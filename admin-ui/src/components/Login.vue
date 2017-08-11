@@ -1,37 +1,37 @@
 <template>
     <div class='loginContainer'>
         <common-header></common-header>
-        <div class='mainSection'>
+        <div class='mainSection' @keyup='isInputing'>
             <div class='form'>
                 <span>账号</span>
-                <input placeholder='用户名/邮箱/已验证手机' v-model='account'>
-                <span @click='clear(1)'>
+                <input placeholder='用户名/邮箱/已验证手机' v-model='account' @focus='inputFocus[1] = true' @blur='inputFocus[1] = false'>
+                <span @click='clear(1)' v-show='inputFocus[1]'>
                     <icon class='icon' type="clear"></icon>
                 </span>
             </div>
             <div class='form'>
                 <span>密码</span>
-                <input class='inputTwo' placeholder='请输入密码' v-model='dynamicPassword'>
+                <input class='inputTwo' placeholder='请输入密码' v-model='dynamicPassword' @focus='inputFocus[2] = true' @blur='inputFocus[2] = false'>
                 <span @click='passwordController = !passwordController' :class='["passwordControl",passwordController ? "showPassword": "hidePassword"]'></span>
-                <span @click='clear(2)'>
+                <span @click='clear(2)' v-show='inputFocus[2]'>
                     <icon class='icon' type="clear"></icon>
                 </span>
             </div>
-            <div class='form phone'>
-                <input placeholder='请输入手机号' v-model='account'>
-                <span @click='clear(3)'>
+            <div class='form phone' v-show='turnOnValidate'>
+                <input placeholder='请输入手机号' v-model='phone' @focus='inputFocus[3] = true' @blur='inputFocus[3] = false'>
+                <span @click='clear(3)' v-show='inputFocus[3]'>
                     <icon class='icon' type="clear"></icon>
                 </span>
                 <span>获取验证码</span>
             </div>
-            <div class='form validate'>
-                <input placeholder='请输入收到的验证码' v-model='account'>
-                <span @click='clear(4)'>
+            <div class='form validate' v-show='turnOnValidate'>
+                <input placeholder='请输入收到的验证码' v-model='validateCode' @focus='inputFocus[4] = true' @blur='inputFocus[4] = false'>
+                <span @click='clear(4)' v-show='inputFocus[4]'>
                     <icon class='icon' type="clear"></icon>
                 </span>
             </div>
     
-            <div class='loginButton login'>
+            <div class='loginButton login' :styleObj='loginButtonStyle'>
                 登录
             </div>
             <div class='loginOneStep login'>
@@ -74,15 +74,41 @@ export default {
     name: 'Login',
     data() {
         return {
+            validateCode: '',
+            phone: '',
             account: '',
             password: '', //永远存储真实的密码值
             dynamicPassword: '', // 用来实现密码的显隐
             passwordController: false,  // 显示密码?
+            inputFocus: {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+            }, // 控制四个input的聚焦状态
+            turnOnValidate: false, // 开启验证模式 ? (显示手机,验证码框)
+            loginButtonStyle: {},
         }
     },
     methods: {
         clear(which) {
-            which === 1 ? this.account = '' : this.dynamicPassword = ''
+            switch (which) {
+                case 1:
+                    this.account = '';
+                    break;
+                case 2:
+                    this.dynamicPassword = '';
+                    break;
+                case 3:
+                    this.phone = '';
+                    break;
+                case 4:
+                    this.validateCode = '';
+                    break;
+            }
+        },
+        computeInputValue(){
+            // 计算用户有没有输入
         }
     },
     watch: {
@@ -150,6 +176,14 @@ export default {
     font-size: 1rem;
 }
 
+.form.phone input {
+    width: 60%;
+}
+
+.form.validate input {
+    width: 83.5%;
+}
+
 .form .inputTwo {
     width: 66%;
 }
@@ -212,7 +246,8 @@ export default {
     justify-content: space-between;
 }
 
-.quickNav a,.otherLoginWay a {
+.quickNav a,
+.otherLoginWay a {
     color: #333;
     font-size: 0.8571428571428571rem;
 }
