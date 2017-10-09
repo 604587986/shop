@@ -1,0 +1,53 @@
+<template>
+    <div class='layoutContainer'>
+        <side-bar></side-bar>
+        <div class='main' :style='mainContainerStyle'>
+            <nav-bar></nav-bar>
+            <main-section></main-section>
+        </div>
+    </div>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+import SideBar from './SideBar'
+import Main from './Main'
+import NavBar from './NavBar'
+
+export default {
+    name: 'Layout',
+    data() {
+        return {
+            mainContainerStyle: {
+                'margin-left': '200px'
+            }
+        }
+    },
+    computed: mapState([
+        'sideBarIsCollapse'
+    ]),
+    watch: {
+        sideBarIsCollapse(val) {
+            // 根据侧栏展开状态动态控制中间div的样式
+            this.mainContainerStyle['margin-left'] = val ? '64px' : '200px'
+        }
+    },
+    components: {
+        SideBar,
+        NavBar,
+        MainSection: Main
+    }
+}
+</script>
+
+<style scoped>
+.main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 90%;
+    width: calc(100% - 200px);
+    height: 100%;
+    transition: margin-left .28s ease-in-out;
+}
+</style>

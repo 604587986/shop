@@ -1,0 +1,229 @@
+<template>
+    <div class='navBarContainer'>
+        <span class='transformIcon' @click='tranformCollapse' :style='transformIconStyle'></span>
+        <div class='navBarRoute'>
+            <router-link to='/'>主页</router-link>
+            <span to='/'>{{routeAlias[0] ? '/' + routeAlias[0] : ''}}</span>
+            <span to='/'>{{routeAlias[1] ? '/' + routeAlias[1] : ''}}</span>
+            <span to='/'>{{routeAlias[2] ? '/' + routeAlias[2] : ''}}</span>
+        </div>
+        <div class='navBarTabTag'>
+            <template v-for='routeItem in navBarTabTag'>
+                <el-tag :type='routeItem.clicked ? "primary" : "" ' :closable='true' @close.stop='tabTagIsClosed(routeItem)' @click.native='tabTagIsClicked(routeItem)' :key='routeItem.routeName'>{{routeItem.alias}}</el-tag>
+            </template>
+        </div>
+        <div class='avator-section'>
+            <el-dropdown>
+                <span class="el-dropdown-link">
+                    <span class='avator-ring'>
+                        <span class='avator'></span>
+                    </span>
+                    <i class="el-icon-caret-bottom el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native='closeCurrent'>关闭当前</el-dropdown-item>
+                    <el-dropdown-item @click.native='closeOther'>关闭其他</el-dropdown-item>
+                    <el-dropdown-item @click.native='closeAll'>关闭所有</el-dropdown-item>
+                    <el-dropdown-item @click.native='logOut' divided>退出登录</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </div>
+    </div>
+</template>
+
+<script>
+import { mapState, mapMutations } from 'vuex'
+import { routerData } from '../../router'
+
+export default {
+    name: 'NavBar',
+    data() {
+        return {
+            transformIconStyle: {
+                transform: 'rotate(90deg)' // 控制图标转换的样式
+            },
+            routeAlias: ['']
+        }
+    },
+    computed: mapState([
+        'sideBarIsCollapse',
+        'navBarTabTag'
+    ]),
+    methods: {
+        ...mapMutations([
+            'changeCollapseStatus',
+            'deleteNavBarTabTag',
+            'changeTabTagClickedStatus',
+            'updateCurrentRoutePath',
+            'closeCurrent'
+        ]),
+        tranformCollapse() {
+            // 转换90°动画
+            if (this.sideBarIsCollapse) {
+                this.transformIconStyle.transform = 'rotate(90deg)'
+            } else {
+                this.transformIconStyle.transform = 'rotate(0deg)'
+            }
+            // 改变侧栏展开状态
+            this.changeCollapseStatus()
+        },
+        computeRouteName(route) {
+            // 根据当前路径所 找出各级路由的别名 和 最终组件的RouteName
+
+            const routeArray = route.path.replace(/^\/|\/$/g, '').split('/')
+            const routeNameArray = [];
+            let routeName
+
+            // 如果是主页,返回空
+            if (routeArray.length === 1 && routeArray[0] === '') {
+                return ['', 'IndexRoute']
+            }
+            // 遍历 寻找路由配置alias.
+            let regex = new RegExp(routeArray[0])
+            routerData.forEach(levelOne => {
+                // 如果找到第一个路由名称
+                if (regex.test(levelOne.path)) {
+                    routeNameArray.push(levelOne.alias)
+                    routeName = levelOne.name
+
+
+                    // 如果存在第二个路由信息,继续
+                    if (routeArray.length >= 2) {
+                        regex = new RegExp(routeArray[1])
+
+                        levelOne.children.forEach(levelTwo => {
+                            // 找到第二个名称
+                            if (regex.test(levelTwo.path)) {
+                                routeNameArray.push(levelTwo.alias)
+                                routeName = levelTwo.name
+
+                                // 如果总共存在三级路由
+                                if (routeArray.length === 3) {
+                                    regex = new RegExp(routeArray[2])
+                                    levelTwo.children.forEach(levelThree => {
+                                        // 找到第三个路由
+                                        if (regex.test(levelThree.path)) {
+                                            routeNameArray.push(levelThree.alias)
+                                            routeName = levelThree.name
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                    }
+                }
+            })
+            return [routeNameArray, routeName]
+        },
+        tabTagIsClosed(tagItem) {
+            // Tab标签被关闭
+            // 从数据源中移除它
+            this.deleteNavBarTabTag(tagItem)
+        },
+        tabTagIsClicked(tagItem) {
+            // Tab标签被点击
+            // 改变数据源中该标签数据的clicked属性
+            this.changeTabTagClickedStatus(tagItem)
+        },
+        closeCurrent() {
+            const currenTag = this.$store.getters.getCurrentNavBarTabTag
+            this.deleteNavBarTabTag(currenTag)
+        },
+        closeOther() {
+            //
+        },
+        closeAll() {
+            //
+        },
+        logOut() {
+            //
+        }
+    },
+    watch: {
+        $route(route) {
+            // 监听路由变化
+            if (route.path === '/') {
+                
+            }
+            const routeArray = this.computeRouteName(route)
+            // 更新 导航路径(标签左边的那个)
+            this.routeAlias = routeArray[0]
+            // 更新导航标签(正则匹配路径)
+            this.updateCurrentRoutePath(route.path.replace(/.*#/, ''))
+            this.changeTabTagClickedStatus({ routeName: routeArray[1] })
+        },
+        navBarTabTag(tags) {
+            // 监听tag长度,如果为零,则跳转到主页
+            if (tags.length === 0) {
+                this.$router.push('/')
+            }
+        }
+    }
+
+}
+</script>
+
+<style scoped>
+.navBarContainer {
+    background: #eef1f6;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.transformIcon {
+    background: url('~images/threeline.png');
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    -webkit-transition: transform 1s;
+    -moz-transition: transform 1s;
+    transition: transform 0.28s;
+    margin: 10px;
+}
+
+.navBarRoute a {
+    color: #333;
+    text-decoration: none;
+}
+
+.navBarRoute span {
+    color: black;
+}
+
+.navBarTabTag {
+    /* position: absolute;
+    left: 15.571428571428571rem; */
+    margin-left: 1rem;
+}
+
+.navBarTabTag>span {
+    margin: 0 0.2rem;
+}
+
+.avator-section {
+    position: absolute;
+    right: 1.7857142857142858rem;
+}
+
+.avator-ring {
+    background: #324157;
+    width: 39px;
+    height: 39px;
+    position: absolute;
+    right: 20px;
+    top: -7px;
+}
+
+.avator {
+    background: url('~images/kangna.jpg');
+    background-size: cover;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+</style>

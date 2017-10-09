@@ -1,0 +1,19 @@
+<template>
+    <div class="hello">
+        animal,size-->
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'AnimalSize',
+    data() {
+        return {
+        }
+    }
+}
+</script>
+
+<style scoped>
+
+</style>

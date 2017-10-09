@@ -1,0 +1,19 @@
+<template>
+    <div class="hello">
+        animal,index-->
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'AnimalIndex',
+    data() {
+        return {
+        }
+    }
+}
+</script>
+
+<style scoped>
+
+</style>

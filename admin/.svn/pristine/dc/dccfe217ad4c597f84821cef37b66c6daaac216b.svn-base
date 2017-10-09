@@ -1,0 +1,19 @@
+<template>
+    <div class="hello">
+        <router-view></router-view>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'AnimalIndex',
+    data() {
+        return {
+        }
+    }
+}
+</script>
+
+<style scoped>
+
+</style>

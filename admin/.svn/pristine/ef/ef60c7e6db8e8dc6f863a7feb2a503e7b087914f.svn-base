@@ -1,0 +1,6 @@
+export default {
+    changeCollapseStatus(state) {
+        // 改变侧栏展开的状态
+        state.sideBarIsCollapse = !state.sideBarIsCollapse
+    }
+}

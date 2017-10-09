@@ -1,0 +1,19 @@
+<template>
+    <div class='main-container'>
+        <router-view></router-view>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'MainSection'
+}
+</script>
+
+<style scoped>
+.main-container {
+    width: 100%;
+    min-height: 100%;
+    background: #fff;
+}
+</style>

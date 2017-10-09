@@ -1,0 +1,19 @@
+<template>
+    <div class="hello">
+        animal,people,age-->
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'peopleage',
+    data() {
+        return {
+        }
+    }
+}
+</script>
+
+<style scoped>
+
+</style>

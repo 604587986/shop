@@ -1,0 +1,412 @@
+<template>
+    <div class="home">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="消息框" name="first">
+                <div class='section'>
+                    <el-button @click="open">打开消息提示</el-button>
+                    <el-button type='success' @click="open2">成功</el-button>
+                    <el-button type='warning' @click="open3">警告</el-button>
+                    <el-button type="info" @click="open">消息</el-button>
+                    <el-button type="danger" @click="open4">错误</el-button>
+                </div>
+                <div class='section'>
+                    <el-button @click="open5">普通弹出框</el-button>
+                    <el-button @click="open6">确定弹出框</el-button>
+                    <el-button @click="open7">表单弹出框</el-button>
+                </div>
+                <div class='section'>
+                    <el-button plain @click="open8">
+                        侧栏提示成功
+                    </el-button>
+                    <el-button plain @click="open9">
+                        侧栏提示警告
+                    </el-button>
+                    <el-button plain @click="open10">
+                        侧栏提示消息
+                    </el-button>
+                    <el-button plain @click="open11">
+                        侧栏提示错误
+                    </el-button>
+                </div>
+                <div class='section'>
+                    <a href='http://element.eleme.io/#/zh-CN/component/message' target='_blanket'>Link</a>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="弹出框" name="second">
+                <div class='section'>
+                    <!-- Table -->
+                    <el-button @click="dialogTableVisible = true">表格Dialog</el-button>
+
+                    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+                        <el-table :data="gridData">
+                            <el-table-column property="date" label="日期" width="150"></el-table-column>
+                            <el-table-column property="name" label="姓名" width="200"></el-table-column>
+                            <el-table-column property="address" label="地址"></el-table-column>
+                        </el-table>
+                    </el-dialog>
+
+                    <!-- Form -->
+                    <el-button type="text" @click="dialogFormVisible = true">表单Dialog</el-button>
+
+                    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+                        <el-form :model="form">
+                            <el-form-item label="活动名称" :label-width="formLabelWidth">
+                                <el-input v-model="form.name" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="活动区域" :label-width="formLabelWidth">
+                                <el-select v-model="form.region" placeholder="请选择活动区域">
+                                    <el-option label="区域一" value="shanghai"></el-option>
+                                    <el-option label="区域二" value="beijing"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="dialogFormVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                        </div>
+                    </el-dialog>
+                </div>
+                <div class='section'>
+                    <a href='http://element.eleme.io/#/zh-CN/component/dialog' target='_blanket'>Link</a>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="表格" name="third">
+                <div class='section'>
+                    <el-table :data="tableData" stripe style="width: 100%">
+                        <el-table-column prop="date" label="日期" width="180">
+                        </el-table-column>
+                        <el-table-column prop="name" label="姓名" width="180">
+                        </el-table-column>
+                        <el-table-column prop="address" label="地址">
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <div class='section'>
+                    <el-table ref="multipleTable" :data="tableData3" border tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+                        <el-table-column type="selection" width="55">
+                        </el-table-column>
+                        <el-table-column label="日期" width="120">
+                            <template scope="scope">{{ scope.row.date }}</template>
+                        </el-table-column>
+                        <el-table-column prop="name" label="姓名" width="120">
+                        </el-table-column>
+                        <el-table-column prop="address" label="地址" show-overflow-tooltip>
+                        </el-table-column>
+                    </el-table>
+                    <div style="margin-top: 20px">
+                        <el-button @click="toggleSelection([tableData3[1], tableData3[2]])">切换第二、第三行的选中状态</el-button>
+                        <el-button @click="toggleSelection()">取消选择</el-button>
+                    </div>
+                </div>
+                <div class='section'>
+                    <a href='http://element.eleme.io/#/zh-CN/component/table' target='_blanket'>Link</a>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="表单" name="fourth">
+                <div class='section'>
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                        <el-form-item label="活动名称" prop="name">
+                            <el-input v-model="ruleForm.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="活动区域" prop="region">
+                            <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="活动时间" required>
+                            <el-col :span="11">
+                                <el-form-item prop="date1">
+                                    <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="line" :span="2">-</el-col>
+                            <el-col :span="11">
+                                <el-form-item prop="date2">
+                                    <el-time-picker type="fixed-time" placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-form-item>
+                        <el-form-item label="即时配送" prop="delivery">
+                            <el-switch on-text="" off-text="" v-model="ruleForm.delivery"></el-switch>
+                        </el-form-item>
+                        <el-form-item label="活动性质" prop="type">
+                            <el-checkbox-group v-model="ruleForm.type">
+                                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+                                <el-checkbox label="地推活动" name="type"></el-checkbox>
+                                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+                                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
+                        <el-form-item label="特殊资源" prop="resource">
+                            <el-radio-group v-model="ruleForm.resource">
+                                <el-radio label="线上品牌商赞助"></el-radio>
+                                <el-radio label="线下场地免费"></el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item label="活动形式" prop="desc">
+                            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                            <el-button @click="resetForm('ruleForm')">重置</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class='section'>
+                    <a href='http://element.eleme.io/#/zh-CN/component/form' target='_blanket'>Link</a>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
+
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'Home',
+    data() {
+        return {
+            activeName: 'second',
+            tableData: [{
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-04',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1517 弄'
+            }, {
+                date: '2016-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1519 弄'
+            }, {
+                date: '2016-05-03',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1516 弄'
+            }],
+            tableData3: [{
+                date: '2016-05-03',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-04',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-08',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-06',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-07',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }],
+            multipleSelection: [],
+            gridData: [{
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-04',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-03',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }],
+            dialogTableVisible: false,
+            dialogFormVisible: false,
+            form: {
+                name: '',
+                region: '',
+                date1: '',
+                date2: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
+            formLabelWidth: '120px',
+            ruleForm: {
+                name: '',
+                region: '',
+                date1: '',
+                date2: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
+            rules: {
+                name: [
+                    { required: true, message: '请输入活动名称', trigger: 'blur' },
+                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                ],
+                region: [
+                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                ],
+                date1: [
+                    { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                ],
+                date2: [
+                    { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                ],
+                type: [
+                    { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+                ],
+                resource: [
+                    { required: true, message: '请选择活动资源', trigger: 'change' }
+                ],
+                desc: [
+                    { required: true, message: '请填写活动形式', trigger: 'blur' }
+                ]
+            }
+        }
+    },
+    methods: {
+        open8() {
+            this.$notify({
+                title: '成功',
+                message: '这是一条成功的提示消息',
+                type: 'success'
+            });
+        },
+        open9() {
+            this.$notify({
+                title: '警告',
+                message: '这是一条警告的提示消息',
+                type: 'warning'
+            });
+        },
+        open10() {
+            this.$notify.info({
+                title: '消息',
+                message: '这是一条消息的提示消息'
+            });
+        },
+        open11() {
+            this.$notify.error({
+                title: '错误',
+                message: '这是一条错误的提示消息'
+            });
+        },
+        handleClick(tab, event) {
+            console.log(tab, event);
+        },
+        open() {
+            this.$message('这是一条消息提示');
+        },
+        open2() {
+            this.$message({
+                message: '恭喜你，这是一条成功消息',
+                type: 'success'
+            });
+        },
+
+        open3() {
+            this.$message({
+                message: '警告哦，这是一条警告消息',
+                type: 'warning'
+            });
+        },
+        open4() {
+            this.$message.error('错了哦，这是一条错误消息');
+        },
+        open5() {
+            this.$alert('这是一段内容', '标题名称', {
+                confirmButtonText: '确定',
+                callback: action => {
+                    this.$message({
+                        type: 'info',
+                        message: `action: ${action}`
+                    });
+                }
+            });
+        },
+        open6() {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+        open7() {
+            this.$prompt('请输入邮箱', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+                inputErrorMessage: '邮箱格式不正确'
+            }).then(({ value }) => {
+                this.$message({
+                    type: 'success',
+                    message: '你的邮箱是: ' + value
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '取消输入'
+                });
+            });
+        },
+        toggleSelection(rows) {
+            if (rows) {
+                rows.forEach(row => {
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                });
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+        submitForm(formName) {
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    alert('submit!');
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        }
+    }
+}
+</script>
+
+<style scoped>
+.section {
+    margin: 1rem;
+}
+</style>

@@ -1,0 +1,126 @@
+<template>
+    <div class='navBarContainer'>
+        <span class='transformIcon' @click='tranformCollapse' :style='transformIconStyle'></span>
+        <div>
+            <router-link to="/">首页</router-link>
+            <span to="/">/{{navBarRouteSignOne}}</span>
+            <span to="/">/{{navBarRouteSignTwo}}</span>
+            <span to="/">/{{navBarRouteSignThree}}</span>
+        </div>
+    </div>
+</template>
+
+<script>
+import { mapState, mapMutations } from 'vuex'
+import { routerData } from '../../router'
+
+export default {
+    name: 'NavBar',
+    data() {
+        return {
+            transformIconStyle: {
+                transform: 'rotate(90deg)' // 控制图标转换的样式
+            }
+        }
+    },
+    computed: mapState([
+        'sideBarIsCollapse',
+        'navBarRouteSignOne',
+        'navBarRouteSignTwo',
+        'navBarRouteSignThree'
+    ]),
+    methods: {
+        ...mapMutations([
+            'changeCollapseStatus'
+        ]),
+        tranformCollapse() {
+            // 转换90°动画
+            if (this.sideBarIsCollapse) {
+                this.transformIconStyle.transform = 'rotate(90deg)'
+            } else {
+                this.transformIconStyle.transform = 'rotate(0deg)'
+            }
+            // 改变侧栏展开状态
+            this.changeCollapseStatus()
+        },
+        computeRouteName(route) {
+            console.log('route-->', route)
+            const routeArray = route.path.replace(/^\/|\/$/g, '').split('/')
+            // console.log('routerData-->', routerData)
+            console.log('routeArray-->', routeArray)
+            const routeNameArray = [];
+            // routeArray.forEach((ele) => {
+            //     routerData.forEach(levelOne => {
+            //         if()
+            //     })
+            // });
+
+            let regex = new RegExp(routeArray[0])
+            routerData.forEach(levelOne => {
+                // 如果找到第一个路由名称
+                if (regex.test(levelOne.path)) {
+                    routeNameArray.push(levelOne.alias)
+                    // 如果存在第二个路由信息,继续
+                    if (routeArray.length >= 2) {
+                        regex = new RegExp(routeArray[1])
+                        levelOne.children.forEach(levelTwo => {
+                            // 找到第二个名称
+                            if (regex.test(levelTwo.path)) {
+                                routeNameArray.push(levelTwo.alias)
+                                // 如果总共存在三级路由
+                                if (routeArray.length === 3) {
+                                    regex = new RegExp(routeArray[2])
+                                    levelTwo.children.forEach(levelThree => {
+                                        // 找到第三个路由
+                                        if (regex.test(levelThree.path)) {
+                                            routeNameArray.push(levelThree.alias)
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                    }
+                }
+            })
+            console.log('result-->', routeNameArray)
+        }
+    },
+    watch: {
+        $route(val) {
+            this.computeRouteName(val)
+        }
+    }
+
+}
+</script>
+
+<style scoped>
+.navBarContainer {
+    background: #eef1f6;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.transformIcon {
+    background: url('~images/threeline.png');
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    -webkit-transition: transform 1s;
+    -moz-transition: transform 1s;
+    transition: transform 0.28s;
+    margin: 10px;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+span {
+    color: black;
+}
+</style>
