@@ -1,4 +1,0 @@
-export default {
-    sideBarIsCollapse: false, // 侧栏展开了?
-    navBarTabTag: []  // 导航Tab页标签
-}

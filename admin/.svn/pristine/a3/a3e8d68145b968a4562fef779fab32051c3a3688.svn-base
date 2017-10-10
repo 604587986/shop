@@ -1,6 +1,0 @@
-export default {
-    sideBarIsCollapse: false, // 侧栏展开了?
-    navBarRouteSignOne: '一级',
-    navBarRouteSignTwo: '二级',
-    navBarRouteSignThree: '三级'
-}
