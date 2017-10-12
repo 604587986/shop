@@ -1,8 +1,6 @@
 <template>
   <div class="member-container">
-    <div class="inner-member">
-
-    </div>
+    <div class="inner-member"> </div>
   </div>
 </template>
 

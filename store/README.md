@@ -5,6 +5,9 @@
 ## Build Setup
 
 ``` bash
+# first install chromedriver [ GWF ]
+npm install chromedriver --chromedriver_cdnurl=http://cdn.npm.taobao.org/dist/chromedriver
+
 # install dependencies
 npm install
 
