@@ -1,5 +1,5 @@
 <template>
-  <div class="side-bar-container">
+  <div class="sidebar-container">
     <el-menu
       :default-active="defaultActive"
       background-color="#313641"
@@ -90,7 +90,7 @@
 <style type="text/scss" lang="scss" scoped>
   @import "../../styles/_color.scss";
 
-  .side-bar-container {
+  .sidebar-container {
     width: 200px;
     position: fixed;
     top: 56px;
