@@ -23,7 +23,7 @@
       margin: 0 20px;
       line-height: $nav-bar_tab-height;
       color: #fff;
-      background: url("../../assets/logo-javashop-rectangle.png") no-repeat left;
+      background: url("../../assets/logo-javashop.png") no-repeat left;
       background-size: 100% $nav-bar_tab-height;
     }
   }

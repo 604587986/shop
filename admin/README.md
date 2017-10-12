@@ -1,6 +1,6 @@
 # store
 
-> javashop商家中心
+> javashop后台管理
 
 ## Build Setup
 
