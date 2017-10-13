@@ -65,9 +65,10 @@
     template: `
           <keep-alive>
             <el-menu-item-group v-if="item.type === 'menu-item-group'">
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
+              <template slot="title">{{ item.title }}</template>
+              <template v-if="item.children && item.children[0]" v-for="(_item, _index) in item.children">
+                <menus-item :item="_item" :index="index + '-' + _index"></menus-item>
+              </template>
             </el-menu-item-group>
             <el-submenu v-if="item.type === 'submenu'" :index="index + ''">
               <template slot="title">
@@ -78,7 +79,7 @@
                 <menus-item :item="_item" :index="index + '-' + _index"></menus-item>
               </template>
             </el-submenu>
-            <el-menu-item v-if="item.type === 'menu-item'" :index="index + ''">
+            <el-menu-item v-else :index="index + ''">
               <i v-if="item.icon" :class="item.icon"></i>
               <span slot="title">{{ item.title }}</span>
             </el-menu-item>
