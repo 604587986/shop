@@ -1,21 +1,20 @@
 import * as types from '../mutation-types'
+import Index from '../../views/Home.vue'
+import NotFound from '@/components/404.vue'
 
 // initial state
 const state = {
   curTabName: '0',
   tabIndex: 0,
-  tabs: [
-    {
-      title: '概况',
-      name: '0'
-    }
-  ]
+  tabs: []
 }
 
 // getters
 const getters = {
   // 返回当前tab名称
-  currentTabName: state => state.curTabName
+  currentTabName: state => state.curTabName,
+  // 返回当前tabs
+  currentTabs: state => state.tabs
 }
 
 // actions
@@ -29,16 +28,15 @@ const mutations = {
    * @param newTab
    */
   [types.LAYOUT_NEW_TAB] (state, newTab) {
-    const { title: _title, name: _name, content: _content } = newTab
+    const { title: _title, name: _name, component: _component } = newTab
     if (typeof _name !== 'string') throw new Error('...layoutNewTab no name!')
     const _index = findTabIndex(state, _name)
     // 如果没有找到对应的tab，添加一个
-    // 如果找到对应的tab，切换到对应的tab
     if (_index === -1) {
       ++state.tabIndex
       const { tabs } = state
       if (!_title) newTab.title = '没有标题'
-      if (!_content) newTab.content = '没有内容'
+      if (!_component) newTab.component = NotFound
       state.tabs = [...tabs, newTab]
       state.curTabName = _name
     } else {

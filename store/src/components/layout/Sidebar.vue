@@ -17,13 +17,22 @@
 
 <script>
   import Vue from 'vue'
-  import sidebarMenu from '../../assets/sidebar-menus.json'
+  import { mapActions } from 'vuex'
+  import sidebarMenu from '../../sidebar-menus'
 
   export default {
     name: 'LayoutSidebar',
     data () {
       return {
         sidebarMenu
+      }
+    },
+    mounted () {
+      if (!this.$store.getters.currentTabs[0]) {
+        this.layoutNewTab({
+          ...this.sidebarMenu[0],
+          name: this.defaultActive
+        })
       }
     },
     computed: {
@@ -35,16 +44,19 @@
       // 监听当前的menu
       defaultActive (newVal, oldVal) {
         const _path = this.filterMenu(newVal).path
-        this.$router.replace(_path || '/404')
       }
     },
     methods: {
       sidebarSelected (index, indexPath) {
         let _menu = this.filterMenu(index)
-        const _tab = { title: _menu.title, name: index, closable: true }
+        const _tab = {
+          title: _menu.title,
+          name: index,
+          closable: true,
+          component: _menu.component
+        }
         index === 0 && (_tab.closable = false)
-        window.Layout.NewTab(_tab)
-        this.$router.push({ path: _menu.path || '/404' })
+        this.layoutNewTab(_tab)
       },
       // 筛选出当前点击的menu
       filterMenu (index) {
@@ -55,7 +67,10 @@
             : (_menu = _menu[item])
         })
         return _menu
-      }
+      },
+      ...mapActions([
+        'layoutNewTab'
+      ])
     }
   }
 
@@ -79,7 +94,7 @@
                 <menus-item :item="_item" :index="index + '-' + _index"></menus-item>
               </template>
             </el-submenu>
-            <el-menu-item v-else :index="index + ''">
+            <el-menu-item v-if="item.type === 'menu-item'" :index="index + ''">
               <i v-if="item.icon" :class="item.icon"></i>
               <span slot="title">{{ item.title }}</span>
             </el-menu-item>
@@ -88,7 +103,7 @@
   })
 </script>
 
-<style type="text/scss" lang="scss" scoped>
+<style type="text/scss" lang="scss">
   @import "../../styles/_color.scss";
 
   .sidebar-container {
@@ -99,8 +114,11 @@
     height: calc(100% - 56px);
     background-color: $sider-bar_background;
     overflow-y: scroll;
-  }
-  .el-menu {
-    border: none;
+    .el-menu {
+      border: none;
+    }
+    .el-submenu__title span, .el-menu-item span, .el-menu-item-group__title {
+      user-select: none;
+    }
   }
 </style>

@@ -1,19 +1,14 @@
 <template>
     <div class="main-container">
       <div class="inner-main-container">
-        <router-view></router-view>
+        <slot></slot>
       </div>
     </div>
 </template>
 
 <script>
     export default {
-      name: 'LayoutMain',
-      watch: {
-        [this.$router] (val) {
-          console.log(val.path)
-        }
-      }
+      name: 'LayoutMain'
     }
 </script>
 
