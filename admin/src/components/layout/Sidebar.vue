@@ -94,7 +94,7 @@
                 <menus-item :item="_item" :index="index + '-' + _index"></menus-item>
               </template>
             </el-submenu>
-            <el-menu-item v-if="item.type === 'menu-item'" :index="index + ''">
+            <el-menu-item v-else :index="index + ''">
               <i v-if="item.icon" :class="item.icon"></i>
               <span slot="title">{{ item.title }}</span>
             </el-menu-item>
