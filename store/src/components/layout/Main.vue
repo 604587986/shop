@@ -1,9 +1,11 @@
 <template>
+  <transition name="el-fade-in-linear">
     <div class="main-container">
       <div class="inner-main-container">
         <slot></slot>
       </div>
     </div>
+  </transition>
 </template>
 
 <script>
