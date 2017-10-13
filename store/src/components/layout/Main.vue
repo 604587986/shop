@@ -9,9 +9,9 @@
 </template>
 
 <script>
-    export default {
-      name: 'LayoutMain'
-    }
+  export default {
+    name: 'LayoutMain'
+  }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
