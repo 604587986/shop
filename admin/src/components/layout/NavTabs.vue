@@ -17,6 +17,9 @@
             :closable="item.closable"
             :disabled="item.disabled"
           >
+            <layout-main>
+              <component :is="item.component"></component>
+            </layout-main>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -42,21 +45,12 @@
 <script>
   import { mapState, mapActions } from 'vuex'
   import LayoutMember from './Member.vue'
+  import LayoutMain from './Main.vue'
 
   export default {
     name: 'LayoutNavTabs',
     data () {
       return {}
-    },
-    mounted () {
-      // 将Layout操作赋给window，方便别的地方调用
-      window.Layout = {
-        NewTab: this.layoutNewTab,
-        CloseTab: this.layoutCloseTab,
-        CloseCurrentTab: this.layoutCloseCurrentTab,
-        CloseOtherTab: this.layoutCloseOtherTab,
-        CloseAllTab: this.layoutCloseAllTab
-      }
     },
     computed: {
       // 当前tab的name
@@ -96,7 +90,8 @@
       }
     },
     components: {
-      LayoutMember
+      LayoutMember,
+      LayoutMain
     }
   }
 </script>
@@ -117,9 +112,12 @@
       height: 100%;
     }
 
+    .el-tabs__header {
+      margin: 0;
+    }
+
     .nav-bar-tabs {
       width: calc(100% - 200px - 150px);
-      height: 100%;
       margin-top: calc(56px - 45px);
     }
 

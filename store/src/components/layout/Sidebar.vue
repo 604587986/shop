@@ -18,7 +18,7 @@
 <script>
   import Vue from 'vue'
   import { mapActions } from 'vuex'
-  import sidebarMenu from '../../sidebar-menus'
+  import sidebarMenu from '@/sidebar-menus'
 
   export default {
     name: 'LayoutSidebar',

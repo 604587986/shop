@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
   import Layout from './components/layout/Layout'
 
   export default {
