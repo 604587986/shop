@@ -1,5 +1,4 @@
 import * as types from '../mutation-types'
-import Index from '../../views/Home.vue'
 import NotFound from '@/components/404.vue'
 
 // initial state

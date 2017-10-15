@@ -3,13 +3,14 @@
 // Template version: 1.1.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 
+const manager_path = require('./manager.config').path
 const path = require('path')
 
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    index: path.resolve(__dirname, `../dist/${manager_path}/index.html`),
+    assetsRoot: path.resolve(__dirname, `../dist/${manager_path}`),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     productionSourceMap: true,

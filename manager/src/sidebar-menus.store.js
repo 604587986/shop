@@ -1,7 +1,12 @@
-import Home from './views/Home.vue'
-import GoodsList from './views/goods/GoodsList.vue'
-import Classify from './views/goods/Classfiy.vue'
+//  概况
+import Home from './views/store/Home.vue'
 
+//  商品管理
+import GoodsList from './views/store/goods/GoodsList.vue'
+import Classify from './views/store/goods/Classfiy.vue'
+import TagList from './views/store/goods/TagList.vue'
+
+//  开发文档
 import Doc from './views/doc/Index.vue'
 
 export default [
@@ -42,7 +47,8 @@ export default [
       },
       {
         title: '标签管理',
-        type: 'menu-item'
+        type: 'menu-item',
+        component: TagList
       },
       {
         title: '回收站',

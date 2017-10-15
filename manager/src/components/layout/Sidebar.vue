@@ -18,13 +18,18 @@
 <script>
   import Vue from 'vue'
   import { mapActions } from 'vuex'
-  import sidebarMenu from '@/sidebar-menus'
+  import sidebarMenuStore from '@/sidebar-menus.store'
+  import sidebarMenuAdmin from '@/sidebar-menus.admin'
+
+  const managerPath = require('../../../config/manager.config').path
 
   export default {
     name: 'LayoutSidebar',
     data () {
       return {
-        sidebarMenu
+        sidebarMenu: managerPath === 'store'
+          ? sidebarMenuStore
+          : sidebarMenuAdmin
       }
     },
     mounted () {
@@ -34,6 +39,7 @@
           name: this.defaultActive
         })
       }
+      console.log(this.sidebarMenu)
     },
     computed: {
       defaultActive () {

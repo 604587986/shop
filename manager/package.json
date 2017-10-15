@@ -1,7 +1,7 @@
 {
   "name": "store",
   "version": "1.0.0",
-  "description": "javashop商家中心",
+  "description": "javashop商家中心和后台管理",
   "author": "javashop <http://www.javamall.com.cn>",
   "private": true,
   "scripts": {
