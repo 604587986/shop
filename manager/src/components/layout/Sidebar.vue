@@ -39,7 +39,6 @@
           name: this.defaultActive
         })
       }
-      console.log(this.sidebarMenu)
     },
     computed: {
       defaultActive () {
