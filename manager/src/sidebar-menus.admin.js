@@ -1,13 +1,13 @@
 //  概况
-import Home from './views/admin/Home.vue'
+const Home = () => import('./views/admin/Home.vue')
 
 //  商品管理
-import GoodsList from './views/admin/goods/GoodsList.vue'
-import Classify from './views/admin/goods/Classfiy.vue'
-import TagList from './views/admin/goods/TagList.vue'
+const GoodsList = () => import('./views/admin/goods/GoodsList.vue')
+const Classify = () => import('./views/admin/goods/Classfiy.vue')
+const TagList = () => import('./views/admin/goods/TagList.vue')
 
 //  开发文档
-import Doc from './views/doc/Index.vue'
+const Doc = () => import('./views/doc/Index.vue')
 
 export default [
   {
@@ -19,7 +19,7 @@ export default [
   {
     title: '商品',
     type: 'submenu',
-    icon: 'el-icon-menu',
+    icon: 'el-icon-eation-goods-manager',
     children: [
       {
         title: '商品管理',
@@ -66,7 +66,7 @@ export default [
   {
     title: '订单',
     type: 'submenu',
-    icon: 'el-icon-more',
+    icon: 'el-icon-eation-order-manager',
     children: [
       {
         title: '订单管理',
@@ -119,7 +119,7 @@ export default [
   {
     title: '会员',
     type: 'submenu',
-    icon: 'el-icon-message',
+    icon: 'el-icon-eation-member-manager',
     children: [
       {
         title: '会员管理',
@@ -164,7 +164,7 @@ export default [
   {
     title: '店铺',
     type: 'submenu',
-    icon: 'el-icon-date',
+    icon: 'el-icon-eation-shop-manager',
     children: [
       {
         title: '店铺管理',
@@ -237,7 +237,7 @@ export default [
   {
     title: '促销',
     type: 'submenu',
-    icon: 'el-icon-time',
+    icon: 'el-icon-eation-activity-manager',
     children: [
       {
         title: '团购管理',
@@ -272,7 +272,7 @@ export default [
   {
     title: '页面',
     type: 'submenu',
-    icon: 'el-icon-document',
+    icon: 'el-icon-eation-page-manager',
     children: [
       {
         title: 'PC装修',
@@ -355,7 +355,7 @@ export default [
   {
     title: '统计',
     type: 'submenu',
-    icon: 'el-icon-d-caret',
+    icon: 'el-icon-eation-statistics-manager',
     children: [
       {
         title: '会员分析',
@@ -585,7 +585,7 @@ export default [
   {
     title: '开发',
     type: 'submenu',
-    icon: 'el-icon-warning',
+    icon: 'el-icon-eation-develop-manager',
     children: [
       {
         title: '工具',
