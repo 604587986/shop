@@ -1,13 +1,13 @@
 //  概况
-import Home from './views/store/Home.vue'
+const Home = () => import('./views/store/Home.vue')
 
 //  商品管理
-import GoodsList from './views/store/goods/GoodsList.vue'
-import Classify from './views/store/goods/Classfiy.vue'
-import TagList from './views/store/goods/TagList.vue'
+const GoodsList = () => import('./views/store/goods/GoodsList.vue')
+const Classify = () => import('./views/store/goods/Classfiy.vue')
+const TagList = () => import('./views/store/goods/TagList.vue')
 
 //  开发文档
-import Doc from './views/doc/Index.vue'
+const Doc = () => import('./views/doc/Index.vue')
 
 export default [
   {

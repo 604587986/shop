@@ -22,4 +22,12 @@
   body {
     background: $body_background;
   }
+
+  [class^="el-icon-eation"], [class*=" el-icon-eation"] {
+    font-family: "iconfont" !important;
+    font-size: inherit;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 </style>
