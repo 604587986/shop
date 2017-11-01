@@ -24,10 +24,36 @@ a:hover {
     text-decoration: underline;
 }
 
+ul, li, dl, dd {
+    margin: 0;
+    padding: 0;
+}
+
 li {
     list-style: none;
 }
 
-dd {
-    margin: 0;
+
+/* 公共class */
+
+.__container__ {
+    width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+.clear, .clr {
+    display: block;
+    overflow: hidden;
+    clear: both;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
 }
