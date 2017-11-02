@@ -1,0 +1,94 @@
+/*
+* @description: 基础css
+* @author: javashop
+* @update: javashop (2017-11-01 17:56)
+*/
+
+body {
+    font: 12px/150% tahoma, arial, Microsoft YaHei, Hiragino Sans GB, "\u5b8b\u4f53", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: #666;
+    background: #fff;
+    display: block;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn,
+em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup,
+tt, b, u, i, input, center, dl, dt, dd, ol, ul, li, fieldset, form, label,
+legend, table, caption, tbody, tfoot, thead, tr, th, td, button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+    color: #666
+}
+
+a:link {
+    text-decoration: none;
+    outline: none;
+}
+
+a:visited {
+    text-decoration: none;
+    outline: none;
+}
+
+a:hover {
+    text-decoration: none;
+    outline: none;
+}
+
+a:active {
+    text-decoration: none;
+    outline: none;
+}
+
+a:focus {
+    outline: none;
+}
+
+li {
+    list-style: none;
+}
+
+a, p, span, div, th, td {
+    word-break: break-all;
+}
+
+img {
+    border: 0;
+}
+
+:focus {
+    outline: 0;
+}
+
+/* 公共class */
+
+.w {
+    width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+.clear, .clr {
+    display: block;
+    overflow: hidden;
+    clear: both;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
