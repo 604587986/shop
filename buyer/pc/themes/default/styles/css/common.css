@@ -428,6 +428,9 @@
   line-height: 12px;
   white-space: nowrap;
 }
+#category .sub-category-item .cate-detail dd a:hover {
+  color: #f42424;
+}
 #category .sub-category-item .cate-layer-rihgt {
   width: 200px;
 }

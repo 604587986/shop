@@ -450,6 +450,9 @@
                     border-left: 1px solid #e0e0e0;
                     line-height: 12px;
                     white-space: nowrap;
+                    &:hover {
+                        color: $color-main
+                    }
                 }
             }
         }
@@ -481,6 +484,3 @@
         }
     }
 }
-
-
-
