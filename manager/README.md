@@ -6,7 +6,7 @@
 
 ``` bash
 # install dependencies
-npm install chromedriver --chromedriver_cdnurl=http://cdn.npm.taobao.org/dist/chromedriver
+npm install --chromedriver_cdnurl=http://cdn.npm.taobao.org/dist/chromedriver --phantomjs_cdnurl=http://npm.taobao.org/mirrors/phantomjs
 
 # serve with hot reload at localhost:8080
 npm run dev
