@@ -27,7 +27,8 @@ export default [
         children: [
           {
             title: '商品列表',
-            type: 'menu-item'
+            type: 'menu-item',
+            component: GoodsList
           }
         ]
       },
@@ -37,8 +38,7 @@ export default [
         children: [
           {
             title: '分类列表',
-            type: 'menu-item',
-            component: GoodsList
+            type: 'menu-item'
           },
           {
             title: '品牌列表',
