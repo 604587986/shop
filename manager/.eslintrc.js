@@ -44,6 +44,7 @@ module.exports = {
     'no-unused-expressions': 0,
     // 禁用一元操作符 ++ 和 --
     'no-plusplus': 0,
+    // 代码结束是否使用分号
     'semi': [2, 'never']
   }
 }
