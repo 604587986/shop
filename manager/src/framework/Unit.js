@@ -24,23 +24,23 @@ export default (_type_) => (target, name, descriptor) => {
 export const UnitFun = (type, value) => {
   switch (type) {
     /** 货币单位转换 */
-    case UnitType.PRICE_UNIT:
+    case UnitTypes.PRICE_UNIT:
       return Foundation.formatPrice(value)
     /** 货币单位转换【带单位】 */
-    case UnitType.PRICE_UNIT_Y:
+    case UnitTypes.PRICE_UNIT_Y:
       return `￥${Foundation.formatPrice(value)}`
     /** 布尔转换为数值 */
-    case UnitType.TRANSFORM_TO_NUMBER:
+    case UnitTypes.TRANSFORM_TO_NUMBER:
       return value ? 1 : 0
     /** 数值转换为布尔 */
-    case UnitType.TRANSFORM_TO_BOOLEAN:
+    case UnitTypes.TRANSFORM_TO_BOOLEAN:
       return !!value
     default:
       return value
   }
 }
 
-export const UnitType = {
+export const UnitTypes = {
   /** 货币相关 */
   // 普通千进制
   PRICE_UNIT: 'PRICE_UNIT',
