@@ -2,7 +2,7 @@ import * as types from '../mutation-types'
 import NotFound from '@/components/404.vue'
 
 // initial state
-const state = {
+const _state = {
   curTabName: '0',
   tabIndex: 0,
   tabs: []
@@ -26,7 +26,7 @@ const mutations = {
    * @param state
    * @param newTab
    */
-  [types.LAYOUT_NEW_TAB] (state, newTab) {
+  [types.LAYOUT_NEW_TAB](state, newTab) {
     const { title: _title, name: _name, component: _component } = newTab
     if (typeof _name !== 'string') throw new Error('...layoutNewTab no name!')
     const _index = findTabIndex(state, _name)
@@ -48,21 +48,21 @@ const mutations = {
    * @param state
    * @param tabName
    */
-  [types.LAYOUT_CLOSE_TAB] (state, tabName) {
+  [types.LAYOUT_CLOSE_TAB](state, tabName) {
     closeTabByTabNames(state, tabName)
   },
   /**
    * 关闭当前Tab
    * @param state
    */
-  [types.LAYOUT_CLOSE_CURRENT_TAB] (state) {
+  [types.LAYOUT_CLOSE_CURRENT_TAB](state) {
     closeTabByTabNames(state, state.curTabName)
   },
   /**
    * 关闭其它Tab
    * @param state
    */
-  [types.LAYOUT_CLOSE_OTHER_TAB] (state) {
+  [types.LAYOUT_CLOSE_OTHER_TAB](state) {
     const { tabs, curTabName } = state
     const _temp = []
     tabs.forEach(item => {
@@ -74,7 +74,7 @@ const mutations = {
    * 关闭全部Tab
    * @param state
    */
-  [types.LAYOUT_CLOSE_ALL_TAB] (state) {
+  [types.LAYOUT_CLOSE_ALL_TAB](state) {
     closeTabByTabNames(state, state.tabs.map(item => item.name))
   }
 }
@@ -123,7 +123,7 @@ const closeTabByTabNames = (state, tabNames) => {
 
 // export
 export default {
-  state,
+  state: _state,
   getters,
   actions,
   mutations

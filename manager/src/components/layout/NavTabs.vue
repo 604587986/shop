@@ -49,25 +49,25 @@
 
   export default {
     name: 'LayoutNavTabs',
-    data () {
+    data() {
       return {}
     },
     computed: {
       // 当前tab的name
       curTabName: {
-        get: function () {
+        get: function get() {
           return this.$store.state.layout.curTabName
         },
-        set: function (name) {
+        set: function set(name) {
           this.$store.state.layout.curTabName = name
         }
       },
       // 当前index计数
       tabIndex: {
-        get: function () {
+        get: function get() {
           return this.$store.state.layout.tabIndex
         },
-        set: function (index) {
+        set: function set(index) {
           this.$store.state.layout.tabIndex = index
         }
       },
@@ -83,7 +83,7 @@
         'layoutCloseOtherTab',
         'layoutCloseAllTab'
       ]),
-      handleCommand (command) {
+      handleCommand(command) {
         command === 'a' && this.layoutCloseCurrentTab()
         command === 'b' && this.layoutCloseOtherTab()
         command === 'c' && this.layoutCloseAllTab()

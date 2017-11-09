@@ -154,7 +154,7 @@
 <script>
   export default {
     name: 'Classify',
-    data () {
+    data() {
       return {
         data3: [{
           id: 1,

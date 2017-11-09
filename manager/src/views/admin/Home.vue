@@ -50,9 +50,35 @@
 </template>
 
 <script>
-    export default {
-      name: 'Home'
+  import { DataModel, Check, CheckTypes, ServerName } from '../../framework'
+
+  class CartModel extends DataModel {
+    /**
+     * 商品价格
+     * @type {number}
+     */
+    @ServerName('goods_price')
+    @Check(CheckTypes.Number)
+    price = 0
+
+    /**
+     * 店铺名称
+     * @type {string}
+     */
+     @ServerName('store_name')
+     @Check(CheckTypes.String)
+    sellerName = '平台自营'
+  }
+  export default {
+    name: 'Home',
+    mounted() {
+      let cartModel = new CartModel()
+      console.log(cartModel.map({
+        goods_price: 22.22,
+        store_name: '美容化妆'
+      }))
     }
+  }
 </script>
 
 <style type="text/scss" lang="scss" scoped>

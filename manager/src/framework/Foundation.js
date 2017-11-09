@@ -76,7 +76,7 @@ Foundation.unixToDate = (unix, format) => {
     'm+': d.getMinutes(),
     's+': d.getSeconds(),
     'q+': Math.floor((d.getMonth() + 3) / 3),
-    'S': d.getMilliseconds()
+    S: d.getMilliseconds()
   }
   if (/(y+)/.test(_format)) _format = _format.replace(RegExp.$1, (d.getFullYear() + '').substr(4 - RegExp.$1.length))
   for (let k in o) if (new RegExp('(' + k + ')').test(_format)) _format = _format.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
@@ -91,7 +91,14 @@ Foundation.dateToUnix = date => {
   let newStr = date.replace(/:/g, '-')
   newStr = newStr.replace(/ /g, '-')
   let arr = newStr.split('-')
-  let datum = new Date(Date.UTC(arr[0], arr[1] - 1, arr[2], arr[3] - 8 || -8, arr[4] || 0, arr[5] || 0))
+  let datum = new Date(Date.UTC(
+    arr[0],
+    arr[1] - 1,
+    arr[2],
+    arr[3] - 8 || -8,
+    arr[4] || 0,
+    arr[5] || 0
+  ))
   return datum.getTime() / 1000
 }
 
