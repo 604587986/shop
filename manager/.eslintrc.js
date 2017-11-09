@@ -45,6 +45,10 @@ module.exports = {
     // 禁用一元操作符 ++ 和 --
     'no-plusplus': 0,
     // 代码结束是否使用分号
-    'semi': [2, 'never']
+    'semi': [2, 'never'],
+    // 禁用行尾空白【警告】
+    'no-trailing-spaces': 1,
+    // 强制使用驼峰式命名
+    'camelcase': 0
   }
 }
