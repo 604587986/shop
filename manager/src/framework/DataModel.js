@@ -1,10 +1,12 @@
-import { checkFun } from './Check'
+import { CheckFun } from './Check'
+import { UnitFun } from './Unit'
 
 export default class DataModel {
   map(json) {
     if (!json) return this
     const alias = this.constructor.__serverName__
     const checkers = this.constructor.__checkers__
+    const units = this.constructor.__units__
     const _isArray = Array.isArray(json)
 
     // 如果json不是数组 将它封装为数组
@@ -13,7 +15,8 @@ export default class DataModel {
       for (let i in this) {
         if (!this.hasOwnProperty(i)) return item
         let realValue = this[i]
-        // 首先检查别名数据，并做映射
+
+        /** 对数据进行字段映射 */
         const _alias = alias[i]
         if (alias && typeof _alias !== 'undefined') {
           const value = item[_alias]
@@ -24,12 +27,21 @@ export default class DataModel {
         } else if (item[i] !== undefined && item[i] !== null) {
           realValue = item[i]
         }
-        // 然后针对数据检查类型
+
+        /** 对数据进行类型检查 */
         if (checkers && checkers[i]) {
           const value = realValue
           const type = checkers[i]
           const valueType = typeof (value)
-          if (!checkFun(type, value)) throw new Error(`要检查的数据类型${type}未通过！`)
+          if (!CheckFun(type, value)) throw new Error(`要检查的数据类型${type}未通过！`)
+        }
+
+        /** 对数据进行重铸 */
+        if (units && units[i]) {
+          const value = realValue
+          const type = units[i]
+          const _value = UnitFun(type, value)
+          realValue = _value
         }
         // 赋值
         item[i] = realValue
