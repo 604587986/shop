@@ -25,14 +25,14 @@
 
   export default {
     name: 'LayoutSidebar',
-    data () {
+    data() {
       return {
         sidebarMenu: managerPath === 'store'
           ? sidebarMenuStore
           : sidebarMenuAdmin
       }
     },
-    mounted () {
+    mounted() {
       if (!this.$store.getters.currentTabs[0]) {
         this.layoutNewTab({
           ...this.sidebarMenu[0],
@@ -41,18 +41,18 @@
       }
     },
     computed: {
-      defaultActive () {
+      defaultActive() {
         return this.$store.getters.currentTabName
       }
     },
     watch: {
       // 监听当前的menu
-      defaultActive (newVal, oldVal) {
+      defaultActive(newVal, oldVal) {
         const _path = this.filterMenu(newVal).path
       }
     },
     methods: {
-      sidebarSelected (index, indexPath) {
+      sidebarSelected(index, indexPath) {
         let _menu = this.filterMenu(index)
         const _tab = {
           title: _menu.title,
@@ -64,7 +64,7 @@
         this.layoutNewTab(_tab)
       },
       // 筛选出当前点击的menu
-      filterMenu (index) {
+      filterMenu(index) {
         let _menu = this.sidebarMenu
         index.split('-').forEach(item => {
           _menu[item].children

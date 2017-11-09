@@ -24,7 +24,7 @@
 <script>
   export default {
     name: 'GoodsList',
-    data () {
+    data() {
       return {
         tableData3: [{
           date: '2016-05-03',
