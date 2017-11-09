@@ -4,7 +4,7 @@ import {
   CheckTypes,
   ServerName,
   Unit,
-  UnitType
+  UnitTypes
 } from '../../../framework'
 
 export default class GoodsListModel extends DataModel {
@@ -61,7 +61,7 @@ export default class GoodsListModel extends DataModel {
    * 商品价格
    * @type {number}
    */
-  @Unit(UnitType.PRICE_UNIT_Y)
+  @Unit(UnitTypes.PRICE_UNIT_Y)
   @Check(CheckTypes.Money)
   @ServerName('goods_price')
   price = 0
