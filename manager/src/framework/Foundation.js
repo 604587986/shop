@@ -84,7 +84,7 @@ Foundation.unixToDate = (unix, format) => {
 }
 
 /**
- * 把date事件转为秒为单位的unix时间戳
+ * 把date转为秒为单位的unix时间戳
  * @param date YYY-MM-DD
  */
 Foundation.dateToUnix = date => {

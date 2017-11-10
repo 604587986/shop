@@ -1,25 +1,46 @@
 import * as types from '../mutation-types'
 import NotFound from '@/components/404.vue'
 
-// initial state
+/** initial state */
 const _state = {
   curTabName: '0',
   tabIndex: 0,
   tabs: []
 }
 
-// getters
+/** getters */
 const getters = {
-  // 返回当前tab名称
+  /** 返回当前tab名称 */
   currentTabName: state => state.curTabName,
-  // 返回当前tabs
+  /** 返回当前tabs */
   currentTabs: state => state.tabs
 }
 
-// actions
-const actions = {}
+/** actions */
+const actions = {
+  /** 新建一个Tab */
+  layoutNewTab: ({ commit }, props) => {
+    commit(types.LAYOUT_NEW_TAB, props)
+  },
+  /** 关闭一个Tab */
+  layoutCloseTab: ({ commit }, tabName) => {
+    commit(types.LAYOUT_CLOSE_TAB, tabName)
+  },
+  /** 关闭当前Tab */
+  layoutCloseCurrentTab: ({ commit }) => {
+    commit(types.LAYOUT_CLOSE_CURRENT_TAB)
+  },
+  /** 关闭其它Tab */
+  layoutCloseOtherTab: ({ commit }) => {
+    commit(types.LAYOUT_CLOSE_OTHER_TAB)
+  },
+  /** 关闭全部Tab */
+  layoutCloseAllTab: ({ commit }) => {
+    commit(types.LAYOUT_CLOSE_ALL_TAB)
+  }
+}
 
-// mutations
+/** mutations */
 const mutations = {
   /**
    * 新建一个Tab
@@ -121,7 +142,7 @@ const closeTabByTabNames = (state, tabNames) => {
   state.tabs = [...tabs]
 }
 
-// export
+/** export */
 export default {
   state: _state,
   getters,

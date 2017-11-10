@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import GoodsListModel from './GoodsListModel'
+  import GoodsListModel from './GoodsList.model'
   const goodsListModel = new GoodsListModel()
   export default {
     name: 'GoodsList',

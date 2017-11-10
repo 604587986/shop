@@ -1,17 +1,33 @@
 <template>
   <div id="app">
-    <layout></layout>
+    <layout v-if="isLogin"></layout>
+    <login v-else></login>
   </div>
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
   import Layout from './components/layout/Layout'
+  import Login from './components/login/Login'
 
   export default {
     name: 'app',
+    data() {
+      return {}
+    },
+    computed: {
+      isLogin() {
+        return this.$store.getters.isLogin
+      }
+    },
+    /* watch: {
+      loginStatus() {
+        this.isLogin = this.$store.getters.isLogin
+      }
+    }, */
     components: {
-      Layout
+      Layout,
+      Login
     }
   }
 </script>
