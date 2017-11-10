@@ -499,7 +499,7 @@ export default [
             type: 'menu-item'
           },
           {
-            title: '信任登陆',
+            title: '信任登录',
             type: 'menu-item'
           },
           {

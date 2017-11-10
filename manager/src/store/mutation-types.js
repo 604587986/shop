@@ -13,3 +13,13 @@ export const LAYOUT_CLOSE_CURRENT_TAB = 'LAYOUT_CLOSE_CURRENT_TAB'
 export const LAYOUT_CLOSE_OTHER_TAB = 'LAYOUT_CLOSE_OTHER_TAB'
 // 关闭全部TAB
 export const LAYOUT_CLOSE_ALL_TAB = 'LAYOUT_CLOSE_ALL_TAB'
+
+/**
+ * LOGIN
+ * @type {string}
+ */
+
+/** 登录成功 */
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+/** 退出成功 */
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
