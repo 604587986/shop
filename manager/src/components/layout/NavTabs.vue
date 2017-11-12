@@ -1,8 +1,5 @@
 <template>
-    <div class="nav-bar-container">
-      <div class="nav-bar-logo">
-        <layout-member></layout-member>
-      </div>
+    <div class="nav-bar-container" :style="mainWidth">
       <div class="nav-bar-tabs">
         <el-tabs
           v-model="curTabName"
@@ -43,7 +40,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex'
+  import { mapState, mapActions, mapGetters } from 'vuex'
   import LayoutMember from './Member.vue'
   import LayoutMain from './Main.vue'
 
@@ -53,6 +50,7 @@
       return {}
     },
     computed: {
+      ...mapGetters(['tabs', 'mainWidth']),
       // 当前tab的name
       curTabName: {
         get: function get() {
@@ -70,10 +68,7 @@
         set: function set(index) {
           this.$store.state.layout.tabIndex = index
         }
-      },
-      ...mapState({
-        tabs: state => state.layout.tabs
-      })
+      }
     },
     methods: {
       ...mapActions([
@@ -97,27 +92,27 @@
 </script>
 
 <style type="text/scss" lang="scss">
-  @import "../../styles/_color.scss";
+  @import "../../styles/color";
+  @import "../../styles/mixin";
 
   .nav-bar-container {
     display: flex;
     flex-direction: row;
     position: fixed;
-    width: 100%;
+    top: 50px;
+    left: 200px;
+    width: calc(100% - 200px);
     height: 56px;
     background: $nav-bar_background;
     text-align: center;
-    .nav-bar-logo {
-      width: 200px;
-      height: 100%;
-    }
+    @include transition(all ease-out .2s);
 
     .el-tabs__header {
       margin: 0;
     }
 
     .nav-bar-tabs {
-      width: calc(100% - 200px - 150px);
+      width: calc(100% - 150px);
       margin-top: calc(56px - 45px);
     }
 

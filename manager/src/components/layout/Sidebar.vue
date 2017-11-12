@@ -1,17 +1,24 @@
 <template>
-  <div class="sidebar-container">
-    <el-menu
-      :default-active="defaultActive"
-      background-color="#313641"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-      unique-opened
-      @select="sidebarSelected"
-    >
-      <template v-for="(item, index) in sidebarMenu">
-        <menus-item :item="item" :index="index"></menus-item>
-      </template>
-    </el-menu>
+  <div class="sidebar-container" :style="sidebarWidth">
+    <div class="sidebar-container-logo">
+      <div v-if="isCollapse" class="logo-square"></div>
+      <div v-else class="logo-rectangle"></div>
+    </div>
+    <div class="sidebar-container-menu">
+      <el-menu
+        :collapse="isCollapse"
+        :default-active="defaultActive"
+        background-color="#313641"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+        unique-opened
+        @select="sidebarSelected"
+      >
+        <template v-for="(item, index) in sidebarMenu">
+          <menus-item :item="item" :index="index"></menus-item>
+        </template>
+      </el-menu>
+    </div>
   </div>
 </template>
 
@@ -20,8 +27,10 @@
   import { mapActions } from 'vuex'
   import sidebarMenuStore from '@/sidebar-menus.store'
   import sidebarMenuAdmin from '@/sidebar-menus.admin'
-
   const managerPath = require('../../../config/manager.config').path
+  window.localStorage.setItem('sidebarMenu',
+    JSON.stringify(managerPath === 'store' ? sidebarMenuStore : sidebarMenuAdmin)
+  )
 
   export default {
     name: 'LayoutSidebar',
@@ -29,7 +38,10 @@
       return {
         sidebarMenu: managerPath === 'store'
           ? sidebarMenuStore
-          : sidebarMenuAdmin
+          : sidebarMenuAdmin,
+        sidebarWidth: {
+          width: '200px'
+        }
       }
     },
     mounted() {
@@ -43,12 +55,16 @@
     computed: {
       defaultActive() {
         return this.$store.getters.currentTabName
+      },
+      isCollapse() {
+        return this.$store.state.layout.isCollapse
       }
     },
     watch: {
-      // 监听当前的menu
-      defaultActive(newVal, oldVal) {
-        const _path = this.filterMenu(newVal).path
+      isCollapse(newVal, oldVal) {
+        this.sidebarWidth = newVal
+          ? { width: '64px' }
+          : { width: '200px' }
       }
     },
     methods: {
@@ -63,7 +79,8 @@
         index === 0 && (_tab.closable = false)
         this.layoutNewTab(_tab)
       },
-      // 筛选出当前点击的menu
+
+      /** 筛选出当前点击的menu */
       filterMenu(index) {
         let _menu = this.sidebarMenu
         index.split('-').forEach(item => {
@@ -109,16 +126,40 @@
 </script>
 
 <style type="text/scss" lang="scss">
-  @import "../../styles/_color.scss";
+  @import "../../styles/color";
+  @import "../../styles/mixin";
 
   .sidebar-container {
-    width: 200px;
     position: fixed;
-    top: 56px;
+    top: 0;
     left: 0;
-    height: calc(100% - 56px);
+    height: 100%;
     background-color: $sider-bar_background;
-    overflow-y: scroll;
+    @include transition(width ease-out .2s);
+
+    .sidebar-container-logo {
+      height: 50px;
+      .logo-square {
+        width: 50px;
+        height: 50px;
+        background: url("../../assets/logo-javashop-square.png") no-repeat center;
+        background-size: 50px 50px;
+        margin: 0 auto;
+      }
+      .logo-rectangle {
+        width: 160px;
+        height: 50px;
+        margin: 0 20px;
+        color: #fff;
+        background: url("../../assets/logo-javashop-rectangle-dark.png") no-repeat left;
+        background-size: 100% 50px;
+      }
+    }
+    .sidebar-container-menu {
+      height: calc(100% - 50px);
+      overflow-y: scroll;
+
+    }
     .el-menu {
       border: none;
     }
