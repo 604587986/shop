@@ -5,6 +5,7 @@ import * as getters from './getters'
 
 import layout from './modules/layout'
 import login from './modules/login'
+import notification from './modules/notification'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
   getters,
   modules: {
     layout,
-    login
+    login,
+    notification
   }
 })

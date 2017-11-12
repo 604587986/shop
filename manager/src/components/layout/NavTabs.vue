@@ -102,9 +102,10 @@
     top: 50px;
     left: 200px;
     width: calc(100% - 200px);
-    height: 56px;
+    height: 50px;
     background: $nav-bar_background;
     text-align: center;
+    @include box-shadow(0 2px 1px 1px hsla(0,0%,39%,.1));
     @include transition(all ease-out .2s);
 
     .el-tabs__header {
@@ -113,9 +114,12 @@
 
     .nav-bar-tabs {
       width: calc(100% - 150px);
-      margin-top: calc(56px - 45px);
+      margin-top: 10px;
+      padding-left: 10px;
     }
-
+    .el-tabs__nav-next, .el-tabs__nav-prev {
+      line-height: 32px;
+    }
     .el-tabs--card>.el-tabs__header {
       border: none;
     }
@@ -123,10 +127,15 @@
       border: none;
       border-radius: 0;
     }
+    .el-tabs--card>.el-tabs__header .el-tabs__item.is-active.is-closable {
+      padding-left: 15px;
+      padding-right: 10px;
+    }
     .el-tabs--card>.el-tabs__header .el-tabs__item {
       min-width: 80px;
-      height: 45px;
-      line-height: 45px;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 3px;
       color: $nav-bar_text;
       border: none;
       user-select: none;
