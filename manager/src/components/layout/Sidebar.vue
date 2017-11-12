@@ -158,7 +158,6 @@
     .sidebar-container-menu {
       height: calc(100% - 50px);
       overflow-y: scroll;
-
     }
     .el-menu {
       border: none;

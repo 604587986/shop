@@ -27,3 +27,9 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 /** 登录状态失效 */
 export const LOGIN_EXPIRED = 'LOGIN_EXPIRED'
+
+/**
+ * NOTIFICATION
+ * @type {string}
+ */
+export const NOTIFICATION_HAVE_READ = 'NOTIFICATION_HAVE_READ'

@@ -24,11 +24,11 @@
 
   .main-container {
     position: fixed;
-    top: (56px + 50px);
+    top: (50px + 50px);
     left: 200px;
     overflow: scroll;
     width: calc(100% - 200px);
-    height: calc(100% - 50px - 56px);
+    height: calc(100% - 50px - 50px);
     @include transition(all ease-out .2s);
 
     .inner-main-container {

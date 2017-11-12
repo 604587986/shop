@@ -14,6 +14,13 @@
       </el-breadcrumb>
     </div>
     <div class="operate-tools-bar">
+      <div class="btns-tools-bar">
+        <el-tooltip class="item" effect="dark" :content="'有' + notification_count + '条未读消息'" placement="bottom">
+          <el-badge :value="notification_count" :max="99" class="item">
+            <el-button type="text" icon="el-icon-enation-bells"></el-button>
+          </el-badge>
+        </el-tooltip>
+      </div>
       <div v-if="userInfo" class="user-info">
         <el-dropdown @command="handleUserCommand" size="small" trigger="click">
           <span class="el-dropdown-link">
@@ -43,7 +50,7 @@
       }
     },
     computed: {
-      ...mapGetters(['mainWidth', 'isCollapse', 'userInfo', 'currentTabName'])
+      ...mapGetters(['mainWidth', 'isCollapse', 'userInfo', 'currentTabName', 'notification_count'])
     },
     watch: {
       currentTabName(newVal, oldVal) {
@@ -128,11 +135,22 @@
     }
   }
   .operate-tools-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     float: right;
     width: 200px;
     height: 50px;
     text-align: right;
     padding: 0 10px;
+
+    .btns-tools-bar {
+      margin-right: 30px;
+      .el-badge .el-button--text {
+        color: #495060;
+        padding: 0;
+      }
+    }
 
     .user-info {
       display: flex;
