@@ -5,15 +5,22 @@ import NotFound from '@/components/404.vue'
 const _state = {
   curTabName: '0',
   tabIndex: 0,
-  tabs: []
+  tabs: [],
+  isCollapse: false,
+  mainWidth: { width: 'calc(100% - 200px)', left: '200px' }
 }
 
 /** getters */
 const getters = {
+  tabs: state => state.tabs,
   /** 返回当前tab名称 */
   currentTabName: state => state.curTabName,
   /** 返回当前tabs */
-  currentTabs: state => state.tabs
+  currentTabs: state => state.tabs,
+  /** 返回sidebar当前展开状态 */
+  isCollapse: state => state.isCollapse,
+  /** 返回宽度 */
+  mainWidth: state => state.mainWidth
 }
 
 /** actions */
@@ -37,6 +44,10 @@ const actions = {
   /** 关闭全部Tab */
   layoutCloseAllTab: ({ commit }) => {
     commit(types.LAYOUT_CLOSE_ALL_TAB)
+  },
+  /** 展开或收起sidebar */
+  layoutSidebarCollapse: ({ commit }) => {
+    commit(types.LAYOUT_COLLASPE_SIDEBAR)
   }
 }
 
@@ -97,6 +108,17 @@ const mutations = {
    */
   [types.LAYOUT_CLOSE_ALL_TAB](state) {
     closeTabByTabNames(state, state.tabs.map(item => item.name))
+  },
+  /**
+   * 展开或收起sidebar
+   * @param state
+   * @param collapse
+   */
+  [types.LAYOUT_COLLASPE_SIDEBAR](state) {
+    state.isCollapse = !state.isCollapse
+    state.mainWidth = state.isCollapse
+      ? { width: 'calc(100% - 64px)', left: '64px' }
+      : { width: 'calc(100% - 200px)', left: '200px' }
   }
 }
 

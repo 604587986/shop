@@ -19,7 +19,7 @@ export default [
   {
     title: '商品',
     type: 'submenu',
-    icon: 'el-icon-eation-goods-manager',
+    icon: 'el-icon-enation-goods-manager',
     children: [
       {
         title: '商品管理',
@@ -66,7 +66,7 @@ export default [
   {
     title: '订单',
     type: 'submenu',
-    icon: 'el-icon-eation-order-manager',
+    icon: 'el-icon-enation-order-manager',
     children: [
       {
         title: '订单管理',
@@ -119,7 +119,7 @@ export default [
   {
     title: '会员',
     type: 'submenu',
-    icon: 'el-icon-eation-member-manager',
+    icon: 'el-icon-enation-member-manager',
     children: [
       {
         title: '会员管理',
@@ -164,7 +164,7 @@ export default [
   {
     title: '店铺',
     type: 'submenu',
-    icon: 'el-icon-eation-shop-manager',
+    icon: 'el-icon-enation-shop-manager',
     children: [
       {
         title: '店铺管理',
@@ -237,7 +237,7 @@ export default [
   {
     title: '促销',
     type: 'submenu',
-    icon: 'el-icon-eation-activity-manager',
+    icon: 'el-icon-enation-activity-manager',
     children: [
       {
         title: '团购管理',
@@ -272,7 +272,7 @@ export default [
   {
     title: '页面',
     type: 'submenu',
-    icon: 'el-icon-eation-page-manager',
+    icon: 'el-icon-enation-page-manager',
     children: [
       {
         title: 'PC装修',
@@ -355,7 +355,7 @@ export default [
   {
     title: '统计',
     type: 'submenu',
-    icon: 'el-icon-eation-statistics-manager',
+    icon: 'el-icon-enation-statistics-manager',
     children: [
       {
         title: '会员分析',
@@ -585,7 +585,7 @@ export default [
   {
     title: '开发',
     type: 'submenu',
-    icon: 'el-icon-eation-develop-manager',
+    icon: 'el-icon-enation-develop-manager',
     children: [
       {
         title: '工具',

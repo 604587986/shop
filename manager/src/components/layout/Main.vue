@@ -1,6 +1,6 @@
 <template>
   <transition name="el-fade-in-linear">
-    <div class="main-container">
+    <div class="main-container" :style="mainWidth">
       <div class="inner-main-container">
         <slot></slot>
       </div>
@@ -10,18 +10,27 @@
 
 <script>
   export default {
-    name: 'LayoutMain'
+    name: 'LayoutMain',
+    computed: {
+      mainWidth() {
+        return this.$store.state.layout.mainWidth
+      }
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../styles/mixin";
+
   .main-container {
     position: fixed;
-    top: 56px;
+    top: (56px + 50px);
     left: 200px;
     overflow: scroll;
     width: calc(100% - 200px);
-    height: calc(100% - 56px);
+    height: calc(100% - 50px - 56px);
+    @include transition(all ease-out .2s);
+
     .inner-main-container {
       margin: 10px;
       width: calc(100% - 20px);

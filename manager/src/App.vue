@@ -6,25 +6,21 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import Layout from './components/layout/Layout'
   import Login from './components/login/Login'
 
   export default {
     name: 'app',
-    data() {
-      return {}
+    created() {
+      window.localStorage.getItem('isLogin') === 'true' && this.loginSuccess()
     },
     computed: {
-      isLogin() {
-        return this.$store.getters.isLogin
-      }
+      ...mapGetters(['isLogin'])
     },
-    /* watch: {
-      loginStatus() {
-        this.isLogin = this.$store.getters.isLogin
-      }
-    }, */
+    methods: {
+      ...mapActions(['loginSuccess'])
+    },
     components: {
       Layout,
       Login
@@ -39,7 +35,7 @@
     background: $body_background;
   }
 
-  [class^="el-icon-eation"], [class*=" el-icon-eation"] {
+  [class^="el-icon-enation"], [class*=" el-icon-enation"] {
     font-family: "iconfont" !important;
     font-size: inherit;
     font-style:normal;
