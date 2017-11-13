@@ -20,7 +20,7 @@ Vue.use(ElementUI)
  * axios全局配置
  * @type {string}
  */
-axios.defaults.baseURL = 'http://www.easy-mock.com/mock/5a030bde72fea73d00fc5eef/'
+axios.defaults.baseURL = 'http://www.easy-mock.com/mock/5a090349c645f12278296ab9/admin'
 /* global Promise */
 /**
  * axios全局请求拦截
