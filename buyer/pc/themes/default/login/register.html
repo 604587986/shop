@@ -1,5 +1,154 @@
 <!--#include file="/common/header.html" -->
-<div id="register" class="w">
-    <h1>注册</h1>
+<link rel="stylesheet" href="/styles/css/login-register.css">
+<script src="/js/register.js"></script>
+<div id="register" class="register w">
+    <div class="index-logo">
+        <a href="">
+            <img src="../images/logo.png" class="pngFix"/>
+        </a>
+        <!-- <span class="user_title">欢迎注册</span> -->
+    </div>
+</div>
+<div class="steps steps-4">
+    <ol>
+        <li class="active"><i>1</i><span >填写手机号</span></li>
+        <li><i>2</i><span>填写账号信息</span></li>
+        <li><i class="iconfont">&#x2714;</i><span>注册成功</span></li>
+    </ol>
+</div>
+<div class="mobile-content">
+    <form action="#" method="post" class="validate">
+        <div class="form-list form-main-list">
+            <div class="form-group">
+                <div class="form-item">
+                    <span class="form-label">手机号</span>
+                    <div class="mobile-text">
+                        <input type="text" class="mobile-input form-control" name="mobile" maxlength="11" placeholder="请输入您的手机号码">
+                    </div>
+                </div>
+                <div class="form-item">
+                    <input type="button" class="btn send-sms-btn" value="发送验证码">
+                </div>
+                <div class="form-item">
+                    <span class="form-label">验证码</span>
+                    <div class="mobile-text">
+                        <input type="text" class="mobile-input form-control" maxlength="6" />
+                    </div>
+                </div>
+                <div class="form-item form-item-short">
+                    <input id="license" type="checkbox" checked="checked" name="license" value="agree" />已阅读并同意
+                    <span class="protocol">服务协议</span>
+                </div>
+                <div class="form-item form-item-short">
+                    <a class="btn btn-danger next-button">下一步</a>
+                    <a class="btn btn-info" href="./email-register.html">邮箱注册</a>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 填写账号信息 -->
+<div class="usef-info-content">
+    <form id="user-info-form" method="post" class="validate">
+        <div class="form-list form-main-list">
+            <div class="form-group">
+                <div class="form-title">
+                    <span class="form-label">账户</span>
+                    <div class="mobile-text">
+                        <input type="hidden" name="mobile" value="" />
+                        <input type="hidden" name="validcode" value="" />
+                        <span>1549474</span>
+                    </div>
+                </div>
+                <div class="form-title">
+                    <span class="form-label">设置登录密码</span>
+                    <div class="mobile-text">
+                        <span>登录时验证，保护账号信息</span>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <span class="form-label">登录密码</span>
+                    <div class="mobile-text">
+                        <input class="form-control mobile-input" name="password" placeholder="设置您的登录密码" type="password" isrequired="true">
+                    </div>
+                </div>
+                <div class="form-item">
+                    <span class="form-label">密码确认</span>
+                    <div class="mobile-text">
+                        <input class="form-control mobile-input" name="repassword" placeholder="请再次输入您的密码" type="password" isrequired="true">
+                    </div>
+                </div>
+                <div class="form-title">
+                    <span class="form-label">设置会员名</span>
+                    <div class="mobile-text">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <span class="form-label">会员名</span>
+                    <div class="mobile-text">
+                        <input class="form-control mobile-input" name="username" placeholder="一旦设置，不能再修改" type="text" isrequired="true">
+                        <p>长度只能在4-20个字符之间</p>
+                    </div>
+                </div>
+                <div class="form-item form-item-short">
+                    <input type="hidden" name="license" value="agree" />
+                </div>
+                <div class="form-item form-item-short">
+                    <input type="button" class="btn btn-large btn-disabled" value="提交" />
+                </div>
+                <div id="output"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 注册成功 -->
+<div class="reg-content">
+    <div class="content-in">
+        <h3 class="success-title">恭喜注册成功，你的账户为：</h3>
+        <div class="form-item">
+            <span class="form-label tsl">登录名&nbsp;&nbsp;</span>
+            <div class="mobile-text">
+                <span class="user-name">sda</span>
+            </div>
+        </div>
+        <div class="form-item">
+            <span class="form-label tsl">绑定手机&nbsp;&nbsp;</span>
+            <div class="mobile-text">
+                <span>177545 （用户接收短信验证码）</span>
+            </div>
+        </div>
+        <div class="binds">
+            <div class="bind-app">
+                <div class="bind-logo">
+                    <img src="../images/weibo.jpg" title="微博绑定" alt="微博绑定">
+                </div>
+                <div class="bind-other">
+                    <p class="bind-title">快速绑定微博账号 </p>
+                    <a class="bind-btn" href="">立即绑定</a>
+                </div>
+            </div>
+            <div class="bind-app">
+                <div class="bind-logo bind-qq-logo">
+                    <img src="../images/qq.jpg" title="QQ绑定" alt="QQ绑定">
+                </div>
+                <div class="bind-other bind-qq-other">
+                    <p class="bind-title">快速绑定QQ账号 </p>
+                    <a class="bind-btn" href="">立即绑定</a>
+                </div>
+            </div>
+            <div class="bind-app">
+                <div class="bind-logo">
+                    <img src="../images/weixin.jpg" title="微信绑定" alt="微信绑定">
+                </div>
+                <div class="bind-other">
+                    <p class="bind-title">快速绑定微信账号 </p>
+                    <a class="bind-btn" href="">立即绑定</a>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
 </div>
 <!--#include file="/common/footer.html" -->

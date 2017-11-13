@@ -1,0 +1,207 @@
+<!--#include file="/shop/store-header.html" -->
+<div class="store-main">
+    <form id="next2" class="validat">
+        <div class="open-store" id="certification-info">
+            <div class="bread-crumb">
+                <span class="icon-home"></span>
+                <span>
+                      <a href="#">首页</a>
+                  </span>
+                <span class="arrow">></span>
+                <span>商家入驻申请</span>
+            </div>
+            <!--左侧-->
+            <div class="left-sidebar">
+                <div class="title">
+                    <h2>商家入驻申请</h2>
+                </div>
+                <div class="content">
+                    <dl>
+                        <dt>
+                            <i class="hideer"></i>入驻协议
+                        </dt>
+                    </dl>
+                    <dl>
+                        <dt>
+                            <i class="hideer"></i> 基本信息
+                        </dt>
+                    </dl>
+                    <dl class="certification agreement">
+                        <dt>
+                            <i class="hideer"></i>认证信息
+                        </dt>
+                        <dd>
+                            <ul>
+                                <li>
+                                    <i></i>
+                                    <a href="#business">营业执照信息</a>
+                                </li>
+                                <li>
+                                    <i></i>
+                                    <a href="#organization">组织机构代码证</a>
+                                </li>
+                                <li>
+                                    <i></i>
+                                    <a href="#prove">一般纳税人证明</a>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl class="financial">
+                        <dt>
+                            <i class="hideer"></i>财务资质信息
+                        </dt>
+                        <dd class="fin-con">
+                            <ul>
+                                <li>
+                                    <i></i>
+                                    <a>开户行银行许可证</a>
+                                </li>
+                                <li>
+                                    <i></i>
+                                    <a>税务登记证</a>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>
+                            <i class="hideer"></i>店铺信息
+                        </dt>
+                    </dl>
+                </div>
+            </div>
+            <!--右侧信息-->
+            <div class="right-layout">
+                <div class="joinin-step">
+                    <ul>
+                        <li class="step1 current"><span>入驻协议</span></li>
+                        <li class="step2 current"><span>基本信息</span></li>
+                        <li class="step3 current"><span>认证信息</span></li>
+                        <li class="step4"><span>财务资质信息</span></li>
+                        <li class="step5"><span>店铺信息</span></li>
+                    </ul>
+                </div>
+                <div class="joinin-content">
+                    <div class="apply-agreement">
+                        <div class="basic-information">
+                            <h3 id="business">营业执照信息</h3>
+                        </div>
+                        <div class="basic-data">
+                            <div class="form-saveMember">
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th><span>法定代表人姓名</span>:</th>
+                                        <td>
+                                            <input type="text" class="legal-name" placeholder="请输入法定代表人姓名" maxlength="10">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>身份证号</span>：</th>
+                                        <td>
+                                            <input type="text" class="legal-id" placeholder="请输入身份证号" maxlength="18">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>法人身份证电子版</span>：</th>
+                                        <td>
+                                            <span class="upload-btn legal_img_btn">上传</span>
+                                            <p>允许上传的格式（jpg、png、jpeg）和大小（1mb)以内</p>
+                                            <img class="temp-preview-image">
+                                            <input type="hidden" class="legal-img" maxlength="100" autocomplete="off">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>营业执照号</span>：</th>
+                                        <td>
+                                            <input type="text" class="license-num" placeholder="请输入营业执照号" maxlength="20">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>营业执照所在地</span>：</th>
+                                        <td id="selectAddress">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>营业执照详细地址</span>：</th>
+                                        <td>
+                                            <input type="text" class="license-add" placeholder="请输入营业执照详细地址" maxlength="50">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>成立日期</span>：</th>
+                                        <td>
+                                            <input class="Wdate form-control establishdate" type="text" class="establishdate" readonly>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>营业执照有效期</span>：</th>
+                                        <td>
+                                            <input class="Wdate form-control licencestart" type="text" class="licencestart" readonly placeholder="开始时间">
+                                            <input class="Wdate form-control licenceend" type="text" class="licenceend" readonly placeholder="结束时间">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>法定经营范围</span>：</th>
+                                        <td>
+                                            <input type="text" class="scope" placeholder="请输入法定经营范围" maxlength="50">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>营业执照电子版</span>：</th>
+                                        <td>
+                                            <span class="upload-btn  licence_img_btn">上传</span>
+                                            <div>允许上传的格式（jpg、png、jpeg）和大小（1mb)以内</div>
+                                            <img class="temp-preview-image" src="" height="200" width="200">
+                                            <input type="hidden" class="licence_img" maxlength="100" autocomplete="off">
+                                        </td>
+                                    </tr>
+                                    <tr class="organ-za">
+                                        <td>
+                                            <h3 id="organization">组织机构代码证</h3>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>组织机构代码</span>：</th>
+                                        <td>
+                                            <input type="text" class="organization-code" placeholder="请输入组织机构代码" maxlength="20">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><span>组织机构代码证电子版</span>：</th>
+                                        <td>
+                                            <span class="upload-btn  code_img_btn">上传</span>
+                                            <div>允许上传的格式（jpg、png、jpeg）和大小（1mb)以内</div>
+                                            <img class="temp-preview-image" height="200" width="200">
+                                            <input type="hidden" name="code_img" class="code_img" maxlength="100" autocomplete="off">
+                                        </td>
+                                    </tr>
+                                    <tr class="organ-za">
+                                        <td>
+                                            <h3 id="prove">一般纳税人证明</h3>
+                                        </td>
+                                    </tr>
+                                    <tr class="aa">
+                                        <th><span>一般纳税人证明</span>：</th>
+                                        <td>
+                                            <span class="upload-btn taxes-img-btn">上传</span>
+                                            <div>允许上传的格式（jpg、png、jpeg）和大小（1mb)以内</div>
+                                            <img class="temp-preview-image" height="200" width="200">
+                                            <input type="hidden" class="taxes-img" maxlength="100" autocomplete="off">
+                                        </td>
+                                    </tr>
+                            </div>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <a class="btn previous">上一步</a>
+                        <a class="btn next">下一步</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</form>
+</div>
