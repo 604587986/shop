@@ -107,7 +107,7 @@
       /** 获取商品列表 */
       GET_GoodsList() {
         this.loading = true
-        this.$http.get(`api/goods/list${this.$Foundation.sequence.get(this.params)}`, { loading: false })
+        this.$http.get(`goods/list${this.$Foundation.sequence.get(this.params)}`, { loading: false })
           .then(response => response.data)
           .then(data => {
             this.loading = false
@@ -121,7 +121,7 @@
       },
       /** 下架商品 */
       DELETE_Goods(id) {
-        this.$http.delete(`api/goods/${id}`)
+        this.$http.delete(`goods/${id}`)
           .then(() => {
             this.GET_GoodsList()
             this.$message.success('下架商品成功！')
