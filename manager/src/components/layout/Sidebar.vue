@@ -101,7 +101,7 @@
     props: ['item', 'index'],
     template: `
           <keep-alive>
-            <el-menu-item-group v-if="item.type === 'menu-item-group'">
+            <el-menu-item-group v-if="item.children && item.children.length === 1 || item.type === 'menu-item-group'">
               <template slot="title">{{ item.title }}</template>
               <template v-if="item.children && item.children[0]" v-for="(_item, _index) in item.children">
                 <menus-item :item="_item" :index="index + '-' + _index"></menus-item>
