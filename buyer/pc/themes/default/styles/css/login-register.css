@@ -52,7 +52,7 @@
 }
 
 .content .login-banner .bg-banner .banner-img {
-    background: url(../../images/bj1.jpg)no-repeat center center;
+    background: url(../../images/background-banner.jpg)no-repeat center center;
     background-size: cover;
     height: 560px;
 }
@@ -302,7 +302,7 @@ ul {
     font-size: 14px;
     font-weight: 700;
     color: #FFF;
-    background: url(../../images/ico-circle2.png) no-repeat 0 0
+    background: url(../../images/icon-circle2.png) no-repeat 0 0;
 }
 
 .steps ol li.active {
@@ -311,7 +311,7 @@ ul {
 }
 
 .steps ol li.active i {
-    background-image: url(../../images/ico-circle1.png)
+    background-image: url(../../images/icon-circle1.png)
 }
 
 .steps-4 ol li {
@@ -851,7 +851,7 @@ ul {
 }
 
 .reg .shop-right ul li i {
-    background: url("../../images/dltup.png") no-repeat left top;
+    background: url("../../images/icon-dltup.png") no-repeat left top;
     display: inline-block;
     height: 48px;
     margin-right: 10px;
