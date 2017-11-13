@@ -7,7 +7,8 @@ const _state = {
   tabIndex: 0,
   tabs: [],
   isCollapse: false,
-  mainWidth: { width: 'calc(100% - 200px)', left: '200px' }
+  mainWidth: { width: 'calc(100% - 200px)', left: '200px' },
+  sidebarWidth: { width: '200px' }
 }
 
 /** getters */
@@ -20,7 +21,9 @@ const getters = {
   /** 返回sidebar当前展开状态 */
   isCollapse: state => state.isCollapse,
   /** 返回宽度 */
-  mainWidth: state => state.mainWidth
+  mainWidth: state => state.mainWidth,
+  /** 返回侧边栏宽度 */
+  sidebarWidth: state => state.sidebarWidth
 }
 
 /** actions */
@@ -119,6 +122,9 @@ const mutations = {
     state.mainWidth = state.isCollapse
       ? { width: 'calc(100% - 64px)', left: '64px' }
       : { width: 'calc(100% - 200px)', left: '200px' }
+    state.sidebarWidth = state.isCollapse
+      ? { width: '64px' }
+      : { width: '200px' }
   }
 }
 

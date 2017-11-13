@@ -9,12 +9,11 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   export default {
     name: 'LayoutMain',
     computed: {
-      mainWidth() {
-        return this.$store.state.layout.mainWidth
-      }
+      ...mapGetters(['mainWidth'])
     }
   }
 </script>

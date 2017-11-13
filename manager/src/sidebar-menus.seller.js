@@ -1,10 +1,10 @@
 //  概况
-const Home = () => import('./views/store/Home.vue')
+const Home = () => import('./views/seller/Home.vue')
 
 //  商品管理
-const GoodsList = () => import('./views/store/goods/GoodsList.vue')
-const Classify = () => import('./views/store/goods/Classfiy.vue')
-const TagList = () => import('./views/store/goods/TagList.vue')
+const GoodsList = () => import('./views/seller/goods/GoodsList.vue')
+const Classify = () => import('./views/seller/goods/Classfiy.vue')
+const TagList = () => import('./views/seller/goods/TagList.vue')
 
 //  开发文档
 const Doc = () => import('./views/doc/Index.vue')

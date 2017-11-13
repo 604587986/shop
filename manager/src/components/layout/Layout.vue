@@ -18,7 +18,7 @@
       /** 模拟登录状态失效 */
       /* setTimeout(() => {
         this.loginExpired()
-      }, 1000 * 5) */
+      }, 1000 * 1000 * 5) */
     },
     methods: {
       ...mapActions(['loginExpired'])

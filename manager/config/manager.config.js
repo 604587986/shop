@@ -1,4 +1,4 @@
 module.exports = {
-  // path: 'store'
+  // path: 'seller'
   path: 'admin'
 }
