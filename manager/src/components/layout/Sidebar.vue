@@ -7,7 +7,7 @@
     <div class="sidebar-container-menu">
       <el-menu
         :collapse="isCollapse"
-        :default-active="defaultActive"
+        :default-active="currentTabName"
         background-color="#313641"
         text-color="#fff"
         active-text-color="#ffd04b"
@@ -24,48 +24,33 @@
 
 <script>
   import Vue from 'vue'
-  import { mapActions } from 'vuex'
-  import sidebarMenuStore from '@/sidebar-menus.store'
+  import { mapActions, mapGetters } from 'vuex'
+  import sidebarMenuSeller from '@/sidebar-menus.seller'
   import sidebarMenuAdmin from '@/sidebar-menus.admin'
   const managerPath = require('../../../config/manager.config').path
   window.localStorage.setItem('sidebarMenu',
-    JSON.stringify(managerPath === 'store' ? sidebarMenuStore : sidebarMenuAdmin)
+    JSON.stringify(managerPath === 'admin' ? sidebarMenuAdmin : sidebarMenuSeller)
   )
 
   export default {
     name: 'LayoutSidebar',
     data() {
       return {
-        sidebarMenu: managerPath === 'store'
-          ? sidebarMenuStore
-          : sidebarMenuAdmin,
-        sidebarWidth: {
-          width: '200px'
-        }
+        sidebarMenu: managerPath === 'admin'
+          ? sidebarMenuAdmin
+          : sidebarMenuSeller
       }
     },
     mounted() {
       if (!this.$store.getters.currentTabs[0]) {
         this.layoutNewTab({
           ...this.sidebarMenu[0],
-          name: this.defaultActive
+          name: this.currentTabName
         })
       }
     },
     computed: {
-      defaultActive() {
-        return this.$store.getters.currentTabName
-      },
-      isCollapse() {
-        return this.$store.state.layout.isCollapse
-      }
-    },
-    watch: {
-      isCollapse(newVal, oldVal) {
-        this.sidebarWidth = newVal
-          ? { width: '64px' }
-          : { width: '200px' }
-      }
+      ...mapGetters(['currentTabName', 'isCollapse', 'sidebarWidth'])
     },
     methods: {
       sidebarSelected(index, indexPath) {
