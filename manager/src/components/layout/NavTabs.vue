@@ -104,7 +104,6 @@
     width: calc(100% - 200px);
     height: 50px;
     background: $nav-bar_background;
-    text-align: center;
     @include box-shadow(0 2px 1px 1px hsla(0,0%,39%,.1));
     @include transition(all ease-out .2s);
 
@@ -140,6 +139,7 @@
       border: none;
       user-select: none;
       transition: color .3s cubic-bezier(.645,.045,.355,1),padding .3s cubic-bezier(.645,.045,.355,1), background-color .3s cubic-bezier(.645,.045,.355,1);
+      text-align: center;
       &.is-active {
         background-color: #fff;
         color: $nav-bar_text-active;

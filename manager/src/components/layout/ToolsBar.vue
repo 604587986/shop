@@ -75,7 +75,7 @@
       /** 用户操作 */
       handleUserCommand(command) {
         command === 'website' && window.open('http://v64.javamall.com.cn/')
-        command === 'password' && console.log('修改密码')
+        command === 'password' && this.$message.success('修改密码')
         command === 'logout' && this.POST_Logout()
       },
 
