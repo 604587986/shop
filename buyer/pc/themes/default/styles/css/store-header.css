@@ -1,0 +1,901 @@
+@charset "UTF-8";
+
+/* 申请开店 */
+
+.store {
+    background-color: white;
+    height: 80px;
+    width: 100%;
+    border-bottom: 3px solid #e22b2c;
+    ;
+}
+
+.store .store-title {
+    margin: 0px auto;
+    width: 1200px;
+    height: 80px;
+}
+
+.store .store-title .s-logo {
+    display: block;
+    float: left;
+    font-size: 0;
+    height: 60px;
+    line-height: 60px;
+    padding: 6px;
+}
+
+.store .store-title .s-logo img {
+    float: left;
+    max-height: 60px;
+    max-width: 180px;
+    vertical-align: middle;
+}
+
+.store .store-title .s-logo h1 {
+    border-left: 1px solid #fff;
+    font: 16px/18px "microsoft yahei";
+    float: left;
+    height: 18px;
+    letter-spacing: normal;
+    margin: 23px 0px 0px 6px;
+    padding-left: 6px;
+    vertical-align: middle;
+    width: 72px;
+    word-spacing: normal;
+}
+
+.store .store-title .store-uesr {
+    display: block;
+    float: right;
+    margin: 30px 0px 0px 0px;
+}
+
+.store .store-title .store-uesr a {
+    color: red;
+    cursor: pointer;
+}
+
+.store .store-title .store_phone {
+    display: block;
+    float: right;
+    padding: 6px;
+}
+
+.store .store-title .store_phone img {
+    display: inline-block;
+    max-height: 70px;
+    max-width: 180px;
+    vertical-align: middle;
+    margin-top: 20px;
+}
+
+.store-uesr span {
+    cursor: pointer;
+}
+
+.store-main {
+    width: 100%;
+    overflow: hidden;
+}
+
+.store-main .open-store {
+    width: 1000px;
+    overflow: hidden;
+    margin: 20px auto;
+    padding: 10px;
+    background: #fff;
+}
+
+.store-main .open-store h1 {
+    color: #27a9e3;
+    cursor: default;
+    display: inline-block;
+    font: 20px/36px "microsoft yahei";
+    height: 36px;
+    padding: 0 20px;
+}
+
+.store-main .open-store h3 {
+    color: #666;
+    display: block;
+    font: 16px/24px "microsoft yahei";
+    height: 28px;
+    margin: 1px 0 1px 0px;
+    padding: 3px 0 2px 20px;
+    font-weight: bold;
+}
+
+.store-main .open-store .no-store {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    padding: 10px;
+    margin: 10px 0px 30px 10px;
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+}
+
+.store-main .open-store .no-store .no_open {
+    background: url("") no-repeat scroll -230px -330px rgba(0, 0, 0, 0);
+    float: left;
+    height: 40px;
+    margin-top: 5px;
+    width: 48px;
+}
+
+.store-main .open-store .no-store dl {
+    float: left;
+    padding-left: 20px;
+}
+
+.store-main .open-store .no-store dl dt {
+    font: 16px/18px "microsoft yahei";
+    height: 18px;
+    margin-bottom: 4px;
+    padding-left: 6px;
+}
+
+.store-main .open-store .no-store dl dd {
+    color: #777;
+}
+
+.open-store_form {
+    margin: 0 auto;
+    width: 874px;
+    padding-top: 15px;
+}
+
+.open-store_form dl {
+    border-bottom: 1px dashed #f5f5f5;
+    clear: both;
+    color: #777;
+    line-height: 20px;
+    margin: 4px auto;
+    padding: 0;
+    width: 96%;
+}
+
+.open-store_form dl {
+    border-bottom: 1px dashed #f5f5f5;
+    clear: both;
+    color: #777;
+    line-height: 20px;
+    margin: 4px auto;
+    padding: 0;
+    width: 96%;
+}
+
+.open-store_form dl.bottom {
+    border-bottom-width: 0;
+}
+
+.open-store_form dl dt {
+    color: #404040;
+    float: left;
+    line-height: 32px;
+    margin: 0;
+    padding: 8px 6px 0 0;
+    text-align: right;
+    width: 160px;
+    font-size: 14px;
+}
+
+.open-store_form dl dt.required em {
+    background: url("") no-repeat scroll -276px -231px rgba(0, 0, 0, 0);
+    display: inline-block;
+    height: 16px;
+    line-height: 22px;
+    margin-right: 5px;
+    width: 16px;
+}
+
+.open-store_form dl dd {
+    float: left;
+    padding: 8px;
+    width: 625px;
+}
+
+.open-store_form dl dd select {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #777;
+    height: 20px;
+    line-height: 20px;
+    padding: 4px;
+    vertical-align: middle;
+    width: 130px;
+}
+
+.open-store_form dl dd p {
+    clear: both;
+}
+
+.open-store_form .submit {
+    cursor: pointer;
+    display: inline-block;
+    font: 12px/20px "microsoft yahei";
+    background: #5bb75b;
+    border: 0px none;
+    color: #fff;
+    padding: 4px 20px;
+}
+
+.open-store_form .submit:hover {
+    background-position: 0 -150px;
+    box-shadow: none;
+    color: #000;
+}
+
+#return {
+    background: #ddd;
+    cursor: pointer;
+    display: inline-block;
+    font: 12px/20px "microsoft yahei";
+    border: 0px none;
+    color: #fff;
+    padding: 4px 20px;
+}
+
+#return:hover {
+    background: #ccc;
+}
+
+.open-store_form textarea {
+    height: 64px;
+    width: 198px;
+}
+
+.no-store a {
+    font: lighter 16px/20px "Microsoft Yahei";
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    display: inline;
+    background-color: red;
+    border: 0 none;
+    color: #fff;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.no-store h4 {
+    float: left;
+    display: inline;
+    font-size: 12px;
+    color: #999;
+    height: 40px;
+    line-height: 45px;
+    margin-left: 10px;
+}
+
+
+/*  商家入驻 */
+
+body {
+    background-color: white;
+    color: #666;
+    font: 12px/20px "Hiragino Sans GB", "Microsoft Yahei", arial, 宋体, "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+    min-width: 1200px;
+    height: 100%;
+}
+
+.icon_home {
+    background: url(../images/hyhome.png) no-repeat 0px -2px;
+    width: 20px;
+    height: 20px;
+}
+
+.bread-crumb {
+    height: 30px;
+    line-height: 30px;
+}
+
+.bread-crumb span a {
+    color: #777;
+}
+
+.bread-crumb span {
+    font-size: 12px;
+    color: #999;
+    vertical-align: middle;
+    letter-spacing: normal;
+    word-spacing: normal;
+    display: inline-block;
+}
+
+.arrow {
+    line-height: 20px;
+    color: #AAAAAA;
+    font-family: "宋体";
+}
+
+.left-sidebar {
+    width: 206px;
+    float: left;
+    border: solid 1px #D7D7D7;
+}
+
+.left-sidebar .title {
+    background-color: #F5F5F5;
+    height: 36px;
+    border-top: solid 1px #D7D7D7;
+    margin-top: -1px;
+}
+
+.left-sidebar .title h2 {
+    font: 600 14px/20px "microsoft yahei";
+    color: #333333;
+    height: 20px;
+    padding: 8px 10px;
+}
+
+.left-sidebar .content {
+    width: 190px;
+    margin: 0 auto;
+}
+
+.left-sidebar .content dl {
+    overflow: hidden;
+}
+
+.left-sidebar .content dt {
+    line-height: 20px;
+    font-weight: 600;
+    color: #555;
+    height: 20px;
+    padding: 10px 0 9px 0;
+    border-bottom: solid 1px #F5F5F5;
+    cursor: default;
+}
+
+.left-sidebar .content dt i {
+    background: url(../../images/icon-erro.png) no-repeat;
+    vertical-align: middle;
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin-right: 10px;
+    margin-left: 6px;
+}
+
+.left-sidebar .content dt i.hideer {
+    background-position: -300px 0;
+}
+
+.left-sidebar .content dd {
+    margin-bottom: 10px;
+}
+
+.left-sidebar .content ul {
+    width: 100%;
+    padding: 6px 0;
+}
+
+.left-sidebar .content ul li {
+    padding: 6px 0;
+}
+
+.left-sidebar .content ul li a {
+    color: #999;
+}
+
+.left-sidebar .content ul li i {
+    background: url(../../images/icon-erro.png) no-repeat -320px 0;
+    vertical-align: middle;
+    display: inline-block;
+    width: 3px;
+    height: 5px;
+    margin-right: 10px;
+    margin-left: 14px;
+}
+
+.certification .cer-con {
+    display: none;
+}
+
+.financial .fin-con {
+    display: none;
+}
+
+
+/*右侧*/
+
+.right-layout {
+    width: 778px;
+    min-height: 500px;
+    float: right;
+    border: solid 1px #D7D7D7;
+}
+
+.joinin-step ul {
+    font-size: 0;
+    width: 505px;
+    height: 46px;
+    margin: 40px auto 20px auto;
+}
+
+.joinin-step ul li {
+    font-size: 12px;
+    background: url(../../images/icon-erro.png) no-repeat 0 -130px;
+    vertical-align: top;
+    letter-spacing: normal;
+    word-spacing: normal;
+    display: inline-block;
+    width: 120px;
+    height: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.joinin-step ul li.step1.current {
+    background-position: -172px -130px;
+}
+
+.joinin-step ul li.step1 {
+    width: 68px;
+}
+
+.joinin-step ul li.step5 {
+    width: 68px;
+}
+
+.joinin-step ul li.step1 span {
+    margin-left: -86px;
+}
+
+.joinin-step ul li span {
+    color: #999;
+    text-align: center;
+    width: 120px;
+    height: 20px;
+    margin-left: -60px;
+    position: absolute;
+    z-index: 1;
+    bottom: -30px;
+    left: 50%;
+}
+
+.joinin-content {
+    padding: 19px;
+    border-top: dotted 1px #EEE;
+}
+
+.right-title {
+    height: 20px;
+    padding: 20px 0px;
+}
+
+.right-title h2 {
+    text-align: center;
+    font-size: 21px;
+}
+
+.right-agreement-content {
+    height: 300px;
+    border: 1px solid #EEE;
+    overflow: auto;
+    letter-spacing: 2px;
+    text-indent: 10px
+}
+
+.right-agreement {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+}
+
+.right-bottom {
+    text-align: center;
+    padding: 20px;
+}
+
+.basic-data {
+    margin-left: 80px;
+    margin-bottom: 30px;
+}
+
+.basic-data-two .layui-form {
+    width: 600px;
+}
+
+.layui-input {
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+}
+
+.joinin-content .bottom {
+    text-align: center;
+    height: 30px;
+    padding: 20px 0 10px 0;
+    border-top: solid 1px #EEE;
+}
+
+.basic-information {
+    margin: 20px 0px;
+}
+
+.has-error {
+    border: 1px solid red;
+}
+
+.error {
+    color: #333;
+    line-height: 28px;
+    background: url(../../images/icon-erro.png) no-repeat -395px -129px;
+    vertical-align: middle;
+    display: inline-block;
+    height: 28px;
+    padding: 1px 5px 1px 20px;
+    margin-left: 4px;
+    border: solid 1px #FCC;
+    border-radius: 3px;
+}
+
+.layui-input-block {
+    float: left;
+    margin-left: 0px!important;
+}
+
+.error {
+    float: left;
+}
+
+.layui-input:hover,
+.layui-textarea:hover {
+    border-color: none!important;
+}
+
+.form-saveMember table {
+    width: 100%;
+}
+
+.form-saveMember table tr th {
+    margin-left: 10%;
+    padding-right: 10px;
+    text-align: right;
+    width: 155px;
+}
+
+.form-saveMember table tr {
+    margin: 15px 0px;
+    display: block;
+    cursor: default;
+}
+
+.form-saveMember table tr td {
+    border: 0px none;
+    background: none;
+    width: 70%;
+    height: 40px;
+}
+
+.form-saveMember table input {
+    height: 30px;
+    width: 205px;
+    font-size: 12px;
+    line-height: 30px;
+    border-radius: 3px;
+    border: none;
+    border: 1px solid #ccc;
+    padding-left: 5px;
+    float: left;
+}
+
+.btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #DCDCDC;
+    cursor: pointer;
+}
+
+.next {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+.next1 {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+.next2 {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+.next3 {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+.next4 {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+
+/* 基本信息页面样式 */
+
+.form-saveMember .company-name {
+    width: 60%;
+}
+
+.form-saveMember .compant-address {
+    width: 60%;
+}
+
+.form-saveMember .compant-phone {
+    width: 50%;
+}
+
+.form-saveMember .compant-email {
+    width: 50%;
+}
+
+.form-saveMember .employee-num {
+    width: 30%;
+}
+
+.form-saveMember .reg-monety {
+    width: 30%;
+}
+
+.form-saveMember .link-name {
+    width: 45%;
+}
+
+.form-saveMember .link-phone {
+    width: 45%;
+}
+
+.form-saveMember .million {
+    float: left;
+    color: red;
+    padding: 6px;
+}
+
+.step2.current {
+    background-position: -147px -130px;
+    width: 68px;
+}
+
+.left_sidebar .content .agreement .hideer {
+    background-position: -280px 0;
+}
+
+.previous1 {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+
+/* 认证信息页面补充css */
+
+.step2.current {
+    background-position: -135px -130px;
+    width: 93px;
+}
+
+.step3.current {
+    background-position: -135px -130px;
+    width: 93px;
+}
+
+.left_sidebar .content .agreement .hideer {
+    background-position: -280px 0;
+}
+
+.layui-input:hover,
+.layui-textarea:hover {
+    border-color: none!important;
+}
+
+.app-address-title {
+    height: 28px;
+    line-height: 28px;
+    border-radius: 3px;
+}
+
+.previous2 {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+.left-sidebar .content .agreement .hideer {
+    background-position: -280px 0;
+}
+
+.form-saveMember .legal-name {
+    width: 55%;
+}
+
+.form-saveMember .legal-id {
+    width: 52%;
+}
+
+.form-saveMember .temp-preview-image {
+    width: 200px;
+    height: 200px;
+}
+
+.form-saveMember .license-num {
+    width: 60%;
+}
+
+.form-saveMember .license-add {
+    width: 60%;
+}
+
+.form-saveMember .establishdate {
+    background-color: #ffffff;
+    cursor: pointer;
+    height: 20px;
+    width: 82px;
+}
+
+.form-saveMember .establishdate {
+    background-color: #ffffff;
+    cursor: pointer;
+    height: 20px;
+    width: 82px;
+}
+
+.form-saveMember .licencestart {
+    background-color: #ffffff;
+    cursor: pointer;
+    height: 20px;
+    width: 82px;
+}
+
+.form-saveMember .licenceend {
+    background-color: #ffffff;
+    cursor: pointer;
+    height: 20px;
+    width: 82px;
+    margin-left: 10px;
+}
+
+.form-saveMember .scope {
+    width: 50%;
+}
+
+.form-saveMember .organ-za {
+    margin-left: -77px;
+}
+
+.form-saveMember .organization-code {
+    width: 60%;
+}
+
+.form-saveMember .organ-za {
+    margin-left: -77px;
+}
+
+.form-saveMember .organ-za {
+    margin-left: -77px;
+}
+
+
+/* 财务资质信息页面补充css */
+
+.step2.current {
+    background-position: -135px -130px;
+    width: 100px;
+}
+
+.step3.current {
+    background-position: -135px -130px;
+    width: 100px;
+}
+
+.step4.current {
+    background-position: -135px -130px;
+    width: 100px;
+}
+
+.joinin-step ul .step5 span {
+    margin-left: -34px;
+}
+
+.left_sidebar .content .agreement .hideer {
+    background-position: -280px 0;
+}
+
+.app-address-title {
+    height: 28px;
+    line-height: 28px;
+    border-radius: 3px;
+}
+
+.previous3 {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+.finance-info tr td input {
+    width: 60%;
+}
+
+
+/* 店铺信息页面补充css */
+
+.step2.current {
+    background-position: -135px -130px;
+    width: 100px;
+}
+
+.step3.current {
+    background-position: -135px -130px;
+    width: 100px;
+}
+
+.step4.current {
+    background-position: -135px -130px;
+    width: 100px;
+}
+
+.step5.current {
+    background-position: -120px -130px;
+    width: 100px;
+}
+
+.joinin-step ul .step5 span {
+    margin-left: -34px;
+}
+
+.left-sidebar .content .agreement .hideer {
+    background-position: -280px 0;
+}
+
+.previous4 {
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+#apply {
+    width: 48px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border: 1px solid #DCDCDC;
+}
+
+.form-saveMember table .checkinput {
+    width: 10px;
+    height: 10px;
+    float: inherit;
+}
+
+.form-saveMember .shop-name {
+    width: 60%;
+}
