@@ -5,7 +5,7 @@ import {
   ServerName,
   Unit,
   UnitTypes
-} from '../../../framework'
+} from '@/framework'
 
 export default class GoodsListModel extends DataModel {
   /**
