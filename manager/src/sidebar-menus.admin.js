@@ -11,7 +11,7 @@ const Doc = () => import('./views/doc/Index.vue')
 
 export default [
   {
-    title: '概况',
+    title: '首页',
     type: 'menu-item',
     icon: 'el-icon-info',
     component: Home

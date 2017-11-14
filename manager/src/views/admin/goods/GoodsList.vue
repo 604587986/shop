@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import GoodsListModel from './GoodsList.model'
+  import GoodsListModel from '@/models/GoodsListModel'
   const goodsListModel = new GoodsListModel()
   export default {
     name: 'GoodsList',
@@ -107,7 +107,7 @@
       /** 获取商品列表 */
       GET_GoodsList() {
         this.loading = true
-        this.$http.get(`goods/list${this.$Foundation.sequence.get(this.params)}`, { loading: false })
+        this.$http.get(`/goods/list${this.$Foundation.sequence.get(this.params)}`, { loading: false })
           .then(response => response.data)
           .then(data => {
             this.loading = false

@@ -8,12 +8,14 @@ import 'normalize.css'
 import App from './App'
 import store from './store'
 import { Foundation, RegExp } from './framework'
+import echarts from 'echarts'
 import managerConfig from '../config/manager.config'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.prototype.$Foundation = Foundation
 Vue.prototype.$RegExp = RegExp
+Vue.prototype.$echarts = echarts
 
 Vue.use(ElementUI)
 
