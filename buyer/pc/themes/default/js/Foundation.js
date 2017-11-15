@@ -1,5 +1,6 @@
-$.extend({
-	Foundation: {
+/** 增加一些基本方法 */
+;!function () {
+	var _Foundation_ = {
 		/**
 		 * 处理unix时间戳，转换为可阅读时间格式
 		 * @param unix
@@ -22,7 +23,7 @@ $.extend({
 			for (let k in o) if (new RegExp('(' + k + ')').test(_format)) _format = _format.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
 			return _format
 		},
-  
+		
 		/**
 		 * 把date转为秒为单位的unix时间戳
 		 * @param date YYY-MM-DD
@@ -50,7 +51,7 @@ $.extend({
 		formatPrice: function (price) {
 			return String(Number(price).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 		},
-  
+		
 		/**
 		 * 手机号隐私保护
 		 * @param mobile
@@ -61,6 +62,56 @@ $.extend({
 				return mobile
 			}
 			return mobile.replace(/(\d{3})(\d{4})(\d{4})/, '$1****$3')
+		},
+		
+		/***
+		 * 倒计时模块
+		 * @param ele
+		 * @param opts
+		 */
+		countDown: function (ele, opts) {
+			ele = ele.style ? ele : ele[0];
+			opts = opts || {};
+			var count = opts.count || 10,
+				beforeStr = opts.beforeStr || '已发送',
+				afterStr = opts.afterStr || '秒',
+				complete = opts.complete || '重新发送';
+			
+			var tagName = ele.tagName;
+			
+			var timer = setInterval(function () {
+				if (count === 1) {
+					clearTimeout(timer);
+					ele.disabled = false;
+					ele.style.cursor = 'pointer';
+					tagName === 'BUTTON'
+						? ele.innerHTML = complete
+						: ele.value = complete
+				} else {
+					count -= 1;
+					ele.disabled = true;
+					var _str = beforeStr + count + afterStr
+					tagName === 'BUTTON'
+						? ele.innerHTML = _str
+						: ele.value = _str
+					ele.style.cursor = 'not-allowed';
+				}
+			}, 1000)
+		},
+		
+		/**
+		 * 获取URL中的传参
+		 * @param str
+		 * @returns {string}
+		 */
+		getQueryString: function (str) {
+			var reg = new RegExp("(^|&)" + str + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r !== null) context = r[2];
+			reg = null;
+			r = null;
+			return context === null || context === '' || context === 'undefined' ? '' : window.decodeURI(context);
 		}
-  }
-})
+	}
+	jQuery.extend({ Foundation: _Foundation_ })
+}();
