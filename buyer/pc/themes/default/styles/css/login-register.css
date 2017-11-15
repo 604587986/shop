@@ -121,15 +121,15 @@
 }
 
 .login-interface form .item.focus {
-    border-color: #f42424;
+    border-color: #666;
 }
 
 .login-interface form .item.focus label {
-    border-color: #f42424;
+    border-color: #666;
 }
 
 .login-interface form .item.focus label .iconfont {
-    color: #f42424;
+    color: #666;
 }
 
 .login-interface form .item-form-t {
@@ -735,7 +735,7 @@ ul {
 }
 
 .send-sms-btn:disabled {
-    background-color: #eeeeee;
+    background-color: #ccc;
 }
 
 

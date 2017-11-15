@@ -1,4 +1,4 @@
-(function () {
+;!function () {
 	
 	/**
 	 * layui 模块加载
@@ -89,7 +89,9 @@
 	var _ajax = $.ajax;
 	$.ajax = function (opts) {
 		/** 配置基础url */
-		opts.url = opts.url.replace(/(\/*)/, window.baseUrl)
+		if(!/^http(s*)/.test(opts.url)){
+			opts.url = opts.url.replace(/(\/*)/, window.baseUrl)
+		}
 		
 		/** 配置默认dataType */
 		opts.dataType = opts.dataType || 'json'
@@ -98,7 +100,6 @@
 		opts.error = opts.error || function (error) {
 			error.responseJSON && $.message.error(error.responseJSON.error_message)
 		}
-		
 		_ajax(opts)
 	}
 	
@@ -115,5 +116,4 @@
 			window.__btn_disabled__ = undefined
 		}
 	})
-	
-})()
+}();

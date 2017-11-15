@@ -107,6 +107,7 @@
 		getQueryString: function (str) {
 			var reg = new RegExp("(^|&)" + str + "=([^&]*)(&|$)", "i");
 			var r = window.location.search.substr(1).match(reg);
+			var context = '';
 			if (r !== null) context = r[2];
 			reg = null;
 			r = null;

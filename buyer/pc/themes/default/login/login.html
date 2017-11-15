@@ -41,19 +41,19 @@
                                     <label for="mobile">
                                         <i class="iconfont ea-icon-mobile"></i>
                                     </label>
-                                    <input id="mobile" value="18888888888" placeholder="请输入手机号">
+                                    <input id="mobile" placeholder="请输入手机号" maxlength="11" autofocus>
                                 </div>
                                 <div class="item item-form-t">
-                                    <button class="send-sms-btn" type="button">获取手机动态码</button>
+                                    <button class="send-sms-btn" type="button">获取手机验证码</button>
                                 </div>
                                 <div class="item item-form-p">
                                     <label for="sms-code">
                                         <i class="iconfont ea-icon-sms"></i>
                                     </label>
-                                    <input id="sms-code" placeholder="短信验证码">
+                                    <input id="sms-code" placeholder="短信验证码" maxlength="6">
                                 </div>
                                 <div class="forget">
-                                    <span><a href="./find-password.html">忘记密码</a></span>
+                                    <span><a href="/login/find-password.html">忘记密码</a></span>
                                 </div>
                                 <button class="form-sub" id="login-by-quick" type="button">登&nbsp;&nbsp;&nbsp;录</button>
                             </form>
@@ -64,19 +64,19 @@
                                     <label for="username">
                                         <i class="iconfont ea-icon-persion"></i>
                                     </label>
-                                    <input id="username" placeholder="邮箱/用户名/已验证手机">
+                                    <input id="username" placeholder="邮箱/用户名/已验证手机" maxlength="20">
                                 </div>
                                 <div class="item">
                                     <label for="password">
                                         <i class="iconfont ea-icon-password"></i>
                                     </label>
-                                    <input id="password" placeholder="请输入密码">
+                                    <input id="password" placeholder="请输入密码" maxlength="20">
                                 </div>
                                 <div class="item">
                                     <label for="validcode">
                                         <i class="iconfont ea-icon-safe"></i>
                                     </label>
-                                    <input id="validcode" placeholder="图片验证码">
+                                    <input id="validcode" placeholder="图片验证码" maxlength="4">
                                     <img class="validcode-img" src="http://data.andste.cc/developers/web/temp/images/validcode-img.png">
                                 </div>
                                 <div class="forget">
@@ -102,7 +102,7 @@
                                 </a>
                             </li>
                             <li class="other-right">
-                                <a href="./register.html" class="registered">
+                                <a class="registered" href="/login/register.html" id="register-btn">
                                     <b></b>
                                     立即注册
                                 </a>
