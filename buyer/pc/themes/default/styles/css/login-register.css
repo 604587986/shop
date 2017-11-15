@@ -30,8 +30,8 @@
     width: 100%;
     text-align: center;
     background: #fff8f0;
-    margin: 0px auto;
-    padding: 10px 0px;
+    margin: 0 auto;
+    padding: 10px 0;
     padding: 17px 0px\0;
     /* ie8下显示此样式 */
 }
@@ -120,30 +120,55 @@
     color: #f42424;
 }
 
-.login-interface .login-show form .item-form-t {
-    width: 225px!important;
-    height: 30px!important;
+.login-interface form .item.focus {
+    border-color: #f42424;
 }
 
-.login-interface .login-show form .item-form-t input {
-    height: 30px!important;
+.login-interface form .item.focus label {
+    border-color: #f42424;
 }
 
-.login-interface .login-show .quick-form .item {
+.login-interface form .item.focus label .iconfont {
+    color: #f42424;
+}
+
+.login-interface form .item-form-t {
+    width: 225px !important;
+    height: 30px;
+    border: 0 !important;
+}
+
+.login-interface form .item-form-t button {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.login-interface .quick-form .item {
     width: 100%;
     height: 35px;
     margin-bottom: 10px;
     border: 1px solid #bdbdbd;
 }
 
-.login-interface .login-show .account-form .item {
+.login-interface .account-form .item {
+    position: relative;
     width: 100%;
     height: 35px;
     margin-bottom: 25px;
     border: 1px solid #bdbdbd;
 }
+.login-interface .account-form .item .validcode-img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 85px;
+    height: 35px;
+    cursor: pointer;
+}
 
-.login-interface .login-show form .item label {
+.login-interface form .item label {
     width: 35px;
     height: 35px;
     float: left;
@@ -151,43 +176,56 @@
     border-right: 1px solid #bdbdbd;
 }
 
-.login-interface .login-show form .item input {
+.login-interface form .item .iconfont {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 35px;
+    color: #666;
+}
+
+.login-interface form .item input {
     display: inline-block;
     height: 35px;
     line-height: 35px;
     width: 225px;
     padding-left: 10px;
-    cursor: pointer;
 }
 
-.login-interface .login-show form .forget {
+.login-interface form .forget {
     height: 18px;
-    margin: 23px 0px;
+    margin: 20px 0;
 }
 
-.login-interface .login-show form .forget span {
+.login-interface form .forget span {
     float: right;
 }
 
-.login-interface .login-show form .form-sub {
+.login-interface form .form-sub {
     width: 100%;
     height: 35px;
     background: #f42424;
     text-align: center;
-    margin: 10px 0px;
+    margin: 10px 0;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    -webkit-transition: background ease-out .2s;
+    -moz-transition: background ease-out .2s;
+    -ms-transition: background ease-out .2s;
+    -o-transition: background ease-out .2s;
+    transition: background ease-out .2s;
 }
 
-.login-interface .login-show form .form-sub a {
-    color: white;
-    font-size: 16px;
-    text-align: center;
-    line-height: 35px;
+.login-interface form .form-sub:hover {
+    background: #f65555;
 }
 
 .login-box .login-form .other-login {
     height: 50px;
     border-top: 1px solid #f4f4f4;
-    padding: 0px 20px;
+    padding: 0 20px;
     background-color: #fcfcfc;
 }
 
@@ -197,7 +235,7 @@
 }
 
 .login-box .login-form .other-login ul li a>span {
-    padding: 0px 10px;
+    padding: 0 10px;
 }
 
 .login-box .login-form .other-login ul .other-one a>span {
@@ -681,9 +719,23 @@ ul {
 
 .send-sms-btn {
     width: 187px;
-    border: 1px solid #bdbdbd;
     height: 35px;
-    border-radius: 3px;
+    border: none;
+    color: #ffffff;
+    background-color: #607d8b;
+    -webkit-transition: background ease-out .2s;
+    -moz-transition: background ease-out .2s;
+    -ms-transition: background ease-out .2s;
+    -o-transition: background ease-out .2s;
+    transition: background ease-out .2s;
+}
+
+.send-sms-btn:hover {
+    background-color: #516a77;
+}
+
+.send-sms-btn:disabled {
+    background-color: #eeeeee;
 }
 
 
