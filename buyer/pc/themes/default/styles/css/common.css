@@ -124,7 +124,7 @@
   color: #999;
 }
 #header .search-box .hot-keyword a:hover {
-  color: #f42424;
+  color: #ff2828;
 }
 #header .search-box .cart-box {
   position: relative;
@@ -147,13 +147,13 @@
   cursor: pointer;
 }
 #header .search-box .inner-cart-box i {
-  color: #f42424;
+  color: #ff2828;
   margin-left: 20px;
   font-size: 18px;
 }
 #header .search-box .inner-cart-box span {
   margin-left: 8px;
-  color: #f42424;
+  color: #ff2828;
 }
 #header .search-box .inner-cart-box em {
   font-style: normal;
@@ -213,7 +213,7 @@
   color: #f42424;
 }
 #header .search-box .header-cart-content .btn-cart:hover {
-  background-color: #f42424;
+  background-color: #ff2828;
   color: #ffffff;
 }
 #header .nav-box {
@@ -240,7 +240,7 @@
   padding: 0 24px;
 }
 #header .nav-box .nav-items a:hover {
-  color: #f42424;
+  color: #ff2828;
 }
 
 /* Footer */
@@ -291,12 +291,12 @@
 #search .input-search {
   width: 378px;
   height: 25px;
-  border: 2px solid #f42424;
+  border: 2px solid #ff2828;
   padding: 3px 10px;
   border-right: 0;
 }
 #search .btn-search {
-  background-color: #f42424;
+  background-color: #ff2828;
   width: 70px;
   height: 35px;
   margin-right: 10px;
@@ -306,14 +306,14 @@
   font-weight: 500;
 }
 #search .btn-search:hover {
-  background-color: #f65555;
+  background-color: #ff5b5b;
 }
 #search .seller-btn-search {
   margin-right: 0;
-  background-color: #a90909;
+  background-color: #c10000;
 }
 #search .seller-btn-search:hover {
-  background-color: #da0b0b;
+  background-color: #f40000;
 }
 
 /* Category */
@@ -321,7 +321,7 @@
   position: relative;
   width: 240px;
   height: 40px;
-  background-color: #f42424;
+  background-color: #ff2828;
   color: #f5f6f5;
 }
 #category .title-category {
@@ -330,18 +330,22 @@
   height: 40px;
   line-height: 40px;
   padding: 0 20px;
-  background: #f42424;
+  background: #ff2828;
   color: #fff;
   text-decoration: none;
   font-size: 16px;
   font-weight: 700;
 }
 #category .category-layer {
-  display: block;
+  display: none;
   position: relative;
+  z-index: 999;
   width: 240px;
   height: 500px;
   background-color: rgba(0, 0, 0, 0.6);
+}
+#category .category-layer.open {
+  display: block;
 }
 #category .category-item:hover .inn-category-item {
   background-color: black;
@@ -376,7 +380,7 @@
   font-size: 13px;
 }
 #category .inn-category-item a:hover {
-  color: #f42424;
+  color: #ff2828;
 }
 #category .sub-category-item {
   display: none;
@@ -429,7 +433,7 @@
   white-space: nowrap;
 }
 #category .sub-category-item .cate-detail dd a:hover {
-  color: #f42424;
+  color: #ff2828;
 }
 #category .sub-category-item .cate-layer-rihgt {
   width: 200px;

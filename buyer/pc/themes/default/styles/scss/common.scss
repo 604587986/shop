@@ -359,11 +359,15 @@
         font-weight: 700;
     }
     .category-layer {
-        display: block;
+        display: none;
         position: relative;
+        z-index: 999;
         width: 240px;
         height: 500px;
         background-color: rgba(0,0,0,.6);
+        &.open {
+            display: block;
+        }
     }
     .category-item {
         &:hover {

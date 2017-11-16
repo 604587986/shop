@@ -1,14 +1,19 @@
+// 公共脚本
 ;!function () {
-	
-	/**
-	 * layui 模块加载
-	 */
-	layui.use(['layer', 'laydate', 'laytpl', 'element'], function () {
-		window.layer = layui.layer;
-		window.laydate = layui.laydate;
-		window.laytpl = layui.laytpl;
-		window.element = layui.element();
-	});
+	/** 将layui的laytpl模块挂载到jquery */
+	$.extend({
+		laytpl: function (tpl, view) {
+			return {
+				render: function (data, fn) {
+					layui.laytpl($(tpl).html()).render(data, function (html) {
+						$(view).html(html)
+						$(tpl).remove()
+						typeof fn === 'function' && fn(data)
+					})
+				}
+			}
+		}
+	})
 	
 	/**
 	 * 基础UI扩展
@@ -37,7 +42,7 @@
 				title: '提示'
 			}, function (index) {
 				typeof (fn) === 'function' && fn(index);
-				widnow.layer.close(index);
+				window.layer.close(index);
 			});
 		},
 		
@@ -103,7 +108,10 @@
 		_ajax(opts)
 	}
 	
-	/** 监听ajax发起与停止，来自动禁用按钮 */
+	/**
+	 * 监听ajax发起与停止
+	 * 用于自动禁用按钮
+	 */
 	$(document).on('ajaxStart ajaxStop', function (event) {
 		var _type = event.type;
 		var _activeElement = event.currentTarget.activeElement;
@@ -116,4 +124,10 @@
 			window.__btn_disabled__ = undefined
 		}
 	})
+	
+	/** 将登录状态作为全局变量给window */
+	!function () {
+		var isLogin = window.localStorage.getItem('isLogin');
+		window.isLogin = isLogin === 'true';
+	}()
 }();

@@ -34,7 +34,6 @@ $(function () {
 				type: 'mobile'
 			},
 			success: function (response) {
-				console.log(response.data)
 				mobile = _mobile;
 				$.Foundation.countDown($this)
 				$.message.success('短信发送成功，请注意查收！', {time: 5000})
@@ -100,6 +99,7 @@ $(function () {
 	 */
 	function loginSuccess(user) {
 		window.localStorage.setItem('userInfo', JSON.stringify(user));
+		window.localStorage.setItem('isLogin', true)
 		window.location.href = from || '/index.html'
 	}
 });

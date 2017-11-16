@@ -1,0 +1,18 @@
+<!--#include file="/member/member-header.html" -->
+<script type="text/javascript" src="/js/member.js"></script>
+<div id="member">
+    <!--个人概览 start-->
+    <script id="overview-member-tpl" type="text/html">
+        <div class="user-avatar">
+            <img class="user-avatar-img" src="{{ d.avatar }}">
+        </div>
+        <div class="user-info">
+            <p class="username-user-info">{{ d.username }}</p>
+            <p class="mobile-user-info">联系方式：{{ $.Foundation.secrecyMobile(d.mobile) }}</p>
+        </div>
+        <soan class="clr"></soan>
+    </script>
+    <div class="overview-member" id="overview-member-view"></div>
+    <!--个人概览 end-->
+</div>
+<!--#include file="/member/member-footer.html" -->
