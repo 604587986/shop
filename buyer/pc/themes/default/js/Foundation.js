@@ -8,9 +8,9 @@
 		 * @returns {*|string}
 		 */
 		unixToDate: function (unix, format) {
-			let _format = format || 'yyyy-MM-dd hh:mm:ss'
-			let d = new Date(unix * 1000)
-			let o = {
+			format = format || 'yyyy-MM-dd hh:mm:ss';
+			var d = new Date(unix * 1000);
+			var o = {
 				'M+': d.getMonth() + 1,
 				'd+': d.getDate(),
 				'h+': d.getHours(),
@@ -19,9 +19,9 @@
 				'q+': Math.floor((d.getMonth() + 3) / 3),
 				S: d.getMilliseconds()
 			}
-			if (/(y+)/.test(_format)) _format = _format.replace(RegExp.$1, (d.getFullYear() + '').substr(4 - RegExp.$1.length))
-			for (let k in o) if (new RegExp('(' + k + ')').test(_format)) _format = _format.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-			return _format
+			if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (d.getFullYear() + '').substr(4 - RegExp.$1.length))
+			for (var k in o) if (new RegExp('(' + k + ')').test(format)) format = format.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+			return format
 		},
 		
 		/**
@@ -29,17 +29,17 @@
 		 * @param date YYY-MM-DD
 		 */
 		dateToUnix: function (date) {
-			let newStr = date.replace(/:/g, '-')
-			newStr = newStr.replace(/ /g, '-')
-			let arr = newStr.split('-')
-			let datum = new Date(Date.UTC(
+			var newStr = date.replace(/:/g, '-');
+			newStr = newStr.replace(/ /g, '-');
+			var arr = newStr.split('-');
+			var datum = new Date(Date.UTC(
 				arr[0],
 				arr[1] - 1,
 				arr[2],
 				arr[3] - 8 || -8,
 				arr[4] || 0,
 				arr[5] || 0
-			))
+			));
 			return datum.getTime() / 1000
 		},
 		
@@ -58,6 +58,7 @@
 		 * @returns {*}
 		 */
 		secrecyMobile: function (mobile) {
+			mobile = String(mobile);
 			if (!/^0?(13[0-9]|15[0-9]|18[0-9]|14[0-9]|17[0-9])[0-9]{8}$/.test(mobile)) {
 				return mobile
 			}
@@ -72,7 +73,7 @@
 		countDown: function (ele, opts) {
 			ele = ele.style ? ele : ele[0];
 			opts = opts || {};
-			var count = opts.count || 10,
+			var count = opts.count || 60,
 				beforeStr = opts.beforeStr || '已发送',
 				afterStr = opts.afterStr || '秒',
 				complete = opts.complete || '重新发送';

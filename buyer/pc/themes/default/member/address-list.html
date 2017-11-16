@@ -1,0 +1,15 @@
+<!--#include file="/member/member-header.html" -->
+<script type="text/javascript" src="/js/address-list.js"></script>
+<div id="order-list">
+    <!--订单列表 start-->
+    <script id="order-list-tpl" type="text/html">
+        {{# layui.each(d, function(index, item){ }}
+            <li>
+                <span>{{ item.name }}</span>
+            </li>
+        {{# }); }}
+    </script>
+    <div class="order-list" id="order-list-view"></div>
+    <!--个订单列表 end-->
+</div>
+<!--#include file="/member/member-footer.html" -->

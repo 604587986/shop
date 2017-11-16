@@ -51,23 +51,21 @@
             | <a href="http://www.javamall.com.cn" title="JAVA B2B2C网店系统">网店系统</a>
         </div>
     </div>
-    <script type="text/javascript">
-		$(function(){
-			var footerEle = $("#footer");
-			function footerPosition(){
-				footerEle.removeClass("fixed-bottom");
-				var contentHeight = document.body.scrollHeight,
-					winHeight = window.innerHeight;
-				if(!(contentHeight > winHeight)){
-					footerEle.addClass("fixed-bottom");
-				} else {
-					footerEle.removeClass("fixed-bottom");
-				}
-			}
-			footerPosition();
-			$(window).resize(footerPosition);
-		});
-    </script>
 </div>
+<script type="text/javascript">
+    $(function () {
+      var footerEle = $("#footer");
+      function footerPosition() {
+        footerEle.removeClass("fixed-bottom");
+        var contentHeight = document.body.scrollHeight,
+            winHeight = window.innerHeight;
+            !(contentHeight > winHeight)
+              ? footerEle.addClass("fixed-bottom")
+              : footerEle.removeClass("fixed-bottom")
+      }
+      footerPosition();
+      $(window).resize(footerPosition);
+    })
+</script>
 </body>
 </html>

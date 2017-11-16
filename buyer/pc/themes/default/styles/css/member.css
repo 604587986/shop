@@ -1,0 +1,124 @@
+@charset "UTF-8";
+.member {
+  padding-bottom: 20px;
+}
+
+/** 顶部面包屑 */
+.member-breadcrumb {
+  height: 20px;
+  padding: 10px 0;
+}
+.member-breadcrumb a {
+  display: inline-block;
+  position: relative;
+  top: -1px;
+}
+
+/** 下方内容 */
+.member-container {
+  /** 左侧导航 */
+  /** 右侧内容 */
+}
+.member-container .member-menu {
+  float: left;
+  width: 208px;
+  border: 1px solid #e7e7e7;
+  background-color: #fff;
+}
+.member-container .member-content {
+  float: left;
+  width: 980px;
+  margin-left: 10px;
+}
+
+/** 坐车导航 */
+.member-menu .item-menu-member h2 {
+  background-color: #F7F7F7;
+  line-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  padding-left: 20px;
+  border-bottom: 1px solid #eee;
+}
+.member-menu .item-menu-member .menus-member {
+  padding-bottom: 10px;
+}
+.member-menu .item-menu-member .menus-member .item-li {
+  padding: 0 15px;
+  line-height: 35px;
+  cursor: pointer;
+  -webkit-transition: all ease-out 0.3s;
+  -moz-transition: all ease-out 0.3s;
+  -o-transition: all ease-out 0.3s;
+  transition: all ease-out 0.3s;
+}
+.member-menu .item-menu-member .menus-member .item-li span {
+  color: #ffffff;
+}
+.member-menu .item-menu-member .menus-member .item-li a {
+  color: #777777;
+  display: inline-block;
+  width: 100%;
+  -webkit-transition: color ease-out 0.3s;
+  -moz-transition: color ease-out 0.3s;
+  -o-transition: color ease-out 0.3s;
+  transition: color ease-out 0.3s;
+}
+.member-menu .item-menu-member .menus-member .item-li.active, .member-menu .item-menu-member .menus-member .item-li.hover {
+  background-color: #ff5b5b;
+  padding-left: 25px;
+}
+.member-menu .item-menu-member .menus-member .item-li.active a, .member-menu .item-menu-member .menus-member .item-li.hover a {
+  color: #fff;
+}
+
+/** 右侧内容 */
+.member-content {
+  /** 用户信息概览 */
+  /** 用户头像 */
+  /** 用户xin */
+}
+.member-content .overview-member {
+  height: 118px;
+  padding: 15px;
+  border: 1px solid #e7e7e7;
+}
+.member-content .user-avatar {
+  position: relative;
+  float: left;
+  width: 110px;
+  height: 110px;
+  overflow: hidden;
+}
+.member-content .user-avatar .user-avatar-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -47.5px;
+  margin-left: -47.5px;
+  width: 95px;
+  height: 95px;
+  border-radius: 100%;
+  -webkit-box-shadow: 0 0 10px 0 #eee;
+  -moz-box-shadow: 0 0 10px 0 #eee;
+  box-shadow: 0 0 10px 0 #eee;
+}
+.member-content .user-info {
+  float: left;
+  height: 110px;
+  margin-left: 15px;
+}
+.member-content .user-info .username-user-info, .member-content .user-info .mobile-user-info {
+  height: 50%;
+  color: #666;
+  font-size: 14px;
+}
+.member-content .user-info .username-user-info {
+  line-height: 85px;
+}
+.member-content .user-info .mobile-user-info {
+  line-height: 20px;
+}
+
+/*# sourceMappingURL=member.css.map */
