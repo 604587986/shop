@@ -118,9 +118,11 @@
 		if(_type === 'ajaxStart') {
 			window.__btn_disabled__ && (window.__btn_disabled__.disabled = false)
 			_activeElement.disabled = true;
-			window.__btn_disabled__ = _activeElement
+			_activeElement.style.cursor = 'not-allowed';
+			window.__btn_disabled__ = _activeElement;
 		}else {
 			window.__btn_disabled__.disabled = false
+			window.__btn_disabled__.style.cursor = 'pointer'
 			window.__btn_disabled__ = undefined
 		}
 	})
