@@ -4,7 +4,7 @@
       <div v-if="isCollapse" class="logo-square"></div>
       <div v-else class="logo-rectangle"></div>
     </div>
-    <div class="sidebar-container-menu">
+    <div class="sidebar-container-menu" :style="{overflow: isCollapse ? 'visible' : 'scroll'}">
       <el-menu
         :collapse="isCollapse"
         :default-active="currentTabName"
@@ -116,6 +116,7 @@
 
   .sidebar-container {
     position: fixed;
+    z-index: 3;
     top: 0;
     left: 0;
     height: 100%;
