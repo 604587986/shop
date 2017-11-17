@@ -126,10 +126,4 @@
 			window.__btn_disabled__ = undefined
 		}
 	})
-	
-	/** 将登录状态作为全局变量给window */
-	!function () {
-		var isLogin = window.localStorage.getItem('isLogin');
-		window.isLogin = isLogin === 'true';
-	}()
 }();
