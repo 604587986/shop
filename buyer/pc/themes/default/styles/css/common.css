@@ -462,4 +462,36 @@
   height: 100%;
 }
 
+/* 404 Not Found */
+#not-found {
+  height: 500px;
+}
+#not-found .bg-not-found {
+  background: url("../../images/background-404.png") no-repeat right;
+  width: 50%;
+  height: 100%;
+}
+#not-found .body-not-found {
+  position: relative;
+  width: 50%;
+  height: 100%;
+}
+#not-found .inner-body-not-found {
+  position: absolute;
+  top: 50%;
+  margin-top: -60px;
+}
+#not-found .inner-body-not-found h1 {
+  margin-bottom: 15px;
+}
+#not-found .inner-body-not-found p {
+  margin: 5px 0;
+  color: #333;
+  font-size: 14px;
+}
+#not-found .inner-body-not-found span {
+  color: #666;
+  font-size: 12px;
+}
+
 /*# sourceMappingURL=common.css.map */

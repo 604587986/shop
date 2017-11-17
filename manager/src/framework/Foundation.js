@@ -140,6 +140,7 @@ Foundation.formatPrice = price => {
  * @returns {*}
  */
 Foundation.secrecyMobile = mobile => {
+  mobile = String(mobile)
   if (!/\d{11}/.test(mobile)) {
     return mobile
   }

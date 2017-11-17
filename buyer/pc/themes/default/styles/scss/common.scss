@@ -488,3 +488,35 @@
         }
     }
 }
+
+/* 404 Not Found */
+#not-found {
+    height: 500px;
+    .bg-not-found {
+        background: url("../../images/background-404.png") no-repeat right;
+        width: 50%;
+        height: 100%;
+    }
+    .body-not-found {
+        position: relative;
+        width: 50%;
+        height: 100%;
+    }
+    .inner-body-not-found {
+        position: absolute;
+        top: 50%;
+        margin-top: -(120px / 2);
+        h1 {
+            margin-bottom: 15px;
+        }
+        p {
+            margin: 5px 0;
+            color: #333;
+            font-size: 14px;
+        }
+        span {
+            color: #666;
+            font-size: 12px;
+        }
+    }
+}

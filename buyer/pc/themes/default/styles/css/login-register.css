@@ -317,14 +317,12 @@ ul {
 .steps ol li {
     display: inline;
     float: left;
-    width: 170px;
-    padding-left: 70px;
     height: 46px;
-    /*line-height: 46px;*/
     font-size: 16px;
     font-weight: 700;
     color: #999;
-    font-family: "\5FAE\8F6F\96C5\9ED1", "\534E\6587\7EC6\9ED1", "\9ED1\4F53", arial
+    width: 200px;
+    padding-left: 30px
 }
 
 .steps ol li i {
@@ -352,11 +350,6 @@ ul {
     background-image: url(../../images/icon-circle1.png)
 }
 
-.steps-4 ol li {
-    width: 200px;
-    padding-left: 30px
-}
-
 
 /* 主体内容  填写手机号*/
 
@@ -364,13 +357,13 @@ ul {
     padding: 50px 0;
 }
 
-.usef-info-content {
+.user-info-content {
     display: none;
     clear: both;
     margin-bottom: 55px;
 }
 
-.reg-content {
+.reg-success-content {
     padding: 50px 0;
     display: none;
 }
@@ -442,7 +435,7 @@ ul {
 
 .btn {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 8px 12px;
     margin-bottom: 0;
     font-weight: 400;
     text-align: center;

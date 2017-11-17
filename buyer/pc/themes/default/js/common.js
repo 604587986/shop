@@ -118,16 +118,12 @@
 		if(_type === 'ajaxStart') {
 			window.__btn_disabled__ && (window.__btn_disabled__.disabled = false)
 			_activeElement.disabled = true;
-			window.__btn_disabled__ = _activeElement
+			_activeElement.style.cursor = 'not-allowed';
+			window.__btn_disabled__ = _activeElement;
 		}else {
 			window.__btn_disabled__.disabled = false
+			window.__btn_disabled__.style.cursor = 'pointer'
 			window.__btn_disabled__ = undefined
 		}
 	})
-	
-	/** 将登录状态作为全局变量给window */
-	!function () {
-		var isLogin = window.localStorage.getItem('isLogin');
-		window.isLogin = isLogin === 'true';
-	}()
 }();
