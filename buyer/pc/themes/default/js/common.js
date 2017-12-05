@@ -90,7 +90,7 @@
 	 * 配置ajax全局拦截
 	 * @type {string}
 	 */
-	window.baseUrl = 'http://www.easy-mock.com/mock/5a0a50c8b31e3216824d5a6e/buyer/'
+	window.baseUrl = 'https://www.easy-mock.com/mock/5a0a50c8b31e3216824d5a6e/buyer/'
 	var _ajax = $.ajax;
 	$.ajax = function (opts) {
 		/** 配置基础url */
