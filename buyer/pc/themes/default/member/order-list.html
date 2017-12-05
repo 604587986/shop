@@ -1,15 +1,154 @@
 <!--#include file="/member/member-header.html" -->
 <script type="text/javascript" src="/js/order-list.js"></script>
 <div id="order-list">
-    <!--订单列表 start-->
-    <script id="order-list-tpl" type="text/html">
-        {{# layui.each(d, function(index, item){ }}
-            <li>
-                <span>{{ item.name }}</span>
-            </li>
-        {{# }); }}
-    </script>
-    <div class="order-list" id="order-list-view"></div>
+    <div class="order-list" id="order-list-view">
+        <div class="order-list-nav common-nav">
+            <ul>
+                <li class="selected"><a href="#"><span>所有订单</span></a></li>
+                <li><a href="#"><span>等待付款</span></a></li>
+                <li><a href="#"><span>已发货</span></a></li>
+                <li><a href="#"><span>已取消</span></a></li>
+                <li><a href="#"><span>已成功</span></a></li>
+                <li><a href="#"><span>待评论</span></a></li>
+            </ul>
+        </div>
+        <!-- 订单搜索 -->
+        <div class="order-search">
+            <div class="user-ordersearch">
+                <input type="text" placeholder="在订单中搜索">
+                <button type="button">在订单中搜索</button>
+                <span>搜索到 <strong>1</strong> <strong>笔订单</strong> </span>
+            </div>
+        </div>
+        <!-- 订单列表 -->
+        <div class="order-list-content">
+            <table cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="shop-name">商品名称</th>
+                        <th class="kong"></th>
+                        <th class="price">单价（元）</th>
+                        <th class="num">数量</th>
+                        <th class="amount">订单金额</th>
+                        <th class="amount">交易状态</th>
+                        <th class="amount">交易操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 订单详细 -->
+                    <table class="order-box">
+                        <!-- 订单下商品列表 -->
+                        <tr>
+                            <td class="orderlist-title" colspan="20">
+                                <span>线上支付<em>￥3,66.00</em></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orderlist-sn" colspan="20">
+                                <span> 订单号：124241</span>
+                                <span> 下单时间：2017-02-01 </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orderlist-goodslist" colspan="6">
+                                <table class="orderitem-goodslist" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td class="order-image">
+                                            <a target="_blank" href="">
+                                                <img height="50" src = "http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/A16D7FFE31574D2E992255A64BD413C7.jpg_300x300"/>
+                                            </a>
+                                        </td>
+                                        <td class="order-listtiele">
+                                            <a target="_blank" href="#">海尔（Haier）BCD-310WDPF 310升多门冰箱 </a>
+                                            <a href="#">[交易快照]</a>
+                                            <span>
+                                            </span>
+                                        </td>
+                                        <td class="order-listprice">
+                                            3699
+                                        </td>
+                                        <td class="order-listnum">
+                                            1
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="orderlist-pay">
+                                <strong>￥3,688,00</strong>
+                                <p>运费(￥0.00)</p>
+                                <p>线上支付</p>
+                            </td>
+                            <td class="orderlist-status">
+                                <p>未付款</p>
+                                <a href="./order-details.html">订单详情</a>
+                            </td>
+                            <td class="orderlist-tools">
+                                <span>
+                                        <a  target="_blank" href="" class="green-btn">订单付款</a> 
+                                    </span>
+                                <a href="./order-details.html">查看订单</a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="order-box">
+                        <!-- 订单下商品列表 -->
+                        <tr>
+                            <td class="orderlist-title" colspan="20">
+                                <span>线上支付<em>￥3,66.00</em></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orderlist-sn" colspan="20">
+                                <span> 订单号：124241</span>
+                                <span> 下单时间：2017-02-01 </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="orderlist-goodslist" colspan="6">
+                                <table class="orderitem-goodslist" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td class="order-image">
+                                            <a target="_blank" href="">
+                                                        <img height="50" src = "http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/A16D7FFE31574D2E992255A64BD413C7.jpg_300x300"/>
+                                                    </a>
+                                        </td>
+                                        <td class="order-listtiele">
+                                            <a target="_blank" href="#">海尔（Haier）BCD-310WDPF 310升多门冰箱 </a>
+                                            <a href="#">[交易快照]</a>
+                                            <span>
+                                                    </span>
+                                        </td>
+                                        <td class="order-listprice">
+                                            3699
+                                        </td>
+                                        <td class="order-listnum">
+                                            1
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="orderlist-pay">
+                                <strong>￥3,688,00</strong>
+                                <p>运费(￥0.00)</p>
+                                <p>线上支付</p>
+                            </td>
+                            <td class="orderlist-status">
+                                <p>未付款</p>
+                                <a href="./order-details.html">订单详情</a>
+                            </td>
+                            <td class="orderlist-tools">
+                                <span>
+                                                <a  target="_blank" href="" class="green-btn">订单付款</a> 
+                                            </span>
+                                <a href="./order-details.html">查看订单</a>
+                            </td>
+                        </tr>
+                    </table>
+                </tbody>
+                <div class="empty"> 尚无订单</div>
+        </div>
+    </div>
     <!--个订单列表 end-->
 </div>
 <!--#include file="/member/member-footer.html" -->
