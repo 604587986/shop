@@ -1,0 +1,224 @@
+<!--#include file="/member/member-header.html" -->
+<script type="text/javascript" src="/js/order-list.js"></script>
+<div id="order-details">
+    <!--订单详情 start-->
+    <div class="order-details" id="order-details-view">
+        <div class="details">
+            <div class="details-left">
+                <h1>订单信息</h1>
+                <div class="details-list">
+                    <dl>
+                        <dt>下单时间：</dt>
+                        <dd>2017-11-22 10:05</dd>
+                    </dl>
+                    <dl>
+                        <dt>收货地址：</dt>
+                        <dd>北京 海淀区 三环以内</dd>
+                    </dl>
+                    <dl>
+                        <dt>收货人：</dt>
+                        <dd>小苹果</dd>
+                    </dl>
+                    <dl>
+                        <dt>发票信息：</dt>
+                        <dd>无</dd>
+                    </dl>
+                    <dl>
+                        <dt>送货时间：</dt>
+                        <dd>任意时间</dd>
+                    </dl>
+                    <dl>
+                        <dt>客户留言：</dt>
+                        <dd>无</dd>
+                    </dl>
+                    <dl class="online">
+                        <dt>订单编号：</dt>
+                        <dd>12242121211</dd>
+                    </dl>
+                    <dl>
+                        <dt>付款方式：</dt>
+                        <dd>在线支付</dd>
+                    </dl>
+                    <dl>
+                        <dt>商品总价：</dt>
+                        <dd>￥211.00</dd>
+                    </dl>
+                    <dl class="bottom-online">
+                        <dt>运费：</dt>
+                        <dd>￥0.00</dd>
+                    </dl>
+                    <dl>
+                        <dt>优惠金额：</dt>
+                        <dd>￥0.00</dd>
+                    </dl>
+                    <dl class="total-price">
+                        <dt>订单总价：</dt>
+                        <dd>￥211.00</dd>
+                    </dl>
+                    <dl class="actually-paid">
+                        <dt>实付金额：</dt>
+                        <dd>￥211.00</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="details-right">
+                <div class="order-status">
+                    <i></i> 订单状态：已收货
+                </div>
+                <ul>
+                    <li>
+                        1. 您尚未对该订单进行支付，请
+                        <strong>
+                            <a target="_blank" href="" >按此为订单付款</a>
+                            按此为订单付款
+                        </strong> 以确保商家及时发货。
+                    </li>
+                    <li>
+                        2. 如果您不想购买此订单的商品，请
+                        <strong>
+                            <a href='javascript:;' class=""  >取消订单</a>
+                                    取消订单	
+                        </strong> 订单操作。
+                    </li>
+                    <li>
+                        3. 如果您已经收到商品，请
+                        <strong>
+                            <a href="javascript:;">确认收货</a>
+                                确认收货	
+                        </strong> 订单操作。
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 流程图 -->
+        <div class="flow" id="flow">
+            <div class="app-flow-control">
+                <div class="inner-app-flow">
+                    <div class="box-app-flow">
+                        <div class="items-app-flow">
+                            <span class="app-flow-hr show"></span>
+                            <div class="app-flow-bg">
+                                <div class="app-flow-color show">
+                                    <i class="icomoon app-flow-c show">✔</i>
+                                </div>
+                            </div>
+                            <div class="app-flow-title">新订单</div>
+                        </div>
+                        <div class="items-app-flow">
+                            <span class="app-flow-hr show"></span>
+                            <div class="app-flow-bg">
+                                <div class="app-flow-color show">
+                                    <i class="icomoon app-flow-c show">✔</i>
+                                </div>
+                            </div>
+                            <div class="app-flow-title">已确认</div>
+                        </div>
+                        <div class="items-app-flow">
+                            <span class="app-flow-hr"></span>
+                            <div class="app-flow-bg">
+                                <div class="app-flow-color">
+                                    <i class="icomoon app-flow-c">✔</i>
+                                </div>
+                            </div>
+                            <div class="app-flow-title">已付款</div>
+                        </div>
+                        <div class="items-app-flow">
+                            <span class="app-flow-hr"></span>
+                            <div class="app-flow-bg">
+                                <div class="app-flow-color">
+                                    <i class="icomoon app-flow-c">✔</i>
+                                </div>
+                            </div>
+                            <div class="app-flow-title">已发货</div>
+                        </div>
+                        <div class="items-app-flow">
+                            <span class="app-flow-hr"></span>
+                            <div class="app-flow-bg">
+                                <div class="app-flow-color">
+                                    <i class="icomoon app-flow-c">✔</i>
+                                </div>
+                            </div>
+                            <div class="app-flow-title">已收货</div>
+                        </div>
+                        <div class="items-app-flow">
+                            <span class="app-flow-hr"></span>
+                            <div class="app-flow-bg">
+                                <div class="app-flow-color">
+                                    <i class="icomoon app-flow-c">✔</i>
+                                </div>
+                            </div>
+                            <div class="app-flow-title">已完成</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 商品列表 -->
+        <div class="goods-list">
+            <table cellpading="0" cellspecing="0">
+                <thead>
+                    <tr>
+                        <th class="goods-name" colspan="2">商品名称</th>
+                        <th class="goods-price">单价(元)</th>
+                        <th class="goods-num">数量</th>
+                        <th class="goods-subtotal">小计</th>
+                        <th class="goods-status">状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="goods-detail" colspan="5">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="#">
+                                                <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/12E409FF1A264CBF87515D0575059E3D.jpg_300x300" alt="">
+                                            </a>
+                                        </td>
+                                        <td class="text">
+                                            <a target="_blank" href="#">安溪馆 三和清香型安溪铁观音茶叶一级 铁盒装250g</a>
+                                        </td>
+                                        <td class="goods-width">
+                                            ￥35.00
+                                        </td>
+                                        <td class="goods-width">
+                                            1
+                                        </td>
+                                        <td class="goods-width">
+                                            ￥35.00
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="#">
+                                                    <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/12E409FF1A264CBF87515D0575059E3D.jpg_300x300" alt="">
+                                                </a>
+                                        </td>
+                                        <td class="text">
+                                            <a target="_blank" href="#">安溪馆 三和清香型安溪铁观音茶叶一级 铁盒装250g</a>
+                                        </td>
+                                        <td class="goods-width">
+                                            ￥35.00
+                                        </td>
+                                        <td class="goods-width">
+                                            1
+                                        </td>
+                                        <td class="goods-width">
+                                            ￥35.00
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="td-two">
+                            未付款
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--个订单详情 end-->
+</div>
+<!--#include file="/member/member-footer.html" -->
