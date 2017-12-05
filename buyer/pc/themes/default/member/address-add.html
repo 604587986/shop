@@ -1,0 +1,92 @@
+<!--#include file="/member/member-header.html" -->
+<script type="text/javascript" src="/js/address-add.js"></script>
+<div id="address-add">
+    <!--收货地址 start-->
+    <div class="address-list" id="address-list-view">
+        <div class="address-nav common-nav">
+            <ul>
+                <li class="selected">
+                    <a href="#">
+                        <span>收货地址管理</span>    
+                    </a>
+                 </li>
+            </ul>
+            <a href="./address-add.html" class="new-address">新增收货地址</a>
+        </div>
+        <div class="prompt">
+            <button type="button" class="close"><span >×</span></button>
+            <strong>友情提示</strong>
+            <span class="more">最多可以保存10个地址</span>
+        </div>
+        <div class="address-add-con">
+            <form>
+                <table cellpadding="0" border="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <th> 默认收货地址：</th>
+                            <td>
+                                <label>
+                                    <input type="radio" name="address" checked>否
+                                </label>
+                                <label class="radio-yes">
+                                    <input type="radio" name="address">是
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><em></em>姓名：</th>
+                            <td><input type="text" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <th>手机：</th>
+                            <td><input type="text" class="form-control" maxlength="11"></td>
+                        </tr>
+                        <tr>
+                            <th>电话：</th>
+                            <td><input type="text" class="form-control" placeholder="选填"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <em>*</em> 收货地区：
+                            </th>
+                            <td id="selectAddress">
+                                <select>
+                                    <option value="">北京</option>
+                                    <option value="">北京</option>
+                                    <option value="">北京</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><em></em>地址：</th>
+                            <td><input type="text" class="form-control" cols="30" name="addr" isrequired="true" maxlength="120"
+                                /></td>
+                        </tr>
+                        <tr>
+                            <th><em></em>地址别名：</th>
+                            <td>
+                                <input type="text" class="form-control" maxlength="120" />
+                                <span>建议填写常用名称</span>
+                                <span style="margin-left: 10px;">例如：</span>
+                                <span>
+                                        <a href="javascript: void(0);" class="example-aliases">家里</a>
+                                        <a href="javascript: void(0);" class="example-aliases">公司</a>
+                                        <a href="javascript: void(0);" class="example-aliases">学校</a>
+                                    </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th></th>
+                            <td>
+                                <a href="javascript: void(0);" class="btn btn-success" id="btnSubmit">保存地址</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+    <!--收货地址 end-->
+</div>
+<!--#include file="/member/member-footer.html" -->

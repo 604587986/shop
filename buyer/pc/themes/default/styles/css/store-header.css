@@ -351,7 +351,7 @@ body {
 }
 
 .left-sidebar .content dt i {
-    background: url(../../images/icon-erro.png) no-repeat;
+    background: url(../../images/icon-error.png) no-repeat;
     vertical-align: middle;
     display: inline-block;
     width: 11px;
@@ -382,7 +382,7 @@ body {
 }
 
 .left-sidebar .content ul li i {
-    background: url(../../images/icon-erro.png) no-repeat -320px 0;
+    background: url(../../images/icon-error.png) no-repeat -320px 0;
     vertical-align: middle;
     display: inline-block;
     width: 3px;
@@ -418,7 +418,7 @@ body {
 
 .joinin-step ul li {
     font-size: 12px;
-    background: url(../../images/icon-erro.png) no-repeat 0 -130px;
+    background: url(../../images/icon-error.png) no-repeat 0 -130px;
     vertical-align: top;
     letter-spacing: normal;
     word-spacing: normal;
@@ -524,7 +524,7 @@ body {
 .error {
     color: #333;
     line-height: 28px;
-    background: url(../../images/icon-erro.png) no-repeat -395px -129px;
+    background: url(../../images/icon-error.png) no-repeat -395px -129px;
     vertical-align: middle;
     display: inline-block;
     height: 28px;
