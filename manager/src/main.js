@@ -24,8 +24,8 @@ Vue.use(ElementUI)
  * @type {string}
  */
 axios.defaults.baseURL = managerConfig.path === 'admin'
-  ? 'http://www.easy-mock.com/mock/5a090349c645f12278296ab9/admin'
-  : 'http://www.easy-mock.com/mock/5a09650451a98322935c0ea2/seller'
+  ? 'https://www.easy-mock.com/mock/5a090349c645f12278296ab9/admin'
+  : 'https://www.easy-mock.com/mock/5a09650451a98322935c0ea2/seller'
 /* global Promise */
 /**
  * axios全局请求拦截
