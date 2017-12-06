@@ -1,5 +1,6 @@
 <template>
     <div class="home-container">
+      <sku-editor></sku-editor>
       <el-row :gutter="20">
         <!--新增商品 start-->
         <el-col :span="16">
@@ -67,6 +68,7 @@
 <script>
   import GoodsListModel from '@/models/GoodsListModel'
   import MemberInfoModel from '@/models/MemberInfoModel'
+  import SkuEditor from '@/plugins/selector/vue/SkuEditor'
   const goodsListModel = new GoodsListModel()
   const memberInfoModel = new MemberInfoModel()
 
@@ -123,6 +125,9 @@
           })
           .catch(error => console.log(error))
       }
+    },
+    components: {
+      SkuEditor
     }
   }
 </script>
