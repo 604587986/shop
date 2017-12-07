@@ -1,5 +1,5 @@
 <template>
-  <div class='test'></div>
+  <div class='sku-editor-container'></div>
 </template>
 
 <script>
@@ -11,17 +11,17 @@
   import 'bootstrap/dist/js/bootstrap.min.js'
   import 'selectize'
   import '@/plugins/selector/js/jquery.filesUpload.js'
-  import skuEditor from '@/plugins/selector/js/skueditor.js'
+  import SkuEditor from '@/plugins/selector/js/SkuEditor.js'
 
   export default {
     name: 'SkuEditor',
     props: ['init'],
     mounted() {
-      $('.test').html(skuEditor.getEditorDOM({
+      $('.sku-editor-containerst').html(SkuEditor.getEditorDOM({
         categoryID: 45
       }))
       if (this.init && this.init.quantity) {
-        skuEditor.initData({
+        SkuEditor.initData({
           data: this.init.skuList,
           quantity: this.init.quantity
         })
@@ -29,21 +29,21 @@
     },
     methods: {
       getSkuList() {
-        return skuEditor.getSkuList()
+        return SkuEditor.getSkuList()
       },
       generateSN() {
-        return skuEditor.generateSN('12')
+        return SkuEditor.generateSN('12')
       },
       skuHasChanged() {
-        return skuEditor.skuHasChanged()
+        return SkuEditor.skuHasChanged()
       }
     },
     beforeDestroy() {
-      $('.test').empty()
+      $('.sku-editor-container').empty()
     }
   }
 </script>
-<style lang='scss'>
+<style lang='scss' scoped>
   table {
     border-collapse: collapse;
   }
