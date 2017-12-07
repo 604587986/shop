@@ -14,7 +14,7 @@ import SkuEditor from '@/plugins/selector/js/skueditor.js'
 
 export default {
   name: 'SkuEditor',
-  props: ['init', 'categoryID', 'sn'],
+  props: ['init', 'categoryID'],
   mounted() {
     $('.sku-editor-container').html(
       SkuEditor.getEditorDOM({
@@ -32,8 +32,8 @@ export default {
     getSkuList() {
       return SkuEditor.getSkuList()
     },
-    generateSN() {
-      return SkuEditor.generateSN(this.sn)
+    generateSN(sn, mode) {
+      return SkuEditor.generateSN(sn, mode)
     },
     skuHasChanged() {
       return SkuEditor.skuHasChanged()
