@@ -317,7 +317,7 @@ let bindClickListener = function(which) {
 // 请求并初次渲染数据.(仅渲染第一层,省级)
 let requestAndFirstRenderData = function() {
   axios.get('/api/base/region/get?depth=3').then(response => {
-    areaData = response.data
+    areaData = response
 
     // 遍历各省插入到HTML中
     let li
