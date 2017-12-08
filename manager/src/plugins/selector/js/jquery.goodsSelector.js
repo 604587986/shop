@@ -843,6 +843,7 @@ import axios from 'axios'
   } // 弹出框的参数
   var which = ''
   var refreshCallback // 商品列表发生变化的回调函数变量
+  var message = null // 存储ElementUI的消息函数
 
   // ----------------------------------方法---------------------------------------
 
@@ -954,20 +955,20 @@ import axios from 'axios'
       '.seller-select-section .seller-selection-table-module .cancel-button'
     ).click(function() {
       removeGoodsData(this)
-      $.message.success('取消成功!')
+      message('取消成功!', 'success')
     })
 
     // 批量取消
     $('.seller-select-section .goods-table-footer button').click(function() {
       var trDOMs = $('.seller-select-section .goods-table input:checked')
       if (trDOMs.length === 0) {
-        $.message.error('您没有选择任何商品!')
+        message('您没有选择任何商品!','error')
         return
       }
       removeGoodsDataRepeatedly(trDOMs)
       // 取消 全选 按钮的选择
       $('.seller-select-section #select-all').prop('checked', false)
-      $.message.success('批量删除成功!')
+      message('批量删除成功!','success')
     })
 
     $('.seller-select-section .pointer').each(function() {
@@ -999,6 +1000,9 @@ import axios from 'axios'
   // ------------------------------------对外接口函数----------------------------------------
 
   var GoodsSellerSelector = function(which2, options) {
+    // 把ElementUI的message引用存储到全局变量中
+    message = options.message
+
     $(options.el).html(sellerSelectHTML)
 
     // 用户设置默认初始化数据的话,则初始化

@@ -8,27 +8,25 @@ import '@/plugins/selector/css/jquery.goodsSelector.css'
 import '@/plugins/selector/js/jquery.goodsSelector'
 export default {
   name: 'GoodsSelectorDialog',
+  data() {
+    return {
+      options: {
+        defaultData: this.defaultData,
+        maxLength: this.maxLength,
+        confirm: data => {
+          // 触发回调
+          this.$emit('refreshFunc', data)
+        }
+      }
+    }
+  },
   props: ['defaultData', 'maxLength', 'showDialog', 'mode'],
   methods: {
     callAdminDialog() {
-      $.GoodsAdminSelector({
-        defaultData: this.defaultData,
-        maxLength: this.maxLength,
-        confirm: data => {
-          // 触发回调
-          this.$emit('refreshFunc', data)
-        }
-      })
+      $.GoodsAdminSelector(this.options)
     },
     callSellerDialog() {
-      $.GoodsAdminSelector({
-        defaultData: this.defaultData,
-        maxLength: this.maxLength,
-        confirm: data => {
-          // 触发回调
-          this.$emit('refreshFunc', data)
-        }
-      })
+      $.GoodsAdminSelector(this.options)
     }
   },
   mounted() {
