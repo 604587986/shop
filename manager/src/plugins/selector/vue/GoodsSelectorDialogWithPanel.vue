@@ -9,12 +9,12 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import '@/plugins/selector/js/jquery.goodsSelector'
 export default {
-  name: 'GoodsSelectorWidthPanel',
-  props: ['maxLength', 'goodsIdList'],
+  name: 'GoodsSelectorDialogWithPanel',
+  props: ['maxLength', 'defaultData'],
   mounted() {
     $('.goods-selector-width-panel-container').GoodsSellerSelector({
       maxLength: this.maxLength,
-      goodsIdList: this.goodsIdList,
+      goodsIdList: this.defaultData,
       refresh: data => {
         this.$emit('refreshFunc', data)
       },

@@ -4,6 +4,8 @@
  */
 //  一些兼容扩展
 import axios from 'axios'
+
+let hideDialogFunc // 带关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
 ;(function() {
   /**
    * Array.prototype.filter
@@ -128,6 +130,9 @@ import axios from 'axios'
       setTimeout(function() {
         _this.$mask.remove()
         _this.$element.remove()
+        if(hideDialogFunc){
+          hideDialogFunc()
+        }
       }, 350)
       typeof _afterClose === 'function' && _afterClose()
     },
@@ -962,13 +967,13 @@ import axios from 'axios'
     $('.seller-select-section .goods-table-footer button').click(function() {
       var trDOMs = $('.seller-select-section .goods-table input:checked')
       if (trDOMs.length === 0) {
-        message('您没有选择任何商品!','error')
+        message('您没有选择任何商品!', 'error')
         return
       }
       removeGoodsDataRepeatedly(trDOMs)
       // 取消 全选 按钮的选择
       $('.seller-select-section #select-all').prop('checked', false)
-      message('批量删除成功!','success')
+      message('批量删除成功!', 'success')
     })
 
     $('.seller-select-section .pointer').each(function() {
@@ -1000,9 +1005,6 @@ import axios from 'axios'
   // ------------------------------------对外接口函数----------------------------------------
 
   var GoodsSellerSelector = function(which2, options) {
-    // 把ElementUI的message引用存储到全局变量中
-    message = options.message
-
     $(options.el).html(sellerSelectHTML)
 
     // 用户设置默认初始化数据的话,则初始化
@@ -1022,6 +1024,7 @@ import axios from 'axios'
   $.extend({
     // 管理员调用选择器的 函数
     GoodsAdminSelector: function(options) {
+      hideDialogFunc = options.callHideDialog
       var goodsSelector = new GoodsSelector(
         this,
         options,
@@ -1032,6 +1035,7 @@ import axios from 'axios'
     },
     // 管理员调用选择器的 函数
     GoodsSellerSelector: function(options) {
+      hideDialogFunc = options.callHideDialog
       var goodsSelector = new GoodsSelector(
         this,
         options,
@@ -1049,6 +1053,8 @@ import axios from 'axios'
 
   // 单独把商家选择框 封装成插件
   $.fn.GoodsSellerSelector = function(options) {
+    // 把ElementUI的message引用存储到全局变量中
+    message = options.message
     options.el = this
     // 插入样式
     $.SellerSelectorGoods(options)

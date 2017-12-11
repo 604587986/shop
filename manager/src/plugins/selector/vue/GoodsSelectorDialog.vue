@@ -16,6 +16,9 @@ export default {
         confirm: data => {
           // 触发回调
           this.$emit('refreshFunc', data)
+        },
+        callHideDialog: () => {
+          this.$emit('hideDialogFunc')
         }
       }
     }
