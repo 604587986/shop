@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import axios from 'axios'
+import jsonp from 'vue-jsonp'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'normalize.css'
@@ -18,6 +19,7 @@ Vue.prototype.$RegExp = RegExp
 Vue.prototype.$echarts = echarts
 
 Vue.use(ElementUI)
+Vue.use(jsonp)
 
 /**
  * axios全局配置
@@ -41,6 +43,8 @@ axios.interceptors.request.use((config) => {
       text: '请稍候...'
     })
   }
+  /** 设置超时时间 */
+  config.timeout = 8000
   return config
 }, (error) => {
   closeLoading(error)
@@ -56,6 +60,9 @@ axios.interceptors.response.use((response) => {
   return response
 }, (error) => {
   closeLoading(error)
+  if (error.message) {
+    Vue.prototype.$message.error(error.message)
+  }
   return Promise.reject(error)
 })
 
