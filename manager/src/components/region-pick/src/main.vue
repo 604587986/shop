@@ -44,7 +44,7 @@
         this.$jsonp(`http://v64.javamall.com.cn/api/base/region/get-children.do?regionid=${_region_id}`)
           .then(response => {
             if (!response || !response[0]) return
-            if (response[0].region_grade !== 1) {
+            if (_region_id !== 0) {
               this.findRegios(region_ids, response)
               return
             }
