@@ -1,7 +1,13 @@
 <template>
   <div class="en-search">
     <div style="width: 330px">
-      <el-input size="small" clearable placeholder="请输入商品关键字" v-model="keyword">
+      <el-input
+        size="small"
+        clearable
+        placeholder="请输入商品关键字"
+        v-model="keyword"
+        @keyup.native.enter="search"
+      >
         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
       </el-input>
     </div>
@@ -14,7 +20,7 @@
         <slot name="advanced-content"></slot>
         <div style="text-align: right; margin: 0">
           <el-button size="mini" type="text" @click="popoverVisible = false">取消</el-button>
-          <el-button type="primary" size="mini" @click="search">确定</el-button>
+          <el-button type="primary" size="mini" @click="advancedSearch">确定</el-button>
         </div>
         <el-button
           size="small"
@@ -48,9 +54,15 @@
       }
     },
     methods: {
+      /** 普通搜索 */
       search() {
         this.popoverVisible = false
-        this.$emit('search', this.$data)
+        this.$emit('search', this.$data.keyword)
+      },
+      /** 高级搜索 */
+      advancedSearch() {
+        this.popoverVisible = false
+        this.$emit('advancedSearch', this.$data.keyword)
       }
     }
   }
