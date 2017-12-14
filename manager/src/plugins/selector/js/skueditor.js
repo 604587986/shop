@@ -515,6 +515,7 @@ var bindSelectizeJS = function(which) {
                     }
                 )
                 .then(res => {
+                    res = res.data
                     $($item).attr('data-value', res.spec_id);
                     // 规格项添加到数组中
                     specNameArray.push(res);
@@ -549,6 +550,7 @@ var bindSelectizeJS = function(which) {
                     spec_value: data.spec_value
                 })
                 .then(res => {
+                    res = res.data
                     // 根据返回的规格值id动态更新页面中selectize默认的id
                     $select
                         .next()
@@ -1280,7 +1282,7 @@ var getMinPrice = function() {
 // 商家获取分类的规格
 var getGoodsSpec = function(category_id) {
     axios.get('goods-info/seller/category/spec').then(response => {
-        specNameArray = response;
+        specNameArray = response.data;
         if (response && response.length > 0) {
             response.forEach(function(item) {
                 specNameValueObject[item.spec_name] = item.valueList;

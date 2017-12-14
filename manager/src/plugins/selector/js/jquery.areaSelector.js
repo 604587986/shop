@@ -209,6 +209,7 @@ let areaHTML =
 let areaData = [{}] // 所有,省市县数据.
 let areaDOM = $(areaHTML) // DOM数据,后续操作全部基于此DOM
 let confirmCallback = null // 全局回调变量
+let hideDialogFunc;  //在关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
 
 // ---------------------------------------END-------------------------------------------
 
@@ -296,6 +297,7 @@ let bindEventListener = function() {
     $('.cover').css('display', 'none')
     // 执行回调,把已选数据传递出去.
     confirmCallback(getJSON())
+    hideDialogFunc();
   })
 
   // 取消 点击事件
@@ -304,6 +306,7 @@ let bindEventListener = function() {
       .closest('.area-container')
       .css('display', 'none')
     $('.cover').css('display', 'none')
+    hideDialogFunc();
   })
 }
 
@@ -317,7 +320,7 @@ let bindClickListener = function(which) {
 // 请求并初次渲染数据.(仅渲染第一层,省级)
 let requestAndFirstRenderData = function() {
   axios.get('/api/base/region/get?depth=3').then(response => {
-    areaData = response
+    areaData = response.data
 
     // 遍历各省插入到HTML中
     let li
@@ -1257,6 +1260,7 @@ export default {
   show: function(options) {
     // 把回调函数赋值给全局变量
     confirmCallback = options.confirm
+    hideDialogFunc = options.callHideDialog
     // 如果选择器已经存在,只是没显示
     areaDOM.css('display', 'block')
     $('.cover').css('display', 'block')
