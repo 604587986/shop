@@ -5,7 +5,7 @@
 //  一些兼容扩展
 import axios from 'axios'
 
-let hideDialogFunc // 带关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
+let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
 ;(function() {
   /**
    * Array.prototype.filter
@@ -456,7 +456,7 @@ let hideDialogFunc // 带关闭Dialog后，动态修改顶层dialogVisible的属
         })
         .then(res => {
           $this && $this.remove()
-          _this.__FUN__dataProcessing(res.result)
+          _this.__FUN__dataProcessing(res.data.result)
           _this.callback()
         })
         .catch(() => {
@@ -472,7 +472,7 @@ let hideDialogFunc // 带关闭Dialog后，动态修改顶层dialogVisible的属
       axios
         .get('/shop/goodslist?sn=' + sn)
         .then(res => {
-          _this.__FUN__dataProcessing(res[0])
+          _this.__FUN__dataProcessing(res.data[0])
         })
         .catch(err => {
           console.log('error: ', err)
@@ -483,7 +483,7 @@ let hideDialogFunc // 带关闭Dialog后，动态修改顶层dialogVisible的属
       axios
         .get(_this.options.cateApi)
         .then(res => {
-          _this.__FUN__cateoryDataProcessing(res)
+          _this.__FUN__cateoryDataProcessing(res.data)
         })
         .catch(err => {
           console.log('error: ', err)
@@ -859,6 +859,7 @@ let hideDialogFunc // 带关闭Dialog后，动态修改顶层dialogVisible的属
         axios
           .get('/shop/goodslist?sn=' + id)
           .then(goods => {
+            goods = goods.data
             if (Array.isArray(goods)) {
               insertGoodsData(goods, true)
             }

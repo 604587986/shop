@@ -6,6 +6,10 @@ const GoodsList = () => import('./views/seller/goods/GoodsList.vue')
 const Classify = () => import('./views/seller/goods/Classfiy.vue')
 const TagList = () => import('./views/seller/goods/TagList.vue')
 
+// DEMO
+const AreaSelector = () => import('./views/seller/demo/AreaSelector.vue')
+const GoodsSelector = () => import('./views/seller/demo/GoodsSelector.vue')
+
 //  开发文档
 const Doc = () => import('./views/doc/Index.vue')
 
@@ -200,6 +204,23 @@ export default [
       {
         title: '咨询管理',
         type: 'menu-item'
+      }
+    ]
+  },
+  {
+    title: '组件示例',
+    type: 'submenu',
+    icon: 'el-icon-enation-bilibili',
+    children: [
+      {
+        title: '地区选择组件',
+        type: 'menu-item',
+        component: AreaSelector
+      },
+      {
+        title: '商品选择组件',
+        type: 'menu-item',
+        component: GoodsSelector
       }
     ]
   },

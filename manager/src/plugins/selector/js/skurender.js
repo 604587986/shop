@@ -83,10 +83,8 @@ import axios from 'axios'
         // 只有一条数据且不存在skuList数据的话,
         // 把得来的数据返回回去.
         // return;
-
-        if(Array.isArray(response.data)){
-            response = response.data
-        }
+        response = response.data
+        
         if (response.length === 1 && !response[0].specList) {
           skuRender.refresh({
             sku_id: response[0].sku_id,

@@ -4,6 +4,7 @@
 
 <script>
 import $ from 'jquery'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import AreaSelector from '@/plugins/selector/js/jquery.areaSelector.js'
 export default {
   name: 'AreaSelectorDialog',
@@ -14,12 +15,16 @@ export default {
         defaultData: this.defaultData,
         confirm: data => {
           this.$emit('confirmFunc', data)
+        },
+        callHideDialog: () => {
+          this.$emit('hideDialogFunc')
         }
       })
     }
   },
   mounted() {
     if (this.showDialog) {
+      console.log(1)
       this.callAreaDialog()
     }
   },
@@ -30,6 +35,7 @@ export default {
         $('.area-container').hide()
         $('.cover').css('display', 'none')
       } else {
+        console.log(2)
         this.callAreaDialog()
       }
     }
