@@ -6,6 +6,11 @@ const GoodsList = () => import('./views/admin/goods/GoodsList.vue')
 const Classify = () => import('./views/admin/goods/Classfiy.vue')
 const TagList = () => import('./views/admin/goods/TagList.vue')
 
+// DEMO
+const TextSelector = () => import('./views/admin/demo/TextSelector.vue')
+const SkuRender = () => import('./views/admin/demo/SkuRender.vue')
+const SkuEditor = () => import('./views/admin/demo/SkuEditor.vue')
+
 //  开发文档
 const Doc = () => import('./views/doc/Index.vue')
 
@@ -672,6 +677,28 @@ export default [
             type: 'menu-item'
           }
         ]
+      }
+    ]
+  },
+  {
+    title: '组件示例',
+    type: 'submenu',
+    icon: 'el-icon-enation-bilibili',
+    children: [
+      {
+        title: 'Sku筛选组件',
+        type: 'menu-item',
+        component: SkuRender
+      },
+      {
+        title: '文本选择组件',
+        type: 'menu-item',
+        component: TextSelector
+      },
+      {
+        title: 'Sku编辑组件',
+        type: 'menu-item',
+        component: SkuEditor
       }
     ]
   },
