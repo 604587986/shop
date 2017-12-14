@@ -1,19 +1,50 @@
 <template>
-  <div class="container" v-loading="loading">
-    <el-table
-      :data="tableData"
-      height="100%"
-      border
-      stripe
-      :header-cell-style="{textAlign: 'center'}"
-      style="width: 100%; height: calc(100% - 42px)">
+  <en-tabel-layout
+    :toolbar="true"
+    :pagination="true"
+    :tableData="tableData"
+    :loading="loading"
+    :selection-change="handleSelectionChange"
+  >
+    <div slot="toolbar" class="inner-toolbar">
+      <div class="toolbar-btns"></div>
+      <div class="toolbar-search">
+        <en-search
+          @search="searchEvent"
+          advanced
+        >
+          <template slot="advanced-content">
+            <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+              <el-form-item label="商品名称">
+                <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+              </el-form-item>
+              <el-form-item label="商品编号">
+                <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
+              </el-form-item>
+              <el-form-item label="店铺名称">
+                <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
+              </el-form-item>
+              <el-form-item label="商品类别">
+                <en-category-pick @changed="categoryChanged"/>
+              </el-form-item>
+            </el-form>
+          </template>
+        </en-search>
+      </div>
+    </div>
+
+    <template slot="table-columns">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column label="商品图片" width="120">
         <template slot-scope="scope">
           <img :src="scope.row.image" class="goods-image"/>
         </template>
       </el-table-column>
       <el-table-column prop="sn" label="商品编号" width="180"> </el-table-column>
-      <el-table-column prop="seller_name" label="店铺名称"> </el-table-column>
+      <el-table-column prop="seller_name" label="店铺名称" width="120"> </el-table-column>
       <el-table-column
         prop="name"
         label="商品名称"
@@ -38,25 +69,34 @@
             @click="handleWithdraw(scope.$index, scope.row)">下架</el-button>
         </template>
       </el-table-column>
-    </el-table>
-    <div class="page">
-      <el-pagination
-        v-if="pageData"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
-      </el-pagination>
-    </div>
-  </div>
+    </template>
+
+    <template slot="pagination-toolbar">
+      <el-button type="danger" size="mini" @click="underTheGoods">下架选中</el-button>
+    </template>
+    <el-pagination
+      slot="pagination"
+      v-if="pageData"
+      @size-change="handlePageSizeChange"
+      @current-change="handlePageCurrentChange"
+      :current-page="pageData.page_no"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pageData.page_size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="pageData.data_total">
+    </el-pagination>
+  </en-tabel-layout>
 </template>
 
 <script>
+  import { TableLayout, Search, CategoryPick } from '../../../components'
+  TableLayout.install()
+  Search.install()
+  CategoryPick.install()
+
   import GoodsListModel from '@/models/GoodsListModel'
   const goodsListModel = new GoodsListModel()
+
   export default {
     name: 'GoodsList',
     mounted() {
@@ -65,7 +105,7 @@
     data() {
       return {
         /** 列表loading状态 */
-        loading: false,
+        loading: true,
 
         /** 列表参数 */
         params: {
@@ -73,26 +113,44 @@
           page_size: 10
         },
 
+        /** 列表数据状态 */
+        tableData: null,
+
         /** 列表分页数据 */
         pageData: null,
 
-        /** 列表数据状态 */
-        tableData: null
+        /** 被选数据 */
+        selectedData: [],
+
+        /** 高级搜索数据 */
+        advancedForm: {
+          goods_name: '',
+          goods_sn: '',
+          shop_name: '',
+          category_id: ''
+        }
       }
     },
     methods: {
+
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
         this.GET_GoodsList()
       },
+
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
         this.GET_GoodsList()
       },
 
-      /** 下架操作确认 */
+      /** 当选择项发生变化 */
+      handleSelectionChange(val) {
+        this.selectedData = val.map(item => item.id)
+      },
+
+      /** 单个商品下架操作确认 */
       handleWithdraw(index, row) {
         this.$confirm('确认下架吗？', '提示')
           .then(() => this.DELETE_Goods(row.id))
@@ -102,6 +160,27 @@
       /** 销售状态格式化 */
       marketStatus(row, column, cellValue) {
         return row.market_enable === 1 ? '售卖中' : '已下架'
+      },
+
+      /** 搜索事件触发 */
+      searchEvent(data) {
+        console.log(data)
+      },
+
+      /** 高级搜索中 分类选择组件值发生改变 */
+      categoryChanged(data) {
+        console.log(data)
+      },
+
+      /** 下架选中商品 */
+      underTheGoods() {
+        if (this.selectedData.length < 1) {
+          this.$message.error('您未选中任何商品！')
+        } else {
+          this.$confirm('确认要下架这些商品吗？', '提示')
+            .then(() => this.DELETE_Goods(this.selectedData.join(',')))
+            .catch(() => {})
+        }
       },
 
       /** 获取商品列表 */
@@ -119,6 +198,7 @@
             this.tableData = goodsListModel.map(data.data)
           })
       },
+
       /** 下架商品 */
       DELETE_Goods(id) {
         this.$http.delete(`goods/${id}`)
@@ -133,19 +213,21 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .container {
-    width: 100%;
-    height: 100%;
+  /deep/ .el-table td:not(.is-left) {
+    text-align: center;
+  }
 
-    .goods-image {
-      width: 55px;
-      height: 55px;
-    }
+  .inner-toolbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
   }
-  .page {
-    height: 32px;
-    padding: 5px 20px;
-    text-align: right;
-    background-color: #ffffff;
+
+  .toolbar-btns {
+
   }
+  .toolbar-search {
+    margin-right: 10px;
+  }
+
 </style>
