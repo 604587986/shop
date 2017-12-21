@@ -10,40 +10,6 @@ export default {
       initData: {
         quantity: 123,
         skuList: [
-          {
-            price: 44,
-            weight: 123,
-            quantity: 4,
-            cost: 4,
-            sn: 123,
-            specList: [
-              {
-                spec_name: '颜色',
-                spec_id: 1,
-                spec_value: 123,
-                spec_value_id: 100,
-                spec_type: null,
-                spec_image: null
-              }
-            ]
-          },
-          {
-            price: 4,
-            weight: 4,
-            quantity: 4,
-            cost: 4,
-            sn: 4,
-            specList: [
-              {
-                spec_name: '颜色',
-                spec_id: 1,
-                spec_value: 124,
-                spec_value_id: 101,
-                spec_type: null,
-                spec_image: null
-              }
-            ]
-          }
         ]
       }
     }

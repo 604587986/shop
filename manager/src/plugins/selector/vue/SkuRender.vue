@@ -24,7 +24,6 @@ export default {
 </script>
 <style lang='scss'>
 .sku-render-container {
-  border: 1px solid red;
   min-width: 200px;
   min-height: 200px;
 }
