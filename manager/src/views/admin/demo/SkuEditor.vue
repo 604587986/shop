@@ -1,11 +1,8 @@
 <template>
-    <sku-editor :init='initData' :categoryID='123' ref='skueditor'></sku-editor>
+  <en-sku-editor :init='initData' :categoryID='123' ref='skueditor'></en-sku-editor>
 </template>
 
 <script>
-// 在需要使用的组件中导入该组件
-import SkuEditor from '@/plugins/selector/vue/SkuEditor'
-
 export default {
   data() {
     return {
@@ -64,10 +61,6 @@ export default {
       // 规格数据相对于上次是否有改变
       console.log(this.$refs.skueditor.skuHasChanged())
     }
-  },
-  // 注册为子组件
-  components: {
-    SkuEditor
   }
 }
 </script>

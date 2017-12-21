@@ -11,6 +11,7 @@ import store from './store'
 import { Foundation, RegExp } from './framework'
 import echarts from 'echarts'
 import managerConfig from '../config/manager.config'
+import EnPlugins from '@/plugins/selector/vue'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
@@ -20,6 +21,7 @@ Vue.prototype.$echarts = echarts
 
 Vue.use(ElementUI)
 Vue.use(jsonp)
+Vue.use(EnPlugins)
 
 /**
  * axios全局配置

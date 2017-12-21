@@ -1,12 +1,11 @@
 <template>
   <div>
     <el-button type='primary' size='small' @click='dialogVisible=true'>弹出</el-button>
-    <text-selector-dialog :defaultData='initData' @hideDialogFunc='hideDialog' @confirmFunc='confirm' :showDialog='dialogVisible'></text-selector-dialog>
+    <en-text-selector-dialog :defaultData='initData' @hideDialogFunc='hideDialog' @confirmFunc='confirm' :showDialog='dialogVisible'></en-text-selector-dialog>
   </div>
 </template>
 
 <script>
-import TextSelectorDialog from '@/plugins/selector/vue/TextSelectorDialog'
 export default {
   data() {
     return {
@@ -25,9 +24,6 @@ export default {
     hideDialog() {
       this.dialogVisible = false
     }
-  },
-  components: {
-    TextSelectorDialog
   }
 }
 </script>

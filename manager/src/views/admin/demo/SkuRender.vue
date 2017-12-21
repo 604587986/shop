@@ -1,12 +1,10 @@
 <template>
     <div>
-        <sku-render @refreshFunc='refresh' :goodsID='163'></sku-render>
+        <en-sku-render @refreshFunc='refresh' :goodsID='163'></en-sku-render>
     </div>
 </template>
 
 <script>
-// 导入组件
-import SkuRender from '@/plugins/selector/vue/SkuRender'
 
 export default {
   methods: {
@@ -14,10 +12,6 @@ export default {
     refresh(data) {
       console.log('-->', data)
     }
-  },
-  // 绑定成子组件
-  components: {
-    SkuRender
   }
 }
 </script>
