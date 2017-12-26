@@ -5,6 +5,7 @@ const Home = () => import('./views/admin/Home.vue')
 const GoodsList = () => import('./views/admin/goods/GoodsList.vue')
 const Classify = () => import('./views/admin/goods/Classfiy.vue')
 const TagList = () => import('./views/admin/goods/TagList.vue')
+const GooodsAudit = () => import('./views/admin/goods/GoodsAudit.vue')
 
 // DEMO
 const TextSelector = () => import('./views/admin/demo/TextSelector.vue')

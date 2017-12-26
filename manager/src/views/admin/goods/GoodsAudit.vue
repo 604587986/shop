@@ -4,14 +4,12 @@
     :pagination="true"
     :tableData="tableData"
     :loading="loading"
-    :selection-change="handleSelectionChange"
   >
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns"></div>
       <div class="toolbar-search">
         <en-search
           @search="searchEvent"
-          @advancedSearch="advancedSearchEvent"
           advanced
         >
           <template slot="advanced-content">
@@ -35,10 +33,6 @@
     </div>
 
     <template slot="table-columns">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
       <el-table-column label="商品图片" width="120">
         <template slot-scope="scope">
           <img :src="scope.row.image" class="goods-image"/>
@@ -72,9 +66,6 @@
       </el-table-column>
     </template>
 
-    <template slot="pagination-toolbar">
-      <el-button type="danger" size="mini" @click="underTheGoods">下架选中</el-button>
-    </template>
     <el-pagination
       slot="pagination"
       v-if="pageData"
@@ -90,7 +81,7 @@
 </template>
 
 <script>
-  import { TableLayout, Search, CategoryPick } from '@/components'
+  import { TableLayout, Search, CategoryPick } from '../../../components'
   TableLayout.install()
   Search.install()
   CategoryPick.install()
@@ -99,7 +90,7 @@
   const goodsListModel = new GoodsListModel()
 
   export default {
-    name: 'GoodsList',
+    name: 'GoodsAudit',
     mounted() {
       this.GET_GoodsList()
     },
@@ -119,9 +110,6 @@
 
         /** 列表分页数据 */
         pageData: null,
-
-        /** 被选数据 */
-        selectedData: [],
 
         /** 高级搜索数据 */
         advancedForm: {
@@ -146,12 +134,7 @@
         this.GET_GoodsList()
       },
 
-      /** 当选择项发生变化 */
-      handleSelectionChange(val) {
-        this.selectedData = val.map(item => item.id)
-      },
-
-      /** 单个商品下架操作确认 */
+      /** 下架操作确认 */
       handleWithdraw(index, row) {
         this.$confirm('确认下架吗？', '提示')
           .then(() => this.DELETE_Goods(row.id))
@@ -165,41 +148,12 @@
 
       /** 搜索事件触发 */
       searchEvent(data) {
-        Object.keys(this.advancedForm).forEach(key => {
-          this.advancedForm[key] = ''
-        })
-        this.params = {
-          ...this.params,
-          ...this.advancedForm,
-          keyword: data
-        }
-        this.GET_GoodsList()
-      },
-
-      /** 高级搜索事件触发 */
-      advancedSearchEvent() {
-        this.params = {
-          ...this.params,
-          ...this.advancedForm,
-          keyword: ''
-        }
-        this.GET_GoodsList()
+        console.log(data)
       },
 
       /** 高级搜索中 分类选择组件值发生改变 */
       categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
-      },
-
-      /** 下架选中商品 */
-      underTheGoods() {
-        if (this.selectedData.length < 1) {
-          this.$message.error('您未选中任何商品！')
-        } else {
-          this.$confirm('确认要下架这些商品吗？', '提示')
-            .then(() => this.DELETE_Goods(this.selectedData.join(',')))
-            .catch(() => {})
-        }
+        console.log(data)
       },
 
       /** 获取商品列表 */

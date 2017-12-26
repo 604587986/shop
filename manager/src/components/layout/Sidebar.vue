@@ -5,7 +5,23 @@
       <div v-else class="logo-rectangle"></div>
     </div>
     <div class="sidebar-container-menu" :style="{overflow: isCollapse ? 'visible' : 'scroll'}">
+      <en-scroll-bar v-if="isCollapse">
+        <el-menu
+          :collapse="isCollapse"
+          :default-active="currentTabName"
+          background-color="#313641"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+          unique-opened
+          @select="sidebarSelected"
+        >
+          <template v-for="(item, index) in sidebarMenu">
+            <menus-item :item="item" :index="index"></menus-item>
+          </template>
+        </el-menu>
+      </en-scroll-bar>
       <el-menu
+        v-else
         :collapse="isCollapse"
         :default-active="currentTabName"
         background-color="#313641"
@@ -25,6 +41,8 @@
 <script>
   import Vue from 'vue'
   import { mapActions, mapGetters } from 'vuex'
+  import ScrollBar from '../../components/scroll-bar'
+  ScrollBar.install()
   import sidebarMenuSeller from '@/sidebar-menus.seller'
   import sidebarMenuAdmin from '@/sidebar-menus.admin'
   const managerPath = require('../../../config/manager.config').path
