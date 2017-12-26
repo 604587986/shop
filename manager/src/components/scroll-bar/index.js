@@ -1,6 +1,6 @@
 /**
- * 滚动组件
- * 包含高级模式
+ * 滚动条组件
+ * 暂用于左侧侧边栏
  */
 import Vue from 'vue'
 import ScrollBar from './src/main'
