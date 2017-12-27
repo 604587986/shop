@@ -39,12 +39,12 @@ export default [
         children: [
           {
             title: '分类列表',
-            type: 'menu-item'
+            type: 'menu-item',
+            component: Classify
           },
           {
             title: '品牌列表',
-            type: 'menu-item',
-            component: Classify
+            type: 'menu-item'
           },
           {
             title: '规格列表',
