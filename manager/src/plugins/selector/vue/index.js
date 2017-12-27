@@ -17,6 +17,7 @@ export default {
     Vue.component(`En${SkuEditor.name}`, SkuEditor)
     Vue.component(`En${SkuRender.name}`, SkuRender)
     Vue.component(`En${TextSelectorDialog.name}`, TextSelectorDialog)
+    // 分类编辑插件
     Vue.component(`En${GoodsCatsEdit.name}`, GoodsCatsEdit)
   }
 }
