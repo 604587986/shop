@@ -4,6 +4,7 @@ import GoodsSelectorDialogWithPanel from './GoodsSelectorDialogWithPanel'
 import SkuEditor from './SkuEditor'
 import SkuRender from './SkuRender'
 import TextSelectorDialog from './TextSelectorDialog'
+import GoodsCatsEdit from './GoodsCatsEdit'
 
 export default {
   install: Vue => {
@@ -16,5 +17,6 @@ export default {
     Vue.component(`En${SkuEditor.name}`, SkuEditor)
     Vue.component(`En${SkuRender.name}`, SkuRender)
     Vue.component(`En${TextSelectorDialog.name}`, TextSelectorDialog)
+    Vue.component(`En${GoodsCatsEdit.name}`, GoodsCatsEdit)
   }
 }

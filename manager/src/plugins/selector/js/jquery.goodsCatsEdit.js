@@ -38,27 +38,24 @@
             catDatas    : [],
             __catDatas  : []
         };
-        
+
         this.default = {
-            'host'    : ctx,
-            'api'     : '/goods-info/category/@id/children.do?format=plugin',
-            'canEdit' : true,
-            'maxLeave': 3
-        };
-        
+          'api': 'http://localhost:8080/javashop/goods-info/category/@id/children.do?format=plugin',
+          'canEdit': true,
+          'maxLeave': 3
+        }
+
         this.options = $.extend({}, this.default, opts);
-        this.options.url = this.options.host + this.options.api;
     };
     /* ============================================================================ */
     goodsCatsEdit.prototype = {
         init: function () {
-            this.createLinkEle();
             this.createAppEle();
             this.bindEvents();
             this.getCatList();
             return this;
         },
-        
+
         refreshData: function () {
             this.params.parentid = 0;
             this.params.activeColumn = 0;
@@ -66,37 +63,37 @@
             this.node.controller.empty();
             this.getCatList();
         },
-        
+
         bindEvents: function () {
             var _this = this;
-            
+
             this.node.app.on('keyup', '.__GCD__input_input', function (e) {
                 e.keyCode === 13 && _this.searchCat($(this));
             });
-            
+
             this.node.app.on('click', '.__search', function () {
                 _this.searchCat($(this));
             });
-            
+
             this.node.app.on('click', '.__GCD__add_cat', function () {
                 _this.addCat($(this));
             });
-            
+
             this.node.app.on('click', '.__cat_item', function () {
                 _this.clickItem($(this));
             });
-            
+
             this.node.app.on('click', '._btn_', function () {
                 _this.onClickItemBtn($(this))
             })
         },
-        
+
         /* 逻辑处理
          ============================================================================ */
         clickItem: function ($this) {
             var _this = this, cat_id = parseInt($this.attr('data-id')), _maxLeave = this.options.maxLeave, _index;
             this.params.activeColumn = ( _index = $this.closest('.__GCD__column').index() + 1);
-            this.params.activeItem = $this.index() - 1;
+            this.params.activeItem = $this.index();// - 1;
             if (_index !== _maxLeave && $this.is('.active')) return;
             $this.addClass('active').siblings().removeClass('active');
             if (this.params.catDatas.length + _index === _maxLeave * 2) {
@@ -114,18 +111,18 @@
                 return;
             }
             //  移除本列表后面所有列表
-            //$this.closest('.__GCD__column').nextAll().remove();
+            $this.closest('.__GCD__column').nextAll().remove();
             this.params.parentid = cat_id;
             this.getCatList();
         },
-        
+
         onClickItemBtn: function ($this) {
             var _itemBtns = this.options.itemBtns;
             var _btn_index = $this.data('btn_index');
             var _onClick = _itemBtns[_btn_index]['onClick'];
             typeof _onClick === 'function' && _onClick(this.makeCat($this));
         },
-        
+
         makeCat: function ($this) {
             var _this = this;
             var _leave        = parseInt($this.attr('data-leave')),
@@ -147,10 +144,10 @@
             _cat.id = _cat_id;
             _cat.text = _cat_text;
             _cat.parent_id = _cat_parentid;
-            _cat.parent_data = __data;
+            _cat.parentData = __data;
             return _cat;
         },
-        
+
         searchCat: function ($this) {
             var _this = this;
             var _val   = $this[0].tagName === 'INPUT' ? $this.val() : $this.siblings('input').val(),
@@ -167,18 +164,18 @@
                 _this.appendContent(_leave - 1, _val);
             }
         },
-        
+
         addCat: function ($this) {
             var _this = this, _leave = parseInt($this.attr('data-leave')), _addCat = _this.options.addCat, _cat = {};
             _cat.leave = _leave;
             _leave > 1 && (function () {
                 var _parent_id = parseInt($this.attr('data-parentid')),
                     _catDatas_ = _this.params.__catDatas[_leave - 2];
-                _cat.parent_data = {};
-                _cat.parent_data['datas'] = _catDatas_;
+                _cat.parentData = {};
+                _cat.parentData['datas'] = _catDatas_;
                 for (var i = 0; i < _catDatas_.length; i++) {
                     if (_catDatas_[i]['id'] === _parent_id) {
-                        _cat.parent_data['data'] = _catDatas_[i];
+                        _cat.parentData['data'] = _catDatas_[i];
                         break;
                     }
                 }
@@ -209,15 +206,14 @@
             this.countWidth();
             !this.options.canEdit && typeof (_callback) === 'function' && _callback(__datas[__datas.length - 1][_index || 0]);
         },
-        
+
         /* 接口、数据处理相关
          ============================================================================ */
         getCatList       : function () {
             var _this = this;
             var _options = {
-                url     : _this.options.url.replace("@id", _this.params.parentid),
-                type    : 'GET',
-                dataType: 'json',
+                url     : _this.options.api.replace("@id", _this.params.parentid),
+                dataType: 'jsonp',
                 success : function (res) { _this.processingCatList(res); }
             };
             $.ajax(_options);
@@ -244,7 +240,7 @@
             _params.parentid = res[0]['id'];
             _dataLen === _maxLeave ? this.returnData(0) : _dataLen < _maxLeave && this.getCatList();
         },
-        
+
         /* DOM操作相关
          ============================================================================ */
         appendContent: function (count, _val) {
@@ -257,7 +253,7 @@
                 _itemBtns.forEach(function (item, index) {
                     _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-text="' + res[i]['text'] +'" data-id="' + res[i]['id'] + '" data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ item.textStyle +'">' + item.text + '</a>';
                 });
-                
+
                 _item += '<div class="__cat_item' + (i === 0 ? ' active' : '') + '" data-id="' + res[i]['id'] + '" data-path="' + res[i]['category_path'] + '">\
                         <h4>' + res[i]['text'] + '</h4>\
                         <div class="__cat_item_btns">\
@@ -279,7 +275,7 @@
                         </div>\
                     </div>\
                 </div>';
-            
+
             //  插入或替换节点
             if (this.node.app.find('.__GCD__column').eq(count).length === 0) {
                 $(content).appendTo(this.node.controller);
@@ -302,33 +298,6 @@
                 ';
             this.node.app = $('#__GCD__');
             this.node.controller = this.node.app.find('.__GCD__controller');
-        },
-        createLinkEle: function () {
-            $('#goodsCatsEditCss').length === 0 && (function () {
-                var styleEle = document.createElement('link');
-                styleEle.id = 'goodsCatsEditCss';
-                styleEle.type = 'text/css';
-                styleEle.rel = 'stylesheet';
-                styleEle.href = ctx + '/statics/e_tools/js/jquery.goodsCatsEdit.css';
-                document.head.appendChild(styleEle);
-            })();
-            
-            $('#select2Css').length === 0 && (function () {
-                var styleEle = document.createElement('link');
-                styleEle.id = 'select2Css';
-                styleEle.type = 'text/css';
-                styleEle.rel = 'stylesheet';
-                styleEle.href = ctx + '/statics/e_tools/css/library/select2.min.css';
-                document.head.appendChild(styleEle);
-            })();
-            
-            $('#select2JS').length === 0 && (function () {
-                var jsEle = document.createElement('script');
-                jsEle.id = 'select2JS';
-                jsEle.type = 'text/javascript';
-                jsEle.src = ctx + '/statics/e_tools/js/library/select2.min.js';
-                document.head.appendChild(jsEle);
-            })();
         }
     };
     /* ============================================================================ */
