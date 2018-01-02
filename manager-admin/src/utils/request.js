@@ -24,7 +24,7 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(
-  response => response,
+  response => response.data,
   /**
   * 下面的注释为通过response自定义code来标示请求状态，当code返回如下情况为权限有问题，登出并返回到登录页
   * 如通过xmlhttprequest 状态码标识 逻辑可写在下面error中
@@ -53,9 +53,10 @@ service.interceptors.response.use(
   //       return response.data;
   //     }
   error => {
-    console.log('err' + error)// for debug
+    const error_response = error.response || {}
+    const error_data = error_response.data || {}
     Message({
-      message: error.message,
+      message: error_data.error_message || '出现错误，请稍后再试！',
       type: 'error',
       duration: 5 * 1000
     })

@@ -28,11 +28,14 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
+          <a target='_blank' href="http://v64.javamall.com.cn/">
             <el-dropdown-item>
-              项目地址
+              浏览网站
             </el-dropdown-item>
           </a>
+          <el-dropdown-item>
+            <span @click="changePassword">修改密码</span>
+          </el-dropdown-item>
           <el-dropdown-item divided>
             <span @click="logout" style="display:block;">退出登录</span>
           </el-dropdown-item>
@@ -71,10 +74,25 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('toggleSideBar')
     },
-    logout() {
-      this.$store.dispatch('LogOut').then(() => {
-        location.reload()// 为了重新实例化vue-router对象 避免bug
+    changePassword() {
+      this.$notify({
+        title: '提示',
+        message: '修改密码成功',
+        type: 'success'
       })
+    },
+    logout() {
+      this.$confirm('确定退出吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$store.dispatch('LogOut').then(() => {
+            location.reload()// 为了重新实例化vue-router对象 避免bug
+          })
+        })
+        .catch(() => {})
     }
   }
 }

@@ -41,8 +41,8 @@ export default {
     return {
       loading: false,
       loginForm: {
-        username: 'admin',
-        password: 'admin',
+        username: 'javashop',
+        password: '111111',
         validcode: '3qnz'
       },
       loginRules: {
