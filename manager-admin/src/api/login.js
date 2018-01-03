@@ -9,6 +9,7 @@ export function loginByUsername(username, password, validcode) {
   return request({
     url: 'login',
     method: 'post',
+    loading: false,
     data
   })
 }

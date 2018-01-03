@@ -1,5 +1,5 @@
 <template>
-  <section class="app-main" style="min-height: 100%">
+  <section class="app-main" style="min-height: 100%; padding: 10px">
     <transition name="fade" mode="out-in">
       <keep-alive :include="cachedViews">
         <router-view :key="key"></router-view>
@@ -13,7 +13,6 @@ export default {
   name: 'AppMain',
   computed: {
     cachedViews() {
-      console.log(this.$store.state.tagsView.cachedViews)
       return this.$store.state.tagsView.cachedViews
     },
     key() {
