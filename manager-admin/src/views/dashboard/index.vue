@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { getDashboardData } from '../../api/dashboard'
+import { getDashboardData } from '@/api/dashboard'
 
 export default {
   name: 'dashboard',
