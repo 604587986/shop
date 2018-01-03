@@ -33,7 +33,7 @@
       </el-col>
       <!--销售统计 end-->
     </el-row>
-    <el-row :gutter="20">
+    <el-row :gutter="20" style="margin-bottom: 0">
       <el-col :span="16">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
@@ -81,13 +81,13 @@ export default {
       loading: true,
       goodsList: null,
       memberList: null,
-      tableHeight: ((window.innerHeight / 2) - 85) - 55
+      tableHeight: (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
     }
   },
   methods: {
     /** 窗口缩放时计算table高度 */
     countTableHeight() {
-      this.tableHeight = ((window.innerHeight / 2) - 85) - 55
+      this.tableHeight = (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
       /** 图表刷新 */
       setTimeout(this.sesalChart.resize)
     }
@@ -149,9 +149,6 @@ export default {
   .el-row {
     position: relative;
     margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
   .el-col {
     border-radius: 4px;
