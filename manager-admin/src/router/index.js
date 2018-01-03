@@ -33,7 +33,7 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: _import('dashboard/index'),
       name: 'dashboard',
-      meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
+      meta: { title: 'dashboard', icon: 'dashboard' }
     }]
   }
 ]
@@ -147,12 +147,6 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: 'notification-history',
-        component: _import('member/member-notification/notificationHistory'),
-        name: 'notification-history',
-        meta: { title: 'notificationHistory' }
-      }
-      /* {
         path: '/member/member-notification',
         component: _import('member/member-notification/index'),
         redirect: '/member/member-notification/notification-history',
@@ -161,7 +155,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'notification-history', component: _import('member/member-notification/notificationHistory'), name: 'notification-history', meta: { title: 'notificationHistory' }}
         ]
-      } */
+      }
     ]
   },
   // 店铺管理
@@ -187,12 +181,6 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: 'settlement-list',
-        component: _import('shop/settlement-manage/settlementList'),
-        name: 'settlement-list',
-        meta: { title: 'settlementList' }
-      },
-      /* {
         path: '/shop/settlement-manage',
         component: _import('shop/settlement-manage/index'),
         redirect: '/shop/settlement-manage/settlement-list',
@@ -201,7 +189,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'settlement-list', component: _import('shop/settlement-manage/settlementList'), name: 'settlement-list', meta: { title: 'settlementList' }}
         ]
-      } */
+      },
       {
         path: '/shop/shop-theme-manage',
         component: _import('shop/shop-theme-manage/index'),
@@ -214,12 +202,6 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: 'level-apply-list',
-        component: _import('shop/shop-level-manage/levelApplyList'),
-        name: 'level-apply-list',
-        meta: { title: 'levelApplyList' }
-      }
-      /* {
         path: '/shop/shop-level-manage',
         component: _import('shop/shop-level-manage/index'),
         redirect: '/shop/shop-level-manage/level-apply-list',
@@ -228,7 +210,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'level-apply-list', component: _import('shop/shop-level-manage/levelApplyList'), name: 'level-apply-list', meta: { title: 'levelApplyList' }}
         ]
-      } */
+      }
     ]
   },
   // 促销管理

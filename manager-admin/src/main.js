@@ -23,9 +23,11 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 
-// 全局注册echarts
+// 全局注册echarts、jsonp
 import echarts from 'echarts'
+import jsonp from 'vue-jsonp'
 Vue.prototype.$echarts = echarts
+Vue.use(jsonp)
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {
