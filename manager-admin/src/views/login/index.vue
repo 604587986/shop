@@ -91,20 +91,6 @@ export default {
           return false
         }
       })
-    },
-    /** 登录 */
-    POST_Login() {
-      this.loading = true
-      this.$http.post('/login', this.loginForm, { loading: false })
-        .then(response => response.data)
-        .then(data => {
-          this.loading = false
-          this.loginSuccess(data.data)
-        })
-        .catch(error => {
-          this.loading = false
-          error.response && error.response.data && this.$message.error(error.response.data.error_message)
-        })
     }
   }
 }

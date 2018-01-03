@@ -33,12 +33,13 @@
               浏览网站
             </el-dropdown-item>
           </a>
-          <el-dropdown-item>
-            <span @click="changePassword">修改密码</span>
-          </el-dropdown-item>
-          <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">退出登录</span>
-          </el-dropdown-item>
+          <span @click="changePassword">
+            <el-dropdown-item>修改密码</el-dropdown-item>
+          </span>
+          <span @click="logout">
+            <el-dropdown-item divided>退出登录</el-dropdown-item>
+          </span>
+
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -145,7 +146,7 @@ export default {
         .user-avatar {
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 100%;
         }
         .el-icon-caret-bottom {
           position: absolute;
