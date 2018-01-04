@@ -90,7 +90,7 @@
 </template>
 
 <script>
-  import { getGoodsList } from '../../api/goods'
+  import { getGoodsList, underGoods } from '../../api/goods'
   import { TableLayout, TableSearch, CategoryPick } from '../../components'
   export default {
     name: 'goodsList',
@@ -196,7 +196,7 @@
           this.$message.error('您未选中任何商品！')
         } else {
           this.$confirm('确认要下架这些商品吗？', '提示')
-            .then(() => this.DELETE_Goods(this.selectedData.join(',')))
+            .then(() => this.DELETE_Goods(this.selectedData))
             .catch(() => {})
         }
       },
@@ -218,13 +218,11 @@
       },
 
       /** 下架商品 */
-      DELETE_Goods(id) {
-        this.$http.delete(`goods/${id}`)
-          .then(() => {
-            this.GET_GoodsList()
-            this.$message.success('下架商品成功！')
-          })
-          .catch(() => this.$message.error('下架商品出错，请稍后再试！'))
+      DELETE_Goods(ids) {
+        underGoods(ids).then(() => {
+          this.GET_GoodsList()
+          this.$message.success('下架商品成功！')
+        }).catch(() => this.$message.error('下架商品出错，请稍后再试！'))
       }
     }
   }
