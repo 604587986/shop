@@ -7,6 +7,11 @@
       :item-btns="itemBtns"
       api="http://localhost:9090/javashop/goods-info/category/@id/children.do?format=plugin"
     />
+    <el-dialog :title="paramsForm.paramsTitle" width="500px" :visible.sync="dialogParamsVisible">
+      <div style="width: 100%; text-align: center">
+        <img src="https://imgsa.baidu.com/forum/w%3D580/sign=30451606f31986184147ef8c7aec2e69/99f6d0b5c9ea15ceb58d736ebd003af33b87b240.jpg" alt="">
+      </div>
+    </el-dialog>
     <!--添加、编辑分类dialog-->
     <el-dialog title="添加分类" width="500px" :visible.sync="dialogCatVisible">
       <el-form :model="catForm" :rules="catRules" ref="catForm" label-width="100px">
@@ -92,18 +97,24 @@
     data() {
       return {
         itemBtns: [
-          { text: '参数', onClick: (cat) => console.log(cat) },
+          { text: '参数', onClick: this.handleEditParams },
           { text: '品牌', onClick: this.handleEditBrand },
           { text: '规格', onClick: this.handleEditSpecs },
           { text: '编辑', onClick: this.handleEditCat },
           { text: '删除', textStyle: 'color: red', onClick: this.handleDeleteCat }
         ],
+        // 编辑分类参数 dialog
+        dialogParamsVisible: false,
         // 添加、编辑分类 dialog
         dialogCatVisible: false,
-        // 编辑品牌 dialog
+        // 编辑关联品牌 dialog
         dialogBrandVisible: false,
-        // 编辑规格 dialog
+        // 编辑关联规格 dialog
         dialogSpecsVisible: false,
+        // 参数管理 表单
+        paramsForm: {
+          paramsTitle: '参数管理'
+        },
         // 添加、编辑分类 表单
         catForm: {
           parent_id: '10',
@@ -195,6 +206,12 @@
         })
       },
 
+      /** 编辑分类参数 */
+      handleEditParams(cat) {
+        this.paramsForm.paramsTitle = '参数管理 - ' + cat.text
+        this.dialogParamsVisible = true
+        console.log(cat)
+      },
       /** 编辑关联品牌 */
       handleEditBrand(cat) {
         this.brandForm.brandTitle = '关联品牌 - ' + cat.text
