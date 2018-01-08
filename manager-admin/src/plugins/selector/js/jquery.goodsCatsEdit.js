@@ -217,7 +217,7 @@
             var _this = this;
             var _options = {
                 url     : _this.options.api.replace("@id", _this.params.parentid),
-                dataType: 'jsonp',
+                type    : 'get',
                 success : function (res) { _this.processingCatList(res); }
             };
             $.ajax(_options);
