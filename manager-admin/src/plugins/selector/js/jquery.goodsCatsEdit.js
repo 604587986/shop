@@ -132,16 +132,18 @@
                 _cat_text     = $this.data('text');
             var _cat = {}, __data = {};
             _cat.leave = _leave;
-            _leave > 1 && (function () {
-                var _data = _this.params.__catDatas[_leave - 2];
-                __data.datas = _data;
-                for (var i = 0; i < _data.length; i++) {
-                    if (_data[i]['id'] === _cat_parentid) {
-                        __data.data = _data[i];
-                        break;
-                    }
+            if(_leave > 1) {
+              var _data = _this.params.__catDatas[_leave - 2];
+              __data.datas = _data;
+              for (var i = 0; i < _data.length; i++) {
+                if (_data[i]['id'] === _cat_parentid) {
+                  __data.data = _data[i];
+                  break;
                 }
-            })();
+              }
+            }else {
+              __data = null
+            }
             _cat.id = _cat_id;
             _cat.text = _cat_text;
             _cat.order = _cat_order;
