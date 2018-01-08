@@ -60,11 +60,11 @@ export const asyncRouterMap = [
       {
         path: '/goods/goods-setting',
         component: _import('goods/goods-setting/index'),
-        redirect: '/goods/goods-setting/classify-list',
+        redirect: '/goods/goods-setting/category-list',
         name: 'goods-setting',
         meta: { title: 'goodsSetting' },
         children: [
-          { path: 'classify-list', component: _import('goods/goods-setting/classifyList'), name: 'classify-list', meta: { title: 'classifyList' }},
+          { path: 'category-list', component: _import('goods/goods-setting/categoryList'), name: 'category-list', meta: { title: 'categoryList' }},
           { path: 'brand-list', component: _import('goods/goods-setting/brandList'), name: 'brand-list', meta: { title: 'brandList' }},
           { path: 'spec-list', component: _import('goods/goods-setting/specList'), name: 'spec-list', meta: { title: 'specList' }}
         ]
