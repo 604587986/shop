@@ -5,7 +5,7 @@ export default {
     goods: '商品管理',
     goodsList: '商品列表',
     goodsSetting: '商品设置',
-    classifyList: '分类列表',
+    categoryList: '分类列表',
     brandList: '品牌列表',
     specList: '规格列表',
     tagManage: '标签管理',

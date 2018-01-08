@@ -5,7 +5,7 @@ export default {
     goods: 'Goods Manage',
     goodsList: 'Goods List',
     goodsSetting: 'Goods Setting',
-    classifyList: 'Classify List',
+    categoryList: 'Category List',
     brandList: 'Brand List',
     specList: 'Spec List',
     tagManage: 'Manage Tag',
