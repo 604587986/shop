@@ -1,3 +1,6 @@
+/**
+ * 首页仪表盘API
+ */
 import request from '@/utils/request'
 
 import GoodsListModel from '../models/GoodsListModel'
