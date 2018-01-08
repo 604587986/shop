@@ -90,8 +90,8 @@
 </template>
 
 <script>
-  import { getGoodsList, underGoods } from '../../api/goods'
-  import { TableLayout, TableSearch, CategoryPick } from '../../components'
+  import * as API_Goods from '@/api/goods'
+  import { TableLayout, TableSearch, CategoryPick } from '@/components'
   export default {
     name: 'goodsList',
     components: {
@@ -203,7 +203,7 @@
 
       GET_GoodsList() {
         this.loading = true
-        getGoodsList(this.params).then(data => {
+        API_Goods.getGoodsList(this.params).then(data => {
           this.loading = false
           this.pageData = {
             page_no: data.page_no,
@@ -219,7 +219,7 @@
 
       /** 下架商品 */
       DELETE_Goods(ids) {
-        underGoods(ids).then(() => {
+        API_Goods.underGoods(ids).then(() => {
           this.GET_GoodsList()
           this.$message.success('下架商品成功！')
         }).catch(() => this.$message.error('下架商品出错，请稍后再试！'))
