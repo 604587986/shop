@@ -125,10 +125,11 @@
 
         makeCat: function ($this) {
             var _this = this;
-            var _leave        = parseInt($this.attr('data-leave')),
-                _cat_id       = parseInt($this.attr('data-id')),
-                _cat_parentid = parseInt($this.attr('data-parentid')),
-                _cat_text     = $this.attr('data-text');
+            var _leave        = parseInt($this.data('leave')),
+                _cat_id       = parseInt($this.data('id')),
+                _cat_parentid = parseInt($this.data('parentid')),
+                _cat_order    = parseInt($this.data('order')),
+                _cat_text     = $this.data('text');
             var _cat = {}, __data = {};
             _cat.leave = _leave;
             _leave > 1 && (function () {
@@ -143,6 +144,7 @@
             })();
             _cat.id = _cat_id;
             _cat.text = _cat_text;
+            _cat.order = _cat_order;
             _cat.parent_id = _cat_parentid;
             _cat.parentData = __data;
             return _cat;
@@ -251,7 +253,7 @@
             for (var i = 0; i < res.length; i++) {
                 var _btns = '';
                 _itemBtns.forEach(function (item, index) {
-                    _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-text="' + res[i]['text'] +'" data-id="' + res[i]['id'] + '" data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ item.textStyle +'">' + item.text + '</a>';
+                    _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-order="'+ res[i]['category_order'] +'" data-text="' + res[i]['text'] +'" data-id="' + res[i]['id'] + '" data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ (item.textStyle || '') +'">' + item.text + '</a>';
                 });
 
                 _item += '<div class="__cat_item' + (i === 0 ? ' active' : '') + '" data-id="' + res[i]['id'] + '" data-path="' + res[i]['category_path'] + '">\
