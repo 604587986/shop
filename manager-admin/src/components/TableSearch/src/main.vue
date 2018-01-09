@@ -36,7 +36,7 @@
 
 <script>
   export default {
-    name: 'EnSearch',
+    name: 'EnTableSearch',
     props: {
       // 是否为高级搜索
       advanced: {
