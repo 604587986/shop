@@ -83,8 +83,11 @@
         <!--品牌图片-->
         <el-form-item label="品牌图片" prop="logo">
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://localhost:9090/javashop/core/upload.do"
             list-type="picture"
+            :on-success="onImgUploadSuccess"
+            :on-remove="onImgRemoved"
+            :file-list="brandForm.imgFileList"
             :multiple="false"
             :limit="1"
           >
@@ -155,7 +158,8 @@
           url: '',
           url_protocol: 'https://',
           logo: '',
-          brief: ''
+          brief: '',
+          imgFileList: []
         },
         /** 添加、修改品牌 表单规则 */
         brandRules: {
@@ -207,6 +211,15 @@
         this.GET_BrandList()
       },
 
+      /** 图片上传成功触发 */
+      onImgUploadSuccess(response) {
+        this.brandForm.logo = response
+      },
+      /** 图片移除触发 */
+      onImgRemoved() {
+        this.brandForm.logo = ''
+      },
+
       /** 修改品牌操作 */
       handleEditBrand(index, row) {
         if (!row.url) row.url = ''
@@ -217,7 +230,8 @@
           url_href: _match ? _match[3] : '',
           url_protocol: _match ? _match[1] : 'https://',
           logo: row.image,
-          form_type: 'edit'
+          form_type: 'edit',
+          imgFileList: row.image ? [{ name: 'logo', url: row.image }] : []
         }
         this.UE_defaultMsg = row.brief
         this.dialogBrandTitle = '修改品牌 - ' + row.name
@@ -248,7 +262,8 @@
           url_protocol: 'https://',
           logo: '',
           brief: '',
-          form_type: 'add'
+          form_type: 'add',
+          imgFileList: []
         }
         this.UE_defaultMsg = ''
         this.dialogBrandTitle = '添加品牌'
@@ -323,10 +338,6 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
-  }
-
-  .toolbar-btns {
-
   }
 
   .goods-image {
