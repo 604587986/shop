@@ -1,3 +1,7 @@
+/**
+ * 会员信息模型
+ */
+
 import {
   DataModel,
   Check,

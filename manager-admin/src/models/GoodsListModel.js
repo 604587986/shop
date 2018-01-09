@@ -1,3 +1,7 @@
+/**
+ * 商品模型
+ */
+
 import {
   DataModel,
   Check,
@@ -5,7 +9,7 @@ import {
   ServerName,
   Unit,
   UnitTypes
-} from '../framework'
+} from '@/framework'
 
 export default class GoodsListModel extends DataModel {
   /**
