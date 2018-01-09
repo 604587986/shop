@@ -24,6 +24,8 @@
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture"
+            :multiple="false"
+            :limit="1"
           >
             <el-button size="small" type="primary">点击上传</el-button>
             <span slot="tip" class="el-upload__tip">&nbsp;只能上传jpg/png文件，且不超过500kb</span>
@@ -61,7 +63,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogBrandVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submitBrandForm('brandForm')">确 定</el-button>
+        <el-button type="primary" @click="submitBrandForm('brandForm')">确 定</el-button>
       </span>
     </el-dialog>
     <!--编辑关联规格dialog-->
@@ -80,7 +82,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSpecsVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submitSpecsForm('specsForm')">确 定</el-button>
+        <el-button type="primary" @click="submitSpecsForm('specsForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
