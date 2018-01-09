@@ -35,31 +35,18 @@
     </div>
 
     <template slot="table-columns">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
+      <el-table-column type="selection" width="55"/>
       <el-table-column label="商品图片" width="120">
         <template slot-scope="scope">
           <img :src="scope.row.image" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="sn" label="商品编号" width="180"> </el-table-column>
-      <el-table-column prop="seller_name" label="店铺名称" width="120"> </el-table-column>
-      <el-table-column
-        prop="name"
-        label="商品名称"
-        align="left"
-        width="450"
-      ></el-table-column>
-      <el-table-column prop="category_name" label="商品分类"> </el-table-column>
-      <el-table-column prop="price" label="商品价格" width="120"> </el-table-column>
-      <el-table-column
-        prop="market_enable"
-        label="上架状态"
-        width="80"
-        :formatter="marketStatus"
-      ></el-table-column>
+      <el-table-column prop="sn" label="商品编号" width="180"/>
+      <el-table-column prop="seller_name" label="店铺名称" width="120"/>
+      <el-table-column prop="name" label="商品名称" align="left" width="450"/>
+      <el-table-column prop="category_name" label="商品分类"/>
+      <el-table-column prop="price" label="商品价格" width="120"/>
+      <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
       <el-table-column prop="brand_name" label="品牌"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -110,7 +97,7 @@
           page_size: 10
         },
 
-        /** 列表数据状态 */
+        /** 列表数据 */
         tableData: null,
 
         /** 列表分页数据 */
