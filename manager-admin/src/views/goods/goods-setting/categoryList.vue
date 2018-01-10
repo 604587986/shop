@@ -9,7 +9,7 @@
     />
     <el-dialog :title="paramsForm.paramsTitle" width="500px" :visible.sync="dialogParamsVisible">
       <div style="width: 100%; text-align: center">
-        <img src="https://imgsa.baidu.com/forum/w%3D580/sign=30451606f31986184147ef8c7aec2e69/99f6d0b5c9ea15ceb58d736ebd003af33b87b240.jpg" alt="">
+        <img src="https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=fe3b9e9b0bf431adb8d2443b7b37ac0f/8cb1cb134954092391d818779558d109b3de4901.jpg" alt="">
       </div>
     </el-dialog>
     <!--添加、编辑分类dialog-->
