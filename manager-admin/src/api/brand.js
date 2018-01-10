@@ -5,7 +5,11 @@
 import request from '@/utils/request'
 import BrandModel from '@/models/BrandModel'
 
-/** 获取品牌列表 */
+/**
+ * 获取品牌列表
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function getBrandList(params) {
   const _params = {
     keyword: params.keyword,
@@ -26,7 +30,11 @@ export function getBrandList(params) {
   })
 }
 
-/** 添加品牌 */
+/**
+ * 添加品牌
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function addBrand(params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => {
@@ -41,7 +49,12 @@ export function addBrand(params) {
   })
 }
 
-/** 编辑品牌 */
+/**
+ * 编辑品牌
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function editBrand(id, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => {
@@ -57,7 +70,11 @@ export function editBrand(id, params) {
   })
 }
 
-/** 删除分类 */
+/**
+ * 删除分类
+ * @param ids
+ * @returns {Promise<any>}
+ */
 export function deleteBrand(ids) {
   if (!Array.isArray(ids)) {
     // ids = ids.join(',')
