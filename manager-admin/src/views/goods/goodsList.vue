@@ -9,7 +9,7 @@
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns"></div>
       <div class="toolbar-search">
-        <en-search
+        <en-table-search
           @search="searchEvent"
           @advancedSearch="advancedSearchEvent"
           advanced
@@ -30,7 +30,7 @@
               </el-form-item>
             </el-form>
           </template>
-        </en-search>
+        </en-table-search>
       </div>
     </div>
 
