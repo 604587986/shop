@@ -47,7 +47,7 @@ export default class GoodsListModel extends DataModel {
 
   /** 商品价格 */
   @Unit(UnitTypes.PRICE_UNIT_Y)
-  @Check(CheckTypes.Money)
+  @Check(CheckTypes.Number)
   @ServerName('goods_price')
-  price = 0
+  price
 }
