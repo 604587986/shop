@@ -77,8 +77,8 @@ export const asyncRouterMap = [
         name: 'tag-manage',
         meta: { title: 'tagManage' },
         children: [
-          { path: 'tag-list', component: _import('goods/tag-manage/tagList'), name: 'tag-list', meta: { title: 'tagList' }},
-          { path: 'tag-goods-set', component: _import('goods/tag-manage/tagGoodsSet'), name: 'tag-goods-set', meta: { title: 'tagGoodsSet' }}
+          { path: 'tag-list', component: _import('goods/tag-manage/tagList'), name: 'tag-list', meta: { title: 'tagList' }}
+          // { path: 'tag-goods-set', component: _import('goods/tag-manage/tagGoodsSet'), name: 'tag-goods-set', meta: { title: 'tagGoodsSet' }}
         ]
       }
     ]
