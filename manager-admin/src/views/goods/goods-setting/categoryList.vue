@@ -264,7 +264,7 @@
           if (valid) {
             API_Category.editCategorySpecs(this.specsForm.category_id, this.specsForm.selectedSpecsList)
               .then(response => {
-                this.$message.success('编辑成功！')
+                this.$message.success('保存成功！')
                 this.dialogSpecsVisible = false
                 this.handleRefresh()
               }).catch(error => console.log(error))

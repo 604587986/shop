@@ -288,7 +288,7 @@
               }).catch(error => console.log(error))
             } else {
               API_Brand.editBrand(this.brandForm.id, this.brandForm).then(() => {
-                this.$message.success('编辑成功！')
+                this.$message.success('保存成功！')
                 this.dialogBrandVisible = false
                 this.GET_BrandList()
               }).catch(error => console.log(error))
