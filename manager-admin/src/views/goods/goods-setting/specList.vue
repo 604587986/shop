@@ -251,7 +251,7 @@
 
       /** 删除规格 */
       DELETE_Specs(ids) {
-        API_Spec.deleteSpec(ids).then(response => {
+        API_Spec.deleteSpecs(ids).then(response => {
           this.$message.success('删除成功！')
           this.GET_SpecsList()
         }).catch(error => console.log(error))

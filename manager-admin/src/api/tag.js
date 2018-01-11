@@ -1,47 +1,44 @@
 /**
- * 规格管理API
+ * 标签管理API
  */
 import request from '@/utils/request'
-import SpecModel from '@/models/SpecModel'
+import TagModel from '@/models/TagModel'
 
 /**
  *
  * @param params
  * @returns {Promise<any>}
  */
-export function getSpecs(params) {
+export function getTags(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/goods-info/admin/spec.do',
+      url: 'http://localhost:9090/javashop/shop/admin/tag/list-json.do',
       method: 'get',
       loading: false,
       params
     }).then(response => {
       const _response = response
-      _response.data = new SpecModel().map(response.data)
+      _response.data = new TagModel().map(response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })
 }
 
 /**
- * 添加规格
+ * 添加标签
  * @param params
  * @returns {Promise<any>}
  */
-export function addSpec(params) {
+export function addTag(params) {
   const _params = {
-    spec_name: params.name,
-    spec_memo: params.memo,
-    spec_type: params.type || 0
+    tag_name: params.name,
+    type: params.type || 0
   }
   const _formData = new FormData()
-  Object.keys(_params).forEach(key => {
-    _formData.append(key, _params[key])
-  })
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/goods/admin/spec.do',
+      url: 'http://localhost:9090/javashop/shop/admin/tag/save-add.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -49,24 +46,21 @@ export function addSpec(params) {
 }
 
 /**
- * 删除规格
+ * 删除标签
  * @param id
  * @param params
  * @returns {Promise<any>}
  */
-export function eidtSpec(id, params) {
+export function eidtTag(id, params) {
   const _params = {
-    spec_name: params.name,
-    spec_memo: params.memo,
-    spec_type: params.type || 0
+    tag_id: id,
+    tag_name: params.name
   }
   const _formData = new FormData()
-  Object.keys(_params).forEach(key => {
-    _formData.append(key, _params[key])
-  })
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods/admin/spec/${id}.do`,
+      url: 'http://localhost:9090/javashop/shop/admin/tag/save-edit.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -74,18 +68,24 @@ export function eidtSpec(id, params) {
 }
 
 /**
- * 删除规格
+ * 删除标签
  * @param ids
  * @returns {Promise<any>}
  */
-export function deleteSpecs(ids) {
-  if (Array.isArray(ids)) {
-    ids = ids.join(',')
+export function deleteTags(ids) {
+  // if (Array.isArray(ids)) {
+  //   ids = ids.join(',')
+  // }
+  if (!Array.isArray(ids)) {
+    ids = [ids]
   }
+  const _formData = new FormData()
+  ids.forEach(item => _formData.append('tag_id', item))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods/admin/spec/${ids}.do`,
-      method: 'delete'
+      url: 'http://localhost:9090/javashop/shop/admin/tag/delete.do',
+      method: 'post',
+      data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
