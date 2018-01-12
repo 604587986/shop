@@ -181,7 +181,7 @@
           ...this.params,
           keyword: data
         }
-        delete this.params.stype
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_GoodsAuditList()
       },
 

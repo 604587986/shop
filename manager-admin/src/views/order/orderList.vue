@@ -89,9 +89,14 @@
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
+              v-if="scope.row.order_status !== 'COMPLETE'"
               size="mini"
               type="primary"
               @click="handleOperateOrder(scope.$index, scope.row)">操作</el-button>
+            <el-button
+              v-else
+              size="mini"
+              @click="handleOperateOrder(scope.$index, scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -198,6 +203,7 @@
           ...this.params,
           keyword: data
         }
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_OrderList()
       },
 

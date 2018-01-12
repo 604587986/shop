@@ -153,14 +153,11 @@
 
       /** 搜索事件触发 */
       searchEvent(data) {
-        Object.keys(this.advancedForm).forEach(key => {
-          this.advancedForm[key] = ''
-        })
         this.params = {
           ...this.params,
-          ...this.advancedForm,
           keyword: data
         }
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_GoodsList()
       },
 
@@ -168,9 +165,9 @@
       advancedSearchEvent() {
         this.params = {
           ...this.params,
-          ...this.advancedForm,
-          keyword: ''
+          ...this.advancedForm
         }
+        delete this.params.keyword
         this.GET_GoodsList()
       },
 
