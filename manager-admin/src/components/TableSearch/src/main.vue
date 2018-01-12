@@ -4,7 +4,7 @@
       <el-input
         size="small"
         clearable
-        placeholder="请输入商品关键字"
+        :placeholder="placeholder"
         v-model="keyword"
         @keyup.native.enter="search"
       >
@@ -45,6 +45,10 @@
       },
       advancedWidth: {
         default: 405
+      },
+      placeholder: {
+        type: String,
+        default: '请输入关键字'
       }
     },
     data() {
