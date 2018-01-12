@@ -91,6 +91,7 @@ export default {
             // this.showDialog = true
           }).catch(() => {
             this.loading = false
+            this.changeValidcode()
           })
         } else {
           this.$message.error(this.translateKey('val_form'))
