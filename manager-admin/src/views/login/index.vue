@@ -7,15 +7,19 @@
       </div>
       <el-form :model="loginForm" :rules="loginRules" ref="loginForm" class="login-input">
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" :placeholder="translateKey('username')" autofocus></el-input>
+          <el-input v-model="loginForm.username" :placeholder="translateKey('username')" autofocus clearable>
+            <svg-icon slot="prefix" class="el-input__icon" icon-class="user"/>
+          </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" :placeholder="translateKey('password')" :minlength="6" :maxlength="20"></el-input>
+          <el-input v-model="loginForm.password" type="password" :placeholder="translateKey('password')" :minlength="6" :maxlength="20" clearable>
+            <svg-icon slot="prefix" class="el-input__icon" icon-class="password"/>
+          </el-input>
         </el-form-item>
         <el-form-item prop="validcode">
-          <el-input v-model="loginForm.validcode" @keyup.native.enter="submitLogin" :placeholder="translateKey('validcode')" :maxlength="4">
+          <el-input v-model="loginForm.validcode" @keyup.native.enter="submitLogin" :placeholder="translateKey('validcode')" :maxlength="4" clearable>
             <template slot="append">
-              <img class="login-validcode-img" src="http://data.andste.cc/developers/web/temp/images/validcode-img.png" alt="3qnz" @click="changeValidcode">
+              <img class="login-validcode-img" :src="validcodeImg" @click="changeValidcode">
             </template>
           </el-input>
         </el-form-item>
@@ -30,6 +34,7 @@
 
 <script>
 // eslint-disable-next-line
+import * as API_common from '@/api/common'
 import particles from 'particles.js'
 import particlesjsConfig from '@/assets/particlesjs-config.json'
 import LangSelect from '@/components/LangSelect'
@@ -41,9 +46,9 @@ export default {
     return {
       loading: false,
       loginForm: {
-        username: 'javashop',
-        password: '111111',
-        validcode: '3qnz'
+        username: 'admin',
+        password: 'admin',
+        validcode: ''
       },
       loginRules: {
         username: [
@@ -55,7 +60,8 @@ export default {
         validcode: [
           { required: true, message: this.translateKey('val_validcode'), trigger: 'blur' }
         ]
-      }
+      },
+      validcodeImg: API_common.getValidateCodeUrl('admin')
     }
   },
   mounted() {
@@ -72,7 +78,7 @@ export default {
     },
     /** 更换图片验证码 */
     changeValidcode() {
-      this.$notify.success('验证码更换成功！')
+      this.validcodeImg = API_common.getValidateCodeUrl('admin')
     },
     /** 表单提交 */
     submitLogin() {
