@@ -10,17 +10,13 @@ import GoodsAuditModel from '@/models/GoodsAuditModel'
  * @returns {Promise<any>}
  */
 export function getGoodsAuditList(params) {
-  const _params = {
-    keyword: params.keyword,
-    page_no: params.page_no,
-    page_size: params.page_size
-  }
+  params.seller_name = params.shop_name
   return new Promise((resolve, reject) => {
     request({
       url: 'http://localhost:9090/javashop/shop/admin/goods/auth/list.do',
       method: 'get',
       loading: false,
-      padams: _params
+      params
     }).then(response => {
       const _response = response
       _response.data = new GoodsAuditModel().map(response.data)
@@ -30,7 +26,7 @@ export function getGoodsAuditList(params) {
 }
 
 /**
- * 审核和商品
+ * 和商品
  * @param id
  * @param params
  * @returns {Promise<any>}
