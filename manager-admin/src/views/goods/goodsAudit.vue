@@ -189,7 +189,7 @@
       advancedSearchEvent() {
         this.params = {
           ...this.params,
-          ...this.advancedForm,
+          ...this.advancedForm
         }
         delete this.params.keyword
         this.GET_GoodsAuditList()
