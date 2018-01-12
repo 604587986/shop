@@ -36,7 +36,8 @@
     methods: {
       GET_RegionData(category_ids = []) {
         const _category_id = category_ids[category_ids.length - 1] || 0
-        this.$jsonp(`http://localhost:8080/javashop/goods-info/category/${_category_id}/children.do`)
+        this.$http.get(`http://localhost:9090/javashop/goods-info/category/${_category_id}/children.do`)
+          .then(response => response.data)
           .then(response => {
             if (!response || !response[0]) return
             if (_category_id !== 0) {

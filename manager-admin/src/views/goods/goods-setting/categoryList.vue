@@ -9,7 +9,7 @@
     />
     <el-dialog :title="paramsForm.paramsTitle" width="500px" :visible.sync="dialogParamsVisible">
       <div style="width: 100%; text-align: center">
-        <img src="https://imgsa.baidu.com/forum/w%3D580/sign=30451606f31986184147ef8c7aec2e69/99f6d0b5c9ea15ceb58d736ebd003af33b87b240.jpg" alt="">
+        <img src="https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=fe3b9e9b0bf431adb8d2443b7b37ac0f/8cb1cb134954092391d818779558d109b3de4901.jpg" alt="">
       </div>
     </el-dialog>
     <!--添加、编辑分类dialog-->
@@ -90,7 +90,7 @@
 
 <script>
   import { GoodsCatsEdit } from '@/plugins/selector/vue'
-  import * as API_Category from '@/api/category'
+  import * as API_category from '@/api/category'
   export default {
     name: 'classifyList',
     components: {
@@ -189,13 +189,13 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.catForm.form_type === 'add') {
-              API_Category.addCategory(this.catForm).then(() => {
+              API_category.addCategory(this.catForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
                 this.handleRefresh()
               }).catch(error => console.log(error))
             } else {
-              API_Category.editCategory(this.catForm.category_id, this.catForm).then(() => {
+              API_category.editCategory(this.catForm.category_id, this.catForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
                 this.handleRefresh()
@@ -217,7 +217,7 @@
       /** 编辑关联品牌 */
       handleEditBrand(cat) {
         this.brandForm.brandTitle = '关联品牌 - ' + cat.text
-        API_Category.getBrandByCategoryId(cat.id).then(response => {
+        API_category.getBrandByCategoryId(cat.id).then(response => {
           this.brandForm = {
             ...this.brandForm,
             category_id: cat.id,
@@ -232,7 +232,7 @@
       submitBrandForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_Category.editCategoryBrand(this.brandForm.category_id, this.brandForm.selectedBrandList)
+            API_category.editCategoryBrand(this.brandForm.category_id, this.brandForm.selectedBrandList)
               .then(response => {
                 this.$message.success('编辑成功！')
                 this.dialogBrandVisible = false
@@ -248,7 +248,7 @@
       /** 编辑关联规格 */
       handleEditSpecs(cat) {
         this.specsForm.specsTitle = '关联规格 - ' + cat.text
-        API_Category.getSpecsByCategoryId(cat.id).then(response => {
+        API_category.getSpecsByCategoryId(cat.id).then(response => {
           this.specsForm = {
             ...this.specsForm,
             category_id: cat.id,
@@ -262,9 +262,9 @@
       submitSpecsForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_Category.editCategorySpecs(this.specsForm.category_id, this.specsForm.selectedSpecsList)
+            API_category.editCategorySpecs(this.specsForm.category_id, this.specsForm.selectedSpecsList)
               .then(response => {
-                this.$message.success('编辑成功！')
+                this.$message.success('保存成功！')
                 this.dialogSpecsVisible = false
                 this.handleRefresh()
               }).catch(error => console.log(error))
@@ -289,7 +289,7 @@
 
       /** 删除分类请求 */
       DELETE_Cat(ids) {
-        API_Category.deleteCategory(ids).then(() => {
+        API_category.deleteCategory(ids).then(() => {
           this.$message.success('删除成功！')
           this.handleRefresh()
         }).catch(error => console.log(error))

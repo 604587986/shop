@@ -9,7 +9,7 @@
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns"></div>
       <div class="toolbar-search">
-        <en-search
+        <en-table-search
           @search="searchEvent"
           @advancedSearch="advancedSearchEvent"
           advanced
@@ -30,7 +30,7 @@
               </el-form-item>
             </el-form>
           </template>
-        </en-search>
+        </en-table-search>
       </div>
     </div>
 
@@ -45,7 +45,9 @@
       <el-table-column prop="seller_name" label="店铺名称" width="120"/>
       <el-table-column prop="name" label="商品名称" align="left" width="450"/>
       <el-table-column prop="category_name" label="商品分类"/>
-      <el-table-column prop="price" label="商品价格" width="120"/>
+      <el-table-column label="商品价格" width="120">
+        <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+      </el-table-column>
       <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
       <el-table-column prop="brand_name" label="品牌"> </el-table-column>
       <el-table-column label="操作">
@@ -77,7 +79,7 @@
 </template>
 
 <script>
-  import * as API_Goods from '@/api/goods'
+  import * as API_goods from '@/api/goods'
   import { TableLayout, TableSearch, CategoryPick } from '@/components'
   export default {
     name: 'goodsList',
@@ -190,7 +192,7 @@
 
       GET_GoodsList() {
         this.loading = true
-        API_Goods.getGoodsList(this.params).then(data => {
+        API_goods.getGoodsList(this.params).then(data => {
           this.loading = false
           this.pageData = {
             page_no: data.page_no,
@@ -206,7 +208,7 @@
 
       /** 下架商品 */
       DELETE_Goods(ids) {
-        API_Goods.underGoods(ids).then(() => {
+        API_goods.underGoods(ids).then(() => {
           this.GET_GoodsList()
           this.$message.success('下架商品成功！')
         }).catch(() => this.$message.error('下架商品出错，请稍后再试！'))

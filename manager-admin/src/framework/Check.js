@@ -3,7 +3,6 @@ import RegExp from './RegExp'
 export default (_type_) => (target, name, descriptor) => {
   let value = descriptor.initializer && descriptor.initializer.call(this)
   const valueType = typeof (value)
-  if (!CheckFun(_type_, value)) throw new Error(`要检查的数据类型${_type_}未通过！`)
   if (!target.constructor.__checkers__) {
     Object.defineProperty(target.constructor, '__checkers__', {
       value: {},

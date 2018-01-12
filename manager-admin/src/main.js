@@ -25,8 +25,10 @@ Vue.use(Element, {
 
 // 全局注册echarts、jsonp
 import echarts from 'echarts'
+import axios from 'axios'
 import jsonp from 'vue-jsonp'
 Vue.prototype.$echarts = echarts
+Vue.prototype.$http = axios
 Vue.use(jsonp)
 
 // register global utility filters.

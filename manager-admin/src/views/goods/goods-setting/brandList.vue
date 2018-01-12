@@ -113,7 +113,7 @@
 </template>
 
 <script>
-  import * as API_Brand from '@/api/brand'
+  import * as API_brand from '@/api/brand'
   import { TableLayout, TableSearch, UE } from '@/components'
   export default {
     name: 'brandList',
@@ -281,14 +281,14 @@
               this.brandForm.url = ''
             }
             if (this.brandForm.form_type === 'add') {
-              API_Brand.addBrand(this.brandForm).then(() => {
+              API_brand.addBrand(this.brandForm).then(() => {
                 this.$message.success('添加成功！')
                 this.dialogBrandVisible = false
                 this.GET_BrandList()
               }).catch(error => console.log(error))
             } else {
-              API_Brand.editBrand(this.brandForm.id, this.brandForm).then(() => {
-                this.$message.success('编辑成功！')
+              API_brand.editBrand(this.brandForm.id, this.brandForm).then(() => {
+                this.$message.success('保存成功！')
                 this.dialogBrandVisible = false
                 this.GET_BrandList()
               }).catch(error => console.log(error))
@@ -303,7 +303,7 @@
       /** 获取品牌列表 */
       GET_BrandList() {
         this.loading = true
-        API_Brand.getBrandList(this.params).then(response => {
+        API_brand.getBrandList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
@@ -319,7 +319,7 @@
 
       /** 删除品牌 */
       DELETE_Brand(ids) {
-        API_Brand.deleteBrand(ids).then(() => {
+        API_brand.deleteBrand(ids).then(() => {
           this.$message.success('删除成功！')
           this.GET_BrandList()
         }).catch(error => console.log(error))

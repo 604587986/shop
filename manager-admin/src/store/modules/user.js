@@ -45,6 +45,8 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password, userInfo.validcode).then(response => {
+          // 后台暂时没有返回数据，模拟一个
+          response = { data: { token: 'Admin-Token=admin' }}
           const data = response.data
           commit('SET_TOKEN', data.token)
           setToken(response.data.token)
@@ -59,6 +61,17 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
+          // 后台暂时没有返回数据，模拟一个
+          response = {
+            data: {
+              role: ['admin'],
+              username: 'javashop',
+              mobile: 18888888888,
+              sex: 1,
+              email: null,
+              avatar: 'http://data.andste.cc/developers/web/temp/images/logo-javashop-app.png'
+            }
+          }
           if (!response.data) {
             reject('error')
           }
@@ -93,22 +106,6 @@ const user = {
         commit('SET_TOKEN', '')
         removeToken()
         resolve()
-      })
-    },
-
-    // 动态修改权限
-    ChangeRole({ commit }, role) {
-      return new Promise(resolve => {
-        commit('SET_TOKEN', role)
-        setToken(role)
-        getUserInfo(role).then(response => {
-          const data = response.data
-          commit('SET_ROLES', data.role)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
-          resolve()
-        })
       })
     }
   }

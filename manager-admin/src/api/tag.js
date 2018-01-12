@@ -1,48 +1,44 @@
 /**
- * 品牌管理API
+ * 标签管理API
  */
-
 import request from '@/utils/request'
-import BrandModel from '@/models/BrandModel'
+import TagModel from '@/models/TagModel'
 
 /**
- * 获取品牌列表
+ *
  * @param params
  * @returns {Promise<any>}
  */
-export function getBrandList(params) {
-  const _params = {
-    keyword: params.keyword,
-    page_no: params.page_no,
-    page_size: params.page_size
-  }
+export function getTags(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/brand/list-json.do',
+      url: 'http://localhost:9090/javashop/shop/admin/tag/list-json.do',
       method: 'get',
       loading: false,
-      params: _params
+      params
     }).then(response => {
       const _response = response
-      _response.data = new BrandModel().map(response.data)
+      _response.data = new TagModel().map(response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })
 }
 
 /**
- * 添加品牌
+ * 添加标签
  * @param params
  * @returns {Promise<any>}
  */
-export function addBrand(params) {
+export function addTag(params) {
+  const _params = {
+    tag_name: params.name,
+    type: params.type || 0
+  }
   const _formData = new FormData()
-  Object.keys(params).forEach(key => {
-    _formData.append(key, params[key])
-  })
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/brand/save.do',
+      url: 'http://localhost:9090/javashop/shop/admin/tag/save-add.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -50,20 +46,21 @@ export function addBrand(params) {
 }
 
 /**
- * 编辑品牌
+ * 删除标签
  * @param id
  * @param params
  * @returns {Promise<any>}
  */
-export function editBrand(id, params) {
+export function eidtTag(id, params) {
+  const _params = {
+    tag_id: id,
+    tag_name: params.name
+  }
   const _formData = new FormData()
-  Object.keys(params).forEach(key => {
-    _formData.append(key, params[key])
-  })
-  _formData.append('brand_id', id)
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/brand/save-edit.do',
+      url: 'http://localhost:9090/javashop/shop/admin/tag/save-edit.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -71,26 +68,24 @@ export function editBrand(id, params) {
 }
 
 /**
- * 删除分类
+ * 删除标签
  * @param ids
  * @returns {Promise<any>}
  */
-export function deleteBrand(ids) {
+export function deleteTags(ids) {
+  // if (Array.isArray(ids)) {
+  //   ids = ids.join(',')
+  // }
   if (!Array.isArray(ids)) {
-    // ids = ids.join(',')
     ids = [ids]
   }
   const _formData = new FormData()
-  ids.forEach(item => {
-    _formData.append('brand_id', item)
-  })
+  ids.forEach(item => _formData.append('tag_id', item))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/shop/admin/brand/delete.do`,
-      // method: 'delete',
+      url: 'http://localhost:9090/javashop/shop/admin/tag/delete.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
-
