@@ -45,7 +45,9 @@
       <el-table-column prop="seller_name" label="店铺名称" width="120"/>
       <el-table-column prop="name" label="商品名称" align="left" width="450"/>
       <el-table-column prop="category_name" label="商品分类"/>
-      <el-table-column prop="price" label="商品价格" width="120"/>
+      <el-table-column label="商品价格" width="120">
+        <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+      </el-table-column>
       <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
       <el-table-column prop="brand_name" label="品牌"> </el-table-column>
       <el-table-column label="操作">

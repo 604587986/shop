@@ -1,3 +1,5 @@
+import Foundation from '@/framework/Foundation'
+
 function pluralize(time, label) {
   if (time === 1) {
     return time + label
@@ -101,4 +103,14 @@ export function html2Text(val) {
 
 export function toThousandslsFilter(num) {
   return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
+}
+
+/**
+ * 金钱单位置换  2999 --> 2,999.00
+ * @param val
+ * @param unit
+ * @returns {*}
+ */
+export function unitPrice(val, unit) {
+  return (unit || '') + Foundation.formatPrice(val)
 }

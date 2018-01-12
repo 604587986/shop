@@ -1,5 +1,5 @@
 /**
- * 商品模型
+ * 商品审核模型
  */
 
 import {
@@ -18,24 +18,24 @@ export default class GoodsModel extends DataModel {
   id
 
   /** 商品图片 */
-  @ServerName('goods_image')
+  @ServerName('thumbnail')
   image
 
   /** 商品编号 */
-  @ServerName('goods_sn')
+  @ServerName('sn')
   sn
 
   /** 卖家名称 */
   @ServerName('seller_name')
   seller_name
 
+  /** 商品分类名称 */
+  @ServerName('name')
+  category_name
+
   /** 商品名称 */
   @ServerName('goods_name')
   name
-
-  /** 商品分类名称 */
-  @ServerName('category_name')
-  category_name
 
   /** 商品上架状态 */
   @ServerName('market_enable')
@@ -47,6 +47,6 @@ export default class GoodsModel extends DataModel {
 
   /** 商品价格 */
   @Check(CheckTypes.Number)
-  @ServerName('goods_price')
+  @ServerName('price')
   price
 }
