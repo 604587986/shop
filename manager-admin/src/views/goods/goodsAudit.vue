@@ -181,7 +181,7 @@
           ...this.params,
           keyword: data
         }
-        delete this.params.stype
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_GoodsAuditList()
       },
 
@@ -189,7 +189,7 @@
       advancedSearchEvent() {
         this.params = {
           ...this.params,
-          ...this.advancedForm,
+          ...this.advancedForm
         }
         delete this.params.keyword
         this.GET_GoodsAuditList()

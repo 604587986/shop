@@ -5,7 +5,7 @@
     </div>
     <el-table
       :data="tableData"
-      :height="tabHeight"
+      :max-height="tabHeight"
       border
       stripe
       :header-cell-style="{textAlign: 'center'}"
