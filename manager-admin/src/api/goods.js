@@ -3,7 +3,7 @@
  */
 import request from '@/utils/request'
 
-import GoodsListModel from '../models/GoodsListModel'
+import GoodsModel from '@/models/GoodsModel'
 
 /** 获取商品列表 */
 export function getGoodsList(params) {
@@ -15,7 +15,7 @@ export function getGoodsList(params) {
       params
     }).then(response => {
       const _response = response
-      _response.data = new GoodsListModel().map(_response.data)
+      _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })

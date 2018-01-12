@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class GoodsListModel extends DataModel {
+export default class GoodsModel extends DataModel {
   /** 商品ID */
   @Check(CheckTypes.Number)
   @ServerName('goods_id')

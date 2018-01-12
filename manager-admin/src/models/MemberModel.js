@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class MemberInfoModel extends DataModel {
+export default class MemberModel extends DataModel {
   /** 会员名称 */
   @ServerName('username')
   username
