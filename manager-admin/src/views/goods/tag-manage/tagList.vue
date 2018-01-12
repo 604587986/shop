@@ -83,7 +83,7 @@
 </template>
 
 <script>
-  import * as API_Tag from '@/api/tag'
+  import * as API_tag from '@/api/tag'
   import { TableLayout, TableSearch } from '@/components'
   export default {
     name: 'tagList',
@@ -215,13 +215,13 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.tagForm.form_type === 'add') {
-              API_Tag.addTag(this.tagForm).then(response => {
+              API_tag.addTag(this.tagForm).then(response => {
                 this.$message.success('添加成功！')
                 this.dialogTagVisible = false
                 this.GET_TagList()
               }).catch(error => console.log(error))
             } else {
-              API_Tag.eidtTag(this.tagForm.id, this.tagForm).then(response => {
+              API_tag.eidtTag(this.tagForm.id, this.tagForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogTagVisible = false
                 this.GET_TagList()
@@ -237,7 +237,7 @@
       /** 获取标签列表 */
       GET_TagList() {
         this.loading = true
-        API_Tag.getTags(this.params).then(response => {
+        API_tag.getTags(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
@@ -253,7 +253,7 @@
 
       /** 删除标签 */
       DELETE_Tags(ids) {
-        API_Tag.deleteTags(ids).then(response => {
+        API_tag.deleteTags(ids).then(response => {
           this.$message.success('删除成功！')
           this.GET_TagList()
         }).catch(error => console.log(error))

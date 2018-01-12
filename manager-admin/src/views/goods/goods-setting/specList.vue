@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import * as API_Spec from '@/api/spec'
+  import * as API_spec from '@/api/spec'
   import { TableLayout, TableSearch } from '@/components'
   export default {
     name: 'specList',
@@ -213,13 +213,13 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.specForm.form_type === 'add') {
-              API_Spec.addSpec(this.specForm).then(response => {
+              API_spec.addSpec(this.specForm).then(response => {
                 this.$message.success('添加成功！')
                 this.dialogSpecVisible = false
                 this.GET_SpecsList()
               }).catch(error => console.log(error))
             } else {
-              API_Spec.eidtSpec(this.specForm.id, this.specForm).then(response => {
+              API_spec.eidtSpec(this.specForm.id, this.specForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogSpecVisible = false
                 this.GET_SpecsList()
@@ -235,7 +235,7 @@
       /** 获取规格列表 */
       GET_SpecsList() {
         this.loading = true
-        API_Spec.getSpecs(this.params).then(response => {
+        API_spec.getSpecs(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
@@ -251,7 +251,7 @@
 
       /** 删除规格 */
       DELETE_Specs(ids) {
-        API_Spec.deleteSpecs(ids).then(response => {
+        API_spec.deleteSpecs(ids).then(response => {
           this.$message.success('删除成功！')
           this.GET_SpecsList()
         }).catch(error => console.log(error))
