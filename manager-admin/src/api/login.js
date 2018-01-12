@@ -1,26 +1,44 @@
 import request from '@/utils/request'
 
+/**
+ * 登录
+ * @param username
+ * @param password
+ * @param validcode
+ * @returns {*}
+ */
 export function loginByUsername(username, password, validcode) {
-  const data = {
+  const _params = {
     username,
     password,
-    validcode
+    valid_code: validcode
   }
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return request({
-    url: 'login',
+    url: 'http://localhost:9090/javashop/core/admin/admin-user/login.do',
     method: 'post',
     loading: false,
-    data
+    data: _formData
   })
 }
 
+/**
+ * 退出账户
+ * @returns {*}
+ */
 export function logout() {
   return request({
-    url: 'logout',
+    url: 'http://localhost:9090/javashop/core/admin/admin-user/logout.do',
     method: 'post'
   })
 }
 
+/**
+ * 获取用户信息
+ * @param token
+ * @returns {*}
+ */
 export function getUserInfo(token) {
   return request({
     url: 'user',
