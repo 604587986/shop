@@ -3,8 +3,8 @@
  */
 import request from '@/utils/request'
 
-import GoodsListModel from '../models/GoodsListModel'
-import MemberInfoModel from '../models/MemberInfoModel'
+import GoodsModel from '@/models/GoodsModel'
+import MemberModel from '@/models/MemberModel'
 
 export function getDashboardData() {
   return new Promise((resolve, reject) => {
@@ -12,14 +12,12 @@ export function getDashboardData() {
       url: 'dashboard',
       method: 'get',
       loading: false
-    })
-      .then(response => {
-        const _response = { ...response.data }
-        _response.goodsList = new GoodsListModel().map(_response.goodsList)
-        _response.memberList = new MemberInfoModel().map(_response.memberList)
-        resolve(_response)
-      })
-      .catch(error => reject(error))
+    }).then(response => {
+      const _response = { ...response.data }
+      _response.goodsList = new GoodsModel().map(_response.goodsList)
+      _response.memberList = new MemberModel().map(_response.memberList)
+      resolve(_response)
+    }).catch(error => reject(error))
   })
 }
 
