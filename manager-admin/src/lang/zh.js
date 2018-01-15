@@ -17,6 +17,7 @@ export default {
     orderList: '订单列表',
     refundOrderList: '退款单',
     invoiceHistory: '发票历史',
+    orderDetail: '订单详情',
 
     member: '会员管理',
     memberManage: '管理会员',

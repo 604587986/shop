@@ -223,9 +223,9 @@
         this.GET_OrderList()
       },
 
-      /** 查看订单 */
+      /** 查看、操作订单 */
       handleOperateOrder(index, row) {
-        console.log(index, row)
+        this.$router.push({ path: `/order/detail/${row.sn}` })
       },
 
       GET_OrderList() {
