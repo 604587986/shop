@@ -95,7 +95,7 @@ export const asyncRouterMap = [
         path: 'order-list',
         component: _import('order/orderList'),
         name: 'order-list',
-        meta: { title: 'orderList', noCache: true }
+        meta: { title: 'orderList' }
       },
       {
         path: 'refund-order-list',
@@ -114,7 +114,7 @@ export const asyncRouterMap = [
         component: _import('order/orderDetail'),
         name: 'order-detail',
         hidden: true,
-        meta: { title: 'orderDetail', noCache: true }
+        meta: { title: 'orderDetail' }
       }
     ]
   },
