@@ -88,10 +88,8 @@ export const asyncRouterMap = [
     path: '/order',
     component: Layout,
     name: 'order',
-    meta: {
-      title: 'order',
-      icon: 'order-manage'
-    },
+    redirect: '/order/order-list',
+    meta: { title: 'order', icon: 'order-manage' },
     children: [
       {
         path: 'order-list',
@@ -110,6 +108,13 @@ export const asyncRouterMap = [
         component: _import('order/invoiceHistory'),
         name: 'invoice-history',
         meta: { title: 'invoiceHistory', noCache: true }
+      },
+      {
+        path: 'detail/:sn',
+        component: _import('order/orderDetail'),
+        name: 'order-detail',
+        hidden: true,
+        meta: { title: 'orderDetail', noCache: true }
       }
     ]
   },
