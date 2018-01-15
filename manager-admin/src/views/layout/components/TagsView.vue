@@ -58,7 +58,7 @@ export default {
       return false
     },
     isActive(route) {
-      return route.path === this.$route.path || route.name === this.$route.name
+      return route.path === this.$route.path// || route.name === this.$route.name
     },
     addViewTags() {
       const route = this.generateRoute()
