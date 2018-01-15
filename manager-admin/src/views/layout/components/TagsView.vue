@@ -132,13 +132,14 @@ export default {
       font-size: 12px;
       margin-left: 5px;
       margin-top: 4px;
+      border-radius: 3px;
       &:first-of-type {
         margin-left: 15px;
       }
       &.active {
-        background-color: #42b983;
+        background-color: #409EFF;
         color: #fff;
-        border-color: #42b983;
+        border-color: #409EFF;
         &::before {
           content: '';
           background: #fff;
