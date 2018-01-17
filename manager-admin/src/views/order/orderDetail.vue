@@ -1,5 +1,5 @@
 <template>
-  <div class="order-detail-container">
+  <div v-loading="loading" class="order-detail-container">
     <el-row v-if="orderDetail && orderDetail.operateAllowable" :gutter="0">
       <el-col :span="24" style="padding: 10px 20px">
         <el-button
@@ -27,6 +27,7 @@
         </div>
       </el-col>
     </el-row>
+    <!--产品列表-->
     <el-row v-if="productList" :gutter="0">
       <el-col :span="24">
         <div class="d-header">商品列表</div>
@@ -47,6 +48,7 @@
         </el-table>
       </el-col>
     </el-row>
+    <!--订单日志-->
     <el-row v-loading="loading_log" :gutter="0">
       <el-col :span="24">
         <div class="d-header">订单日志</div>
