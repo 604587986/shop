@@ -47,6 +47,20 @@
         </el-table>
       </el-col>
     </el-row>
+    <el-row v-loading="loading_log" :gutter="0">
+      <el-col :span="24">
+        <div class="d-header">订单日志</div>
+        <el-table :data="orderLog" :header-cell-style="{textAlign: 'center'}">
+          <el-table-column prop="id" label="操作ID" width="100"/>
+          <el-table-column prop="name" label="操作人员" width="200"/>
+          <el-table-column label="操作时间" width="250">
+            <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
+          </el-table-column>
+          <el-table-column prop="content" label="操作详情" width="400"/>
+          <el-table-column/>
+        </el-table>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -59,8 +73,12 @@
       return {
         /** 列表loading状态 */
         loading: false,
+        /** 订单日志loading状态 */
+        loading_log: false,
         /** 订单详情数据 */
         orderDetail: null,
+        /** 订单日志 */
+        orderLog: [],
         /** 订单sn */
         sn: this.$route.params.sn,
         /** 基本信息、发票信息、买家信息、商家信息 */
@@ -72,10 +90,14 @@
     filters: {
       paymentTypeFilter(val) {
         return val === 'online' ? '在线支付' : '货到付款'
+      },
+      unixToDate(val) {
+        return Foundation.unixToDate(val)
       }
     },
     mounted() {
       this.GET_OrderDetail()
+      this.GET_OrderLog()
     },
     methods: {
       GET_OrderDetail() {
@@ -87,6 +109,18 @@
           this.countShowData()
         }).catch(error => {
           this.loading = false
+          console.log(error)
+        })
+      },
+
+      /** 获取订单日志 */
+      GET_OrderLog() {
+        this.loading_log = true
+        API_order.getOrderLog(this.sn).then(response => {
+          this.loading_log = false
+          this.orderLog = response
+        }).catch(error => {
+          this.loading_log = false
           console.log(error)
         })
       },

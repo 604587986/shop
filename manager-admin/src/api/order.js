@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 import OrderModel from '@/models/OrderModel'
+import OrderLog from '@/models/OrderLog'
 import ProductModel from '@/models/ProductModel'
 
 /**
@@ -36,6 +37,24 @@ export function getOrderDetail(sn) {
     }).then(response => {
       const _response = new OrderModel().map(response)
       _response.productList = new ProductModel().map(_response.productList)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 根据订单sn获取订单日志
+ * @param sn
+ * @returns {Promise<any>}
+ */
+export function getOrderLog(sn) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `http://localhost:9090/javashop/order-query/admin/order/${sn}/log.do`,
+      method: 'get',
+      loading: false
+    }).then(response => {
+      const _response = new OrderLog().map(response)
       resolve(_response)
     }).catch(error => reject(error))
   })
