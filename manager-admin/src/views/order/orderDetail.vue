@@ -1,5 +1,21 @@
 <template>
   <div class="order-detail-container">
+    <el-row v-if="orderDetail && orderDetail.operateAllowable" :gutter="0">
+      <el-col :span="24" style="padding: 10px 20px">
+        <el-button
+          type="primary"
+          size="mini"
+          :disabled="!orderDetail.operateAllowable.allowPay"
+          @click="confirmPay"
+        >确认收款</el-button>
+        <el-button
+          type="danger"
+          size="mini"
+          :disabled="!orderDetail.operateAllowable.allowCancel"
+          @click="cancelOrder"
+        >取消订单</el-button>
+      </el-col>
+    </el-row>
     <el-row v-for="(row, index) in orderInfo" :key="index" :gutter="0">
       <el-col v-for="col in row" :key="col.key" :span="12">
         <div class="d-header">{{ col.title }}</div>
@@ -75,6 +91,26 @@
         })
       },
 
+      /** 确认收款 */
+      confirmPay() {
+        this.$confirm('确定要确认收款吗？', '提示', { type: 'warning' }).then(() => {
+          API_order.confirmPay(this.sn, { payprice: this.orderDetail.order_price }).then(response => {
+            this.$message.success('订单确认收款成功！')
+            this.GET_OrderDetail()
+          }).catch(error => console.log(error))
+        }).catch(() => {})
+      },
+
+      /** 取消订单 */
+      cancelOrder() {
+        this.$confirm('确定要取消这个订单吗？', '提示', { type: 'warning' }).then(() => {
+          API_order.cancleOrder(this.sn).then(() => {
+            this.$message.success('订单取消成功！')
+            this.GET_OrderDetail()
+          }).catch(error => console.log(error))
+        }).catch(() => {})
+      },
+
       /** 组合基本信息、发票信息、买家信息、商家信息 */
       countShowData() {
         const o = this.orderDetail
@@ -88,7 +124,7 @@
                 { label: '订单编号', value: o.sn },
                 { label: '订单金额', value: '￥' + f.formatPrice(o.need_pay_money) },
                 { label: '支付方式', value: o.payment_type_text },
-                { label: '订单状态', value: o.ship_status_text },
+                { label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '') },
                 { label: '下单时间', value: f.unixToDate(o.order_time) }
               ]
             },
