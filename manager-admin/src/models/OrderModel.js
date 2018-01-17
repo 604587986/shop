@@ -70,8 +70,8 @@ export default class OrderModel extends DataModel {
   payment_type_text
 
   /** 支付时间 */
-  payment_time
   @ServerName('payment_time')
+  payment_time
 
   /** 需要支付金额 */
   @ServerName('need_pay_money')

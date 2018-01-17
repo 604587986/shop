@@ -1,5 +1,21 @@
 <template>
   <div class="order-detail-container">
+    <el-row v-if="orderDetail && orderDetail.operateAllowable" :gutter="0">
+      <el-col :span="24" style="padding: 10px 20px">
+        <el-button
+          type="primary"
+          size="mini"
+          :disabled="!orderDetail.operateAllowable.allowPay"
+          @click="confirmPay"
+        >确认收款</el-button>
+        <el-button
+          type="danger"
+          size="mini"
+          :disabled="!orderDetail.operateAllowable.allowCancel"
+          @click="cancelOrder"
+        >取消订单</el-button>
+      </el-col>
+    </el-row>
     <el-row v-for="(row, index) in orderInfo" :key="index" :gutter="0">
       <el-col v-for="col in row" :key="col.key" :span="12">
         <div class="d-header">{{ col.title }}</div>
@@ -31,6 +47,20 @@
         </el-table>
       </el-col>
     </el-row>
+    <el-row v-loading="loading_log" :gutter="0">
+      <el-col :span="24">
+        <div class="d-header">订单日志</div>
+        <el-table :data="orderLog" :header-cell-style="{textAlign: 'center'}">
+          <el-table-column prop="id" label="操作ID" width="100"/>
+          <el-table-column prop="name" label="操作人员" width="200"/>
+          <el-table-column label="操作时间" width="250">
+            <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
+          </el-table-column>
+          <el-table-column prop="content" label="操作详情" width="400"/>
+          <el-table-column/>
+        </el-table>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -43,8 +73,12 @@
       return {
         /** 列表loading状态 */
         loading: false,
+        /** 订单日志loading状态 */
+        loading_log: false,
         /** 订单详情数据 */
         orderDetail: null,
+        /** 订单日志 */
+        orderLog: [],
         /** 订单sn */
         sn: this.$route.params.sn,
         /** 基本信息、发票信息、买家信息、商家信息 */
@@ -56,10 +90,14 @@
     filters: {
       paymentTypeFilter(val) {
         return val === 'online' ? '在线支付' : '货到付款'
+      },
+      unixToDate(val) {
+        return Foundation.unixToDate(val)
       }
     },
     mounted() {
       this.GET_OrderDetail()
+      this.GET_OrderLog()
     },
     methods: {
       GET_OrderDetail() {
@@ -75,6 +113,38 @@
         })
       },
 
+      /** 获取订单日志 */
+      GET_OrderLog() {
+        this.loading_log = true
+        API_order.getOrderLog(this.sn).then(response => {
+          this.loading_log = false
+          this.orderLog = response
+        }).catch(error => {
+          this.loading_log = false
+          console.log(error)
+        })
+      },
+
+      /** 确认收款 */
+      confirmPay() {
+        this.$confirm('确定要确认收款吗？', '提示', { type: 'warning' }).then(() => {
+          API_order.confirmPay(this.sn, { payprice: this.orderDetail.order_price }).then(response => {
+            this.$message.success('订单确认收款成功！')
+            this.GET_OrderDetail()
+          }).catch(error => console.log(error))
+        }).catch(() => {})
+      },
+
+      /** 取消订单 */
+      cancelOrder() {
+        this.$confirm('确定要取消这个订单吗？', '提示', { type: 'warning' }).then(() => {
+          API_order.cancleOrder(this.sn).then(() => {
+            this.$message.success('订单取消成功！')
+            this.GET_OrderDetail()
+          }).catch(error => console.log(error))
+        }).catch(() => {})
+      },
+
       /** 组合基本信息、发票信息、买家信息、商家信息 */
       countShowData() {
         const o = this.orderDetail
@@ -88,7 +158,7 @@
                 { label: '订单编号', value: o.sn },
                 { label: '订单金额', value: '￥' + f.formatPrice(o.need_pay_money) },
                 { label: '支付方式', value: o.payment_type_text },
-                { label: '订单状态', value: o.ship_status_text },
+                { label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '') },
                 { label: '下单时间', value: f.unixToDate(o.order_time) }
               ]
             },
