@@ -7,17 +7,26 @@ import GoodsModel from '@/models/GoodsModel'
 import MemberModel from '@/models/MemberModel'
 
 export function getDashboardData() {
+  const nowDate = new Date()
+  const year = nowDate.getFullYear()
+  const month = nowDate.getMonth() + 1
+  const urls = [
+    `b2b2c/admin/salesStatis/sale-income-totle-json.do?year=${year}&month=${month}`,
+    'shop/admin/member/member-list-json.do',
+    'shop/admin/goods/list-json.do'
+  ]
+  const alls = []
+  urls.forEach((url, index) => {
+    alls.push(request({ url, method: 'get', loading: false })
+      .then(response => Promise.resolve(response))
+      .catch(error => Promise.reject(error)))
+  })
   return new Promise((resolve, reject) => {
-    request({
-      url: 'dashboard',
-      method: 'get',
-      loading: false
-    }).then(response => {
-      const _response = { ...response.data }
-      _response.goodsList = new GoodsModel().map(_response.goodsList)
-      _response.memberList = new MemberModel().map(_response.memberList)
-      resolve(_response)
-    }).catch(error => reject(error))
+    Promise.all(alls).then(values => resolve({
+      incomeStatistics: values[0].data,
+      memberList: new MemberModel().map(values[1].data),
+      goodsList: new GoodsModel().map(values[2].data)
+    })).catch(error => reject(error))
   })
 }
 

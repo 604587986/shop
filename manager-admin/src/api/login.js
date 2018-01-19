@@ -16,7 +16,7 @@ export function loginByUsername(username, password, validcode) {
   const _formData = new FormData()
   Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return request({
-    url: 'http://localhost:9090/javashop/core/admin/admin-user/login.do',
+    url: 'core/admin/admin-user/login.do',
     method: 'post',
     loading: false,
     data: _formData
@@ -29,7 +29,7 @@ export function loginByUsername(username, password, validcode) {
  */
 export function logout() {
   return request({
-    url: 'http://localhost:9090/javashop/core/admin/admin-user/logout.do',
+    url: 'core/admin/admin-user/logout.do',
     method: 'post'
   })
 }
@@ -41,7 +41,7 @@ export function logout() {
  */
 export function getUserInfo(token) {
   return request({
-    url: 'user',
+    url: 'https://www.easy-mock.com/mock/5a090349c645f12278296ab9/admin/user',
     method: 'get',
     params: { token }
   })
