@@ -98,10 +98,10 @@ export const asyncRouterMap = [
         meta: { title: 'orderList' }
       },
       {
-        path: 'refund-order-list',
-        component: _import('order/refundOrderList'),
-        name: 'refund-order-list',
-        meta: { title: 'refundOrderList', noCache: true }
+        path: 'refund-list',
+        component: _import('order/refundList'),
+        name: 'refund-list',
+        meta: { title: 'refundList', noCache: true }
       },
       {
         path: 'invoice-history',
@@ -115,6 +115,13 @@ export const asyncRouterMap = [
         name: 'order-detail',
         hidden: true,
         meta: { title: 'orderDetail' }
+      },
+      {
+        path: 'refund/:sn',
+        component: _import('order/refundDetail'),
+        name: 'refund-detail',
+        hidden: true,
+        meta: { title: 'refundDetail' }
       }
     ]
   },

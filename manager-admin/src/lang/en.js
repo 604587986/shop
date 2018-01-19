@@ -15,9 +15,10 @@ export default {
 
     order: 'Manage Order',
     orderList: 'Order List',
-    refundOrderList: 'Refund Order',
+    refundList: 'Refund List',
     invoiceHistory: 'Invoice History',
     orderDetail: 'Order Detail',
+    refundDetail: 'Refund Detail',
 
     member: 'Member Manage',
     memberManage: 'Member Manage',

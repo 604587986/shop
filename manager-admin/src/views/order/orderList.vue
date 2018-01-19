@@ -211,15 +211,16 @@
       advancedSearchEvent() {
         this.params = {
           ...this.params,
-          ...this.advancedForm,
-          start_time: '',
-          end_time: ''
+          ...this.advancedForm
         }
+        delete this.params.start_time
+        delete this.params.end_time
         if (this.advancedForm.order_time_range) {
           this.params.start_time = this.advancedForm.order_time_range[0]
           this.params.end_time = this.advancedForm.order_time_range[1]
         }
         delete this.params.keyword
+        delete this.params.order_time_range
         this.GET_OrderList()
       },
 

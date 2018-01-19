@@ -13,7 +13,6 @@ import {
 
 export default class GoodsModel extends DataModel {
   /** 商品ID */
-  @Check(CheckTypes.Number)
   @ServerName('goods_id')
   id
 
@@ -46,7 +45,6 @@ export default class GoodsModel extends DataModel {
   brand_name
 
   /** 商品价格 */
-  @Check(CheckTypes.Number)
   @ServerName('goods_price')
   price
 }
