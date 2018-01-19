@@ -115,6 +115,13 @@ export const asyncRouterMap = [
         name: 'order-detail',
         hidden: true,
         meta: { title: 'orderDetail' }
+      },
+      {
+        path: 'refund/:sn',
+        component: _import('order/refundDetail'),
+        name: 'refund-detail',
+        hidden: true,
+        meta: { title: 'refundDetail' }
       }
     ]
   },

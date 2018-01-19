@@ -18,6 +18,7 @@ export default {
     refundOrderList: 'Refund Order',
     invoiceHistory: 'Invoice History',
     orderDetail: 'Order Detail',
+    refundDetail: 'Refund Detail',
 
     member: 'Member Manage',
     memberManage: 'Member Manage',
