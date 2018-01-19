@@ -104,10 +104,10 @@ export const asyncRouterMap = [
         meta: { title: 'refundList', noCache: true }
       },
       {
-        path: 'invoice-history',
-        component: _import('order/invoiceHistory'),
-        name: 'invoice-history',
-        meta: { title: 'invoiceHistory', noCache: true }
+        path: 'receipt-history',
+        component: _import('order/receiptHistory'),
+        name: 'receipt-history',
+        meta: { title: 'receiptHistory', noCache: true }
       },
       {
         path: 'detail/:sn',
