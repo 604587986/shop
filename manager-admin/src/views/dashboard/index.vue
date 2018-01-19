@@ -9,14 +9,16 @@
             <el-button style="float: right; padding: 3px 0" type="text">查看更多</el-button>
           </div>
           <el-table :data="goodsList" border :height="tableHeight" style="width: 100%;">
-            <el-table-column prop="username" label="商品图片" width="120">
+            <el-table-column label="商品图片" width="120">
               <template slot-scope="scope">
                 <img :src="scope.row.image" class="goods-image"/>
               </template>
             </el-table-column>
             <el-table-column prop="sn" label="商品编号" width="180"></el-table-column>
             <el-table-column prop="name" label="商品名称"/>
-            <el-table-column prop="price" label="销售价" width="110"/>
+            <el-table-column label="销售价" width="110">
+              <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+            </el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -44,7 +46,9 @@
             <el-table-column prop="username" label="会员名称"/>
             <el-table-column prop="mobile" label="手机号"/>
             <el-table-column prop="email" label="电子邮箱"/>
-            <el-table-column prop="create_time" label="注册时间"/>
+            <el-table-column label="注册时间">
+              <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
+            </el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -66,7 +70,7 @@
 </template>
 
 <script>
-import { getDashboardData } from '@/api/dashboard'
+import * as API_Dashboard from '@/api/dashboard'
 
 export default {
   name: 'dashboard',
@@ -93,37 +97,39 @@ export default {
     }
   },
   created() {
-    getDashboardData()
-      .then(data => {
-        /** 新增商品 */
-        this.goodsList = data.goodsList
-        /** 新增会员 */
-        this.memberList = data.memberList
-        /** 销售统计 */
-        this.sesalChart.setOption({
-          title: { text: '2017年11月销售统计', subtext: '单位(元)', x: 'center' },
-          tooltip: { trigger: 'item', formatter: '{a} <br/>{b} : {c} ({d}%)' },
-          legend: { orient: 'vertical', left: 'left', data: ['收款金额', '实收金额', '退款金额'] },
-          series: [
-            { name: '访问来源',
-              type: 'pie',
-              radius: '55%',
-              center: ['55%', '70%'],
-              data: [
-                { value: 2000, name: '收款金额' },
-                { value: 1800, name: '实收金额' },
-                { value: 200, name: '退款金额' }
-              ],
-              itemStyle: { emphasis: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }}
-            }
-          ]
-        })
-        this.loading = false
+    API_Dashboard.getDashboardData().then(response => {
+      this.loading = false
+      /** 新增商品 */
+      this.goodsList = response.goodsList
+      /** 新增会员 */
+      this.memberList = response.memberList
+      /** 销售统计 */
+      const IS = response.incomeStatistics
+      const nowDate = new Date()
+      const year = nowDate.getFullYear()
+      const month = nowDate.getMonth() + 1
+      this.sesalChart.setOption({
+        title: { text: `${year}年${month}月销售统计`, subtext: '单位(元)', x: 'center' },
+        tooltip: { trigger: 'item', formatter: '{a} <br/>{b} : {c} ({d}%)' },
+        legend: { orient: 'vertical', left: 'left', data: ['收款金额', '实收金额', '退款金额'] },
+        series: [
+          { name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['55%', '70%'],
+            data: [
+              { value: IS.receivables, name: '收款金额' },
+              { value: IS.paid, name: '实收金额' },
+              { value: IS.refund, name: '退款金额' }
+            ],
+            itemStyle: { emphasis: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }}
+          }
+        ]
       })
-      .catch(error => {
-        this.loading = false
-        console.log(error)
-      })
+    }).catch(error => {
+      this.loading = false
+      console.log(error)
+    })
   }
 }
 </script>
