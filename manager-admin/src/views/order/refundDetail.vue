@@ -11,7 +11,7 @@
     </el-row>
     <el-row :gutter="0">
       <el-col :span="4">{{ refundType }}原因</el-col><el-col :span="8">{{ refundDetail.refund_reason }}</el-col>
-      <el-col :span="4">申请退款金额</el-col><el-col :span="8">￥{{ refundDetail.refund_price | unitPrice }}</el-col>
+      <el-col :span="4">申请退款金额</el-col><el-col :span="8">{{ refundDetail.refund_price | unitPrice('￥') }}</el-col>
     </el-row>
     <el-row :gutter="0">
       <el-col :span="4">退款方式</el-col><el-col :span="8">{{ refundDetail.account_type_text }}</el-col>
