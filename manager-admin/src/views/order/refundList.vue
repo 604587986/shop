@@ -34,7 +34,7 @@
                     <el-option label="退货" value="return_goods"/>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="下单时间">
+                <el-form-item label="申请时间">
                   <el-date-picker
                     v-model="advancedForm.refund_time_range"
                     type="daterange"
