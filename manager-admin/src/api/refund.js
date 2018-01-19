@@ -15,6 +15,7 @@ export function getRefundList(params) {
     request({
       url: 'http://localhost:9090/javashop/after-sale/admin/refund-all.do',
       method: 'get',
+      loading: false,
       params
     }).then(response => {
       const _response = response
@@ -33,7 +34,8 @@ export function getRefundDetail(sn) {
   return new Promise((resolve, reject) => {
     request({
       url: `http://localhost:9090/javashop/after-sale/admin/refund/${sn}.do`,
-      method: 'get'
+      method: 'get',
+      loading: false
     }).then(response => {
       const _response = response
       _response.goods = new GoodsModel().map(response.goods)

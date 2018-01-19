@@ -110,10 +110,10 @@
 </template>
 
 <script>
-  import * as API_refundOrder from '@/api/refundOrder'
+  import * as API_refund from '@/api/refund'
   import { TableLayout, TableSearch, CategoryPick } from '@/components'
   export default {
-    name: 'refundOrderList',
+    name: 'refundList',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
@@ -228,7 +228,7 @@
       /** 获取退款单列表数据 */
       GET_RefundOrder() {
         this.loading = true
-        API_refundOrder.getRefundList(this.params).then(response => {
+        API_refund.getRefundList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
