@@ -222,7 +222,7 @@
 
       /** 操作订单 */
       handleOperateOrder(index, row) {
-        // this.$router.push({ path: `/order/detail/${row.sn}` })
+        this.$router.push({ path: `/order/refund/${row.sn}` })
       },
 
       /** 获取退款单列表数据 */
