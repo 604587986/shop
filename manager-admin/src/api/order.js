@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import OrderModel from '@/models/OrderModel'
-import OrderLog from '@/models/OrderLog'
+import OrderLogModel from '@/models/OrderLogModel'
 import ProductModel from '@/models/ProductModel'
 
 /**
@@ -54,7 +54,7 @@ export function getOrderLog(sn) {
       method: 'get',
       loading: false
     }).then(response => {
-      const _response = new OrderLog().map(response)
+      const _response = new OrderLogModel().map(response)
       resolve(_response)
     }).catch(error => reject(error))
   })
