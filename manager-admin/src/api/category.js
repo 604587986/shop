@@ -15,7 +15,7 @@ export function addCategory(params) {
   }
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/goods-info/admin/category/save-add.do',
+      url: 'goods-info/admin/category/save-add.do',
       method: 'post',
       params: _params
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -35,7 +35,7 @@ export function editCategory(category_id, params) {
   }
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods-info/admin/category/save-edit.do`,
+      url: `goods-info/admin/category/save-edit.do`,
       method: 'post',
       params: _params
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -46,7 +46,7 @@ export function editCategory(category_id, params) {
 export function getBrandByCategoryId(category_id) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods-info/admin/category/${category_id}/brand.do`,
+      url: `goods-info/admin/category/${category_id}/brand.do`,
       method: 'get'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
@@ -61,7 +61,7 @@ export function editCategoryBrand(category_id, params) {
   _formData.append('category_id', category_id)
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods-info/admin/category/${category_id}/brand.do`,
+      url: `goods-info/admin/category/${category_id}/brand.do`,
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -72,7 +72,7 @@ export function editCategoryBrand(category_id, params) {
 export function getSpecsByCategoryId(category_id) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods-info/admin/category/${category_id}/spec.do`,
+      url: `goods-info/admin/category/${category_id}/spec.do`,
       method: 'get'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
@@ -87,7 +87,7 @@ export function editCategorySpecs(category_id, params) {
   _formData.append('category_id', category_id)
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods-info/admin/category/${category_id}/spec.do`,
+      url: `goods-info/admin/category/${category_id}/spec.do`,
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -99,7 +99,7 @@ export function deleteCategory(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods-info/admin/category/delete/${ids}.do`,
+      url: `goods-info/admin/category/delete/${ids}.do`,
       method: 'delete'
     }).then(response => resolve(response)).catch(error => reject(error))
   })

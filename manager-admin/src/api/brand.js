@@ -18,7 +18,7 @@ export function getBrandList(params) {
   }
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/brand/list-json.do',
+      url: 'shop/admin/brand/list-json.do',
       method: 'get',
       loading: false,
       params: _params
@@ -42,7 +42,7 @@ export function addBrand(params) {
   })
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/brand/save.do',
+      url: 'shop/admin/brand/save.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -63,7 +63,7 @@ export function editBrand(id, params) {
   _formData.append('brand_id', id)
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/brand/save-edit.do',
+      url: 'shop/admin/brand/save-edit.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -86,7 +86,7 @@ export function deleteBrand(ids) {
   })
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/shop/admin/brand/delete.do`,
+      url: `shop/admin/brand/delete.do`,
       // method: 'delete',
       method: 'post',
       data: _formData

@@ -6,5 +6,5 @@ import request from '@/utils/request'
  * @returns {string}
  */
 export function getValidateCodeUrl(type) {
-  return `http://localhost:9090/javashop/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
+  return `validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
 }

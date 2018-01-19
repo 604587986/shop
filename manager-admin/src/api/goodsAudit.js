@@ -13,7 +13,7 @@ export function getGoodsAuditList(params) {
   params.seller_name = params.shop_name
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/goods/auth/list.do',
+      url: 'shop/admin/goods/auth/list.do',
       method: 'get',
       loading: false,
       params
@@ -41,7 +41,7 @@ export function goodsAudit(id, params) {
   Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/goods/auth/pass.do',
+      url: 'shop/admin/goods/auth/pass.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))

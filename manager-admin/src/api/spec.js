@@ -12,7 +12,7 @@ import SpecModel from '@/models/SpecModel'
 export function getSpecs(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/goods-info/admin/spec.do',
+      url: 'goods-info/admin/spec.do',
       method: 'get',
       loading: false,
       params
@@ -41,7 +41,7 @@ export function addSpec(params) {
   })
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/goods/admin/spec.do',
+      url: 'goods/admin/spec.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -66,7 +66,7 @@ export function eidtSpec(id, params) {
   })
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods/admin/spec/${id}.do`,
+      url: `goods/admin/spec/${id}.do`,
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -84,7 +84,7 @@ export function deleteSpecs(ids) {
   }
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/goods/admin/spec/${ids}.do`,
+      url: `goods/admin/spec/${ids}.do`,
       method: 'delete'
     }).then(response => resolve(response)).catch(error => reject(error))
   })

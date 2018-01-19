@@ -11,7 +11,7 @@ import ProductModel from '@/models/ProductModel'
 export function getOrderList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/order-query/admin/order.do',
+      url: 'order-query/admin/order.do',
       method: 'get',
       loading: false,
       params
@@ -31,7 +31,7 @@ export function getOrderList(params) {
 export function getOrderDetail(sn) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/order-query/admin/order/${sn}.do`,
+      url: `order-query/admin/order/${sn}.do`,
       method: 'get',
       loading: false
     }).then(response => {
@@ -50,7 +50,7 @@ export function getOrderDetail(sn) {
 export function getOrderLog(sn) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/order-query/admin/order/${sn}/log.do`,
+      url: `order-query/admin/order/${sn}/log.do`,
       method: 'get',
       loading: false
     }).then(response => {
@@ -72,7 +72,7 @@ export function confirmPay(sn, params) {
   _formData.append('ordersn', sn)
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/order-opration/admin/order/pay.do',
+      url: 'order-opration/admin/order/pay.do',
       method: 'post',
       data: _formData
     })
@@ -89,7 +89,7 @@ export function cancleOrder(sn) {
   _formData.append('reson', '管理员取消')
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/order-opration/admin/order/cancel/${sn}.do`,
+      url: `order-opration/admin/order/cancel/${sn}.do`,
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
