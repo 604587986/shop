@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class OrderLog extends DataModel {
+export default class OrderLogModel extends DataModel {
   /** 操作ID */
   @ServerName('log_id')
   id
