@@ -18,22 +18,48 @@
             placeholder="请输入订单编号"
           >
             <template slot="advanced-content">
-              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="订单号">
+              <el-form ref="advancedForm" :model="advancedForm" label-width="100px">
+                <el-form-item label="售后单号">
+                  <el-input size="medium" v-model="advancedForm.sn" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="售后订单号">
                   <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="收货人">
-                  <el-input size="medium" v-model="advancedForm.ship_name" clearable></el-input>
+                <el-form-item label="店铺名称">
+                  <el-input size="medium" v-model="advancedForm.seller_name" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
+                <el-form-item label="申请售后类型">
+                  <el-select v-model="advancedForm.refuse_type" placeholder="请选择" clearable>
+                    <el-option label="退款" value="return_money"/>
+                    <el-option label="退货" value="return_goods"/>
+                  </el-select>
                 </el-form-item>
-                <el-form-item label="买家名字">
-                  <el-input size="medium" v-model="advancedForm.buyer_name" clearable></el-input>
+                <el-form-item label="下单时间">
+                  <el-date-picker
+                    v-model="advancedForm.refund_time_range"
+                    type="daterange"
+                    align="center"
+                    :editable="false"
+                    unlink-panels
+                    range-separator="-"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="yyyy-MM-dd"
+                    :picker-options="pickerOptions">
+                  </el-date-picker>
                 </el-form-item>
-                <el-form-item label="下单日期">
-                </el-form-item>
-                <el-form-item label="订单状态">
+                <el-form-item label="售后状态">
+                  <el-select v-model="advancedForm.refund_status" placeholder="请选择" clearable>
+                    <el-option label="申请中" value="apply"/>
+                    <el-option label="审核通过" value="pass"/>
+                    <el-option label="审核拒绝" value="refuse"/>
+                    <el-option label="全部入库" value="all_stock_in"/>
+                    <el-option label="部分入库" value="part_stock_in"/>
+                    <el-option label="取消申请售后" value="cancel"/>
+                    <el-option label="退款中" value="refunding"/>
+                    <el-option label="退款失败" value="refundfail"/>
+                    <el-option label="已完成售后" value="completed"/>
+                  </el-select>
                 </el-form-item>
               </el-form>
             </template>
@@ -119,7 +145,39 @@
         pageData: null,
 
         /** 高级搜索数据 */
-        advancedForm: {}
+        advancedForm: {},
+
+        /** 高级搜索时间选择组件配置 */
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now()
+          },
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
+          }]
+        }
       }
     },
     methods: {
@@ -146,7 +204,21 @@
       },
 
       /** 高级搜索事件触发 */
-      advancedSearchEvent() {},
+      advancedSearchEvent() {
+        this.params = {
+          ...this.params,
+          ...this.advancedForm
+        }
+        delete this.params.start_time
+        delete this.params.end_time
+        if (this.advancedForm.refund_time_range) {
+          this.params.start_time = this.advancedForm.refund_time_range[0]
+          this.params.end_time = this.advancedForm.refund_time_range[1]
+        }
+        delete this.params.keyword
+        delete this.params.refund_time_range
+        this.GET_RefundOrder()
+      },
 
       /** 操作订单 */
       handleOperateOrder(index, row) {

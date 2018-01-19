@@ -2,7 +2,8 @@
  * 退款单API
  */
 import request from '@/utils/request'
-import RefundOrderModel from '@/models/RefundOrderModel'
+import RefundModel from '@/models/RefundModel'
+import GoodsModel from '@/models/GoodsModel'
 
 /**
  * 获取退款单列表
@@ -17,7 +18,26 @@ export function getRefundList(params) {
       params
     }).then(response => {
       const _response = response
-      _response.data = new RefundOrderModel().map(response.data)
+      _response.data = new RefundModel().map(response.data)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取售后详情
+ * @param sn
+ * @returns {Promise<any>}
+ */
+export function getRefundDetail(sn) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `http://localhost:9090/javashop/after-sale/admin/refund/${sn}.do`,
+      method: 'get'
+    }).then(response => {
+      const _response = response
+      _response.goods = new GoodsModel().map(response.goods)
+      _response.refund = new RefundModel().map(response.refund)
       resolve(_response)
     }).catch(error => reject(error))
   })

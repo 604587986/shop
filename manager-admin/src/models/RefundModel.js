@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class RefundOrderModel extends DataModel {
+export default class RefundModel extends DataModel {
   /** 售后ID */
   @ServerName('id')
   id
