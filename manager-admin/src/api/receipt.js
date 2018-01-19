@@ -9,7 +9,7 @@ import ReceiptModel from '@/models/ReceiptModel'
 export function getHistoryReceiptList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/receipt/history-list-json.do',
+      url: 'shop/admin/receipt/history-list-json.do',
       method: 'get',
       loading: false,
       params

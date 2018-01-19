@@ -13,7 +13,7 @@ import GoodsModel from '@/models/GoodsModel'
 export function getRefundList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/after-sale/admin/refund-all.do',
+      url: 'after-sale/admin/refund-all.do',
       method: 'get',
       loading: false,
       params
@@ -33,7 +33,7 @@ export function getRefundList(params) {
 export function getRefundDetail(sn) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://localhost:9090/javashop/after-sale/admin/refund/${sn}.do`,
+      url: `after-sale/admin/refund/${sn}.do`,
       method: 'get',
       loading: false
     }).then(response => {

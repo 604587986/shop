@@ -12,7 +12,7 @@ import TagModel from '@/models/TagModel'
 export function getTags(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/tag/list-json.do',
+      url: 'shop/admin/tag/list-json.do',
       method: 'get',
       loading: false,
       params
@@ -38,7 +38,7 @@ export function addTag(params) {
   Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/tag/save-add.do',
+      url: 'shop/admin/tag/save-add.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -60,7 +60,7 @@ export function eidtTag(id, params) {
   Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/tag/save-edit.do',
+      url: 'shop/admin/tag/save-edit.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -83,7 +83,7 @@ export function deleteTags(ids) {
   ids.forEach(item => _formData.append('tag_id', item))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://localhost:9090/javashop/shop/admin/tag/delete.do',
+      url: 'shop/admin/tag/delete.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
