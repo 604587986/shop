@@ -16,7 +16,7 @@ export default {
     order: 'Manage Order',
     orderList: 'Order List',
     refundList: 'Refund List',
-    invoiceHistory: 'Invoice History',
+    receiptHistory: 'Receipt History',
     orderDetail: 'Order Detail',
     refundDetail: 'Refund Detail',
 

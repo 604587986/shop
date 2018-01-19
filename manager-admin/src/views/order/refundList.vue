@@ -34,7 +34,7 @@
                     <el-option label="退货" value="return_goods"/>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="下单时间">
+                <el-form-item label="申请时间">
                   <el-date-picker
                     v-model="advancedForm.refund_time_range"
                     type="daterange"
@@ -90,7 +90,7 @@
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleOperateOrder(scope.$index, scope.row)">操作</el-button>
+            <el-button size="mini" type="primary" @click="handleOperateRefund(scope.$index, scope.row)">操作</el-button>
           </template>
         </el-table-column>
       </template>
@@ -221,7 +221,7 @@
       },
 
       /** 操作订单 */
-      handleOperateOrder(index, row) {
+      handleOperateRefund(index, row) {
         this.$router.push({ path: `/order/refund/${row.sn}` })
       },
 
