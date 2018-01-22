@@ -387,6 +387,8 @@
         case 1:
           _ele.find("input[name=" + names.province + "]").val(local_name);
           _ele.find("input[name=" + names.province_id + "]").val(region_id).nextAll().val('');
+          _this.regions['province'] = local_name;
+          _this.regions['province_id'] = region_id;
           _this.regions['city'] = undefined;
           _this.regions['city_id'] = undefined;
           _this.regions['region'] = undefined;
