@@ -40,9 +40,9 @@ export default class MemberModel extends DataModel {
   @ServerName('lastlogin')
   last_login_time
 
-  /** 登录次数 */
+  /** 本月登录次数 tm --> this month */
   @ServerName('logincount')
-  login_count
+  login_count_tm
 
   /** 会员等级ID */
   @ServerName('lv_id')
@@ -54,7 +54,7 @@ export default class MemberModel extends DataModel {
 
   /** 会员ID */
   @ServerName('member_id')
-  member_id
+  id
 
   /** 手机号 */
   @ServerName('mobile')
@@ -83,6 +83,10 @@ export default class MemberModel extends DataModel {
   /** 注册时间 */
   @ServerName('regtime')
   register_time
+
+  /** 注册IP */
+  @ServerName('registerip')
+  register_ip
 
   /** 会员备注 */
   @ServerName('remark')

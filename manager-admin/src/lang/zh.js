@@ -136,6 +136,6 @@ export default {
     val_username: '请输入管理员名称',
     val_password: '请输入管理员密码',
     val_validcode: '请输入图片验证码',
-    val_form: '表单填写有误，请核对！'
+    val_form: '表单填写有误，请检查！'
   }
 }
