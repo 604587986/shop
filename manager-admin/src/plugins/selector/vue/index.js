@@ -5,6 +5,7 @@
 // import SkuRender from './SkuRender'
 // import TextSelectorDialog from './TextSelectorDialog'
 import GoodsCatsEdit from './GoodsCatsEdit'
+import AddressSelect from './AddressSelect'
 
 export {
   // AreaSelectorDialog,
@@ -13,5 +14,6 @@ export {
   // SkuEditor,
   // SkuRender,
   // TextSelectorDialog,
-  GoodsCatsEdit
+  GoodsCatsEdit,
+  AddressSelect
 }
