@@ -6,5 +6,5 @@ import request from '@/utils/request'
  * @returns {string}
  */
 export function getValidateCodeUrl(type) {
-  return `validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
+  return `${process.env.BASE_API}/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
 }
