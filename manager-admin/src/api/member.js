@@ -71,3 +71,41 @@ export function deleteMembers(ids) {
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
+
+/**
+ * 获取会员回收站列表
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getRecycleMemberList(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'shop/admin/member/list-recycle-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new MemberModel().map(response.data)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 恢复会员
+ * @param ids
+ * @returns {Promise<any>}
+ */
+export function recycleMember(ids) {
+  if (!Array.isArray(ids)) ids = [ids]
+  const _formData = new FormData()
+  ids.forEach(item => _formData.append('member_id', item))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'shop/admin/member/recycle-regain-member.do',
+      method: 'post',
+      data: _formData
+    }).then(response => {resolve(response)}).catch(error => reject(error))
+  })
+}
