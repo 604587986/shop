@@ -106,6 +106,6 @@ export function recycleMember(ids) {
       url: 'shop/admin/member/recycle-regain-member.do',
       method: 'post',
       data: _formData
-    }).then(response => {resolve(response)}).catch(error => reject(error))
+    }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
