@@ -43,7 +43,9 @@
         <el-table-column prop="register_time" label="注册时间">
           <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="name" label="上次登录时间"/>
+        <el-table-column label="上次登录时间">
+          <template slot-scope="scope">{{ scope.row.last_login_time | unixToDate }}</template>
+        </el-table-column>
         <el-table-column prop="login_count_tm" label="本月登录次数"/>
         <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
         <el-table-column label="操作">
@@ -94,7 +96,7 @@
           <el-input v-model="addMemberForm.nickname" :maxlength="20"></el-input>
         </el-form-item>
         <!--性别-->
-        <el-form-item label="性别">
+        <el-form-item label="性别" class="form-item-sex">
           <el-radio v-model="addMemberForm.sex" :label="1">男</el-radio>
           <el-radio v-model="addMemberForm.sex" :label="0">女</el-radio>
         </el-form-item>
@@ -122,7 +124,7 @@
           <el-input v-model.number="addMemberForm.tel" :maxlength="20"></el-input>
         </el-form-item>
         <!--地区-->
-        <el-form-item label="地区">
+        <el-form-item label="地区" class="form-item-region">
           <en-address-select :changed="addressSelectChanged"/>
         </el-form-item>
         <!--详细地址-->
@@ -369,10 +371,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  /deep/ .el-table td:not(.is-left) {
-    text-align: center;
-  }
-
   .inner-toolbar {
     display: flex;
     width: 100%;
@@ -389,6 +387,18 @@
     top: 0;
     right: 10px;
     cursor: pointer;
+  }
+
+  .el-date-editor.el-input {
+    width: 180px;
+  }
+
+  /deep/ .form-item-sex .el-form-item__content{
+    width: 180px;
+  }
+
+  /deep/ .form-item-region .el-form-item__content {
+    min-width: 180px;
   }
 
 </style>
