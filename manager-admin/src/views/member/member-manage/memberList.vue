@@ -371,17 +371,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .inner-toolbar {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding: 0 20px;
-  }
-
-  .toolbar-search {
-    margin-right: 10px;
-  }
-
   .show-pwd {
     position: absolute;
     top: 0;
