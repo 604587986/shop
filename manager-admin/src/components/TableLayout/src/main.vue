@@ -103,4 +103,7 @@
       align-items: center;
     }
   }
+  /deep/ .el-table td:not(.is-left) {
+    text-align: center;
+  }
 </style>
