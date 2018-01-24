@@ -12,7 +12,7 @@
         <el-table-column prop="username" label="用户名"/>
         <el-table-column prop="mobile" label="手机号"/>
         <el-table-column prop="email" label="电子邮箱"/>
-        <el-table-column prop="register_time" label="注册时间">
+        <el-table-column label="注册时间">
           <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
         </el-table-column>
         <el-table-column label="上次登录时间">
