@@ -29,6 +29,7 @@ export default {
     goodsAskList: 'Goods Ask List',
     memberNotification: 'Member Notification',
     notificationHistory: 'Notification History',
+    memberEdit: 'editMember',
 
     shop: 'Manage Shop',
     shopManage: 'Shop Manage',

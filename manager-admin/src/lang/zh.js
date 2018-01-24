@@ -29,6 +29,7 @@ export default {
     goodsAskList: '商品咨询列表',
     memberNotification: '会员通知',
     notificationHistory: '通知历史',
+    memberEdit: '编辑会员',
 
     shop: '店铺管理',
     shopManage: '管理店铺',

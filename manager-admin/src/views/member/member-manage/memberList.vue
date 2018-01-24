@@ -80,7 +80,14 @@
         </el-form-item>
         <!--密码-->
         <el-form-item label="密码" prop="password">
-          <el-input v-model="addMemberForm.password" type="password" :maxlength="20"></el-input>
+          <el-input
+            v-model="addMemberForm.password"
+            :type="pwdType"
+            :maxlength="20"
+          ></el-input>
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
         </el-form-item>
         <!--昵称-->
         <el-form-item label="昵称" prop="nickname">
@@ -226,7 +233,8 @@
             { required: true, message: '请输入详细地址', trigger: 'blur' },
             { max: 50, message: '最长50个字符', trigger: 'blur' }
           ]
-        }
+        },
+        pwdType: 'password'
       }
     },
     mounted() {
@@ -251,7 +259,9 @@
       },
 
       /** 操作会员 */
-      handleOperateMember(index, row) {},
+      handleOperateMember(index, row) {
+        this.$router.push({ path: `/member/member-manage/edit/${row.id}` })
+      },
 
       /** 性别格式化 */
       formatterSex(row, column, cellValue) {
@@ -331,7 +341,11 @@
           ...this.addMemberForm,
           ...object.regions
         }
-        console.log(object)
+      },
+
+      /** 显示 */
+      showPwd() {
+        this.pwdType = this.pwdType === 'password' ? 'text' : 'password'
       },
 
       /** 获取会员列表 */
@@ -368,6 +382,13 @@
 
   .toolbar-search {
     margin-right: 10px;
+  }
+
+  .show-pwd {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    cursor: pointer;
   }
 
 </style>
