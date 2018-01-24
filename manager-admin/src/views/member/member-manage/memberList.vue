@@ -43,7 +43,9 @@
         <el-table-column prop="register_time" label="注册时间">
           <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="name" label="上次登录时间"/>
+        <el-table-column label="上次登录时间">
+          <template slot-scope="scope">{{ scope.row.last_login_time | unixToDate }}</template>
+        </el-table-column>
         <el-table-column prop="login_count_tm" label="本月登录次数"/>
         <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
         <el-table-column label="操作">
@@ -80,14 +82,21 @@
         </el-form-item>
         <!--密码-->
         <el-form-item label="密码" prop="password">
-          <el-input v-model="addMemberForm.password" type="password" :maxlength="20"></el-input>
+          <el-input
+            v-model="addMemberForm.password"
+            :type="pwdType"
+            :maxlength="20"
+          ></el-input>
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
         </el-form-item>
         <!--昵称-->
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="addMemberForm.nickname" :maxlength="20"></el-input>
         </el-form-item>
         <!--性别-->
-        <el-form-item label="性别">
+        <el-form-item label="性别" class="form-item-sex">
           <el-radio v-model="addMemberForm.sex" :label="1">男</el-radio>
           <el-radio v-model="addMemberForm.sex" :label="0">女</el-radio>
         </el-form-item>
@@ -115,7 +124,7 @@
           <el-input v-model.number="addMemberForm.tel" :maxlength="20"></el-input>
         </el-form-item>
         <!--地区-->
-        <el-form-item label="地区">
+        <el-form-item label="地区" class="form-item-region">
           <en-address-select :changed="addressSelectChanged"/>
         </el-form-item>
         <!--详细地址-->
@@ -226,7 +235,8 @@
             { required: true, message: '请输入详细地址', trigger: 'blur' },
             { max: 50, message: '最长50个字符', trigger: 'blur' }
           ]
-        }
+        },
+        pwdType: 'password'
       }
     },
     mounted() {
@@ -251,7 +261,9 @@
       },
 
       /** 操作会员 */
-      handleOperateMember(index, row) {},
+      handleOperateMember(index, row) {
+        this.$router.push({ path: `/member/member-manage/edit/${row.id}` })
+      },
 
       /** 性别格式化 */
       formatterSex(row, column, cellValue) {
@@ -331,7 +343,11 @@
           ...this.addMemberForm,
           ...object.regions
         }
-        console.log(object)
+      },
+
+      /** 显示 */
+      showPwd() {
+        this.pwdType = this.pwdType === 'password' ? 'text' : 'password'
       },
 
       /** 获取会员列表 */
@@ -355,19 +371,23 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  /deep/ .el-table td:not(.is-left) {
-    text-align: center;
+  .show-pwd {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    cursor: pointer;
   }
 
-  .inner-toolbar {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding: 0 20px;
+  .el-date-editor.el-input {
+    width: 180px;
   }
 
-  .toolbar-search {
-    margin-right: 10px;
+  /deep/ .form-item-sex .el-form-item__content{
+    width: 180px;
+  }
+
+  /deep/ .form-item-region .el-form-item__content {
+    min-width: 180px;
   }
 
 </style>

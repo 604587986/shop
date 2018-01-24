@@ -144,7 +144,8 @@ export const asyncRouterMap = [
         meta: { title: 'memberManage' },
         children: [
           { path: 'member-list', component: _import('member/member-manage/memberList'), name: 'member-list', meta: { title: 'memberList' }},
-          { path: 'member-recycle', component: _import('member/member-manage/memberRecycle'), name: 'member-recycle', meta: { title: 'memberRecycle' }}
+          { path: 'member-recycle', component: _import('member/member-manage/memberRecycle'), name: 'member-recycle', meta: { title: 'memberRecycle' }},
+          { path: 'edit/:id', component: _import('member/member-manage/memberEdit'), name: 'member-edit', hidden: true, meta: { title: 'memberEdit' }}
         ]
       },
       {

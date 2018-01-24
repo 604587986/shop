@@ -91,6 +91,16 @@
     border-bottom: 1px solid #e6ebf5;
     background-color: #fff;
   }
+  .inner-toolbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .toolbar-search {
+    margin-right: 10px;
+  }
   /** 分页样式 */
   .pagination {
     display: flex;
@@ -102,5 +112,8 @@
       display: flex;
       align-items: center;
     }
+  }
+  /deep/ .el-table td:not(.is-left) {
+    text-align: center;
   }
 </style>
