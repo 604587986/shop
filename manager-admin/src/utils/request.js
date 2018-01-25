@@ -36,6 +36,11 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
   response => {
     closeLoading(response)
+    const _data = response.data
+    if (typeof _data === 'string' && _data.indexOf('window.open(\'/javashop/admin/login.do\',\'_top\')') !== -1) {
+      fedLogOut()
+      return Promise.reject('登录失效')
+    }
     return response.data
   },
   error => {
@@ -43,17 +48,7 @@ service.interceptors.response.use(
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
-    if (error_response.status === 403) {
-      MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-        confirmButtonText: '重新登录',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        store.dispatch('FedLogOut').then(() => {
-          location.reload()
-        })
-      }).catch(() => {})
-    }
+    if (error_response.status === 403) fedLogOut()
     Message({
       message: error_data.error_message || '出现错误，请稍后再试！',
       type: 'error',
@@ -71,6 +66,18 @@ const closeLoading = (target) => {
   if (target.config.loading) {
     target.config.loading.close()
   }
+}
+
+function fedLogOut() {
+  MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+    confirmButtonText: '重新登录',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    store.dispatch('FedLogOut').then(() => {
+      location.reload()
+    })
+  }).catch(() => {})
 }
 
 export default service
