@@ -8,14 +8,14 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleReleaseNotice">发布通知</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleReleaseNotification">发布</el-button>
         </div>
       </div>
       <template slot="table-columns">
         <!--<el-table-column type="selection" width="100"/>-->
         <el-table-column prop="title" label="标题"/>
         <el-table-column label="通知类型">
-          <template slot-scope="scope">{{ scope.row.send_type | typeFilter }}</template>
+          <template slot-scope="scope">{{ scope.row.type | typeFilter }}</template>
         </el-table-column>
         <el-table-column label="发送时间">
           <template slot-scope="scope">{{ scope.row.send_time | unixToDate }}</template>
@@ -46,6 +46,32 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
+    <el-dialog title="发布商城通知" :visible.sync="dialogNotificationVisible" width="500px">
+      <el-form :model="notificationForm" :rules="notificationRules" ref="notificationForm" label-width="100px">
+        <el-form-item label="通知标题" prop="title">
+          <el-input v-model="notificationForm.title" :maxlength="20" placeholder="标题在20字以内"></el-input>
+        </el-form-item>
+        <el-form-item label="通知内容" prop="content">
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            placeholder="请输入通知内容"
+            v-model="notificationForm.content"
+            :maxlength="2000">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="通知标题">
+          <el-radio-group v-model="notificationForm.type">
+            <el-radio :label="0">全站</el-radio>
+            <el-radio :label="1">指定会员</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogNotificationVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitNotificationForm('notificationForm')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -75,7 +101,23 @@
         pageData: null,
 
         /** 被选数据 */
-        selectedData: []
+        selectedData: [],
+
+        /** 发布商城通知 dialog */
+        dialogNotificationVisible: false,
+
+        /** 发布商城通知 表单 */
+        notificationForm: { type: 0 },
+
+        /** 发布商城通知 表单规则 */
+        notificationRules: {
+          title: [
+            { required: true, message: '请输入通知标题', trigger: 'blur' }
+          ],
+          content: [
+            { required: true, message: '请输入通知内容', trigger: 'blur' }
+          ]
+        }
       }
     },
     mounted() {
@@ -105,8 +147,25 @@
       },
 
       /** 发布通知 */
-      handleReleaseNotice() {
-        console.log('...')
+      handleReleaseNotification() {
+        this.notificationForm = { type: 0 }
+        this.dialogNotificationVisible = true
+      },
+
+      /** 发布通知 表单提交 */
+      submitNotificationForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            API_Notification.releaseNotification(this.notificationForm).then(response => {
+              this.dialogNotificationVisible = false
+              this.$message.success('发布成功！')
+              this.GET_NotificationList()
+            }).catch(error => console.log(error))
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        })
       },
 
       /** 获取回收站会员列表 */

@@ -20,3 +20,26 @@ export function getNotificationList(params) {
     }).catch(error => reject(error))
   })
 }
+
+/**
+ * 发布新的商城通知
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function releaseNotification(params) {
+  const _params = {
+    msg_title: params.title,
+    msg_content: params.content,
+    send_type: params.type,
+    member_ids: params.ids
+  }
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'shop/admin/message/save-message.do',
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
