@@ -68,7 +68,7 @@
         <!--下单时间-->
         <el-table-column prop="order_time" label="下单时间" width="200"/>
         <!--订单总额-->
-        <el-table-column prop="seller_name" label="订单总额">
+        <el-table-column label="订单总额">
           <template slot-scope="scope">{{ scope.row.order_amount | unitPrice('￥') }}</template>
         </el-table-column>
         <!--收货人-->
