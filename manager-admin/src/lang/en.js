@@ -42,6 +42,7 @@ export default {
     themeListWap: 'Wap Theme List',
     shopLevelManage: 'Shop Level Manage',
     levelApplyList: 'Apply List',
+    shopEdit: 'Shop Edit',
 
     promotions: 'promotions',
     groupBuyManage: 'GroupBuy Manage',

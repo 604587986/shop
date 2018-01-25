@@ -187,10 +187,11 @@ export const asyncRouterMap = [
         component: _import('shop/shop-manage/index'),
         redirect: '/shop/shop-manage/shop-list',
         name: 'shop-manage',
-        meta: { title: 'shopManage', noCache: true },
+        meta: { title: 'shopManage' },
         children: [
           { path: 'shop-list', component: _import('shop/shop-manage/shopList'), name: 'shop-list', meta: { title: 'shopList' }},
-          { path: 'shop-audit', component: _import('shop/shop-manage/shopAudit'), name: 'shop-audit', meta: { title: 'shopAudit' }}
+          { path: 'shop-audit', component: _import('shop/shop-manage/shopAudit'), name: 'shop-audit', meta: { title: 'shopAudit' }},
+          { path: 'edit/:shop_id', component: _import('shop/shop-manage/shopEdit'), name: 'shop-edit', hidden: true, meta: { title: 'shopEdit' }}
         ]
       },
       {

@@ -54,8 +54,6 @@ export function deleteComment(ids) {
   })
 }
 
-/***** ASK *****/
-
 /**
  * 获取咨询列表
  * @param params
@@ -82,7 +80,7 @@ export function getAskList(params) {
  * @returns {Promist}
  */
 export function getAskDetail(id) {
-  return new Promist((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     request({
       url: '',
       method: 'get',
