@@ -318,8 +318,8 @@
         }
 
         API_Member.addMember(this.addMemberForm).then(response => {
-          this.$message.success('添加成功！')
           this.dialogAddMemberVisible = false
+          this.$message.success('添加成功！')
           this.GET_MemberList()
         }).catch(error => console.log(error))
 
