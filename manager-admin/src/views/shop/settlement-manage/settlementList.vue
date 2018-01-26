@@ -9,7 +9,7 @@
         <el-table-column prop="username" label="账号单"/>
         <el-table-column prop="mobile" label="开始日期"/>
         <el-table-column prop="email" label="结束日期"/>
-        <el-table-column prop="register_time" label="订单金额">
+        <el-table-column label="订单金额">
           <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
         </el-table-column>
         <el-table-column label="收取佣金">
