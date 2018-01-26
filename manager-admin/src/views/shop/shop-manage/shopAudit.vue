@@ -45,8 +45,8 @@
 </template>
 
 <script>
-  import * as API_Shop from '@/api/shop';
-  import { TableLayout } from '@/components';
+  import * as API_Shop from '@/api/shop'
+  import { TableLayout } from '@/components'
 
   export default {
     name: 'shopAudit',
