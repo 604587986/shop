@@ -64,23 +64,23 @@ export default class ShopModel extends DataModel {
   @ServerName('code_img')
   code_img
 
-  /**  */
+  /** 公司地址 */
   @ServerName('compant_address')
   compant_address
 
-  /**  */
+  /** 公司电子邮箱 */
   @ServerName('compant_email')
   compant_email
 
-  /**  */
+  /** 公司电话 */
   @ServerName('compant_phone')
   compant_phone
 
-  /**  */
+  /** 公司名称 */
   @ServerName('company_name')
   company_name
 
-  /**  */
+  /** 员工数 */
   @ServerName('employee_num')
   employee_num
 
@@ -168,11 +168,11 @@ export default class ShopModel extends DataModel {
   @ServerName('license_town_id')
   license_town_id
 
-  /**  */
+  /** 联系姓名 */
   @ServerName('link_name')
   link_name
 
-  /**  */
+  /** 联系电话 */
   @ServerName('link_phone')
   link_phone
 
@@ -192,9 +192,9 @@ export default class ShopModel extends DataModel {
   @ServerName('organization_code')
   organization_code
 
-  /**  */
+  /** 注册资金 */
   @ServerName('reg_monety')
-  reg_monety
+  reg_money
 
   /** 法定经营范围 */
   @ServerName('scope')

@@ -1,6 +1,7 @@
 /**
  * 商品管理API
  */
+
 import request from '@/utils/request'
 
 import GoodsModel from '@/models/GoodsModel'

@@ -1,3 +1,7 @@
+/**
+ * 店铺相关API
+ */
+
 import request from '@/utils/request'
 import ShopModel from '@/models/ShopModel'
 
@@ -53,6 +57,24 @@ export function recoverShop(ids) {
   return new Promise((resolve, reject) => {
     request({
       url: 'b2b2c/admin/shop/use-shop.do',
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 编辑店铺
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function editShop(id, params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/shop/save-edit.do',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
