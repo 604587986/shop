@@ -41,7 +41,7 @@ export default {
     themeList: '模板列表',
     themeListWap: 'WAP模板列表',
     shopLevelManage: '店铺等级管理',
-    levelApplyList: '申请列表',
+    levelApplyList: '等级申请',
     shopEdit: '编辑店铺',
 
     promotions: '促销管理',
