@@ -168,16 +168,30 @@
             <el-checkbox :indeterminate="isIndeterminateCat" v-model="checkAllCat" @change="handleCheckAllCatChange">全选</el-checkbox>
             <div style="margin: 15px 0;"></div>
             <el-checkbox-group v-model="checkedCats" @change="handleCheckedCatsChange">
-              <el-checkbox v-for="cat in cats" :label="cat.label" :key="cat.id">{{ cat.label }}</el-checkbox>
+              <el-checkbox v-for="cat in cats" :label="cat.id" :key="cat.id">{{ cat.label }}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-tab-pane>
       </el-tabs>
+      <div class="save-btn-box">
+        <el-button type="primary">保存修改</el-button>
+      </div>
     </el-form>
   </div>
 </template>
 
 <script>
+  const categroy = [
+    { label: '数码家电', id: 1 },
+    { label: '食品饮料', id: 2 },
+    { label: '进口食品', id: 3 },
+    { label: '美容化妆', id: 4 },
+    { label: '母婴玩具', id: 5 },
+    { label: '厨房用品', id: 6 },
+    { label: '钟表箱包', id: 7 },
+    { label: '营养保健', id: 8 },
+    { label: '服装鞋靴', id: 9 }
+  ]
   export default {
     name: 'shopEdit',
     data() {
@@ -186,18 +200,8 @@
         shopRules: {},
         isIndeterminateCat: true,
         checkAllCat: false,
-        checkedCats: [],
-        cats: [
-          { label: '数码家电', id: 1 },
-          { label: '食品饮料', id: 2 },
-          { label: '进口食品', id: 3 },
-          { label: '美容化妆', id: 4 },
-          { label: '母婴玩具', id: 5 },
-          { label: '厨房用品', id: 6 },
-          { label: '钟表箱包', id: 7 },
-          { label: '营养保健', id: 8 },
-          { label: '服装鞋靴', id: 9 }
-        ]
+        checkedCats: [1, 2],
+        cats: categroy
       }
     },
     mounted() {},
@@ -209,10 +213,17 @@
       handleLicenceImgSuccess() {},
 
       /** 经营类目全选 */
-      handleCheckAllCatChange() {},
+      handleCheckAllCatChange(val) {
+        this.checkedCats = val ? categroy.map(item => item.id) : []
+        this.isIndeterminateCat = false
+      },
 
       /** 经营类目选择 */
-      handleCheckedCatsChange() {}
+      handleCheckedCatsChange(value) {
+        let checkedCount = value.length
+        this.checkAllCat = checkedCount === this.cats.length
+        this.isIndeterminateCat = checkedCount > 0 && checkedCount < this.cats.length
+      }
     }
   }
 </script>
@@ -248,5 +259,14 @@
     height: 178px;
     line-height: 178px;
     text-align: center;
+  }
+
+  .save-btn-box {
+    text-align: center;
+    background-color: #fff;
+    padding: 10px 0;
+    border: 1px solid #dcdfe6;
+    border-top: 0;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
   }
 </style>
