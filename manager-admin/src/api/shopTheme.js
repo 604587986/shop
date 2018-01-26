@@ -24,3 +24,64 @@ export function getShopThemeList(params) {
     }).catch(error => reject(error))
   })
 }
+
+/**
+ * 添加店铺模板
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function addShopTheme(params) {
+  const _params = {
+    name: params.name,
+    path: params.path
+  }
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/store-themes/save-add.do',
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 编辑店铺模板
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function editShopTheme(id, params) {
+  const _params = {
+    id,
+    name: params.name,
+    path: params.path,
+    is_default: params.is_default
+  }
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/store-themes/save-edit.do',
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 删除店铺模板
+ * @param ids
+ * @returns {Promise<any>}
+ */
+export function deleteShopTheme(ids) {
+  // if (!Array.isArray(ids)) ids = [ids]
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/store-themes/delete.do',
+      method: 'post',
+      params: { id: ids }
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
