@@ -1,3 +1,7 @@
+/**
+ * 评论管理API
+ */
+
 import request from '@/utils/request'
 import CommentModel from '@/models/CommentModel'
 

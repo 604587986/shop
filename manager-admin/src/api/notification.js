@@ -1,3 +1,7 @@
+/**
+ * 商城通知相关API
+ */
+
 import request from '@/utils/request'
 import NotificationModel from '@/models/NotificationModel'
 

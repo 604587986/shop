@@ -1,6 +1,7 @@
 /**
  * 规格管理API
  */
+
 import request from '@/utils/request'
 import SpecModel from '@/models/SpecModel'
 

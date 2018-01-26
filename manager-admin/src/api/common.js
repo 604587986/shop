@@ -1,3 +1,7 @@
+/**
+ * 公共API
+ */
+
 import request from '@/utils/request'
 
 /**

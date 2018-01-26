@@ -1,3 +1,7 @@
+/**
+ * 发票相关API
+ */
+
 import request from '@/utils/request'
 import ReceiptModel from '@/models/ReceiptModel'
 

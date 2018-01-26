@@ -1,3 +1,7 @@
+/**
+ * 店铺相关API
+ */
+
 import request from '@/utils/request'
 import ShopModel from '@/models/ShopModel'
 

@@ -1,3 +1,7 @@
+/**
+ * 会员管理API
+ */
+
 import request from '@/utils/request'
 import MemberModel from '@/models/MemberModel'
 
