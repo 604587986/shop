@@ -1,0 +1,267 @@
+<template>
+  <div>
+    <en-tabel-layout
+      toolbar
+      pagination
+      :tableData="tableData"
+      :loading="loading"
+    >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns">
+        </div>
+        <div class="toolbar-search">
+          <en-table-search
+            @search="searchEvent"
+            @advancedSearch="advancedSearchEvent"
+            advanced
+            advancedWidth="465"
+            placeholder="请输入店铺名称"
+          >
+            <template slot="advanced-content">
+              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+                <el-form-item label="店铺名称">
+                  <el-input size="medium" v-model="advancedForm.shop_name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="会员名称">
+                  <el-input size="medium" v-model="advancedForm.member_name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="店铺状态">
+                  <el-select v-model="advancedForm.shop_status" placeholder="请选择" clearable>
+                    <el-option label="全部" value="all"/>
+                    <el-option label="已开启" value="open"/>
+                    <el-option label="已关闭" value="closed"/>
+                    <el-option label="待审核" value="apply"/>
+                    <el-option label="审核未通过" value="refused"/>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="注册日期">
+                  <el-date-picker
+                    v-model="advancedForm.shop_time_range"
+                    type="daterange"
+                    align="center"
+                    :editable="false"
+                    unlink-panels
+                    range-separator="-"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="yyyy-MM-dd"
+                    :picker-options="pickerOptions">
+                  </el-date-picker>
+                </el-form-item>
+              </el-form>
+            </template>
+          </en-table-search>
+        </div>
+      </div>
+      <template slot="table-columns">
+        <!--店铺ID-->
+        <el-table-column prop="shop_id" label="店铺ID"/>
+        <!--店铺名称-->
+        <el-table-column prop="shop_name" label="店铺名称"/>
+        <!--会员名称-->
+        <el-table-column prop="member_name" label="会员名称"/>
+        <!--创建时间-->
+        <el-table-column label="创建时间">
+          <template slot-scope="scope">{{ scope.row.shop_create_time | unixToDate('yyyy-MM-dd') }}</template>
+        </el-table-column>
+        <!--店铺状态-->
+        <el-table-column label="店铺状态">
+          <template slot-scope="scope">{{ scope.row.shop_status | statusFilter }}</template>
+        </el-table-column>
+        <!--操作-->
+        <el-table-column label="操作" width="150">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleEditOrder(scope.$index, scope.row)">修改</el-button>
+            <el-button
+              v-if="scope.row.shop_status === 'open'"
+              size="mini"
+              type="danger"
+              @click="handleCloseOrder(scope.$index, scope.row)">关闭</el-button>
+            <el-button
+              v-if="scope.row.shop_status === 'closed'"
+              size="mini"
+              type="success"
+              @click="handleRecoverOrder(scope.$index, scope.row)">恢复</el-button>
+          </template>
+        </el-table-column>
+      </template>
+      <el-pagination
+        slot="pagination"
+        v-if="pageData"
+        @size-change="handlePageSizeChange"
+        @current-change="handlePageCurrentChange"
+        :current-page="pageData.page_no"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="pageData.page_size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pageData.data_total">
+      </el-pagination>
+    </en-tabel-layout>
+  </div>
+</template>
+
+<script>
+  import * as API_Shop from '@/api/shop'
+  import { TableLayout, TableSearch } from '@/components'
+  export default {
+    name: 'shopList',
+    components: {
+      [TableLayout.name]: TableLayout,
+      [TableSearch.name]: TableSearch
+    },
+    data() {
+      return {
+        /** 列表loading状态 */
+        loading: false,
+
+        /** 列表参数 */
+        params: {
+          page_no: 1,
+          page_size: 10
+        },
+
+        /** 列表数据 */
+        tableData: null,
+
+        /** 列表分页数据 */
+        pageData: null,
+
+        /** 高级搜索数据 */
+        advancedForm: {},
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now()
+          },
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
+          }]
+        }
+      }
+    },
+    mounted() {
+      this.GET_ShopList()
+    },
+    filters: {
+      statusFilter(val) {
+        switch (val) {
+          case 'refused': return '审核未通过'
+          case 'apply': return '待审核'
+          case 'open': return '开启中'
+          case 'closed': return '已关闭'
+          default: return '未知状态'
+        }
+      }
+    },
+    methods: {
+      /** 分页大小发生改变 */
+      handlePageSizeChange(size) {
+        this.params.page_size = size
+        this.GET_ShopList()
+      },
+
+      /** 分页页数发生改变 */
+      handlePageCurrentChange(page) {
+        this.params.page_no = page
+        this.GET_ShopList()
+      },
+
+      /** 编辑店铺 */
+      handleEditOrder(index, row) {
+        this.$router.push({ path: `/shop/shop-manage/edit/${row.id}` })
+      },
+
+      /** 关闭店铺 */
+      handleCloseOrder(index, row) {
+        this.$confirm('确定要关闭这个店铺吗？', '提示', { type: 'warning' }).then(() => {
+          API_Shop.closeShop(row.id).then(response => {
+            this.$message.success('关闭成功！')
+            this.GET_ShopList()
+          }).catch(error => console.log(error))
+        }).catch(() => {})
+      },
+
+      /** 恢复店铺 */
+      handleRecoverOrder(index, row) {
+        this.$confirm('确定要恢复这个店铺吗？', '提示', { type: 'warning' }).then(() => {
+          API_Shop.recoverShop(row.id).then(response => {
+            this.$message.success('恢复成功！')
+            this.GET_ShopList()
+          }).catch(error => console.log(error))
+        }).catch(() => {})
+      },
+
+      /** 搜索事件触发 */
+      searchEvent(data) {
+        this.params = {
+          ...this.params,
+          keyword: data
+        }
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.GET_ShopList()
+      },
+
+      /** 高级搜索事件触发 */
+      advancedSearchEvent() {
+        this.params = {
+          ...this.params,
+          ...this.advancedForm
+        }
+        delete this.params.start_time
+        delete this.params.end_time
+        if (this.advancedForm.order_time_range) {
+          this.params.start_time = this.advancedForm.order_time_range[0]
+          this.params.end_time = this.advancedForm.order_time_range[1]
+        }
+        delete this.params.keyword
+        delete this.params.order_time_range
+        this.GET_ShopList()
+      },
+
+      /** 获取店铺列表 */
+      GET_ShopList() {
+        this.loading = true
+        API_Shop.getShopList(this.params).then(response => {
+          this.loading = false
+          this.tableData = response.data
+          this.pageData = {
+            page_no: response.draw,
+            page_size: 10,
+            data_total: response.recordsTotal
+          }
+        }).catch(error => {
+          this.loading = false
+          console.log(error)
+        })
+      }
+    }
+  }
+</script>
+
+<style type="text/scss" lang="scss" scoped>
+
+</style>
