@@ -3,14 +3,17 @@
  */
 
 import request from '@/utils/request'
-
 import GoodsModel from '@/models/GoodsModel'
 
-/** 获取商品列表 */
+/**
+ * 获取商品列表
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function getGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'goods/list',
+      url: 'shop/admin/goods/list-json.do',
       method: 'get',
       loading: false,
       params
@@ -22,13 +25,23 @@ export function getGoodsList(params) {
   })
 }
 
-/** 下架商品 */
-export function underGoods(ids) {
-  if (Array.isArray(ids)) ids = ids.join(',')
+/**
+ * 下架商品
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function underGoods(params) {
+  const _params = {
+    goodsId: params.goods_id,
+    message: params.message
+  }
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `goods/${ids}`,
-      method: 'delete'
+      url: `shop/admin/goods/under.do`,
+      method: 'post',
+      data: _formData
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
