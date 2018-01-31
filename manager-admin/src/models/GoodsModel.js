@@ -17,7 +17,7 @@ export default class GoodsModel extends DataModel {
   id
 
   /** 商品图片 */
-  @ServerName('goods_image')
+  @ServerName('thumbnail')
   image
 
   /** 商品编号 */
