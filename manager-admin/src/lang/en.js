@@ -52,6 +52,7 @@ export default {
     pointsClassify: 'Points Classify',
     pointsGoods: 'Points Goods',
     seckillList: 'Seckil lList',
+    groupBuyDetail: 'GroupBuy Detail',
 
     page: 'Page Manage',
     pcDecoration: 'PC Decoration',

@@ -162,13 +162,41 @@
       },
 
       /** 管理团购 */
-      handleOperateGroupBuy(index, row) {},
+      handleOperateGroupBuy(index, row) {
+        this.$router.push({ path: `/promotions/group-buy-manage/group-buy-detail/${row.act_id}` })
+      },
 
       /** 删除团购 */
-      handleDeleteGroupBuy() {},
+      handleDeleteGroupBuy(index, row) {
+        this.$confirm('确定要删除这个团购活动吗？', '提示', { type: 'warning' }).then(() => {
+          API_GroupBuy.deleteGroupBuy(row.act_id).then(response => {
+            this.$message.success('删除成功！')
+            this.GET_GroupBuyList()
+          }).catch(error => console.log(error))
+        }).catch(() => {})
+      },
 
       /** 添加团购 提交表单 */
-      submitAddGroupBuyForm() {},
+      submitAddGroupBuyForm(formName) {
+        const _time_range = this.groupBuyForm.time_range
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if (this.groupBuyForm.apply_deadline > _time_range[0]) {
+              this.$message.error('报名时间不能大于开始时间！')
+              return false
+            }
+            this.groupBuyForm.start_time = _time_range[0]
+            this.groupBuyForm.end_time = _time_range[1]
+            API_GroupBuy.addGroupBuy(this.groupBuyForm).then(response => {
+              this.dialogAddGroupBuyVisible = false
+              this.$message.success('添加成功！')
+              this.GET_GroupBuyList()
+            }).catch(error => console.log(error))
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+          }
+        })
+      },
 
       /** 获取会员列表 */
       GET_GroupBuyList() {

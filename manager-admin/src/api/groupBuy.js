@@ -22,6 +22,47 @@ export function getGroupBuyList(params) {
 }
 
 /**
+ * 添加团购活动
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function addGroupBuy(params) {
+  const _params = {
+    act_name: params.name,
+    act_start_time: params.start_time,
+    act_end_time: params.end_time,
+    act_join_end_time: params.apply_deadline
+  }
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'shop/admin/group-buy-act/save-add.do',
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 删除团购活动
+ * @param ids
+ * @returns {Promise<any>}
+ */
+export function deleteGroupBuy(ids) {
+  if (!Array.isArray(ids)) ids = [ids]
+  const _formData = new FormData()
+  ids.forEach(item => _formData.append('cat_id', item))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'shop/admin/group-buy-act/delete.do' + '?act_id=' + ids[0],
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
  * 获取团购分类列表
  * @param params
  * @returns {Promise<any>}
