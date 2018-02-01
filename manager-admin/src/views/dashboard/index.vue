@@ -151,6 +151,10 @@ export default {
         width: 75%;
       }
     }
+    .goods-image {
+      width: 50px;
+      height: 50px;
+    }
   }
   .el-row {
     position: relative;
