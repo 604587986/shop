@@ -31,7 +31,7 @@
               @click="handleOperateGroupBuy(scope.$index, scope.row)">管理</el-button>
             <el-button
               size="mini"
-              type="primary"
+              type="danger"
               @click="handleDeleteGroupBuy(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
