@@ -52,7 +52,8 @@ export default {
     pointsClassify: '积分分类',
     pointsGoods: '积分商品',
     seckillList: '限时抢购',
-    groupBuyDetail: '团购详情',
+    groupBuyGoods: '团购商品',
+    groupBuyGoodsInfo: '团购商品信息',
 
     page: '页面设置',
     pcDecoration: 'PC装修',

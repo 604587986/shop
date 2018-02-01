@@ -82,7 +82,7 @@ export default class GroupBuyModel extends DataModel {
 
   /** 商品价格 */
   @ServerName('price')
-  price
+  goods_price
 
   /** 商品产品ID */
   @ServerName('product_id')
@@ -111,4 +111,8 @@ export default class GroupBuyModel extends DataModel {
   /** 商品浏览量 */
   @ServerName('view_num')
   view_num
+
+  /** 虚拟数量 */
+  @ServerName('visual_num')
+  visual_num
 }

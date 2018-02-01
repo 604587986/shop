@@ -163,7 +163,7 @@
 
       /** 管理团购 */
       handleOperateGroupBuy(index, row) {
-        this.$router.push({ path: `/promotions/group-buy-manage/group-buy-detail/${row.act_id}` })
+        this.$router.push({ path: `/promotions/group-buy-manage/group-buy-goods/${row.act_id}` })
       },
 
       /** 删除团购 */

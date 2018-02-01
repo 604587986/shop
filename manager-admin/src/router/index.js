@@ -238,7 +238,8 @@ export const asyncRouterMap = [
         children: [
           { path: 'group-buy-list', component: _import('promotions/group-buy-manage/groupBuyList'), name: 'groupBuyList', meta: { title: 'groupBuyList' }},
           { path: 'group-buy-category', component: _import('promotions/group-buy-manage/groupBuyCategory'), name: 'groupBuyCategory', meta: { title: 'groupBuyCategory' }},
-          { path: 'group-buy-detail/:id', component: _import('promotions/group-buy-manage/groupBuyDetail'), name: 'groupBuyDetail', hidden: true, meta: { title: 'groupBuyDetail' }}
+          { path: 'group-buy-goods/:id', component: _import('promotions/group-buy-manage/groupBuyGoods'), name: 'groupBuyGoods', hidden: true, meta: { title: 'groupBuyGoods' }},
+          { path: 'group-buy-goods-info', component: _import('promotions/group-buy-manage/groupBuyGoodsInfo'), name: 'groupBuyGoodsInfo', hidden: true, meta: { title: 'groupBuyGoodsInfo' }}
         ]
       },
       {
