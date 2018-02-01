@@ -237,7 +237,7 @@ export const asyncRouterMap = [
         meta: { title: 'groupBuyManage' },
         children: [
           { path: 'group-buy-list', component: _import('promotions/group-buy-manage/groupBuyList'), name: 'groupBuyList', meta: { title: 'groupBuyList' }},
-          { path: 'group-buy-classify', component: _import('promotions/group-buy-manage/groupBuyClassify'), name: 'groupBuyClassify', meta: { title: 'groupBuyClassify' }}
+          { path: 'group-buy-category', component: _import('promotions/group-buy-manage/groupBuyCategory'), name: 'groupBuyCategory', meta: { title: 'groupBuyCategory' }}
         ]
       },
       {

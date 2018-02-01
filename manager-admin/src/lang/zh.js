@@ -47,7 +47,7 @@ export default {
     promotions: '促销管理',
     groupBuyManage: '团购管理',
     groupBuyList: '团购列表',
-    groupBuyClassify: '团购分类',
+    groupBuyCategory: '团购分类',
     pointsMallManage: '积分商城',
     pointsClassify: '积分分类',
     pointsGoods: '积分商品',

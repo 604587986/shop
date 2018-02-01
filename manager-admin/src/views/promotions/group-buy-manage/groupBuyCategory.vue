@@ -1,10 +1,10 @@
 <template>
-  <div>groupBuyClassify</div>
+  <div>groupBuyCategory</div>
 </template>
 
 <script>
   export default {
-    name: 'groupBuyClassify'
+    name: 'groupBuyCategory'
   }
 </script>
 

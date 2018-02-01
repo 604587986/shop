@@ -47,7 +47,7 @@ export default {
     promotions: 'promotions',
     groupBuyManage: 'GroupBuy Manage',
     groupBuyList: 'GroupBuy List',
-    groupBuyClassify: 'GroupBuy Classify',
+    groupBuyCategory: 'GroupBuy Category',
     pointsMallManage: 'Points Mall Manage',
     pointsClassify: 'Points Classify',
     pointsGoods: 'Points Goods',

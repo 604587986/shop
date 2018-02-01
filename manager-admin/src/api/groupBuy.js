@@ -19,3 +19,19 @@ export function getGroupBuyList(params) {
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
+
+/**
+ * 获取团购分类列表
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGroupBuyCategoryList(params) {
+  return new  Promise((resolve, reject) => {
+    request({
+      url: 'shop/admin/group-buy-cat/list-json.do',
+      method: 'get',
+      loading: false,
+      params
+    })
+  })
+}
