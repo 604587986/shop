@@ -18,7 +18,8 @@
     },
     props: {
       defaultMsg: {
-        type: String
+        type: String,
+        default: ''
       },
       config: {
         type: Object
