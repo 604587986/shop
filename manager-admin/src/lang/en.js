@@ -51,6 +51,7 @@ export default {
     pointsMallManage: 'Points Mall Manage',
     pointsClassify: 'Points Classify',
     pointsGoods: 'Points Goods',
+    seckillManage: 'Seckill Manage',
     seckillList: 'Seckil lList',
     groupBuyGoods: 'GroupBuy Goods',
     groupBuyGoodsInfo: 'GroupBuy Goods Info',

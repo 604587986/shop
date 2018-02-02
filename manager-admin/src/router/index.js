@@ -254,10 +254,14 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: 'seckill-list',
-        component: _import('promotions/seckillList'),
-        name: 'seckillList',
-        meta: { title: 'seckillList' }
+        path: '/promotions/seckill-manage',
+        component: _import('promotions/seckill-manage/index'),
+        redirect: '/promotions/seckill-manage/seckill-list',
+        name: 'seckillManage',
+        meta: { title: 'seckillManage' },
+        children: [
+          { path: 'seckill-list', component: _import('promotions/seckill-manage/seckillList'), name: 'seckillList', meta: { title: 'seckillList' }}
+        ]
       }
     ]
   },

@@ -51,6 +51,7 @@ export default {
     pointsMallManage: '积分商城',
     pointsClassify: '积分分类',
     pointsGoods: '积分商品',
+    seckillManage: '限时抢购管理',
     seckillList: '限时抢购',
     groupBuyGoods: '团购商品',
     groupBuyGoodsInfo: '团购商品信息',
