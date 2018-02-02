@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import SeckillModel from '@/models/SeckillModel'
-import SeckillAuditGoodsModel from '@/models/SeckillAuditGoodsModel'
+import SeckillGoodsModel from '@/models/SeckillGoodsModel'
 
 /**
  * 获取限时抢购列表
@@ -82,7 +82,7 @@ export function getAuditGoodsList(id, params) {
       params
     }).then(response => {
       const _response = response
-      _response.data = new SeckillAuditGoodsModel().map(response.data)
+      _response.data = new SeckillGoodsModel().map(response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })
@@ -128,5 +128,26 @@ export function rejectSeckillAuditGoods(id, reason) {
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取已通过审核的限时抢购商品列表
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getPassGoodsList(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `shop/admin/seckill/${id}/goods.do?status=APPLY`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new SeckillGoodsModel().map(response.data)
+      resolve(_response)
+    }).catch(error => reject(error))
   })
 }

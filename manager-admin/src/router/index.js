@@ -261,7 +261,8 @@ export const asyncRouterMap = [
         meta: { title: 'seckillManage' },
         children: [
           { path: 'seckill-list', component: _import('promotions/seckill-manage/seckillList'), name: 'seckillList', meta: { title: 'seckillList' }},
-          { path: 'seckill-list/audit/:id', component: _import('promotions/seckill-manage/seckillAuditGoodsList'), name: 'seckillAuditGoodsList', hidden: true, meta: { title: 'seckillAuditGoodsList' }}
+          { path: 'seckill-list/audit/:id', component: _import('promotions/seckill-manage/seckillAuditGoodsList'), name: 'seckillAuditGoodsList', hidden: true, meta: { title: 'seckillAuditGoodsList' }},
+          { path: 'seckill-list/pass/:id', component: _import('promotions/seckill-manage/seckillPassGoodsList'), name: 'seckillPassGoodsList', hidden: true, meta: { title: 'seckillPassGoodsList' }}
         ]
       }
     ]

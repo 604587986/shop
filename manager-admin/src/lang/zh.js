@@ -56,6 +56,7 @@ export default {
     groupBuyGoods: '团购商品',
     groupBuyGoodsInfo: '团购商品信息',
     seckillAuditGoodsList: '审核限时抢购商品',
+    seckillPassGoodsList: '已通过限时抢购商品',
 
     page: '页面设置',
     pcDecoration: 'PC装修',

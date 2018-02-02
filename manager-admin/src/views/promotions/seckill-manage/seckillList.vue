@@ -204,7 +204,7 @@
 
       /** 查看限时抢购商品 */
       handleViewSeckillGoods(index, row) {
-        console.log(row)
+        this.$router.push({ path: `/promotions/seckill-manage/seckill-list/pass/${row.id}` })
       },
 
       /** 时间段Tag删除 */

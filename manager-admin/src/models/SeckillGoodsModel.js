@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class SeckillModel extends DataModel {
+export default class SeckillGoodsModel extends DataModel {
   /** 申请ID */
   @ServerName('apply_id')
   apply_id
