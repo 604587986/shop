@@ -55,6 +55,7 @@ export default {
     seckillList: 'Seckil lList',
     groupBuyGoods: 'GroupBuy Goods',
     groupBuyGoodsInfo: 'GroupBuy Goods Info',
+    seckillAuditGoodsList: 'Seckill Audit Goods List',
 
     page: 'Page Manage',
     pcDecoration: 'PC Decoration',

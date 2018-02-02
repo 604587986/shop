@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 import SeckillModel from '@/models/SeckillModel'
+import SeckillAuditGoodsModel from '@/models/SeckillAuditGoodsModel'
 
 /**
  * 获取限时抢购列表
@@ -62,6 +63,70 @@ export function publishSeckill(id, params) {
       url: `shop/admin/seckill/${id}/release.do`,
       method: 'post',
       data: _params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取限时抢购待审核商品列表
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getAuditGoodsList(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `shop/admin/seckill/${id}/goods.do?status=APPLY`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new SeckillAuditGoodsModel().map(response.data)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 通过限时抢购审核通过
+ * @param id
+ * @returns {Promise<any>}
+ */
+export function passSeckillAuditGoods(id) {
+  const _params = {
+    status: 'PASS',
+    fail_reason: ''
+  }
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `shop/admin/seckill/${id}/auth.do`,
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 限时抢购商品驳回
+ * @param id
+ * @param reason
+ * @returns {Promise<any>}
+ */
+export function rejectSeckillAuditGoods(id, reason) {
+  const _params = {
+    status: 'FAIL',
+    fail_reason: reason
+  }
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `shop/admin/seckill/${id}/auth.do`,
+      method: 'post',
+      data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }

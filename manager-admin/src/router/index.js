@@ -260,7 +260,8 @@ export const asyncRouterMap = [
         name: 'seckillManage',
         meta: { title: 'seckillManage' },
         children: [
-          { path: 'seckill-list', component: _import('promotions/seckill-manage/seckillList'), name: 'seckillList', meta: { title: 'seckillList' }}
+          { path: 'seckill-list', component: _import('promotions/seckill-manage/seckillList'), name: 'seckillList', meta: { title: 'seckillList' }},
+          { path: 'seckill-list/audit/:id', component: _import('promotions/seckill-manage/seckillAuditGoodsList'), name: 'seckillAuditGoodsList', hidden: true, meta: { title: 'seckillAuditGoodsList' }}
         ]
       }
     ]
