@@ -140,7 +140,7 @@ export function rejectSeckillAuditGoods(id, reason) {
 export function getPassGoodsList(id, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `shop/admin/seckill/${id}/goods.do?status=APPLY`,
+      url: `shop/admin/seckill/${id}/goods.do?status=PASS`,
       method: 'get',
       loading: false,
       params
