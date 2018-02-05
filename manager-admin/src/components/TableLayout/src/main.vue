@@ -7,7 +7,8 @@
       :data="tableData"
       :max-height="tabHeight"
       border
-      stripe
+      :row-key="rowKey"
+      :stripe="stripe"
       :header-cell-style="{textAlign: 'center'}"
       :style="{width: '100%'}"
       @selection-change="selectionChange"
@@ -27,6 +28,16 @@
   export default {
     name: 'EnTabelLayout',
     props: {
+      /** 是否显示斑纹 */
+      stripe: {
+        type: Boolean,
+        default: true
+      },
+      /** 行数据的 Key */
+      rowKey: {
+        type: String,
+        default: null
+      },
       /** 是否显示工具栏 */
       toolbar: {
         type: Boolean,
