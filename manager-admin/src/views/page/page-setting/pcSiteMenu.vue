@@ -181,7 +181,7 @@
         })
       },
 
-      /** 获取回收站会员列表 */
+      /** 获取导航菜单列表 */
       GET_SiteMenuList() {
         this.loading = true
         API_SiteMenu.getSiteMenuByPC(this.params).then(response => {
