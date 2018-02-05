@@ -306,12 +306,12 @@ export const asyncRouterMap = [
       {
         path: '/page/page-setting',
         component: _import('page/page-setting/index'),
-        redirect: '/page/page-setting/pc-navbar',
-        name: 'page-setting',
+        redirect: '/page/page-setting/pc-site-menu',
+        name: 'pageSetting',
         meta: { title: 'pageSetting' },
         children: [
-          { path: 'pc-navbar', component: _import('page/page-setting/pcNavbar'), name: 'pcNavbar', meta: { title: 'pcNavbar' }},
-          { path: 'mobile-navbar', component: _import('page/page-setting/mobileNavbar'), name: 'mobileNavbar', meta: { title: 'mobileNavbar' }},
+          { path: 'pc-site-menu', component: _import('page/page-setting/pcSiteMenu'), name: 'pcSiteMenu', meta: { title: 'pcSiteMenu' }},
+          { path: 'mobile-site-menu', component: _import('page/page-setting/mobileSiteMenu'), name: 'mobileSiteMenu', meta: { title: 'mobileSiteMenu' }},
           { path: 'hot-keyword', component: _import('page/page-setting/hotKeyword'), name: 'hotKeyword', meta: { title: 'hotKeyword' }},
           { path: 'help-center', component: _import('page/page-setting/helpCenter'), name: 'helpCenter', meta: { title: 'helpCenter' }},
           { path: 'mall-announcement', component: _import('page/page-setting/mallAnnouncement'), name: 'mallAnnouncement', meta: { title: 'mallAnnouncement' }},
