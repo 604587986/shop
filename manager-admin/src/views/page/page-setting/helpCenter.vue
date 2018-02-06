@@ -209,6 +209,7 @@
         float: left;
         font-size: 14px;
         width: 65px;
+        margin-top: 14px;
       }
       .el-input {
         width: 145px;
