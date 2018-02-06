@@ -13,6 +13,7 @@
             </el-input>
           </div>
           <el-tree
+            v-loading="cate_loading"
             :data="categoryData"
             :props="{ children: 'children', label: 'name' }"
             default-expand-all
