@@ -5,13 +5,14 @@
         <el-card class="help-category">
           <div class="help-category-header">
             <h2>文章分类</h2>
-            <el-input
-              placeholder="请输入内容"
-              size="mini"
-              v-model="filterCateTree">
-              <i slot="prefix" class="el-input__icon el-icon-search"></i>
-            </el-input>
           </div>
+          <el-input
+            placeholder="请输入内容"
+            size="mini"
+            class="help-category-search"
+            v-model="filterCateTree">
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          </el-input>
           <el-tree
             v-loading="cate_loading"
             :data="categoryData"
@@ -196,6 +197,7 @@
     width: 100%;
     height: 500px;
     background-color: #fff;
+    min-width: 119px;
 
     .help-category-header {
       padding: 0 10px;
@@ -221,8 +223,8 @@
       }
     }
 
-    /deep/ .el-tree {
-      margin-top: 35px;
+    /deep/ .help-category-search {
+      margin-top: 30px;
     }
   }
 
