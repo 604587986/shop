@@ -117,7 +117,7 @@
       /** 获取模板列表 */
       GET_FloorList() {
         this.loading = true
-        API_Decoration.getPCFloorList(this.params).then(response => {
+        API_Decoration.getFloorList('PC', this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
