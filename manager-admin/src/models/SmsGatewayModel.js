@@ -26,7 +26,6 @@ export default class SmsGatewayModel extends DataModel {
 
   /** 短信网关是否开启 */
   @ServerName('is_open')
-  @Unit(UnitTypes.TRANSFORM_TO_BOOLEAN)
   is_open
 
   /** 短信网关名称 */

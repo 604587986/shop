@@ -10,12 +10,8 @@
         <el-table-column prop="name" label="平台名称"/>
         <el-table-column label="启用状态">
           <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.is_open"
-              active-color="#13ce66"
-              inactive-color="#ff4949">
-            </el-switch>
-            <span>{{scope.row.is_open ? '已开启' : '已关闭'}}</span>
+            {{ scope.row.is_open === 1 ? '已开启' : '已关闭' }}
+            <el-button v-if="scope.row.is_open === 0" type="text" @click="handleOpenSmsGateway(scope.$index, scope.row)">开启</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -86,6 +82,14 @@
 
       /** 修改短信网关 */
       handleEditSmsGateway(index, row) {},
+
+      /** 开启短信网关 */
+      handleOpenSmsGateway(index, row) {
+        API_SmsGateway.openSmsGatewayById(row.id).then(response => {
+          this.$message.success('开启成功！')
+          this.GET_SmsGatewayList()
+        }).catch(error => console.log(error))
+      },
 
       /** 获取短信网关列表 */
       GET_SmsGatewayList() {
