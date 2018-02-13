@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class BrandModel extends DataModel {
+export default class ContactMallModel extends DataModel {
   /** 创建时间 */
   @ServerName('add_time')
   create_time
