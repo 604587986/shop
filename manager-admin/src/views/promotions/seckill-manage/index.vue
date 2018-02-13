@@ -1,5 +1,5 @@
 <template>
-  <router-view :include="cachedViews"></router-view>
+  <router-view></router-view>
 </template>
 
 <script>

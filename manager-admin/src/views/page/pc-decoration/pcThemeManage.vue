@@ -116,7 +116,7 @@
       /** 获取模板列表 */
       GET_TplList() {
         this.loading = true
-        API_Decoration.getPCTplList(this.params).then(response => {
+        API_Decoration.getTplList('PC', this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {

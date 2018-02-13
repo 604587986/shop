@@ -6,14 +6,15 @@ import request from '@/utils/request'
 import * as DecorationModel from '@/models/DecorationModel'
 
 /**
- * 获取模板列表 - PC
+ * 获取模板列表
+ * @param client_type
  * @param params
  * @returns {Promise<any>}
  */
-export function getPCTplList(params) {
+export function getTplList(client_type, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'cms/admin/panel-tpl.do?client_type=pc',
+      url: `cms/admin/panel-tpl.do?client_type=${client_type}`,
       method: 'get',
       loading: false,
       params
@@ -26,16 +27,17 @@ export function getPCTplList(params) {
 }
 
 /**
- * 添加模板 - PC
+ * 添加模板
+ * @param client_type
  * @param params
  * @returns {Promise<any>}
  */
-export function addPCTpl(params) {
+export function addTpl(client_type, params) {
   const _params = {
     tpl_name: params.tpl_name,
     tpl_type: params.tpl_type,
     tpl_content: params,
-    client_type: 'pc'
+    client_type: client_type
   }
   const _formData = new FormData()
   Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
@@ -49,7 +51,7 @@ export function addPCTpl(params) {
 }
 
 /**
- * 删除模板 - PC
+ * 删除模板
  * @param ids
  * @returns {Promise<any>}
  */
@@ -64,14 +66,15 @@ export function deleteTpl(ids) {
 }
 
 /**
- * 获取楼层列表 - PC
+ * 获取楼层列表
+ * @param client_type
  * @param params
  * @returns {Promise<any>}
  */
-export function getPCFloorList(params) {
+export function getFloorList(client_type, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'cms/admin/floor.do?client_type=pc',
+      url: `cms/admin/floor.do?client_type=${client_type}`,
       method: 'get',
       loading: false,
       params
@@ -84,21 +87,20 @@ export function getPCFloorList(params) {
 }
 
 /**
- * 获取焦点图列表 - PC
+ * 获取焦点图列表
+ * @param client_type
  * @param params
  * @returns {Promise<any>}
  */
-export function getPCFocusList(params) {
+export function getFocusList(client_type, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'cms/admin/focus.do?client_type=pc',
+      url: `cms/admin/focus.do?client_type=${client_type}`,
       method: 'get',
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new DecorationModel.Focus().map(response.data)
-      resolve(_response)
+      resolve(new DecorationModel.Focus().map(response))
     }).catch(error => reject(error))
   })
 }
