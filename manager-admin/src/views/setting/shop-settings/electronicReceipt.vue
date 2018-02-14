@@ -121,11 +121,11 @@
       submitElectronicReceiptForm() {
         this.$refs['electronicReceiptForm'].validate((valid) => {
           if (valid) {
-            const { id } = this.electronicReceiptForm
+            const { id, eb_id, app_key, req_url } = this.electronicReceiptForm
             const params = {
-              EBusinessID: this.electronicReceiptForm.eb_id,
-              AppKey: this.electronicReceiptForm.app_key,
-              ReqURL: this.electronicReceiptForm.req_url
+              EBusinessID: eb_id,
+              AppKey: app_key,
+              ReqURL: req_url
             }
             API_ElectronicReceipt.editElectronicReceipt(id, params).then(response => {
               this.dialogElectronicReceiptVisible = false
