@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class BrandModel extends DataModel {
+export default class SmtpModel extends DataModel {
   /** HOST */
   @ServerName('host')
   host

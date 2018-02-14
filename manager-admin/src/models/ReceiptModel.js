@@ -32,3 +32,14 @@ export default class ReceiptModel extends DataModel {
   @ServerName('duty_invoice')
   duty_invoice
 }
+
+/** 发票内容模型 */
+export class ReceiptContentModel extends DataModel {
+  /** 发票内容ID */
+  @ServerName('contentid')
+  id
+
+  /** 发票内容 */
+  @ServerName('receipt_content')
+  content
+}
