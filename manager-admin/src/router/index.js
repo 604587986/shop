@@ -415,7 +415,7 @@ export const asyncRouterMap = [
           { path: 'smtp', component: _import('setting/shop-settings/SMTPSettings'), name: 'smtpSettings', meta: { title: 'smtpSettings' }},
           { path: 'sms-gateway', component: _import('setting/shop-settings/SMSGatewaySettings'), name: 'smsGatewaySettings', meta: { title: 'SMSGatewaySettings' }},
           { path: 'express-platform', component: _import('setting/shop-settings/expressPlatformSettings'), name: 'expressPlatformSettings', meta: { title: 'expressPlatformSettings' }},
-          { path: 'invoice-settings', component: _import('setting/shop-settings/invoiceSettings'), name: 'invoiceSettings', meta: { title: 'invoiceSettings' }},
+          { path: 'receipt-content-settings', component: _import('setting/shop-settings/receiptContentSettings'), name: 'receiptContentSettings', meta: { title: 'receiptContentSettings' }},
           { path: 'electronic-receipt', component: _import('setting/shop-settings/electronicReceipt'), name: 'electronicrEceiptSettings', meta: { title: 'electronicReceipt' }},
           { path: 'storage-solution', component: _import('setting/shop-settings/storageSolution'), name: 'storageSolutionSettings', meta: { title: 'storageSolution' }},
           { path: 'static-page', component: _import('setting/shop-settings/staticPage'), name: 'staticPageSettings', meta: { title: 'staticPage' }},
