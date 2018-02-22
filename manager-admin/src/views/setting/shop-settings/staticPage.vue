@@ -18,11 +18,11 @@
           @click="handleCreateStaticPage"
         >{{ status === 'doing' ? '生成中' : '生成' }}</el-button>
       </el-form-item>
+      <el-form-item label="">
+        <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
+        <p class="progress-text">{{ status_text }}</p>
+      </el-form-item>
     </el-form>
-    <div class="progress-box">
-      <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
-      <p>{{ status_text }}</p>
-    </div>
   </div>
 </template>
 
@@ -103,12 +103,14 @@
     background-color: #fff;
     padding: 10px;
   }
-  .progress-box {
-    width: 500px;
-    margin-top: 20px;
-    p {
-      margin-top: 10px;
-      font-size: 14px;
-    }
+  .progress-text {
+    font-size: 14px;
+  }
+  /deep/ .progress-box .el-progress-bar__inner {
+    -webkit-transition: width ease-in .2s;
+    -moz-transition: width ease-in .2s;
+    -ms-transition: width ease-in .2s;
+    -o-transition: width ease-in .2s;
+    transition: width ease-in .2s;
   }
 </style>
