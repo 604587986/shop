@@ -23,7 +23,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleEditAuth(scope.$index, scope.row)">操作</el-button>
+              @click="handleEditAuth(scope.$index, scope.row)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
