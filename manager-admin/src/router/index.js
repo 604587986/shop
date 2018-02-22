@@ -447,6 +447,18 @@ export const asyncRouterMap = [
           { path: 'express-company', component: _import('setting/payment-and-delivery/expressCompany'), name: 'expressCompanySettings', meta: { title: 'expressCompany' }},
           { path: 'regional-management', component: _import('setting/payment-and-delivery/regionalManagement'), name: 'regionalManagementSettings', meta: { title: 'regionalManagement' }}
         ]
+      },
+      {
+        path: '/setting/auth-settings',
+        component: _import('setting/auth-settings/index'),
+        redirect: '/setting/auth-settings/administrator-manage',
+        name: 'authSettings',
+        meta: { title: 'authSettings' },
+        children: [
+          { path: 'administrator-manage', component: _import('setting/auth-settings/administratorManage'), name: 'administratorManage', meta: { title: 'administratorManage' }},
+          { path: 'role-manage', component: _import('setting/auth-settings/roleManage'), name: 'roleManage', meta: { title: 'roleManage' }},
+          { path: 'auth-manage', component: _import('setting/auth-settings/authManage'), name: 'authManage', meta: { title: 'authManage' }}
+        ]
       }
     ]
   },

@@ -75,6 +75,10 @@
       },
       /** 生成静态页 */
       handleCreateStaticPage() {
+        if (this.checkedPages.length === 0) {
+          this.$message.error('请选择要生成的页面！')
+          return false
+        }
         this.$confirm('确定要生成静态页吗？', '提示', { type: 'warning' }).then(() => {
           const params = this.checkedPages.map(item => item.value)
           API_StaticPage.createStaticPage(params).then(response => {

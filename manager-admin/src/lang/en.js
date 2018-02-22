@@ -123,6 +123,11 @@ export default {
     expressCompany: 'Express Company',
     regionalManagement: 'Regional Management',
 
+    authSettings: 'Auth Settings',
+    administratorManage: 'Administrator Manage',
+    roleManage: 'Role Manage',
+    authManage: 'Auth Manage',
+
     development: 'Development',
     toolManage: 'Tool',
     URLMapping: 'URL Mapping',
