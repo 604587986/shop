@@ -26,6 +26,8 @@
       }
     },
     created() {
+      /** 开局一个API，界面全靠编。 */
+      /** 检查是否有商品索引生成任务 */
       API_Progress.hasSameTask('index_create').then(response => {
         if (response.data.has_task === 1) {
           this.status = 'doing'
