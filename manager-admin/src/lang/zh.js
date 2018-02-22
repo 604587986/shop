@@ -122,6 +122,11 @@ export default {
     expressCompany: '配送方式',
     regionalManagement: '区域管理',
 
+    authSettings: '权限管理',
+    administratorManage: '管理员管理',
+    roleManage: '角色管理',
+    authManage: '权限点管理',
+
     development: '开发管理',
     toolManage: '工具',
     URLMapping: 'URL映射',
