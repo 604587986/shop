@@ -25,6 +25,7 @@ export function outputData(type) {
     request({
       url: 'core/admin/data-export/do-export.do',
       method: 'post',
+      loading: false,
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
   })
