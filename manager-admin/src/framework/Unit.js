@@ -35,6 +35,9 @@ export const UnitFun = (type, value) => {
     /** 数值转换为布尔 */
     case UnitTypes.TRANSFORM_TO_BOOLEAN:
       return !!value
+    /** 掐头去尾 */
+    case UnitTypes.BREAK_OFF_BOTH_ENDS:
+      return value.substr(1, value.length - 2)
     default:
       return value
   }
@@ -51,5 +54,9 @@ export const UnitTypes = {
   // 布尔转换为数值
   TRANSFORM_TO_NUMBER: 'TRANSFORM_TO_NUMBER',
   // 数值转换为布尔
-  TRANSFORM_TO_BOOLEAN: 'TRANSFORM_TO_BOOLEAN'
+  TRANSFORM_TO_BOOLEAN: 'TRANSFORM_TO_BOOLEAN',
+
+  /** 去除字符 */
+  // 掐头去尾
+  BREAK_OFF_BOTH_ENDS: 'BREAK_OFF_BOTH_ENDS'
 }
