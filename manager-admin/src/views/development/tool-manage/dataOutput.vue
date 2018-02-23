@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import * as API_Common from '@/api/common'
+  import * as API_SiteData from '@/api/siteData'
   export default {
     name: 'dataOutput',
     data() {
@@ -30,14 +30,17 @@
       /** 导出数据 */
       handleOutputData() {
         this.output_loading = true
-        API_Common.outputData(this.output_type).then(response => {
+        API_SiteData.outputData(this.output_type).then(response => {
           this.output_loading = false
           let blob = new Blob([response + ''], { type: 'text\/xml' })
           let link = document.createElement('a')
           link.href = window.URL.createObjectURL(blob)
           link.download = `data-${this.output_type === 1 ? 'b2b2c' : 'b2c'}.xml`
           link.click()
-        }).catch(error => console.log(error))
+        }).catch(error => {
+          this.output_loading = false
+          console.log(error)
+        })
       }
     }
   }
