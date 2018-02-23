@@ -91,38 +91,11 @@ export const asyncRouterMap = [
     redirect: '/order/order-list',
     meta: { title: 'order', icon: 'order-manage' },
     children: [
-      {
-        path: 'order-list',
-        component: _import('order/orderList'),
-        name: 'orderList',
-        meta: { title: 'orderList' }
-      },
-      {
-        path: 'refund-list',
-        component: _import('order/refundList'),
-        name: 'refundList',
-        meta: { title: 'refundList' }
-      },
-      {
-        path: 'receipt-history',
-        component: _import('order/receiptHistory'),
-        name: 'receiptHistory',
-        meta: { title: 'receiptHistory' }
-      },
-      {
-        path: 'detail/:sn',
-        component: _import('order/orderDetail'),
-        name: 'orderDetail',
-        hidden: true,
-        meta: { title: 'orderDetail' }
-      },
-      {
-        path: 'refund/:sn',
-        component: _import('order/refundDetail'),
-        name: 'refundDetail',
-        hidden: true,
-        meta: { title: 'refundDetail' }
-      }
+      { path: 'order-list', component: _import('order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
+      { path: 'refund-list', component: _import('order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
+      { path: 'receipt-history', component: _import('order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }},
+      { path: 'detail/:sn', component: _import('order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
+      { path: 'refund/:sn', component: _import('order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }}
     ]
   },
   // 会员管理
@@ -478,22 +451,22 @@ export const asyncRouterMap = [
         meta: { title: 'toolManage' },
         children: [
           { path: 'url-mapping', component: _import('development/tool-manage/URLMapping'), name: 'urlMapping', meta: { title: 'URLMapping' }},
-          { path: 'menu-manage', component: _import('development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }},
+          // { path: 'menu-manage', component: _import('development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }},
           { path: 'data-output', component: _import('development/tool-manage/dataOutput'), name: 'dataOutput', meta: { title: 'dataOutput' }},
           { path: 'clear-example-data', component: _import('development/tool-manage/clearExampleData'), name: 'clearExampleData', meta: { title: 'clearExampleData' }}
         ]
       },
-      {
-        path: '/development/site-theme-manage',
-        component: _import('development/site-theme-manage/index'),
-        redirect: '/development/site-theme-manage/frontdesk-theme',
-        name: 'siteThemeManage',
-        meta: { title: 'SiteThemeManage' },
-        children: [
-          { path: 'frontdesk-theme', component: _import('development/site-theme-manage/frontdeskTheme'), name: 'frontdeskTheme', meta: { title: 'frontdeskTheme' }},
-          { path: 'backstage-theme', component: _import('development/site-theme-manage/backstageTheme'), name: 'backstageTheme', meta: { title: 'backstageTheme' }}
-        ]
-      },
+      // {
+      //   path: '/development/site-theme-manage',
+      //   component: _import('development/site-theme-manage/index'),
+      //   redirect: '/development/site-theme-manage/frontdesk-theme',
+      //   name: 'siteThemeManage',
+      //   meta: { title: 'SiteThemeManage' },
+      //   children: [
+      //     { path: 'frontdesk-theme', component: _import('development/site-theme-manage/frontdeskTheme'), name: 'frontdeskTheme', meta: { title: 'frontdeskTheme' }},
+      //     { path: 'backstage-theme', component: _import('development/site-theme-manage/backstageTheme'), name: 'backstageTheme', meta: { title: 'backstageTheme' }}
+      //   ]
+      // },
       {
         path: '/development/article-manage',
         component: _import('development/article-manage/index'),
