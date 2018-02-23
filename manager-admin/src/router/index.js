@@ -477,6 +477,16 @@ export const asyncRouterMap = [
           { path: 'article-model', component: _import('development/article-manage/articleModel'), name: 'articleModel', meta: { title: 'articleModel' }},
           { path: 'article-list', component: _import('development/article-manage/articleList'), name: 'articleList', meta: { title: 'articleList' }}
         ]
+      },
+      {
+        path: '/development/component-manage',
+        component: _import('development/component-manage/index'),
+        redirect: '/development/component-manage/component-list',
+        name: 'componentManage',
+        meta: { title: 'componentManage' },
+        children: [
+          { path: 'component-list', component: _import('development/component-manage/componentList'), name: 'componentList', meta: { title: 'componentList' }}
+        ]
       }
     ]
   },
