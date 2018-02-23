@@ -138,7 +138,9 @@ export default {
     backstageTheme: '站点后台管理',
     articleManage: '文章管理',
     articleModel: '文章模型',
-    articleList: '文章列表'
+    articleList: '文章列表',
+    componentManage: '组件管理',
+    componentList: '组件列表'
   },
   login: {
     logIn: '登录',

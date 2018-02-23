@@ -139,7 +139,9 @@ export default {
     backstageTheme: 'Backstage Theme',
     articleManage: 'Article Manage',
     articleModel: 'Article Model',
-    articleList: 'Article List'
+    articleList: 'Article List',
+    componentManage: 'Component Manage',
+    componentList: 'Component List'
   },
   login: {
     logIn: 'Log in',
