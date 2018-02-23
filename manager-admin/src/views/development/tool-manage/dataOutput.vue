@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import * as API_Common from '@/api/common'
+  import * as API_SiteData from '@/api/siteData'
   export default {
     name: 'dataOutput',
     data() {
@@ -37,7 +37,10 @@
           link.href = window.URL.createObjectURL(blob)
           link.download = `data-${this.output_type === 1 ? 'b2b2c' : 'b2c'}.xml`
           link.click()
-        }).catch(error => console.log(error))
+        }).catch(error => {
+          this.output_loading = false
+          console.log(error)
+        })
       }
     }
   }
