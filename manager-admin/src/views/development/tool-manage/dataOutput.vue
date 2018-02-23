@@ -30,7 +30,7 @@
       /** 导出数据 */
       handleOutputData() {
         this.output_loading = true
-        API_Common.outputData(this.output_type).then(response => {
+        API_SiteData.outputData(this.output_type).then(response => {
           this.output_loading = false
           let blob = new Blob([response + ''], { type: 'text\/xml' })
           let link = document.createElement('a')
