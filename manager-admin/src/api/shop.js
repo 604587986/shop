@@ -11,8 +11,10 @@ import ShopModel from '@/models/ShopModel'
  * @returns {Promise<any>}
  */
 export function getShopList(params) {
-  params.shop_disable = params.shop_status
-  delete params.shop_status
+  if (params !== undefined) {
+    params.shop_disable = params.shop_status
+    delete params.shop_status
+  }
   return new Promise((resolve, reject) => {
     request({
       url: 'b2b2c/admin/shop/shop-list-json.do',
