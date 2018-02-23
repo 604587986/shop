@@ -12,13 +12,6 @@
           <template slot-scope="scope">
             <div class="component-children">
               <span class="component-children-item" v-for="item in scope.row.children">{{ item.name }}</span>
-              <!--<el-popover-->
-              <!--placement="right"-->
-              <!--width="200"-->
-              <!--trigger="hover">-->
-              <!--<p v-for="item in scope.row.children">{{ item.name }}</p>-->
-              <!--<el-button slot="reference">focus 激活</el-button>-->
-              <!--</el-popover>-->
             </div>
           </template>
         </el-table-column>
