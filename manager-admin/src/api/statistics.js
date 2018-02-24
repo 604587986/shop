@@ -73,7 +73,7 @@ export function addMemberStatistics(params) {
     request({
       url: 'b2b2c/admin/memberStatistics/get-add-member-num.do',
       method: 'get',
-      loaidng: false,
+      loading: false,
       params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
