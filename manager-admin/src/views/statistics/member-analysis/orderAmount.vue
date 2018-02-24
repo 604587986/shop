@@ -59,7 +59,6 @@
         cur_tab: 'order',
         shopList: [],
         change_flag: 1,
-        search_type: 1,
         params: {
           start_date: '',
           end_date: '',

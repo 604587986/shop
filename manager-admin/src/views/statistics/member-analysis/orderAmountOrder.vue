@@ -1,5 +1,5 @@
 <template>
-  <div :loading="loading">
+  <div>
     <div id="order-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
@@ -28,9 +28,6 @@
     props: ['params', 'curTab'],
     data() {
       return {
-        /** 列表loading状态 */
-        loading: false,
-
         /** 列表数据 */
         tableData: null
       }
