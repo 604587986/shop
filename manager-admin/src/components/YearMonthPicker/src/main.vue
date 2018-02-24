@@ -69,6 +69,7 @@
         const _y = val.substr(0, 4)
         const _m = val.substr(5, 2)
         const obj = {
+          type: this.date_type,
           year: _y,
           month: _m,
           year_month: val,
