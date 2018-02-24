@@ -26,6 +26,44 @@ export function memberOrderNum(params) {
 }
 
 /**
+ * 会员订单商品量
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function memberGoodsNum(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  _formData.append('store_id', params.shop_id)
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/memberStatistics/get-goods-num-top.do',
+      method: 'post',
+      loading: false,
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 会员订单金额
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function memberPriceNum(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  _formData.append('store_id', params.shop_id)
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/memberStatistics/get-order-price-top.do',
+      method: 'post',
+      loading: false,
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
  * 新增会员统计
  * @param params
  * @returns {Promise<any>}

@@ -23,15 +23,15 @@
           </el-select>
         </div>
       </div>
-      <el-tabs v-model="tab_type" type="card" @tab-click="handleClickTab">
+      <el-tabs v-model="cur_tab" type="card">
         <el-tab-pane label="订单量" name="order">
-          <div id="order-chart" class="tab-chart"></div>
+          <order-amount-order :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
         <el-tab-pane label="订单商品量" name="goods">
-          <div id="goods-chart" class="tab-chart"></div>
+          <order-amount-goods :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
         <el-tab-pane label="订单金额" name="price">
-          <div id="price-chart" class="tab-chart"></div>
+          <order-amount-price :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -39,19 +39,26 @@
 </template>
 
 <script>
-  import * as API_Statistics from '@/api/statistics'
   import * as API_Shop from '@/api/shop'
   import { YearMonthPicker } from '@/components'
+  import orderAmountOrder from './orderAmountOrder'
+  import orderAmountGoods from './orderAmountGoods'
+  import orderAmountPrice from './orderAmountPrice'
+  import { Foundation } from '@/framework'
   export default {
     name: 'orderAmount',
     components: {
-      [YearMonthPicker.name]: YearMonthPicker
+      [YearMonthPicker.name]: YearMonthPicker,
+      OrderAmountOrder: orderAmountOrder,
+      OrderAmountGoods: orderAmountGoods,
+      OrderAmountPrice: orderAmountPrice
     },
     data() {
       return {
         loading: false,
-        tab_type: 'order',
+        cur_tab: 'order',
         shopList: [],
+        change_flag: 1,
         search_type: 1,
         params: {
           start_date: '',
@@ -63,87 +70,27 @@
     created() {
       this.GET_ShopList()
     },
-    mounted() {
-      this.$nextTick(() => {
-        this.orderChart = this.$echarts.init(document.getElementById('order-chart'))
-        this.goodsChart = this.$echarts.init(document.getElementById('goods-chart'))
-        this.priceChart = this.$echarts.init(document.getElementById('price-chart'))
-      })
+    watch: {
+      cur_tab() {
+        this.change_flag++
+      }
     },
     methods: {
       /** 年月份发生变化 */
       yearMonthChange(object) {
         this.params.start_date = object.start_time
         this.params.end_date = object.end_time
-        this.GET_OrderNum()
+        this.change_flag++
       },
       /** 店铺发生改变 */
       shopChange() {
-        this.GET_OrderNum()
+        this.change_flag++
       },
-      /** tab切换 */
-      handleClickTab() {
-        console.log(this.tab_type)
-      },
-
+      /** 获取店铺列表 */
       GET_ShopList() {
         API_Shop.getShopList().then(response => {
           this.shopList = response.data
         }).catch(error => console.log(error))
-      },
-      /** 获取会员下单量 */
-      GET_OrderNum() {
-        this.loading = true
-        API_Statistics.memberOrderNum(this.params).then(response => {
-          const _data = response.data.map(item => item.num)
-          const _name = response.data.map(item => item.name)
-          this.orderChart.setOption({
-            color: ['#3398DB'],
-            title: {
-              x: 'center',
-              text: '买家排行TOP10'
-            },
-            tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                type: 'shadow'
-              },
-              formatter: function(params) {
-                params = params[0]
-                const member_name = _name[params.dataIndex]
-                return `买家：${member_name}<br/>${params.seriesName}：${params.value}`
-              }
-            },
-            grid: {
-              left: '3%',
-              right: '4%',
-              bottom: '3%',
-              containLabel: true
-            },
-            xAxis: [
-              {
-                type: 'category',
-                data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-                axisTick: { alignWithLabel: true }
-              }
-            ],
-            yAxis: [
-              { type: 'value' }
-            ],
-            series: [
-              {
-                name: '订单量',
-                type: 'bar',
-                barWidth: '60%',
-                data: _data
-              }
-            ]
-          })
-          this.loading = false
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
       }
     }
   }
