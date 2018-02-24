@@ -112,13 +112,13 @@
 
 <script>
   import * as API_goodsAudit from '@/api/goodsAudit'
-  import { TableLayout, TableSearch, CategoryPick } from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
   export default {
     name: 'goodsAudit',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
-      [CategoryPick.name]: CategoryPick
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {

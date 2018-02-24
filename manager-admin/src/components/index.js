@@ -1,7 +1,7 @@
 import TableLayout from './TableLayout'
 import TableSearch from './TableSearch'
 import RegionPick from './RegionPick'
-import CategoryPick from './CategoryPick'
+import CategoryPicker from './CategoryPicker'
 import YearMonthPicker from './YearMonthPicker'
 import UE from './UE'
 
@@ -9,7 +9,7 @@ export {
   TableLayout,
   TableSearch,
   RegionPick,
-  CategoryPick,
+  CategoryPicker,
   YearMonthPicker,
   UE
 }
