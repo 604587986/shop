@@ -1,5 +1,5 @@
 <template>
-  <div :loading="loading" class="container">
+  <div class="container">
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
@@ -55,11 +55,9 @@
     },
     data() {
       return {
-        loading: false,
         cur_tab: 'order',
         shopList: [],
         change_flag: 1,
-        search_type: 1,
         params: {
           start_date: '',
           end_date: '',
