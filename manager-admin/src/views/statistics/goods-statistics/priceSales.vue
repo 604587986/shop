@@ -114,7 +114,6 @@
             seriesName: '此价格区间销量',
             seriesData: response.data
           }))
-          console.log(response)
         }).catch(error => {
           this.loading = false
           console.log(error)
