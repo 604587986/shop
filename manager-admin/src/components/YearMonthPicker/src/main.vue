@@ -99,7 +99,7 @@
           end_time: val + (is_year ? '-12' : '') + '-' + new Date(_y, _m, 0).getDate() + ' 23:59:59',
           last_end_time: l_val + (is_year ? '-12' : '') + '-' + new Date(l_y, l_m, 0).getDate() + ' 23:59:59'
         }
-        this.$emit('change', obj)
+        this.$emit('changed', obj)
       }
     }
   }

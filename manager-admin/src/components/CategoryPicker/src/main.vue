@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: 'EnCategoryPick',
+    name: 'EnCategoryPicker',
     data() {
       return {
         options: [],

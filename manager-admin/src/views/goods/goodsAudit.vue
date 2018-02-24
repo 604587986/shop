@@ -27,7 +27,7 @@
                   <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
                 </el-form-item>
                 <el-form-item label="商品类别">
-                  <en-category-pick @changed="categoryChanged"/>
+                  <en-category-picker @changed="categoryChanged"/>
                 </el-form-item>
               </el-form>
             </template>
@@ -112,13 +112,13 @@
 
 <script>
   import * as API_goodsAudit from '@/api/goodsAudit'
-  import { TableLayout, TableSearch, CategoryPick } from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
   export default {
     name: 'goodsAudit',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
-      [CategoryPick.name]: CategoryPick
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {

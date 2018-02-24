@@ -111,13 +111,13 @@
 
 <script>
   import * as API_refund from '@/api/refund'
-  import { TableLayout, TableSearch, CategoryPick } from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
   export default {
     name: 'refundList',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
-      [CategoryPick.name]: CategoryPick
+      [CategoryPicker.name]: CategoryPicker
     },
     mounted() {
       this.GET_RefundOrder()
