@@ -25,7 +25,7 @@
                 <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
               </el-form-item>
               <el-form-item label="商品类别">
-                <en-category-pick @changed="categoryChanged"/>
+                <en-category-picker @changed="categoryChanged"/>
               </el-form-item>
             </el-form>
           </template>
