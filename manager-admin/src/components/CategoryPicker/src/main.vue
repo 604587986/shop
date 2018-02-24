@@ -3,6 +3,7 @@
     :options="options"
     change-on-select
     @change="handleItemChange"
+    :clearable="clearable"
     :props="props"
     separator="/"
     size="medium"
@@ -12,6 +13,18 @@
 <script>
   export default {
     name: 'EnCategoryPicker',
+    props: {
+      /** 最大级数 */
+      maxLevel: {
+        type: Number,
+        default: 4
+      },
+      /** 是否可以清空 */
+      clearable: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         options: [],
@@ -21,13 +34,6 @@
           children: 'children',
           disabled: 'disabled'
         }
-      }
-    },
-    props: {
-      /** 最大级数 */
-      maxLevel: {
-        type: Number,
-        default: 4
       }
     },
     mounted() {
