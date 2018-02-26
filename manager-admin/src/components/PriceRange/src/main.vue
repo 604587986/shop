@@ -30,7 +30,7 @@
       // 最大区间组数
       maxRange: {
         type: Number,
-        default: 5
+        default: 10
       },
       // 默认区间
       defaultRange: {
