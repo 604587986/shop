@@ -1,6 +1,6 @@
 <template>
-  <div v-loading="loading">
-    <div id="goods-chart" style="height: 300px"></div>
+  <div>
+    <div v-loading="loading" id="goods-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
       :pagination="false"
