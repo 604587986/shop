@@ -100,3 +100,53 @@ export function getPriceSales(params) {
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
+
+/**
+ * 获取热卖商品下单金额
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function hotGoodsPrice(params) {
+  params.store_id = params.shop_id
+  params.cycle_type = params.type
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/goodsStatis/get-hot-goods-money-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = response.data.chartsjson.map(item => {
+        item.price = item.y
+        return item
+      })
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取热卖商品下单量
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function hotGoodsNum(params) {
+  params.store_id = params.shop_id
+  params.cycle_type = params.type
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/goodsStatis/get-hot-goods-num-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = response.data.chartsjson.map(item => {
+        item.num = item.y
+        return item
+      })
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
