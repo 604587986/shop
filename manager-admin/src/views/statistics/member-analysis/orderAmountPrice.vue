@@ -54,6 +54,7 @@
       /** 获取会员下单量 */
       GET_MemberAmountPrice() {
         if (this.curTab !== 'price' || this.loading) return
+        this.loading = true
         API_Statistics.memberPriceNum(this.params).then(response => {
           this.loading = false
           const data = response.data.sort((x, y) => x.price < y.price)
