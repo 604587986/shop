@@ -121,7 +121,7 @@ export function hotGoodsPrice(params) {
         item.price = item.y
         return item
       })
-      resolve(response)
+      resolve(_response)
     }).catch(error => reject(error))
   })
 }
@@ -146,7 +146,32 @@ export function hotGoodsNum(params) {
         item.num = item.y
         return item
       })
-      resolve(response)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取收藏排行
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodsCollectTop(params) {
+  params.shopId = params.shop_id
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/b2b2c/admin/goodsStatis/get-collect-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = response.data.map(item => {
+        item.num = item.y
+        item.name = item.goods_name
+        return item
+      })
+      resolve(_response)
     }).catch(error => reject(error))
   })
 }

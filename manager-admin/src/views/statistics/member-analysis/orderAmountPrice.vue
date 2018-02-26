@@ -1,6 +1,6 @@
 <template>
-  <div v-loading="loading">
-    <div id="price-chart" style="height: 300px"></div>
+  <div>
+    <div v-loading="loading" id="price-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
       :pagination="false"

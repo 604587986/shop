@@ -1,6 +1,6 @@
 <template>
-  <div v-loading="loading">
-    <div id="hot-goods-num-chart" style="height: 300px"></div>
+  <div>
+    <div v-loading="loading" id="hot-goods-num-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
       :pagination="false"
@@ -9,7 +9,7 @@
       <template slot="table-columns">
         <el-table-column type="index" width="150" label="排名"/>
         <el-table-column prop="name" label="商品名称"/>
-        <el-table-column prop="num" label="下单量"/>
+        <el-table-column prop="num" label="商品销量"/>
       </template>
     </en-tabel-layout>
   </div>
