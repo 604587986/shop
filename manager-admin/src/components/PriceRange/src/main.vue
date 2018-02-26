@@ -30,7 +30,7 @@
       // 最大区间组数
       maxRange: {
         type: Number,
-        default: 10
+        default: 5
       },
       // 默认区间
       defaultRange: {
@@ -42,6 +42,18 @@
       return {
         dialogVisible: false
       }
+    },
+    created() {
+      // 开局校验传入默认价格区间
+      if (this.defaultRange.length > this.maxRange) {
+        throw new Error('传入默认价格区间长度大于最大长度限制！')
+      }
+      this.defaultRange.forEach((item, index) => {
+        const preRange = this.defaultRange[index - 1]
+        if (item[0] >= item[1] || preRange && preRange[1] >= item[0]) {
+          throw new Error('传入默认价格区间格式有误！')
+        }
+      })
     },
     methods: {
       handleSetPriceRange() {

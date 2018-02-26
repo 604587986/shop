@@ -26,6 +26,10 @@
               :value="item.shop_id"/>
           </el-select>
         </div>
+        <div class="chart-header-item">
+          <span>价格区间：</span>
+          <en-price-range :default-range="priceRange" @changed="handleRriceRangeChanged"/>
+        </div>
       </div>
       <div id="price-sales-chart" style="height: 300px"></div>
     </el-card>
@@ -35,28 +39,28 @@
 <script>
   import * as API_Statistics from '@/api/statistics'
   import * as API_Shop from '@/api/shop'
-  import { CategoryPicker, YearMonthPicker } from '@/components'
+  import { CategoryPicker, YearMonthPicker, PriceRange } from '@/components'
   import echartsOptions from '../echartsOptions'
   export default {
     name: 'priceSales',
     components: {
       [YearMonthPicker.name]: YearMonthPicker,
-      [CategoryPicker.name]: CategoryPicker
+      [CategoryPicker.name]: CategoryPicker,
+      [PriceRange.name]: PriceRange
     },
     data() {
       return {
         loading: false,
         change_flag: 1,
         shopList: [],
-        min_prices: [0, 101, 1001, 10001],
-        max_prices: [100, 1000, 10000, 50000],
         params: {
           cat_id: 0,
           shop_id: 0,
           year: '',
           month: '',
           type: 1
-        }
+        },
+        priceRange: [[0, 100], [101, 1000], [1001, 10000], [10001, 50000]]
       }
     },
     mounted() {
@@ -87,6 +91,11 @@
       shopChange() {
         this.change_flag++
       },
+      /** 价格区间发生改变 */
+      handleRriceRangeChanged(range) {
+        this.priceRange = range
+        this.GET_PriceSalesData()
+      },
       /** 获取店铺列表 */
       GET_ShopList() {
         API_Shop.getShopList().then(response => {
@@ -97,12 +106,12 @@
       /** 获取价格销量数据 */
       GET_PriceSalesData() {
         this.loading = true
-        this.params.minprice = this.min_prices.join(',')
-        this.params.maxprice = this.max_prices.join(',')
+        this.params.minprice = this.priceRange.map((item, index) => item[0]).join(',')
+        this.params.maxprice = this.priceRange.map((item, index) => item[1]).join(',')
         API_Statistics.getPriceSales(this.params).then(response => {
           this.loading = false
-          const xAxisData = this.min_prices.map((item, index) => {
-            return `${item}${this.max_prices[index] !== undefined ? '-' + this.max_prices[index] : ''}元`
+          const xAxisData = this.priceRange.map((item, index) => {
+            return `${item[0]} - ${item[1]}元`
           })
           this.echarts.setOption(echartsOptions({
             titleText: '价格销量分布',
