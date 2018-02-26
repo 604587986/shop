@@ -9,7 +9,7 @@
       <template slot="table-columns">
         <el-table-column type="index" width="150" label="排名"/>
         <el-table-column prop="name" label="商品名称"/>
-        <el-table-column prop="num" label="下单量"/>
+        <el-table-column prop="num" label="商品销量"/>
       </template>
     </en-tabel-layout>
   </div>
