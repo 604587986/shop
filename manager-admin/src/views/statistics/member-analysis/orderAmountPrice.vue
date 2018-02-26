@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <div id="price-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
@@ -29,6 +29,7 @@
     props: ['params', 'curTab'],
     data() {
       return {
+        loading: false,
         /** 列表数据 */
         tableData: null
       }
@@ -36,19 +37,14 @@
     mounted() {
       this.$nextTick(() => {
         this.echarts = this.$echarts.init(document.getElementById('price-chart'))
-        this.GET_MemberAmountPrice()
       })
     },
     watch: {
       curTab() {
         this.GET_MemberAmountPrice()
       },
-      'params.end_date': function() {
-        this.GET_MemberAmountPrice()
-      },
-      'params.shop_id': function() {
-        this.GET_MemberAmountPrice()
-      }
+      'params.end_date': 'GET_MemberAmountPrice',
+      'params.shop_id': 'GET_MemberAmountPrice'
     },
     methods: {
       /** 金额格式化 */
@@ -57,8 +53,9 @@
       },
       /** 获取会员下单量 */
       GET_MemberAmountPrice() {
-        if (this.curTab !== 'price') return
+        if (this.curTab !== 'price' || this.loading) return
         API_Statistics.memberPriceNum(this.params).then(response => {
+          this.loading = false
           const data = response.data.sort((x, y) => x.price < y.price)
           this.tableData = data
           const _data = data.map(item => item.price)
@@ -74,7 +71,10 @@
             seriesData: _data
           }))
           this.echarts.resize()
-        }).catch(error => console.log(error))
+        }).catch(error => {
+          this.loading = false
+          console.log(error)
+        })
       }
     }
   }

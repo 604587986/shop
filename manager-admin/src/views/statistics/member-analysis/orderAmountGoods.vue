@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <div id="goods-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
@@ -28,6 +28,7 @@
     props: ['params', 'curTab'],
     data() {
       return {
+        loading: false,
         /** 列表数据 */
         tableData: null
       }
@@ -35,25 +36,22 @@
     mounted() {
       this.$nextTick(() => {
         this.echarts = this.$echarts.init(document.getElementById('goods-chart'))
-        this.GET_MemberAmountGoods()
       })
     },
     watch: {
       curTab() {
         this.GET_MemberAmountGoods()
       },
-      'params.end_date': function() {
-        this.GET_MemberAmountGoods()
-      },
-      'params.shop_id': function() {
-        this.GET_MemberAmountGoods()
-      }
+      'params.end_date': 'GET_MemberAmountGoods',
+      'params.shop_id': 'GET_MemberAmountGoods'
     },
     methods: {
       /** 获取会员下单量 */
       GET_MemberAmountGoods() {
-        if (this.curTab !== 'goods') return
+        if (this.curTab !== 'goods' || this.loading) return
+        this.loading = true
         API_Statistics.memberGoodsNum(this.params).then(response => {
+          this.loading = false
           const data = response.data.sort((x, y) => x.num < y.num)
           this.tableData = data
           const _data = data.map(item => item.num)
@@ -69,7 +67,10 @@
             seriesData: _data
           }))
           this.echarts.resize()
-        }).catch(error => console.log(error))
+        }).catch(error => {
+          this.loading = false
+          console.log(error)
+        })
       }
     }
   }
