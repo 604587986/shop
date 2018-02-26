@@ -78,7 +78,6 @@
     methods: {
       /** 年月份发生变化 */
       yearMonthChanged(object) {
-        console.log(object)
         this.params.year = object.year
         this.params.month = object.month
         this.params.type = object.type === 'month' ? 1 : 2
