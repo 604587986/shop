@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <div id="order-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
@@ -28,6 +28,7 @@
     props: ['params', 'curTab'],
     data() {
       return {
+        loading: false,
         /** 列表数据 */
         tableData: null
       }
@@ -41,18 +42,16 @@
       curTab() {
         this.GET_MemberAmountOrder()
       },
-      'params.end_date': function() {
-        this.GET_MemberAmountOrder()
-      },
-      'params.shop_id': function() {
-        this.GET_MemberAmountOrder()
-      }
+      'params.end_date': 'GET_MemberAmountOrder',
+      'params.shop_id': 'GET_MemberAmountOrder'
     },
     methods: {
       /** 获取会员下单量 */
       GET_MemberAmountOrder() {
-        if (this.curTab !== 'order') return
+        if (this.curTab !== 'order' || this.loading) return
+        this.loading = true
         API_Statistics.memberOrderNum(this.params).then(response => {
+          this.loading = false
           const data = response.data.sort((x, y) => x.num < y.num)
           this.tableData = data
           const _data = data.map(item => item.num)
@@ -68,7 +67,10 @@
             seriesData: _data
           }))
           this.echarts.resize()
-        }).catch(error => console.log(error))
+        }).catch(error => {
+          this.loading = false
+          console.log(error)
+        })
       }
     }
   }
