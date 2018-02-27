@@ -21,7 +21,7 @@
   import echartsOptions from '../echartsOptions'
   import { Foundation } from '@/framework'
   export default {
-    name: 'orderAmountGoods',
+    name: 'hotGoodsPrice',
     components: {
       [TableLayout.name]: TableLayout
     },

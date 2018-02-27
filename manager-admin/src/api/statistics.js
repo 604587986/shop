@@ -175,3 +175,53 @@ export function getGoodsCollectTop(params) {
     }).catch(error => reject(error))
   })
 }
+
+/** 行业分析 */
+
+/**
+ * 获取行业规模下单量
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getIndustryScaleOrder(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/industryStatistics/industry-order.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取行业规模下单商品数量
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getIndustryScaleGoods(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/industryStatistics/industry-order.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取行业规模下单金额
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getIndustryScalePrice(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/industryStatistics/industry-order.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
