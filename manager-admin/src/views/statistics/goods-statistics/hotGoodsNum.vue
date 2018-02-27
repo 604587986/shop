@@ -20,7 +20,7 @@
   import { TableLayout } from '@/components'
   import echartsOptions from '../echartsOptions'
   export default {
-    name: 'orderAmountOrder',
+    name: 'hotGoodsNum',
     components: {
       [TableLayout.name]: TableLayout
     },
