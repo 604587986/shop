@@ -1,0 +1,44 @@
+<template>
+  <div style="display: inline-block">
+    <el-select
+      v-model="shop_id"
+      placeholder="请选择"
+      @change="handleShopChanged"
+      style="width: 150px"
+    >
+      <el-option label="全平台" :value="0"/>
+      <el-option
+        v-for="item in shopList"
+        :key="item.shop_id"
+        :label="item.shop_name"
+        :value="item.shop_id"/>
+    </el-select>
+  </div>
+</template>
+
+<script>
+  import * as API_Shop from '@/api/shop'
+  export default {
+    name: 'EnShopPicker',
+    data() {
+      return {
+        shop_id: 0,
+        shopList: []
+      }
+    },
+    created() {
+      API_Shop.getShopList().then(response => {
+        this.shopList = response.data
+      }).catch(error => console.log(error))
+    },
+    methods: {
+      handleShopChanged() {
+        this.$emit('changed', this.shop_id)
+      }
+    }
+  }
+</script>
+
+<style type="text/scss" lang="scss" scoped>
+
+</style>
