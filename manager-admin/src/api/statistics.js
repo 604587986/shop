@@ -225,3 +225,21 @@ export function getIndustryScalePrice(params) {
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
+
+/**
+ * 获取概括总览数据
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGeneralityOverviewData(params) {
+  params.category_id = params.cat_id
+  params.store_id = params.shop_id
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/industryStatistics/collect-data.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
