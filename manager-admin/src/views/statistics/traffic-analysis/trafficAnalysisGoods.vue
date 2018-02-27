@@ -1,16 +1,18 @@
 <template>
   <div class="container">
-    <div slot="header" class="chart-header">
-      <div class="chart-header-item">
-        <span>订单周期：</span>
-        <en-year-month-picker @changed="handleYearMonthChanged"/>
+    <el-card>
+      <div slot="header" class="chart-header">
+        <div class="chart-header-item">
+          <span>订单周期：</span>
+          <en-year-month-picker @changed="handleYearMonthChanged"/>
+        </div>
+        <div class="chart-header-item">
+          <span>店铺：</span>
+          <en-shop-picker @changed="handleShopChanged"/>
+        </div>
       </div>
-      <div class="chart-header-item">
-        <span>店铺：</span>
-        <en-shop-picker @changed="handleShopChanged"/>
-      </div>
-    </div>
-    <div id="traffic-analysis-goods-chart" style="height: 300px"></div>
+      <div id="traffic-analysis-goods-chart" style="height: 300px"></div>
+    </el-card>
   </div>
 </template>
 
