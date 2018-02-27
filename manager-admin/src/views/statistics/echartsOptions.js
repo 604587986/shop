@@ -38,7 +38,7 @@ export default function(options) {
     series: [
       {
         name: options.seriesName || '数量',
-        type: 'bar',
+        type: options.seriesType || 'bar',
         barWidth: '60%',
         data: options.seriesData || []
       }
