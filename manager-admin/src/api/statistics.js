@@ -276,12 +276,21 @@ export function getTrafficAnalysisData(params) {
  * @returns {Promise<any>}
  */
 export function getTrafficAnalysisGoodsData(params) {
+  params.top_num = 10
+  params.store_id = params.shop_id
   return new Promise((resolve, reject) => {
     request({
       url: 'b2b2c/admin/flowStatistics/get-goods-flow-statistics.do',
       method: 'get',
       loading: false,
       params
-    }).then(response => resolve(response)).catch(error => reject(error))
+    }).then(response => {
+      const _response = response
+      _response.data = response.data.map(item => {
+        item.name = item.goods_name
+        return item
+      })
+      resolve(_response)
+    }).catch(error => reject(error))
   })
 }
