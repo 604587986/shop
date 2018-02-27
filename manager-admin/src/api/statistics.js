@@ -243,3 +243,45 @@ export function getGeneralityOverviewData(params) {
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
+
+/** 流量分析 */
+/**
+ * 获取流量分析数据
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getTrafficAnalysisData(params) {
+  params.statistics_type = params.type
+  params.store_id = params.shop_id
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/flowStatistics/get-flow-statistics.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = response.data.map(item => {
+        item.date = item.day_num
+        return item
+      })
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取商品流量数据
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getTrafficAnalysisGoodsData(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/flowStatistics/get-goods-flow-statistics.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
