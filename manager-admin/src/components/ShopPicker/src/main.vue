@@ -33,7 +33,8 @@
     },
     methods: {
       handleShopChanged() {
-        this.$emit('changed', this.shop_id)
+        const shop = this.shopList.filter(item => item.shop_id === this.shop_id)
+        this.$emit('changed', shop[0] ? shop[0] : {})
       }
     }
   }

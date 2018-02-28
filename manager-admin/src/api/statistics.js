@@ -367,3 +367,20 @@ export function getSalesRevenueStatistics(params) {
   })
 }
 
+/**
+ * 获取区域分析
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getRegionAnalysis(params) {
+  params.store_id = params.shop_id
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/regionOrderStatistics/region-type-list-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
