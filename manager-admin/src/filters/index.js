@@ -137,3 +137,31 @@ export function unixToDate(unix, format) {
   for (const k in o) if (new RegExp('(' + k + ')').test(_format)) _format = _format.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
   return _format
 }
+
+/**
+ * 根据订单状态码返回订单状态
+ * @param status_code
+ * @returns {string}
+ */
+export function unixOrderStatus(status_code) {
+  switch (status_code) {
+    case 'NEW':
+      return '新订单'
+    case 'INTODB_ERROR':
+      return '入库失败'
+    case 'CONFIRM':
+      return '已确认'
+    case 'PAID_OFF':
+      return '已付款'
+    case 'SHIPPED':
+      return '已发货'
+    case 'ROG':
+      return '已收货'
+    case 'COMPLETE':
+      return '已完成'
+    case 'CANCELLED':
+      return '已取消'
+    case 'AFTER_SERVICE':
+      return '售后中'
+  }
+}
