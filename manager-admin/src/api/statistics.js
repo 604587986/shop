@@ -294,3 +294,60 @@ export function getTrafficAnalysisGoodsData(params) {
     }).catch(error => reject(error))
   })
 }
+
+/** 其它统计 */
+/**
+ * 下单金额
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getOrderStatisticsPrice(params) {
+  params.store_id = params.shop_id
+  params.cycle_type = params.type
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/salesStatis/get-sale-money-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 下单金额表格数据
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getOrderStatisticsPrideTable(params) {
+  params.store_id = params.shop_id
+  params.ststus = params.order_status
+  params.cycle_type = params.type
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/salesStatis/list-json.do',
+      method: 'post',
+      loading: false,
+      params
+    }).then(resposne => resolve(resposne)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 下单量
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getOrderStatisticsOrder(params) {
+  params.store_id = params.shop_id
+  params.cycle_type = params.type
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/salesStatis/get-sale-num-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
