@@ -55,8 +55,8 @@
         this.changed_flag++
       },
       /** 店铺发生改变 */
-      handleShopChanged(shop_id) {
-        this.params.shop_id = shop_id
+      handleShopChanged(shop) {
+        this.params.shop_id = shop.shop_id
         this.changed_flag++
       },
       GET_TrafficAnalysisGoodsData() {
