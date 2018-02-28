@@ -1,6 +1,6 @@
 <template>
   <div style="display: inline-block">
-    <el-select v-model="date_type" placeholder="请选择" style="width: 100px">
+    <el-select v-if="optional" v-model="date_type" placeholder="请选择" style="width: 100px">
       <el-option label="按月" value="month"/>
       <el-option label="按年" value="year"/>
     </el-select>
@@ -29,6 +29,10 @@
       clearable: {
         type: Boolean,
         default: false
+      },
+      optional: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
