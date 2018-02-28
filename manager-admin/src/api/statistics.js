@@ -351,3 +351,19 @@ export function getOrderStatisticsOrder(params) {
   })
 }
 
+/**
+ * 获取销售收入统计
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getSalesRevenueStatistics(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/salesStatis/sale-income-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
