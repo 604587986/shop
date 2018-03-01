@@ -402,6 +402,40 @@ export function getOrderPriceDistribution(params) {
 }
 
 /**
+ * 获取购买时段分布
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getBuyTimeDistribution(params) {
+  params.store_id = params.shop_id
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/memberStatistics/get-buy-time-dis.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => console.log(error))
+  })
+}
+
+/**
+ * 获取购买频次数据
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getBuyFrequency(params) {
+  params.store_id = params.shop_id
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/memberStatistics/get-buy-fre.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
  * 获取退款统计
  * @param params
  * @returns {Promise<any>}
