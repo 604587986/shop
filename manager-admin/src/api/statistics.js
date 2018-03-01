@@ -384,3 +384,38 @@ export function getRegionAnalysis(params) {
   })
 }
 
+/**
+ * 获取客单价分布
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getOrderPriceDistribution(params) {
+  params.store_id = params.shop_id
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/memberStatistics/get-order-price-dis.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取退款统计
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getRefundStatisticsData(params) {
+  params.cycle_type = params.type
+  params.store_id = params.shop_id
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'b2b2c/admin/orderReturnedStatistics/returned-statistics-json.do',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
