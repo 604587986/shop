@@ -16,10 +16,10 @@
           <regional-analysis-member :params="params" :cur_tab="cur_tab" :changed_flag="changed_flag"/>
         </el-tab-pane>
         <el-tab-pane label="下单量" name="num">
-
+          <regional-analysis-num :params="params" :cur_tab="cur_tab" :changed_flag="changed_flag"/>
         </el-tab-pane>
         <el-tab-pane label="下单金额" name="price">
-
+          <regional-analysis-price :params="params" :cur_tab="cur_tab" :changed_flag="changed_flag"/>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -29,14 +29,18 @@
 <script>
   import * as API_Statistics from '@/api/statistics'
   import { YearMonthPicker, ShopPicker } from '@/components'
-  import regionalAnalysisMember from './regionalAnalysisMember'
+  import RegionalAnalysisMember from './regionalAnalysisMember'
+  import RegionalAnalysisNum from './regionalAnalysisNum'
+  import RegionalAnalysisPrice from './regionalAnalysisPrice'
   import echartMapChina from '@/assets/echart-map-china'
   export default {
     name: 'regionalAnalysis',
     components: {
       [YearMonthPicker.name]: YearMonthPicker,
       [ShopPicker.name]: ShopPicker,
-      RegionalAnalysisMember: regionalAnalysisMember
+      RegionalAnalysisMember,
+      RegionalAnalysisNum,
+      RegionalAnalysisPrice
     },
     data() {
       return {
@@ -46,7 +50,6 @@
           year: '',
           month: '',
           shop_id: 0,
-          type: 1,
           cycle_type: 1
         }
       }
