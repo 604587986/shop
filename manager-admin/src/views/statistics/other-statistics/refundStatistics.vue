@@ -77,7 +77,6 @@
             seriesData: _data
           }))
           this.echarts.resize()
-          console.log(response)
         }).catch(error => {
           this.loading = false
           console.log(error)
