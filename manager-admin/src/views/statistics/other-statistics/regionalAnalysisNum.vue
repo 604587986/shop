@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="regional-analysis-member-chart" style="height: 600px"></div>
+    <div id="regional-analysis-num-chart" style="height: 600px"></div>
   </div>
 </template>
 
@@ -34,30 +34,30 @@
       }
     },
     watch: {
-      'changed_flag': 'GET_RegionalAnalysisMember',
-      'cur_tab': 'GET_RegionalAnalysisMember'
+      'changed_flag': 'GET_RegionalAnalysisNum',
+      'cur_tab': 'GET_RegionalAnalysisNum'
     },
     mounted() {
       this.$nextTick(() => {
-        this.echarts = this.$echarts.init(document.getElementById('regional-analysis-member-chart'))
-        this.GET_RegionalAnalysisMember()
+        this.echarts = this.$echarts.init(document.getElementById('regional-analysis-num-chart'))
+        this.GET_RegionalAnalysisNum()
       })
     },
     methods: {
       /** 获取下单会员数据 */
-      GET_RegionalAnalysisMember() {
-        if (this.cur_tab !== 'member' || this.loading) return
+      GET_RegionalAnalysisNum() {
+        if (this.cur_tab !== 'num' || this.loading) return
         this.loading = true
         const params = {
           ...this.params,
-          type: 1
+          type: 2
         }
         API_Statistics.getRegionAnalysis(params).then(response => {
           this.loading = false
           const _data = response.message
           this.echarts.setOption(echartsOptionsMap({
-            titleText: '下单会员分布',
-            seriesName: '下单会员数量',
+            titleText: '下单量分布',
+            seriesName: '下单数量',
             seriesData: _data
           }))
           this.echarts.resize()
