@@ -84,14 +84,27 @@
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  data() {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  import { AlertModule } from 'vux'
+  export default {
+    name: 'HelloWorld',
+    data() {
+      return {
+        msg: 'Welcome to Your Vue.js App'
+      }
+    },
+    mounted() {
+      AlertModule.show({
+        title: 'VUX is Cool',
+        content: 'Do you agree?',
+        onShow() {
+          console.log('Module: I\'m showing')
+        },
+        onHide() {
+          console.log('Module: I\'m hiding now')
+        }
+      })
     }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
