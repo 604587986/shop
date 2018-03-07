@@ -41,7 +41,7 @@
     methods: {
       GET_RegionData(region_ids = []) {
         const _region_id = region_ids[region_ids.length - 1] || 0
-        this.$jsonp(`http://localhost:8080/javashop/api/base/region/get-children.do?regionid=${_region_id}`)
+        this.$jsonp(`${process.env.BASE_API}/api/base/region/get-children.do?regionid=${_region_id}`)
           .then(response => {
             if (!response || !response[0]) return
             if (_region_id !== 0) {

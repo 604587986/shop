@@ -13,7 +13,8 @@
         type: String
       },
       api: {
-        type: String
+        type: String,
+        default: process.env.BASE_API
       },
       deData: {
         type: Array
