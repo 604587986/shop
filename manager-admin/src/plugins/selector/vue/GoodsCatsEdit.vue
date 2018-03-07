@@ -10,7 +10,7 @@
     props: {
       api: {
         type: String,
-        default: 'http://localhost:8080/javashop/goods-info/category/@id/children.do?format=plugin'
+        default: `${process.env.BASE_API}/goods-info/category/@id/children.do?format=plugin`
       },
       canEdit: {
         type: Boolean,

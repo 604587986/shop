@@ -5,7 +5,6 @@
       canEdit
       :add-cat="handleAddCat"
       :item-btns="itemBtns"
-      api="http://localhost:9090/javashop/goods-info/category/@id/children.do?format=plugin"
     />
     <el-dialog :title="paramsForm.paramsTitle" width="500px" :visible.sync="dialogParamsVisible">
       <div style="width: 100%; text-align: center">
