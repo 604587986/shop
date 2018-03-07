@@ -4,7 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import 'normalize.css/normalize.css' // A modern alternative to CSS resets
+import * as filters from '@/utils/filters'
+
 Vue.config.productionTip = false
+
+/** 注册全局filters */
+Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
 
 /* eslint-disable no-new */
 new Vue({
