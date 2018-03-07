@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
+import 'vant/lib/vant-css/index.css'
 import * as filters from '@/utils/filters'
 
 Vue.config.productionTip = false
