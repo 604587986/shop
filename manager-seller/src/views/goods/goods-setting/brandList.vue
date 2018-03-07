@@ -83,7 +83,7 @@
         <!--品牌图片-->
         <el-form-item label="品牌图片" prop="logo">
           <el-upload
-            action="http://localhost:9090/javashop/core/upload.do"
+            :action="upload_api"
             list-type="picture"
             :on-success="onImgUploadSuccess"
             :on-remove="onImgRemoved"
@@ -114,6 +114,7 @@
 
 <script>
   import * as API_brand from '@/api/brand'
+  import * as API_Common from '@/api/common'
   import { TableLayout, TableSearch, UE } from '@/components'
   export default {
     name: 'brandList',
@@ -173,7 +174,10 @@
           initialFrameWidth: null,
           initialFrameHeight: 125,
           zIndex: 20000
-        }
+        },
+
+        /** 上传API */
+        upload_api: API_Common.getUploadApi()
       }
     },
     mounted() {
