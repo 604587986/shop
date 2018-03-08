@@ -3,9 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-import 'vant/lib/vant-css/index.css'
+import 'normalize.css/normalize.css' // 引入normalize重置样式文件
+import 'vant/lib/vant-css/index.css' // 引入vant的css文件
 import * as filters from '@/utils/filters'
 
 Vue.config.productionTip = false
@@ -17,6 +18,7 @@ Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
