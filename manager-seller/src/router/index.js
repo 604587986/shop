@@ -57,30 +57,11 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'goods-list', component: _import('goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
-      {
-        path: '/goods/goods-setting',
-        component: _import('goods/goods-setting/index'),
-        redirect: '/goods/goods-setting/category-list',
-        name: 'goodsSetting',
-        meta: { title: 'goodsSetting' },
-        children: [
-          { path: 'category-list', component: _import('goods/goods-setting/categoryList'), name: 'categoryList', meta: { title: 'categoryList' }},
-          { path: 'brand-list', component: _import('goods/goods-setting/brandList'), name: 'brandList', meta: { title: 'brandList' }},
-          { path: 'spec-list', component: _import('goods/goods-setting/specList'), name: 'specList', meta: { title: 'specList' }}
-        ]
-      },
-      { path: 'goods-audit', component: _import('goods/goodsAudit'), name: 'goods-audit', meta: { title: 'goodsAudit' }},
-      {
-        path: '/goods/tag-manage',
-        component: _import('goods/tag-manage/index'),
-        redirect: '/goods/tag-manage/tag-list',
-        name: 'tagManage',
-        meta: { title: 'tagManage' },
-        children: [
-          { path: 'tag-list', component: _import('goods/tag-manage/tagList'), name: 'taglist', meta: { title: 'tagList' }}
-          // { path: 'tag-goods-set', component: _import('goods/tag-manage/tagGoodsSet'), name: 'tagGoodsSet', meta: { title: 'tagGoodsSet' }}
-        ]
-      }
+      { path: 'draft-list', component: _import('goods/draftList'), name: 'draftList', meta: { title: 'draftList' }},
+      { path: 'category-manage', component: _import('goods/categoryManage'), name: 'categoryManage', meta: { title: 'categoryManage' }},
+      { path: 'tag-manage', component: _import('goods/tagManage'), name: 'tagManage', meta: { title: 'tagManage' }},
+      { path: 'recycle-station', component: _import('goods/recycleStation'), name: 'recycleStation', meta: { title: 'recycleStation' }},
+      { path: 'understock', component: _import('goods/understock'), name: 'understock', meta: { title: 'understock' }}
     ]
   },
   // 订单管理
@@ -456,17 +437,6 @@ export const asyncRouterMap = [
           { path: 'clear-example-data', component: _import('development/tool-manage/clearExampleData'), name: 'clearExampleData', meta: { title: 'clearExampleData' }}
         ]
       },
-      // {
-      //   path: '/development/site-theme-manage',
-      //   component: _import('development/site-theme-manage/index'),
-      //   redirect: '/development/site-theme-manage/frontdesk-theme',
-      //   name: 'siteThemeManage',
-      //   meta: { title: 'SiteThemeManage' },
-      //   children: [
-      //     { path: 'frontdesk-theme', component: _import('development/site-theme-manage/frontdeskTheme'), name: 'frontdeskTheme', meta: { title: 'frontdeskTheme' }},
-      //     { path: 'backstage-theme', component: _import('development/site-theme-manage/backstageTheme'), name: 'backstageTheme', meta: { title: 'backstageTheme' }}
-      //   ]
-      // },
       {
         path: '/development/article-manage',
         component: _import('development/article-manage/index'),

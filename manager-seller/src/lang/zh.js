@@ -4,14 +4,11 @@ export default {
 
     goods: '商品管理',
     goodsList: '商品列表',
-    goodsSetting: '商品设置',
-    categoryList: '分类列表',
-    brandList: '品牌列表',
-    specList: '规格列表',
+    draftList: '草稿箱',
+    categoryManage: '分类管理',
     tagManage: '标签管理',
-    tagList: '标签列表',
-    tagGoodsSet: '标签商品设置',
-    goodsAudit: '商品审核',
+    recycleStation: '回收站',
+    understock: '预警货品',
 
     order: '订单管理',
     orderList: '订单列表',
