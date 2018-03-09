@@ -50,7 +50,7 @@ $(function () {
 	
 	/** 跳转到邮箱注册 */
 	mobileContent.on('click', '.email-button', function () {
-		window.location.href = '/login/email-register.html'
+		window.location.href = '/email-register.html'
 	})
 	
 	/** 提交注册 */
