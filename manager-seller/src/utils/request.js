@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import PaginationModel from '@/models/PaginationModel'
 
 // 创建axios实例
 const service = axios.create({
@@ -36,12 +37,15 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
   response => {
     closeLoading(response)
-    const _data = response.data
+    let _data = response.data
     if (typeof _data === 'string' && _data.indexOf('window.open(\'/javashop/admin/login.do\',\'_top\')') !== -1) {
       fedLogOut()
       return Promise.reject('登录失效')
     }
-    return response.data
+    if (_data.page_no && _data.page_size && _data.data_total) {
+      _data = new PaginationModel().map(_data)
+    }
+    return _data
   },
   error => {
     closeLoading(error)
