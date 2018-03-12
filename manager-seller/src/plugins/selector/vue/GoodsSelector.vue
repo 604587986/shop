@@ -6,43 +6,66 @@
 import $ from 'jquery'
 import '@/plugins/selector/js/jquery.goodsSelector'
 export default {
-  name: 'EnGoodsSelectorDialog',
+  name: 'EnGoodsSelector',
+  props: {
+    /** 默认数据 */
+    defaultData: {
+      type: Array
+    },
+    /** 最大可选个数 */
+    maxLength: {
+      type: Number,
+      maxLength: 1
+    },
+    /** 弹框开启状态 */
+    show: {
+      type: Boolean,
+      default: false
+    },
+    /** 获取商品列表API */
+    api: {
+      type: String,
+      default: 'shop/seller/goods/search'
+    },
+    /** 获取分类API */
+    cateApi: {
+      type: String,
+      default: '/goods-info/category/children?category=0&string=format'
+    }
+  },
   data() {
     return {
       options: {
+        api: this.api,
         defaultData: this.defaultData,
         maxLength: this.maxLength,
         confirm: data => {
           // 触发回调
-          this.$emit('refreshFunc', data)
+          this.$emit('confirm', data)
         },
         callHideDialog: () => {
-          this.$emit('hideDialogFunc')
+          this.$emit('closed')
         }
       }
     }
   },
-  props: ['defaultData', 'maxLength', 'showDialog', 'mode'],
   methods: {
-    callAdminDialog() {
-      $.GoodsAdminSelector(this.options)
-    },
-    callSellerDialog() {
+    showSelector() {
       $.GoodsAdminSelector(this.options)
     }
   },
   mounted() {
-    if (this.showDialog) {
-      this.mode === 'admin' ? this.callAdminDialog() : this.callSellerDialog()
+    if (this.show) {
+      this.showSelector()
     }
   },
   watch: {
-    showDialog(val) {
+    show(val) {
       if (!val) {
         // 关闭Dialog
         $('#__GSR__ .cancel').click()
       } else {
-        this.mode === 'admin' ? this.callAdminDialog() : this.callSellerDialog()
+        this.showSelector()
       }
     }
   }
