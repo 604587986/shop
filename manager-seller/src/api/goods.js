@@ -13,7 +13,8 @@ import GoodsModel from '@/models/GoodsModel'
 export function getGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/goods/list-json.do',
+      // url: 'shop/admin/goods/list-json.do',
+      url: 'https://www.easy-mock.com/mock/5a09650451a98322935c0ea2/seller/goods/list',
       method: 'get',
       loading: false,
       params

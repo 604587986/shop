@@ -32,6 +32,10 @@ export default class GoodsModel extends DataModel {
   @ServerName('goods_name')
   name
 
+  /** 库存 */
+  @ServerName('goods_balanced')
+  balanced
+
   /** 商品分类名称 */
   @ServerName('category_name')
   category_name
