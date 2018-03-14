@@ -4,9 +4,21 @@
     pagination
     :tableData="tableData"
     :loading="loading"
+    :selectionChange="selectionChange"
   >
     <div slot="toolbar" class="inner-toolbar">
-      <div class="toolbar-btns"></div>
+      <div class="toolbar-btns">
+        <el-button
+          size="mini"
+          type="danger"
+          :disabled="selectionids.length === 0"
+          @click="handleDeleteRecycles()">批量删除</el-button>
+        <el-button
+          size="mini"
+          type="success"
+          :disabled="selectionids.length === 0"
+          @click="handlReductionRecycles()">批量还原</el-button>
+      </div>
       <div class="toolbar-search">
         <en-table-search
           @search="searchEvent"
@@ -34,6 +46,7 @@
     </div>
 
     <template slot="table-columns">
+      <el-table-column  type="selection" />
       <el-table-column label="商品图片" width="120">
         <template slot-scope="scope">
           <img :src="scope.row.image" class="goods-image"/>
@@ -49,12 +62,15 @@
       <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
       <el-table-column prop="brand_name" label="品牌"> </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope">
+        <template slot-scope="scope" width="200">
+          <el-button
+            size="mini"
+            type="success"
+            @click="handlReductionRecycle(scope.$index, scope.row)">还原</el-button>
           <el-button
             size="mini"
             type="danger"
-            :disabled="scope.row.market_enable === 0"
-            @click="handleWithdraw(scope.$index, scope.row)">下架</el-button>
+            @click="handleDeleteRecycle(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </template>
@@ -106,7 +122,10 @@
           goods_sn: '',
           shop_name: '',
           category_id: ''
-        }
+        },
+
+        /** 已选择的回收站商品 */
+        selectionids: []
       }
     },
     mounted() {
@@ -126,13 +145,26 @@
         this.GET_GoodsList()
       },
 
-      /** 单个商品下架操作确认 */
-      handleWithdraw(index, row) {
-        this.$confirm('确认下架吗？', '提示')
-          .then(() => this.DELETE_Goods(row.id))
+      /** 单个商品删除操作确认 */
+      handleDeleteRecycle(index, row) {
+        this.$confirm('确认删除吗？', '提示')
+          .then(() => this.DELETE_Recycles(row.id))
           .catch(() => {})
       },
-
+      /** 批量删除 */
+      handleDeleteRecycles() {
+        this.selectionids.length !== 0 && this.DELETE_Recycles(this.selectionids)
+      },
+      /**  回收站单个商品还原 */
+      handlReductionRecycle(row) {
+        this.$confirm('确认还原吗？', '提示')
+          .then(() => this.ReductionGoods(row.id))
+          .catch(() => {})
+      },
+      /** 批量还原 */
+      handlReductionRecycles() {
+        this.selectionids.length !== 0 && this.ReductionGoods(this.selectionids)
+      },
       /** 销售状态格式化 */
       marketStatus(row, column, cellValue) {
         return row.market_enable === 1 ? '售卖中' : '已下架'
@@ -160,12 +192,12 @@
 
       /** 高级搜索中 分类选择组件值发生改变 */
       categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
+        this.advancedForm.catidegory_id = data.category_id
       },
 
       GET_GoodsList() {
         this.loading = true
-        API_goods.getGoodsList(this.params).then(response => {
+        API_goods.getRecycleGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,
@@ -179,12 +211,25 @@
         })
       },
 
-      /** 下架商品 */
-      DELETE_Goods(ids) {
-        API_goods.underGoods(ids).then(() => {
+      selectionChange(val) {
+        this.selectionids = val.map(item => item.id)
+      },
+      /** 还原回收站商品*/
+      ReductionGoods(ids) {
+        API_goods.RecycleReductionGoods({ ids }).then(response => {
+          this.$message.success('还原成功')
+        }).catch(error => {
+          this.$message.success('还原失败，请稍后再试')
+          console.log(error)
+        })
+      },
+
+      /** 删除回收站商品 */
+      DELETE_Recycles(ids) {
+        API_goods.RecycleDeleteGoods(ids).then(() => {
           this.GET_GoodsList()
-          this.$message.success('下架商品成功！')
-        }).catch(() => this.$message.error('下架商品出错，请稍后再试！'))
+          this.$message.success('删除商品成功！')
+        }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
       }
     }
   }

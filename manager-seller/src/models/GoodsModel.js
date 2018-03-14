@@ -17,15 +17,15 @@ export default class GoodsModel extends DataModel {
   id
 
   /** 商品图片 */
-  @ServerName('thumbnail')
+  @ServerName('goods_image')
   image
 
   /** 商品编号 */
-  @ServerName('sn')
+  @ServerName('goods_sn')
   sn
 
   /** 卖家名称 */
-  @ServerName('seller_name')
+  @ServerName('shop_name')
   seller_name
 
   /** 商品名称 */
@@ -49,6 +49,6 @@ export default class GoodsModel extends DataModel {
   brand_name
 
   /** 商品价格 */
-  @ServerName('price')
+  @ServerName('goods_price')
   price
 }
