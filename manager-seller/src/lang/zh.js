@@ -7,6 +7,7 @@ export default {
     draftList: '草稿箱',
     categoryManage: '分类管理',
     tagManage: '标签管理',
+    tagAdd: '标签商品',
     recycleStation: '回收站',
     understock: '预警货品',
 
