@@ -84,15 +84,11 @@
       this.getTagGoodsList()
     },
     methods: {
-      /**
-       * 显示商品选择器
-       */
+      /**  显示商品选择器*/
       selectgoodslist() {
         this.showDialog = true
       },
-      /**
-       * 保存商品选择器选择的商品
-       */
+      /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
         this.tableData = val
       },
@@ -108,10 +104,7 @@
           console.log(error)
         })
       },
-      /**
-       * 取消参加
-       * @param scope
-       */
+      /**  取消参加 */
       canceljoin(scope) {
         this.tableData.forEach((elem, index) => {
           if (elem.id === scope.row.id) {
@@ -123,9 +116,7 @@
       selectionChange(val) {
         this.selectionids = val.map(item => item.id)
       },
-      /**
-       * 批量取消
-       */
+      /** 批量取消 */
       cancelall() {
         this.selectionids.forEach(key => {
           this.tableData.forEach((elem, index) => {
@@ -136,9 +127,7 @@
           this.$message.success('批量取消成功！')
         })
       },
-      /**
-       * 保存设置
-       */
+      /** 保存设置 */
       savesetup() {
         API_goodsTag.saveTagGoodsList(this.params).then(response => {
           this.loading = false
@@ -161,7 +150,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: felx-start;
+    justify-content: flex-start;
     align-items: center;
   }
   .goodsinfo-txt{

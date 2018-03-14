@@ -23,10 +23,10 @@ export function getTagsList(params) {
 }
 
 /**
- * 2018/3/13
- * 作者:杨培
  * 获取标签商品列表
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function getTagGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
@@ -43,10 +43,10 @@ export function getTagGoodsList(params) {
 }
 
 /**
- * 2018/3/13
- * 作者:杨培
  * 保存标签商品列表
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function saveTagGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({

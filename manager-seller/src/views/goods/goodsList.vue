@@ -231,37 +231,21 @@
           console.log(error)
         })
       },
-      /**
-       * 2018/3/13
-       * 作者:杨培
-       * 仓库中的商品
-       **/
+      /** 仓库中的商品 */
       inWarehouse() {
         // this.params = { }
         this.GET_GoodsList()
       },
-      /**
-       * 2018/3/13
-       * 作者:杨培
-       * 出售中的商品
-       **/
+      /** 出售中的商品 */
       selling() {
         // this.params = { }
         this.GET_GoodsList()
       },
-      /**
-       * 2018/3/13
-       * 作者:杨培
-       * 编辑商品
-       **/
+      /** 编辑商品 */
       handleEditGoods(row) {
         // this.$route.push({ name: '' })
       },
-      /**
-       * 2018/3/13
-       * 作者:杨培
-       * 删除商品
-       **/
+      /** 删除商品 */
       handleDeleteGoods(row) {
         this.$confirm('确认删除此商品, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -277,11 +261,7 @@
           this.$message.info({ message: '已取消删除' })
         })
       },
-      /**
-       * 2018/3/13
-       * 作者:杨培
-       * 库存
-       **/
+      /** 库存 */
       handleStockGoods() {
         this.goodsStockshow = true
         API_goods.getGoodsStockList().then((response) => {
@@ -289,11 +269,7 @@
           this.goodsStockData = response.data.length === 1 ? response.data[0] : response.data
         }).catch(() => this.$message.error('请求库存数据出错，请稍后再试！'))
       },
-      /**
-       * 2018/3/14
-       * 作者:杨培
-       * 保存库存商品
-       **/
+      /** 保存库存商品 */
       reserveStockGoods() {
         API_goods.reserveStockGoods().then((response) => {
           this.goodsStockshow = false

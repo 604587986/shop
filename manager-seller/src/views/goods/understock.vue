@@ -189,11 +189,7 @@
         })
       },
 
-      /**
-       * 2018/3/14
-       * 作者:杨培
-       * 查看库存信息
-       **/
+      /** 查看库存信息 */
       handleWithdraw(ids) {
         this.goodsWarningStockshow = true
         API_goods.getWarningGoodsStockList(ids).then((response) => {

@@ -50,10 +50,10 @@ export function underGoods(params) {
 }
 
 /**
- * 2018/3/13
- * 作者:杨培
  * 商品列表 删除商品
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function deleteGoods(params) {
   const ids = params.toString()
   return new Promise((resolve, reject) => {
@@ -66,11 +66,12 @@ export function deleteGoods(params) {
     }).catch(error => reject(error))
   })
 }
+
 /**
- * 2018/3/14
- * 作者:杨培
  * 获取库存商品数据
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function getGoodsStockList(params) {
   return new Promise((resolve, reject) => {
     request({
@@ -87,10 +88,10 @@ export function getGoodsStockList(params) {
 }
 
 /**
- * 2018/3/14
- * 作者:杨培
  * 保存库存商品
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function reserveStockGoods(params) {
   return new Promise((resolve, reject) => {
     request({
@@ -104,10 +105,10 @@ export function reserveStockGoods(params) {
 }
 
 /**
- * 2018/3/14
- * 作者:杨培
  * 获取草稿箱商品列表
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function getDraftGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
@@ -124,10 +125,10 @@ export function getDraftGoodsList(params) {
 }
 
 /**
- * 2018/3/14
- * 作者:杨培
  * 获取回收站商品列表
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function getRecycleGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
@@ -144,10 +145,11 @@ export function getRecycleGoodsList(params) {
 }
 
 /**
- * 2018/3/14
- * 作者:杨培
  * 回收站 还原商品
- **/
+ * @param params
+ * @returns {Promise<any>}
+ * @constructor
+ */
 export function RecycleReductionGoods(params) {
   return new Promise((resolve, reject) => {
     request({
@@ -161,10 +163,11 @@ export function RecycleReductionGoods(params) {
 }
 
 /**
- * 2018/3/14
- * 作者:杨培
  * 回收站 删除商品
- **/
+ * @param params
+ * @returns {Promise<any>}
+ * @constructor
+ */
 export function RecycleDeleteGoods(params) {
   const ids = params.toString()
   return new Promise((resolve, reject) => {
@@ -179,10 +182,10 @@ export function RecycleDeleteGoods(params) {
 }
 
 /**
- * 2018/3/14
- * 作者:杨培
  * 获取预警商品列表
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function getWarningGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
@@ -199,10 +202,10 @@ export function getWarningGoodsList(params) {
 }
 
 /**
- * 2018/3/14
- * 作者:杨培
  * 查看预警商品库存信息
- **/
+ * @param params
+ * @returns {Promise<any>}
+ */
 export function getWarningGoodsStockList(params) {
   return new Promise((resolve, reject) => {
     request({

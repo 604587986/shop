@@ -151,29 +151,17 @@
           .then(() => this.DELETE_Recycles(row.id))
           .catch(() => {})
       },
-      /**
-       * 2018/3/14
-       * 作者:杨培
-       * 批量删除
-       **/
+      /** 批量删除 */
       handleDeleteRecycles() {
         this.selectionids.length !== 0 && this.DELETE_Recycles(this.selectionids)
       },
-      /**
-       * 2018/3/14
-       * 作者:杨培
-       *  回收站单个商品还原
-       **/
+      /**  回收站单个商品还原 */
       handlReductionRecycle(row) {
         this.$confirm('确认还原吗？', '提示')
           .then(() => this.ReductionGoods(row.id))
           .catch(() => {})
       },
-      /**
-       * 2018/3/14
-       * 作者:杨培
-       * 批量还原
-       **/
+      /** 批量还原 */
       handlReductionRecycles() {
         this.selectionids.length !== 0 && this.ReductionGoods(this.selectionids)
       },
@@ -223,18 +211,10 @@
         })
       },
 
-      /**
-       * 2018/3/14
-       * 作者:杨培
-       **/
       selectionChange(val) {
         this.selectionids = val.map(item => item.id)
       },
-      /**
-       * 2018/3/14
-       * 作者:杨培
-       * 还原回收站商品
-       **/
+      /** 还原回收站商品*/
       ReductionGoods(ids) {
         API_goods.RecycleReductionGoods({ ids }).then(response => {
           this.$message.success('还原成功')

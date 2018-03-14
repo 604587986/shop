@@ -34,27 +34,30 @@
     </div>
 
     <template slot="table-columns">
-      <el-table-column label="商品图片" width="120">
+      <el-table-column label="分类名称" width="120" prop="category_name">
+        <!--<template slot-scope="scope">-->
+          <!--<img :src="scope.row.category_name" class="goods-image"/>-->
+        <!--</template>-->
+      </el-table-column>
+      <el-table-column prop="category_sort" label="排序" />
+      <el-table-column  label="显示">
         <template slot-scope="scope">
-          <img :src="scope.row.image" class="goods-image"/>
+           <span style="color: #5CB85C" v-if="scope.row.is_show === 1"><i class="el-icon-success"></i>已显示</span>
+           <span style="color: #333333" v-if="scope.row.is_show === 0"><i class="el-icon-success"></i>未显示</span>
         </template>
       </el-table-column>
-      <el-table-column prop="sn" label="商品编号" width="180"/>
-      <el-table-column prop="seller_name" label="店铺名称" width="120"/>
-      <el-table-column prop="name" label="商品名称" align="left" width="450"/>
-      <el-table-column prop="category_name" label="商品分类"/>
-      <el-table-column label="商品价格" width="120">
-        <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
-      </el-table-column>
-      <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-      <el-table-column prop="brand_name" label="品牌"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="danger"
-            :disabled="scope.row.market_enable === 0"
-            @click="handleWithdraw(scope.$index, scope.row)">下架</el-button>
+            type="success"
+            @click="handleWithdraw(scope.$index, scope.row)">编辑</el-button><el-button
+            size="mini"
+            type="warning"
+            @click="handleWithdraw(scope.$index, scope.row)">删除</el-button><el-button
+            size="mini"
+            type="primary"
+            @click="handleWithdraw(scope.$index, scope.row)">新增下级</el-button>
         </template>
       </el-table-column>
     </template>
