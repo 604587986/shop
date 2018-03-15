@@ -15,6 +15,10 @@ module.exports = {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_xir5egvl2xaxxbt9.css' }
+    ],
+    script: [
+      { type: 'text/javascript', src: 'https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js' },
+      { type: 'text/javascript', src: '/layer/layer.js' }
     ]
   },
   /*
@@ -40,13 +44,9 @@ module.exports = {
     },
     extractCSS: {
       allChunks: true
-    },
-    plugins: [
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery'
-      })
-    ]
-  }
+    }
+  },
+  plugins: [
+    { src: '~plugins/vue-layer', ssr: false }
+  ]
 }

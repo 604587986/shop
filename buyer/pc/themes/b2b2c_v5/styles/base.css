@@ -88,3 +88,12 @@ img {
 .fr {
   float: right;
 }
+
+
+/** layer skin */
+.layer-skin-custom-msg {
+  border: 0 !important;
+  -webkit-box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
+  -moz-box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
+  box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
+}
