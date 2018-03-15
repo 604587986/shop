@@ -19,7 +19,7 @@
       </div>
       <div class="login-banner">
         <div class="bg-banner">
-          <div class="banner-img" :style="{background: 'url('+ login_banner +') no-repeat center center;background-size: cover'}"></div>
+          <div class="banner-img"></div>
           <!-- 登录页 -->
           <div class="login-box">
             <div class="login-form">
@@ -138,7 +138,7 @@
     methods: {
       /** 登陆事件 */
       handleLogin() {
-        console.log(this.login_type)
+        this.$message.success('登录方式：', this.login_type)
       }
     }
   }
@@ -187,6 +187,8 @@
       margin: 0 auto;
       position: relative;
       .banner-img {
+        background: url(http://data.andste.cc/developers/web/temp/images/background-banner.jpg) no-repeat center center;
+        background-size: cover;
         height: 560px;
       }
       .login-box {
