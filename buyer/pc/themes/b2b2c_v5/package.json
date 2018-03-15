@@ -1,0 +1,30 @@
+{
+  "name": "b2b2c_v5",
+  "version": "1.0.0",
+  "description": "Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。",
+  "author": "Andste <andste.cc@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.0",
+    "nuxt": "^1.4.0"
+  },
+  "devDependencies": {
+    "ajv": "^6.2.1",
+    "babel-eslint": "^8.2.1",
+    "eslint": "^4.15.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-vue": "^4.0.0",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.7",
+    "vue-style-loader": "^4.0.2"
+  }
+}
