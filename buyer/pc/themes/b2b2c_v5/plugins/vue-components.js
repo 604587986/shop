@@ -6,6 +6,7 @@ import {
   Footer,
   Header,
   Search,
+  Settleup,
   Shortcut
 } from '@/components'
 
@@ -15,4 +16,5 @@ Vue.component(Category.name, Category)
 Vue.component(Footer.name, Footer)
 Vue.component(Header.name, Header)
 Vue.component(Search.name, Search)
+Vue.component(Settleup.name, Settleup)
 Vue.component(Shortcut.name, Shortcut)

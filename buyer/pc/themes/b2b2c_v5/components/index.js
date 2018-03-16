@@ -4,6 +4,7 @@ import Category from './Category'
 import Footer from './Footer'
 import Header from './Header'
 import Search from './Search'
+import Settleup from './Settleup'
 import Shortcut from './Shortcut'
 
 export {
@@ -12,5 +13,6 @@ export {
   Footer,
   Header,
   Search,
+  Settleup,
   Shortcut
 }
