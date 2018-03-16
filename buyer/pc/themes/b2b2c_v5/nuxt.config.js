@@ -1,9 +1,10 @@
 const webpack = require('webpack')
 
 module.exports = {
-  /*
-  ** Headers of the page
-  */
+  env: {
+    BASE_API: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer',
+    UPLOAD_API: 'http://localhost:8080'
+  },
   head: {
     title: '商城首页-Javashop多店铺示例商城',
     meta: [
@@ -21,17 +22,8 @@ module.exports = {
       { type: 'text/javascript', src: '/layer/layer.js' }
     ]
   },
-  /*
-  ** Customize the progress bar color
-  */
   loading: { color: '#29d' },
-  /*
-  ** Build configuration
-  */
   build: {
-    /*
-    ** Run ESLint on save
-    */
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
@@ -44,9 +36,17 @@ module.exports = {
     },
     extractCSS: {
       allChunks: true
-    }
+    },
+    vendor: ['axios'],
+    plugins: [],
+    publicPath: ''
   },
+  css: [
+    '~styles/normalize.css',
+    '~styles/base.css'
+  ],
   plugins: [
-    { src: '~plugins/vue-layer', ssr: false }
+    { src: '~plugins/vue-layer', ssr: false },
+    { src: '~plugins/vue-lazyload', ssr: true }
   ]
 }

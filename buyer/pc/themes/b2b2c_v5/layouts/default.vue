@@ -16,8 +16,6 @@
   }
 </script>
 <style>
-  @import "../styles/normalize.css";
-  @import "../styles/base.css";
   #wrapper {
     min-height: calc(100vh - 31px - 219px)
   }
