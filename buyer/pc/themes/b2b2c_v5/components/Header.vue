@@ -3,6 +3,7 @@
     <div class="top-header">
       <en-logo/>
       <en-search/>
+      <en-settleup/>
     </div>
   </div>
 </template>
@@ -22,6 +23,7 @@
     height: 150px;
     .top-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
       height: 100px;
       /deep/ #logo {
