@@ -98,6 +98,7 @@
     }
   }
   .links {
+    z-index: 999;
     a {
       color: #999;
       display: block;

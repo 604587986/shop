@@ -28,7 +28,7 @@ export function getUploadApi() {
 export function getHotKeywords() {
   return new Promise((resolve, reject) => {
     request({
-      url: '/hot-keywords',
+      url: 'hot-keywords',
       method: 'get',
       loading: false
     }).then(response => resolve(response.slice(0, 7))).catch(error => reject(error))
@@ -43,7 +43,7 @@ export function getHotKeywords() {
 export function getAutoCompleteKeyword(keyword) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/auto-complete-keyword',
+      url: 'auto-complete-keyword',
       method: 'get',
       loading: false,
       message: false,
