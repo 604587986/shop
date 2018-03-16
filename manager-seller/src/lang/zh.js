@@ -13,7 +13,10 @@ export default {
 
     order: '订单管理',
     orderList: '订单列表',
-    refundList: '售后订单',
+    refundList: '维权订单',
+    logisticsManage: '物流管理',
+    commentsManage: '评论管理',
+    settlementManage: '结算管理',
     receiptHistory: '发票历史',
     orderDetail: '订单详情',
     refundDetail: '售后详情',

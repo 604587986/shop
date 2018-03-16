@@ -74,10 +74,13 @@ export const asyncRouterMap = [
     meta: { title: 'order', icon: 'order-manage' },
     children: [
       { path: 'order-list', component: _import('order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
-      { path: 'refund-list', component: _import('order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
-      { path: 'receipt-history', component: _import('order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }},
       { path: 'detail/:sn', component: _import('order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
-      { path: 'refund/:sn', component: _import('order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }}
+      { path: 'refund-list', component: _import('order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
+      { path: 'refund/:sn', component: _import('order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }},
+      { path: 'logistics-manage', component: _import('order/logisticsManage'), name: 'logisticsManage', meta: { title: 'logisticsManage' }},
+      { path: 'comments-manage', component: _import('order/commentsManage'), name: 'commentsManage', meta: { title: 'commentsManage' }},
+      { path: 'settlement-manage', component: _import('order/settlementManage'), name: 'settlementManage', meta: { title: 'settlementManage' }},
+      { path: 'receipt-history', component: _import('order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }}
     ]
   },
   // 会员管理
