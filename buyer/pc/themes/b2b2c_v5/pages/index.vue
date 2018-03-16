@@ -11,8 +11,6 @@
     created() {
     },
     mounted() {
-      console.log(API_Common.getValidateCodeUrl('member'))
-      console.log(API_Common.getUploadApi())
     }
   }
 </script>

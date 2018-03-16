@@ -15,9 +15,9 @@ service.interceptors.request.use(config => {
   if (config.loading !== false) {
     config.loading = 1
   }
-  if (store.getters.token) {
-    config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-  }
+  // if (store.getters.token) {
+  //   config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+  // }
   return config
 }, error => {
   // Do something with request error
@@ -29,7 +29,7 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
   response => {
     closeLoading(response)
-    // let _data = response.data
+    let _data = response.data
     // if (typeof _data === 'string' && _data.indexOf('window.open(\'/javashop/admin/login.do\',\'_top\')') !== -1) {
     //   fedLogOut()
     //   return Promise.reject('登录失效')
@@ -45,7 +45,9 @@ service.interceptors.response.use(
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
     if (error_response.status === 403) fedLogOut()
-    Vue.prototype.$message.error(error_data.message || '出现错误，请稍后再试！')
+    if (error.config.message !== false) {
+      Vue.prototype.$message.error(error_data.message || '出现错误，请稍后再试！')
+    }
     return Promise.reject(error)
   }
 )

@@ -2,6 +2,7 @@
   <div class="w" id="header">
     <div class="top-header">
       <en-logo/>
+      <en-search/>
     </div>
   </div>
 </template>
