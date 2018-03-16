@@ -49,6 +49,10 @@ a:focus {
   outline: none;
 }
 
+i, em {
+  font-style: normal;
+}
+
 li {
   list-style: none;
 }

@@ -24,8 +24,8 @@
     .top-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      height: 100px;
+      height: 70px;
+      padding-top: 30px;
       /deep/ #logo {
         width: 240px;
         height: 60px;
