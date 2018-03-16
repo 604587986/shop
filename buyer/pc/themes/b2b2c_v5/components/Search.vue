@@ -1,16 +1,17 @@
 <template>
   <div id="search">
-    <form class="search-form">
+    <div class="search-form">
       <input
         v-model="keyword"
         @input="handleKeywordChnaged"
         @focus="show_autocomplete = true"
         @blur="handleSearchInputBlur"
+        @keyup.enter="handleSearchGoods"
         class="search-input"
       >
       <button type="button" class="search-btn goods" @click="handleSearchGoods">搜商品</button>
       <button type="button" class="search-btn shop" @click="handleSearchShop">搜店铺</button>
-    </form>
+    </div>
     <ul class="search-hot-keywords">
       <li v-for="item in hot_keywords" :key="item">
         <nuxt-link :to="'/goods-list?keyword=' + item">{{ item }}</nuxt-link>
@@ -48,9 +49,6 @@
     created() {
       API_Common.getHotKeywords().then(response => this.hot_keywords = response)
     },
-    watch: {
-      // 'keyword': 'GET_AutoCompleteWords'
-    },
     methods: {
       /** 关键字发生改变 */
       handleKeywordChnaged(event) {
@@ -62,13 +60,15 @@
       handleSearchInputBlur() {
         setTimeout(() => {
           this.show_autocomplete = false
-        }, 500)
+        }, 150)
       },
       /** 搜索商品 */
       handleSearchGoods(keyword) {
         keyword = typeof (keyword) === 'string'
           ? keyword
           : this.keyword
+        this.keyword = keyword
+        this.show_autocomplete = false
         this.$route.path === '/goods-list'
           ? this.$router.replace({ path: '/goods-list', query: { keyword }})
           : this.$router.push({ path: '/goods-list', query: { keyword }})
