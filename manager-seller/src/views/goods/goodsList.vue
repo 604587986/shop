@@ -12,9 +12,10 @@
           <el-button @click="inWarehouse">仓库中的商品</el-button>
           <el-button @click="selling">出售中的商品</el-button>
         </el-button-group>
+        <el-button @click="publishGoods" type="success">发布商品</el-button>
+        <el-button @click="gotoRecycle" type="primary">回收站</el-button>
       </div>
       <div class="toolbar-search">
-
         <en-table-search
           @search="searchEvent"
           @advancedSearch="advancedSearchEvent"
@@ -241,9 +242,18 @@
         // this.params = { }
         this.GET_GoodsList()
       },
+      /** 发布商品*/
+      publishGoods() {
+        this.$router.push({ path: 'good-publish' })
+      },
+
+      /** 跳转回收站*/
+      gotoRecycle() {
+        this.$router.push({ path: 'recycle-station' })
+      },
       /** 编辑商品 */
       handleEditGoods(row) {
-        // this.$route.push({ name: '' })
+        this.$router.push({ path: 'good-publish', query: { goodsid: row.id }})
       },
       /** 删除商品 */
       handleDeleteGoods(row) {

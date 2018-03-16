@@ -10,7 +10,7 @@
       >
         <template slot="table-columns">
           <el-table-column  type="selection" />
-          <el-table-column label="商品信息" width="1500px" header-align="left">
+          <el-table-column label="商品信息" width="1000px" header-align="left">
             <template slot-scope="scope">
               <div class="goods_info">
                 <img :src="scope.row.image" class="goods-image" />

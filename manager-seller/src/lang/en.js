@@ -5,8 +5,10 @@ export default {
     goods: 'Goods Manage',
     goodsList: 'Goods List',
     draftList: 'Draft List',
+    goodPublish: 'good Publish',
     categoryManage: 'Category Manage',
     tagManage: 'Tag Manage',
+    tagAdd: 'tag Add',
     recycleStation: 'Recycle Station',
     understock: 'Understock',
 
