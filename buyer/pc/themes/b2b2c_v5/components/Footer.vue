@@ -57,12 +57,7 @@
 
 <script>
   export default {
-    name: 'Footer',
-    mounted() {
-
-    },
-    methods: {
-    }
+    name: 'EnFooter'
   }
 </script>
 

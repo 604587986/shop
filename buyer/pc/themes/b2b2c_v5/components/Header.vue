@@ -1,18 +1,32 @@
 <template>
-  <div id="header">
+  <div class="w" id="header">
+    <div class="top-header">
+      <en-logo/>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Header'
+    name: 'EnHeader',
+    components: {
+    },
+    mounted() {
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
   #header {
-    width: 100%;
-    height: 50px;
-    background-color: dodgerblue;
+    height: 150px;
+    .top-header {
+      display: flex;
+      align-items: center;
+      height: 100px;
+      /deep/ #logo {
+        width: 240px;
+        height: 60px;
+      }
+    }
   }
 </style>

@@ -5,12 +5,8 @@
 </template>
 
 <script>
-  import { Header } from '~/components'
 	export default {
-		name: '',
-    components: {
-      'e-header': Header
-    }
+		name: ''
 	}
 </script>
 

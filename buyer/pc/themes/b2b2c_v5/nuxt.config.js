@@ -47,6 +47,7 @@ module.exports = {
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
-    { src: '~plugins/vue-lazyload', ssr: true }
+    { src: '~plugins/vue-lazyload', ssr: true },
+    { src: '~plugins/vue-components', ssr: true }
   ]
 }

@@ -78,7 +78,7 @@
 
 <script>
   export default {
-    name: 'Shortcut'
+    name: 'EnShortcut'
   }
 </script>
 
