@@ -62,7 +62,8 @@ export const asyncRouterMap = [
       { path: 'tag-manage', component: _import('goods/tagManage'), name: 'tagManage', meta: { title: 'tagManage' }},
       { path: 'tag-add/:tag_id', component: _import('goods/tagAdd'), name: 'tagAdd', meta: { title: 'tagAdd' }, hidden: true },
       { path: 'recycle-station', component: _import('goods/recycleStation'), name: 'recycleStation', meta: { title: 'recycleStation' }},
-      { path: 'understock', component: _import('goods/understock'), name: 'understock', meta: { title: 'understock' }}
+      { path: 'understock', component: _import('goods/understock'), name: 'understock', meta: { title: 'understock' }},
+      { path: 'good-publish', component: _import('goods/goodsPublish'), name: 'goodPublish', meta: { title: 'goodPublish' }, hidden: true }
     ]
   },
   // 订单管理

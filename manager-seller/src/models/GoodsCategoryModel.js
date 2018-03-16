@@ -21,10 +21,10 @@ export default class GoodsCategoryModel extends DataModel {
 
   /** 商品分类顺序 */
   @ServerName('sort')
-  category_sort
+  sort
 
   /** 商品分类显示 */
   @ServerName('is_show')
-  category_show
+  is_show
 }
 

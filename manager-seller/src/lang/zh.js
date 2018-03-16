@@ -4,6 +4,7 @@ export default {
 
     goods: '商品管理',
     goodsList: '商品列表',
+    goodPublish: '商品发布',
     draftList: '草稿箱',
     categoryManage: '分类管理',
     tagManage: '标签管理',

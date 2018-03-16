@@ -58,7 +58,7 @@ export function deleteGoods(params) {
   const ids = params.toString()
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/` + ids,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/${ids}`,
       method: 'delete',
       data: params
     }).then(response => {
@@ -153,7 +153,7 @@ export function getRecycleGoodsList(params) {
 export function RecycleReductionGoods(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/recycle/revert/`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/recycle/revert`,
       method: 'post',
       data: params
     }).then(response => {
@@ -172,7 +172,7 @@ export function RecycleDeleteGoods(params) {
   const ids = params.toString()
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/` + ids,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/recycle/${ids}`,
       method: 'delete',
       data: params
     }).then(response => {
