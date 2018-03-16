@@ -13,7 +13,7 @@
     </form>
     <ul class="search-hot-keywords">
       <li v-for="item in hot_keywords" :key="item">
-        <nuxt-link to="/">{{ item }}</nuxt-link>
+        <nuxt-link :to="'/goods-list?keyword=' + item">{{ item }}</nuxt-link>
       </li>
     </ul>
     <div v-show="show_autocomplete && autoCompleteData.length > 0" class="search-autocomplete">
@@ -49,14 +49,14 @@
       API_Common.getHotKeywords().then(response => this.hot_keywords = response)
     },
     watch: {
-      'keyword': 'GET_AutoCompleteWords'
+      // 'keyword': 'GET_AutoCompleteWords'
     },
     methods: {
       /** 关键字发生改变 */
       handleKeywordChnaged(event) {
-        if (event.data) {
-          this.GET_AutoCompleteWords(event.data.replace('\'', ''))
-        }
+        let _str = event.data || ''
+        _str = _str.replace('\'', '')
+        this.GET_AutoCompleteWords(this.keyword + _str)
       },
       /** 搜索框失去焦点 */
       handleSearchInputBlur() {
@@ -69,10 +69,9 @@
         keyword = typeof (keyword) === 'string'
           ? keyword
           : this.keyword
-        this.$router.push({
-          path: '/goods-list',
-          query: { keyword }
-        })
+        this.$route.path === '/goods-list'
+          ? this.$router.replace({ path: '/goods-list', query: { keyword }})
+          : this.$router.push({ path: '/goods-list', query: { keyword }})
       },
       /** 搜索店铺 */
       handleSearchShop() {
@@ -85,8 +84,8 @@
       GET_AutoCompleteWords(keyword) {
         let _str = keyword || this.keyword
         if (_str === this.autoCompleteStr) return
-        _str = _str.trim()
         this.autoCompleteStr = _str
+        _str = _str.trim()
         this.show_autocomplete = !!_str
         API_Common.getAutoCompleteKeyword(_str).then(response => this.autoCompleteData = response)
       }
