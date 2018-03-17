@@ -20,17 +20,20 @@
       }
     },
     computed: {
-      always_show() {
+      /** 如果为首页，总是展开 */
+      always_unfold() {
         return this.$route.path === '/'
       }
     },
     methods: {
+      /** 鼠标移入 */
       handleCategoryMouseover() {
-        if (this.always_show) return
+        if (this.always_unfold) return
         this.unfold = true
       },
+      /** 鼠标移出 */
       handleCategoryMouseout() {
-        if (this.always_show) return
+        if (this.always_unfold) return
         this.unfold = false
       }
     }
