@@ -5,6 +5,7 @@ import {
   Category,
   Footer,
   Header,
+  Nav,
   Search,
   Settleup,
   Shortcut
@@ -15,6 +16,7 @@ Vue.component(Logo.name, Logo)
 Vue.component(Category.name, Category)
 Vue.component(Footer.name, Footer)
 Vue.component(Header.name, Header)
+Vue.component(Nav.name, Nav)
 Vue.component(Search.name, Search)
 Vue.component(Settleup.name, Settleup)
 Vue.component(Shortcut.name, Shortcut)
