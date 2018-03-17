@@ -65,11 +65,6 @@
   /* Footer */
   #footer {
     background-color: #f5f6f5;
-    &.fixed-bottom {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
     .help-center-footer {
       border-bottom: solid 1px #eaeaea;
       padding: 20px 0 20px 10%;
