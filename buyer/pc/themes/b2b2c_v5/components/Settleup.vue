@@ -1,5 +1,10 @@
 <template>
-  <div id="settleup">
+  <div
+    id="settleup"
+    @mouseenter="show_dorpdown = true"
+    @mouseleave="show_dorpdown = false"
+    :class="{'hover' : show_dorpdown}"
+  >
     <div class="header-cart-con header-cart-cm">
       <nuxt-link to="/cart">
         <i class="icon-carts"></i>
@@ -7,17 +12,94 @@
         <em class="count cart_num cart-num" id="cart-num">0</em>
       </nuxt-link>
     </div>
+    <div class="dorpdown-layer">
+      <div class="header-cart-content">
+        <div class="mc">
+          <ul v-if="skuList.length > 0" class="header-cart-list">
+            <li v-for="sku in skuList" :key="sku.sku_id" class="item-header-cart">
+              <div class="p-img">
+                <nuxt-link :to="'/goods/' + sku.goods_id" target="_blank" :title="sku.goods_name">
+                  <img :src="sku.goods_image" :alt="sku.goods_name">
+                </nuxt-link>
+              </div>
+              <div class="p-name">
+                <nuxt-link :to="'/goods/' + sku.goods_id" target="_blank">
+                  {{ sku.goods_name }}
+                </nuxt-link>
+              </div>
+              <div class="p-number">
+                <span class="num">{{ sku.num }}</span>
+                <div class="count">
+                  <a @click="handleUpdateCartSkuNum(sku, '+')" href="javascript:void(0);" class="count-oper count-add"><i class="cart-icon icon-up"></i></a>
+                  <a @click="handleUpdateCartSkuNum(sku, '-')" href="javascript:void(0);" class="count-oper count-remove"><i class="cart-icon icon-down"></i></a>
+                </div>
+              </div>
+              <div class="p-oper">
+                <div class="price"><em>¥</em><span class="item-total">699.00</span></div>
+                <a @click="handleRemoveSkuItem(sku)" href="javascript:void(0);" class="remove">删除</a>
+              </div>
+            </li>
+          </ul>
+          <p v-else class="no-sku"> 暂无商品... </p>
+        </div>
+        <div class="mb">
+          <div class="p-total">共<span class="cart-num">0</span>件商品&nbsp;&nbsp;共计：<span class="cart-total">0.00</span></div>
+          <nuxt-link to="/cart" class="btn-cart">去购物车</nuxt-link>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import { mapActions, mapGetters } from 'vuex'
   export default {
-    name: 'EnSettleup'
+    name: 'EnSettleup',
+    data() {
+      return {
+        show_dorpdown: false
+      }
+    },
+    created() {
+      this.$store.dispatch('cart/getCartDataAction')
+    },
+    computed: {
+      ...mapGetters({
+        skuList: 'cart/skuList'
+      })
+    },
+    methods: {
+      ...mapActions({
+        updateSkuNum: 'cart/updateSkuNumAction',
+        removeSkuItem: 'cart/removeSkuItemAction',
+      }),
+      /** 更新购物车货品数量 */
+      handleUpdateCartSkuNum(sku, symbol) {
+        this.updateSkuNum({sku_id: sku.sku_id, num: sku.num})
+      },
+      /** 移除购物车货品 */
+      handleRemoveSkuItem(sku) {
+        this.removeSkuItem(sku.sku_id)
+      }
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
   #settleup {
+    position: relative;
+    height: 35px;
+    &.hover {
+      .header-cart-cm {
+        padding-bottom: 2px;
+        border-color: #ccc;
+        border-bottom: none;
+        background-color: #fff;
+      }
+      .dorpdown-layer {
+        display: block;
+      }
+    }
     .header-cart-cm {
       position: relative;
       border: 1px solid #eee;
@@ -63,6 +145,145 @@
       em {
         margin-left: 10px;
       }
+    }
+    .dorpdown-layer {
+      top: 35px;
+      width: 330px;
+      .header-cart-content {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+        background: #fff;
+      }
+      .header-cart-list {
+        margin-top: -1px;
+      }
+      .mc {
+        height: auto;
+        max-height: 334px;
+        overflow: auto;
+      }
+      .item-header-cart {
+        padding: 10px;
+        border-top: 1px dashed #ccc;
+        overflow: hidden;
+        line-height: 18px;
+        vertical-align: bottom;
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      }
+      .p-img {
+        float: left;
+        width: 50px;
+        height: 50px;
+        border: 1px solid #d3d3d3;
+        padding: 0;
+        margin-right: 8px;
+        font-size: 0;
+        img {
+          width: 50px;
+          height: 50px;
+          cursor: pointer;
+        }
+      }
+      .p-name {
+        float: left;
+        width: 100px;
+        height: 36px;
+        margin: 5px 8px 0 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      .p-number {
+        float: left;
+        margin-top: 9px;
+        .num {
+          width: 35px;
+          height: 28px;
+          line-height: 28px;
+          border: 1px solid #d6d6d6;
+          display: block;
+          float: left;
+          text-align: center;
+        }
+        .count {
+          float: left;
+          height: 28px;
+          width: 18px;
+          border-top: 1px solid #d6d6d6;
+          border-bottom: 1px solid #d6d6d6;
+          .count-add {
+            border-bottom: 1px solid #d6d6d6;
+          }
+          .cart-icon {
+            position: absolute;
+            left: 50%;
+            margin-left: -7px;
+            top: 50%;
+            margin-top: -6px;
+            display: block;
+            width: 14px;
+            height: 13px;
+            line-height: 14px;
+            transition: all ease-out .2s;
+            &.icon-up {
+              background: url(../assets/images/icon-add.png) no-repeat center;
+              background-size: 100%;
+            }
+            &.icon-down {
+              background: url(../assets/images/icon-less.png) no-repeat center;
+              background-size: 100%;
+            }
+          }
+          a {
+            position: relative;
+            display: block;
+            width: 18px;
+            height: 14px;
+            border-right: 1px solid #d6d6d6;
+            text-align: center;
+          }
+        }
+      }
+      .p-oper {
+        float: right;
+        text-align: center;
+        margin-top: 5px;
+      }
+      .mb {
+        padding: 10px;
+        background-color: #eee;
+        overflow: hidden;
+      }
+      .p-total {
+        float: left;
+        line-height: 28px;
+        color: #999;
+      }
+      .btn-cart {
+        display: block;
+        float: right;
+        width: 96px;
+        height: 26px;
+        line-height: 26px;
+        border: 1px solid #f42424;
+        background: #eee;
+        text-align: center;
+        color: #f42424;
+        font-weight: bold;
+        transition: all .2s;
+        &:hover {
+          background-color: #f42424;
+          color: #fff;
+        }
+      }
+    }
+    .no-sku {
+      text-align: center;
+      padding: 20px 0;
     }
   }
 </style>
