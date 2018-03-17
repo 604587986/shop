@@ -1,10 +1,11 @@
 <template>
-  <div class="w" id="header">
-    <div class="top-header">
+  <div id="header">
+    <div class="top-header w">
       <en-logo/>
       <en-search/>
       <en-settleup/>
     </div>
+    <en-nav/>
   </div>
 </template>
 

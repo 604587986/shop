@@ -53,3 +53,18 @@ export function getAutoCompleteKeyword(keyword) {
     }).then(response => resolve(response.slice(0, 10))).catch(error => reject(error))
   })
 }
+
+/**
+ * 获取导航栏列表
+ * @returns {Promise<any>}
+ */
+export function getNavList() {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'nav/list',
+      method: 'get',
+      loading: false,
+      message: false
+    }).then(response => resolve(response.slice(0, 8))).catch(error => reject(error))
+  })
+}

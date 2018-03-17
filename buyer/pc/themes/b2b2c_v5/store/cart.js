@@ -50,16 +50,12 @@ export const getters = {
    * @param state
    * @returns {Array}
    */
-  skuList: state => {
-    return state.skuList
-  },
+  skuList: state => state.skuList,
   /**
    * 获取shopList
    * @param state
    */
-  shopList: state => {
-    return state.cartData.data
-  },
+  shopList: state => state.cartData.data,
   /**
    * 购物车所有货品总数
    * @param state
