@@ -128,7 +128,7 @@
 
 <script>
   export default {
-    name: 'Login',
+    name: 'login',
     data() {
       return {
         login_type: 'quick',

@@ -8,6 +8,7 @@
 <script>
   import * as API_Common from '@/api/common'
   export default {
+    name: 'index',
     created() {
     },
     mounted() {

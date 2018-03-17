@@ -37,7 +37,7 @@ module.exports = {
     extractCSS: {
       allChunks: true
     },
-    vendor: ['axios', 'vuex'],
+    vendor: ['axios'],
     plugins: [],
     publicPath: ''
   },

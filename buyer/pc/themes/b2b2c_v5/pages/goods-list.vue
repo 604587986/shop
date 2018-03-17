@@ -7,7 +7,7 @@
 <script>
   import * as API_GoodsList from '@/api/goods'
   export default {
-    name: '',
+    name: 'goods-list',
     data() {
       return {
         params: {
