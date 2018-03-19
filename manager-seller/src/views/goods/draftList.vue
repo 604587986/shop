@@ -165,7 +165,7 @@
 
       GET_GoodsList() {
         this.loading = true
-        API_goods.getGoodsList(this.params).then(response => {
+        API_goods.getDraftGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,

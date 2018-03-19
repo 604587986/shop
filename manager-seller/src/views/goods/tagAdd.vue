@@ -10,13 +10,14 @@
       >
         <template slot="table-columns">
           <el-table-column  type="selection" />
-          <el-table-column label="商品信息" >
+          <el-table-column label="商品信息" width="1000px" header-align="left">
             <template slot-scope="scope">
-              <img :src="scope.row.image" class="goods-image"/>
-              <div class="goodsinfo-txt">
-                <span>{{scope.row.name}}</span>
-                <span>{{scope.row.price}}</span>
-                <!--<span>{{ scope.row.price | unitPrice('￥') }}</span>-->
+              <div class="goods_info">
+                <img :src="scope.row.image" class="goods-image" />
+                <div class="goodsinfo-txt">
+                  <span class="goods_name">{{scope.row.name}}</span>
+                  <span class="goods_price">{{ scope.row.price | unitPrice('￥') }}</span>
+                </div>
               </div>
             </template>
           </el-table-column>
@@ -35,7 +36,7 @@
       <div style="text-align: center">
         <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
       </div>
-      <en-goods-selector :show="showDialog"  :api="goods_api"  :maxLength="maxsize"  @confirm="refreshFunc" @closed="showDialog = false" />
+      <en-goods-selector :show="showDialog"  :api="goods_api" :defaultData="tableData"  :maxLength="maxsize"  @confirm="refreshFunc" @closed="showDialog = false" />
     </div>
 </template>
 
@@ -54,27 +55,25 @@
     },
     data() {
       return {
-        /** 列表loading状态 */
+        /** 标签商品列表loading状态 */
         loading: false,
 
-        /** 列表参数*/
+        /** 标签商品列表参数*/
         params: {
           tag_id: null
         },
-        /** 列表数据 */
+        /** 标签商品列表数据 */
         tableData: null,
 
-        /** 已选择项id的 */
+        /** 标签商品已选择项id的集合 */
         selectionids: [],
 
-        /** 最大长度*/
+        /** 商品选择器最大长度*/
         maxsize: 0,
 
-        /** 商品列表api*/
+        /** 商品选择器列表api*/
         goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
-
-        /** 商品列表*/
-        goodsIdList: null,
+        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
@@ -85,40 +84,27 @@
       this.getTagGoodsList()
     },
     methods: {
-      /**
-       * 商品列表
-       */
+      /**  显示商品选择器*/
       selectgoodslist() {
         this.showDialog = true
-        API_goods.getGoodsList(this.params).then(response => {
-          this.goodsIdList = response.data
-        }).catch(error => {
-          console.log(error)
-        })
       },
-      /**
-       * 保存选择的商品
-       */
-      refreshFunc() {
-        console.log(77)
+      /** 保存商品选择器选择的商品 */
+      refreshFunc(val) {
+        this.tableData = val
       },
-      /** 已选标签商品列表**/
+      /** 标签商品列表**/
       getTagGoodsList() {
         this.loading = true
-        API_goods.getGoodsList(this.params).then(response => {
+        API_goodsTag.getTagGoodsList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
-          console.log(this.tableData, 666)
           this.maxsize = 0
         }).catch(error => {
           this.loading = false
           console.log(error)
         })
       },
-      /**
-       * 取消参加
-       * @param row
-       */
+      /**  取消参加 */
       canceljoin(scope) {
         this.tableData.forEach((elem, index) => {
           if (elem.id === scope.row.id) {
@@ -130,9 +116,7 @@
       selectionChange(val) {
         this.selectionids = val.map(item => item.id)
       },
-      /**
-       * 批量取消
-       */
+      /** 批量取消 */
       cancelall() {
         this.selectionids.forEach(key => {
           this.tableData.forEach((elem, index) => {
@@ -143,11 +127,16 @@
           this.$message.success('批量取消成功！')
         })
       },
-      /**
-       * 保存设置
-       */
+      /** 保存设置 */
       savesetup() {
-        this.$message.success('保存设置成功！')
+        API_goodsTag.saveTagGoodsList(this.params).then(response => {
+          this.loading = false
+          this.$message.success('保存设置成功！')
+        }).catch(error => {
+          this.loading = false
+          this.$message.error('保存设置失败，请稍后再试！')
+          console.log(error)
+        })
       }
     }
   }
@@ -157,12 +146,26 @@
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
+  .goods_info{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
   .goodsinfo-txt{
+    margin-left:20px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: flex-start;
+    .goods_name{
+      color:#6289ff;
+    }
+    .goods_price{
+      color: #f60;
+    }
   }
 
 </style>

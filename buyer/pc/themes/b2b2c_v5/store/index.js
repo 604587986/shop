@@ -3,7 +3,10 @@ import * as API_Common from '@/api/common'
 
 /** state */
 export const state = () => ({
-  navList: []
+  // 导航栏
+  navList: [],
+  // 分类
+  categoryList: []
 })
 
 /** mutations */
@@ -11,6 +14,10 @@ export const mutations = {
   /** 设置导航栏数据 */
   [types.SET_NAV_DATA](state, data) {
     state.navList = data
+  },
+  /** 设置分类数据 */
+  [types.SET_CATEGORY_DATA](state, data) {
+    state.categoryList = data
   }
 }
 
@@ -20,6 +27,12 @@ export const actions = {
   getNavData: ({ commit }) => {
     API_Common.getNavList().then(response => {
       commit(types.SET_NAV_DATA, response)
+    })
+  },
+  /** 获取分类数据 */
+  getCategoryData: ({ commit }) => {
+    API_Common.getCategoryList().then(response => {
+      commit(types.SET_CATEGORY_DATA, response)
     })
   }
 }
@@ -31,5 +44,11 @@ export const getters = {
    * @param state
    * @returns {*}
    */
-  navList: state => state.navList
+  navList: state => state.navList,
+  /**
+   * 分类列表
+   * @param state
+   * @returns {*}
+   */
+  categoryList: state => state.categoryList
 }

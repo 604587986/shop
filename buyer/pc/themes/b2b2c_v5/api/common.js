@@ -68,3 +68,18 @@ export function getNavList() {
     }).then(response => resolve(response.slice(0, 8))).catch(error => reject(error))
   })
 }
+
+/**
+ * 获取分类列表
+ * @returns {Promise<any>}
+ */
+export function getCategoryList() {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'category/list',
+      method: 'get',
+      loading: false,
+      message: false
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
