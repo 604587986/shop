@@ -11,17 +11,12 @@
 
 <script>
   export default {
-    name: 'EnHeader',
-    components: {
-    },
-    mounted() {
-    }
+    name: 'EnHeader'
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
   #header {
-    height: 150px;
     .top-header {
       display: flex;
       justify-content: space-between;

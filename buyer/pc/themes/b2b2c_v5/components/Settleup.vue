@@ -9,7 +9,7 @@
       <nuxt-link to="/cart">
         <i class="icon-carts"></i>
         <span>我的购物车</span>
-        <em class="count cart_num cart-num" id="cart-num">0</em>
+        <em class="count cart_num cart-num" id="cart-num">{{ allCount > 99 ? '99+' : allCount }}</em>
       </nuxt-link>
     </div>
     <div class="dorpdown-layer">
@@ -43,7 +43,7 @@
           <p v-else class="no-sku"> 暂无商品... </p>
         </div>
         <div class="mb">
-          <div class="p-total">共<span class="cart-num">0</span>件商品&nbsp;&nbsp;共计：<span class="cart-total">0.00</span></div>
+          <div class="p-total">共<span class="cart-num">{{ allCount }}</span>件商品&nbsp;&nbsp;共计：<span class="cart-total">0.00</span></div>
           <nuxt-link to="/cart" class="btn-cart">去购物车</nuxt-link>
         </div>
       </div>
@@ -65,7 +65,8 @@
     },
     computed: {
       ...mapGetters({
-        skuList: 'cart/skuList'
+        skuList: 'cart/skuList',
+        allCount: 'cart/allCount'
       })
     },
     methods: {
@@ -130,7 +131,7 @@
         height: 13px;
         line-height: 13px;
         padding: 1px;
-        border-radius: 50%;
+        border-radius: 10px;
         background: #f42424;
         color: #fff;
         position: absolute;
