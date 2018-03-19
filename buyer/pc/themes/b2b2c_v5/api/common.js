@@ -80,6 +80,6 @@ export function getCategoryList() {
       method: 'get',
       loading: false,
       message: false
-    }).then(response => resolve(response)).catch(error => reject(error))
+    }).then(response => resolve(response.slice(0, 7))).catch(error => reject(error))
   })
 }
