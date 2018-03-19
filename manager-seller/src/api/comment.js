@@ -13,7 +13,7 @@ import CommentModel from '@/models/CommentModel'
 export function getCommentList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/comments/list-json.do?type=1',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/order/comment/list',
       method: 'get',
       loading: false,
       params
@@ -52,6 +52,23 @@ export function deleteComment(ids) {
   return new Promise((resolve, reject) => {
     request({
       url: 'shop/admin/comments/delete.do',
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 商家回复评论
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function replyComment(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/order/comment/reply',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))

@@ -15,7 +15,7 @@ import ProductModel from '@/models/ProductModel'
 export function getOrderList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'order-query/admin/order.do',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/order/list',
       method: 'get',
       loading: false,
       params

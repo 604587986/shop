@@ -18,7 +18,7 @@ export default class OrderModel extends DataModel {
   id
 
   /** 订单编号 */
-  @ServerName('sn')
+  @ServerName('order_sn')
   sn
 
   /** 下单时间 */
