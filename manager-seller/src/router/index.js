@@ -148,16 +148,6 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: '/shop/settlement-manage',
-        component: _import('shop/settlement-manage/index'),
-        redirect: '/shop/settlement-manage/settlement-list',
-        name: 'settlementManage',
-        meta: { title: 'settlementManage' },
-        children: [
-          { path: 'settlement-list', component: _import('shop/settlement-manage/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }}
-        ]
-      },
-      {
         path: '/shop/shop-theme-manage',
         component: _import('shop/shop-theme-manage/index'),
         redirect: '/shop/shop-theme-manage/theme-list',

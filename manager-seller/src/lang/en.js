@@ -37,7 +37,6 @@ export default {
     shopManage: 'Shop Manage',
     shopList: 'Shop List',
     shopAudit: 'Shop Audit',
-    settlementManage: 'Settlement Manage',
     settlementList: 'Settlement List',
     shopThemeManage: 'Shop Theme',
     themeList: 'Theme List',

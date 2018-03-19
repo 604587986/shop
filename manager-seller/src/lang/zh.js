@@ -37,7 +37,6 @@ export default {
     shopManage: '管理店铺',
     shopList: '店铺列表',
     shopAudit: '店铺审核',
-    settlementManage: '结算管理',
     settlementList: '结算列表',
     shopThemeManage: '店铺模板管理',
     themeList: '模板列表',
