@@ -4,7 +4,7 @@
       <!-- logo -->
       <div class="index-login">
         <a target="_blank" href="/">
-          <img src="~/static/images/logo-javashop.png" alt="logo">
+          <img src="~assets/images/logo-javashop.png" alt="logo">
         </a>
         <span>欢迎登录</span>
       </div>
@@ -187,7 +187,7 @@
       margin: 0 auto;
       position: relative;
       .banner-img {
-        background: url(http://data.andste.cc/developers/web/temp/images/background-banner.jpg) no-repeat center center;
+        background: url(../assets/images/background-banner.jpg) no-repeat center center;
         background-size: cover;
         height: 560px;
       }
