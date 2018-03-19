@@ -9,3 +9,9 @@
     name: 'EnLogo'
   }
 </script>
+<style type="text/scss" lang="scss" scoped>
+  #logo {
+    width: 260px;
+    height: 100%;
+  }
+</style>
