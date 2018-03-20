@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 import {
   Logo,
+  CartStep,
   Category,
   Footer,
   Header,
@@ -13,6 +14,7 @@ import {
 
 /** 注册全局组件 */
 Vue.component(Logo.name, Logo)
+Vue.component(CartStep.name, CartStep)
 Vue.component(Category.name, Category)
 Vue.component(Footer.name, Footer)
 Vue.component(Header.name, Header)
