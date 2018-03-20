@@ -10,7 +10,7 @@
       <div class="w">
         <div class="list-header">
           <span class="checkbox select-all">
-            <a href="javascript:;" :class="['check', 'check-all', all_checked ? 'checked' : '']">
+            <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']" @click="handleCheckAll">
               <i class="iconfont ea-icon-check"></i>
             </a>全选
           </span>
@@ -25,7 +25,7 @@
           <div v-if="shopList && shopList.length > 0" class="">
             <div v-for="shop in shopList" :key="shop.shop_id" class="shop-item">
               <div class="shop-header">
-                <a href="javascript:;" :class="['check', shop.checked ? 'checked' : '']">
+                <a href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
                 <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
@@ -33,7 +33,7 @@
               <div class="shop-body">
                 <div v-for="sku in shop.skuList" :key="sku.sku_id" class="sku-item">
                   <div class="item clearfix">
-                    <a href="javascript:;" :class="['check', sku.checked ? 'checked' : '']">
+                    <a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
                       <i class="iconfont ea-icon-check"></i>
                     </a>
                     <nuxt-link :to="'/goods/' + sku.sku_id" class="sku-pic">
@@ -45,9 +45,9 @@
                     <div class="sku-price">{{ sku.price | unitPrice }}</div>
                     <div class="sku-num">
                       <div class="num-action clearfix">
-                        <a class="oper unable" href="javascript:;">−</a>
+                        <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
                         <input class="input" type="number" :value="sku.num" :title="sku.num">
-                        <a class="oper" href="javascript:;">+</a>
+                        <a class="oper" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
                       </div>
                     </div>
                     <div class="sku-weight">
@@ -57,7 +57,7 @@
                       {{ sku.price * sku.num | unitPrice }}
                     </div>
                     <div class="sku-action">
-                      <i class="iconfont ea-icon-delete"></i>
+                      <i class="iconfont ea-icon-delete" @click="handleDelete(sku)"></i>
                     </div>
                   </div>
                 </div>
@@ -83,20 +83,20 @@
         </div>
       </div>
     </div>
-    <div class="cart-checkbar">
+    <div :class="['cart-checkbar', check_bar_fiexd_top && 'fiexd-top', check_bar_fiexd_bottom && 'fiexd-bottom']" id="check-bar">
       <div class="check-bar">
         <div class="w">
           <div class="check-bar-left">
             <span class="select-all">
-              <a href="javascript:;" :class="['check', 'check-all', all_checked ? 'checked' : '']">
+              <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']" @click="handleCheckAll">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
                 <span>全选（共<b>{{ allCount }}</b>）件</span>
             </span>
             <em>|</em>
-            <a href="javascript:;" class="check-tool-a">批量删除</a>
+            <a href="javascript:;" class="check-tool-a" @click="handleBatchDelete">批量删除</a>
             <em>|</em>
-            <a href="javascript:;" class="check-tool-a">清空购物车</a>
+            <a href="javascript:;" class="check-tool-a" @click="handleCleanCart">清空购物车</a>
           </div>
           <div class="check-bar-right">
             <span>已选商品<b style="color: #ff5e5e; margin: 0 2px">{{ checkedCount }}</b>件</span>
@@ -107,6 +107,66 @@
         </div>
       </div>
     </div>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
+    <p>123</p>
   </div>
 </template>
 
@@ -115,10 +175,18 @@
   export default {
     name: 'cart',
     data() {
-      return {}
+      return {
+        check_bar_top: 0,
+        check_bar_fiexd_top: false,
+        check_bar_fiexd_bottom: false
+      }
     },
-    created() {
-      this.getCartData()
+    mounted() {
+      this.$nextTick(() => {
+        this.$checkBar = $('#check-bar')
+        window.addEventListener('scroll', this.countCheckBarFiexd)
+        this.getCartData()
+      })
     },
     computed: {
       ...mapGetters({
@@ -131,10 +199,60 @@
         return !!this.checkedCount && this.checkedCount === this.allCount
       }
     },
+    watch: {
+      shopList(newVal, oldVal) {
+        /** 计算当前结算栏相对顶部高度 */
+        this.$nextTick(() => {
+          this.check_bar_top = this.$checkBar.offset().top
+          this.countCheckBarFiexd()
+        })
+      }
+    },
     methods: {
+      /** 勾选、取消勾选商品 */
+      handleCheckSku(sku) {
+        console.log('勾选、取消勾选商品：', sku)
+      },
+      /** 勾选、取消勾选店铺 */
+      handleCheckShop(shop) {
+        console.log('勾选、取消勾选店铺：', shop)
+      },
+      /** 全选、全不选 */
+      handleCheckAll() {
+        console.log('全选...')
+      },
+      /** 更新商品数量 */
+      handleUpdateSkuNum(sku, symbol) {
+        if (symbol === '-' && sku.num < 2) return
+        console.log('更新数量', sku, symbol)
+      },
+      /** 删除 */
+      handleDelete(sku) {
+        console.log('删除：', sku)
+      },
+      /** 批量删除 */
+      handleBatchDelete() {
+        console.log('批量删除...')
+      },
+      /** 清空购物车 */
+      handleCleanCart() {
+        console.log('清空购物车...')
+      },
+      /** 监听页面滚动，实现结算栏浮起、固定 */
+      countCheckBarFiexd(event) {
+        const bodyScrollTop = document.documentElement.scrollTop || document.body.scrollTop
+        /** 是否固定到顶部 */
+        this.check_bar_fiexd_top = bodyScrollTop > this.check_bar_top
+        /** 是否固定到底部 */
+        this.check_bar_fiexd_bottom = bodyScrollTop < (this.check_bar_top - window.innerHeight  + 60)
+      },
+      /** vuex/cart */
       ...mapActions({
         getCartData: 'cart/getCartDataAction'
       })
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.countCheckBarFiexd)
     }
   }
 </script>
@@ -379,7 +497,23 @@
   }
   .cart-checkbar {
     display: block;
+    width: 100%;
     height: 60px;
+    &.fiexd-top {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1110;
+      box-shadow: 0 0 10px #ccc;
+    }
+    &.fiexd-bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 1110;
+      min-width: 1190px;
+      box-shadow: 0 0 10px #ccc;
+    }
     .check-bar {
       position: relative;
       z-index: 10;
