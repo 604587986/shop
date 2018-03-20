@@ -1,6 +1,8 @@
 import Vue from 'vue'
 
 const _layer = {
+  /** 将原生属性挂载进来，然后再扩展属性 */
+  ...window.layer,
   /**
    * 普通alert弹框
    * @param message
