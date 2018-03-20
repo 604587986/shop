@@ -177,9 +177,10 @@
       handleSkuNumChanged(event, sku) {
         const value = event.target.value
         if (!regExp.integer.test(value)) {
-          this.$message.error('输入的值不是正整数！')
+          this.$message.error('输的输入不合法！')
           return
         }
+        if (Number(value) === sku.num) return
         console.log('输入框值发生改变：', event, sku)
       },
       /** 删除 */
