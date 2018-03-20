@@ -39,7 +39,7 @@ export function switchExpressPower(ids, params) {
       url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logistics/company/${ids}`,
       method: 'post',
       loading: false,
-      params
+      _formData
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
