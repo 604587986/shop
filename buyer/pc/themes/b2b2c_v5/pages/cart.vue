@@ -46,7 +46,7 @@
                     <div class="sku-num">
                       <div class="num-action clearfix">
                         <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
-                        <input class="input" type="number" :value="sku.num" :title="sku.num">
+                        <input class="input" type="number" :value="sku.num" :title="sku.num" @change="handleSkuNumChanged($event, sku)">
                         <a class="oper" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
                       </div>
                     </div>
@@ -112,6 +112,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import regExp from '@/utils/RegExp'
   export default {
     name: 'cart',
     data() {
@@ -171,6 +172,15 @@
       handleUpdateSkuNum(sku, symbol) {
         if (symbol === '-' && sku.num < 2) return
         console.log('更新数量', sku, symbol)
+      },
+      /** 输入框值发生改变 */
+      handleSkuNumChanged(event, sku) {
+        const value = event.target.value
+        if (!regExp.integer.test(value)) {
+          this.$message.error('输入的值不是正整数！')
+          return
+        }
+        console.log('输入框值发生改变：', event, sku)
       },
       /** 删除 */
       handleDelete(sku) {
