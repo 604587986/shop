@@ -15,7 +15,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_yl8o9pi4h8y3nmi.css' }
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_cebsxgue5kygy14i.css' }
     ],
     script: [
       { type: 'text/javascript', src: 'https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js' },
@@ -48,6 +48,7 @@ module.exports = {
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
     { src: '~plugins/vue-lazyload', ssr: true },
-    { src: '~plugins/vue-components', ssr: true }
+    { src: '~plugins/vue-components', ssr: true },
+    { src: '~plugins/vue-filters', ssr: false }
   ]
 }
