@@ -116,15 +116,21 @@
     name: 'cart',
     data() {
       return {
+        /** 结算栏相对顶部高度 */
         check_bar_top: 0,
+        /** 是否固定到顶部 */
         check_bar_fiexd_top: false,
+        /** 是否固定到底部 */
         check_bar_fiexd_bottom: false
       }
     },
     mounted() {
       this.$nextTick(() => {
+        /** 获取结算栏jQuery对象 */
         this.$checkBar = $('#check-bar')
+        /** 添加滚动事件监听 */
         window.addEventListener('scroll', this.countCheckBarFiexd)
+        /** 获取购物车数据 */
         this.getCartData()
       })
     },
@@ -180,6 +186,7 @@
       },
       /** 监听页面滚动，实现结算栏浮起、固定 */
       countCheckBarFiexd(event) {
+        /** 获取滚动条当前位置 */
         const bodyScrollTop = document.documentElement.scrollTop || document.body.scrollTop
         /** 是否固定到顶部 */
         this.check_bar_fiexd_top = bodyScrollTop > this.check_bar_top
@@ -192,6 +199,7 @@
       })
     },
     destroyed() {
+      /** 当组件销毁时，移除事件监听 */
       window.removeEventListener('scroll', this.countCheckBarFiexd)
     }
   }
