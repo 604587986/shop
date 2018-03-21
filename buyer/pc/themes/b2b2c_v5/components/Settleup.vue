@@ -72,7 +72,7 @@
     methods: {
       ...mapActions({
         updateSkuNum: 'cart/updateSkuNumAction',
-        removeSkuItem: 'cart/removeSkuItemAction',
+        removeSkuItem: 'cart/deleteSkuItemAction',
       }),
       /** 更新购物车货品数量 */
       handleUpdateCartSkuNum(sku, symbol) {

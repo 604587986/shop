@@ -2,43 +2,213 @@ import * as API_Cart from '@/api/cart'
 import * as types from './mutation-types'
 
 export const state = () => ({
-  cartData: {},
-  shopList: [],
-  skuList: []
+  shopList: []
 })
 
 /** mutations */
 export const mutations = {
-  /** 设置购物车数据 */
+  /**
+   * 设置购物车数据
+   * @param state
+   * @param data
+   */
   [types.SET_CART_DATA](state, data) {
-    state.cartData = data
     state.shopList = data.data
-    const _skulist = []
-    data.data.forEach(item => {
-      _skulist.push(...item.skuList)
+  },
+  /**
+   * 更新货品数量
+   * @param state
+   * @param params
+   */
+  [types.UPDATE_SKU_NUM](state, params) {
+    state.shopList.every(shop => {
+      let flag = true
+      shop.skuList.every(item => {
+        if (item.sku_id === params.sku_id) {
+          item.num = params.num
+          flag = false
+        }
+        return flag
+      })
+      return flag
     })
-    state.skuList = _skulist
+  },
+  /**
+   * 选择、取消选择货品
+   * @param state
+   * @param params
+   */
+  [types.CHECK_SKU_ITEM](state, params) {
+    state.shopList.every(shop => {
+      let flag = true
+      let _checked = 1
+      shop.skuList.forEach(item => {
+        if (item.sku_id === params.sku_id) {
+          item.checked = params.checked
+          flag = false
+        }
+        if (item.checked === 0) _checked = 0
+      })
+      shop.checked = _checked
+      return flag
+    })
+  },
+  /**
+   * 选择、取消选择店铺内所有货品
+   * @param state
+   * @param params
+   */
+  [types.CHECK_SHOP_SKU](state, params) {
+    state.shopList.every(shop => {
+      if (shop.shop_id === params.shop_id) {
+        shop.checked = params.checked
+        shop.skuList.map(sku => {
+          sku.checked = params.checked
+          return sku
+        })
+        return false
+      }
+      return true
+    })
+  },
+  /**
+   * 全选、取消全选
+   * @param state
+   * @param checked
+   */
+  [types.CHECK_ALL](state, checked) {
+    state.shopList = state.shopList.map(shop => {
+      shop.checked = checked
+      shop.skuList.map(sku => {
+        sku.checked = checked
+        return sku
+      })
+      return shop
+    })
+  },
+  /**
+   * 删除货品【可能是多个】
+   * @param state
+   * @param sku_ids
+   */
+  [types.DELETE_SKU_ITEMS](state, sku_ids) {
+    sku_ids = Array.isArray(sku_ids) ? sku_ids : [sku_ids]
+    const _shopList = []
+    state.shopList.forEach(shop => {
+      const _skuList = []
+      shop.skuList.forEach(sku => {
+        if (!sku_ids.includes(sku.sku_id)) _skuList.push(sku)
+      })
+      if (_skuList.length > 0) {
+        shop.skuList = _skuList
+        _shopList.push(shop)
+      }
+    })
+    state.shopList = _shopList
+  },
+  /**
+   * 清空购物车
+   * @param state
+   */
+  [types.CLEAN_CART](state) {
+    state.shopList = []
   }
 }
 
 /** actions */
 export const actions = {
-  /** 获取购物车数据 */
+  /**
+   * 获取购物车数据
+   * @param commit
+   * @param params
+   */
   getCartDataAction: ({ commit }, params) => {
     API_Cart.getCartList(params).then(response => {
       commit(types.SET_CART_DATA, response)
     })
   },
-  /** 更新购物车货品数量 */
-  updateSkuNumAction: ({ commit, dispatch }, params) => {
-    API_Cart.updateSkuNum(params.sku_id, params.num).then(response => {
-      dispatch('getCartDataAction')
+  /**
+   * 更新购物车货品数量
+   * @param commit
+   * @param params
+   * @returns {Promise<any>}
+   */
+  updateSkuNumAction: ({ commit }, params) => {
+    return new Promise((resolve, reject) => {
+      API_Cart.updateSkuNum(params.sku_id, params.num).then(response => {
+        commit(types.UPDATE_SKU_NUM, params)
+        resolve(response)
+      }).catch(error => reject(error))
     })
   },
-  /** 移除购物车货品项 */
-  removeSkuItemAction: ({ commit, dispatch }, sku_ids) => {
-    API_Cart.deleteSkuItem(sku_ids).then(response => {
-      dispatch('getCartDataAction')
+  /**
+   * 选择、取消选择货品
+   * @param commit
+   * @param params
+   * @returns {Promise<any>}
+   */
+  checkSkuItemAction: ({ commit }, params) => {
+    return new Promise((resolve, reject) => {
+      API_Cart.checkSku(params.sku_id, params.checked).then(response => {
+        commit(types.CHECK_SKU_ITEM, params)
+        resolve(response)
+      }).catch(error => reject(error))
+    })
+  },
+  /**
+   * 选择、取消选择店铺内所有货品
+   * @param commit
+   * @param params
+   * @returns {Promise<any>}
+   */
+  checkShopSkuAction: ({ commit }, params) => {
+    return new Promise((resolve, reject) => {
+      API_Cart.checkShop(params.shop_id, params.checked).then(resposne => {
+        commit(types.CHECK_SHOP_SKU, params)
+        resolve(resposne)
+      }).catch(error => reject(error))
+    })
+  },
+  /**
+   * 全选、取消全选
+   * @param commit
+   * @param checked
+   * @returns {Promise<any>}
+   */
+  checkAllAction: ({ commit }, checked) => {
+    return new Promise((resolve, reject) => {
+      API_Cart.checkAll(checked).then(response => {
+        commit(types.CHECK_ALL, checked)
+        resolve(response)
+      }).catch(error => reject(error))
+    })
+  },
+  /**
+   * 删除购物车货品项
+   * @param commit
+   * @param dispatch
+   * @param sku_ids
+   * @returns {Promise<any>}
+   */
+  deleteSkuItemAction: ({ commit, dispatch }, sku_ids) => {
+    return new Promise((resolve, reject) => {
+      API_Cart.deleteSkuItem(sku_ids).then(response => {
+        commit(types.DELETE_SKU_ITEMS, sku_ids)
+        resolve(response)
+      }).catch(error => reject(error))
+    })
+  },
+  /**
+   * 清空购物车
+   * @param commit
+   * @returns {Promise<any>}
+   */
+  cleanCartAction: ({ commit }) => {
+    return new Promise((resolve, reject) => {
+      API_Cart.cleanCart().then(response => {
+        commit(types.CLEAN_CART)
+        resolve(response)
+      }).catch(error => reject(error))
     })
   }
 }
@@ -50,12 +220,16 @@ export const getters = {
    * @param state
    * @returns {Array}
    */
-  skuList: state => state.skuList,
+  skuList: state => {
+    const _skuList = []
+    state.shopList.forEach(item => _skuList.push(...item.skuList))
+    return _skuList
+  },
   /**
    * 获取shopList
    * @param state
    */
-  shopList: state => state.cartData.data,
+  shopList: state => state.shopList,
   /**
    * 购物车所有货品总数
    * @param state
@@ -63,7 +237,9 @@ export const getters = {
    */
   allCount: state => {
     let _allCount = 0
-    state.skuList.forEach(item => _allCount += item.num)
+    state.shopList.forEach(shop => {
+      shop.skuList.forEach(item => _allCount += item.num)
+    })
     return _allCount
   },
   /**
@@ -73,8 +249,10 @@ export const getters = {
    */
   checkedCount: state => {
     let _checkedCount = 0
-    state.skuList.forEach(item => {
-      if (item.checked) _checkedCount += item.num
+    state.shopList.forEach(shop => {
+      shop.skuList.forEach(item => {
+        if (item.checked) _checkedCount += item.num
+      })
     })
     return _checkedCount
   }
