@@ -96,13 +96,14 @@
         border-color: #ccc;
         border-bottom: none;
         background-color: #fff;
+        z-index: 20;
       }
       .dorpdown-layer {
         display: block;
       }
     }
     .dorpdown-layer {
-      z-index: 999;
+      z-index: 10;
     }
     .header-cart-cm {
       position: relative;
