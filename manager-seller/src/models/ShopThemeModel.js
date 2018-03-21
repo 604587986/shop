@@ -13,18 +13,18 @@ import {
 
 export default class ShopThemeModel extends DataModel {
   /** 模板ID */
-  @ServerName('id')
-  id
+  @ServerName('theme_id')
+  theme_id
 
   /** 模板名称 */
-  @ServerName('name')
-  name
+  @ServerName('theme_name')
+  theme_name
 
-  /** 模板路径 */
-  @ServerName('path')
-  path
+  /** 是否选中 */
+  @ServerName('selected')
+  selected
 
-  /** 是否为默认 */
-  @ServerName('is_default')
-  is_default
+  /** 模板图片 */
+  @ServerName('theme_image')
+  theme_image
 }
