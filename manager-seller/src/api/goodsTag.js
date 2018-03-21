@@ -30,7 +30,7 @@ export function getTagsList(params) {
 export function getTagGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/tag/goods-list/' + params.tag_id,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/tag/goods-list/${params.tag_id}`,
       method: 'get',
       loading: false,
       params
