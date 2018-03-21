@@ -76,7 +76,9 @@
       }),
       /** 更新购物车货品数量 */
       handleUpdateCartSkuNum(sku, symbol) {
-        this.updateSkuNum({sku_id: sku.sku_id, num: sku.num})
+        if (symbol === '-' && sku.num < 2) return
+        const num = symbol === '+' ? sku.num + 1 : sku.num - 1
+        this.updateSkuNum({sku_id: sku.sku_id, num})
       },
       /** 移除购物车货品 */
       handleRemoveSkuItem(sku) {
