@@ -41,7 +41,7 @@ export function logout() {
  */
 export function getUserInfo(token) {
   return request({
-    url: 'https://www.easy-mock.com/mock/5a090349c645f12278296ab9/admin/user',
+    url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/user',
     method: 'get',
     params: { token }
   })
