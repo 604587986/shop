@@ -51,24 +51,24 @@
         </en-tabel-layout>
       </el-tab-pane>
       <el-tab-pane label="新增模板" name="add">
-        <el-form :model="MouldForm" status-icon :rules="rules" ref="MouldForm" label-width="100px" class="demo-ruleForm" style="width: 30%;margin-left: 10%;">
+        <el-form :model="mouldForm" status-icon :rules="rules" ref="mouldForm" label-width="100px" class="demo-ruleForm" style="width: 30%;margin-left: 10%;">
           <el-form-item label="模板名称" prop="tpl_name">
-            <el-input type="text" v-model="MouldForm.tpl_name" auto-complete="off"></el-input>
+            <el-input type="text" v-model="mouldForm.tpl_name" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item :label="MouldForm.tpl_type === 'weight' ? '首重（kg）': '首件（个）'" prop="first_company">
-            <el-input type="text" v-model.number="MouldForm.first_company" auto-complete="off"></el-input>
+          <el-form-item :label="mouldForm.tpl_type === 'weight' ? '首重（kg）': '首件（个）'" prop="first_company">
+            <el-input type="text" v-model.number="mouldForm.first_company" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="运费（元）" prop="first_price">
-            <el-input v-model.number="MouldForm.first_price"></el-input>
+            <el-input v-model.number="mouldForm.first_price"></el-input>
           </el-form-item>
-          <el-form-item :label="MouldForm.tpl_type === 'weight' ? '续重（kg）': '续件（个）'" prop="continued_company">
-            <el-input v-model.number="MouldForm.continued_company"></el-input>
+          <el-form-item :label="mouldForm.tpl_type === 'weight' ? '续重（kg）': '续件（个）'" prop="continued_company">
+            <el-input v-model.number="mouldForm.continued_company"></el-input>
           </el-form-item>
-          <el-form-item  :label="MouldForm.tpl_type === 'weight' ? '续重运费（元）': '续件运费（元）'"  prop="continued_price">
-            <el-input v-model.number="MouldForm.continued_price"></el-input>
+          <el-form-item  :label="mouldForm.tpl_type === 'weight' ? '续重运费（元）': '续件运费（元）'"  prop="continued_price">
+            <el-input v-model.number="mouldForm.continued_price"></el-input>
           </el-form-item>
           <el-form-item label="模板类型" prop="tpl_type">
-            <el-select v-model="MouldForm.tpl_type" placeholder="请选择">
+            <el-select v-model="mouldForm.tpl_type" placeholder="请选择">
               <el-option
                 label="重量算运费"
                 value="weight">
@@ -83,7 +83,7 @@
             <el-button type="primary">选择地区</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="saveMould('MouldForm')">保存模板</el-button>
+            <el-button type="primary" @click="saveMould('mouldForm')">保存模板</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -152,7 +152,7 @@
         tableData: null,
 
         /** 新增模板表单信息*/
-        MouldForm: {
+        mouldForm: {
           tpl_id: '',
           tpl_name: '',
           first_company: '',
@@ -202,7 +202,7 @@
         if (this.activeName === 'express') {
           this.GET_ExpressMould()
         } else if (this.activeName === 'add') {
-          this.MouldForm = {
+          this.mouldForm = {
             tpl_id: '',
             tpl_name: '',
             first_company: '',
@@ -231,7 +231,7 @@
       /** 编辑模板*/
       handleEditMould(row) {
         this.activeName = 'add'
-        this.MouldForm = {
+        this.mouldForm = {
           tpl_id: row.tpl_id,
           tpl_name: row.tpl_name,
           first_company: row.first_company,
@@ -258,7 +258,7 @@
       /** 新增模板 */
       handleAddMould() {
         this.activeName = 'add'
-        this.MouldForm = {
+        this.mouldForm = {
           tpl_id: '',
           tpl_name: '',
           first_company: '',
@@ -274,7 +274,7 @@
       saveMould(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_express.saveExpressMould(this.MouldForm.tpl_id, this.MouldForm).then(() => {
+            API_express.saveExpressMould(this.mouldForm.tpl_id, this.mouldForm).then(() => {
               this.$message.success('保存成功')
             }).catch(error => {
               this.$message.success('保存失败，请稍后再试！')
