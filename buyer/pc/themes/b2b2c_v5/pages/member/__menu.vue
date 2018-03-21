@@ -24,18 +24,18 @@
             ]
           },
           { title: '客服服务', name: 'service', children: [
-              { title: '我的收藏', name: 'order' },
-              { title: '我的咨询', name: 'shipping-address' },
-              { title: '我的评论', name: 'after-sale' },
-              { title: '我的积分', name: 'after-sale' },
-              { title: '我的优惠券', name: 'after-sale' },
-              { title: '站内消息', name: 'after-sale' }
+              { title: '我的收藏', name: 'aa' },
+              { title: '我的咨询', name: 'bb' },
+              { title: '我的评论', name: 'cc' },
+              { title: '我的积分', name: 'dd' },
+              { title: '我的优惠券', name: 'ee' },
+              { title: '站内消息', name: 'ff' }
             ]
           },
           { title: '账号管理', name: 'account', children: [
-              { title: '完善资料', name: 'order' },
-              { title: '账户安全', name: 'after-sale' },
-              { title: '账号绑定', name: 'after-sale' }
+              { title: '完善资料', name: 'gg' },
+              { title: '账户安全', name: 'hh' },
+              { title: '账号绑定', name: 'ii' }
             ]
           }
         ]
@@ -63,7 +63,7 @@
       color: #777;
       font-weight: 400;
       transition: all .3s ease-out;
-      &.active, &:hover {
+      &.nuxt-link-active, &:hover {
         background-color: #FF6A67;
         color: #fff;
         padding-left: 30px;
