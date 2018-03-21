@@ -42,8 +42,8 @@ module.exports = {
     publicPath: ''
   },
   css: [
-    '~styles/normalize.css',
-    '~styles/base.css'
+    '~assets/styles/normalize.css',
+    '~assets/styles/base.css'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
