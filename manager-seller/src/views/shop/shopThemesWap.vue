@@ -23,7 +23,7 @@
       </ul>
       <hr/>
       <div style="width: 100%;text-align: center;">
-        <el-button type="success" @click="saveCurrrentTpl">保存修改</el-button>
+        <el-button type="success" @click="POST_SaveCurrrentTpl">保存修改</el-button>
       </div>
     </div>
     <div class="zoom-img" :class="{'zoom-img-show': zoom_img_show }">
@@ -96,7 +96,7 @@
         this.zoom_img_show = !this.zoom_img_show
       },
       /** 保存Wap店铺主题*/
-      saveCurrrentTpl() {
+      POST_SaveCurrrentTpl() {
         if (!this.tpl_choosed_id) {
           this.$message.warning('请先选择一种模板！')
           return

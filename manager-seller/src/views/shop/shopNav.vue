@@ -59,7 +59,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addShopNavshow = false">取 消</el-button>
-        <el-button type="primary" @click="addShopNav">保 存</el-button>
+        <el-button type="primary" @click="POST_AddShopNav">保 存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -133,7 +133,7 @@
       },
 
       /** 新增导航*/
-      addShopNav() {
+      POST_AddShopNav() {
         API_ShopNav.addShopNav(this.navform).then(response => {
           this.$message.success('保存成功')
           this.addShopNavshow = false
