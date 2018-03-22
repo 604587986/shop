@@ -143,7 +143,7 @@
 
 <script>
   import * as API_order from '@/api/order'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'orderList',
@@ -207,10 +207,10 @@
 
         /** 订单状态 列表*/
         orderStatusList: [
-          {value: 0, label: '全部'},
-          {value: 1, label: '待付款'},
-          {value: 2, label: '待发货'},
-          {value: 3, label: '待收货'}
+          { value: 0, label: '全部' },
+          { value: 1, label: '待付款' },
+          { value: 2, label: '待发货' },
+          { value: 3, label: '待收货' }
         ]
       }
     },
@@ -274,7 +274,7 @@
 
       /** 查看、操作订单 */
       handleOperateOrder(item) {
-        this.$router.push({path: `/order/detail/${item.sn}`})
+        this.$router.push({ path: `/order/detail/${item.sn}` })
       },
 
       GET_OrderList() {

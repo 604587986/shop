@@ -76,7 +76,7 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'draftList',

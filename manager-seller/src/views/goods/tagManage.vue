@@ -35,7 +35,7 @@
 
 <script>
   import * as API_goods from '@/api/goodsTag'
-  import {TableLayout} from '@/components'
+  import { TableLayout } from '@/components'
 
   export default {
     name: 'tagManage',
@@ -94,7 +94,7 @@
 
       /** 为商品添加标签 */
       addtag(tag_id) {
-        this.$router.push({name: 'tagAdd', params: {tag_id: tag_id}})
+        this.$router.push({ name: 'tagAdd', params: { tag_id: tag_id }})
       }
     }
   }

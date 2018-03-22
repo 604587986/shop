@@ -55,7 +55,7 @@
 
 <script>
   import * as API_Receipt from '@/api/receipt'
-  import {TableLayout} from '@/components'
+  import { TableLayout } from '@/components'
 
   export default {
     name: 'receiptHistory',
@@ -105,13 +105,13 @@
       /** 查看发票 */
       handleOperateReceipt(index, row) {
         const keys = [
-          {label: '订单编号', key: 'sn'},
-          {label: '发票类型', key: 'receipt_type'},
-          {label: '会员名称', key: 'member_name'},
-          {label: '发票金额', key: 'goods_price'},
-          {label: '发票抬头', key: 'receipt_title'},
-          {label: '发票内容', key: 'receipt_content'},
-          {label: '发票税号', key: 'duty_invoice'}
+          { label: '订单编号', key: 'sn' },
+          { label: '发票类型', key: 'receipt_type' },
+          { label: '会员名称', key: 'member_name' },
+          { label: '发票金额', key: 'goods_price' },
+          { label: '发票抬头', key: 'receipt_title' },
+          { label: '发票内容', key: 'receipt_content' },
+          { label: '发票税号', key: 'duty_invoice' }
         ]
         this.viewRectiptData = keys.map(item => {
           item.value = row[item.key]

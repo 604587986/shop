@@ -95,7 +95,7 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'recycleStation',
@@ -223,7 +223,7 @@
       },
       /** 还原回收站商品*/
       ReductionGoods(ids) {
-        API_goods.RecycleReductionGoods({ids}).then(response => {
+        API_goods.RecycleReductionGoods({ ids }).then(response => {
           this.$message.success('还原成功')
         }).catch(error => {
           this.$message.success('还原失败，请稍后再试')

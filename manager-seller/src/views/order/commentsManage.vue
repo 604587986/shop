@@ -136,7 +136,7 @@
 
 <script>
   import * as API_comment from '@/api/comment'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsList',

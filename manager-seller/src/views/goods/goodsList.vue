@@ -123,7 +123,7 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsList',
@@ -249,16 +249,16 @@
       },
       /** 发布商品*/
       publishGoods() {
-        this.$router.push({path: 'good-publish'})
+        this.$router.push({ path: 'good-publish' })
       },
 
       /** 跳转回收站*/
       gotoRecycle() {
-        this.$router.push({path: 'recycle-station'})
+        this.$router.push({ path: 'recycle-station' })
       },
       /** 编辑商品 */
       handleEditGoods(row) {
-        this.$router.push({path: 'good-publish', query: {goodsid: row.id}})
+        this.$router.push({ path: 'good-publish', query: { goodsid: row.id }})
       },
       /** 删除商品 */
       handleDeleteGoods(row) {
@@ -273,7 +273,7 @@
             this.$message.success('删除商品成功！')
           }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
         }).catch(() => {
-          this.$message.info({message: '已取消删除'})
+          this.$message.info({ message: '已取消删除' })
         })
       },
       /** 库存 */

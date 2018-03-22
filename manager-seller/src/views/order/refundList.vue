@@ -103,7 +103,7 @@
 
 <script>
   import * as API_refund from '@/api/refund'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'refundList',
@@ -215,7 +215,7 @@
 
       /** 操作订单 */
       handleOperateRefund(index, row) {
-        this.$router.push({path: `/order/refund/${row.sn}`})
+        this.$router.push({ path: `/order/refund/${row.sn}` })
       },
 
       /** 获取退款单列表数据 */

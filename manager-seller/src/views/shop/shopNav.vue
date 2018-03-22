@@ -67,7 +67,7 @@
 
 <script>
   import * as API_ShopNav from '@/api/shopNav'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'shopNav',

@@ -134,7 +134,7 @@
 <script>
   import * as API_express from '@/api/expressMould'
   import * as API_logistics from '@/api/expressCompany'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'logisticsManage',
@@ -172,22 +172,22 @@
         /** 表单校验规则*/
         rules: {
           tpl_name: [
-            {required: true, message: '请输入模板名称', trigger: 'blur'}
+            { required: true, message: '请输入模板名称', trigger: 'blur' }
           ],
           first_company: [
-            {required: true, message: '请输入首重数量', trigger: 'blur'}
+            { required: true, message: '请输入首重数量', trigger: 'blur' }
           ],
           first_price: [
-            {required: true, message: '请输入首重运费', trigger: 'blur'}
+            { required: true, message: '请输入首重运费', trigger: 'blur' }
           ],
           continued_company: [
-            {required: true, message: '请输入续重数量', trigger: 'blur'}
+            { required: true, message: '请输入续重数量', trigger: 'blur' }
           ],
           continued_price: [
-            {required: true, message: '请输入续重运费', trigger: 'blur'}
+            { required: true, message: '请输入续重运费', trigger: 'blur' }
           ],
           tpl_type: [
-            {required: true, message: '请选择模板类型', trigger: 'blur'}
+            { required: true, message: '请选择模板类型', trigger: 'blur' }
           ]
         },
 

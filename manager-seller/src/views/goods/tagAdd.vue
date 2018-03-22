@@ -44,8 +44,8 @@
 
 <script>
   import * as API_goodsTag from '@/api/goodsTag'
-  import {CategoryPicker, TableLayout, TableSearch} from '@/components'
-  import {GoodsSelector} from '@/plugins/selector/vue'
+  import { CategoryPicker, TableLayout, TableSearch } from '@/components'
+  import { GoodsSelector } from '@/plugins/selector/vue'
 
   export default {
     name: 'tagAdd',

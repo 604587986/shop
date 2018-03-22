@@ -190,21 +190,21 @@
               title: '基本信息',
               key: 'base',
               items: [
-                {label: '订单编号', value: o.sn},
-                {label: '订单金额', value: '￥' + f.formatPrice(o.need_pay_money)},
-                {label: '支付方式', value: o.payment_type_text},
-                {label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '')},
-                {label: '下单时间', value: f.unixToDate(o.order_time)}
+                { label: '订单编号', value: o.sn },
+                { label: '订单金额', value: '￥' + f.formatPrice(o.need_pay_money) },
+                { label: '支付方式', value: o.payment_type_text },
+                { label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '') },
+                { label: '下单时间', value: f.unixToDate(o.order_time) }
               ]
             },
             {
               title: '发票信息',
               key: 'receipt',
               items: [
-                {label: '发票类型', value: o.need_receipt ? (o.receipt_type === 'PERSON' ? '个人' : '单位') : '无'},
-                {label: '发票抬头', value: o.need_receipt ? o.receipt_title || '无' : '无'},
-                {label: '发票内容', value: o.need_receipt ? o.receipt_content || '无' : '无'},
-                {label: '发票税号', value: o.need_receipt ? o.duty_invoice || '无' : '无'}
+                { label: '发票类型', value: o.need_receipt ? (o.receipt_type === 'PERSON' ? '个人' : '单位') : '无' },
+                { label: '发票抬头', value: o.need_receipt ? o.receipt_title || '无' : '无' },
+                { label: '发票内容', value: o.need_receipt ? o.receipt_content || '无' : '无' },
+                { label: '发票税号', value: o.need_receipt ? o.duty_invoice || '无' : '无' }
               ]
             }
           ],
@@ -213,20 +213,20 @@
               title: '买家信息',
               key: 'buyer',
               items: [
-                {label: '收&ensp;货&ensp;人', value: o.ship_name},
-                {label: '收货地址', value: o.ship_province + o.ship_city + o.ship_region + o.ship_town + ' ' + o.ship_addr},
-                {label: '联系方式', value: o.ship_mobile},
-                {label: '买家留言', value: o.remark || '无'}
+                { label: '收&ensp;货&ensp;人', value: o.ship_name },
+                { label: '收货地址', value: o.ship_province + o.ship_city + o.ship_region + o.ship_town + ' ' + o.ship_addr },
+                { label: '联系方式', value: o.ship_mobile },
+                { label: '买家留言', value: o.remark || '无' }
               ]
             },
             {
               title: '商家信息',
               key: 'seller',
               items: [
-                {label: '卖家账号', value: o.seller_name},
-                {label: '发货时间', value: f.unixToDate(o.ship_time)},
-                {label: '物流公司', value: o.logi_name},
-                {label: '快递单号', value: o.ship_no}
+                { label: '卖家账号', value: o.seller_name },
+                { label: '发货时间', value: f.unixToDate(o.ship_time) },
+                { label: '物流公司', value: o.logi_name },
+                { label: '快递单号', value: o.ship_no }
               ]
             }
           ]

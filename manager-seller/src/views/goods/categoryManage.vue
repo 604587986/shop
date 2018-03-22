@@ -127,7 +127,7 @@
 
 <script>
   import * as API_goodsCategory from '@/api/goodsCategory'
-  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'categoryManage',
