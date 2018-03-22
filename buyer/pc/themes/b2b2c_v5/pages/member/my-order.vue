@@ -11,8 +11,8 @@
       </ul>
     </div>
     <div class="order-search">
-      <input type="text" placeholder="输入订单中商品关键词">
-      <button type="button">搜索</button>
+      <input type="text" v-model="keyword" placeholder="输入订单中商品关键词" @keyup.enter="handleSearch">
+      <button type="button" @click="handleSearch">搜索</button>
       <span v-if="pageData">搜到：<em style="color: #f42424">{{ pageData.data_total }}</em> 笔订单</span>
       <span v-else>搜索中...</span>
     </div>
@@ -95,6 +95,7 @@
           { title: '已完成', active: false, status: 'complete' },
           { title: '待评论', active: false, status: 'wait-comments' },
         ],
+        keyword: '',
         params: {
           page_no: 1,
           page_size: 5,
@@ -121,6 +122,11 @@
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
+        this.GET_OrderList()
+      },
+      /** 订单搜索 */
+      handleSearch() {
+        this.params.keyword = this.keyword
         this.GET_OrderList()
       },
       /** 获取订单列表 */
