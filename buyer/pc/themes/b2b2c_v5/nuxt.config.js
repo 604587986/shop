@@ -15,7 +15,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_69d3rq6qvn0tqpvi.css' }
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_6i5byjvh3tw6d2t9.css' }
     ],
     script: [
       { type: 'text/javascript', src: 'https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js' },

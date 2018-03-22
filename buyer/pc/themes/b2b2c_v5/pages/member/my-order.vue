@@ -13,7 +13,7 @@
     <div class="order-search">
       <input type="text" placeholder="输入订单中商品关键词">
       <button type="button">搜索</button>
-      <span v-if="orderData">搜到：<em style="color: #f42424">{{ orderData.data_total }}</em> 笔订单</span>
+      <span v-if="pageData">搜到：<em style="color: #f42424">{{ pageData.data_total }}</em> 笔订单</span>
       <span v-else>搜索中...</span>
     </div>
     <div class="order-table">
@@ -26,7 +26,7 @@
         <span style="width: 110px">订单操作</span>
       </div>
       <ul class="order-table-tbody">
-        <li v-for="order in orderData.data" :key="order.order_sn">
+        <li v-for="order in orderList" :key="order.order_sn">
           <div class="order-tbody-title">
             <span class="pay-type">线上支付：</span>
             <span class="price"><em>￥</em>{{ order.order_amount | unitPrice }}</span>
@@ -61,17 +61,31 @@
         </li>
       </ul>
     </div>
+    <div class="order-pagination" v-if="pageData">
+      <el-pagination
+        @current-change="handleCurrentPageChange"
+        :current-page.sync="pageData.page_no"
+        :page-size="pageData.page_size"
+        layout="total, prev, pager, next"
+        :total="pageData.data_total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
   import * as API_Order from '@/api/order'
+  import elementPagination from 'element-pagination'
+  import 'element-theme-chalk/lib/pagination.css'
   export default {
     name: 'my-order',
+    components: {
+      'el-pagination': elementPagination
+    },
     data() {
       return {
         loading: true,
-        orderData: '',
+        orderList: '',
         navList: [
           { title: '所有订单', active: true, status: 'all' },
           { title: '待付款', active: false, status: 'wait-pay' },
@@ -85,7 +99,9 @@
           page_no: 1,
           page_size: 5,
           status: 'all'
-        }
+        },
+        /** 列表分页数据 */
+        pageData: ''
       }
     },
     created() {
@@ -102,11 +118,22 @@
         this.params.status = nav.status
         this.GET_OrderList()
       },
+      /** 当前页数发生改变 */
+      handleCurrentPageChange(cur) {
+        this.params.page_no = cur
+        this.GET_OrderList()
+      },
       /** 获取订单列表 */
       GET_OrderList() {
         this.loading = true
         API_Order.getOrderList(this.params).then(response => {
-          this.orderData = response
+          this.orderList = response.data
+          this.pageData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
+          $("html,body").animate({ scrollTop: 0 }, 300)
           this.loading = flase
         }).catch(error => {
           this.loading = false
@@ -336,6 +363,32 @@
           }
         }
       }
+    }
+  }
+  .order-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 50px;
+    /deep/ .el-pager li {
+      font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+    }
+    /deep/ .el-icon {
+      font-family: "iconfont" !important;
+      font-style: normal;
+    }
+    /deep/ .el-icon-arrow-left::before {
+      content: '\e605'
+    }
+    /deep/ .el-icon-arrow-right::before {
+      content: '\e606';
+    }
+    /deep/ .el-icon-more::before {
+      content: '\e719';
+    }
+    /deep/ .el-icon-d-arrow-right::before {
+      content: '\e624';
     }
   }
 </style>
