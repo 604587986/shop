@@ -1,44 +1,25 @@
 <template>
   <div id="member-menu">
-    <div v-for="menu in menus" :key="menu.name" class="menu-item">
-      <h2>{{ menu.title }}</h2>
-      <nuxt-link v-for="item in menu.children" :key="item.name" :to="'/member/' + item.name">
-        <em>&gt;</em>
-        {{ item.title }}
-        <em>&lt;</em>
-      </nuxt-link>
+    <div class="inner-menu">
+      <div v-for="menu in menus" :key="menu.name" class="menu-item">
+        <h2>{{ menu.title }}</h2>
+        <nuxt-link v-for="item in menu.children" :key="item.name" :to="'/member/' + item.name">
+          <em>&gt;</em>
+          {{ item.title }}
+          <em>&lt;</em>
+        </nuxt-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import menus from './menus'
   export default {
     name: 'member-menu',
     data() {
       return {
-        menus: [
-          { title: '交易管理', name: 'transaction', children: [
-              { title: '我的订单', name: 'order' },
-              { title: '收货地址', name: 'shipping-address' },
-              { title: '售后申请', name: 'after-sale' }
-            ]
-          },
-          { title: '客服服务', name: 'service', children: [
-              { title: '我的收藏', name: 'aa' },
-              { title: '我的咨询', name: 'bb' },
-              { title: '我的评论', name: 'cc' },
-              { title: '我的积分', name: 'dd' },
-              { title: '我的优惠券', name: 'ee' },
-              { title: '站内消息', name: 'ff' }
-            ]
-          },
-          { title: '账号管理', name: 'account', children: [
-              { title: '完善资料', name: 'gg' },
-              { title: '账户安全', name: 'hh' },
-              { title: '账号绑定', name: 'ii' }
-            ]
-          }
-        ]
+        menus
       }
     }
   }
@@ -47,7 +28,10 @@
 <style type="text/scss" lang="scss" scoped>
   #member-menu {
     width: 208px;
-    border: 1px solid #e7e7e7;
+    .inner-menu {
+      width: 100%;
+      border: 1px solid #e7e7e7;
+    }
     h2 {
       background: #F7F7F7;
       color: #333;

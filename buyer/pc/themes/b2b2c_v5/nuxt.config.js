@@ -43,12 +43,19 @@ module.exports = {
   },
   css: [
     '~assets/styles/normalize.css',
-    '~assets/styles/base.css'
+    '~assets/styles/base.css',
+    '~assets/styles/page-transletion.scss'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
     { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
     { src: '~plugins/vue-filters', ssr: false }
-  ]
+  ],
+  router: {
+    scrollBehavior: function (to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    }
+  },
+  transition: 'page'
 }
