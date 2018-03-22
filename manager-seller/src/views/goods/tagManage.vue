@@ -6,14 +6,15 @@
     :loading="loading"
   >
     <template slot="table-columns">
-      <el-table-column prop="id" label="标签ID" />
-      <el-table-column prop="name" label="标签名称" />
+      <el-table-column prop="id" label="标签ID"/>
+      <el-table-column prop="name" label="标签名称"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="primary"
-            @click="addtag(scope.row.id)">标签商品设置</el-button>
+            @click="addtag(scope.row.id)">标签商品设置
+          </el-button>
         </template>
       </el-table-column>
     </template>
@@ -34,7 +35,8 @@
 
 <script>
   import * as API_goods from '@/api/goodsTag'
-  import { TableLayout } from '@/components'
+  import {TableLayout} from '@/components'
+
   export default {
     name: 'tagManage',
     components: {
@@ -92,7 +94,7 @@
 
       /** 为商品添加标签 */
       addtag(tag_id) {
-        this.$router.push({ name: 'tagAdd', params: { tag_id: tag_id }})
+        this.$router.push({name: 'tagAdd', params: {tag_id: tag_id}})
       }
     }
   }
@@ -112,6 +114,7 @@
   .toolbar-btns {
 
   }
+
   .toolbar-search {
     margin-right: 10px;
   }

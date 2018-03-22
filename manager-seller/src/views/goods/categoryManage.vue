@@ -44,16 +44,17 @@
               <i v-if="!scope.row._expanded && scope.row.level===1" class="el-icon-plus icon_expanded_level1"></i>
             </span>
             <span v-else>
-              <svg-icon v-if="scope.row.level===2" iconClass="leftbotcorner" className="leftbotcorner-icon icon_expanded_level2" ></svg-icon>
+              <svg-icon v-if="scope.row.level===2" iconClass="leftbotcorner"
+                        className="leftbotcorner-icon icon_expanded_level2"></svg-icon>
               <i v-if="scope.row.level===1" class="el-icon-minus icon_expanded_level1"></i>
             </span>
             <span>{{ scope.row.category_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column  prop="sort" label="排序" />
-        <el-table-column  label="显示">
+        <el-table-column prop="sort" label="排序"/>
+        <el-table-column label="显示">
           <template slot-scope="scope">
-            <span class="showstatus showed"  v-if="scope.row.is_show === 1"><i class="el-icon-success"></i>已显示</span>
+            <span class="showstatus showed" v-if="scope.row.is_show === 1"><i class="el-icon-success"></i>已显示</span>
             <span class="showstatus notshow" v-if="scope.row.is_show === 0"><i class="el-icon-success"></i>未显示</span>
           </template>
         </el-table-column>
@@ -62,16 +63,19 @@
             <el-button
               size="mini"
               type="success"
-              @click="handleEditGoodsCategory(scope.$index, scope.row)">编辑</el-button>
+              @click="handleEditGoodsCategory(scope.$index, scope.row)">编辑
+            </el-button>
             <el-button
               size="mini"
               type="warning"
-              @click="handleDeleteGoodsCategory(scope.row.category_id)">删除</el-button>
+              @click="handleDeleteGoodsCategory(scope.row.category_id)">删除
+            </el-button>
             <el-button
               v-if=" scope.row.level === 1 "
               size="mini"
               type="primary"
-              @click="handleAddSonCategory(scope.$index, scope.row)">新增下级</el-button>
+              @click="handleAddSonCategory(scope.$index, scope.row)">新增下级
+            </el-button>
           </template>
         </el-table-column>
       </template>
@@ -91,10 +95,10 @@
     <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="30%" align="center">
       <el-form :model="goodsCategoryData" label-position="right" label-width="80px">
         <el-form-item label="分类名称">
-          <el-input  v-model="goodsCategoryData.category_name" auto-complete="off" style="width: 70%;"></el-input>
+          <el-input v-model="goodsCategoryData.category_name" auto-complete="off" style="width: 70%;"></el-input>
         </el-form-item>
         <el-form-item label="上级分类">
-          <el-select v-model="goodsCategoryData.category_parent"  placeholder="请选择" style="width: 70%;">
+          <el-select v-model="goodsCategoryData.category_parent" placeholder="请选择" style="width: 70%;">
             <el-option
               v-for="item in tableData"
               :key="item.category_id"
@@ -104,7 +108,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="排序">
-          <el-input v-model="goodsCategoryData.sort" auto-complete="off" style="width: 70%;" ></el-input>
+          <el-input v-model="goodsCategoryData.sort" auto-complete="off" style="width: 70%;"></el-input>
         </el-form-item>
         <el-form-item label="显示状态">
           <el-radio-group v-model="goodsCategoryData.is_show" style="width: 70%;">
@@ -123,7 +127,8 @@
 
 <script>
   import * as API_goodsCategory from '@/api/goodsCategory'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+
   export default {
     name: 'categoryManage',
     components: {
@@ -198,7 +203,8 @@
       handleWithdraw(index, row) {
         this.$confirm('确认下架吗？', '提示')
           .then(() => this.DELETE_Goods(row.id))
-          .catch(() => {})
+          .catch(() => {
+          })
       },
 
       /** 销售状态格式化 */
@@ -409,26 +415,29 @@
     height: 50px;
   }
 
-
-  .showstatus{
-    margin:2px;
-    padding:2px;
+  .showstatus {
+    margin: 2px;
+    padding: 2px;
     border-radius: 5px;
   }
-  .showed{
+
+  .showed {
     color: #5CB85C;
     border: 1px solid #5cb85c;
   }
-  .notshow{
+
+  .notshow {
     color: #888888;
     border: 1px solid #888888;
   }
-  .icon_expanded_level1{
+
+  .icon_expanded_level1 {
     margin-left: 100px;
     cursor: pointer;
     border: 1px solid #ddd;
   }
-  .icon_expanded_level2{
+
+  .icon_expanded_level2 {
     margin-left: 125px;
   }
 </style>

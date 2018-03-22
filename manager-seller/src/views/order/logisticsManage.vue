@@ -19,7 +19,7 @@
             <!--首重（kg）-->
             <el-table-column prop="first_company" label="首重（kg）"/>
             <!--运费（元）-->
-            <el-table-column  label="运费（元）">
+            <el-table-column label="运费（元）">
               <template slot-scope="scope">
                 <span>{{ scope.row.first_price }}</span>
               </template>
@@ -40,18 +40,21 @@
                 <el-button
                   size="mini"
                   type="text"
-                  @click="handleEditMould(scope.row)">编辑</el-button>
+                  @click="handleEditMould(scope.row)">编辑
+                </el-button>
                 <el-button
                   size="mini"
                   type="text"
-                  @click="handleDeleteMould(scope.row)">删除</el-button>
+                  @click="handleDeleteMould(scope.row)">删除
+                </el-button>
               </template>
             </el-table-column>
           </template>
         </en-tabel-layout>
       </el-tab-pane>
       <el-tab-pane label="新增模板" name="add">
-        <el-form :model="mouldForm" status-icon :rules="rules" ref="mouldForm" label-width="100px" class="demo-ruleForm" style="width: 30%;margin-left: 10%;">
+        <el-form :model="mouldForm" status-icon :rules="rules" ref="mouldForm" label-width="100px" class="demo-ruleForm"
+                 style="width: 30%;margin-left: 10%;">
           <el-form-item label="模板名称" prop="tpl_name">
             <el-input type="text" v-model="mouldForm.tpl_name" auto-complete="off"></el-input>
           </el-form-item>
@@ -64,7 +67,7 @@
           <el-form-item :label="mouldForm.tpl_type === 'weight' ? '续重（kg）': '续件（个）'" prop="continued_company">
             <el-input v-model.number="mouldForm.continued_company"></el-input>
           </el-form-item>
-          <el-form-item  :label="mouldForm.tpl_type === 'weight' ? '续重运费（元）': '续件运费（元）'"  prop="continued_price">
+          <el-form-item :label="mouldForm.tpl_type === 'weight' ? '续重运费（元）': '续件运费（元）'" prop="continued_price">
             <el-input v-model.number="mouldForm.continued_price"></el-input>
           </el-form-item>
           <el-form-item label="模板类型" prop="tpl_type">
@@ -111,12 +114,14 @@
                   size="mini"
                   type="success"
                   v-if="scope.row.logistics_status == 0"
-                  @click="handleLogisticsSwitch(scope.row)">开启</el-button>
+                  @click="handleLogisticsSwitch(scope.row)">开启
+                </el-button>
                 <el-button
                   size="mini"
                   type="danger"
                   v-if="scope.row.logistics_status == 1"
-                  @click="handleLogisticsSwitch(scope.row)">关闭</el-button>
+                  @click="handleLogisticsSwitch(scope.row)">关闭
+                </el-button>
               </template>
             </el-table-column>
           </template>
@@ -129,7 +134,8 @@
 <script>
   import * as API_express from '@/api/expressMould'
   import * as API_logistics from '@/api/expressCompany'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+
   export default {
     name: 'logisticsManage',
     components: {
@@ -166,22 +172,22 @@
         /** 表单校验规则*/
         rules: {
           tpl_name: [
-            { required: true, message: '请输入模板名称', trigger: 'blur' }
+            {required: true, message: '请输入模板名称', trigger: 'blur'}
           ],
           first_company: [
-            { required: true, message: '请输入首重数量', trigger: 'blur' }
+            {required: true, message: '请输入首重数量', trigger: 'blur'}
           ],
           first_price: [
-            { required: true, message: '请输入首重运费', trigger: 'blur' }
+            {required: true, message: '请输入首重运费', trigger: 'blur'}
           ],
           continued_company: [
-            { required: true, message: '请输入续重数量', trigger: 'blur' }
+            {required: true, message: '请输入续重数量', trigger: 'blur'}
           ],
           continued_price: [
-            { required: true, message: '请输入续重运费', trigger: 'blur' }
+            {required: true, message: '请输入续重运费', trigger: 'blur'}
           ],
           tpl_type: [
-            { required: true, message: '请选择模板类型', trigger: 'blur' }
+            {required: true, message: '请选择模板类型', trigger: 'blur'}
           ]
         },
 
@@ -253,7 +259,8 @@
               console.log(error)
             })
           })
-          .catch(() => {})
+          .catch(() => {
+          })
       },
       /** 新增模板 */
       handleAddMould() {
@@ -302,7 +309,8 @@
         const _tip = row.logistics_status === 1 ? '关闭' : '开启'
         this.$confirm(`确定要${_tip}么?`, '确认信息')
           .then(() => this.switchLogistics(row))
-          .catch(() => {})
+          .catch(() => {
+          })
       },
       switchLogistics(row) {
         const _tip = row.logistics_status === 1 ? '关闭' : '开启'
@@ -318,7 +326,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .company-choosed{
+  .company-choosed {
     font-weight: bold;
     color: #e90101;
   }

@@ -7,9 +7,9 @@
     >
       <template slot="table-columns">
         <!--结算编号-->
-        <el-table-column prop="sn" label="结算编号" />
+        <el-table-column prop="sn" label="结算编号"/>
         <!--起止时间-->
-        <el-table-column label="起止时间" >
+        <el-table-column label="起止时间">
           <template slot-scope="scope">{{ scope.row.order_time | unixToDate }}</template>
         </el-table-column>
         <!--本期应收-->
@@ -26,7 +26,8 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateOrder(scope.$index, scope.row)">查看详情</el-button>
+              @click="handleOperateOrder(scope.$index, scope.row)">查看详情
+            </el-button>
           </template>
         </el-table-column>
       </template>
@@ -47,7 +48,8 @@
 
 <script>
   import * as API_order from '@/api/order'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+
   export default {
     name: 'settlementManage',
     components: {

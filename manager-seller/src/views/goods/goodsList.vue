@@ -1,126 +1,130 @@
 <template>
   <div>
-   <en-tabel-layout
-    toolbar
-    pagination
-    :tableData="tableData"
-    :loading="loading"
-  >
-    <div slot="toolbar" class="inner-toolbar">
-      <div class="toolbar-btns">
-        <el-button-group>
-          <el-button @click="inWarehouse">仓库中的商品</el-button>
-          <el-button @click="selling">出售中的商品</el-button>
-        </el-button-group>
-        <el-button @click="publishGoods" type="success">发布商品</el-button>
-        <el-button @click="gotoRecycle" type="primary">回收站</el-button>
+    <en-tabel-layout
+      toolbar
+      pagination
+      :tableData="tableData"
+      :loading="loading"
+    >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns">
+          <el-button-group>
+            <el-button @click="inWarehouse">仓库中的商品</el-button>
+            <el-button @click="selling">出售中的商品</el-button>
+          </el-button-group>
+          <el-button @click="publishGoods" type="success">发布商品</el-button>
+          <el-button @click="gotoRecycle" type="primary">回收站</el-button>
+        </div>
+        <div class="toolbar-search">
+          <en-table-search
+            @search="searchEvent"
+            @advancedSearch="advancedSearchEvent"
+            advanced
+          >
+            <template slot="advanced-content">
+              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+                <el-form-item label="商品名称">
+                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+                </el-form-item>
+                <el-form-item label="商品编号">
+                  <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
+                </el-form-item>
+                <el-form-item label="店铺名称">
+                  <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
+                </el-form-item>
+                <el-form-item label="商品类别">
+                  <en-category-picker @changed="categoryChanged"/>
+                </el-form-item>
+              </el-form>
+            </template>
+          </en-table-search>
+        </div>
       </div>
-      <div class="toolbar-search">
-        <en-table-search
-          @search="searchEvent"
-          @advancedSearch="advancedSearchEvent"
-          advanced
-        >
-          <template slot="advanced-content">
-            <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-              <el-form-item label="商品名称">
-                <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
-              </el-form-item>
-              <el-form-item label="商品编号">
-                <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
-              </el-form-item>
-              <el-form-item label="店铺名称">
-                <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
-              </el-form-item>
-              <el-form-item label="商品类别">
-                <en-category-picker @changed="categoryChanged"/>
-              </el-form-item>
-            </el-form>
-          </template>
-        </en-table-search>
-      </div>
-    </div>
-    <template slot="table-columns">
-      <el-table-column label="商品图片" width="120">
-        <template slot-scope="scope">
-          <img :src="scope.row.image" class="goods-image"/>
-        </template>
-      </el-table-column>
-      <el-table-column prop="sn" label="商品编号" width="180"/>
-      <el-table-column prop="seller_name" label="店铺名称" width="120"/>
-      <el-table-column prop="name" label="商品名称" align="left" width="450"/>
-      <el-table-column prop="category_name" label="商品分类"/>
-      <el-table-column label="商品价格" width="120">
-        <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
-      </el-table-column>
-      <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-      <el-table-column prop="brand_name" label="品牌"> </el-table-column>
-      <el-table-column label="操作" width="280">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="success"
-            @click="handleEditGoods(scope.row)">编辑</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDeleteGoods(scope.row)">删除</el-button>
-          <el-button
-            size="mini"
-            type="primary"
-            @click="handleStockGoods(scope.row)">库存</el-button>
-        </template>
-      </el-table-column>
-    </template>
-
-    <el-pagination
-      slot="pagination"
-      v-if="pageData"
-      @size-change="handlePageSizeChange"
-      @current-change="handlePageCurrentChange"
-      :current-page="pageData.page_no"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageData.page_size"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pageData.data_total">
-    </el-pagination>
-  </en-tabel-layout>
-  <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="30%">
-    <el-form :model="goodsStockData" v-if="goodsStocknums === 1 ">
-      <el-form-item label="库存">
-        <el-input  auto-complete="off" label-width="100"></el-input>
-      </el-form-item>
-      <el-form-item label="发货数">
-        <el-input  auto-complete="off" label-width="100"></el-input>
-        <el-input  auto-complete="off" label-width="100"></el-input>
-      </el-form-item>
-    </el-form>
-    <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
       <template slot="table-columns">
-        <el-table-column prop="name" label="商品名称" />
-        <el-table-column label="库存" width="120">
+        <el-table-column label="商品图片" width="120">
           <template slot-scope="scope">
-            <el-input  auto-complete="off" label-width="100"></el-input>
+            <img :src="scope.row.image" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column label="发货数" width="120">
+        <el-table-column prop="sn" label="商品编号" width="180"/>
+        <el-table-column prop="seller_name" label="店铺名称" width="120"/>
+        <el-table-column prop="name" label="商品名称" align="left" width="450"/>
+        <el-table-column prop="category_name" label="商品分类"/>
+        <el-table-column label="商品价格" width="120">
+          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+        </el-table-column>
+        <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
+        <el-table-column prop="brand_name" label="品牌"></el-table-column>
+        <el-table-column label="操作" width="280">
           <template slot-scope="scope">
-            <el-input  auto-complete="off" label-width="100"></el-input>
+            <el-button
+              size="mini"
+              type="success"
+              @click="handleEditGoods(scope.row)">编辑
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDeleteGoods(scope.row)">删除
+            </el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleStockGoods(scope.row)">库存
+            </el-button>
           </template>
         </el-table-column>
-     </template>
+      </template>
+
+      <el-pagination
+        slot="pagination"
+        v-if="pageData"
+        @size-change="handlePageSizeChange"
+        @current-change="handlePageCurrentChange"
+        :current-page="pageData.page_no"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="pageData.page_size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pageData.data_total">
+      </el-pagination>
     </en-tabel-layout>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="goodsStockshow = false">取 消</el-button>
-      <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
-    </div>
-  </el-dialog>
- </div>
+    <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="30%">
+      <el-form :model="goodsStockData" v-if="goodsStocknums === 1 ">
+        <el-form-item label="库存">
+          <el-input auto-complete="off" label-width="100"></el-input>
+        </el-form-item>
+        <el-form-item label="发货数">
+          <el-input auto-complete="off" label-width="100"></el-input>
+          <el-input auto-complete="off" label-width="100"></el-input>
+        </el-form-item>
+      </el-form>
+      <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
+        <template slot="table-columns">
+          <el-table-column prop="name" label="商品名称"/>
+          <el-table-column label="库存" width="120">
+            <template slot-scope="scope">
+              <el-input auto-complete="off" label-width="100"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="发货数" width="120">
+            <template slot-scope="scope">
+              <el-input auto-complete="off" label-width="100"></el-input>
+            </template>
+          </el-table-column>
+        </template>
+      </en-tabel-layout>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="goodsStockshow = false">取 消</el-button>
+        <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+
   export default {
     name: 'goodsList',
     components: {
@@ -184,7 +188,8 @@
       handleWithdraw(index, row) {
         this.$confirm('确认下架吗？', '提示')
           .then(() => this.DELETE_Goods(row.id))
-          .catch(() => {})
+          .catch(() => {
+          })
       },
 
       /** 销售状态格式化 */
@@ -244,16 +249,16 @@
       },
       /** 发布商品*/
       publishGoods() {
-        this.$router.push({ path: 'good-publish' })
+        this.$router.push({path: 'good-publish'})
       },
 
       /** 跳转回收站*/
       gotoRecycle() {
-        this.$router.push({ path: 'recycle-station' })
+        this.$router.push({path: 'recycle-station'})
       },
       /** 编辑商品 */
       handleEditGoods(row) {
-        this.$router.push({ path: 'good-publish', query: { goodsid: row.id }})
+        this.$router.push({path: 'good-publish', query: {goodsid: row.id}})
       },
       /** 删除商品 */
       handleDeleteGoods(row) {
@@ -268,7 +273,7 @@
             this.$message.success('删除商品成功！')
           }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
         }).catch(() => {
-          this.$message.info({ message: '已取消删除' })
+          this.$message.info({message: '已取消删除'})
         })
       },
       /** 库存 */
@@ -304,6 +309,7 @@
   .toolbar-btns {
 
   }
+
   .toolbar-search {
     margin-right: 10px;
   }

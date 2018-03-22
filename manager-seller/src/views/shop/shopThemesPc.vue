@@ -15,7 +15,8 @@
       <ul>
         <li v-for="item in tpl_list">
           <div class="tpl-theme">
-            <img :src="item.theme_image" alt="" class="shop-theme-image" @click="chooseTheme(item)" :class='{"choosed-image":item.theme_id === tpl_choosed_id}'>
+            <img :src="item.theme_image" alt="" class="shop-theme-image" @click="chooseTheme(item)"
+                 :class='{"choosed-image":item.theme_id === tpl_choosed_id}'>
             <span class="tpl-name">模板名称:{{item.theme_name}}</span>
             <span class="tpl-preview" @click="previewImg(item.theme_image)">预览</span>
           </div>
@@ -37,6 +38,7 @@
 
 <script>
   import * as API_ShopTheme from '@/api/shopTheme'
+
   export default {
     name: 'shopThemesPc',
     data() {
@@ -75,7 +77,9 @@
               this.tpl_current = elem
             }
           })
-        }).catch(error => { console.log(error) })
+        }).catch(error => {
+          console.log(error)
+        })
       },
 
       /** 选择模板主题*/
@@ -110,7 +114,8 @@
               this.$message.error('切换失败，请稍后重试！')
             })
           })
-          .catch(() => {})
+          .catch(() => {
+          })
       }
     }
   }
@@ -118,30 +123,32 @@
 
 <style type="text/scss" lang="scss" scoped>
   /*被选中的模板图片*/
-  .choosed-image{
+  .choosed-image {
     border: 1px solid #5cb85c;
   }
+
   /*最外层*/
-  .bg-out{
+  .bg-out {
     background: #ffffff;
     padding: 15px;
   }
+
   /*图片*/
-  .shop-theme-image{
+  .shop-theme-image {
     width: 100%;
-    max-height:250px;
+    max-height: 250px;
     max-width: 200px;
     cursor: pointer;
   }
 
   /*预览*/
-  .tpl-preview{
+  .tpl-preview {
     cursor: pointer;
     border: 1px solid #5cb85c !important;
   }
 
   /*模板主题*/
-  ul{
+  ul {
     width: 80%;
     margin: 0 auto;
     padding: 10px 25px;
@@ -150,12 +157,12 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    li{
+    li {
       list-style: none;
     }
   }
 
-  .tpl-current-theme{
+  .tpl-current-theme {
     width: 80%;
     margin: 0 auto;
     padding: 10px 25px;
@@ -164,10 +171,10 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: flex-start;
-    span{
+    span {
       text-align: center;
       display: inline-block;
-      margin-top:15px;
+      margin-top: 15px;
       width: 100%;
       max-width: 200px;
       background-color: #fcf8e3;
@@ -178,16 +185,16 @@
     }
   }
 
-  .tpl-theme{
+  .tpl-theme {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: stretch;
-    span{
+    span {
       text-align: center;
       display: inline-block;
-      margin-top:15px;
+      margin-top: 15px;
       width: 100%;
       max-width: 200px;
       background-color: #fcf8e3;
@@ -199,10 +206,11 @@
   }
 
   /*隐藏区域*/
-  .zoom-img-show{
+  .zoom-img-show {
     display: none;
   }
-  .zoom-img{
+
+  .zoom-img {
     width: 100%;
     position: absolute;
     top: 0;
@@ -211,8 +219,9 @@
     overflow: hidden;
     background: #000000;
   }
+
   /*关闭按钮*/
-  .close-btn{
+  .close-btn {
     position: fixed;
     right: 5px;
     top: 5px;
@@ -224,12 +233,13 @@
     text-align: center;
     cursor: pointer;
   }
-  .zoom-bg-img{
+
+  .zoom-bg-img {
     margin: 0 auto;
     padding: 25px 0;
     width: 25%;
     text-align: center;
-    img{
+    img {
       width: 100%;
     }
   }

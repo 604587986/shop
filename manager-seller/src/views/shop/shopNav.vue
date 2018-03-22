@@ -12,20 +12,21 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column prop="shop_nav_sort" label="排序" />
+        <el-table-column prop="shop_nav_sort" label="排序"/>
         <el-table-column prop="shop_nav_name" label="导航名称"/>
         <el-table-column label="是否显示">
           <template slot-scope="scope">
-             <span v-if="scope.row.shop_nav_show === 1">已显示</span>
-             <span v-if="scope.row.shop_nav_show === 0">未显示</span>
+            <span v-if="scope.row.shop_nav_show === 1">已显示</span>
+            <span v-if="scope.row.shop_nav_show === 0">未显示</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" >
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="success"
-              @click="handleEditShopNav(scope.row)">编辑</el-button>
+              @click="handleEditShopNav(scope.row)">编辑
+            </el-button>
           </template>
         </el-table-column>
       </template>
@@ -33,7 +34,7 @@
     <el-dialog title="新增导航" :visible.sync="addShopNavshow" width="30%">
       <el-form :model="navform">
         <el-form-item label="导航名称">
-          <el-input  v-model="navform.shop_nav_name" auto-complete="off" label-width="100"></el-input>
+          <el-input v-model="navform.shop_nav_name" auto-complete="off" label-width="100"></el-input>
         </el-form-item>
         <el-form-item label="是否显示">
           <el-radio-group v-model="navform.shop_nav_show">
@@ -42,10 +43,10 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="排序">
-          <el-input  v-model.number="navform.shop_nav_sort" auto-complete="off" label-width="100"></el-input>
+          <el-input v-model.number="navform.shop_nav_sort" auto-complete="off" label-width="100"></el-input>
         </el-form-item>
         <el-form-item label="URL">
-          <el-input  v-model="navform.shop_nav_url" auto-complete="off" label-width="100"></el-input>
+          <el-input v-model="navform.shop_nav_url" auto-complete="off" label-width="100"></el-input>
           <span>请填写包含http://的完整URL地址，否则会跳转到外链</span>
           <span>例: http://localhost:8080/b2b2c/index.html填写:http://localhost:8080/b2b2c/index.html</span>
         </el-form-item>
@@ -66,7 +67,8 @@
 
 <script>
   import * as API_ShopNav from '@/api/shopNav'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import {TableLayout, TableSearch, CategoryPicker} from '@/components'
+
   export default {
     name: 'shopNav',
     components: {
@@ -80,7 +82,7 @@
         loading: false,
 
         /** 列表参数 */
-        params: { },
+        params: {},
 
         /** 列表数据*/
         tableData: null,
@@ -158,6 +160,7 @@
   .toolbar-btns {
 
   }
+
   .toolbar-search {
     margin-right: 10px;
   }
