@@ -4,7 +4,7 @@
     <en-nav/>
     <div class="member-layout w">
       <en-menu/>
-      <nuxt-child/>
+      <nuxt-child style="width: calc(1190px - 220px)"/>
     </div>
   </div>
 </template>
