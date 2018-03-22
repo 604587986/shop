@@ -12,33 +12,12 @@
 </template>
 
 <script>
+  import menus from './menus'
   export default {
     name: 'member-menu',
     data() {
       return {
-        menus: [
-          { title: '交易管理', name: 'transaction', children: [
-              { title: '我的订单', name: 'order' },
-              { title: '收货地址', name: 'shipping-address' },
-              { title: '售后申请', name: 'after-sale' }
-            ]
-          },
-          { title: '客服服务', name: 'service', children: [
-              { title: '我的收藏', name: 'aa' },
-              { title: '我的咨询', name: 'bb' },
-              { title: '我的评论', name: 'cc' },
-              { title: '我的积分', name: 'dd' },
-              { title: '我的优惠券', name: 'ee' },
-              { title: '站内消息', name: 'ff' }
-            ]
-          },
-          { title: '账号管理', name: 'account', children: [
-              { title: '完善资料', name: 'gg' },
-              { title: '账户安全', name: 'hh' },
-              { title: '账号绑定', name: 'ii' }
-            ]
-          }
-        ]
+        menus
       }
     }
   }

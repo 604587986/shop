@@ -7,6 +7,7 @@
 </template>
 
 <script>
+  import menus from './menus'
   export default {
     name: 'member-nav',
     computed: {
@@ -14,7 +15,19 @@
         return this.$route.fullPath
       },
       currentName() {
-        return this.$route.name
+        let _name = this.$route.name
+        menus.every(item => {
+          let flag = true
+          item.children.every(_item => {
+            if ('member-' + _item.name === _name) {
+              flag = false
+              _name = _item.title
+            }
+            return flag
+          })
+          return flag
+        })
+        return _name
       }
     }
   }
