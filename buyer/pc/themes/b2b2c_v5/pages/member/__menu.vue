@@ -1,12 +1,14 @@
 <template>
   <div id="member-menu">
-    <div v-for="menu in menus" :key="menu.name" class="menu-item">
-      <h2>{{ menu.title }}</h2>
-      <nuxt-link v-for="item in menu.children" :key="item.name" :to="'/member/' + item.name">
-        <em>&gt;</em>
-        {{ item.title }}
-        <em>&lt;</em>
-      </nuxt-link>
+    <div class="inner-menu">
+      <div v-for="menu in menus" :key="menu.name" class="menu-item">
+        <h2>{{ menu.title }}</h2>
+        <nuxt-link v-for="item in menu.children" :key="item.name" :to="'/member/' + item.name">
+          <em>&gt;</em>
+          {{ item.title }}
+          <em>&lt;</em>
+        </nuxt-link>
+      </div>
     </div>
   </div>
 </template>
@@ -26,7 +28,10 @@
 <style type="text/scss" lang="scss" scoped>
   #member-menu {
     width: 208px;
-    border: 1px solid #e7e7e7;
+    .inner-menu {
+      width: 100%;
+      border: 1px solid #e7e7e7;
+    }
     h2 {
       background: #F7F7F7;
       color: #333;
