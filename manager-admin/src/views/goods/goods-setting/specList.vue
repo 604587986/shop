@@ -16,7 +16,7 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column type="selection" width="100"/>\
+        <el-table-column type="selection" width="100"/>
         <!--规格名称-->
         <el-table-column prop="name" label="规格名称"/>
         <!--规格类型-->
@@ -125,6 +125,10 @@
           name: [
             { required: true, message: '请输入规格名称', trigger: 'blur' },
             { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
+          ],
+          memo: [
+            { required: true, message: '请输入规格备注', trigger: 'blur' },
+            { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
           ]
         }
       }
@@ -178,9 +182,9 @@
 
       /** 删除规格事件 */
       handleDeleteSpec(index, row) {
-        this.$confirm('确定要删除这个规格吗？', '提示', { type: 'warning' })
-          .then(() => { this.DELETE_Specs(row.id) })
-          .catch(() => {})
+        this.$confirm('确定要删除这个规格吗？', '提示', { type: 'warning' }).then(() => {
+          this.DELETE_Specs(row.id)
+        }).catch(() => {})
       },
 
       /** 删除选中 */
@@ -188,9 +192,9 @@
         if (this.selectedData.length < 1) {
           this.$message.error('您未选中任何规格！')
         } else {
-          this.$confirm('确定要删除这些规格吗？', '提示', { type: 'warning' })
-            .then(() => { this.DELETE_Specs(this.selectedData) })
-            .catch(() => {})
+          this.$confirm('确定要删除这些规格吗？', '提示', { type: 'warning' }).then(() => {
+            this.DELETE_Specs(this.selectedData)
+          }).catch(() => {})
         }
       },
 
@@ -217,13 +221,13 @@
                 this.$message.success('添加成功！')
                 this.dialogSpecVisible = false
                 this.GET_SpecsList()
-              }).catch(error => console.log(error))
+              })
             } else {
               API_spec.eidtSpec(this.specForm.id, this.specForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogSpecVisible = false
                 this.GET_SpecsList()
-              }).catch(error => console.log(error))
+              })
             }
           } else {
             this.$message.error('表单填写有误，请检查！')
