@@ -152,5 +152,10 @@ export default {
     val_password: 'Please enter the administrator password!',
     val_validcode: 'Please enter the image verification code!',
     val_form: 'Fill in the form is incorrect, please check!'
+  },
+  tagsView: {
+    close: 'Close',
+    closeOthers: 'Close Others',
+    closeAll: 'Close All'
   }
 }
