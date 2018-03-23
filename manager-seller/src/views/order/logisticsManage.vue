@@ -53,8 +53,13 @@
         </en-tabel-layout>
       </el-tab-pane>
       <el-tab-pane label="新增模板" name="add">
-        <el-form :model="mouldForm" status-icon :rules="rules" ref="mouldForm" label-width="100px" class="demo-ruleForm"
-                 style="width: 30%;margin-left: 10%;">
+        <el-form
+          :model="mouldForm" status-icon
+          :rules="rules" ref="mouldForm"
+          label-width="100px"
+          class="demo-ruleForm"
+          style="width: 30%;margin-left: 10%;">
+
           <el-form-item label="模板名称" prop="tpl_name">
             <el-input type="text" v-model="mouldForm.tpl_name" auto-complete="off"></el-input>
           </el-form-item>
@@ -64,10 +69,10 @@
           <el-form-item label="运费（元）" prop="first_price">
             <el-input v-model.number="mouldForm.first_price"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.tpl_type === 'weight' ? '续重（kg）': '续件（个）'" prop="continued_company">
+          <el-form-item :label="mouldForm.tpl_type === 'weight' ? '续重（kg）':'续件（个）'" prop="continued_company">
             <el-input v-model.number="mouldForm.continued_company"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.tpl_type === 'weight' ? '续重运费（元）': '续件运费（元）'" prop="continued_price">
+          <el-form-item :label="mouldForm.tpl_type === 'weight'?'续重运费（元）':'续件运费（元）'" prop="continued_price">
             <el-input v-model.number="mouldForm.continued_price"></el-input>
           </el-form-item>
           <el-form-item label="模板类型" prop="tpl_type">
