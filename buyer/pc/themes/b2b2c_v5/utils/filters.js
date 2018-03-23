@@ -60,3 +60,16 @@ export function unixOrderStatus(status_code) {
       return '售后中'
   }
 }
+
+/**
+ * 13888888888 -> 138****8888
+ * @param mobile
+ * @returns {*}
+ */
+export function secrecyMobile(mobile) {
+  mobile = String(mobile)
+  if (!/\d{11}/.test(mobile)) {
+    return mobile
+  }
+  return mobile.replace(/(\d{3})(\d{4})(\d{4})/, '$1****$3')
+}
