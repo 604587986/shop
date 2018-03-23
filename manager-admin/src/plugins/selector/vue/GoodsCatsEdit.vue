@@ -10,7 +10,7 @@
     props: {
       api: {
         type: String,
-        default: `${process.env.BASE_API}/goods-info/category/@id/children.do?format=plugin`
+        default: `${process.env.BASE_API}/goods/categories/@id/children`
       },
       canEdit: {
         type: Boolean,
