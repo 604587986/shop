@@ -11,17 +11,12 @@ import BrandModel from '@/models/BrandModel'
  * @returns {Promise<any>}
  */
 export function getBrandList(params) {
-  const _params = {
-    keyword: params.keyword,
-    page_no: params.page_no,
-    page_size: params.page_size
-  }
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/brand/list-json.do',
+      url: 'goods/brands',
       method: 'get',
       loading: false,
-      params: _params
+      params
     }).then(response => {
       const _response = response
       _response.data = new BrandModel().map(response.data)
@@ -37,14 +32,26 @@ export function getBrandList(params) {
  */
 export function addBrand(params) {
   const _formData = new FormData()
-  Object.keys(params).forEach(key => {
-    _formData.append(key, params[key])
-  })
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/brand/save.do',
+      url: 'goods/brands',
       method: 'post',
       data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取品牌详情
+ * @param id
+ * @returns {Promise<any>}
+ */
+export function getBrandDetail(id) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `goods/brands/${id}`,
+      method: 'get'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
@@ -57,13 +64,10 @@ export function addBrand(params) {
  */
 export function editBrand(id, params) {
   const _formData = new FormData()
-  Object.keys(params).forEach(key => {
-    _formData.append(key, params[key])
-  })
-  _formData.append('brand_id', id)
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/brand/save-edit.do',
+      url: `goods/brands/${id}`,
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -71,25 +75,16 @@ export function editBrand(id, params) {
 }
 
 /**
- * 删除分类
+ * 删除品牌
  * @param ids
  * @returns {Promise<any>}
  */
 export function deleteBrand(ids) {
-  if (!Array.isArray(ids)) {
-    // ids = ids.join(',')
-    ids = [ids]
-  }
-  const _formData = new FormData()
-  ids.forEach(item => {
-    _formData.append('brand_id', item)
-  })
+  ids = Array.isArray(ids) ? ids : [ids]
   return new Promise((resolve, reject) => {
     request({
-      url: `shop/admin/brand/delete.do`,
-      // method: 'delete',
-      method: 'post',
-      data: _formData
+      url: `goods/brands/${ids.join(',')}`,
+      method: 'delete'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
