@@ -19,12 +19,6 @@
         <el-table-column type="selection" width="100"/>
         <!--规格名称-->
         <el-table-column prop="name" label="规格名称"/>
-        <!--规格类型-->
-        <el-table-column label="规格类型">
-          <template slot-scope="scope">
-            <span>{{ scope.row.type | typeFilter }}</span>
-          </template>
-        </el-table-column>
         <!--规格备注-->
         <el-table-column prop="memo" label="规格备注"/>
 
@@ -131,11 +125,6 @@
             { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
           ]
         }
-      }
-    },
-    filters: {
-      typeFilter(val) {
-        return val ? '图片' : '文字'
       }
     },
     mounted() {
