@@ -255,7 +255,7 @@
             for (var i = 0; i < res.length; i++) {
                 var _btns = '';
                 _itemBtns.forEach(function (item, index) {
-                    _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-order="'+ res[i]['category_order'] +'" data-text="' + res[i]['text'] +'" data-id="' + res[i]['category_id'] + '" data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ (item.textStyle || '') +'">' + item.text + '</a>';
+                    _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-order="'+ res[i]['category_order'] +'" data-text="' + res[i]['name'] +'" data-id="' + res[i]['category_id'] + '" data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ (item.textStyle || '') +'">' + item.text + '</a>';
                 });
 
                 _item += '<div class="__cat_item' + (i === 0 ? ' active' : '') + '" data-id="' + res[i]['category_id'] + '" data-path="' + res[i]['category_path'] + '">\
