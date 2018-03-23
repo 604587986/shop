@@ -9,8 +9,8 @@
     <div class="cart-content" id="cart-content">
       <div class="w">
         <div class="list-header">
-          <span class="checkbox select-all">
-            <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']" @click="handleCheckAll">
+          <span class="checkbox select-all" @click="handleCheckAll">
+            <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']">
               <i class="iconfont ea-icon-check"></i>
             </a>全选
           </span>
@@ -94,8 +94,8 @@
       <div class="check-bar">
         <div class="w">
           <div class="check-bar-left">
-            <span class="select-all">
-              <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']" @click="handleCheckAll">
+            <span class="select-all" @click="handleCheckAll">
+              <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
                 <span>全选（共<b>{{ allCount }}</b>）件</span>

@@ -15,7 +15,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_69d3rq6qvn0tqpvi.css' }
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_6i5byjvh3tw6d2t9.css' }
     ],
     script: [
       { type: 'text/javascript', src: 'https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js' },
@@ -43,12 +43,19 @@ module.exports = {
   },
   css: [
     '~assets/styles/normalize.css',
-    '~assets/styles/base.css'
+    '~assets/styles/base.css',
+    '~assets/styles/page-transletion.scss'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
     { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
     { src: '~plugins/vue-filters', ssr: false }
-  ]
+  ],
+  router: {
+    scrollBehavior: function (to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    }
+  },
+  transition: 'page'
 }
