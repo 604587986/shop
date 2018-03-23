@@ -32,7 +32,8 @@ export function getBrandList(params) {
  */
 export function addBrand(params) {
   const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  _formData.append('name', params.name)
+  _formData.append('logo', params.logo)
   return new Promise((resolve, reject) => {
     request({
       url: 'goods/brands',
@@ -64,7 +65,8 @@ export function getBrandDetail(id) {
  */
 export function editBrand(id, params) {
   const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  _formData.append('name', params.name)
+  _formData.append('logo', params.logo)
   return new Promise((resolve, reject) => {
     request({
       url: `goods/brands/${id}`,
