@@ -32,14 +32,6 @@ export default class BrandModel extends DataModel {
   @ServerName('disabled')
   disabled
 
-  /** 品牌概述 */
-  @ServerName('brief')
-  brief
-
-  /** 品牌关键字 */
-  @ServerName('keywords')
-  keywords
-
   /** 订单数量 */
   @ServerName('ordernum')
   order_num
