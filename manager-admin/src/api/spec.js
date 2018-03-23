@@ -6,14 +6,14 @@ import request from '@/utils/request'
 import SpecModel from '@/models/SpecModel'
 
 /**
- *
+ * 获取规格列表
  * @param params
  * @returns {Promise<any>}
  */
 export function getSpecs(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'goods-info/admin/spec.do',
+      url: 'goods/specs',
       method: 'get',
       loading: false,
       params
@@ -31,18 +31,12 @@ export function getSpecs(params) {
  * @returns {Promise<any>}
  */
 export function addSpec(params) {
-  const _params = {
-    spec_name: params.name,
-    spec_memo: params.memo,
-    spec_type: params.type || 0
-  }
   const _formData = new FormData()
-  Object.keys(_params).forEach(key => {
-    _formData.append(key, _params[key])
-  })
+  _formData.append('spec_name', params.name)
+  _formData.append('spec_memo', params.memo)
   return new Promise((resolve, reject) => {
     request({
-      url: 'goods/admin/spec.do',
+      url: 'goods/specs',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -50,24 +44,18 @@ export function addSpec(params) {
 }
 
 /**
- * 删除规格
+ * 编辑
  * @param id
  * @param params
  * @returns {Promise<any>}
  */
 export function eidtSpec(id, params) {
-  const _params = {
-    spec_name: params.name,
-    spec_memo: params.memo,
-    spec_type: params.type || 0
-  }
   const _formData = new FormData()
-  Object.keys(_params).forEach(key => {
-    _formData.append(key, _params[key])
-  })
+  _formData.append('spec_name', params.name)
+  _formData.append('spec_memo', params.memo)
   return new Promise((resolve, reject) => {
     request({
-      url: `goods/admin/spec/${id}.do`,
+      url: `goods/specs/${id}`,
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -80,12 +68,10 @@ export function eidtSpec(id, params) {
  * @returns {Promise<any>}
  */
 export function deleteSpecs(ids) {
-  if (Array.isArray(ids)) {
-    ids = ids.join(',')
-  }
+  if (Array.isArray(ids)) ids = ids.join(',')
   return new Promise((resolve, reject) => {
     request({
-      url: `goods/admin/spec/${ids}.do`,
+      url: `goods/specs/${ids}`,
       method: 'delete'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
