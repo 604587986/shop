@@ -1,50 +1,52 @@
 <template>
-    <div>
-      <el-button type="primary" @click="selectgoodslist" style="margin-bottom: 15px;">选择商品</el-button>
-      <en-tabel-layout
-        toolbar
-        pagination
-        :tableData="tableData"
-        :loading="loading"
-        :selectionChange="selectionChange"
-      >
-        <template slot="table-columns">
-          <el-table-column  type="selection" />
-          <el-table-column label="商品信息" width="1000px" header-align="left">
-            <template slot-scope="scope">
-              <div class="goods_info">
-                <img :src="scope.row.image" class="goods-image" />
-                <div class="goodsinfo-txt">
-                  <span class="goods_name">{{scope.row.name}}</span>
-                  <span class="goods_price">{{ scope.row.price | unitPrice('￥') }}</span>
-                </div>
+  <div>
+    <el-button type="primary" @click="selectgoodslist" style="margin-bottom: 15px;">选择商品</el-button>
+    <en-tabel-layout
+      toolbar
+      pagination
+      :tableData="tableData"
+      :loading="loading"
+      :selectionChange="selectionChange"
+    >
+      <template slot="table-columns">
+        <el-table-column type="selection"/>
+        <el-table-column label="商品信息" width="1000px" header-align="left">
+          <template slot-scope="scope">
+            <div class="goods_info">
+              <img :src="scope.row.image" class="goods-image"/>
+              <div class="goodsinfo-txt">
+                <span class="goods_name">{{scope.row.name}}</span>
+                <span class="goods_price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="balanced" label="库存" />
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="primary"
-                @click="canceljoin(scope)">取消参加</el-button>
-            </template>
-          </el-table-column>
-        </template>
-      </en-tabel-layout>
-      <el-button type="danger" @click="cancelall" style="margin-top: 15px;">批量取消</el-button>
-      <div style="text-align: center">
-        <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
-      </div>
-      <en-goods-selector :show="showDialog"  :api="goods_api" :defaultData="tableData"  :maxLength="maxsize"  @confirm="refreshFunc" @closed="showDialog = false" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="balanced" label="库存"/>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              @click="canceljoin(scope)">取消参加
+            </el-button>
+          </template>
+        </el-table-column>
+      </template>
+    </en-tabel-layout>
+    <el-button type="danger" @click="cancelall" style="margin-top: 15px;">批量取消</el-button>
+    <div style="text-align: center">
+      <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
     </div>
+    <en-goods-selector :show="showDialog" :api="goods_api" :defaultData="tableData" :maxLength="maxsize"
+                       @confirm="refreshFunc" @closed="showDialog = false"/>
+  </div>
 </template>
 
 <script>
-  import * as API_goods from '@/api/goods'
   import * as API_goodsTag from '@/api/goodsTag'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker, TableLayout, TableSearch } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
+
   export default {
     name: 'tagAdd',
     components: {
@@ -146,24 +148,26 @@
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
-  .goods_info{
+
+  .goods_info {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
   }
-  .goodsinfo-txt{
-    margin-left:20px;
+
+  .goodsinfo-txt {
+    margin-left: 20px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: flex-start;
-    .goods_name{
-      color:#6289ff;
+    .goods_name {
+      color: #6289ff;
     }
-    .goods_price{
+    .goods_price {
       color: #f60;
     }
   }

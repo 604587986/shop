@@ -73,57 +73,58 @@
     </en-tabel-layout>
     <table class="my-table">
       <thead>
-        <tr class="bg-order">
-          <th class="shoplist-header"><span>商品</span> <span>单价/数量</span></th>
-          <th>买家</th>
-          <th>下单时间</th>
-          <th>订单状态</th>
-          <th>订单来源</th>
-          <th>实付金额</th>
-        </tr>
+      <tr class="bg-order">
+        <th class="shoplist-header"><span>商品</span> <span>单价/数量</span></th>
+        <th>买家</th>
+        <th>下单时间</th>
+        <th>订单状态</th>
+        <th>订单来源</th>
+        <th>实付金额</th>
+      </tr>
       </thead>
       <tbody v-for="item in tableData">
-        <tr style="width: 100%;height: 10px;"></tr>
-        <tr class="bg-order">
-          <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
-          <td>
-            <el-button
-              size="mini"
-              type="text"
-              @click="handleOperateOrder(item)">查看详情</el-button>
-          </td>
-        </tr>
-        <tr >
-          <!--商品-->
-          <td>
-            <p v-for="shop in item.skuList" class="shoplist-content">
+      <tr style="width: 100%;height: 10px;"></tr>
+      <tr class="bg-order">
+        <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
+        <td>
+          <el-button
+            size="mini"
+            type="text"
+            @click="handleOperateOrder(item)">查看详情
+          </el-button>
+        </td>
+      </tr>
+      <tr>
+        <!--商品-->
+        <td>
+          <p v-for="shop in item.skuList" class="shoplist-content">
               <span class="goods-info">
                 <img :src="shop.goods_image" alt="" class="goods-image"/>
                 <a href="#">{{ shop.goods_name }}</a>
               </span>
-              <span>
+            <span>
                 <span>{{shop.goods_price | unitPrice('￥')}}</span> × <span>1</span>
               </span>
-            </p>
-          </td>
-          <!--买家-->
-          <td> {{ item.ship_name }}</td>
-          <!--下单时间-->
-          <td>{{ item.order_time | unixToDate }}</td>
-          <!--订单状态-->
-          <td>{{ item.order_status_text  }}</td>
-          <!--订单来源-->
-          <td>{{ item.client_type }}</td>
-          <!--实付金额-->
-          <td>
-            <div class="order-money">
-              <!--订单总金额-->
-              <span class="order-amount">{{ item.order_amount | unitPrice('￥')}}</span>
-              <!--运费/邮费-->
-              <span>运费({{ item.shipping_amount | unitPrice('￥') }})</span>
-            </div>
-          </td>
-        </tr>
+          </p>
+        </td>
+        <!--买家-->
+        <td> {{ item.ship_name }}</td>
+        <!--下单时间-->
+        <td>{{ item.order_time | unixToDate }}</td>
+        <!--订单状态-->
+        <td>{{ item.order_status_text }}</td>
+        <!--订单来源-->
+        <td>{{ item.client_type }}</td>
+        <!--实付金额-->
+        <td>
+          <div class="order-money">
+            <!--订单总金额-->
+            <span class="order-amount">{{ item.order_amount | unitPrice('￥')}}</span>
+            <!--运费/邮费-->
+            <span>运费({{ item.shipping_amount | unitPrice('￥') }})</span>
+          </div>
+        </td>
+      </tr>
       </tbody>
     </table>
     <el-pagination
@@ -143,6 +144,7 @@
 <script>
   import * as API_order from '@/api/order'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+
   export default {
     name: 'orderList',
     components: {
@@ -304,24 +306,24 @@
   }
 
   /*表格信息*/
-  .my-table{
-    .bg-order{
+  .my-table {
+    .bg-order {
       background: #FAFAFA;
     }
     width: 100%;
     background: #ffffff;
     border-collapse: collapse;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
-    font-size:14px ;
-    font-bold:700;
-    thead{
-      th{
+    font-size: 14px;
+    font-bold: 700;
+    thead {
+      th {
         padding: 20px 0;
         border: 1px solid #ebeef5;
         border-collapse: collapse;
         color: #909399;
       }
-      .shoplist-header{
+      .shoplist-header {
         padding: 20px;
         display: flex;
         flex-direction: row;
@@ -330,65 +332,65 @@
         align-items: center;
       }
     }
-    tbody{
+    tbody {
       margin-top: 10px;
-      td{
+      td {
         border: 1px solid #ebeef5;
         border-collapse: collapse;
         vertical-align: middle;
         text-align: center;
       }
-      td:first-child{
+      td:first-child {
         text-align: left;
       }
-      td:not(:first-child){
+      td:not(:first-child) {
         padding: 20px;
       }
-      td.shoplist-content-out{
+      td.shoplist-content-out {
         padding: 20px;
       }
 
       /*商品信息*/
-      p.shoplist-content:not(:last-child){
+      p.shoplist-content:not(:last-child) {
         border-bottom: 1px solid #ebeef5;
         border-collapse: collapse;
       }
-      p.shoplist-content{
+      p.shoplist-content {
         margin: 0;
-        padding:20px;
+        padding: 20px;
         box-sizing: padding-box;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: space-between;
         align-items: center;
-        .goods-info{
+        .goods-info {
           display: flex;
           flex-direction: row;
           flex-wrap: nowrap;
           justify-content: flex-start;
           align-items: center;
-          img{
+          img {
             display: block;
             margin-right: 10px;
           }
-          a{
+          a {
             display: block;
             color: #409EFF;
           }
         }
       }
-      div.order-money{
+      div.order-money {
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: center;
         align-items: center;
-        span{
+        span {
           display: inline-block;
           padding: 5px;
         }
-        span.order-amount{
+        span.order-amount {
           color: red;
         }
       }
@@ -401,7 +403,7 @@
   }
 
   /*分页信息*/
-  .el-pagination{
+  .el-pagination {
     text-align: right;
     width: 100%;
     background: #ffffff;

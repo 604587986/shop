@@ -2,93 +2,94 @@
   <div v-loading="loading" class="order-detail-container">
     <!--订单信息-->
     <div class="order-info">
-       <div>
-         <el-card class="box-card">
-           <div slot="header" class="clearfix">
-             <span>订单信息</span>
-           </div>
-           <!--收货信息-->
-           <div class="">
-             <div  class="text item">
-               收货地址: {{}}
-             </div>
-             <div  class="text item">
-               收货人: {{}}
-             </div>
-             <div  class="text item">
-               联系电话:{{}}
-             </div>
-           </div>
-           <hr/>
-           <!--订单编号 付款方式 下单时间-->
-           <div class="">
-             <div  class="text item">
-               订单编号: {{}}
-             </div>
-             <div  class="text item">
-               付款方式: {{}}
-             </div>
-             <div  class="text item">
-               下单时间:{{}}
-             </div>
-           </div>
-           <hr/>
-           <!--相关费用-->
-           <div class="">
-             <div  class="text item">
-               商品总价: {{}}
-             </div>
-             <div  class="text item">
-               运费: {{}}
-             </div>
-             <div  class="text item">
-               优惠金额:{{}}
-             </div>
-             <div  class="text item">
-               订单总价:{{}}
-             </div>
-           </div>
-         </el-card>
-         <!--其他信息（发票、备注）-->
-         <el-card class="box-card">
-           <div slot="header" class="clearfix">
-             <span>其他信息（发票、备注）</span>
-           </div>
-           <div class="text item">
-             订单附言:{{}}
-           </div>
-           <div class="text item">
-             送货时间:{{}}
-           </div>
-           <div class="text item">
-             发票抬头:{{}}
-           </div>
-           <div class="text item">
-             发票内容:{{}}
-           </div>
-         </el-card>
-       </div>
+      <div>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>订单信息</span>
+          </div>
+          <!--收货信息-->
+          <div class="">
+            <div class="text item">
+              收货地址: {{}}
+            </div>
+            <div class="text item">
+              收货人: {{}}
+            </div>
+            <div class="text item">
+              联系电话:{{}}
+            </div>
+          </div>
+          <hr/>
+          <!--订单编号 付款方式 下单时间-->
+          <div class="">
+            <div class="text item">
+              订单编号: {{}}
+            </div>
+            <div class="text item">
+              付款方式: {{}}
+            </div>
+            <div class="text item">
+              下单时间:{{}}
+            </div>
+          </div>
+          <hr/>
+          <!--相关费用-->
+          <div class="">
+            <div class="text item">
+              商品总价: {{}}
+            </div>
+            <div class="text item">
+              运费: {{}}
+            </div>
+            <div class="text item">
+              优惠金额:{{}}
+            </div>
+            <div class="text item">
+              订单总价:{{}}
+            </div>
+          </div>
+        </el-card>
+        <!--其他信息（发票、备注）-->
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>其他信息（发票、备注）</span>
+          </div>
+          <div class="text item">
+            订单附言:{{}}
+          </div>
+          <div class="text item">
+            送货时间:{{}}
+          </div>
+          <div class="text item">
+            发票抬头:{{}}
+          </div>
+          <div class="text item">
+            发票内容:{{}}
+          </div>
+        </el-card>
+      </div>
       <!--订单状态-->
-       <div class="order-status-info">
-         <div>
-           <i style="color: #5cb85c;" icon="el-icon-check"></i>订单状态:{{}}
-         </div>
-         <div class="text item">
-           1、订单附言：{{}}
-         </div>
-         <div class="text item">
-           2、送货时间：{{}}
-         </div>
-         <div class="text item">
-           3、发票抬头：{{}}
-         </div>
-         <div class="text item">
-           4、发票内容：{{}}
-         </div>
-         <div class="text item">
-           5、物流信息：<el-button type="text" @click="looklogistics">点击查看</el-button>
-         </div>
-       </div>
+      <div class="order-status-info">
+        <div>
+          <i style="color: #5cb85c;" icon="el-icon-check"></i>订单状态:{{}}
+        </div>
+        <div class="text item">
+          1、订单附言：{{}}
+        </div>
+        <div class="text item">
+          2、送货时间：{{}}
+        </div>
+        <div class="text item">
+          3、发票抬头：{{}}
+        </div>
+        <div class="text item">
+          4、发票内容：{{}}
+        </div>
+        <div class="text item">
+          5、物流信息：
+          <el-button type="text" @click="looklogistics">点击查看</el-button>
+        </div>
+      </div>
     </div>
     <!--订单状态 步骤条-->
     <el-steps :active="activestep" align-center finish-status="success" style="margin-top: 20px;">
@@ -126,6 +127,7 @@
 <script>
   import * as API_order from '@/api/order'
   import Foundation from '@/framework/Foundation'
+
   export default {
     name: 'orderDetail',
     data() {
@@ -285,23 +287,26 @@
     width: 50px;
     height: 50px;
   }
-  .order-info{
+
+  .order-info {
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
     justify-content: space-between;
-    div:first-child{
+    div:first-child {
       flex-grow: 1;
     }
-    div:last-child{
+    div:last-child {
       flex-grow: 3;
     }
   }
-  .order-status-info{
+
+  .order-status-info {
     padding: 20px;
   }
-  .item{
-     padding: 4px;
+
+  .item {
+    padding: 4px;
   }
 </style>
 

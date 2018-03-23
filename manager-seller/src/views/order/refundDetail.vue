@@ -6,22 +6,30 @@
       </el-col>
     </el-row>
     <el-row :gutter="0">
-      <el-col :span="4">{{ refundType }}单号</el-col><el-col :span="8">{{ refundDetail.sn }}</el-col>
-      <el-col :span="4">申请时间</el-col><el-col :span="8">{{ refundDetail.create_time | unixToDate }}</el-col>
+      <el-col :span="4">{{ refundType }}单号</el-col>
+      <el-col :span="8">{{ refundDetail.sn }}</el-col>
+      <el-col :span="4">申请时间</el-col>
+      <el-col :span="8">{{ refundDetail.create_time | unixToDate }}</el-col>
     </el-row>
     <el-row :gutter="0">
-      <el-col :span="4">{{ refundType }}原因</el-col><el-col :span="8">{{ refundDetail.refund_reason }}</el-col>
-      <el-col :span="4">申请退款金额</el-col><el-col :span="8">{{ refundDetail.refund_price | unitPrice('￥') }}</el-col>
+      <el-col :span="4">{{ refundType }}原因</el-col>
+      <el-col :span="8">{{ refundDetail.refund_reason }}</el-col>
+      <el-col :span="4">申请退款金额</el-col>
+      <el-col :span="8">{{ refundDetail.refund_price | unitPrice('￥') }}</el-col>
     </el-row>
     <el-row :gutter="0">
-      <el-col :span="4">退款方式</el-col><el-col :span="8">{{ refundDetail.account_type_text }}</el-col>
-      <el-col :span="4">售后状态</el-col><el-col :span="8">{{ refundDetail.refund_status_text }}</el-col>
+      <el-col :span="4">退款方式</el-col>
+      <el-col :span="8">{{ refundDetail.account_type_text }}</el-col>
+      <el-col :span="4">售后状态</el-col>
+      <el-col :span="8">{{ refundDetail.refund_status_text }}</el-col>
     </el-row>
     <el-row :gutter="0">
-      <el-col :span="4">客户备注</el-col><el-col :span="20">{{ refundDetail.customer_remark }}</el-col>
+      <el-col :span="4">客户备注</el-col>
+      <el-col :span="20">{{ refundDetail.customer_remark }}</el-col>
     </el-row>
     <el-row :gutter="0">
-      <el-col :span="4">退款账户</el-col><el-col :span="20">{{ refundDetail.return_account }}</el-col>
+      <el-col :span="4">退款账户</el-col>
+      <el-col :span="20">{{ refundDetail.return_account }}</el-col>
     </el-row>
     <el-row :gutter="0">
       <el-col :span="4">审核</el-col>
@@ -37,6 +45,7 @@
 <script>
   import * as API_Refund from '@/api/refund'
   import Foundation from '@/framework/Foundation'
+
   export default {
     name: 'refundDetail',
     data() {

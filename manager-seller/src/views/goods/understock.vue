@@ -48,13 +48,14 @@
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-        <el-table-column prop="brand_name" label="品牌"> </el-table-column>
+        <el-table-column prop="brand_name" label="品牌"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="primary"
-              @click="handleWithdraw(scope.$index, scope.row)">查看</el-button>
+              @click="handleWithdraw(scope.$index, scope.row)">查看
+            </el-button>
           </template>
         </el-table-column>
       </template>
@@ -74,10 +75,10 @@
     <el-dialog title="库存编辑" :visible.sync="goodsWarningStockshow" width="40%">
       <en-tabel-layout :tableData="goodsWarningStockDate" :loading="loading">
         <template slot="table-columns">
-          <el-table-column prop="sn" label="货号" />
-          <el-table-column prop="name" label="商品名称" />
-          <el-table-column prop="balanced" label="可用库存" />
-          <el-table-column prop="balanced" label="库存" />
+          <el-table-column prop="sn" label="货号"/>
+          <el-table-column prop="name" label="商品名称"/>
+          <el-table-column prop="balanced" label="可用库存"/>
+          <el-table-column prop="balanced" label="库存"/>
         </template>
       </en-tabel-layout>
     </el-dialog>
@@ -87,6 +88,7 @@
 <script>
   import * as API_goods from '@/api/goods'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+
   export default {
     name: 'understock',
     components: {
@@ -214,12 +216,15 @@
   .toolbar-btns {
 
   }
+
   .toolbar-search {
     margin-right: 10px;
   }
-  /deep/ .toolbar{
+
+  /deep/ .toolbar {
     display: none !important;
   }
+
   .goods-image {
     width: 50px;
     height: 50px;

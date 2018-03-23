@@ -17,21 +17,23 @@
           <li></li>
         </ul>
       </div>
-      <p>您当前选择的商品类别是：<sapn></sapn></p>
+      <p>您当前选择的商品类别是：
+        <sapn></sapn>
+      </p>
     </div>
     <div class="content-goods-publish" v-if="activestep === 1">
-         000
+      000
     </div>
     <div class="content-goods-publish" v-if="activestep === 2">
-                              363
+      363
     </div>
     <div class="footer">
       <el-button-group>
-        <el-button type="primary"  @click="pre">上一步</el-button>
-        <el-button type="primary"  @click="next">下一步</el-button>
-        <el-button type="primary"  @click="aboveGoods">上架</el-button>
-        <el-button type="primary"  @click="underGoods">下架</el-button>
-        <el-button type="primary"  @click="saveDraft">保存草稿</el-button>
+        <el-button type="primary" @click="pre">上一步</el-button>
+        <el-button type="primary" @click="next">下一步</el-button>
+        <el-button type="primary" @click="aboveGoods">上架</el-button>
+        <el-button type="primary" @click="underGoods">下架</el-button>
+        <el-button type="primary" @click="saveDraft">保存草稿</el-button>
       </el-button-group>
     </div>
   </div>
@@ -76,13 +78,14 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .content-goods-publish{
+  .content-goods-publish {
     padding: 15px;
     margin: 0 auto;
     text-align: center;
     border: 1px solid #ddd;
   }
-  .footer{
+
+  .footer {
     width: 100%;
     position: fixed;
     bottom: 20px;
