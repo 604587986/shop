@@ -82,10 +82,10 @@ export function editBrand(id, params) {
  * @returns {Promise<any>}
  */
 export function deleteBrand(ids) {
-  ids = Array.isArray(ids) ? ids : [ids]
+  if (Array.isArray(ids)) ids = ids.join(',')
   return new Promise((resolve, reject) => {
     request({
-      url: `goods/brands/${ids.join(',')}`,
+      url: `goods/brands/${ids}`,
       method: 'delete'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
