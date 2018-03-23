@@ -32,7 +32,8 @@ export function getBrandList(params) {
  */
 export function addBrand(params) {
   const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  _formData.append('name', params.name)
+  _formData.append('logo', params.logo)
   return new Promise((resolve, reject) => {
     request({
       url: 'goods/brands',
@@ -64,7 +65,8 @@ export function getBrandDetail(id) {
  */
 export function editBrand(id, params) {
   const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  _formData.append('name', params.name)
+  _formData.append('logo', params.logo)
   return new Promise((resolve, reject) => {
     request({
       url: `goods/brands/${id}`,
@@ -80,10 +82,10 @@ export function editBrand(id, params) {
  * @returns {Promise<any>}
  */
 export function deleteBrand(ids) {
-  ids = Array.isArray(ids) ? ids : [ids]
+  if (Array.isArray(ids)) ids = ids.join(',')
   return new Promise((resolve, reject) => {
     request({
-      url: `goods/brands/${ids.join(',')}`,
+      url: `goods/brands/${ids}`,
       method: 'delete'
     }).then(response => resolve(response)).catch(error => reject(error))
   })

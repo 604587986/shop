@@ -24,18 +24,16 @@
           </template>
         </el-table-column>
         <!--品牌名称-->
-        <el-table-column prop="name" label="品牌名称" width="250" />
-        <!--品牌网址-->
-        <el-table-column prop="url" label="品牌网址" />
+        <el-table-column prop="name" label="品牌名称" />
         <!--查看详细-->
-        <el-table-column label="查看详细" width="150">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="text"
-              @click="handleViewBrandDetail(scope.$index, scope.row)">查看详细</el-button>
-          </template>
-        </el-table-column>
+        <!--<el-table-column label="查看详细" width="150">-->
+          <!--<template slot-scope="scope">-->
+            <!--<el-button-->
+              <!--size="mini"-->
+              <!--type="text"-->
+              <!--@click="handleViewBrandDetail(scope.$index, scope.row)">查看详细</el-button>-->
+          <!--</template>-->
+        <!--</el-table-column>-->
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -65,22 +63,18 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog :title="dialogBrandTitle" :visible.sync="dialogBrandVisible">
+    <el-dialog
+      :title="dialogBrandTitle"
+      :visible.sync="dialogBrandVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="500px"
+    >
       <el-form :model="brandForm" :rules="brandRules" ref="brandForm" label-width="100px">
         <!--品牌名称-->
         <el-form-item label="品牌名称" prop="name">
           <el-input v-model="brandForm.name"></el-input>
         </el-form-item>
-        <!--品牌网址-->
-        <el-form-item label="品牌网址" prop="url">
-          <el-input placeholder="请输入地址" v-model="brandForm.url_href" class="input-with-select">
-            <el-select v-model="brandForm.url_protocol" slot="prepend" placeholder="请选择">
-              <el-option label="https://" value="https://"></el-option>
-              <el-option label="http://" value="http://"></el-option>
-            </el-select>
-          </el-input>
-        </el-form-item>
-        <!--品牌图片-->
         <el-form-item label="品牌图片" prop="logo">
           <el-upload
             :action="upload_api"
@@ -95,33 +89,28 @@
             <span slot="tip" class="el-upload__tip">&nbsp;只能上传jpg/png文件，且不超过500kb</span>
           </el-upload>
         </el-form-item>
-        <!--详细信息-->
-        <el-form-item label="详细信息">
-          <UE :defaultMsg="UE_defaultMsg" :config="UE_config" ref="ue"/>
-        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogBrandVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitBrandForm('brandForm')">确 定</el-button>
       </span>
     </el-dialog>
-    <!--查看品牌详情-->
-    <el-dialog title="查看品牌详情" :visible.sync="dialogBrandDetailVisible" center>
-      <div v-html="brandDetail"/>
-    </el-dialog>
+    <!--&lt;!&ndash;查看品牌详情&ndash;&gt;-->
+    <!--<el-dialog title="查看品牌详情" :visible.sync="dialogBrandDetailVisible" center>-->
+      <!--<div v-html="brandDetail"/>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 
 <script>
   import * as API_brand from '@/api/brand'
   import * as API_Common from '@/api/common'
-  import { TableLayout, TableSearch, UE } from '@/components'
+  import { TableLayout, TableSearch } from '@/components'
   export default {
     name: 'brandList',
     components: {
       [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
-      UE
+      [TableSearch.name]: TableSearch
     },
     data() {
       return {
@@ -156,10 +145,7 @@
         /** 添加、修改品牌 表单 */
         brandForm: {
           name: '',
-          url: '',
-          url_protocol: 'https://',
           logo: '',
-          brief: '',
           imgFileList: []
         },
         /** 添加、修改品牌 表单规则 */
@@ -169,13 +155,6 @@
             { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
           ]
         },
-        UE_defaultMsg: '',
-        UE_config: {
-          initialFrameWidth: null,
-          initialFrameHeight: 125,
-          zIndex: 20000
-        },
-
         /** 上传API */
         upload_api: API_Common.getUploadApi()
       }
@@ -227,34 +206,30 @@
       /** 修改品牌操作 */
       handleEditBrand(index, row) {
         if (!row.url) row.url = ''
-        const _match = row.url.match(/(http(s*):\/\/)(.*)/)
         this.brandForm = {
           ...this.brandForm,
           ...row,
-          url_href: _match ? _match[3] : '',
-          url_protocol: _match ? _match[1] : 'https://',
           logo: row.image,
           form_type: 'edit',
           imgFileList: row.image ? [{ name: 'logo', url: row.image }] : []
         }
-        this.UE_defaultMsg = row.brief
         this.dialogBrandTitle = '修改品牌 - ' + row.name
         this.dialogBrandVisible = true
       },
       /** 删除品牌操作 */
       handleDeleteBrand(index, row) {
-        this.$confirm('确定要删除这个品牌吗？', '提示', { type: 'warning' })
-          .then(() => { this.DELETE_Brand(row.id) })
-          .catch(() => {})
+        this.$confirm('确定要删除这个品牌吗？', '提示', { type: 'warning' }).then(() => {
+          this.DELETE_Brand(row.id)
+        }).catch(() => {})
       },
       /** 删除选中品牌操作 */
       deleteTheBrand() {
         if (this.selectedData.length < 1) {
           this.$message.error('您未选中任何品牌！')
         } else {
-          this.$confirm('确定要删除这些品牌吗？', '提示', { type: 'warning' })
-            .then(() => { this.DELETE_Brand(this.selectedData) })
-            .catch(() => {})
+          this.$confirm('确定要删除这些品牌吗？', '提示', { type: 'warning' }).then(() => {
+            this.DELETE_Brand(this.selectedData)
+          }).catch(() => {})
         }
       },
 
@@ -262,14 +237,10 @@
       handleAddBrand() {
         this.brandForm = {
           name: '',
-          url_href: '',
-          url_protocol: 'https://',
           logo: '',
-          brief: '',
           form_type: 'add',
           imgFileList: []
         }
-        this.UE_defaultMsg = ''
         this.dialogBrandTitle = '添加品牌'
         this.dialogBrandVisible = true
       },
@@ -278,24 +249,22 @@
       submitBrandForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.brandForm.brief = this.$refs['ue'].getUEContent()
-            if (this.brandForm.url_href) {
-              this.brandForm.url = this.brandForm.url_protocol + this.brandForm.url_href
-            } else {
-              this.brandForm.url = ''
+            if (!this.brandForm.logo) {
+              this.$message.error('您还没有上传品牌LOGO，请检查！')
+              return
             }
             if (this.brandForm.form_type === 'add') {
               API_brand.addBrand(this.brandForm).then(() => {
                 this.$message.success('添加成功！')
                 this.dialogBrandVisible = false
                 this.GET_BrandList()
-              }).catch(error => console.log(error))
+              })
             } else {
               API_brand.editBrand(this.brandForm.id, this.brandForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogBrandVisible = false
                 this.GET_BrandList()
-              }).catch(error => console.log(error))
+              })
             }
           } else {
             this.$message.error('表单填写有误，请检查！')
@@ -303,21 +272,15 @@
           }
         })
       },
-
       /** 获取品牌列表 */
       GET_BrandList() {
         this.loading = true
         API_brand.getBrandList(this.params).then(response => {
           this.loading = false
+          this.pageData = response
           this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
+        }).catch(() => {
           this.loading = false
-          console.log(error)
         })
       },
 
@@ -326,7 +289,7 @@
         API_brand.deleteBrand(ids).then(() => {
           this.$message.success('删除成功！')
           this.GET_BrandList()
-        }).catch(error => console.log(error))
+        })
       }
     }
   }

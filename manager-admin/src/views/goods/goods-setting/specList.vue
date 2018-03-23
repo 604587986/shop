@@ -16,15 +16,9 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column type="selection" width="100"/>\
+        <el-table-column type="selection" width="100"/>
         <!--规格名称-->
         <el-table-column prop="name" label="规格名称"/>
-        <!--规格类型-->
-        <el-table-column label="规格类型">
-          <template slot-scope="scope">
-            <span>{{ scope.row.type | typeFilter }}</span>
-          </template>
-        </el-table-column>
         <!--规格备注-->
         <el-table-column prop="memo" label="规格备注"/>
 
@@ -61,7 +55,13 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog :title="dialogSpecTitle" :visible.sync="dialogSpecVisible" width="500px">
+    <el-dialog
+      :title="dialogSpecTitle"
+      :visible.sync="dialogSpecVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="500px"
+    >
       <el-form :model="specForm" :rules="specRules" ref="specForm" label-width="100px">
         <!--规格名称-->
         <el-form-item label="规格名称" prop="name">
@@ -125,13 +125,12 @@
           name: [
             { required: true, message: '请输入规格名称', trigger: 'blur' },
             { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
+          ],
+          memo: [
+            { required: true, message: '请输入规格备注', trigger: 'blur' },
+            { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
           ]
         }
-      }
-    },
-    filters: {
-      typeFilter(val) {
-        return val ? '图片' : '文字'
       }
     },
     mounted() {
@@ -178,9 +177,9 @@
 
       /** 删除规格事件 */
       handleDeleteSpec(index, row) {
-        this.$confirm('确定要删除这个规格吗？', '提示', { type: 'warning' })
-          .then(() => { this.DELETE_Specs(row.id) })
-          .catch(() => {})
+        this.$confirm('确定要删除这个规格吗？', '提示', { type: 'warning' }).then(() => {
+          this.DELETE_Specs(row.id)
+        }).catch(() => {})
       },
 
       /** 删除选中 */
@@ -188,9 +187,9 @@
         if (this.selectedData.length < 1) {
           this.$message.error('您未选中任何规格！')
         } else {
-          this.$confirm('确定要删除这些规格吗？', '提示', { type: 'warning' })
-            .then(() => { this.DELETE_Specs(this.selectedData) })
-            .catch(() => {})
+          this.$confirm('确定要删除这些规格吗？', '提示', { type: 'warning' }).then(() => {
+            this.DELETE_Specs(this.selectedData)
+          }).catch(() => {})
         }
       },
 
@@ -217,13 +216,13 @@
                 this.$message.success('添加成功！')
                 this.dialogSpecVisible = false
                 this.GET_SpecsList()
-              }).catch(error => console.log(error))
+              })
             } else {
               API_spec.eidtSpec(this.specForm.id, this.specForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogSpecVisible = false
                 this.GET_SpecsList()
-              }).catch(error => console.log(error))
+              })
             }
           } else {
             this.$message.error('表单填写有误，请检查！')

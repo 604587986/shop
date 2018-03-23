@@ -22,9 +22,9 @@ service.interceptors.request.use(config => {
       text: '请稍候...'
     })
   }
-  if (store.getters.token) {
-    config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-  }
+  // if (store.getters.token) {
+  //   config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+  // }
   return config
 }, error => {
   // Do something with request error

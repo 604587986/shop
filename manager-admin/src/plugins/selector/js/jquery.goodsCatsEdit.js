@@ -101,7 +101,7 @@
                 !_this.options.canEdit && typeof (_callback) === 'function' && (function () {
                     var _datas = _this.params.__catDatas[_maxLeave - 1], _data;
                     for (var i = 0; i < _datas.length; i++) {
-                        if (_datas[i]['id'] === cat_id) {
+                        if (_datas[i]['category_id'] === cat_id) {
                             _data = _datas[i];
                             break;
                         }
@@ -136,7 +136,7 @@
               var _data = _this.params.__catDatas[_leave - 2];
               __data.datas = _data;
               for (var i = 0; i < _data.length; i++) {
-                if (_data[i]['id'] === _cat_parentid) {
+                if (_data[i]['category_id'] === _cat_parentid) {
                   __data.data = _data[i];
                   break;
                 }
@@ -178,7 +178,7 @@
                 _cat.parentData = {};
                 _cat.parentData['datas'] = _catDatas_;
                 for (var i = 0; i < _catDatas_.length; i++) {
-                    if (_catDatas_[i]['id'] === _parent_id) {
+                    if (_catDatas_[i]['category_id'] === _parent_id) {
                         _cat.parentData['data'] = _catDatas_[i];
                         break;
                     }
@@ -229,7 +229,7 @@
                 _params.__catDatas.splice(__, 1000);
                 var __catDatas = this.params.catDatas;
                 var __activeItem = __catDatas[__catDatas.length - 1];
-                var __id = __activeItem === undefined ? 0 : __activeItem[_params.activeItem]['id'];
+                var __id = __activeItem === undefined ? 0 : __activeItem[_params.activeItem]['category_id'];
                 this.options.canEdit
                     ? (__catDatas.length < _maxLeave && (__catDatas.push([]) && this.appendContent(__, __id)))
                     : this.returnData(_params.activeItem);
@@ -241,7 +241,7 @@
             var _dataLen = _params.catDatas.length;
             this.appendContent(__);
             this.countWidth();
-            _params.parentid = res[0]['id'];
+            _params.parentid = res[0]['category_id'];
             _dataLen === _maxLeave ? this.returnData(0) : _dataLen < _maxLeave && this.getCatList();
         },
 
@@ -255,11 +255,11 @@
             for (var i = 0; i < res.length; i++) {
                 var _btns = '';
                 _itemBtns.forEach(function (item, index) {
-                    _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-order="'+ res[i]['category_order'] +'" data-text="' + res[i]['text'] +'" data-id="' + res[i]['id'] + '" data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ (item.textStyle || '') +'">' + item.text + '</a>';
+                    _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-order="'+ res[i]['category_order'] +'" data-text="' + res[i]['name'] +'" data-id="' + res[i]['category_id'] + '" data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ (item.textStyle || '') +'">' + item.text + '</a>';
                 });
 
-                _item += '<div class="__cat_item' + (i === 0 ? ' active' : '') + '" data-id="' + res[i]['id'] + '" data-path="' + res[i]['category_path'] + '">\
-                        <h4>' + res[i]['text'] + '</h4>\
+                _item += '<div class="__cat_item' + (i === 0 ? ' active' : '') + '" data-id="' + res[i]['category_id'] + '" data-path="' + res[i]['category_path'] + '">\
+                        <h4>' + res[i]['name'] + '</h4>\
                         <div class="__cat_item_btns">\
                             ' + _btns + '\
                         </div>\
@@ -290,7 +290,7 @@
             //  如果是搜索，获取后面的
             _val !== undefined && typeof (_val === 'string') && res.length > 0 && (function () {
                 _this.node.app.find('.__GCD__column').eq(count).nextAll().remove();
-                _this.params.parentid = res[0]['id'];
+                _this.params.parentid = res[0]['category_id'];
                 _this.getCatList();
             })();
         },
