@@ -1,34 +1,107 @@
 <template>
   <div v-loading="loading" class="order-detail-container">
-    <el-row v-if="orderDetail && orderDetail.operateAllowable" :gutter="0">
-      <el-col :span="24" style="padding: 10px 20px">
-        <el-button
-          type="primary"
-          size="mini"
-          :disabled="!orderDetail.operateAllowable.allowPay"
-          @click="confirmPay"
-        >确认收款</el-button>
-        <el-button
-          type="danger"
-          size="mini"
-          :disabled="!orderDetail.operateAllowable.allowCancel"
-          @click="cancelOrder"
-        >取消订单</el-button>
-      </el-col>
-    </el-row>
-    <el-row v-for="(row, index) in orderInfo" :key="index" :gutter="0">
-      <el-col v-for="col in row" :key="col.key" :span="12">
-        <div class="d-header">{{ col.title }}</div>
-        <div class="d-content">
-          <div v-for="item in col.items" :key="item.key" class="item">
-            <span class="item-label" v-html="item.label"></span>
-            <span class="item-value">{{ item.value }}</span>
+    <!--订单信息-->
+    <div class="order-info">
+      <div>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>订单信息</span>
           </div>
+          <!--收货信息-->
+          <div class="">
+            <div class="text item">
+              收货地址: {{}}
+            </div>
+            <div class="text item">
+              收货人: {{}}
+            </div>
+            <div class="text item">
+              联系电话:{{}}
+            </div>
+          </div>
+          <hr/>
+          <!--订单编号 付款方式 下单时间-->
+          <div class="">
+            <div class="text item">
+              订单编号: {{}}
+            </div>
+            <div class="text item">
+              付款方式: {{}}
+            </div>
+            <div class="text item">
+              下单时间:{{}}
+            </div>
+          </div>
+          <hr/>
+          <!--相关费用-->
+          <div class="">
+            <div class="text item">
+              商品总价: {{}}
+            </div>
+            <div class="text item">
+              运费: {{}}
+            </div>
+            <div class="text item">
+              优惠金额:{{}}
+            </div>
+            <div class="text item">
+              订单总价:{{}}
+            </div>
+          </div>
+        </el-card>
+        <!--其他信息（发票、备注）-->
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>其他信息（发票、备注）</span>
+          </div>
+          <div class="text item">
+            订单附言:{{}}
+          </div>
+          <div class="text item">
+            送货时间:{{}}
+          </div>
+          <div class="text item">
+            发票抬头:{{}}
+          </div>
+          <div class="text item">
+            发票内容:{{}}
+          </div>
+        </el-card>
+      </div>
+      <!--订单状态-->
+      <div class="order-status-info">
+        <div>
+          <i style="color: #5cb85c;" icon="el-icon-check"></i>订单状态:{{}}
         </div>
-      </el-col>
-    </el-row>
-    <!--产品列表-->
-    <el-row v-if="productList" :gutter="0">
+        <div class="text item">
+          1、订单附言：{{}}
+        </div>
+        <div class="text item">
+          2、送货时间：{{}}
+        </div>
+        <div class="text item">
+          3、发票抬头：{{}}
+        </div>
+        <div class="text item">
+          4、发票内容：{{}}
+        </div>
+        <div class="text item">
+          5、物流信息：
+          <el-button type="text" @click="looklogistics">点击查看</el-button>
+        </div>
+      </div>
+    </div>
+    <!--订单状态 步骤条-->
+    <el-steps :active="activestep" align-center finish-status="success" style="margin-top: 20px;">
+      <el-step title="新订单" description=""></el-step>
+      <el-step title="已确认" description=""></el-step>
+      <el-step title="已付款" description=""></el-step>
+      <el-step title="已发货" description=""></el-step>
+      <el-step title="已收货" description=""></el-step>
+      <el-step title="已完成" description=""></el-step>
+    </el-steps>
+    <!--商品列表-->
+    <el-row :gutter="0">
       <el-col :span="24">
         <div class="d-header">商品列表</div>
         <el-table :data="productList" :header-cell-style="{textAlign: 'center'}">
@@ -38,28 +111,13 @@
             </template>
           </el-table-column>
           <el-table-column prop="goods_name" label="商品名称" align="left"/>
-          <el-table-column label="商品价格" width="150">
+          <el-table-column label="单价（元）" width="150">
             <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
           </el-table-column>
-          <el-table-column prop="num" label="购买数量" width="120"/>
+          <el-table-column prop="num" label="数量" width="120"/>
           <el-table-column label="小计" width="120">
             <template slot-scope="scope">{{ scope.row.subtotal | unitPrice('￥') }}</template>
           </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
-    <!--订单日志-->
-    <el-row v-loading="loading_log" :gutter="0">
-      <el-col :span="24">
-        <div class="d-header">订单日志</div>
-        <el-table :data="orderLog" :header-cell-style="{textAlign: 'center'}">
-          <el-table-column prop="id" label="操作ID" width="100"/>
-          <el-table-column prop="name" label="操作人员" width="200"/>
-          <el-table-column label="操作时间" width="250">
-            <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
-          </el-table-column>
-          <el-table-column prop="content" label="操作详情" width="400"/>
-          <el-table-column/>
         </el-table>
       </el-col>
     </el-row>
@@ -69,6 +127,7 @@
 <script>
   import * as API_order from '@/api/order'
   import Foundation from '@/framework/Foundation'
+
   export default {
     name: 'orderDetail',
     data() {
@@ -86,7 +145,9 @@
         /** 基本信息、发票信息、买家信息、商家信息 */
         orderInfo: [],
         /** 产品列表 */
-        productList: null
+        productList: null,
+        /** 当前步骤*/
+        activestep: 2
       }
     },
     filters: {
@@ -99,7 +160,6 @@
     },
     mounted() {
       this.GET_OrderDetail()
-      this.GET_OrderLog()
     },
     methods: {
       GET_OrderDetail() {
@@ -115,36 +175,9 @@
         })
       },
 
-      /** 获取订单日志 */
-      GET_OrderLog() {
-        this.loading_log = true
-        API_order.getOrderLog(this.sn).then(response => {
-          this.loading_log = false
-          this.orderLog = response
-        }).catch(error => {
-          this.loading_log = false
-          console.log(error)
-        })
-      },
-
-      /** 确认收款 */
-      confirmPay() {
-        this.$confirm('确定要确认收款吗？', '提示', { type: 'warning' }).then(() => {
-          API_order.confirmPay(this.sn, { payprice: this.orderDetail.order_price }).then(response => {
-            this.$message.success('订单确认收款成功！')
-            this.GET_OrderDetail()
-          }).catch(error => console.log(error))
-        }).catch(() => {})
-      },
-
-      /** 取消订单 */
-      cancelOrder() {
-        this.$confirm('确定要取消这个订单吗？', '提示', { type: 'warning' }).then(() => {
-          API_order.cancleOrder(this.sn).then(() => {
-            this.$message.success('订单取消成功！')
-            this.GET_OrderDetail()
-          }).catch(error => console.log(error))
-        }).catch(() => {})
+      /** 查看物流信息*/
+      looklogistics() {
+        console.log(4546)
       },
 
       /** 组合基本信息、发票信息、买家信息、商家信息 */
@@ -253,6 +286,27 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+
+  .order-info {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    div:first-child {
+      flex-grow: 1;
+    }
+    div:last-child {
+      flex-grow: 3;
+    }
+  }
+
+  .order-status-info {
+    padding: 20px;
+  }
+
+  .item {
+    padding: 4px;
   }
 </style>
 

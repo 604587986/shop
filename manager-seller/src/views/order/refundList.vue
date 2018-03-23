@@ -68,24 +68,16 @@
       </div>
       <template slot="table-columns">
         <!--退款ID-->
-        <el-table-column prop="id" label="售后ID"/>
-        <!--售后单号-->
-        <el-table-column prop="sn" label="售后单号"/>
-        <!--店铺名称-->
-        <el-table-column prop="seller_name" label="店铺名称"/>
-        <!--申请售后类型-->
-        <el-table-column label="申请售后类型">
-          <template slot-scope="scope">{{ scope.row.refuse_type | refuseTypeFilter }}</template>
-        </el-table-column>
-        <!--售后状态-->
-        <el-table-column prop="refund_status_text" label="售后状态"/>
+        <!--<el-table-column prop="id" label="售后ID"/>-->
+        <!--退货单号-->
+        <el-table-column prop="sn" label="退货单号"/>
+        <!--订单号-->
+        <el-table-column prop="sn" label="订单号"/>
+        <!--会员名称-->
+        <el-table-column prop="seller_name" label="会员名称"/>
         <!--创建时间-->
-        <el-table-column label="创建时间">
+        <el-table-column label="申请时间">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
-        </el-table-column>
-        <!--申请金额-->
-        <el-table-column label="申请金额">
-          <template slot-scope="scope">{{ scope.row.refund_price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--操作-->
         <el-table-column label="操作" width="150">
@@ -112,6 +104,7 @@
 <script>
   import * as API_refund from '@/api/refund'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+
   export default {
     name: 'refundList',
     components: {

@@ -47,14 +47,15 @@
         <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
       </el-table-column>
       <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-      <el-table-column prop="brand_name" label="品牌"> </el-table-column>
+      <el-table-column prop="brand_name" label="品牌"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="danger"
             :disabled="scope.row.market_enable === 0"
-            @click="handleWithdraw(scope.$index, scope.row)">下架</el-button>
+            @click="handleWithdraw(scope.$index, scope.row)">下架
+          </el-button>
         </template>
       </el-table-column>
     </template>
@@ -76,6 +77,7 @@
 <script>
   import * as API_goods from '@/api/goods'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+
   export default {
     name: 'draftList',
     components: {
@@ -130,7 +132,8 @@
       handleWithdraw(index, row) {
         this.$confirm('确认下架吗？', '提示')
           .then(() => this.DELETE_Goods(row.id))
-          .catch(() => {})
+          .catch(() => {
+          })
       },
 
       /** 销售状态格式化 */
@@ -204,6 +207,7 @@
   .toolbar-btns {
 
   }
+
   .toolbar-search {
     margin-right: 10px;
   }

@@ -12,12 +12,14 @@
           size="mini"
           type="danger"
           :disabled="selectionids.length === 0"
-          @click="handleDeleteRecycles()">批量删除</el-button>
+          @click="handleDeleteRecycles()">批量删除
+        </el-button>
         <el-button
           size="mini"
           type="success"
           :disabled="selectionids.length === 0"
-          @click="handlReductionRecycles()">批量还原</el-button>
+          @click="handlReductionRecycles()">批量还原
+        </el-button>
       </div>
       <div class="toolbar-search">
         <en-table-search
@@ -46,7 +48,7 @@
     </div>
 
     <template slot="table-columns">
-      <el-table-column  type="selection" />
+      <el-table-column type="selection"/>
       <el-table-column label="商品图片" width="120">
         <template slot-scope="scope">
           <img :src="scope.row.image" class="goods-image"/>
@@ -60,17 +62,19 @@
         <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
       </el-table-column>
       <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-      <el-table-column prop="brand_name" label="品牌"> </el-table-column>
+      <el-table-column prop="brand_name" label="品牌"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope" width="200">
           <el-button
             size="mini"
             type="success"
-            @click="handlReductionRecycle(scope.$index, scope.row)">还原</el-button>
+            @click="handlReductionRecycle(scope.$index, scope.row)">还原
+          </el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDeleteRecycle(scope.$index, scope.row)">删除</el-button>
+            @click="handleDeleteRecycle(scope.$index, scope.row)">删除
+          </el-button>
         </template>
       </el-table-column>
     </template>
@@ -92,6 +96,7 @@
 <script>
   import * as API_goods from '@/api/goods'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+
   export default {
     name: 'recycleStation',
     components: {
@@ -149,7 +154,8 @@
       handleDeleteRecycle(index, row) {
         this.$confirm('确认删除吗？', '提示')
           .then(() => this.DELETE_Recycles(row.id))
-          .catch(() => {})
+          .catch(() => {
+          })
       },
       /** 批量删除 */
       handleDeleteRecycles() {
@@ -159,7 +165,8 @@
       handlReductionRecycle(row) {
         this.$confirm('确认还原吗？', '提示')
           .then(() => this.ReductionGoods(row.id))
-          .catch(() => {})
+          .catch(() => {
+          })
       },
       /** 批量还原 */
       handlReductionRecycles() {
@@ -249,6 +256,7 @@
   .toolbar-btns {
 
   }
+
   .toolbar-search {
     margin-right: 10px;
   }

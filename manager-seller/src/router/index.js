@@ -135,49 +135,10 @@ export const asyncRouterMap = [
     name: 'shop',
     meta: { title: 'shop', icon: 'shop-manage' },
     children: [
-      {
-        path: '/shop/shop-manage',
-        component: _import('shop/shop-manage/index'),
-        redirect: '/shop/shop-manage/shop-list',
-        name: 'shopManage',
-        meta: { title: 'shopManage' },
-        children: [
-          { path: 'shop-list', component: _import('shop/shop-manage/shopList'), name: 'shopList', meta: { title: 'shopList' }},
-          { path: 'shop-audit', component: _import('shop/shop-manage/shopAudit'), name: 'shopAudit', meta: { title: 'shopAudit' }},
-          { path: 'edit/:shop_id', component: _import('shop/shop-manage/shopEdit'), name: 'shopEdit', hidden: true, meta: { title: 'shopEdit' }}
-        ]
-      },
-      {
-        path: '/shop/settlement-manage',
-        component: _import('shop/settlement-manage/index'),
-        redirect: '/shop/settlement-manage/settlement-list',
-        name: 'settlementManage',
-        meta: { title: 'settlementManage' },
-        children: [
-          { path: 'settlement-list', component: _import('shop/settlement-manage/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }}
-        ]
-      },
-      {
-        path: '/shop/shop-theme-manage',
-        component: _import('shop/shop-theme-manage/index'),
-        redirect: '/shop/shop-theme-manage/theme-list',
-        name: 'shopThemeManage',
-        meta: { title: 'shopThemeManage' },
-        children: [
-          { path: 'theme-list', component: _import('shop/shop-theme-manage/themeList'), name: 'themeList', meta: { title: 'themeList' }},
-          { path: 'theme-list-wap', component: _import('shop/shop-theme-manage/themeListWap'), name: 'themeListWap', meta: { title: 'themeListWap' }}
-        ]
-      },
-      {
-        path: '/shop/shop-level-manage',
-        component: _import('shop/shop-level-manage/index'),
-        redirect: '/shop/shop-level-manage/level-apply-list',
-        name: 'shop-level-audit',
-        meta: { title: 'shopLevelManage' },
-        children: [
-          { path: 'level-apply-list', component: _import('shop/shop-level-manage/levelApplyList'), name: 'levelApplyList', meta: { title: 'levelApplyList' }}
-        ]
-      }
+      { path: 'shop-themes-pc', component: _import('shop/shopThemesPc'), name: 'shopThemesPc', meta: { title: 'shopThemesPc' }},
+      { path: 'shop-themes-wap', component: _import('shop/shopThemesWap'), name: 'shopThemesWap', meta: { title: 'shopThemesWap' }},
+      { path: 'shop-banner', component: _import('shop/shopBanner'), name: 'shopBanner', meta: { title: 'shopBanner' }},
+      { path: 'shop-nav', component: _import('shop/shopNav'), name: 'shopNav', meta: { title: 'shopNav' }}
     ]
   },
   // 促销管理

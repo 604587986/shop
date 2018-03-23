@@ -65,7 +65,7 @@ export default class CommentModel extends DataModel {
   order_sn
 
   /** 商家回复 */
-  @ServerName('reply')
+  @ServerName('seller_reply')
   seller_reply
 
   /** 商家回复状态 */

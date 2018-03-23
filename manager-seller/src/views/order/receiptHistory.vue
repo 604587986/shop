@@ -25,7 +25,8 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleOperateReceipt(scope.$index, scope.row)">查看</el-button>
+              @click="handleOperateReceipt(scope.$index, scope.row)">查看
+            </el-button>
           </template>
         </el-table-column>
       </template>
@@ -55,6 +56,7 @@
 <script>
   import * as API_Receipt from '@/api/receipt'
   import { TableLayout } from '@/components'
+
   export default {
     name: 'receiptHistory',
     components: {
