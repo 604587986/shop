@@ -55,7 +55,13 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog :title="dialogSpecTitle" :visible.sync="dialogSpecVisible" width="500px">
+    <el-dialog
+      :title="dialogSpecTitle"
+      :visible.sync="dialogSpecVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="500px"
+    >
       <el-form :model="specForm" :rules="specRules" ref="specForm" label-width="100px">
         <!--规格名称-->
         <el-form-item label="规格名称" prop="name">
