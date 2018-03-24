@@ -17,12 +17,38 @@ export const mutations = {
     state.goodsCollectionData = data
   },
   /**
+   * 删除商品收藏
+   * @param state
+   * @param ids
+   */
+  [types.DELETE_GOODS_COLLECTION](state, ids) {
+    if (!Array.isArray(ids)) ids = [ids]
+    const _list = []
+    state.goodsCollectionData.data.forEach(item => {
+      if (!ids.includes(item.goods_id)) _list.push(item)
+    })
+    state.goodsCollectionData.data = _list
+  },
+  /**
    * 设置店铺收藏数据
    * @param state
    * @param data
    */
   [types.SET_SHOP_COLLECTION](state, data) {
     state.shopCollectionData = data
+  },
+  /**
+   * 删除店铺收藏
+   * @param state
+   * @param ids
+   */
+  [types.DELETE_SHOP_COLLECTION](state, ids) {
+    if (!Array.isArray(ids)) ids = [ids]
+    const _list = []
+    state.shopCollectionData.data.forEach(item => {
+      if (!ids.includes(item.goods_id)) _list.push(item)
+    })
+    state.shopCollectionData.data = _list
   }
 }
 
@@ -48,7 +74,7 @@ export const actions = {
    * @param ids
    * @returns {Promise<any>}
    */
-  deleteGoodsCollectionDataAction: ({ commit }, ids) => {
+  deleteGoodsCollectionAction: ({ commit }, ids) => {
     return new Promise((resolve, reject) => {
       API_Collection.deleteGoodsCollection(ids).then(response => {
         commit(types.DELETE_GOODS_COLLECTION, ids)
@@ -76,7 +102,7 @@ export const actions = {
    * @param ids
    * @returns {Promise<any>}
    */
-  deleteShopCollectionDataAction: ({ commit }, ids) => {
+  deleteShopCollectionAction: ({ commit }, ids) => {
     return new Promise((resolve, reject) => {
       API_Collection.deleteShopCollection(ids).then(response => {
         commit(types.DELETE_SHOP_COLLECTION, ids)
