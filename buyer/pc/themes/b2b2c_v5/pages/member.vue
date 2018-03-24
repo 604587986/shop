@@ -10,6 +10,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
   import Nav from './member/__nav'
   import Menu from './member/__menu'
   export default {
@@ -17,6 +18,21 @@
     components: {
       'en-nav': Nav,
       'en-menu': Menu
+    },
+    created() {
+      this.getOrderData()
+      this.getGoodsCollectionData()
+      this.getShopCollectionData()
+    },
+    methods: {
+      ...mapActions({
+        /** 获取订单列表 */
+        getOrderData: 'order/getOrderDataAction',
+        /** 获取商品收藏列表 */
+        getGoodsCollectionData: 'collection/getGoodsCollectionDataAction',
+        /** 获取店铺收藏列表 */
+        getShopCollectionData: 'collection/getShopCollectionDataAction'
+      })
     }
   }
 </script>

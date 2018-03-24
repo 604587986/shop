@@ -37,62 +37,185 @@
           </div>
         </div>
         <div class="item-content">
-          <div class="order-item">
-            <nuxt-link :to="'/goods/' + 2" class="goods-image">
-              <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/8399360E37A949A5BA56381ADA2ADF97.jpg_300x300">
-            </nuxt-link>
-            <div class="order-info">
-              <nuxt-link :to="'/goods/' + 2" class="goods-name">良品铺子酸奶果粒块54g草莓蓝莓干水果酸奶块良品铺子酸奶果粒块54g草莓蓝莓干水果酸奶块休闲零食特产小吃休闲零食特产小吃</nuxt-link>
-              <p>下单时间：2018-03-23 17:44:59</p>
-              <p>订单金额：<span class="price">￥343.80</span></p>
-              <p class="order-status-num"><span>订单状态：未付款</span><span>订单内共有（3）种商品</span></p>
+          <empty v-if="orderList.length === 0">暂无订单...</empty>
+          <template v-else>
+            <div v-for="(item, index) in orderList" v-if="index < 3" :key="item.order_sn" class="order-item" >
+              <nuxt-link :to="'/goods/' + item.skuList[0].goods_id" class="goods-image">
+                  <img :src="item.skuList[0].goods_image">
+                </nuxt-link>
+              <div class="order-info">
+                  <nuxt-link :to="'/goods/' + item.skuList[0].goods_id" class="goods-name">{{ item.skuList[0].goods_name }}</nuxt-link>
+                  <p>下单时间：2018-03-23 17:44:59</p>
+                  <p>订单金额：<span class="price">￥343.80</span></p>
+                  <p class="order-status-num"><span>订单状态：未付款</span><span>订单内共有（{{ item.skuList.length }}）种商品</span></p>
+                </div>
+              <div class="order-oper">
+                  <nuxt-link :to="'/member/order/detail/' + item.order_sn">查看订单</nuxt-link>
+                </div>
             </div>
-            <div class="order-oper">
-              <nuxt-link to="/member/order/detail/2">查看订单</nuxt-link>
-            </div>
-          </div>
-          <div class="order-item">
-            <nuxt-link :to="'/goods/' + 2" class="goods-image">
-              <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/8399360E37A949A5BA56381ADA2ADF97.jpg_300x300">
-            </nuxt-link>
-            <div class="order-info">
-              <nuxt-link :to="'/goods/' + 2" class="goods-name">良品铺子酸奶果粒块54g草莓蓝莓干水果酸奶块良品铺子酸奶果粒块54g草莓蓝莓干水果酸奶块休闲零食特产小吃休闲零食特产小吃</nuxt-link>
-              <p>下单时间：2018-03-23 17:44:59</p>
-              <p>订单金额：<span class="price">￥343.80</span></p>
-              <p class="order-status-num"><span>订单状态：未付款</span><span>订单内共有（3）种商品</span></p>
-            </div>
-            <div class="order-oper">
-              <nuxt-link to="/member/order/detail/2">查看订单</nuxt-link>
-            </div>
-          </div>
-          <div class="order-item">
-            <nuxt-link :to="'/goods/' + 2" class="goods-image">
-              <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/8399360E37A949A5BA56381ADA2ADF97.jpg_300x300">
-            </nuxt-link>
-            <div class="order-info">
-              <nuxt-link :to="'/goods/' + 2" class="goods-name">良品铺子酸奶果粒块54g草莓蓝莓干水果酸奶块良品铺子酸奶果粒块54g草莓蓝莓干水果酸奶块休闲零食特产小吃休闲零食特产小吃</nuxt-link>
-              <p>下单时间：2018-03-23 17:44:59</p>
-              <p>订单金额：<span class="price">￥343.80</span></p>
-              <p class="order-status-num"><span>订单状态：未付款</span><span>订单内共有（3）种商品</span></p>
-            </div>
-            <div class="order-oper">
-              <nuxt-link to="/member/order/detail/2">查看订单</nuxt-link>
-            </div>
-          </div>
+          </template>
         </div>
       </div>
-      <div class="item right"></div>
+      <div class="item right cart">
+        <div class="item-title">
+          <h2>购物车</h2>
+          <nuxt-link to="/cart">查看全部 	&gt;&gt;</nuxt-link>
+        </div>
+        <div class="item-content">
+          <empty v-if="cartSkuList.length === 0">暂无商品...</empty>
+          <template v-else>
+            <div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">
+              <nuxt-link :to="'/goods/' + 2" class="goods-image">
+                <img :src="item.goods_image" :alt="item.goods_name">
+              </nuxt-link>
+              <div class="goods-name">
+                <nuxt-link :to="'/goods/' + 2">{{ item.goods_name }}</nuxt-link>
+                <p><em>￥{{ item.price | unitPrice }}</em> <span>x {{ item.num }}</span></p>
+              </div>
+              <a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
     <div class="box-item">
-      <div class="item left"></div>
-      <div class="item right"></div>
+      <div class="item left goods-collection">
+        <div class="item-title">
+          <h2>商品收藏</h2>
+          <nuxt-link to="/member/collection#goods">查看全部 	&gt;&gt;</nuxt-link>
+        </div>
+        <div class="item-content">
+          <empty v-if="goodsCollectionList.length === 0">暂无收藏商品...</empty>
+          <template v-else>
+            <div
+              v-for="(item, index) in goodsCollectionList"
+              v-if="index < 8"
+              :key="item.goods_id"
+              class="goods-collection-item"
+            >
+              <nuxt-link :to="'/goods/' + item.goods_id">
+                <img :src="item.goods_image" :alt="item.goods_name" class="goods-image">
+              </nuxt-link>
+              <span class="goods-name">{{ item.goods_name }}</span>
+              <div class="goods-price">
+                <span>￥{{ item.goods_price | unitPrice }}</span>
+                <a href="javascript:;" class="delete-btn" @click="handleDeleteGoodsCollection(item)">删除</a>
+              </div>
+            </div>
+            <span class="clear"></span>
+          </template>
+        </div>
+      </div>
+      <div class="item right shop-collection">
+        <div class="item-title">
+          <h2>店铺收藏</h2>
+          <nuxt-link to="/member/collection#shop">查看全部 	&gt;&gt;</nuxt-link>
+        </div>
+        <div class="item-content">
+          <empty v-if="goodsCollectionList.length === 0">暂无收藏店铺...</empty>
+          <template v-else>
+            <div
+              v-for="(item, index) in shopCollectionList"
+              v-if="index < 4"
+              :key="item.shop_id"
+              class="shop-collection-item"
+            >
+              <div class="shop-info">
+                <img :src="item.shop_logo" :alt="item.shop_name" :title="item.shop_name">
+                <div class="shop-btns">
+                  <a href="javascript:;">进入店铺</a>
+                  <a href="javascript:;" @click="handleDeleteShopCollection(item)">取消关注</a>
+                </div>
+              </div>
+              <div class="shop-goods swiper-container-shop">
+                <div class="swiper-wrapper">
+                  <nuxt-link
+                    v-for="goods in item.goodsList"
+                    :key="goods.goods_id"
+                    :to="'/goods/' + goods.goods_id"
+                    :title="goods.goods_name"
+                    class="swiper-slide"
+                  >
+                    <img :src="goods.goods_image" :alt="goods.goods_name" class="shop-goods-image">
+                  </nuxt-link>
+                </div>
+                <div class="swiper-button-prev swiper-button-white"></div>
+                <div class="swiper-button-next swiper-button-white"></div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapActions, mapGetters } from 'vuex'
+  import Swiper from 'swiper'
+  import Empty from './__empty'
   export default {
-    name: 'index'
+    name: 'index',
+    components: {
+      Empty
+    },
+    mounted() {
+      this.$nextTick(this.initShopSwiper)
+    },
+    computed: {
+      ...mapGetters({
+        cartSkuList: 'cart/skuList',
+        orderList: 'order/orderList',
+        goodsCollectionList: 'collection/goodsCollectionList',
+        shopCollectionList: 'collection/shopCollectionList'
+      })
+    },
+    watch: {
+      shopCollectionList: 'initShopSwiper'
+    },
+    methods: {
+      /** 删除购物车货品 */
+      handleDeleteSkuItem(sku) {
+        this.$layer.confirm('确认要删除这个货品吗', () => {
+          this.deleteSkuItem(sku.sku_id).then(() => this.$message.success('删除成功！'))
+        })
+      },
+      /** 删除商品收藏 */
+      handleDeleteGoodsCollection(goods) {
+        this.$layer.confirm('确认要删除这个商品收藏吗', () => {
+          this.deleteGoodsCollection(goods.goods_id).then(() => this.$message.success('删除成功！'))
+        })
+      },
+      /** 删除店铺收藏 */
+      handleDeleteShopCollection(shop) {
+        this.$layer.confirm('确认要取消关注这个店铺吗', () => {
+          this.deleteShopCollection(shop.shop_id).then(() => this.$message.success('删除成功！'))
+        })
+      },
+      /** 初始化shopSwiper */
+      initShopSwiper() {
+        setTimeout(() => {
+          this.shopSwiper = new Swiper('.swiper-container-shop', {
+            loop: true,
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+            spaceBetween: 10,
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            }
+          })
+        })
+      },
+      ...mapActions({
+        /** 删除购物车货品 */
+        deleteSkuItem: 'cart/deleteSkuItemAction',
+        /** 删除商品收藏 */
+        deleteGoodsCollection: 'collection/deleteGoodsCollectionAction',
+        /** 删除店铺收藏 */
+        deleteShopCollection: 'collection/deleteShopCollectionAction'
+      })
+    }
   }
 </script>
 
@@ -200,12 +323,22 @@
   .box-item:last-child .item {
     border-top: none;
   }
+  .goods-image {
+    display: block;
+    width: 80px;
+    height: 80px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
   .item.order {
     background-color: #fefbf8;
     .order-status {
       a {
         border-right: 1px solid #e7e7e7;
         padding: 0 15px;
+        &:last-child { border-right: none }
       }
     }
     .order-item {
@@ -214,15 +347,6 @@
       background-color: #fbf8e9;
       margin-top: 10px;
       padding: 12px;
-      .goods-image {
-        display: block;
-        width: 80px;
-        height: 80px;
-        img {
-          width: 100%;
-          height: 100%;
-        }
-      }
       .order-info {
         width: 320px;
         margin-left: 10px;
@@ -263,5 +387,149 @@
         }
       }
     }
+  }
+  .item.cart {
+    .cart-item {
+      display: flex;
+      justify-items: center;
+      width: 100%;
+      margin-bottom: 10px;
+      transition: background-color .2s ease-in;
+      &:hover { background-color: #fefbf8 }
+    }
+    .goods-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      width: 60px;
+      height: 60px;
+    }
+    .goods-name {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      width: 200px;
+      a {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      p {
+        display: flex;
+        justify-content: space-between;
+      }
+      em {
+        font-size: 12px;
+        color: #f42424;
+      }
+      span { margin-right: 50px }
+    }
+    .delete-btn {
+      color: red;
+      align-self: center;
+      margin-left: 20px;
+    }
+  }
+  .item.goods-collection {
+    .item-content {
+      margin-left: -25px;
+    }
+    .goods-collection-item {
+      width: 119px;
+      height: 165px;
+      border: 1px solid #e7e7e7;
+      border-radius: 3px;
+      float: left;
+      margin-bottom: 10px;
+      margin-left: 25px;
+      transition: all .2s ease-in;
+      &:hover {
+        box-shadow: 0 0 15px #ccc;
+      }
+      .goods-image {
+        width: 119px;
+        height: 119px;
+      }
+      .goods-name {
+        display: block;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        color: #333;
+        padding: 0 5px;
+      }
+      .goods-price {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 5px;
+      }
+      .delete-btn { color: #f42424 }
+    }
+  }
+  .item.shop-collection {
+    .shop-collection-item {
+      display: flex;
+      height: 78px;
+      border: 1px solid #e7e7e7;
+      margin-bottom: 10px;
+    }
+    .shop-info {
+      display: flex;
+      flex-flow: column;
+      width: 124px;
+      height: 100%;
+      img {
+        width: 124px;
+        height: 55px;
+      }
+      .shop-btns {
+        display: flex;
+        justify-content: space-between;
+        height: 78px - 55px;
+        a {
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          border-right: 1px solid #e7e7e7;
+          background-color: #f9f9f9;
+          color: #666;
+          &:hover {
+            color: #f42424
+          }
+        }
+      }
+    }
+    .shop-goods {
+      position: relative;
+      width: 359px - 124px;
+      padding: 5px 10px;
+      overflow: hidden;
+      user-select: none;
+      &:hover {
+        /deep/ .swiper-button-next, .swiper-button-prev { opacity: 1 }
+      }
+    }
+    .shop-goods-image {
+      width: 100%;
+      height: 100%;
+    }
+    /deep/ .swiper-button-next, .swiper-button-prev {
+      opacity: 0;
+      width: 20px;
+      height: 100%;
+      top: 0;
+      margin-top: 0;
+      background-size: 10px 20px;
+      background-color: rgba(0,0,0,.5);
+      transition: opacity .2s ease-in;
+    }
+    /deep/ .swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
+      opacity: 1;
+    }
+    /deep/ .swiper-button-prev { left: 0 }
+    /deep/ .swiper-button-next { right: 0 }
   }
 </style>

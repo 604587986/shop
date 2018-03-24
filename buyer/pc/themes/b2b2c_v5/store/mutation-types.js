@@ -8,6 +8,20 @@ export const SET_CATEGORY_DATA = 'SET_CATEGORY_DATA'
 // 设置用户信息
 export const SET_USER_DATA = 'SET_USER_DATA'
 
+/** 订单相关 */
+// 设置订单数据
+export const SET_ORDER_DATA = 'SET_ORDER_DATA'
+
+/** 收藏相关 */
+// 设置商品收藏
+export const SET_GOODS_COLLECTION = 'SET_GOODS_COLLECTION'
+// 删除商品收藏
+export const DELETE_GOODS_COLLECTION = 'DELETE_GOODS_COLLECTION'
+// 设置店铺收藏
+export const SET_SHOP_COLLECTION = 'SET_SHOP_COLLECTION'
+// 删除店铺收藏
+export const DELETE_SHOP_COLLECTION = 'DELETE_SHOP_COLLECTION'
+
 /** 购物车相关 */
 // 设置购物车数据
 export const SET_CART_DATA = 'SET_CART_DATA'

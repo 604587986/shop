@@ -145,7 +145,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  @import "../node_modules/swiper/dist/css/swiper.min.css";
   .focus-container {
     height: 500px;
     background-color: rgb(241, 241, 241);
