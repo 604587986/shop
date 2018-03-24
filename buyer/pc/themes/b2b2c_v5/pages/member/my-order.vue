@@ -13,7 +13,7 @@
     <div class="order-search">
       <input type="text" v-model="keyword" placeholder="输入订单中商品关键词" @keyup.enter="handleSearch">
       <button type="button" @click="handleSearch">搜索</button>
-      <span v-if="pageData">搜到：<em style="color: #f42424">{{ pageData.data_total }}</em> 笔订单</span>
+      <span v-if="orderData">搜到：<em style="color: #f42424">{{ orderData.data_total }}</em> 笔订单</span>
       <span v-else>搜索中...</span>
     </div>
     <div class="order-table">
@@ -26,7 +26,7 @@
         <span style="width: 110px">订单操作</span>
       </div>
       <ul class="order-table-tbody">
-        <li v-for="order in orderList" :key="order.order_sn">
+        <li v-if="orderData" v-for="order in orderData.data" :key="order.order_sn">
           <div class="order-tbody-title">
             <span class="pay-type">线上支付：</span>
             <span class="price"><em>￥</em>{{ order.order_amount | unitPrice }}</span>
@@ -61,13 +61,13 @@
         </li>
       </ul>
     </div>
-    <div class="order-pagination" v-if="pageData">
+    <div class="order-pagination" v-if="orderData">
       <el-pagination
         @current-change="handleCurrentPageChange"
-        :current-page.sync="pageData.page_no"
-        :page-size="pageData.page_size"
+        :current-page.sync="params.page_no"
+        :page-size="params.page_size"
         layout="total, prev, pager, next"
-        :total="pageData.data_total">
+        :total="orderData.data_total">
       </el-pagination>
     </div>
   </div>
@@ -75,6 +75,7 @@
 
 <script>
   import * as API_Order from '@/api/order'
+  import { mapActions, mapGetters } from 'vuex'
   import elementPagination from 'element-pagination'
   import 'element-theme-chalk/lib/pagination.css'
   export default {
@@ -84,8 +85,6 @@
     },
     data() {
       return {
-        loading: true,
-        orderList: '',
         navList: [
           { title: '所有订单', active: true, status: 'all' },
           { title: '待付款', active: false, status: 'wait-pay' },
@@ -100,13 +99,13 @@
           page_no: 1,
           page_size: 5,
           status: 'all'
-        },
-        /** 列表分页数据 */
-        pageData: ''
+        }
       }
     },
-    created() {
-      this.GET_OrderList()
+    computed: {
+      ...mapGetters({
+        orderData: 'order/orderData'
+      })
     },
     methods: {
       /** 订单筛选栏点击 */
@@ -122,29 +121,19 @@
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
-        this.GET_OrderList()
+        this.getOrderData(this.params).then(this.scrollToTop)
       },
       /** 订单搜索 */
       handleSearch() {
         this.params.keyword = this.keyword
-        this.GET_OrderList()
+        this.getOrderData(this.params).then(this.scrollToTop)
       },
-      /** 获取订单列表 */
-      GET_OrderList() {
-        this.loading = true
-        API_Order.getOrderList(this.params).then(response => {
-          this.orderList = response.data
-          this.pageData = {
-            page_no: response.page_no,
-            page_size: response.page_size,
-            data_total: response.data_total
-          }
-          $("html,body").animate({ scrollTop: 0 }, 300)
-          this.loading = flase
-        }).catch(error => {
-          this.loading = false
-        })
-      }
+      scrollToTop() {
+        $("html,body").animate({ scrollTop: 0 }, 300)
+      },
+      ...mapActions({
+        getOrderData: 'order/getOrderDataAction'
+      })
     }
   }
 </script>
