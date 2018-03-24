@@ -123,8 +123,11 @@ export const actions = {
    * @param params
    */
   getCartDataAction: ({ commit }, params) => {
-    API_Cart.getCartList(params).then(response => {
-      commit(types.SET_CART_DATA, response)
+    return new Promise((resolve, reject) => {
+      API_Cart.getCartList(params).then(response => {
+        commit(types.SET_CART_DATA, response)
+        resolve(response)
+      }).catch(error => reject(error))
     })
   },
   /**
