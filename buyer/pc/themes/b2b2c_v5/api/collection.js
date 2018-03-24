@@ -60,7 +60,7 @@ export function deleteShopCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return new Promise((resolve, reject) => {
     request({
-      url: `collction/shop/${ids}`,
+      url: `collection/shop/${ids}`,
       method: 'delete'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
