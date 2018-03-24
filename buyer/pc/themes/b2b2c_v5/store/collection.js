@@ -46,7 +46,7 @@ export const mutations = {
     if (!Array.isArray(ids)) ids = [ids]
     const _list = []
     state.shopCollectionData.data.forEach(item => {
-      if (!ids.includes(item.goods_id)) _list.push(item)
+      if (!ids.includes(item.shop_id)) _list.push(item)
     })
     state.shopCollectionData.data = _list
   }
