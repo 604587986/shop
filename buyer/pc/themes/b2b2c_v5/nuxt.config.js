@@ -44,7 +44,8 @@ module.exports = {
   css: [
     '~assets/styles/normalize.css',
     '~assets/styles/base.css',
-    '~assets/styles/page-transletion.scss'
+    '~assets/styles/page-transletion.scss',
+    '~node_modules/swiper/dist/css/swiper.min.css'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
