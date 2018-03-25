@@ -128,19 +128,13 @@
                 </div>
               </div>
               <div class="shop-goods swiper-container-shop">
-                <div class="swiper-wrapper">
-                  <nuxt-link
-                    v-for="goods in item.goodsList"
-                    :key="goods.goods_id"
-                    :to="'/goods/' + goods.goods_id"
-                    :title="goods.goods_name"
-                    class="swiper-slide"
-                  >
-                    <img :src="goods.goods_image" :alt="goods.goods_name" class="shop-goods-image">
-                  </nuxt-link>
-                </div>
-                <div class="swiper-button-prev swiper-button-white"></div>
-                <div class="swiper-button-next swiper-button-white"></div>
+                <el-carousel height="68px" indicator-position="none" type="card" arrow="never">
+                  <el-carousel-item v-for="goods in item.goodsList" :key="goods.goods_id">
+                    <nuxt-link :to="'/goods/' + goods.goods_id" :title="goods.goods_name" class="swiper-slide">
+                      <img :src="goods.goods_image" :alt="goods.goods_name" class="shop-goods-image">
+                    </nuxt-link>
+                  </el-carousel-item>
+                </el-carousel>
               </div>
             </div>
           </template>

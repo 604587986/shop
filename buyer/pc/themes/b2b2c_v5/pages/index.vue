@@ -85,13 +85,8 @@
 
 <script>
   import * as API_Common from '@/api/common'
-  import { Carousel, CarouselItem } from 'element-ui'
   export default {
     name: 'index',
-    components: {
-      'el-carousel': Carousel,
-      'el-carousel-item': CarouselItem
-    },
     data() {
       return {
         /** 首页卡片tab x坐标 */

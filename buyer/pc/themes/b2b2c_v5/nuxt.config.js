@@ -38,9 +38,7 @@ module.exports = {
     extractCSS: {
       allChunks: true
     },
-    externals: {
-      'axios': 'axios'
-    },
+    externals: ['axios', 'element-ui'],
     vendor: [],
     babel: {
       "plugins": [
@@ -65,7 +63,8 @@ module.exports = {
     { src: '~plugins/vue-layer', ssr: false },
     { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
-    { src: '~plugins/vue-filters', ssr: false }
+    { src: '~plugins/vue-filters', ssr: false },
+    { src: '~plugins/element-ui', ssr: true }
   ],
   router: {
     scrollBehavior: function (to, from, savedPosition) {
