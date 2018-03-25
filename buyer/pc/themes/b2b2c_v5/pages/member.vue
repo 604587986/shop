@@ -20,8 +20,7 @@
       'en-menu': Menu
     },
     created() {
-      let status = this.$route.hash ? this.$route.hash.replace(/^#/, '') : 'all'
-      if (!this.$route.hash) this.getOrderData({ page_no: 1, page_size: 10, status })
+      if (!this.$route.hash) this.getOrderData()
       this.getGoodsCollectionData()
       this.getShopCollectionData()
     },
