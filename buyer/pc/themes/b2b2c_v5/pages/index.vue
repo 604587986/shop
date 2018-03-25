@@ -95,7 +95,6 @@
 
 <script>
   import * as API_Common from '@/api/common'
-  import Swiper from 'swiper'
   export default {
     name: 'index',
     data() {
@@ -113,32 +112,32 @@
     },
     methods: {
       initFocusSwiper() {
-        this.swiper = new Swiper('#swiper-container-index', {
-          autoplay: 2000,
-          speed: 800,
-          pagination: {
-            el: '.swiper-pagination-index',
-            type: 'custom',
-            renderCustom: function(swiper, current, total) {
-              var _btns = ''
-              for (var i = 0; i < total; i++) {
-                i === total - 1
-                  ? (_btns += '<i class="custom-pagination-btn __last__' + (current === i + 1 ? ' __active__' : '') + '"></i>')
-                  : (_btns += '<i class="custom-pagination-btn' + (current === i + 1 ? ' __active__' : '') + '"></i>')
-              }
-              //  修正pagination偏移量
-              return ('<div class="custom-pagination-inner" style="margin-left: -' + (total * 22 + 6) / 2 + 'px">' + _btns + '</div>')
-            }
-          },
-          autoplayDisableOnInteraction: false,
-          effect: 'fade'
-        })
-        const _swiper = this.swiper
-        const $swiperContainerIndex = $('#swiper-container-index')
-        $('.swiper-pagination-index').on('mouseenter', 'i', function() {
-          var $this = $(this), index = $this.index();
-          _swiper.slideTo(index, 500, false);
-        });
+        // this.swiper = new Swiper('#swiper-container-index', {
+        //   autoplay: 2000,
+        //   speed: 800,
+        //   pagination: {
+        //     el: '.swiper-pagination-index',
+        //     type: 'custom',
+        //     renderCustom: function(swiper, current, total) {
+        //       var _btns = ''
+        //       for (var i = 0; i < total; i++) {
+        //         i === total - 1
+        //           ? (_btns += '<i class="custom-pagination-btn __last__' + (current === i + 1 ? ' __active__' : '') + '"></i>')
+        //           : (_btns += '<i class="custom-pagination-btn' + (current === i + 1 ? ' __active__' : '') + '"></i>')
+        //       }
+        //       //  修正pagination偏移量
+        //       return ('<div class="custom-pagination-inner" style="margin-left: -' + (total * 22 + 6) / 2 + 'px">' + _btns + '</div>')
+        //     }
+        //   },
+        //   autoplayDisableOnInteraction: false,
+        //   effect: 'fade'
+        // })
+        // const _swiper = this.swiper
+        // const $swiperContainerIndex = $('#swiper-container-index')
+        // $('.swiper-pagination-index').on('mouseenter', 'i', function() {
+        //   var $this = $(this), index = $this.index();
+        //   _swiper.slideTo(index, 500, false);
+        // });
       }
     }
   }

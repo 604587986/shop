@@ -19,6 +19,7 @@ module.exports = {
     ],
     script: [
       { type: 'text/javascript', src: 'https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js' },
+      { type: 'text/javascript', src: 'https://cdn.bootcss.com/axios/0.18.0/axios.min.js' },
       { type: 'text/javascript', src: '/layer/layer.js' }
     ]
   },
@@ -37,15 +38,28 @@ module.exports = {
     extractCSS: {
       allChunks: true
     },
-    vendor: ['axios'],
+    externals: {
+      'axios': 'axios'
+    },
+    vendor: [],
+    babel: {
+      "plugins": [
+        ["component",
+          {
+            "libraryName": "element-ui",
+            "styleLibraryName": "theme-chalk"
+          }
+        ]
+      ]
+    },
     plugins: [],
     publicPath: ''
   },
   css: [
     '~assets/styles/normalize.css',
+    'element-ui/lib/theme-chalk/reset.css',
     '~assets/styles/base.css',
-    '~assets/styles/page-transletion.scss',
-    '~node_modules/swiper/dist/css/swiper.min.css'
+    '~assets/styles/page-transletion.scss'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },

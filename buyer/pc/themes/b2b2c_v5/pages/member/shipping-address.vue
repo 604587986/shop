@@ -1,5 +1,11 @@
 <template>
-  <h1>shipping-address</h1>
+  <div id="shipping-address">
+    <div class="member-nav">
+      <ul class="member-nav-list">
+        <li class="active">收货地址管理</li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>

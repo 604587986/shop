@@ -1,7 +1,7 @@
 <template>
   <div id="my-order">
-    <div class="order-nav">
-      <ul class="order-nav-list">
+    <div class="member-nav">
+      <ul class="member-nav-list">
         <li
           v-for="item in navList"
           :key="item.status"
@@ -76,12 +76,11 @@
 <script>
   import * as API_Order from '@/api/order'
   import { mapActions, mapGetters } from 'vuex'
-  import elementPagination from 'element-pagination'
-  import 'element-theme-chalk/lib/pagination.css'
+  import Pagination from 'element-ui/lib/pagination'
   export default {
     name: 'my-order',
     components: {
-      'el-pagination': elementPagination
+      'el-pagination': Pagination
     },
     created() {
       /** 如果有hash值，需要重新请求数据 */
@@ -147,44 +146,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .order-nav {
-    position: relative;
-    width: 100%;
-    height: 38px;
-    background-color: #fff;
-    z-index: 1;
-  }
-  .order-nav-list {
-    display: flex;
-    align-items: center;
-    height: 36px;
-    background-color: #fff;
-    li {
-      background-color: #f7f7f7;
-      border-right: 1px solid #e7e7e7;
-      border-top: 1px solid #e7e7e7;
-      border-bottom: 1px solid #e7e7e7;
-      line-height: 35px;
-      padding: 0 20px;
-      color: #666;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      transition: background-color .3s ease-out;
-      &:first-child {
-        border-left: 1px solid #e7e7e7;
-      }
-      &.active {
-        background-color: #fff;
-        color: #f42424;
-        border-bottom: none;
-      }
-      &:not(.active):hover {
-        background-color: #e7e7e7;
-        color: #000;
-      }
-    }
-  }
   .order-search {
     display: flex;
     align-items: center;

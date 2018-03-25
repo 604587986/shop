@@ -152,7 +152,6 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import Swiper from 'swiper'
   import Empty from './__empty'
   export default {
     name: 'index',
@@ -194,18 +193,7 @@
       },
       /** 初始化shopSwiper */
       initShopSwiper() {
-        setTimeout(() => {
-          this.shopSwiper = new Swiper('.swiper-container-shop', {
-            loop: true,
-            slidesPerView: 3,
-            slidesPerGroup: 3,
-            spaceBetween: 10,
-            navigation: {
-              nextEl: '.swiper-button-next',
-              prevEl: '.swiper-button-prev'
-            }
-          })
-        })
+
       },
       ...mapActions({
         /** 删除购物车货品 */
