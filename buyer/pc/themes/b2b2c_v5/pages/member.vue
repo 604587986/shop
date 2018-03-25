@@ -20,7 +20,12 @@
       'en-menu': Menu
     },
     created() {
-      this.getOrderData()
+      let status = this.$route.hash ? this.$route.hash.replace(/^#/, '') : 'all'
+      this.getOrderData({
+        page_no: 1,
+        page_size: 10,
+        status
+      })
       this.getGoodsCollectionData()
       this.getShopCollectionData()
     },

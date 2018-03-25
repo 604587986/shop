@@ -83,23 +83,32 @@
     components: {
       'el-pagination': elementPagination
     },
+    created() {
+      /** 如果有hash值，需要重新请求数据 */
+      if (this.$route.hash) this.getOrderData(this.params).then(this.scrollToTop)
+    },
     data() {
+      let _hash = this.$route.hash
+      _hash = _hash ? _hash.replace(/^#/,'') : 'all'
       return {
-        navList: [
-          { title: '所有订单', active: true, status: 'all' },
-          { title: '待付款', active: false, status: 'wait-pay' },
-          { title: '待发货', active: false, status: 'wait-ship' },
-          { title: '已发货', active: false, status: 'shipped' },
-          { title: '已取消', active: false, status: 'canceled' },
-          { title: '已完成', active: false, status: 'complete' },
-          { title: '待评论', active: false, status: 'wait-comments' },
-        ],
         keyword: '',
         params: {
           page_no: 1,
           page_size: 5,
-          status: 'all'
-        }
+          status: _hash
+        },
+        navList: [
+          { title: '所有订单', status: 'all' },
+          { title: '待付款', status: 'wait-pay' },
+          { title: '待发货', status: 'wait-ship' },
+          { title: '已发货', status: 'shipped' },
+          { title: '已取消', status: 'canceled' },
+          { title: '已完成', status: 'complete' },
+          { title: '待评论', status: 'wait-comments' }
+        ].map(item => {
+          item.active = item.status === _hash
+          return item
+        })
       }
     },
     computed: {
@@ -111,12 +120,11 @@
       /** 订单筛选栏点击 */
       handleClickNav(nav) {
         this.navList = this.navList.map(item => {
-          item.active = false
+          item.active = item.status === nav.status
           return item
         })
-        nav.active = true
         this.params.status = nav.status
-        this.GET_OrderList()
+        this.getOrderData(this.params).then(this.scrollToTop)
       },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
