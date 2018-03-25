@@ -10,6 +10,12 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Alert, Pagination, Table, TableColumn } from 'element-ui'
+  Vue.use(Alert)
+  Vue.use(Pagination)
+  Vue.use(Table)
+  Vue.use(TableColumn)
   import { mapActions } from 'vuex'
   import Nav from './member/__nav'
   import Menu from './member/__menu'

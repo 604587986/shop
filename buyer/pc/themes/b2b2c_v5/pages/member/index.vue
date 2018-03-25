@@ -128,13 +128,19 @@
                 </div>
               </div>
               <div class="shop-goods swiper-container-shop">
-                <el-carousel height="68px" indicator-position="none" type="card" arrow="never">
-                  <el-carousel-item v-for="goods in item.goodsList" :key="goods.goods_id">
-                    <nuxt-link :to="'/goods/' + goods.goods_id" :title="goods.goods_name" class="swiper-slide">
-                      <img :src="goods.goods_image" :alt="goods.goods_name" class="shop-goods-image">
-                    </nuxt-link>
-                  </el-carousel-item>
-                </el-carousel>
+                <div class="swiper-wrapper">
+                  <nuxt-link
+                    v-for="goods in item.goodsList"
+                    :key="goods.goods_id"
+                    :to="'/goods/' + goods.goods_id"
+                    :title="goods.goods_name"
+                    class="swiper-slide"
+                  >
+                    <img :src="goods.goods_image" :alt="goods.goods_name" class="shop-goods-image">
+                  </nuxt-link>
+                </div>
+                <div class="swiper-button-prev swiper-button-white"></div>
+                <div class="swiper-button-next swiper-button-white"></div>
               </div>
             </div>
           </template>
@@ -146,6 +152,8 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import Swiper from 'swiper'
+  import 'swiper/dist/css/swiper.min.css'
   import Empty from './__empty'
   export default {
     name: 'index',
@@ -187,7 +195,18 @@
       },
       /** 初始化shopSwiper */
       initShopSwiper() {
-
+        setTimeout(() => {
+          this.shopSwiper = new Swiper('.swiper-container-shop', {
+            loop: true,
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+            spaceBetween: 10,
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev'
+            }
+          })
+        })
       },
       ...mapActions({
         /** 删除购物车货品 */
