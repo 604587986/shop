@@ -61,7 +61,7 @@ module.exports = {
     { src: '~plugins/vue-layer', ssr: false },
     { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
-    { src: '~plugins/vue-filters', ssr: false },
+    { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/element-ui', ssr: true }
   ],
   router: {
