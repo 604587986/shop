@@ -21,11 +21,7 @@
     },
     created() {
       let status = this.$route.hash ? this.$route.hash.replace(/^#/, '') : 'all'
-      this.getOrderData({
-        page_no: 1,
-        page_size: 10,
-        status
-      })
+      if (!this.$route.hash) this.getOrderData({ page_no: 1, page_size: 10, status })
       this.getGoodsCollectionData()
       this.getShopCollectionData()
     },
