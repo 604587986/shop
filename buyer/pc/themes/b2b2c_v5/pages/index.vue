@@ -3,21 +3,11 @@
     <en-header/>
     <div class="focus-container">
       <div class="w">
-        <div class="swiper-container" id="swiper-container-index">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <a href="#">
-                <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/BEC6DE293CEB40769B43984B0C094906.jpg" alt="" class="focus-img">
-              </a>
-            </div>
-            <div class="swiper-slide">
-              <a href="#">
-                <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/068EFE2D3E294D55990FA58B1F66A340.jpg" alt="" class="focus-img">
-              </a>
-            </div>
-          </div>
-          <div class="swiper-pagination swiper-pagination-index"></div>
-        </div>
+        <el-carousel height="500px" arrow="never">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/BEC6DE293CEB40769B43984B0C094906.jpg" alt="" class="focus-img">
+          </el-carousel-item>
+        </el-carousel>
         <div class="index-card">
           <div class="card-user">
             <div class="inner-card-user">
@@ -95,50 +85,12 @@
 
 <script>
   import * as API_Common from '@/api/common'
-  import Swiper from 'swiper'
   export default {
     name: 'index',
     data() {
       return {
         /** 首页卡片tab x坐标 */
         card_news_tab_x: 0
-      }
-    },
-    created() {
-    },
-    mounted() {
-      this.$nextTick(() => {
-        this.initFocusSwiper()
-      })
-    },
-    methods: {
-      initFocusSwiper() {
-        this.swiper = new Swiper('#swiper-container-index', {
-          autoplay: 2000,
-          speed: 800,
-          pagination: {
-            el: '.swiper-pagination-index',
-            type: 'custom',
-            renderCustom: function(swiper, current, total) {
-              var _btns = ''
-              for (var i = 0; i < total; i++) {
-                i === total - 1
-                  ? (_btns += '<i class="custom-pagination-btn __last__' + (current === i + 1 ? ' __active__' : '') + '"></i>')
-                  : (_btns += '<i class="custom-pagination-btn' + (current === i + 1 ? ' __active__' : '') + '"></i>')
-              }
-              //  修正pagination偏移量
-              return ('<div class="custom-pagination-inner" style="margin-left: -' + (total * 22 + 6) / 2 + 'px">' + _btns + '</div>')
-            }
-          },
-          autoplayDisableOnInteraction: false,
-          effect: 'fade'
-        })
-        const _swiper = this.swiper
-        const $swiperContainerIndex = $('#swiper-container-index')
-        $('.swiper-pagination-index').on('mouseenter', 'i', function() {
-          var $this = $(this), index = $this.index();
-          _swiper.slideTo(index, 500, false);
-        });
       }
     }
   }

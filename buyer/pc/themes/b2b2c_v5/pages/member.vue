@@ -10,6 +10,12 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Alert, Pagination, Table, TableColumn } from 'element-ui'
+  Vue.use(Alert)
+  Vue.use(Pagination)
+  Vue.use(Table)
+  Vue.use(TableColumn)
   import { mapActions } from 'vuex'
   import Nav from './member/__nav'
   import Menu from './member/__menu'
@@ -20,7 +26,7 @@
       'en-menu': Menu
     },
     created() {
-      this.getOrderData()
+      if (!this.$route.hash) this.getOrderData()
       this.getGoodsCollectionData()
       this.getShopCollectionData()
     },
@@ -37,9 +43,47 @@
   }
 </script>
 
-<style type="text/scss" lang="scss" scoped>
+<style type="text/scss" lang="scss">
   .member-layout {
     display: flex;
     justify-content: space-between;
+  }
+  .member-nav {
+    position: relative;
+    width: 100%;
+    height: 38px;
+    background-color: #fff;
+    z-index: 1;
+  }
+  .member-nav-list {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    background-color: #fff;
+    border-bottom: 1px solid #e7e7e7;
+    li {
+      background-color: #f7f7f7;
+      border-right: 1px solid #e7e7e7;
+      border-top: 1px solid #e7e7e7;
+      line-height: 35px;
+      padding: 0 20px;
+      color: #666;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background-color .3s ease-out;
+      &:first-child {
+        border-left: 1px solid #e7e7e7;
+      }
+      &.active {
+        background-color: #fff;
+        color: #f42424;
+        border-bottom: 1px solid #fff;
+      }
+      &:not(.active):hover {
+        background-color: #e7e7e7;
+        color: #000;
+      }
+    }
   }
 </style>

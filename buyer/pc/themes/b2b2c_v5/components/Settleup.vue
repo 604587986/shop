@@ -82,7 +82,7 @@
       },
       /** 移除购物车货品 */
       handleRemoveSkuItem(sku) {
-        this.removeSkuItem(sku.sku_id)
+        this.removeSkuItem(sku.sku_id).then(this.$message.success('删除成功！'))
       }
     }
   }

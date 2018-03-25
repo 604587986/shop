@@ -1,7 +1,7 @@
 <template>
   <div id="my-order">
-    <div class="order-nav">
-      <ul class="order-nav-list">
+    <div class="member-nav">
+      <ul class="member-nav-list">
         <li
           v-for="item in navList"
           :key="item.status"
@@ -76,30 +76,34 @@
 <script>
   import * as API_Order from '@/api/order'
   import { mapActions, mapGetters } from 'vuex'
-  import elementPagination from 'element-pagination'
-  import 'element-theme-chalk/lib/pagination.css'
   export default {
     name: 'my-order',
-    components: {
-      'el-pagination': elementPagination
+    created() {
+      /** 如果有hash值，需要重新请求数据 */
+      if (this.$route.hash) this.getOrderData(this.params).then(this.scrollToTop)
     },
     data() {
+      let _hash = this.$route.hash
+      _hash = _hash ? _hash.replace(/^#/,'') : 'all'
       return {
-        navList: [
-          { title: '所有订单', active: true, status: 'all' },
-          { title: '待付款', active: false, status: 'wait-pay' },
-          { title: '待发货', active: false, status: 'wait-ship' },
-          { title: '已发货', active: false, status: 'shipped' },
-          { title: '已取消', active: false, status: 'canceled' },
-          { title: '已完成', active: false, status: 'complete' },
-          { title: '待评论', active: false, status: 'wait-comments' },
-        ],
         keyword: '',
         params: {
           page_no: 1,
           page_size: 5,
-          status: 'all'
-        }
+          status: _hash
+        },
+        navList: [
+          { title: '所有订单', status: 'all' },
+          { title: '待付款', status: 'wait-pay' },
+          { title: '待发货', status: 'wait-ship' },
+          { title: '已发货', status: 'shipped' },
+          { title: '已取消', status: 'canceled' },
+          { title: '已完成', status: 'complete' },
+          { title: '待评论', status: 'wait-comments' }
+        ].map(item => {
+          item.active = item.status === _hash
+          return item
+        })
       }
     },
     computed: {
@@ -111,12 +115,11 @@
       /** 订单筛选栏点击 */
       handleClickNav(nav) {
         this.navList = this.navList.map(item => {
-          item.active = false
+          item.active = item.status === nav.status
           return item
         })
-        nav.active = true
         this.params.status = nav.status
-        this.GET_OrderList()
+        this.getOrderData(this.params).then(this.scrollToTop)
       },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
@@ -139,44 +142,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .order-nav {
-    position: relative;
-    width: 100%;
-    height: 38px;
-    background-color: #fff;
-    z-index: 1;
-  }
-  .order-nav-list {
-    display: flex;
-    align-items: center;
-    height: 36px;
-    background-color: #fff;
-    li {
-      background-color: #f7f7f7;
-      border-right: 1px solid #e7e7e7;
-      border-top: 1px solid #e7e7e7;
-      border-bottom: 1px solid #e7e7e7;
-      line-height: 35px;
-      padding: 0 20px;
-      color: #666;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      transition: background-color .3s ease-out;
-      &:first-child {
-        border-left: 1px solid #e7e7e7;
-      }
-      &.active {
-        background-color: #fff;
-        color: #f42424;
-        border-bottom: none;
-      }
-      &:not(.active):hover {
-        background-color: #e7e7e7;
-        color: #000;
-      }
-    }
-  }
   .order-search {
     display: flex;
     align-items: center;
@@ -366,24 +331,5 @@
     justify-content: flex-end;
     width: 100%;
     height: 50px;
-    /deep/ .el-pager li {
-      font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
-    }
-    /deep/ .el-icon {
-      font-family: "iconfont" !important;
-      font-style: normal;
-    }
-    /deep/ .el-icon-arrow-left::before {
-      content: '\e605'
-    }
-    /deep/ .el-icon-arrow-right::before {
-      content: '\e606';
-    }
-    /deep/ .el-icon-more::before {
-      content: '\e719';
-    }
-    /deep/ .el-icon-d-arrow-right::before {
-      content: '\e624';
-    }
   }
 </style>

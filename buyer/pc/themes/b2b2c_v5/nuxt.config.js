@@ -38,20 +38,31 @@ module.exports = {
       allChunks: true
     },
     vendor: ['axios'],
+    babel: {
+      "plugins": [
+        ["component",
+          {
+            "libraryName": "element-ui",
+            "styleLibraryName": "theme-chalk"
+          }
+        ]
+      ]
+    },
     plugins: [],
     publicPath: ''
   },
   css: [
     '~assets/styles/normalize.css',
+    'element-ui/lib/theme-chalk/reset.css',
     '~assets/styles/base.css',
-    '~assets/styles/page-transletion.scss',
-    '~node_modules/swiper/dist/css/swiper.min.css'
+    '~assets/styles/page-transletion.scss'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
     { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
-    { src: '~plugins/vue-filters', ssr: false }
+    { src: '~plugins/vue-filters', ssr: false },
+    { src: '~plugins/element-ui', ssr: true }
   ],
   router: {
     scrollBehavior: function (to, from, savedPosition) {
