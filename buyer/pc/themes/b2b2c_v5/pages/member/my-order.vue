@@ -76,12 +76,8 @@
 <script>
   import * as API_Order from '@/api/order'
   import { mapActions, mapGetters } from 'vuex'
-  import Pagination from 'element-ui/lib/pagination'
   export default {
     name: 'my-order',
-    components: {
-      'el-pagination': Pagination
-    },
     created() {
       /** 如果有hash值，需要重新请求数据 */
       if (this.$route.hash) this.getOrderData(this.params).then(this.scrollToTop)
@@ -335,24 +331,5 @@
     justify-content: flex-end;
     width: 100%;
     height: 50px;
-    /deep/ .el-pager li {
-      font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
-    }
-    /deep/ .el-icon {
-      font-family: "iconfont" !important;
-      font-style: normal;
-    }
-    /deep/ .el-icon-arrow-left::before {
-      content: '\e605'
-    }
-    /deep/ .el-icon-arrow-right::before {
-      content: '\e606';
-    }
-    /deep/ .el-icon-more::before {
-      content: '\e719';
-    }
-    /deep/ .el-icon-d-arrow-right::before {
-      content: '\e624';
-    }
   }
 </style>

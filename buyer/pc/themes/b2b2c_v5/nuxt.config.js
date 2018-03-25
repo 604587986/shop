@@ -19,7 +19,6 @@ module.exports = {
     ],
     script: [
       { type: 'text/javascript', src: 'https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js' },
-      { type: 'text/javascript', src: 'https://cdn.bootcss.com/axios/0.18.0/axios.min.js' },
       { type: 'text/javascript', src: '/layer/layer.js' }
     ]
   },
@@ -38,8 +37,7 @@ module.exports = {
     extractCSS: {
       allChunks: true
     },
-    externals: ['axios', 'element-ui'],
-    vendor: [],
+    vendor: ['axios'],
     babel: {
       "plugins": [
         ["component",
