@@ -12,7 +12,7 @@ export const mutations = {
    * @param state
    * @param data
    */
-  [types.SET_USER_DATA](state, data) {
+  [types.SET_ADDRESS_DATA](state, data) {
     state.address = data
   },
 }
