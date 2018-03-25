@@ -15,6 +15,38 @@ export const mutations = {
   [types.SET_ADDRESS_DATA](state, data) {
     state.address = data
   },
+  /**
+   * 保存地址
+   * @param state
+   * @param data
+   */
+  [types.ADD_ADDRESS](state, data) {
+    state.address = state.address.push(data)
+  },
+  /**
+   * 编辑地址
+   * @param state
+   * @param params
+   */
+  [types.EDIT_ADDRESS](state, params) {
+    state.address = state.address.map(item => {
+      if (item.address_id === params.address_id) item = params
+      return item
+    })
+  },
+  /**
+   * 删除地址
+   * @param state
+   * @param ids
+   */
+  [types.DELETE_ADDRESS](state, ids) {
+    if (!Array.isArray(ids)) ids = [ids]
+    const _list = []
+    state.address.forEach(item => {
+      if (!ids.includes(item.address_id)) _list.push(item)
+    })
+    state.address = _list
+  }
 }
 
 /** actions */
@@ -55,7 +87,7 @@ export const actions = {
    */
   editAddressAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_Address.editAddress(params.id, params).then(response => {
+      API_Address.editAddress(params.address_id, params).then(response => {
         commit(types.EDIT_ADDRESS, params)
         resolve(response)
       }).catch(error => reject(error))
