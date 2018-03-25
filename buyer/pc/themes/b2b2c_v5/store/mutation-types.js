@@ -8,6 +8,16 @@ export const SET_CATEGORY_DATA = 'SET_CATEGORY_DATA'
 // 设置用户信息
 export const SET_USER_DATA = 'SET_USER_DATA'
 
+/** 收货地址相关 */
+// 设置地址数据
+export const SET_ADDRESS_DATA = 'SET_ADDRESS_DATA'
+// 添加地址
+export const ADD_ADDRESS = 'ADD_ADDRESS'
+// 编辑地址
+export const EDIT_ADDRESS = 'EDIT_ADDRESS'
+// 删除地址
+export const DELETE_ADDRESS = 'DELETE_ADDRESS'
+
 /** 订单相关 */
 // 设置订单数据
 export const SET_ORDER_DATA = 'SET_ORDER_DATA'
