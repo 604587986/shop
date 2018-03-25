@@ -169,19 +169,19 @@
     methods: {
       /** 删除购物车货品 */
       handleDeleteSkuItem(sku) {
-        this.$layer.confirm('确认要删除这个货品吗', () => {
+        this.$layer.confirm('确认要删除这个货品吗？', () => {
           this.deleteSkuItem(sku.sku_id).then(() => this.$message.success('删除成功！'))
         })
       },
       /** 删除商品收藏 */
       handleDeleteGoodsCollection(goods) {
-        this.$layer.confirm('确认要删除这个商品收藏吗', () => {
+        this.$layer.confirm('确认要删除这个商品收藏吗？', () => {
           this.deleteGoodsCollection(goods.goods_id).then(() => this.$message.success('删除成功！'))
         })
       },
       /** 删除店铺收藏 */
       handleDeleteShopCollection(shop) {
-        this.$layer.confirm('确认要取消关注这个店铺吗', () => {
+        this.$layer.confirm('确认要取消关注这个店铺吗？', () => {
           this.deleteShopCollection(shop.shop_id).then(() => this.$message.success('删除成功！'))
         })
       },
