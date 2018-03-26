@@ -58,12 +58,12 @@ export function deleteParamsGroup(group_id) {
 /**
  * 参数组排序
  * @param group_id
- * @param params
+ * @param sort_type
  * @returns {Promise<any>}
  */
-export function sortParamsGroup(group_id, params) {
+export function sortParamsGroup(group_id, sort_type) {
   const _formData = new FormData()
-  _formData.append('sort_type', params.sort_type)
+  _formData.append('sort_type', sort_type)
   return new Promise((resolve, reject) => {
     request({
       url: `goods/parameter-groups/${group_id}/sort`,
