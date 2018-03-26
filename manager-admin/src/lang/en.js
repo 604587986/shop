@@ -6,6 +6,7 @@ export default {
     goodsList: 'Goods List',
     goodsSetting: 'Goods Setting',
     categoryList: 'Category List',
+    categoryParams: 'Category Params',
     brandList: 'Brand List',
     specList: 'Spec List',
     tagManage: 'Manage Tag',

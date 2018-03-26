@@ -65,6 +65,7 @@ export const asyncRouterMap = [
         meta: { title: 'goodsSetting' },
         children: [
           { path: 'category-list', component: _import('goods/goods-setting/categoryList'), name: 'categoryList', meta: { title: 'categoryList' }},
+          { path: 'category-params', component: _import('goods/goods-setting/categoryParams'), name: 'categoryParams', meta: { title: 'categoryParams' }},
           { path: 'brand-list', component: _import('goods/goods-setting/brandList'), name: 'brandList', meta: { title: 'brandList' }},
           { path: 'spec-list', component: _import('goods/goods-setting/specList'), name: 'specList', meta: { title: 'specList' }}
         ]
