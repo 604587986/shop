@@ -93,7 +93,7 @@
         clickItem: function ($this) {
             var _this = this, cat_id = parseInt($this.attr('data-id')), _maxLeave = this.options.maxLeave, _index;
             this.params.activeColumn = ( _index = $this.closest('.__GCD__column').index() + 1);
-            this.params.activeItem = $this.index();// - 1;
+            this.params.activeItem = $this.index() - 1;
             if (_index !== _maxLeave && $this.is('.active')) return;
             $this.addClass('active').siblings().removeClass('active');
             if (this.params.catDatas.length + _index === _maxLeave * 2) {
