@@ -6,11 +6,6 @@
       :add-cat="handleAddCat"
       :item-btns="itemBtns"
     />
-    <el-dialog :title="paramsForm.paramsTitle" width="500px" :visible.sync="dialogParamsVisible">
-      <div style="width: 100%; text-align: center">
-        <img src="https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=fe3b9e9b0bf431adb8d2443b7b37ac0f/8cb1cb134954092391d818779558d109b3de4901.jpg" alt="">
-      </div>
-    </el-dialog>
     <!--添加、编辑分类dialog-->
     <el-dialog title="添加分类" width="500px" :visible.sync="dialogCatVisible">
       <el-form :model="catForm" :rules="catRules" ref="catForm" label-width="100px">
@@ -21,8 +16,11 @@
         <!--分类图片-->
         <el-form-item label="分类图片" prop="cat_img">
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="upload_api"
             list-type="picture"
+            :on-success="onImgUploadSuccess"
+            :on-remove="onImgRemove"
+            :file-list="catForm.catImageList"
             :multiple="false"
             :limit="1"
           >
@@ -89,9 +87,10 @@
 
 <script>
   import { GoodsCatsEdit } from '@/plugins/selector/vue'
+  import * as API_Common from '@/api/common'
   import * as API_category from '@/api/category'
   export default {
-    name: 'classifyList',
+    name: 'categoryList',
     components: {
       [GoodsCatsEdit.name]: GoodsCatsEdit
     },
@@ -104,18 +103,12 @@
           { text: '编辑', onClick: this.handleEditCat },
           { text: '删除', textStyle: 'color: red', onClick: this.handleDeleteCat }
         ],
-        // 编辑分类参数 dialog
-        dialogParamsVisible: false,
         // 添加、编辑分类 dialog
         dialogCatVisible: false,
         // 编辑关联品牌 dialog
         dialogBrandVisible: false,
         // 编辑关联规格 dialog
         dialogSpecsVisible: false,
-        // 参数管理 表单
-        paramsForm: {
-          paramsTitle: '参数管理'
-        },
         // 添加、编辑分类 表单
         catForm: {
           parent_id: '10',
@@ -123,7 +116,8 @@
           category_image: '',
           parent_datas: null,
           category_order: 0,
-          category_id: null
+          category_id: null,
+          catImageList: []
         },
         // 添加、编辑分类 表单规则
         catRules: {
@@ -149,7 +143,9 @@
           specsList: []
         },
         // 编辑关联规格 表单规则
-        specsRules: {}
+        specsRules: {},
+        // 上传接口
+        upload_api: API_Common.getUploadApi()
       }
     },
     methods: {
@@ -161,9 +157,11 @@
           form_type: 'add',
           parent_id: parentData ? parentData.data.category_id : 0,
           parent_datas: parentData ? parentData.datas : null,
+          category_image: '',
           category_name: null,
           category_id: null,
-          category_order: 0
+          category_order: 0,
+          catImageList: []
         }
         this.dialogCatVisible = true
       },
@@ -176,11 +174,21 @@
           form_type: 'eidt',
           parent_id: parentData ? parentData.data.category_id : 0,
           parent_datas: parentData ? parentData.datas : null,
+          category_image: cat.image,
           category_name: cat.text,
           category_id: cat.id,
-          category_order: cat.order
+          category_order: cat.order,
+          catImageList: [{ name: 'cat-img', url: cat.image }]
         }
         this.dialogCatVisible = true
+      },
+      /** 图片上传成功时 */
+      onImgUploadSuccess(res) {
+        this.catForm.category_image = res
+      },
+      /** 图片被移除时 */
+      onImgRemove() {
+        this.catForm.category_image = ''
       },
 
       /** 添加、编辑分类 表单提交 */
@@ -192,13 +200,13 @@
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
                 this.handleRefresh()
-              }).catch(error => console.log(error))
+              })
             } else {
               API_category.editCategory(this.catForm.category_id, this.catForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
                 this.handleRefresh()
-              }).catch(error => console.log(error))
+              })
             }
           } else {
             this.$message.error('表单填写有误，请检查！')
@@ -209,9 +217,7 @@
 
       /** 编辑分类参数 */
       handleEditParams(cat) {
-        this.paramsForm.paramsTitle = '参数管理 - ' + cat.text
-        this.dialogParamsVisible = true
-        console.log(cat)
+        this.$router.push({ name: 'categoryParams', params: { id: cat.id }})
       },
       /** 编辑关联品牌 */
       handleEditBrand(cat) {
