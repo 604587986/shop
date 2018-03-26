@@ -129,7 +129,8 @@
                 _cat_id       = parseInt($this.data('id')),
                 _cat_parentid = parseInt($this.data('parentid')),
                 _cat_order    = parseInt($this.data('order')),
-                _cat_text     = $this.data('text');
+                _cat_text     = $this.data('text'),
+                _cat_image    = $this.data('image');
             var _cat = {}, __data = {};
             _cat.leave = _leave;
             if(_leave > 1) {
@@ -146,6 +147,7 @@
             }
             _cat.id = _cat_id;
             _cat.text = _cat_text;
+            _cat.image = _cat_image;
             _cat.order = _cat_order;
             _cat.parent_id = _cat_parentid;
             _cat.parentData = __data;
@@ -255,10 +257,10 @@
             for (var i = 0; i < res.length; i++) {
                 var _btns = '';
                 _itemBtns.forEach(function (item, index) {
-                    _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-order="'+ res[i]['category_order'] +'" data-text="' + res[i]['name'] +'" data-id="' + res[i]['category_id'] + '" data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ (item.textStyle || '') +'">' + item.text + '</a>';
+                    _btns += '<a herf="javascript:;" class="_btn_" data-btn_index="'+ index +'" data-order="'+ res[i]['category_order'] +'" data-text="' + res[i]['name'] +'" data-id="' + res[i]['category_id'] + '" data-image="'+ res[i]['image'] +' " data-parentid="' + res[i]['parent_id'] + '" data-leave="' + __l + '" style="'+ (item.textStyle || '') +'">' + item.text + '</a>';
                 });
 
-                _item += '<div class="__cat_item' + (i === 0 ? ' active' : '') + '" data-id="' + res[i]['category_id'] + '" data-path="' + res[i]['category_path'] + '">\
+                _item += '<div class="__cat_item' + (i === 0 ? ' active' : '') + '" data-id="' + res[i]['category_id'] + '" data-image="'+ res[i]['image'] +'" data-path="' + res[i]['category_path'] + '">\
                         <h4>' + res[i]['name'] + '</h4>\
                         <div class="__cat_item_btns">\
                             ' + _btns + '\
