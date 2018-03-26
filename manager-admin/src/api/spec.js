@@ -76,3 +76,35 @@ export function deleteSpecs(ids) {
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
+
+/**
+ * 获取规格值
+ * @param spec_id
+ * @returns {Promise<any>}
+ */
+export function getSpecValues(spec_id) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `goods/specs/${spec_id}/values`,
+      method: 'get'
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 保存规格值
+ * @param spec_id
+ * @param value_list
+ * @returns {Promise<any>}
+ */
+export function saveSpecValues(spec_id, value_list) {
+  const _formData = new FormData()
+  value_list.forEach(item => _formData.append('value_list', item))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `goods/specs/${spec_id}/values`,
+      method: 'post',
+      data: _formData
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
