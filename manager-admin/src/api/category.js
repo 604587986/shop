@@ -5,39 +5,32 @@ import request from '@/utils/request'
 
 /** 添加分类 */
 export function addCategory(params) {
-  const _params = {
-    cattype: 0,
-    name: params.category_name,
-    image: params.category_image,
-    parent_id: params.parent_id,
-    category_order: params.category_order,
-    list_show: 1
-  }
+  const _formData = new FormData()
+  _formData.append('name', params.category_name)
+  _formData.append('parent_id', params.parent_id)
+  _formData.append('category_order', params.category_order)
+  _formData.append('image', params.category_image)
   return new Promise((resolve, reject) => {
     request({
-      url: 'goods-info/admin/category/save-add.do',
+      url: 'goods/categories',
       method: 'post',
-      params: _params
+      data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
 
 /** 编辑分类 */
-export function editCategory(category_id, params) {
-  const _params = {
-    category_id: category_id,
-    cattype: 0,
-    name: params.category_name,
-    image: params.category_image,
-    parent_id: params.parent_id,
-    category_order: params.category_order,
-    list_show: 1
-  }
+export function editCategory(id, params) {
+  const _formData = new FormData()
+  _formData.append('name', params.category_name)
+  _formData.append('parent_id', params.parent_id)
+  _formData.append('category_order', params.category_order)
+  _formData.append('image', params.category_image)
   return new Promise((resolve, reject) => {
     request({
-      url: `goods-info/admin/category/save-edit.do`,
+      url: `goods/categories/${id}`,
       method: 'post',
-      params: _params
+      data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
@@ -46,7 +39,7 @@ export function editCategory(category_id, params) {
 export function getBrandByCategoryId(category_id) {
   return new Promise((resolve, reject) => {
     request({
-      url: `goods-info/admin/category/${category_id}/brand.do`,
+      url: `goods/categories/${category_id}/specs`,
       method: 'get'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
@@ -61,7 +54,7 @@ export function editCategoryBrand(category_id, params) {
   _formData.append('category_id', category_id)
   return new Promise((resolve, reject) => {
     request({
-      url: `goods-info/admin/category/${category_id}/brand.do`,
+      url: `goods/categories/${category_id}/brands`,
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -72,7 +65,7 @@ export function editCategoryBrand(category_id, params) {
 export function getSpecsByCategoryId(category_id) {
   return new Promise((resolve, reject) => {
     request({
-      url: `goods-info/admin/category/${category_id}/spec.do`,
+      url: `goods/categories/${category_id}/specs`,
       method: 'get'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
@@ -87,7 +80,7 @@ export function editCategorySpecs(category_id, params) {
   _formData.append('category_id', category_id)
   return new Promise((resolve, reject) => {
     request({
-      url: `goods-info/admin/category/${category_id}/spec.do`,
+      url: `goods/categories/${category_id}/specs`,
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -99,7 +92,7 @@ export function deleteCategory(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return new Promise((resolve, reject) => {
     request({
-      url: `goods-info/admin/category/delete/${ids}.do`,
+      url: `goods/categories/${ids}`,
       method: 'delete'
     }).then(response => resolve(response)).catch(error => reject(error))
   })
