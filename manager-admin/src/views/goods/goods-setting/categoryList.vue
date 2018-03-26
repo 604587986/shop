@@ -169,6 +169,7 @@
       /** 编辑分类 */
       handleEditCat(cat) {
         const { parentData } = cat
+        console.log(cat)
         this.catForm = {
           ...this.catForm,
           form_type: 'eidt',
@@ -178,7 +179,7 @@
           category_name: cat.text,
           category_id: cat.id,
           category_order: cat.order,
-          catImageList: [{ name: 'cat-img', url: cat.image }]
+          catImageList: cat.image ? [{ name: 'cat-img', url: cat.image }] : []
         }
         this.dialogCatVisible = true
       },
