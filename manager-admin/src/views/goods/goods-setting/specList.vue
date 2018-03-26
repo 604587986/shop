@@ -77,6 +77,39 @@
         <el-button type="primary" @click="submitSpecForm('specForm')">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      :visible.sync="dialogSpecValuesVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="500px"
+      class="spec-values-dialog"
+    >
+      <span slot="title" class="el-dialog__title">
+        编辑规格值
+        <el-button type="text" size="mini" style="margin-left: 5px" @click="handleAddSpecValue">添加</el-button>
+      </span>
+      <el-table
+        :data="specValues"
+        style="width: 100%"
+        :header-cell-style="{textAlign: 'center'}"
+        :cell-style="{textAlign: 'center'}"
+      >
+        <el-table-column label="规格值">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.value"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="150">
+          <template slot-scope="scope">
+            <el-button type="danger" size="mini" @click="handleDeleteSpecValue(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogSpecValuesVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitSpecValuesForm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -129,6 +162,19 @@
           memo: [
             { required: true, message: '请输入规格备注', trigger: 'blur' },
             { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
+          ]
+        },
+        /** 编辑规格值 dialog */
+        dialogSpecValuesVisible: false,
+        /** 编辑规格值 */
+        specValues: [],
+        /** 当前修改规格值的规格id */
+        cur_spec_id: 0,
+        /** 规格值 规则*/
+        specValuesRules: {
+          value: [
+            { required: true, message: '请输入规格值', trigger: 'blur' },
+            { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
           ]
         }
       }
@@ -195,7 +241,22 @@
 
       /** 修改规格值事件 */
       handleEditSpecVal(index, row) {
-        console.log(row)
+        API_spec.getSpecValues(row.id).then(response => {
+          this.cur_spec_id = row.id
+          this.specValues = response.map(item => {
+            return { value: item.spec_value }
+          })
+          this.dialogSpecValuesVisible = true
+        })
+      },
+
+      /** 添加规格值 */
+      handleAddSpecValue() {
+        this.specValues.push({ value: '' })
+      },
+      /** 删除规格值 */
+      handleDeleteSpecValue(index, row) {
+        this.specValues.splice(index, 1)
       },
 
       /** 搜索事件触发 */
@@ -229,6 +290,27 @@
             return false
           }
         })
+      },
+
+      /** 修改规格值 表单提交 */
+      submitSpecValuesForm(formName) {
+        let flag = true
+        const _list = []
+        this.specValues.every(item => {
+          if (item.value === '') {
+            this.$message.error('表单填写有误，请检查！')
+            flag = false
+          } else {
+            _list.push(item.value)
+          }
+          return flag
+        })
+        if (flag) {
+          API_spec.saveSpecValues(this.cur_spec_id, _list).then(response => {
+            this.$message.success('保存成功！')
+            this.dialogSpecValuesVisible = false
+          })
+        }
       },
 
       /** 获取规格列表 */
@@ -269,5 +351,8 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
+  }
+  /deep/ .spec-values-dialog {
+    .el-dialog__body { padding: 0 20px }
   }
 </style>
