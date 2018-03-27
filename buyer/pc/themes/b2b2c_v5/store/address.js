@@ -2,7 +2,7 @@ import * as API_Address from '@/api/address'
 import * as types from './mutation-types'
 
 export const state = () => ({
-  address: []
+  address: {}
 })
 
 /** mutations */
@@ -21,7 +21,7 @@ export const mutations = {
    * @param data
    */
   [types.ADD_ADDRESS](state, data) {
-    state.address = state.address.push(data)
+    state.address.data = state.address.data.push(data)
   },
   /**
    * 编辑地址
@@ -29,7 +29,7 @@ export const mutations = {
    * @param params
    */
   [types.EDIT_ADDRESS](state, params) {
-    state.address = state.address.map(item => {
+    state.address.data = state.address.data.map(item => {
       if (item.address_id === params.address_id) item = params
       return item
     })
@@ -42,10 +42,10 @@ export const mutations = {
   [types.DELETE_ADDRESS](state, ids) {
     if (!Array.isArray(ids)) ids = [ids]
     const _list = []
-    state.address.forEach(item => {
+    state.address.data.forEach(item => {
       if (!ids.includes(item.address_id)) _list.push(item)
     })
-    state.address = _list
+    state.address.data = _list
   }
 }
 
@@ -116,5 +116,5 @@ export const getters = {
    * @param state
    * @returns {*}
    */
-  addressList: state => state.address
+  addressList: state => state.address.data
 }
