@@ -130,7 +130,7 @@
       },
       /** 编辑地址 */
       handleEaitAddress(row) {
-        this.addressForm = row
+        this.addressForm = {...row}
         this.addressForm.regions = [row.province_id, row.city_id, row.region_id || -1, row.town_id || -1]
         this.selectedRegions = ''
         this.openLayer({
