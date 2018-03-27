@@ -1,14 +1,13 @@
 <template>
   <div id="app">
     <en-shortcut/>
-    <en-header/>
     <nuxt id="wrapper"/>
     <en-footer/>
   </div>
 </template>
 <script>
   export default {
-    name: 'defalt'
+    name: 'full'
   }
 </script>
 <style>

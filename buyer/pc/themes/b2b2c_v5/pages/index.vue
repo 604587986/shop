@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <en-header/>
     <div class="focus-container">
       <div class="w">
         <el-carousel height="500px" arrow="never">
@@ -12,9 +11,9 @@
           <div class="card-user">
             <div class="inner-card-user">
               <div class="card-user-avatar">
-                <a href="#">
+                <nuxt-link to="/member">
                   <img src="//storage.jd.com/i.imageUpload/6c616979756e636875616e31343834333537343637373532_mid.jpg">
-                </a>
+                </nuxt-link>
               </div>
               <div class="card-user-show">
                 <p>Hi,<a href="#">&ensp;Andste</a></p>

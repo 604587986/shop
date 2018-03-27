@@ -1,6 +1,5 @@
 <template>
   <div id="member">
-    <en-header/>
     <en-nav/>
     <div class="member-layout w">
       <en-menu/>
@@ -11,8 +10,10 @@
 
 <script>
   import Vue from 'vue'
-  import { Alert, Pagination, Table, TableColumn } from 'element-ui'
+  import { Alert, Form, FormItem, Pagination, Table, TableColumn } from 'element-ui'
   Vue.use(Alert)
+  Vue.use(Form)
+  Vue.use(FormItem)
   Vue.use(Pagination)
   Vue.use(Table)
   Vue.use(TableColumn)
