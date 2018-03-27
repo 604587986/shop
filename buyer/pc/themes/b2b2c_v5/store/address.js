@@ -21,7 +21,7 @@ export const mutations = {
    * @param data
    */
   [types.ADD_ADDRESS](state, data) {
-    state.address.data = state.address.data.push(data)
+    state.address.data.splice(0, 0, data)
   },
   /**
    * 编辑地址
@@ -73,8 +73,9 @@ export const actions = {
    */
   addAddressAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
+      console.log(params)
       API_Address.addAddress(params).then(response => {
-        commit(types.ADD_ADDRESS)
+        commit(types.ADD_ADDRESS, params)
         resolve(response)
       }).catch(error => reject(error))
     })
