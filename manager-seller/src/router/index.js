@@ -150,42 +150,13 @@ export const asyncRouterMap = [
     name: 'promotions',
     meta: { title: 'promotions', icon: 'promotions-manage' },
     children: [
-      {
-        path: '/promotions/group-buy-manage',
-        component: _import('promotions/group-buy-manage/index'),
-        redirect: '/promotions/group-buy-manage/group-buy-list',
-        name: 'groupBuyManage',
-        meta: { title: 'groupBuyManage' },
-        children: [
-          { path: 'group-buy-list', component: _import('promotions/group-buy-manage/groupBuyList'), name: 'groupBuyList', meta: { title: 'groupBuyList' }},
-          { path: 'group-buy-category', component: _import('promotions/group-buy-manage/groupBuyCategory'), name: 'groupBuyCategory', meta: { title: 'groupBuyCategory' }},
-          { path: 'group-buy-goods/:id', component: _import('promotions/group-buy-manage/groupBuyGoods'), name: 'groupBuyGoods', hidden: true, meta: { title: 'groupBuyGoods' }},
-          { path: 'group-buy-goods-info', component: _import('promotions/group-buy-manage/groupBuyGoodsInfo'), name: 'groupBuyGoodsInfo', hidden: true, meta: { title: 'groupBuyGoodsInfo' }}
-        ]
-      },
-      {
-        path: '/promotions/points-mall-manage',
-        component: _import('promotions/points-mall-manage/index'),
-        redirect: '/promotions/points-mall-manage/points-classify',
-        name: 'points-mall-manage',
-        meta: { title: 'pointsMallManage' },
-        children: [
-          { path: 'points-classify', component: _import('promotions/points-mall-manage/pointsClassify'), name: 'pointsClassify', meta: { title: 'pointsClassify' }},
-          { path: 'points-goods', component: _import('promotions/points-mall-manage/pointsGoods'), name: 'pointsGoods', meta: { title: 'pointsGoods' }}
-        ]
-      },
-      {
-        path: '/promotions/seckill-manage',
-        component: _import('promotions/seckill-manage/index'),
-        redirect: '/promotions/seckill-manage/seckill-list',
-        name: 'seckillManage',
-        meta: { title: 'seckillManage' },
-        children: [
-          { path: 'seckill-list', component: _import('promotions/seckill-manage/seckillList'), name: 'seckillList', meta: { title: 'seckillList' }},
-          { path: 'seckill-list/audit/:id', component: _import('promotions/seckill-manage/seckillAuditGoodsList'), name: 'seckillAuditGoodsList', hidden: true, meta: { title: 'seckillAuditGoodsList', noCache: true }},
-          { path: 'seckill-list/pass/:id', component: _import('promotions/seckill-manage/seckillPassGoodsList'), name: 'seckillPassGoodsList', hidden: true, meta: { title: 'seckillPassGoodsList', noCache: true }}
-        ]
-      }
+      { path: 'full-cut', component: _import('promotions/fullCut'), name: 'fullCut', meta: { title: 'fullCut' }},
+      { path: 'single-cut', component: _import('promotions/singleCut'), name: 'singleCut', meta: { title: 'singleCut' }},
+      { path: 'second-half-price', component: _import('promotions/secondHalfPrice'), name: 'secondHalfPrice', meta: { title: 'secondHalfPrice' }},
+      { path: 'discount-manager', component: _import('promotions/discountManager'), name: 'discountManager', meta: { title: 'discountManager' }},
+      { path: 'gift-manager', component: _import('promotions/giftManager'), name: 'giftManager', meta: { title: 'giftManager' }},
+      { path: 'group-buy-manager', component: _import('promotions/groupBuyManager'), name: 'groupBuyManager', meta: { title: 'groupBuyManager' }},
+      { path: 'group-time-limit', component: _import('promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit' }}
     ]
   },
   // 统计
