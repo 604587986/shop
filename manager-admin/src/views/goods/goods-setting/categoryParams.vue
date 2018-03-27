@@ -21,12 +21,57 @@
             <el-dropdown-item :command="{type: 'sort_down', group}">下移</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
       </div>
-      <div v-for="o in 4" :key="o" class="text item">
-        {{'列表内容 ' + o }}
-      </div>
+      <template v-if="group.params">
+        <div v-for="param in group.params" :key="param.param_id" class="param-item">
+          <span>{{ param.param_name }} 【{{ param.param_type | paramTypeFilter }}】</span>
+          <span>
+            <el-button type="text" size="mini" @click="handleEditParam(param, group)">编辑</el-button>
+            <el-button type="text" size="mini" style="color: #F56C6C" @click="handleDeleteParam(param)">删除</el-button>
+            <el-button type="text" size="mini" @click="handleSortParam('up', param)">上移</el-button>
+            <el-button type="text" size="mini" @click="handleSortParam('down', param)">下移</el-button>
+          </span>
+        </div>
+      </template>
+      <div v-else class="param-item empty">暂无数据...</div>
+      <el-button type="text" class="add-params-btn" @click="handleAddParams(group)">添加</el-button>
     </el-card>
+    <el-dialog
+      :title="paramForm.param_id ? '编辑参数' : '添加参数'"
+      :visible.sync="dialogParamsVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="500px"
+    >
+      <el-form :model="paramForm" :rules="paramsRules" ref="paramForm" label-width="100px">
+        <el-form-item label="参数名称" prop="param_name">
+          <el-input v-model="paramForm.param_name"></el-input>
+        </el-form-item>
+        <el-form-item label="参数类型" prop="param_type">
+          <el-select v-model="paramForm.param_type" placeholder="请选择">
+            <el-option label="输入项" :value="1"/>
+            <el-option label="选择项" :value="2"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="可选择值" prop="options">
+          <el-input
+            ref="paramOptionsInput"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            placeholder="请输入可选择值，多个值用英文逗号隔开。(选择'选择项'时,必填!)"
+            v-model="paramForm.options">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="选项">
+          <el-checkbox v-model="paramForm.required" :true-label="1" :false-label="0">必填</el-checkbox>
+          <el-checkbox v-model="paramForm.is_index" :true-label="1" :false-label="0">可索引</el-checkbox>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogParamsVisible = false">取 消</el-button>
+    <el-button type="primary" @click="submitParamForm('paramForm')">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -43,9 +88,17 @@
         paramsGroup: [],
         /** 编辑分类参数 dialog */
         dialogParamsVisible: false,
-        /** 参数管理 表单 */
-        paramsForm: {
-          paramsTitle: '参数管理'
+        /** 添加、编辑参数 表单 */
+        paramForm: {},
+        /** 添加、编辑参数 规格 */
+        paramsRules: {
+          param_name: [
+            { required: true, message: '请输入参数名称', trigger: 'blur' },
+            { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
+          ],
+          param_type: [
+            { required: true, message: '请选择参数类型', trigger: 'change' }
+          ]
         },
         /** 添加参数组 表单 */
         addGroupForm: {
@@ -56,6 +109,11 @@
     },
     created() {
       this.GET_CategoryParamsGroup()
+    },
+    filters: {
+      paramTypeFilter(val) {
+        return val === 1 ? '输入项' : '选择项'
+      }
     },
     methods: {
       /** 新增参数组 */
@@ -127,15 +185,63 @@
       /** 参数组排序 */
       handleSortGroup(type, group) {
         API_Params.sortParamsGroup(group.group_id, type).then(() => {
-          this.$message.success('修改成功！')
           this.GET_CategoryParamsGroup()
+          this.$message.success('修改成功！')
         })
       },
-      /** 编辑关联规格 表单提交 */
-      submitSpecsForm(formName) {
+      /** 添加参数 */
+      handleAddParams(group) {
+        this.paramForm = {
+          param_name: '',
+          param_type: 1,
+          options: '',
+          required: 0,
+          is_index: 0,
+          group_id: group.group_id,
+          category_id: this.category_id
+        }
+        this.dialogParamsVisible = true
+      },
+      /** 编辑参数 */
+      handleEditParam(params, group) {
+        this.paramForm = {
+          ...params,
+          group_id: group.group_id,
+          category_id: this.category_id
+        }
+        this.dialogParamsVisible = true
+      },
+      /** 删除参数 */
+      handleDeleteParam(param) {
+        this.$confirm('确定要删除这个参数吗？', '提示', { type: 'warning' }).then(() => {
+          API_Params.deleteParams(param.param_id).then(() => {
+            this.GET_CategoryParamsGroup()
+            this.$message.success('删除成功！')
+          })
+        }).catch(() => {})
+      },
+      /** 参数排序 */
+      handleSortParam(type, param) {
+        API_Params.sortParams(param.param_id, type).then(() => {
+          this.GET_CategoryParamsGroup()
+          this.$message.success('修改成功！')
+        })
+      },
+      /** 添加、编辑 表单提交 */
+      submitParamForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log('...')
+            if (this.paramForm.param_type === 2 && !this.paramForm.options) {
+              this.$refs['paramOptionsInput'].focus()
+              this.$message.error('参数类型为：【选择项】"时，可选择值不能为空！')
+              return false
+            } else {
+              API_Params.addParams(this.paramForm).then(response => {
+                this.dialogParamsVisible = false
+                this.GET_CategoryParamsGroup()
+                this.$message.success('保存成功！')
+              })
+            }
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -172,7 +278,7 @@
       background-color: #f5f7fa;
     }
     /deep/ .el-card__body {
-      padding: 10px 15px;
+      padding: 10px 15px 0;
     }
     /deep/ .el-dropdown-link{
       cursor:pointer;
@@ -224,5 +330,34 @@
       box-shadow: 0 0 10px 0 #303133;
       .add-div-title {  font-size: 12px }
     }
+  }
+  .add-params-btn {
+    width: 100%;
+  }
+  .el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
+  /deep/ .el-checkbox+.el-checkbox { margin-left: 20px }
+  /deep/ .el-button+.el-button { margin-left: 0 }
+  .param-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px;
+    background-color: #f5f7fa;
+    font-size: 14px;
+    &.empty { background-color: #fff }
   }
 </style>
