@@ -19,11 +19,12 @@ export function getAddressList() {
 
 /**
  * 添加收货地址
- * @param parma
+ * @param params
  * @returns {Promise<any>}
  */
-export function addAddress(parma) {
+export function addAddress(params) {
   const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: 'address',
@@ -41,6 +42,7 @@ export function addAddress(parma) {
  */
 export function editAddress(id, params) {
   const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `address/${id}`,
