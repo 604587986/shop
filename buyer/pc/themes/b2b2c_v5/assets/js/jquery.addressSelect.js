@@ -458,7 +458,8 @@
             var _this = this;
             var _region_id = region_id || 0;
             var _region_grade = region_grade || 0;
-            var _url = _this.options.host ? _this.options.host + _this.options.appApi + _region_id : _this.options.appApi + _region_id;
+            var _url = _this.options.host ? _this.options.host + _this.options.appApi : _this.options.appApi;
+            _url = _url.replace("@id", _region_id)
             axios.get(_url).then(function (response) {
                 response.status === 200 && (function () {
                     _this.defaultArray.length > 0
@@ -484,7 +485,7 @@
                 town_id     = names.town ? '<input type="hidden" value="" name="' + names.town + '_id">' : '';
             var inputs = _this.options.setInput ? province + province_id + city + city_id + region + region_id + town + town_id : '';
             var html = '<div class="app-address">'
-                + '<div class="app-address-title el-input__inner">'
+                + '<div class="app-address-title">'
                 + '<div class="app-address-title-view">-- 请选择 --</div><i style="padding: 0;"></i></div>'
                 + '<div class="app-address-body">'
                 + '<div class="app-address-tab">'
@@ -563,18 +564,18 @@
         + 'font-style: normal;}'
         + '.app-address-title {'
         + 'position: relative;'
-        //+ 'border: 1px solid #cccccc;'
+        + 'border: 1px solid #cccccc;'
         + 'background-color: #ffffff;'
         + 'padding: 0 20px 0 4px;'
-        //+ 'height: 23px;'
-        //+ 'line-height: 23px;}'
+        + 'height: 23px;'
+        + 'line-height: 23px;}'
         + 'z-index: 1;'
         + 'line-height: 36px;}'
         + '.app-address-title-view {'
         + 'text-align: center;}'
         + '.app-address-title.hover {'
         + 'z-index: 1;'
-        //+ 'height: 24px;'
+        + 'height: 24px;'
         + 'border-bottom: none;}'
         + '.app-address-title i {'
         + 'display: block;'
@@ -673,7 +674,8 @@
         + 'margin-top: 10px;}'
         + '.app-address-area li {'
         + 'float: left;'
-        + 'width: 105px;'
+        + 'width: 110px;'
+        + 'line-height: normal;'
         //+ 'height: 25px;'
         + 'padding: 0 0 0 5px;'
         + 'clear: none;'
@@ -694,12 +696,13 @@
         + 'position: absolute;'
         + 'z-index: 999999;'
         + 'padding: 3px 7px;'
+        + 'line-height: normal;'
         + 'background-color: #005ea7;'
         + 'color: #ffffff;'
         + 'opacity: 0;'
-        + '-webkit-transition: all .3s ease-out;'
-        + '-moz-transition: all .3s ease-out;'
-        + '-ms-transition: all .3s ease-out;'
-        + '-o-transition: all .3s ease-out;'
-        + 'transition: all .3s ease-out;}';
+        + '-webkit-transition: opacity .3s ease-out;'
+        + '-moz-transition: opacity .3s ease-out;'
+        + '-ms-transition: opacity .3s ease-out;'
+        + '-o-transition: opacity .3s ease-out;'
+        + 'transition: opacity .3s ease-out;}';
 })(jQuery, window, document);
