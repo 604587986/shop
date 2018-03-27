@@ -50,7 +50,7 @@ service.interceptors.response.use(
     // 403 --> 没有登录、登录状态失效
     if (error_response.status === 403) fedLogOut()
     Message({
-      message: error_data.error_message || '出现错误，请稍后再试！',
+      message: error_data.message || '出现错误，请稍后再试！',
       type: 'error',
       duration: 5 * 1000
     })
