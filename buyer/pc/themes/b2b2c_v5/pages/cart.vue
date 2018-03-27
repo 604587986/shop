@@ -123,6 +123,7 @@
   import * as regExp from '@/utils/RegExp'
   export default {
     name: 'cart',
+    layout: 'full',
     data() {
       return {
         /** 结算栏相对顶部高度 */

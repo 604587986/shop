@@ -1,6 +1,6 @@
 <template>
   <div id="goods-list">
-    <en-header/>
+
   </div>
 </template>
 

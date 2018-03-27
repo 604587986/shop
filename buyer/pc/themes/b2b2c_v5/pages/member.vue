@@ -1,6 +1,5 @@
 <template>
   <div id="member">
-    <en-header/>
     <en-nav/>
     <div class="member-layout w">
       <en-menu/>
