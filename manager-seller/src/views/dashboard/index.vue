@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container" v-loading="loading">
     <!--商家基本信息-->
-    <el-row :gutter="20" v-if="shop_info">
+    <el-row :gutter="20" type="flex" justify="space-around" v-if="shop_info">
       <el-col  :span="24">
         <div class="grid-content bg-purple-light">
           <!--logo-->
@@ -58,7 +58,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
+    <el-row :gutter="20" type="flex" justify="space-around">
       <!--店铺 商品提示-->
       <el-col  :span="12" v-if="shop_prompt">
         <el-card class="box-card">
@@ -92,7 +92,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
+    <el-row :gutter="20" type="flex" justify="space-around">
       <!--交易提示-->
       <el-col  :span="12" v-if="trading_prompt">
         <el-card class="box-card">
@@ -198,7 +198,7 @@ export default {
     uploaded(response, file, fileList) {
       // 更换图片 置空存储数组
       this.shop_info.shop_logo = file.url
-      // this._fileList = []
+      this.fileList = []
     },
 
     /** 跳转商品列表*/
@@ -236,9 +236,9 @@ export default {
   .el-tag {
     cursor: pointer;
   }
-  .el-row {
+  /deep/ .el-row {
     position: relative;
-    margin-bottom: 20px;
+    margin: 0 3px 20px 3px !important;
   }
   .el-col {
     border-radius: 4px;
