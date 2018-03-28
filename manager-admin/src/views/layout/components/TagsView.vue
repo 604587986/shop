@@ -58,7 +58,6 @@ export default {
       let matched = [...this.$route.matched]
       matched.splice(0, 1)
       matched = matched.filter(item => item.name)
-      console.log(matched)
       if (matched) {
         return matched
       }
