@@ -64,7 +64,7 @@ const user = {
           // 后台暂时没有返回数据，模拟一个
           response = {
             data: {
-              role: ['admin'],
+              roles: ['admin'],
               username: 'javashop',
               mobile: 18888888888,
               sex: 1,
@@ -76,7 +76,7 @@ const user = {
             reject('error')
           }
           const data = response.data
-          commit('SET_ROLES', data.role)
+          commit('SET_ROLES', data.roles)
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           resolve(response)

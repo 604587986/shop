@@ -457,17 +457,6 @@ export const asyncRouterMap = [
           { path: 'clear-example-data', component: _import('development/tool-manage/clearExampleData'), name: 'clearExampleData', meta: { title: 'clearExampleData' }}
         ]
       },
-      // {
-      //   path: '/development/site-theme-manage',
-      //   component: _import('development/site-theme-manage/index'),
-      //   redirect: '/development/site-theme-manage/frontdesk-theme',
-      //   name: 'siteThemeManage',
-      //   meta: { title: 'SiteThemeManage' },
-      //   children: [
-      //     { path: 'frontdesk-theme', component: _import('development/site-theme-manage/frontdeskTheme'), name: 'frontdeskTheme', meta: { title: 'frontdeskTheme' }},
-      //     { path: 'backstage-theme', component: _import('development/site-theme-manage/backstageTheme'), name: 'backstageTheme', meta: { title: 'backstageTheme' }}
-      //   ]
-      // },
       {
         path: '/development/article-manage',
         component: _import('development/article-manage/index'),
