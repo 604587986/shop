@@ -72,21 +72,17 @@ export class AdministratorModel extends DataModel {
 
 /** 角色模型 */
 export class RoleModel extends DataModel {
-  /** actids */
-  @ServerName('actids')
-  actids
-
   /** roleid */
-  @ServerName('roleid')
-  roleid
+  @ServerName('role_id')
+  role_id
 
   /** 角色备注 */
-  @ServerName('rolememo')
-  memo
+  @ServerName('role_memo')
+  role_memo
 
   /** 角色名称 */
-  @ServerName('rolename')
-  name
+  @ServerName('role_name')
+  role_name
 }
 
 /** 权限模型 */
