@@ -36,4 +36,16 @@ export class Activity extends DataModel {
   /** 结束时间 */
   @ServerName('end_time')
   end_time
+
+  /** 减价金额 */
+  @ServerName('price_reduction')
+  price_reduction
+
+  /** 报名截止时间 */
+  @ServerName('sign_end_time')
+  sign_end_time
+
+  /** 报名条件 */
+  @ServerName('sign_condition')
+  sign_condition
 }

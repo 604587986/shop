@@ -235,14 +235,13 @@
       /** 删除满减优惠 */
       handleDeleteFullCut(row) {
         this.$confirm('确认删除当前项？', '确认信息')
-          .then(() => this.toDelFullCut(row))
+          .then(() => this.toDelActivity(row))
           .catch(() => {
           })
       },
 
       /** 执行删除*/
-      toDelFullCut(row) {
-        console.log(row, 444)
+      toDelActivity(row) {
         API_activity.DeleteFullCut(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
           this.GET_ActivityList()
