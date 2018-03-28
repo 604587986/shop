@@ -1,11 +1,16 @@
 <template>
-  <keep-alive>
+  <keep-alive :include="cachedViews">
     <router-view></router-view>
   </keep-alive>
 </template>
 
 <script>
   export default {
-    name: 'trafficAnalysis'
+    name: 'trafficAnalysis',
+    computed: {
+      cachedViews() {
+        return this.$store.state.tagsView.cachedViews
+      }
+    }
   }
 </script>
