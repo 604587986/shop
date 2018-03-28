@@ -93,9 +93,8 @@
         <el-form-item label="库存">
           <el-input auto-complete="off" label-width="100"></el-input>
         </el-form-item>
-        <el-form-item label="发货数">
-          <el-input auto-complete="off" label-width="100"></el-input>
-          <el-input auto-complete="off" label-width="100"></el-input>
+        <el-form-item label="待发货数">
+          <el-input auto-complete="off" disabled label-width="100"></el-input>
         </el-form-item>
       </el-form>
       <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
@@ -106,11 +105,7 @@
               <el-input auto-complete="off" label-width="100"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="发货数" width="120">
-            <template slot-scope="scope">
-              <el-input auto-complete="off" label-width="100"></el-input>
-            </template>
-          </el-table-column>
+          <el-table-column label="待发货数" width="120"></el-table-column>
         </template>
       </en-tabel-layout>
       <div slot="footer" class="dialog-footer">
