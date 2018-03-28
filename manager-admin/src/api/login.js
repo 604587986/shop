@@ -47,3 +47,14 @@ export function getUserInfo(token) {
   })
 }
 
+/**
+ * 获取用户角色权限
+ * @param token
+ * @returns {*}
+ */
+export function getUserRolesPermissions(token) {
+  return request({
+    url: 'http://www.andste.cc/mock/5aa72c250d9d060b4b99b466/admin/menus',
+    method: 'get'
+  })
+}

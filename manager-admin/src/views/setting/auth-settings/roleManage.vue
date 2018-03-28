@@ -13,8 +13,8 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column prop="name" label="角色名称"/>
-        <el-table-column prop="memo" label="角色描述"/>
+        <el-table-column prop="role_name" label="角色名称"/>
+        <el-table-column prop="role_memo" label="角色描述"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -31,12 +31,12 @@
 
       <el-pagination
         slot="pagination"
-        v-if="pageData"
+        v-if="pageData.data_total"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
@@ -64,10 +64,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null
+        pageData: {}
       }
     },
     created() {
@@ -87,13 +87,22 @@
       },
 
       /** 添加角色 */
-      handleAddRole() {},
+      handleAddRole() {
+      },
 
       /** 编辑角色 */
-      handleEditRole() {},
+      handleEditRole(row) {
+      },
 
       /** 删除角色 */
-      handleDeleteRole() {},
+      handleDeleteRole(row) {
+        this.$confirm('确定要删除这个角色吗？', '提示', { type: 'warning' }).then(() => {
+          API_AuthSetting.deleteRole(row.role_id).then(() => {
+            this.$message.success('删除成功！')
+            this.GET_RoleList()
+          })
+        }).catch(() => {})
+      },
 
       /** 获取管理员列表 */
       GET_RoleList() {
@@ -101,15 +110,8 @@
         API_AuthSetting.getRoleList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.pageData.data_total = response.data_total
+        }).catch(() => (this.loading = false))
       }
     }
   }

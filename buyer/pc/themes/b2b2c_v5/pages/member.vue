@@ -10,10 +10,12 @@
 
 <script>
   import Vue from 'vue'
-  import { Alert, Form, FormItem, Pagination, Table, TableColumn } from 'element-ui'
+  import { Alert, Checkbox, Form, FormItem, Input, Pagination, Table, TableColumn } from 'element-ui'
   Vue.use(Alert)
+  Vue.use(Checkbox)
   Vue.use(Form)
   Vue.use(FormItem)
+  Vue.use(Input)
   Vue.use(Pagination)
   Vue.use(Table)
   Vue.use(TableColumn)
