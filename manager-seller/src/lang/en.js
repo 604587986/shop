@@ -22,17 +22,6 @@ export default {
     orderDetail: 'Order Detail',
     refundDetail: 'Refund Detail',
 
-    member: 'Member Manage',
-    memberManage: 'Member Manage',
-    memberList: 'Member List',
-    memberRecycle: 'Member Recycle',
-    goodsComment: 'Goods Comment',
-    goodsCommentList: 'Goods Comment List',
-    goodsAskList: 'Goods Ask List',
-    memberNotification: 'Member Notification',
-    notificationHistory: 'Notification History',
-    memberEdit: 'editMember',
-
     shop: 'Manage Shop',
     shopThemesPc: 'shop Themes Pc',
     shopThemesWap: 'shop Themes Wap',

@@ -22,17 +22,6 @@ export default {
     orderDetail: '订单详情',
     refundDetail: '售后详情',
 
-    member: '会员管理',
-    memberManage: '管理会员',
-    memberList: '会员列表',
-    memberRecycle: '会员回收站',
-    goodsComment: '商品评论',
-    goodsCommentList: '商品评论列表',
-    goodsAskList: '商品咨询列表',
-    memberNotification: '会员通知',
-    notificationHistory: '通知历史',
-    memberEdit: '编辑会员',
-
     shop: '店铺管理',
     shopThemesPc: '店铺模板',
     shopThemesWap: 'Wap店铺',

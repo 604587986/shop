@@ -85,49 +85,6 @@ export const asyncRouterMap = [
       { path: 'receipt-history', component: _import('order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }}
     ]
   },
-  // 会员管理
-  {
-    path: '/member',
-    component: Layout,
-    redirect: '/member/member-manage/member-list',
-    name: 'member',
-    meta: { title: 'member', icon: 'member-manage' },
-    children: [
-      {
-        path: '/member/member-manage',
-        component: _import('member/member-manage/index'),
-        redirect: '/member/member-manage/member-list',
-        name: 'memberManage',
-        meta: { title: 'memberManage' },
-        children: [
-          { path: 'member-list', component: _import('member/member-manage/memberList'), name: 'memberList', meta: { title: 'memberList' }},
-          { path: 'member-recycle', component: _import('member/member-manage/memberRecycle'), name: 'memberRecycle', meta: { title: 'memberRecycle' }},
-          { path: 'edit/:id', component: _import('member/member-manage/memberEdit'), name: 'memberEdit', hidden: true, meta: { title: 'memberEdit' }}
-        ]
-      },
-      {
-        path: '/member/goods-comment',
-        component: _import('member/goods-comment/index'),
-        redirect: '/member/goods-comment/goods-comment-list',
-        name: 'goodsComment',
-        meta: { title: 'goodsComment' },
-        children: [
-          { path: 'goods-comment-list', component: _import('member/goods-comment/goodsCommentList'), name: 'mgoodsCommentList', meta: { title: 'goodsCommentList' }},
-          { path: 'goods-ask-list', component: _import('member/goods-comment/goodsAskList'), name: 'goodsAskList', meta: { title: 'goodsAskList' }}
-        ]
-      },
-      {
-        path: '/member/member-notification',
-        component: _import('member/member-notification/index'),
-        redirect: '/member/member-notification/notification-history',
-        name: 'memberNotification',
-        meta: { title: 'memberNotification' },
-        children: [
-          { path: 'notification-history', component: _import('member/member-notification/notificationHistory'), name: 'notificationHistory', meta: { title: 'notificationHistory' }}
-        ]
-      }
-    ]
-  },
   // 店铺管理
   {
     path: '/shop',
