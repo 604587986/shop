@@ -52,20 +52,34 @@ export default {
   methods: {
     generateTitle, // generateTitle by vue-i18n
     generateRoute() {
-      if (this.$route.name) {
-        return this.$route
+      // if (this.$route.name) {
+      //   return this.$route
+      // }
+      let matched = [...this.$route.matched]
+      matched.splice(0, 1)
+      matched = matched.filter(item => item.name)
+      console.log(matched)
+      if (matched) {
+        return matched
       }
       return false
     },
     isActive(route) {
-      return route.path === this.$route.path// || route.name === this.$route.name
+      return route.path === this.$route.path || route.name === this.$route.name
     },
     addViewTags() {
-      const route = this.generateRoute()
-      if (!route) {
+      const routes = this.generateRoute()
+      if (!routes) {
         return false
       }
-      this.$store.dispatch('addVisitedViews', route)
+      // this.$store.dispatch('addVisitedViews', routes)
+      const length = routes.length
+      routes.forEach((item, index) => {
+        if (index === length - 1) {
+          item.showInVisitedViews = true
+        }
+        this.$store.dispatch('addVisitedViews', item)
+      })
     },
     moveToCurrentTag() {
       const tags = this.$refs.tag
