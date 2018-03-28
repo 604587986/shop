@@ -1,4 +1,5 @@
 import { asyncRouterMap, constantRouterMap } from '@/router'
+import * as API_User from '@/api/login'
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -45,18 +46,33 @@ const permission = {
   actions: {
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
-        const { roles } = data
-        let accessedRouters
-        if (roles.indexOf('admin') >= 0) {
-          accessedRouters = asyncRouterMap
-        } else {
-          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-        }
-        commit('SET_ROUTERS', accessedRouters)
-        resolve()
+        API_User.getUserRolesPermissions().then(response => {
+          let accessedRouters = filterRoleRouter(asyncRouterMap, response)
+          commit('SET_ROUTERS', accessedRouters)
+          resolve()
+        })
       })
     }
   }
+}
+
+/**
+ * 递归筛选出有权限的路由
+ * @param routers
+ * @param names
+ * @returns {Array}
+ */
+function filterRoleRouter(routers, names) {
+  const _routers = []
+  routers.forEach(item => {
+    if (names.includes(item.name) || item.hidden) {
+      if (item.children) {
+        item.children = filterRoleRouter(item.children, names)
+      }
+      _routers.push(item)
+    }
+  })
+  return _routers
 }
 
 export default permission

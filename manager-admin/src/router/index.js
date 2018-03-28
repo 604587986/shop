@@ -70,7 +70,7 @@ export const asyncRouterMap = [
           { path: 'spec-list', component: _import('goods/goods-setting/specList'), name: 'specList', meta: { title: 'specList' }}
         ]
       },
-      { path: 'goods-audit', component: _import('goods/goodsAudit'), name: 'goods-audit', meta: { title: 'goodsAudit' }},
+      { path: 'goods-audit', component: _import('goods/goodsAudit'), name: 'goodsAudit', meta: { title: 'goodsAudit' }},
       {
         path: '/goods/tag-manage',
         component: _import('goods/tag-manage/index'),
@@ -78,8 +78,8 @@ export const asyncRouterMap = [
         name: 'tagManage',
         meta: { title: 'tagManage' },
         children: [
-          { path: 'tag-list', component: _import('goods/tag-manage/tagList'), name: 'taglist', meta: { title: 'tagList' }}
-          // { path: 'tag-goods-set', component: _import('goods/tag-manage/tagGoodsSet'), name: 'tagGoodsSet', meta: { title: 'tagGoodsSet' }}
+          { path: 'tag-list', component: _import('goods/tag-manage/tagList'), name: 'taglist', meta: { title: 'tagList' }},
+          { path: 'tag-goods-set', component: _import('goods/tag-manage/tagGoodsSet'), name: 'tagGoodsSet', meta: { title: 'tagGoodsSet' }}
         ]
       }
     ]
@@ -187,7 +187,7 @@ export const asyncRouterMap = [
         path: '/shop/shop-level-manage',
         component: _import('shop/shop-level-manage/index'),
         redirect: '/shop/shop-level-manage/level-apply-list',
-        name: 'shop-level-audit',
+        name: 'shopLevelAudit',
         meta: { title: 'shopLevelManage' },
         children: [
           { path: 'level-apply-list', component: _import('shop/shop-level-manage/levelApplyList'), name: 'levelApplyList', meta: { title: 'levelApplyList' }}
@@ -220,7 +220,7 @@ export const asyncRouterMap = [
         path: '/promotions/points-mall-manage',
         component: _import('promotions/points-mall-manage/index'),
         redirect: '/promotions/points-mall-manage/points-classify',
-        name: 'points-mall-manage',
+        name: 'pointsMallManage',
         meta: { title: 'pointsMallManage' },
         children: [
           { path: 'points-classify', component: _import('promotions/points-mall-manage/pointsClassify'), name: 'pointsClassify', meta: { title: 'pointsClassify' }},
@@ -267,7 +267,7 @@ export const asyncRouterMap = [
         path: '/page/mobile-decoration',
         component: _import('page/mobile-decoration/index'),
         redirect: '/page/mobile-decoration/mobile-theme',
-        name: 'mobile-decoration',
+        name: 'mobileDecoration',
         meta: {
           title: 'mobileDecoration'
         },
@@ -322,7 +322,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'price-sales', component: _import('statistics/goods-statistics/priceSales'), name: 'priceSales', meta: { title: 'priceSales' }},
           { path: 'hot-goods', component: _import('statistics/goods-statistics/hotGoods'), name: 'hotGoods', meta: { title: 'hotGoods' }},
-          // { path: 'goods-sales-details', component: _import('statistics/goods-statistics/goodsSalesDetails'), name: 'goodsSalesDetails', meta: { title: 'goodsSalesDetails' }},
+          { path: 'goods-sales-details', component: _import('statistics/goods-statistics/goodsSalesDetails'), name: 'goodsSalesDetails', meta: { title: 'goodsSalesDetails' }},
           { path: 'goods-collect', component: _import('statistics/goods-statistics/goodsCollect'), name: 'goodsCollect', meta: { title: 'goodsCollect' }}
         ]
       },
@@ -355,7 +355,7 @@ export const asyncRouterMap = [
         name: 'otherStatistics',
         meta: { title: 'otherStatistics' },
         children: [
-          { path: 'order', component: _import('statistics/other-statistics/orderStatistics'), name: 'order-statistics', meta: { title: 'orderStatistics' }},
+          { path: 'order', component: _import('statistics/other-statistics/orderStatistics'), name: 'orderStatistics', meta: { title: 'orderStatistics' }},
           { path: 'salesRevenue', component: _import('statistics/other-statistics/salesRevenueStatistics'), name: 'salesRevenueStatistics', meta: { title: 'salesRevenueStatistics' }},
           { path: 'regionalAnalysis', component: _import('statistics/other-statistics/regionalAnalysis'), name: 'regionalAnalysis', meta: { title: 'regionalAnalysis' }},
           { path: 'customerPriceDistribution', component: _import('statistics/other-statistics/customerPriceDistribution'), name: 'customerPriceDistribution', meta: { title: 'customerPriceDistribution' }},
@@ -452,7 +452,7 @@ export const asyncRouterMap = [
         meta: { title: 'toolManage' },
         children: [
           { path: 'url-mapping', component: _import('development/tool-manage/URLMapping'), name: 'urlMapping', meta: { title: 'URLMapping' }},
-          // { path: 'menu-manage', component: _import('development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }},
+          { path: 'menu-manage', component: _import('development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }},
           { path: 'data-output', component: _import('development/tool-manage/dataOutput'), name: 'dataOutput', meta: { title: 'dataOutput' }},
           { path: 'clear-example-data', component: _import('development/tool-manage/clearExampleData'), name: 'clearExampleData', meta: { title: 'clearExampleData' }}
         ]
