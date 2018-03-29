@@ -81,11 +81,28 @@ export function deleteRole(id) {
  * @param id
  * @returns {Promise<any>}
  */
-export function getRoleDetail(id) {
+export function getRolePermission(id) {
   return new Promise((resolve, reject) => {
     request({
       url: `http://www.andste.cc/mock/5aa72c250d9d060b4b99b466/admin/permission/role/${id}`,
       method: 'get'
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 添加角色权限
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function addRolePermission(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'http://www.andste.cc/mock/5aa72c250d9d060b4b99b466/admin/permission/role',
+      method: 'post',
+      data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
@@ -96,7 +113,7 @@ export function getRoleDetail(id) {
  * @param params
  * @returns {Promise<any>}
  */
-export function editRole(id, params) {
+export function editRolePermission(id, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {

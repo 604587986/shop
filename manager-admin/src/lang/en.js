@@ -128,6 +128,7 @@ export default {
     administratorManage: 'Administrator Manage',
     roleManage: 'Role Manage',
     authManage: 'Auth Manage',
+    rolePermission: 'Role Permission',
 
     development: 'Development',
     toolManage: 'Tool',

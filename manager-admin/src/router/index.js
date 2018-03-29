@@ -431,7 +431,8 @@ export const asyncRouterMap = [
         children: [
           { path: 'administrator-manage', component: _import('setting/auth-settings/administratorManage'), name: 'administratorManage', meta: { title: 'administratorManage' }},
           { path: 'role-manage', component: _import('setting/auth-settings/roleManage'), name: 'roleManage', meta: { title: 'roleManage' }},
-          { path: 'auth-manage', component: _import('setting/auth-settings/authManage'), name: 'authManage', meta: { title: 'authManage' }}
+          { path: 'auth-manage', component: _import('setting/auth-settings/authManage'), name: 'authManage', meta: { title: 'authManage' }},
+          { path: 'role-permission/:id', component: _import('setting/auth-settings/rolePermission'), name: 'rolePermission', hidden: true, meta: { title: 'rolePermission' }}
         ]
       }
     ]

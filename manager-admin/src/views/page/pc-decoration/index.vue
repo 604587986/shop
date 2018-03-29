@@ -1,11 +1,16 @@
 <template>
-  <keep-alive>
+  <keep-alive :include="cachedViews">
     <router-view></router-view>
   </keep-alive>
 </template>
 
 <script>
   export default {
-    name: 'pcDecoration'
+    name: 'pcDecoration',
+    computed: {
+      cachedViews() {
+        return this.$store.state.tagsView.cachedViews
+      }
+    }
   }
 </script>
