@@ -34,6 +34,9 @@
           </el-row>
         </div>
       </el-form-item>
+      <el-form-item label="">
+        <el-button type="primary" size="small" style="margin-top: 15px" @click="saveRolePermission">保存设置</el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -130,9 +133,29 @@
           length_checked: _list.filter(_item => _item.checked).length
         }
       },
+      /** 保存角色权限 */
+      saveRolePermission() {
+        this.$refs['permissionForm'].validate(valid => {
+          if (valid) {
+            this.role_id
+              ? API_AuthSetting.addRolePermission(this.permissionForm).then(() => {
+                this.$message.success('保存成功！')
+                this.$router.go(-1)
+              })
+              : API_AuthSetting.editRolePermission(this.role_id, this.permissionForm).then(() => {
+                this.$message.success('保存成功！')
+                this.$router.go(-1)
+              })
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        })
+      },
       /** 获取权限菜单树 */
       GET_RolePermission(role_id) {
         API_AuthSetting.getRolePermission(role_id).then(response => {
+          this.role_id = response.role_id
           this.permissionForm.name = response.role_name
           this.permissions = response.permissions
         })
@@ -149,12 +172,14 @@
   .level_1 {
     padding: 15px 0;
     border-bottom: 1px dashed #e7e7e7;
+    &:last-child{ border-bottom: none }
   }
   /deep/ .el-form-item__content {
     border-left: 1px solid #e7e7e7;
     padding-left: 20px;
   }
-  /deep/ .el-form-item:first-child {
+  /deep/ .el-form-item:not(:first-child) {
+    border-top: 1px solid #e7e7e7;
     position: relative;
     &::after {
       content: ' ';
@@ -162,12 +187,9 @@
       height: 22px;
       background-color: #e7e7e7;
       position: absolute;
-      top: 36px;
+      top: -22px;
       left: 200px;
     }
-  }
-  /deep/ .el-form-item:nth-child(2) {
-    border-top: 1px solid #e7e7e7;
   }
   .checkbox-dropdown {
     display: inline-block;
