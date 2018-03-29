@@ -48,4 +48,16 @@ export class Activity extends DataModel {
   /** 报名条件 */
   @ServerName('sign_condition')
   sign_condition
+
+  /** 申请规则 */
+  @ServerName('application_rules')
+  application_rules
+
+  /** 抢购阶段 */
+  @ServerName('panic_buy')
+  panic_buy
+
+  /** 是否已报名  1已报名 0未报名*/
+  @ServerName('is_signed')
+  is_signed
 }

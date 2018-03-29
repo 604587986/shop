@@ -1,48 +1,26 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
       pagination
       :tableData="tableData"
       :loading="loading"
     >
-      <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns"></div>
-        <div class="toolbar-search">
-          <en-table-search @search="searchEvent"></en-table-search>
-        </div>
-      </div>
       <template slot="table-columns">
-        <el-table-column prop="activity_name" label="活动名称"/>
+        <el-table-column prop="goods_name" label="商品名称"/>
         <el-table-column label="活动时间">
           <template slot-scope="scope">
             <span>{{ scope.row.start_time | unixToDate}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="报名截止时间">
+        <el-table-column label="审核状态">
           <template slot-scope="scope">
-            <span>{{ scope.row.sign_end_time | unixToDate }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="报名条件">
-          <template slot-scope="scope">
-            <span>{{ scope.row.sign_condition }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
+            <span v-if="scope.row.examine_status === 1">审核中</span>
+            <span v-if="scope.row.examine_status === 2">通过</span>
+            <span v-if="scope.row.examine_status === 0">驳回</span> <br>
             <el-button
-              size="mini"
-              type="primary"
-              v-if="scope.row.is_signed === 0"
-              @click="handleSignUpTimeLimt(scope.row)">报名
-            </el-button>
-            <el-button
-              size="mini"
-              type="primary"
-              v-if="scope.row.is_signed === 1"
-              @click="activityGoodsInfo(scope.row)">已报名
-            </el-button>
+              v-if="scope.row.examine_status === 0"
+              type="text"
+              @click="lookReason(scope.row)">（查看原因）</el-button>
           </template>
         </el-table-column>
       </template>
@@ -62,11 +40,11 @@
 </template>
 
 <script>
-  import * as API_activity from '@/api/activity'
+  import * as API_activityGoods from '@/api/activityGoods'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
-    name: 'timeLimit',
+    name: 'activityGoodsData',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
@@ -91,33 +69,25 @@
       }
     },
     mounted() {
-      this.GET_ActivityList()
+      this.GET_ActivityGoodsList()
     },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_ActivityList()
+        this.GET_ActivityGoodsList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_ActivityList()
+        this.GET_ActivityGoodsList()
       },
 
-      /** 搜索事件触发 */
-      searchEvent(data) {
-        this.params = {
-          ...this.params
-        }
-        this.GET_ActivityList()
-      },
-
-      /** 获取活动信息*/
-      GET_ActivityList() {
+      /** 获取活动商品信息*/
+      GET_ActivityGoodsList() {
         this.loading = true
-        API_activity.getActivityModelList(this.params).then(response => {
+        API_activityGoods.getActivityGoddsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,
@@ -130,14 +100,9 @@
         })
       },
 
-      /** 报名 */
-      handleSignUpTimeLimt(row) {
-        this.$router.push({ path: 'add-time-limit', query: { row }})
-      },
-
-      /** 活动商品信息*/
-      activityGoodsInfo(row) {
-        this.$router.push({ path: '/promotions/activity-goods-data' })
+      /** 查看原因 */
+      lookReason(row) {
+        this.$alert(row.reject_reason, '驳回原因')
       }
     }
   }
@@ -147,24 +112,4 @@
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
-
-  .inner-toolbar {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .toolbar-btns {
-
-  }
-
-  .toolbar-search {
-    margin-right: 10px;
-  }
-
-  .goods-image {
-    width: 50px;
-    height: 50px;
-  }
-
 </style>

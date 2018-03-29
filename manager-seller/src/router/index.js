@@ -103,7 +103,7 @@ export const asyncRouterMap = [
   {
     path: '/promotions',
     component: Layout,
-    redirect: '/promotions/group-buy-manage/group-buy-list',
+    redirect: '/promotions/group-buy-manager',
     name: 'promotions',
     meta: { title: 'promotions', icon: 'promotions-manage' },
     children: [
@@ -113,7 +113,9 @@ export const asyncRouterMap = [
       { path: 'discount-manager', component: _import('promotions/discountManager'), name: 'discountManager', meta: { title: 'discountManager' }},
       { path: 'gift-manager', component: _import('promotions/giftManager'), name: 'giftManager', meta: { title: 'giftManager' }},
       { path: 'group-buy-manager', component: _import('promotions/groupBuyManager'), name: 'groupBuyManager', meta: { title: 'groupBuyManager' }},
-      { path: 'group-time-limit', component: _import('promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit' }}
+      { path: 'group-time-limit', component: _import('promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit' }},
+      { path: 'add-time-limit', component: _import('promotions/addTimeLimit'), name: 'addTimeLimit', meta: { title: 'addTimeLimit' }, hidden: true },
+      { path: 'activity-goods-data', component: _import('promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData' }, hidden: true }
     ]
   },
   // 统计

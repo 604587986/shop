@@ -36,6 +36,8 @@ export default {
     giftManager: '赠品管理',
     groupBuyManager: '团购管理',
     timeLimit: '限时抢购',
+    addTimeLimit: '新增限时抢购',
+    activityGoodsData: '活动商品信息',
 
     statistics: '统计分析',
     memberAnalysis: '会员分析',

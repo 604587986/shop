@@ -36,6 +36,8 @@ export default {
     giftManager: 'gift Manager',
     groupBuyManager: 'group Buy Manager',
     timeLimit: 'time Limit',
+    addTimeLimit: 'add Time Limit',
+    activityGoodsData: 'activity Goods Data',
 
     statistics: 'Statistics Manage',
     memberAnalysis: 'Member Analysis',
