@@ -432,7 +432,7 @@ export const asyncRouterMap = [
           { path: 'administrator-manage', component: _import('setting/auth-settings/administratorManage'), name: 'administratorManage', meta: { title: 'administratorManage' }},
           { path: 'role-manage', component: _import('setting/auth-settings/roleManage'), name: 'roleManage', meta: { title: 'roleManage' }},
           { path: 'auth-manage', component: _import('setting/auth-settings/authManage'), name: 'authManage', meta: { title: 'authManage' }},
-          { path: 'role-permission', component: _import('setting/auth-settings/rolePermission'), name: 'rolePermission', meta: { title: 'rolePermission' }}
+          { path: 'role-permission', component: _import('setting/auth-settings/rolePermission'), name: 'rolePermission', hidden: true, meta: { title: 'rolePermission' }}
         ]
       }
     ]
