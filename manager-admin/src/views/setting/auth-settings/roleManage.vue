@@ -20,11 +20,11 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleEditRole(scope.$index, scope.row)">编辑</el-button>
+              @click="handleEditRole(scope.row)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDeleteRole(scope.$index, scope.row)">删除</el-button>
+              @click="handleDeleteRole(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </template>
@@ -88,10 +88,12 @@
 
       /** 添加角色 */
       handleAddRole() {
+        this.$router.push({ name: 'rolePermission' })
       },
 
       /** 编辑角色 */
       handleEditRole(row) {
+        this.$router.push({ name: 'rolePermission', query: { role_id: row.role_id }})
       },
 
       /** 删除角色 */
