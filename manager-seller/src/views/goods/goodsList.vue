@@ -9,7 +9,7 @@
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-button-group>
-            <el-button @click="inWarehouse">仓库中的商品</el-button>
+            <el-button @click="inWarehouse" autofocus>仓库中的商品</el-button>
             <el-button @click="selling">出售中的商品</el-button>
           </el-button-group>
           <el-button @click="publishGoods" type="success">发布商品</el-button>
@@ -93,9 +93,8 @@
         <el-form-item label="库存">
           <el-input auto-complete="off" label-width="100"></el-input>
         </el-form-item>
-        <el-form-item label="发货数">
-          <el-input auto-complete="off" label-width="100"></el-input>
-          <el-input auto-complete="off" label-width="100"></el-input>
+        <el-form-item label="待发货数">
+          <el-input auto-complete="off" disabled label-width="100"></el-input>
         </el-form-item>
       </el-form>
       <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
@@ -106,11 +105,7 @@
               <el-input auto-complete="off" label-width="100"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="发货数" width="120">
-            <template slot-scope="scope">
-              <el-input auto-complete="off" label-width="100"></el-input>
-            </template>
-          </el-table-column>
+          <el-table-column label="待发货数" width="120"></el-table-column>
         </template>
       </en-tabel-layout>
       <div slot="footer" class="dialog-footer">
@@ -140,7 +135,8 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          goods_status: 0
         },
 
         /** 列表数据 */
@@ -168,6 +164,9 @@
       }
     },
     mounted() {
+      if (this.$route.query) {
+        this.params.goods_status = this.$route.query.goodsStatus
+      }
       this.GET_GoodsList()
     },
     methods: {
@@ -201,7 +200,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          keyword: data
+          goods_status: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_GoodsList()
@@ -239,12 +238,12 @@
       },
       /** 仓库中的商品 */
       inWarehouse() {
-        // this.params = { }
+        this.params.goods_status = 0
         this.GET_GoodsList()
       },
       /** 出售中的商品 */
       selling() {
-        // this.params = { }
+        this.params.goods_status = 1
         this.GET_GoodsList()
       },
       /** 发布商品*/
