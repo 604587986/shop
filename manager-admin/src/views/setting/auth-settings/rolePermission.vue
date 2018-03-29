@@ -62,7 +62,7 @@
       }
     },
     created() {
-      const role_id = this.$route.query.role_id
+      const role_id = this.$route.params.id
       this.GET_RolePermission(role_id || 0)
     },
     computed: {
