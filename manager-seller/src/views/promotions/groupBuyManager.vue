@@ -16,6 +16,7 @@
               :value="item.group_buy_status_id">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="addGroupBuyGoods">新增团购商品</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent"/>
@@ -172,21 +173,28 @@
         })
       },
 
-      /** 编辑商品 */
-      handleEditGroupGoods(row) {
-        // this.$router.push({ path: 'good-publish', query: { goodsid: row.id }})
+      /** 新增团购商品商品 */
+      addGroupBuyGoods() {
+        const _goods_id = -1
+        this.$router.push({ path: `add-group-buy-goods/${_goods_id}` })
       },
+
+      /** 编辑团购商品 */
+      handleEditGroupGoods(row) {
+        this.$router.push({ path: `add-group-buy-goods/${row.goods_id}` })
+      },
+
       /** 删除团购商品 */
       handleDeleteGroupGoods(row) {
-        this.$confirm('确认删除此商品, 是否继续?', '提示', {
+        this.$confirm('确认删除此团购商品, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           API_activityGoods.delActivityGroupGoods(row.goods_id, row).then(() => {
             this.GET_ActivityGoodsList()
-            this.$message.success('删除商品成功！')
-          }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
+            this.$message.success('删除团购商品成功！')
+          }).catch(() => this.$message.error('删除团购商品出错，请稍后再试！'))
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })
