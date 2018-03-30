@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-form ref="gruopBuyForm" :model="gruopBuyForm" label-width="120px" style="width: 80%;margin-left: 15%;">
+  <div class="bg-group-buy">
+    <el-form ref="gruopBuyForm" :model="gruopBuyForm" label-width="120px" >
       <el-form-item label="团购活动">
         <el-select v-model="gruopBuyForm.group_activity" placeholder="选择要参加的团购活动及时间段">
           <el-option v-for="item in gruopBuyActivitys" :key="item.value"
@@ -306,6 +306,16 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  .el-form-item  {
+    padding-left: 12%;
+    border-bottom: 1px dotted #E6E6E6;
+  }
+  .bg-group-buy {
+    background-color: #fff;
+    border: 1px solid #9a9a9a;
+    margin: 10px;
+    padding: 25px;
+  }
   /*商品图片*/
   .goods-image {
     width: 200px;
