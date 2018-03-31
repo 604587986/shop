@@ -9,12 +9,12 @@
 </template>
 
 <script>
-export default {
-  name: 'AppMain',
-  computed: {
-    cachedViews() {
-      return this.$store.state.tagsView.cachedViews
+  export default {
+    name: 'AppMain',
+    computed: {
+      cachedViews() {
+        return this.$store.state.tagsView.cachedViews
+      }
     }
   }
-}
 </script>

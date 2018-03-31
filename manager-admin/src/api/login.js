@@ -54,7 +54,7 @@ export function getUserInfo(token) {
  */
 export function getUserRolesPermissions(token) {
   return request({
-    url: 'http://www.andste.cc/mock/5aa72c250d9d060b4b99b466/admin/menus',
+    url: 'http://www.andste.cc/mock/5aa72c250d9d060b4b99b466/admin/permission/menus',
     method: 'get'
   })
 }
