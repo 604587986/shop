@@ -44,6 +44,9 @@
         <el-form-item label="菜单标识" prop="name">
           <el-input v-model="menuForm.name"></el-input>
         </el-form-item>
+        <el-form-item label="菜单权限" prop="permission">
+          <el-input v-model="menuForm.permission"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogMenuVisible = false">取 消</el-button>
@@ -63,7 +66,20 @@
         /** 添加、编辑菜单 表单 */
         menuForm: {},
         /** 添加、编辑菜单 表单规则 */
-        menuRules: {},
+        menuRules: {
+          title: [
+            { required: true, message: '请输入菜单标题', trigger: 'blur' },
+            { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
+          ],
+          name: [
+            { required: true, message: '请输入菜单标识', trigger: 'blur' },
+            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          ],
+          permission: [
+            { required: true, message: '请输入菜单权限', trigger: 'blur' },
+            { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
+          ]
+        },
         /** 添加、编辑菜单 dialog */
         dialogMenuVisible: false,
         /** 当前操作的menu */
