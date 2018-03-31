@@ -38,6 +38,7 @@ export default {
     timeLimit: '限时抢购',
     addTimeLimit: '新增限时抢购',
     activityGoodsData: '活动商品信息',
+    addGroupBuyGoods: '新增团购商品',
 
     statistics: '统计分析',
     memberAnalysis: '会员分析',
