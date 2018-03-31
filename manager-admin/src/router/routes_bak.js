@@ -270,13 +270,15 @@
   {
     name: 'development',
     title: '开发管理',
+    disabled: true,
     children: [
       {
         name: 'toolManage',
         title: '工具',
+        disabled: true,
         children: [
           { name: 'urlMapping', title: 'URL映射' },
-          { name: 'menuManage', title: '菜单管理' },
+          { name: 'menuManage', title: '菜单管理', disabled: true },
           { name: 'dataOutput', title: '数据导出' },
           { name: 'clearExampleData', title: '清除示例数据' }
         ]
