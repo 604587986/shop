@@ -55,6 +55,12 @@ export default {
       if (this.$route.name) {
         return this.$route
       }
+      // let matched = [...this.$route.matched]
+      // matched.splice(0, 1)
+      // matched = matched.filter(item => item.name)
+      // if (matched) {
+      //   return matched
+      // }
       return false
     },
     isActive(route) {
@@ -66,6 +72,17 @@ export default {
         return false
       }
       this.$store.dispatch('addVisitedViews', route)
+      // const routes = this.generateRoute()
+      // if (!routes) {
+      //   return false
+      // }
+      // const length = routes.length
+      // routes.forEach((item, index) => {
+      //   if (index === length - 1) {
+      //     item.showInVisitedViews = true
+      //   }
+      //   this.$store.dispatch('addVisitedViews', item)
+      // })
     },
     moveToCurrentTag() {
       const tags = this.$refs.tag
