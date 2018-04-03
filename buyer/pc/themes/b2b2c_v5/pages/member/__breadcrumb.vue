@@ -1,5 +1,5 @@
 <template>
-  <div id="member-nav" class="w">
+  <div id="member-breadcrumb" class="w">
     <nuxt-link to="/"><i class="iconfont ea-icon-home"></i>首页</nuxt-link>&ensp;&gt;
     <nuxt-link to="/member">会员中心</nuxt-link>&ensp;&gt;
     <nuxt-link :to="fullPath">{{ currentName }}</nuxt-link>
@@ -9,7 +9,7 @@
 <script>
   import menus from './menus'
   export default {
-    name: 'member-nav',
+    name: 'member-breadcrumb',
     computed: {
       fullPath() {
         return this.$route.fullPath
@@ -34,7 +34,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  #member-nav {
+  #member-breadcrumb {
     position: relative;
     font-size: 12px;
     height: 20px;

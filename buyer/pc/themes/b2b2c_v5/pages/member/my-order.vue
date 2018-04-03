@@ -80,7 +80,7 @@
     name: 'my-order',
     created() {
       /** 如果有hash值，需要重新请求数据 */
-      if (this.$route.hash) this.getOrderData(this.params).then(this.scrollToTop)
+      if (this.$route.hash) this.getOrderData(this.params).then(this.MixinScrollToTop)
     },
     data() {
       let _hash = this.$route.hash
@@ -119,20 +119,17 @@
           return item
         })
         this.params.status = nav.status
-        this.getOrderData(this.params).then(this.scrollToTop)
+        this.getOrderData(this.params).then(this.MixinScrollToTop)
       },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
-        this.getOrderData(this.params).then(this.scrollToTop)
+        this.getOrderData(this.params).then(this.MixinScrollToTop)
       },
       /** 订单搜索 */
       handleSearch() {
         this.params.keyword = this.keyword
-        this.getOrderData(this.params).then(this.scrollToTop)
-      },
-      scrollToTop() {
-        $("html,body").animate({ scrollTop: 0 }, 300)
+        this.getOrderData(this.params).then(this.MixinScrollToTop)
       },
       ...mapActions({
         getOrderData: 'order/getOrderDataAction'

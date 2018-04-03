@@ -8,6 +8,10 @@ body {
   display: block;
 }
 
+body {
+  font-family: "Microsoft YaHei","Microsoft JhengHei",SimSun,verdana,Tahoma,arial;
+}
+
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
 blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn,
 em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup,
@@ -64,6 +68,7 @@ a, p, span, div, th, td {
 
 img {
   border: 0;
+  vertical-align:bottom
 }
 
 :focus {

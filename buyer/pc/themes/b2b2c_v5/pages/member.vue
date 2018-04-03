@@ -1,6 +1,6 @@
 <template>
   <div id="member">
-    <en-nav/>
+    <en-breadcrumb/>
     <div class="member-layout w">
       <en-menu/>
       <nuxt-child style="width: calc(1190px - 220px); margin-bottom: 20px"/>
@@ -20,12 +20,12 @@
   Vue.use(Table)
   Vue.use(TableColumn)
   import { mapActions } from 'vuex'
-  import Nav from './member/__nav'
+  import Breadcrumb from './member/__breadcrumb'
   import Menu from './member/__menu'
   export default {
     name: 'member',
     components: {
-      'en-nav': Nav,
+      'en-breadcrumb': Breadcrumb,
       'en-menu': Menu
     },
     created() {
