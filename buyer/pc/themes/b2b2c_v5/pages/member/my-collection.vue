@@ -63,9 +63,51 @@
       <div v-show="type === 'shop'" class="shop">
         <ul>
           <li v-for="shop in shopData.data" :key="shop.shop_id" class="coll-s-item">
-            <div class="shop-card"></div>
+            <div class="shop-card">
+              <div class="shop-card-side">
+                <nuxt-link :to="'/shop/' + shop.shop_id">
+                  <img :src="shop.seller_avatar" :alt="shop.shop_name">
+                </nuxt-link>
+              </div>
+              <div class="shop-card-main">
+                <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
+                <div class="shop-tools">
+                  <a href="javascript:;"><i class="iconfont ea-icon-delete"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="shop-content">
+              <div class="shop-goods-box">
+                <div class="goods-tab clearfix">
+                  <div v-for="tag in shop.tagList" :key="tag.tag_name" :class="['tab-item', tag.active && 'active']" @click="handleShopTabChanged(shop.tagList, tag)">
+                    {{ tag.tag_name }}
+                    <em>{{ tag.goods_num }}</em>
+                  </div>
+                </div>
+                <nuxt-link :to="'/shop/' + shop.shop_id" class="see-more">查看更多&gt;&gt;</nuxt-link>
+              </div>
+              <div class="shop-goods-list">
+                <ul v-for="tag in shop.tagList" :key="tag.tag_name" v-show="tag.active" class="goods-list">
+                  <li v-for="goods in tag.goodsList" :key="goods.goods_id" class="goods-item">
+                    <div class="goods-image">
+                      <nuxt-link :to="'/goods/' + goods.goods_id">
+                        <img :src="goods.goods_image" :alt="goods.goods_name">
+                      </nuxt-link>
+                    </div>
+                    <div class="goods-price">
+                      <div class="price">
+                        <span>￥</span>
+                        <strong>{{ goods.goods_price | unitPrice }}</strong>
+                      </div>
+                      <div v-if="goods.goods_original_price" class="original-price">
+                        <span>￥{{ goods.goods_original_price | unitPrice }}</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </li>
-          <li class="clr"></li>
         </ul>
         <el-pagination
           v-if="shopData"
@@ -137,6 +179,13 @@
         this.params_shop.page_no = page
         this.GET_Collection('shop')
       },
+      /** 店铺标签tab切换 */
+      handleShopTabChanged(tagList, tag) {
+        tagList.map(item => {
+          item.active = item.tag_name === tag.tag_name
+          return item
+        })
+      },
       /** 获取收藏 */
       GET_Collection(type) {
         if (type === 'goods') {
@@ -154,6 +203,12 @@
             response.data.map(item => {
               // 初始化是否显示删除遮罩标识
               item.show_del_pop = 0
+              item.tagList.map((_item, index) => {
+                // 初始化标签显示状态【第一个默认显示】
+                _item.active = index === 0
+                _item.goodsList = _item.goodsList.slice(0, 5)
+                return _item
+              })
               return item
             })
             this.shopData = response
@@ -325,12 +380,136 @@
     position: relative;
     min-height: 279px;
     border-bottom: #e5e5e5 1px solid;
+    &:last-child { border-bottom: none };
     .shop-card {
       width: 270px;
       margin-right: 30px;
       padding-top: 20px;
       position: relative;
-      background-color: #27a9e3;
+    }
+    .shop-card-side {
+      float: left;
+      padding-left: 6px;
+      padding-right: 17px;
+      height: 190px;
+      width: 50px;
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+      }
+    }
+    .shop-card-main {
+      position: relative;
+      float: left;
+    }
+    .shop-name {
+      display: block;
+      line-height: 25px;
+      margin-bottom: 2px;
+      height: 26px;
+      width: 130px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      color: #3c3c3c;
+      &:hover { color: #f42424 }
+    }
+    .shop-tools {
+      position: absolute;
+      top: 0;
+      right: 0;
+      .ea-icon-delete {
+        font-size: 20px;
+        line-height: normal;
+      }
+    }
+    .shop-content {
+      width: 100%;
+    }
+    .shop-goods-box {
+      padding-top: 20px;
+      padding-bottom: 16px;
+      overflow: hidden;
+    }
+    .goods-tab {
+      float: left;
+      border: #dcdcdc 1px solid;
+      .tab-item {
+        float: left;
+        padding: 0 13px;
+        height: 26px;
+        line-height: 26px;
+        text-align: center;
+        color: #6c6c6c;
+        cursor: pointer;
+        border-right: #dcdcdc 1px solid;
+        &.active {
+          background-color: #f3f3f3;
+          color: #ff4200;
+        }
+        &:last-child { border-right: none }
+      }
+    }
+    .see-more {
+      float: right;
+      color: #6c6c6c;
+      padding-right: 10px;
+      &:hover { color: #f42424 }
+    }
+    .shop-goods-list {
+      .goods-list {
+        overflow: hidden;
+        width: 100%;
+        height: 205px;
+      }
+      .goods-item {
+        position: relative;
+        float: left;
+        width: 135px;
+        height: 205px;
+        text-align: center;
+        margin-right: 15px;
+        &:nth-child(5n) {
+          margin-right: 0;
+        }
+      }
+      .goods-image {
+        width: 132px;
+        height: 132px;
+        border: #eee 1px solid;
+        margin-bottom: 8px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .goods-price {
+        height: 25px;
+        line-height: 25px;
+        div {
+          display: inline;
+          color: #6c6c6c;
+        }
+        .price {
+          color: #f40;
+          margin-right: 0;
+          strong {
+            color: #f40;
+            font-weight: 700;
+            font-family: verdana,arial;
+          }
+        }
+        .original-price {
+          text-decoration: line-through;
+          white-space: nowrap;
+          font-weight: 400;
+          span {
+            color: #9c9c9c;
+          }
+        }
+      }
     }
   }
 </style>
