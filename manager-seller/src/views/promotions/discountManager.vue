@@ -73,7 +73,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="新增优惠券" :visible.sync="couponshow" width="40%">
+    <el-dialog title="新增优惠券" :visible.sync="couponshow" width="40%" align="center">
       <el-form :model="couponForm" label-position="right" label-width="160px">
         <el-form-item label="优惠券名称">
           <el-input
