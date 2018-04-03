@@ -40,6 +40,12 @@
             <template slot-scope="scope">{{ scope.row.consumption_point | filterType }}</template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          v-if="pointsData"
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+          :total="pointsData.data_total">
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -68,6 +74,11 @@
       }
     },
     methods: {
+      /** 当前分页发生变化 */
+      handleCurrentChange(page) {
+        this.params.page_no = page
+        this.GET_Points()
+      },
       GET_Points() {
         API_Points.getPointsData(this.params).then(response => {
           this.pointsData = response
@@ -81,6 +92,10 @@
 <style type="text/scss" lang="scss" scoped>
   .points-container {
     padding-top: 10px;
+    /deep/ .el-pagination {
+      text-align: right;
+      margin-top: 15px;
+    }
   }
   .points-my /deep/ .el-alert--warning {
     h2 {
