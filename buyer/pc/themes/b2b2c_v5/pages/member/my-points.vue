@@ -23,17 +23,56 @@
           <p>可用积分：205</p>
         </el-alert>
       </div>
-      <div v-show="type === 2" class="points-detail"></div>
+      <div v-show="type === 2" class="points-detail">
+        <el-table
+          :data="pointsData.data"
+          :header-cell-style="{textAlign: 'center'}"
+          style="width: 100%"
+        >
+          <el-table-column label="日期" align="center">
+            <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
+          </el-table-column>
+          <el-table-column prop="point_detail" label="明细" align="center"/>
+          <el-table-column label="等级积分" align="center" width="120">
+            <template slot-scope="scope">{{ scope.row.level_point | filterType }}</template>
+          </el-table-column>
+          <el-table-column label="消费积分" align="center" width="120">
+            <template slot-scope="scope">{{ scope.row.consumption_point | filterType }}</template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import * as API_Points from '@/api/points'
   export default {
     name: 'my-points',
     data() {
       return {
-        type: 1
+        type: 1,
+        params: {
+          page_no: 1,
+          page_size: 10
+        },
+        pointsData: ''
+      }
+    },
+    created() {
+      this.GET_Points()
+    },
+    filters: {
+      filterType(val) {
+        return (val > 0 ? '+' : '-') + val
+      }
+    },
+    methods: {
+      GET_Points() {
+        API_Points.getPointsData(this.params).then(response => {
+          this.pointsData = response
+          this.MixinScrollToTop()
+        })
       }
     }
   }
@@ -53,6 +92,7 @@
     }
   }
   .points-my /deep/ .el-alert--info {
+    margin-top: 15px;
     h2 {
       font-size: 16px;
       margin-bottom: 10px;
