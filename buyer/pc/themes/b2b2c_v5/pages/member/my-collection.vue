@@ -12,13 +12,13 @@
           <li
             v-for="goods in goodsData.data"
             :key="goods.goods_id"
-            :class="['coll-g-item', goods.show_pop && 'del-pop-show']"
+            :class="['coll-g-item', goods.show_del_pop && 'del-pop-show']"
           >
             <div class="goods-image">
               <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                 <img :src="goods.goods_image" :alt="goods.goods_name">
               </nuxt-link>
-              <div class="goods-delete" @click="goods.show_pop = 1">
+              <div class="goods-delete" @click="goods.show_del_pop = 1">
                 <i class="iconfont ea-icon-delete"></i>
               </div>
               <div class="goods-image-btns">
@@ -47,7 +47,7 @@
                 <div class="txt">确定删除？</div>
                 <div class="btns">
                   <a href="javascript:;" @click="handleDeleteGoodsColl(goods)">确定</a>
-                  <a href="javascript:;" @click="goods.show_pop = 0">取消</a>
+                  <a href="javascript:;" @click="goods.show_del_pop = 0">取消</a>
                 </div>
               </div>
             </div>
@@ -57,16 +57,20 @@
         <el-pagination
           v-if="goodsData"
           layout="prev, pager, next"
+          @current-change="handleGoodsCurrentChange"
           :total="1000"/>
       </div>
       <div v-show="type === 'shop'" class="shop">
         <ul>
-          <li v-for="shop in shopData.data" :key="shop.shop_id" class="coll-s-item"></li>
+          <li v-for="shop in shopData.data" :key="shop.shop_id" class="coll-s-item">
+            <div class="shop-card"></div>
+          </li>
           <li class="clr"></li>
         </ul>
         <el-pagination
           v-if="shopData"
           layout="prev, pager, next"
+          @current-change="handleShopCurrentChange"
           :total="1000"/>
       </div>
     </div>
@@ -106,8 +110,11 @@
       handleTypeChanged(type) {
         this.type = type
         const _href = location.href.match(/(.+)#/)
+        // 改变地址栏hash值【不会刷新页面】
         location.href = (_href ? _href[1] : location.href)  + '#' + type
+        // 如果没有商品收藏数据，则获取
         if (!this.goodsData) this.GET_Collection('goods')
+        // 如果没有店铺收藏数据，则获取
         if (!this.shopData) this.GET_Collection('shop')
       },
       /** 加入到购物车 */
@@ -120,19 +127,37 @@
           this.GET_Collection('goods')
         })
       },
+      /** 商品收藏当前页发生改变 */
+      handleGoodsCurrentChange(page) {
+        this.params_goods.page_no = page
+        this.GET_Collection('goods')
+      },
+      /** 店铺收藏当前页发生改变 */
+      handleShopCurrentChange(page) {
+        this.params_shop.page_no = page
+        this.GET_Collection('shop')
+      },
       /** 获取收藏 */
       GET_Collection(type) {
         if (type === 'goods') {
           API_Collection.getGoodsCollection(this.params_goods).then(response => {
             response.data.map(item => {
-              item.show_pop = 0
+              // 初始化是否显示删除遮罩标识
+              item.show_del_pop = 0
               return item
             })
             this.goodsData = response
+            this.MixinScrollToTop()
           })
         } else {
           API_Collection.getShopCollection(this.params_shop).then(response => {
+            response.data.map(item => {
+              // 初始化是否显示删除遮罩标识
+              item.show_del_pop = 0
+              return item
+            })
             this.shopData = response
+            this.MixinScrollToTop()
           })
         }
       }
@@ -293,6 +318,19 @@
     }
     &.del-pop-show .del-pop {
       display: block;
+    }
+  }
+  .coll-s-item {
+    display: flex;
+    position: relative;
+    min-height: 279px;
+    border-bottom: #e5e5e5 1px solid;
+    .shop-card {
+      width: 270px;
+      margin-right: 30px;
+      padding-top: 20px;
+      position: relative;
+      background-color: #27a9e3;
     }
   }
 </style>
