@@ -62,6 +62,7 @@ module.exports = {
     { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
     { src: '~plugins/vue-filters', ssr: true },
+    { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
     { src: '~plugins/address-selecter', ssr: false }
   ],
