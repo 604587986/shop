@@ -53,7 +53,6 @@ module.exports = {
   },
   css: [
     '~assets/styles/normalize.css',
-    'element-ui/lib/theme-chalk/reset.css',
     '~assets/styles/base.css',
     '~assets/styles/page-transletion.scss'
   ],
@@ -62,6 +61,7 @@ module.exports = {
     { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
     { src: '~plugins/vue-filters', ssr: true },
+    { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
     { src: '~plugins/address-selecter', ssr: false }
   ],
