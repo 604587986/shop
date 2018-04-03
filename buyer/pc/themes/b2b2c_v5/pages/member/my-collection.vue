@@ -62,7 +62,7 @@
       </div>
       <div v-show="type === 'shop'" class="shop">
         <ul>
-          <li v-for="shop in shopData.data" :key="shop.shop_id" class="coll-s-item">
+          <li v-for="shop in shopData.data" :key="shop.shop_id" :class="['coll-s-item', shop.show_del_pop && 'del-pop-show']">
             <div class="shop-card">
               <div class="shop-card-side">
                 <nuxt-link :to="'/shop/' + shop.shop_id">
@@ -72,7 +72,13 @@
               <div class="shop-card-main">
                 <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
                 <div class="shop-tools">
-                  <a href="javascript:;"><i class="iconfont ea-icon-delete"></i></a>
+                  <a href="javascript:;" @click="shop.show_del_pop = 1"><i class="iconfont ea-icon-delete"></i></a>
+                </div>
+                <div class="shop-other">
+                  <p style="margin-bottom: 5px">店铺评分：</p>
+                  <p>描述相符: 4.5</p>
+                  <p>服务态度: 4.5</p>
+                  <p>发货速度: 4.5</p>
                 </div>
               </div>
             </div>
@@ -105,6 +111,16 @@
                     </div>
                   </li>
                 </ul>
+              </div>
+            </div>
+            <div class="del-pop">
+              <div class="del-pop-bg"></div>
+              <div class="del-pop-box">
+                <div class="txt">确定删除？</div>
+                <div class="btns">
+                  <a href="javascript:;" @click="handleDeleteShopColl(shop)">确定</a>
+                  <a href="javascript:;" @click="shop.show_del_pop = 0">取消</a>
+                </div>
               </div>
             </div>
           </li>
@@ -173,6 +189,12 @@
       handleGoodsCurrentChange(page) {
         this.params_goods.page_no = page
         this.GET_Collection('goods')
+      },
+      /** 删除店铺收藏 */
+      handleDeleteShopColl(shop) {
+        API_Collection.deleteShopCollection(shop.shop_id).then(() => {
+          this.GET_Collection('shop')
+        })
       },
       /** 店铺收藏当前页发生改变 */
       handleShopCurrentChange(page) {
@@ -323,57 +345,6 @@
         display: block;
       }
     }
-    .del-pop {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10;
-      .del-pop-bg {
-        width: 100%;
-        height: 100%;
-        background-color: #000;
-        opacity: .5;
-        z-index: 11;
-      }
-      .del-pop-box {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        margin-top: -30px;
-        width: 100%;
-        z-index: 12;
-        a {
-          display: inline-block;
-          width: 52px;
-          height: 22px;
-          line-height: 22px;
-          border: #c5c5c5 1px solid;
-          background-color: #fff;
-          cursor: pointer;
-          margin-left: 3px;
-          margin-right: 3px;
-          &:first-child {
-            border-color: #ff4200;
-            background-color: #ff4200;
-            color: #fff;
-          }
-        }
-      }
-      .txt {
-        height: 25px;
-        line-height: 25px;
-        color: #fff;
-        margin-bottom: 7px;
-        text-align: center;
-      }
-      .btns { text-align: center }
-    }
-    &.del-pop-show .del-pop {
-      display: block;
-    }
   }
   .coll-s-item {
     display: flex;
@@ -402,6 +373,9 @@
     .shop-card-main {
       position: relative;
       float: left;
+    }
+    .shop-other {
+      margin-top: 10px;
     }
     .shop-name {
       display: block;
@@ -511,5 +485,56 @@
         }
       }
     }
+  }
+  .del-pop {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    .del-pop-bg {
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      opacity: .5;
+      z-index: 11;
+    }
+    .del-pop-box {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      margin-top: -30px;
+      width: 100%;
+      z-index: 12;
+      a {
+        display: inline-block;
+        width: 52px;
+        height: 22px;
+        line-height: 22px;
+        border: #c5c5c5 1px solid;
+        background-color: #fff;
+        cursor: pointer;
+        margin-left: 3px;
+        margin-right: 3px;
+        &:first-child {
+          border-color: #ff4200;
+          background-color: #ff4200;
+          color: #fff;
+        }
+      }
+    }
+    .txt {
+      height: 25px;
+      line-height: 25px;
+      color: #fff;
+      margin-bottom: 7px;
+      text-align: center;
+    }
+    .btns { text-align: center }
+  }
+  .del-pop-show .del-pop {
+    display: block;
   }
 </style>
