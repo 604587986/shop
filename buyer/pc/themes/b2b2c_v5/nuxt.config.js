@@ -53,7 +53,6 @@ module.exports = {
   },
   css: [
     '~assets/styles/normalize.css',
-    'element-ui/lib/theme-chalk/reset.css',
     '~assets/styles/base.css',
     '~assets/styles/page-transletion.scss'
   ],
