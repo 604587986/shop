@@ -160,7 +160,8 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          orderStatus: 0
         },
 
         /** 列表数据 */
@@ -220,6 +221,9 @@
       }
     },
     mounted() {
+      if (this.$route.query) {
+        this.orderStatus = this.params.orderStatus = this.$route.query.orderStatus
+      }
       this.GET_OrderList()
     },
     methods: {

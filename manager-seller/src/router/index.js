@@ -56,7 +56,7 @@ export const asyncRouterMap = [
       icon: 'goods-manage'
     },
     children: [
-      { path: 'goods-list', component: _import('goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
+      { path: 'goods-list/:goods_status', component: _import('goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
       { path: 'draft-list', component: _import('goods/draftList'), name: 'draftList', meta: { title: 'draftList' }},
       { path: 'category-manage', component: _import('goods/categoryManage'), name: 'categoryManage', meta: { title: 'categoryManage' }},
       { path: 'tag-manage', component: _import('goods/tagManage'), name: 'tagManage', meta: { title: 'tagManage' }},
@@ -68,6 +68,7 @@ export const asyncRouterMap = [
   },
   // 订单管理
   {
+
     path: '/order',
     component: Layout,
     name: 'order',
@@ -82,49 +83,6 @@ export const asyncRouterMap = [
       { path: 'comments-manage', component: _import('order/commentsManage'), name: 'commentsManage', meta: { title: 'commentsManage' }},
       { path: 'settlement-manage', component: _import('order/settlementManage'), name: 'settlementManage', meta: { title: 'settlementManage' }},
       { path: 'receipt-history', component: _import('order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }}
-    ]
-  },
-  // 会员管理
-  {
-    path: '/member',
-    component: Layout,
-    redirect: '/member/member-manage/member-list',
-    name: 'member',
-    meta: { title: 'member', icon: 'member-manage' },
-    children: [
-      {
-        path: '/member/member-manage',
-        component: _import('member/member-manage/index'),
-        redirect: '/member/member-manage/member-list',
-        name: 'memberManage',
-        meta: { title: 'memberManage' },
-        children: [
-          { path: 'member-list', component: _import('member/member-manage/memberList'), name: 'memberList', meta: { title: 'memberList' }},
-          { path: 'member-recycle', component: _import('member/member-manage/memberRecycle'), name: 'memberRecycle', meta: { title: 'memberRecycle' }},
-          { path: 'edit/:id', component: _import('member/member-manage/memberEdit'), name: 'memberEdit', hidden: true, meta: { title: 'memberEdit' }}
-        ]
-      },
-      {
-        path: '/member/goods-comment',
-        component: _import('member/goods-comment/index'),
-        redirect: '/member/goods-comment/goods-comment-list',
-        name: 'goodsComment',
-        meta: { title: 'goodsComment' },
-        children: [
-          { path: 'goods-comment-list', component: _import('member/goods-comment/goodsCommentList'), name: 'mgoodsCommentList', meta: { title: 'goodsCommentList' }},
-          { path: 'goods-ask-list', component: _import('member/goods-comment/goodsAskList'), name: 'goodsAskList', meta: { title: 'goodsAskList' }}
-        ]
-      },
-      {
-        path: '/member/member-notification',
-        component: _import('member/member-notification/index'),
-        redirect: '/member/member-notification/notification-history',
-        name: 'memberNotification',
-        meta: { title: 'memberNotification' },
-        children: [
-          { path: 'notification-history', component: _import('member/member-notification/notificationHistory'), name: 'notificationHistory', meta: { title: 'notificationHistory' }}
-        ]
-      }
     ]
   },
   // 店铺管理
@@ -145,99 +103,20 @@ export const asyncRouterMap = [
   {
     path: '/promotions',
     component: Layout,
-    redirect: '/promotions/group-buy-manage/group-buy-list',
+    redirect: '/promotions/group-buy-manager',
     name: 'promotions',
     meta: { title: 'promotions', icon: 'promotions-manage' },
     children: [
-      {
-        path: '/promotions/group-buy-manage',
-        component: _import('promotions/group-buy-manage/index'),
-        redirect: '/promotions/group-buy-manage/group-buy-list',
-        name: 'groupBuyManage',
-        meta: { title: 'groupBuyManage' },
-        children: [
-          { path: 'group-buy-list', component: _import('promotions/group-buy-manage/groupBuyList'), name: 'groupBuyList', meta: { title: 'groupBuyList' }},
-          { path: 'group-buy-category', component: _import('promotions/group-buy-manage/groupBuyCategory'), name: 'groupBuyCategory', meta: { title: 'groupBuyCategory' }},
-          { path: 'group-buy-goods/:id', component: _import('promotions/group-buy-manage/groupBuyGoods'), name: 'groupBuyGoods', hidden: true, meta: { title: 'groupBuyGoods' }},
-          { path: 'group-buy-goods-info', component: _import('promotions/group-buy-manage/groupBuyGoodsInfo'), name: 'groupBuyGoodsInfo', hidden: true, meta: { title: 'groupBuyGoodsInfo' }}
-        ]
-      },
-      {
-        path: '/promotions/points-mall-manage',
-        component: _import('promotions/points-mall-manage/index'),
-        redirect: '/promotions/points-mall-manage/points-classify',
-        name: 'points-mall-manage',
-        meta: { title: 'pointsMallManage' },
-        children: [
-          { path: 'points-classify', component: _import('promotions/points-mall-manage/pointsClassify'), name: 'pointsClassify', meta: { title: 'pointsClassify' }},
-          { path: 'points-goods', component: _import('promotions/points-mall-manage/pointsGoods'), name: 'pointsGoods', meta: { title: 'pointsGoods' }}
-        ]
-      },
-      {
-        path: '/promotions/seckill-manage',
-        component: _import('promotions/seckill-manage/index'),
-        redirect: '/promotions/seckill-manage/seckill-list',
-        name: 'seckillManage',
-        meta: { title: 'seckillManage' },
-        children: [
-          { path: 'seckill-list', component: _import('promotions/seckill-manage/seckillList'), name: 'seckillList', meta: { title: 'seckillList' }},
-          { path: 'seckill-list/audit/:id', component: _import('promotions/seckill-manage/seckillAuditGoodsList'), name: 'seckillAuditGoodsList', hidden: true, meta: { title: 'seckillAuditGoodsList', noCache: true }},
-          { path: 'seckill-list/pass/:id', component: _import('promotions/seckill-manage/seckillPassGoodsList'), name: 'seckillPassGoodsList', hidden: true, meta: { title: 'seckillPassGoodsList', noCache: true }}
-        ]
-      }
-    ]
-  },
-  // 页面管理
-  {
-    path: '/page',
-    component: Layout,
-    redirect: '/page/pc-decoration/pc-theme',
-    name: 'page',
-    meta: { title: 'page', icon: 'page-manage' },
-    children: [
-      {
-        path: '/page/pc-decoration',
-        component: _import('page/pc-decoration/index'),
-        redirect: '/page/pc-decoration/pc-theme',
-        name: 'pcDecoration',
-        meta: {
-          title: 'pcDecoration'
-        },
-        children: [
-          { path: 'pc-theme', component: _import('page/pc-decoration/pcThemeManage'), name: 'pcThemeManage', meta: { title: 'pcThemeManage' }},
-          { path: 'pc-floor', component: _import('page/pc-decoration/pcFloorManage'), name: 'pcFloorManage', meta: { title: 'pcFloorManage' }},
-          { path: 'pc-focus', component: _import('page/pc-decoration/pcFocusManage'), name: 'pcFocusManage', meta: { title: 'pcFocusManage' }}
-        ]
-      },
-      {
-        path: '/page/mobile-decoration',
-        component: _import('page/mobile-decoration/index'),
-        redirect: '/page/mobile-decoration/mobile-theme',
-        name: 'mobile-decoration',
-        meta: {
-          title: 'mobileDecoration'
-        },
-        children: [
-          { path: 'mobile-theme', component: _import('page/mobile-decoration/mobileThemeManage'), name: 'mobileThemeManage', meta: { title: 'mobileThemeManage' }},
-          { path: 'mobile-floor', component: _import('page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' }},
-          { path: 'mobile-focus', component: _import('page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }}
-        ]
-      },
-      {
-        path: '/page/page-setting',
-        component: _import('page/page-setting/index'),
-        redirect: '/page/page-setting/pc-site-menu',
-        name: 'pageSetting',
-        meta: { title: 'pageSetting' },
-        children: [
-          { path: 'pc-site-menu', component: _import('page/page-setting/pcSiteMenu'), name: 'pcSiteMenu', meta: { title: 'pcSiteMenu' }},
-          { path: 'mobile-site-menu', component: _import('page/page-setting/mobileSiteMenu'), name: 'mobileSiteMenu', meta: { title: 'mobileSiteMenu' }},
-          { path: 'hot-keyword', component: _import('page/page-setting/hotKeyword'), name: 'hotKeyword', meta: { title: 'hotKeyword' }},
-          { path: 'help-center', component: _import('page/page-setting/helpCenter'), name: 'helpCenter', meta: { title: 'helpCenter' }},
-          { path: 'mall-announcement', component: _import('page/page-setting/mallAnnouncement'), name: 'mallAnnouncement', meta: { title: 'mallAnnouncement' }},
-          { path: 'contact-mall', component: _import('page/page-setting/contactMall'), name: 'contactMall', meta: { title: 'contactMall' }}
-        ]
-      }
+      { path: 'full-cut', component: _import('promotions/fullCut'), name: 'fullCut', meta: { title: 'fullCut' }},
+      { path: 'single-cut', component: _import('promotions/singleCut'), name: 'singleCut', meta: { title: 'singleCut' }},
+      { path: 'second-half-price', component: _import('promotions/secondHalfPrice'), name: 'secondHalfPrice', meta: { title: 'secondHalfPrice' }},
+      { path: 'discount-manager', component: _import('promotions/discountManager'), name: 'discountManager', meta: { title: 'discountManager' }},
+      { path: 'gift-manager', component: _import('promotions/giftManager'), name: 'giftManager', meta: { title: 'giftManager' }},
+      { path: 'group-buy-manager', component: _import('promotions/groupBuyManager'), name: 'groupBuyManager', meta: { title: 'groupBuyManager' }},
+      { path: 'group-time-limit', component: _import('promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit' }},
+      { path: 'add-time-limit', component: _import('promotions/addTimeLimit'), name: 'addTimeLimit', meta: { title: 'addTimeLimit' }, hidden: true },
+      { path: 'activity-goods-data', component: _import('promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData' }, hidden: true },
+      { path: 'add-group-buy-goods/:goods_id', component: _import('promotions/addGroupBuyGoods'), name: 'addGroupBuyGoods', meta: { title: 'addGroupBuyGoods' }, hidden: true }
     ]
   },
   // 统计
@@ -382,50 +261,5 @@ export const asyncRouterMap = [
       }
     ]
   },
-  // 开发
-  {
-    path: '/development',
-    component: Layout,
-    redirect: '/development/tool-manage/url-mapping',
-    name: 'development',
-    meta: { title: 'development', icon: 'development-manage' },
-    children: [
-      {
-        path: '/development/tool-manage',
-        component: _import('development/tool-manage/index'),
-        redirect: '/development/tool-manage/url-mapping',
-        name: 'toolManage',
-        meta: { title: 'toolManage' },
-        children: [
-          { path: 'url-mapping', component: _import('development/tool-manage/URLMapping'), name: 'urlMapping', meta: { title: 'URLMapping' }},
-          // { path: 'menu-manage', component: _import('development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }},
-          { path: 'data-output', component: _import('development/tool-manage/dataOutput'), name: 'dataOutput', meta: { title: 'dataOutput' }},
-          { path: 'clear-example-data', component: _import('development/tool-manage/clearExampleData'), name: 'clearExampleData', meta: { title: 'clearExampleData' }}
-        ]
-      },
-      {
-        path: '/development/article-manage',
-        component: _import('development/article-manage/index'),
-        redirect: '/development/article-manage/article-list',
-        name: 'articleManage',
-        meta: { title: 'articleManage' },
-        children: [
-          { path: 'article-model', component: _import('development/article-manage/articleModel'), name: 'articleModel', meta: { title: 'articleModel' }},
-          { path: 'article-list', component: _import('development/article-manage/articleList'), name: 'articleList', meta: { title: 'articleList' }}
-        ]
-      },
-      {
-        path: '/development/component-manage',
-        component: _import('development/component-manage/index'),
-        redirect: '/development/component-manage/component-list',
-        name: 'componentManage',
-        meta: { title: 'componentManage' },
-        children: [
-          { path: 'component-list', component: _import('development/component-manage/componentList'), name: 'componentList', meta: { title: 'componentList' }}
-        ]
-      }
-    ]
-  },
-
   { path: '*', redirect: '/404', hidden: true }
 ]

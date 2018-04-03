@@ -5,7 +5,9 @@
     <!--当前模板-->
     <p style="padding: 0 50px;">当前模板:</p>
     <div class="tpl-current-theme">
-      <img :src="tpl_current.theme_image" alt="" class="shop-theme-image choosed-image">
+      <div class="themes-img choosed-image">
+        <img :src="tpl_current.theme_image" alt="" class="shop-theme-image">
+      </div>
       <span class="tpl-name">模板名称:{{tpl_current.theme_name}}</span>
     </div>
     <!--模板列表-->
@@ -15,8 +17,11 @@
       <ul>
         <li v-for="item in tpl_list">
           <div class="tpl-theme">
-            <img :src="item.theme_image" alt="" class="shop-theme-image" @click="chooseTheme(item)"
-                 :class='{"choosed-image":item.theme_id === tpl_choosed_id}'>
+            <div class="themes-img"
+                 :class='{"choosed-image":item.theme_id === tpl_choosed_id}'
+                 @click="chooseTheme(item)">
+              <img :src="item.theme_image" alt="" class="shop-theme-image">
+            </div>
             <span class="tpl-name">模板名称:{{item.theme_name}}</span>
             <span class="tpl-preview" @click="previewImg(item.theme_image)">预览</span>
           </div>
@@ -136,7 +141,6 @@
   /*图片*/
   .shop-theme-image {
     width: 100%;
-    max-height: 250px;
     max-width: 200px;
     cursor: pointer;
   }
@@ -171,6 +175,11 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: flex-start;
+    .themes-img {
+      max-width: 200px;
+      max-height: 250px;
+      overflow: hidden;
+    }
     span {
       text-align: center;
       display: inline-block;
@@ -191,6 +200,11 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: stretch;
+    .themes-img {
+      max-width: 200px;
+      max-height: 250px;
+      overflow: hidden;
+    }
     span {
       text-align: center;
       display: inline-block;
