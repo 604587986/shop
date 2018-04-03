@@ -117,7 +117,7 @@
       /** 获取活动信息*/
       GET_ActivityList() {
         this.loading = true
-        API_activity.getActivityModelList(this.params).then(response => {
+        API_activity.getActivityList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,

@@ -10,7 +10,7 @@ import * as ActivityModel from '@/models/ActivityModel'
  * @param params
  * @returns {Promise<any>}
  */
-export function getActivityModelList(params) {
+export function getActivityList(params) {
   return new Promise((resolve, reject) => {
     request({
       url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/list',
@@ -32,13 +32,35 @@ export function getActivityModelList(params) {
  * @returns {Promise<any>}
  * @constructor
  */
-export function DeleteFullCut(ids, params) {
+export function DeleteActivity(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/${ids}`,
       method: 'delete',
+      loading: false,
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 新增活动
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ * @constructor
+ */
+export function AddActivity(ids, params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/reserve/${ids}`,
+      method: 'post',
       loading: false,
       data: _formData
     }).then(response => {

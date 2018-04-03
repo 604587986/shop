@@ -44,12 +44,12 @@
               <template slot-scope="scope">
                 <el-button
                   size="mini"
-                  type="text"
+                  type="primary"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
                   size="mini"
-                  type="text"
+                  type="danger"
                   @click="handleDeleteFullCut(scope.row)">删除
                 </el-button>
               </template>
@@ -78,7 +78,7 @@
                   <el-date-picker
                     v-model="activityForm.take_effect_time"
                     type="datetimerange"
-                    value-format="yyyy-MM-dd HH:mm:ss"
+                    value-format="timestamp"
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
@@ -89,18 +89,20 @@
                 </el-form-item>
               </div>
               <div class="dicount-set">
-                <el-form-item label="优惠方式">
-                  单品立减 <el-input v-model="activityForm.discount_mode" style="width: 80px;"></el-input> 元
+                <el-form-item label="优惠方式" prop="price_reduction">
+                  单品立减 <el-input v-model.number="activityForm.price_reduction" style="width: 150px;"></el-input> 元
                 </el-form-item>
               </div>
               <div class="activity-goods">
                 <el-form-item label="活动商品">
-                  <el-radio-group v-model="activityForm.activity_goods">
+                  <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
                     <el-radio :label="1">全部商品参与</el-radio>
                     <el-radio :label="0">部分商品参与</el-radio>
                   </el-radio-group>
-                  <!--商品选择器-->
-                  <div></div>
+                  <!--商品表格-->
+                  <div v-show="!goodsShow">
+                     我是表格
+                  </div>
                 </el-form-item>
               </div>
               <el-form-item>
@@ -111,12 +113,16 @@
         </el-row>
       </el-tab-pane>
     </el-tabs>
+    <!--商品选择器-->
+    <en-goods-selector :show="showDialog" :api="goods_api" :defaultData="tableData" :maxLength="maxsize"
+                       @confirm="refreshFunc" @closed="showDialog = false"/>
   </div>
 </template>
 
 <script>
   import * as API_activity from '@/api/activity'
   import { TableLayout, TableSearch, CategoryPicker, UE } from '@/components'
+  import { GoodsSelector } from '@/plugins/selector/vue'
 
   export default {
     name: 'singleCut',
@@ -124,7 +130,8 @@
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
-      [UE.name]: UE
+      [UE.name]: UE,
+      [GoodsSelector.name]: GoodsSelector
     },
     data() {
       return {
@@ -142,6 +149,8 @@
 
         /** 新增满减表单信息*/
         activityForm: {
+          /** 活动ID*/
+          activity_id: '',
 
           /** 活动名称*/
           activity_name: '',
@@ -152,11 +161,14 @@
           /** 活动描述*/
           activity_desc: '',
 
-          /** 优惠方式 单品立减20元*/
-          discount_mode: 20,
+          /** 优惠方式 减价金额*/
+          price_reduction: 20,
+
+          /** 是否全部商品参与*/
+          is_all_joined: '',
 
           /** 活动商品*/
-          activity_goods: ''
+          activity_goods: []
         },
 
         /** 表单校验规则*/
@@ -167,8 +179,28 @@
           ],
           take_effect_time: [
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'change' }
+          ],
+          price_reduction: [
+            { required: true, message: '请填写优惠金额', trigger: 'change' },
+            { type: 'number', message: '请输入数字值' }
           ]
-        }
+        },
+
+        /** 是否显示商品表格*/
+        goodsShow: true,
+
+        /** 表格商品数据*/
+        goodsData: null,
+
+        /** 商品选择器最大长度*/
+        maxsize: 0,
+
+        /** 商品选择器列表api*/
+        goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
+        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+
+        /** 显示/隐藏商品选择器 */
+        showDialog: false
       }
     },
     mounted() {
@@ -185,27 +217,38 @@
         this.GET_ActivityList()
       },
 
-      /** 切换*/
+      /** 切换面板*/
       handleToggleClick(tab, event) {
         this.activeName = tab.name
         if (this.activeName === 'express') {
           this.GET_ActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
+            activity_id: '',
             activity_name: '',
             take_effect_time: [],
             activity_desc: '',
             discount_threshold: '',
-            discount_mode: '',
+            price_reduction: '',
             activity_goods: ''
           }
         }
       },
 
+      /** 是否全选商品*/
+      changeJoinGoods(val) {
+        this.goodsShow = val === 1
+      },
+
+      /** 保存商品选择器选择的商品 */
+      refreshFunc(val) {
+        this.goodsData = val
+      },
+
       /** 获取活动信息*/
       GET_ActivityList() {
         this.loading = true
-        API_activity.getActivityModelList(this.params).then(response => {
+        API_activity.getActivityList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
         }).catch(error => {
@@ -216,7 +259,10 @@
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
-        this.activityForm = {}
+        this.activityForm = {
+          ...row,
+          take_effect_time: [parseInt(row.start_time) * 1000, parseInt(row.end_time) * 1000]
+        }
       },
 
       /** 删除活动 */
@@ -229,7 +275,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.DeleteFullCut(row.activity_id, row).then(response => {
+        API_activity.DeleteActivity(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
           this.GET_ActivityList()
         }).catch(error => {
@@ -242,22 +288,28 @@
       handleAddFullCut() {
         this.activeName = 'add'
         this.activityForm = {
+          activity_id: '',
           activity_name: '',
           take_effect_time: [],
           activity_desc: '',
-          discount_mode: '',
+          price_reduction: '',
           activity_goods: ''
         }
       },
 
-      /** 保存表单设置*/
+      /** 保存表单设置 为此活动保存表单 提交商品goods_id数组列表*/
       saveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log('submit!')
-          } else {
-            console.log('error submit!!')
-            return false
+            const _ids = this.activityForm.activity_id || -1
+            API_activity.AddActivity(_ids, this.activityForm).then(response => {
+              this.$message.success('保存设置成功！')
+              this.activeName === 'singleCutList'
+              this.GET_ActivityList()
+            }).catch(error => {
+              console.log(error)
+              this.$message.error('删除失败，请稍后再试！')
+            })
           }
         })
       }

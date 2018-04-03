@@ -44,12 +44,12 @@
               <template slot-scope="scope">
                 <el-button
                   size="mini"
-                  type="text"
+                  type="primary"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
                   size="mini"
-                  type="text"
+                  type="danger"
                   @click="handleDeleteFullCut(scope.row)">删除
                 </el-button>
               </template>
@@ -142,6 +142,8 @@
 
         /** 新增满减表单信息*/
         activityForm: {
+          /** 活动ID*/
+          activity_id: '',
 
           /** 活动名称*/
           activity_name: '',
@@ -192,6 +194,7 @@
           this.GET_ActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
+            activity_id: '',
             activity_name: '',
             take_effect_time: [],
             activity_desc: '',
@@ -205,7 +208,7 @@
       /** 获取活动信息*/
       GET_ActivityList() {
         this.loading = true
-        API_activity.getActivityModelList(this.params).then(response => {
+        API_activity.getActivityList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
         }).catch(error => {
@@ -229,7 +232,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.DeleteFullCut(row.activity_id, row).then(response => {
+        API_activity.DeleteActivity(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
           this.GET_ActivityList()
         }).catch(error => {
@@ -254,7 +257,14 @@
       saveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log('submit!')
+            API_activity.AddActivity(this.activityForm.activity_id, this.activityForm).then(response => {
+              this.$message.success('保存设置成功！')
+              this.activeName === 'secondHalfPrice'
+              this.GET_ActivityList()
+            }).catch(error => {
+              console.log(error)
+              this.$message.error('删除失败，请稍后再试！')
+            })
           } else {
             console.log('error submit!!')
             return false
