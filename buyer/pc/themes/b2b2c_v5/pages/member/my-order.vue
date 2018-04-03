@@ -111,6 +111,9 @@
         orderData: 'order/orderData'
       })
     },
+    created() {
+      if (!this.orderData) this.getOrderData(this.params).then(this.MixinScrollToTop)
+    },
     methods: {
       /** 订单筛选栏点击 */
       handleClickNav(nav) {
