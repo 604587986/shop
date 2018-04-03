@@ -115,9 +115,13 @@
         /** 团购状态*/
         groupBuyStatus: [
           { group_buy_status_id: 0, group_buy_status_name: '全部团购' },
+
           { group_buy_status_id: 1, group_buy_status_name: '未审核' },
+
           { group_buy_status_id: 2, group_buy_status_name: '审核失败' },
+
           { group_buy_status_id: 3, group_buy_status_name: '已通过' },
+
           { group_buy_status_id: 4, group_buy_status_name: '已结束' }
         ]
       }

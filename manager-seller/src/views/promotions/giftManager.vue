@@ -132,22 +132,22 @@
         /** 赠品编辑表单*/
         giftForm: {
 
-          // 赠品名称
+          /** 赠品名称 */
           gift_name: '',
 
-          // 赠品图片
+          /** 赠品图片 */
           gift_image: '',
 
-          // 赠品价格
+          /** 赠品价格 */
           gift_price: 2,
 
-          // 实际库存
+          /** 实际库存 */
           gift_real_stock: 8,
 
-          // 可用库存
+          /** 可用库存 */
           gift_usable_stock: 2,
 
-          // 创建时间
+          /** 创建时间 */
           gift_creat_time: ''
         },
 

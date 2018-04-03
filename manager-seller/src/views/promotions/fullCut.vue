@@ -161,11 +161,23 @@
 
         /** 新增满减表单信息*/
         activityForm: {
+
+          /** 活动名称*/
           activity_name: '',
+
+          /** 生效时间*/
           take_effect_time: [],
+
+          /** 活动描述*/
           activity_desc: '',
+
+          /** 优惠门槛*/
           discount_threshold: '',
+
+          /** 优惠方式*/
           discount_mode: [],
+
+          /** 活动商品*/
           activity_goods: ''
         },
 
