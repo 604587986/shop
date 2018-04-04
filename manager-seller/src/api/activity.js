@@ -54,7 +54,29 @@ export function deleteActivity(ids, params) {
  * @returns {Promise<any>}
  * @constructor
  */
-export function addActivity(ids, params) {
+export function addActivity(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/add',
+      method: 'post',
+      loading: false,
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 保存活动 更新
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ * @constructor
+ */
+export function saveActivity(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
@@ -76,7 +98,7 @@ export function addActivity(ids, params) {
  * @returns {Promise<any>}
  * @constructor
  */
-export function ActivitysignUp(ids, params) {
+export function signUpActivity(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
