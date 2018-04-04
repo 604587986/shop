@@ -50,6 +50,7 @@
   .member-layout {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
   }
   .member-nav {
     position: relative;
