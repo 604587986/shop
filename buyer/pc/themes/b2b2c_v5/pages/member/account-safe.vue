@@ -1,10 +1,10 @@
 <template>
-  <h1>account-security</h1>
+  <nuxt-child/>
 </template>
 
 <script>
   export default {
-    name: 'account-security'
+    name: 'account-safe'
   }
 </script>
 
