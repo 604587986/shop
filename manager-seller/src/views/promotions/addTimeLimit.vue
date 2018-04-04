@@ -131,7 +131,7 @@
       /** 确定报名*/
       signUp() {
         /** 构造提交表单参数*/
-        API_activity.ActivitysignUp(this.signForm).then(response => {
+        API_activity.signUpActivity(this.signForm).then(response => {
           this.$message.success('报名成功')
           this.$router.push({ path: '/promotions/activity-goods-data' })
         }).catch(error => {

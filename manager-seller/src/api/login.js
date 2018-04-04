@@ -16,7 +16,7 @@ export function loginByUsername(username, password, validcode) {
   const _formData = new FormData()
   Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return request({
-    url: 'core/admin/admin-user/login.do',
+    url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/login',
     method: 'post',
     loading: false,
     data: _formData

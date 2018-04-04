@@ -16,7 +16,7 @@
             <svg-icon slot="prefix" class="el-input__icon" icon-class="password"/>
           </el-input>
         </el-form-item>
-        <el-form-item prop="validcode">
+        <el-form-item prop="">
           <el-input v-model="loginForm.validcode" @keyup.native.enter="submitLogin" :placeholder="translateKey('validcode')" :maxlength="4" clearable>
             <template slot="append">
               <img class="login-validcode-img" :src="validcodeImg" @click="changeValidcode">

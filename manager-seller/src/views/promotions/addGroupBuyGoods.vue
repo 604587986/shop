@@ -114,7 +114,7 @@
           并同意</el-checkbox>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="saveGroupBuyGoods">提交</el-button>
+        <el-button type="primary" @click="handleSaveGroupBuyGoods">提交</el-button>
       </el-form-item>
     </el-form>
     <!--商品选择器-->
@@ -127,10 +127,39 @@
     <el-dialog
       title="用户注册协议"
       :visible.sync="showAgreement"
-      width="30%"
+      width="50%"
       center
       :before-close="handleAgreementClose">
-      <span>这是一段信息</span>
+      <div>
+        <h4>甲乙双方确认并同意本条款中对于各名词的解释及定义，并同意按照该定义履行相关义务</h4>
+        <p>1、团购：通过互联网渠道，一定数量的消费者组团，以较低价格购买同一种商品/服务的商业活动。</p>
+
+        <p> 2、javashop商城：系提供团购交易服务的网络服务平台。</p>
+
+        <p> 3、团购信息：甲方通过javashop商城发布的，在javashop商城网页面上展示的甲方商品/服务信息(如团购价、商品/服务描述、电子券有效期、团购规则等)。该信息为甲方就前述商品/服务向团购用户发出的要约， 一旦团购用户通过javashop商城确认同意购买甲方该商品/服务，即视为甲方与团购用户达成了团购合同。</p>
+
+        <p> 4、团购订单：即团购合同，系团购用户通过美团网与甲方间达成的购买商品/服务的合同。</p>
+
+        <p> 5、优惠券：指甲方提供给团购用户的商品/服务的消费凭证，团购用户可以凭其获取相应的商品/服务; 优惠券的形式包括但不限于javashop商城页面、短信、电子邮件等。</p>
+
+        <p> 6、优惠券消费数：团购用户已实际消费的优惠券数量。因甲方提供的商品/服务需要在javashop商城验证平台上进行验证， 优惠券消费数以javashop商城验证平台上已标记消费的数量为准。</p>
+
+        <p> 7、门店价：签订本合同时，甲方提供的商品/服务不参加团购活动时(即在实体经营场所销售/提供时)的单份销售价格。</p>
+
+        <p> 8、团购价：甲方提供的商品/服务参加团购活动时的单份销售价格。</p>
+
+        <p> 9、代收团购款项：javashop商城实际经营者代甲方收取的团购用户通过javashop商城向甲方支付的已实际消费的优惠券对应的款项。该款项由javashop商城实际经营者代收后转付至乙方，乙方扣除本合同约定的服务费后支付给甲方。计算标准为：团购价乘以优惠券消费数。</p>
+
+        <p> 10、服务费：为了实现甲方进入javashop商城开展经营活动、进行团购交易之目的，乙方为甲方提供本合同第二条约定之服务收取的相关费用。</p>
+
+        <p> 11、服务费价格：团购用户每实际消费一张优惠券，甲方应向乙方支付的服务费数额。</p>
+
+        <p> 12、结算价：针对每一张已实际消费的优惠券，乙方于代收团购款项中扣除应收取的服务费后，应支付给甲方的数额。计算标准为：团购价减服务费价格。</p>
+
+        <p> 13、代收净额：对应团购用户实际消费的优惠券数量，乙方应支付给甲方的实际结算款项。计算标准为：结算价乘以优惠券消费数。</p>
+
+        <p>  14、本协议仅为javashop商城团购协议示例，不作为正式协议使用。</p>
+      </div>
       <span slot="footer" class="dialog-footer">
     <el-button type="danger" @click="showAgreement = false, allowAgreement = true ">同意并继续</el-button>
   </span>
@@ -139,7 +168,7 @@
 </template>
 
 <script>
-  import * as API_activityGoods from '@/api/activityGoods'
+  import * as API_groupBuy from '@/api/groupBuy'
   import { UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
@@ -246,10 +275,7 @@
       }
     },
     mounted() {
-      const _id = this.$route.params.goods_id
-      if (_id && _id !== -1) {
-        // this.GET_GroupBuyGoodsDetails(_id)
-      }
+      this.$route.params.goods_id && this.GET_GroupBuyGoodsDetails(this.$route.params.goods_id)
       this.GET_AllGroupBuyActivitys()
     },
     methods: {
@@ -260,7 +286,7 @@
 
       /** 获取团购商品详情*/
       GET_GroupBuyGoodsDetails(id) {
-        API_activityGoods.getGroupBuyGoodsDetails(id).then(response => {
+        API_groupBuy.getGroupBuyGoodsDetails(id).then(response => {
           this.gruopBuyForm = { ...response.data }
         }).catch(error => {
           console.log(error)
@@ -292,14 +318,22 @@
       },
 
       /** 保存团购商品*/
-      saveGroupBuyGoods(ids) {
-        const _ids = ids || ''
-        API_activityGoods.saveGroupBuyGoods(_ids, this.gruopBuyForm).then(response => {
-          this.$message.success('提交成功')
-        }).catch(error => {
-          console.log(error)
-          this.$message.error('提交失败，请稍后再试！')
-        })
+      handleSaveGroupBuyGoods(ids) {
+        if (this.$route.params.goods_id) {
+          API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(response => {
+            this.$message.success('提交成功')
+          }).catch(error => {
+            console.log(error)
+            this.$message.error('提交失败，请稍后再试！')
+          })
+        } else {
+          API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(response => {
+            this.$message.success('提交成功')
+          }).catch(error => {
+            console.log(error)
+            this.$message.error('提交失败，请稍后再试！')
+          })
+        }
       }
     }
   }

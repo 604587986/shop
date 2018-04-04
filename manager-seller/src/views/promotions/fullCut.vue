@@ -44,12 +44,12 @@
               <template slot-scope="scope">
                 <el-button
                   size="mini"
-                  type="text"
+                  type="primary"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
                   size="mini"
-                  type="text"
+                  type="danger"
                   @click="handleDeleteFullCut(scope.row)">删除
                 </el-button>
               </template>
@@ -123,7 +123,7 @@
                 </el-form-item>
               </div>
               <el-form-item>
-                <el-button type="primary" @click="saveActivity('activityForm')">保存设置</el-button>
+                <el-button type="primary" @click="handleSaveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -161,11 +161,25 @@
 
         /** 新增满减表单信息*/
         activityForm: {
+          /** 活动ID*/
+          activity_id: '',
+
+          /** 活动名称*/
           activity_name: '',
+
+          /** 生效时间*/
           take_effect_time: [],
+
+          /** 活动描述*/
           activity_desc: '',
+
+          /** 优惠门槛*/
           discount_threshold: '',
+
+          /** 优惠方式*/
           discount_mode: [],
+
+          /** 活动商品*/
           activity_goods: ''
         },
 
@@ -193,7 +207,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          goods_status: data
+          keyword: data
         }
         this.GET_ActivityList()
       },
@@ -205,11 +219,20 @@
           this.GET_ActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
+            activity_id: '',
+
             activity_name: '',
-            take_effect_time: [],
-            activity_desc: '',
-            discount_threshold: '',
+
             discount_mode: '',
+
+            take_effect_time: [],
+
+            activity_desc: '',
+
+            discount_threshold: '',
+
+            is_all_joined: '',
+
             activity_goods: ''
           }
         }
@@ -218,7 +241,7 @@
       /** 获取活动信息*/
       GET_ActivityList() {
         this.loading = true
-        API_activity.getActivityModelList(this.params).then(response => {
+        API_activity.getActivityList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
         }).catch(error => {
@@ -229,10 +252,12 @@
       /** 编辑满减优惠 */
       handleEditMould(row) {
         this.activeName = 'add'
-        this.activityForm = {}
+        this.activityForm = {
+          ...row
+        }
       },
 
-      /** 删除满减优惠 */
+      /** 删除满减优惠活动 */
       handleDeleteFullCut(row) {
         this.$confirm('确认删除当前项？', '确认信息')
           .then(() => this.toDelActivity(row))
@@ -242,7 +267,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.DeleteFullCut(row.activity_id, row).then(response => {
+        API_activity.deleteActivity(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
           this.GET_ActivityList()
         }).catch(error => {
@@ -255,23 +280,47 @@
       handleAddFullCut() {
         this.activeName = 'add'
         this.activityForm = {
+          activity_id: '',
+
           activity_name: '',
-          take_effect_time: [],
-          activity_desc: '',
-          discount_threshold: '',
+
           discount_mode: '',
+
+          take_effect_time: [],
+
+          activity_desc: '',
+
+          discount_threshold: '',
+
+          is_all_joined: '',
+
           activity_goods: ''
         }
       },
 
       /** 保存表单设置*/
-      saveActivity(formName) {
+      handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log('submit!')
-          } else {
-            console.log('error submit!!')
-            return false
+            if (this.activityForm.activity_id) {
+              API_activity.saveActivity(this.activityForm.activity_id, this.activityForm).then(response => {
+                this.$message.success('保存设置成功！')
+                this.activeName === 'express'
+                this.GET_ActivityList()
+              }).catch(error => {
+                console.log(error)
+                this.$message.error('保存设置失败，请稍后再试！')
+              })
+            } else {
+              API_activity.addActivity(this.activityForm).then(response => {
+                this.$message.success('保存设置成功！')
+                this.activeName === 'express'
+                this.GET_ActivityList()
+              }).catch(error => {
+                console.log(error)
+                this.$message.error('保存设置失败，请稍后再试！')
+              })
+            }
           }
         })
       }

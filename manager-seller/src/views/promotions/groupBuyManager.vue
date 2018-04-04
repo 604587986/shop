@@ -16,7 +16,7 @@
               :value="item.group_buy_status_id">
             </el-option>
           </el-select>
-          <el-button type="primary" @click="addGroupBuyGoods">新增团购商品</el-button>
+          <el-button type="primary" @click="handleAddGroupBuyGoods">新增团购商品</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent"/>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import * as API_activityGoods from '@/api/activityGoods'
+  import * as API_groupBuy from '@/api/groupBuy'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
@@ -115,9 +115,13 @@
         /** 团购状态*/
         groupBuyStatus: [
           { group_buy_status_id: 0, group_buy_status_name: '全部团购' },
+
           { group_buy_status_id: 1, group_buy_status_name: '未审核' },
+
           { group_buy_status_id: 2, group_buy_status_name: '审核失败' },
+
           { group_buy_status_id: 3, group_buy_status_name: '已通过' },
+
           { group_buy_status_id: 4, group_buy_status_name: '已结束' }
         ]
       }
@@ -159,7 +163,7 @@
 
       GET_ActivityGoodsList() {
         this.loading = true
-        API_activityGoods.getActivityGoddsList(this.params).then(response => {
+        API_groupBuy.getGroupBuyGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,
@@ -174,14 +178,13 @@
       },
 
       /** 新增团购商品商品 */
-      addGroupBuyGoods() {
-        const _goods_id = -1
-        this.$router.push({ path: `add-group-buy-goods/${_goods_id}` })
+      handleAddGroupBuyGoods() {
+        this.$router.push({ path: 'add-group-buy-goods' })
       },
 
       /** 编辑团购商品 */
       handleEditGroupGoods(row) {
-        this.$router.push({ path: `add-group-buy-goods/${row.goods_id}` })
+        this.$router.push({ path: `edit-group-buy-goods/${row.goods_id}` })
       },
 
       /** 删除团购商品 */
@@ -191,7 +194,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          API_activityGoods.delActivityGroupGoods(row.goods_id, row).then(() => {
+          API_groupBuy.deleteGroupBuyGoods(row.goods_id, row).then(() => {
             this.GET_ActivityGoodsList()
             this.$message.success('删除团购商品成功！')
           }).catch(() => this.$message.error('删除团购商品出错，请稍后再试！'))

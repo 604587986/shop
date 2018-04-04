@@ -29,35 +29,39 @@ export class Activity extends DataModel {
   @ServerName('activity_status')
   activity_status
 
-  /** 开始时间 */
+  /** 活动开始时间 */
   @ServerName('start_time')
   start_time
 
-  /** 结束时间 */
+  /** 活动结束时间 */
   @ServerName('end_time')
   end_time
 
-  /** 减价金额 */
+  /** 优惠减价金额 （满减/单减）*/
   @ServerName('price_reduction')
   price_reduction
 
-  /** 报名截止时间 */
+  /** 活动报名截止时间 */
   @ServerName('sign_end_time')
   sign_end_time
 
-  /** 报名条件 */
+  /** 活动报名条件 */
   @ServerName('sign_condition')
   sign_condition
 
-  /** 申请规则 */
+  /** 活动申请规则 */
   @ServerName('application_rules')
   application_rules
 
-  /** 抢购阶段 */
+  /** （限时抢购用到）抢购阶段 */
   @ServerName('panic_buy')
   panic_buy
 
-  /** 是否已报名  1已报名 0未报名*/
+  /** 报名状态  1已报名 0未报名*/
   @ServerName('is_signed')
   is_signed
+
+  /** 是否是全部商品参与  1是 0否*/
+  @ServerName('is_all_joined')
+  is_all_joined
 }

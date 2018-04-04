@@ -39,6 +39,7 @@ export default {
     addTimeLimit: 'add Time Limit',
     activityGoodsData: 'activity Goods Data',
     addGroupBuyGoods: 'add Group Buy Goods',
+    editGroupBuyGoods: 'edit Group Buy Goods',
 
     statistics: 'Statistics Manage',
     memberAnalysis: 'Member Analysis',

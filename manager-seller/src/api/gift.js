@@ -1,43 +1,42 @@
 /**
- * 优惠券相关API
+ * 赠品管理API
  */
 
 import request from '@/utils/request'
-import * as CouponModel from '@/models/CouponModel'
+import * as GiftModel from '@/models/GiftModel'
 
 /**
- * 获取优惠券模型列表
+ * 获取赠品品列表
  * @param params
  * @returns {Promise<any>}
  */
-export function getCouponsList(params) {
+export function getGiftsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/list',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/list',
       method: 'get',
       loading: false,
       params
     }).then(response => {
       const _response = response
-      _response.data = new CouponModel.Coupon().map(response.data)
+      _response.data = new GiftModel.Gift().map(_response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })
 }
 
 /**
- * 删除优惠券
+ * 删除赠品
  * @param ids
  * @param params
  * @returns {Promise<any>}
- * @constructor
  */
-export function deleteCoupons(ids, params) {
+export function deleteGifts(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/${ids}`,
       method: 'delete',
       loading: false,
       data: _formData
@@ -48,18 +47,17 @@ export function deleteCoupons(ids, params) {
 }
 
 /**
- * 保存优惠券 更新操作
+ * 保存赠品更新
  * @param ids
  * @param params
  * @returns {Promise<any>}
- * @constructor
  */
-export function modifyCoupons(ids, params) {
+export function saveGifts(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/reserve/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/reserve/${ids}`,
       method: 'post',
       loading: false,
       data: _formData
@@ -70,17 +68,16 @@ export function modifyCoupons(ids, params) {
 }
 
 /**
- * 新增优惠券
+ * 新增赠品
  * @param params
  * @returns {Promise<any>}
- * @constructor
  */
-export function addCoupons(params) {
+export function addGifts(params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/increase',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/increase',
       method: 'post',
       loading: false,
       data: _formData
