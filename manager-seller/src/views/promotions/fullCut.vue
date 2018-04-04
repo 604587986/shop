@@ -123,7 +123,7 @@
                 </el-form-item>
               </div>
               <el-form-item>
-                <el-button type="primary" @click="saveActivity('activityForm')">保存设置</el-button>
+                <el-button type="primary" @click="handleSaveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -257,7 +257,7 @@
         }
       },
 
-      /** 删除满减优惠 */
+      /** 删除满减优惠活动 */
       handleDeleteFullCut(row) {
         this.$confirm('确认删除当前项？', '确认信息')
           .then(() => this.toDelActivity(row))
@@ -267,7 +267,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.DeleteActivity(row.activity_id, row).then(response => {
+        API_activity.deleteActivity(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
           this.GET_ActivityList()
         }).catch(error => {
@@ -299,20 +299,28 @@
       },
 
       /** 保存表单设置*/
-      saveActivity(formName) {
+      handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_activity.AddActivity(this.activityForm.activity_id, this.activityForm).then(response => {
-              this.$message.success('保存设置成功！')
-              this.activeName === 'express'
-              this.GET_ActivityList()
-            }).catch(error => {
-              console.log(error)
-              this.$message.error('删除失败，请稍后再试！')
-            })
-          } else {
-            console.log('error submit!!')
-            return false
+            if (this.activityForm.activity_id) {
+              API_activity.saveActivity(this.activityForm.activity_id, this.activityForm).then(response => {
+                this.$message.success('保存设置成功！')
+                this.activeName === 'express'
+                this.GET_ActivityList()
+              }).catch(error => {
+                console.log(error)
+                this.$message.error('保存设置失败，请稍后再试！')
+              })
+            } else {
+              API_activity.addActivity(this.activityForm).then(response => {
+                this.$message.success('保存设置成功！')
+                this.activeName === 'express'
+                this.GET_ActivityList()
+              }).catch(error => {
+                console.log(error)
+                this.$message.error('保存设置失败，请稍后再试！')
+              })
+            }
           }
         })
       }

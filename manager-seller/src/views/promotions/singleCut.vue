@@ -10,7 +10,7 @@
         >
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
-              <el-button type="success" @click="handleAddFullCut">新增</el-button>
+              <el-button type="success" @click="handleAddSingleCut">新增</el-button>
             </div>
             <div class="toolbar-search">
               <en-table-search @search="searchEvent"/>
@@ -100,13 +100,49 @@
                     <el-radio :label="0">部分商品参与</el-radio>
                   </el-radio-group>
                   <!--商品表格-->
-                  <div v-show="!goodsShow">
-                     我是表格
-                  </div>
+                  <en-tabel-layout
+                      toolbar
+                      :tableData="goodsData"
+                      :loading="loading"
+                      v-show="!goodsShow"
+                    >
+                      <div slot="toolbar" class="inner-toolbar">
+                        <div class="toolbar-btns">
+                          <el-button type="success" @click="showGoodsSelector">选择商品</el-button>
+                          <el-button type="danger" @click="">批量取消</el-button>
+                        </div>
+                      </div>
+                      <template slot="table-columns">
+                        <!--商品信息-->
+                        <el-table-column  label="商品信息">
+                          <template slot-scope="scope">
+                            <div>
+                              <img :src="scope.row.thumbnail" alt="">
+                              <div>
+                                <span>{{ scope.row.goods_name }}</span>
+                                <span>{{ scope.row.price | unitPrice('￥') }}</span>
+                              </div>
+                            </div>
+                          </template>
+                        </el-table-column>
+                        <!--库存-->
+                        <el-table-column prop="enable_quantity" label="库存" />
+                        <!--操作-->
+                        <el-table-column label="操作" width="150">
+                          <template slot-scope="scope">
+                            <el-button
+                              size="mini"
+                              type="primary"
+                              @click="handleCancleJoin(scope.row)">取消参加
+                            </el-button>
+                          </template>
+                        </el-table-column>
+                      </template>
+                    </en-tabel-layout>
                 </el-form-item>
               </div>
               <el-form-item>
-                <el-button type="primary" @click="saveActivity('activityForm')">保存设置</el-button>
+                <el-button type="success" @click="saveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -242,7 +278,18 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
+        console.log(val, 154646)
         this.goodsData = val
+      },
+
+      /** 显示商品选择器*/
+      showGoodsSelector() {
+        this.showDialog = true
+      },
+
+      /** 取消参加*/
+      handleCancleJoin(row) {
+
       },
 
       /** 获取活动信息*/
@@ -275,7 +322,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.DeleteActivity(row.activity_id, row).then(response => {
+        API_activity.deleteActivity(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
           this.GET_ActivityList()
         }).catch(error => {
@@ -285,7 +332,7 @@
       },
 
       /** 新增 */
-      handleAddFullCut() {
+      handleAddSingleCut() {
         this.activeName = 'add'
         this.activityForm = {
           activity_id: '',
@@ -297,12 +344,12 @@
         }
       },
 
-      /** 保存表单设置 为此活动保存表单 提交商品goods_id数组列表*/
+      /** 保存表单设置 为此活动保存表单 提交商品goods_id 字符串 用逗号分隔*/
       saveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const _ids = this.activityForm.activity_id || -1
-            API_activity.AddActivity(_ids, this.activityForm).then(response => {
+            API_activity.addActivity(_ids, this.activityForm).then(response => {
               this.$message.success('保存设置成功！')
               this.activeName === 'singleCutList'
               this.GET_ActivityList()
@@ -337,7 +384,7 @@
     background-color: #f8f8f8;
   }
   .activity-goods {
-    height: 80px;
+    min-height: 80px;
     margin: 10px 0 10px 10px;
     padding: 10px;
     background-color: #f8f8f8;

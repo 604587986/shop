@@ -13,7 +13,7 @@ import * as ActivityModel from '@/models/ActivityModel'
 export function getActivityList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/list',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/list',
       method: 'get',
       loading: false,
       params
@@ -37,7 +37,7 @@ export function deleteActivity(ids, params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/${ids}`,
       method: 'delete',
       loading: false,
       data: _formData
@@ -59,7 +59,7 @@ export function addActivity(params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/add',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/increase',
       method: 'post',
       loading: false,
       data: _formData
@@ -81,7 +81,7 @@ export function saveActivity(ids, params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/reserve/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/reserve/${ids}`,
       method: 'post',
       loading: false,
       data: _formData
@@ -103,7 +103,7 @@ export function signUpActivity(ids, params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/sign/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/sign/${ids}`,
       method: 'post',
       loading: false,
       data: _formData

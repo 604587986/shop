@@ -10,7 +10,7 @@
         >
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
-              <el-button type="success" @click="handleAddFullCut">新增</el-button>
+              <el-button type="success" @click="handleAddSeconedHalf">新增</el-button>
             </div>
             <div class="toolbar-search">
               <en-table-search @search="searchEvent"/>
@@ -104,7 +104,7 @@
                 </el-form-item>
               </div>
               <el-form-item>
-                <el-button type="primary" @click="saveActivity('activityForm')">保存设置</el-button>
+                <el-button type="primary" @click="handleSaveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -232,7 +232,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.DeleteActivity(row.activity_id, row).then(response => {
+        API_activity.deleteActivity(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
           this.GET_ActivityList()
         }).catch(error => {
@@ -242,7 +242,7 @@
       },
 
       /** 新增 */
-      handleAddFullCut() {
+      handleAddSeconedHalf() {
         this.activeName = 'add'
         this.activityForm = {
           activity_name: '',
@@ -254,20 +254,28 @@
       },
 
       /** 保存表单设置*/
-      saveActivity(formName) {
+      handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_activity.AddActivity(this.activityForm.activity_id, this.activityForm).then(response => {
-              this.$message.success('保存设置成功！')
-              this.activeName === 'secondHalfPrice'
-              this.GET_ActivityList()
-            }).catch(error => {
-              console.log(error)
-              this.$message.error('删除失败，请稍后再试！')
-            })
-          } else {
-            console.log('error submit!!')
-            return false
+            if (this.activityForm.activity_id) {
+              API_activity.saveActivity(this.activityForm.activity_id, this.activityForm).then(response => {
+                this.$message.success('保存设置成功！')
+                this.activeName === 'seconedHalfList'
+                this.GET_ActivityList()
+              }).catch(error => {
+                console.log(error)
+                this.$message.error('保存设置失败，请稍后再试！')
+              })
+            } else {
+              API_activity.addActivity(this.activityForm).then(response => {
+                this.$message.success('保存设置成功！')
+                this.activeName === 'seconedHalfList'
+                this.GET_ActivityList()
+              }).catch(error => {
+                console.log(error)
+                this.$message.error('保存设置失败，请稍后再试！')
+              })
+            }
           }
         })
       }
