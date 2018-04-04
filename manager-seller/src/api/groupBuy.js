@@ -3,7 +3,7 @@
  */
 
 import request from '@/utils/request'
-import * as ActivityGoodsModel from '@/models/ActivityGoodsModel'
+import * as GroupBuyModel from '../models/GroupBuyModel'
 
 /**
  * 获取团购商品列表
@@ -19,7 +19,7 @@ export function getGroupBuyGoodsList(params) {
       params
     }).then(response => {
       const _response = response
-      _response.data = new ActivityGoodsModel.ActivityGoods().map(response.data)
+      _response.data = new GroupBuyModel.GroupBuy().map(response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })
