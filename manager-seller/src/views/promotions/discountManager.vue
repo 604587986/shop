@@ -8,7 +8,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-            <el-button type="success" @click="addCoupon">新增</el-button>
+            <el-button type="success" @click="handleAddCoupon">新增</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search
@@ -108,7 +108,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="couponShow = false">取 消</el-button>
-        <el-button type="primary" @click="reserveCoupon">确 定</el-button>
+        <el-button type="primary" @click="handleReserveCoupon">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -216,7 +216,7 @@
 
       GET_CouponsList() {
         this.loading = true
-        API_coupon.getCouponList(this.params).then(response => {
+        API_coupon.getCouponsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,
@@ -247,19 +247,25 @@
       },
 
       /** 保存优惠券*/
-      reserveCoupon() {
-        const _ids = this.currentcouponId || ''
+      handleReserveCoupon() {
         const _params = {
           ...this.couponForm,
           coupon_time_start: this.couponForm.coupon_time_limit[0],
           coupon_time_end: this.couponForm.coupon_time_limit[1]
         }
-        console.log(_params, 333)
-        API_coupon.modifyCoupon(_ids, _params).then(() => {
-          this.couponShow = false
-          this.$message.success('保存成功！')
-          this.GET_CouponsList()
-        }).catch(() => this.$message.error('保存失败，请稍后再试！'))
+        if (this.currentcouponId) {
+          API_coupon.modifyCoupons(this.currentcouponId, _params).then(() => {
+            this.couponShow = false
+            this.$message.success('保存成功！')
+            this.GET_CouponsList()
+          }).catch(() => this.$message.error('保存失败，请稍后再试！'))
+        } else {
+          API_coupon.addCoupons(_params).then(() => {
+            this.couponShow = false
+            this.$message.success('保存成功！')
+            this.GET_CouponsList()
+          }).catch(() => this.$message.error('保存失败，请稍后再试！'))
+        }
       },
 
       /** 修改*/
@@ -273,7 +279,7 @@
       },
 
       /** 新增优惠券*/
-      addCoupon() {
+      handleAddCoupon() {
         this.couponShow = true
         this.currentcouponId = ''
         this.couponForm = {
