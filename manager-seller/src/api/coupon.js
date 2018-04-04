@@ -13,7 +13,7 @@ import * as CouponModel from '@/models/CouponModel'
 export function getCouponsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupon/list',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/list',
       method: 'get',
       loading: false,
       params
@@ -37,7 +37,7 @@ export function deleteCoupons(ids, params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupon/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/${ids}`,
       method: 'delete',
       loading: false,
       data: _formData
@@ -48,7 +48,7 @@ export function deleteCoupons(ids, params) {
 }
 
 /**
- * 修改优惠券 更新操作
+ * 保存优惠券 更新操作
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -59,7 +59,7 @@ export function modifyCoupons(ids, params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activity/sign/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/reserve/${ids}`,
       method: 'post',
       loading: false,
       data: _formData
