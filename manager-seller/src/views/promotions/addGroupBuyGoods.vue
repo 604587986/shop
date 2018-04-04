@@ -114,7 +114,7 @@
           并同意</el-checkbox>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="saveGroupBuyGoods">提交</el-button>
+        <el-button type="primary" @click="handleSaveGroupBuyGoods">提交</el-button>
       </el-form-item>
     </el-form>
     <!--商品选择器-->
@@ -168,7 +168,7 @@
 </template>
 
 <script>
-  import * as API_activityGoods from '@/api/activityGoods'
+  import * as API_groupBuy from '@/api/groupBuy'
   import { UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
@@ -275,10 +275,7 @@
       }
     },
     mounted() {
-      const _id = this.$route.params.goods_id
-      if (_id && _id !== -1) {
-        // this.GET_GroupBuyGoodsDetails(_id)
-      }
+      this.$route.params.goods_id && this.GET_GroupBuyGoodsDetails(this.$route.params.goods_id)
       this.GET_AllGroupBuyActivitys()
     },
     methods: {
@@ -289,7 +286,7 @@
 
       /** 获取团购商品详情*/
       GET_GroupBuyGoodsDetails(id) {
-        API_activityGoods.getGroupBuyGoodsDetails(id).then(response => {
+        API_groupBuy.getGroupBuyGoodsDetails(id).then(response => {
           this.gruopBuyForm = { ...response.data }
         }).catch(error => {
           console.log(error)
@@ -321,14 +318,22 @@
       },
 
       /** 保存团购商品*/
-      saveGroupBuyGoods(ids) {
-        const _ids = ids || ''
-        API_activityGoods.saveGroupBuyGoods(_ids, this.gruopBuyForm).then(response => {
-          this.$message.success('提交成功')
-        }).catch(error => {
-          console.log(error)
-          this.$message.error('提交失败，请稍后再试！')
-        })
+      handleSaveGroupBuyGoods(ids) {
+        if (this.$route.params.goods_id) {
+          API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(response => {
+            this.$message.success('提交成功')
+          }).catch(error => {
+            console.log(error)
+            this.$message.error('提交失败，请稍后再试！')
+          })
+        } else {
+          API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(response => {
+            this.$message.success('提交成功')
+          }).catch(error => {
+            console.log(error)
+            this.$message.error('提交失败，请稍后再试！')
+          })
+        }
       }
     }
   }
