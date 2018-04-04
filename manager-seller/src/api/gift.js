@@ -69,7 +69,6 @@ export function saveGifts(ids, params) {
 
 /**
  * 新增赠品
- * @param ids
  * @param params
  * @returns {Promise<any>}
  */
