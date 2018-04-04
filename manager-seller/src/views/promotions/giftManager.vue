@@ -8,7 +8,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button type="success" @click="addGift">新增</el-button>
+          <el-button type="success" @click="handelAddGifts">新增</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
@@ -89,7 +89,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="giftShow = false">取 消</el-button>
-        <el-button type="primary" @click="reserveGift">确 定</el-button>
+        <el-button type="primary" @click="handleReserveGifts">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -181,6 +181,7 @@
         this.GET_GiftsList()
       },
 
+      /** 获取赠品列表*/
       GET_GiftsList() {
         this.loading = true
         API_Gift.getGiftsList(this.params).then(response => {
@@ -204,7 +205,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          API_Gift.deleteGift(row.gift_id, row).then(() => {
+          API_Gift.deleteGifts(row.gift_id, row).then(() => {
             this.GET_GiftsList()
             this.$message.success('删除赠品成功！')
           }).catch(() => this.$message.error('删除赠品出错，请稍后再试！'))
@@ -214,16 +215,22 @@
       },
 
       /** 保存赠品*/
-      reserveGift() {
-        const _ids = this.currentGiftId || '-1'
-        const _params = {
-          ...this.giftForm
+      handleReserveGifts() {
+        if (this.currentGiftId) {
+          // 更新
+          API_Gift.saveGifts(this.currentGiftId, this.giftForm).then(() => {
+            this.giftShow = false
+            this.$message.success('保存成功！')
+            this.GET_GiftsList()
+          }).catch(() => this.$message.error('保存失败，请稍后再试！'))
+        } else {
+          // 新增
+          API_Gift.addGifts(this.giftForm).then(() => {
+            this.giftShow = false
+            this.$message.success('保存成功！')
+            this.GET_GiftsList()
+          }).catch(() => this.$message.error('保存失败，请稍后再试！'))
         }
-        API_Gift.saveGift(_ids, _params).then(() => {
-          this.giftShow = false
-          this.$message.success('保存成功！')
-          this.GET_GiftsList()
-        }).catch(() => this.$message.error('保存失败，请稍后再试！'))
       },
 
       /** 修改*/
@@ -236,7 +243,7 @@
       },
 
       /** 新增赠品*/
-      addGift() {
+      handelAddGifts() {
         this.giftShow = true
         this.currentGiftId = ''
         this.giftForm = {
@@ -244,11 +251,11 @@
 
           gift_image: '',
 
-          gift_price: 2,
+          gift_price: '',
 
-          gift_real_stock: 8,
+          gift_real_stock: '',
 
-          gift_usable_stock: 2,
+          gift_usable_stock: '',
 
           gift_creat_time: ''
         }

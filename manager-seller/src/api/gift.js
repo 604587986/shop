@@ -13,7 +13,7 @@ import * as GiftModel from '@/models/GiftModel'
 export function getGiftsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gift/list',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/list',
       method: 'get',
       loading: false,
       params
@@ -31,12 +31,12 @@ export function getGiftsList(params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function deleteGift(ids, params) {
+export function deleteGifts(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gift/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/${ids}`,
       method: 'delete',
       loading: false,
       data: _formData
@@ -47,17 +47,38 @@ export function deleteGift(ids, params) {
 }
 
 /**
- * 保存赠品
+ * 保存赠品更新
  * @param ids
  * @param params
  * @returns {Promise<any>}
  */
-export function saveGift(ids, params) {
+export function saveGifts(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gift/save/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/reserve/${ids}`,
+      method: 'post',
+      loading: false,
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 新增赠品
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function addGifts(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/increase',
       method: 'post',
       loading: false,
       data: _formData
