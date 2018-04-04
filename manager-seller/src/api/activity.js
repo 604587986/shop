@@ -32,7 +32,7 @@ export function getActivityList(params) {
  * @returns {Promise<any>}
  * @constructor
  */
-export function DeleteActivity(ids, params) {
+export function deleteActivity(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
@@ -54,7 +54,7 @@ export function DeleteActivity(ids, params) {
  * @returns {Promise<any>}
  * @constructor
  */
-export function AddActivity(ids, params) {
+export function addActivity(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
