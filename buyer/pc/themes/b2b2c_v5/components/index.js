@@ -3,6 +3,7 @@ import AddressSelect from './AddressSelect'
 import Logo from './Logo'
 import CartStep from './CartStep'
 import Category from './Category'
+import CountDownBtn from './CountDownBtn'
 import Footer from './Footer'
 import Header from './Header'
 import Nav from './Nav'
@@ -15,6 +16,7 @@ export {
   Logo,
   CartStep,
   Category,
+  CountDownBtn,
   Footer,
   Header,
   Nav,

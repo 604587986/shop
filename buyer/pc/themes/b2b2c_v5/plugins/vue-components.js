@@ -4,6 +4,7 @@ import {
   Logo,
   CartStep,
   Category,
+  CountDownBtn,
   Footer,
   Header,
   Nav,
@@ -16,6 +17,7 @@ import {
 Vue.component(Logo.name, Logo)
 Vue.component(CartStep.name, CartStep)
 Vue.component(Category.name, Category)
+Vue.component(CountDownBtn.name, CountDownBtn)
 Vue.component(Footer.name, Footer)
 Vue.component(Header.name, Header)
 Vue.component(Nav.name, Nav)
