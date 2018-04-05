@@ -10,7 +10,7 @@ import request from '@/utils/request'
  * @returns {string}
  */
 export function getValidateCodeUrl(type) {
-  return `${process.env.VALIDATE_CODE_API}/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
+  return `${process.env.VALIDATE_CODE_API}/validcode.do?vtype=${type}&r=${new Date().getTime()}`
 }
 
 /**
@@ -19,6 +19,28 @@ export function getValidateCodeUrl(type) {
  */
 export function getUploadApi() {
   return `${process.env.UPLOAD_API}/core/upload.do`
+}
+
+/**
+ * 发送手机验证码
+ * @param type
+ * @param mobile
+ * @param validcode
+ * @returns {Promise<any>}
+ */
+export function sendMobileSms(type, mobile, validcode) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `${process.env.VALIDATE_CODE_API}/api/shop/member/send-sms-code.do`,
+      method: 'get',
+      params: {
+        validcode,
+        mobile,
+        key: type,
+        _: new Date().getTime()
+      }
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
 }
 
 /**
