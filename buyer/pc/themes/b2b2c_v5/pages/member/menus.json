@@ -25,7 +25,14 @@
     "name": "account",
     "children": [
       { "title": "我的资料", "name": "my-profile" },
-      { "title": "账户安全", "name": "account-security" },
+      {
+        "title": "账户安全",
+        "name": "account-safe",
+        "children": [
+          { "title": "修改密码", "name": "password" },
+          { "title": "手机验证", "name": "mobile" }
+        ]
+      },
       { "title": "账号绑定", "name": "account-binding" }
     ]
   }

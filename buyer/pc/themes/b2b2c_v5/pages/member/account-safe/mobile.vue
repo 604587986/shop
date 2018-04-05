@@ -1,10 +1,10 @@
 <template>
-  <h1>account-security</h1>
+  <div>mobile</div>
 </template>
 
 <script>
   export default {
-    name: 'account-security'
+    name: ''
   }
 </script>
 
