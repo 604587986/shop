@@ -1,10 +1,12 @@
 <template>
-  <div>mobile</div>
+  <div id="account-safe-mobile">
+    <h1>mobile</h1>
+  </div>
 </template>
 
 <script>
   export default {
-    name: ''
+    name: 'account-safe-mobile'
   }
 </script>
 
