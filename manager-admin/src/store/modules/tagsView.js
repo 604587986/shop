@@ -9,6 +9,7 @@ const tagsView = {
       state.visitedViews.push({
         name: view.name,
         path: view.path,
+        fullPath: view.fullPath,
         title: view.meta.title || 'no-name'
       })
       if (!view.meta.noCache) {
