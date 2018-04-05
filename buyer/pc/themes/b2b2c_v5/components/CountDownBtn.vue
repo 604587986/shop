@@ -32,7 +32,7 @@
         default: '秒后重新获取'
       },
       /** 一个异步方法，回调后开始倒计时 */
-      setStart:{
+      start:{
         type: Function,
         required: true
       }
@@ -47,7 +47,7 @@
     },
     methods: {
       handleClicked() {
-        this.setStart().then(() => this.startCountDown()).catch(() => {})
+        this.start().then(() => this.startCountDown()).catch(() => {})
       },
       startCountDown() {
         this.disabled = true
@@ -60,6 +60,7 @@
             this.message = '重新发送'
             this.count_time = this.time
             this.disabled = false
+            this.$emit('end')
           }
         }, 1000)
       }
