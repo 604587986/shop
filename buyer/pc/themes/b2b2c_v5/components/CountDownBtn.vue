@@ -47,7 +47,7 @@
     },
     methods: {
       handleClicked() {
-        this.setStart().then(() => this.startCountDown())
+        this.setStart().then(() => this.startCountDown()).catch(() => {})
       },
       startCountDown() {
         this.disabled = true
