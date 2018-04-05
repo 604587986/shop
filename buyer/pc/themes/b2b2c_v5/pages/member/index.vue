@@ -156,7 +156,7 @@
   import 'swiper/dist/css/swiper.min.css'
   import Empty from './__empty'
   export default {
-    name: 'index',
+    name: 'member-index',
     components: {
       Empty
     },

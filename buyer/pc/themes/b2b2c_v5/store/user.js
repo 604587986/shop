@@ -25,13 +25,16 @@ export const actions = {
    * @param params
    */
   getUserDataAction: ({ commit }, params) => {
-    API_Cart.getCartList(params).then(response => {
-      commit(types.SET_CART_DATA, response)
+    return new Promise((resolve, reject) => {
+      API_User.getUserInfo().then(response => {
+        commit(types.SET_USER_DATA, response)
+        resolve(response)
+      }).catch(error => reject(error))
     })
   },
 }
 
 /** getters */
 export const getters = {
-
+  user: state => state.user
 }

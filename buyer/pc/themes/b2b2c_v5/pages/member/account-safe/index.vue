@@ -21,7 +21,7 @@
       <div class="fore1"><strong>登录密码</strong></div>
       <div class="fore2"><span>互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</span></div>
       <div class="fore3">
-        <a href="/validate/updatePassword">修改</a>
+        <nuxt-link to="/member/account-safe/password">修改</nuxt-link>
       </div>
     </div>
     <div class="safe-item">
@@ -30,14 +30,17 @@
         <span>您验证的手机：</span><strong>185*****335</strong>&nbsp;&nbsp;
         <span>若已丢失或停用，请立即更换，</span><span style="color:#cc0000;">避免账户被盗</span>
       </div>
-      <div class="fore3"><a href="/validate/updateMobile" class="ftx-05">修改</a></div>
+      <div class="fore3">
+        <nuxt-link to="/member/account-safe/mobile">修改</nuxt-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   export default {
-    name: ''
+    name: 'account-safe-index'
   }
 </script>
 
