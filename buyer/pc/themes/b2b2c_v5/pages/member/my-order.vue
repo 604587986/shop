@@ -112,7 +112,7 @@
       })
     },
     created() {
-      if (!this.orderData) this.getOrderData(this.params).then(this.MixinScrollToTop)
+      if (!this.orderData) this.getOrderData(this.params).then(() => this.MixinScrollToTop())
     },
     methods: {
       /** 订单筛选栏点击 */
@@ -122,17 +122,17 @@
           return item
         })
         this.params.status = nav.status
-        this.getOrderData(this.params).then(this.MixinScrollToTop)
+        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
-        this.getOrderData(this.params).then(this.MixinScrollToTop)
+        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
       /** 订单搜索 */
       handleSearch() {
         this.params.keyword = this.keyword
-        this.getOrderData(this.params).then(this.MixinScrollToTop)
+        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
       ...mapActions({
         getOrderData: 'order/getOrderDataAction'
