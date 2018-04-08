@@ -38,7 +38,7 @@
           <el-input v-model="changePasswordForm.password" placeholder="请输入密码" type="password"></el-input>
         </el-form-item>
         <el-form-item label="请确认密码：" prop="rep_password">
-          <el-input v-model="changePasswordForm.rep_password" placeholder="请确认密码" required type="password" auto-complete="off"></el-input>
+          <el-input v-model="changePasswordForm.rep_password" placeholder="请确认密码" type="password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="图片验证码：" prop="imgcode" class="img-code">
           <el-input v-model="changePasswordForm.imgcode" placeholder="请输入图片验证码" clearable :maxlength="4">
@@ -93,6 +93,7 @@
           ],
           rep_password: [
             {
+              required: true,
               validator: (rule, value, callback) => {
                 if (!value) {
                   callback(new Error('请再次输入新的登陆密码'))

@@ -64,3 +64,18 @@ export function changePassword(new_password, rep_password, img_code) {
   })
 }
 
+/**
+ * 绑定手机号
+ * @param mobile
+ * @returns {AxiosPromise}
+ */
+export function bindMobile(mobile) {
+  const _formData = new FormData()
+  _formData.append('mobile', mobile)
+  return request({
+    url: '',
+    method: 'post',
+    data: _formData
+  })
+}
+
