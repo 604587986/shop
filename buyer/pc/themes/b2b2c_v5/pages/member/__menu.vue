@@ -3,11 +3,18 @@
     <div class="inner-menu">
       <div v-for="menu in menus" :key="menu.name" class="menu-item">
         <h2>{{ menu.title }}</h2>
-        <nuxt-link v-for="item in menu.children" :key="item.name" :to="'/member/' + item.name">
-          <em>&gt;</em>
-          {{ item.title }}
-          <em>&lt;</em>
-        </nuxt-link>
+        <template v-for="item in menu.children">
+          <nuxt-link
+            v-if="!item.hidden"
+            :key="item.name"
+            :to="'/member/' + item.name"
+            :class="[item.children && item.children.includes(name) && 'nuxt-link-exact-active nuxt-link-active']"
+          >
+            <em>&gt;</em>
+            {{ item.title }}
+            <em>&lt;</em>
+          </nuxt-link>
+        </template>
       </div>
     </div>
   </div>
@@ -20,6 +27,11 @@
     data() {
       return {
         menus
+      }
+    },
+    computed: {
+      name() {
+        return this.$route.name.replace('member-', '')
       }
     }
   }
