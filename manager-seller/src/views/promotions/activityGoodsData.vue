@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import * as API_activityGoods from '@/api/activityGoods'
+  import * as API_LimitTime from '@/api/limitTime'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
@@ -87,7 +87,7 @@
       /** 获取活动商品信息*/
       GET_ActivityGoodsList() {
         this.loading = true
-        API_activityGoods.getActivityGoddsList(this.params).then(response => {
+        API_LimitTime.getLimitTimeGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,

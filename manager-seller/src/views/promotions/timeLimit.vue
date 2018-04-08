@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import * as API_activity from '@/api/activity'
+  import * as API_limitTime from '@/api/limitTime'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
@@ -91,19 +91,19 @@
       }
     },
     mounted() {
-      this.GET_ActivityList()
+      this.GET_LimitActivityList()
     },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_ActivityList()
+        this.GET_LimitActivityList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_ActivityList()
+        this.GET_LimitActivityList()
       },
 
       /** 搜索事件触发 */
@@ -111,13 +111,13 @@
         this.params = {
           ...this.params
         }
-        this.GET_ActivityList()
+        this.GET_LimitActivityList()
       },
 
-      /** 获取活动信息*/
-      GET_ActivityList() {
+      /** 获取限时活动列表*/
+      GET_LimitActivityList() {
         this.loading = true
-        API_activity.getActivityList(this.params).then(response => {
+        API_limitTime.getLimitTimeActivityList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,
@@ -132,10 +132,11 @@
 
       /** 报名 */
       handleSignUpTimeLimt(row) {
-        this.$router.push({ path: 'add-time-limit', query: { row }})
+        const _activity_id = row.activity_id
+        this.$router.push({ path: 'add-time-limit', query: { _activity_id }})
       },
 
-      /** 活动商品信息*/
+      /** 活动商品信息 已报名*/
       activityGoodsInfo(row) {
         this.$router.push({ path: '/promotions/activity-goods-data' })
       }
