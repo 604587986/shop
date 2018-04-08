@@ -8,7 +8,7 @@
             v-if="!item.hidden"
             :key="item.name"
             :to="'/member/' + item.name"
-            :class="[item.includes && item.include.includes(name) && 'nuxt-link-exact-active nuxt-link-active']"
+            :class="[item.include && item.include.includes(name) && 'nuxt-link-exact-active nuxt-link-active']"
           >
             <em>&gt;</em>
             {{ item.title }}
