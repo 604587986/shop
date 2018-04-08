@@ -10,14 +10,17 @@
         <el-form-item label="账户名称">
           <span>{{ profileForm.username }}</span>
         </el-form-item>
-        <el-form-item label="真实姓名">
-          <el-input clearable></el-input>
+        <el-form-item label="真实姓名" prop="truename">
+          <el-input v-model="profileForm.truename" clearable></el-input>
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="profileForm.nickname" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="性别" required>
           <el-radio v-model="profileForm.sex" :label="1">男</el-radio>
           <el-radio v-model="profileForm.sex" :label="2">女</el-radio>
         </el-form-item>
-        <el-form-item label="生日">
+        <el-form-item label="生日" prop="birthday">
           <el-date-picker
             v-model="profileForm.birthday"
             type="date"
@@ -25,15 +28,14 @@
             :editable="false"
             clearable
             :picker-options="{disabledDate(time) { return time.getTime() > Date.now() }}"
-            value-format="yyyy-MM-dd"
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="地区">
+        <el-form-item label="地区" required>
           <en-address-select @changed="handleAddressSelectChanged"/>
         </el-form-item>
-        <el-form-item label="详细地址">
-          <el-input clearable></el-input>
+        <el-form-item label="详细地址" prop="address">
+          <el-input v-model="profileForm.address" clearable></el-input>
         </el-form-item>
         <el-form-item label="邮编">
           <el-input clearable></el-input>
@@ -57,8 +59,26 @@
     },
     data() {
       return {
-        profileForm: {},
-        profileRules: {}
+        profileForm: {
+          birthday: ''
+        },
+        profileRules: {
+          truename: [
+            { required: true, message: '请输入真实姓名', trigger: 'blur' },
+            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          ],
+          nickname: [
+            { required: true, message: '请输入昵称', trigger: 'blur' },
+            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          ],
+          birthday: [
+            { type: 'date', required: true, message: '请选择生日', trigger: 'change' }
+          ],
+          address: [
+            { required: true, message: '请输入详细地址', trigger: 'blur' },
+            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+          ]
+        }
       }
     },
     mounted() {
