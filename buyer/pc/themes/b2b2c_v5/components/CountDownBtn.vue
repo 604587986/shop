@@ -1,5 +1,5 @@
 <template>
-  <el-button :disabled="disabled" @click="handleClicked" class="count-down-btn">{{ message || initTip }}</el-button>
+  <el-button :disabled="disabled" @click.stop="handleClicked" class="count-down-btn">{{ message || initTip }}</el-button>
 </template>
 
 <script>
