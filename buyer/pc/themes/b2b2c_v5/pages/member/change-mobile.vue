@@ -186,7 +186,7 @@
           if (valid) {
             API_Safe.validMobileSms().then(() => {
               API_Safe.bindMobile().then(() => {
-                ...
+                // ...
               })
             })
           } else {
