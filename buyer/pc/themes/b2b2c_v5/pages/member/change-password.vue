@@ -27,7 +27,13 @@
         </el-form-item>
       </el-form>
     </div>
-    <div v-if="step === 2">步骤二</div>
+    <div v-if="step === 2" class="change-password-container">
+      <el-alert type="warning" title="" :closable="false">
+        <h2>提示</h2>
+        <p>1. 密码只能为6-20个英文字母或数字。 </p>
+        <p>2. 请务必牢记您的新密码。</p>
+      </el-alert>
+    </div>
   </div>
 </template>
 
@@ -41,19 +47,13 @@
         /** 步骤 */
         step: 1,
         /** 图片验证码 表单 */
-        validImgCodeForm: {
-          // 图片验证码
-          img_code: ''
-        },
+        validImgCodeForm: { img_code: '' }, // 图片验证码
         /** 图片验证码 表单规则 */
         validImgCodeRules: {
           img_code: [ { required: true, message: '请输入图片验证码', trigger: 'blur' } ]
         },
         /** 短信验证码 表单 */
-        validSmsCodeForm: {
-          // 短信验证码
-          sms_code: ''
-        },
+        validSmsCodeForm: { sms_code: '' }, // 短信验证码
         /** 短信验证码 表单规则 */
         validSmsCodeRules: {
           sms_code: [ { required: true, message: '请输入短信验证码', trigger: 'blur' } ]
@@ -65,6 +65,9 @@
     created() {
       this.getValidImgUrl()
     },
+    watch: {
+      user: 'getValidImgUrl'
+    },
     computed: {
       ...mapGetters({
         user: 'user/user'
@@ -73,6 +76,7 @@
     methods: {
       /** 获取验证码URL */
       getValidImgUrl() {
+        if (!this.user) return
         this.valid_img_url = API_Common.getValidateCodeUrl('UPDATEPASSWORDMOBILE' + this.user.mobile)
       },
       /** 发送手机验证码 */
@@ -80,7 +84,9 @@
         return new Promise((resolve, reject) => {
           this.$refs['validImgCodeForm'].validate((valid) => {
             if (valid) {
-              API_Common.sendMobileSms('UPDATEPASSWORDMOBILE', this.user.mobile, this.validImgCodeRules.img_code).then(() => {
+              const { mobile } = this.user
+              const { img_code } = this.validImgCodeForm
+              API_Common.sendMobileSms('UPDATEPASSWORDMOBILE', mobile, img_code).then(() => {
                 this.$message.success('验证码发送成功，请注意查收！')
                 resolve()
               }).catch(() => {
@@ -99,9 +105,14 @@
       },
       /** 手机验证 */
       submitValForm() {
-        this.$refs['validMobileForm'].validate((valid) => {
+        this.$refs['validSmsCodeForm'].validate((valid) => {
           if (valid) {
-            console.log(this.validMobileForm)
+            const { mobile } = this.user
+            const { sms_code } = this.validSmsCodeForm
+            const { img_code } = this.validImgCodeForm
+            API_Common.validMobileSms('UPDATEPASSWORDMOBILE', mobile, sms_code, img_code).then(() => {
+              this.step = 2
+            })
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -113,12 +124,12 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ .el-alert--info {
+    h2 { margin: 20px 0 }
+    p { margin-bottom: 10px }
+  }
   .valid-mobile-container {
     width: 100%;
-    /deep/ .el-alert--info {
-      h2 { margin: 20px 0 }
-      p { margin-bottom: 10px }
-    }
     /deep/ .el-form {
       margin-top: 10px;
       padding-left: 24px
@@ -136,5 +147,8 @@
       .el-input { width: auto }
       .el-input__inner { width: 190px }
     }
+  }
+  .change-password-container {
+
   }
 </style>
