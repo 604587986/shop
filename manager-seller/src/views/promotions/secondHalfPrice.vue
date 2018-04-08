@@ -78,14 +78,14 @@
                   <el-date-picker
                     v-model="activityForm.take_effect_time"
                     type="datetimerange"
-                    value-format="yyyy-MM-dd HH:mm:ss"
+                    value-format="timestamp"
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="活动描述">
-                  <UE v-model="activityForm.activity_desc"></UE>
+                  <UE v-model="activityForm.activity_desc" :defaultMsg="activityForm.activity_desc"></UE>
                 </el-form-item>
               </div>
               <div class="dicount-set">
@@ -95,28 +95,73 @@
               </div>
               <div class="activity-goods">
                 <el-form-item label="活动商品">
-                  <el-radio-group v-model="activityForm.activity_goods">
+                  <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
                     <el-radio :label="1">全部商品参与</el-radio>
                     <el-radio :label="0">部分商品参与</el-radio>
                   </el-radio-group>
                   <!--商品选择器-->
-                  <div></div>
+                  <div v-show="!goodsShow">
+                    <en-tabel-layout
+                      toolbar
+                      :tableData="goodsData"
+                      :loading="loading"
+                      :selectionChange="selectionChange"
+                    >
+                      <div slot="toolbar" class="inner-toolbar">
+                        <div class="toolbar-btns">
+                          <el-button type="success" @click="showGoodsSelector">选择商品</el-button>
+                          <el-button type="danger" @click="cancelall">批量取消</el-button>
+                        </div>
+                      </div>
+                      <template slot="table-columns">
+                        <el-table-column type="selection"/>
+                        <!--商品信息-->
+                        <el-table-column  label="商品信息">
+                          <template slot-scope="scope">
+                            <div>
+                              <img :src="scope.row.thumbnail" alt="" class="goods-image">
+                              <div>
+                                <span>{{ scope.row.goods_name }}</span>
+                                <span>{{ scope.row.price | unitPrice('￥') }}</span>
+                              </div>
+                            </div>
+                          </template>
+                        </el-table-column>
+                        <!--库存-->
+                        <el-table-column prop="enable_quantity" label="库存" />
+                        <!--操作-->
+                        <el-table-column label="操作" width="150">
+                          <template slot-scope="scope">
+                            <el-button
+                              size="mini"
+                              type="primary"
+                              @click="handleCancleJoin(scope.$index, scope.row)">取消参加
+                            </el-button>
+                          </template>
+                        </el-table-column>
+                      </template>
+                    </en-tabel-layout>
+                  </div>
                 </el-form-item>
               </div>
               <el-form-item>
-                <el-button type="primary" @click="handleSaveActivity('activityForm')">保存设置</el-button>
+                <el-button type="success" @click="handleSaveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
             </el-form>
           </el-col>
         </el-row>
       </el-tab-pane>
     </el-tabs>
+    <!--商品选择器-->
+    <en-goods-selector :show="showDialog" :api="goods_api" :defaultData="tableData" :maxLength="maxsize"
+                       @confirm="refreshFunc" @closed="showDialog = false"/>
   </div>
 </template>
 
 <script>
   import * as API_activity from '@/api/activity'
   import { TableLayout, TableSearch, CategoryPicker, UE } from '@/components'
+  import { GoodsSelector } from '@/plugins/selector/vue'
 
   export default {
     name: 'secondHalfPrice',
@@ -124,7 +169,8 @@
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
-      [UE.name]: UE
+      [UE.name]: UE,
+      [GoodsSelector.name]: GoodsSelector
     },
     data() {
       return {
@@ -157,8 +203,11 @@
           /** 优惠方式*/
           discount_mode: '',
 
+          /** 是否全部商品参与*/
+          is_all_joined: '',
+
           /** 活动商品*/
-          activity_goods: ''
+          activity_goods: []
         },
 
         /** 表单校验规则*/
@@ -170,7 +219,26 @@
           take_effect_time: [
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'change' }
           ]
-        }
+        },
+
+        /** 是否显示商品表格*/
+        goodsShow: true,
+
+        /** 表格商品数据*/
+        goodsData: null,
+
+        /** 选择的goods_id*/
+        selectionids: [],
+
+        /** 商品选择器最大长度*/
+        maxsize: 0,
+
+        /** 商品选择器列表api*/
+        goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
+        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+
+        /** 显示/隐藏商品选择器 */
+        showDialog: false
       }
     },
     mounted() {
@@ -187,7 +255,7 @@
         this.GET_ActivityList()
       },
 
-      /** 切换*/
+      /** 切换面板*/
       handleToggleClick(tab, event) {
         this.activeName = tab.name
         if (this.activeName === 'express') {
@@ -205,6 +273,46 @@
         }
       },
 
+      /** 是否全选商品*/
+      changeJoinGoods(val) {
+        this.goodsShow = val === 1
+      },
+
+      /** 保存商品选择器选择的商品 */
+      refreshFunc(val) {
+        this.goodsData = val
+      },
+
+      /** 显示商品选择器*/
+      showGoodsSelector() {
+        console.log(2125123)
+        this.showDialog = true
+      },
+
+      /** 取消参加*/
+      handleCancleJoin(index, row) {
+        this.goodsData.forEach((elem, _index) => {
+          if (index === _index) {
+            this.goodsData.splice(_index, 1)
+          }
+        })
+      },
+
+      selectionChange(val) {
+        this.selectionids = val.map(item => item.goods_id)
+      },
+      /** 批量取消 */
+      cancelall() {
+        this.selectionids.forEach(key => {
+          this.goodsData.forEach((elem, index) => {
+            if (elem.goods_id === key) {
+              this.goodsData.splice(index, 1)
+            }
+          })
+          this.$message.success('批量取消成功！')
+        })
+      },
+
       /** 获取活动信息*/
       GET_ActivityList() {
         this.loading = true
@@ -219,7 +327,11 @@
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
-        this.activityForm = {}
+        this.activityForm = {
+          ...row,
+          take_effect_time: [parseInt(row.start_time) * 1000, parseInt(row.end_time) * 1000]
+        }
+        this.goodsShow = this.activityForm.is_all_joined === 1
       },
 
       /** 删除活动 */
@@ -284,6 +396,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  .goods-image {
+    width: 50px;
+    height: 50px;
+  }
   /*新增表单面板*/
   #pane-add {
     background: #fff;
@@ -303,7 +419,7 @@
     background-color: #f8f8f8;
   }
   .activity-goods {
-    height: 80px;
+    min-height: 80px;
     margin: 10px 0 10px 10px;
     padding: 10px;
     background-color: #f8f8f8;
