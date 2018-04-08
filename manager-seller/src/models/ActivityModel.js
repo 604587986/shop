@@ -44,4 +44,8 @@ export class Activity extends DataModel {
   /** 是否是全部商品参与  1是 0否*/
   @ServerName('is_all_joined')
   is_all_joined
+
+  /** 活动描述 */
+  @ServerName('activity_desc')
+  activity_desc
 }

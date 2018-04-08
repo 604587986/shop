@@ -85,7 +85,7 @@
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="活动描述">
-                  <UE v-model="activityForm.activity_desc"></UE>
+                  <UE v-model="activityForm.activity_desc" :defaultMsg="activityForm.activity_desc"></UE>
                 </el-form-item>
               </div>
               <div class="dicount-set">
@@ -100,24 +100,26 @@
                     <el-radio :label="0">部分商品参与</el-radio>
                   </el-radio-group>
                   <!--商品表格-->
-                  <en-tabel-layout
+                  <div v-show="!goodsShow">
+                    <en-tabel-layout
                       toolbar
                       :tableData="goodsData"
                       :loading="loading"
-                      v-show="!goodsShow"
+                      :selectionChange="selectionChange"
                     >
                       <div slot="toolbar" class="inner-toolbar">
                         <div class="toolbar-btns">
                           <el-button type="success" @click="showGoodsSelector">选择商品</el-button>
-                          <el-button type="danger" @click="">批量取消</el-button>
+                          <el-button type="danger" @click="cancelall">批量取消</el-button>
                         </div>
                       </div>
                       <template slot="table-columns">
+                        <el-table-column type="selection"/>
                         <!--商品信息-->
                         <el-table-column  label="商品信息">
                           <template slot-scope="scope">
                             <div>
-                              <img :src="scope.row.thumbnail" alt="">
+                              <img :src="scope.row.thumbnail" alt="" class="goods-image">
                               <div>
                                 <span>{{ scope.row.goods_name }}</span>
                                 <span>{{ scope.row.price | unitPrice('￥') }}</span>
@@ -133,12 +135,13 @@
                             <el-button
                               size="mini"
                               type="primary"
-                              @click="handleCancleJoin(scope.row)">取消参加
+                              @click="handleCancleJoin(scope.$index, scope.row)">取消参加
                             </el-button>
                           </template>
                         </el-table-column>
                       </template>
                     </en-tabel-layout>
+                  </div>
                 </el-form-item>
               </div>
               <el-form-item>
@@ -228,6 +231,9 @@
         /** 表格商品数据*/
         goodsData: null,
 
+        /** 选择的goods_id*/
+        selectionids: [],
+
         /** 商品选择器最大长度*/
         maxsize: 0,
 
@@ -278,7 +284,6 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        console.log(val, 154646)
         this.goodsData = val
       },
 
@@ -288,8 +293,27 @@
       },
 
       /** 取消参加*/
-      handleCancleJoin(row) {
+      handleCancleJoin(index, row) {
+        this.goodsData.forEach((elem, _index) => {
+          if (index === _index) {
+            this.goodsData.splice(_index, 1)
+          }
+        })
+      },
 
+      selectionChange(val) {
+        this.selectionids = val.map(item => item.goods_id)
+      },
+      /** 批量取消 */
+      cancelall() {
+        this.selectionids.forEach(key => {
+          this.goodsData.forEach((elem, index) => {
+            if (elem.goods_id === key) {
+              this.goodsData.splice(index, 1)
+            }
+          })
+          this.$message.success('批量取消成功！')
+        })
       },
 
       /** 获取活动信息*/
@@ -310,6 +334,7 @@
           ...row,
           take_effect_time: [parseInt(row.start_time) * 1000, parseInt(row.end_time) * 1000]
         }
+        this.goodsShow = this.activityForm.is_all_joined === 1
       },
 
       /** 删除活动 */
@@ -365,6 +390,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  .goods-image {
+    width: 50px;
+    height: 50px;
+  }
   /*新增表单面板*/
   #pane-add {
     background: #fff;
