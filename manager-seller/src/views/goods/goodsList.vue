@@ -248,16 +248,16 @@
       },
       /** 发布商品*/
       publishGoods() {
-        this.$router.push({ path: 'good-publish' })
+        this.$router.push({ path: '/goods/good-publish' })
       },
 
       /** 跳转回收站*/
       gotoRecycle() {
-        this.$router.push({ path: 'recycle-station' })
+        this.$router.push({ path: '/goods/recycle-station' })
       },
       /** 编辑商品 */
       handleEditGoods(row) {
-        this.$router.push({ path: 'good-publish', query: { goodsid: row.id }})
+        this.$router.push({ path: '/goods/good-publish', query: { goodsid: row.id }})
       },
       /** 删除商品 */
       handleDeleteGoods(row) {
