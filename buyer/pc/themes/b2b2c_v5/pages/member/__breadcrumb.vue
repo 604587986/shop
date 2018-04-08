@@ -2,7 +2,10 @@
   <div id="member-breadcrumb" class="w">
     <nuxt-link to="/"><i class="iconfont ea-icon-home"></i>首页</nuxt-link>&ensp;&gt;
     <nuxt-link to="/member">会员中心</nuxt-link>&ensp;&gt;
-    <template v-for="(b, i) in breadcrumbs">
+    <template v-if="fullPath === '/member'">
+      <nuxt-link to="/member"> {{ user.username }}</nuxt-link>
+    </template>
+    <template v-else v-for="(b, i) in breadcrumbs">
       <nuxt-link :to="b.path" :key="b.path"> {{ b.title }}</nuxt-link>
       <template v-if="i !== breadcrumbs.length - 1">&ensp;&gt;</template>
     </template>
@@ -11,6 +14,7 @@
 
 <script>
   import menus from './menus'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'member-breadcrumb',
     computed: {
@@ -34,7 +38,10 @@
           })
         })
         return _bcs
-      }
+      },
+      ...mapGetters({
+        user: 'user/user'
+      })
     }
   }
 </script>

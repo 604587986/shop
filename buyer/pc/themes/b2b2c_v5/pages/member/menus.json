@@ -25,7 +25,7 @@
     "name": "account",
     "children": [
       { "title": "我的资料", "name": "my-profile" },
-      { "title": "账户安全", "name": "account-safe", "includes": [ "change-password", "hange-mobile"] },
+      { "title": "账户安全", "name": "account-safe", "include": [ "change-password", "change-mobile"] },
       { "title": "修改密码", "name": "change-password", "hidden": true },
       { "title": "修改手机", "name": "change-mobile", "hidden": true },
       { "title": "账号绑定", "name": "account-binding" }
