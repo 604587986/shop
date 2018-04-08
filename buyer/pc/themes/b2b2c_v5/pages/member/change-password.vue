@@ -23,7 +23,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button @click="submitValForm">提交验证</el-button>
+          <el-button @click.stop="submitValForm">提交验证</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -33,6 +33,22 @@
         <p>1. 密码只能为6-20个英文字母或数字。 </p>
         <p>2. 请务必牢记您的新密码。</p>
       </el-alert>
+      <el-form :model="changePasswordForm" :rules="changePasswordRules" ref="changePasswordForm" label-width="140px">
+        <el-form-item label="请输入密码：" prop="password">
+          <el-input v-model="changePasswordForm.password" placeholder="请输入密码" type="password"></el-input>
+        </el-form-item>
+        <el-form-item label="请确认密码：" prop="rep_password">
+          <el-input v-model="changePasswordForm.rep_password" placeholder="请确认密码" type="password"></el-input>
+        </el-form-item>
+        <el-form-item label="图片验证码：" prop="imgcode" class="img-code">
+          <el-input v-model="changePasswordForm.imgcode" placeholder="请输入图片验证码" clearable :maxlength="4">
+            <img slot="append" :src="valid_img_url" @click="getValidImgUrl">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="">
+          <el-button @click.stop="submitChangeForm">确认修改</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -40,6 +56,7 @@
 <script>
   import { mapActions, mapGetters } from 'vuex'
   import * as API_Common from '@/api/common'
+  import * as API_Safe from '@/api/safe'
   export default {
     name: 'change-password',
     data() {
@@ -59,7 +76,36 @@
           sms_code: [ { required: true, message: '请输入短信验证码', trigger: 'blur' } ]
         },
         /** 图片验证码URL */
-        valid_img_url: ''
+        valid_img_url: '',
+        /** 修改密码 表单 */
+        changePasswordForm: {
+          password: '',
+          rep_password: '',
+          imgcode: ''
+        },
+        /** 修改密码 表单规则 */
+        changePasswordRules: {
+          password: [
+            { required: true, message: '请输入新的登陆密码', trigger: 'blur' },
+            { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+          ],
+          rep_password: [
+            { required: true, message: '请再次输入新的登陆密码', trigger: 'blur' },
+            {
+              validator: (rule, value, callback) => {
+                if (value !== this.changePasswordForm.password) {
+                  callback(new Error('两次输入的密码不相同'))
+                } else {
+                  callback()
+                }
+              },
+              trigger: 'blur'
+            }
+          ],
+          imgcode: [
+            { required: true, message: '请输入图片验证码', trigger: 'blur' }
+          ]
+        }
       }
     },
     created() {
@@ -86,7 +132,7 @@
             if (valid) {
               const { mobile } = this.user
               const { img_code } = this.validImgCodeForm
-              API_Common.sendMobileSms('UPDATEPASSWORDMOBILE', mobile, img_code).then(() => {
+              API_Safe.sendMobileSms('UPDATEPASSWORDMOBILE', mobile, img_code).then(() => {
                 this.$message.success('验证码发送成功，请注意查收！')
                 resolve()
               }).catch(() => {
@@ -110,33 +156,53 @@
             const { mobile } = this.user
             const { sms_code } = this.validSmsCodeForm
             const { img_code } = this.validImgCodeForm
-            API_Common.validMobileSms('UPDATEPASSWORDMOBILE', mobile, sms_code, img_code).then(() => {
-              this.step = 2
+            API_Safe.validMobileSms('UPDATEPASSWORDMOBILE', mobile, sms_code, img_code).then(() => {
+              setTimeout(() => {
+                this.step = 2
+              }, 200)
             })
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
           }
         })
-      }
+      },
+      /** 修改密码 */
+      submitChangeForm() {
+        this.$refs['changePasswordForm'].validate((valid) => {
+          if (valid) {
+            const { password, rep_password, imgcode } = this.changePasswordForm
+            API_Safe.changePassword(password, rep_password, imgcode).then(() => {
+              this.$message.success('修改成功！')
+              setTimeout(this.logout, 300)
+            })
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        })
+      },
+      ...mapActions({
+        logout: 'user/logoutAction'
+      })
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  /deep/ .el-alert--info {
-    h2 { margin: 20px 0 }
-    p { margin-bottom: 10px }
-  }
-  .valid-mobile-container {
+  .valid-mobile-container, .change-password-container {
     width: 100%;
+    /deep/ .el-alert {
+      h2 { margin: 20px 0 }
+      p { margin-bottom: 10px }
+    }
     /deep/ .el-form {
       margin-top: 10px;
       padding-left: 24px
     }
+    /deep/ .el-input__inner { width: 190px }
     /deep/ .img-code {
       .el-input { width: auto }
-      .el-input__inner { width: 190px }
       .el-input-group__append {
         padding: 0;
         cursor: pointer;
@@ -145,10 +211,6 @@
     }
     /deep/ .sms-code {
       .el-input { width: auto }
-      .el-input__inner { width: 190px }
     }
-  }
-  .change-password-container {
-
   }
 </style>
