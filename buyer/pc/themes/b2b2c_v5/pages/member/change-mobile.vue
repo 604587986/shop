@@ -62,7 +62,7 @@
     data() {
       return {
         /** 步骤 */
-        step: 2,
+        step: 1,
         /** 图片验证码 表单 */
         validImgCodeForm: { img_code: '' }, // 图片验证码
         /** 图片验证码 表单规则 */
