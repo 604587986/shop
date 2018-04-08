@@ -65,33 +65,10 @@ export default {
     logManage: 'Log Manage',
 
     setting: 'Setting Mange',
-    shopSettings: 'Shop Setting',
-    systemSettings: 'System Settings',
-    smtpSettings: 'SMTP Settings',
-    SMSGatewaySettings: 'SMS Gateway Setting',
-    expressPlatformSettings: 'Express Platform Settings',
-    receiptContentSettings: 'Receipt Content Settings',
-    electronicReceipt: 'Electronic Receipt',
-    storageSolution: 'Storage Solution',
-    staticPage: 'Static Page',
-    goodsIndex: 'Goods Index',
-    trustLogin: 'Trust Login',
-    cacheManage: 'Cache Manage',
+    shopSettings: 'shop Settings',
+    goodsWarning: 'goods Warning',
+    gradeApplication: 'grade Application'
 
-    messageSettings: 'Message Settings',
-    shopMessage: 'Shop Message',
-    memberMessage: 'Member Message',
-    otherMessage: 'Other Message',
-
-    paymentAndDelivery: 'Payment And Delivery',
-    payment: 'payment',
-    expressCompany: 'Express Company',
-    regionalManagement: 'Regional Management',
-
-    authSettings: 'Auth Settings',
-    administratorManage: 'Administrator Manage',
-    roleManage: 'Role Manage',
-    authManage: 'Auth Manage'
   },
   login: {
     logIn: 'Log in',

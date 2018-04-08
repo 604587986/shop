@@ -197,52 +197,17 @@ export const asyncRouterMap = [
   //   ]
   // },
   // 设置
-  // {
-  //   path: '/setting',
-  //   component: Layout,
-  //   redirect: '/setting/shop-settings/system',
-  //   name: 'setting',
-  //   meta: { title: 'setting', icon: 'setting-manage' },
-  //   children: [
-  //     {
-  //     },
-  //     {
-  //       path: '/setting/message-settings',
-  //       component: _import('setting/message-settings/index'),
-  //       redirect: '/setting/message-settings/member',
-  //       name: 'messageSettings',
-  //       meta: { title: 'messageSettings' },
-  //       children: [
-  //         { path: 'shop', component: _import('setting/message-settings/shopMessage'), name: 'shopMessageSettings', meta: { title: 'shopMessage' }},
-  //         { path: 'member', component: _import('setting/message-settings/memberMessage'), name: 'memberMessageSettings', meta: { title: 'memberMessage' }},
-  //         { path: 'other', component: _import('setting/message-settings/otherMessage'), name: 'otherMessageSettings', meta: { title: 'otherMessage' }}
-  //       ]
-  //     },
-  //     {
-  //       path: '/setting/payment-and-delivery',
-  //       component: _import('setting/payment-and-delivery/index'),
-  //       redirect: '/setting/payment-and-delivery/payment',
-  //       name: 'paymentAndDelivery',
-  //       meta: { title: 'paymentAndDelivery' },
-  //       children: [
-  //         { path: 'payment', component: _import('setting/payment-and-delivery/payment'), name: 'paymentSettings', meta: { title: 'payment' }},
-  //         { path: 'express-company', component: _import('setting/payment-and-delivery/expressCompany'), name: 'expressCompanySettings', meta: { title: 'expressCompany' }},
-  //         { path: 'regional-management', component: _import('setting/payment-and-delivery/regionalManagement'), name: 'regionalManagementSettings', meta: { title: 'regionalManagement' }}
-  //       ]
-  //     },
-  //     {
-  //       path: '/setting/auth-settings',
-  //       component: _import('setting/auth-settings/index'),
-  //       redirect: '/setting/auth-settings/administrator-manage',
-  //       name: 'authSettings',
-  //       meta: { title: 'authSettings' },
-  //       children: [
-  //         { path: 'administrator-manage', component: _import('setting/auth-settings/administratorManage'), name: 'administratorManage', meta: { title: 'administratorManage' }},
-  //         { path: 'role-manage', component: _import('setting/auth-settings/roleManage'), name: 'roleManage', meta: { title: 'roleManage' }},
-  //         { path: 'auth-manage', component: _import('setting/auth-settings/authManage'), name: 'authManage', meta: { title: 'authManage' }}
-  //       ]
-  //     }
-  //   ]
-  // },
+  {
+    path: '/setting',
+    component: Layout,
+    redirect: '/setting/shop',
+    name: 'setting',
+    meta: { title: 'setting', icon: 'setting-manage' },
+    children: [
+      { path: 'shop-setting', component: _import('setting/shopSettings'), name: 'shopSettings', meta: { title: 'shopSettings' }},
+      { path: 'goods-warning', component: _import('setting/goodsWarning'), name: 'goodsWarning', meta: { title: 'goodsWarning' }},
+      { path: 'grade-application', component: _import('setting/gradeApplication'), name: 'gradeApplication', meta: { title: 'gradeApplication' }}
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
