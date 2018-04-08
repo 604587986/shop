@@ -1,5 +1,5 @@
 <template>
-  <el-button :disabled="disabled" @click="handleClicked" class="count-down-btn">{{ message || initTip }}</el-button>
+  <el-button :disabled="disabled" @click.stop="handleClicked" class="count-down-btn">{{ message || initTip }}</el-button>
 </template>
 
 <script>
@@ -75,7 +75,6 @@
       cursor: not-allowed;
       background-image: none;
       background-color: #fff;
-      border-color: #ebeef5;
     }
   }
 </style>

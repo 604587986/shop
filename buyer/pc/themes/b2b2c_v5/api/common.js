@@ -22,28 +22,6 @@ export function getUploadApi() {
 }
 
 /**
- * 发送手机验证码
- * @param type
- * @param mobile
- * @param validcode
- * @returns {Promise<any>}
- */
-export function sendMobileSms(type, mobile, validcode) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `${process.env.VALIDATE_CODE_API}/api/shop/member/send-sms-code.do`,
-      method: 'get',
-      params: {
-        validcode,
-        mobile,
-        key: type,
-        _: new Date().getTime()
-      }
-    }).then(response => resolve(response)).catch(error => reject(error))
-  })
-}
-
-/**
  * 获取热门关键字
  * @returns {Promise<any>}
  */
