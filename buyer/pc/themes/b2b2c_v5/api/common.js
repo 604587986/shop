@@ -22,47 +22,6 @@ export function getUploadApi() {
 }
 
 /**
- * 发送手机验证码
- * @param type
- * @param mobile
- * @param validcode
- * @returns {Promise<any>}
- */
-export function sendMobileSms(type, mobile, validcode) {
-  return request({
-    url: `${process.env.VALIDATE_CODE_API}/api/shop/member/send-sms-code.do`,
-    method: 'get',
-    params: {
-      validcode,
-      mobile,
-      key: type,
-      _: new Date().getTime()
-    }
-  })
-}
-
-/**
- * 校验短信验证码
- * @param type
- * @param mobile
- * @param mobile_code
- * @param img_code
- * @returns {Promise<any>}
- */
-export function validMobileSms(type, mobile, mobile_code, img_code) {
-  return request({
-    url: `${process.env.VALIDATE_CODE_API}/api/shop/member/member-mobile-validate.do`,
-    method: 'get',
-    params: {
-      validcode: img_code,
-      mobileCode: mobile_code,
-      mobile,
-      key: type
-    }
-  })
-}
-
-/**
  * 获取热门关键字
  * @returns {Promise<any>}
  */
