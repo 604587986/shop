@@ -116,8 +116,12 @@
       },
 
       /** 编辑导航 */
-      handleEditShopNav() {
-
+      handleEditShopNav(row) {
+        this.addShopNavshow = true
+        // 清空表单
+        this.navform = {
+          ...row
+        }
       },
 
       showaddShopNav() {

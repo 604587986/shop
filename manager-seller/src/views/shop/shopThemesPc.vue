@@ -5,7 +5,7 @@
     <!--当前模板-->
     <p style="padding: 0 50px;">当前模板:</p>
     <div class="tpl-current-theme">
-      <div class="themes-img choosed-image">
+      <div class="themes-img choosed-image" v-if="tpl_current.theme_image">
         <img :src="tpl_current.theme_image" alt="" class="shop-theme-image">
       </div>
       <span class="tpl-name">模板名称:{{tpl_current.theme_name}}</span>
@@ -20,7 +20,7 @@
             <div class="themes-img"
                  :class='{"choosed-image":item.theme_id === tpl_choosed_id}'
                  @click="chooseTheme(item)">
-              <img :src="item.theme_image" alt="" class="shop-theme-image">
+              <img v-if="item.theme_image" :src="item.theme_image" alt="" class="shop-theme-image">
             </div>
             <span class="tpl-name">模板名称:{{item.theme_name}}</span>
             <span class="tpl-preview" @click="previewImg(item.theme_image)">预览</span>
