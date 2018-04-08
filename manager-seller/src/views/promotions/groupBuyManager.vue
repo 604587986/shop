@@ -152,7 +152,7 @@
         this.GET_ActivityGoodsList()
       },
 
-      /** 团购状态 改变*/
+      /** 团购状态发生改变*/
       groupBuyStatusChange(val) {
         this.params = {
           ...this.params,

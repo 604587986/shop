@@ -5,8 +5,8 @@
       <el-form-item label="团购活动">
         <el-select v-model="gruopBuyForm.group_activity" placeholder="选择要参加的团购活动及时间段">
           <el-option v-for="item in gruopBuyActivitys" :key="item.activity_id"
-            :label="item.activity_desc"
-            :value="item.activity_id">
+                     :label="item.activity_desc"
+                     :value="item.activity_id">
           </el-option>
         </el-select>
         <span class="activity-tip">选择要参加的团购活动及时间段</span>
@@ -21,10 +21,10 @@
       </el-form-item>
       <!--团购副标题-->
       <el-form-item label="团购副标题">
-         <el-input
-           v-model="gruopBuyForm.group_buy_subtitle"
-           :style="{ width:inputLength +'px' }"
-           placeholder="团购副标题针对团购特殊说明"></el-input>
+        <el-input
+          v-model="gruopBuyForm.group_buy_subtitle"
+          :style="{ width:inputLength +'px' }"
+          placeholder="团购副标题针对团购特殊说明"></el-input>
         <span class="activity-tip">团购副标题针对团购特殊说明</span>
       </el-form-item>
       <!--团购商品-->
@@ -187,7 +187,7 @@
   import { UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
-    name: 'addGroupBuyGoods',
+    name: 'editGroupBuyGoods',
     components: {
       [UE.name]: UE,
       [GoodsSelector.name]: GoodsSelector
@@ -287,6 +287,7 @@
       }
     },
     mounted() {
+      this.$route.params.goods_id && this.GET_GroupBuyGoodsDetails(this.$route.params.goods_id)
       this.GET_AllGroupBuyActivitys()
     },
     methods: {
