@@ -1,6 +1,6 @@
 <template>
   <div id="change-password">
-    <div v-if="step === 1" class="valid-mobile-container">
+    <div v-show="step === 1" class="valid-mobile-container">
       <el-alert type="info" title="" :closable="false">
         <h2>为什么要进行身份验证？</h2>
         <p>1. 为保障您的账户信息安全，在变更账户中的重要信息时需要身份验证，感谢您的理解与支持。 </p>
@@ -27,7 +27,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div v-if="step === 2" class="change-password-container">
+    <div v-show="step === 2" class="change-password-container">
       <el-alert type="warning" title="" :closable="false">
         <h2>提示</h2>
         <p>1. 密码只能为6-20个英文字母或数字。 </p>
@@ -38,11 +38,11 @@
           <el-input v-model="changePasswordForm.password" placeholder="请输入密码" type="password"></el-input>
         </el-form-item>
         <el-form-item label="请确认密码：" prop="rep_password">
-          <el-input v-model="changePasswordForm.rep_password" placeholder="请确认密码" type="password"></el-input>
+          <el-input v-model="changePasswordForm.rep_password" placeholder="请确认密码" required type="password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="图片验证码：" prop="imgcode" class="img-code">
           <el-input v-model="changePasswordForm.imgcode" placeholder="请输入图片验证码" clearable :maxlength="4">
-            <img slot="append" :src="valid_img_url" @click="getValidImgUrl">
+            <img slot="append" :src="change_img_url" @click="getChangeImgUrl">
           </el-input>
         </el-form-item>
         <el-form-item label="">
@@ -77,6 +77,8 @@
         },
         /** 图片验证码URL */
         valid_img_url: '',
+        /** 修改密码图片证码URL */
+        change_img_url: '',
         /** 修改密码 表单 */
         changePasswordForm: {
           password: '',
@@ -90,10 +92,11 @@
             { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
           ],
           rep_password: [
-            { required: true, message: '请再次输入新的登陆密码', trigger: 'blur' },
             {
               validator: (rule, value, callback) => {
-                if (value !== this.changePasswordForm.password) {
+                if (!value) {
+                  callback(new Error('请再次输入新的登陆密码'))
+                } else if (value !== this.changePasswordForm.password) {
                   callback(new Error('两次输入的密码不相同'))
                 } else {
                   callback()
@@ -120,10 +123,14 @@
       })
     },
     methods: {
-      /** 获取验证码URL */
+      /** 获取图片验证码URL */
       getValidImgUrl() {
         if (!this.user) return
         this.valid_img_url = API_Common.getValidateCodeUrl('UPDATEPASSWORDMOBILE' + this.user.mobile)
+      },
+      /** 获取修改密码图片验证码URL */
+      getChangeImgUrl() {
+        this.change_img_url = API_Common.getValidateCodeUrl('membervalid')
       },
       /** 发送手机验证码 */
       sendValidMobileSms() {
@@ -159,6 +166,7 @@
             API_Safe.validMobileSms('UPDATEPASSWORDMOBILE', mobile, sms_code, img_code).then(() => {
               setTimeout(() => {
                 this.step = 2
+                this.getChangeImgUrl()
               }, 200)
             })
           } else {
