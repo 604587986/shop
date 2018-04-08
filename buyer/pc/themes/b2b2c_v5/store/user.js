@@ -15,6 +15,21 @@ export const mutations = {
   [types.SET_USER_DATA](state, data) {
     state.user = data
   },
+  /**
+   * 登陆
+   * @param state
+   * @param data
+   */
+  [types.LOG_IN](state, data) {
+    state.user = data
+  },
+  /**
+   * 登出
+   * @param state
+   */
+  [types.LOG_OUT](state) {
+    state.user = ''
+  }
 }
 
 /** actions */
@@ -25,13 +40,43 @@ export const actions = {
    * @param params
    */
   getUserDataAction: ({ commit }, params) => {
-    API_Cart.getCartList(params).then(response => {
-      commit(types.SET_CART_DATA, response)
+    return new Promise((resolve, reject) => {
+      API_User.getUserInfo().then(response => {
+        commit(types.SET_USER_DATA, response)
+        resolve(response)
+      }).catch(error => reject(error))
     })
   },
+  /**
+   * 登出
+   * @param commit
+   * @param params
+   * @returns {Promise<any>}
+   */
+  loginAction: ({ commit }, params) => {
+    return new Promise((resolve, reject) => {
+      API_User.login(params).then(response => {
+        commit(types.LOG_IN, response)
+        resolve(response)
+      }).catch(error => reject(error))
+    })
+  },
+  /**
+   * 登出
+   * @param commit
+   * @returns {Promise<any>}
+   */
+  logoutAction: ({ commit }) => {
+    return new Promise((resolve, reject) => {
+      API_User.logout().then(() => {
+        commit(types.LOG_OUT)
+        resolve()
+      }).catch(error => reject(error))
+    })
+  }
 }
 
 /** getters */
 export const getters = {
-
+  user: state => state.user
 }

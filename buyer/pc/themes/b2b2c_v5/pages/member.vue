@@ -19,7 +19,7 @@
   Vue.use(Pagination)
   Vue.use(Table)
   Vue.use(TableColumn)
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
   import Breadcrumb from './member/__breadcrumb'
   import Menu from './member/__menu'
   export default {
@@ -29,12 +29,23 @@
       'en-menu': Menu
     },
     created() {
-      if (!this.$route.hash) this.getOrderData()
-      this.getGoodsCollectionData()
-      this.getShopCollectionData()
+      if (!this.user) this.getUserData()
+      if (!this.orderData) this.getOrderData()
+      if (!this.goodsCollectionData) this.getGoodsCollectionData()
+      if (!this.shopCollectionData) this.getShopCollectionData()
+    },
+    computed: {
+      ...mapGetters({
+        user: 'user/user',
+        orderData: 'order/orderData',
+        goodsCollectionData: 'collection/goodsCollectionData',
+        shopCollectionData: 'collection/shopCollectionData'
+      })
     },
     methods: {
       ...mapActions({
+        /** 获取用户信息 */
+        getUserData: 'user/getUserDataAction',
         /** 获取订单列表 */
         getOrderData: 'order/getOrderDataAction',
         /** 获取商品收藏列表 */
@@ -50,6 +61,7 @@
   .member-layout {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
   }
   .member-nav {
     position: relative;

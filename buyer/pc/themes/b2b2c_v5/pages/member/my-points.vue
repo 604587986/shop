@@ -92,6 +92,7 @@
 <style type="text/scss" lang="scss" scoped>
   .points-container {
     padding-top: 10px;
+    /deep/ .cell { font-size: 12px }
     /deep/ .el-pagination {
       text-align: right;
       margin-top: 15px;
