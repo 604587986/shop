@@ -27,7 +27,7 @@
     <div class="safe-item">
       <div class="fore1"><strong>手机验证</strong></div>
       <div class="fore2">
-        <span>您验证的手机：</span><strong>185*****335</strong>&nbsp;&nbsp;
+        <span>您验证的手机：</span><strong>{{ user.mobile | secrecyMobile }}</strong>&nbsp;&nbsp;
         <span>若已丢失或停用，请立即更换，</span><span style="color:#cc0000;">避免账户被盗</span>
       </div>
       <div class="fore3">
@@ -40,7 +40,12 @@
 <script>
   import { mapGetters } from 'vuex'
   export default {
-    name: 'account-safe-index'
+    name: 'account-safe-index',
+    computed: {
+      ...mapGetters({
+        user: 'user/user'
+      })
+    }
   }
 </script>
 
