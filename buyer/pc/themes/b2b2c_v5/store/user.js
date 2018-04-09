@@ -29,6 +29,14 @@ export const mutations = {
    */
   [types.LOG_OUT](state) {
     state.user = ''
+  },
+  /**
+   * 保存用户信息【修改资料】
+   * @param state
+   * @param res
+   */
+  [types.SAVE_USER_INFO](state, res) {
+    state.user = res
   }
 }
 
@@ -71,6 +79,20 @@ export const actions = {
       API_User.logout().then(() => {
         commit(types.LOG_OUT)
         resolve()
+      }).catch(error => reject(error))
+    })
+  },
+  /**
+   * 保存用户信息【修改资料】
+   * @param commit
+   * @param params
+   * @returns {Promise<any>}
+   */
+  saveUserInfoAction: ({ commit }, params) => {
+    return new Promise((resolve, reject) => {
+      API_User.saveUserInfo(params).then(response => {
+        commit(types.SAVE_USER_INFO, response)
+        resolve(response)
       }).catch(error => reject(error))
     })
   }

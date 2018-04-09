@@ -11,6 +11,8 @@ export const LOG_IN = 'LOG_IN'
 export const LOG_OUT = 'LOG_OUT'
 // 设置用户信息
 export const SET_USER_DATA = 'SET_USER_DATA'
+// 保存用户信息【修改资料】
+export const SAVE_USER_INFO = 'SAVE_USER_INFO'
 
 /** 收货地址相关 */
 // 设置地址数据
