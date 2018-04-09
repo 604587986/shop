@@ -11,10 +11,10 @@
           <span>{{ profileForm.username }}</span>
         </el-form-item>
         <el-form-item label="真实姓名" prop="truename">
-          <el-input v-model="profileForm.truename" clearable></el-input>
+          <el-input v-model="profileForm.truename" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="profileForm.nickname" clearable></el-input>
+          <el-input v-model="profileForm.nickname" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="性别" required>
           <el-radio v-model="profileForm.sex" :label="1">男</el-radio>
@@ -26,22 +26,24 @@
             type="date"
             placeholder="请选择生日"
             :editable="false"
-            clearable
             :picker-options="{disabledDate(time) { return time.getTime() > Date.now() }}"
+            size="small"
+            clearable
+            value-format="yyyy-MM-dd"
           >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="地区" required>
-          <en-address-select @changed="handleAddressSelectChanged"/>
+          <en-address-select :default="defaultRegions" @changed="handleAddressSelectChanged"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="address">
-          <el-input v-model="profileForm.address" clearable></el-input>
+          <el-input v-model="profileForm.address" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="邮编">
-          <el-input clearable></el-input>
+          <el-input v-model="profileForm.zip" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button>保存资料</el-button>
+          <el-button @click="submitProfile">保存资料</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -59,9 +61,13 @@
     },
     data() {
       return {
-        profileForm: {
-          birthday: ''
-        },
+        /** 修改头像模态框显示状态 */
+        crop_show: false,
+        /** 地区 */
+        regions: {},
+        /** 个人资料 表单 */
+        profileForm: JSON.parse(JSON.stringify(this.$store.state.user.user)) || {},
+        /** 个人资料 表单规则 */
         profileRules: {
           truename: [
             { required: true, message: '请输入真实姓名', trigger: 'blur' },
@@ -72,7 +78,7 @@
             { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
           ],
           birthday: [
-            { type: 'date', required: true, message: '请选择生日', trigger: 'change' }
+            { required: true, message: '请选择生日', trigger: 'change' }
           ],
           address: [
             { required: true, message: '请输入详细地址', trigger: 'blur' },
@@ -84,7 +90,23 @@
     mounted() {
       window.axios = axios
     },
+    watch: {
+      user(newVal, oldVal) {
+        this.profileForm = JSON.parse(JSON.stringify(newVal))
+      }
+    },
     computed: {
+      /** 默认地址 */
+      defaultRegions() {
+        const { user } = this.$store.state.user
+        if(!user) return null
+        return [
+          user.province_id,
+          user.city_id,
+          user.region_id || -1,
+          user.town_id || -1
+        ]
+      },
       ...mapGetters({
         user: 'user/user'
       })
@@ -93,6 +115,19 @@
       /** 地区选择器值发生改变 */
       handleAddressSelectChanged(object) {
         console.log(object)
+      },
+      handleCropSuccess() {},
+      handleCropUploadSuccess() {},
+      /** 保存资料提交表单 */
+      submitProfile() {
+        this.$refs['profileForm'].validate((valid) => {
+          if (valid) {
+            console.log(this.profileForm)
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        })
       }
     }
   }
