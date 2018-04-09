@@ -11,6 +11,14 @@
         <div class="toolbar-btns">
           <el-button @click="handleDeleteAllMsgs" type="danger">全部删除</el-button>
           <el-button @click="handleSignReadAllMsgs" type="primary">标记为已读</el-button>
+          <el-select v-model="current_category" placeholder="请选择"  @change="handleChangeMsgCategory">
+            <el-option
+              v-for="item in msg_categorys"
+              :key="item.msg_category_id"
+              :label="item.msg_category_label"
+              :value="item.msg_category_id">
+            </el-option>
+          </el-select>
         </div>
       </div>
       <template slot="table-columns">
@@ -79,8 +87,31 @@
         /** 列表分页数据 */
         pageData: null,
 
-        /** 选中项的msg_ids*/
-        selectionids: []
+        /** 选中项的msg_id们 */
+        selectionids: [],
+
+        /** 消息类型*/
+        current_category: 0,
+
+        /** 消息类型列表 */
+        msg_categorys: [
+          {
+            /** 消息类型id*/
+            msg_category_id: 0,
+
+            /** 消息类型文本*/
+            msg_category_label: '所有'
+          }, {
+            msg_category_id: 1,
+            msg_category_label: '商品相关消息'
+          }, {
+            msg_category_id: 2,
+            msg_category_label: '订单相关消息'
+          }, {
+            msg_category_id: 3,
+            msg_category_label: '售后相关消息'
+          }
+        ]
 
       }
     },
@@ -116,6 +147,16 @@
           this.loading = false
           console.log(error)
         })
+      },
+
+      /** 改变分类*/
+      handleChangeMsgCategory(val) {
+        this.current_category = val
+        this.params = {
+          ...this.params,
+          current_category: val
+        }
+        this.GET_MsgsList()
       },
 
       /** 获取选中项*/
