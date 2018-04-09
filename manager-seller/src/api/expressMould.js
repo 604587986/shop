@@ -35,7 +35,7 @@ export function deleteExpressMould(ids, params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logistics/tpl/${ids}`,
       method: 'delete',
       data: _formData
     }).then(response => {
@@ -55,7 +55,7 @@ export function saveExpressMould(ids, params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logistics/tpl/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logistics/tpl/reserve/${ids}`,
       method: 'post',
       data: _formData
     }).then(response => {
