@@ -25,7 +25,7 @@
         <el-table-column type="selection" width="55"/>
         <el-table-column prop="msg_content" label="内容"/>
         <el-table-column label="发送时间" width="200" >
-          <template slot-scope="scope">{{ scope.row.send_time | unixToDate('yyyy-MM-dd HH') }}</template>
+          <template slot-scope="scope">{{ scope.row.send_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
