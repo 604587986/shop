@@ -31,8 +31,8 @@
                 卖家信用：{{dashBoardData.shop_info.shop_credit}}
               </span>
               <div class="shop-icon">
-                <img src="/javashop/themes/b2b2cv4/images/cert_autonym.gif" alt="">
-                <img src="/javashop/themes/b2b2cv4/images/cert_material.gif" alt="">
+                <img src="http://localhost:8080/javashop/themes/b2b2cv4/images/cert_autonym.gif" alt="">
+                <img src="http://localhost:8080/javashop/themes/b2b2cv4/images/cert_material.gif" alt="">
               </div>
               <span>店铺地址：{{dashBoardData.shop_info.shop_address}}</span>
             </div>
@@ -203,12 +203,12 @@ export default {
 
     /** 跳转商品列表*/
     toGoodsManager(goodsStatus) {
-      this.$router.push({ path: '/goods/goods-list', query: { goodsStatus }})
+      this.$router.push({ path: `/goods/goods-list/${goodsStatus}` })
     },
 
     /** 跳转买家留言*/
     toConsumerMsg() {
-      this.$router.push({ path: '/goods/goods-list' })
+      // this.$router.push({ path: '/goods/goods-list' })
     },
 
     /** 跳转订单列表*/

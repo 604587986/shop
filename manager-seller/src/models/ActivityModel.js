@@ -41,27 +41,11 @@ export class Activity extends DataModel {
   @ServerName('price_reduction')
   price_reduction
 
-  /** 活动报名截止时间 */
-  @ServerName('sign_end_time')
-  sign_end_time
-
-  /** 活动报名条件 */
-  @ServerName('sign_condition')
-  sign_condition
-
-  /** 活动申请规则 */
-  @ServerName('application_rules')
-  application_rules
-
-  /** （限时抢购用到）抢购阶段 */
-  @ServerName('panic_buy')
-  panic_buy
-
-  /** 报名状态  1已报名 0未报名*/
-  @ServerName('is_signed')
-  is_signed
-
   /** 是否是全部商品参与  1是 0否*/
   @ServerName('is_all_joined')
   is_all_joined
+
+  /** 活动描述 */
+  @ServerName('activity_desc')
+  activity_desc
 }

@@ -13,13 +13,13 @@ import * as GroupBuyModel from '../models/GroupBuyModel'
 export function getGroupBuyGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/goods/list',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/group/buy/list',
       method: 'get',
       loading: false,
       params
     }).then(response => {
       const _response = response
-      _response.data = new GroupBuyModel.GroupBuy().map(response.data)
+      _response.data = new GroupBuyModel.GroupBuyGoods().map(response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })
@@ -98,12 +98,34 @@ export function getGroupBuyGoodsDetails(ids, params) {
   Object.keys(params).forEach(key => _formdata.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/group/goods/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/group/buy/details/${ids}`,
       method: 'post',
       loading: false,
       data: _formdata
     }).then(response => {
-      resolve(response)
+      const _response = response
+      _response.data = new GroupBuyModel.GroupBuyDetails().map(response.data)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取团购活动列表 （待审核）
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGroupBuyActivityList(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/group/activity/list',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new GroupBuyModel.GroupBuyActivitys().map(response.data)
+      resolve(_response)
     }).catch(error => reject(error))
   })
 }

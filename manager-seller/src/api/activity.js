@@ -92,18 +92,17 @@ export function saveActivity(ids, params) {
 }
 
 /**
- * 活动报名
+ * 获取活动详情
  * @param ids
  * @param params
  * @returns {Promise<any>}
- * @constructor
  */
-export function signUpActivity(ids, params) {
+export function getActivityDetails(ids, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/sign/${ids}`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/reserve/${ids}`,
       method: 'post',
       loading: false,
       data: _formData

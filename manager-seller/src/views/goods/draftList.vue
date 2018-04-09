@@ -34,7 +34,7 @@
     </div>
 
     <template slot="table-columns">
-      <el-table-column label="商品图片" width="120">
+      <el-table-column label="图片" width="120">
         <template slot-scope="scope">
           <img :src="scope.row.image" class="goods-image"/>
         </template>

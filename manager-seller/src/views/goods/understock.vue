@@ -35,20 +35,22 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column label="商品图片" width="120">
+        <el-table-column label="图片" width="120">
           <template slot-scope="scope">
             <img :src="scope.row.image" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column prop="sn" label="商品编号" width="180"/>
-        <el-table-column prop="seller_name" label="店铺名称" width="120"/>
-        <el-table-column prop="name" label="商品名称" align="left" width="450"/>
-        <el-table-column prop="category_name" label="商品分类"/>
-        <el-table-column label="商品价格" width="120">
+        <el-table-column prop="name" label="名称" align="left" width="450"/>
+        <el-table-column label="价格" width="120">
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-        <el-table-column prop="brand_name" label="品牌"></el-table-column>
+        <el-table-column prop="balanced" label="库存" width="180"/>
+        <el-table-column prop="balanced" label="可用库存" width="120"/>
+
+        <el-table-column prop="category_name" label="创建时间">
+          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
+        </el-table-column>
+        <el-table-column prop="market_enable" label="状态" width="80" :formatter="marketStatus"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -72,7 +74,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="库存编辑" :visible.sync="goodsWarningStockshow" width="40%">
+    <el-dialog title="库存信息" center :visible.sync="goodsWarningStockshow" width="40%">
       <en-tabel-layout :tableData="goodsWarningStockDate" :loading="loading">
         <template slot="table-columns">
           <el-table-column prop="sn" label="货号"/>

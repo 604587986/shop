@@ -117,149 +117,96 @@ export const asyncRouterMap = [
       { path: 'add-time-limit', component: _import('promotions/addTimeLimit'), name: 'addTimeLimit', meta: { title: 'addTimeLimit' }, hidden: true },
       { path: 'activity-goods-data', component: _import('promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData' }, hidden: true },
       { path: 'add-group-buy-goods', component: _import('promotions/addGroupBuyGoods'), name: 'addGroupBuyGoods', meta: { title: 'addGroupBuyGoods' }, hidden: true },
-      { path: 'edit-group-buy-goods/:goods_id', component: _import('promotions/addGroupBuyGoods'), name: 'editGroupBuyGoods', meta: { title: 'editGroupBuyGoods' }, hidden: true }
+      { path: 'edit-group-buy-goods/:goods_id', component: _import('promotions/editGroupBuyGoods'), name: 'editGroupBuyGoods', meta: { title: 'editGroupBuyGoods' }, hidden: true }
     ]
   },
   // 统计
-  {
-    path: '/statistics',
-    component: Layout,
-    redirect: '/statistics/member-analysis/order-amount',
-    name: 'statistics',
-    meta: { title: 'statistics', icon: 'statistics-manage' },
-    children: [
-      {
-        path: '/statistics/member-analysis',
-        component: _import('statistics/member-analysis/index'),
-        redirect: '/statistics/member-analysis/order-amount',
-        name: 'memberAnalysis',
-        meta: { title: 'memberAnalysis' },
-        children: [
-          { path: 'order-amount', component: _import('statistics/member-analysis/orderAmount'), name: 'orderAmount', meta: { title: 'orderAmount' }},
-          { path: 'added-member', component: _import('statistics/member-analysis/addedMember'), name: 'addedMmeber', meta: { title: 'addedMember' }}
-        ]
-      },
-      {
-        path: '/statistics/goods-statistics',
-        component: _import('statistics/goods-statistics/index'),
-        redirect: '/statistics/goods-statistics/price-sales',
-        name: 'goodsStatistics',
-        meta: { title: 'goodsStatistics' },
-        children: [
-          { path: 'price-sales', component: _import('statistics/goods-statistics/priceSales'), name: 'priceSales', meta: { title: 'priceSales' }},
-          { path: 'hot-goods', component: _import('statistics/goods-statistics/hotGoods'), name: 'hotGoods', meta: { title: 'hotGoods' }},
-          // { path: 'goods-sales-details', component: _import('statistics/goods-statistics/goodsSalesDetails'), name: 'goodsSalesDetails', meta: { title: 'goodsSalesDetails' }},
-          { path: 'goods-collect', component: _import('statistics/goods-statistics/goodsCollect'), name: 'goodsCollect', meta: { title: 'goodsCollect' }}
-        ]
-      },
-      {
-        path: '/statistics/industry-analysis',
-        component: _import('statistics/industry-analysis/index'),
-        redirect: '/statistics/industry-analysis/industry-scale',
-        name: 'industryAnalysis',
-        meta: { title: 'industryAnalysis' },
-        children: [
-          { path: 'industry-scale', component: _import('statistics/industry-analysis/industryScale'), name: 'industryScale', meta: { title: 'industryScale' }},
-          { path: 'generality-overview', component: _import('statistics/industry-analysis/generalityOverview'), name: 'generalityOverview', meta: { title: 'generalityOverview' }}
-        ]
-      },
-      {
-        path: '/statistics/traffic-analysis',
-        component: _import('statistics/traffic-analysis/index'),
-        redirect: '/statistics/traffic-analysis/index',
-        name: 'trafficAnalysis',
-        meta: { title: 'trafficAnalysis' },
-        children: [
-          { path: 'index', component: _import('statistics/traffic-analysis/trafficAnalysisIndex'), name: 'indexTrafficAnalysis', meta: { title: 'trafficAnalysisIndex' }},
-          { path: 'goods', component: _import('statistics/traffic-analysis/trafficAnalysisGoods'), name: 'goodsTrafficAnalysis', meta: { title: 'trafficAnalysisGoods' }}
-        ]
-      },
-      {
-        path: '/statistics/other-statistics',
-        component: _import('statistics/other-statistics/index'),
-        redirect: '/statistics/other-statistics/order',
-        name: 'otherStatistics',
-        meta: { title: 'otherStatistics' },
-        children: [
-          { path: 'order', component: _import('statistics/other-statistics/orderStatistics'), name: 'order-statistics', meta: { title: 'orderStatistics' }},
-          { path: 'salesRevenue', component: _import('statistics/other-statistics/salesRevenueStatistics'), name: 'salesRevenueStatistics', meta: { title: 'salesRevenueStatistics' }},
-          { path: 'regionalAnalysis', component: _import('statistics/other-statistics/regionalAnalysis'), name: 'regionalAnalysis', meta: { title: 'regionalAnalysis' }},
-          { path: 'customerPriceDistribution', component: _import('statistics/other-statistics/customerPriceDistribution'), name: 'customerPriceDistribution', meta: { title: 'customerPriceDistribution' }},
-          { path: 'refund', component: _import('statistics/other-statistics/refundStatistics'), name: 'refundStatistics', meta: { title: 'refundStatistics' }}
-        ]
-      },
-      {
-        path: 'statistics/log-manage',
-        component: _import('statistics/log-manage/index'),
-        name: 'logManage',
-        meta: { title: 'logManage' }
-      }
-    ]
-  },
+  // {
+  //   path: '/statistics',
+  //   component: Layout,
+  //   redirect: '/statistics/member-analysis/order-amount',
+  //   name: 'statistics',
+  //   meta: { title: 'statistics', icon: 'statistics-manage' },
+  //   children: [
+  //     {
+  //       path: '/statistics/member-analysis',
+  //       component: _import('statistics/member-analysis/index'),
+  //       redirect: '/statistics/member-analysis/order-amount',
+  //       name: 'memberAnalysis',
+  //       meta: { title: 'memberAnalysis' },
+  //       children: [
+  //         { path: 'order-amount', component: _import('statistics/member-analysis/orderAmount'), name: 'orderAmount', meta: { title: 'orderAmount' }},
+  //         { path: 'added-member', component: _import('statistics/member-analysis/addedMember'), name: 'addedMmeber', meta: { title: 'addedMember' }}
+  //       ]
+  //     },
+  //     {
+  //       path: '/statistics/goods-statistics',
+  //       component: _import('statistics/goods-statistics/index'),
+  //       redirect: '/statistics/goods-statistics/price-sales',
+  //       name: 'goodsStatistics',
+  //       meta: { title: 'goodsStatistics' },
+  //       children: [
+  //         { path: 'price-sales', component: _import('statistics/goods-statistics/priceSales'), name: 'priceSales', meta: { title: 'priceSales' }},
+  //         { path: 'hot-goods', component: _import('statistics/goods-statistics/hotGoods'), name: 'hotGoods', meta: { title: 'hotGoods' }},
+  //         // { path: 'goods-sales-details', component: _import('statistics/goods-statistics/goodsSalesDetails'), name: 'goodsSalesDetails', meta: { title: 'goodsSalesDetails' }},
+  //         { path: 'goods-collect', component: _import('statistics/goods-statistics/goodsCollect'), name: 'goodsCollect', meta: { title: 'goodsCollect' }}
+  //       ]
+  //     },
+  //     {
+  //       path: '/statistics/industry-analysis',
+  //       component: _import('statistics/industry-analysis/index'),
+  //       redirect: '/statistics/industry-analysis/industry-scale',
+  //       name: 'industryAnalysis',
+  //       meta: { title: 'industryAnalysis' },
+  //       children: [
+  //         { path: 'industry-scale', component: _import('statistics/industry-analysis/industryScale'), name: 'industryScale', meta: { title: 'industryScale' }},
+  //         { path: 'generality-overview', component: _import('statistics/industry-analysis/generalityOverview'), name: 'generalityOverview', meta: { title: 'generalityOverview' }}
+  //       ]
+  //     },
+  //     {
+  //       path: '/statistics/traffic-analysis',
+  //       component: _import('statistics/traffic-analysis/index'),
+  //       redirect: '/statistics/traffic-analysis/index',
+  //       name: 'trafficAnalysis',
+  //       meta: { title: 'trafficAnalysis' },
+  //       children: [
+  //         { path: 'index', component: _import('statistics/traffic-analysis/trafficAnalysisIndex'), name: 'indexTrafficAnalysis', meta: { title: 'trafficAnalysisIndex' }},
+  //         { path: 'goods', component: _import('statistics/traffic-analysis/trafficAnalysisGoods'), name: 'goodsTrafficAnalysis', meta: { title: 'trafficAnalysisGoods' }}
+  //       ]
+  //     },
+  //     {
+  //       path: '/statistics/other-statistics',
+  //       component: _import('statistics/other-statistics/index'),
+  //       redirect: '/statistics/other-statistics/order',
+  //       name: 'otherStatistics',
+  //       meta: { title: 'otherStatistics' },
+  //       children: [
+  //         { path: 'order', component: _import('statistics/other-statistics/orderStatistics'), name: 'order-statistics', meta: { title: 'orderStatistics' }},
+  //         { path: 'salesRevenue', component: _import('statistics/other-statistics/salesRevenueStatistics'), name: 'salesRevenueStatistics', meta: { title: 'salesRevenueStatistics' }},
+  //         { path: 'regionalAnalysis', component: _import('statistics/other-statistics/regionalAnalysis'), name: 'regionalAnalysis', meta: { title: 'regionalAnalysis' }},
+  //         { path: 'customerPriceDistribution', component: _import('statistics/other-statistics/customerPriceDistribution'), name: 'customerPriceDistribution', meta: { title: 'customerPriceDistribution' }},
+  //         { path: 'refund', component: _import('statistics/other-statistics/refundStatistics'), name: 'refundStatistics', meta: { title: 'refundStatistics' }}
+  //       ]
+  //     },
+  //     {
+  //       path: 'statistics/log-manage',
+  //       component: _import('statistics/log-manage/index'),
+  //       name: 'logManage',
+  //       meta: { title: 'logManage' }
+  //     }
+  //   ]
+  // },
   // 设置
   {
     path: '/setting',
     component: Layout,
-    redirect: '/setting/shop-settings/system',
+    redirect: '/setting/shop',
     name: 'setting',
     meta: { title: 'setting', icon: 'setting-manage' },
     children: [
-      {
-        path: '/setting/shop-settings',
-        component: _import('setting/shop-settings/index'),
-        redirect: '/setting/shop-settings/system',
-        name: 'shopSettings',
-        meta: { title: 'shopSettings' },
-        children: [
-          { path: 'system', component: _import('setting/shop-settings/systemSettings'), name: 'systemSettings', meta: { title: 'systemSettings' }},
-          { path: 'smtp', component: _import('setting/shop-settings/SMTPSettings'), name: 'smtpSettings', meta: { title: 'smtpSettings' }},
-          { path: 'sms-gateway', component: _import('setting/shop-settings/SMSGatewaySettings'), name: 'smsGatewaySettings', meta: { title: 'SMSGatewaySettings' }},
-          { path: 'express-platform', component: _import('setting/shop-settings/expressPlatformSettings'), name: 'expressPlatformSettings', meta: { title: 'expressPlatformSettings' }},
-          { path: 'receipt-content-settings', component: _import('setting/shop-settings/receiptContentSettings'), name: 'receiptContentSettings', meta: { title: 'receiptContentSettings' }},
-          { path: 'electronic-receipt', component: _import('setting/shop-settings/electronicReceipt'), name: 'electronicrEceiptSettings', meta: { title: 'electronicReceipt' }},
-          { path: 'storage-solution', component: _import('setting/shop-settings/storageSolution'), name: 'storageSolutionSettings', meta: { title: 'storageSolution' }},
-          { path: 'static-page', component: _import('setting/shop-settings/staticPage'), name: 'staticPageSettings', meta: { title: 'staticPage' }},
-          { path: 'goods-index', component: _import('setting/shop-settings/goodsIndex'), name: 'goodsIndexSettings', meta: { title: 'goodsIndex' }},
-          { path: 'trust-login', component: _import('setting/shop-settings/trustLogin'), name: 'trustLoginSettings', meta: { title: 'trustLogin' }},
-          { path: 'cache-manage', component: _import('setting/shop-settings/cacheManage'), name: 'cacheManageSettings', meta: { title: 'cacheManage' }}
-        ]
-      },
-      {
-        path: '/setting/message-settings',
-        component: _import('setting/message-settings/index'),
-        redirect: '/setting/message-settings/member',
-        name: 'messageSettings',
-        meta: { title: 'messageSettings' },
-        children: [
-          { path: 'shop', component: _import('setting/message-settings/shopMessage'), name: 'shopMessageSettings', meta: { title: 'shopMessage' }},
-          { path: 'member', component: _import('setting/message-settings/memberMessage'), name: 'memberMessageSettings', meta: { title: 'memberMessage' }},
-          { path: 'other', component: _import('setting/message-settings/otherMessage'), name: 'otherMessageSettings', meta: { title: 'otherMessage' }}
-        ]
-      },
-      {
-        path: '/setting/payment-and-delivery',
-        component: _import('setting/payment-and-delivery/index'),
-        redirect: '/setting/payment-and-delivery/payment',
-        name: 'paymentAndDelivery',
-        meta: { title: 'paymentAndDelivery' },
-        children: [
-          { path: 'payment', component: _import('setting/payment-and-delivery/payment'), name: 'paymentSettings', meta: { title: 'payment' }},
-          { path: 'express-company', component: _import('setting/payment-and-delivery/expressCompany'), name: 'expressCompanySettings', meta: { title: 'expressCompany' }},
-          { path: 'regional-management', component: _import('setting/payment-and-delivery/regionalManagement'), name: 'regionalManagementSettings', meta: { title: 'regionalManagement' }}
-        ]
-      },
-      {
-        path: '/setting/auth-settings',
-        component: _import('setting/auth-settings/index'),
-        redirect: '/setting/auth-settings/administrator-manage',
-        name: 'authSettings',
-        meta: { title: 'authSettings' },
-        children: [
-          { path: 'administrator-manage', component: _import('setting/auth-settings/administratorManage'), name: 'administratorManage', meta: { title: 'administratorManage' }},
-          { path: 'role-manage', component: _import('setting/auth-settings/roleManage'), name: 'roleManage', meta: { title: 'roleManage' }},
-          { path: 'auth-manage', component: _import('setting/auth-settings/authManage'), name: 'authManage', meta: { title: 'authManage' }}
-        ]
-      }
+      { path: 'shop-setting', component: _import('setting/shopSettings'), name: 'shopSettings', meta: { title: 'shopSettings' }},
+      { path: 'goods-warning', component: _import('setting/goodsWarning'), name: 'goodsWarning', meta: { title: 'goodsWarning' }},
+      { path: 'grade-application', component: _import('setting/gradeApplication'), name: 'gradeApplication', meta: { title: 'gradeApplication' }}
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

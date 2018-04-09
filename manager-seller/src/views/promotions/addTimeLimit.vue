@@ -77,7 +77,7 @@
       </el-col>
     </el-row>
     <div style="text-align: center;">
-      <el-button type="success" @click="signUp">确定报名</el-button>
+      <el-button type="success" @click="handleSignUp">确定报名</el-button>
     </div>
     <en-goods-selector :show="showDialog" :api="goods_api" :defaultData="tableData" :maxLength="maxsize"
                        @confirm="refreshFunc" @closed="showDialog = false"/>
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-  import * as API_activity from '@/api/activity'
+  import * as API_limitTime from '@/api/limitTime'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
@@ -103,6 +103,9 @@
 
         /** 活动信息*/
         activityData: null,
+
+        /** 活动ID*/
+        activityID: '',
 
         /** 表格信息*/
         tableData: [],
@@ -125,13 +128,23 @@
       }
     },
     mounted() {
-      this.activityData = this.$route.query.row
+      this.activityID = this.$route.query._activity_id
+      this.GET_limitTimeActivityDetails()
     },
     methods: {
-      /** 确定报名*/
-      signUp() {
-        /** 构造提交表单参数*/
-        API_activity.signUpActivity(this.signForm).then(response => {
+      /** 获取限时活动详情 */
+      GET_limitTimeActivityDetails() {
+        API_limitTime.getLimitTimeActivityDetails(this.activityID, {}).then(response => {
+          this.loading = false
+          this.activityData = response.data
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+
+      /** 确定报名 */
+      handleSignUp() {
+        API_limitTime.signUpLimitTimeActivity(this.activityID, this.signForm).then(response => {
           this.$message.success('报名成功')
           this.$router.push({ path: '/promotions/activity-goods-data' })
         }).catch(error => {

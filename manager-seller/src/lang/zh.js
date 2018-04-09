@@ -65,33 +65,10 @@ export default {
     logManage: '日志管理',
 
     setting: '设置管理',
-    shopSettings: '网店设置',
-    systemSettings: '系统设置',
-    smtpSettings: 'SMTP设置',
-    SMSGatewaySettings: '短信网关设置',
-    expressPlatformSettings: '快递平台设置',
-    receiptContentSettings: '发票内容设置',
-    electronicReceipt: '电子面单',
-    storageSolution: '储存方案',
-    staticPage: '静态页',
-    goodsIndex: '商品索引',
-    trustLogin: '信任登录',
-    cacheManage: '缓存管理',
+    shopSettings: '店铺设置',
+    goodsWarning: '货品预警',
+    gradeApplication: '等级申请'
 
-    messageSettings: '消息设置',
-    shopMessage: '店铺消息',
-    memberMessage: '会员消息',
-    otherMessage: '其它消息',
-
-    paymentAndDelivery: '支付和配送',
-    payment: '支付方式',
-    expressCompany: '配送方式',
-    regionalManagement: '区域管理',
-
-    authSettings: '权限管理',
-    administratorManage: '管理员管理',
-    roleManage: '角色管理',
-    authManage: '权限点管理'
   },
   login: {
     logIn: '登录',
