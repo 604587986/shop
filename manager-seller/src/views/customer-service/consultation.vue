@@ -1,0 +1,253 @@
+<template>
+  <div>
+    <en-tabel-layout
+      toolbar
+      pagination
+      :tableData="tableData"
+      :loading="loading"
+    >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns"></div>
+        <div class="toolbar-search">
+          <en-table-search
+            @search="searchEvent"
+            @advancedSearch="advancedSearchEvent"
+            advanced
+            advancedWidth="465"
+            placeholder="请输入关键字"
+          >
+            <template slot="advanced-content">
+              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+                <el-form-item label="会员名称">
+                  <el-input size="medium" v-model="advancedForm.member_name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="商品名称">
+                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="咨询内容">
+                  <el-input size="medium" v-model="advancedForm.consultation_content" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="回复状态">
+                  <el-select v-model="advancedForm.is_reply" placeholder="请选择" clearable>
+                    <el-option label="全部" value="0"/>
+                    <el-option label="已回复" value="1"/>
+                    <el-option label="未回复" value="2"/>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+            </template>
+          </en-table-search>
+        </div>
+      </div>
+    </en-tabel-layout>
+    <table class="my-table">
+      <thead>
+      <tr class="bg-order">
+        <th>咨询</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody v-for="item in tableData">
+      <tr class="bg-order">
+        <td colspan="2" class="base-info">
+          <!--商品名称-->
+          <a href="#" class="goods-name">{{ item.goods_name }}</a>
+          咨询用户：<span class="member-name">{{ item.member_name}} </span>
+          咨询时间：<span>{{ item.consultation_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+        </td>
+      </tr>
+      <tr>
+        <!--咨询-->
+        <td>
+          <h4>咨询问题：</h4>
+          <p>{{ item.consultation_content }}</p>
+        </td>
+        <!--操作-->
+        <td class="opera-btn">
+          <h4>回复咨询：</h4>
+          <p>{{ item.reply_content }}</p>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <el-pagination
+      slot="pagination"
+      v-if="pageData"
+      @size-change="handlePageSizeChange"
+      @current-change="handlePageCurrentChange"
+      :current-page="pageData.page_no"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pageData.page_size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="pageData.data_total">
+    </el-pagination>
+  </div>
+</template>
+
+<script>
+  import * as API_consultation from '@/api/consultation'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+
+  export default {
+    name: 'consultation',
+    components: {
+      [TableLayout.name]: TableLayout,
+      [TableSearch.name]: TableSearch,
+      [CategoryPicker.name]: CategoryPicker
+    },
+    data() {
+      return {
+        /** 列表loading状态 */
+        loading: false,
+
+        /** 列表参数 */
+        params: {
+          page_no: 1,
+          page_size: 10
+        },
+
+        /** 列表数据 */
+        tableData: null,
+
+        /** 列表分页数据 */
+        pageData: null,
+
+        /** 高级搜索数据 */
+        advancedForm: {}
+      }
+    },
+    mounted() {
+      this.GET_ConsultationList()
+    },
+    methods: {
+      /** 分页大小发生改变 */
+      handlePageSizeChange(size) {
+        this.params.page_size = size
+        this.GET_ConsultationList()
+      },
+
+      /** 分页页数发生改变 */
+      handlePageCurrentChange(page) {
+        this.params.page_no = page
+        this.GET_ConsultationList()
+      },
+
+      /** 搜索事件触发 */
+      searchEvent(data) {
+        this.params = {
+          ...this.params,
+          keyword: data
+        }
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.GET_ConsultationList()
+      },
+
+      /** 高级搜索事件触发 */
+      advancedSearchEvent() {
+        this.params = {
+          ...this.params,
+          ...this.advancedForm
+        }
+        this.GET_ConsultationList()
+      },
+
+      /** 获取咨询列表*/
+      GET_ConsultationList() {
+        this.loading = true
+        API_consultation.getConsultationList(this.params).then(response => {
+          this.loading = false
+          this.tableData = response.data
+          this.pageData = {
+            page_no: response.draw,
+            page_size: 10,
+            data_total: response.recordsTotal
+          }
+        }).catch(error => {
+          this.loading = false
+          console.log(error)
+        })
+      }
+    }
+  }
+</script>
+
+<style type="text/scss" lang="scss" scoped>
+  /* 工具条*/
+  .inner-toolbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  /*表格信息*/
+  .my-table {
+    .bg-order {
+      background: #FAFAFA;
+    }
+    width: 100%;
+    background: #ffffff;
+    border-collapse: collapse;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+    font-size: 14px;
+    font-bold: 700;
+    thead {
+      th {
+        padding: 20px 0;
+        border: 1px solid #ebeef5;
+        border-collapse: collapse;
+        color: #909399;
+        width: 50%;
+      }
+    }
+    tbody {
+      margin-top: 10px;
+      td {
+        border: 1px solid #ebeef5;
+        border-collapse: collapse;
+        vertical-align: middle;
+        text-align: left;
+        padding: 10px 20px;
+        h4 {
+          margin: 10px 0;
+          padding: 0;
+        }
+        p {
+          margin: 10px 0;
+          padding: 0;
+        }
+      }
+      td.base-info {
+        font-weight: bold;
+
+        /*商品名称*/
+        a.goods-name {
+          color: #337ab7 ;
+          display: inline-block;
+          margin: 0 20px 0 0;
+        }
+
+        /*会员名称*/
+        span.member-name {
+          display: inline-block;
+          margin: 0 20px 0 0;
+        }
+      }
+
+      td.opera-btn {
+        color: #f42424;
+        line-height: 25px;
+      }
+    }
+  }
+
+  /*分页信息*/
+  .el-pagination {
+    text-align: right;
+    width: 100%;
+    background: #ffffff;
+    height: 40px;
+  }
+</style>
+
+

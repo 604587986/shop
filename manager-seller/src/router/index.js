@@ -198,6 +198,17 @@ export const asyncRouterMap = [
   // },
   // 设置
   {
+    path: '/customer',
+    component: Layout,
+    redirect: '/customer/consultation',
+    name: 'customer',
+    meta: { title: 'customer', icon: 'setting-manage' },
+    children: [
+      { path: 'consultation', component: _import('customer-service/consultation'), name: 'consultation', meta: { title: 'consultation' }},
+      { path: 'message', component: _import('customer-service/message'), name: 'message', meta: { title: 'message' }}
+    ]
+  },
+  {
     path: '/setting',
     component: Layout,
     redirect: '/setting/shop',

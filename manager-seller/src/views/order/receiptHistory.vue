@@ -6,20 +6,20 @@
       :loading="loading"
     >
       <template slot="table-columns">
-        <!--订单编号-->
+        <!--日期-->
         <el-table-column label="日期">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
+          <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
-        <!--下单时间-->
+        <!--会员名称-->
         <el-table-column prop="member_name" label="会员名称"/>
-        <!--订单总额-->
-        <el-table-column prop="sn" label="订单编号"/>
-        <!--收货人-->
+        <!--订单编号-->
+        <el-table-column prop="order_sn" label="订单编号"/>
+        <!--发票金额-->
         <el-table-column label="发票金额">
-          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.receipt_amount | unitPrice('￥') }}</template>
         </el-table-column>
-        <!--订单状态-->
-        <el-table-column prop="receipt_type" label="发票类别"/>
+        <!--发票类别-->
+        <el-table-column prop="receipt_title" label="发票类别"/>
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -105,13 +105,11 @@
       /** 查看发票 */
       handleOperateReceipt(index, row) {
         const keys = [
-          { label: '订单编号', key: 'sn' },
-          { label: '发票类型', key: 'receipt_type' },
-          { label: '会员名称', key: 'member_name' },
-          { label: '发票金额', key: 'goods_price' },
+          { label: '订单编号', key: 'order_sn' },
           { label: '发票抬头', key: 'receipt_title' },
+          { label: '发票类型', key: 'receipt_type_code' },
           { label: '发票内容', key: 'receipt_content' },
-          { label: '发票税号', key: 'duty_invoice' }
+          { label: '发票税号', key: 'ITIN' }
         ]
         this.viewRectiptData = keys.map(item => {
           item.value = row[item.key]

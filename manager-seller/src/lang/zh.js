@@ -16,7 +16,7 @@ export default {
     orderList: '订单列表',
     refundList: '维权订单',
     logisticsManage: '物流管理',
-    commentsManage: '评论管理',
+    commentsManage: '评价管理',
     settlementManage: '结算管理',
     receiptHistory: '发票历史',
     orderDetail: '订单详情',
@@ -63,6 +63,10 @@ export default {
     customerPriceDistribution: '客单价分布图',
     refundStatistics: '退款统计',
     logManage: '日志管理',
+
+    customer: '客服管理',
+    consultation: '咨询管理',
+    message: '消息',
 
     setting: '设置管理',
     shopSettings: '店铺设置',
