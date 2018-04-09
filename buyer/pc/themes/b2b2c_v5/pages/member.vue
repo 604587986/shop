@@ -10,13 +10,15 @@
 
 <script>
   import Vue from 'vue'
-  import { Alert, Checkbox, Form, FormItem, Input, Pagination, Table, TableColumn } from 'element-ui'
+  import { Alert, Checkbox, DatePicker, Form, FormItem, Input, Pagination, Radio, Table, TableColumn } from 'element-ui'
   Vue.use(Alert)
   Vue.use(Checkbox)
+  Vue.use(DatePicker)
   Vue.use(Form)
   Vue.use(FormItem)
   Vue.use(Input)
   Vue.use(Pagination)
+  Vue.use(Radio)
   Vue.use(Table)
   Vue.use(TableColumn)
   import { mapActions, mapGetters } from 'vuex'
