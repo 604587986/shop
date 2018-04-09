@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import StockWarningNumModel from '@/models/StockWarningNumModel'
 
 /**
  * 获取库存预警数量

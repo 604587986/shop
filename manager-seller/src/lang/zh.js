@@ -64,6 +64,10 @@ export default {
     refundStatistics: '退款统计',
     logManage: '日志管理',
 
+    customer: '客服管理',
+    consultation: '咨询管理',
+    message: '消息',
+
     setting: '设置管理',
     shopSettings: '店铺设置',
     goodsWarning: '货品预警',

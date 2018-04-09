@@ -64,6 +64,10 @@ export default {
     refundStatistics: 'Traffic AnalysisGoods',
     logManage: 'Log Manage',
 
+    customer: 'customer service',
+    consultation: 'consultation',
+    message: 'message',
+
     setting: 'Setting Mange',
     shopSettings: 'shop Settings',
     goodsWarning: 'goods Warning',
