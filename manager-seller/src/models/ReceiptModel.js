@@ -12,13 +12,25 @@ import {
 } from '@/framework'
 
 export default class ReceiptModel extends DataModel {
-  /** 是否需要发票 */
-  @ServerName('need_receipt')
-  need_receipt
+  /** 会员名称 */
+  @ServerName('member_name')
+  member_name
 
-  /** 发票类型 */
-  @ServerName('receipt_type')
-  receipt_type
+  /** 订单编号 */
+  @ServerName('order_sn')
+  order_sn
+
+  /** 发票金额 */
+  @ServerName('receipt_amount')
+  receipt_amount
+
+  /** 日期 */
+  @ServerName('create_time')
+  create_time
+
+  /** 发票类型码 */
+  @ServerName('receipt_type_code')
+  receipt_type_code
 
   /** 发票抬头 */
   @ServerName('receipt_title')
@@ -28,18 +40,7 @@ export default class ReceiptModel extends DataModel {
   @ServerName('receipt_content')
   receipt_content
 
-  /** 税号 */
-  @ServerName('duty_invoice')
-  duty_invoice
-}
-
-/** 发票内容模型 */
-export class ReceiptContentModel extends DataModel {
-  /** 发票内容ID */
-  @ServerName('contentid')
-  id
-
-  /** 发票内容 */
-  @ServerName('receipt_content')
-  content
+  /** 纳税人识别号 */
+  @ServerName('ITIN')
+  ITIN
 }
