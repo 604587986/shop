@@ -136,18 +136,19 @@ export const asyncRouterMap = [
       { path: 'log-manage', component: _import('statistics/logManage'), name: 'logManage', meta: { title: 'logManage' }}
     ]
   },
-  // 设置
+  // 客服管理
   {
     path: '/customer',
     component: Layout,
     redirect: '/customer/consultation',
     name: 'customer',
-    meta: { title: 'customer', icon: 'setting-manage' },
+    meta: { title: 'customer', icon: 'user' },
     children: [
       { path: 'consultation', component: _import('customer-service/consultation'), name: 'consultation', meta: { title: 'consultation' }},
       { path: 'message', component: _import('customer-service/message'), name: 'message', meta: { title: 'message' }}
     ]
   },
+  // 设置
   {
     path: '/setting',
     component: Layout,
