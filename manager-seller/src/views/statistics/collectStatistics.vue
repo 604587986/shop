@@ -47,8 +47,7 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10,
-          goods_status: 0
+          page_size: 10
         },
 
         /** 列表数据 */
@@ -79,7 +78,7 @@
 
       /** 收藏数据*/
       GET_CollectionData() {
-        API_collectionStatistics.getCollectionStatistics().then(response => {
+        API_collectionStatistics.getCollectionStatistics(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,
@@ -87,7 +86,7 @@
             data_total: response.recordsFiltered
           }
           /** 收藏列表 */
-          this.tableData = response.data
+          this.tableData = response.data.sort((a, b) => { return b.collection_num - a.collection_num })
           /** 商品名称列表 x轴信息 */
           const goodsNameList = this.tableData.map((item) => { return item.goods_name })
           /** 商品收藏数据列表 */
