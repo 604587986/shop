@@ -121,81 +121,21 @@ export const asyncRouterMap = [
     ]
   },
   // 统计
-  // {
-  //   path: '/statistics',
-  //   component: Layout,
-  //   redirect: '/statistics/member-analysis/order-amount',
-  //   name: 'statistics',
-  //   meta: { title: 'statistics', icon: 'statistics-manage' },
-  //   children: [
-  //     {
-  //       path: '/statistics/member-analysis',
-  //       component: _import('statistics/member-analysis/index'),
-  //       redirect: '/statistics/member-analysis/order-amount',
-  //       name: 'memberAnalysis',
-  //       meta: { title: 'memberAnalysis' },
-  //       children: [
-  //         { path: 'order-amount', component: _import('statistics/member-analysis/orderAmount'), name: 'orderAmount', meta: { title: 'orderAmount' }},
-  //         { path: 'added-member', component: _import('statistics/member-analysis/addedMember'), name: 'addedMmeber', meta: { title: 'addedMember' }}
-  //       ]
-  //     },
-  //     {
-  //       path: '/statistics/goods-statistics',
-  //       component: _import('statistics/goods-statistics/index'),
-  //       redirect: '/statistics/goods-statistics/price-sales',
-  //       name: 'goodsStatistics',
-  //       meta: { title: 'goodsStatistics' },
-  //       children: [
-  //         { path: 'price-sales', component: _import('statistics/goods-statistics/priceSales'), name: 'priceSales', meta: { title: 'priceSales' }},
-  //         { path: 'hot-goods', component: _import('statistics/goods-statistics/hotGoods'), name: 'hotGoods', meta: { title: 'hotGoods' }},
-  //         // { path: 'goods-sales-details', component: _import('statistics/goods-statistics/goodsSalesDetails'), name: 'goodsSalesDetails', meta: { title: 'goodsSalesDetails' }},
-  //         { path: 'goods-collect', component: _import('statistics/goods-statistics/goodsCollect'), name: 'goodsCollect', meta: { title: 'goodsCollect' }}
-  //       ]
-  //     },
-  //     {
-  //       path: '/statistics/industry-analysis',
-  //       component: _import('statistics/industry-analysis/index'),
-  //       redirect: '/statistics/industry-analysis/industry-scale',
-  //       name: 'industryAnalysis',
-  //       meta: { title: 'industryAnalysis' },
-  //       children: [
-  //         { path: 'industry-scale', component: _import('statistics/industry-analysis/industryScale'), name: 'industryScale', meta: { title: 'industryScale' }},
-  //         { path: 'generality-overview', component: _import('statistics/industry-analysis/generalityOverview'), name: 'generalityOverview', meta: { title: 'generalityOverview' }}
-  //       ]
-  //     },
-  //     {
-  //       path: '/statistics/traffic-analysis',
-  //       component: _import('statistics/traffic-analysis/index'),
-  //       redirect: '/statistics/traffic-analysis/index',
-  //       name: 'trafficAnalysis',
-  //       meta: { title: 'trafficAnalysis' },
-  //       children: [
-  //         { path: 'index', component: _import('statistics/traffic-analysis/trafficAnalysisIndex'), name: 'indexTrafficAnalysis', meta: { title: 'trafficAnalysisIndex' }},
-  //         { path: 'goods', component: _import('statistics/traffic-analysis/trafficAnalysisGoods'), name: 'goodsTrafficAnalysis', meta: { title: 'trafficAnalysisGoods' }}
-  //       ]
-  //     },
-  //     {
-  //       path: '/statistics/other-statistics',
-  //       component: _import('statistics/other-statistics/index'),
-  //       redirect: '/statistics/other-statistics/order',
-  //       name: 'otherStatistics',
-  //       meta: { title: 'otherStatistics' },
-  //       children: [
-  //         { path: 'order', component: _import('statistics/other-statistics/orderStatistics'), name: 'order-statistics', meta: { title: 'orderStatistics' }},
-  //         { path: 'salesRevenue', component: _import('statistics/other-statistics/salesRevenueStatistics'), name: 'salesRevenueStatistics', meta: { title: 'salesRevenueStatistics' }},
-  //         { path: 'regionalAnalysis', component: _import('statistics/other-statistics/regionalAnalysis'), name: 'regionalAnalysis', meta: { title: 'regionalAnalysis' }},
-  //         { path: 'customerPriceDistribution', component: _import('statistics/other-statistics/customerPriceDistribution'), name: 'customerPriceDistribution', meta: { title: 'customerPriceDistribution' }},
-  //         { path: 'refund', component: _import('statistics/other-statistics/refundStatistics'), name: 'refundStatistics', meta: { title: 'refundStatistics' }}
-  //       ]
-  //     },
-  //     {
-  //       path: 'statistics/log-manage',
-  //       component: _import('statistics/log-manage/index'),
-  //       name: 'logManage',
-  //       meta: { title: 'logManage' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/statistics',
+    component: Layout,
+    redirect: '/statistics/generalityOverview',
+    name: 'statistics',
+    meta: { title: 'statistics', icon: 'statistics-manage' },
+    children: [
+      { path: 'generality-overview', component: _import('statistics/generalityOverview'), name: 'generalityOverview', meta: { title: 'generalityOverview' }},
+      { path: 'goods-analysis', component: _import('statistics/goodsAnalysis'), name: 'goodsAnalysis', meta: { title: 'goodsAnalysis' }},
+      { path: 'operate-report', component: _import('statistics/operateReport'), name: 'operateReport', meta: { title: 'operateReport' }},
+      { path: 'traffic-statistics', component: _import('statistics/trafficStatistics'), name: 'trafficStatistics', meta: { title: 'trafficStatistics' }},
+      { path: 'collect-statistics', component: _import('statistics/collectStatistics'), name: 'collectStatistics', meta: { title: 'collectStatistics' }},
+      { path: 'log-manage', component: _import('statistics/logManage'), name: 'logManage', meta: { title: 'logManage' }}
+    ]
+  },
   // 设置
   {
     path: '/customer',
