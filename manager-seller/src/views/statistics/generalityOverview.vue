@@ -41,8 +41,6 @@
         this.loading = false
         /** 店铺概况信息 */
         this.shopSurvey = response.shop_survey
-        console.log(response)
-        // response.sale_statistics
         /** 最近30天销售统计 */
         const xData = []
         for (let i = 1; i <= 30; i++) {
@@ -65,7 +63,7 @@
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: xData
+            data: xData.reverse()
           },
           yAxis: {
             type: 'value',
@@ -102,7 +100,6 @@
       this.$nextTick(() => {
         this.sesalChart = this.$echarts.init(document.getElementById('salesStatistics'))
       })
-      this.GET_LogsList()
     },
     methods: {
       /** 窗口缩放时计算table高度 */
@@ -110,10 +107,6 @@
         this.tableHeight = document.body.clientHeight / 3 * 2
         /** 图表刷新 */
         setTimeout(this.sesalChart.resize)
-      },
-
-      GET_LogsList() {
-        this.loading = true
       },
 
       /** 获取最近30天日期信息 */
