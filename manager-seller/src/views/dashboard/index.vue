@@ -203,12 +203,12 @@ export default {
 
     /** 跳转商品列表*/
     toGoodsManager(goodsStatus) {
-      this.$router.push({ path: `/goods/goods-list/${goodsStatus}` })
+      this.$router.push({ path: '/goods/goods-list', query: { goodsStatus }})
     },
 
     /** 跳转买家留言*/
     toConsumerMsg() {
-      // this.$router.push({ path: '/goods/goods-list' })
+      this.$router.push({ path: '/customer/consultation' })
     },
 
     /** 跳转订单列表*/

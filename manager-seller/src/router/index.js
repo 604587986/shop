@@ -56,7 +56,7 @@ export const asyncRouterMap = [
       icon: 'goods-manage'
     },
     children: [
-      { path: 'goods-list/:goods_status', component: _import('goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
+      { path: 'goods-list', component: _import('goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
       { path: 'draft-list', component: _import('goods/draftList'), name: 'draftList', meta: { title: 'draftList' }},
       { path: 'category-manage', component: _import('goods/categoryManage'), name: 'categoryManage', meta: { title: 'categoryManage' }},
       { path: 'tag-manage', component: _import('goods/tagManage'), name: 'tagManage', meta: { title: 'tagManage' }},
