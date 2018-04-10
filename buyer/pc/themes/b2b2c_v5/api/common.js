@@ -17,9 +17,7 @@ export function getValidateCodeUrl(type) {
  * 图片上传API
  * @type {string}
  */
-export function getUploadApi() {
-  return `${process.env.UPLOAD_API}/core/upload.do`
-}
+export const uploadApi = `${process.env.UPLOAD_API}/core/upload.do`
 
 /**
  * 获取热门关键字
