@@ -61,7 +61,7 @@
         </li>
       </ul>
     </div>
-    <div class="order-pagination" v-if="orderData">
+    <div class="member-pagination" v-if="orderData">
       <el-pagination
         @current-change="handleCurrentPageChange"
         :current-page.sync="params.page_no"
@@ -324,12 +324,5 @@
         }
       }
     }
-  }
-  .order-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%;
-    height: 50px;
   }
 </style>

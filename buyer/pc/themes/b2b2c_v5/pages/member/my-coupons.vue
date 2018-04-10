@@ -26,7 +26,7 @@
         </li>
       </ul>
       <span class="clr"></span>
-      <div class="coupons-pagination" v-if="coupons">
+      <div class="member-pagination" v-if="coupons">
         <el-pagination
           @current-change="handleCurrentPageChange"
           :current-page.sync="params.page_no"
@@ -158,12 +158,5 @@
         }
       }
     }
-  }
-  .coupons-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%;
-    height: 50px;
   }
 </style>
