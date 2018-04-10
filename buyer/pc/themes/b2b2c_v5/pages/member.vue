@@ -10,7 +10,7 @@
 
 <script>
   import Vue from 'vue'
-  import { Alert, Checkbox, DatePicker, Form, FormItem, Input, Pagination, Radio, Table, TableColumn } from 'element-ui'
+  import { Alert, Checkbox, DatePicker, Form, FormItem, Input, Pagination, Radio, Table, TableColumn, Upload } from 'element-ui'
   Vue.use(Alert)
   Vue.use(Checkbox)
   Vue.use(DatePicker)
@@ -21,6 +21,7 @@
   Vue.use(Radio)
   Vue.use(Table)
   Vue.use(TableColumn)
+  Vue.use(Upload)
   import { mapActions, mapGetters } from 'vuex'
   import Breadcrumb from './member/__breadcrumb'
   import Menu from './member/__menu'
@@ -102,5 +103,12 @@
         color: #000;
       }
     }
+  }
+  .member-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 50px;
   }
 </style>

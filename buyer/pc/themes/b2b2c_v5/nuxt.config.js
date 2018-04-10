@@ -5,9 +5,9 @@ module.exports = {
     /** 基础API */
     BASE_API: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer',
     /** 文件上传API */
-    UPLOAD_API: 'http://localhost:8080/javashop',
+    UPLOAD_API: 'http://localhost:3001/javashop',
     /** 图片验证码API */
-    VALIDATE_CODE_API: 'http://localhost:8080/javashop'
+    VALIDATE_CODE_API: 'http://localhost:3001/javashop'
   },
   head: {
     title: '商城首页-Javashop多店铺示例商城',
