@@ -56,5 +56,7 @@
     .iconfont {
       margin-right: 5px;
     }
+    a { color: #666 }
+    a:hover { color: #f42424 }
   }
 </style>
