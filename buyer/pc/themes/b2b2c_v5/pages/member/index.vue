@@ -82,7 +82,7 @@
       <div class="item left goods-collection">
         <div class="item-title">
           <h2>商品收藏</h2>
-          <nuxt-link to="/member/collection#goods">查看全部 	&gt;&gt;</nuxt-link>
+          <nuxt-link to="/member/my-collection#goods">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
           <empty v-if="goodsCollectionList.length === 0">暂无收藏商品...</empty>
@@ -109,7 +109,7 @@
       <div class="item right shop-collection">
         <div class="item-title">
           <h2>店铺收藏</h2>
-          <nuxt-link to="/member/collection#shop">查看全部 	&gt;&gt;</nuxt-link>
+          <nuxt-link to="/member/my-collection#shop">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
           <empty v-if="goodsCollectionList.length === 0">暂无收藏店铺...</empty>
