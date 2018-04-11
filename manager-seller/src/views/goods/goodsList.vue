@@ -169,6 +169,15 @@
       }
       this.GET_GoodsList()
     },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        if (vm.$route.query) {
+          vm.goods_status = vm.params.goods_status = vm.$route.query.goods_status
+        }
+        vm.GET_GoodsList()
+        next()
+      })
+    },
     methods: {
 
       /** 分页大小发生改变 */

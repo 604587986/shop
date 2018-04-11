@@ -71,62 +71,65 @@
         </div>
       </div>
     </en-tabel-layout>
-    <table class="my-table">
-      <thead>
-      <tr class="bg-order">
-        <th class="shoplist-header"><span>商品</span> <span>单价/数量</span></th>
-        <th>买家</th>
-        <th>下单时间</th>
-        <th>订单状态</th>
-        <th>订单来源</th>
-        <th>实付金额</th>
-      </tr>
-      </thead>
-      <tbody v-for="item in tableData">
-      <tr style="width: 100%;height: 10px;"></tr>
-      <tr class="bg-order">
-        <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
-        <td>
-          <el-button
-            size="mini"
-            type="text"
-            @click="handleOperateOrder(item)">查看详情
-          </el-button>
-        </td>
-      </tr>
-      <tr>
-        <!--商品-->
-        <td>
-          <p v-for="shop in item.skuList" class="shoplist-content">
+    <div class="my-table-out">
+      <table class="my-table">
+        <thead>
+        <tr class="bg-order">
+          <th class="shoplist-header"><span>商品</span> <span>单价/数量</span></th>
+          <th>买家</th>
+          <th>下单时间</th>
+          <th>订单状态</th>
+          <th>订单来源</th>
+          <th>实付金额</th>
+        </tr>
+        </thead>
+        <tbody v-for="item in tableData">
+        <tr style="width: 100%;height: 10px;"></tr>
+        <tr class="bg-order">
+          <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
+          <td>
+            <el-button
+              size="mini"
+              type="text"
+              @click="handleOperateOrder(item)">查看详情
+            </el-button>
+          </td>
+        </tr>
+        <tr>
+          <!--商品-->
+          <td>
+            <p v-for="shop in item.skuList" class="shoplist-content">
               <span class="goods-info">
                 <img :src="shop.goods_image" alt="" class="goods-image"/>
                 <a href="#">{{ shop.goods_name }}</a>
               </span>
-            <span>
+              <span>
                 <span>{{shop.goods_price | unitPrice('￥')}}</span> × <span>1</span>
               </span>
-          </p>
-        </td>
-        <!--买家-->
-        <td> {{ item.ship_name }}</td>
-        <!--下单时间-->
-        <td>{{ item.order_time | unixToDate }}</td>
-        <!--订单状态-->
-        <td>{{ item.order_status_text }}</td>
-        <!--订单来源-->
-        <td>{{ item.client_type }}</td>
-        <!--实付金额-->
-        <td>
-          <div class="order-money">
-            <!--订单总金额-->
-            <span class="order-amount">{{ item.order_amount | unitPrice('￥')}}</span>
-            <!--运费/邮费-->
-            <span>运费({{ item.shipping_amount | unitPrice('￥') }})</span>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+            </p>
+          </td>
+          <!--买家-->
+          <td> {{ item.ship_name }}</td>
+          <!--下单时间-->
+          <td>{{ item.order_time | unixToDate }}</td>
+          <!--订单状态-->
+          <td>{{ item.order_status_text }}</td>
+          <!--订单来源-->
+          <td>{{ item.client_type }}</td>
+          <!--实付金额-->
+          <td>
+            <div class="order-money">
+              <!--订单总金额-->
+              <span class="order-amount">{{ item.order_amount | unitPrice('￥')}}</span>
+              <!--运费/邮费-->
+              <span>运费({{ item.shipping_amount | unitPrice('￥') }})</span>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
     <el-pagination
       slot="pagination"
       v-if="pageData"
@@ -226,6 +229,15 @@
       }
       this.GET_OrderList()
     },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        if (vm.$route.query) {
+          vm.orderStatus = vm.params.orderStatus = vm.$route.query.orderStatus
+        }
+        vm.GET_OrderList()
+        next()
+      })
+    },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
@@ -310,6 +322,13 @@
   }
 
   /*表格信息*/
+  .my-table-out{
+    white-space: nowrap;
+    overflow-y: scroll;
+    text-overflow: ellipsis;
+    width: 100%;
+    max-height: 800px;
+  }
   .my-table {
     .bg-order {
       background: #FAFAFA;
