@@ -290,6 +290,8 @@
         }
         .service-item {
           display: block;
+          color: #666;
+          &:hover { color: #f42424 }
           .iconfont {
             display: block;
             font-size: 30px;
