@@ -16,3 +16,18 @@ export function getAfterSale(params) {
     params
   })
 }
+
+/**
+ * 申请售后
+ * @param params
+ * @returns {AxiosPromise}
+ */
+export function applyAfterSale(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return request({
+    url: '/after-sale',
+    method: 'get',
+    data: _formData
+  })
+}
