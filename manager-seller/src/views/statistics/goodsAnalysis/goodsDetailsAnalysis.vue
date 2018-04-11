@@ -37,9 +37,9 @@
           </template>
         </el-table-column>
         <!--近30天下单商品数-->
-        <el-table-column prop="order_num" label="近30天下单商品数"/>
+        <el-table-column prop="order_goods_num" sortable label="近30天下单商品数"/>
         <!--近30天下单金额-->
-        <el-table-column prop="order_amount" label="近30天下单金额"/>
+        <el-table-column prop="order_amount" sortable label="近30天下单金额"/>
       </template>
       <el-pagination
         slot="pagination"
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-  import * as API_goods from '@/api/goods'
+  import * as API_goodsDetailsStatistics from '@/api/goodsDetailsStatistics'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
@@ -75,8 +75,7 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10,
-          goods_status: 0
+          page_size: 10
         },
 
         /** 列表数据 */
@@ -91,58 +90,24 @@
           goods_sn: '',
           shop_name: '',
           category_id: ''
-        },
-
-        /** 商品库存显示*/
-        goodsStockshow: false,
-
-        /** 库存商品数量*/
-        goodsStocknums: 1,
-
-        /** 商品库存列表数据*/
-        goodsStockData: null
+        }
       }
     },
     mounted() {
-      if (this.$route.query) {
-        this.params.goods_status = this.$route.query.goodsStatus
-      }
-      this.GET_GoodsList()
-    },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        if (vm.$route.query) {
-          vm.goods_status = vm.params.goods_status = vm.$route.query.goods_status
-        }
-        vm.GET_GoodsList()
-        next()
-      })
+      this.GET_GoodsStatistics()
     },
     methods: {
 
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_GoodsList()
+        this.GET_GoodsStatistics()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_GoodsList()
-      },
-
-      /** 单个商品下架操作确认 */
-      handleWithdraw(index, row) {
-        this.$confirm('确认下架吗？', '提示')
-          .then(() => this.DELETE_Goods(row.id))
-          .catch(() => {
-          })
-      },
-
-      /** 销售状态格式化 */
-      marketStatus(row, column, cellValue) {
-        return row.market_enable === 1 ? '售卖中' : '已下架'
+        this.GET_GoodsStatistics()
       },
 
       /** 搜索事件触发 */
@@ -152,7 +117,7 @@
           goods_status: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
-        this.GET_GoodsList()
+        this.GET_GoodsStatistics()
       },
 
       /** 高级搜索事件触发 */
@@ -162,7 +127,7 @@
           ...this.advancedForm
         }
         delete this.params.keyword
-        this.GET_GoodsList()
+        this.GET_GoodsStatistics()
       },
 
       /** 高级搜索中 分类选择组件值发生改变 */
@@ -170,9 +135,9 @@
         this.advancedForm.category_id = data.category_id
       },
 
-      GET_GoodsList() {
+      GET_GoodsStatistics() {
         this.loading = true
-        API_goods.getGoodsList(this.params).then(response => {
+        API_goodsDetailsStatistics.getGoodsStatisticsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,
