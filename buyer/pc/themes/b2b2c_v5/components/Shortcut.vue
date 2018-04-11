@@ -93,6 +93,9 @@
       height: 30px;
       line-height: 30px;
     }
+    .login-status {
+      a { color: #666 }
+    }
     a:hover {
       color: #e33333
     }
