@@ -124,13 +124,35 @@ export const asyncRouterMap = [
   {
     path: '/statistics',
     component: Layout,
-    redirect: '/statistics/generalityOverview',
+    redirect: '/statistics/generality-overview',
     name: 'statistics',
     meta: { title: 'statistics', icon: 'statistics-manage' },
     children: [
       { path: 'generality-overview', component: _import('statistics/generalityOverview'), name: 'generalityOverview', meta: { title: 'generalityOverview' }},
-      { path: 'goods-analysis', component: _import('statistics/goodsAnalysis'), name: 'goodsAnalysis', meta: { title: 'goodsAnalysis' }},
-      { path: 'operate-report', component: _import('statistics/operateReport'), name: 'operateReport', meta: { title: 'operateReport' }},
+      {
+        path: '/statistics/goods-analysis',
+        component: _import('statistics/goodsAnalysis/index'),
+        redirect: '/statistics/goods-analysis/goods-details',
+        name: 'goodsAnalysis',
+        meta: { title: 'goodsAnalysis' },
+        children: [
+          { path: 'goods-details', component: _import('statistics/goodsAnalysis/goodsDetailsAnalysis'), name: 'goodsDetailsAnalysis', meta: { title: 'goodsDetailsAnalysis' }},
+          { path: 'price-sales', component: _import('statistics/goodsAnalysis/goodsPriceSales'), name: 'goodsPriceSales', meta: { title: 'goodsPriceSales' }},
+          { path: 'hot-selling-goods', component: _import('statistics/goodsAnalysis/hotSellingGoods'), name: 'hotSellingGoods', meta: { title: 'hotSellingGoods' }}
+        ]
+      },
+      {
+        path: '/statistics/operate-report',
+        component: _import('statistics/operateReport/index'),
+        redirect: '/statistics/goods-analysis/goods-details',
+        name: 'operateReport',
+        meta: { title: 'operateReport' },
+        children: [
+          { path: 'regional-analysis', component: _import('statistics/operateReport/regionalAnalysis'), name: 'regionalAnalysis', meta: { title: 'regionalAnalysis' }},
+          { path: 'sales-statistics', component: _import('statistics/operateReport/salesStatistics'), name: 'salesStatistics', meta: { title: 'salesStatistics' }},
+          { path: 'buy-analysis', component: _import('statistics/operateReport/buyAnalysis'), name: 'buyAnalysis', meta: { title: 'buyAnalysis' }}
+        ]
+      },
       { path: 'traffic-statistics', component: _import('statistics/trafficStatistics'), name: 'trafficStatistics', meta: { title: 'trafficStatistics' }},
       { path: 'collect-statistics', component: _import('statistics/collectStatistics'), name: 'collectStatistics', meta: { title: 'collectStatistics' }},
       { path: 'log-manage', component: _import('statistics/logManage'), name: 'logManage', meta: { title: 'logManage' }}

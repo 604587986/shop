@@ -4,7 +4,7 @@
 
 <script>
   export default {
-    name: 'operateReport'
+    name: 'salesStatistics'
   }
 </script>
 
