@@ -65,6 +65,8 @@
   /* Footer */
   #footer {
     background-color: #f5f6f5;
+    a { color: #666 }
+    a:hover { color: #f42424 }
     .help-center-footer {
       border-bottom: solid 1px #eaeaea;
       padding: 20px 0 20px 10%;
@@ -91,9 +93,6 @@
       text-align: center;
       height: 40px;
       line-height: 40px;
-      a {
-        color: #666;
-      }
     }
   }
 </style>
