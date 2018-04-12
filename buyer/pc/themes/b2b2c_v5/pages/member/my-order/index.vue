@@ -57,7 +57,8 @@
             </div>
             <div class="order-item-status">{{ order.order_status_text }}</div>
             <div class="order-item-operate">
-              <button type="button">订单付款</button>
+              <nuxt-link :to="'/pay/' + order.order_sn">订单付款</nuxt-link>
+              <nuxt-link :to="'./my-order/' + order.order_sn">订单详情</nuxt-link>
             </div>
           </div>
         </li>
@@ -308,8 +309,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         width: 110px;
-        button {
+        a {
           display: block;
           width: 80px;
           height: 30px;
@@ -317,7 +319,9 @@
           border: 1px solid #ccc;
           text-align: center;
           background: #f9f9f9;
+          color: #666;
           cursor: pointer;
+          margin-bottom: 10px;
           &:hover {
             background: #eaeaea;
           }
