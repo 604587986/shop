@@ -5,7 +5,7 @@
     "children": [
       { "title": "我的订单", "name": "my-order" },
       { "title": "收货地址", "name": "shipping-address" },
-      { "title": "申请列表", "name": "after-sale" }
+      { "title": "售后列表", "name": "after-sale" }
     ]
   },
   {
