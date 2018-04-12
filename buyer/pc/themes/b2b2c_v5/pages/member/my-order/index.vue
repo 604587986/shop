@@ -48,6 +48,9 @@
                 </div>
                 <div class="sku-price">{{ sku.goods_price | unitPrice('￥') }}</div>
                 <div class="sku-num">x {{ sku.num }}</div>
+                <div class="after-sale-btn">
+                  <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.order_sn">申请售后</nuxt-link>
+                </div>
               </div>
             </div>
             <div class="order-item-price">
@@ -267,6 +270,11 @@
       .sku-price, .sku-num {
         width: 80px;
         text-align: center;
+      }
+      .after-sale-btn {
+        width: 60px;
+        a { color: #666 }
+        a:hover { color: #f42424 }
       }
       .order-item-price, .order-item-status {
         width: 100px;
