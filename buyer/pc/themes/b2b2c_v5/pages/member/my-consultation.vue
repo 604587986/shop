@@ -54,7 +54,7 @@
         }
       }
     },
-    created() {
+    mounted() {
       this.GET_Consulatation()
     },
     methods: {

@@ -65,7 +65,7 @@
         pointsData: ''
       }
     },
-    created() {
+    mounted() {
       this.GET_Points()
     },
     filters: {

@@ -51,7 +51,7 @@
         }
       }
     },
-    created() {
+    mounted() {
       this.GET_Comments()
     },
     methods: {

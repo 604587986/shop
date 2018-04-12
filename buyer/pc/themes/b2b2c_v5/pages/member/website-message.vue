@@ -46,10 +46,8 @@
         }
       }
     },
-    created() {
-      this.getMessageData(this.params).then(() => {
-        this.MixinScrollToTop()
-      })
+    mounted() {
+      this.getMessageData(this.params).then(() => this.MixinScrollToTop())
     },
     computed: {
       ...mapGetters({
