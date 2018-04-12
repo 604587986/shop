@@ -120,9 +120,7 @@
   import SkuList from '../__skuList'
   export default {
     name: 'apply',
-    components: {
-      SkuList
-    },
+    components: { SkuList },
     data() {
       return {
         order_sn: '',
