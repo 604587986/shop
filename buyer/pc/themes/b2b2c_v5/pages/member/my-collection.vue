@@ -169,7 +169,7 @@
         this.type = type
         const _href = location.href.match(/(.+)#/)
         // 改变地址栏hash值【不会刷新页面】
-        location.href = (_href ? _href[1] : location.href)  + '#' + type
+        location.hash = type
         // 如果没有商品收藏数据，则获取
         if (!this.goodsData) this.GET_Collection('goods')
         // 如果没有店铺收藏数据，则获取

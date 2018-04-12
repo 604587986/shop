@@ -124,7 +124,7 @@
           return item
         })
         this.params.status = nav.status
-        location.hash = '#' + nav.status
+        location.hash = nav.status
         this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
       /** 当前页数发生改变 */
