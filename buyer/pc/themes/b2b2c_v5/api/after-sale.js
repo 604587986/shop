@@ -31,3 +31,15 @@ export function applyAfterSale(params) {
     data: _formData
   })
 }
+
+/**
+ * 获取售后详情
+ * @param sn
+ * @returns {AxiosPromise}
+ */
+export function getAfterSaleDetail(sn) {
+  return request({
+    url: `/after-sale/${sn}`,
+    method: 'get'
+  })
+}
