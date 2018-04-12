@@ -43,7 +43,9 @@
                     <img :src="sku.goods_image" :alt="sku.goods_name">
                   </nuxt-link>
                 </div>
-                <div class="goods-name">{{ sku.goods_name }}</div>
+                <div class="goods-name">
+                  <nuxt-link :to="'/goods/' + sku.goods_id">{{ sku.goods_name }}</nuxt-link>
+                </div>
                 <div class="sku-price">{{ sku.goods_price | unitPrice('￥') }}</div>
                 <div class="sku-num">x {{ sku.num }}</div>
               </div>
