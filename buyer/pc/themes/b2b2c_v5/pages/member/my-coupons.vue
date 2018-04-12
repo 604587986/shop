@@ -52,7 +52,7 @@
         }
       }
     },
-    created() {
+    mounted() {
       this.GET_Coupons()
     },
     methods: {

@@ -112,7 +112,7 @@
         }
       }
     },
-    created() {
+    mounted() {
       this.getValidImgUrl()
     },
     watch: {
