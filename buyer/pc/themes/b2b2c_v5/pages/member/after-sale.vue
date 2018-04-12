@@ -45,7 +45,7 @@
         }
       }
     },
-    created() {
+    mounted() {
       this.GET_AfterSale()
     },
     methods: {

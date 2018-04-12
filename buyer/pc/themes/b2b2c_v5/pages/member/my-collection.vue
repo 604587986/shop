@@ -160,7 +160,7 @@
         shopData: ''
       }
     },
-    created() {
+    mounted() {
       this.GET_Collection(this.type)
     },
     methods: {
