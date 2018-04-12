@@ -58,7 +58,7 @@
             <div class="order-item-status">{{ order.order_status_text }}</div>
             <div class="order-item-operate">
               <nuxt-link :to="'/pay/' + order.order_sn">订单付款</nuxt-link>
-              <nuxt-link :to="'./my-order/' + order.order_sn">订单详情</nuxt-link>
+              <nuxt-link :to="'./my-order/' + order.order_sn">查看详情</nuxt-link>
             </div>
           </div>
         </li>
