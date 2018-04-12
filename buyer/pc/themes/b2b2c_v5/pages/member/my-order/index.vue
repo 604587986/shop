@@ -80,9 +80,9 @@
   import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'my-order',
-    created() {
-      /** 如果有hash值，需要重新请求数据 */
-      if (this.$route.hash) this.getOrderData(this.params).then(this.MixinScrollToTop)
+    mounted() {
+      /** 如果有hash值，或者没有订单数据。需要重新请求数据 */
+      if (!this.orderData || this.$route.hash) this.getOrderData(this.params).then(() => this.MixinScrollToTop())
     },
     data() {
       let _hash = this.$route.hash
@@ -112,9 +112,6 @@
       ...mapGetters({
         orderData: 'order/orderData'
       })
-    },
-    created() {
-      if (!this.orderData) this.getOrderData(this.params).then(() => this.MixinScrollToTop())
     },
     methods: {
       /** 订单筛选栏点击 */
