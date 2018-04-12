@@ -25,6 +25,7 @@ Vue.use(Element, {
 
 // 全局注册echarts、jsonp
 import echarts from 'echarts'
+import china from 'echarts/map/js/china'
 import axios from 'axios'
 import jsonp from 'vue-jsonp'
 Vue.prototype.$echarts = echarts
