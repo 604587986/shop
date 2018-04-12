@@ -20,7 +20,25 @@
         </div>
       </div>
       <div class="status-order">
-
+        <h2>订单状态：未付款</h2>
+        <ul>
+          <li>1. 您尚未对该订单进行支付，请
+            <strong>
+              <a target="_blank" href="/javashop/order_pay_desk.html?ordersn=20180412000001" class="green_btn">按此为订单付款</a>
+            </strong>
+            以确保商家及时发货。
+          </li>
+          <li>2. 如果您不想购买此订单的商品，请
+            <strong>
+              <a href="javascript:;" class="cancelBtn order_delno" sn="20180412000001">取消订单</a>
+            </strong>
+            订单操作。
+          </li>
+          <li>3. 如果您已经收到商品，请
+            <a href="javascript:;" class="cancelBtn order_delno" sn="20180412000001">确认收货</a>
+            订单操作。
+          </li>
+        </ul>
       </div>
     </div>
     <div v-if="order" class="goods-list">
@@ -129,12 +147,24 @@
     }
   }
   .status-order {
+    width: 970px - 400px;
     background-color: #fff;
     font-size: 12px;
     letter-spacing: normal;
     padding: 20px 30px;
     vertical-align: top;
     word-spacing: normal;
+    h2 {
+      display: block;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      border-bottom: 1px dotted #e7e7e7;
+      margin-bottom: 20px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
   }
   .goods-list {
     margin-top: 30px;
