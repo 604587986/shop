@@ -61,7 +61,7 @@
               <dl><dt>下单时间：</dt><dd>2018-04-12 18:34</dd></dl>
             </div>
           </div>
-          <el-form :model="returnGoodsForm" :rules="returnGoodsRules" ref="returnGoodsForm" label-width="100px">
+          <el-form :model="returnGoodsForm" :rules="returnGoodsRules" ref="returnGoodsForm" label-width="100px" style="margin-top: 10px">
             <el-form-item label="退款方式：" prop="name">
               <el-select v-model="returnGoodsForm.return_way" size="small" placeholder="请选择退款方式">
                 <el-option label="支付宝" value="alpay"></el-option>
