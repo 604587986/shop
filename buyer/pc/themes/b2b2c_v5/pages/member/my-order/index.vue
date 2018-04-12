@@ -80,7 +80,7 @@
   import * as API_Order from '@/api/order'
   import { mapActions, mapGetters } from 'vuex'
   export default {
-    name: 'my-order',
+    name: 'my-order-index',
     mounted() {
       /** 如果有hash值，或者没有订单数据。需要重新请求数据 */
       if (!this.orderData || this.$route.hash) this.getOrderData(this.params).then(() => this.MixinScrollToTop())
