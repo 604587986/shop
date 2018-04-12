@@ -69,7 +69,8 @@
 
 <script>
   import Vue from 'vue'
-  import { Upload } from 'element-ui'
+  import { DatePicker, Upload } from 'element-ui'
+  Vue.use(DatePicker)
   Vue.use(Upload)
   import { mapGetters, mapActions } from 'vuex'
   import * as API_Common from '@/api/common'
