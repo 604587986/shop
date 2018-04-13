@@ -88,7 +88,7 @@
         /** 修改密码 表单规则 */
         changePasswordRules: {
           password: [
-            { required: true, message: '请输入新的登陆密码', trigger: 'blur' },
+            { required: true, message: '请输入新的登录密码', trigger: 'blur' },
             { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
           ],
           rep_password: [
@@ -96,7 +96,7 @@
               required: true,
               validator: (rule, value, callback) => {
                 if (!value) {
-                  callback(new Error('请再次输入新的登陆密码'))
+                  callback(new Error('请再次输入新的登录密码'))
                 } else if (value !== this.changePasswordForm.password) {
                   callback(new Error('两次输入的密码不相同'))
                 } else {
