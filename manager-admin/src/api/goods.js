@@ -42,6 +42,18 @@ export function underGoods(goods_id, reason) {
 }
 
 /**
+ * 上架商品
+ * @param goods_id
+ * @returns {*}
+ */
+export function upGoods(goods_id) {
+  return request({
+    url: `/goods/${goods_id}/up`,
+    method: 'post'
+  })
+}
+
+/**
  * 获取待审核商品列表
  * @param params
  * @returns {Promise<any>}
