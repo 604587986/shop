@@ -111,7 +111,7 @@
   #category {
     width: 240px;
     height: 40px;
-    background-color: #ff2828;
+    background-color: #f42424;
     flex-shrink: 0;
     z-index: 10;
     .category-title {
