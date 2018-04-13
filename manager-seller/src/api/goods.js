@@ -111,7 +111,7 @@ export function reserveStockGoods(params) {
 export function getDraftGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/draft/list',
+      url: '/goods/draft-goods',
       method: 'get',
       loading: false,
       params
@@ -188,7 +188,7 @@ export function RecycleDeleteGoods(params) {
 export function getWarningGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/warning-list',
+      url: '/goods/warning',
       method: 'get',
       loading: false,
       params

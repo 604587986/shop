@@ -13,7 +13,7 @@
           <el-button
             size="mini"
             type="primary"
-            @click="addtag(scope.row.id)">标签商品设置
+            @click="addtag(scope.row.tag_id)">标签商品设置
           </el-button>
         </template>
       </el-table-column>

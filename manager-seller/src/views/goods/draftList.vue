@@ -32,29 +32,37 @@
         </en-table-search>
       </div>
     </div>
-
     <template slot="table-columns">
-      <el-table-column label="图片" width="120">
+      <el-table-column label="图片">
         <template slot-scope="scope">
-          <img :src="scope.row.image" class="goods-image"/>
+          <img :src="scope.row.goods_image" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="sn" label="商品编号" width="180"/>
-      <el-table-column prop="seller_name" label="店铺名称" width="120"/>
-      <el-table-column prop="name" label="商品名称" align="left" width="450"/>
-      <el-table-column prop="category_name" label="商品分类"/>
-      <el-table-column label="商品价格" width="120">
-        <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+      <el-table-column prop="goods_name" label="名称" />
+      <el-table-column label="价格">
+        <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
       </el-table-column>
-      <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-      <el-table-column prop="brand_name" label="品牌"></el-table-column>
+      <el-table-column label="库存">
+        <template slot-scope="scope">{{ scope.row.quantity }}件</template>
+      </el-table-column>
+      <el-table-column label="可用库存">
+        <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
+      </el-table-column>
+      <el-table-column label="创建时间">
+        <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
+      </el-table-column>
+      <el-table-column prop="market_enable" label="状态" width="80" :formatter="marketStatus"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"
+            type="primary"
+            @click="handleWithdraw(scope.$index, scope.row)">编辑
+          </el-button>
+          <el-button
+            size="mini"
             type="danger"
-            :disabled="scope.row.market_enable === 0"
-            @click="handleWithdraw(scope.$index, scope.row)">下架
+            @click="handleWithdraw(scope.$index, scope.row)">删除
           </el-button>
         </template>
       </el-table-column>

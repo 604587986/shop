@@ -62,7 +62,9 @@
 
         /** 标签商品列表参数*/
         params: {
-          tag_id: null
+          page_no: 1,
+          page_size: 10,
+          tag_id: ''
         },
         /** 标签商品列表数据 */
         tableData: null,
