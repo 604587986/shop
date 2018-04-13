@@ -13,8 +13,7 @@ import GoodsModel from '@/models/GoodsModel'
 export function getGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      // url: 'shop/admin/goods/list-json.do',
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+      url: '/goods',
       method: 'get',
       loading: false,
       params

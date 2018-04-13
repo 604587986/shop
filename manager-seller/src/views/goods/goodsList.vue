@@ -8,10 +8,10 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button-group>
-            <el-button @click="inWarehouse" autofocus>仓库中的商品</el-button>
-            <el-button @click="selling">出售中的商品</el-button>
-          </el-button-group>
+          <el-select v-model="marketEnable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
+            <el-option key="0" label="未出售（已下架）" :value="0"/>
+            <el-option key="1" label="出售中（已上架）" :value="1"/>
+          </el-select>
           <el-button @click="publishGoods" type="success">发布商品</el-button>
           <el-button @click="gotoRecycle" type="primary">回收站</el-button>
         </div>
@@ -24,16 +24,16 @@
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品编号">
-                  <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
+                  <el-input size="medium" v-model="advancedForm.goods_sn" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="店铺名称">
-                  <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
+                  <el-input size="medium" v-model="advancedForm.seller_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品类别">
-                  <en-category-picker @changed="categoryChanged"/>
+                  <en-category-picker @changed="categoryChanged" clearable/>
                 </el-form-item>
               </el-form>
             </template>
@@ -41,20 +41,25 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column label="商品图片" width="120">
+        <el-table-column label="图片">
           <template slot-scope="scope">
-            <img :src="scope.row.image" class="goods-image"/>
+            <img :src="scope.row.goods_image" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column prop="sn" label="商品编号" width="180"/>
-        <el-table-column prop="seller_name" label="店铺名称" width="120"/>
-        <el-table-column prop="name" label="商品名称" align="left" width="450"/>
-        <el-table-column prop="category_name" label="商品分类"/>
-        <el-table-column label="商品价格" width="120">
-          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+        <el-table-column prop="goods_name" label="名称" />
+        <el-table-column label="价格">
+          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-        <el-table-column prop="brand_name" label="品牌"></el-table-column>
+        <el-table-column label="库存">
+          <template slot-scope="scope">{{ scope.row.quantity }}件</template>
+        </el-table-column>
+        <el-table-column label="可用库存">
+          <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
+        </el-table-column>
+        <el-table-column label="创建时间">
+          <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
+        </el-table-column>
+        <el-table-column prop="market_enable" label="状态" width="80" :formatter="marketStatus"/>
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
             <el-button
@@ -75,7 +80,6 @@
           </template>
         </el-table-column>
       </template>
-
       <el-pagination
         slot="pagination"
         v-if="pageData"
@@ -145,12 +149,22 @@
         /** 列表分页数据 */
         pageData: null,
 
+        /** 商品状态 是否上架 0代表已下架，1代表已上架 */
+        marketEnable: 0,
+
         /** 高级搜索数据 */
         advancedForm: {
+          /** 商品名称 */
           goods_name: '',
+
+          /** 商品编号 */
           goods_sn: '',
-          shop_name: '',
-          category_id: ''
+
+          /** 店铺名称*/
+          seller_name: '',
+
+          /** 商品分类路径 商品分类id */
+          category_path: ''
         },
 
         /** 商品库存显示*/
@@ -209,7 +223,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          goods_status: data
+          keyword: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_GoodsList()
@@ -227,7 +241,7 @@
 
       /** 高级搜索中 分类选择组件值发生改变 */
       categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
+        this.advancedForm.category_path = data.category_path
       },
 
       GET_GoodsList() {
@@ -245,16 +259,17 @@
           console.log(error)
         })
       },
-      /** 仓库中的商品 */
-      inWarehouse() {
-        this.params.goods_status = 0
+
+      /** 更改商品上下架状态*/
+      changeGoodsStatus(val) {
+        this.params = {
+          ...this.params,
+          market_enable: val
+        }
         this.GET_GoodsList()
+        console.log(val, 21)
       },
-      /** 出售中的商品 */
-      selling() {
-        this.params.goods_status = 1
-        this.GET_GoodsList()
-      },
+
       /** 发布商品*/
       publishGoods() {
         this.$router.push({ path: '/goods/good-publish' })
