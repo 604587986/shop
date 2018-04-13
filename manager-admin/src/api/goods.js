@@ -13,7 +13,7 @@ import GoodsModel from '@/models/GoodsModel'
 export function getGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/goods/list-json.do',
+      url: '/goods',
       method: 'get',
       loading: false,
       params
@@ -27,23 +27,65 @@ export function getGoodsList(params) {
 
 /**
  * 下架商品
+ * @param goods_id
+ * @param reason
+ * @returns {Promise<any>}
+ */
+export function underGoods(goods_id, reason) {
+  const _formData = new FormData()
+  _formData.append('reason', reason)
+  return request({
+    url: `/goods/${goods_id}/under`,
+    method: 'post',
+    data: _formData
+  })
+}
+
+/**
+ * 上架商品
+ * @param goods_id
+ * @returns {*}
+ */
+export function upGoods(goods_id) {
+  return request({
+    url: `/goods/${goods_id}/up`,
+    method: 'post'
+  })
+}
+
+/**
+ * 获取待审核商品列表
  * @param params
  * @returns {Promise<any>}
  */
-export function underGoods(params) {
-  const _params = {
-    goodsId: params.goods_id,
-    message: params.message
-  }
-  const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
+export function getAuditGoods(params) {
+  params.is_auth = 0
   return new Promise((resolve, reject) => {
     request({
-      url: `shop/admin/goods/under.do`,
-      method: 'post',
-      data: _formData
+      url: `/goods`,
+      method: 'get',
+      params
     }).then(response => {
-      resolve(response)
+      const _response = response
+      _response.data = new GoodsModel().map(_response.data)
+      resolve(_response)
     }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 审核商品
+ * @param goods_id
+ * @param params
+ * @returns {*}
+ */
+export function auditGoods(goods_id, params) {
+  const _formData = new FormData()
+  _formData.append('pass', params.pass)
+  _formData.append('message', params.message)
+  return request({
+    url: `goods/${goods_id}/auth`,
+    method: 'post',
+    data: _formData
   })
 }

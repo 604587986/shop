@@ -3,7 +3,7 @@
     <en-tabel-layout
       toolbar
       pagination
-      :tableData="tableData"
+      :tableData="goodsData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -18,13 +18,13 @@
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品编号">
-                  <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
+                  <el-input size="medium" v-model="advancedForm.goods_sn" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="店铺名称">
-                  <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
+                  <el-input size="medium" v-model="advancedForm.shop_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品类别">
                   <en-category-picker @changed="categoryChanged"/>
@@ -42,19 +42,19 @@
           </template>
         </el-table-column>
         <!--商品编号-->
-        <el-table-column prop="sn" label="商品SN"/>
+        <el-table-column prop="sn" label="商品SN" width="200"/>
         <!--商品名称-->
-        <el-table-column prop="name" label="商品名称" align="left" width="300"/>
+        <el-table-column prop="name" label="商品名称" align="left"/>
         <!--店铺名称-->
-        <el-table-column prop="seller_name" label="店铺名称"/>
+        <el-table-column prop="seller_name" label="店铺名称" width="150"/>
         <!--商品分类-->
-        <el-table-column prop="category_name" label="商品分类"/>
+        <!--<el-table-column prop="category_name" label="商品分类"/>-->
         <!--销售价格-->
-        <el-table-column label="销售价格">
+        <el-table-column label="销售价格" width="120">
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--品牌名称-->
-        <el-table-column prop="brand_name" label="品牌名称"/>
+        <!--<el-table-column prop="brand_name" label="品牌名称"/>-->
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -66,15 +66,15 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="goodsData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="goodsData.data_total">
       </el-pagination>
     </en-tabel-layout>
 
@@ -85,20 +85,20 @@
       width="400px">
       <el-form :model="goodsAuditForm" label-width="100px">
         <!--是否通过=-->
-        <el-form-item label="是否通过" prop="passed">
-          <el-radio-group v-model="goodsAuditForm.passed">
+        <el-form-item label="是否通过" prop="pass">
+          <el-radio-group v-model="goodsAuditForm.pass">
             <el-radio :label="1">通过</el-radio>
             <el-radio :label="0">不通过</el-radio>
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="备注信息" prop="passed">
+        <el-form-item label="备注信息" prop="message">
           <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="请输入审核备注(120字以内)"
             :maxlength="120"
-            v-model="goodsAuditForm.remark">
+            v-model="goodsAuditForm.message">
           </el-input>
         </el-form-item>
       </el-form>
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-  import * as API_goodsAudit from '@/api/goodsAudit'
+  import * as API_goods from '@/api/goods'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
   export default {
     name: 'goodsAudit',
@@ -131,16 +131,13 @@
           page_size: 10
         },
 
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
+        /** 商品数据 */
+        goodsData: '',
 
         /** 审核商品 表单 */
         goodsAuditForm: {
-          remark: '',
-          passed: 1
+          message: '',
+          pass: 1
         },
 
         /** 审核商品 dialog */
@@ -154,8 +151,7 @@
           goods_name: '',
           goods_sn: '',
           shop_name: '',
-          category_id: '',
-          stype: 1
+          category_path: ''
         }
       }
     },
@@ -197,7 +193,7 @@
 
       /** 高级搜索中 分类选择组件值发生改变 */
       categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
+        this.advancedForm.category_path = data.category_path
       },
 
       /** 审核商品 */
@@ -205,35 +201,28 @@
         this.dialogGoodsAuditTitle = '审核商品 - ' + row.sn
         this.goodsAuditForm = {
           id: row.id,
-          remark: '',
-          passed: 1
+          message: '',
+          pass: 1
         }
         this.dialogGoodsAuditVisible = true
       },
 
       /** 审核商品 表单提交 */
       submitGoodsAuditForm() {
-        API_goodsAudit.goodsAudit(this.goodsAuditForm.id, this.goodsAuditForm).then(response => {
-          this.$message.success('审核完成！')
+        API_goods.auditGoods(this.goodsAuditForm.id, this.goodsAuditForm).then(response => {
           this.dialogGoodsAuditVisible = false
+          this.$message.success('审核完成！')
           this.GET_GoodsAuditList()
-        }).catch(error => console.log(error))
+        })
       },
 
+      /** 获取待审核商品 */
       GET_GoodsAuditList() {
         this.loading = true
-        API_goodsAudit.getGoodsAuditList(this.params).then(response => {
+        API_goods.getAuditGoods(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.goodsData = response
+        }).catch(() => (this.loading = false))
       }
     }
   }
