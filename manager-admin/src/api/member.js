@@ -9,14 +9,13 @@ import MemberModel from '@/models/MemberModel'
 export function getMemberList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/member/member-list-json.do',
+      url: '/members',
       method: 'get',
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new MemberModel().map(response.data)
-      resolve(_response)
+      response.data = new MemberModel().map(response.data)
+      resolve(response)
     }).catch(error => reject(error))
   })
 }
@@ -27,34 +26,42 @@ export function getMemberList(params) {
  * @returns {Promise<any>}
  */
 export function addMember(params) {
-  const _params = {
-    uname: params.uname,
-    password: params.password,
-    name: params.nickname,
-    sex: params.sex,
-    mybirthday: params.birthday,
-    email: params.email,
-    tel: params.tel,
-    mobile: params.mobile,
-    province: params.province,
-    province_id: params.province_id,
-    city: params.city,
-    city_id: params.city_id,
-    region: params.region,
-    region_id: params.region_id,
-    town: params.town,
-    town_id: params.town_id,
-    zip: params.zip,
-    address: params.address
-  }
   const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/member/save-member.do',
+      url: '/members',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取会员详情
+ * @param member_id
+ * @returns {*}
+ */
+export function getMemberDetail(member_id) {
+  return request({
+    url: `/members/${member_id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 修改会员
+ * @param member_id
+ * @param params
+ * @returns {*}
+ */
+export function editMember(member_id, params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return request({
+    url: `/members/${member_id}`,
+    method: 'post',
+    data: _formData
   })
 }
 
@@ -64,15 +71,10 @@ export function addMember(params) {
  * @returns {Promise<any>}
  */
 export function deleteMembers(ids) {
-  if (!Array.isArray(ids)) ids = [ids]
-  const _formData = new FormData()
-  ids.forEach(item => _formData.append('member_id', item))
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shop/admin/member/delete.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  if (Array.isArray(ids)) ids = ids.join(',')
+  return request({
+    url: `/members/${ids}`,
+    method: 'delete'
   })
 }
 
@@ -89,9 +91,8 @@ export function getRecycleMemberList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new MemberModel().map(response.data)
-      resolve(_response)
+      response.data = new MemberModel().map(response.data)
+      resolve(response)
     }).catch(error => reject(error))
   })
 }
