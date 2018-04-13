@@ -125,7 +125,7 @@
     data() {
       return {
         /** 注册步骤 */
-        step: 3,
+        step: 1,
         /** 校验手机 表单 */
         valiMobileForm: {},
         /** 校验手机 表单规则 */
