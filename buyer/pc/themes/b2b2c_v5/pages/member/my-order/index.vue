@@ -87,6 +87,7 @@
     mounted() {
       /** 如果有hash值，或者没有订单数据。需要重新请求数据 */
       if (!this.orderData || this.$route.hash) this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+      window.addEventListener('hashchange', this.handleHashChanged)
     },
     data() {
       let _hash = this.$route.hash
@@ -120,13 +121,7 @@
     methods: {
       /** 订单筛选栏点击 */
       handleClickNav(nav) {
-        this.navList = this.navList.map(item => {
-          item.active = item.status === nav.status
-          return item
-        })
-        this.params.status = nav.status
         location.hash = nav.status
-        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
@@ -138,9 +133,22 @@
         this.params.keyword = this.keyword
         this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
+      /** hash发生改变 */
+      handleHashChanged() {
+        const _hash = this.$route.hash.replace('#', '')
+        this.navList = this.navList.map(item => {
+          item.active = item.status === _hash
+          return item
+        })
+        this.params.status = _hash
+        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+      },
       ...mapActions({
         getOrderData: 'order/getOrderDataAction'
       })
+    },
+    destroyed() {
+      window.removeEventListener('hashchange', this.handleHashChanged)
     }
   }
 </script>

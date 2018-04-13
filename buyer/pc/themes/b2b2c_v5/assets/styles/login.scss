@@ -208,6 +208,8 @@
   line-height: 50px;
   a>span {
     padding: 0 10px;
+    color: #666666;
+    &:hover { color: #f42424 }
   }
 }
 
