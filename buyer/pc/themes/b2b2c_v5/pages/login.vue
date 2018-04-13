@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="login" class="login w">
+  <div id="login">
+    <div class="login w">
       <!-- logo -->
       <div class="index-login">
         <a target="_blank" href="/">
@@ -63,7 +63,7 @@
                       <input id="sms-code" placeholder="短信验证码" maxlength="6">
                     </div>
                     <div class="forget">
-                      <span><nuxt-link to="/find-pwd">忘记密码</nuxt-link></span>
+                      <span><nuxt-link to="/find-password">忘记密码</nuxt-link></span>
                     </div>
                     <button class="form-sub" type="button" @click="handleLogin">登&nbsp;&nbsp;&nbsp;录</button>
                   </form>
@@ -137,7 +137,7 @@
       }
     },
     methods: {
-      /** 登陆事件 */
+      /** 登录事件 */
       handleLogin() {
         this.$message.success('登录方式：', this.login_type)
       }

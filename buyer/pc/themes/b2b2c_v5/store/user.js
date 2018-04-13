@@ -16,7 +16,7 @@ export const mutations = {
     state.user = data
   },
   /**
-   * 登陆
+   * 登录
    * @param state
    * @param data
    */
