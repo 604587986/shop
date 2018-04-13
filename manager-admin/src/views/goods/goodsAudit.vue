@@ -18,13 +18,13 @@
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品编号">
-                  <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
+                  <el-input size="medium" v-model="advancedForm.goods_sn" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="店铺名称">
-                  <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
+                  <el-input size="medium" v-model="advancedForm.shop_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品类别">
                   <en-category-picker @changed="categoryChanged"/>
@@ -151,8 +151,7 @@
           goods_name: '',
           goods_sn: '',
           shop_name: '',
-          category_id: '',
-          stype: 1
+          category_path: ''
         }
       }
     },
@@ -194,7 +193,7 @@
 
       /** 高级搜索中 分类选择组件值发生改变 */
       categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
+        this.advancedForm.category_path = data.category_path
       },
 
       /** 审核商品 */
