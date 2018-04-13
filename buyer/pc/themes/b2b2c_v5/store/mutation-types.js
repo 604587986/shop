@@ -5,7 +5,7 @@ export const SET_NAV_DATA = 'SET_NAV_DATA'
 export const SET_CATEGORY_DATA = 'SET_CATEGORY_DATA'
 
 /** 用户信息相关 */
-// 登陆
+// 登录
 export const LOG_IN = 'LOG_IN'
 // 登出
 export const LOG_OUT = 'LOG_OUT'

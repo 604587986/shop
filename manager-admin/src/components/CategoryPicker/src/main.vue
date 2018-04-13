@@ -6,6 +6,7 @@
     :clearable="clearable"
     :props="props"
     separator="/"
+    clearable
     size="medium"
   ></el-cascader>
 </template>
@@ -42,25 +43,23 @@
     methods: {
       GET_RegionData(category_ids = []) {
         const _category_id = category_ids[category_ids.length - 1] || 0
-        this.$http.get(`${process.env.BASE_API}/goods-info/category/${_category_id}/children.do`)
-          .then(response => response.data)
-          .then(response => {
-            if (!response || !response[0]) return
-            if (_category_id !== 0) {
-              this.findRegios(category_ids, response)
-              return
+        this.$http.get(`${process.env.BASE_API}/goods/categories/${_category_id}/children`).then(response => response.data).then(response => {
+          if (!response || !response[0]) return
+          if (_category_id !== 0) {
+            this.findRegios(category_ids, response)
+            return
+          }
+          this.options = response.map(item => {
+            if (item.has_children) {
+              item.children = [{
+                name: '加载中...',
+                disabled: true,
+                category_id: -1
+              }]
             }
-            this.options = response.map(item => {
-              if (item.hasChildren) {
-                item.children = [{
-                  name: '加载中...',
-                  disabled: true,
-                  category_id: -1
-                }]
-              }
-              return item
-            })
+            return item
           })
+        })
       },
 
       /** 选中项发生改变 */
@@ -82,7 +81,7 @@
         // 如果有传入地区数据，说明是在异步加载
         if (response) {
           _data.children = response.map(item => {
-            if (category_ids.length + 1 < this.maxLevel && item.hasChildren) {
+            if (category_ids.length + 1 < this.maxLevel && item.has_children) {
               item.children = [{
                 name: '加载中...',
                 disabled: true,

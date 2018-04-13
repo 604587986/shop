@@ -48,6 +48,9 @@
                 </div>
                 <div class="sku-price">{{ sku.goods_price | unitPrice('￥') }}</div>
                 <div class="sku-num">x {{ sku.num }}</div>
+                <div class="after-sale-btn">
+                  <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.order_sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
+                </div>
               </div>
             </div>
             <div class="order-item-price">
@@ -57,7 +60,8 @@
             </div>
             <div class="order-item-status">{{ order.order_status_text }}</div>
             <div class="order-item-operate">
-              <button type="button">订单付款</button>
+              <nuxt-link :to="'/pay/' + order.order_sn">订单付款</nuxt-link>
+              <nuxt-link :to="'./my-order/' + order.order_sn">查看详情</nuxt-link>
             </div>
           </div>
         </li>
@@ -79,10 +83,11 @@
   import * as API_Order from '@/api/order'
   import { mapActions, mapGetters } from 'vuex'
   export default {
-    name: 'my-order',
+    name: 'my-order-index',
     mounted() {
       /** 如果有hash值，或者没有订单数据。需要重新请求数据 */
       if (!this.orderData || this.$route.hash) this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+      window.addEventListener('hashchange', this.handleHashChanged)
     },
     data() {
       let _hash = this.$route.hash
@@ -116,13 +121,7 @@
     methods: {
       /** 订单筛选栏点击 */
       handleClickNav(nav) {
-        this.navList = this.navList.map(item => {
-          item.active = item.status === nav.status
-          return item
-        })
-        this.params.status = nav.status
         location.hash = nav.status
-        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
@@ -134,9 +133,22 @@
         this.params.keyword = this.keyword
         this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
+      /** hash发生改变 */
+      handleHashChanged() {
+        const _hash = this.$route.hash.replace('#', '')
+        this.navList = this.navList.map(item => {
+          item.active = item.status === _hash
+          return item
+        })
+        this.params.status = _hash
+        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+      },
       ...mapActions({
         getOrderData: 'order/getOrderDataAction'
       })
+    },
+    destroyed() {
+      window.removeEventListener('hashchange', this.handleHashChanged)
     }
   }
 </script>
@@ -267,6 +279,11 @@
         width: 80px;
         text-align: center;
       }
+      .after-sale-btn {
+        width: 60px;
+        a { color: #666 }
+        a:hover { color: #f42424 }
+      }
       .order-item-price, .order-item-status {
         width: 100px;
         text-align: center;
@@ -308,8 +325,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         width: 110px;
-        button {
+        a {
           display: block;
           width: 80px;
           height: 30px;
@@ -317,7 +335,9 @@
           border: 1px solid #ccc;
           text-align: center;
           background: #f9f9f9;
+          color: #666;
           cursor: pointer;
+          margin-bottom: 5px;
           &:hover {
             background: #eaeaea;
           }

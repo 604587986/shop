@@ -13,13 +13,13 @@ import StorageSolutionModel from '@/models/StorageSolutionModel'
 export function getStorageSolutionList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop-core/admin/uploader/uploader-list-json.do',
+      url: '/system/uploaders',
       method: 'get',
       loading: false,
       params
     }).then(response => {
       const _response = response
-      _response.data = new StorageSolutionModel().map(response.data)
+      // _response.data = new StorageSolutionModel().map(response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })

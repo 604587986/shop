@@ -47,7 +47,7 @@
           zoom: 1;
           font-weight: 500;
           &:hover {
-            color: #ff2828
+            color: #f42424
           }
         }
       }
