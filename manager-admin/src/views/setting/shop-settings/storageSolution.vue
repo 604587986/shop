@@ -3,11 +3,11 @@
     <en-tabel-layout
       :toolbar="false"
       pagination
-      :tableData="tableData"
+      :tableData="storageSolutionData.data"
       :loading="loading"
     >
       <template slot="table-columns">
-        <el-table-column prop="name" label="储存泛滥名称"/>
+        <el-table-column prop="name" label="储存方案名称"/>
         <el-table-column label="启用状态">
           <template slot-scope="scope">
             {{ scope.row.is_open === 1 ? '已开启' : '已关闭' }}
@@ -28,11 +28,11 @@
         v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="storageSolutionData.data_total">
       </el-pagination>
     </en-tabel-layout>
   </div>
@@ -57,11 +57,8 @@
           page_size: 10
         },
 
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        /** 储存方案列表数据 */
+        storageSolutionData: ''
       }
     },
     mounted() {
@@ -96,16 +93,8 @@
         this.loading = true
         API_StorageSolution.getStorageSolutionList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.storageSolutionData = response
+        }).catch(() => (this.loading = false))
       }
     }
   }

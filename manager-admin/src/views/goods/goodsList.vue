@@ -40,9 +40,9 @@
         </template>
       </el-table-column>
       <el-table-column prop="sn" label="商品编号" width="200"/>
-      <el-table-column prop="seller_name" label="店铺名称" width="150"/>
       <el-table-column prop="name" label="商品名称" align="left"/>
       <!--<el-table-column prop="category_name" label="商品分类"/>-->
+      <el-table-column prop="seller_name" label="店铺名称" width="150"/>
       <el-table-column label="商品价格" width="120">
         <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
       </el-table-column>
