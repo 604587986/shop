@@ -2,7 +2,7 @@
   <en-tabel-layout
     toolbar
     pagination
-    :tableData="tableData"
+    :tableData="goodsData.data"
     :loading="loading"
   >
     <div slot="toolbar" class="inner-toolbar">
@@ -16,13 +16,13 @@
           <template slot="advanced-content">
             <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
               <el-form-item label="商品名称">
-                <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+                <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
               </el-form-item>
               <el-form-item label="商品编号">
-                <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
+                <el-input size="medium" v-model="advancedForm.goods_sn" clearable></el-input>
               </el-form-item>
               <el-form-item label="店铺名称">
-                <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
+                <el-input size="medium" v-model="advancedForm.seller_name" clearable></el-input>
               </el-form-item>
               <el-form-item label="商品类别">
                 <en-category-picker @changed="categoryChanged"/>
@@ -39,16 +39,16 @@
           <img :src="scope.row.image" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="sn" label="商品编号" width="180"/>
-      <el-table-column prop="seller_name" label="店铺名称" width="120"/>
-      <el-table-column prop="name" label="商品名称" align="left" width="450"/>
-      <el-table-column prop="category_name" label="商品分类"/>
+      <el-table-column prop="sn" label="商品编号" width="200"/>
+      <el-table-column prop="seller_name" label="店铺名称" width="150"/>
+      <el-table-column prop="name" label="商品名称" align="left"/>
+      <!--<el-table-column prop="category_name" label="商品分类"/>-->
       <el-table-column label="商品价格" width="120">
         <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
       </el-table-column>
       <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-      <el-table-column prop="brand_name" label="品牌"> </el-table-column>
-      <el-table-column label="操作">
+      <!--<el-table-column prop="brand_name" label="品牌"> </el-table-column>-->
+      <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -60,15 +60,15 @@
     </template>
 
     <el-pagination
+      v-if="goodsData"
       slot="pagination"
-      v-if="pageData"
       @size-change="handlePageSizeChange"
       @current-change="handlePageCurrentChange"
-      :current-page="pageData.page_no"
+      :current-page="params.page_no"
       :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageData.page_size"
+      :page-size="params.page_size"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="pageData.data_total">
+      :total="goodsData.data_total">
     </el-pagination>
   </en-tabel-layout>
 </template>
@@ -94,18 +94,15 @@
           page_size: 10
         },
 
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
+        /** 商品列表数据 */
+        goodsData: '',
 
         /** 高级搜索数据 */
         advancedForm: {
           goods_name: '',
           goods_sn: '',
-          shop_name: '',
-          category_id: ''
+          seller_name: '',
+          category_path: ''
         }
       }
     },
@@ -128,9 +125,17 @@
 
       /** 单个商品下架操作确认 */
       handleWithdraw(index, row) {
-        this.$confirm('确认下架吗？', '提示')
-          .then(() => this.DELETE_Goods(row.id))
-          .catch(() => {})
+        this.$prompt('请输入下架原因', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /.+/,
+          inputErrorMessage: '请填写下架原因！'
+        }).then(({ value }) => {
+          API_goods.underGoods(row.id, value).then(() => {
+            this.GET_GoodsList()
+            this.$message.success('下架商品成功！')
+          })
+        })
       },
 
       /** 销售状态格式化 */
@@ -160,31 +165,15 @@
 
       /** 高级搜索中 分类选择组件值发生改变 */
       categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
+        this.advancedForm.category_path = data.category_path || ''
       },
 
       GET_GoodsList() {
         this.loading = true
         API_goods.getGoodsList(this.params).then(response => {
           this.loading = false
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
-          }
-          this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
-      },
-
-      /** 下架商品 */
-      DELETE_Goods(ids) {
-        API_goods.underGoods(ids).then(() => {
-          this.GET_GoodsList()
-          this.$message.success('下架商品成功！')
-        }).catch(() => this.$message.error('下架商品出错，请稍后再试！'))
+          this.goodsData = response
+        }).catch(() => (this.loading = false))
       }
     }
   }
