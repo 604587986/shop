@@ -146,5 +146,213 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  @import "../assets/styles/login";
+  .login .index-login {
+    width: 1000px;
+    margin: 20px auto;
+    height: 60px;
+    a {
+      float: left;
+      width: 245px;
+      height: 60px;
+    }
+    img {
+      width: 240px;
+      height: 60px;
+    }
+    span {
+      font-size: 23px;
+      float: left;
+      display: block;
+      margin: 25px 5px;
+    }
+  }
+  .content .prompt {
+    width: 100%;
+    text-align: center;
+    background: #fff8f0;
+    margin: 0 auto;
+    padding: 10px 0;
+    a { color: black }
+  }
+  .content .login-banner {
+    background: #FF5E18;
+    width: 100%;
+    .bg-banner {
+      width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      .banner-img {
+        background: url(../assets/images/background-banner.jpg) no-repeat center center;
+        background-size: cover;
+        height: 560px;
+      }
+      .login-box {
+        float: right;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        width: 346px;
+        background: #ffffff;
+      }
+    }
+  }
+  .login-box .login-form .tips-wapper {
+    background: #fff8f0;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    p {
+      font-size: 12px;
+      color: #999;
+    }
+  }
+  .login-box .login-form .login-tab {
+    height: 60px;
+    border-bottom: 1px solid #f4f4f4;
+    ul li {
+      float: left;
+      width: 50%;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 20px;
+      cursor: pointer;
+      a {
+        display: block;
+        height: 18px;
+        width: 99%;
+        color: #666;
+        &:hover, &.active { color: #f42424 }
+      }
+      .tab-a { border-right: 1px solid #f4f4f4 }
+    }
+  }
+  .login-form .login-interface .account-login { display: block }
+  .login-form .login-interface .login-show form {
+    width: 280px;
+    margin: 25px auto;
+  }
+  .active { color: #f42424 }
+  .login-interface form .item.focus {
+    border-color: #666;
+    label {
+      border-color: #666;
+      .iconfont { color: #666 }
+    }
+  }
+  .login-interface form .item-form-t {
+    width: 225px !important;
+    height: 30px;
+    border: 0 !important;
+    button {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+  }
+  .login-interface .quick-form .item {
+    position: relative;
+    width: 100%;
+    height: 35px;
+    margin-bottom: 10px;
+    border: 1px solid #bdbdbd;
+  }
+  .login-interface .account-form .item {
+    position: relative;
+    width: 100%;
+    height: 35px;
+    margin-bottom: 25px;
+    border: 1px solid #bdbdbd;
+  }
+  .validcode-img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 85px;
+    height: 35px;
+    cursor: pointer;
+  }
+  .login-interface form .item label {
+    width: 35px;
+    height: 35px;
+    float: left;
+    display: inline-block;
+    border-right: 1px solid #bdbdbd;
+  }
+  .login-interface form .item .iconfont {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 35px;
+    color: #666;
+  }
+  .login-interface form .item input {
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    width: 225px;
+    padding-left: 10px;
+  }
+  .login-interface form .forget {
+    height: 18px;
+    margin: 20px 0;
+  }
+  .login-interface form .forget span {
+    float: right;
+  }
+  .login-interface form .form-sub {
+    width: 100%;
+    height: 35px;
+    background: #f42424;
+    text-align: center;
+    margin: 10px 0;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    transition: background ease-out .2s;
+  }
+  .login-interface form .form-sub:hover {
+    background: #f65555;
+  }
+  .login-box .login-form .other-login {
+    height: 50px;
+    border-top: 1px solid #f4f4f4;
+    padding: 0 20px;
+    background-color: #fcfcfc;
+  }
+  .login-box .login-form .other-login ul li {
+    float: left;
+    line-height: 50px;
+    a>span {
+      padding: 0 10px;
+      color: #666666;
+      &:hover { color: #f42424 }
+    }
+  }
+  .login-box .login-form .other-login ul .other-one a>span {
+    border-right: 1px solid #bdbdbd;
+  }
+  .login-box .login-form .other-login ul .other-right {
+    float: right;
+  }
+  .other-login ul .other-right a {
+    color: #f42424;
+    font-size: 15px;
+  }
+  .send-sms-btn {
+    width: 187px;
+    height: 35px;
+    border: none;
+    color: #ffffff;
+    background-color: #607d8b;
+    transition: background ease-out .2s;
+  }
+  .send-sms-btn:hover {
+    background-color: #516a77;
+  }
+  .send-sms-btn:disabled {
+    background-color: #ccc;
+  }
 </style>
