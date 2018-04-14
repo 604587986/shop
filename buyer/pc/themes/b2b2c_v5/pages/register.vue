@@ -5,7 +5,7 @@
       <div class="index-register w">
         <div class="welcome">
           <a target="_blank" href="/">
-            <img src="~assets/images/logo-javashop.png" alt="logo">
+            <img src="../assets/images/logo-javashop.png" alt="logo">
           </a>
           <span>欢迎注册</span>
         </div>
@@ -51,6 +51,7 @@
           </el-form-item>
           <el-form-item label="">
             <el-button class="next-btn" type="danger" @click="handleNextStep">下一步</el-button>
+            <nuxt-link to="/register-by-email" style="font-size: 12px">邮箱注册 ></nuxt-link>
           </el-form-item>
         </el-form>
       </div>
@@ -79,30 +80,30 @@
         <div class="bind-box">
           <div class="bind-app">
             <div class="bind-logo">
-              <img src="/javashop/themes/b2b2cv4/member/register/images/weibo.jpg" title="微博绑定" alt="微博绑定" style="width:55px;">
+              <img src="../assets/images/icon-weibo.jpg" title="微博绑定" alt="微博绑定" style="width:55px;">
             </div>
             <div class="bind-other">
               <p class="bind-title">快速绑定微博账号 </p>
-              <a class="bind-btn" href="/javashop/member/bind-member.html">立即绑定</a>
+              <a class="bind-btn" href="#">立即绑定</a>
             </div>
           </div>
           <div class="bind-app">
             <div class="bind-logo">
-              <img src="/javashop/themes/b2b2cv4/member/register/images/qq.jpg" title="QQ绑定" alt="QQ绑定">
+              <img src="../assets/images/icon-qq.jpg" title="QQ绑定" alt="QQ绑定">
             </div>
             <div class="bind-other">
               <p class="bind-title">快速绑定QQ账号 </p>
-              <a class="bind-btn" href="/javashop/member/bind-member.html">立即绑定</a>
+              <a class="bind-btn" href="#">立即绑定</a>
             </div>
 
           </div>
           <div class="bind-app">
             <div class="bind-logo">
-              <img src="/javashop/themes/b2b2cv4/member/register/images/weixin.jpg" title="微信绑定" alt="微信绑定">
+              <img src="../assets/images/icon-weixin.jpg" title="微信绑定" alt="微信绑定">
             </div>
             <div class="bind-other">
               <p class="bind-title">快速绑定微信账号 </p>
-              <a class="bind-btn" href="/javashop/member/bind-member.html">立即绑定</a>
+              <a class="bind-btn" href="#">立即绑定</a>
             </div>
           </div>
         </div>
@@ -186,7 +187,7 @@
           ],
           nickname: [
             { required: true, message: '请输入会员昵称', trigger: 'blur' },
-            { min: 2, max: 10, message: '长度在 2 到 1o 个字符', trigger: 'blur' }
+            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
           ]
         }
       }
@@ -248,5 +249,148 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  @import "../assets/styles/register";
+  .register .index-register{
+    position: relative;
+    width: 1000px;
+    margin: 20px auto;
+    height: 100px;
+    .welcome {
+      a {
+        float: left;
+        width: 245px;
+        height: 60px;
+      }
+      img {
+        width: 240px;
+        height: 60px;
+      }
+      span {
+        font-size: 23px;
+        float: left;
+        display: block;
+        margin: 25px 5px;
+      }
+    }
+    .have-account {
+      font-size: 16px;
+      float: right;
+      margin-top: 24px;
+      color: #999;
+      a { color: #f42424 }
+    }
+  }
+  .register-steps {
+    width: 100%;
+    height: 48px;
+    border-bottom: 2px solid #e6e6e6;
+    ul {
+      width: 690px;
+      margin: 0 auto;
+    }
+    li {
+      display: block;
+      width: 200px;
+      padding-left: 30px;
+      float: left;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 48px;
+      &.active {
+        border-bottom: 2px solid #f42424;
+        i { background-color: #f42424 }
+        span { color: #f42424 }
+      }
+      i {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border-radius: 24px;
+        text-align: center;
+        line-height: 24px;
+        margin-right: 5px;
+        background-color: #ccc;
+        color: #fff;
+      }
+      span {
+        display: inline-block;
+        color: #3e3e3e;
+      }
+    }
+  }
+  .register-content {
+    .item {
+      width: 370px;
+      margin: 50px auto;
+    }
+    .vali-mobile {
+      /deep/ .vali-img .el-input-group__append { padding: 0 }
+      .vali-img { height: 38px }
+      .next-btn { width: 250px }
+    }
+    .input-account {
+      .submit-btn { width: 250px }
+    }
+    .register-success {
+      width: 750px;
+      margin: 0 auto;
+      padding-top: 20px;
+      text-align: center;
+      h3 {
+        color: #3e3e3e;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: Microsoft-Yahei;
+      }
+      h4 {
+        font-size: 14px;
+        margin-top: 10px;
+      }
+      .bind-box {
+        width: 100%;
+        margin: 100px auto;
+      }
+      .bind-app {
+        float: left;
+        width: 250px;
+      }
+      .bind-logo {
+        width: 80px;
+        height: 80px;
+        float: left;
+        img {
+          height: 50px;
+          padding: 15px;
+        }
+      }
+      .bind-other {
+        float: left;
+        width: 150px;
+        height: 80px;
+        text-align: center;
+      }
+      .bind-title {
+        font-size: 12px;
+        color: #333333;
+        text-align: center;
+        line-height: 40px;
+      }
+      .bind-btn {
+        display: block;
+        width: 70%;
+        margin: 0 auto;
+        background-color: #FF4000;
+        border-radius: 3px;
+        color: #ffffff;
+        font-size: 12px;
+        text-align: center;
+        line-height: 30px;
+        cursor: pointer;
+        transition: all .2s ease;
+        user-select: none;
+        &:hover {
+          background-color: #d93700;
+        }
+      }
+    }
+  }
 </style>
