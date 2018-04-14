@@ -79,30 +79,30 @@
         <div class="bind-box">
           <div class="bind-app">
             <div class="bind-logo">
-              <img src="/javashop/themes/b2b2cv4/member/register/images/weibo.jpg" title="微博绑定" alt="微博绑定" style="width:55px;">
+              <img src="../assets/images/icon-weibo.jpg" title="微博绑定" alt="微博绑定" style="width:55px;">
             </div>
             <div class="bind-other">
               <p class="bind-title">快速绑定微博账号 </p>
-              <a class="bind-btn" href="/javashop/member/bind-member.html">立即绑定</a>
+              <a class="bind-btn" href="#">立即绑定</a>
             </div>
           </div>
           <div class="bind-app">
             <div class="bind-logo">
-              <img src="/javashop/themes/b2b2cv4/member/register/images/qq.jpg" title="QQ绑定" alt="QQ绑定">
+              <img src="../assets/images/icon-qq.jpg" title="QQ绑定" alt="QQ绑定">
             </div>
             <div class="bind-other">
               <p class="bind-title">快速绑定QQ账号 </p>
-              <a class="bind-btn" href="/javashop/member/bind-member.html">立即绑定</a>
+              <a class="bind-btn" href="#">立即绑定</a>
             </div>
 
           </div>
           <div class="bind-app">
             <div class="bind-logo">
-              <img src="/javashop/themes/b2b2cv4/member/register/images/weixin.jpg" title="微信绑定" alt="微信绑定">
+              <img src="../assets/images/icon-weixin.jpg" title="微信绑定" alt="微信绑定">
             </div>
             <div class="bind-other">
               <p class="bind-title">快速绑定微信账号 </p>
-              <a class="bind-btn" href="/javashop/member/bind-member.html">立即绑定</a>
+              <a class="bind-btn" href="#">立即绑定</a>
             </div>
           </div>
         </div>
