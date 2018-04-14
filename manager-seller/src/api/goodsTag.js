@@ -10,7 +10,7 @@ import GoodsModel from '@/models/GoodsModel'
 export function getTagsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/tag/list',
+      url: '/goods/tags',
       method: 'get',
       loading: false,
       params
@@ -30,7 +30,7 @@ export function getTagsList(params) {
 export function getTagGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/tag/goods-list/${params.tag_id}`,
+      url: `/goods/tags/${params.tag_id}/goods`,
       method: 'get',
       loading: false,
       params

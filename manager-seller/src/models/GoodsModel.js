@@ -12,43 +12,48 @@ import {
 } from '@/framework'
 
 export default class GoodsModel extends DataModel {
-  /** 商品ID */
-  @ServerName('goods_id')
-  id
+  // /** 商品ID */
+  // @ServerName('goods_id')
+  // id
 
-  /** 商品图片 */
-  @ServerName('goods_image')
-  image
+  /** 商品图片 小图路径 */
+  @ServerName('small')
+  goods_image
 
-  /** 商品编号 */
-  @ServerName('goods_sn')
-  sn
-
-  /** 卖家名称 */
-  @ServerName('shop_name')
-  seller_name
+  // /** 商品编号 */
+  // @ServerName('goods_sn')
+  // sn
 
   /** 商品名称 */
   @ServerName('goods_name')
-  name
+  goods_name
+
+  // /** 卖家名称 */
+  // @ServerName('seller_name')
+  // seller_name
+
+  /** 商品价格 */
+  @ServerName('price')
+  goods_price
 
   /** 库存 */
-  @ServerName('goods_balanced')
-  balanced
+  @ServerName('quantity')
+  quantity
 
-  /** 商品分类名称 */
-  @ServerName('category_name')
-  category_name
+  /** 可用库存 */
+  @ServerName('enable_quantity')
+  enable_quantity
+
+  /** 创建时间 */
+  @ServerName('create_time')
+  create_time
 
   /** 商品上架状态 */
   @ServerName('market_enable')
   market_enable
 
-  /** 商品品牌 */
-  @ServerName('brand_name')
-  brand_name
-
-  /** 商品价格 */
-  @ServerName('goods_price')
-  price
+  // /** 商品品牌 */
+  // @ServerName('brand_name')
+  // brand_name
+  //
 }

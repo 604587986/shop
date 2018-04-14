@@ -11,6 +11,8 @@ const service = axios.create({
   timeout: 5000 // 请求超时时间
 })
 
+axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+
 // request拦截器
 service.interceptors.request.use(config => {
   // Do something before request is sent
@@ -24,7 +26,7 @@ service.interceptors.request.use(config => {
     })
   }
   if (store.getters.token) {
-    config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+    config.headers['Authorization'] = getToken() // 让每个请求携带令牌
   }
   return config
 }, error => {

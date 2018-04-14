@@ -12,12 +12,16 @@ import {
 } from '@/framework'
 
 export default class GoodsTagModel extends DataModel {
-  /** 商品标签ID */
-  @ServerName('tag_id')
-  id
+  /** 所属卖家ID  标签ID*/
+  @ServerName('seller_id')
+  tag_id
 
-  /** 商品标签名称 */
+  /** 标签名字 */
   @ServerName('tag_name')
   name
+
+  /** 关键字 */
+  @ServerName('mark')
+  mark
 }
 
