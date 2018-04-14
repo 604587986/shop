@@ -389,7 +389,7 @@
           </div>
         </div>
         <div class="bill-btn-ckt">
-          <a href="javascript: void(0);" class="bill_btn" id="bill_btn">提交订单</a>
+          <nuxt-link to="/checkout/cashier" class="bill_btn">提交订单</nuxt-link>
         </div>
       </div>
     </div>
