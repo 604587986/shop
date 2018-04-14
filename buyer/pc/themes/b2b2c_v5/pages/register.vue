@@ -5,7 +5,7 @@
       <div class="index-register w">
         <div class="welcome">
           <a target="_blank" href="/">
-            <img src="~assets/images/logo-javashop.png" alt="logo">
+            <img src="../assets/images/logo-javashop.png" alt="logo">
           </a>
           <span>欢迎注册</span>
         </div>
@@ -51,6 +51,7 @@
           </el-form-item>
           <el-form-item label="">
             <el-button class="next-btn" type="danger" @click="handleNextStep">下一步</el-button>
+            <nuxt-link to="/register-by-email" style="font-size: 12px">邮箱注册 ></nuxt-link>
           </el-form-item>
         </el-form>
       </div>
@@ -186,7 +187,7 @@
           ],
           nickname: [
             { required: true, message: '请输入会员昵称', trigger: 'blur' },
-            { min: 2, max: 10, message: '长度在 2 到 1o 个字符', trigger: 'blur' }
+            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
           ]
         }
       }
