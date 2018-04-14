@@ -1,0 +1,14 @@
+.checkout-header {
+  width: 100%;
+  background: #fff;
+  .w {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100px;
+    .logo {
+      width: 260px;
+      height: 60px;
+    }
+  }
+}

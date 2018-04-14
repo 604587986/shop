@@ -230,7 +230,7 @@
       },
       /** 去结算 */
       handleCheckout() {
-        console.log('去结算...')
+        this.$router.push({ path: '/checkout' })
       },
       /** 监听页面滚动，实现结算栏浮起、固定 */
       countCheckBarFiexd(event) {
