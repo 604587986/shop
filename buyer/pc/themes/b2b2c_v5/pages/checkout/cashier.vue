@@ -10,19 +10,35 @@
     </div>
     <div class="cashier-box">
       <div class="cashier-change">
-        <h2>交易号：<a href="/javashop/member/order.html" target="_blank"><b>20180414000002</b></a></h2>
-        <h2>货到付款：<span>￥4,498.00</span><i>元</i></h2>
+        <h2>交易号：
+          <nuxt-link :to="'/member/my-order/' + order_sn" target="_blank">
+            <b>{{ order_sn }}</b>
+          </nuxt-link>
+        </h2>
+        <h2>{{ online ? '在线支付' : '货到付款' }}：<span>￥4,498.00</span><i>元</i></h2>
         <div class="cashier-order-detail">
           <div class="cashier-order-inside">
             <h3><i></i>送货至：<span></span><span>山西省</span><span>太原市</span><span>阳曲县<span><span><span>12312313</span><span>13333333333</span></span></span></span></h3>
           </div>
         </div>
+        <div v-if="online" class="cashier-tools">
+          <div class="cashier-tools-inside">
+            <div class="cashier-tools-title">
+              <h3>支付平台</h3>
+            </div>
+            <ul class="cashier-pay-list">
+              <li class="alipay">
+                <img src="~/assets/images/icon-alipay.png">
+              </li>
+              <li class="wechat">
+                <img src="~/assets/images/icon-wechat.png">
+              </li>
+            </ul>
+          </div>
+        </div>
         <div class="same-pay-way bank-pay paybtn">
-          <ul>
-            <li>
-              <a href="/javashop/member/order.html">查看订单</a>
-            </li>
-          </ul>
+          <nuxt-link v-if="online" to="#">立即支付</nuxt-link>
+          <nuxt-link v-else :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
         </div>
       </div>
     </div>
@@ -32,7 +48,13 @@
 <script>
   export default {
     name: 'cashier',
-    layout: 'full'
+    layout: 'full',
+    data() {
+      return {
+        online: true, // true: 在线支付; false: 货到付款
+        order_sn: '2333'
+      }
+    }
   }
 </script>
 
@@ -94,6 +116,49 @@
       border: 1px solid #e1e1e1;
       background: #f4f4f4;
       margin: 20px 0 0 0;
+    }
+    .cashier-tools {
+      width: 950px;
+      border: 1px solid #e1e1e1;
+      background: #f4f4f4;
+      margin: 20px 0 20px 0;
+      .cashier-tools-inside {
+        margin: 3px;
+        background: #fff;
+      }
+      .cashier-tools-title {
+        height: 52px;
+        line-height: 52px;
+        h3 {
+          width: 924px;
+          height: 52px;
+          line-height: 52px;
+          font-weight: 200;
+          font-size: 12px;
+          background: #fcfcfc;
+          padding-left: 20px;
+        }
+      }
+      .cashier-pay-list {
+        width: 844px;
+        overflow: hidden;
+        margin: 0 10px;
+        padding: 10px 40px;
+        li {
+          float: left;
+          height: 35px;
+          line-height: 30px;
+          margin: 0 8px 10px 0;
+          padding: 5px 5px;
+          position: relative;
+          border: 1px solid #e0e0e0;
+          cursor: pointer;
+          img {
+            width: 150px;
+            height: 35px
+          }
+        }
+      }
     }
     .cashier-order-inside {
       margin: 3px;
