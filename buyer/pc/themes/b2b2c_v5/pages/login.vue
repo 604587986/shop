@@ -4,7 +4,7 @@
       <!-- logo -->
       <div class="index-login">
         <a target="_blank" href="/">
-          <img src="../assets/images/logo-javashop.png" alt="logo">
+          <img src="~/assets/images/logo-javashop.png" alt="logo">
         </a>
         <span>欢迎登录</span>
       </div>

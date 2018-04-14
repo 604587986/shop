@@ -3,7 +3,7 @@
     <div class="index-register w">
       <div class="welcome">
         <a target="_blank" href="/">
-          <img src="../assets/images/logo-javashop.png" alt="logo">
+          <img src="~/assets/images/logo-javashop.png" alt="logo">
         </a>
         <span>欢迎注册</span>
       </div>
