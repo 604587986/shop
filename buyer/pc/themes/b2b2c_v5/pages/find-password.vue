@@ -43,11 +43,13 @@
   Vue.use(Form)
   Vue.use(FormItem)
   Vue.use(Input)
+  import * as regExp from '@/utils/RegExp'
   export default {
     name: 'find-password',
     layout: 'full',
     data() {
       return {
+        step: 1,
         find_mobile: true, // true：手机找回 false：邮箱找回,
         /** 校验手机 表单 */
         valiMobileForm: {},
