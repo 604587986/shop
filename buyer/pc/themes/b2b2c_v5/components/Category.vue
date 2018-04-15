@@ -83,6 +83,11 @@
     created() {
       this.getCategoryData()
     },
+    watch: {
+      $route() {
+        this.unfold = this.$route.path === '/'
+      }
+    },
     computed: {
       /** 如果为首页，总是展开 */
       always_unfold() {

@@ -39,7 +39,7 @@
           </el-form-item>
           <el-form-item label="图片验证码：" prop="vali_code" class="vali-img">
             <el-input v-model="valiMobileForm.vali_code" :maxlength="4">
-              <img src="http://data.andste.cc/developers/web/temp/images/validcode-img.png" slot="append" class="vali-img">
+              <img src="http://data.andste.cc/developers/web/temp/images/validcode-img.png" slot="append">
             </el-input>
           </el-form-item>
         </el-form>
@@ -324,7 +324,7 @@
     }
     .vali-mobile {
       /deep/ .vali-img .el-input-group__append { padding: 0 }
-      .vali-img { height: 38px }
+      img { height: 38px }
       .next-btn { width: 250px }
     }
     .input-account {
