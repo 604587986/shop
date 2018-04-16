@@ -140,6 +140,11 @@
       /** 登录事件 */
       handleLogin() {
         this.$message.success('登录方式：', this.login_type)
+        const { query } = this.$route
+        if (query.forward) {
+          console.log(query.forward)
+          // this.$router.push({ path: query.forward })
+        }
       }
     }
   }

@@ -25,6 +25,7 @@
   import Menu from './member/__menu'
   export default {
     name: 'member',
+    middleware: 'auth',
     components: {
       'en-breadcrumb': Breadcrumb,
       'en-menu': Menu
