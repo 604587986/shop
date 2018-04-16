@@ -491,7 +491,7 @@
       z-index: 2;
     }
     /deep/ .el-pagination {
-      padding: 10px 0;
+      padding: 10px 0 50px 0;
       text-align: right;
       margin-right: 10px;
     }
