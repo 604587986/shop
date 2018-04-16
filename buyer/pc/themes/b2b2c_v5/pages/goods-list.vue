@@ -1,5 +1,5 @@
 <template>
-  <div id="goods-list" style="background-color: #ededed">
+  <div id="goods-list" style="background-color: #ededed;padding-bottom: 20px">
     <div class="gl-container w">
       <div class="gl-bar-title">
         <span>全部<i class="iconfont ea-icon-arrow-right"></i></span>
@@ -110,6 +110,26 @@
           </dd>
         </dl>
       </div>
+      <div class="gl-sku-box">
+        <div class="gl-sku-filter">
+          <div class="btns">
+            <nuxt-link to="#" class="active">默认<i class="iconfont ea-icon-arrow-down3"></i></nuxt-link>
+            <nuxt-link to="#">销量<i class="iconfont ea-icon-arrow-down3"></i></nuxt-link>
+            <nuxt-link to="#">价格<i class="iconfont ea-icon-arrow-down3"></i></nuxt-link>
+            <nuxt-link to="#">评价<i class="iconfont ea-icon-arrow-down3"></i></nuxt-link>
+          </div>
+          <div class="price">
+            <div class="p-c-b">
+              <span><em>￥</em><input type="text" class="custom-pro" maxlength="5"></span>
+              <i></i>
+              <span><em>￥</em><input type="text" class="custom-pro" maxlength="5"></span>
+              <a href="javascript:;" class="empty-pro">清空</a>
+              <a href="javascript:;" class="enter-pro">确定</a>
+            </div>
+          </div>
+        </div>
+        <div class="gl-sku-list"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -137,9 +157,6 @@
       }
     },
     methods: {
-      handleBarMouse(event) {
-        console.log(event)
-      },
       GET_GoodsList(params) {
         API_GoodsList.getGoodsList({...this.params, ...params}).then(response => {
           this.goodsList = response.data
@@ -291,6 +308,115 @@
           margin: 8px;
         }
       }
+    }
+  }
+  .gl-sku-box {
+    width: 1190px;
+    margin: 35px auto;
+    overflow: hidden;
+    box-shadow: rgb(204, 204, 204) 0 2px 5px;
+    .gl-sku-filter {
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 45px;
+      background-color: #f5f5f5;
+      .btns {
+        margin-left: 30px;
+        .iconfont {
+          transform: rotate(-180deg);
+        }
+        a {
+          display: inline-block;
+          background: #fff;
+          width: 65px;
+          height: 22px;
+          position: relative;
+          text-align: center;
+          border: 1px solid #ededed;
+          font-size: 12px;
+          margin-left: -1px;
+          line-height: 22px;
+          z-index: 1;
+          color: #666;
+          &.active {
+            background: #e93b39;
+            border-color: #e93b39;
+            color: #fff;
+          }
+        }
+      }
+      .price {
+        width: 124px;
+        overflow: hidden;
+        margin-left: 15px;
+        text-align: center;
+        &:hover {
+          overflow: inherit;
+          align-self: end;
+          .p-c-b {
+            background: #ededed;
+            padding-top: 10px;
+            height: 64px;
+            position: relative;
+            z-index: 3;
+            overflow: visible;
+          }
+        }
+        .p-c-b {
+          height: 24px;
+          overflow: hidden;
+        }
+        span {
+          display: inline-block;
+          width: 45px;
+          height: 22px;
+          border: 1px solid #ededed;
+          background-color: #fff;
+          background-position: 3px -281px;
+          text-align: right;
+        }
+        em { margin-right: 2px }
+        input {
+          width: 33px;
+          height: 14px;
+          border: 0 none;
+          margin-top: 4px;
+        }
+        i {
+          display: inline-block;
+          border-top: 1px solid #acacac;
+          width: 8px;
+          margin: 0 1px;
+          height: 3px;
+          vertical-align: middle;
+        }
+        a {
+          display: inline-block;
+          width: 45px;
+          height: 18px;
+          font-size: 12px;
+          line-height: 18px;
+          margin: 10px 0;
+        }
+        .empty-pro {
+          border: 1px solid #e0e0e0;
+          background: #fff;
+          margin-right: 5px;
+          color: #666;
+        }
+        .enter-pro {
+          border: 1px solid #e93b39;
+          background: #e93b39;
+          margin-left: 5px;
+          color: #fff;
+        }
+      }
+    }
+    .gl-sku-list {
+      position: relative;
+      background-color: #fff;
+      min-height: 200px;
     }
   }
 </style>
