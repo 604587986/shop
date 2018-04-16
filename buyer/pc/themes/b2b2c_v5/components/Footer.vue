@@ -44,7 +44,7 @@
     <div class="link-footer">
       <div class="w">
         <a href="//index.html">首页</a>
-        | <a href="//member/member.html">会员中心</a>
+        | <nuxt-link to="/member">会员中心</nuxt-link>
         | <a href="//new_store/pages/main_outline.html">商家中心</a>
         | <a href="//help-21-9.html">关于网站</a>
         | <a href="//help-21-8.html">联系我们</a>
