@@ -189,7 +189,7 @@
     data() {
       return {
         params: {
-          keyword: '',
+          keyword: this.$route.query.keyword || '',
           page_no: 1,
           page_size: 20
         },
@@ -197,11 +197,15 @@
       }
     },
     mounted() {
-      this.GET_GoodsList({keyword: this.$route.query.keyword})
+      this.GET_GoodsList(true)
     },
     watch: {
       $route() {
-        console.log(this.$route.query)
+        this.params = {
+          ...this.params,
+          ...this.$route.query
+        }
+        this.GET_GoodsList()
       }
     },
     methods: {
@@ -210,10 +214,10 @@
         this.params.page_no = page
         this.GET_GoodsList()
       },
-      GET_GoodsList(params) {
+      GET_GoodsList(is_first) {
         API_GoodsList.getGoodsList(this.params).then(response => {
           this.goodsData = response
-          this.MixinScrollToTop(171)
+          this.MixinScrollToTop(is_first ? 0 : 171)
         })
       }
     }
