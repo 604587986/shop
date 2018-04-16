@@ -63,7 +63,7 @@
                       <input id="sms-code" placeholder="短信验证码" maxlength="6">
                     </div>
                     <div class="forget">
-                      <span><nuxt-link :to="'/find-password' + _forward">忘记密码</nuxt-link></span>
+                      <span><nuxt-link :to="'/find-password' + MixinForward">忘记密码</nuxt-link></span>
                     </div>
                     <button class="form-sub" type="button" @click="handleLogin">登&nbsp;&nbsp;&nbsp;录</button>
                   </form>
@@ -90,7 +90,7 @@
                       <img class="validcode-img" src="http://data.andste.cc/developers/web/temp/images/validcode-img.png">
                     </div>
                     <div class="forget">
-                      <span><nuxt-link :to="'/find-password' + _forward">忘记密码</nuxt-link></span>
+                      <span><nuxt-link :to="'/find-password' + MixinForward">忘记密码</nuxt-link></span>
                     </div>
                     <button class="form-sub" type="button" @click="handleLogin">登&nbsp;&nbsp;&nbsp;录</button>
                   </form>
@@ -112,7 +112,7 @@
                     </a>
                   </li>
                   <li class="other-right">
-                    <nuxt-link :to="'/register' + _forward" class="registered">
+                    <nuxt-link :to="'/register' + MixinForward" class="registered">
                       <b></b>立即注册
                     </nuxt-link>
                   </li>
@@ -136,18 +136,12 @@
         login_banner: 'http://data.andste.cc/developers/web/temp/images/background-banner.jpg'
       }
     },
-    computed: {
-      _forward() {
-        const { forward } = this.$route.query
-        return forward ? `?forward=${forward}` : ''
-      }
-    },
     methods: {
       /** 登录事件 */
       handleLogin() {
         this.$message.success('登录方式：' + this.login_type)
-        if (this._forward) {
-          console.log(this._forward)
+        if (this.MixinForward) {
+          console.log(this.MixinForward)
         }
       }
     }

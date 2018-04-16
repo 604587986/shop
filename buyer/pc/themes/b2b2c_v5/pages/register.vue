@@ -11,7 +11,7 @@
         </div>
         <div class="have-account">
           <span>已有账号？</span>
-          <a href="/login">请登录></a>
+          <nuxt-link :to="'/login' + MixinForward">请登录></nuxt-link>
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@
           </el-form-item>
           <el-form-item label="">
             <el-button class="next-btn" type="danger" @click="handleNextStep">下一步</el-button>
-            <nuxt-link to="/register-by-email" style="font-size: 12px">邮箱注册 ></nuxt-link>
+            <nuxt-link :to="'/register-by-email' + MixinForward" style="font-size: 12px">邮箱注册 ></nuxt-link>
           </el-form-item>
         </el-form>
       </div>

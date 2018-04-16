@@ -9,7 +9,7 @@
       </div>
       <div class="have-account">
         <span>已有账号？</span>
-        <a href="/login">请登录></a>
+        <nuxt-link :to="'/login' + MixinForward">请登录></nuxt-link>
       </div>
     </div>
     <div class="content-register">
