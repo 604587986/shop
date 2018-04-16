@@ -128,13 +128,61 @@
             </div>
           </div>
         </div>
-        <div class="gl-sku-list"></div>
+        <div class="gl-sku-list">
+          <ul class="clearfix">
+            <li v-for="goods in goodsData.data" :key="goods.goods_id">
+              <div class="gl-item">
+                <div class="gl-img">
+                  <img src="https://img13.360buyimg.com/n7/jfs/t16096/72/2361833392/251194/4945bb65/5aa3a872Naeb5f0ce.jpg" alt="">
+                </div>
+                <div class="gl-price">
+                  <strong><em>¥</em><i>99.00</i></strong>
+                </div>
+                <div class="gl-name">
+                  <nuxt-link to="#" title="京东自营 闪电发货 支持货到付款【儿童日买3免1】店内部分春季爆品、夏季新品参与促销，查看详情猛戳我>>">
+                    <em>京东自营 闪电发货 支持货到付款【儿童日买3免1】店内部分春季爆品、夏季新品参与促销，查看详情猛戳我>></em>
+                  </nuxt-link>
+                  <span class="gl-attribute">
+                    <a title="吊带裙/背心裙" href="#" target="_blank" class="attr">
+                      <b>吊带裙/背心裙</b>
+                    </a>
+                    <a title="淑女风" href="#" target="_blank" class="attr">
+                      <b>淑女风</b>
+                    </a>
+                    <a title="纯棉" href="#" target="_blank" class="attr">
+                      <b>纯棉</b>
+                    </a>
+                  </span>
+                </div>
+                <div class="gl-commit">
+                  <strong>已有<a class="comment" target="_blank" href="#">1000+</a>人评价</strong>
+                </div>
+                <div class="gl-shop">
+                  <span>
+                    <a href="#" target="_blank" title="馨颂童装京东自营旗舰店">馨颂童装京东自营旗舰店<i class="iconfont ea-icon-shop" title="进入店铺"></i></a>
+                  </span>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <el-pagination
+            v-if="goodsData"
+            @current-change="handleCurrentPageChange"
+            :current-page.sync="params.page_no"
+            :page-size="params.page_size"
+            layout="total, prev, pager, next"
+            :total="goodsData.data_total">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Pagination } from 'element-ui'
+  Vue.use(Pagination)
   import * as API_GoodsList from '@/api/goods'
   export default {
     name: 'goods-list',
@@ -145,7 +193,7 @@
           page_no: 1,
           page_size: 20
         },
-        goodsList: []
+        goodsData: ''
       }
     },
     mounted() {
@@ -157,9 +205,15 @@
       }
     },
     methods: {
+      /** 当前页数发生改变 */
+      handleCurrentPageChange(page) {
+        this.params.page_no = page
+        this.GET_GoodsList()
+      },
       GET_GoodsList(params) {
-        API_GoodsList.getGoodsList({...this.params, ...params}).then(response => {
-          this.goodsList = response.data
+        API_GoodsList.getGoodsList(this.params).then(response => {
+          this.goodsData = response
+          this.MixinScrollToTop(171)
         })
       }
     }
@@ -417,6 +471,131 @@
       position: relative;
       background-color: #fff;
       min-height: 200px;
+    }
+  }
+  .gl-sku-list {
+    padding: 0 10px;
+    li {
+      width: 234px;
+      height: 400px;
+      float: left;
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      box-shadow: 0 0 0 0 #e4e7ed;
+      transition: box-shadow .2s ease;
+    }
+    li:hover {
+      border-color: #e9e9e9;
+      box-shadow: 0 0 5px 2px #e4e7ed;
+      z-index: 2;
+    }
+    /deep/ .el-pagination {
+      padding: 10px 0;
+      text-align: right;
+      margin-right: 10px;
+    }
+    .gl-item {
+      padding: 12px 6px;
+      width: 220px;
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      background: #fff;
+      border: 1px solid #fff;
+      transition: border-color .1s ease;
+      .gl-img {
+        margin-bottom: 5px;
+        img {
+          width: 220px;
+          height: 220px;
+        }
+      }
+    }
+    .gl-price {
+      position: relative;
+      line-height: 22px;
+      height: 22px;
+      overflow: hidden;
+      width: 100%;
+      margin: 0 0 8px;
+      strong {
+        float: left;
+        margin-right: 10px;
+        color: #e4393c;
+        font-size: 20px;
+        font-weight: 400;
+        font-family: Verdana;
+        em { font-size: 16px }
+      }
+    }
+    .gl-name {
+      height: 40px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      a {
+        color: #666;
+        &:hover { color: #f42424 }
+      }
+      em {
+        display: block;
+        height: 20px;
+        line-height: 20px;
+        overflow: hidden;
+        transition: height .08s ease;
+      }
+      .gl-attribute {
+        display: block;
+        width: 228px;
+        height: 19px;
+        margin-top: 1px;
+        margin-right: -8px;
+        overflow: hidden;
+        .attr {
+          float: left;
+          height: 19px;
+          line-height: 19px;
+          padding: 0 4px;
+          margin-right: 7px;
+          background: #f4f4f4;
+          b {
+            font-weight: 400;
+            color: #999;
+          }
+        }
+      }
+    }
+    .gl-commit {
+      width: 100%;
+      height: 18px;
+      margin-top: -3px;
+      margin-bottom: 9px;
+      overflow: hidden;
+      strong {
+        color: #a7a7a7;
+        font-weight: 400;
+        a {
+          color: #646fb0;
+          font-family: verdana;
+          font-weight: 700;
+        }
+      }
+    }
+    .gl-shop {
+      line-height: 18px;
+      height: 18px;
+      overflow: hidden;
+      margin-top: -3px;
+      margin-bottom: 9px;
+      span {
+        display: inline-block;
+        position: relative;
+        height: 18px;
+        a { color: #999 }
+        a:hover { color: #f42424 }
+        i { margin-left: 5px }
+      }
     }
   }
 </style>
