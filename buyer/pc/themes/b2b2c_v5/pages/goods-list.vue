@@ -50,22 +50,22 @@
             <div class="small-list brand-list">
               <ul class="show-logo">
                 <li class="">
-                  <a href="goods_list.html?cat=1&amp;brand=2" title="新农哥">
+                  <a href="/goods-list?cat_id=1&amp;brand=2" title="新农哥">
                     <img class="lazy" src="http://static.v4.javamall.com.cn/attachment/brand/201202211143461491.jpg" data-original="http://static.v4.javamall.com.cn/attachment/brand/201202211143461491.jpg" alt="新农哥" style="display: block;">新农哥
                   </a>
                 </li>
                 <li class="">
-                  <a href="goods_list.html?cat=1&amp;brand=11" title="德芙">
+                  <a href="/goods-list?cat_id=1&amp;brand=11" title="德芙">
                     <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/C13CB8F002EF4BEE82F4A9BA875FCB45.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/C13CB8F002EF4BEE82F4A9BA875FCB45.jpg" alt="德芙" style="display: block;">德芙
                   </a>
                 </li>
                 <li class="">
-                  <a href="goods_list.html?cat=1&amp;brand=13" title="百事">
+                  <a href="/goods-list?cat_id=1&amp;brand=13" title="百事">
                     <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/5D971CEA5BBC4892863D9BC707239661.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/5D971CEA5BBC4892863D9BC707239661.jpg" alt="百事" style="display: block;">百事
                   </a>
                 </li>
                 <li class="">
-                  <a href="goods_list.html?cat=1&amp;brand=3" title="洽洽">
+                  <a href="/goods-list?cat_id=1&amp;brand=3" title="洽洽">
                     <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/46315F247154475CACA0A3287AF94B16.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/46315F247154475CACA0A3287AF94B16.jpg" alt="洽洽" style="display: block;">洽洽
                   </a>
                 </li>
@@ -77,15 +77,15 @@
           <dt>价格:</dt>
           <dd>
             <div class="small-list">
-              <a href="goods_list.html?price=_5&amp;cat=1">5元以下</a>
-              <a href="goods_list.html?price=5_10&amp;cat=1">5-10元</a>
-              <a href="goods_list.html?price=10_20&amp;cat=1">10-20元</a>
-              <a href="goods_list.html?price=20_50&amp;cat=1">20-50元</a>
-              <a href="goods_list.html?price=50_100&amp;cat=1">50-100元</a>
-              <a href="goods_list.html?price=100_200&amp;cat=1">100-200元</a>
-              <a href="goods_list.html?price=200_500&amp;cat=1">200-500元</a>
-              <a href="goods_list.html?price=500_1000&amp;cat=1">500-1000元</a>
-              <a href="goods_list.html?price=1000_&amp;cat=1">1000元以上</a>
+              <a href="/goods-list.html?price=_5&amp;cat=1">5元以下</a>
+              <a href="/goods-list.html?price=5_10&amp;cat=1">5-10元</a>
+              <a href="/goods-list.html?price=10_20&amp;cat=1">10-20元</a>
+              <a href="/goods-list.html?price=20_50&amp;cat=1">20-50元</a>
+              <a href="/goods-list.html?price=50_100&amp;cat=1">50-100元</a>
+              <a href="/goods-list.html?price=100_200&amp;cat=1">100-200元</a>
+              <a href="/goods-list.html?price=200_500&amp;cat=1">200-500元</a>
+              <a href="/goods-list.html?price=500_1000&amp;cat=1">500-1000元</a>
+              <a href="/goods-list.html?price=1000_&amp;cat=1">1000元以上</a>
             </div>
           </dd>
         </dl>
@@ -93,19 +93,19 @@
           <dt>分类:</dt>
           <dd>
             <div class="small-list">
-              <a href="goods_list.html?cat=1_2_7">蜜饯</a>
-              <a href="goods_list.html?cat=1_2">休闲零食 </a>
-              <a href="goods_list.html?cat=1_13_14">碳酸饮料</a>
-              <a href="goods_list.html?cat=1_3_10">巧克力</a>
-              <a href="goods_list.html?cat=1_18_19">白酒</a>
-              <a href="goods_list.html?cat=1_377">牛奶乳品</a>
-              <a href="goods_list.html?cat=1_288_290">普洱</a>
-              <a href="goods_list.html?cat=1_288_289">铁观音</a>
-              <a href="goods_list.html?cat=1_2_306">牛肉干</a>
-              <a href="goods_list.html?cat=1_2_6">坚果</a>
-              <a href="goods_list.html?cat=1_18_21">洋酒</a>
-              <a href="goods_list.html?cat=1_18_168">葡萄酒</a>
-              <a href="goods_list.html?cat=1_377_380">儿童奶</a>
+              <a href="/goods-list?cat_id=1_2_7">蜜饯</a>
+              <a href="/goods-list?cat_id=1_2">休闲零食 </a>
+              <a href="/goods-list?cat_id=1_13_14">碳酸饮料</a>
+              <a href="/goods-list?cat_id=1_3_10">巧克力</a>
+              <a href="/goods-list?cat_id=1_18_19">白酒</a>
+              <a href="/goods-list?cat_id=1_377">牛奶乳品</a>
+              <a href="/goods-list?cat_id=1_288_290">普洱</a>
+              <a href="/goods-list?cat_id=1_288_289">铁观音</a>
+              <a href="/goods-list?cat_id=1_2_306">牛肉干</a>
+              <a href="/goods-list?cat_id=1_2_6">坚果</a>
+              <a href="/goods-list?cat_id=1_18_21">洋酒</a>
+              <a href="/goods-list?cat_id=1_18_168">葡萄酒</a>
+              <a href="/goods-list?cat_id=1_377_380">儿童奶</a>
             </div>
           </dd>
         </dl>
