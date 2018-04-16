@@ -145,7 +145,7 @@
     methods: {
       /** 登录事件 */
       handleLogin() {
-        this.$message.success('登录方式：', this.login_type)
+        this.$message.success('登录方式：' + this.login_type)
         if (this._forward) {
           console.log(this._forward)
         }
