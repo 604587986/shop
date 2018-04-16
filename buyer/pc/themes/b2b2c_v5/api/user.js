@@ -10,12 +10,10 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function login(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'user/login',
-      method: 'post',
-      data: params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'user/login',
+    method: 'post',
+    data: params
   })
 }
 
@@ -24,11 +22,9 @@ export function login(params) {
  * @returns {Promise<any>}
  */
 export function logout() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'user/logout',
-      method: 'post'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'user/logout',
+    method: 'post'
   })
 }
 

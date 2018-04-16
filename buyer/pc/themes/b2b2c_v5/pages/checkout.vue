@@ -5,6 +5,7 @@
 <script>
   export default {
     name: 'checkout',
-    layout: 'full'
+    layout: 'full',
+    middleware: 'auth'
   }
 </script>
