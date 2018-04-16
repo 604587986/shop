@@ -3,7 +3,7 @@
     <div class="login w">
       <!-- logo -->
       <div class="index-login">
-        <a target="_blank" href="/">
+        <a href="/">
           <img src="~/assets/images/logo-javashop.png" alt="logo">
         </a>
         <span>欢迎登录</span>

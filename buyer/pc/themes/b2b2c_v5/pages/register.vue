@@ -4,7 +4,7 @@
       <!-- logo -->
       <div class="index-register w">
         <div class="welcome">
-          <a target="_blank" href="/">
+          <a href="/">
             <img src="~/assets/images/logo-javashop.png" alt="logo">
           </a>
           <span>欢迎注册</span>
