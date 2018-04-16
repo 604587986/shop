@@ -4,7 +4,7 @@
       <div class="login-status">
         <span>您好，欢迎来到</span>
         <nuxt-link to="/" style="color: #333">Javashop示例商城</nuxt-link>
-        <span>[<nuxt-link to="/login">登录</nuxt-link>] [<nuxt-link to="/register">注册</nuxt-link>]</span>
+        <span>[<nuxt-link :to="'/login' + MixinForward">登录</nuxt-link>] [<nuxt-link :to="'/register' + MixinForward">注册</nuxt-link>]</span>
       </div>
       <ul class="links">
         <li>
