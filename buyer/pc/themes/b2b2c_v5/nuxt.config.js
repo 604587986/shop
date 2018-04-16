@@ -28,6 +28,7 @@ module.exports = {
   },
   loading: { color: '#29d' },
   build: {
+    analyze: true,
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
