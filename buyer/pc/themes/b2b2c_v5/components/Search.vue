@@ -75,10 +75,9 @@
       },
       /** 搜索店铺 */
       handleSearchShop() {
-        this.$router.push({
-          path: '/shop-list',
-          query: { keyword: this.keyword }
-        })
+        this.$route.name === 'shop'
+          ? this.$router.replace({path: '/shop', query: { keyword: this.keyword }})
+          : this.$router.push({path: '/shop', query: { keyword: this.keyword }})
       },
       /** 获取自动补全数据 */
       GET_AutoCompleteWords(keyword) {
