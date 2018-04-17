@@ -6,10 +6,15 @@ import banner from './__banner'
 export default {
   data() {
     return {
-      shop_id: this.shop.shop_id
+      shop_id: this.$route.params.id
     }
   },
-  props: ['shop'],
+  props: {
+    shop: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   components: {
     'en-banner': banner
   },
