@@ -28,6 +28,7 @@ module.exports = {
   },
   loading: { color: '#29d' },
   build: {
+    analyze: false,
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
@@ -74,5 +75,8 @@ module.exports = {
       return { x: 0, y: 0 }
     }
   },
-  transition: 'page'
+  transition: 'page',
+  generate: {
+    subFolders: true
+  }
 }

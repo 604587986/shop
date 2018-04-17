@@ -28,3 +28,31 @@ export function getOrderDetail(sn) {
     method: 'get'
   })
 }
+
+/**
+ * 取消订单
+ * @param order_sn
+ * @param reason
+ * @returns {AxiosPromise}
+ */
+export function cancelOrder(order_sn, reason) {
+  const _formData = new FormData()
+  _formData.append('reason', reason)
+  return request({
+    url: `order/cancel`,
+    method: 'post',
+    data: _formData
+  })
+}
+
+/**
+ * 确认收货
+ * @param order_sn
+ * @returns {AxiosPromise}
+ */
+export function confirmReceipt(order_sn) {
+  return request({
+    url: `order/confirm-receipt/${order_sn}`,
+    method: 'post'
+  })
+}

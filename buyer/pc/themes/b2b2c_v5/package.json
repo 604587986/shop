@@ -5,6 +5,7 @@
   "author": "Andste <andste.cc@gmail.com>",
   "private": true,
   "scripts": {
+    "analyze": "nuxt build --analyze",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
@@ -28,7 +29,7 @@
     "eslint-plugin-vue": "^4.0.0",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.7",
-    "vue-lazyload": "^1.2.2",
+    "vue-lazyload": "^1.2.3",
     "vue-style-loader": "^4.0.2"
   }
 }

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <nuxt-link to="/">去首页</nuxt-link>
-  </div>
+  <nuxt-child/>
 </template>
 
 <script>

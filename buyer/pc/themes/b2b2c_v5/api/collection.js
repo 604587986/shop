@@ -10,14 +10,12 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getGoodsCollection(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'collection/goods/list',
-      method: 'get',
-      loading: false,
-      message: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'collection/goods/list',
+    method: 'get',
+    loading: false,
+    message: false,
+    params
   })
 }
 
@@ -28,11 +26,9 @@ export function getGoodsCollection(params) {
  */
 export function deleteGoodsCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
-  return new Promise((resolve, reject) => {
-    request({
-      url: `collection/goods/${ids}`,
-      method: 'delete'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `collection/goods/${ids}`,
+    method: 'delete'
   })
 }
 
@@ -42,12 +38,10 @@ export function deleteGoodsCollection(ids) {
  * @returns {Promise<any>}
  */
 export function getShopCollection(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'collection/shop/list',
-      method: 'get',
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'collection/shop/list',
+    method: 'get',
+    params
   })
 }
 
@@ -58,10 +52,8 @@ export function getShopCollection(params) {
  */
 export function deleteShopCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
-  return new Promise((resolve, reject) => {
-    request({
-      url: `collection/shop/${ids}`,
-      method: 'delete'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `collection/shop/${ids}`,
+    method: 'delete'
   })
 }
