@@ -7,47 +7,31 @@
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns"></div>
+        <div class="toolbar-btns">
+          <en-category-picker @changed="categoryChanged" :clearable="true"/>
+        </div>
         <div class="toolbar-search">
-          <en-table-search
-            @search="searchEvent"
-            @advancedSearch="advancedSearchEvent"
-            advanced
-          >
-            <template slot="advanced-content">
-              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
-                </el-form-item>
-                <el-form-item label="商品编号">
-                  <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
-                </el-form-item>
-                <el-form-item label="店铺名称">
-                  <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
-                </el-form-item>
-                <el-form-item label="商品类别">
-                  <en-category-picker @changed="categoryChanged"/>
-                </el-form-item>
-              </el-form>
-            </template>
-          </en-table-search>
+          <en-table-search @search="searchEvent" />
         </div>
       </div>
 
       <template slot="table-columns">
         <el-table-column label="图片" width="120">
           <template slot-scope="scope">
-            <img :src="scope.row.image" class="goods-image"/>
+            <img :src="scope.row.goods_image" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="名称" align="left" width="450"/>
+        <el-table-column prop="goods_name" label="名称" align="left" width="450"/>
         <el-table-column label="价格" width="120">
-          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column prop="balanced" label="库存" width="180"/>
-        <el-table-column prop="balanced" label="可用库存" width="120"/>
-
-        <el-table-column prop="category_name" label="创建时间">
+        <el-table-column label="库存" width="180">
+          <template slot-scope="scope">{{ scope.row.quantity }}件</template>
+        </el-table-column>
+        <el-table-column label="可用库存" width="180">
+          <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
+        </el-table-column>
+        <el-table-column label="创建时间">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
         <el-table-column prop="market_enable" label="状态" width="80" :formatter="marketStatus"/>
@@ -56,7 +40,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleWithdraw(scope.$index, scope.row)">查看
+              @click="handleWithdraw(scope.row)">查看
             </el-button>
           </template>
         </el-table-column>
@@ -77,10 +61,10 @@
     <el-dialog title="库存信息" center :visible.sync="goodsWarningStockshow" width="40%">
       <en-tabel-layout :tableData="goodsWarningStockDate" :loading="loading">
         <template slot="table-columns">
-          <el-table-column prop="sn" label="货号"/>
-          <el-table-column prop="name" label="商品名称"/>
-          <el-table-column prop="balanced" label="可用库存"/>
-          <el-table-column prop="balanced" label="库存"/>
+          <el-table-column prop="goods_sn" label="货号"/>
+          <el-table-column prop="goods_name" label="商品名称"/>
+          <el-table-column prop="quantity" label="可用库存"/>
+          <el-table-column prop="enable_quantity" label="库存"/>
         </template>
       </en-tabel-layout>
     </el-dialog>
@@ -115,14 +99,6 @@
         /** 列表分页数据 */
         pageData: null,
 
-        /** 高级搜索数据 */
-        advancedForm: {
-          goods_name: '',
-          goods_sn: '',
-          shop_name: '',
-          category_id: ''
-        },
-
         /** 预警商品库存信息显示*/
         goodsWarningStockshow: false,
 
@@ -131,20 +107,20 @@
       }
     },
     mounted() {
-      this.GET_GoodsList()
+      this.GET_WarningGoodsList()
     },
     methods: {
 
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_GoodsList()
+        this.GET_WarningGoodsList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_GoodsList()
+        this.GET_WarningGoodsList()
       },
 
       /** 销售状态格式化 */
@@ -158,8 +134,7 @@
           ...this.params,
           keyword: data
         }
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
-        this.GET_GoodsList()
+        this.GET_WarningGoodsList()
       },
 
       /** 高级搜索事件触发 */
@@ -177,7 +152,7 @@
         this.advancedForm.category_id = data.category_id
       },
 
-      GET_GoodsList() {
+      GET_WarningGoodsList() {
         this.loading = true
         API_goods.getWarningGoodsList(this.params).then(response => {
           this.loading = false
@@ -194,9 +169,10 @@
       },
 
       /** 查看库存信息 */
-      handleWithdraw(ids) {
+      handleWithdraw(row) {
+        const _ids = [row.goods_id].toString()
         this.goodsWarningStockshow = true
-        API_goods.getWarningGoodsStockList(ids).then((response) => {
+        API_goods.getWarningGoodsStockList(_ids).then((response) => {
           this.goodsWarningStockDate = response.data
         }).catch(() => this.$message.error('查看库存商品信息出错，请稍后再试！'))
       }

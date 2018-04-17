@@ -26,40 +26,17 @@ export function getGoodsList(params) {
 }
 
 /**
- * 商品列表 下架商品
- * @param params deleteGoods
- * @returns {Promise<any>}
- */
-export function underGoods(params) {
-  const _params = {
-    goodsId: params.goods_id,
-    message: params.message
-  }
-  const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
-  return new Promise((resolve, reject) => {
-    request({
-      url: `shop/admin/goods/under.do`,
-      method: 'post',
-      data: _formData
-    }).then(response => {
-      resolve(response)
-    }).catch(error => reject(error))
-  })
-}
-
-/**
- * 商品列表 删除商品
+ * 商品列表 删除商品  商家将商品放入回收站  下架的商品才能放入回收站
  * @param params
  * @returns {Promise<any>}
  */
-export function deleteGoods(params) {
-  const ids = params.toString()
+export function deleteGoods(ids, params) {
+  const _params = {}
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/${ids}`,
+      url: `/goods/${ids}/recycle`,
       method: 'delete',
-      data: params
+      data: _params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -71,10 +48,10 @@ export function deleteGoods(params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function getGoodsStockList(params) {
+export function getGoodsStockList(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+      url: `/goods/${ids}/skus`,
       method: 'get',
       loading: false,
       params
@@ -91,17 +68,58 @@ export function getGoodsStockList(params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function reserveStockGoods(params) {
+export function reserveStockGoods(goods_id, params) {
+  const _params = params
+  const _formData = new FormData()
+  _params.forEach((key, index) => _formData.append(index, key))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/reserve`,
+      url: `/goods/${goods_id}/quantity`,
       method: 'post',
-      data: params
+      data: _formData
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
   })
 }
+
+/**
+ * 查询商品分类信息 发布商品  ids 为category_id
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodsCatrgory(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/${ids}/skus`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+// /**
+//  * 查询编辑商品时分类信息   ids 为category_id
+//  * @param ids
+//  * @param params
+//  * @returns {Promise<any>}
+//  */
+// export function getGoodsCatrgory(ids, params) {
+//   return new Promise((resolve, reject) => {
+//     request({
+//       url: `/goods/${ids}/skus`,
+//       method: 'get',
+//       loading: false,
+//       params
+//     }).then(response => {
+//       resolve(response)
+//     }).catch(error => reject(error))
+//   })
+// }
 
 /**
  * 获取草稿箱商品列表
@@ -149,12 +167,15 @@ export function getRecycleGoodsList(params) {
  * @returns {Promise<any>}
  * @constructor
  */
-export function RecycleReductionGoods(params) {
+export function RecycleReductionGoods(ids, params) {
+  const _params = params
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/recycle/revert`,
+      url: `/goods/${ids}/revert`,
       method: 'post',
-      data: params
+      data: _formData
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -162,18 +183,20 @@ export function RecycleReductionGoods(params) {
 }
 
 /**
- * 回收站 删除商品
+ * 回收站 彻底删除商品
  * @param params
  * @returns {Promise<any>}
  * @constructor
  */
-export function RecycleDeleteGoods(params) {
-  const ids = params.toString()
+export function RecycleDeleteGoods(ids, params) {
+  const _params = params
+  const _formData = new FormData()
+  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/recycle/${ids}`,
+      url: `/goods/${ids}`,
       method: 'delete',
-      data: params
+      data: _formData
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -205,10 +228,10 @@ export function getWarningGoodsList(params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function getWarningGoodsStockList(params) {
+export function getWarningGoodsStockList(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+      url: `/goods/${ids}/skus`,
       method: 'get',
       loading: false,
       params
