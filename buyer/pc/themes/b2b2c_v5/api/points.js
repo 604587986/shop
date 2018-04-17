@@ -10,11 +10,9 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getPointsData(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'points/list',
-      method: 'get',
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'points/list',
+    method: 'get',
+    params
   })
 }
