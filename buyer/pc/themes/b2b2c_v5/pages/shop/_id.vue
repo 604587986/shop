@@ -9,9 +9,9 @@
 </template>
 
 <script>
-  const theme1 = () => import('./themes/theme1').then(m => m.default || m)
-  const theme2 = () => import('./themes/theme2').then(m => m.default || m)
-  const theme3 = () => import('./themes/theme3').then(m => m.default || m)
+  const theme1 = () => import('./theme1').then(m => m.default || m)
+  const theme2 = () => import('./theme2').then(m => m.default || m)
+  const theme3 = () => import('./theme3').then(m => m.default || m)
   import * as API_Shop from '@/api/shop'
   export default {
     name: 'shop-index',

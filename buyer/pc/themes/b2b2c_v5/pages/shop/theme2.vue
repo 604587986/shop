@@ -75,6 +75,13 @@
             </template>
           </ul>
         </div>
+        <div class="item rec">
+          <div class="tag-title">
+            <h2>店铺の推荐</h2>
+            <span>SHOP-REC</span>
+            <nuxt-link to="#" title="查看更多"></nuxt-link>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -271,25 +278,11 @@
     }
     .item.new {
       .tag-title {
-        display: flex;
-        align-items: center;
         width: 100%;
         height: 90px;
         background: #efebdf;
-        margin-bottom: 10px;
-        h2 {
-          margin-left: 20px;
-          font-size: 22px;
-          color: #897459;
-          font-weight: bold;
-          font-family: 微软雅黑;
-        }
-        span {
-          color: #60776d;
-          font-weight: 200;
-          margin-left: 5px;
-          font-size: 12px;
-        }
+        h2 { color: #897459 }
+        span { color: #60776d }
       }
       .goods-item {
         border: 1px solid #ececec;
@@ -336,6 +329,15 @@
           float: right;
           margin-top: 2px;
         }
+      }
+    }
+    .item.rec {
+      .tag-title {
+        width: 100%;
+        height: 90px;
+        background: #FFC107;
+        h2 { color: #fff }
+        span { color: #fff }
       }
     }
   }

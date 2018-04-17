@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import * as API_Shop from '@/api/shop'
 import * as API_Collection from '@/api/collection'
-import banner from './__banner'
+import banner from '@/components/ShopBanner'
 
 export default {
   data() {
