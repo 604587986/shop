@@ -8,36 +8,18 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
+          <!--商品状态 上架 下架-->
           <el-select v-model="marketEnable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
             <el-option key="0" label="未出售（已下架）" :value="0"/>
             <el-option key="1" label="出售中（已上架）" :value="1"/>
           </el-select>
+          <!--商品分类 获取分类列表-->
+          <en-category-picker @changed="changeGoodsCateGory" :clearable='true'/>
           <el-button @click="publishGoods" type="success">发布商品</el-button>
           <el-button @click="gotoRecycle" type="primary">回收站</el-button>
         </div>
         <div class="toolbar-search">
-          <en-table-search
-            @search="searchEvent"
-            @advancedSearch="advancedSearchEvent"
-            advanced
-          >
-            <template slot="advanced-content">
-              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="商品编号">
-                  <el-input size="medium" v-model="advancedForm.goods_sn" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="店铺名称">
-                  <el-input size="medium" v-model="advancedForm.seller_name" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="商品类别">
-                  <en-category-picker @changed="categoryChanged" clearable/>
-                </el-form-item>
-              </el-form>
-            </template>
-          </en-table-search>
+          <en-table-search @search="searchEvent" />
         </div>
       </div>
       <template slot="table-columns">
@@ -94,22 +76,26 @@
     </en-tabel-layout>
     <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="30%">
       <el-form :model="goodsStockData" v-if="goodsStocknums === 1 ">
-        <el-form-item label="库存">
-          <el-input auto-complete="off" label-width="100"></el-input>
+        <el-form-item label="库存" prop="quantity">
+          <!--v-model="goodsStockData.quantity"-->
+          <el-input   auto-complete="off" label-width="100"></el-input>
         </el-form-item>
         <el-form-item label="待发货数">
-          <el-input auto-complete="off" disabled label-width="100"></el-input>
+          <!--v-model="goodsStockData.deliver_goods_quantity"-->
+          <el-input  auto-complete="off" disabled label-width="100"></el-input>
         </el-form-item>
       </el-form>
       <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
         <template slot="table-columns">
-          <el-table-column prop="name" label="商品名称"/>
+          <el-table-column prop="goods_name" label="商品名称"/>
           <el-table-column label="库存" width="120">
             <template slot-scope="scope">
-              <el-input auto-complete="off" label-width="100"></el-input>
+              <!--v-model="scope.row.quantity"-->
+              <el-input  auto-complete="off" label-width="100"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="待发货数" width="120"></el-table-column>
+          <!--prop="deliver_goods_quantity"-->
+          <el-table-column  label="待发货数" width="120"></el-table-column>
         </template>
       </en-tabel-layout>
       <div slot="footer" class="dialog-footer">
@@ -122,14 +108,15 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker, SkuSelector } from '@/components'
 
   export default {
     name: 'goodsList',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker
+      [CategoryPicker.name]: CategoryPicker,
+      [SkuSelector.name]: SkuSelector
     },
     data() {
       return {
@@ -152,20 +139,11 @@
         /** 商品状态 是否上架 0代表已下架，1代表已上架 */
         marketEnable: 0,
 
-        /** 高级搜索数据 */
-        advancedForm: {
-          /** 商品名称 */
-          goods_name: '',
+        /** 当前商品分类*/
+        categoryId: '',
 
-          /** 商品编号 */
-          goods_sn: '',
-
-          /** 店铺名称*/
-          seller_name: '',
-
-          /** 商品分类路径 商品分类id */
-          category_path: ''
-        },
+        /** 当前商品id*/
+        goodsId: '',
 
         /** 商品库存显示*/
         goodsStockshow: false,
@@ -178,9 +156,6 @@
       }
     },
     mounted() {
-      if (this.$route.query) {
-        this.params.goods_status = this.$route.query.goodsStatus
-      }
       this.GET_GoodsList()
     },
     beforeRouteEnter(to, from, next) {
@@ -206,14 +181,6 @@
         this.GET_GoodsList()
       },
 
-      /** 单个商品下架操作确认 */
-      handleWithdraw(index, row) {
-        this.$confirm('确认下架吗？', '提示')
-          .then(() => this.DELETE_Goods(row.id))
-          .catch(() => {
-          })
-      },
-
       /** 销售状态格式化 */
       marketStatus(row, column, cellValue) {
         return row.market_enable === 1 ? '售卖中' : '已下架'
@@ -225,23 +192,31 @@
           ...this.params,
           keyword: data
         }
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_GoodsList()
       },
 
-      /** 高级搜索事件触发 */
-      advancedSearchEvent() {
-        this.params = {
-          ...this.params,
-          ...this.advancedForm
+      /** 切换上下架状态*/
+      changeGoodsStatus(val) {
+        delete this.params.market_enable
+        if (val !== '') {
+          this.params = {
+            ...this.params,
+            market_enable: val
+          }
         }
-        delete this.params.keyword
         this.GET_GoodsList()
       },
 
-      /** 高级搜索中 分类选择组件值发生改变 */
-      categoryChanged(data) {
-        this.advancedForm.category_path = data.category_path
+      /** 切换分类*/
+      changeGoodsCateGory(data) {
+        delete this.params.category_path
+        if (data !== '') {
+          this.params = {
+            ...this.params,
+            category_path: data.category_id
+          }
+        }
+        this.GET_GoodsList()
       },
 
       GET_GoodsList() {
@@ -249,25 +224,15 @@
         API_goods.getGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
           console.log(error)
         })
-      },
-
-      /** 更改商品上下架状态*/
-      changeGoodsStatus(val) {
-        this.params = {
-          ...this.params,
-          market_enable: val
-        }
-        this.GET_GoodsList()
-        console.log(val, 21)
       },
 
       /** 发布商品*/
@@ -279,10 +244,12 @@
       gotoRecycle() {
         this.$router.push({ path: '/goods/recycle-station' })
       },
+
       /** 编辑商品 */
       handleEditGoods(row) {
-        this.$router.push({ path: '/goods/good-publish', query: { goodsid: row.id }})
+        this.$router.push({ path: '/goods/good-publish', query: { goodsid: row.goods_id }})
       },
+
       /** 删除商品 */
       handleDeleteGoods(row) {
         this.$confirm('确认删除此商品, 是否继续?', '提示', {
@@ -290,8 +257,8 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const ids = [row.id]
-          API_goods.deleteGoods(ids).then(() => {
+          const _ids = [row.goods_id].toString()
+          API_goods.deleteGoods(_ids).then(() => {
             this.GET_GoodsList()
             this.$message.success('删除商品成功！')
           }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
@@ -299,17 +266,26 @@
           this.$message.info({ message: '已取消删除' })
         })
       },
+
       /** 库存 */
-      handleStockGoods() {
+      handleStockGoods(row) {
+        this.goodsId = row.goods_id
         this.goodsStockshow = true
         API_goods.getGoodsStockList().then((response) => {
           this.goodsStocknums = response.data.length
           this.goodsStockData = response.data.length === 1 ? response.data[0] : response.data
         }).catch(() => this.$message.error('请求库存数据出错，请稍后再试！'))
       },
+
       /** 保存库存商品 */
       reserveStockGoods() {
-        API_goods.reserveStockGoods().then((response) => {
+        const _params = this.goodsStockData.map((elem) => {
+          return {
+            quantity_count: elem.quantity || 0,
+            sku_id: 0
+          }
+        })
+        API_goods.reserveStockGoods(this.goodsId, _params).then((response) => {
           this.goodsStockshow = false
           this.$message.success('库存商品保存成功')
         }).catch(() => this.$message.error('库存商品保存出错，请稍后再试！'))
