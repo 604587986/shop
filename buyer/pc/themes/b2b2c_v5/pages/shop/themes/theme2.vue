@@ -67,7 +67,7 @@
                   <h2><a href="/javashop/goods-30.html">{{ goods.goods_name }}</a></h2>
                   <p>
                     <span>RMB：<i>{{ goods.goods_price | unitPrice('￥') }}</i></span>
-                    <span class="hot-sale">已销售：0件</span>
+                    <span class="hot-sale">已销售：{{ goods.buy_count }}件</span>
                   </p>
                 </div>
                 <div class="new-background"></div>
