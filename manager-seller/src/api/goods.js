@@ -27,6 +27,7 @@ export function getGoodsList(params) {
 
 /**
  * 商品列表 删除商品  商家将商品放入回收站  下架的商品才能放入回收站
+ * @param ids
  * @param params
  * @returns {Promise<any>}
  */
@@ -45,6 +46,7 @@ export function deleteGoods(ids, params) {
 
 /**
  * 获取库存商品数据
+ * @param ids
  * @param params
  * @returns {Promise<any>}
  */
@@ -65,6 +67,7 @@ export function getGoodsStockList(ids, params) {
 
 /**
  * 保存库存商品
+ * @param goods_id
  * @param params
  * @returns {Promise<any>}
  */
@@ -142,6 +145,24 @@ export function getDraftGoodsList(params) {
 }
 
 /**
+ * 删除草稿箱商品
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function deleteDraftGoods(ids, params) {
+  const _params = {}
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${ids}`,
+      method: 'delete',
+      data: _params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+/**
  * 获取回收站商品列表
  * @param params
  * @returns {Promise<any>}
@@ -163,6 +184,7 @@ export function getRecycleGoodsList(params) {
 
 /**
  * 回收站 还原商品
+ * @param ids
  * @param params
  * @returns {Promise<any>}
  * @constructor
@@ -184,6 +206,7 @@ export function RecycleReductionGoods(ids, params) {
 
 /**
  * 回收站 彻底删除商品
+ * @param ids
  * @param params
  * @returns {Promise<any>}
  * @constructor
@@ -225,6 +248,7 @@ export function getWarningGoodsList(params) {
 
 /**
  * 查看预警商品库存信息
+ * @param ids
  * @param params
  * @returns {Promise<any>}
  */
