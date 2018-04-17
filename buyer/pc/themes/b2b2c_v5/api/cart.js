@@ -10,12 +10,10 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getCartList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'cart/list',
-      method: 'get',
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'cart/list',
+    method: 'get',
+    params
   })
 }
 
@@ -26,12 +24,10 @@ export function getCartList(params) {
  * @returns {Promise<any>}
  */
 export function updateSkuNum(sku_id, num) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `cart/${sku_id}`,
-      method: 'post',
-      data: { num }
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `cart/${sku_id}`,
+    method: 'post',
+    data: { num }
   })
 }
 
@@ -42,12 +38,10 @@ export function updateSkuNum(sku_id, num) {
  * @returns {Promise<any>}
  */
 export function checkSku(sku_id, checked) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `cart/check-sku/${sku_id}`,
-      method: 'post',
-      data: { checked }
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `cart/check-sku/${sku_id}`,
+    method: 'post',
+    data: { checked }
   })
 }
 
@@ -57,12 +51,10 @@ export function checkSku(sku_id, checked) {
  * @param checked
  */
 export function checkShop(shop_id, checked) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `cart/check-shop/${shop_id}`,
-      method: 'post',
-      data: { checked }
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `cart/check-shop/${shop_id}`,
+    method: 'post',
+    data: { checked }
   })
 }
 
@@ -72,12 +64,10 @@ export function checkShop(shop_id, checked) {
  * @returns {Promise<any>}
  */
 export function checkAll(checked) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'cart/check-all',
-      method: 'post',
-      data: { checked }
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'cart/check-all',
+    method: 'post',
+    data: { checked }
   })
 }
 
@@ -88,11 +78,9 @@ export function checkAll(checked) {
  */
 export function deleteSkuItem(sku_ids) {
   sku_ids = Array.isArray(sku_ids) ? sku_ids.join(',') : sku_ids
-  return new Promise((resolve, reject) => {
-    request({
-      url: `cart/${sku_ids}`,
-      method: 'delete'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `cart/${sku_ids}`,
+    method: 'delete'
   })
 }
 
@@ -101,10 +89,8 @@ export function deleteSkuItem(sku_ids) {
  * @returns {Promise<any>}
  */
 export function cleanCart() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'cart/clean',
-      method: 'post'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'cart/clean',
+    method: 'post'
   })
 }

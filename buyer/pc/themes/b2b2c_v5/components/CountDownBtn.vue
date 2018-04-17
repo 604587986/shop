@@ -14,7 +14,7 @@
       /** 初始化提示 */
       initTip: {
         type: String,
-        default: '获取短信验证码'
+        default: '获取验证码'
       },
       /** 倒计时结束的提示 */
       endTip: {

@@ -18,7 +18,7 @@
               <div class="card-user-show">
                 <p>Hi,<a href="#">&ensp;Andste</a></p>
                 <p class="btns">
-                  <nuxt-link to="/login" class="please-login">请登录</nuxt-link>
+                  <nuxt-link :to="'/login' + MixinForward" class="please-login">请登录</nuxt-link>
                   <a href="#" class="apply-shop">申请开店</a>
                 </p>
               </div>
@@ -83,6 +83,10 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Carousel, CarouselItem } from 'element-ui'
+  Vue.use(Carousel)
+  Vue.use(CarouselItem)
   import * as API_Common from '@/api/common'
   export default {
     name: 'index',

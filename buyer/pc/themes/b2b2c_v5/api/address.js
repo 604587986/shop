@@ -9,11 +9,9 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getAddressList() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'address/list',
-      method: 'get'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'address/list',
+    method: 'get'
   })
 }
 
@@ -25,12 +23,10 @@ export function getAddressList() {
 export function addAddress(params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'address',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'address',
+    method: 'post',
+    data: _formData
   })
 }
 
@@ -43,12 +39,10 @@ export function addAddress(params) {
 export function editAddress(id, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  return new Promise((resolve, reject) => {
-    request({
-      url: `address/${id}`,
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `address/${id}`,
+    method: 'post',
+    data: _formData
   })
 }
 
@@ -59,10 +53,8 @@ export function editAddress(id, params) {
  */
 export function deleteAddress(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
-  return new Promise((resolve, reject) => {
-    request({
-      url: `address/${ids}`,
-      method: 'delete'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `address/${ids}`,
+    method: 'delete'
   })
 }
