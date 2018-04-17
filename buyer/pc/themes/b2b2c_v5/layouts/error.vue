@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div v-if="error.statusCode === 500">{{ error.message }}</div>
+    <div v-else>{{ error.statusCode }}：{{ error.message }}</div>
   </div>
 </template>
 
