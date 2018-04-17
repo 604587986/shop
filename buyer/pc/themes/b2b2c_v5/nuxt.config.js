@@ -75,5 +75,8 @@ module.exports = {
       return { x: 0, y: 0 }
     }
   },
-  transition: 'page'
+  transition: 'page',
+  generate: {
+    subFolders: true
+  }
 }
