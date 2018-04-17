@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import menus from './menus'
+  import menus from '@/pages/member/menus'
   import { mapGetters } from 'vuex'
   export default {
     name: 'member-breadcrumb',

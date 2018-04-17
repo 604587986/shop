@@ -20,7 +20,7 @@
 
 <script>
   import * as API_AfterSale from '@/api/after-sale'
-  import SkuList from '../__skuList'
+  import SkuList from '@/components/MemberSkuList'
   export default {
     name: 'detail',
     components: {
