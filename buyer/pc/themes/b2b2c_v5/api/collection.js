@@ -20,6 +20,18 @@ export function getGoodsCollection(params) {
 }
 
 /**
+ * 收藏商品
+ * @param goods_id
+ * @returns {AxiosPromise}
+ */
+export function collectionGoods(goods_id) {
+  return request({
+    url: `collection/goods/${goods_id}`,
+    method: 'post'
+  })
+}
+
+/**
  * 删除商品收藏
  * @param ids
  * @returns {Promise<any>}
@@ -42,6 +54,18 @@ export function getShopCollection(params) {
     url: 'collection/shop/list',
     method: 'get',
     params
+  })
+}
+
+/**
+ * 收藏店铺
+ * @param shop_id
+ * @returns {AxiosPromise}
+ */
+export function collectionShop(shop_id) {
+  return request({
+    url: `collection/shop/${shop_id}`,
+    method: 'post'
   })
 }
 
