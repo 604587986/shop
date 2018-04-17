@@ -32,8 +32,8 @@
           </div>
           <div class="dd dorpdown-layer">
             <dl>
-              <dd><a href="/">收藏的商品</a></dd>
-              <dd><a href="/">收藏的店铺</a></dd>
+              <dd><nuxt-link to="/member/my-collection#goods">收藏的商品</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-collection#shop">收藏的店铺</nuxt-link></dd>
             </dl>
           </div>
         </li>
@@ -45,7 +45,7 @@
           </div>
           <div class="dd dorpdown-layer">
             <dl>
-              <dd><a href="/help/help.html">帮助中心</a></dd>
+              <dd><nuxt-link to="/help">帮助中心</nuxt-link></dd>
               <dd><a href="/">售后中心</a></dd>
               <dd><a href="/">客服中心</a></dd>
             </dl>
@@ -59,9 +59,9 @@
           </div>
           <div class="dd dorpdown-layer">
             <dl>
-              <dd><a href="/">商城首页</a></dd>
-              <dd><a href="/">商家中心</a></dd>
-              <dd><a href="/">个人中心</a></dd>
+              <dd><nuxt-link to="/">商城首页</nuxt-link></dd>
+              <dd><nuxt-link to="/store">商家中心</nuxt-link></dd>
+              <dd><nuxt-link to="/member">个人中心</nuxt-link></dd>
             </dl>
           </div>
         </li>
