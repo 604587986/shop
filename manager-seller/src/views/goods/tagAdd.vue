@@ -13,15 +13,15 @@
         <el-table-column label="商品信息" width="1000px" header-align="left">
           <template slot-scope="scope">
             <div class="goods_info">
-              <img :src="scope.row.image" class="goods-image"/>
+              <img :src="scope.row.goods_image" class="goods-image"/>
               <div class="goodsinfo-txt">
-                <span class="goods_name">{{scope.row.name}}</span>
-                <span class="goods_price">{{ scope.row.price | unitPrice('￥') }}</span>
+                <span class="goods_name">{{scope.row.goods_name}}</span>
+                <span class="goods_price">{{ scope.row.goods_price | unitPrice('￥') }}</span>
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="balanced" label="库存"/>
+        <el-table-column prop="quantity" label="库存"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -37,8 +37,13 @@
     <div style="text-align: center">
       <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
     </div>
-    <en-goods-selector :show="showDialog" :api="goods_api" :defaultData="tableData" :maxLength="maxsize"
-                       @confirm="refreshFunc" @closed="showDialog = false"/>
+    <en-goods-selector
+      :show="showDialog"
+      :api="goods_api"
+      :defaultData="tableData"
+      :maxLength="maxsize"
+      @confirm="refreshFunc"
+      @closed="showDialog = false"/>
   </div>
 </template>
 
@@ -92,14 +97,22 @@
       selectgoodslist() {
         this.showDialog = true
       },
+
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        this.tableData = val
+        console.log(this.tableData, val)
+        this.tableData = this.tableData.concat(val)
+        // 去重 转化
+        const res = new Map()
+        this.tableData = this.tableData.filter((key) => !res.has(key.goods_id) && res.set(key.goods_id, 1))
+        console.log(this.tableData, 565)
       },
+
       /** 标签商品列表**/
       getTagGoodsList() {
         this.loading = true
-        API_goodsTag.getTagGoodsList(this.params).then(response => {
+        const _tag_id = this.params.tag_id
+        API_goodsTag.getTagGoodsList(_tag_id, this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.maxsize = 0
@@ -108,23 +121,26 @@
           console.log(error)
         })
       },
+
       /**  取消参加 */
       canceljoin(scope) {
         this.tableData.forEach((elem, index) => {
-          if (elem.id === scope.row.id) {
+          if (elem.goods_id === scope.row.goods_id) {
             this.$message.success('取消成功！')
             this.tableData.splice(index, 1)
           }
         })
       },
+
       selectionChange(val) {
-        this.selectionids = val.map(item => item.id)
+        this.selectionids = val.map(item => item.goods_id)
       },
+
       /** 批量取消 */
       cancelall() {
         this.selectionids.forEach(key => {
           this.tableData.forEach((elem, index) => {
-            if (elem.id === key) {
+            if (elem.goods_id === key) {
               this.tableData.splice(index, 1)
             }
           })
@@ -133,7 +149,9 @@
       },
       /** 保存设置 */
       savesetup() {
-        API_goodsTag.saveTagGoodsList(this.params).then(response => {
+        const _tag_id = this.params.tag_id
+        const _goods_ids = this.selectionids.toString()
+        API_goodsTag.saveTagGoodsList(_tag_id, _goods_ids, this.params).then(response => {
           this.loading = false
           this.$message.success('保存设置成功！')
         }).catch(error => {
