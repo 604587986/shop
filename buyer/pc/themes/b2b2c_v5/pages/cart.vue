@@ -84,7 +84,7 @@
             <div class="empty-cart">
               <h1>您的购物车中暂无商品</h1>
               <nuxt-link to="/">挑选心爱的商品</nuxt-link>
-              <nuxt-link to="/member/order">查看我的订单</nuxt-link>
+              <nuxt-link to="/member/my-order">查看我的订单</nuxt-link>
             </div>
           </div>
         </div>
@@ -230,7 +230,7 @@
       },
       /** 去结算 */
       handleCheckout() {
-        this.$router.push({ path: 'checkout' })
+        this.$router.push({ path: '/checkout' })
       },
       /** 监听页面滚动，实现结算栏浮起、固定 */
       countCheckBarFiexd(event) {
