@@ -21,7 +21,14 @@
     </div>
     <div class="shop-nav">
       <div class="w">
-        <h1>全部分类</h1>
+        <div class="shop-category">
+          <h1>全部分类</h1>
+        </div>
+        <nuxt-link to="#" class="item">店铺首页</nuxt-link>
+        <span>|</span>
+        <nuxt-link to="#" class="item">店铺简介</nuxt-link>
+        <span>|</span>
+        <nuxt-link to="#" class="item">信用评价</nuxt-link>
       </div>
     </div>
     <en-banner :banners="shop.shop_banner"/>
@@ -196,6 +203,16 @@
     background-color: #333;
     color: #fff;
     h1 { font-size: 14px }
+    span { color: #dddbdb }
+    .shop-category {
+      display: inline-block;
+    }
+    .item {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 15px;
+      color: #dddbdb
+    }
   }
   .shop-tags {
     padding: 30px 0;
@@ -575,7 +592,7 @@
         &.collection {
           cursor: pointer;
           margin: 0 1px 0 0;
-          background: url(../../assets/images/icon-shop-collection.png) no-repeat center center #c39b82;
+          background: url(~/assets/images/icon-shop-collection.png) no-repeat center center #c39b82;
         }
         h3 { color: #fff; font-size: 16px }
         p {
