@@ -106,6 +106,35 @@
         </div>
       </div>
     </div>
+    <div class="shop-info">
+      <div class="info-title">关于本店</div>
+      <div class="info-information">
+        <div class="item">
+          <h3>{{ shop.shop_name }}</h3>
+          <div class="information-same">
+            <p>身份认证：身份已认证</p>
+            <p>店铺认证：店铺已认证</p>
+            <p>创店时间：2018-05-20</p>
+          </div>
+        </div>
+        <div class="item">
+          <h3>联系方式</h3>
+          <div class="information-same">
+            <p>所在地址：河北-廊坊市-三河市-燕郊镇</p>
+            <p>详细地址：维多利亚D座24层23A07</p>
+            <p>联系电话：18519495555</p>
+          </div>
+        </div>
+        <div class="item">
+          <h3>店铺评价</h3>
+          <div class="information-same">
+            <p>描述相符：<en-shop-star :star="5"/></p>
+            <p>服务态度：<en-shop-star :star="4"/></p>
+            <p>发货速度：<en-shop-star :star="3"/></p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -353,6 +382,7 @@
     .item.rec {
       background-color: #fff;
       min-height: 300px;
+      margin-bottom: 30px;
       h3 {
         font: 28px/60px tahoma,arial,宋体;
         width: 500px;
@@ -397,6 +427,37 @@
           margin-top: 5px;
           strong { color: #f42424 }
         }
+      }
+    }
+  }
+  .shop-info {
+    width: 750px;
+    margin: 0 auto;
+    padding: 20px 0;
+    .info-title {
+      width: 100%;
+      font-size: 20px;
+      color: #666;
+      text-align: center;
+      padding: 5px 0 20px;
+    }
+    .info-information {
+      display: flex;
+      justify-content: space-between;
+      .item {
+        width: 200px;
+      }
+      h3 {
+        font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+        font-size: 14px;
+        padding: 9px 0;
+      }
+      .information-same {
+        border-top: 1px dotted #000;
+        clear: both;
+        line-height: 22px;
+        overflow: hidden;
+        padding: 10px 0 0;
       }
     }
   }
