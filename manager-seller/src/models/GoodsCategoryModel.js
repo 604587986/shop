@@ -10,7 +10,8 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class GoodsCategoryModel extends DataModel {
+/** 分类管理*/
+export class GoodsCategory extends DataModel {
   /** 商品分类D */
   @ServerName('category_id')
   category_id
@@ -19,7 +20,7 @@ export default class GoodsCategoryModel extends DataModel {
   @ServerName('category_name')
   category_name
 
-  /** 商品分类顺序 */
+  /** 商品分类排序 */
   @ServerName('sort')
   sort
 
@@ -28,3 +29,21 @@ export default class GoodsCategoryModel extends DataModel {
   is_show
 }
 
+/** 发布商品分级查询*/
+export class GoodsCategoryLevel extends DataModel {
+  /** 商品分类排序 */
+  @ServerName('category_order')
+  category_order
+
+  /** 商品分类图标 */
+  @ServerName('image')
+  category_image
+
+  /** 分类名称 */
+  @ServerName('name')
+  category_name
+
+  /** 分类父id */
+  @ServerName('parent_id')
+  category_parent_id
+}
