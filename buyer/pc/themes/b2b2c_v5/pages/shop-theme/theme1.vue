@@ -84,6 +84,31 @@
             </template>
           </ul>
         </div>
+        <div class="item rec">
+          <div class="item-header">
+            <h2>店铺推荐</h2>
+            <span>SHOP-RECOMMEND</span>
+            <nuxt-link to="#" class="more">更多&gt;&gt;</nuxt-link>
+          </div>
+          <ul>
+            <template v-for="(goods, index) in shop.recGoods">
+              <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
+                <div class="goods-image">
+                  <nuxt-link to="#">
+                    <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
+                  </nuxt-link>
+                </div>
+                <div class="goods-name">
+                  <nuxt-link to="#">{{ goods.goods_name }}</nuxt-link>
+                </div>
+                <div class="goods-price">
+                  <p>RMB：<strong>￥{{ goods.goods_price | unitPrice }}</strong></p>
+                  <p>已销售：{{ goods.buy_count }}件</p>
+                </div>
+              </li>
+            </template>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -228,7 +253,7 @@
     }
     .item.new {
       .item-header { border-bottom: 1px solid #FF5722 }
-      ul { margin-top: 20px }
+      ul { margin-top: 10px }
       .goods-item {
         $g_width: ((1190px - 20px) / 2 - 10px) / 3;
         position: relative;
@@ -289,6 +314,45 @@
         }
         .price {
           color: #f42424;
+        }
+      }
+    }
+    .item.rec {
+      .item-header { border-bottom: 1px solid #03a9f4 }
+      ul { margin-top: 10px }
+      $g_width: (1190px - 30px) / 4;
+      .goods-item {
+        float: left;
+        box-sizing: border-box;
+        width: $g_width;
+        height: 375px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        &:nth-child(4n+1) { margin-left: 0 }
+        &:hover {
+          border: 1px solid #838383;
+        }
+        .goods-image {
+          width: $g_width - 20px - 2px;
+          height: $g_width - 20px - 2px;
+        }
+        .goods-name {
+          margin-top: 5px;
+          min-height: 35px;
+          padding-bottom: 5px;
+          border-bottom: 1px dashed #ccc;
+          a {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+          }
+        }
+        .goods-price {
+          margin-top: 5px;
+          strong { color: #f42424 }
         }
       }
     }
