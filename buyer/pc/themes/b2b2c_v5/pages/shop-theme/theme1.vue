@@ -111,6 +111,42 @@
         </div>
       </div>
     </div>
+    <div class="shop-intro w">
+      <div class="intro-title">
+        <h2>关于店铺</h2>
+        <h3>Welcome to my shop I wish you a happy shopping</h3>
+      </div>
+      <div class="intro-body" v-html="shop.shop_intro"></div>
+    </div>
+    <div class="shop-info">
+      <div class="info-title">关于本店</div>
+      <div class="info-information">
+        <div class="item">
+          <h3>{{ shop.shop_name }}</h3>
+          <div class="information-same">
+            <p>身份认证：身份已认证</p>
+            <p>店铺认证：店铺已认证</p>
+            <p>创店时间：2018-05-20</p>
+          </div>
+        </div>
+        <div class="item">
+          <h3>联系方式</h3>
+          <div class="information-same">
+            <p>所在地址：河北-廊坊市-三河市-燕郊镇</p>
+            <p>详细地址：维多利亚D座24层23A07</p>
+            <p>联系电话：18519495555</p>
+          </div>
+        </div>
+        <div class="item">
+          <h3>店铺评价</h3>
+          <div class="information-same">
+            <p>描述相符：<en-shop-star :star="5"/></p>
+            <p>服务态度：<en-shop-star :star="4"/></p>
+            <p>发货速度：<en-shop-star :star="3"/></p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -118,9 +154,7 @@
   import mixin from './themeMixin'
   export default {
     name: 'shop-theme-1',
-    mixins: [mixin],
-    mounted() {
-    }
+    mixins: [mixin]
   }
 </script>
 
@@ -354,6 +388,62 @@
           margin-top: 5px;
           strong { color: #f42424 }
         }
+      }
+    }
+  }
+  .shop-intro {
+    background-color: #fff;
+    text-align: center;
+    .intro-title {
+      width: 500px;
+      margin: 0 auto;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 10px;
+      font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+      h2 {
+        line-height: 30px;
+        font-size: 20px;
+      }
+      h3 {
+        font-size: 12px;
+        line-height: 30px;
+        color: #666
+      }
+    }
+    .intro-body {
+      padding: 10px 0;
+      min-height: 100px;
+      border-bottom: 1px dashed #ccc;
+    }
+  }
+  .shop-info {
+    width: 750px;
+    margin: 0 auto;
+    padding: 20px 0;
+    .info-title {
+      width: 100%;
+      font-size: 20px;
+      color: #666;
+      text-align: center;
+      padding: 5px 0 20px;
+    }
+    .info-information {
+      display: flex;
+      justify-content: space-between;
+      .item {
+        width: 200px;
+      }
+      h3 {
+        font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+        font-size: 14px;
+        padding: 9px 0;
+      }
+      .information-same {
+        border-top: 1px dotted #000;
+        clear: both;
+        line-height: 22px;
+        overflow: hidden;
+        padding: 10px 0 0;
       }
     }
   }
