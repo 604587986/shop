@@ -111,6 +111,35 @@
         </div>
       </div>
     </div>
+    <div class="shop-intro">
+      <div class="inner">
+        <div class="service-box">
+          <h2>联系客服</h2>
+          <div class="service-bg"></div>
+        </div>
+        <div class="infomation-box">
+          <div class="item info">
+            <h3>{{ shop.shop_name }}</h3>
+            <p>身份认证：身份已认证</p>
+            <p>店铺认证：店铺已认证</p>
+            <p>创店时间：2018-05-20</p>
+          </div>
+          <div class="item contact">
+            <h3>联系方式</h3>
+            <p>所在地址：河北-廊坊市-三河市-燕郊镇</p>
+            <p>详细地址：维多利亚D座24层23A07</p>
+            <p>联系方式：1858888888</p>
+          </div>
+          <div class="item evaluation">
+            <h3>店铺评价</h3>
+            <p>描述相符：<en-shop-star :star="5"/></p>
+            <p>服务态度：<en-shop-star :star="4"/></p>
+            <p>发货速度：<en-shop-star :star="3"/></p>
+          </div>
+          <div class="item collection" @click="collectionShop"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -484,6 +513,79 @@
     .font-other { height: 60px }
     .shop-intro-body {
 
+    }
+  }
+  .shop-intro {
+    width: 100%;
+    min-height: 550px;
+    background-color: #dac1ab;
+    .inner {
+      width: 950px;
+      height: 550px;
+      margin: 0 auto;
+      clear: both;
+    }
+    .service-box {
+      float: left;
+      position: relative;
+      width: 150px;
+      height: 550px;
+      margin-right: 120px;
+      h2 {
+        width: 20px;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -100px;
+        z-index: 10;
+        background: #D3B09C;
+        text-align: center;
+        font-size: 20px;
+        line-height: 25px;
+        color: #fff;
+        padding: 50px 10px;
+        cursor: pointer;
+      }
+      .service-bg {
+        position: absolute;
+        top: 0;
+        right: 20px;
+        width: 2px;
+        background: #D3B09C;
+        height: 550px;
+        display: block;
+        overflow: hidden;
+      }
+    }
+    .infomation-box {
+      width: 550px;
+      height: 420px;
+      float: left;
+      position: relative;
+      margin-top: 65px;
+      .item {
+        width: 184px;
+        height: 89px;
+        padding: 60px 45px;
+        float: left;
+        margin: 0 1px 1px 0;
+        background: #c39b82;
+        &.contact { margin: 0 0 1px 0 }
+        &.evaluation { margin: 0 1px 0 0 }
+        &.collection {
+          cursor: pointer;
+          margin: 0 1px 0 0;
+          background: url(../../assets/images/icon-shop-collection.png) no-repeat center center #c39b82;
+        }
+        h3 { color: #fff; font-size: 16px }
+        p {
+          line-height: 20px;
+          font-size: 12px;
+          color: #fff;
+          font-weight: 400;
+          margin-top: 5px;
+        }
+      }
     }
   }
 </style>
