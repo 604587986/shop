@@ -592,7 +592,7 @@
         &.collection {
           cursor: pointer;
           margin: 0 1px 0 0;
-          background: url(../../assets/images/icon-shop-collection.png) no-repeat center center #c39b82;
+          background: url(~/assets/images/icon-shop-collection.png) no-repeat center center #c39b82;
         }
         h3 { color: #fff; font-size: 16px }
         p {
