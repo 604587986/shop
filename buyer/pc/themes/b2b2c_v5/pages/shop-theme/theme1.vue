@@ -332,7 +332,7 @@
         padding: 10px;
         &:nth-child(4n+1) { margin-left: 0 }
         &:hover {
-          border: 1px solid #838383;
+          border: 1px solid #03a9f4;
         }
         .goods-image {
           width: $g_width - 20px - 2px;
