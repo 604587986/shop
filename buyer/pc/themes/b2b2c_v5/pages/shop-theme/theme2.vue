@@ -81,6 +81,23 @@
             <span>SHOP-REC</span>
             <nuxt-link to="#" title="查看更多"></nuxt-link>
           </div>
+          <ul>
+            <template v-for="(goods, index) in shop.recGoods">
+              <li v-if="index < 6" :key="goods.goods_id" class="goods-item">
+                <div class="goods-image">
+                  <img :src="goods.goods_image" :alt="goods.goods_image">
+                </div>
+                <div class="goods-info">
+                  <nuxt-link to="#" class="goods-name">{{ goods.goods_name }}</nuxt-link>
+                  <p>原价：<span class="goods-original-price">{{ goods.goods_original_price | unitPrice('￥') }}</span></p>
+                  <p>价格：<span class="goods-price">{{ goods.goods_price | unitPrice('￥') }}</span></p>
+                  <p>已销售：<span>{{ goods.buy_count }}</span>件</p>
+                  <nuxt-link to="#" class="goods-btn">查看详情</nuxt-link>
+                </div>
+                <i class="icon-tag-rec"></i>
+              </li>
+            </template>
+          </ul>
         </div>
       </div>
     </div>
@@ -338,6 +355,85 @@
         background: #FFC107;
         h2 { color: #fff }
         span { color: #fff }
+      }
+      ul { width: 100% }
+      .goods-item {
+        position: relative;
+        $g_width: ($c_width - 40px -10px) / 2;
+        box-sizing: border-box;
+        float: left;
+        width: $g_width;
+        height: 210px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        overflow: hidden;
+        .icon-tag-rec {
+          display: block;
+          position: absolute;
+          left: 0;
+          top: -60px;
+          width: 60px;
+          height: 60px;
+          background: url(../../assets/images/icons-shop-tag.png) no-repeat left -212px;
+          transition: all .3s ease;
+        }
+        &:hover .icon-tag-rec { top: 0 }
+        &:nth-child(2n) { margin-left: 10px }
+        .goods-image {
+          float: left;
+          width: 188px;
+          height: 188px;
+          margin-top: -1px;
+          border: 1px solid #ddd;
+          img {
+            width: 178px;
+            height: 178px;
+            margin-left: 5px;
+            margin-top: 5px;
+          }
+        }
+        .goods-info {
+          position: relative;
+          float: right;
+          width: $g_width - 190px - 10px - 20px - 2px;
+          height: 190px;
+          margin-left: 10px;
+        }
+        .goods-name {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          overflow: hidden;
+          width: 100%;
+          color: #333;
+          font-size: 14px;
+          min-height: 50px;
+          margin-bottom: 10px;
+          &:hover { color: #f42424 }
+        }
+        p { margin-top: 8px }
+        .goods-original-price { text-decoration: line-through }
+        .goods-price { color: #f42424 }
+        .goods-btn {
+          display: block;
+          position: absolute;
+          bottom: 5px;
+          left: 0;
+          width: 150px;
+          height: 25px;
+          line-height: 25px;
+          text-align: center;
+          color: #666;
+          border: 1px solid #ddd;
+          margin-top: 10px;
+          transition: all .3s ease;
+          &:hover {
+            border: 1px solid #f42424;
+            color: #f42424;
+          }
+        }
       }
     }
   }
