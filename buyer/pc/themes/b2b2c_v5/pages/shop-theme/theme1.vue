@@ -59,6 +59,31 @@
             </template>
           </ul>
         </div>
+        <div class="item new">
+          <div class="item-header">
+            <h2>店铺新品</h2>
+            <span>SHOP-NEW</span>
+            <nuxt-link to="#" class="more">更多&gt;&gt;</nuxt-link>
+          </div>
+          <ul>
+            <template v-for="(goods, index) in shop.newGoods">
+              <li v-if="index < 10" :key="goods.goods_id" class="goods-item">
+                <div class="goods-image">
+                  <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
+                </div>
+                <div class="goods-info">
+                  <div class="goods-name">
+                    <nuxt-link to="#">{{ goods.goods_name }}</nuxt-link>
+                  </div>
+                  <div v-if="index === 0" class="goods-price">
+                    <p>RMB: <strong class="price">￥{{ goods.goods_price | unitPrice }}</strong></p>
+                    <p>已销售：{{ goods.buy_count }}件</p>
+                  </div>
+                </div>
+              </li>
+            </template>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -136,6 +161,8 @@
       margin: 20px auto;
     }
     .item {
+      margin-top: 10px;
+      padding-bottom: 20px;
       .item-header {
         position: relative;
         width: 100%;
@@ -196,6 +223,72 @@
           font-family: georgia;
           color: #f42424;
           font-size: 14px;
+        }
+      }
+    }
+    .item.new {
+      .item-header { border-bottom: 1px solid #FF5722 }
+      ul { margin-top: 20px }
+      .goods-item {
+        $g_width: ((1190px - 20px) / 2 - 10px) / 3;
+        position: relative;
+        box-sizing: border-box;
+        width: $g_width;
+        height: $g_width;
+        float: left;
+        margin-left: 5px;
+        border: 1px solid #FF5722;
+        margin-bottom: 5px;
+        padding: 5px;
+        overflow: hidden;
+        &:nth-child(1) {
+          width: (1190px - 20px) / 2;
+          height: $g_width * 3 + 10px;
+          margin-left: 0;
+          margin-bottom: 0;
+          margin-right: 20px;
+          border: none;
+          padding: 0;
+          .goods-info {
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            height: 70px;
+          }
+          .goods-name {
+            min-height: 35px;
+            a { font-size: 14px }
+          }
+        }
+        &:nth-child(3n-1) {
+          margin-left: 0;
+        }
+        .goods-info {
+          position: absolute;
+          left: 5px;
+          bottom: 5px;
+          width: $g_width - 10px - 2px;
+          height: 40px;
+          background-color: rgba(0,0,0,.6);
+        }
+        .goods-name {
+          padding: 3px;
+          a {
+            color: #fff;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+          }
+        }
+        .goods-price {
+          display: flex;
+          justify-content: space-between;
+          color: #fff;
+          padding: 0 5px;
+        }
+        .price {
+          color: #f42424;
         }
       }
     }
