@@ -16,6 +16,9 @@
   export default {
     name: 'shop',
     layout: 'full',
+    validate({ query }) {
+      return /^\d+$/.test(query.shop_id)
+    },
     components: { theme1, theme2, theme3 },
     data() {
       return {
@@ -28,7 +31,6 @@
     },
     methods: {
       GET_ShopData() {
-        if (!this.shop_id) return
         API_Shop.getShopData(this.shop_id).then(response => {
           this.shopData = response
         })

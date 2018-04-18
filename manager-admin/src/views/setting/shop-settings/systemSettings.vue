@@ -212,10 +212,10 @@
               <template slot="append">消费积分</template>
             </el-input>
           </el-form-item>
-          <!--登陆（一天一次有效）-->
+          <!--登录（一天一次有效）-->
           <el-form-item prop="cancel_order_day">
             <template slot="label">
-              <el-checkbox v-model="pointForm.a">登陆（一天一次有效）</el-checkbox>
+              <el-checkbox v-model="pointForm.a">登录（一天一次有效）</el-checkbox>
             </template>
             <el-input placeholder="800" size="small" v-model="pointForm.a">
               <template slot="append">等级积分</template>
