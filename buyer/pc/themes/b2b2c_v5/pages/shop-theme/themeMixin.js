@@ -6,7 +6,7 @@ import banner from '@/components/ShopBanner'
 export default {
   data() {
     return {
-      shop_id: this.$route.params.id
+      shop_id: this.$route.query.shop_id
     }
   },
   props: {
