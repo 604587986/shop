@@ -10,6 +10,7 @@ import {
   Nav,
   Search,
   Settleup,
+  ShopStar,
   Shortcut
 } from '@/components'
 
@@ -23,4 +24,5 @@ Vue.component(Header.name, Header)
 Vue.component(Nav.name, Nav)
 Vue.component(Search.name, Search)
 Vue.component(Settleup.name, Settleup)
+Vue.component(ShopStar.name, ShopStar)
 Vue.component(Shortcut.name, Shortcut)
