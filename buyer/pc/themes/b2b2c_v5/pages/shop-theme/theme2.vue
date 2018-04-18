@@ -99,6 +99,16 @@
             </template>
           </ul>
         </div>
+        <div class="item">
+          <div class="shop-intro-title">
+            <span class="font-shop">店</span>
+            <div class="font-other">
+              <span class="font-shop-l">铺简介</span>
+              <span class="font-shop-en">SHOP-INTRODUCTION</span>
+            </div>
+          </div>
+          <div class="shop-intro-body" v-html="shop.shop_intro"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -435,6 +445,45 @@
           }
         }
       }
+    }
+  }
+  .shop-intro-title {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 80px;
+    .font-shop {
+      display: block;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+      color: #fff;
+      background-color: #644139;
+      font-size: 28px;
+      font-family: "Microsoft YaHei";
+      border-radius: 100%;
+      margin-right: 5px;
+    }
+    .font-shop-l {
+      display: block;
+      height: 40px;
+      line-height: 40px;
+      font-family: "Microsoft YaHei";
+      color: #644139;
+      font-size: 24px;
+    }
+    .font-shop-en {
+      display: block;
+      height: 20px;
+      line-height: 20px;
+      font-size: 12px;
+      font-weight: 200;
+      color: #ccc;
+    }
+    .font-other { height: 60px }
+    .shop-intro-body {
+
     }
   }
 </style>
