@@ -85,7 +85,25 @@
             </li>
           </ul>
         </div>
-        <div class="item rec"></div>
+        <div class="item rec">
+          <h3>掌柜推荐</h3>
+          <ul>
+            <template v-for="(goods, index) in shop.recGoods">
+              <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
+                <div class="goods-image">
+                  <nuxt-link to="#">
+                    <img :src="goods.goods_image" alt="goods.goods_name" :title="goods.goods_name">
+                  </nuxt-link>
+                </div>
+                <nuxt-link to="#" class="goods-name">{{ goods.goods_name }}</nuxt-link>
+                <div class="goods-price">
+                  <span>RMB：<strong>￥{{ goods.goods_price | unitPrice }}</strong></span>
+                  <span>已销售：{{ goods.buy_count }}件</span>
+                </div>
+              </li>
+            </template>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -335,6 +353,51 @@
     .item.rec {
       background-color: #fff;
       min-height: 300px;
+      h3 {
+        font: 28px/60px tahoma,arial,宋体;
+        width: 500px;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        margin: 0 auto;
+        font-size: 30px;
+        background: url(~/assets/images/background-shop-waves.png) no-repeat center -7px;
+      }
+      ul {
+        width: 950px;
+        margin: 0 auto;
+      }
+      $g_width: (950px - 30px) / 4;
+      .goods-item {
+        float: left;
+        width: $g_width;
+        height: 300px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        &:nth-child(4n+1) {
+          margin-left: 0;
+        }
+        .goods-image {
+          width: $g_width;
+          height: $g_width;
+        }
+        .goods-name {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          margin-top: 5px;
+          min-height: 35px;
+        }
+        .goods-price {
+          display: flex;
+          justify-content: space-between;
+          border-top: 1px dashed #ccc;
+          padding-top: 3px;
+          margin-top: 5px;
+          strong { color: #f42424 }
+        }
+      }
     }
   }
 </style>
