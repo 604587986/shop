@@ -1,122 +1,110 @@
 <template>
-  <div id="shop-theme-1" class="container">
+  <div id="shop-theme-1">
     <div class="shop-header">
       <div class="w">
         <div class="shop-name">{{ shop.shop_name }}</div>
-        <div class="shop-header-right">
-          <div class="shop-nav">
-            <div class="item category">
-              <h3>全部分类</h3>
-            </div>
-            <nuxt-link to="#" class="item">店铺首页</nuxt-link>
-            <span>|</span>
-            <nuxt-link to="#" class="item">店铺简介</nuxt-link>
-            <span>|</span>
-            <nuxt-link to="#" class="item">信用评分</nuxt-link>
+        <div class="shop-more">
+          <div class="item" @click="collectionShop">
+            <i class="iconfont ea-icon-star"></i>
+            <p>收藏</p>
           </div>
-          <div class="shop-more">
-            <div class="item" @click="collectionShop">
-              <i class="iconfont ea-icon-star"></i>
-              <p>收藏</p>
-            </div>
-            <div class="item">
-              <i class="iconfont ea-icon-service"></i>
-              <p>客服</p>
-            </div>
-            <div class="item">
-              <i class="iconfont ea-icon-more"></i>
-              <p>更多</p>
-            </div>
+          <div class="item">
+            <i class="iconfont ea-icon-service"></i>
+            <p>客服</p>
+          </div>
+          <div class="item">
+            <i class="iconfont ea-icon-more"></i>
+            <p>更多</p>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="shop-nav">
+      <div class="w">
+        <div class="item category">
+          <h1>全部分类</h1>
+        </div>
+        <nuxt-link to="#" class="item">店铺首页</nuxt-link>
+        <span>|</span>
+        <nuxt-link to="#" class="item">店铺简介</nuxt-link>
+        <span>|</span>
+        <nuxt-link to="#" class="item">店铺评价</nuxt-link>
       </div>
     </div>
     <en-banner :banners="shop.shop_banner"/>
     <div class="shop-tags">
       <div class="tags-container">
         <div class="item hot">
-          <div class="item-header">
-            <h2>店铺热卖</h2>
-            <span>HOT-GOODS</span>
-            <nuxt-link to="#" class="more">更多&gt;&gt;</nuxt-link>
-          </div>
           <ul>
             <template v-for="(goods, index) in shop.hotGoods">
-              <li v-if="index < 10" :key="index" class="goods-item">
-                <div class="goods-image">
-                  <nuxt-link to="#">
-                    <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
-                  </nuxt-link>
-                </div>
-                <div class="goods-name">
-                  <nuxt-link to="#">{{ goods.goods_name }}</nuxt-link>
-                </div>
-                <div class="goods-price">
-                  <span>RMB：<i class="price">￥{{ goods.goods_price | unitPrice }}</i></span>
-                  <span>已售：{{ goods.buy_count }}件</span>
+              <li v-if="index < 5" :key="goods.goods_id" class="goods-item">
+                <div class="w">
+                  <div class="goods-info">
+                    <h3>店家热卖<span>Hot-Recommend</span></h3>
+                    <nuxt-link to="#" class="goods-name">{{ goods.goods_name }}</nuxt-link>
+                    <div class="goods-price">
+                      <span>RMB：<strong>￥{{ goods.goods_price | unitPrice }}</strong></span>
+                      <span>已销售：{{ goods.buy_count }}件</span>
+                    </div>
+                    <nuxt-link to="#" class="goods-btn">查看详情</nuxt-link>
+                  </div>
+                  <div class="goods-image">
+                    <nuxt-link to="#">
+                      <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
+                    </nuxt-link>
+                  </div>
                 </div>
               </li>
             </template>
           </ul>
         </div>
         <div class="item new">
-          <div class="item-header">
-            <h2>店铺新品</h2>
-            <span>SHOP-NEW</span>
-            <nuxt-link to="#" class="more">更多&gt;&gt;</nuxt-link>
-          </div>
           <ul>
             <template v-for="(goods, index) in shop.newGoods">
-              <li v-if="index < 10" :key="goods.goods_id" class="goods-item">
-                <div class="goods-image">
-                  <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
-                </div>
-                <div class="goods-info">
-                  <div class="goods-name">
-                    <nuxt-link to="#">{{ goods.goods_name }}</nuxt-link>
-                  </div>
-                  <div v-if="index === 0" class="goods-price">
-                    <p>RMB: <strong class="price">￥{{ goods.goods_price | unitPrice }}</strong></p>
-                    <p>已销售：{{ goods.buy_count }}件</p>
-                  </div>
-                </div>
-              </li>
-            </template>
-          </ul>
-        </div>
-        <div class="item rec">
-          <div class="item-header">
-            <h2>店铺推荐</h2>
-            <span>SHOP-RECOMMEND</span>
-            <nuxt-link to="#" class="more">更多&gt;&gt;</nuxt-link>
-          </div>
-          <ul>
-            <template v-for="(goods, index) in shop.recGoods">
               <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
                   <nuxt-link to="#">
                     <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
                   </nuxt-link>
                 </div>
-                <div class="goods-name">
-                  <nuxt-link to="#">{{ goods.goods_name }}</nuxt-link>
+                <div class="goods-info">
+                  <nuxt-link to="#" class="goods-name">{{ goods.goods_name }}</nuxt-link>
+                  <div class="goods-price">
+                    <span>RMB：<strong>￥{{ goods.goods_price | unitPrice }}</strong></span>
+                    <span>已销售：{{ goods.buy_count }}件</span>
+                  </div>
                 </div>
+              </li>
+            </template>
+            <li class="middle-item">
+              <div class="shop-logo">
+                <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/64161729403B4A699B6540A2BC6B9015.jpg" :alt="shop.shop_name">
+              </div>
+              <h3>新品</h3>
+              <p>追求卓越品质,打造一流品牌</p>
+            </li>
+          </ul>
+        </div>
+        <div class="item rec">
+          <h3>掌柜推荐</h3>
+          <ul>
+            <template v-for="(goods, index) in shop.recGoods">
+              <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
+                <div class="goods-image">
+                  <nuxt-link to="#">
+                    <img :src="goods.goods_image" alt="goods.goods_name" :title="goods.goods_name">
+                  </nuxt-link>
+                </div>
+                <nuxt-link to="#" class="goods-name">{{ goods.goods_name }}</nuxt-link>
                 <div class="goods-price">
-                  <p>RMB：<strong>￥{{ goods.goods_price | unitPrice }}</strong></p>
-                  <p>已销售：{{ goods.buy_count }}件</p>
+                  <span>RMB：<strong>￥{{ goods.goods_price | unitPrice }}</strong></span>
+                  <span>已销售：{{ goods.buy_count }}件</span>
                 </div>
               </li>
             </template>
           </ul>
         </div>
       </div>
-    </div>
-    <div class="shop-intro w">
-      <div class="intro-title">
-        <h2>关于店铺</h2>
-        <h3>Welcome to my shop I wish you a happy shopping</h3>
-      </div>
-      <div class="intro-body" v-html="shop.shop_intro"></div>
     </div>
     <div class="shop-info">
       <div class="info-title">关于本店</div>
@@ -165,36 +153,24 @@
   }
   .shop-header {
     width: 100%;
-    height: 100px;
-    background-color: #fff;
+    height: 120px;
+    background: url(~/assets/images/background-brown-paper.jpg) repeat-x left top;
     .w {
-      height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .shop-name {
-      font-size: 28px;
-      color: #000
-    }
-    .shop-header-right {
-      display: flex;
-      align-items: center;
-    }
-    .shop-nav {
-      margin-top: 20px;
-      .item {
-        display: inline-block;
-        font-size: 14px;
-        color: #666;
-        padding: 0 10px;
-        &:not(.category):hover { color: #ff5e5e }
-      }
+      padding: 0 0 0 320px;
+      height: 120px;
+      line-height: 125px;
+      font-size: 30px;
+      color: #fff;
+      background: url(~/assets/images/icon-welcome.png) no-repeat left center;
     }
     .shop-more {
       display: flex;
-      align-items: center;
-      margin-top: 20px;
+      margin-top: 28px;
       .item {
         text-align: center;
         cursor: pointer;
@@ -205,215 +181,253 @@
           font-size: 26px;
           border-radius: 100%;
           color: #666;
-          padding: 2px;
-          border: 1px solid #ccc;
+          padding: 3px;
         }
         p { margin-top: 3px }
       }
     }
   }
-  .shop-tags {
-    background-color: #fff;
-    min-height: 500px;
-    .tags-container {
-      width: 1190px;
-      margin: 20px auto;
+  .shop-nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    background-color: #818181;
+    color: #fff;
+    h1 { font-size: 14px }
+    span { color: #dddbdb }
+    .shop-category {
+      display: inline-block;
     }
     .item {
-      margin-top: 10px;
-      padding-bottom: 20px;
-      .item-header {
-        position: relative;
-        width: 100%;
-        height: 34px;
-        color: #333;
-        font-size: 22px;
-        border-bottom: 1px solid #ffac13;
-        h2 {
-          display: inline-block;
-          font-size: 18px;
-        }
-        span {
-          font-size: 14px;
-          color: #ccc;
-          margin-left: 10px;
-        }
-        .more {
-          position: absolute;
-          right: 0;
-          color: #ccc;
-          font-size: 12px;
-          &:hover { color: #ffac13 }
-        }
-      }
-      ul { clear: both }
-      overflow: hidden;
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 15px;
+      color: #dddbdb
+    }
+  }
+  .shop-tags {
+    background-color: #fff;
+    overflow: hidden;
+    min-height: 300px;
+    .item {
+      position: relative;
+      overflow: hidden
     }
     .item.hot {
-      $g_width: (1190px - 80px) / 5;
-      .goods-item {
-        float: left;
-        width: $g_width;
-        height: 300px;
-        margin-top: 20px;
-        margin-right: 20px;
-        &:nth-child(5n) { margin-right: 0 }
+      width: 100%;
+      li {
+        height: 450px;
+        background-color: #fff;
+        &:nth-child(2n) {
+          background-color: #F2F0EC;
+          .w { flex-direction: row-reverse }
+        }
+        .w {
+          display: flex;
+          width: 980px;
+        }
+      }
+      .goods-info {
+        width: 450px;
+        height: 450px;
+        h3 {
+          font: 12px/1.5 tahoma,arial,宋体;
+          width: 400px;
+          margin: 80px 0 10px 0;
+          color: #484848;
+          font-size: 28px;
+          font-weight: bold;
+          height: 60px;
+          line-height: 60px;
+          span {
+            margin-left: 10px;
+            color: #ddd;
+          }
+        }
       }
       .goods-image {
-        width: $g_width;
-        height: $g_width;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 500px;
+        height: 450px;
+        img {
+          width: 300px;
+          height: 300px;
+        }
       }
       .goods-name {
-        min-height: 36px;
-        margin-top: 5px;
-        a {
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-          overflow: hidden;
-        }
+        line-height: 30px;
+        width: 400px;
+        font-size: 16px;
+        margin-bottom: 30px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
       .goods-price {
         display: flex;
         justify-content: space-between;
-        margin-top: 5px;
-        color: #333;
-        .price {
-          font-family: georgia;
-          color: #f42424;
-          font-size: 14px;
+        width: 400px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 14px;
+        strong { color: #f42424 }
+      }
+      .goods-btn {
+        display: block;
+        width: 150px;
+        height: 28px;
+        text-align: center;
+        line-height: 28px;
+        border: 1px solid #b0b0b0;
+        transition: all .3s ease;
+        margin-top: 10px;
+        &:hover {
+          background-color: #757575;
+          border-color: #757575;
+          color: #fff
         }
       }
     }
     .item.new {
-      .item-header { border-bottom: 1px solid #FF5722 }
-      ul { margin-top: 10px }
-      .goods-item {
-        $g_width: ((1190px - 20px) / 2 - 10px) / 3;
+      background-color: #F7F7F7;
+      min-height: 300px;
+      ul {
         position: relative;
-        box-sizing: border-box;
+        width: 950px;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        padding-top: 10px;
+        overflow: hidden;
+      }
+      $g_width: (950px - 40px) / 3;
+      .goods-item {
+        float: left;
+        position: relative;
         width: $g_width;
         height: $g_width;
-        float: left;
-        margin-left: 5px;
-        border: 1px solid #FF5722;
-        margin-bottom: 5px;
-        padding: 5px;
+        margin-left: 10px;
+        margin-bottom: 10px;
         overflow: hidden;
-        &:nth-child(1) {
-          width: (1190px - 20px) / 2;
-          height: $g_width * 3 + 10px;
-          margin-left: 0;
-          margin-bottom: 0;
-          margin-right: 20px;
-          border: none;
-          padding: 0;
+        &:nth-child(5) {
+          margin-left: $g_width + 20px;
+        }
+        &:hover {
           .goods-info {
-            width: 100%;
-            left: 0;
-            bottom: 0;
-            height: 70px;
-          }
-          .goods-name {
-            min-height: 35px;
-            a { font-size: 14px }
+            transform: translateX(0);
           }
         }
-        &:nth-child(3n-1) {
+      }
+      .middle-item {
+        position: absolute;
+        left: $g_width + 20px;
+        top: $g_width + 20px;
+        width: $g_width;
+        height: $g_width;
+        margin: 0;
+        text-align: center;
+        .shop-logo {
+          text-align: center;
+          img { width: 100px }
+        }
+        h3 {
+          font: 28px/60px tahoma,arial,宋体;
+          height: 80px;
+          line-height: 80px;
+          text-align: center;
+          font-size: 40px;
+          font-weight: 200;
+        }
+        p {
+          height: 80px;
+          line-height: 80px;
+          text-align: center;
+        }
+      }
+      .goods-image {
+        width: 100%;
+        height: 100%;
+      }
+      .goods-info {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 60px;
+        background-color: rgba(0,0,0,.6);
+        transition: all .3s ease;
+        transform: translateY(60px);
+      }
+      .goods-name {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        padding: 3px 10px;
+        color: #fff3f3;
+        &:hover { color: #f42424 }
+      }
+      .goods-price {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+        color: #aaaaaa;
+        strong { color: #f42424 }
+      }
+    }
+    .item.rec {
+      background-color: #fff;
+      min-height: 300px;
+      margin-bottom: 30px;
+      h3 {
+        font: 28px/60px tahoma,arial,宋体;
+        width: 500px;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        margin: 0 auto;
+        font-size: 30px;
+        background: url(~/assets/images/background-shop-waves.png) no-repeat center -7px;
+      }
+      ul {
+        width: 950px;
+        margin: 0 auto;
+      }
+      $g_width: (950px - 30px) / 4;
+      .goods-item {
+        float: left;
+        width: $g_width;
+        height: 300px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        &:nth-child(4n+1) {
           margin-left: 0;
         }
-        .goods-info {
-          position: absolute;
-          left: 5px;
-          bottom: 5px;
-          width: $g_width - 10px - 2px;
-          height: 40px;
-          background-color: rgba(0,0,0,.6);
+        .goods-image {
+          width: $g_width;
+          height: $g_width;
         }
         .goods-name {
-          padding: 3px;
-          a {
-            color: #fff;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            overflow: hidden;
-          }
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          margin-top: 5px;
+          min-height: 35px;
         }
         .goods-price {
           display: flex;
           justify-content: space-between;
-          color: #fff;
-          padding: 0 5px;
-        }
-        .price {
-          color: #f42424;
-        }
-      }
-    }
-    .item.rec {
-      .item-header { border-bottom: 1px solid #03a9f4 }
-      ul { margin-top: 10px }
-      $g_width: (1190px - 30px) / 4;
-      .goods-item {
-        float: left;
-        box-sizing: border-box;
-        width: $g_width;
-        height: 375px;
-        margin-left: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        &:nth-child(4n+1) { margin-left: 0 }
-        &:hover {
-          border: 1px solid #03a9f4;
-        }
-        .goods-image {
-          width: $g_width - 20px - 2px;
-          height: $g_width - 20px - 2px;
-        }
-        .goods-name {
-          margin-top: 5px;
-          min-height: 35px;
-          padding-bottom: 5px;
-          border-bottom: 1px dashed #ccc;
-          a {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            overflow: hidden;
-          }
-        }
-        .goods-price {
+          border-top: 1px dashed #ccc;
+          padding-top: 3px;
           margin-top: 5px;
           strong { color: #f42424 }
         }
       }
-    }
-  }
-  .shop-intro {
-    background-color: #fff;
-    text-align: center;
-    .intro-title {
-      width: 500px;
-      margin: 0 auto;
-      border-bottom: 1px dashed #ccc;
-      padding-bottom: 10px;
-      font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
-      h2 {
-        line-height: 30px;
-        font-size: 20px;
-      }
-      h3 {
-        font-size: 12px;
-        line-height: 30px;
-        color: #666
-      }
-    }
-    .intro-body {
-      padding: 10px 0;
-      min-height: 100px;
-      border-bottom: 1px dashed #ccc;
     }
   }
   .shop-info {
