@@ -22,47 +22,30 @@
         </el-button>
       </div>
       <div class="toolbar-search">
-        <en-table-search
-          @search="searchEvent"
-          @advancedSearch="advancedSearchEvent"
-          advanced
-        >
-          <template slot="advanced-content">
-            <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-              <el-form-item label="商品名称">
-                <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
-              </el-form-item>
-              <el-form-item label="商品编号">
-                <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
-              </el-form-item>
-              <el-form-item label="店铺名称">
-                <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
-              </el-form-item>
-              <el-form-item label="商品类别">
-                <en-category-picker @changed="categoryChanged"/>
-              </el-form-item>
-            </el-form>
-          </template>
-        </en-table-search>
+        <en-table-search @search="searchEvent"/>
       </div>
     </div>
 
     <template slot="table-columns">
       <el-table-column type="selection"/>
-      <el-table-column label="商品图片" width="120">
+      <el-table-column label="图片" width="120">
         <template slot-scope="scope">
-          <img :src="scope.row.image" class="goods-image"/>
+          <img :src="scope.row.goods_image" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="sn" label="商品编号" width="180"/>
-      <el-table-column prop="seller_name" label="店铺名称" width="120"/>
-      <el-table-column prop="name" label="商品名称" align="left" width="450"/>
-      <el-table-column prop="category_name" label="商品分类"/>
-      <el-table-column label="商品价格" width="120">
-        <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+      <el-table-column prop="goods_name" label="名称" align="left" width="450"/>
+      <el-table-column label="价格">
+        <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
       </el-table-column>
-      <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-      <el-table-column prop="brand_name" label="品牌"></el-table-column>
+      <el-table-column label="库存">
+        <template slot-scope="scope">{{ scope.row.quantity }}件</template>
+      </el-table-column>
+      <el-table-column label="可用库存">
+        <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
+      </el-table-column>
+      <el-table-column label="创建时间">
+        <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope" width="200">
           <el-button
@@ -121,14 +104,6 @@
         /** 列表分页数据 */
         pageData: null,
 
-        /** 高级搜索数据 */
-        advancedForm: {
-          goods_name: '',
-          goods_sn: '',
-          shop_name: '',
-          category_id: ''
-        },
-
         /** 已选择的回收站商品 */
         selectionids: []
       }
@@ -150,31 +125,30 @@
         this.GET_GoodsList()
       },
 
-      /** 单个商品删除操作确认 */
+      /** 单个商品彻底删除操作确认 */
       handleDeleteRecycle(index, row) {
-        this.$confirm('确认删除吗？', '提示')
-          .then(() => this.DELETE_Recycles(row.id))
+        this.$confirm('确认彻底删除吗？', '提示')
+          .then(() => this.DELETE_Recycles(row.goods_id))
           .catch(() => {
           })
       },
+
       /** 批量删除 */
       handleDeleteRecycles() {
         this.selectionids.length !== 0 && this.DELETE_Recycles(this.selectionids)
       },
+
       /**  回收站单个商品还原 */
       handlReductionRecycle(row) {
         this.$confirm('确认还原吗？', '提示')
-          .then(() => this.ReductionGoods(row.id))
+          .then(() => this.ReductionGoods(row.goods_id))
           .catch(() => {
           })
       },
+
       /** 批量还原 */
       handlReductionRecycles() {
         this.selectionids.length !== 0 && this.ReductionGoods(this.selectionids)
-      },
-      /** 销售状态格式化 */
-      marketStatus(row, column, cellValue) {
-        return row.market_enable === 1 ? '售卖中' : '已下架'
       },
 
       /** 搜索事件触发 */
@@ -183,23 +157,7 @@
           ...this.params,
           keyword: data
         }
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_GoodsList()
-      },
-
-      /** 高级搜索事件触发 */
-      advancedSearchEvent() {
-        this.params = {
-          ...this.params,
-          ...this.advancedForm
-        }
-        delete this.params.keyword
-        this.GET_GoodsList()
-      },
-
-      /** 高级搜索中 分类选择组件值发生改变 */
-      categoryChanged(data) {
-        this.advancedForm.catidegory_id = data.category_id
       },
 
       GET_GoodsList() {
@@ -218,22 +176,25 @@
         })
       },
 
+      /** goods_id*/
       selectionChange(val) {
-        this.selectionids = val.map(item => item.id)
+        this.selectionids = val.map(item => item.goods_id).toString()
       },
+
       /** 还原回收站商品*/
       ReductionGoods(ids) {
-        API_goods.RecycleReductionGoods({ ids }).then(response => {
+        API_goods.RecycleReductionGoods(ids, {}).then(response => {
           this.$message.success('还原成功')
         }).catch(error => {
-          this.$message.success('还原失败，请稍后再试')
+          this.$message.error('还原失败，请稍后再试')
           console.log(error)
         })
       },
 
       /** 删除回收站商品 */
       DELETE_Recycles(ids) {
-        API_goods.RecycleDeleteGoods(ids).then(() => {
+        const _ids = ids.toString()
+        API_goods.RecycleDeleteGoods(_ids, {}).then(() => {
           this.GET_GoodsList()
           this.$message.success('删除商品成功！')
         }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))

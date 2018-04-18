@@ -6,14 +6,14 @@
     :loading="loading"
   >
     <template slot="table-columns">
-      <el-table-column prop="id" label="标签ID"/>
+      <!--<el-table-column prop="id" label="标签ID"/>-->
       <el-table-column prop="name" label="标签名称"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="primary"
-            @click="addtag(scope.row.tag_id)">标签商品设置
+            @click="addtag(scope.row)">标签商品设置
           </el-button>
         </template>
       </el-table-column>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import * as API_goods from '@/api/goodsTag'
+  import * as API_goodsTag from '@/api/goodsTag'
   import { TableLayout } from '@/components'
 
   export default {
@@ -76,9 +76,10 @@
         this.params.page_no = page
         this.GET_TagsList()
       },
+
       GET_TagsList() {
         this.loading = true
-        API_goods.getTagsList(this.params).then(response => {
+        API_goodsTag.getTagsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.draw,
@@ -92,9 +93,9 @@
         })
       },
 
-      /** 为商品添加标签 */
-      addtag(tag_id) {
-        this.$router.push({ name: 'tagAdd', params: { tag_id: tag_id }})
+      /** 标签商品设置 */
+      addtag(row) {
+        this.$router.push({ name: 'tagAdd', params: { tag_id: row.tag_id }})
       }
     }
   }
@@ -109,10 +110,6 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-  }
-
-  .toolbar-btns {
-
   }
 
   .toolbar-search {

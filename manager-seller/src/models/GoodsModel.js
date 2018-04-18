@@ -12,13 +12,15 @@ import {
 } from '@/framework'
 
 export default class GoodsModel extends DataModel {
-  // /** 商品ID */
-  // @ServerName('goods_id')
-  // id
+  /** 商品ID */
+  @ServerName('goods_id')
+  goods_id
 
   /** 商品图片 小图路径 */
-  @ServerName('small')
+  @ServerName('original')
   goods_image
+
+  // original
 
   // /** 商品编号 */
   // @ServerName('goods_sn')
@@ -55,5 +57,12 @@ export default class GoodsModel extends DataModel {
   // /** 商品品牌 */
   // @ServerName('brand_name')
   // brand_name
-  //
+
+  /** 商品编号 货号 */
+  @ServerName('sn')
+  goods_sn
+
+  /** 待发货数 */
+  @ServerName('enable_quantity')
+  deliver_goods_quantity
 }
