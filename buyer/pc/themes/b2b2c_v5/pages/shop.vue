@@ -9,9 +9,9 @@
 </template>
 
 <script>
-  const theme1 = () => import('@/pages/shop-theme/theme1').then(m => m.default || m)
-  const theme2 = () => import('@/pages/shop-theme/theme2').then(m => m.default || m)
-  const theme3 = () => import('@/pages/shop-theme/theme3').then(m => m.default || m)
+  const theme1 = () => import('@/pages/.shop-theme/theme1').then(m => m.default || m)
+  const theme2 = () => import('@/pages/.shop-theme/theme2').then(m => m.default || m)
+  const theme3 = () => import('@/pages/.shop-theme/theme3').then(m => m.default || m)
   import * as API_Shop from '@/api/shop'
   export default {
     name: 'shop',
