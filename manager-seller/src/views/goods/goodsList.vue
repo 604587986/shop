@@ -74,30 +74,32 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="30%">
-      <el-form :model="goodsStockData" v-if="goodsStocknums === 1 ">
-        <el-form-item label="库存" prop="quantity">
-          <!--v-model="goodsStockData.quantity"-->
-          <el-input   auto-complete="off" label-width="100"></el-input>
-        </el-form-item>
-        <el-form-item label="待发货数">
-          <!--v-model="goodsStockData.deliver_goods_quantity"-->
-          <el-input  auto-complete="off" disabled label-width="100"></el-input>
-        </el-form-item>
-      </el-form>
-      <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
-        <template slot="table-columns">
-          <el-table-column prop="goods_name" label="商品名称"/>
-          <el-table-column label="库存" width="120">
-            <template slot-scope="scope">
-              <!--v-model="scope.row.quantity"-->
-              <el-input  auto-complete="off" label-width="100"></el-input>
-            </template>
-          </el-table-column>
-          <!--prop="deliver_goods_quantity"-->
-          <el-table-column  label="待发货数" width="120"></el-table-column>
-        </template>
-      </en-tabel-layout>
+    <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="30%" >
+      <div align="center">
+        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
+          <el-form-item label="库存" prop="quantity" >
+            <!--v-model="goodsStockData.quantity"-->
+            <el-input   auto-complete="off"  ></el-input>
+          </el-form-item>
+          <el-form-item label="待发货数" >
+            <!--v-model="goodsStockData.deliver_goods_quantity"-->
+            <el-input  auto-complete="off" disabled ></el-input>
+          </el-form-item>
+        </el-form>
+        <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
+          <template slot="table-columns">
+            <el-table-column prop="goods_name" label="商品名称"/>
+            <el-table-column label="库存" width="120">
+              <template slot-scope="scope">
+                <!--v-model="scope.row.quantity"-->
+                <el-input  auto-complete="off" ></el-input>
+              </template>
+            </el-table-column>
+            <!--prop="deliver_goods_quantity"-->
+            <el-table-column  label="待发货数" width="120"></el-table-column>
+          </template>
+        </en-tabel-layout>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="goodsStockshow = false">取 消</el-button>
         <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
@@ -152,7 +154,7 @@
         goodsStocknums: 1,
 
         /** 商品库存列表数据*/
-        goodsStockData: null
+        goodsStockData: []
       }
     },
     mounted() {
