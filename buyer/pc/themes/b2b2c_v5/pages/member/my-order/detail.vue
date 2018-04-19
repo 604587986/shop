@@ -53,7 +53,7 @@
   export default {
     name: 'order-detail',
     validate({ query }) {
-      return /^.+$/.test(query.order_sn)
+      return !!query.order_sn
     },
     components: {
       SkuList
