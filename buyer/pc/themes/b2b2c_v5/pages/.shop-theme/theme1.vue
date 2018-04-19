@@ -106,6 +106,12 @@
         </div>
       </div>
     </div>
+    <div class="shop-intro">
+      <div class="w">
+        <div class="intro-title">店铺简介</div>
+        <div class="intro-body" v-html="shop.shop_intro"></div>
+      </div>
+    </div>
     <div class="shop-info">
       <div class="info-title">关于本店</div>
       <div class="info-information">
@@ -428,6 +434,24 @@
           strong { color: #f42424 }
         }
       }
+    }
+  }
+  .shop-intro {
+    .w {
+      width: 950px;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 20px;
+    }
+    .intro-title, .intro-body {
+      text-align: center;
+    }
+    .intro-title {
+      font-size: 20px;
+      color: #666;
+      padding: 5px 0;
+    }
+    .intro-body {
+      margin-top: 20px;
     }
   }
   .shop-info {
