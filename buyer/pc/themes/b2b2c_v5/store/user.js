@@ -1,5 +1,6 @@
 import * as API_User from '@/api/user'
 import * as types from './mutation-types'
+import Cookies from 'js-cookie'
 
 export const state = () => ({
   user: ''
@@ -8,55 +9,42 @@ export const state = () => ({
 /** mutations */
 export const mutations = {
   /**
-   * 设置用户数据
+   * 保存用户信息
    * @param state
    * @param data
    */
-  [types.SET_USER_DATA](state, data) {
+  [types.SAVE_USER_INFO](state, data) {
     state.user = data
+    Cookies.set('user', JSON.stringify(data))
   },
   /**
-   * 登录
+   * 移除用户信息
    * @param state
    * @param data
    */
-  [types.LOG_IN](state, data) {
-    state.user = data
-  },
-  /**
-   * 登出
-   * @param state
-   */
-  [types.LOG_OUT](state) {
+  [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
-  },
-  /**
-   * 保存用户信息【修改资料】
-   * @param state
-   * @param res
-   */
-  [types.SAVE_USER_INFO](state, res) {
-    state.user = res
+    Cookies.remove('user')
   }
 }
 
 /** actions */
 export const actions = {
   /**
-   * 获取购物车数据
+   * 获取用户数据
    * @param commit
    * @param params
    */
   getUserDataAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_User.getUserInfo().then(response => {
-        commit(types.SET_USER_DATA, response)
+        commit(types.SAVE_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
     })
   },
   /**
-   * 登出
+   * 登录
    * @param commit
    * @param params
    * @returns {Promise<any>}
@@ -77,7 +65,7 @@ export const actions = {
   logoutAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
       API_User.logout().then(() => {
-        commit(types.LOG_OUT)
+        commit(types.REMOVE_USER_INFO)
         resolve()
       }).catch(error => reject(error))
     })
@@ -100,5 +88,5 @@ export const actions = {
 
 /** getters */
 export const getters = {
-  user: state => state.user
+  user: state => state.user || JSON.parse(Cookies.get('user'))
 }
