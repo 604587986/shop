@@ -52,13 +52,16 @@
   import SkuList from '@/components/MemberSkuList'
   export default {
     name: 'order-detail',
+    validate({ query }) {
+      return /^.+$/.test(query.order_sn)
+    },
     components: {
       SkuList
     },
     data() {
       return {
         order: '',
-        order_sn: this.$route.params.id
+        order_sn: this.$route.query.order_sn
       }
     },
     mounted() {
