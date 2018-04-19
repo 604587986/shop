@@ -23,12 +23,15 @@
   import SkuList from '@/components/MemberSkuList'
   export default {
     name: 'detail',
+    validate({ query }) {
+      return !!query.order_sn
+    },
     components: {
       SkuList
     },
     data() {
       return {
-        sn: this.$route.params.id,
+        sn: this.$route.query.order_sn,
         detail: ''
       }
     },
