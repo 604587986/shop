@@ -1,6 +1,5 @@
 import * as API_User from '@/api/user'
 import * as types from './mutation-types'
-import Cookies from 'js-cookie'
 
 export const state = () => ({
   user: ''
@@ -15,7 +14,6 @@ export const mutations = {
    */
   [types.SAVE_USER_INFO](state, data) {
     state.user = data
-    Cookies.set('user', JSON.stringify(data))
   },
   /**
    * 移除用户信息
@@ -24,7 +22,6 @@ export const mutations = {
    */
   [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
-    Cookies.remove('user')
   }
 }
 
@@ -88,5 +85,5 @@ export const actions = {
 
 /** getters */
 export const getters = {
-  user: state => state.user || JSON.parse(Cookies.get('user'))
+  user: state => state.user
 }
