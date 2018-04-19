@@ -154,7 +154,7 @@
   import { mapActions, mapGetters } from 'vuex'
   import Swiper from 'swiper'
   import 'swiper/dist/css/swiper.min.css'
-  import Empty from './__empty'
+  import Empty from '@/components/MemberEmpty'
   export default {
     name: 'member-index',
     components: {

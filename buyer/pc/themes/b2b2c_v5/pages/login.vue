@@ -127,6 +127,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
   export default {
     name: 'login',
     layout: 'full',
@@ -139,11 +140,19 @@
     methods: {
       /** 登录事件 */
       handleLogin() {
-        this.$message.success('登录方式：' + this.login_type)
-        if (this.MixinForward) {
-          console.log(this.MixinForward)
-        }
-      }
+        const _forwardMatch = this.MixinForward.match(/\?forward=(.+)/) || []
+        const forward = _forwardMatch[1]
+        this.login().then(() => {
+          if (forward) {
+            this.$router.push({ path: forward })
+          } else {
+            this.$router.push({ path: '/' })
+          }
+        })
+      },
+      ...mapActions({
+        login: 'user/loginAction'
+      })
     }
   }
 </script>

@@ -9,6 +9,7 @@ import Header from './Header'
 import Nav from './Nav'
 import Search from './Search'
 import Settleup from './Settleup'
+import ShopStar from './ShopStar'
 import Shortcut from './Shortcut'
 
 export {
@@ -22,5 +23,6 @@ export {
   Nav,
   Search,
   Settleup,
+  ShopStar,
   Shortcut
 }

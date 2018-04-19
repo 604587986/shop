@@ -21,8 +21,8 @@
   Vue.use(Table)
   Vue.use(TableColumn)
   import { mapActions, mapGetters } from 'vuex'
-  import Breadcrumb from './member/__breadcrumb'
-  import Menu from './member/__menu'
+  import Breadcrumb from '@/components/MemberBreadcrumb'
+  import Menu from '@/components/MemberMenu'
   export default {
     name: 'member',
     middleware: 'auth',

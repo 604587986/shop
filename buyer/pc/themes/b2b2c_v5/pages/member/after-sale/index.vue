@@ -15,7 +15,7 @@
         <el-table-column prop="apply_status" label="售后状态" width="150"/>
         <el-table-column label="操作" width="100">
           <template slot-scope="scope">
-            <nuxt-link :to="'/member/after-sale/' + scope.row.order_sn">查看</nuxt-link>
+            <nuxt-link :to="'/member/after-sale/detail?order_sn=' + scope.row.order_sn">查看</nuxt-link>
           </template>
         </el-table-column>
       </el-table>

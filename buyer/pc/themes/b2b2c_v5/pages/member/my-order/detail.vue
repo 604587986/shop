@@ -49,16 +49,19 @@
 
 <script>
   import * as API_Order from '@/api/order'
-  import SkuList from '../__skuList'
+  import SkuList from '@/components/MemberSkuList'
   export default {
     name: 'order-detail',
+    validate({ query }) {
+      return !!query.order_sn
+    },
     components: {
       SkuList
     },
     data() {
       return {
         order: '',
-        order_sn: this.$route.params.id
+        order_sn: this.$route.query.order_sn
       }
     },
     mounted() {
