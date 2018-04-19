@@ -52,7 +52,7 @@ export const actions = {
   loginAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_User.login(params).then(response => {
-        commit(types.LOG_IN, response)
+        commit(types.SAVE_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
     })
