@@ -16,6 +16,7 @@
         </div>
       </div>
     </div>
+    <div v-else-if="error.statusCode === 502">服务器出错</div>
     <div v-else>{{ error.statusCode }}：{{ error.message }}</div>
   </div>
 </template>

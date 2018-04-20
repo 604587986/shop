@@ -14,6 +14,13 @@
   const theme3 = () => import('@/pages/-shop-theme/-theme3').then(m => m.default || m)
   import * as API_Shop from '@/api/shop'
   export default {
+    asyncData({ query }, callback) {
+      API_Shop.getShopData(query.shop_id).then(response => {
+        callback(null, { shopData: response })
+      }).catch(e => {
+        callback({ statusCode: e.response.status })
+      })
+    },
     name: 'shop-index',
     validate({ query }) {
       return /^\d+$/.test(query.shop_id)
@@ -26,7 +33,6 @@
       }
     },
     mounted() {
-      this.GET_ShopData()
     },
     methods: {
       GET_ShopData() {
