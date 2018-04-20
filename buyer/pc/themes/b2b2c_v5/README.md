@@ -6,9 +6,7 @@
 
 ``` bash
 # 安装依赖
-$ npm install # Or yarn install
-# 国内使用npm建议使用淘宝源
-$ npm install --registry=https://registry.npm.taobao.org
+$ npm install
 
 # 在localhost:3000上启动热加载服务器
 $ npm run dev
