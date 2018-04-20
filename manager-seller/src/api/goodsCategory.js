@@ -60,7 +60,7 @@ export function UpdateGoodsCategory(ids, params) {
 }
 
 /**
- * 发布商品 查询商品品类 分级查询
+ * 发布商品 查询商品品类 分级查询（商城商品品类）
  * @param ids
  * @param params
  * @returns {Promise<any>}

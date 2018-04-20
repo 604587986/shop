@@ -49,7 +49,7 @@ export function deleteGoods(ids, params) {
 }
 
 /**
- * 获取库存商品数据
+ * 查询库存商品数据
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -91,7 +91,26 @@ export function reserveStockGoods(goods_id, params) {
 }
 
 /**
- *  查询商品分类信息发布商品  ids 为category_id
+ * 查询商品参数
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodsParams(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/category/${ids}/params`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ *  查询商品品类信息发布商品  ids 为category_id 商城商品品类
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -129,7 +148,26 @@ export function getGoodData(ids, params) {
 }
 
 /**
- * 获取品牌列表 ids为categoryid
+ * 查询单个草稿箱商品信息 编辑草稿箱商品列表
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodDraftData(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${ids}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 品牌列表 ids为categoryid
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -232,7 +270,7 @@ export function aboveDraftGoods(ids, params) {
 }
 
 /**
- * 保存草稿
+ * 正常商品 保存草稿
  * @param params
  * @returns {Promise<any>}
  */
@@ -250,6 +288,8 @@ export function saveDraft(params) {
     }).catch(error => reject(error))
   })
 }
+
+/** 草稿箱商品 保存草稿 即 修改草稿箱商品 */
 
 /**
  * 获取草稿箱商品列表
@@ -284,25 +324,6 @@ export function deleteDraftGoods(ids, params) {
       url: `/goods/draft-goods/${ids}`,
       method: 'delete',
       data: _params
-    }).then(response => {
-      resolve(response)
-    }).catch(error => reject(error))
-  })
-}
-
-/**
- * 查询单个草稿箱商品信息 编辑草稿箱商品列表
- * @param ids
- * @param params
- * @returns {Promise<any>}
- */
-export function getGoodDraftData(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/draft-goods/${ids}`,
-      method: 'get',
-      loading: false,
-      params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))

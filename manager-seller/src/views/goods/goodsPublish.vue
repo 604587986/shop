@@ -217,20 +217,44 @@
             </el-form-item>
           </div>
         </div>
+      </el-form>
+      <el-form
+        :model="baseInfoForm.goodsParams"
+        status-icon
+        label-position="right"
+        ref="goodsParams"
+        label-width="120px"
+        class="demo-ruleForm">
         <!--商品参数-->
         <el-collapse>
           <!--商品参数-->
-          <!--<el-collapse-item title="seo" v-for="">-->
-            <!--<el-form-item label="seo标题：" v-for="">-->
-              <!--<el-input placeholder="3-60个字符"></el-input>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item label="seo关键字：" >-->
-              <!--<el-input type="textarea"></el-input>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item label="seo描述：" >-->
-              <!--<el-input type="textarea"></el-input>-->
-            <!--</el-form-item>-->
-          <!--</el-collapse-item>-->
+          <el-collapse-item
+            v-for="paramsgroup in  baseInfoForm.goodsParams.data" :title="`${paramsgroup.group_name}:`" :key="paramsgroup.group_id">
+            <el-form-item
+              v-if="paramsgroup.params "
+              v-for="paramsitem in paramsgroup.params"
+              :key="paramsitem.param_id"
+              :label="`${paramsitem.param_name}：`"
+              :prop="'paramsitem.param_value'"
+              :rules="{required: true, message: '公司名称不能为空', trigger: 'blur'}"
+            >
+              <el-input v-if="paramsitem.param_type === 1 " v-model="paramsitem.param_value" ></el-input>
+              <el-select
+                v-if="paramsitem.param_type === 2"
+                v-model="paramsitem.param_value"
+                filterable
+                @visible-change="getGoodsBrandList"
+                @change="changeGoodsBrand"
+                placeholder="请选择">
+                <el-option
+                  v-for="option in optionList"
+                  :key="option.value"
+                  :label="option.label"
+                  :value="option.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-collapse-item>
         </el-collapse>
       </el-form>
     </div>
@@ -308,6 +332,12 @@
           }
         }, 1000)
       }
+      var checkEmpty = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('市场价格不能为空'))
+        }
+      }
+
       var checkCost = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('成本价格不能为空'))
@@ -367,30 +397,6 @@
         /** 3级分类列表*/
         categoryListLevel3: [],
 
-        /** 商品参数 */
-        goodsParams: {
-          /** 生产许可证 编号*/
-          productionLicenseId: '',
-
-          /** 产品标准号 */
-          productStandard: '',
-
-          /** 储藏方式 */
-          resverseWay: '',
-
-          /** 厂址*/
-          factoryAddress: '',
-
-          /** 保质期 */
-          qualityGuaranteePeriod: '',
-
-          /** 厂名 */
-          factoryName: '',
-
-          /** 净含量 */
-          netContent: ''
-        },
-
         /** 商品详情信息提交表单 */
         baseInfoForm: {
 
@@ -437,7 +443,30 @@
           },
 
           /** 商品描述 anytype*/
-          goods_desc: null
+          goods_desc: null,
+
+          /** 商品参数组列表 */
+          goodsParams: {
+            data: [
+              {
+                group_id: '1',
+                group_name: '主题',
+                params: [
+                  {
+                    param_id: 1,
+                    param_name: '品牌',
+                    param_type: 1,
+                    param_value: 'fask',
+                    required: 1,
+                    optionList: [
+                      { value: 1, label: '及sad' },
+                      { value: 2, label: '啥事' }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         },
 
         /** 品牌列表 */
@@ -515,6 +544,10 @@
           ],
           summary_stock: [
             { required: true, message: '请填写总库存', trigger: 'blur' }
+          ],
+          param_value: [
+            { required: true, message: '请填写总库存', trigger: 'blur' }
+            // { validator: checkEmpty, trigger: 'blur' }
           ]
         }
 
@@ -531,11 +564,10 @@
           } else if (vm.currentStatus === 2 && vm.$route.query.goodsid) {
             vm.GET_GoodDraftData()
           }
+          vm.GET_GoodsParams()
+          vm.GET_GoodsGroupList()
         } else {
           vm.GET_NextLevelCategory()
-        }
-        if (vm.activestep === 1) {
-          vm.GET_GoodsGroupList()
         }
         next()
       })
@@ -549,13 +581,12 @@
       /** 下一步*/
       next() {
         /** 1级校验 */
-        if (this.activestep === 0) {
-          if (!this.activeCategoryName1) {
-            this.$message.error('请选择商品分类')
-            return
-          } else {
-            this.GET_GoodsBaseData()
-          }
+        if (this.activestep === 0 && !this.activeCategoryName1) {
+          this.$message.error('请选择商品分类')
+          return
+        } else {
+          this.GET_GoodsParams()
+          this.GET_GoodsGroupList()
         }
 
         /** 2级校验 */
@@ -670,9 +701,13 @@
         }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
       },
 
-      /** 商品基本信息 包括商品参数在内的所有所需信息 */
-      GET_GoodsBaseData() {
-
+      /** 查询商品参数 */
+      GET_GoodsParams() {
+        // const goods_id = this.activeGoodsId || 0
+        // API_goods.getGoodsParams(this.activeGoodsId, { goods_id }).then((response) => {
+        //   this.loading = false
+        //   this.goodsParams = response.data
+        // }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
       },
 
       /** 商品分组列表*/
