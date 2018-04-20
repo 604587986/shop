@@ -249,8 +249,9 @@
 
       /** 编辑商品 */
       handleEditGoods(row) {
+        const _goods_id = row.goods_id || '0'
         // isdraft 商品列表1
-        this.$router.push({ path: '/goods/good-publish', query: { goodsid: row.goods_id, isdraft: 1 }})
+        this.$router.push({ path: '/goods/good-publish', query: { goodsid: _goods_id, isdraft: 1 }})
       },
 
       /** 删除商品 */
