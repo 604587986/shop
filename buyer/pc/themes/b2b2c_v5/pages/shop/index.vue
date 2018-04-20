@@ -32,8 +32,6 @@
         shopData: ''
       }
     },
-    mounted() {
-    },
     methods: {
       GET_ShopData() {
         API_Shop.getShopData(this.shop_id).then(response => {
