@@ -148,6 +148,66 @@ export function underGoods(ids, params) {
 }
 
 /**
+ * 上架正常商品
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function aboveGoods(params) {
+  const _params = params
+  const _formData = new FormData()
+  _params.forEach((key, index) => _formData.append(index, key))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods`,
+      method: 'post',
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 上架草稿箱正常商品
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function aboveDraftGoods(ids, params) {
+  const _params = params
+  const _formData = new FormData()
+  _params.forEach((key, index) => _formData.append(index, key))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${ids}/market`,
+      method: 'post',
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 保存草稿
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function saveDraft(params) {
+  const _params = params
+  const _formData = new FormData()
+  _params.forEach((key, index) => _formData.append(index, key))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods`,
+      method: 'post',
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
  * 获取草稿箱商品列表
  * @param params
  * @returns {Promise<any>}
@@ -213,7 +273,7 @@ export function getGoodDraftData(ids, params) {
 export function getRecycleGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/recycle/list',
+      url: '/goods',
       method: 'get',
       loading: false,
       params
