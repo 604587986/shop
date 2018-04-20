@@ -151,7 +151,7 @@
 </template>
 
 <script>
-  import mixin from './themeMixin'
+  import mixin from './-themeMixin'
   export default {
     name: 'shop-theme-3',
     mixins: [mixin]
