@@ -139,9 +139,9 @@
           </div>
           <div class="item evaluation">
             <h3>店铺评价</h3>
-            <p>描述相符：<en-shop-star :star="5"/></p>
-            <p>服务态度：<en-shop-star :star="4"/></p>
-            <p>发货速度：<en-shop-star :star="3"/></p>
+            <div>描述相符：<en-shop-star :star="5"/></div>
+            <div>服务态度：<en-shop-star :star="4"/></div>
+            <div>发货速度：<en-shop-star :star="3"/></div>
           </div>
           <div class="item collection" @click="collectionShop"></div>
         </div>
