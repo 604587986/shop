@@ -51,6 +51,7 @@
         label-width="120px"
         class="demo-ruleForm">
         <!--商品详情-->
+        <!--基本信息-->
         <div class="base-info-item">
           <h4>基本信息</h4>
           <div>
@@ -67,7 +68,12 @@
               商品可以从属于店铺的多个分类之下，店铺分类可以由 "商家中心 -> 商品 -> 分组管理" 中自定义
             </p>
             <el-form-item label="商品品牌：" >
-              <el-select v-model="baseInfoForm.brand" filterable placeholder="请选择">
+              <el-select
+                v-model="baseInfoForm.brand"
+                filterable
+                @visible-change="getGoodsBrandList"
+                @change="changeGoodsBrand"
+                placeholder="请选择">
                 <el-option
                   v-for="item in brandList"
                   :key="item.value"
@@ -78,6 +84,7 @@
             </el-form-item>
           </div>
         </div>
+        <!--商品信息-->
         <div class="base-info-item">
           <h4>商品信息</h4>
           <div>
@@ -115,17 +122,19 @@
             </el-form-item>
           </div>
         </div>
+        <!--商品规格-->
         <div class="base-info-item">
           <h4>商品规格</h4>
           <div>
             <el-form-item label="商品规格："  style="width: 90%;text-align: left;">
               <!--规格选择器-->
             </el-form-item>
-            <el-form-item label="总库存：" prop="summary_stock" style="width: 90%;text-align: left;">
+            <el-form-item label="总库存：" prop="summary_stock" style="width: 20%;text-align: left;">
               <el-input v-model="baseInfoForm.summary_stock" disabled></el-input>
             </el-form-item>
           </div>
         </div>
+        <!--seo-->
         <div class="base-info-item">
           <h4>seo</h4>
           <div>
@@ -140,10 +149,11 @@
             </el-form-item>
           </div>
         </div>
-        <!--商品参数-->
-        <el-collapse>
-          <el-collapse-item title="物流/其他">
-            <el-form-item label="运费：" >
+        <!--物流/其他-->
+        <div class="base-info-item">
+          <h4>物流/其他</h4>
+          <div>
+            <el-form-item label="运费：" style="width: 50%;">
               <el-radio-group v-model="baseInfoForm.goods_transfee_charge">
                 <el-radio :label="1">卖家承担运费</el-radio>
                 <el-radio :label="0">买家承担运费</el-radio>
@@ -151,7 +161,10 @@
               <el-select
                 v-model="baseInfoForm.template_id"
                 placeholder="请选择运费模板"
-                v-show="baseInfoForm.goods_transfee_charge === 0 ">
+                v-show="baseInfoForm.goods_transfee_charge === 0 "
+                @visible-change="getTplList"
+                @change="changeTpl"
+              >
                 <el-option
                   v-for="item in tplList"
                   :key="item.value"
@@ -160,8 +173,12 @@
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-collapse-item>
-          <el-collapse-item title="兑换许可">
+          </div>
+        </div>
+        <!--兑换许可-->
+        <div class="base-info-item">
+          <h4>兑换许可</h4>
+          <div>
             <el-form-item label="积分兑换：" >
               <el-switch
                 v-model="baseInfoForm.exchange.enable_exchange"
@@ -173,14 +190,23 @@
               </el-switch>
             </el-form-item>
             <p class="exchange-tip">添加为积分换购商品后,自今日起一年后自动过期</p>
-          </el-collapse-item>
-          <el-collapse-item title="积分配置" v-show="isShowExchangeConfig">
-            <el-form-item label="兑换积分：">
-              <el-input v-model="baseInfoForm.exchange.exchange_money"></el-input>元 +
-              <el-input v-model="baseInfoForm.exchange.exchange_point" ></el-input>积分 可兑换此商品
+          </div>
+        </div>
+        <!--积分配置-->
+        <div class="base-info-item" v-show="isShowExchangeConfig">
+          <h4>积分配置</h4>
+          <div>
+            <el-form-item label="兑换积分：" style="width: 50%;">
+              <el-input v-model="baseInfoForm.exchange.exchange_money" style="width: 100px;"></el-input> 元 +
+              <el-input v-model="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分 可兑换此商品
             </el-form-item>
             <el-form-item label="积分商品分类：" >
-              <el-select v-model="baseInfoForm.exchange.category_id" placeholder="请选择积分商品分类">
+              <el-select
+                v-model="baseInfoForm.exchange.category_id"
+                placeholder="请选择积分商品分类"
+                @visible-change="getGoodsCatrgory"
+                @change="changeExangeCategory"
+              >
                 <el-option
                   v-for="item in exchangeGoodsCatrgoryList"
                   :key="item.value"
@@ -189,8 +215,10 @@
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-collapse-item>
-
+          </div>
+        </div>
+        <!--商品参数-->
+        <el-collapse>
           <!--商品参数-->
           <!--<el-collapse-item title="seo" v-for="">-->
             <!--<el-form-item label="seo标题：" v-for="">-->
@@ -251,8 +279,8 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { TableLayout, TableSearch, CategoryPicker, SkuSelector, UE } from '@/components'
   import * as API_goodsCategory from '@/api/goodsCategory'
+  import { TableLayout, TableSearch, CategoryPicker, SkuSelector, UE } from '@/components'
   export default {
     name: 'goodsPublish',
     components: {
@@ -367,19 +395,19 @@
         baseInfoForm: {
 
           /** 商品名称 */
-          goods_name: 0,
+          goods_name: '',
 
           /** 商品编号 */
-          goods_sn: 0,
+          goods_sn: '',
 
           /** 市场价格 */
-          market_price: 0,
+          market_price: '',
 
           /** 成本价格 */
-          cost: 0,
+          cost: '',
 
           /** 商品重量 */
-          weight: 0,
+          weight: '',
 
           /** 商品相册列表 */
           goods_images: [],
@@ -506,6 +534,9 @@
         } else {
           vm.GET_NextLevelCategory()
         }
+        if (vm.activestep === 1) {
+          vm.GET_GoodsGroupList()
+        }
         next()
       })
     },
@@ -542,15 +573,39 @@
 
       /** 保存草稿 */
       saveDraft() {
-
+        API_goods.saveDraft(this.baseInfoForm).then(response => {
+          this.$message.success('保存草稿成功')
+          this.$router.push({ path: '/goods/draft-list' })
+        }).catch(error => {
+          this.$message.success('保存草稿失败，请稍后重试！')
+          console.log(error)
+        })
       },
 
-      /** 上架 */
+      /** 上架  */
       aboveGoods() {
-
+        if (this.currentStatus === 0) {
+          /** 正常商品 */
+          API_goods.aboveGoods(this.baseInfoForm).then(response => {
+            this.$message.success('上架商品成功')
+            this.$router.push({ path: '/goods/goods-list' })
+          }).catch(error => {
+            this.$message.success('上架商品失败，请稍后重试！')
+            console.log(error)
+          })
+        } else {
+          /**  草稿箱商品 */
+          API_goods.aboveDraftGoods(this.activeGoodsId, this.baseInfoForm).then(response => {
+            this.$message.success('上架草稿箱商品成功')
+            this.$router.push({ path: '/goods/goods-list' })
+          }).catch(error => {
+            this.$message.success('上架草稿箱商品失败，请稍后重试！')
+            console.log(error)
+          })
+        }
       },
 
-      /** 查询下一级 商品分类*/
+      /** 查询下一级 商城商品分类*/
       GET_NextLevelCategory(row, level) {
         this.loading = true
         const _id = row && row.parent_id || 0
@@ -568,7 +623,7 @@
         }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
       },
 
-      /** 选择商品分类 */
+      /** 选择商城商品分类 */
       handleSelectCategory(row, index, level) {
         if (level === 1) {
           this.activeCategoryName1 = row.category_name
@@ -590,7 +645,7 @@
 
       /** 查询单个商品信息*/
       GET_GoodData() {
-        this.loading = true
+        // this.loading = true
         API_goods.getGoodData(this.activeGoodsId, {}).then((response) => {
           this.loading = false
           this.baseInfoForm = response.data
@@ -599,7 +654,7 @@
 
       /** 商家下架商品*/
       handleUnderGoods() {
-        this.loading = true
+        // this.loading = true
         API_goods.underGoods(this.activeGoodsId, { }).then((response) => {
           this.loading = false
           this.$message.success('下架成功')
@@ -608,19 +663,66 @@
 
       /** 查询单个草稿箱商品信息 */
       GET_GoodDraftData() {
-        this.loading = true
+        // this.loading = true
         API_goods.getGoodDraftData(this.activeGoodsId, { }).then((response) => {
           this.loading = false
+          this.baseInfoForm = response.data
         }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
       },
 
-      /** 获取商品基本信息 */
+      /** 商品基本信息 包括商品参数在内的所有所需信息 */
       GET_GoodsBaseData() {
+
+      },
+
+      /** 商品分组列表*/
+      GET_GoodsGroupList() {
 
       },
 
       /** 商品分组 改变时触发 */
       changeGoodsCateGory(val) {
+
+      },
+
+      /** 商品品牌列表 */
+      getGoodsBrandList(val) {
+        if (val) {
+          API_goods.getGoodsBrandList(this.activeGoodsId, { }).then((response) => {
+            this.brandList = response.data
+          }).catch(() => {})
+        }
+      },
+
+      /** 商品品牌 改变时触发 */
+      changeGoodsBrand(val) {
+
+      },
+
+      /** 运费模板列表 */
+      getTplList(val) {
+        if (val) {
+          API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
+            this.tplList = response.data
+          }).catch(() => {})
+        }
+      },
+
+      /** 运费模板改变时触发 */
+      changeTpl(val) {
+
+      },
+
+      /** 积分商品商城分类列表 */
+      getGoodsCatrgory() {
+        API_goodsCategory.getGoodsCategoryLevelList(0, { categoryLevel: this.categoryLevel }).then((response) => {
+          this.exchangeGoodsCatrgoryList = response.data
+          this.loading = false
+        }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
+      },
+
+      /** 积分商品商城分类 改变时触发*/
+      changeExangeCategory(val) {
 
       },
 
@@ -729,6 +831,7 @@
       text-align: left;
     }
   }
+
   /*平铺*/
   div.base-info-item {
     h4 {
@@ -743,7 +846,7 @@
     }
     .el-form-item {
       margin-left: 5%;
-      width: 19%;
+      width: 22%;
       min-width: 300px;
     }
     .el-form-item__content {
@@ -756,6 +859,7 @@
       color: #999;
       font-size: 13px;
     }
+
     /*积分提示*/
     p.exchange-tip {
       margin:0;
@@ -811,6 +915,7 @@
   #editor {
     min-height: 500px;
   }
+
   /** 底部步骤 */
   .footer {
     width: 88.7%;

@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export class GoodsBrandModel extends DataModel {
+export default class GoodsBrandModel extends DataModel {
   /** 商品品牌ID */
   @ServerName('brand_id')
   brand_id

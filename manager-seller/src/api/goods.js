@@ -5,6 +5,7 @@
 import request from '@/utils/request'
 import GoodsModel from '@/models/GoodsModel'
 import GoodsBrandModel from '@/models/GoodsBrandModel'
+import ExpressMouldModel from '@/models/ExpressMouldModel'
 
 /**
  * 获取商品列表
@@ -143,6 +144,27 @@ export function getGoodsBrandList(ids, params) {
     }).then(response => {
       const _response = response
       _response.data = new GoodsBrandModel().map(_response.data)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 运费模板列表
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getTplList(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/${ids}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new ExpressMouldModel().map(_response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })
