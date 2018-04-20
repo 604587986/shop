@@ -4,6 +4,7 @@
 
 import request from '@/utils/request'
 import GoodsModel from '@/models/GoodsModel'
+import GoodsBrandModel from '@/models/GoodsBrandModel'
 
 /**
  * 获取商品列表
@@ -122,6 +123,27 @@ export function getGoodData(ids, params) {
       params
     }).then(response => {
       resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取品牌列表 ids为categoryid
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodsBrandList(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/${ids}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new GoodsBrandModel().map(_response.data)
+      resolve(_response)
     }).catch(error => reject(error))
   })
 }
