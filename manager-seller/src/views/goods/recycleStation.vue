@@ -51,7 +51,7 @@
           <el-button
             size="mini"
             type="success"
-            @click="handlReductionRecycle(scope.$index, scope.row)">还原
+            @click="handlReductionRecycle(scope.row)">还原
           </el-button>
           <el-button
             size="mini"
@@ -95,7 +95,9 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          /** 表示回收站商品 */
+          disables: 0
         },
 
         /** 列表数据 */

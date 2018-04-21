@@ -3,7 +3,7 @@
  */
 
 import request from '@/utils/request'
-import ExpressMouldModel from '@/models/expressMould'
+import ExpressMouldModel from '@/models/ExpressMouldModel'
 
 /**
  * 获取快递模板列表

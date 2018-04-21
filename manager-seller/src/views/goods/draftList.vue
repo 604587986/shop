@@ -149,7 +149,9 @@
 
       /** 草稿箱编辑 */
       handleDraftEdit(row) {
-        this.$router.push({ path: '/goods/good-publish', query: { goodsid: row.goods_id }})
+        const _goods_id = row.goods_id || '0'
+        // isdraft 草稿箱2
+        this.$router.push({ path: '/goods/good-publish', query: { goodsid: _goods_id, isdraft: 2 }})
       },
 
       /** 草稿箱商品删除 */

@@ -4,6 +4,8 @@
 
 import request from '@/utils/request'
 import GoodsModel from '@/models/GoodsModel'
+import GoodsBrandModel from '@/models/GoodsBrandModel'
+import ExpressMouldModel from '@/models/ExpressMouldModel'
 
 /**
  * 获取商品列表
@@ -13,7 +15,8 @@ import GoodsModel from '@/models/GoodsModel'
 export function getGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/goods',
+      // url: '/goods',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
       method: 'get',
       loading: false,
       params
@@ -35,7 +38,8 @@ export function deleteGoods(ids, params) {
   const _params = {}
   return new Promise((resolve, reject) => {
     request({
-      url: `/goods/${ids}/recycle`,
+      // url: `/goods/${ids}/recycle`,
+      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/${ids}`,
       method: 'delete',
       data: _params
     }).then(response => {
@@ -45,7 +49,7 @@ export function deleteGoods(ids, params) {
 }
 
 /**
- * 获取库存商品数据
+ * 查询库存商品数据
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -87,7 +91,26 @@ export function reserveStockGoods(goods_id, params) {
 }
 
 /**
- * 查询商品分类信息 发布商品  ids 为category_id
+ * 查询商品参数
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodsParams(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/category/${ids}/params`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ *  查询商品品类信息发布商品  ids 为category_id 商城商品品类
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -105,24 +128,168 @@ export function getGoodsCatrgory(ids, params) {
   })
 }
 
-// /**
-//  * 查询编辑商品时分类信息   ids 为category_id
-//  * @param ids
-//  * @param params
-//  * @returns {Promise<any>}
-//  */
-// export function getGoodsCatrgory(ids, params) {
-//   return new Promise((resolve, reject) => {
-//     request({
-//       url: `/goods/${ids}/skus`,
-//       method: 'get',
-//       loading: false,
-//       params
-//     }).then(response => {
-//       resolve(response)
-//     }).catch(error => reject(error))
-//   })
-// }
+/**
+ * 查询单个商品信息 编辑商品列表
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodData(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/${ids}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 查询单个草稿箱商品信息 编辑草稿箱商品列表
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodDraftData(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${ids}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 品牌列表 ids为categoryid
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodsBrandList(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/${ids}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new GoodsBrandModel().map(_response.data)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 运费模板列表
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getTplList(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/${ids}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new ExpressMouldModel().map(_response.data)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 商家下架商品
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function underGoods(ids, params) {
+  const _params = params
+  const _formData = new FormData()
+  _params.forEach((key, index) => _formData.append(index, key))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/${ids}/under`,
+      method: 'post',
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 上架正常商品
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function aboveGoods(params) {
+  const _params = params
+  const _formData = new FormData()
+  _params.forEach((key, index) => _formData.append(index, key))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods`,
+      method: 'post',
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 上架草稿箱正常商品
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function aboveDraftGoods(ids, params) {
+  const _params = params
+  const _formData = new FormData()
+  _params.forEach((key, index) => _formData.append(index, key))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${ids}/market`,
+      method: 'post',
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 正常商品 保存草稿
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function saveDraft(params) {
+  const _params = params
+  const _formData = new FormData()
+  _params.forEach((key, index) => _formData.append(index, key))
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods`,
+      method: 'post',
+      data: _formData
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/** 草稿箱商品 保存草稿 即 修改草稿箱商品 */
 
 /**
  * 获取草稿箱商品列表
@@ -162,6 +329,7 @@ export function deleteDraftGoods(ids, params) {
     }).catch(error => reject(error))
   })
 }
+
 /**
  * 获取回收站商品列表
  * @param params
@@ -170,7 +338,7 @@ export function deleteDraftGoods(ids, params) {
 export function getRecycleGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/recycle/list',
+      url: '/goods',
       method: 'get',
       loading: false,
       params
