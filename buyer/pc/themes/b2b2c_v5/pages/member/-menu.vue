@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import menus from '@/pages/member/menus'
+  import menus from './menus'
   export default {
     name: 'member-menu',
     data() {

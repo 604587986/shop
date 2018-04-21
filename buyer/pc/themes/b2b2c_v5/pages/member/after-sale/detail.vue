@@ -20,7 +20,7 @@
 
 <script>
   import * as API_AfterSale from '@/api/after-sale'
-  import SkuList from '@/components/MemberSkuList'
+  import SkuList from '../-skuList'
   export default {
     name: 'detail',
     validate({ query }) {

@@ -49,7 +49,7 @@
 
 <script>
   import * as API_Order from '@/api/order'
-  import SkuList from '@/components/MemberSkuList'
+  import SkuList from '../-skuList'
   export default {
     name: 'order-detail',
     validate({ query }) {
