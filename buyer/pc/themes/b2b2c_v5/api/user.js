@@ -7,7 +7,7 @@ import request from '@/utils/request'
 /**
  * 登录账户
  * @param params
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function login(params) {
   return request({
@@ -19,7 +19,7 @@ export function login(params) {
 
 /**
  * 退出账户
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function logout() {
   return request({
@@ -30,7 +30,7 @@ export function logout() {
 
 /**
  * 获取当前登录的用户信息
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function getUserInfo() {
   return request({
