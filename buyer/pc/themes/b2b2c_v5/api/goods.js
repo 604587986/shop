@@ -5,6 +5,18 @@
 import request from '@/utils/request'
 
 /**
+ * 获取商品详情
+ * @param goods_id
+ * @returns {AxiosPromise}
+ */
+export function getGoods(goods_id) {
+  return request({
+    url: `goods/${goods_id}`,
+    method: 'get'
+  })
+}
+
+/**
  * 获取商品列表
  * @param params
  * @returns {AxiosPromise}
