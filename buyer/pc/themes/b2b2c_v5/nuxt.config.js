@@ -76,6 +76,7 @@ module.exports = {
     }
   },
   transition: 'page',
+  ignorePrefix: '-',
   generate: {
     subFolders: true
   }

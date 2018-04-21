@@ -40,11 +40,11 @@ service.interceptors.response.use(
     return _data
   },
   error => {
-    closeLoading(error)
+    // closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
-    if (error_response.status === 403) fedLogOut()
+    // if (error_response.status === 403) fedLogOut()
     if (error.config.message !== false) {
       Vue.prototype.$message.error(error_data.message || '出现错误，请稍后再试！')
     }

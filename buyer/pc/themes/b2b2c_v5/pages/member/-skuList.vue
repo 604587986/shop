@@ -23,7 +23,7 @@
 
 <script>
   export default {
-    name: 'sku-list',
+    name: 'member-sku-list',
     props: {
       skuList: {
         type: Array,

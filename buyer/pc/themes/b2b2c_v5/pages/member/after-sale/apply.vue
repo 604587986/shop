@@ -117,7 +117,7 @@
   Vue.use(Select)
   Vue.use(Option)
   import * as API_AfterSale from '@/api/after-sale'
-  import SkuList from '@/components/MemberSkuList'
+  import SkuList from '../-skuList'
   export default {
     name: 'apply',
     components: { SkuList },

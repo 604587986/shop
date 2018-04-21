@@ -9,14 +9,21 @@
 </template>
 
 <script>
-  const theme1 = () => import('@/pages/.shop-theme/theme1').then(m => m.default || m)
-  const theme2 = () => import('@/pages/.shop-theme/theme2').then(m => m.default || m)
-  const theme3 = () => import('@/pages/.shop-theme/theme3').then(m => m.default || m)
+  const theme1 = () => import('@/pages/-shop-theme/-theme1').then(m => m.default || m)
+  const theme2 = () => import('@/pages/-shop-theme/-theme2').then(m => m.default || m)
+  const theme3 = () => import('@/pages/-shop-theme/-theme3').then(m => m.default || m)
   import * as API_Shop from '@/api/shop'
   export default {
     name: 'shop-index',
     validate({ query }) {
       return /^\d+$/.test(query.shop_id)
+    },
+    asyncData({ query }, callback) {
+      API_Shop.getShopData(query.shop_id).then(response => {
+        callback(null, { shopData: response })
+      }).catch(e => {
+        callback({ statusCode: e.response.status })
+      })
     },
     components: { theme1, theme2, theme3 },
     data() {
@@ -24,9 +31,6 @@
         shop_id: this.$route.query.shop_id,
         shopData: ''
       }
-    },
-    mounted() {
-      this.GET_ShopData()
     },
     methods: {
       GET_ShopData() {

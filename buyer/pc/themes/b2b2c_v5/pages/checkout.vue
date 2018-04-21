@@ -6,6 +6,6 @@
   export default {
     name: 'checkout',
     layout: 'full',
-    middleware: 'auth'
+    middleware: 'auth-user'
   }
 </script>
