@@ -32,6 +32,11 @@
         shopData: ''
       }
     },
+    head () {
+      return {
+        title: `${this.shopData.shop_name}-Javashop多店铺示例商城`
+      }
+    },
     methods: {
       GET_ShopData() {
         API_Shop.getShopData(this.shop_id).then(response => {
