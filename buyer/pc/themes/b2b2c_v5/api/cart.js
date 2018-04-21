@@ -7,7 +7,7 @@ import request from '@/utils/request'
 /**
  * 获取购物车列表
  * @param params
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function getCartList(params) {
   return request({
@@ -21,7 +21,7 @@ export function getCartList(params) {
  * 更新购物车货品数量
  * @param sku_id
  * @param num
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function updateSkuNum(sku_id, num) {
   return request({
@@ -35,7 +35,7 @@ export function updateSkuNum(sku_id, num) {
  * 选择、取消选择货品
  * @param sku_id
  * @param checked
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function checkSku(sku_id, checked) {
   return request({
@@ -49,6 +49,7 @@ export function checkSku(sku_id, checked) {
  * 选择、取消选择店铺内全部商品
  * @param shop_id
  * @param checked
+ * @returns {AxiosPromise}
  */
 export function checkShop(shop_id, checked) {
   return request({
@@ -61,7 +62,7 @@ export function checkShop(shop_id, checked) {
 /**
  * 全选、取消全选
  * @param checked
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function checkAll(checked) {
   return request({
@@ -74,7 +75,7 @@ export function checkAll(checked) {
 /**
  * 移除购物车货品项
  * @param sku_ids
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function deleteSkuItem(sku_ids) {
   sku_ids = Array.isArray(sku_ids) ? sku_ids.join(',') : sku_ids
@@ -86,7 +87,7 @@ export function deleteSkuItem(sku_ids) {
 
 /**
  * 清空购物车
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function cleanCart() {
   return request({

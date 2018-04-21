@@ -7,7 +7,7 @@ import request from '@/utils/request'
 /**
  * 获取商品收藏
  * @param params
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function getGoodsCollection(params) {
   return request({
@@ -34,7 +34,7 @@ export function collectionGoods(goods_id) {
 /**
  * 删除商品收藏
  * @param ids
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function deleteGoodsCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
@@ -47,7 +47,7 @@ export function deleteGoodsCollection(ids) {
 /**
  * 获取店铺收藏
  * @param params
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function getShopCollection(params) {
   return request({
@@ -72,7 +72,7 @@ export function collectionShop(shop_id) {
 /**
  * 删除店铺收藏
  * @param ids
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function deleteShopCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')

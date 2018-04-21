@@ -6,7 +6,7 @@ import request from '@/utils/request'
 
 /**
  * 获取收货地址列表
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function getAddressList() {
   return request({
@@ -18,7 +18,7 @@ export function getAddressList() {
 /**
  * 添加收货地址
  * @param params
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function addAddress(params) {
   const _formData = new FormData()
@@ -34,7 +34,7 @@ export function addAddress(params) {
  * 编辑地址
  * @param id
  * @param params
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function editAddress(id, params) {
   const _formData = new FormData()
@@ -49,7 +49,7 @@ export function editAddress(id, params) {
 /**
  * 删除收货地址
  * @param ids
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function deleteAddress(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
