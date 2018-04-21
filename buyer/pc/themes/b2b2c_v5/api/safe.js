@@ -9,7 +9,7 @@ import request from '@/utils/request'
  * @param type
  * @param mobile
  * @param validcode
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function sendMobileSms(type, mobile, validcode) {
   return request({
@@ -30,7 +30,7 @@ export function sendMobileSms(type, mobile, validcode) {
  * @param mobile
  * @param mobile_code
  * @param img_code
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function validMobileSms(type, mobile, mobile_code, img_code) {
   return request({
@@ -48,7 +48,7 @@ export function validMobileSms(type, mobile, mobile_code, img_code) {
 /**
  * 修改密码
  * @param new_password
- * @param rep_passwd
+ * @param rep_password
  * @param img_code
  * @returns {AxiosPromise}
  */
