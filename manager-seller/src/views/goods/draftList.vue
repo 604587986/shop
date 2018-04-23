@@ -26,9 +26,6 @@
       <el-table-column label="库存">
         <template slot-scope="scope">{{ scope.row.quantity }}件</template>
       </el-table-column>
-      <el-table-column label="可用库存">
-        <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
-      </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
       </el-table-column>
