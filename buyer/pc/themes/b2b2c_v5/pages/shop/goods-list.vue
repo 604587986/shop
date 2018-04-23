@@ -18,7 +18,10 @@
           <div class="inner-price"></div>
         </div>
         <div class="inner-search">
-          243
+          <el-input placeholder="店内搜索" size="mini" clearable v-model="params.keyword" @keyup.enter.native="handleSearch('shop')">
+            <el-button slot="append" icon="el-icon-search" @click="handleSearch('shop')"></el-button>
+          </el-input>
+          <el-button size="mini" type="danger" class="search-btn" @click="handleSearch('all')">搜全站</el-button>
         </div>
       </div>
     </div>
@@ -58,11 +61,13 @@
 <script>
   import Vue from 'vue'
   import * as API_Shop from '@/api/shop'
+  import Foundation from '@/utils/Foundation'
   const theme1Header = () => import('@/pages/-shop-theme/-theme1-header')
   const theme2Header = () => import('@/pages/-shop-theme/-theme2-header')
   const theme3Header = () => import('@/pages/-shop-theme/-theme3-header')
-  import { Pagination } from 'element-ui'
+  import { Pagination, Input } from 'element-ui'
   Vue.use(Pagination)
+  Vue.use(Input)
   export default {
     name: 'shop-goods-list',
     validate({ query }) {
@@ -111,6 +116,17 @@
         })
         this.GET_GoodsList()
       },
+      /** 商品搜索【店内、全站】 */
+      handleSearch(type) {
+        if (type === 'all') {
+          this.$router.push({ path: '/goods-list', query: { keyword: this.params.keyword } })
+        } else {
+          const { query } = this.$route
+          this.$route.query.keyword = this.params.keyword
+          window.history.replaceState(null, null, `?${Foundation.formatQuery(this.$route.query)}`);
+          this.GET_GoodsList()
+        }
+      },
       /** 获取店铺商品列表 */
       GET_GoodsList() {
         API_Shop.getShopGoods(this.params).then(response => {
@@ -134,6 +150,7 @@
     .inner, .inner-sort {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       height: 44px;
       background-color: #F9FCFA;
     }
@@ -154,6 +171,11 @@
         color: #f42424;
         transform: rotate(180deg) scale(.8);
       }
+    }
+    .inner-search {
+      display: flex;
+      margin-right: 30px;
+      .search-btn { margin-left: 10px }
     }
   }
   .goods-container {
