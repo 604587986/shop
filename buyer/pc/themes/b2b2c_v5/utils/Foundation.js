@@ -147,4 +147,20 @@ Foundation.secrecyMobile = mobile => {
   return mobile.replace(/(\d{3})(\d{4})(\d{4})/, '$1****$3')
 }
 
+/**
+ *
+ * @param query
+ * @returns {string}
+ */
+Foundation.formatQuery = query => {
+  return Object.keys(query).sort().map(key => {
+    var val = query[key]
+    if (val == null) return ''
+    if (Array.isArray(val)) {
+      return val.slice().map(val2 => [key, '=', val2].join('')).join('&')
+    }
+    return key + '=' + val
+  }).filter(Boolean).join('&')
+}
+
 export default Foundation
