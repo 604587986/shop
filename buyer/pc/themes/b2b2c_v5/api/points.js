@@ -7,7 +7,7 @@ import request from '@/utils/request'
 /**
  * 获取积分明细数据
  * @param params
- * @returns {Promise<any>}
+ * @returns {AxiosPromise}
  */
 export function getPointsData(params) {
   return request({

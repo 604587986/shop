@@ -23,6 +23,10 @@ export const mutations = {
 
 /** actions */
 export const actions = {
+  /** nuxt服务初始化时调用 */
+  nuxtServerInit ({ commit }, { req }) {
+  
+  },
   /** 获取导航栏数据 */
   getNavData: ({ commit }) => {
     API_Common.getNavList().then(response => {
