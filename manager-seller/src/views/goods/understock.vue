@@ -61,10 +61,8 @@
     <el-dialog title="库存信息" center :visible.sync="goodsWarningStockshow" width="40%">
       <en-tabel-layout :tableData="goodsWarningStockDate" :loading="loading">
         <template slot="table-columns">
-          <el-table-column prop="goods_sn" label="货号"/>
-          <el-table-column prop="goods_name" label="商品名称"/>
-          <el-table-column prop="quantity" label="可用库存"/>
           <el-table-column prop="enable_quantity" label="库存"/>
+          <el-table-column prop="deliver_goods_quantity" label="待发货数"/>
         </template>
       </en-tabel-layout>
     </el-dialog>
@@ -174,6 +172,9 @@
         this.goodsWarningStockshow = true
         API_goods.getWarningGoodsStockList(_ids).then((response) => {
           this.goodsWarningStockDate = response.data
+          this.goodsWarningStockDate.forEach((key) => {
+            this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
+          })
         }).catch(() => this.$message.error('查看库存商品信息出错，请稍后再试！'))
       }
     }
