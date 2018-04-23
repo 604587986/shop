@@ -15,7 +15,13 @@
               </div>
             </template>
           </div>
-          <div class="inner-price"></div>
+          <div class="inner-price">
+            ￥
+            <el-input-number size="mini" :controls="false" v-model="params.min_price"/>
+             -
+            <el-input-number size="mini" :controls="false" v-model="params.max_price"/>
+            <el-button size="mini" class="price-btn" @click="handlePriceConfirm">确认</el-button>
+          </div>
         </div>
         <div class="inner-search">
           <el-input placeholder="店内搜索" size="mini" clearable v-model="params.keyword" @keyup.enter.native="handleSearch('shop')">
@@ -65,9 +71,10 @@
   const theme1Header = () => import('@/pages/-shop-theme/-theme1-header')
   const theme2Header = () => import('@/pages/-shop-theme/-theme2-header')
   const theme3Header = () => import('@/pages/-shop-theme/-theme3-header')
-  import { Pagination, Input } from 'element-ui'
+  import { Pagination, Input, InputNumber } from 'element-ui'
   Vue.use(Pagination)
   Vue.use(Input)
+  Vue.use(InputNumber)
   export default {
     name: 'shop-goods-list',
     validate({ query }) {
@@ -114,6 +121,17 @@
           }
           item.active = item.sort_id === sort.sort_id
         })
+        this.handleQueryChanged()
+        this.GET_GoodsList()
+      },
+      /** 价格区间确认 */
+      handlePriceConfirm() {
+        const { min_price, max_price } = this.params
+        if (min_price > max_price) {
+          this.$message.error('价格区间格式有误！')
+          return false
+        }
+        this.handleQueryChanged()
         this.GET_GoodsList()
       },
       /** 商品搜索【店内、全站】 */
@@ -121,11 +139,16 @@
         if (type === 'all') {
           this.$router.push({ path: '/goods-list', query: { keyword: this.params.keyword } })
         } else {
-          const { query } = this.$route
-          this.$route.query.keyword = this.params.keyword
-          window.history.replaceState(null, null, `?${Foundation.formatQuery(this.$route.query)}`);
+          this.handleQueryChanged()
           this.GET_GoodsList()
         }
+      },
+      /** 当query发生改变时，替换地址栏state */
+      handleQueryChanged() {
+        Object.keys(this.params).forEach(key => {
+          this.$route.query[key] = this.params[key]
+        })
+        window.history.replaceState(null, null, `?${Foundation.formatQuery(this.$route.query)}`)
       },
       /** 获取店铺商品列表 */
       GET_GoodsList() {
@@ -146,7 +169,11 @@
   .sort-nav {
     width: 100%;
     .inner { border-bottom: 1px solid #D8D8D8 }
-    .left { height: 100% }
+    .left {
+      display: flex;
+      align-items: center;
+      height: 100%
+    }
     .inner, .inner-sort {
       display: flex;
       align-items: center;
@@ -171,6 +198,13 @@
         color: #f42424;
         transform: rotate(180deg) scale(.8);
       }
+    }
+    .inner-price {
+      margin-left: 35px;
+      /deep/ .el-input-number {
+        width: 80px;
+      }
+      .price-btn { margin-left: 5px }
     }
     .inner-search {
       display: flex;
