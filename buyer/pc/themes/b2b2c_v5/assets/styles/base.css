@@ -155,3 +155,8 @@ input::-webkit-inner-spin-button {
 input[type="number"]{
   -moz-appearance: textfield;
 }
+
+/** others */
+.price {
+  color: #f42424;
+}
