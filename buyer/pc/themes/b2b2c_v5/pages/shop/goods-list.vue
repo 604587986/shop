@@ -15,10 +15,19 @@
               </div>
             </template>
           </div>
-          <div class="inner-price"></div>
+          <div class="inner-price">
+            ￥
+            <el-input-number size="mini" :controls="false" v-model="params.min_price"/>
+             -
+            <el-input-number size="mini" :controls="false" v-model="params.max_price"/>
+            <el-button size="mini" class="price-btn" @click="handlePriceConfirm">确认</el-button>
+          </div>
         </div>
         <div class="inner-search">
-          243
+          <el-input placeholder="店内搜索" size="mini" clearable v-model="params.keyword" @keyup.enter.native="handleSearch('shop')">
+            <el-button slot="append" icon="el-icon-search" @click="handleSearch('shop')"></el-button>
+          </el-input>
+          <el-button size="mini" type="danger" class="search-btn" @click="handleSearch('all')">搜全站</el-button>
         </div>
       </div>
     </div>
@@ -58,11 +67,14 @@
 <script>
   import Vue from 'vue'
   import * as API_Shop from '@/api/shop'
+  import Foundation from '@/utils/Foundation'
   const theme1Header = () => import('@/pages/-shop-theme/-theme1-header')
   const theme2Header = () => import('@/pages/-shop-theme/-theme2-header')
   const theme3Header = () => import('@/pages/-shop-theme/-theme3-header')
-  import { Pagination } from 'element-ui'
+  import { Pagination, Input, InputNumber } from 'element-ui'
   Vue.use(Pagination)
+  Vue.use(Input)
+  Vue.use(InputNumber)
   export default {
     name: 'shop-goods-list',
     validate({ query }) {
@@ -109,7 +121,34 @@
           }
           item.active = item.sort_id === sort.sort_id
         })
+        this.handleQueryChanged()
         this.GET_GoodsList()
+      },
+      /** 价格区间确认 */
+      handlePriceConfirm() {
+        const { min_price, max_price } = this.params
+        if (min_price > max_price) {
+          this.$message.error('价格区间格式有误！')
+          return false
+        }
+        this.handleQueryChanged()
+        this.GET_GoodsList()
+      },
+      /** 商品搜索【店内、全站】 */
+      handleSearch(type) {
+        if (type === 'all') {
+          this.$router.push({ path: '/goods-list', query: { keyword: this.params.keyword } })
+        } else {
+          this.handleQueryChanged()
+          this.GET_GoodsList()
+        }
+      },
+      /** 当query发生改变时，替换地址栏state */
+      handleQueryChanged() {
+        Object.keys(this.params).forEach(key => {
+          this.$route.query[key] = this.params[key]
+        })
+        window.history.replaceState(null, null, `?${Foundation.formatQuery(this.$route.query)}`)
       },
       /** 获取店铺商品列表 */
       GET_GoodsList() {
@@ -130,10 +169,15 @@
   .sort-nav {
     width: 100%;
     .inner { border-bottom: 1px solid #D8D8D8 }
-    .left { height: 100% }
+    .left {
+      display: flex;
+      align-items: center;
+      height: 100%
+    }
     .inner, .inner-sort {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       height: 44px;
       background-color: #F9FCFA;
     }
@@ -154,6 +198,18 @@
         color: #f42424;
         transform: rotate(180deg) scale(.8);
       }
+    }
+    .inner-price {
+      margin-left: 35px;
+      /deep/ .el-input-number {
+        width: 80px;
+      }
+      .price-btn { margin-left: 5px }
+    }
+    .inner-search {
+      display: flex;
+      margin-right: 30px;
+      .search-btn { margin-left: 10px }
     }
   }
   .goods-container {
