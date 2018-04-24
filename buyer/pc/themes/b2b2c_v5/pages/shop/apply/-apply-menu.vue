@@ -1,15 +1,111 @@
 <template>
-  <div id="apply-menu">
-    apply-menu
+  <div id="apply-menu" class="menu-container">
+    <div class="title">
+      <h2>商家入驻申请</h2>
+    </div>
+    <div class="content">
+      <dl :class="[routeNname === 'shop-apply-user-agreement' && 'current']">
+        <dt>
+          <i></i>入驻协议
+        </dt>
+      </dl>
+      <dl :class="[routeNname === 'shop-apply-basic-info' && 'current']">
+        <dt>
+          <i></i>基本信息
+        </dt>
+      </dl>
+      <dl :class="[routeNname === 'shop-apply-auth-info' && 'current']">
+        <dt><i></i>认证信息</dt>
+        <dd style="display: none;">
+          <ul>
+            <li>
+              <i></i><a>营业执照信息</a>
+            </li>
+            <li>
+              <i></i><a>组织机构代码证</a>
+            </li>
+            <li>
+              <i></i><a>一般纳税人证明</a>
+            </li>
+          </ul>
+        </dd>
+      </dl>
+      <dl :class="[routeNname === 'shop-apply-financial-qualification' && 'current']">
+        <dt>
+          <i></i>财务资质信息
+        </dt>
+        <dd style="display: none;">
+          <ul>
+            <li>
+              <i></i>
+              <a>开户行银行许可证</a>
+            </li>
+            <li>
+              <i></i>
+              <a>税务登记证</a>
+            </li>
+          </ul>
+        </dd>
+      </dl>
+      <dl :class="[routeNname === 'shop-apply-shop-info' && 'current']">
+        <dt>
+          <i class="hideer">  </i>
+          店铺信息
+        </dt>
+      </dl>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'apply-menu'
+    name: 'apply-menu',
+    computed:{
+      routeNname() {
+        return this.$route.name
+      }
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  .menu-container {
+    width: 208px;
+    border: solid 1px #D7D7D7;
+    .title {
+      background-color: #F5F5F5;
+      height: 36px;
+      border-top: solid 1px #D7D7D7;
+      margin-top: -1px;
+      h2 {
+        font: 600 14px/20px "microsoft yahei";
+        color: #333333;
+        height: 20px;
+        padding: 8px 10px;
+      }
+    }
+    .content {
+      width: 190px;
+      margin: 0 auto;
+      .current i { background-position: -280px 0 }
+      dt {
+        line-height: 20px;
+        font-weight: 600;
+        color: #555;
+        height: 20px;
+        padding: 10px 0 9px 0;
+        border-bottom: solid 1px #F5F5F5;
+        i {
+          background: url(~/assets/images/icons-apply-shop.png) no-repeat;
+          background-position: -300px 0;
+          vertical-align: middle;
+          display: inline-block;
+          width: 11px;
+          height: 11px;
+          margin-right: 10px;
+          margin-left: 6px;
+        }
+      }
+    }
+  }
 </style>
