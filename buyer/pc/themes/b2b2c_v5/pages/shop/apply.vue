@@ -13,6 +13,13 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Form, FormItem, Input, InputNumber, Upload } from 'element-ui'
+  Vue.use(Form)
+  Vue.use(FormItem)
+  Vue.use(Input)
+  Vue.use(InputNumber)
+  Vue.use(Upload)
   import applyHeader from './apply/-apply-header';
   import applyMenu from './apply/-apply-menu';
   import applySteps from './apply/-apply-steps'
@@ -50,6 +57,10 @@
       font-size: 22px;
       padding-left: 35px;
       padding-bottom: 20px;
+    }
+    .content {
+      display: flex;
+      justify-content: center;
     }
   }
   /deep/ .next-btns {
