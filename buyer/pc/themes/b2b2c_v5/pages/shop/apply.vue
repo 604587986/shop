@@ -3,9 +3,9 @@
     <apply-header/>
     <nuxt-child v-if="$route.name === 'shop-apply'"/>
     <div v-else class="apply-container w">
-      <apply-menu/>
+      <apply-menu :step="step"/>
       <div class="right-content">
-        <apply-steps/>
+        <apply-steps :step="step"/>
         <nuxt-child/>
       </div>
     </div>
@@ -19,7 +19,26 @@
 
   export default {
     name: 'apply',
-    components: { applyHeader, applyMenu, applySteps }
+    components: { applyHeader, applyMenu, applySteps },
+    computed: {
+      step() {
+        const { name } = this.$route
+        switch (name) {
+          case 'shop-apply-user-agreement':
+            return 1
+          case 'shop-apply-basic-info':
+            return 2
+          case 'shop-apply-auth-info':
+            return 3
+          case 'shop-apply-financial-qualification':
+            return 4
+          case 'shop-apply-shop-info':
+            return 5
+          default:
+            return 1
+        }
+      }
+    }
   }
 </script>
 

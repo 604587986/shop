@@ -4,17 +4,17 @@
       <h2>商家入驻申请</h2>
     </div>
     <div class="content">
-      <dl :class="[routeNname === 'shop-apply-user-agreement' && 'current']">
+      <dl :class="[step === 1 && 'current']">
         <dt>
           <i></i>入驻协议
         </dt>
       </dl>
-      <dl :class="[routeNname === 'shop-apply-basic-info' && 'current']">
+      <dl :class="[step === 2 && 'current']">
         <dt>
           <i></i>基本信息
         </dt>
       </dl>
-      <dl :class="[routeNname === 'shop-apply-auth-info' && 'current']">
+      <dl :class="[step === 3 && 'current']">
         <dt><i></i>认证信息</dt>
         <dd style="display: none;">
           <ul>
@@ -30,7 +30,7 @@
           </ul>
         </dd>
       </dl>
-      <dl :class="[routeNname === 'shop-apply-financial-qualification' && 'current']">
+      <dl :class="[step === 4 && 'current']">
         <dt>
           <i></i>财务资质信息
         </dt>
@@ -47,7 +47,7 @@
           </ul>
         </dd>
       </dl>
-      <dl :class="[routeNname === 'shop-apply-shop-info' && 'current']">
+      <dl :class="[step === 5 && 'current']">
         <dt>
           <i class="hideer">  </i>
           店铺信息
@@ -60,11 +60,7 @@
 <script>
   export default {
     name: 'apply-menu',
-    computed:{
-      routeNname() {
-        return this.$route.name
-      }
-    }
+    props: ['step']
   }
 </script>
 
