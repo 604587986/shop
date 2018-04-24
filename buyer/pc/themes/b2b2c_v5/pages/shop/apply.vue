@@ -14,7 +14,8 @@
 
 <script>
   import Vue from 'vue'
-  import { Form, FormItem, Input, InputNumber, Upload } from 'element-ui'
+  import { DatePicker, Form, FormItem, Input, InputNumber, Upload } from 'element-ui'
+  Vue.use(DatePicker)
   Vue.use(Form)
   Vue.use(FormItem)
   Vue.use(Input)
