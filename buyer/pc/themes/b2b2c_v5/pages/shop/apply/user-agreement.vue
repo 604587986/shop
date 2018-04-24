@@ -1,6 +1,6 @@
 <template>
-  <div id="user-agreement" class="user-agreement-container">
-    <h2 class="title">入驻协议</h2>
+  <div id="user-agreement" class="item-container">
+    <h2 class="title" style="text-align: center">入驻协议</h2>
     <div class="content">
       使用本公司服务所须遵守的条款和条件:<br>
 
@@ -61,27 +61,19 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .user-agreement-container {
-    padding: 20px;
-    .title {
-      text-align: center;
-      font-size: 22px;
-      padding-bottom: 20px;
-    }
-    .content {
-      border: 1px solid #d7d7d7;
-      padding: 10px;
-      line-height: 20px;
-      max-height: 300px;
-      overflow-y: scroll;
-    }
-    .agreed {
-      text-align: center;
-      padding: 20px 0;
-    }
-    .next-btn {
-      text-align: center;
-      padding: 10px 0;
-    }
+  .content {
+    border: 1px solid #d7d7d7;
+    padding: 10px;
+    line-height: 20px;
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+  .agreed {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .next-btn {
+    text-align: center;
+    padding: 10px 0;
   }
 </style>

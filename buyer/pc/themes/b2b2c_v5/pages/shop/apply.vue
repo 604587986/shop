@@ -43,6 +43,15 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ .item-container {
+    padding: 20px;
+    .title {
+      text-align: left;
+      font-size: 22px;
+      padding-left: 35px;
+      padding-bottom: 20px;
+    }
+  }
   .apply-container {
     display: flex;
     justify-content: space-between;
