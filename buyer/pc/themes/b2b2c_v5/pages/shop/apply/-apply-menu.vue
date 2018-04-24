@@ -1,14 +1,12 @@
 <template>
-  <div id="apply-shop">
-    <apply-header/>
-    <nuxt-child/>
+  <div id="apply-menu">
+    apply-menu
   </div>
 </template>
 
 <script>
-  import applyHeader from './apply/-apply-header'
   export default {
-    name: 'apply'
+    name: 'apply-menu'
   }
 </script>
 
