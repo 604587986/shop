@@ -8,7 +8,8 @@
 <script>
   import applyHeader from './apply/-apply-header'
   export default {
-    name: 'apply'
+    name: 'apply',
+    components: { applyHeader }
   }
 </script>
 
