@@ -52,6 +52,13 @@
       padding-bottom: 20px;
     }
   }
+  /deep/ .next-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 1px dashed #d7d7d7;
+  }
   .apply-container {
     display: flex;
     justify-content: space-between;
