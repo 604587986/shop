@@ -1,6 +1,5 @@
 <template>
   <div id="apply-index">
-    <apply-header/>
     <div class="entry-container">
       <h1>欢迎来到Javashop多店铺示例商城，商家中心</h1>
       <h3>您现在还没有店铺，无法对商家中心功能进行操作，您可以：</h3>
@@ -13,10 +12,8 @@
 </template>
 
 <script>
-  import applyHeader from './-apply-header'
   export default {
-    name: 'apply-index',
-    components: { applyHeader }
+    name: 'apply-index'
   }
 </script>
 
