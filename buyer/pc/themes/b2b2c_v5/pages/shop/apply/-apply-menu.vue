@@ -16,7 +16,7 @@
       </dl>
       <dl :class="[step === 3 && 'current']">
         <dt><i></i>认证信息</dt>
-        <dd style="display: none;">
+        <dd>
           <ul>
             <li>
               <i></i><a>营业执照信息</a>
@@ -34,7 +34,7 @@
         <dt>
           <i></i>财务资质信息
         </dt>
-        <dd style="display: none;">
+        <dd>
           <ul>
             <li>
               <i></i>
@@ -66,6 +66,7 @@
 
 <style type="text/scss" lang="scss" scoped>
   .menu-container {
+    place-self: flex-start;
     width: 208px;
     border: solid 1px #D7D7D7;
     .title {
@@ -84,6 +85,7 @@
       width: 190px;
       margin: 0 auto;
       .current i { background-position: -280px 0 }
+      .current dd { display: block }
       dt {
         line-height: 20px;
         font-weight: 600;
@@ -100,6 +102,24 @@
           height: 11px;
           margin-right: 10px;
           margin-left: 6px;
+        }
+      }
+      dd { display: none }
+      ul {
+        width: 100%;
+        padding: 6px 0;
+        li {
+          padding: 6px 0;
+          a { color: #666 }
+          i {
+            background: url(~/assets/images/icons-apply-shop.png) no-repeat -320px 0;
+            vertical-align: middle;
+            display: inline-block;
+            width: 3px;
+            height: 5px;
+            margin-right: 10px;
+            margin-left: 14px;
+          }
         }
       }
     }
