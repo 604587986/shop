@@ -8,7 +8,7 @@
     <div class="profile-container">
       <div class="avatar-box">
         <el-upload
-          :action="upload_api"
+          :action="MixinUploadApi"
           class="avatar-uploader"
           :show-file-list="false"
           :on-success="handleAvararUploadSuccess"
@@ -73,7 +73,6 @@
   Vue.use(DatePicker)
   Vue.use(Upload)
   import { mapGetters, mapActions } from 'vuex'
-  import * as API_Common from '@/api/common'
   import axios from 'axios'
   import { AddressSelect } from '@/components'
   export default {
@@ -83,8 +82,6 @@
     },
     data() {
       return {
-        /** 修改头像，上传API */
-        upload_api: API_Common.uploadApi,
         /** 地区 */
         regions: {},
         /** 个人资料 表单 */
