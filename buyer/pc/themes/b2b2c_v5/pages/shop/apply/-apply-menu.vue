@@ -84,7 +84,7 @@
     .content {
       width: 190px;
       margin: 0 auto;
-      .current i { background-position: -280px 0 }
+      .current dt i { background-position: -280px 0 }
       .current dd { display: block }
       dt {
         line-height: 20px;

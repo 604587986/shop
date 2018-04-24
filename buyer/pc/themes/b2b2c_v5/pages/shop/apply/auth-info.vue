@@ -1,43 +1,89 @@
 <template>
   <div id="auth-info" class="item-container">
-    <h2 class="title">营业执照信息</h2>
     <div class="content">
       <el-form
         :model="authInfoForm"
         :rules="authInfoRules"
         ref="authInfoForm"
-        label-width="120px"
-        style="width: 350px"
+        label-width="170px"
         size="small"
-        class="basic-info-form"
       >
-        <el-form-item label="公司名称：" prop="company_name">
-          <el-input v-model="authInfoForm.company_name" clearable></el-input>
+        <h5 class="item-title">营业执照信息</h5>
+        <el-form-item label="法定代表人姓名：" prop="legal_name">
+          <el-input v-model="authInfoForm.legal_name" clearable></el-input>
         </el-form-item>
-        <el-form-item label="公司地址：" prop="compant_address">
-          <el-input v-model="authInfoForm.compant_address" clearable></el-input>
+        <el-form-item label="法定代表人身份证：" prop="legal_id">
+          <el-input v-model="authInfoForm.legal_id" clearable></el-input>
         </el-form-item>
-        <el-form-item label="公司电话：" prop="compant_phone">
-          <el-input v-model="authInfoForm.compant_phone" clearable></el-input>
+        <el-form-item label="法人身份证电子版：" prop="legal_img">
+          <el-input v-model="authInfoForm.legal_img" clearable></el-input>
         </el-form-item>
-        <el-form-item label="公司邮箱：" prop="compant_email">
-          <el-input v-model="authInfoForm.compant_email" clearable></el-input>
+        <el-form-item label="营业执照编号：" prop="license_num">
+          <el-input v-model="authInfoForm.license_num" clearable></el-input>
         </el-form-item>
-        <el-form-item label="员工总数：" prop="employee_num">
-          <el-input v-model="authInfoForm.employee_num" clearable>
-            <el-button slot="append">人</el-button>
-          </el-input>
+        <el-form-item label="营业执照所在地：" prop="license_province">
+
         </el-form-item>
-        <el-form-item label="注册资金：" prop="reg_money">
-          <el-input v-model="authInfoForm.reg_money" clearable>
-            <el-button slot="append">万</el-button>
-          </el-input>
+        <el-form-item label="成立日期：" prop="establishdate">
+          <el-date-picker
+            v-model="authInfoForm.establishdate"
+            type="date"
+            placeholder="选择成立日期">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="联系人姓名：" prop="link_name">
-          <el-input v-model="authInfoForm.link_name" clearable></el-input>
+        <el-form-item label="营业执照有效期：" class="licence-range">
+          <el-date-picker
+            v-model="authInfoForm.licencestart"
+            type="date"
+            placeholder="开始日期">
+          </el-date-picker>
+          至
+          <el-date-picker
+            v-model="authInfoForm.licenceend"
+            type="date"
+            placeholder="结束日期">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="联系人电话：" prop="link_phone">
-          <el-input v-model="authInfoForm.link_phone" :maxlength="11" clearable></el-input>
+        <el-form-item label="法定经营范围：" prop="scope">
+          <el-input v-model="authInfoForm.scope" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="营业执照电子版：" prop="licence_img">
+          <el-upload
+            :action="MixinUploadApi"
+            :on-success="res => handleImgUploadSuccess('licence_img', res)"
+            :on-remove="handleImgRemove('licence_img')"
+            :limit="1"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
+        <h5 class="item-title">组织机构代码证</h5>
+        <el-form-item label="组织机构代码：" prop="organization_code">
+          <el-input v-model="authInfoForm.organization_code" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="组织机构代码证电子版：" prop="code_img">
+          <el-upload
+            :action="MixinUploadApi"
+            :on-success="res => handleImgUploadSuccess('code_img', res)"
+            :on-remove="handleImgRemove('code_img')"
+            :limit="1"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
+        <h5 class="item-title">一般纳税人证明</h5>
+        <el-form-item label="一般纳税人证明：" prop="taxes_img">
+          <el-upload
+            :action="MixinUploadApi"
+            :on-success="res => handleImgUploadSuccess('taxes_img', res)"
+            :on-remove="handleImgRemove('taxes_img')"
+            :limit="1"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
         </el-form-item>
       </el-form>
     </div>
@@ -49,6 +95,7 @@
 </template>
 
 <script>
+  import * as regExp from '@/utils/RegExp'
   export default {
     name: "auth-info",
     data() {
@@ -59,14 +106,13 @@
         authInfoForm: {},
         /** 基础信息 表单规则 */
         authInfoRules: {
-          company_name: [ req_rule('请输入公司名称'), len_rule(1, 20) ],
-          compant_address: [ req_rule('请输入公司地址'), len_rule(1, 100) ],
-          compant_phone: [ req_rule('请输入公司电话'), len_rule(6, 11)],
-          compant_email: [
-            req_rule('请输入公司邮箱'),
-            { validator: (rule, value, callback) => {
-                if (!regExp.email.test(value)) {
-                  callback(new Error('邮箱格式不正确！'))
+          legal_name: [ req_rule('请输入法定代表人姓名'), len_rule(1, 20) ],
+          legal_id: [
+            req_rule('请输入法定代表人身份证号'),
+            {
+              validator: (rule, value, callback) => {
+                if (!regExp.cardID.test(value)) {
+                  callback(new Error('身份证号格式不正确'))
                 } else {
                   callback()
                 }
@@ -74,46 +120,15 @@
               trigger: 'blur'
             }
           ],
-          employee_num: [
-            req_rule('请输入员工人数'),
-            { validator: (rule, value, callback) => {
-                if (!regExp.integer.test(value)) {
-                  callback(new Error('员工人数应为正整数，且不为零！'))
-                } else {
-                  callback()
-                }
-              },
-              trigger: 'blur'
-            }
-          ],
-          reg_money: [
-            req_rule('请输入注册金额'),
-            { validator: (rule, value, callback) => {
-                if (!regExp.integer.test(value)) {
-                  callback(new Error('注册资金应为正整数，且不为零！'))
-                } else {
-                  callback()
-                }
-              },
-              trigger: 'blur'
-            }
-          ],
-          link_name: [
-            req_rule('请输入联系人姓名'),
-            len_rule(1, 20)
-          ],
-          link_phone: [
-            req_rule('请输入联系人电话'),
-            { validator: (rule, value, callback) => {
-                if (!regExp.mobile.test(value)) {
-                  callback(new Error('联系人电话格式不正确！'))
-                } else {
-                  callback()
-                }
-              },
-              trigger: 'blur'
-            }
-          ]
+          legal_img: [ req_rule('请上传法人身份证电子版')],
+          license_num: [ req_rule('请输入营业执照编号') ],
+          license_province: [ req_rule('请选择营业执照所在地') ],
+          establishdate: [ req_rule('请选择成立日期') ],
+          scope: [ req_rule('请输入法定经营范围') ],
+          licence_img: [ req_rule('请上传营业执照电子版') ],
+          organization_code: [ req_rule('请输入组织机构代码') ],
+          code_img: [ req_rule('请上传组织机构代码证电子版') ],
+          taxes_img: [ req_rule('请上传一般纳税人证明') ],
         }
       }
     },
@@ -128,11 +143,34 @@
             return false
           }
         })
+      },
+      /** 图片上传成功 */
+      handleImgUploadSuccess(img_name, res) {
+        this.authInfoForm[img_name] = res
+      },
+      /** 图片被移除 */
+      handleImgRemove(img_name) {
+        this.authInfoForm[img_name] = ''
       }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  .item-container {
+    /deep/ .el-form { width: 100% }
+    /deep/ .el-form-item {
+      width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .item-title {
+      font-size: 22px;
+      padding-left: 20px;
+      padding-bottom: 20px;
+    }
+    /deep/ .el-date-editor {
+      width: 230px;
+    }
+  }
 </style>
