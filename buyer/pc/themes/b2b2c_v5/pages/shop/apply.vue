@@ -14,7 +14,9 @@
 
 <script>
   import Vue from 'vue'
-  import { DatePicker, Form, FormItem, Input, InputNumber, Upload } from 'element-ui'
+  import { Checkbox, CheckboxGroup, DatePicker, Form, FormItem, Input, InputNumber, Upload } from 'element-ui'
+  Vue.use(Checkbox)
+  Vue.use(CheckboxGroup)
   Vue.use(DatePicker)
   Vue.use(Form)
   Vue.use(FormItem)
