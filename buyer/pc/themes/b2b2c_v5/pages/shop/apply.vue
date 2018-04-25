@@ -1,7 +1,7 @@
 <template>
   <div id="apply-shop">
     <apply-header/>
-    <nuxt-child v-if="$route.name === 'shop-apply'"/>
+    <nuxt-child v-if="$route.name === 'shop-apply' || $route.name === 'shop-apply-success'"/>
     <div v-else class="apply-container w">
       <apply-menu :step="step"/>
       <div class="right-content">
