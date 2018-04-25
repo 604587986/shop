@@ -19,7 +19,7 @@
           <el-input v-model.trim="finlQuafForm.bank_name" :maxlength="18" clearable></el-input>
         </el-form-item>
         <el-form-item label="开户银行所在地：" prop="bank_province">
-          <en-address-select name="license" @changed="handleAddressSelectChanged"/>
+          <en-address-select @changed="handleAddressSelectChanged"/>
         </el-form-item>
         <el-form-item label="开户银行许可证电子版：" prop="bank_img">
           <el-upload

@@ -30,7 +30,7 @@
           <el-input v-model.trim="authInfoForm.license_num" clearable></el-input>
         </el-form-item>
         <el-form-item label="营业执照所在地：" prop="license_province">
-          <en-address-select name="license" @changed="handleAddressSelectChanged"/>
+          <en-address-select @changed="handleAddressSelectChanged"/>
         </el-form-item>
         <el-form-item label="成立日期：" prop="establishdate">
           <el-date-picker
