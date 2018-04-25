@@ -1,13 +1,10 @@
 const webpack = require('webpack')
 
 module.exports = {
+  dev: (process.env.NODE_ENV !== 'production'),
   env: {
     /** 基础API */
-    BASE_API: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer',
-    /** 文件上传API */
-    UPLOAD_API: 'http://localhost:3001/javashop',
-    /** 图片验证码API */
-    VALIDATE_CODE_API: 'http://localhost:3001/javashop'
+    BASE_API: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer'
   },
   head: {
     title: '商城首页-Javashop多店铺示例商城',
