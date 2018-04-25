@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 
 module.exports = {
+  dev: (process.env.NODE_ENV !== 'production'),
   env: {
     /** 基础API */
     BASE_API: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer',
