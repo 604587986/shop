@@ -17,7 +17,7 @@ export function getAddressList() {
 
 /**
  * 添加收货地址
- * @param params
+ * @param params 地址参数
  * @returns {AxiosPromise}
  */
 export function addAddress(params) {
@@ -32,8 +32,8 @@ export function addAddress(params) {
 
 /**
  * 编辑地址
- * @param id
- * @param params
+ * @param id 地址ID
+ * @param params 地址参数
  * @returns {AxiosPromise}
  */
 export function editAddress(id, params) {
@@ -48,7 +48,7 @@ export function editAddress(id, params) {
 
 /**
  * 删除收货地址
- * @param ids
+ * @param ids 地址ID集合【数组或单个ID】
  * @returns {AxiosPromise}
  */
 export function deleteAddress(ids) {

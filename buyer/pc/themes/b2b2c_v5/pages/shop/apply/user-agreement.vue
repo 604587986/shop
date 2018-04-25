@@ -40,9 +40,6 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import { Checkbox } from 'element-ui'
-  Vue.use(Checkbox)
   export default {
     name: "user-agreement",
     data() {

@@ -34,7 +34,7 @@ export function applyAfterSale(params) {
 
 /**
  * 获取售后详情
- * @param sn
+ * @param sn 订单编号
  * @returns {AxiosPromise}
  */
 export function getAfterSaleDetail(sn) {

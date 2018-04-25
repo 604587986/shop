@@ -6,7 +6,7 @@ import request from '@/utils/request'
 
 /**
  * 获取商品详情
- * @param goods_id
+ * @param goods_id 商品ID
  * @returns {AxiosPromise}
  */
 export function getGoods(goods_id) {

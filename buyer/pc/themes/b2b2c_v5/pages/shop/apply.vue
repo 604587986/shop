@@ -1,7 +1,7 @@
 <template>
   <div id="apply-shop">
     <apply-header/>
-    <nuxt-child v-if="$route.name === 'shop-apply'"/>
+    <nuxt-child v-if="$route.name === 'shop-apply' || $route.name === 'shop-apply-success'"/>
     <div v-else class="apply-container w">
       <apply-menu :step="step"/>
       <div class="right-content">
@@ -14,16 +14,20 @@
 
 <script>
   import Vue from 'vue'
-  import { DatePicker, Form, FormItem, Input, InputNumber, Upload } from 'element-ui'
+  import { Checkbox, CheckboxGroup, DatePicker, Form, FormItem, Input, InputNumber, Upload } from 'element-ui'
+  Vue.use(Checkbox)
+  Vue.use(CheckboxGroup)
   Vue.use(DatePicker)
   Vue.use(Form)
   Vue.use(FormItem)
   Vue.use(Input)
   Vue.use(InputNumber)
   Vue.use(Upload)
-  import applyHeader from './apply/-apply-header';
-  import applyMenu from './apply/-apply-menu';
+  import applyHeader from './apply/-apply-header'
+  import applyMenu from './apply/-apply-menu'
   import applySteps from './apply/-apply-steps'
+  import { AddressSelect } from '@/components'
+  Vue.component(AddressSelect.name, AddressSelect)
 
   export default {
     name: 'apply',

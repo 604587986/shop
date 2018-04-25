@@ -73,7 +73,6 @@
   Vue.use(DatePicker)
   Vue.use(Upload)
   import { mapGetters, mapActions } from 'vuex'
-  import axios from 'axios'
   import { AddressSelect } from '@/components'
   export default {
     name: 'my-profile',
