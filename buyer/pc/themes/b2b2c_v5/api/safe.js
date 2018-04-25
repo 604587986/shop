@@ -6,9 +6,9 @@ import request from '@/utils/request'
 
 /**
  * 发送手机验证码
- * @param type
- * @param mobile
- * @param validcode
+ * @param type 验证类型
+ * @param mobile 手机号
+ * @param validcode 图片验证码
  * @returns {AxiosPromise}
  */
 export function sendMobileSms(type, mobile, validcode) {
@@ -26,10 +26,10 @@ export function sendMobileSms(type, mobile, validcode) {
 
 /**
  * 校验短信验证码
- * @param type
- * @param mobile
- * @param mobile_code
- * @param img_code
+ * @param type 验证类型
+ * @param mobile 手机号
+ * @param mobile_code 手机验证码
+ * @param img_code 图片验证码
  * @returns {AxiosPromise}
  */
 export function validMobileSms(type, mobile, mobile_code, img_code) {
@@ -47,9 +47,9 @@ export function validMobileSms(type, mobile, mobile_code, img_code) {
 
 /**
  * 修改密码
- * @param new_password
- * @param rep_password
- * @param img_code
+ * @param new_password 新密码
+ * @param rep_password 确认新密码
+ * @param img_code 图片验证码
  * @returns {AxiosPromise}
  */
 export function changePassword(new_password, rep_password, img_code) {
@@ -66,7 +66,7 @@ export function changePassword(new_password, rep_password, img_code) {
 
 /**
  * 绑定手机号
- * @param mobile
+ * @param mobile 手机号
  * @returns {AxiosPromise}
  */
 export function bindMobile(mobile) {

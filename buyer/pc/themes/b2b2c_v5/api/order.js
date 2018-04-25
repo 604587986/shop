@@ -19,20 +19,20 @@ export function getOrderList(params) {
 
 /**
  * 获取订单详情
- * @param sn
+ * @param order_sn 订单编号
  * @returns {AxiosPromise}
  */
-export function getOrderDetail(sn) {
+export function getOrderDetail(order_sn) {
   return request({
-    url: `order/${sn}`,
+    url: `order/${order_sn}`,
     method: 'get'
   })
 }
 
 /**
  * 取消订单
- * @param order_sn
- * @param reason
+ * @param order_sn 订单编号
+ * @param reason 取消订单原因
  * @returns {AxiosPromise}
  */
 export function cancelOrder(order_sn, reason) {
@@ -47,7 +47,7 @@ export function cancelOrder(order_sn, reason) {
 
 /**
  * 确认收货
- * @param order_sn
+ * @param order_sn 订单编号
  * @returns {AxiosPromise}
  */
 export function confirmReceipt(order_sn) {

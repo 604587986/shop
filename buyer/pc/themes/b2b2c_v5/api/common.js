@@ -35,7 +35,7 @@ export function getHotKeywords() {
 
 /**
  * 搜索关键字自动完成
- * @param keyword
+ * @param keyword 关键词
  * @returns {Promise<any>}
  */
 export function getAutoCompleteKeyword(keyword) {

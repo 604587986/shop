@@ -6,7 +6,7 @@ import request from '@/utils/request'
 
 /**
  * 获取店铺数据
- * @param shop_id
+ * @param shop_id 店铺ID
  * @returns {AxiosPromise}
  */
 export function getShopData(shop_id) {
