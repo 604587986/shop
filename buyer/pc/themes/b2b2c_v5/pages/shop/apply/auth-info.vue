@@ -5,7 +5,7 @@
         :model="authInfoForm"
         :rules="authInfoRules"
         ref="authInfoForm"
-        label-width="170px"
+        label-width="180px"
         size="small"
       >
         <h5 class="item-title">营业执照信息</h5>
@@ -16,7 +16,15 @@
           <el-input v-model="authInfoForm.legal_id" clearable></el-input>
         </el-form-item>
         <el-form-item label="法人身份证电子版：" prop="legal_img">
-          <el-input v-model="authInfoForm.legal_img" clearable></el-input>
+          <el-upload
+            :action="MixinUploadApi"
+            :on-success="res => handleImgUploadSuccess('legal_img', res)"
+            :on-remove="handleImgRemove('legal_img')"
+            :limit="1"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
         </el-form-item>
         <el-form-item label="营业执照编号：" prop="license_num">
           <el-input v-model="authInfoForm.license_num" clearable></el-input>
@@ -28,19 +36,29 @@
           <el-date-picker
             v-model="authInfoForm.establishdate"
             type="date"
+            :editable="false"
+            value-format="yyyy-MM-dd"
             placeholder="选择成立日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="营业执照有效期：" class="licence-range">
+        <el-form-item label="营业执照有效期：" prop="licencestart" class="licence-range">
           <el-date-picker
             v-model="authInfoForm.licencestart"
             type="date"
+            :editable="false"
+            value-format="yyyy-MM-dd"
             placeholder="开始日期">
           </el-date-picker>
-          至
+        </el-form-item>
+        <div style="width: 400px;margin: 0 auto;padding-bottom: 15px">
+          <span style="margin-left: 180px;">至</span>
+        </div>
+        <el-form-item label="" prop="licenceend" class="licence-range">
           <el-date-picker
             v-model="authInfoForm.licenceend"
             type="date"
+            :editable="false"
+            value-format="yyyy-MM-dd"
             placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
@@ -124,6 +142,32 @@
           license_num: [ req_rule('请输入营业执照编号') ],
           license_province: [ req_rule('请选择营业执照所在地') ],
           establishdate: [ req_rule('请选择成立日期') ],
+          licencestart: [
+            req_rule('请选择开始日期'),
+            {
+              validator: (rule, value, callback) => {
+                if (value >= this.authInfoForm.licenceend) {
+                  callback(new Error('结束时间不能早于开始时间'))
+                } else {
+                  callback()
+                }
+              },
+              trigger: 'blur'
+            }
+          ],
+          licenceend: [
+            req_rule('请选择结束日期'),
+            {
+              validator: (rule, value, callback) => {
+                if (value <= this.authInfoForm.licencestart) {
+                  callback(new Error('结束时间不能早于开始时间'))
+                } else {
+                  callback()
+                }
+              },
+              trigger: 'blur'
+            }
+          ],
           scope: [ req_rule('请输入法定经营范围') ],
           licence_img: [ req_rule('请上传营业执照电子版') ],
           organization_code: [ req_rule('请输入组织机构代码') ],
@@ -137,7 +181,7 @@
       handleNextStep() {
         this.$refs['authInfoForm'].validate((valid) => {
           if (valid) {
-            this.$router.push({ name: 'shop-apply-auth-info' })
+            this.$router.push({ name: 'shop-apply-financial-qualification' })
           } else {
             this.$message.error('表单填写有误，请核对！')
             return false
@@ -160,7 +204,7 @@
   .item-container {
     /deep/ .el-form { width: 100% }
     /deep/ .el-form-item {
-      width: 400px;
+      width: 410px;
       margin-left: auto;
       margin-right: auto;
     }
