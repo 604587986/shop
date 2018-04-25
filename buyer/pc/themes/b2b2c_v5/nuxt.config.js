@@ -12,7 +12,10 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { name: 'keywords', content: '最好的Java网店系统,Java多用户商城,Java商城定制开发' },
-      { hid: 'description', name: 'description', content: 'Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。' }
+      { hid: 'description', name: 'description', content: 'Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。' },
+      { name: 'renderer', content: 'webkit' },
+      { name: 'force-rendering', content: 'webkit' },
+      { httpEquiv: 'X-UA-Compatible', content: 'IE=edge,chrome=1' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
