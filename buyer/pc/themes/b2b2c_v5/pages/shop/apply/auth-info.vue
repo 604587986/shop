@@ -10,10 +10,10 @@
       >
         <h5 class="item-title">营业执照信息</h5>
         <el-form-item label="法定代表人姓名：" prop="legal_name">
-          <el-input v-model="authInfoForm.legal_name" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.legal_name" clearable></el-input>
         </el-form-item>
         <el-form-item label="法定代表人身份证：" prop="legal_id">
-          <el-input v-model="authInfoForm.legal_id" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.legal_id" :maxlength="18" clearable></el-input>
         </el-form-item>
         <el-form-item label="法人身份证电子版：" prop="legal_img">
           <el-upload
@@ -27,7 +27,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="营业执照编号：" prop="license_num">
-          <el-input v-model="authInfoForm.license_num" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.license_num" clearable></el-input>
         </el-form-item>
         <el-form-item label="营业执照所在地：" prop="license_province">
           <en-address-select name="license" @changed="handleAddressSelectChanged"/>
@@ -63,7 +63,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="法定经营范围：" prop="scope">
-          <el-input v-model="authInfoForm.scope" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.scope" clearable></el-input>
         </el-form-item>
         <el-form-item label="营业执照电子版：" prop="licence_img">
           <el-upload
@@ -78,7 +78,7 @@
         </el-form-item>
         <h5 class="item-title">组织机构代码证</h5>
         <el-form-item label="组织机构代码：" prop="organization_code">
-          <el-input v-model="authInfoForm.organization_code" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.organization_code" clearable></el-input>
         </el-form-item>
         <el-form-item label="组织机构代码证电子版：" prop="code_img">
           <el-upload
@@ -121,8 +121,8 @@
       [AddressSelect.name]: AddressSelect
     },
     data() {
-      const req_rule = (message) => ({ required: true, message, trigger: 'blur' })
-      const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'blur' })
+      const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
+      const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
       return {
         /** 基础信息 表单 */
         authInfoForm: {},
