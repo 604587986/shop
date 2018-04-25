@@ -2,21 +2,21 @@
   <div id="financial-qualification" class="item-container">
     <div class="content">
       <el-form
-        :model="authInfoForm"
-        :rules="authInfoRules"
-        ref="authInfoForm"
+        :model="finlQuafForm"
+        :rules="finlQuafRules"
+        ref="finlQuafForm"
         label-width="180px"
         size="small"
       >
         <h5 class="item-title">开户行银行许可证</h5>
         <el-form-item label="银行开户名：" prop="bank_account_name">
-          <el-input v-model.trim="authInfoForm.bank_account_name" clearable></el-input>
+          <el-input v-model.trim="finlQuafForm.bank_account_name" clearable></el-input>
         </el-form-item>
         <el-form-item label="公司银行账号：" prop="bank_number">
-          <el-input v-model.trim="authInfoForm.bank_number" :maxlength="18" clearable></el-input>
+          <el-input v-model.trim="finlQuafForm.bank_number" :maxlength="18" clearable></el-input>
         </el-form-item>
         <el-form-item label="开户银行支行名称：" prop="bank_name">
-          <el-input v-model.trim="authInfoForm.bank_name" :maxlength="18" clearable></el-input>
+          <el-input v-model.trim="finlQuafForm.bank_name" :maxlength="18" clearable></el-input>
         </el-form-item>
         <el-form-item label="开户银行所在地：" prop="bank_province">
           <en-address-select name="license" @changed="handleAddressSelectChanged"/>
@@ -34,10 +34,10 @@
         </el-form-item>
         <h5 class="item-title">税务登记证</h5>
         <el-form-item label="税务登记证号：" prop="taxes_certificate_num">
-          <el-input v-model.trim="authInfoForm.taxes_certificate_num" clearable></el-input>
+          <el-input v-model.trim="finlQuafForm.taxes_certificate_num" clearable></el-input>
         </el-form-item>
         <el-form-item label="纳税人识别号：" prop="taxes_distinguish_num">
-          <el-input v-model.trim="authInfoForm.taxes_distinguish_num" clearable></el-input>
+          <el-input v-model.trim="finlQuafForm.taxes_distinguish_num" clearable></el-input>
         </el-form-item>
         <el-form-item label="税务登记证电子版：" prop="taxes_certificate_img">
           <el-upload
@@ -70,9 +70,9 @@
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
       return {
         /** 基础信息 表单 */
-        authInfoForm: {},
+        finlQuafForm: {},
         /** 基础信息 表单规则 */
-        authInfoRules: {
+        finlQuafRules: {
           bank_account_name: [ req_rule('请输入银行开户名') ],
           bank_number: [ req_rule('请输入法定代表人身份证号') ],
           bank_name: [ req_rule('请输入开户银行支行名称')],
@@ -99,7 +99,7 @@
     methods: {
       /** 下一步 */
       handleNextStep() {
-        this.$refs['authInfoForm'].validate((valid) => {
+        this.$refs['finlQuafForm'].validate((valid) => {
           if (valid) {
             this.$router.push({ name: 'shop-apply-shop-info' })
           } else {
@@ -111,15 +111,15 @@
       /** 地址选择插件值发生改变 */
       handleAddressSelectChanged(object) {
         const { regions } = object
-        Object.keys(regions).forEach(key => this.authInfoForm[`bank_${key}`] = regions[key] || '')
+        Object.keys(regions).forEach(key => this.finlQuafForm[`bank_${key}`] = regions[key] || '')
       },
       /** 图片上传成功 */
       handleImgUploadSuccess(img_name, res) {
-        this.authInfoForm[img_name] = res
+        this.finlQuafForm[img_name] = res
       },
       /** 图片被移除 */
       handleImgRemove(img_name) {
-        this.authInfoForm[img_name] = ''
+        this.finlQuafForm[img_name] = ''
       }
     }
   }
