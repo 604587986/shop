@@ -61,10 +61,8 @@
 
 <script>
   import * as regExp from '@/utils/RegExp'
-  import { AddressSelect } from '@/components'
   export default {
     name: "financial-qualification",
-    components: { [AddressSelect.name]: AddressSelect },
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })

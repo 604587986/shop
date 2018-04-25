@@ -21,9 +21,11 @@
   Vue.use(Input)
   Vue.use(InputNumber)
   Vue.use(Upload)
-  import applyHeader from './apply/-apply-header';
-  import applyMenu from './apply/-apply-menu';
+  import applyHeader from './apply/-apply-header'
+  import applyMenu from './apply/-apply-menu'
   import applySteps from './apply/-apply-steps'
+  import { AddressSelect } from '@/components'
+  Vue.component(AddressSelect.name, AddressSelect)
 
   export default {
     name: 'apply',
