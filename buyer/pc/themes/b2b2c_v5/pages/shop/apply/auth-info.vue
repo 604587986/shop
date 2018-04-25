@@ -30,7 +30,7 @@
           <el-input v-model="authInfoForm.license_num" clearable></el-input>
         </el-form-item>
         <el-form-item label="营业执照所在地：" prop="license_province">
-
+          <en-address-select name="license" @changed="handleAddressSelectChanged"/>
         </el-form-item>
         <el-form-item label="成立日期：" prop="establishdate">
           <el-date-picker
@@ -114,8 +114,12 @@
 
 <script>
   import * as regExp from '@/utils/RegExp'
+  import { AddressSelect } from '@/components'
   export default {
     name: "auth-info",
+    components: {
+      [AddressSelect.name]: AddressSelect
+    },
     data() {
       const req_rule = (message) => ({ required: true, message, trigger: 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'blur' })
@@ -187,6 +191,11 @@
             return false
           }
         })
+      },
+      /** 地址选择插件值发生改变 */
+      handleAddressSelectChanged(object) {
+        const { regions } = object
+        Object.keys(regions).forEach(key => this.authInfoForm[`license_${key}`] = regions[key] || '')
       },
       /** 图片上传成功 */
       handleImgUploadSuccess(img_name, res) {
