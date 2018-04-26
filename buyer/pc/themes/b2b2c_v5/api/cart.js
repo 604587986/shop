@@ -19,8 +19,8 @@ export function getCartList(params) {
 
 /**
  * 更新购物车货品数量
- * @param sku_id
- * @param num
+ * @param sku_id 货品sku_id
+ * @param num 商品数量
  * @returns {AxiosPromise}
  */
 export function updateSkuNum(sku_id, num) {
@@ -33,8 +33,8 @@ export function updateSkuNum(sku_id, num) {
 
 /**
  * 选择、取消选择货品
- * @param sku_id
- * @param checked
+ * @param sku_id 货品sku_id
+ * @param checked 货品选中状态
  * @returns {AxiosPromise}
  */
 export function checkSku(sku_id, checked) {
@@ -47,8 +47,8 @@ export function checkSku(sku_id, checked) {
 
 /**
  * 选择、取消选择店铺内全部商品
- * @param shop_id
- * @param checked
+ * @param shop_id 店铺ID
+ * @param checked 店铺选中状态
  * @returns {AxiosPromise}
  */
 export function checkShop(shop_id, checked) {
@@ -61,7 +61,7 @@ export function checkShop(shop_id, checked) {
 
 /**
  * 全选、取消全选
- * @param checked
+ * @param checked 全选状态
  * @returns {AxiosPromise}
  */
 export function checkAll(checked) {
@@ -74,7 +74,7 @@ export function checkAll(checked) {
 
 /**
  * 移除购物车货品项
- * @param sku_ids
+ * @param sku_ids 货品sku_id【集合或单个ID】
  * @returns {AxiosPromise}
  */
 export function deleteSkuItem(sku_ids) {

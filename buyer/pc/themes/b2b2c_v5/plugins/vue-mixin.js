@@ -1,6 +1,13 @@
 import Vue from 'vue'
+import * as API_Common from '@/api/common'
 
 Vue.mixin({
+  data() {
+    return {
+      /** 图片上传API */
+      MixinUploadApi: API_Common.uploadApi
+    }
+  },
   methods: {
     /** 滚动到顶部【动画】 */
     MixinScrollToTop(top) {
