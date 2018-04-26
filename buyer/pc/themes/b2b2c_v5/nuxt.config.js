@@ -15,7 +15,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。' },
       { name: 'renderer', content: 'webkit' },
       { name: 'force-rendering', content: 'webkit' },
-      { httpEquiv: 'X-UA-Compatible', content: 'IE=edge,chrome=1' },
+      { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge,chrome=1' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -24,7 +24,8 @@ module.exports = {
     script: [
       { type: 'text/javascript', src: 'https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js' },
       { type: 'text/javascript', src: '/layer/layer.js' }
-    ]
+    ],
+    __dangerouslyDisableSanitizers: ['script']
   },
   loading: { color: '#29d' },
   build: {
