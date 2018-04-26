@@ -70,7 +70,7 @@ module.exports = {
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
     { src: '~plugins/address-selecter', ssr: false },
-    { src: '~plugins/vue-piczoom', ssr: false },
+    { src: '~plugins/vue-piczoom', ssr: false }
   ],
   router: {
     scrollBehavior: function (to, from, savedPosition) {
