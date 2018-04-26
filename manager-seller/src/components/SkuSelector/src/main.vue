@@ -10,6 +10,7 @@
     ></sku-item>
     <!--规格设置-->
     <div class="sku-settings">
+      <label class="label-sku">规格明细：</label>
       <sku-table
         :skuInfo="skuInfo"
         :tablehead="tablehead"
@@ -52,11 +53,11 @@
 
         /** 固定表头数据 */
         origin: {
-          sn: '65656262',
-          weight: 45,
-          stock: 45,
-          cost: '25.25',
-          price: '56.32'
+          sn: '',
+          weight: '',
+          stock: '',
+          cost: '',
+          price: ''
         },
 
         /** 定制表头*/
@@ -166,5 +167,16 @@
   .container {
     margin-left: 0;
     padding-left: 0;
+  }
+
+  .sku-settings {
+    position: relative;
+    .label-sku {
+      position: absolute;
+      top: -5px;
+      left: -7%;
+      z-index: 100;
+      color: #606266;
+    }
   }
 </style>
