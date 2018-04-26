@@ -39,18 +39,18 @@
             </el-autocomplete>
             <!--规格值图片 上传列表-->
             <div v-show="$index === 0 && checkedImage">
-              <img src="" alt="">
-              <!--<el-upload-->
-                <!--class="upload-demo"-->
-                <!--style="text-align: center;"-->
-                <!--:key="index"-->
-                <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-                <!--:on-preview="handlePreview"-->
-                <!--:on-remove="handleRemove"-->
-                <!--:file-list="fileList2"-->
-                <!--list-type="picture">-->
-                <!--<el-button size="small" type="primary">点击上传</el-button>-->
-              <!--</el-upload>-->
+              <img :src="val.spec_image" alt="" class="sku-image">
+              <el-upload
+                class="upload-demo"
+                style="text-align: center;"
+                :key="index"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :before-upload="beforeImgUpload"
+                :on-preview="handleImgPreview"
+                :on-success="getImgUrl"
+                list-type="picture">
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
             </div>
           </div>
           <el-button type="text"  size="mini" style="margin-left: 10px;"  class="add-btn-skuval" @click="addSpec($index)">添加规格值</el-button>
@@ -107,7 +107,13 @@
                 spec_value: '',
 
                 /** 规格值id */
-                spec_value_id: ''
+                spec_value_id: '',
+
+                /** 规格值图片 */
+                spec_image: '',
+
+                /** 该规格是否有图片，1 有 0 没有 */
+                spec_type: 0
               }
             ]
           }
@@ -126,16 +132,23 @@
 
         /** 当前规格值索引 */
         activeSkuValIndex: 0
-
-        // /** 是否显示规格值 */
-        // isShowSkuValue: false
       }
     },
     methods: {
+      /** 规格项 */
 
       /** 添加规格项 */
       addSkuItem() {
-        this.skuInfo.push({})
+        this.skuInfo.push({
+          /** 规格描述 */
+          spec_memo: '',
+
+          /** 规格名称 */
+          spec_name: '',
+
+          /** 规格值列表 */
+          value_list: []
+        })
       },
 
       /** 移除当前规格项 进行数据变化*/
@@ -206,6 +219,7 @@
       },
 
       /** 规格值 */
+
       /** 添加当前规格项的规格值*/
       addSpec($index) {
         if (!this.skuInfo[$index] || !this.skuInfo[$index].value_list) {
@@ -220,7 +234,13 @@
           spec_value: '',
 
           /** 规格值id */
-          spec_value_id: ''
+          spec_value_id: '',
+
+          /** 规格值图片 */
+          spec_image: '',
+
+          /** 该规格是否有图片，1 有 0 没有 */
+          spec_type: 0
         })
       },
 
@@ -279,6 +299,34 @@
 
         /** 更新skuInfo数据 */
         this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex] = val
+        this.$emit('updateSkuInfo', this.skuInfo)
+      },
+
+      /** 点击已上传的文件链接时的钩子*/
+      handleImgPreview(file) {
+        this.dialogImageUrl = file.url
+      },
+
+      /** 图片上传之前的校验  */
+      beforeImgUpload(file) {
+        const isType = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
+        const isLt1M = file.size / 1024 / 1024 < 1
+
+        if (!isType) {
+          this.$message.error('上传头像图片只能是 JPG/JPEG/PNG 格式!')
+        }
+        if (!isLt1M) {
+          this.$message.error('上传商品相册图片大小不能超过 1MB!')
+        }
+        return isType && isLt1M
+      },
+
+      /** 文件上传成功之后的钩子 */
+      getImgUrl(response, file, fileList) {
+        console.log(response, file, fileList)
+        /** 更新skuInfo数据 */
+        this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_image = file.url
+        this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_type = 1
         this.$emit('updateSkuInfo', this.skuInfo)
       }
     }
@@ -352,6 +400,13 @@
         button.add-btn-skuval {
           margin-left: 10px;
           outline: none;
+        }
+        /** 待上传图片 */
+        img.sku-image {
+          width: 50px;
+          height: 50px;
+          border: 1px solid #e5e5e5;
+          background: rgba(158, 158, 158, .6);
         }
       }
     }
