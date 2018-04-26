@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ skuInfo }}
     <el-table
       :data="skuInfo"
       border
@@ -76,8 +75,8 @@
       /** 合并数据相同的单元格 */
       arraySpanMethod({ row, column, rowIndex, columnIndex }) {
         if (columnIndex < this.tablehead.length - 5) {
-          const _row = this.concactArray[rowIndex]
-          const _col = _row >= 1 ? 1 : 0
+          const _row = this.concactArray[rowIndex][columnIndex]
+          const _col = _row > 0 ? 1 : 0
           return {
             rowspan: _row,
             colspan: _col
@@ -85,26 +84,26 @@
         }
       },
       concactArrayCom(index, item) {
-        console.log(index, 5555)
         let _isMerge = false
-        if (index === 0) {
-          this.concactArray.push(1)
-        } else {
-          for (let i = 0, _len = this.tablehead.length; i < _len; i++) {
-            if (i < this.tablehead.length - 5) {
-              this.concactArray.push(1)
-              console.log(item[this.tablehead[i]], this.skuInfo[index - 1][this.tablehead[i]])
-              if (item[this.tablehead[i]] !== this.skuInfo[index - 1][this.tablehead[i]]) {
-                _isMerge = true
-              } else {
-                console.log('weishenme')
-                if (!_isMerge) {
-                  this.concactArray[index] += 1
-                }
-              }
+        /** 循环列 先循环第一列 若相同则合并 再循环第二列 依次循环 若不相同 则不合并 终止循环 */
+        let _currnetRow = []
+        for (let i = 0, _len = this.tablehead.length - 5; i < _len; i++) {
+          if (index > 0 && item[this.tablehead[i]] !== this.skuInfo[index - 1][this.tablehead[i]]) {
+            _currnetRow[i] = 1
+            _isMerge = true
+          } else if (index > 0 && !_isMerge) {
+            _currnetRow[i] = 0
+            let _count = 1
+            while (this.concactArray[index - _count][i] === 0) {
+              _count++
             }
+            console.log(_count, index - _count, i, this.concactArray[index - _count][i])
+            this.concactArray[index - _count][i] += 1
+          } else { // index === 0
+            _currnetRow[i] = 1
           }
         }
+        this.concactArray.push(_currnetRow)
       }
     }
   }
