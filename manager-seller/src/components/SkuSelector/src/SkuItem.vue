@@ -10,8 +10,10 @@
             value-key="spec_name"
             :fetch-suggestions="querySearchSkuItem"
             placeholder="请输入规格项名称"
-            @select="handleSelectSkuItem(item, $index)">
-            <!--@blur.naitve="editSkuItem(item, $index)"-->
+            :select-when-unmatched='true'
+            @focus="getActiveSkuItem($index)"
+            @blur.naitve="editSkuItem(item, $index)"
+            @select="handleSelectSkuItem">
           </el-autocomplete>
           <el-checkbox v-if="$index === 0 " v-model="checkedImage" @change="handleChangeImage">添加规格图片</el-checkbox>
           <div class="empty"></div>
@@ -28,18 +30,30 @@
               value-key="spec_value"
               :fetch-suggestions="querySearchSkuValue"
               placeholder="请输入规格值名称"
-              @select="handleSelectSkuValue(val, $index, index)">
-              <!--@blur.naitve="editSkuIValue(val, $index, index)"-->
+              @focus="getActiveSkuValue(index)"
+              @blur.naitve="editSkuIValue(val, $index, index)"
+              @select="handleSelectSkuValue">
               <template slot="append">
                 <el-button type="danger" size="mini" @click="handleCloseSkuValue($index, index)" icon="el-icon-delete"></el-button>
               </template>
             </el-autocomplete>
             <!--规格值图片 上传列表-->
             <div v-show="$index === 0 && checkedImage">
-              我是上传组件
+              <img src="" alt="">
+              <!--<el-upload-->
+                <!--class="upload-demo"-->
+                <!--style="text-align: center;"-->
+                <!--:key="index"-->
+                <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+                <!--:on-preview="handlePreview"-->
+                <!--:on-remove="handleRemove"-->
+                <!--:file-list="fileList2"-->
+                <!--list-type="picture">-->
+                <!--<el-button size="small" type="primary">点击上传</el-button>-->
+              <!--</el-upload>-->
             </div>
           </div>
-          <el-button type="text" plain size="mini" style="margin-left: 10px;"  class="add-btn-skuval" @click="addSpec($index)">添加规格值</el-button>
+          <el-button type="text"  size="mini" style="margin-left: 10px;"  class="add-btn-skuval" @click="addSpec($index)">添加规格值</el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -71,7 +85,7 @@
     },
     data() {
       return {
-        /** 表单数据 */
+        /** 表单数据  估计没啥用*/
         skuForm: {},
 
         /** 要提交的规格数据*/
@@ -99,22 +113,22 @@
           }
         ],
 
-        /** 当前规格值 */
-        currentSkuValue: '',
-
         /** 当前规格项下的规格值列表*/
         specList: [
           { spec_value_id: '0', spec_value: '' }
         ],
 
-        /** 是否选中 添加规格图片*/
+        /** 是否添加规格图片*/
         checkedImage: false,
 
-        /** 是否显示规格值 */
-        isShowSkuValue: false,
+        /** 当前规格项索引 */
+        activeSkuItemIndex: 0,
 
-        /** 当前正在操作的规格值列表 */
-        operaSpecsList: []
+        /** 当前规格值索引 */
+        activeSkuValIndex: 0
+
+        // /** 是否显示规格值 */
+        // isShowSkuValue: false
       }
     },
     methods: {
@@ -128,6 +142,11 @@
       handleCloseSkuItem($index) {
         this.skuInfo.splice($index, 1)
         this.$emit('updateSkuInfo', this.skuInfo)
+      },
+
+      /** 获取当前 规格项索引 */
+      getActiveSkuItem($index) {
+        this.activeSkuItemIndex = $index
       },
 
       /** 点击查询输入规格项建议*/
@@ -145,7 +164,7 @@
       },
 
       /** 选择规格项时触发  */
-      handleSelectSkuItem(item, $index) {
+      handleSelectSkuItem(item) {
         /** 检测是否已存在*/
         const exited = this.skuInfo.some((key) => {
           return key.spec_name === item.spec_name
@@ -155,43 +174,28 @@
         })
         if (exited && _skuInfo.length > 1) {
           this.$message.error('当前项已存在，请重新选择或者编辑！')
-          this.$set(this.skuInfo[$index], 'spec_name', '')
+          this.$set(this.skuInfo[this.activeSkuItemIndex], 'spec_name', '')
           return
         }
         /** 更新skuInfo数据 */
-        this.$set(this.skuInfo[$index], 'spec_memo', item.spec_memo || '')
-        this.$set(this.skuInfo[$index], 'spec_name', item.spec_name || '')
-        this.$set(this.skuInfo[$index], 'value_list', item.value_list || [])
+        this.$set(this.skuInfo[this.activeSkuItemIndex], 'spec_memo', item.spec_memo || '')
+        this.$set(this.skuInfo[this.activeSkuItemIndex], 'spec_name', item.spec_name || '')
+        this.$set(this.skuInfo[this.activeSkuItemIndex], 'value_list', [])
 
         /** 设置当前规格值列表 */
-        this.specList = this.skuData[$index].spec_list
+        this.specList = this.skuData[this.activeSkuItemIndex].spec_list
       },
 
       /** 编辑规格项结束时触发添加事件 blur */
       editSkuItem(item, $index) {
-        /** 检测是否已存在*/
-        // const exited = this.skuInfo.some((key) => {
-        //   return key.spec_name === item.spec_name
-        // })
-        // if (exited) {
-        //   this.$message.error('当前项已存在，请重新选择或者编辑！')
-        //   return
-        // }
-        /** 更新提交数据  按道理应该等请求数据回来之后再进行赋值 此处先这么用着等组件大致完结的时候再修正*/
-        this.skuInfo[$index] = {
-          spec_memo: item.spec_memo || '',
-          spec_name: item.spec_name || '',
-          value_list: [
-            {
-              spec_id: '',
-
-              spec_value: '',
-
-              spec_value_id: ''
-            }
-          ]
+        /** 检测是否有spec_memo值 如果有则说明是选择而非编辑的终止方法的执行 */
+        if (item.spec_memo) {
+          return
         }
-
+        /** 更新skuInfo数据 按道理应该等请求数据回来之后再进行赋值 此处先这么用着等组件大致完结的时候再修正 */
+        this.$set(this.skuInfo[$index], 'spec_memo', item.spec_memo || '')
+        this.$set(this.skuInfo[$index], 'spec_name', item.spec_name || '')
+        this.$set(this.skuInfo[$index], 'value_list', item.spec_list || [])
         /** 更新下拉列表规格项数据 */
         this.$emit('updateSkuItem', item.value)
       },
@@ -220,6 +224,11 @@
         })
       },
 
+      /** 获取当前规格值索引*/
+      getActiveSkuValue(index) {
+        this.activeSkuValIndex = index
+      },
+
       /** 点击查询输入规格值建议*/
       querySearchSkuValue(queryString, cb) {
         const restaurants = this.specList.map((key) => { return key })
@@ -241,32 +250,36 @@
       },
 
       /** 选择规格值时触发 */
-      handleSelectSkuValue(val, $index, index) {
+      handleSelectSkuValue(val) {
         /** 检测是否已存在*/
-        const exited = this.skuInfo[$index].value_list.some((key) => {
+        const exited = this.skuInfo[this.activeSkuItemIndex].value_list.some((key) => {
           return key.spec_value === val.spec_value
         })
-        const _value_list = this.skuInfo[$index].value_list.filter((key) => {
+        const _value_list = this.skuInfo[this.activeSkuItemIndex].value_list.filter((key) => {
           return key.spec_value === val.spec_value
         })
         if (exited && _value_list.length > 1) {
           this.$message.error('当前项已存在，请重新选择或者编辑！')
-          this.$set(this.skuInfo[$index].value_list[index], 'spec_value', '')
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', '')
           return
         }
         /** 更新skuInfo数据 */
-        this.skuInfo[$index].value_list[index] = val
+        this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex] = val
         this.$emit('updateSkuInfo', this.skuInfo)
       },
 
       /** 编辑规格值时触发 */
       editSkuIValue(val, $index, index) {
+        /** 检测是否有spec_value_id值 如果有则说明是选择而非编辑的终止方法的执行 */
+        if (val.spec_value_id) {
+          return
+        }
         /** 更新下拉列表规格项数据 */
-        // this.$emit('updateSkuItem', val)
+        this.$emit('updateSkuItem', val)
 
         /** 更新skuInfo数据 */
-        this.skuInfo[$index].value_list[index] = val
-        console.log(this.skuInfo, 56)
+        this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex] = val
+        this.$emit('updateSkuInfo', this.skuInfo)
       }
     }
   }

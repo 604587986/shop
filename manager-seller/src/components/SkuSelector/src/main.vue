@@ -94,7 +94,7 @@
       },
       updateSkuItem(item) {
         const _params = {
-          spec_name: item
+          ...item
         }
         // API_goodsSku.saveCustomSkuItem(this.categoryId, _params).then(response => {
         //   this.skuData = response.data
@@ -107,7 +107,7 @@
         /** 构造表格数据 转换数据格式 */
         const obj = this.skuInfo.map((key) => {
           return key.value_list.map((item) => {
-            let map = new Map().set(key.spec_name, item.spec_value)
+            let map = new Map().set(key.spec_name, item.spec_value || '')
             let obj = Object.create(null)
             for (let [k, v] of map) {
               obj[k] = v
@@ -116,7 +116,6 @@
           })
         })
         this.skuInfo = this.printResult(this.combination(...obj))
-        console.log(this.skuInfo, '自己')
       },
 
       /** 重组数据*/
@@ -170,6 +169,8 @@
   }
 
   .sku-settings {
+    border: 1px solid #e5e5e5;
+    padding: 10px;
     position: relative;
     .label-sku {
       position: absolute;

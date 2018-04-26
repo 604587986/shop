@@ -11,7 +11,6 @@
           :key="item"
           :label="labeltxt(item)"
           align="center"
-          contenteditable="true"
         >
           <template slot-scope="scope">
             <span v-if="checkFixed(item)">
@@ -150,7 +149,6 @@
             while (this.concactArray[index - _count][i] === 0) {
               _count++
             }
-            console.log(_count, index - _count, i, this.concactArray[index - _count][i])
             this.concactArray[index - _count][i] += 1
           } else { // index === 0
             _currnetRow[i] = 1
@@ -177,7 +175,6 @@
           this.tableData.forEach(key => { key.price = this.batch })
           this.isShowBatch = !this.isShowBatch
         } else if (this.activeVal === 2) { // 库存
-          console.log(this.batch)
           if (!this.batch || !Number.isInteger(this.batch)) {
             this.batch = ''
             this.$message.error('请输入一个有效的库存')
@@ -192,6 +189,11 @@
       /** 取消批量设置值 */
       cancelBatch() {
         this.isShowBatch = !this.isShowBatch
+      },
+
+      /** 数据改变之后 抛出数据 */
+      submitData() {
+
       }
     }
   }
