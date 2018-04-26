@@ -36,7 +36,7 @@ export function getMesssagesAsUnread(params) {
 
 /**
  * 标记消息为已读
- * @param ids
+ * @param ids 消息ID【集合或单个ID】
  * @returns {AxiosPromise}
  */
 export function messageMarkAsRead(ids) {
@@ -48,7 +48,7 @@ export function messageMarkAsRead(ids) {
 
 /**
  * 删除消息
- * @param ids
+ * @param ids 消息ID【集合或单个ID】
  * @returns {AxiosPromise}
  */
 export function deleteMessage(ids) {

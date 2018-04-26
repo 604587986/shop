@@ -1,9 +1,9 @@
 <template>
   <div id="shop-index">
-    <template v-if="shopData">
-      <theme1 v-if="shopData.shop_theme === 1" :shop="shopData"/>
-      <theme2 v-if="shopData.shop_theme === 2" :shop="shopData"/>
-      <theme3 v-if="shopData.shop_theme === 3" :shop="shopData"/>
+    <template v-if="shop">
+      <theme1 v-if="shop.shop_theme === 1" :shop="shop"/>
+      <theme2 v-if="shop.shop_theme === 2" :shop="shop"/>
+      <theme3 v-if="shop.shop_theme === 3" :shop="shop"/>
     </template>
   </div>
 </template>
@@ -20,7 +20,7 @@
     },
     asyncData({ query }, callback) {
       API_Shop.getShopData(query.shop_id).then(response => {
-        callback(null, { shopData: response })
+        callback(null, { shop: response })
       }).catch(e => {
         callback({ statusCode: e.response.status })
       })
@@ -29,18 +29,18 @@
     data() {
       return {
         shop_id: this.$route.query.shop_id,
-        shopData: ''
+        shop: ''
       }
     },
     head () {
       return {
-        title: `${this.shopData.shop_name}-Javashop多店铺示例商城`
+        title: `${this.shop.shop_name}-Javashop多店铺示例商城`
       }
     },
     methods: {
       GET_ShopData() {
         API_Shop.getShopData(this.shop_id).then(response => {
-          this.shopData = response
+          this.shop = response
         })
       }
     }

@@ -10,14 +10,14 @@ import request from '@/utils/request'
  * @returns {string}
  */
 export function getValidateCodeUrl(type) {
-  return `${process.env.VALIDATE_CODE_API}/validcode.do?vtype=${type}&r=${new Date().getTime()}`
+  return `http://localhost:3001/javashop/validcode.do?vtype=${type}&r=${new Date().getTime()}`
 }
 
 /**
  * 图片上传API
  * @type {string}
  */
-export const uploadApi = `${process.env.UPLOAD_API}/core/upload.do`
+export const uploadApi = 'http://localhost:3001/javashop/core/upload.do'
 
 /**
  * 获取热门关键字
@@ -35,7 +35,7 @@ export function getHotKeywords() {
 
 /**
  * 搜索关键字自动完成
- * @param keyword
+ * @param keyword 关键词
  * @returns {Promise<any>}
  */
 export function getAutoCompleteKeyword(keyword) {

@@ -21,7 +21,7 @@ export function getGoodsCollection(params) {
 
 /**
  * 收藏商品
- * @param goods_id
+ * @param goods_id 商品ID
  * @returns {AxiosPromise}
  */
 export function collectionGoods(goods_id) {
@@ -33,7 +33,7 @@ export function collectionGoods(goods_id) {
 
 /**
  * 删除商品收藏
- * @param ids
+ * @param ids 商品ID【集合或单个商品ID】
  * @returns {AxiosPromise}
  */
 export function deleteGoodsCollection(ids) {
@@ -59,7 +59,7 @@ export function getShopCollection(params) {
 
 /**
  * 收藏店铺
- * @param shop_id
+ * @param shop_id 店铺ID
  * @returns {AxiosPromise}
  */
 export function collectionShop(shop_id) {
@@ -71,7 +71,7 @@ export function collectionShop(shop_id) {
 
 /**
  * 删除店铺收藏
- * @param ids
+ * @param ids 店铺ID【集合或单个ID】
  * @returns {AxiosPromise}
  */
 export function deleteShopCollection(ids) {

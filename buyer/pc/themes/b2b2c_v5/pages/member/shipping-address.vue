@@ -63,7 +63,6 @@
 
 <script>
   import Vue from 'vue'
-  import axios from 'axios'
   import { mapActions, mapGetters } from 'vuex'
   import { AddressSelect } from '@/components'
   import * as regExp from '@/utils/RegExp'

@@ -13,7 +13,7 @@ export const mutations = {
    * @param state
    * @param data
    */
-  [types.SET_GOODS_COLLECTION](state, data) {
+  [types.SET_COLLECTION_GOODS](state, data) {
     state.goodsCollectionData = data
   },
   /**
@@ -21,7 +21,7 @@ export const mutations = {
    * @param state
    * @param ids
    */
-  [types.DELETE_GOODS_COLLECTION](state, ids) {
+  [types.DELETE_COLLECTION_GOODS](state, ids) {
     if (!Array.isArray(ids)) ids = [ids]
     const _list = []
     state.goodsCollectionData.data.forEach(item => {
@@ -34,7 +34,7 @@ export const mutations = {
    * @param state
    * @param data
    */
-  [types.SET_SHOP_COLLECTION](state, data) {
+  [types.SET_COLLECTION_SHOP](state, data) {
     state.shopCollectionData = data
   },
   /**
@@ -42,7 +42,7 @@ export const mutations = {
    * @param state
    * @param ids
    */
-  [types.DELETE_SHOP_COLLECTION](state, ids) {
+  [types.DELETE_COLLECTION_SHOP](state, ids) {
     if (!Array.isArray(ids)) ids = [ids]
     const _list = []
     state.shopCollectionData.data.forEach(item => {
@@ -63,7 +63,7 @@ export const actions = {
   getGoodsCollectionDataAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Collection.getGoodsCollection(params).then(response => {
-        commit(types.SET_GOODS_COLLECTION, response)
+        commit(types.SET_COLLECTION_GOODS, response)
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -77,7 +77,7 @@ export const actions = {
   deleteGoodsCollectionAction: ({ commit }, ids) => {
     return new Promise((resolve, reject) => {
       API_Collection.deleteGoodsCollection(ids).then(response => {
-        commit(types.DELETE_GOODS_COLLECTION, ids)
+        commit(types.DELETE_COLLECTION_GOODS, ids)
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -91,7 +91,7 @@ export const actions = {
   getShopCollectionDataAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Collection.getShopCollection(params).then(response => {
-        commit(types.SET_SHOP_COLLECTION, response)
+        commit(types.SET_COLLECTION_SHOP, response)
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -105,7 +105,7 @@ export const actions = {
   deleteShopCollectionAction: ({ commit }, ids) => {
     return new Promise((resolve, reject) => {
       API_Collection.deleteShopCollection(ids).then(response => {
-        commit(types.DELETE_SHOP_COLLECTION, ids)
+        commit(types.DELETE_COLLECTION_SHOP, ids)
         resolve(response)
       }).catch(error => reject(error))
     })

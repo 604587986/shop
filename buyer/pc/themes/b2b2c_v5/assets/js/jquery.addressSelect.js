@@ -3,6 +3,8 @@
  * version 1.0.5
  */
 
+import axios from 'axios'
+
 ;(function ($, window, document, undefined) {
     var addressSelect = function (ele, opts) {
         this.$element = ele;
