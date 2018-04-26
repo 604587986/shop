@@ -19,7 +19,8 @@
     "js-cookie": "^2.2.0",
     "normalize.css": "^8.0.0",
     "nuxt": "^1.4.0",
-    "swiper": "^4.2.0"
+    "swiper": "^4.2.0",
+    "vue-piczoom": "^1.0.6"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

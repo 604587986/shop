@@ -1,0 +1,54 @@
+<template>
+  <div id="goods-zoom" class="goods-zoom-container">
+    <div class="swiper-container-zoom">
+      <div class="swiper-wrapper">
+        <!--<img v-for="image in images" :src="image.small" :key="image.small" class="swiper-slide">-->
+      </div>
+    </div>
+    <div class="zoom-box">
+      <pic-zoom :url="current.small" :big-url="current.big" :scale="3"></pic-zoom>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "goods-zoom",
+    props: ['images', 'curImg'],
+    computed: {
+      current() {
+        return this.images[0]
+      }
+    },
+    watch: {
+      curImg(newVal, oldVal) {
+        this.current = { small: newVal, big: newVal }
+      }
+    },
+    methods: {
+    }
+  }
+</script>
+
+<style type="text/scss" lang="scss" scoped>
+  .goods-zoom-container {
+    display: flex;
+    width: 480px;
+    height: 400px;
+    border: 1px solid #ededed;
+  }
+  .swiper-container-zoom {
+    width: 80px;
+    height: 100%;
+    border-right: 1px solid #ededed;
+    .swiper-slide {
+      width: 80px;
+      height: 80px;
+      cursor: pointer;
+    }
+  }
+  .zoom-box {
+    width: 400px;
+    height: 400px;
+  }
+</style>
