@@ -13,9 +13,11 @@
 
 <script>
   import Swiper from 'swiper'
+  import { PicZoom } from '@/components'
   export default {
     name: "goods-zoom",
     props: ['images', 'curImg'],
+    components: { PicZoom },
     computed: {
       current() {
         return this.images[0]
