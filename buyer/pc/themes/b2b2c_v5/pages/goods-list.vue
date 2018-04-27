@@ -133,13 +133,15 @@
             <li v-for="goods in goodsData.data" :key="goods.goods_id">
               <div class="gl-item">
                 <div class="gl-img">
-                  <img src="https://img13.360buyimg.com/n7/jfs/t16096/72/2361833392/251194/4945bb65/5aa3a872Naeb5f0ce.jpg" alt="">
+                  <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">
+                    <img src="https://img13.360buyimg.com/n7/jfs/t16096/72/2361833392/251194/4945bb65/5aa3a872Naeb5f0ce.jpg" alt="">
+                  </nuxt-link>
                 </div>
                 <div class="gl-price">
                   <strong><em>¥</em><i>99.00</i></strong>
                 </div>
                 <div class="gl-name">
-                  <nuxt-link to="#" title="京东自营 闪电发货 支持货到付款【儿童日买3免1】店内部分春季爆品、夏季新品参与促销，查看详情猛戳我>>">
+                  <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" title="京东自营 闪电发货 支持货到付款【儿童日买3免1】店内部分春季爆品、夏季新品参与促销，查看详情猛戳我>>">
                     <em>京东自营 闪电发货 支持货到付款【儿童日买3免1】店内部分春季爆品、夏季新品参与促销，查看详情猛戳我>></em>
                   </nuxt-link>
                   <span class="gl-attribute">
