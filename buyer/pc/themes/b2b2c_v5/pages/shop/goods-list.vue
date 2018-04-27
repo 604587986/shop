@@ -36,12 +36,12 @@
         <ul class="goods-list">
           <li v-for="goods in goods.data" :key="goods.goods_id" class="goods-item">
             <div class="goods-image">
-              <nuxt-link :to="'/goods/' + goods.goods_id">
+              <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">
                 <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
               </nuxt-link>
             </div>
             <div class="goods-name">
-              <nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.goods_name }}</nuxt-link>
+              <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">{{ goods.goods_name }}</nuxt-link>
             </div>
             <div class="goods-price">
               <span>RMB：<span class="price">￥<strong>{{ goods.goods_price | unitPrice }}</strong></span></span>
