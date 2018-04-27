@@ -40,11 +40,11 @@
           <empty v-if="orderList.length === 0">暂无订单...</empty>
           <template v-else>
             <div v-for="(item, index) in orderList" v-if="index < 3" :key="item.order_sn" class="order-item" >
-              <nuxt-link :to="'/goods/' + item.skuList[0].goods_id" class="goods-image">
+              <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-image">
                   <img :src="item.skuList[0].goods_image">
                 </nuxt-link>
               <div class="order-info">
-                  <nuxt-link :to="'/goods/' + item.skuList[0].goods_id" class="goods-name">{{ item.skuList[0].goods_name }}</nuxt-link>
+                  <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-name">{{ item.skuList[0].goods_name }}</nuxt-link>
                   <p>下单时间：2018-03-23 17:44:59</p>
                   <p>订单金额：<span class="price">￥343.80</span></p>
                   <p class="order-status-num"><span>订单状态：未付款</span><span>订单内共有（{{ item.skuList.length }}）种商品</span></p>
@@ -65,11 +65,11 @@
           <empty v-if="cartSkuList.length === 0">暂无商品...</empty>
           <template v-else>
             <div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">
-              <nuxt-link :to="'/goods/' + 2" class="goods-image">
+              <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" class="goods-image">
                 <img :src="item.goods_image" :alt="item.goods_name">
               </nuxt-link>
               <div class="goods-name">
-                <nuxt-link :to="'/goods/' + 2">{{ item.goods_name }}</nuxt-link>
+                <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">{{ item.goods_name }}</nuxt-link>
                 <p><em>￥{{ item.price | unitPrice }}</em> <span>x {{ item.num }}</span></p>
               </div>
               <a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>
@@ -93,7 +93,7 @@
               :key="item.goods_id"
               class="goods-collection-item"
             >
-              <nuxt-link :to="'/goods/' + item.goods_id">
+              <nuxt-link :to="'/goods-' + item.goods_id + '.html'">
                 <img :src="item.goods_image" :alt="item.goods_name" class="goods-image">
               </nuxt-link>
               <span class="goods-name">{{ item.goods_name }}</span>
@@ -132,7 +132,7 @@
                   <nuxt-link
                     v-for="goods in item.goodsList"
                     :key="goods.goods_id"
-                    :to="'/goods/' + goods.goods_id"
+                    :to="'/goods-' + goods.goods_id + '.html'"
                     :title="goods.goods_name"
                     class="swiper-slide"
                   >
@@ -153,7 +153,6 @@
 <script>
   import { mapActions, mapGetters } from 'vuex'
   import Swiper from 'swiper'
-  import 'swiper/dist/css/swiper.min.css'
   import Empty from './-empty'
   export default {
     name: 'member-index',

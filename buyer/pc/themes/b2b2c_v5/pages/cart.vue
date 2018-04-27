@@ -36,10 +36,10 @@
                     <a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
                       <i class="iconfont ea-icon-check"></i>
                     </a>
-                    <nuxt-link :to="'/goods/' + sku.sku_id" class="sku-pic">
+                    <nuxt-link :to="'/goods-' + sku.sku_id + '.html'" class="sku-pic">
                       <img :src="sku.goods_image" :alt="sku.goods_name">
                     </nuxt-link>
-                    <nuxt-link :to="'/goods/' + sku.sku_id" class="sku-name">
+                    <nuxt-link :to="'/goods-' + sku.sku_id + '.html'" class="sku-name">
                       {{ sku.goods_name }}
                     </nuxt-link>
                     <div class="sku-price">{{ sku.price | unitPrice }}</div>

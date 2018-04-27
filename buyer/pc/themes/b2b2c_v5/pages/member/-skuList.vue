@@ -3,10 +3,10 @@
   <el-table :data="skuList" style="width: 100%">
     <el-table-column label="商品名称" class-name="goods-name-img">
       <template slot-scope="scope">
-        <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank">
+        <nuxt-link :to="'/goods-' + scope.row.goods_id + '.html'" target="_blank">
           <img :src="scope.row.goods_image">
         </nuxt-link>
-        <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row.goods_name }}</nuxt-link>
+        <nuxt-link :to="'/goods-' + scope.row.goods_id + '.html'" target="_blank" class="goods-name">{{ scope.row.goods_name }}</nuxt-link>
       </template>
     </el-table-column>
     <el-table-column label="商品单价" width="120">
