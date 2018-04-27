@@ -24,7 +24,7 @@
       </template>
     </div>
     <div class="zoom-box">
-      <pic-zoom :url="current.small" :big-url="current.big" style="width: 400px;height: 400px"></pic-zoom>
+      <pic-zoom :url="current.small" :big-url="current.big" scroll style="width: 400px;height: 400px"></pic-zoom>
     </div>
   </div>
 </template>
