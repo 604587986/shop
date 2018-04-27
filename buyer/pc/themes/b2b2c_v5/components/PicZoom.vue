@@ -1,5 +1,10 @@
+<!--
+插件来自：
+https://github.com/826327700/vue-piczoom
+由于使用npm安装方式报错，所以放到本地
+-->
 <template>
-  <div class="magnifier-box" :class="vertical?'vertical':''" :ref="id" @mousemove="mousemove" @mouseover="mouseover" @mouseleave="mouseleave">
+  <div class="magnifier-box" :class="[vertical && 'vertical']" :ref="id" @mousemove="mousemove" @mouseover="mouseover" @mouseleave="mouseleave">
     <img v-show="showImg" :src="imgUrl" alt="">
     <div class="mouse-cover"></div>
     <div class="edit-wrap" v-if="showEidt">
@@ -77,7 +82,7 @@
         this.orginUrl = val
         this.initTime()
       },
-      bigUrl: function(){
+      bigUrl: function(bigUrl){
         this.bigImgUrl = bigUrl
         this.bigOrginUrl = bigUrl
         this.initTime()
