@@ -3,11 +3,13 @@
  */
 
 import BreadNav from './-bread-nav'
+import GoodsInfo from './-goods-info'
 import GoodsZoom from './-goods-zoom'
 import ShopCard from './-shop-card'
 
 export {
   BreadNav,
+  GoodsInfo,
   GoodsZoom,
   ShopCard
 }
