@@ -42,6 +42,7 @@
     </div>
     <!--步骤2-->
     <div class="content-goods-publish" v-if="activestep === 1">
+      <!--商品详情-->
       <el-form
         :model="baseInfoForm"
         status-icon
@@ -230,11 +231,9 @@
         ref="goods_params_list"
         label-width="120px"
         class="demo-ruleForm">
-        <!--商品参数-->
         <el-collapse>
-          <!--商品参数-->
           <el-collapse-item
-            v-for="paramsgroup in  goodsParams" :title="`${paramsgroup.group_name}:`" :key="paramsgroup.group_id">
+            v-for="paramsgroup in  goodsParams" :title="paramsgroup.group_name" :key="paramsgroup.group_id">
             <el-form-item
               v-for="(goods_params_list, index) in baseInfoForm.goods_params_list"
               v-if="paramsgroup.group_id === goods_params_list.group_id"

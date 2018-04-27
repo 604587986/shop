@@ -39,17 +39,16 @@
             </el-autocomplete>
             <!--规格值图片 上传列表-->
             <div v-show="$index === 0 && checkedImage">
-              <img :src="val.spec_image" alt="" class="sku-image">
               <el-upload
-                class="upload-demo"
-                style="text-align: center;"
+                class="avatar-uploader"
+                style="text-align: center; margin-top: 10px;"
                 :key="index"
                 :action="BASE_IMG_URL"
-                :before-upload="beforeImgUpload"
-                :on-preview="handleImgPreview"
+                :show-file-list="false"
                 :on-success="getImgUrl"
-                list-type="picture">
-                <el-button size="small" type="primary">点击上传</el-button>
+                :before-upload="beforeImgUpload">
+                <img v-if="val.spec_image" :src="val.spec_image" class="avatar sku-image" @click="handleClickImg(index)">
+                <i v-else class="el-icon-plus avatar-uploader-icon"  @click="handleClickImg(index)"></i>
               </el-upload>
             </div>
           </div>
@@ -219,6 +218,15 @@
       /** 选中/不选中 添加规格图片 是否显示上传组件*/
       handleChangeImage(val) {
         this.checkedImage = val
+        /** 如果 图片按钮不显示 则置空图片列表中的所有图片数据 并且spec_type设置为0 */
+        if (!val) {
+          this.skuInfo.forEach(key => {
+            key.value_list.forEach(item => {
+              item.spec_image = ''
+              item.spec_type = 0
+            })
+          })
+        }
       },
 
       /** 规格值 */
@@ -297,17 +305,12 @@
         if (val.spec_value_id) {
           return
         }
-        /** 更新下拉列表规格项数据 */
-        this.$emit('updateSkuItem', val)
+        /** 更新下拉列表规格值数据 */
+        this.$emit('updateSkuVal', val)
 
         /** 更新skuInfo数据 */
         this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex] = val
         this.$emit('updateSkuInfo', this.skuInfo)
-      },
-
-      /** 点击已上传的文件链接时的钩子*/
-      handleImgPreview(file) {
-        this.dialogImageUrl = file.url
       },
 
       /** 图片上传之前的校验  */
@@ -324,12 +327,17 @@
         return isType && isLt1M
       },
 
+      /** 点击已上传的图片 或者 i标签 */
+      handleClickImg(index) {
+        this.activeSkuValIndex = index
+      },
+
       /** 文件上传成功之后的钩子 */
       getImgUrl(response, file, fileList) {
         console.log(response, file, fileList)
         /** 更新skuInfo数据 */
-        this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_image = file.url
-        this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_type = 1
+        this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', file.url)
+        this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', 1)
         this.$emit('updateSkuInfo', this.skuInfo)
       }
     }
@@ -406,10 +414,22 @@
         }
         /** 待上传图片 */
         img.sku-image {
-          width: 50px;
-          height: 50px;
-          border: 1px solid #e5e5e5;
-          background: rgba(158, 158, 158, .6);
+          width: 120px;
+          height: 120px;
+        }
+        i.avatar-uploader-icon {
+          font-size: 28px;
+          color: #8c939d;
+          width: 120px;
+          height: 120px;
+          line-height: 120px;
+          text-align: center;
+          border: 1px dashed #d9d9d9;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+        i.avatar-uploader-icon:hover {
+          border-color: #409eff;
         }
       }
     }
