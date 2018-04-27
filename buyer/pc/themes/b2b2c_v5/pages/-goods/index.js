@@ -4,8 +4,10 @@
 
 import BreadNav from './-bread-nav'
 import GoodsZoom from './-goods-zoom'
+import ShopCard from './-shop-card'
 
 export {
   BreadNav,
-  GoodsZoom
+  GoodsZoom,
+  ShopCard
 }
