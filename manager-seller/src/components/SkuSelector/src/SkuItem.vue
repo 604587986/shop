@@ -44,7 +44,7 @@
                 class="upload-demo"
                 style="text-align: center;"
                 :key="index"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                :action="BASE_IMG_URL"
                 :before-upload="beforeImgUpload"
                 :on-preview="handleImgPreview"
                 :on-success="getImgUrl"
@@ -85,6 +85,9 @@
     },
     data() {
       return {
+        /** 图片服务器地址 */
+        BASE_IMG_URL: process.env.BASE_IMG_URL,
+
         /** 表单数据  估计没啥用*/
         skuForm: {},
 

@@ -109,7 +109,7 @@
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
                 class="avatar-uploader"
-                action="http://localhost:8090/receiveImg.php/photo/"
+                :action="BASE_IMG_URL"
                 list-type="picture-card"
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
@@ -359,6 +359,9 @@
         }, 1000)
       }
       return {
+        /** 图片服务器地址 */
+        BASE_IMG_URL: process.env.BASE_IMG_URL,
+
         /** 加载中。。。 */
         loading: false,
 

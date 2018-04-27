@@ -65,12 +65,11 @@
       }
     },
     mounted() {
-      // if (this.goodsId) {
-      //   this.getSkuInfoByGoods()
-      // } else {
-      //   this.getSkuInfoByCategory()
-      // }
-      this.getSkuInfoByCategory()
+      if (this.goodsId) {
+        this.getSkuInfoByGoods()
+      } else {
+        this.getSkuInfoByCategory()
+      }
     },
     methods: {
       /** 根据分类id获取规格信息*/
@@ -116,6 +115,7 @@
           })
         })
         this.skuInfo = this.printResult(this.combination(...obj))
+        console.log(this.skuInfo, '表格数据')
       },
 
       /** 重组数据*/
