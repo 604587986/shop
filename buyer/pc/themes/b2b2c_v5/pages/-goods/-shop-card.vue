@@ -43,6 +43,7 @@
         }
         API_Collection.collectionShop(shop_id).then(() => {
           this.$message.success('收藏店铺成功！')
+          this.goods.shop_collected = true
           this.goods.shop_collection_num += 1
         })
       }
