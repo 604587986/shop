@@ -224,7 +224,7 @@
       </el-form>
       <!--商品参数-->
       <el-form
-        :model="baseInfoForm.goods_params_list"
+        :model="baseInfoForm"
         status-icon
         label-position="right"
         ref="goods_params_list"
@@ -236,22 +236,23 @@
           <el-collapse-item
             v-for="paramsgroup in  goodsParams" :title="`${paramsgroup.group_name}:`" :key="paramsgroup.group_id">
             <el-form-item
-              v-if="paramsgroup.params"
-              v-for="paramsitem in paramsgroup.params"
-              :key="paramsitem.param_id"
-              :label="`${paramsitem.param_name}：`"
-              :prop="paramsitem.param_value"
-              :rules="{ 'param_value': [{required: true, message: '不能为空', trigger: 'blur' }]}">
-              <el-input v-if="paramsitem.param_type === 1 " v-model="paramsitem.param_value" ></el-input>
+              v-for="(goods_params_list, index) in baseInfoForm.goods_params_list"
+              v-if="paramsgroup.group_id === goods_params_list.group_id"
+              :key="goods_params_list.param_id"
+              :label="`${goods_params_list.param_name}：`"
+              :prop="'goods_params_list.' + index + '.param_value'"
+              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'blur' }"
+            >
+              <el-input v-if="goods_params_list.param_type === 1 " v-model="goods_params_list.param_value" ></el-input>
               <el-select
-                v-if="paramsitem.param_type === 2"
-                v-model="paramsitem.param_value"
+                v-if="goods_params_list.param_type === 2"
+                v-model="goods_params_list.param_value"
                 filterable
                 @visible-change="getGoodsBrandList"
                 @change="changeGoodsBrand"
                 placeholder="请选择">
                 <el-option
-                  v-for="option in optionList"
+                  v-for="option in goods_params_list.optionList"
                   :key="option.value"
                   :label="option.label"
                   :value="option.value">
@@ -334,12 +335,6 @@
             }
           }
         }, 1000)
-      }
-      var checkEmpty = (rule, value, callback) => {
-        console.log(value, 456)
-        if (!value) {
-          return callback(new Error('市场价格不能为空'))
-        }
       }
 
       var checkCost = (rule, value, callback) => {
@@ -459,17 +454,7 @@
           goods_desc: null,
 
           /** 要提交的 商品参数列表 */
-          goods_params_list: [{
-
-            /** 参数id */
-            param_id: '',
-
-            /** 参数名称 */
-            param_name: '',
-
-            /** 参数值 */
-            param_value: ''
-          }]
+          goods_params_list: []
         },
 
         /** 请求的商品参数组列表 */
@@ -487,6 +472,23 @@
                 optionList: [
                   { value: 1, label: '及sad' },
                   { value: 2, label: '啥事' }
+                ]
+              }
+            ]
+          },
+          {
+            group_id: '21',
+            group_name: '小二',
+            params: [
+              {
+                param_id: 12,
+                param_name: '谁知道',
+                param_type: 2,
+                param_value: 'task',
+                required: 0,
+                optionList: [
+                  { value: 1, label: '一部非' },
+                  { value: 2, label: '哈哈' }
                 ]
               }
             ]
@@ -568,11 +570,7 @@
           summary_stock: [
             { required: true, message: '请填写总库存', trigger: 'blur' }
           ]
-          // param_value: [
-          //   { validator: checkEmpty, trigger: 'blur' }
-          // ]
         }
-
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -637,7 +635,6 @@
 
       /** 上架  */
       aboveGoods() {
-        console.log(this.baseInfoForm, 45646)
         if (this.currentStatus === 0) {
           /** 正常商品上架 */
           API_goods.aboveGoods(this.baseInfoForm).then(response => {
@@ -726,10 +723,27 @@
 
       /** 查询商品参数 */
       GET_GoodsParams() {
+        // 处理数据 方便校验
+        let _paramsList = []
+        this.goodsParams.forEach(key => {
+          key.params.forEach(item => {
+            this.$set(item, 'group_id', key.group_id)
+          })
+          _paramsList = _paramsList.concat(key.params)
+        })
+        this.baseInfoForm.goods_params_list = _paramsList
         // const goods_id = this.activeGoodsId || 0
         // API_goods.getGoodsParams(this.activeGoodsId, { goods_id }).then((response) => {
         //   this.loading = false
         //   this.goodsParams = response.data
+        //   let _paramsList = []
+        //   this.goodsParams.forEach(key => {
+        //     key.params.forEach(item => {
+        //       this.$set(item, 'group_id', key.group_id)
+        //     })
+        //     _paramsList = _paramsList.concat(key.params)
+        //   })
+        //   this.baseInfoForm.goods_params_list = _paramsList
         // }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
       },
 
