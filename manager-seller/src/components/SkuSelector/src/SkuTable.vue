@@ -59,7 +59,7 @@
       }
     },
     watch: {
-      skuInfo: function() { // 此方法可能中毒了 不能使用箭头函数 原因不明
+      skuInfo() {
         this.tableData = this.skuInfo
         this.concactArray = []
         this.tableData.forEach((key, index) => {
