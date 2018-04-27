@@ -7,6 +7,7 @@ import CountDownBtn from './CountDownBtn'
 import Footer from './Footer'
 import Header from './Header'
 import Nav from './Nav'
+import PicZoom from './PicZoom'
 import Search from './Search'
 import Settleup from './Settleup'
 import ShopStar from './ShopStar'
@@ -21,6 +22,7 @@ export {
   Footer,
   Header,
   Nav,
+  PicZoom,
   Search,
   Settleup,
   ShopStar,
