@@ -115,7 +115,7 @@
       position: absolute;
       left: 0;
       top: 0;
-      background: url("../../assets/images/icons-goods.png") no-repeat -141px -238px;
+      background: url(~/assets/images/icons-goods.png) no-repeat -141px -238px;
     }
     .swiper-btn {
       position: absolute;
