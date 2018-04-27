@@ -235,7 +235,7 @@ export function underGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function aboveGoods(params) {
-  const _params = params
+  const _params = params || { }
   const _formData = new FormData()
   _params.forEach((key, index) => _formData.append(index, key))
   return new Promise((resolve, reject) => {

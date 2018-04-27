@@ -128,6 +128,7 @@
           <div>
             <el-form-item label="商品规格："  style="width: 90%;text-align: left;">
               <!--规格选择器-->
+               <en-sku-selector></en-sku-selector>
             </el-form-item>
             <el-form-item label="总库存：" prop="summary_stock" style="width: 20%;text-align: left;">
               <el-input v-model="baseInfoForm.summary_stock" disabled></el-input>
@@ -305,6 +306,7 @@
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
   import { TableLayout, TableSearch, CategoryPicker, SkuSelector, UE } from '@/components'
+  import { SkuEditor } from '@/plugins/selector/vue'
   export default {
     name: 'goodsPublish',
     components: {
@@ -312,7 +314,8 @@
       [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [SkuSelector.name]: SkuSelector,
-      [UE.name]: UE
+      [UE.name]: UE,
+      [SkuEditor.name]: SkuEditor
     },
 
     data() {
@@ -461,6 +464,23 @@
                     optionList: [
                       { value: 1, label: '及sad' },
                       { value: 2, label: '啥事' }
+                    ]
+                  }
+                ]
+              },
+              {
+                group_id: '2',
+                group_name: '基本信息',
+                params: [
+                  {
+                    param_id: 2,
+                    param_name: '主角光环',
+                    param_type: 1,
+                    param_value: '程序员你知道么？',
+                    required: 0,
+                    optionList: [
+                      { value: 1, label: '大法' },
+                      { value: 2, label: '戊二醛二' }
                     ]
                   }
                 ]

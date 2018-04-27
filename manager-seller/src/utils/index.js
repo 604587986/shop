@@ -248,6 +248,7 @@ export function debounce(func, wait, immediate) {
   }
 }
 
+/** 深拷贝*/
 export function deepClone(source) {
   if (!source && typeof source !== 'object') {
     throw new Error('error arguments', 'shallowClone')
@@ -264,4 +265,21 @@ export function deepClone(source) {
     }
   }
   return targetObj
+}
+
+/** 数组对象深拷贝 */
+export function cloneObj(obj) {
+  let str = null
+  let newobj = obj.constructor === Array ? [] : {}
+  if (typeof obj !== 'object') {
+    return
+  } else if (window && window.JSON) {
+    str = JSON.stringify(obj) // 系列化对象
+    newobj = JSON.parse(str) // 还原
+  } else {
+    for (var i in obj) {
+      newobj[i] = typeof obj[i] === 'object' ? cloneObj(obj[i]) : obj[i]
+    }
+  }
+  return newobj
 }

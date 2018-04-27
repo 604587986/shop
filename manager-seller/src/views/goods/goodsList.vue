@@ -96,7 +96,7 @@
               </template>
             </el-table-column>
             <!--prop="deliver_goods_quantity"-->
-            <el-table-column  label="待发货数" width="120"></el-table-column>
+            <el-table-column prop="deliver_goods_quantity" label="待发货数" width="120" />
           </template>
         </en-tabel-layout>
       </div>
@@ -159,6 +159,9 @@
     },
     mounted() {
       this.GET_GoodsList()
+    },
+    computed: {
+
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
@@ -277,6 +280,10 @@
         this.goodsStockshow = true
         API_goods.getGoodsStockList().then((response) => {
           this.goodsStocknums = response.data.length
+          // 构造待发货字段
+          response.data.forEach((key) => {
+            this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
+          })
           this.goodsStockData = response.data.length === 1 ? response.data[0] : response.data
         }).catch(() => this.$message.error('请求库存数据出错，请稍后再试！'))
       },
