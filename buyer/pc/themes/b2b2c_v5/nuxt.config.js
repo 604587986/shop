@@ -7,11 +7,11 @@ module.exports = {
     BASE_API: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer'
   },
   head: {
-    title: '商城首页-Javashop多店铺示例商城',
+    title: 'Javashop多店铺示例商城',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'keywords', content: '最好的Java网店系统,Java多用户商城,Java商城定制开发' },
+      { hid: 'keywords', name: 'keywords', content: '最好的Java网店系统,Java多用户商城,Java商城定制开发' },
       { hid: 'description', name: 'description', content: 'Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。' },
       { name: 'renderer', content: 'webkit' },
       { name: 'force-rendering', content: 'webkit' },
