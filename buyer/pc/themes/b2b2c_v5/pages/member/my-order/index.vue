@@ -39,12 +39,12 @@
             <div class="order-item-sku">
               <div class="sku-item" v-for="sku in order.skuList" :key="sku.sku_id">
                 <div class="goods-image">
-                  <nuxt-link :to="'/goods/' + sku.goods_id">
+                  <nuxt-link :to="'/goods-' + sku.goods_id + '.html'">
                     <img :src="sku.goods_image" :alt="sku.goods_name">
                   </nuxt-link>
                 </div>
                 <div class="goods-name">
-                  <nuxt-link :to="'/goods/' + sku.goods_id">{{ sku.goods_name }}</nuxt-link>
+                  <nuxt-link :to="'/goods-' + sku.goods_id + '.html'">{{ sku.goods_name }}</nuxt-link>
                 </div>
                 <div class="sku-price">{{ sku.goods_price | unitPrice('￥') }}</div>
                 <div class="sku-num">x {{ sku.num }}</div>
