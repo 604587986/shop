@@ -1,16 +1,15 @@
 <template>
-  <div id="goods-comments" class="goods-comments">
+  <div id="sales-record" class="sales-record">
+
   </div>
 </template>
 
 <script>
   export default {
-    name: "goods-comments"
+    name: "sales-record"
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .goods-comments {
 
-  }
 </style>
