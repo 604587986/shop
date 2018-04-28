@@ -56,7 +56,7 @@ export function saveTagGoodsList(tag_id, goods_ids, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/tags/${tag_id}/goods/${goods_ids}`,
-      method: 'post',
+      method: 'put',
       loading: false,
       data: _formData
     }).then(response => {
