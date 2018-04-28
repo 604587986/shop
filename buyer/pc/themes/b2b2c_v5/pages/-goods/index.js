@@ -9,6 +9,7 @@ import GoodsInfo from './-goods-info'
 import GoodsParams from './-goods-params'
 import GoodsTags from './-goods-tags'
 import GoodsZoom from './-goods-zoom'
+import SalesRecord from './-sales-record'
 import ShopCard from './-shop-card'
 
 export {
@@ -19,5 +20,6 @@ export {
   GoodsParams,
   GoodsTags,
   GoodsZoom,
+  SalesRecord,
   ShopCard
 }
