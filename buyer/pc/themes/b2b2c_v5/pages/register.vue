@@ -39,7 +39,7 @@
           </el-form-item>
           <el-form-item label="图片验证码：" prop="vali_code" class="vali-img">
             <el-input v-model="valiMobileForm.vali_code" :maxlength="4">
-              <img src="http://data.andste.cc/developers/web/temp/images/validcode-img.png" slot="append">
+              <img :src="valid_code_url" slot="append" @click="changeValidCodeUrl">
             </el-input>
           </el-form-item>
         </el-form>
@@ -119,6 +119,8 @@
   Vue.use(Form)
   Vue.use(FormItem)
   Vue.use(Input)
+  import * as API_Common from '@/api/common'
+  import * as API_SendSms from '@/api/sendSms'
   import * as regExp from '@/utils/RegExp'
   export default {
     name: 'register',
@@ -127,8 +129,12 @@
       return {
         /** 注册步骤 */
         step: 1,
+        valid_code_url: this.changeValidCodeUrl(),
         /** 校验手机 表单 */
-        valiMobileForm: {},
+        valiMobileForm: {
+          mobile: 18519951112,
+          vali_code: 'zzzz'
+        },
         /** 校验手机 表单规则 */
         valiMobileRules: {
           mobile: [
@@ -193,20 +199,37 @@
       }
     },
     methods: {
+      /** 获取图片验证码 */
+      changeValidCodeUrl() {
+        const _url = API_Common.getValidateCodeUrl(this.MixinUUID, 'REGISTER')
+        this.valid_code_url = _url
+        return _url
+      },
       /** 发送手机验证码异步方法 */
       sendValidMobileSms() {
         return new Promise((resolve, reject) => {
-          this.$refs['valiMobileForm'].validate((valid) => {
-            if (valid) {
-              setTimeout(() => {
-                resolve()
-              }, 3000)
-            } else {
-              this.$message.error('表单填写有误，请检查！')
-              return false
-            }
+          const { mobile, vali_code } = this.valiMobileForm
+          API_SendSms.register(this.MixinUUID, mobile, vali_code).then(() => {
+            resolve()
+          }).catch(() => {
+            reject()
           })
         })
+        // return new Promise((resolve, reject) => {
+        //   this.$refs['valiMobileForm'].validate((valid) => {
+        //     if (valid) {
+        //       const { mobile, vali_code } = this.valiMobileForm
+        //       API_SendSms.register(mobile, vali_code).then(() => {
+        //         resolve()
+        //       }).catch(() => {
+        //         reject()
+        //       })
+        //     } else {
+        //       this.$message.error('表单填写有误，请检查！')
+        //       return false
+        //     }
+        //   })
+        // })
       },
       handleCountDownEnd() {
         console.log('倒计时结束>...')
