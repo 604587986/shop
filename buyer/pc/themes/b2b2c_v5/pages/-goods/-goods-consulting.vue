@@ -13,7 +13,7 @@
     name: "goods-consulting",
     props: ['goodsId'],
     methods: {
-      /** 显示提问窗 */
+      /** 显示咨询窗 */
       handleShowPrompt() {
         this.$layer.prompt({
           formType: 2,
