@@ -129,7 +129,7 @@
       return {
         /** 注册步骤 */
         step: 1,
-        valid_code_url: this.changeValidCodeUrl(),
+        valid_code_url: '',
         /** 校验手机 表单 */
         valiMobileForm: {
           mobile: 18519951112,
@@ -197,6 +197,9 @@
           ]
         }
       }
+    },
+    created() {
+      this.changeValidCodeUrl()
     },
     methods: {
       /** 获取图片验证码 */
