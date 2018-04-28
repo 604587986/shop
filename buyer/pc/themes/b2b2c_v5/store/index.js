@@ -1,12 +1,15 @@
 import * as types from './mutation-types'
 import * as API_Common from '@/api/common'
+import uuidv1 from 'uuid/v1'
 
 /** state */
 export const state = () => ({
   // 导航栏
   navList: [],
   // 分类
-  categoryList: []
+  categoryList: [],
+  // uuid
+  uuid: uuidv1()
 })
 
 /** mutations */
@@ -49,10 +52,18 @@ export const getters = {
    * @returns {*}
    */
   navList: state => state.navList,
+
   /**
    * 分类列表
    * @param state
    * @returns {*}
    */
-  categoryList: state => state.categoryList
+  categoryList: state => state.categoryList,
+
+  /**
+   * 获取UUID
+   * @param state
+   * @returns {getters.uuid|(function(*))|*}
+   */
+  uuid: state => state.uuid
 }
