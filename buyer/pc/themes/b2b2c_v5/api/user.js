@@ -53,3 +53,17 @@ export function saveUserInfo(params) {
     data: _formData
   })
 }
+
+/**
+ * 会员注册【手机】
+ * @param params
+ */
+export function registerByMobile(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return request({
+    url: 'http://192.168.2.5:8084/passport/register/pc',
+    method: 'post',
+    data: _formData
+  })
+}
