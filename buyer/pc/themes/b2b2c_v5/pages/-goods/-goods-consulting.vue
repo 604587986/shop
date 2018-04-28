@@ -18,6 +18,7 @@
         this.$layer.prompt({
           formType: 2,
           title: '向商家咨询',
+          maxlength: 150,
           area: ['300px', '60px']
         }, (value, index, elem) => {
           if (!value.trim()) return false
