@@ -4,10 +4,11 @@
     <sku-item
       :skuData="skuData"
       :goodsId="goodsId"
+      :goodsSkuInfo="goodsSkuInfo"
       :categoryId="categoryId"
-      v-on:updateSkuItem="updateSkuItem"
-      v-on:updateSkuVal="updateSkuVal"
-      v-on:updateSkuInfo="updateSkuInfo"
+      @updateSkuItem="updateSkuItem"
+      @updateSkuVal="updateSkuVal"
+      @updateSkuInfo="updateSkuInfo"
     ></sku-item>
     <!--规格设置-->
     <div class="sku-settings">
@@ -15,7 +16,7 @@
       <sku-table
         :skuInfo="skuInfo"
         :tablehead="tablehead"
-        v-on:skuTable="skuTable"
+        @skuTable="skuTable"
       ></sku-table>
     </div>
   </div>
@@ -35,15 +36,18 @@
 
       /** 商品id */
       goodsId: {
-        type: String,
-        default: ''
+        type: [String, Number],
+        default: ['', 0]
       },
 
       /** 分类id*/
       categoryId: {
-        type: String,
-        default: ''
-      }
+        type: [String, Number],
+        default: ['', 0]
+      },
+
+      /** 商品规格信息 */
+      goodsSkuInfo: []
     },
     data() {
       return {
@@ -65,7 +69,7 @@
         /** 定制表头*/
         tablehead: [],
 
-        /** 表格要抛出的固定属性数据 */
+        /** 表格要抛出的固定属性数据 经过处理之后也是最终要抛出的数据*/
         fixData: [],
 
         /** 规格选择部分跑出的计算数据 */
@@ -78,6 +82,9 @@
       } else {
         this.getSkuInfoByCategory()
       }
+      /** 赋值给选择数据 同时计算表格数据 */
+      // this.skuInfo = this.goodsSkuInfo
+      // this.updateSkuInfo(this.skuInfo)
     },
     methods: {
       /** 根据分类id获取规格信息*/
@@ -112,7 +119,28 @@
 
       /** 更新用户自定义规格值 */
       updateSkuVal(target) {
-        console.log(target, 456)
+        // console.log(target, 456)
+      },
+
+      /** 计算最终数据 */
+      finalData() {
+        /** 在此处可抛出最终数据 */
+        this.fixData.forEach(key => {
+          this.choiceData.forEach(item => {
+            if (Array.isArray(item)) {
+              const _isExit = item.some(elem => {
+                return elem.spec_value_id === key.spec_value_id
+              })
+              if (_isExit) {
+                key.spec_list = item
+              }
+            } else if (item.spec_value_id === key.spec_value_id) {
+              key.spec_list.push(item)
+            }
+          })
+        })
+        /** 抛出最终数据 */
+        this.$emit('finalSku', this.fixData)
       },
 
       /** 更新表格部分skuInfo数据 */
@@ -121,8 +149,7 @@
           let { cost, price, quantity, sn, weight, spec_value_id } = key
           return { cost, price, quantity, sn, weight, spec_value_id }
         })
-
-        /** 在此出可抛出最终数据 */
+        this.finalData()
       },
 
       /** 更新规格选择部分skuInfo数据 */
@@ -145,7 +172,7 @@
           })
         })
         this.skuInfo = this.printResult(this.combination(...obj))[1]
-        console.log(this.skuInfo)
+        // console.log(this.skuInfo)
       },
 
       /** 重组数据*/
@@ -189,7 +216,9 @@
           }
         }
         _empty.push(result)
-        this.tablehead = Object.keys(result[0])
+        this.tablehead = Object.keys(result[0]).filter(key => {
+          return key !== 'spec_value_id'
+        })
         return _empty
       }
     }

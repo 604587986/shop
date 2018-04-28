@@ -132,7 +132,7 @@
           <div>
             <el-form-item label="商品规格："  style="width: 90%;text-align: left;">
               <!--规格选择器-->
-               <en-sku-selector></en-sku-selector>
+               <en-sku-selector :goodsId="activeGoodsId" :categoryId="categoryLevel" @finalSku="finalSku"></en-sku-selector>
             </el-form-item>
             <el-form-item label="总库存：" prop="summary_stock" style="width: 20%;text-align: left;">
               <el-input v-model="baseInfoForm.summary_stock" disabled></el-input>
@@ -859,6 +859,11 @@
       /** 积分兑换开关值改变时触发 */
       handleSwitchexchange(val) {
         this.isShowExchangeConfig = val
+      },
+
+      /** 规格选择器规格数据改变时触发 */
+      finalSku(val) {
+        console.log(val, 4564564)
       }
     }
   }

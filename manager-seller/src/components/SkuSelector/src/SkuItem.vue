@@ -68,18 +68,6 @@
       skuData: {
         type: Array,
         default: []
-      },
-
-      /** 商品id */
-      goodsId: {
-        type: String,
-        default: ''
-      },
-
-      /** 分类id*/
-      categoryId: {
-        type: String,
-        default: ''
       }
     },
     data() {

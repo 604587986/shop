@@ -69,6 +69,7 @@
       }
     },
     mounted() {
+      this.tableData = this.skuInfo
       this.tableData.forEach((key, index) => {
         this.concactArrayCom(index, key)
       })
@@ -142,9 +143,10 @@
         let _currnetRow = []
         for (let i = 0, _len = this.tablehead.length - 5; i < _len; i++) {
           if (this.tablehead[i] === 'spec_value_id') {
-            console.log((item[this.tablehead[i]] !== this.skuInfo[index - 1][this.tablehead[i]]))
+            i++
+            continue
           }
-          if (index > 0 && item[this.tablehead[i]] !== this.skuInfo[index - 1][this.tablehead[i]] && this.tablehead[i] !== 'spec_value_id') {
+          if (index > 0 && item[this.tablehead[i]] !== this.skuInfo[index - 1][this.tablehead[i]]) {
             _currnetRow[i] = 1
             _isMerge = true
           } else if (index > 0 && !_isMerge) {
