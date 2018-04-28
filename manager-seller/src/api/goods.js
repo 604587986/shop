@@ -15,8 +15,7 @@ import ExpressMouldModel from '@/models/ExpressMouldModel'
 export function getGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      // url: '/goods',
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+      url: '/goods',
       method: 'get',
       loading: false,
       params
@@ -39,7 +38,6 @@ export function deleteGoods(ids, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}/recycle`,
-      // url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/${ids}`,
       method: 'put',
       data: _params
     }).then(response => {
