@@ -3,6 +3,7 @@
  */
 
 import BreadNav from './-bread-nav'
+import GoodsComments from './-goods-comments'
 import GoodsInfo from './-goods-info'
 import GoodsParams from './-goods-params'
 import GoodsTags from './-goods-tags'
@@ -11,6 +12,7 @@ import ShopCard from './-shop-card'
 
 export {
   BreadNav,
+  GoodsComments,
   GoodsInfo,
   GoodsParams,
   GoodsTags,
