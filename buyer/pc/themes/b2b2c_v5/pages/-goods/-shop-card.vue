@@ -18,7 +18,9 @@
     </div>
     <div class="shop-btns">
       <nuxt-link :to="'/shop?shop_id=' + goods.shop_id" class="shop-btn into">进入商家店铺</nuxt-link>
-      <a href="javascript:;" class="shop-btn collection">收藏店铺(3)</a>
+      <a href="javascript:;" @click="collectionShop" class="shop-btn collection">
+        {{ goods.shop_collected ? '已收藏' : '收藏店铺' }}({{ goods.shop_collection_num }})
+      </a>
     </div>
     <div class="shop-contact">
       <h5>店铺名称：<span>{{ goods.shop_name }}</span></h5>
@@ -28,9 +30,24 @@
 </template>
 
 <script>
+  import * as API_Collection from '@/api/collection'
   export default {
     name: "shop-card",
-    props: ['goods']
+    props: ['goods'],
+    methods: {
+      collectionShop() {
+        const { shop_collected, shop_id } = this.goods
+        if (shop_collected) {
+          this.$message.error('您已经收藏过这个店铺啦！')
+          return false
+        }
+        API_Collection.collectionShop(shop_id).then(() => {
+          this.$message.success('收藏店铺成功！')
+          this.goods.shop_collected = true
+          this.goods.shop_collection_num += 1
+        })
+      }
+    }
   }
 </script>
 
