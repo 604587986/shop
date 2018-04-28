@@ -18,8 +18,14 @@
               @click="handleClickTabItem(tab)"
             >{{ tab.title }}</div>
           </div>
+          <div class="detail-content">
+            <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.goods_intro"></div>
+            <goods-params v-show="curTab === '规格参数'" :goods-params="goods.goods_params"/>
+            <goods-comments v-show="curTab === '商品评论'"/>
+            <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
+            <sales-record v-show="curTab === '销售记录'" />
+          </div>
         </div>
-        <div class="detail-content"></div>
       </div>
     </div>
   </div>
@@ -27,7 +33,7 @@
 
 <script>
   import * as API_Goods from '@/api/goods'
-  import { BreadNav, GoodsInfo, GoodsTags, GoodsZoom, ShopCard } from '@/pages/-goods'
+  import * as GoodsComponents from '@/pages/-goods'
 	export default {
 		name: 'goods',
     asyncData({ query }, callback) {
@@ -52,18 +58,20 @@
         ]
       }
     },
-    components: { BreadNav, GoodsInfo, GoodsTags, GoodsZoom, ShopCard },
+    components: GoodsComponents,
     data() {
 		  return {
         goods: '',
         /** 当前要展示的图片 */
         curImg: '',
-        tabs: ['商品详情', '规格参数', '商品评论', '商品咨询', '销售记录'].map((item, index) => ({ title: item, active: index === 0 }))
+        tabs: ['商品详情', '规格参数', '商品评论', '商品咨询', '销售记录'].map((item, index) => ({ title: item, active: index === 0 })),
+        curTab: '商品详情'
       }
     },
     methods: {
 		  /** 商品详情tab点击事件 */
       handleClickTabItem(tab) {
+        this.curTab = tab.title
         this.tabs.map(item => {
           item.active = tab === item
           return item
@@ -113,5 +121,10 @@
         &:nth-child(5) { border-right: 0 }
       }
     }
+    .detail-content {
+      padding-top: 10px;
+      overflow: hidden;
+    }
+    .intro-detail { text-align: center }
   }
 </style>

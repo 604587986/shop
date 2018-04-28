@@ -41,7 +41,7 @@
       border: 1px solid #d7d7d7;
       height: 67px;
       padding: 10px 10px 20px 10px;
-      background: url(../../assets/images/icon-goods-consulting-tip.png) no-repeat 10px 10px;
+      background: url(~/assets/images/icon-goods-consulting-tip.png) no-repeat 10px 10px;
     }
     .consu-tip {
       color: #9b827d;
