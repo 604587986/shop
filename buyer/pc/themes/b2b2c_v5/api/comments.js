@@ -30,3 +30,18 @@ export function getConsultations(params) {
     params
   })
 }
+
+/**
+ * 商品咨询
+ * @param goods_id
+ * @param content
+ */
+export function consultating(goods_id, content) {
+  const _formData = new FormData()
+  _formData.append('content', content)
+  return request({
+    url: `/consulting/${goods_id}`,
+    method: 'post',
+    data: _formData
+  })
+}

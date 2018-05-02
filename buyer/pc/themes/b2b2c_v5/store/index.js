@@ -49,10 +49,18 @@ export const getters = {
    * @returns {*}
    */
   navList: state => state.navList,
+
   /**
    * 分类列表
    * @param state
    * @returns {*}
    */
-  categoryList: state => state.categoryList
+  categoryList: state => state.categoryList,
+
+  /**
+   * 获取UUID
+   * @param state
+   * @returns {getters.uuid|(function(*))|*}
+   */
+  uuid: state => state.uuid
 }

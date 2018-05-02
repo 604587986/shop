@@ -64,6 +64,9 @@
   import * as regExp from '@/utils/RegExp'
   export default {
     name: 'register-by-email',
+    validate() {
+      return false
+    },
     layout: 'full',
     data() {
       return{

@@ -75,6 +75,7 @@
       cursor: not-allowed;
       background-image: none;
       background-color: #fff;
+      border-color: transparent;
     }
   }
 </style>
