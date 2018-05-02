@@ -46,7 +46,7 @@ const user = {
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password, userInfo.validcode).then(response => {
           // 后台暂时没有返回数据，模拟一个
-          response = { data: { token: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOm51bGwsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTAwLCJyb2xlcyI6WyJCVVlFUiIsIlNFTExFUiJdLCJzZWxsZXJOYW1lIjoi5rWL6K-V5bqX6ZO6IiwiZXhwIjoxNTI0MzY5MjQxLCJ1c2VybmFtZSI6ImNlc2hpZGlhbnB1In0.vuYe8yYT1TnSOrZZ6KjDdEaGbiBot0CQFLyFwlZ82PU0dKBDg41pUKPHEENbimOr7-SxJqt_zJP6yDBnGuGShQ' }}
+          response = { data: { token: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6Miwic3ViIjoiU0VMTEVSIiwic2VsbGVySWQiOjMsInJvbGVzIjpbIkJVWUVSIiwiU0VMTEVSIl0sInNlbGxlck5hbWUiOiLnjovls7Dlupfpk7oxMTEiLCJ1c2VybmFtZSI6ImtpbmdhcGV4In0.rFV567biYKAgNuw1eA4roV8k2d6YyJRLAmIBhi0MxxKDnq_lGvK-GU1J6RmYjzYWwi3G9TyxhMJuV7klWk5o1Q' }}
           const data = response.data
           commit('SET_TOKEN', data.token)
           setToken(response.data.token)
