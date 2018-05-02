@@ -12,7 +12,7 @@ import request from '@/utils/request'
  */
 export function getValidateCodeUrl(uuid, type) {
   return uuid
-    ? `http://192.168.2.5:8083/captchas/${uuid}/${type}?r=${new Date().getTime()}`
+    ? `http://192.168.2.5:7000/captchas/${uuid}/${type}?r=${new Date().getTime()}`
     : ''
 }
 
