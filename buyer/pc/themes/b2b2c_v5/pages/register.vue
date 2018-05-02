@@ -15,229 +15,172 @@
         </div>
       </div>
     </div>
-    <div class="register-steps clearfix">
-      <ul>
-        <li :class="[step === 1 && 'active']">
-          <i>1</i>
-          <span>验证手机号</span>
-        </li>
-        <li :class="[step === 2 && 'active']">
-          <i>2</i>
-          <span>填写账号信息</span>
-        </li>
-        <li :class="[step === 3 && 'active']">
-          <i>3</i>
-          <span>注册成功</span>
-        </li>
-      </ul>
-    </div>
     <div class="register-content">
-      <div v-show="step === 1" class="item vali-mobile">
-        <el-form :model="valiMobileForm" :rules="valiMobileRules" ref="valiMobileForm" label-width="120px">
-          <el-form-item label="手机号码：" prop="mobile">
-            <el-input v-model="valiMobileForm.mobile" :maxlength="11"></el-input>
-          </el-form-item>
-          <el-form-item label="图片验证码：" prop="vali_code" class="vali-img">
-            <el-input v-model="valiMobileForm.vali_code" :maxlength="4">
-              <img src="http://data.andste.cc/developers/web/temp/images/validcode-img.png" slot="append">
-            </el-input>
-          </el-form-item>
-        </el-form>
-        <el-form :model="valiSmsForm" :rules="valiSmsRules" ref="valiSmsForm" label-width="120px">
-          <el-form-item label="短信验证码：" prop="sms_code">
-            <el-input v-model="valiSmsForm.sms_code" :maxlength="6">
-              <en-count-down-btn :time="20" :start="sendValidMobileSms" @end="handleCountDownEnd" slot="append"/>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="">
-            <el-button class="next-btn" type="danger" @click="handleNextStep">下一步</el-button>
-            <nuxt-link :to="'/register-by-email' + MixinForward" style="font-size: 12px">邮箱注册 ></nuxt-link>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div v-show="step === 2" class="item input-account">
-        <el-form :model="inputAccountForm" :rules="inputAccountRules" ref="inputAccountForm" label-width="120px">
-          <el-form-item label="账户：" prop="username">
-            <span>Andste</span>
-          </el-form-item>
-          <el-form-item label="登录密码：" prop="password">
-            <el-input v-model="inputAccountForm.password" type="password" :maxlength="20"></el-input>
-          </el-form-item>
-          <el-form-item label="确认密码：" prop="rep_password">
-            <el-input v-model="inputAccountForm.rep_password" type="password" :maxlength="20"></el-input>
-          </el-form-item>
-          <el-form-item label="会员昵称：" prop="nickname">
-            <el-input v-model="inputAccountForm.nickname" :maxlength="20"></el-input>
-          </el-form-item>
-          <el-form-item label="">
-            <el-button class="submit-btn" type="danger" @click="handleSubmitAccount">提交</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div v-show="step === 3" class="register-success">
-        <h3>恭喜您注册成功，登录账户为：<span style="color: #f42424;">Andste</span></h3>
-        <h4>绑定手机：<span style="color: #f42424;">18519052335</span>（此手机可用于登录、修改或找回密码）</h4>
-        <div class="bind-box">
-          <div class="bind-app">
-            <div class="bind-logo">
-              <img src="../assets/images/icon-weibo.jpg" title="微博绑定" alt="微博绑定" style="width:55px;">
-            </div>
-            <div class="bind-other">
-              <p class="bind-title">快速绑定微博账号 </p>
-              <a class="bind-btn" href="#">立即绑定</a>
-            </div>
-          </div>
-          <div class="bind-app">
-            <div class="bind-logo">
-              <img src="../assets/images/icon-qq.jpg" title="QQ绑定" alt="QQ绑定">
-            </div>
-            <div class="bind-other">
-              <p class="bind-title">快速绑定QQ账号 </p>
-              <a class="bind-btn" href="#">立即绑定</a>
-            </div>
-
-          </div>
-          <div class="bind-app">
-            <div class="bind-logo">
-              <img src="../assets/images/icon-weixin.jpg" title="微信绑定" alt="微信绑定">
-            </div>
-            <div class="bind-other">
-              <p class="bind-title">快速绑定微信账号 </p>
-              <a class="bind-btn" href="#">立即绑定</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <el-form
+        :model="registerForm"
+        :rules="registerRules"
+        ref="registerForm"
+        status-icon
+        label-width="100px"
+      >
+        <el-form-item prop="username">
+          <span slot="label">用&ensp;户&ensp;名</span>
+          <el-input v-model="registerForm.username" :maxlength="20"></el-input>
+        </el-form-item>
+        <el-form-item label="设置密码" prop="password">
+          <el-input v-model="registerForm.password" type="password" :maxlength="20"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="confirm_password">
+          <el-input v-model="registerForm.confirm_password" type="password" :maxlength="20"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码" :error="requiredMobile" prop="mobile">
+          <el-input v-model="registerForm.mobile" :maxlength="11"></el-input>
+        </el-form-item>
+        <el-form-item v-if="showValidCode" label="图片验证码" :error="requiredValCode" prop="vali_code" class="vali-code">
+          <el-input v-model="registerForm.vali_code" :maxlength="4">
+            <img v-if="valid_code_url" :src="valid_code_url" slot="append" @click="changeValidCodeUrl">
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="sms_code" class="sms-code">
+          <span slot="label">手机验证码</span>
+          <el-input v-model="registerForm.sms_code" :maxlength="6">
+            <en-count-down-btn :start="sendValidMobileSms" slot="append"/>
+          </el-input>
+        </el-form-item>
+        <button type="button" class="register-btn" @click="handleConfirmRegister">立即注册</button>
+      </el-form>
     </div>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
+  import { mapGetters } from 'vuex'
   import { Button, Form, FormItem, Input } from 'element-ui'
   Vue.use(Button)
   Vue.use(Form)
   Vue.use(FormItem)
   Vue.use(Input)
+  import * as API_Common from '@/api/common'
+  import * as API_Passport from '@/api/passport'
   import * as regExp from '@/utils/RegExp'
   export default {
     name: 'register',
     layout: 'full',
     data() {
       return {
-        /** 注册步骤 */
-        step: 1,
-        /** 校验手机 表单 */
-        valiMobileForm: {},
-        /** 校验手机 表单规则 */
-        valiMobileRules: {
-          mobile: [
-            { required: true, message: '请输入手机号码', trigger: 'blur' },
-            {
-              validator: (rule, value, callback) => {
-                if (!regExp.mobile.test(value)) {
-                  callback(new Error('手机格式有误！'))
-                } else {
-                  callback()
-                }
-              },
-              trigger: 'blur'
-            }
-          ],
-          vali_code: [{ required: true, message: '请输入图片验证码', trigger: 'blur' }]
-        },
-        /** 短信验证码 表单 */
-        valiSmsForm: {
+        /** 会员注册 表单 */
+        registerForm: {
+          username: '',
+          password: '',
+          confirm_password: '',
+          mobile: '',
+          vali_code: '',
           sms_code: ''
         },
-        /** 短信验证码 表单规则 */
-        valiSmsRules: {
-          sms_code: [{ required: true, message: '请输入短信验证码', trigger: 'blur' }]
-        },
-        /** 填写账号信息 表单 */
-        inputAccountForm: {},
-        /** 填写账号信息 表单规则 */
-        inputAccountRules: {
+        /** 会员注册 表单规则 */
+        registerRules: {
+          username: [
+            { required: true, message: '请输入会员昵称', trigger: 'blur' },
+            { min: 2, max: 10, message: '长度在 2 到 10 个字符' },
+            { validator: (rule, value, callback) => {
+              API_Passport.checkUsernameRepeat(value).then(response => {
+                  if (response.exist) {
+                    callback(new Error('此用户名已被注册！'))
+                  } else {
+                    callback()
+                  }
+                }).catch(error => {
+                callback(new Error('用户名重复校验出错，请稍后再试！'))
+              })
+            }, trigger: 'blur' }
+          ],
           password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
-            {
-              validator: (rule, value, callback) => {
-                if (!regExp.password.test(value)) {
-                  callback(new Error('密码应为6-20位数字、英文字母！'))
-                } else {
-                  callback()
-                }
-              },
-              trigger: 'blur'
-            }
+            { validator: (rule, value, callback) => {
+              if (!regExp.password.test(value)) {
+                callback(new Error('密码应为6-20位数字、英文字母！'))
+              } else {
+                callback()
+              }
+            } }
           ],
-          rep_password: [
+          confirm_password: [
             { required: true, message: '请确认密码', trigger: 'blur' },
-            {
-              validator: (rule, value, callback) => {
-                const { password, rep_password} = this.inputAccountForm
-                if (password !== rep_password) {
+            { validator: (rule, value, callback) => {
+                const { password, confirm_password } = this.registerForm
+                if (password !== confirm_password) {
                   callback(new Error('两次输入不一致！'))
                 } else {
                   callback()
                 }
-              },
-              trigger: 'blur'
-            }
+              } }
           ],
-          nickname: [
-            { required: true, message: '请输入会员昵称', trigger: 'blur' },
-            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
-          ]
-        }
+          mobile: [
+            { required: true, message: '请输入手机号码', trigger: 'blur' },
+            { validator: (rule, value, callback) => {
+              if (!regExp.mobile.test(value)) {
+                callback(new Error('手机格式有误！'))
+              } else {
+                API_Passport.checkMobileRepeat(value).then(response => {
+                  if (response.exist) {
+                    callback(new Error('手机号已被注册！'))
+                  } else {
+                    this.showValidCode = true
+                    callback()
+                  }
+                }).catch(error => {
+                  callback(new Error('手机号重复校验出错，请稍后再试！'))
+                })
+              }
+            } }
+          ],
+          vali_code: [{ required: true, message: '请输入图片验证码', trigger: 'blur' }],
+          sms_code: [{ required: true, message: '请输入短信验证码', trigger: 'blur' }]
+        },
+        requiredMobile: '',
+        requiredValCode: '',
+        /** 是否显示图片验证码 */
+        showValidCode: false,
+        /** 图片验证码URL */
+        valid_code_url: ''
+      }
+    },
+    computed: {
+      ...mapGetters(['uuid'])
+    },
+    watch: {
+      uuid(newVal) {
+        this.valid_code_url = API_Common.getValidateCodeUrl(newVal, 'REGISTER')
       }
     },
     methods: {
+      /** 获取图片验证码 */
+      changeValidCodeUrl() {
+        this.valid_code_url = API_Common.getValidateCodeUrl(this.uuid, 'REGISTER')
+      },
       /** 发送手机验证码异步方法 */
       sendValidMobileSms() {
         return new Promise((resolve, reject) => {
-          this.$refs['valiMobileForm'].validate((valid) => {
-            if (valid) {
-              setTimeout(() => {
-                resolve()
-              }, 3000)
-            } else {
-              this.$message.error('表单填写有误，请检查！')
-              return false
-            }
-          })
-        })
-      },
-      handleCountDownEnd() {
-        console.log('倒计时结束>...')
-      },
-      /** 下一步 */
-      handleNextStep() {
-        this.$refs['valiMobileForm'].validate((valid) => {
-          if (valid) {
-            this.$refs['valiSmsForm'].validate((valid) => {
-              if (valid) {
-                setTimeout(() => {
-                  this.step = 2
-                }, 2000)
-              } else {
-                this.$message.error('请填写短信验证码！')
-                return false
-              }
-            })
+          const { mobile, vali_code } = this.registerForm
+          if (!mobile) {
+            this.$message.error('请输入手机号！')
+            this.requiredMobile = '手机号不能为空！'
+          } else if (!vali_code) {
+            this.$message.error('请输入图片验证码！')
+            this.requiredValCode = '图片验证码不能为空！'
           } else {
-            this.$message.error('表单填写有误，请检查！')
-            return false
+            API_Passport.sendRegisterSms(this.uuid, mobile, vali_code).then(resolve).catch(reject)
           }
         })
       },
-      /** 提交表单 */
-      handleSubmitAccount() {
-        this.$refs['inputAccountForm'].validate((valid) => {
-          if (valid) {
-            setTimeout(() => {
-              this.step = 3
-            }, 2000)
+      /** 立即注册 */
+      handleConfirmRegister() {
+        this.$refs['registerForm'].validate(valide => {
+          if (valide) {
+            API_Passport.registerByMobile(this.registerForm).then(response => {
+              console.log(response)
+            })
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -253,7 +196,7 @@
     position: relative;
     width: 1000px;
     margin: 20px auto;
-    height: 100px;
+    height: 80px;
     .welcome {
       a {
         float: left;
@@ -279,118 +222,70 @@
       a { color: #f42424 }
     }
   }
-  .register-steps {
-    width: 100%;
-    height: 48px;
-    border-bottom: 2px solid #e6e6e6;
-    ul {
-      width: 690px;
-      margin: 0 auto;
-    }
-    li {
-      display: block;
-      width: 200px;
-      padding-left: 30px;
-      float: left;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 48px;
-      &.active {
-        border-bottom: 2px solid #f42424;
-        i { background-color: #f42424 }
-        span { color: #f42424 }
-      }
-      i {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        border-radius: 24px;
-        text-align: center;
-        line-height: 24px;
-        margin-right: 5px;
-        background-color: #ccc;
-        color: #fff;
-      }
-      span {
-        display: inline-block;
-        color: #3e3e3e;
-      }
-    }
-  }
   .register-content {
-    .item {
-      width: 370px;
-      margin: 50px auto;
+    border-top: 2px solid #f42424;
+    padding-top: 50px;
+    margin-bottom: 50px;
+  }
+  .register-content /deep/ .el-form {
+    width: 400px;
+    margin: 0 auto;
+    /deep/ .el-form-item {
+      position: relative;
+      margin-bottom: 30px;
+      border: 1px solid #ddd;
+      &.is-error { border-color: #f56c6c }
+      &.is-error .el-input__inner { color: #f56c6c }
+      &:hover { border-color: #999 }
     }
-    .vali-mobile {
-      /deep/ .vali-img .el-input-group__append { padding: 0 }
-      img { height: 38px }
-      .next-btn { width: 250px }
+    /deep/ .el-input__inner { border: none }
+    /deep/ .el-form-item__label {
+      letter-spacing: 3px;
+      &:before { content: '' }
     }
-    .input-account {
-      .submit-btn { width: 250px }
+    /deep/ .vali-code .el-form-item__label, /deep/ .sms-code .el-form-item__label {
+      letter-spacing: 1px
     }
-    .register-success {
-      width: 750px;
-      margin: 0 auto;
-      padding-top: 20px;
+    /deep/ .sms-code .el-input-group__append {
+      width: 70px;
       text-align: center;
-      h3 {
-        color: #3e3e3e;
-        font-size: 18px;
-        font-weight: bold;
-        font-family: Microsoft-Yahei;
+      .count-down-btn {
+        padding: 0;
       }
-      h4 {
-        font-size: 14px;
-        margin-top: 10px;
-      }
-      .bind-box {
-        width: 100%;
-        margin: 100px auto;
-      }
-      .bind-app {
-        float: left;
-        width: 250px;
-      }
-      .bind-logo {
-        width: 80px;
-        height: 80px;
-        float: left;
+    }
+    /deep/ .is-error .el-form-item__label { color: #f56c6c }
+    /deep/ .el-form-item__label, /deep/ .el-form-item__content { line-height: 50px }
+    /deep/ .el-form-item__error { padding-top: 9px }
+    .vali-code {
+      .el-input-group__append {
+        width: 100px;
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        position: relative;
         img {
+          width: 100%;
           height: 50px;
-          padding: 15px;
+          cursor: pointer;
+          position: absolute;
+          top: -6px;
+          left: 0;
         }
       }
-      .bind-other {
-        float: left;
-        width: 150px;
-        height: 80px;
-        text-align: center;
-      }
-      .bind-title {
-        font-size: 12px;
-        color: #333333;
-        text-align: center;
-        line-height: 40px;
-      }
-      .bind-btn {
-        display: block;
-        width: 70%;
-        margin: 0 auto;
-        background-color: #FF4000;
-        border-radius: 3px;
-        color: #ffffff;
-        font-size: 12px;
-        text-align: center;
-        line-height: 30px;
-        cursor: pointer;
-        transition: all .2s ease;
-        user-select: none;
-        &:hover {
-          background-color: #d93700;
-        }
-      }
+    }
+    /deep/ .sms-code .el-input-group__append {
+      background-color: transparent;
+      border: none;
+    }
+    .register-btn {
+      width: 400px;
+      height: 52px;
+      background-color: #f42424;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 2px;
+      &:hover { background-color: #d72121 }
     }
   }
 </style>

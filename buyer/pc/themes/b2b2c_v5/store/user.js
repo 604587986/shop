@@ -1,4 +1,5 @@
 import * as API_User from '@/api/user'
+import * as API_Passport from '@/api/passport'
 import * as types from './mutation-types'
 
 export const state = () => ({
@@ -48,10 +49,15 @@ export const actions = {
    */
   loginAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_User.login(params).then(response => {
-        commit(types.SAVE_USER_INFO, response)
-        resolve(response)
-      }).catch(error => reject(error))
+      if (params.login_type === 'quick') {
+        API_Passport.loginByMobile()
+      } else {
+        API_Passport.login(params.form).then(response => {
+          console.log(response)
+          commit(types.SAVE_USER_INFO, response)
+          resolve(response)
+        }).catch(error => reject(error))
+      }
     })
   },
   /**
