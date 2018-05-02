@@ -170,7 +170,7 @@
             this.$message.error('请输入图片验证码！')
             this.requiredValCode = '图片验证码不能为空！'
           } else {
-            API_Passport.senRegisterSms(this.uuid, mobile, vali_code).then(resolve).catch(reject)
+            API_Passport.sendRegisterSms(this.uuid, mobile, vali_code).then(resolve).catch(reject)
           }
         })
       },
@@ -234,7 +234,8 @@
       position: relative;
       margin-bottom: 30px;
       border: 1px solid #ddd;
-      /*&.is-error { border-color: #f56c6c }*/
+      &.is-error { border-color: #f56c6c }
+      &.is-error .el-input__inner { color: #f56c6c }
       &:hover { border-color: #999 }
     }
     /deep/ .el-input__inner { border: none }
