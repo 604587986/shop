@@ -19,10 +19,6 @@ Vue.mixin({
     MixinForward() {
       const { forward } = this.$route.query
       return forward ? `?forward=${forward}` : ''
-    },
-    /** UUID */
-    MixinUUID() {
-      return this.$store.getters.uuid
     }
   }
 })
