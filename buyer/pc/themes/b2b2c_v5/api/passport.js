@@ -45,3 +45,16 @@ export function checkMobileRepeat(mobile) {
   })
 }
 
+/**
+ * 注册会员【手机号】
+ * @param params
+ */
+export function registerByMobile(params) {
+  const _formData = new FormData()
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+  return request({
+    url: `http://192.168.2.5:7001/passport/register/pc`,
+    method: 'post',
+    data: _formData
+  })
+}
