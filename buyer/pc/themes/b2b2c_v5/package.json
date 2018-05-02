@@ -20,7 +20,8 @@
     "normalize.css": "^8.0.0",
     "nuxt": "^1.4.0",
     "swiper": "^4.2.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "vuex-persistedstate": "^2.5.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
