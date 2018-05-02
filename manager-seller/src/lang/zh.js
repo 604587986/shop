@@ -18,6 +18,7 @@ export default {
     logisticsManage: '物流管理',
     commentsManage: '评价管理',
     settlementManage: '结算管理',
+    settlementDetail: '结算详情',
     receiptHistory: '发票历史',
     orderDetail: '订单详情',
     refundDetail: '售后详情',

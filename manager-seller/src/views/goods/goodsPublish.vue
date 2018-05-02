@@ -42,6 +42,7 @@
     </div>
     <!--步骤2-->
     <div class="content-goods-publish" v-if="activestep === 1">
+      <!--商品详情-->
       <el-form
         :model="baseInfoForm"
         status-icon
@@ -69,7 +70,7 @@
             </p>
             <el-form-item label="商品品牌：" >
               <el-select
-                v-model="baseInfoForm.brand"
+                v-model="baseInfoForm.brand_id"
                 filterable
                 @visible-change="getGoodsBrandList"
                 @change="changeGoodsBrand"
@@ -106,14 +107,17 @@
             <el-form-item label="商品重量(kg)：" prop="weight">
               <el-input v-model.number="baseInfoForm.weight"></el-input>
             </el-form-item>
-            <el-form-item label="商品图片：" style="width: 90%;text-align: left;">
+            <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
+                class="avatar-uploader"
+                :action="BASE_IMG_URL"
                 list-type="picture-card"
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
-                :on-remove="handleRemove">
-                <i class="el-icon-plus"></i>
+                :on-remove="handleRemove"
+                :on-success="handleSuccess">
+                <span style="display: none;"  v-model="baseInfoForm.goods_gallery"></span>
+                <i  class="el-icon-plus avatar-uploader-icon"></i>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png/jqeg文件，且不超过1mb</div>
               </el-upload>
               <el-dialog :visible.sync="dialogImage">
@@ -128,7 +132,7 @@
           <div>
             <el-form-item label="商品规格："  style="width: 90%;text-align: left;">
               <!--规格选择器-->
-               <en-sku-selector></en-sku-selector>
+               <en-sku-selector :goodsId="activeGoodsId" :categoryId="categoryLevel" @finalSku="finalSku"></en-sku-selector>
             </el-form-item>
             <el-form-item label="总库存：" prop="summary_stock" style="width: 20%;text-align: left;">
               <el-input v-model="baseInfoForm.summary_stock" disabled></el-input>
@@ -219,36 +223,35 @@
           </div>
         </div>
       </el-form>
+      <!--商品参数-->
       <el-form
-        :model="baseInfoForm.goodsParams"
+        :model="baseInfoForm"
         status-icon
         label-position="right"
-        ref="goodsParams"
+        ref="goods_params_list"
         label-width="120px"
         class="demo-ruleForm">
-        <!--商品参数-->
         <el-collapse>
-          <!--商品参数-->
           <el-collapse-item
-            v-for="paramsgroup in  baseInfoForm.goodsParams.data" :title="`${paramsgroup.group_name}:`" :key="paramsgroup.group_id">
+            v-for="paramsgroup in  goodsParams" :title="paramsgroup.group_name" :key="paramsgroup.group_id">
             <el-form-item
-              v-if="paramsgroup.params "
-              v-for="paramsitem in paramsgroup.params"
-              :key="paramsitem.param_id"
-              :label="`${paramsitem.param_name}：`"
-              :prop="'paramsitem.param_value'"
-              :rules="{required: true, message: '公司名称不能为空', trigger: 'blur'}"
+              v-for="(goods_params_list, index) in baseInfoForm.goods_params_list"
+              v-if="paramsgroup.group_id === goods_params_list.group_id"
+              :key="goods_params_list.param_id"
+              :label="`${goods_params_list.param_name}：`"
+              :prop="'goods_params_list.' + index + '.param_value'"
+              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'blur' }"
             >
-              <el-input v-if="paramsitem.param_type === 1 " v-model="paramsitem.param_value" ></el-input>
+              <el-input v-if="goods_params_list.param_type === 1 " v-model="goods_params_list.param_value" ></el-input>
               <el-select
-                v-if="paramsitem.param_type === 2"
-                v-model="paramsitem.param_value"
+                v-if="goods_params_list.param_type === 2"
+                v-model="goods_params_list.param_value"
                 filterable
                 @visible-change="getGoodsBrandList"
                 @change="changeGoodsBrand"
                 placeholder="请选择">
                 <el-option
-                  v-for="option in optionList"
+                  v-for="option in goods_params_list.optionList"
                   :key="option.value"
                   :label="option.label"
                   :value="option.value">
@@ -306,7 +309,6 @@
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
   import { TableLayout, TableSearch, CategoryPicker, SkuSelector, UE } from '@/components'
-  import { SkuEditor } from '@/plugins/selector/vue'
   export default {
     name: 'goodsPublish',
     components: {
@@ -314,10 +316,8 @@
       [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [SkuSelector.name]: SkuSelector,
-      [UE.name]: UE,
-      [SkuEditor.name]: SkuEditor
+      [UE.name]: UE
     },
-
     data() {
       var checkMarket = (rule, value, callback) => {
         if (!value) {
@@ -334,11 +334,6 @@
             }
           }
         }, 1000)
-      }
-      var checkEmpty = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('市场价格不能为空'))
-        }
       }
 
       var checkCost = (rule, value, callback) => {
@@ -358,6 +353,9 @@
         }, 1000)
       }
       return {
+        /** 图片服务器地址 */
+        BASE_IMG_URL: process.env.BASE_IMG_URL,
+
         /** 加载中。。。 */
         loading: false,
 
@@ -403,6 +401,9 @@
         /** 商品详情信息提交表单 */
         baseInfoForm: {
 
+          /** 品牌id */
+          brand_id: '',
+
           /** 商品名称 */
           goods_name: '',
 
@@ -419,7 +420,10 @@
           weight: '',
 
           /** 商品相册列表 */
-          goods_images: [],
+          goods_gallery_list: [],
+
+          /** 用来校验的商品相册 */
+          goods_gallery: '',
 
           /** 商品总库存 */
           summary_stock: 0,
@@ -448,47 +452,47 @@
           /** 商品描述 anytype*/
           goods_desc: null,
 
-          /** 商品参数组列表 */
-          goodsParams: {
-            data: [
+          /** 要提交的 商品参数列表 */
+          goods_params_list: []
+        },
+
+        /** 请求的商品参数组列表 */
+        goodsParams: [
+          {
+            group_id: '1',
+            group_name: '主题',
+            params: [
               {
-                group_id: '1',
-                group_name: '主题',
-                params: [
-                  {
-                    param_id: 1,
-                    param_name: '品牌',
-                    param_type: 1,
-                    param_value: 'fask',
-                    required: 1,
-                    optionList: [
-                      { value: 1, label: '及sad' },
-                      { value: 2, label: '啥事' }
-                    ]
-                  }
+                param_id: 1,
+                param_name: '品牌',
+                param_type: 1,
+                param_value: 'fask',
+                required: 1,
+                optionList: [
+                  { value: 1, label: '及sad' },
+                  { value: 2, label: '啥事' }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            group_id: '21',
+            group_name: '小二',
+            params: [
               {
-                group_id: '2',
-                group_name: '基本信息',
-                params: [
-                  {
-                    param_id: 2,
-                    param_name: '主角光环',
-                    param_type: 1,
-                    param_value: '程序员你知道么？',
-                    required: 0,
-                    optionList: [
-                      { value: 1, label: '大法' },
-                      { value: 2, label: '戊二醛二' }
-                    ]
-                  }
+                param_id: 12,
+                param_name: '谁知道',
+                param_type: 2,
+                param_value: 'task',
+                required: 0,
+                optionList: [
+                  { value: 1, label: '一部非' },
+                  { value: 2, label: '哈哈' }
                 ]
               }
             ]
           }
-        },
-
+        ],
         /** 品牌列表 */
         brandList: [{
           value: '选项1',
@@ -559,18 +563,13 @@
             { required: true, message: '请输入商品重量', trigger: 'blur' },
             { type: 'number', message: '请输入数字值', trigger: 'blur' }
           ],
-          goods_images: [
-            { required: true, message: '请选择商品相册', trigger: 'blur' }
+          goods_gallery: [
+            { required: true, message: '请选择商品相册', trigger: 'change' }
           ],
           summary_stock: [
             { required: true, message: '请填写总库存', trigger: 'blur' }
-          ],
-          param_value: [
-            { required: true, message: '请填写总库存', trigger: 'blur' }
-            // { validator: checkEmpty, trigger: 'blur' }
           ]
         }
-
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -636,7 +635,7 @@
       /** 上架  */
       aboveGoods() {
         if (this.currentStatus === 0) {
-          /** 正常商品 */
+          /** 正常商品上架 */
           API_goods.aboveGoods(this.baseInfoForm).then(response => {
             this.$message.success('上架商品成功')
             this.$router.push({ path: '/goods/goods-list' })
@@ -645,7 +644,7 @@
             console.log(error)
           })
         } else {
-          /**  草稿箱商品 */
+          /**  草稿箱商品上架 */
           API_goods.aboveDraftGoods(this.activeGoodsId, this.baseInfoForm).then(response => {
             this.$message.success('上架草稿箱商品成功')
             this.$router.push({ path: '/goods/goods-list' })
@@ -723,10 +722,27 @@
 
       /** 查询商品参数 */
       GET_GoodsParams() {
+        // 处理数据 方便校验
+        let _paramsList = []
+        this.goodsParams.forEach(key => {
+          key.params.forEach(item => {
+            this.$set(item, 'group_id', key.group_id)
+          })
+          _paramsList = _paramsList.concat(key.params)
+        })
+        this.baseInfoForm.goods_params_list = _paramsList
         // const goods_id = this.activeGoodsId || 0
         // API_goods.getGoodsParams(this.activeGoodsId, { goods_id }).then((response) => {
         //   this.loading = false
         //   this.goodsParams = response.data
+        //   let _paramsList = []
+        //   this.goodsParams.forEach(key => {
+        //     key.params.forEach(item => {
+        //       this.$set(item, 'group_id', key.group_id)
+        //     })
+        //     _paramsList = _paramsList.concat(key.params)
+        //   })
+        //   this.baseInfoForm.goods_params_list = _paramsList
         // }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
       },
 
@@ -743,9 +759,9 @@
       /** 商品品牌列表 */
       getGoodsBrandList(val) {
         if (val) {
-          API_goods.getGoodsBrandList(this.activeGoodsId, { }).then((response) => {
-            this.brandList = response.data
-          }).catch(() => {})
+          // API_goods.getGoodsBrandList(this.activeGoodsId, { }).then((response) => {
+          //   this.brandList = response.data
+          // }).catch(() => {})
         }
       },
 
@@ -781,12 +797,36 @@
 
       },
 
-      /** 文件列表移除文件时的钩子*/
+      /** 文件列表移除文件时的钩子  图片删除校验*/
       handleRemove(file, fileList) {
-        console.log(file, fileList)
+        this.baseInfoForm.goods_gallery_list.forEach((key, index) => {
+          if (key.name === file.name) {
+            this.baseInfoForm.goods_gallery_list.splice(index, 1)
+          }
+        })
+        if (fileList.length <= 0) {
+          this.baseInfoForm.goods_gallery_list = []
+          this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+        }
+        this.$refs.baseInfoForm.validateField('goods_gallery')
       },
 
-      /** 点击已上传的文件链接时的钩子*/
+      /** 文件列表上传成功时的钩子  上传成功校验 */
+      handleSuccess(file, fileList) {
+        this.baseInfoForm.goods_gallery_list.push({
+          img_id: -1,
+
+          original: fileList.url,
+
+          sort: 0,
+
+          name: fileList.name
+        })
+        this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+        this.$refs['baseInfoForm'].validateField('goods_gallery')
+      },
+
+      /** 点击已上传的文件链接时的钩子 放大 */
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url
         this.dialogImage = true
@@ -803,12 +843,27 @@
         if (!isLt1M) {
           this.$message.error('上传商品相册图片大小不能超过 1MB!')
         }
-        return isType && isLt1M
+
+        /** 重复校验*/
+        const isExit = this.baseInfoForm.goods_gallery_list.some(key => {
+          return file.name === key.name
+        })
+
+        if (isExit) {
+          this.$message.error('图片已存在')
+        }
+
+        return isType && isLt1M && !isExit
       },
 
       /** 积分兑换开关值改变时触发 */
       handleSwitchexchange(val) {
         this.isShowExchangeConfig = val
+      },
+
+      /** 规格选择器规格数据改变时触发 */
+      finalSku(val) {
+        console.log(val, 4564564)
       }
     }
   }

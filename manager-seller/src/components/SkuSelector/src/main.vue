@@ -4,9 +4,11 @@
     <sku-item
       :skuData="skuData"
       :goodsId="goodsId"
+      :goodsSkuInfo="goodsSkuInfo"
       :categoryId="categoryId"
-      v-on:updateSkuItem="updateSkuItem"
-      v-on:updateSkuInfo="updateSkuInfo"
+      @updateSkuItem="updateSkuItem"
+      @updateSkuVal="updateSkuVal"
+      @updateSkuInfo="updateSkuInfo"
     ></sku-item>
     <!--规格设置-->
     <div class="sku-settings">
@@ -14,6 +16,7 @@
       <sku-table
         :skuInfo="skuInfo"
         :tablehead="tablehead"
+        @skuTable="skuTable"
       ></sku-table>
     </div>
   </div>
@@ -23,7 +26,7 @@
   import * as API_goodsSku from '@/api/goodsSkuInfo'
   import SkuItem from './SkuItem'
   import SkuTable from './SkuTable'
-  import { cloneObj } from '@/utils/index'
+  import { cloneObj, deepClone } from '@/utils/index'
   export default {
     name: 'EnSkuSelector',
     components: {
@@ -33,15 +36,18 @@
 
       /** 商品id */
       goodsId: {
-        type: String,
-        default: ''
+        type: [String, Number],
+        default: ['', 0]
       },
 
       /** 分类id*/
       categoryId: {
-        type: String,
-        default: ''
-      }
+        type: [String, Number],
+        default: ['', 0]
+      },
+
+      /** 商品规格信息 */
+      goodsSkuInfo: []
     },
     data() {
       return {
@@ -55,22 +61,30 @@
         origin: {
           sn: '',
           weight: '',
-          stock: '',
+          quantity: '',
           cost: '',
           price: ''
         },
 
         /** 定制表头*/
-        tablehead: []
+        tablehead: [],
+
+        /** 表格要抛出的固定属性数据 经过处理之后也是最终要抛出的数据*/
+        fixData: [],
+
+        /** 规格选择部分跑出的计算数据 */
+        choiceData: []
       }
     },
     mounted() {
-      // if (this.goodsId) {
-      //   this.getSkuInfoByGoods()
-      // } else {
-      //   this.getSkuInfoByCategory()
-      // }
-      this.getSkuInfoByCategory()
+      if (this.goodsId) {
+        this.getSkuInfoByGoods()
+      } else {
+        this.getSkuInfoByCategory()
+      }
+      /** 赋值给选择数据 同时计算表格数据 */
+      // this.skuInfo = this.goodsSkuInfo
+      // this.updateSkuInfo(this.skuInfo)
     },
     methods: {
       /** 根据分类id获取规格信息*/
@@ -85,13 +99,13 @@
       getSkuInfoByGoods() {
         API_goodsSku.getGoodsSkuList(this.params).then(response => {
           this.skuData = response.data
-          this.$store.dispatch('updateSkuData', this.skuData)
-          this.$store.dispatch('updateSkuInfo', [])
         }).catch(error => {
           this.loading = false
           console.log(error)
         })
       },
+
+      /** 更新用户自定义规格项 */
       updateSkuItem(item) {
         const _params = {
           ...item
@@ -102,12 +116,54 @@
         //   console.log(error)
         // })
       },
+
+      /** 更新用户自定义规格值 */
+      updateSkuVal(target) {
+        // console.log(target, 456)
+      },
+
+      /** 计算最终数据 */
+      finalData() {
+        /** 在此处可抛出最终数据 */
+        this.fixData.forEach(key => {
+          this.choiceData.forEach(item => {
+            if (Array.isArray(item)) {
+              const _isExit = item.some(elem => {
+                return elem.spec_value_id === key.spec_value_id
+              })
+              if (_isExit) {
+                key.spec_list = item
+              }
+            } else if (item.spec_value_id === key.spec_value_id) {
+              key.spec_list.push(item)
+            }
+          })
+        })
+        /** 抛出最终数据 */
+        this.$emit('finalSku', this.fixData)
+      },
+
+      /** 更新表格部分skuInfo数据 */
+      skuTable(target) {
+        this.fixData = target.map(key => {
+          let { cost, price, quantity, sn, weight, spec_value_id } = key
+          return { cost, price, quantity, sn, weight, spec_value_id }
+        })
+        this.finalData()
+      },
+
+      /** 更新规格选择部分skuInfo数据 */
       updateSkuInfo(target) {
+        /** 计算选择数据 */
+        let _target = target.map(key => { return key.value_list })
+        this.choiceData = this.printResult(this.combination(..._target))[0]
+
+        /** 计算表格数据 */
         this.skuInfo = target
         /** 构造表格数据 转换数据格式 */
         const obj = this.skuInfo.map((key) => {
           return key.value_list.map((item) => {
-            let map = new Map().set(key.spec_name, item.spec_value || '')
+            let map = new Map().set(key.spec_name, item.spec_value || '').set('spec_value_id', item.spec_value_id)
             let obj = Object.create(null)
             for (let [k, v] of map) {
               obj[k] = v
@@ -115,7 +171,8 @@
             return obj
           })
         })
-        this.skuInfo = this.printResult(this.combination(...obj))
+        this.skuInfo = this.printResult(this.combination(...obj))[1]
+        // console.log(this.skuInfo)
       },
 
       /** 重组数据*/
@@ -148,6 +205,9 @@
 
       /** 打印方法 */
       printResult(result) {
+        const _result = cloneObj(result)
+        let _empty = []
+        _empty.push(_result)
         for (let i = 0, len = result.length; i < len; i++) {
           if (Array.isArray(result[i])) {
             result[i] = Object.assign({ }, ...result[i], this.origin)
@@ -155,8 +215,11 @@
             result[i] = Object.assign({ }, result[i], this.origin)
           }
         }
-        this.tablehead = Object.keys(result[0])
-        return result
+        _empty.push(result)
+        this.tablehead = Object.keys(result[0]).filter(key => {
+          return key !== 'spec_value_id'
+        })
+        return _empty
       }
     }
   }

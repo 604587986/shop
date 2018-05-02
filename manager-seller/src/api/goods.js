@@ -15,8 +15,7 @@ import ExpressMouldModel from '@/models/ExpressMouldModel'
 export function getGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      // url: '/goods',
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+      url: '/goods',
       method: 'get',
       loading: false,
       params
@@ -38,9 +37,8 @@ export function deleteGoods(ids, params) {
   const _params = {}
   return new Promise((resolve, reject) => {
     request({
-      // url: `/goods/${ids}/recycle`,
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/${ids}`,
-      method: 'delete',
+      url: `/goods/${ids}/recycle`,
+      method: 'put',
       data: _params
     }).then(response => {
       resolve(response)
@@ -82,7 +80,7 @@ export function reserveStockGoods(goods_id, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${goods_id}/quantity`,
-      method: 'post',
+      method: 'put',
       data: _formData
     }).then(response => {
       resolve(response)
@@ -91,7 +89,7 @@ export function reserveStockGoods(goods_id, params) {
 }
 
 /**
- * 查询商品参数
+ * 查询商品参数 商品发布，获取所选分类关联的参数信息
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -110,7 +108,7 @@ export function getGoodsParams(ids, params) {
 }
 
 /**
- *  查询商品品类信息发布商品  ids 为category_id 商城商品品类
+ *  查询商品品类信息 商品发布  ids 为category_id 商城商品品类
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -129,7 +127,7 @@ export function getGoodsCatrgory(ids, params) {
 }
 
 /**
- * 查询单个商品信息 编辑商品列表
+ * 查询单个商品信息 商品列表 编辑
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -148,7 +146,7 @@ export function getGoodData(ids, params) {
 }
 
 /**
- * 查询单个草稿箱商品信息 编辑草稿箱商品列表
+ * 查询单个草稿箱商品信息 草稿箱商品列表 编辑
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -167,7 +165,7 @@ export function getGoodDraftData(ids, params) {
 }
 
 /**
- * 品牌列表 ids为categoryid
+ * 品牌列表 ids为categoryid  商品发布，获取所选分类关联的品牌信息
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -175,7 +173,7 @@ export function getGoodDraftData(ids, params) {
 export function getGoodsBrandList(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/goods/${ids}`,
+      url: `/goods/category/${ids}/brands`,
       method: 'get',
       loading: false,
       params
@@ -196,7 +194,7 @@ export function getGoodsBrandList(ids, params) {
 export function getTplList(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/goods/${ids}`,
+      url: `/shops/ship-templates`,
       method: 'get',
       loading: false,
       params
@@ -221,7 +219,7 @@ export function underGoods(ids, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}/under`,
-      method: 'post',
+      method: 'put',
       data: _formData
     }).then(response => {
       resolve(response)
@@ -230,7 +228,7 @@ export function underGoods(ids, params) {
 }
 
 /**
- * 上架正常商品
+ * 上架正常商品 商品相关API-添加商品
  * @param params
  * @returns {Promise<any>}
  */
@@ -261,7 +259,7 @@ export function aboveDraftGoods(ids, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/draft-goods/${ids}/market`,
-      method: 'post',
+      method: 'put',
       data: _formData
     }).then(response => {
       resolve(response)
@@ -270,7 +268,7 @@ export function aboveDraftGoods(ids, params) {
 }
 
 /**
- * 正常商品 保存草稿
+ * 正常商品 保存草稿 草稿商品相关API-添加商品
  * @param params
  * @returns {Promise<any>}
  */
@@ -364,7 +362,7 @@ export function RecycleReductionGoods(ids, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}/revert`,
-      method: 'post',
+      method: 'put',
       data: _formData
     }).then(response => {
       resolve(response)

@@ -8,6 +8,7 @@
       style="width: 100%">
         <el-table-column
           v-for="item in tablehead"
+          v-if="item !== 'spec_value_id'"
           :key="item"
           :label="labeltxt(item)"
           align="center"
@@ -48,7 +49,7 @@
         default: [{
           sn: '',
           weight: '',
-          stock: '',
+          quantity: '',
           cost: '',
           price: ''
         }]
@@ -59,7 +60,7 @@
       }
     },
     watch: {
-      skuInfo: function() { // 此方法可能中毒了 不能使用箭头函数 原因不明
+      skuInfo() {
         this.tableData = this.skuInfo
         this.concactArray = []
         this.tableData.forEach((key, index) => {
@@ -68,6 +69,7 @@
       }
     },
     mounted() {
+      this.tableData = this.skuInfo
       this.tableData.forEach((key, index) => {
         this.concactArrayCom(index, key)
       })
@@ -106,7 +108,7 @@
         switch (item) {
           case 'sn': _output = '货号'; break
           case 'weight': _output = '重量(kg)'; break
-          case 'stock': _output = '库存'; break
+          case 'quantity': _output = '库存'; break
           case 'cost': _output = '成本价'; break
           case 'price': _output = '价格(元)'; break
           default: _output = item
@@ -116,7 +118,7 @@
 
       /** 当前表头是否属于固定表头的鉴定 */
       checkFixed(item) {
-        if (item === 'sn' || item === 'weight' || item === 'stock' || item === 'cost' || item === 'price') {
+        if (item === 'sn' || item === 'weight' || item === 'quantity' || item === 'cost' || item === 'price') {
           return false
         }
         return true
@@ -140,6 +142,10 @@
         /** 循环列 先循环第一列 若相同则合并 再循环第二列 依次循环 若不相同 则不合并 终止循环 */
         let _currnetRow = []
         for (let i = 0, _len = this.tablehead.length - 5; i < _len; i++) {
+          if (this.tablehead[i] === 'spec_value_id') {
+            i++
+            continue
+          }
           if (index > 0 && item[this.tablehead[i]] !== this.skuInfo[index - 1][this.tablehead[i]]) {
             _currnetRow[i] = 1
             _isMerge = true
@@ -159,31 +165,24 @@
 
       /** 批量设置价格*/
       setBatch(val) {
+        this.batch = ''
         this.isShowBatch = !this.isShowBatch
         this.activeVal = val
       },
 
       /** 保存批量设置值 */
       saveBatch() {
-        if (this.activeVal === 1) { // 价格
-          if (!this.batch || !Number.isInteger(this.batch)) {
-            this.batch = ''
-            this.$message.error('请输入一个有效的价格')
-            return
-          }
-          /** 批量设置价格 */
-          this.tableData.forEach(key => { key.price = this.batch })
-          this.isShowBatch = !this.isShowBatch
-        } else if (this.activeVal === 2) { // 库存
-          if (!this.batch || !Number.isInteger(this.batch)) {
-            this.batch = ''
-            this.$message.error('请输入一个有效的库存')
-            return
-          }
-          /** 批量设置库存 */
-          this.tableData.forEach(key => { key.stock = this.batch })
-          this.isShowBatch = !this.isShowBatch
+        const _desc = this.activeVal === 1 ? '价格' : '库存'
+        if (!this.batch || !Number.isInteger(this.batch)) {
+          this.batch = ''
+          this.$message.error(`请输入一个有效的库存${_desc}`)
+          return
         }
+        /** 批量设置 */
+        this.activeVal === 1 ? this.tableData.forEach(key => { key.price = this.batch }) : this.tableData.forEach(key => { key.quantity = this.batch })
+        this.isShowBatch = !this.isShowBatch
+        /** 异步更新skuInfo数据 */
+        this.$emit('skuTable', this.skuInfo)
       },
 
       /** 取消批量设置值 */

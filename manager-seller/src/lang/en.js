@@ -18,6 +18,7 @@ export default {
     logisticsManage: 'Logistics Manage',
     commentsManage: 'Comments Manage',
     settlementManage: 'Settlement Manage',
+    settlementDetail: 'settlement Detail',
     receiptHistory: 'Receipt History',
     orderDetail: 'Order Detail',
     refundDetail: 'Refund Detail',

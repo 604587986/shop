@@ -42,6 +42,7 @@
     methods: {
       GET_RegionData(category_ids = []) {
         const _category_id = category_ids[category_ids.length - 1] || 0
+        /** 此处为商品分组的调用接口 */
         this.$http.get(`${process.env.BASE_API}/goods-info/category/${_category_id}/children.do`)
           .then(response => response.data)
           .then(response => {
