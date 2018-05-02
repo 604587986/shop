@@ -11,7 +11,9 @@ import request from '@/utils/request'
  * @returns {string}
  */
 export function getValidateCodeUrl(uuid, type) {
-  return `http://192.168.2.5:8083/captchas/${uuid}/${type}?r=${new Date().getTime()}`
+  return uuid
+    ? `http://192.168.2.5:8083/captchas/${uuid}/${type}?r=${new Date().getTime()}`
+    : ''
 }
 
 /**
