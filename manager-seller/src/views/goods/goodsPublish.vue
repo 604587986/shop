@@ -132,7 +132,7 @@
           <div>
             <el-form-item label="商品规格："  style="width: 90%;text-align: left;">
               <!--规格选择器-->
-               <en-sku-selector :goodsId="activeGoodsId" :categoryId="categoryLevel" @finalSku="finalSku"></en-sku-selector>
+               <en-sku-selector :goodsId="activeGoodsId" :categoryId="categoryID" @finalSku="finalSku"></en-sku-selector>
             </el-form-item>
             <el-form-item label="总库存：" prop="summary_stock" style="width: 20%;text-align: left;">
               <el-input v-model="baseInfoForm.summary_stock" disabled></el-input>
@@ -273,7 +273,7 @@
         label-width="120px"
         class="demo-ruleForm">
         <el-form-item label="商品描述：">
-          <UE v-model="baseInfoForm.goods_desc" :defaultMsg="baseInfoForm.goods_desc"></UE>
+          <UE v-model="baseInfoForm.intro" :defaultMsg="baseInfoForm.intro"></UE>
         </el-form-item>
       </el-form>
     </div>
@@ -386,8 +386,8 @@
         /** 当前商品id*/
         activeGoodsId: '',
 
-        /** 测试数据 */
-        categoryLevel: 0,
+        /** 当前商城分类id */
+        categoryID: 0,
 
         /** 1级分类列表*/
         categoryListLevel1: [],
@@ -404,13 +404,19 @@
           /** 品牌id */
           brand_id: '',
 
+          /** 商城分类id */
+          category_id: '',
+
           /** 商品名称 */
           goods_name: '',
 
-          /** 商品编号 */
+          /** 商品编号 sn*/
           goods_sn: '',
 
-          /** 市场价格 */
+          /** 商品价格 */
+          price: '',
+
+          /** 市场价格 mktprice*/
           market_price: '',
 
           /** 成本价格 */
@@ -425,11 +431,17 @@
           /** 用来校验的商品相册 */
           goods_gallery: '',
 
-          /** 商品总库存 */
+          /** 商品总库存 quantity*/
           summary_stock: 0,
 
           /** 卖家承担运费1 买家承担运费0 */
           goods_transfee_charge: 1,
+
+          /** sku数据变化或者组合变化判断 0:没变化，1：变化 */
+          has_changed: 0,
+
+          /** 是否上架，1上架 0下架 */
+          market_enable: 1,
 
           /** 模板运费id */
           template_id: '',
@@ -449,11 +461,26 @@
             exchange_point: 0
           },
 
-          /** 商品描述 anytype*/
-          goods_desc: null,
+          /** 店铺分组id*/
+          shop_cat_id: '',
 
-          /** 要提交的 商品参数列表 */
-          goods_params_list: []
+          /** seo描述 */
+          meta_description: '',
+
+          /** seo关键字 */
+          meta_keywords: '',
+
+          /** seo关键字 */
+          page_title: '',
+
+          /** 商品参数列表 */
+          goods_params_list: [],
+
+          /** sku列表 */
+          sku_list: [],
+
+          /** 商品描述 详情 */
+          intro: ''
         },
 
         /** 请求的商品参数组列表 */
@@ -604,7 +631,9 @@
           this.$message.error('请选择商品分类')
           return
         } else {
+          // 获取改商城分类下 商品参数信息
           this.GET_GoodsParams()
+          // 获取当前店铺分组列表
           this.GET_GoodsGroupList()
         }
 
@@ -634,13 +663,15 @@
 
       /** 上架  */
       aboveGoods() {
+        // 构造提交表单数据
         if (this.currentStatus === 0) {
           /** 正常商品上架 */
+          console.log(this.baseInfoForm, 363)
           API_goods.aboveGoods(this.baseInfoForm).then(response => {
             this.$message.success('上架商品成功')
             this.$router.push({ path: '/goods/goods-list' })
           }).catch(error => {
-            this.$message.success('上架商品失败，请稍后重试！')
+            this.$message.error('上架商品失败，请稍后重试！')
             console.log(error)
           })
         } else {
@@ -649,7 +680,7 @@
             this.$message.success('上架草稿箱商品成功')
             this.$router.push({ path: '/goods/goods-list' })
           }).catch(error => {
-            this.$message.success('上架草稿箱商品失败，请稍后重试！')
+            this.$message.error('上架草稿箱商品失败，请稍后重试！')
             console.log(error)
           })
         }
@@ -690,6 +721,8 @@
           this.activeCategoryName3 = row.category_name
           this.activeCategoryIndex3 = index
         }
+        // 设置当前商城分类ID
+        this.categoryID = row.category_order
         this.GET_NextLevelCategory(row, level)
       },
 
@@ -759,9 +792,9 @@
       /** 商品品牌列表 */
       getGoodsBrandList(val) {
         if (val) {
-          // API_goods.getGoodsBrandList(this.activeGoodsId, { }).then((response) => {
-          //   this.brandList = response.data
-          // }).catch(() => {})
+          API_goods.getGoodsBrandList(this.categoryID, { }).then((response) => {
+            this.brandList = response.data
+          }).catch(() => {})
         }
       },
 

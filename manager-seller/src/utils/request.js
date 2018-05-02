@@ -4,14 +4,13 @@ import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 import PaginationModel from '@/models/PaginationModel'
+const qs = require('qs')
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
   timeout: 5000 // 请求超时时间
 })
-
-axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
 
 // request拦截器
 service.interceptors.request.use(config => {
@@ -25,9 +24,14 @@ service.interceptors.request.use(config => {
       text: '请稍候...'
     })
   }
+  /** 设置令牌 */
   if (store.getters.token) {
     config.headers['Authorization'] = getToken() // 让每个请求携带令牌
   }
+  /** 进行参数序列化 */
+  // if (config.method === 'post') {
+  //   qs.stringify(config.params)
+  // }
   return config
 }, error => {
   // Do something with request error
