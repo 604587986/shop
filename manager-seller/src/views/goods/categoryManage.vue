@@ -1,43 +1,17 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
       pagination
       :tableData="tableData"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button type="success" @click="addGoodsCategory">新增商品分类</el-button>
-        </div>
-        <div class="toolbar-search">
-          <en-table-search
-            @search="searchEvent"
-            @advancedSearch="advancedSearchEvent"
-            advanced
-          >
-            <template slot="advanced-content">
-              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
-                </el-form-item>
-                <el-form-item label="商品编号">
-                  <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
-                </el-form-item>
-                <el-form-item label="店铺名称">
-                  <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
-                </el-form-item>
-                <el-form-item label="商品类别">
-                  <en-category-picker @changed="categoryChanged"/>
-                </el-form-item>
-              </el-form>
-            </template>
-          </en-table-search>
+          <el-button type="success" @click="addGoodsCategory">新增商品分组</el-button>
         </div>
       </div>
-
       <template slot="table-columns">
-        <el-table-column label="分类名称" width="320" align="left">
+        <el-table-column label="分组名称" width="320" align="left">
           <template slot-scope="scope">
             <span v-if="toggleIconShow(scope.row)" @click="toogleCategory(scope.$index, scope.row)">
               <i v-if="scope.row._expanded && scope.row.level===1" class=" el-icon-minus icon_expanded_level1"></i>
@@ -48,7 +22,7 @@
                         className="leftbotcorner-icon icon_expanded_level2"></svg-icon>
               <i v-if="scope.row.level===1" class="el-icon-minus icon_expanded_level1"></i>
             </span>
-            <span>{{ scope.row.category_name }}</span>
+            <span>{{ scope.row.shop_cat_name }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="sort" label="排序"/>
@@ -68,7 +42,7 @@
             <el-button
               size="mini"
               type="warning"
-              @click="handleDeleteGoodsCategory(scope.row.category_id)">删除
+              @click="handleDeleteGoodsCategory(scope.row)">删除
             </el-button>
             <el-button
               v-if=" scope.row.level === 1 "
@@ -79,39 +53,27 @@
           </template>
         </el-table-column>
       </template>
-
-      <el-pagination
-        slot="pagination"
-        v-if="pageData"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
-      </el-pagination>
     </en-tabel-layout>
     <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="30%" align="center">
-      <el-form :model="goodsCategoryData" label-position="right" label-width="80px">
-        <el-form-item label="分类名称">
-          <el-input v-model="goodsCategoryData.category_name" auto-complete="off" style="width: 70%;"></el-input>
+      <el-form :model="goodsCatData" label-position="right" label-width="80px">
+        <el-form-item label="分组名称">
+          <el-input v-model="goodsCatData.category_name" auto-complete="off" style="width: 70%;"></el-input>
         </el-form-item>
-        <el-form-item label="上级分类">
-          <el-select v-model="goodsCategoryData.category_parent" placeholder="请选择" style="width: 70%;">
+        <el-form-item label="上级分组">
+          <el-select v-model="goodsCatData.category_parent" placeholder="请选择" style="width: 70%;">
             <el-option
-              v-for="item in tableData"
-              :key="item.category_id"
-              :label="item.category_name"
-              :value="item.category_id">
+              v-for="item in datafirst"
+              :key="item.shop_cat_id"
+              :label="item.shop_cat_name"
+              :value="item.shop_cat_id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="排序">
-          <el-input v-model="goodsCategoryData.sort" auto-complete="off" style="width: 70%;"></el-input>
+          <el-input v-model.number="goodsCatData.sort" auto-complete="off" style="width: 70%;"></el-input>
         </el-form-item>
         <el-form-item label="显示状态">
-          <el-radio-group v-model="goodsCategoryData.is_show" style="width: 70%;">
+          <el-radio-group v-model="goodsCatData.is_show" style="width: 70%;">
             <el-radio :label="1">是</el-radio>
             <el-radio :label="0">否</el-radio>
           </el-radio-group>
@@ -127,58 +89,45 @@
 
 <script>
   import * as API_goodsCategory from '@/api/goodsCategory'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { TableLayout } from '@/components'
 
   export default {
     name: 'categoryManage',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker
+      [TableLayout.name]: TableLayout
     },
     data() {
       return {
         /** 列表loading状态 */
         loading: false,
 
-        /** 列表参数 */
-        params: {
-          page_no: 1,
-          page_size: 10
-        },
-
         /** 列表数据 */
         tableData: null,
 
-        /** 列表分页数据 */
-        pageData: null,
+        /** 一级列表数据 */
+        datafirst: null,
 
-        /** 高级搜索数据 */
-        advancedForm: {
-          goods_name: '',
-          goods_sn: '',
-          shop_name: '',
-          category_id: ''
-        },
+        /** 分组更新弹框标题*/
+        categorytitle: '增加分组',
 
-        /** 分类更新弹框标题*/
-        categorytitle: '增加分类',
+        /** 是否是编辑 1添加 2编辑 */
+        is_edit: 1,
 
-        /** 显示新增/编辑分类弹框*/
+        /** 显示新增/编辑分组弹框*/
         goodsCategoryShow: false,
 
         /** 显示状态*/
         showstatus: 1,
 
         /** 弹框数据*/
-        goodsCategoryData: {
+        goodsCatData: {
           category_name: '',
           category_parent: '',
-          sort: 0,
+          sort: 1,
           is_show: 0
         },
 
-        /** 商品分类*/
+        /** 商品分组*/
         categoryID: 0
       }
     },
@@ -186,78 +135,32 @@
       this.GET_GoodsCategoryList()
     },
     methods: {
-
-      /** 分页大小发生改变 */
-      handlePageSizeChange(size) {
-        this.params.page_size = size
-        this.GET_GoodsCategoryList()
-      },
-
-      /** 分页页数发生改变 */
-      handlePageCurrentChange(page) {
-        this.params.page_no = page
-        this.GET_GoodsCategoryList()
-      },
-
-      /** 单个商品下架操作确认 */
-      handleWithdraw(index, row) {
-        this.$confirm('确认下架吗？', '提示')
-          .then(() => this.DELETE_Goods(row.id))
-          .catch(() => {
-          })
-      },
-
-      /** 销售状态格式化 */
-      marketStatus(row, column, cellValue) {
-        return row.market_enable === 1 ? '售卖中' : '已下架'
-      },
-
-      /** 搜索事件触发 */
-      searchEvent(data) {
-        this.params = {
-          ...this.params,
-          keyword: data
-        }
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
-        this.GET_GoodsCategoryList()
-      },
-
-      /** 高级搜索事件触发 */
-      advancedSearchEvent() {
-        this.params = {
-          ...this.params,
-          ...this.advancedForm
-        }
-        delete this.params.keyword
-        this.GET_GoodsCategoryList()
-      },
-
-      /** 高级搜索中 分类选择组件值发生改变 */
-      categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
-      },
-
-      /** 添加属性 */
+      /** 添加展开属性 */
       add_expanded(data) {
-        data.forEach(elem => {
-          this.$set(elem, '_expanded', false)
-          if (elem.children && elem.children.length > 0) {
-            this.add_expanded(elem.children)
-          }
-        })
+        if (Array.isArray(data) && data.length > 0) {
+          data.forEach(elem => {
+            this.$set(elem, '_expanded', false)
+            if (elem.children && elem.children.length > 0) {
+              this.add_expanded(elem.children)
+            }
+          })
+        }
       },
 
+      /** 获取商品分组列表 */
       GET_GoodsCategoryList() {
         this.loading = true
-        API_goodsCategory.getGoodsCategoryList(this.params).then(response => {
+        API_goodsCategory.getGoodsCategoryList().then(response => {
           this.loading = false
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
-          }
           this.tableData = response.data
-          // 为分类数据增加展开状态
+          // 为分组增加等级标识
+          this.tableData.forEach(key => {
+            const _level = key.shop_cat_pid === 0 ? 1 : 2
+            this.$set(key, 'level', _level)
+          })
+          // 平行结构数据转换树形结构数据
+          this.tableData = this.transData(this.tableData)
+          // 为分组数据增加展开状态
           this.add_expanded(this.tableData)
         }).catch(error => {
           this.loading = false
@@ -265,78 +168,85 @@
         })
       },
 
-      /** 删除分类 */
-      handleDeleteGoodsCategory(ids) {
-        API_goodsCategory.DeleteGoodsCategory(ids).then(() => {
+      /** 删除分组 */
+      handleDeleteGoodsCategory(row) {
+        const _id = row.shop_cat_id
+        API_goodsCategory.deleteGoodsCategory(_id).then(() => {
           this.GET_GoodsCategoryList()
           this.$message.success('删除商品成功！')
         }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
       },
 
-      /** 新增商品分类 */
+      /** 新增商品分组 */
       addGoodsCategory() {
+        this.is_edit = 1
         this.goodsCategoryShow = true
-        this.categorytitle = '增加分类'
-        this.categoryID = 0
-        this.goodsCategoryData = {
+        this.categorytitle = '增加分组'
+        this.goodsCatData = {
           category_name: '',
-          category_parent: '',
           sort: '',
           is_show: 1
         }
       },
 
-      /** 编辑商品分类 */
+      /** 编辑商品分组 */
       handleEditGoodsCategory($index, row) {
+        this.is_edit = 2
         this.goodsCategoryShow = true
-        this.categorytitle = '编辑分类'
-        this.categoryID = row.category_id
-        if (row.level === 1) {
-          this.goodsCategoryData = {
-            category_name: row.category_name,
-            category_parent: '',
-            sort: row.sort,
-            is_show: row.is_show
-          }
-        } else if (row.level === 2) {
-          /** 获取他爸爸的category_id*/
-          let category_id = null
-          for (let i = $index; i >= 0; i--) {
-            if (this.tableData[i].level === 1) {
-              category_id = this.tableData[i].category_id
-              break
-            }
-          }
-          this.goodsCategoryData = {
-            category_name: row.category_name,
-            category_parent: category_id,
-            sort: row.sort,
-            is_show: row.is_show
-          }
+        this.categorytitle = '编辑分组'
+        this.categoryID = row.shop_cat_id
+        const _shop_cat_pid = row.shop_cat_pid === 0 ? '' : row.shop_cat_pid
+        this.goodsCatData = {
+          category_name: row.shop_cat_name,
+          category_parent: _shop_cat_pid,
+          sort: row.sort,
+          is_show: row.is_show
         }
       },
 
-      /** 新增商品下级分类 */
+      /** 新增商品下级分组 */
       handleAddSonCategory($index, row) {
+        this.is_edit = 1
         this.goodsCategoryShow = true
-        this.categorytitle = '增加子分类'
-        this.categoryID = row.category_id
-        this.goodsCategoryData = {
+        this.categorytitle = '增加子分组'
+        this.goodsCatData = {
           category_name: '',
-          category_parent: row.category_id,
+          category_parent: row.shop_cat_id,
           sort: '',
           is_show: 1
         }
       },
 
-      /** 保存商品分类 */
+      /** 保存商品分组 */
       reserveCategoryGoods() {
-        const params = {}
-        API_goodsCategory.UpdateGoodsCategory(this.categoryID, params).then(response => {
-          this.goodsCategoryShow = false
-          this.$message.success('保存成功')
-          this.GET_GoodsCategoryList()
-        }).catch(() => this.$message.error('更新商品分类信息出错，请稍后再试'))
+        let params = {}
+        if (this.goodsCatData.category_parent) {
+          params = {
+            shop_cat_pid: this.goodsCatData.category_parent,
+            shop_cat_name: this.goodsCatData.category_name,
+            disable: this.goodsCatData.is_show,
+            sort: this.goodsCatData.sort
+          }
+        } else {
+          params = {
+            shop_cat_name: this.goodsCatData.category_name,
+            disable: this.goodsCatData.is_show,
+            sort: this.goodsCatData.sort
+          }
+        }
+        if (this.is_edit === 1) { // 添加
+          API_goodsCategory.addGoodsCategory(params).then(response => {
+            this.goodsCategoryShow = false
+            this.$message.success('添加成功')
+            this.GET_GoodsCategoryList()
+          }).catch(() => this.$message.error('添加商品分组信息出错，请稍后再试'))
+        } else { // 编辑
+          API_goodsCategory.updateGoodsCategory(this.categoryID, params).then(response => {
+            this.goodsCategoryShow = false
+            this.$message.success('编辑成功')
+            this.GET_GoodsCategoryList()
+          }).catch(() => this.$message.error('更新商品分组信息出错，请稍后再试'))
+        }
       },
 
       /** 点击展开和关闭的时候，图标的切换*/
@@ -356,8 +266,8 @@
           let arr = this.getChildCategoryId(dataArr, [])
           for (let i = 0; i < childLen; i++) {
             this.tableData.map((value) => {
-              if (arr.indexOf(value.category_id) > -1) {
-                this.removeByValue(this.tableData, value.category_id)
+              if (arr.indexOf(value.shop_cat_id) > -1) {
+                this.removeByValue(this.tableData, value.shop_cat_id)
               }
             })
           }
@@ -370,7 +280,7 @@
         rowData._expanded = !rowData._expanded
       },
 
-      /** 获取子级分类id */
+      /** 获取子级分组id */
       getChildCategoryId(data, emptyArr) {
         Array.from(data).forEach((record) => {
           record.level !== 1 && emptyArr.push(record.category_id)
@@ -385,11 +295,26 @@
       /** 对数组原型添加删除指定项的方法 */
       removeByValue(arr, val) {
         for (var i = 0; i < arr.length; i++) {
-          if (arr[i].category_id === val) {
+          if (arr[i].shop_cat_id === val) {
             arr.splice(i, 1)
             break
           }
         }
+      },
+
+      /** 平行结构转树形结构数据 */
+      transData(data) {
+        const _datafirst = this.datafirst = data.filter(key => { return key.level === 1 })
+        const _dataseconed = data.filter(key => { return key.level === 2 })
+        _datafirst.forEach(key => {
+          this.$set(key, 'children', [])
+          _dataseconed.forEach(item => {
+            if (item.shop_cat_pid === key.shop_cat_id) {
+              key.children.push(item)
+            }
+          })
+        })
+        return _datafirst
       }
     }
   }
