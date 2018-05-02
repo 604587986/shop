@@ -51,7 +51,7 @@
                         <i class="iconfont ea-icon-safe"></i>
                       </label>
                       <input id="validcode-mobile" placeholder="图片验证码" maxlength="4">
-                      <img class="validcode-img" src="http://data.andste.cc/developers/web/temp/images/validcode-img.png">
+                      <img class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="item item-form-t">
                       <button class="send-sms-btn" type="button">获取手机验证码</button>
@@ -74,20 +74,20 @@
                       <label for="username">
                         <i class="iconfont ea-icon-persion"></i>
                       </label>
-                      <input id="username" placeholder="邮箱/用户名/已验证手机" maxlength="20">
+                      <input id="username" v-model="accountForm.username" placeholder="邮箱/用户名/已验证手机" maxlength="20">
                     </div>
                     <div class="item">
                       <label for="password">
                         <i class="iconfont ea-icon-password"></i>
                       </label>
-                      <input id="password" placeholder="请输入密码" maxlength="20">
+                      <input id="password" v-model="accountForm.password" placeholder="请输入密码" maxlength="20">
                     </div>
                     <div class="item">
                       <label for="validcode">
                         <i class="iconfont ea-icon-safe"></i>
                       </label>
-                      <input id="validcode" placeholder="图片验证码" maxlength="4">
-                      <img class="validcode-img" src="http://data.andste.cc/developers/web/temp/images/validcode-img.png">
+                      <input id="validcode" v-model="accountForm.captcha" placeholder="图片验证码" maxlength="4">
+                      <img class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="forget">
                       <span><nuxt-link :to="'/find-password' + MixinForward">忘记密码</nuxt-link></span>
@@ -127,22 +127,42 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
+  import * as API_Common from '@/api/common'
   export default {
     name: 'login',
     layout: 'full',
     data() {
       return {
-        login_type: 'quick',
-        login_banner: 'http://data.andste.cc/developers/web/temp/images/background-banner.jpg'
+        login_type: 'account',//'quick',
+        login_banner: 'http://data.andste.cc/developers/web/temp/images/background-banner.jpg',
+        /** 图片验证码 */
+        val_code_url: '',
+        quickForm: {},
+        accountForm: {}
+      }
+    },
+    computed: {
+      ...mapGetters(['uuid'])
+    },
+    watch: {
+      uuid(newVal) {
+        this.val_code_url = API_Common.getValidateCodeUrl(newVal, 'LOGIN')
       }
     },
     methods: {
+      /** 改变图片验证码URL */
+      handleChangeValUrl() {
+        this.val_code_url = API_Common.getValidateCodeUrl(this.uuid, 'LOGIN')
+      },
       /** 登录事件 */
       handleLogin() {
         const _forwardMatch = this.MixinForward.match(/\?forward=(.+)/) || []
         const forward = _forwardMatch[1]
-        this.login().then(() => {
+        const login_type = this.login_type
+        const form = login_type === 'quick' ? this.quickForm : this.accountForm
+        form.uuid = this.uuid
+        this.login({ login_type, form }).then(() => {
           if (forward) {
             this.$router.push({ path: forward })
           } else {
