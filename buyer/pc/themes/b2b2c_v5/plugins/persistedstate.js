@@ -20,11 +20,6 @@ export default ({ store, isHMR }) => {
         return {
           uuid: uuid
         }
-      },
-      storage: {
-        getItem: key => Cookies.get(key),
-        setItem: (key, value) => Cookies.set(key, value, { expires: 3 }),
-        removeItem: key => Cookies.remove(key)
       }
     })(store)
   ])
