@@ -13,7 +13,7 @@
             <el-option key="0" label="未出售（已下架）" :value="0"/>
             <el-option key="1" label="出售中（已上架）" :value="1"/>
           </el-select>
-          <!--商品分类 获取分类列表-->
+          <!--商品分组 获取分组列表-->
           <en-category-picker @changed="changeGoodsCateGory" :clearable='true'/>
           <el-button @click="publishGoods" type="success">发布商品</el-button>
           <el-button @click="gotoRecycle" type="primary">回收站</el-button>
@@ -28,21 +28,21 @@
             <img :src="scope.row.goods_image" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column prop="goods_name" label="名称" />
-        <el-table-column label="价格">
+        <el-table-column prop="goods_name" label="名称"/>
+        <el-table-column label="价格" >
           <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column label="库存">
+        <el-table-column label="库存" >
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
         </el-table-column>
-        <el-table-column label="可用库存">
+        <el-table-column label="可用库存" >
           <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
         </el-table-column>
-        <el-table-column label="创建时间">
+        <el-table-column label="创建时间" >
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="状态" width="80" :formatter="marketStatus"/>
-        <el-table-column label="操作" width="280">
+        <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus"/>
+        <el-table-column label="操作" width="280px">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -141,7 +141,7 @@
         /** 商品状态 是否上架 0代表已下架，1代表已上架 */
         marketEnable: 0,
 
-        /** 当前商品分类*/
+        /** 当前商品分组*/
         categoryId: '',
 
         /** 当前商品id*/
@@ -154,7 +154,7 @@
         goodsStocknums: 1,
 
         /** 商品库存列表数据*/
-        goodsStockData: []
+        goodsStockData: {}
       }
     },
     mounted() {
@@ -212,13 +212,13 @@
         this.GET_GoodsList()
       },
 
-      /** 切换分类*/
+      /** 切换分组*/
       changeGoodsCateGory(data) {
-        delete this.params.category_path
+        delete this.params.shop_cat_path
         if (data !== '') {
           this.params = {
             ...this.params,
-            category_path: data.category_id
+            shop_cat_path: data
           }
         }
         this.GET_GoodsList()
@@ -309,7 +309,9 @@
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
-
+  /deep/ .el-table__body {
+    min-width: 100%;
+  }
   .inner-toolbar {
     display: flex;
     width: 100%;
