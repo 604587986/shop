@@ -62,8 +62,19 @@ export function registerByMobile(params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
-    url: 'http://192.168.2.5:8084/passport/register/pc',
+    url: 'http://192.168.2.5:6002/passport/register/pc',
     method: 'post',
     data: _formData
+  })
+}
+
+/**
+ * 手机号码重复校验
+ * @param mobile 手机号
+ */
+export function checkMobileRegistered(mobile) {
+  return request({
+    url: `http://192.168.2.5:6001/passport/mobile/${mobile}`,
+    method: 'get'
   })
 }
