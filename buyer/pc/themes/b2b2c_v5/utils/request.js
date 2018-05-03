@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { getToken } from '@/utils/auth'
+import Storage from '@/utils/storage'
+import Foundation from '@/utils/Foundation'
+import MD5 from 'md5'
 
 // 创建axios实例
 const service = axios.create({
@@ -10,14 +12,20 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
-  // Do something before request is sent
   /** 配置全屏加载 */
   if (config.loading !== false) {
     config.loading = 1
   }
-  // if (store.getters.token) {
-  //   config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-  // }
+  let accessToken = Storage.getItem('accessToken')
+  if (accessToken) {
+    if (process.env.NODE_ENV === 'production') {
+      const { member_id } = JSON.parse(Storage.getItem('user') || "{}")
+      const nonce = Foundation.randomString(6)
+      const timestamp = parseInt(new Date().getTime() / 1000)
+      accessToken = MD5(member_id + nonce + timestamp + accessToken)
+    }
+    config.headers['Authorization'] = accessToken
+  }
   return config
 }, error => {
   // Do something with request error

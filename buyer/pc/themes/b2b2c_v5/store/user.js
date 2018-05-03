@@ -1,9 +1,12 @@
 import * as API_User from '@/api/user'
 import * as API_Passport from '@/api/passport'
 import * as types from './mutation-types'
+import Storage from '@/utils/storage'
 
 export const state = () => ({
-  user: ''
+  user: '',
+  accessToken: '',
+  refreshToken: ''
 })
 
 /** mutations */
@@ -13,8 +16,9 @@ export const mutations = {
    * @param state
    * @param data
    */
-  [types.SAVE_USER_INFO](state, data) {
+  [types.SET_USER_INFO](state, data) {
     state.user = data
+    process.client && Storage.setItem('user', JSON.stringify(data))
   },
   /**
    * 移除用户信息
@@ -23,6 +27,41 @@ export const mutations = {
    */
   [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
+    process.client && Storage.removeItem('user')
+  },
+  /**
+   * 设置访问令牌
+   * @param state
+   * @param token
+   */
+  [types.SET_ACCESS_TOKEN](state, token) {
+    state.accessToken = token
+    process.client && Storage.setItem('accessToken', token)
+  },
+  /**
+   * 移除访问令牌
+   * @param state
+   */
+  [types.REMOVE_ACCESS_TOKEN](state) {
+    state.accessToken = ''
+    process.client && Storage.removeItem('accessToken')
+  },
+  /**
+   * 设置刷新令牌
+   * @param state
+   * @param token
+   */
+  [types.SET_REFRESH_TOKEN](state, token) {
+    state.refreshToken = token
+    process.client && Storage.setItem('refreshToken', token)
+  },
+  /**
+   * 移除刷新令牌
+   * @param state
+   */
+  [types.REMOVE_REFRESH_TOKEN](state) {
+    state.refreshToken = ''
+    process.client && Storage.removeItem('refreshToken')
   }
 }
 
@@ -33,10 +72,10 @@ export const actions = {
    * @param commit
    * @param params
    */
-  getUserDataAction: ({ commit }, params) => {
+  getUserDataAction: ({ commit }, uid) => {
     return new Promise((resolve, reject) => {
-      API_User.getUserInfo().then(response => {
-        commit(types.SAVE_USER_INFO, response)
+      API_User.getUserInfo(uid).then(response => {
+        commit(types.SET_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -47,16 +86,20 @@ export const actions = {
    * @param params
    * @returns {Promise<any>}
    */
-  loginAction: ({ commit }, params) => {
+  loginAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
+      params.form.uuid = Storage.getItem('uuid')
       if (params.login_type === 'quick') {
         API_Passport.loginByMobile()
       } else {
-        API_Passport.login(params.form).then(response => {
-          console.log(response)
-          commit(types.SAVE_USER_INFO, response)
-          resolve(response)
-        }).catch(error => reject(error))
+        API_Passport.login(params.form).then(loginSccess).catch(error => reject(error))
+      }
+      function loginSccess(res) {
+        const { access_token, refresh_token, ...user } = res
+        dispatch('getUserDataAction', user.uid)
+        commit(types.SET_ACCESS_TOKEN, access_token)
+        commit(types.SET_REFRESH_TOKEN, refresh_token)
+        resolve(res)
       }
     })
   },
@@ -69,6 +112,8 @@ export const actions = {
     return new Promise((resolve, reject) => {
       API_User.logout().then(() => {
         commit(types.REMOVE_USER_INFO)
+        commit(types.REMOVE_ACCESS_TOKEN)
+        commit(types.REMOVE_REFRESH_TOKEN)
         resolve()
       }).catch(error => reject(error))
     })
@@ -82,14 +127,9 @@ export const actions = {
   saveUserInfoAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_User.saveUserInfo(params).then(response => {
-        commit(types.SAVE_USER_INFO, response)
+        commit(types.SET_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
     })
   }
-}
-
-/** getters */
-export const getters = {
-  user: state => state.user
 }

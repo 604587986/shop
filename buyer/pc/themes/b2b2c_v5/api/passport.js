@@ -4,7 +4,7 @@
  */
 
 import request from '@/utils/request'
-import uuid from 'uuid/v1'
+import Storage from '@/utils/storage'
 
 /**
  * 普通登录
@@ -33,14 +33,13 @@ export function loginByMobile(mobile, sms_code) {
 
 /**
  * 发送会员注册手机验证码
- * @param uuid
  * @param mobile
  * @param img_code
  */
-export function sendRegisterSms(uuid, mobile, img_code) {
+export function sendRegisterSms(mobile, img_code) {
   const _formData = new FormData()
   _formData.append('captcha', img_code)
-  _formData.append('uuid', uuid)
+  _formData.append('uuid', Storage.getItem('uuid'))
   return request({
     url: `http://192.168.2.5:7001/passport/register/smscode/${mobile}`,
     method: 'post',
@@ -50,14 +49,13 @@ export function sendRegisterSms(uuid, mobile, img_code) {
 
 /**
  * 发送会员登录手机验证码
- * @param uuid
  * @param mobile
  * @param img_code
  */
-export function sendLoginSms(uuid, mobile, img_code) {
+export function sendLoginSms(mobile, img_code) {
   const _formData = new FormData()
   _formData.append('captcha', img_code)
-  _formData.append('uuid', uuid)
+  _formData.append('uuid', Storage.getItem('uuid'))
   return request({
     url: `http://192.168.2.5:7001/passport/login/smscode/${mobile}`,
     method: 'post',

@@ -3,7 +3,7 @@
     <nuxt-link to="/"><i class="iconfont ea-icon-home"></i>首页</nuxt-link>&ensp;&gt;
     <nuxt-link to="/member">会员中心</nuxt-link>&ensp;&gt;
     <template v-if="fullPath === '/member'">
-      <nuxt-link to="/member"> {{ user.username }}</nuxt-link>
+      <nuxt-link to="/member"> {{ user.uname }}</nuxt-link>
     </template>
     <template v-else v-for="(b, i) in breadcrumbs">
       <nuxt-link :to="b.path" :key="b.path"> {{ b.title }}</nuxt-link>
@@ -40,7 +40,7 @@
         return _bcs
       },
       ...mapGetters({
-        user: 'user/user'
+        user: 'user'
       })
     }
   }
