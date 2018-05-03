@@ -181,7 +181,7 @@ export const asyncRouterMap = [
     children: [
       { path: 'shop-setting', component: _import('setting/shopSettings'), name: 'shopSettings', meta: { title: 'shopSettings' }},
       { path: 'goods-warning', component: _import('setting/goodsWarning'), name: 'goodsWarning', meta: { title: 'goodsWarning' }},
-      { path: 'grade-application', component: _import('setting/gradeApplication'), name: 'gradeApplication', meta: { title: 'gradeApplication' }}
+      { path: 'grade-application', component: _import('setting/gradeApplication'), name: 'gradeApplication', meta: { title: 'gradeApplication' }, hidden: true }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

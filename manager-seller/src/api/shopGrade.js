@@ -6,24 +6,6 @@ import request from '@/utils/request'
 import ShopNavModel from '@/models/ShopNavModel'
 
 /**
- * 获取店铺等级信息
- * @param params
- * @returns {Promise<any>}
- */
-export function getShopGradeData(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/settings/shop/grade',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    }).catch(error => reject(error))
-  })
-}
-
-/**
  * 提升店铺等级
  * @param ids
  * @param params
