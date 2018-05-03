@@ -1,40 +1,16 @@
 /**
- * 用户信息相关API
+ * 用户相关API
  */
 
 import request from '@/utils/request'
 
 /**
- * 登录账户
- * @param params
- * @returns {AxiosPromise}
- */
-export function login(params) {
-  return request({
-    url: 'user/login',
-    method: 'post',
-    data: params
-  })
-}
-
-/**
- * 退出账户
- * @returns {AxiosPromise}
- */
-export function logout() {
-  return request({
-    url: 'user/logout',
-    method: 'post'
-  })
-}
-
-/**
  * 获取当前登录的用户信息
  * @returns {AxiosPromise}
  */
-export function getUserInfo() {
+export function getUserInfo(uid) {
   return request({
-    url: 'user/info',
+    url: `http://192.168.2.5:7002/member/${uid}`,
     method: 'get'
   })
 }
