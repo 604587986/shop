@@ -38,7 +38,8 @@ export const actions = {
     let _uuid = ''
     if (req.headers.cookie) {
       const cookies = Cookie.parse(req.headers.cookie)
-      commit('user/SET_USER_INFO', global.JSON.parse(cookies.user || "{}"))
+      const { user } = cookies
+      commit('user/SET_USER_INFO', user ? global.JSON.parse(cookies.user) : '')
       commit('user/SET_ACCESS_TOKEN', cookies.accessToken)
       commit('user/SET_REFRESH_TOKEN', cookies.refreshToken)
       _uuid = cookies.uuid
