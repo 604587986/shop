@@ -6,7 +6,7 @@
  * @returns {*}
  */
 export default function ({ store, redirect, route }) {
-  if (!store.state.user.user) {
+  if (!store.state.user.accessToken) {
     return redirect(`/login?forward=${route.fullPath}`)
   }
 }
