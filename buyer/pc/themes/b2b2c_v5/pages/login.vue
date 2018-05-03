@@ -185,7 +185,7 @@
       margin: 25px 5px;
     }
   }
-  .content .prompt {
+  .login-content .prompt {
     width: 100%;
     text-align: center;
     background: #fff8f0;
@@ -193,7 +193,7 @@
     padding: 10px 0;
     a { color: black }
   }
-  .content .login-banner {
+  .login-content .login-banner {
     background: #FF5E18;
     width: 100%;
     .bg-banner {
