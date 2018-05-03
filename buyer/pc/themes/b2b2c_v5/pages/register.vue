@@ -55,7 +55,6 @@
 
 <script>
   import Vue from 'vue'
-  import { mapGetters } from 'vuex'
   import { Button, Form, FormItem, Input } from 'element-ui'
   Vue.use(Button)
   Vue.use(Form)
@@ -143,21 +142,13 @@
         /** 是否显示图片验证码 */
         showValidCode: false,
         /** 图片验证码URL */
-        valid_code_url: ''
-      }
-    },
-    computed: {
-      ...mapGetters(['uuid'])
-    },
-    watch: {
-      uuid(newVal) {
-        this.valid_code_url = API_Common.getValidateCodeUrl(newVal, 'REGISTER')
+        valid_code_url: API_Common.getValidateCodeUrl('REGISTER')
       }
     },
     methods: {
       /** 获取图片验证码 */
       changeValidCodeUrl() {
-        this.valid_code_url = API_Common.getValidateCodeUrl(this.uuid, 'REGISTER')
+        this.valid_code_url = API_Common.getValidateCodeUrl('REGISTER')
       },
       /** 发送手机验证码异步方法 */
       sendValidMobileSms() {
@@ -170,7 +161,7 @@
             this.$message.error('请输入图片验证码！')
             this.requiredValCode = '图片验证码不能为空！'
           } else {
-            API_Passport.sendRegisterSms(this.uuid, mobile, vali_code).then(resolve).catch(reject)
+            API_Passport.sendRegisterSms(mobile, vali_code).then(resolve).catch(reject)
           }
         })
       },
