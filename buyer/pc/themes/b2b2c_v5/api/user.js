@@ -31,26 +31,12 @@ export function saveUserInfo(params) {
 }
 
 /**
- * 会员注册【手机】
- * @param params
+ * 登出
+ * @returns {AxiosPromise}
  */
-export function registerByMobile(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+export function logout() {
   return request({
-    url: 'http://192.168.2.5:6002/passport/register/pc',
-    method: 'post',
-    data: _formData
-  })
-}
-
-/**
- * 手机号码重复校验
- * @param mobile 手机号
- */
-export function checkMobileRegistered(mobile) {
-  return request({
-    url: `http://192.168.2.5:6001/passport/mobile/${mobile}`,
-    method: 'get'
+    url: `http://192.168.2.5:7002/member/logout`,
+    method: 'post'
   })
 }
