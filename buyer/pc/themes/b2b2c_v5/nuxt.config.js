@@ -1,7 +1,6 @@
 const webpack = require('webpack')
 
 module.exports = {
-  dev: (process.env.NODE_ENV !== 'production'),
   env: {
     /** 基础API */
     BASE_API: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer'
@@ -69,8 +68,7 @@ module.exports = {
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
-    { src: '~plugins/address-selecter', ssr: false },
-    { src: '~plugins/persistedstate', ssr: false }
+    { src: '~plugins/address-selecter', ssr: false }
   ],
   router: {
     scrollBehavior: function (to, from, savedPosition) {
