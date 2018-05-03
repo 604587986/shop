@@ -43,7 +43,7 @@
     name: 'account-safe',
     computed: {
       ...mapGetters({
-        user: 'user/user'
+        user: 'user'
       })
     }
   }
