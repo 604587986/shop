@@ -52,6 +52,7 @@
             <el-button
               size="mini"
               type="danger"
+              :disabled="scope.row.market_enable === 1 "
               @click="handleDeleteGoods(scope.row)">删除
             </el-button>
             <el-button
@@ -78,12 +79,10 @@
       <div align="center">
         <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
           <el-form-item label="库存" prop="quantity" >
-            <!--v-model="goodsStockData.quantity"-->
-            <el-input   auto-complete="off"  ></el-input>
+            <el-input  v-model="goodsStockData.quantity" auto-complete="off"  ></el-input>
           </el-form-item>
           <el-form-item label="待发货数" >
-            <!--v-model="goodsStockData.deliver_goods_quantity"-->
-            <el-input  auto-complete="off" disabled ></el-input>
+            <el-input v-model="goodsStockData.deliver_goods_quantity" auto-complete="off" disabled ></el-input>
           </el-form-item>
         </el-form>
         <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
@@ -91,12 +90,10 @@
             <el-table-column prop="goods_name" label="商品名称"/>
             <el-table-column label="库存" width="120">
               <template slot-scope="scope">
-                <!--v-model="scope.row.quantity"-->
-                <el-input  auto-complete="off" ></el-input>
+                <el-input v-model="scope.row.quantity" auto-complete="off" ></el-input>
               </template>
             </el-table-column>
-            <!--prop="deliver_goods_quantity"-->
-            <el-table-column prop="deliver_goods_quantity" label="待发货数" width="120" />
+            <el-table-column  prop="deliver_goods_quantity" label="待发货数" width="120" />
           </template>
         </en-tabel-layout>
       </div>
@@ -278,27 +275,42 @@
       handleStockGoods(row) {
         this.goodsId = row.goods_id
         this.goodsStockshow = true
-        API_goods.getGoodsStockList().then((response) => {
-          this.goodsStocknums = response.data.length
+        API_goods.getGoodsStockList(row.goods_id, {}).then((response) => {
+          this.goodsStockData = response
+          this.goodsStocknums = response.length
           // 构造待发货字段
-          response.data.forEach((key) => {
-            this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
-          })
-          this.goodsStockData = response.data.length === 1 ? response.data[0] : response.data
-        }).catch(() => this.$message.error('请求库存数据出错，请稍后再试！'))
+          if (Array.isArray(response) && response.length > 0) {
+            this.goodsStockData.forEach((key) => {
+              this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
+            })
+          }
+          this.goodsStockData = this.goodsStockData.length > 1 ? this.goodsStockData : this.goodsStockData[0]
+        }).catch((error) => {
+          console.log(error)
+          this.$message.error('请求库存数据出错，请稍后再试！')
+        })
       },
 
       /** 保存库存商品 */
       reserveStockGoods() {
-        const _params = this.goodsStockData.map((elem) => {
-          return {
-            quantity_count: elem.quantity || 0,
-            sku_id: 0
-          }
-        })
+        let _params = []
+        if (Array.isArray(this.goodsStockData)) {
+          _params = this.goodsStockData.map((elem) => {
+            return {
+              quantity_count: parseInt(elem.quantity),
+              sku_id: elem.sku_id
+            }
+          })
+        } else {
+          _params.push({
+            quantity_count: this.goodsStockData.quantity,
+            sku_id: this.goodsStockData.sku_id
+          })
+        }
         API_goods.reserveStockGoods(this.goodsId, _params).then((response) => {
           this.goodsStockshow = false
           this.$message.success('库存商品保存成功')
+          this.GET_GoodsList()
         }).catch(() => this.$message.error('库存商品保存出错，请稍后再试！'))
       }
     }

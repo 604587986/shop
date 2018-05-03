@@ -17,22 +17,16 @@ export default class GoodsModel extends DataModel {
   goods_id
 
   /** 商品图片 小图路径 */
-  @ServerName('original')
+  @ServerName('thumbnail')
   goods_image
-
-  // original
-
-  // /** 商品编号 */
-  // @ServerName('goods_sn')
-  // sn
 
   /** 商品名称 */
   @ServerName('goods_name')
   goods_name
 
-  // /** 卖家名称 */
-  // @ServerName('seller_name')
-  // seller_name
+  /** 卖家名称 */
+  @ServerName('seller_name')
+  seller_name
 
   /** 商品价格 */
   @ServerName('price')
@@ -54,15 +48,11 @@ export default class GoodsModel extends DataModel {
   @ServerName('market_enable')
   market_enable
 
-  // /** 商品品牌 */
-  // @ServerName('brand_name')
-  // brand_name
+  /** 商品品牌ID */
+  @ServerName('brand_id')
+  brand_id
 
   /** 商品编号 货号 */
   @ServerName('sn')
-  goods_sn
-
-  /** 待发货数 */
-  @ServerName('enable_quantity')
-  deliver_goods_quantity
+  sn
 }
