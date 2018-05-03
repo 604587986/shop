@@ -2,6 +2,7 @@
   <el-cascader
     :options="options"
     change-on-select
+    v-model="defaultArr"
     @change="handleItemChange"
     :clearable="clearable"
     :props="props"
@@ -24,6 +25,12 @@
       clearable: {
         type: Boolean,
         default: false
+      },
+
+      /** 默认值 */
+      defaultVal: {
+        type: Number,
+        default: -1
       }
     },
     data() {
@@ -35,6 +42,15 @@
           label: 'shop_cat_name',
           children: 'children',
           disabled: 'disabled'
+        },
+        /** 默认值映射的 数组 */
+        defaultArr: [162, 173]
+      }
+    },
+    watch: {
+      defaultVal: function() {
+        if (this.defaultVal !== -1) {
+          this.findItem()
         }
       }
     },
@@ -55,6 +71,9 @@
           })
           // 平行结构数据转换树形结构数据
           this.options = this.transData(this.options)
+          if (this.defaultVal !== -1) {
+            this.findItem()
+          }
         }).catch(error => {
           this.loading = false
           console.log(error)
@@ -66,30 +85,23 @@
         this.$emit('changed', val[val.length - 1])
       },
 
-      /** 找出对应的地区 */
-      findRegios(category_ids, response) {
-        let _data = { children: this.options }
-        category_ids.forEach((item, index) => {
-          _data.children && _data.children.forEach(_item => {
-            if (_item.category_id === category_ids[index]) {
-              _data = _item
+      /** 找出对应的选项 */
+      findItem() {
+        if (!this.options || this.options.length === 0) return
+        this.defaultArr = []
+        this.options.forEach(key => {
+          if (key.shop_cat_id === this.defaultVal) {
+            this.defaultArr.push(key.shop_cat_id)
+            return
+          }
+          key.children && key.children.forEach(_item => {
+            if (_item.shop_cat_id === this.defaultVal) {
+              this.defaultArr.push(key.shop_cat_id)
+              this.defaultArr.push(_item.shop_cat_id)
+              return
             }
           })
         })
-        // 如果有传入地区数据，说明是在异步加载
-        if (response) {
-          _data.children = response.map(item => {
-            if (category_ids.length + 1 < this.maxLevel && item.hasChildren) {
-              item.children = [{
-                name: '加载中...',
-                disabled: true,
-                category_id: -1
-              }]
-            }
-            return item
-          })
-        }
-        return _data
       },
 
       /** 平行结构转树形结构数据 */
