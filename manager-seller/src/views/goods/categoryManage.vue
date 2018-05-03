@@ -283,7 +283,7 @@
       /** 获取子级分组id */
       getChildCategoryId(data, emptyArr) {
         Array.from(data).forEach((record) => {
-          record.level !== 1 && emptyArr.push(record.category_id)
+          record.level !== 1 && emptyArr.push(record.shop_cat_id)
           if (record.children && record.children.length > 0) {
             let childCategoryIdArr = this.getChildCategoryId(record.children, emptyArr)
             emptyArr.concat(childCategoryIdArr)
