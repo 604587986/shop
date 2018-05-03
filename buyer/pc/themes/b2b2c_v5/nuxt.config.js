@@ -42,7 +42,7 @@ module.exports = {
     extractCSS: {
       allChunks: true
     },
-    vendor: ['axios', 'vuex-persistedstate'],
+    vendor: ['axios'],
     babel: {
       "plugins": [
         ["component",
