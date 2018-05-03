@@ -8,9 +8,9 @@ import request from '@/utils/request'
  * 获取当前登录的用户信息
  * @returns {AxiosPromise}
  */
-export function getUserInfo(uid) {
+export function getUserInfo() {
   return request({
-    url: `http://192.168.2.5:7002/member/${uid}`,
+    url: `http://192.168.2.5:7002/member`,
     method: 'get'
   })
 }
