@@ -15,8 +15,14 @@
                   <img src="//storage.jd.com/i.imageUpload/6c616979756e636875616e31343834333537343637373532_mid.jpg">
                 </nuxt-link>
               </div>
-              <div class="card-user-show">
-                <p>Hi,<a href="#">&ensp;Andste</a></p>
+              <div v-if="user" class="card-user-show logined">
+                <p>Hi,<nuxt-link to="/member"> {{ user.uname }}</nuxt-link></p>
+                <p class="btns">
+                  <nuxt-link to="/member" class="to-member">进入个人中心</nuxt-link>
+                </p>
+              </div>
+              <div v-else class="card-user-show">
+                <p>Hi,<a href="#">&ensp;欢迎来到Javashop！</a></p>
                 <p class="btns">
                   <nuxt-link :to="'/login' + MixinForward" class="please-login">请登录</nuxt-link>
                   <a href="#" class="apply-shop">申请开店</a>
@@ -84,6 +90,7 @@
 
 <script>
   import Vue from 'vue'
+  import { mapGetters } from 'vuex'
   import { Carousel, CarouselItem } from 'element-ui'
   Vue.use(Carousel)
   Vue.use(CarouselItem)
@@ -95,6 +102,9 @@
         /** 首页卡片tab x坐标 */
         card_news_tab_x: 0
       }
+    },
+    computed: {
+      ...mapGetters(['user'])
     }
   }
 </script>
@@ -202,6 +212,17 @@
             .apply-shop {
               border-color: #f42424;
               color: #f42424;
+            }
+          }
+          &.logined .to-member {
+            width: 60%;
+            color: #f42424;
+            border-color: #f42424;
+            transition: all .2s ease;
+            &:hover {
+              background-color: #f42424;
+              color: #fff;
+              border-color: #f42424;
             }
           }
         }
