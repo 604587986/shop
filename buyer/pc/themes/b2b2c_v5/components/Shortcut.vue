@@ -1,7 +1,12 @@
 <template>
   <div id="shortcut">
     <div class="w">
-      <div class="login-status">
+      <div v-if="accessToken" class="login-status logined">
+        <span>您好<nuxt-link to="/member">{{ user.uname }}</nuxt-link>，欢迎来到</span>
+        <nuxt-link to="/">Javashop示例商城</nuxt-link>
+        <span>[<a href="javascript:;" @click="logout">退出</a>]</span>
+      </div>
+      <div v-else class="login-status">
         <span>您好，欢迎来到</span>
         <nuxt-link to="/" style="color: #333">Javashop示例商城</nuxt-link>
         <span>[<nuxt-link :to="'/login' + MixinForward">登录</nuxt-link>] [<nuxt-link :to="'/register' + MixinForward">注册</nuxt-link>]</span>
@@ -77,8 +82,20 @@
 </template>
 
 <script>
+  import { mapActions, mapGetters } from 'vuex'
   export default {
-    name: 'EnShortcut'
+    name: 'EnShortcut',
+    computed: {
+      ...mapGetters({
+        user: 'user',
+        accessToken: 'accessToken'
+      })
+    },
+    methods: {
+      ...mapActions({
+        logout: 'user/logoutAction'
+      })
+    }
   }
 </script>
 
@@ -96,6 +113,7 @@
     .login-status {
       a { color: #666 }
     }
+    .logined a { color: #333 }
     a:hover {
       color: #e33333
     }
