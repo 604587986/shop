@@ -4,11 +4,27 @@ export const SET_NAV_DATA = 'SET_NAV_DATA'
 /** 分类相关 */
 export const SET_CATEGORY_DATA = 'SET_CATEGORY_DATA'
 
+/** UUID相关 */
+// 设置UUID
+export const SET_UUID = 'SET_UUID'
+// 移除UUID
+export const REMOVE_UUID = 'REMOVE_UUID'
+
 /** 用户信息相关 */
 // 保存用户信息
-export const SAVE_USER_INFO = 'SAVE_USER_INFO'
+export const SET_USER_INFO = 'SET_USER_INFO'
 // 移除用户信息
 export const REMOVE_USER_INFO = 'REMOVE_USER_INFO'
+
+/** TOKEN相关 */
+// 保存访问令牌
+export const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN'
+// 移除访问令牌
+export const REMOVE_ACCESS_TOKEN = 'REMOVE_ACCESS_TOKEN'
+// 保存刷新令牌
+export const SET_REFRESH_TOKEN = 'SET_REFRESH_TOKEN'
+// 移除刷新令牌
+export const REMOVE_REFRESH_TOKEN = 'REMOVE_REFRESH_TOKEN'
 
 /** 收货地址相关 */
 // 设置地址数据
