@@ -38,7 +38,7 @@
     },
     computed: {
       ...mapGetters({
-        user: 'user/user',
+        user: 'user',
         orderData: 'order/orderData',
         goodsCollectionData: 'collection/goodsCollectionData',
         shopCollectionData: 'collection/shopCollectionData'

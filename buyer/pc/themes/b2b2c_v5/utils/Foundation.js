@@ -163,4 +163,20 @@ Foundation.formatQuery = query => {
   }).filter(Boolean).join('&')
 }
 
+/**
+ * 随机生成字符串
+ * @param len
+ * @returns {string}
+ */
+Foundation.randomString = len => {
+  len = len || 32
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const maxPos = chars.length
+  let _string = ''
+  for (let i = 0; i < len; i++) {
+    _string += chars.charAt(Math.floor(Math.random() * maxPos))
+  }
+  return _string
+}
+
 export default Foundation
