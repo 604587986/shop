@@ -127,7 +127,7 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions } from 'vuex'
   import * as API_Common from '@/api/common'
   export default {
     name: 'login',
@@ -137,23 +137,15 @@
         login_type: 'account',//'quick',
         login_banner: 'http://data.andste.cc/developers/web/temp/images/background-banner.jpg',
         /** 图片验证码 */
-        val_code_url: '',
+        val_code_url: API_Common.getValidateCodeUrl('LOGIN'),
         quickForm: {},
         accountForm: {}
-      }
-    },
-    computed: {
-      ...mapGetters(['uuid'])
-    },
-    watch: {
-      uuid(newVal) {
-        this.val_code_url = API_Common.getValidateCodeUrl(newVal, 'LOGIN')
       }
     },
     methods: {
       /** 改变图片验证码URL */
       handleChangeValUrl() {
-        this.val_code_url = API_Common.getValidateCodeUrl(this.uuid, 'LOGIN')
+        this.val_code_url = API_Common.getValidateCodeUrl('LOGIN')
       },
       /** 登录事件 */
       handleLogin() {
@@ -161,13 +153,8 @@
         const forward = _forwardMatch[1]
         const login_type = this.login_type
         const form = login_type === 'quick' ? this.quickForm : this.accountForm
-        form.uuid = this.uuid
         this.login({ login_type, form }).then(() => {
-          if (forward) {
-            this.$router.push({ path: forward })
-          } else {
-            this.$router.push({ path: '/' })
-          }
+          this.$router.push({ path: forward || '/' })
         })
       },
       ...mapActions({
