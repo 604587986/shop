@@ -153,14 +153,13 @@
 
       /** 草稿箱商品删除 */
       handleDraftDel(row) {
-        console.log(row)
         this.$confirm('确认删除此草稿箱商品, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const _ids = [row.goods_id].toString()
-          API_goods.deleteDraftGoods(_ids).then(() => {
+          console.log(row)
+          API_goods.deleteDraftGoods(row.goods_id, {}).then(() => {
             this.GET_DraftGoodsList()
             this.$message.success('删除草稿箱商品成功！')
           }).catch(() => this.$message.error('删除草稿箱商品出错，请稍后再试！'))

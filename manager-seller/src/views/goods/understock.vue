@@ -141,10 +141,10 @@
       categoryChanged(val) {
         this.params = {
           ...this.params,
-          shop_cat_path: val
+          shop_cat_path: val.join('|')
         }
         delete this.params.keyword
-        this.GET_GoodsList()
+        this.GET_WarningGoodsList()
       },
 
       GET_WarningGoodsList() {

@@ -209,14 +209,11 @@ export function getTplList(ids, params) {
  * @returns {Promise<any>}
  */
 export function underGoods(ids, params) {
-  const _params = params
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}/under`,
       method: 'put',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -229,9 +226,6 @@ export function underGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function aboveGoods(params) {
-  const _params = params
-  // const _formData = new FormData()
-  // Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: '/goods',
