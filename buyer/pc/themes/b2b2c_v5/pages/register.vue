@@ -25,25 +25,25 @@
       >
         <el-form-item prop="username">
           <span slot="label">用&ensp;户&ensp;名</span>
-          <el-input v-model="registerForm.username" :maxlength="20"></el-input>
+          <el-input v-model="registerForm.username" :maxlength="20" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item label="设置密码" prop="password">
-          <el-input v-model="registerForm.password" type="password" :maxlength="20"></el-input>
+          <el-input v-model="registerForm.password" type="password" :maxlength="20" placeholder="6-20位不包含特殊字符"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="confirm_password">
-          <el-input v-model="registerForm.confirm_password" type="password" :maxlength="20"></el-input>
+          <el-input v-model="registerForm.confirm_password" type="password" :maxlength="20" placeholder="请牢记您的密码"></el-input>
         </el-form-item>
         <el-form-item label="手机号码" :error="requiredMobile" prop="mobile">
-          <el-input v-model="registerForm.mobile" :maxlength="11"></el-input>
+          <el-input v-model="registerForm.mobile" :maxlength="11" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item v-if="showValidCode" label="图片验证码" :error="requiredValCode" prop="vali_code" class="vali-code">
-          <el-input v-model="registerForm.vali_code" :maxlength="4">
+          <el-input v-model="registerForm.vali_code" :maxlength="4" placeholder="请输入图片验证码">
             <img v-if="valid_code_url" :src="valid_code_url" slot="append" @click="changeValidCodeUrl">
           </el-input>
         </el-form-item>
         <el-form-item prop="sms_code" class="sms-code">
           <span slot="label">手机验证码</span>
-          <el-input v-model="registerForm.sms_code" :maxlength="6">
+          <el-input v-model="registerForm.sms_code" :maxlength="6" placeholder="10分钟内有效">
             <en-count-down-btn :start="sendValidMobileSms" slot="append"/>
           </el-input>
         </el-form-item>
