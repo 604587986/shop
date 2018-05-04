@@ -10,10 +10,13 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function saveStockWarningNum(params) {
+  const _formdata = new FormData()
+  Object.keys(params).forEach(key => _formdata.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: '/shops/warning-counts',
       method: 'put',
+      // data: _formdata
       params
     }).then(response => resolve(response)).catch(error => reject(error))
   })

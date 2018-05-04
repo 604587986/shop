@@ -420,7 +420,7 @@ export function getWarningGoodsStockList(ids, params) {
       params
     }).then(response => {
       const _response = response
-      _response.data = new GoodsModel().map(_response.data)
+      _response.data = new GoodsModel().map(_response)
       resolve(_response)
     }).catch(error => reject(error))
   })
