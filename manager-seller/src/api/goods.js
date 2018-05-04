@@ -60,8 +60,7 @@ export function getGoodsStockList(ids, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsModel().map(_response.data)
+      const _response = new GoodsModel().map(response)
       resolve(_response)
     }).catch(error => reject(error))
   })
@@ -74,14 +73,11 @@ export function getGoodsStockList(ids, params) {
  * @returns {Promise<any>}
  */
 export function reserveStockGoods(goods_id, params) {
-  const _params = params
-  const _formData = new FormData()
-  _params.forEach((key, index) => _formData.append(index, key))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${goods_id}/quantity`,
       method: 'put',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -215,7 +211,7 @@ export function getTplList(ids, params) {
 export function underGoods(ids, params) {
   const _params = params
   const _formData = new FormData()
-  _params.forEach((key, index) => _formData.append(index, key))
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}/under`,
@@ -233,14 +229,14 @@ export function underGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function aboveGoods(params) {
-  const _params = params || { }
-  const _formData = new FormData()
-  _params.forEach((key, index) => _formData.append(index, key))
+  const _params = params
+  // const _formData = new FormData()
+  // Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `/goods/draft-goods`,
+      url: '/goods',
       method: 'post',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -255,7 +251,7 @@ export function aboveGoods(params) {
 export function aboveDraftGoods(ids, params) {
   const _params = params
   const _formData = new FormData()
-  _params.forEach((key, index) => _formData.append(index, key))
+  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/draft-goods/${ids}/market`,
@@ -273,14 +269,11 @@ export function aboveDraftGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function saveDraft(params) {
-  const _params = params
-  const _formData = new FormData()
-  _params.forEach((key, index) => _formData.append(index, key))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/draft-goods`,
       method: 'post',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))

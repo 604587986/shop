@@ -3,7 +3,7 @@
     <el-form :model="stockWarningForm" ref="stockWarningForm" label-width="100px" class="demo-ruleForm">
       <el-form-item
         label="库存预警数"
-        prop="stockWarningNum"
+        prop="stock_warning_num"
         :rules="[
           { required: true, message: '数量不能为空' },
           { type: 'number', message: '库存预警数必须为数字值' }
@@ -11,7 +11,7 @@
       >
         <el-input
           type="number"
-          v-model.number="stockWarningForm.stockWarningNum"
+          v-model.number="stockWarningForm.stock_warning_num"
           style="width: 200px;"
           auto-complete="off">
         </el-input>
@@ -25,13 +25,14 @@
 
 <script>
   import * as API_stockWarningNum from '@/api/stockWarningNum'
+  import * as API_shopSettings from '@/api/shopSettings'
   export default {
     name: 'goodsWarning',
     data() {
       return {
         /** 库存预警数*/
         stockWarningForm: {
-          stockWarningNum: 0
+          stock_warning_num: 0
         }
       }
     },
@@ -41,8 +42,9 @@
     methods: {
       /** 获取当前库存预警数*/
       GET_stockWarningNum() {
-        API_stockWarningNum.getStockWarningNum({}).then(response => {
-          this.stockWarningForm = { ...response }
+        API_shopSettings.getShopData({}).then(response => {
+          console.log(response)
+          this.stockWarningForm.stock_warning_num = response.data['stock_warning_num']
         }).catch(error => {
           console.log(error)
         })
@@ -52,11 +54,16 @@
       handleSaveStockWarning(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_stockWarningNum.saveStockWarningNum(this.stockWarningForm).then(response => {
+            console.log(this.stockWarningForm.stock_warning_num)
+            const _params = {
+              warning_count: this.stockWarningForm.stock_warning_num
+            }
+            console.log(_params)
+            API_stockWarningNum.saveStockWarningNum(_params).then(response => {
               this.$message.success('修改成功')
               this.GET_stockWarningNum()
             }).catch(error => {
-              this.$message.success('修改失败，请稍后重试！')
+              this.$message.error('修改失败，请稍后重试！')
               console.log(error)
             })
           }

@@ -47,4 +47,8 @@ export default class ShopSettingsModel extends DataModel {
   /** 店铺横幅 */
   @ServerName('shop_banner')
   shop_banner
+
+  /** 预警货品数量 */
+  @ServerName('goods_warning_count')
+  stock_warning_num
 }

@@ -13,7 +13,7 @@
             <el-option key="0" label="未出售（已下架）" :value="0"/>
             <el-option key="1" label="出售中（已上架）" :value="1"/>
           </el-select>
-          <!--商品分类 获取分类列表-->
+          <!--商品分组 获取分组列表-->
           <en-category-picker @changed="changeGoodsCateGory" :clearable='true'/>
           <el-button @click="publishGoods" type="success">发布商品</el-button>
           <el-button @click="gotoRecycle" type="primary">回收站</el-button>
@@ -28,21 +28,21 @@
             <img :src="scope.row.goods_image" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column prop="goods_name" label="名称" />
-        <el-table-column label="价格">
+        <el-table-column prop="goods_name" label="名称"/>
+        <el-table-column label="价格" >
           <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column label="库存">
+        <el-table-column label="库存" >
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
         </el-table-column>
-        <el-table-column label="可用库存">
+        <el-table-column label="可用库存" >
           <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
         </el-table-column>
-        <el-table-column label="创建时间">
+        <el-table-column label="创建时间" >
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="状态" width="80" :formatter="marketStatus"/>
-        <el-table-column label="操作" width="280">
+        <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus"/>
+        <el-table-column label="操作" width="280px">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -52,6 +52,7 @@
             <el-button
               size="mini"
               type="danger"
+              :disabled="scope.row.market_enable === 1 "
               @click="handleDeleteGoods(scope.row)">删除
             </el-button>
             <el-button
@@ -78,12 +79,10 @@
       <div align="center">
         <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
           <el-form-item label="库存" prop="quantity" >
-            <!--v-model="goodsStockData.quantity"-->
-            <el-input   auto-complete="off"  ></el-input>
+            <el-input  v-model="goodsStockData.quantity" auto-complete="off"  ></el-input>
           </el-form-item>
           <el-form-item label="待发货数" >
-            <!--v-model="goodsStockData.deliver_goods_quantity"-->
-            <el-input  auto-complete="off" disabled ></el-input>
+            <el-input v-model="goodsStockData.deliver_goods_quantity" auto-complete="off" disabled ></el-input>
           </el-form-item>
         </el-form>
         <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
@@ -91,12 +90,10 @@
             <el-table-column prop="goods_name" label="商品名称"/>
             <el-table-column label="库存" width="120">
               <template slot-scope="scope">
-                <!--v-model="scope.row.quantity"-->
-                <el-input  auto-complete="off" ></el-input>
+                <el-input v-model="scope.row.quantity" auto-complete="off" ></el-input>
               </template>
             </el-table-column>
-            <!--prop="deliver_goods_quantity"-->
-            <el-table-column prop="deliver_goods_quantity" label="待发货数" width="120" />
+            <el-table-column  prop="deliver_goods_quantity" label="待发货数" width="120" />
           </template>
         </en-tabel-layout>
       </div>
@@ -141,7 +138,7 @@
         /** 商品状态 是否上架 0代表已下架，1代表已上架 */
         marketEnable: 0,
 
-        /** 当前商品分类*/
+        /** 当前商品分组*/
         categoryId: '',
 
         /** 当前商品id*/
@@ -154,7 +151,7 @@
         goodsStocknums: 1,
 
         /** 商品库存列表数据*/
-        goodsStockData: []
+        goodsStockData: {}
       }
     },
     mounted() {
@@ -212,13 +209,13 @@
         this.GET_GoodsList()
       },
 
-      /** 切换分类*/
+      /** 切换分组*/
       changeGoodsCateGory(data) {
-        delete this.params.category_path
+        delete this.params.shop_cat_path
         if (data !== '') {
           this.params = {
             ...this.params,
-            category_path: data.category_id
+            shop_cat_path: data
           }
         }
         this.GET_GoodsList()
@@ -278,27 +275,42 @@
       handleStockGoods(row) {
         this.goodsId = row.goods_id
         this.goodsStockshow = true
-        API_goods.getGoodsStockList().then((response) => {
-          this.goodsStocknums = response.data.length
+        API_goods.getGoodsStockList(row.goods_id, {}).then((response) => {
+          this.goodsStockData = response
+          this.goodsStocknums = response.length
           // 构造待发货字段
-          response.data.forEach((key) => {
-            this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
-          })
-          this.goodsStockData = response.data.length === 1 ? response.data[0] : response.data
-        }).catch(() => this.$message.error('请求库存数据出错，请稍后再试！'))
+          if (Array.isArray(response) && response.length > 0) {
+            this.goodsStockData.forEach((key) => {
+              this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
+            })
+          }
+          this.goodsStockData = this.goodsStockData.length > 1 ? this.goodsStockData : this.goodsStockData[0]
+        }).catch((error) => {
+          console.log(error)
+          this.$message.error('请求库存数据出错，请稍后再试！')
+        })
       },
 
       /** 保存库存商品 */
       reserveStockGoods() {
-        const _params = this.goodsStockData.map((elem) => {
-          return {
-            quantity_count: elem.quantity || 0,
-            sku_id: 0
-          }
-        })
+        let _params = []
+        if (Array.isArray(this.goodsStockData)) {
+          _params = this.goodsStockData.map((elem) => {
+            return {
+              quantity_count: parseInt(elem.quantity),
+              sku_id: elem.sku_id
+            }
+          })
+        } else {
+          _params.push({
+            quantity_count: this.goodsStockData.quantity,
+            sku_id: this.goodsStockData.sku_id
+          })
+        }
         API_goods.reserveStockGoods(this.goodsId, _params).then((response) => {
           this.goodsStockshow = false
           this.$message.success('库存商品保存成功')
+          this.GET_GoodsList()
         }).catch(() => this.$message.error('库存商品保存出错，请稍后再试！'))
       }
     }
@@ -309,7 +321,9 @@
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
-
+  /deep/ .el-table__body {
+    min-width: 100%;
+  }
   .inner-toolbar {
     display: flex;
     width: 100%;

@@ -13,7 +13,7 @@ import ShopSettingsModel from '@/models/ShopSettingsModel'
 export function getShopData(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/settings/shop/data',
+      url: '/shops',
       method: 'get',
       loading: false,
       params
@@ -32,13 +32,11 @@ export function getShopData(params) {
  * @returns {Promise<any>}
  */
 export function saveShopSettings(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/settings/shop-data/${ids}`,
+      url: '/shops',
       method: 'post',
-      data: _formData
+      data: params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }

@@ -97,7 +97,7 @@
           page_no: 1,
           page_size: 10,
           /** 表示回收站商品 */
-          disables: 0
+          disabled: 0
         },
 
         /** 列表数据 */
@@ -110,8 +110,11 @@
         selectionids: []
       }
     },
-    mounted() {
-      this.GET_GoodsList()
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.GET_GoodsList()
+        next()
+      })
     },
     methods: {
 
@@ -187,6 +190,7 @@
       ReductionGoods(ids) {
         API_goods.RecycleReductionGoods(ids, {}).then(response => {
           this.$message.success('还原成功')
+          this.GET_GoodsList()
         }).catch(error => {
           this.$message.error('还原失败，请稍后再试')
           console.log(error)

@@ -10,22 +10,34 @@ import {
   UnitTypes
 } from '@/framework'
 
-/** 分类管理*/
+/** 分组管理*/
 export class GoodsCategory extends DataModel {
-  /** 商品分类D */
-  @ServerName('category_id')
-  category_id
+  /** 商品分组父ID */
+  @ServerName('shop_cat_pid')
+  shop_cat_pid
 
-  /** 商品分类名称 */
-  @ServerName('category_name')
-  category_name
+  /** 商品分组ID*/
+  @ServerName('shop_cat_id')
+  shop_cat_id
 
-  /** 商品分类排序 */
+  /** 店铺ID */
+  @ServerName('shop_id')
+  shop_id
+
+  /** 商品分组路径 */
+  @ServerName('cat_path')
+  cat_path
+
+  /** 商品分组名称 */
+  @ServerName('shop_cat_name')
+  shop_cat_name
+
+  /** 商品分组排序 */
   @ServerName('sort')
   sort
 
-  /** 商品分类显示 */
-  @ServerName('is_show')
+  /** 商品分组显示 1显示 0不显示*/
+  @ServerName('disable')
   is_show
 }
 

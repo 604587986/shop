@@ -10,8 +10,8 @@ import GoodsModel from '@/models/GoodsModel'
 export function getTagsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/goods/tags',
-      // url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/tag/list',
+      // url: '/goods/tags',
+      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/tag/list',
       method: 'get',
       loading: false,
       params
