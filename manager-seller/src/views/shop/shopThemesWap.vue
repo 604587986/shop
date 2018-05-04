@@ -4,7 +4,7 @@
     <hr/>
     <p style="padding: 0 50px;">当前模板:</p>
     <div class="tpl-current-theme">
-      <div class="themes-img choosed-image">
+      <div class="themes-img choosed-image" v-if="tpl_current && tpl_current.theme_image">
         <img :src="tpl_current.theme_image" alt="" class="shop-theme-image">
       </div>
       <span class="tpl-name">模板名称:{{tpl_current.theme_name}}</span>
@@ -15,13 +15,13 @@
       <p style="padding: 0 50px;">模板列表:</p>
       <ul>
         <li v-for="item in tpl_list">
-          <div class="tpl-theme">
+          <div class="tpl-theme" v-if="item.theme_image && item.theme_name">
             <div class="themes-img"
-              :class='{"choosed-image":item.theme_id === tpl_choosed_id}'
+              :class='{"choosed-image":item.themes_id === tpl_choosed_id}'
               @click="chooseTheme(item)">
-              <img :src="item.theme_image" alt="" class="shop-theme-image">
+              <img v-if="item.theme_image" :src="item.theme_image" alt="" class="shop-theme-image">
             </div>
-            <span class="tpl-name">模板名称:{{item.theme_name}}</span>
+            <span class="tpl-name" >模板名称:{{item.theme_name}}</span>
             <span class="tpl-preview" @click="previewImg(item.theme_image)">预览</span>
           </div>
         </li>
@@ -67,16 +67,16 @@
       }
     },
     mounted() {
-      this.GET_ShopThemesPc()
+      this.GET_ShopThemes()
     },
     methods: {
 
       /** 获取PC店铺主题列表*/
-      GET_ShopThemesPc() {
-        API_ShopTheme.getShopWapThemeList({}).then(response => {
+      GET_ShopThemes() {
+        API_ShopTheme.getShopThemeList({ type: 'WAP' }).then(response => {
           this.tpl_list = response.data
           this.tpl_list.forEach(elem => {
-            if (elem.selected === 1) {
+            if (elem.current_use === 1) {
               this.tpl_current = elem
             }
           })
@@ -87,7 +87,7 @@
 
       /** 选择模板主题*/
       chooseTheme(item) {
-        this.tpl_choosed_id = item.theme_id
+        this.tpl_choosed_id = item.themes_id
       },
 
       /** 预览*/
@@ -108,10 +108,10 @@
         }
         this.$confirm(`确定要切换模板么?`, '确认信息')
           .then(() => {
-            const params = {}
-            API_ShopTheme.saveWapShopTheme(this.tpl_choosed_id, params).then(() => {
+            const _params = {}
+            API_ShopTheme.saveShopTheme(this.tpl_choosed_id, _params).then(() => {
               this.$message.success('切换成功')
-              this.GET_ShopThemesPc()
+              this.GET_ShopThemes()
             }).catch((error) => {
               console.log(error)
               this.$message.error('切换失败，请稍后重试！')

@@ -13,18 +13,30 @@ import {
 
 export default class ShopThemeModel extends DataModel {
   /** 模板ID */
-  @ServerName('theme_id')
-  theme_id
+  @ServerName('themes_id')
+  themes_id
 
   /** 模板名称 */
-  @ServerName('theme_name')
+  @ServerName('name')
   theme_name
 
-  /** 是否选中 */
-  @ServerName('selected')
-  selected
+  /** 模板目录 */
+  @ServerName('path')
+  theme_path
 
-  /** 模板图片 */
-  @ServerName('theme_image')
+  /** 模板图片路径 */
+  @ServerName('preview_base_path')
   theme_image
+
+  /** 当前是否使用 1 是 0 否 */
+  @ServerName('current_use')
+  current_use
+
+  /** 是否为默认 1为默认 反之为0 */
+  @ServerName('is_default')
+  is_default
+
+  /** 模版类型 PC WAP */
+  @ServerName('type')
+  theme_type
 }
