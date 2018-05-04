@@ -4,7 +4,7 @@
 
 import request from '@/utils/request'
 import Storage from '@/utils/storage'
-import { state } from '@/store'
+import GetFullUrl from '@/utils/urls'
 
 /**
  * 获取图片验证码URL
@@ -13,7 +13,7 @@ import { state } from '@/store'
  * @returns {string}
  */
 export function getValidateCodeUrl(uuid, type) {
-  return `http://192.168.2.5:7000/captchas/${uuid}/${type}?r=${new Date().getTime()}`
+  return GetFullUrl(`captchas/${uuid}/${type}?r=${new Date().getTime()}`)
 }
 
 /**
