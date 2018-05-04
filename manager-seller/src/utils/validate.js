@@ -51,3 +51,12 @@ export function validatePhone(phone) {
   return re.test(phone)
 }
 
+/**
+ * validate link
+ * @param link
+ * @returns {*|boolean}
+ */
+export function validateLink(link) {
+  const re = /^(http:\/\/|^https:\/\/|^\/\/)((\w|=|\?|\.|\/|&|-)+)/g
+  return re.test(link)
+}
