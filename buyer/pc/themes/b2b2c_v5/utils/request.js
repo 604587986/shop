@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import { Loading } from 'element-ui'
 import Storage from '@/utils/storage'
 import Foundation from '@/utils/Foundation'
 import MD5 from 'md5'
@@ -21,7 +22,12 @@ service.interceptors.request.use(config => {
   
   /** 配置全屏加载 */
   if (loading !== false) {
-    config.loading = 1
+    config.loading = Loading.service({
+      fullscreen: true,
+      background: 'rgba(0,0,0,.6)',
+      lock: true,
+      text: '努力加载中...'
+    })
   }
   let accessToken = Storage.getItem('accessToken')
   if (accessToken) {
@@ -55,7 +61,7 @@ service.interceptors.response.use(
     return _data
   },
   error => {
-    // closeLoading(error)
+    closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
@@ -73,7 +79,7 @@ service.interceptors.response.use(
  */
 const closeLoading = (target) => {
   if (target.config.loading) {
-    // target.config.loading.close()
+    target.config.loading.close()
   }
 }
 
