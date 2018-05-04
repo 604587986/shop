@@ -1,10 +1,7 @@
 const webpack = require('webpack')
 
 module.exports = {
-  env: {
-    /** 基础API */
-    BASE_API: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer'
-  },
+  env: {},
   head: {
     title: 'Javashop多店铺示例商城',
     meta: [

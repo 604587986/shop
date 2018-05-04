@@ -1,5 +1,5 @@
 /**
- * Created by Andste on 2018/5/2.
+ * Created by andste.cc@gmail.com on 2018/5/2.
  * 用户认证相关API
  */
 
@@ -12,7 +12,7 @@ import Storage from '@/utils/storage'
  */
 export function login(params) {
   return request({
-    url: 'http://192.168.2.5:7001/passport/login',
+    url: 'passport/login',
     method: 'get',
     params
   })
@@ -25,7 +25,7 @@ export function login(params) {
  */
 export function loginByMobile(mobile, sms_code) {
   return request({
-    url: 'http://192.168.2.5:7001/passport/login/${mobile}',
+    url: `passport/login/${mobile}`,
     method: 'get',
     params: { sms_code }
   })
@@ -41,7 +41,7 @@ export function sendRegisterSms(mobile, img_code) {
   _formData.append('captcha', img_code)
   _formData.append('uuid', Storage.getItem('uuid'))
   return request({
-    url: `http://192.168.2.5:7001/passport/register/smscode/${mobile}`,
+    url: `passport/register/smscode/${mobile}`,
     method: 'post',
     data: _formData
   })
@@ -57,7 +57,7 @@ export function sendLoginSms(mobile, img_code) {
   _formData.append('captcha', img_code)
   _formData.append('uuid', Storage.getItem('uuid'))
   return request({
-    url: `http://192.168.2.5:7001/passport/login/smscode/${mobile}`,
+    url: `passport/login/smscode/${mobile}`,
     method: 'post',
     data: _formData
   })
@@ -69,7 +69,7 @@ export function sendLoginSms(mobile, img_code) {
  */
 export function checkUsernameRepeat(username) {
   return request({
-    url: `http://192.168.2.5:7001/passport/username/${username}`,
+    url: `passport/username/${username}`,
     method: 'get'
   })
 }
@@ -80,7 +80,7 @@ export function checkUsernameRepeat(username) {
  */
 export function checkMobileRepeat(mobile) {
   return request({
-    url: `http://192.168.2.5:7001/passport/mobile/${mobile}`,
+    url: `passport/mobile/${mobile}`,
     method: 'get'
   })
 }
@@ -93,7 +93,7 @@ export function registerByMobile(params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
-    url: `http://192.168.2.5:7001/passport/register/pc`,
+    url: 'passport/register/pc',
     method: 'post',
     data: _formData
   })

@@ -127,11 +127,11 @@
       /** 获取图片验证码URL */
       getValidImgUrl() {
         if (!this.user) return
-        this.valid_img_url = API_Common.getValidateCodeUrl('UPDATEPASSWORDMOBILE' + this.user.mobile)
+        this.valid_img_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'UPDATEPASSWORDMOBILE' + this.user.mobile)
       },
       /** 获取修改密码图片验证码URL */
       getChangeImgUrl() {
-        this.change_img_url = API_Common.getValidateCodeUrl('membervalid')
+        this.change_img_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'membervalid')
       },
       /** 发送手机验证码 */
       sendValidMobileSms() {

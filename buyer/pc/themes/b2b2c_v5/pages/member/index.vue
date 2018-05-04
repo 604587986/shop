@@ -56,27 +56,27 @@
           </template>
         </div>
       </div>
-      <div class="item right cart">
-        <div class="item-title">
-          <h2>购物车</h2>
-          <nuxt-link to="/cart">查看全部 	&gt;&gt;</nuxt-link>
-        </div>
-        <div class="item-content">
-          <empty v-if="cartSkuList.length === 0">暂无商品...</empty>
-          <template v-else>
-            <div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">
-              <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" class="goods-image">
-                <img :src="item.goods_image" :alt="item.goods_name">
-              </nuxt-link>
-              <div class="goods-name">
-                <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">{{ item.goods_name }}</nuxt-link>
-                <p><em>￥{{ item.price | unitPrice }}</em> <span>x {{ item.num }}</span></p>
-              </div>
-              <a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>
-            </div>
-          </template>
-        </div>
-      </div>
+      <!--<div class="item right cart">-->
+        <!--<div class="item-title">-->
+          <!--<h2>购物车</h2>-->
+          <!--<nuxt-link to="/cart">查看全部 	&gt;&gt;</nuxt-link>-->
+        <!--</div>-->
+        <!--<div class="item-content">-->
+          <!--<empty v-if="cartSkuList.length === 0">暂无商品...</empty>-->
+          <!--<template v-else>-->
+            <!--<div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">-->
+              <!--<nuxt-link :to="'/goods-' + goods.goods_id + '.html'" class="goods-image">-->
+                <!--<img :src="item.goods_image" :alt="item.goods_name">-->
+              <!--</nuxt-link>-->
+              <!--<div class="goods-name">-->
+                <!--<nuxt-link :to="'/goods-' + goods.goods_id + '.html'">{{ item.goods_name }}</nuxt-link>-->
+                <!--<p><em>￥{{ item.price | unitPrice }}</em> <span>x {{ item.num }}</span></p>-->
+              <!--</div>-->
+              <!--<a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>-->
+            <!--</div>-->
+          <!--</template>-->
+        <!--</div>-->
+      <!--</div>-->
     </div>
     <div class="box-item">
       <div class="item left goods-collection">
