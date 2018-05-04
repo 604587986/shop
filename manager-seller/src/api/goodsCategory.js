@@ -46,13 +46,11 @@ export function deleteGoodsCategory(params) {
  * @returns {Promise<any>}
  */
 export function addGoodsCategory(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: '/shops/cats',
       method: 'post',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -66,13 +64,11 @@ export function addGoodsCategory(params) {
  * @constructor
  */
 export function updateGoodsCategory(ids, params) {
-  // const _formData = new FormData()
-  // Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/shops/cats/${ids}`,
       method: 'put',
-      params
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
