@@ -13,7 +13,7 @@ export function getMessages(params) {
   params = params || {}
   params.page_size = params.page_size || 5
   return request({
-    url: '/message',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message',
     method: 'get',
     params
   })
@@ -28,7 +28,7 @@ export function getMesssagesAsUnread(params) {
   params = params || {}
   params.page_size = params.page_size || 5
   return request({
-    url: '/message',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message',
     method: 'get',
     params
   })
@@ -41,7 +41,7 @@ export function getMesssagesAsUnread(params) {
  */
 export function messageMarkAsRead(ids) {
   return request({
-    url: `/message/${ids}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message/${ids}`,
     method: 'post'
   })
 }
@@ -53,7 +53,7 @@ export function messageMarkAsRead(ids) {
  */
 export function deleteMessage(ids) {
   return request({
-    url: `/message/${ids}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message/${ids}`,
     method: 'delete'
   })
 }
