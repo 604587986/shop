@@ -35,7 +35,7 @@ export function saveShopSettings(ids, params) {
   return new Promise((resolve, reject) => {
     request({
       url: '/shops',
-      method: 'post',
+      method: 'put',
       data: params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
