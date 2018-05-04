@@ -131,6 +131,7 @@
   import * as regExp from '@/utils/RegExp'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
+  import { mobile } from "@/utils/RegExp";
   export default {
     name: 'login',
     layout: 'full',
@@ -183,6 +184,17 @@
         const forward = _forwardMatch[1]
         const login_type = this.login_type
         const form = login_type === 'quick' ? this.quickForm : this.accountForm
+        if (login_type === 'quick') {
+          if (!form.mobile || !regExp.mobile.test(form.mobile) || !form.sms_code) {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        } else {
+          if (!form.username || !form.password || !form.captcha) {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        }
         this.login({ login_type, form }).then(() => {
           this.$router.push({ path: forward || '/' })
         })
