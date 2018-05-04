@@ -95,10 +95,10 @@ export const actions = {
         API_Passport.login(params.form).then(loginSccess).catch(error => reject(error))
       }
       function loginSccess(res) {
-        const { access_token, refresh_token, ...user } = res
+        const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        API_User.getUserInfo(user.uid).then(response => {
+        API_User.getUserInfo(uid).then(response => {
           commit(types.SET_USER_INFO, response)
           resolve(response)
         }).catch(error => reject(error))
@@ -132,6 +132,25 @@ export const actions = {
         commit(types.SET_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
+    })
+  },
+  /**
+   * 注册【通过手机号】
+   * @param commit
+   * @param params
+   * @returns {Promise<any>}
+   */
+  registerByMobileAction: ({ commit }, params) => {
+    return new Promise((resolve, reject) => {
+      API_Passport.registerByMobile(params).then(res=> {
+        const { access_token, refresh_token, uid } = res
+        commit(types.SET_ACCESS_TOKEN, access_token)
+        commit(types.SET_REFRESH_TOKEN, refresh_token)
+        API_User.getUserInfo(uid).then(response => {
+          commit(types.SET_USER_INFO, response)
+          resolve(response)
+        }).catch(error => reject(error))
+      })
     })
   }
 }

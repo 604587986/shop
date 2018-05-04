@@ -64,13 +64,14 @@ export function sendLoginSms(mobile, img_code) {
 }
 
 /**
- *
+ * 用户名重复校验
  * @param username
  */
 export function checkUsernameRepeat(username) {
   return request({
     url: `passport/username/${username}`,
-    method: 'get'
+    method: 'get',
+    loading: false
   })
 }
 
@@ -81,7 +82,8 @@ export function checkUsernameRepeat(username) {
 export function checkMobileRepeat(mobile) {
   return request({
     url: `passport/mobile/${mobile}`,
-    method: 'get'
+    method: 'get',
+    loading: false
   })
 }
 

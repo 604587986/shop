@@ -55,6 +55,7 @@
 
 <script>
   import Vue from 'vue'
+  import { mapActions } from 'vuex'
   import { Button, Form, FormItem, Input } from 'element-ui'
   Vue.use(Button)
   Vue.use(Form)
@@ -134,8 +135,8 @@
               }
             } }
           ],
-          vali_code: [{ required: true, message: '请输入图片验证码', trigger: 'blur' }],
-          sms_code: [{ required: true, message: '请输入短信验证码', trigger: 'blur' }]
+          vali_code: [{ required: true, message: '请输入图片验证码' }],
+          sms_code: [{ required: true, message: '请输入短信验证码' }]
         },
         requiredMobile: '',
         requiredValCode: '',
@@ -161,7 +162,10 @@
             this.$message.error('请输入图片验证码！')
             this.requiredValCode = '图片验证码不能为空！'
           } else {
-            API_Passport.sendRegisterSms(mobile, vali_code).then(resolve).catch(reject)
+            API_Passport.sendRegisterSms(mobile, vali_code).then(() => {
+              this.$message.success('短信发送成功，请注意查收！')
+              resolve()
+            }).catch(reject)
           }
         })
       },
@@ -169,15 +173,18 @@
       handleConfirmRegister() {
         this.$refs['registerForm'].validate(valide => {
           if (valide) {
-            API_Passport.registerByMobile(this.registerForm).then(response => {
-              console.log(response)
+            this.registerByMobile(this.registerForm).then(() => {
+              this.$router.push({ path: '/' })
             })
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
           }
         })
-      }
+      },
+      ...mapActions({
+        registerByMobile: 'user/registerByMobileAction'
+      })
     }
   }
 </script>
