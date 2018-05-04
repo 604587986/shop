@@ -14,7 +14,7 @@ export function getDashboardData() {
   const urls = [
     `b2b2c/admin/salesStatis/sale-income-totle-json.do?year=${year}&month=${month}`,
     'shop/admin/member/member-list-json.do',
-    'shop/admin/goods/list-json.do'
+    '/goods'
   ]
   const alls = []
   urls.forEach((url, index) => {
