@@ -67,6 +67,11 @@
   export default {
     name: 'register',
     layout: 'full',
+    head() {
+      return {
+        title: '会员注册-Javashop多店铺示例商城'
+      }
+    },
     data() {
       return {
         /** 会员注册 表单 */

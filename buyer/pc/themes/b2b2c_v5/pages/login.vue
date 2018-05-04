@@ -134,6 +134,11 @@
   export default {
     name: 'login',
     layout: 'full',
+    head() {
+      return {
+        title: '会员登录-Javashop多店铺示例商城'
+      }
+    },
     data() {
       return {
         login_type: 'quick', // 'account',
