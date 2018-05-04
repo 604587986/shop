@@ -37,8 +37,8 @@ export default function getFullUrl(url) {
   const _domain = process.env.NODE_ENV === 'production'
     ? pro_domain
     : dev_domain
-  let _url = _domain + url
+  let _url = _domain.main + url
   if (/^\/?passport($|\/)/.test(url)) _url = _domain.passport + url
-  if (/^\/?captchas($|\/)|^\/?uploaders($|\/)/.test(url)) _url =  _domain.base + url
+  if (/^\/?captchas($|\/)|^\/?uploaders($|\/)/.test(url)) _url = _domain.base + url
   return _url.replace(/([^:])\/\//g, '$1/')
 }
