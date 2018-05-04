@@ -142,13 +142,13 @@
         /** 是否显示图片验证码 */
         showValidCode: false,
         /** 图片验证码URL */
-        valid_code_url: API_Common.getValidateCodeUrl('REGISTER')
+        valid_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER')
       }
     },
     methods: {
       /** 获取图片验证码 */
       changeValidCodeUrl() {
-        this.valid_code_url = API_Common.getValidateCodeUrl('REGISTER')
+        this.valid_code_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER')
       },
       /** 发送手机验证码异步方法 */
       sendValidMobileSms() {
@@ -221,7 +221,7 @@
   .register-content /deep/ .el-form {
     width: 400px;
     margin: 0 auto;
-    /deep/ .el-form-item {
+    .el-form-item {
       position: relative;
       margin-bottom: 30px;
       border: 1px solid #ddd;
@@ -229,24 +229,24 @@
       &.is-error .el-input__inner { color: #f56c6c }
       &:hover { border-color: #999 }
     }
-    /deep/ .el-input__inner { border: none }
-    /deep/ .el-form-item__label {
+    .el-input__inner { border: none }
+    .el-form-item__label {
       letter-spacing: 3px;
       &:before { content: '' }
     }
-    /deep/ .vali-code .el-form-item__label, /deep/ .sms-code .el-form-item__label {
+    .vali-code .el-form-item__label, .sms-code .el-form-item__label {
       letter-spacing: 1px
     }
-    /deep/ .sms-code .el-input-group__append {
+    .sms-code .el-input-group__append {
       width: 70px;
       text-align: center;
       .count-down-btn {
         padding: 0;
       }
     }
-    /deep/ .is-error .el-form-item__label { color: #f56c6c }
-    /deep/ .el-form-item__label, /deep/ .el-form-item__content { line-height: 50px }
-    /deep/ .el-form-item__error { padding-top: 9px }
+    .is-error .el-form-item__label { color: #f56c6c }
+    .el-form-item__label, .el-form-item__content { line-height: 50px }
+    .el-form-item__error { padding-top: 9px }
     .vali-code {
       .el-input-group__append {
         width: 100px;
@@ -264,7 +264,7 @@
         }
       }
     }
-    /deep/ .sms-code .el-input-group__append {
+    .sms-code .el-input-group__append {
       background-color: transparent;
       border: none;
     }

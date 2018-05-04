@@ -3,27 +3,34 @@ import axios from 'axios'
 import Storage from '@/utils/storage'
 import Foundation from '@/utils/Foundation'
 import MD5 from 'md5'
+import GetFullUrl from '@/utils/urls'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
+  // baseURL: process.env.BASE_API, // api的base_url
   timeout: 5000 // 请求超时时间
 })
 
 // request拦截器
 service.interceptors.request.use(config => {
+  /** url处理 */
+  const { url, loading } = config
+  if (!/^http/.test(url)) {
+    config.url = GetFullUrl(url)
+  }
+  
   /** 配置全屏加载 */
-  if (config.loading !== false) {
+  if (loading !== false) {
     config.loading = 1
   }
   let accessToken = Storage.getItem('accessToken')
   if (accessToken) {
-    if (process.env.NODE_ENV === 'production') {
-      const { member_id } = JSON.parse(Storage.getItem('user') || "{}")
-      const nonce = Foundation.randomString(6)
-      const timestamp = parseInt(new Date().getTime() / 1000)
-      accessToken = MD5(member_id + nonce + timestamp + accessToken)
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   const { member_id } = JSON.parse(Storage.getItem('user') || "{}")
+    //   const nonce = Foundation.randomString(6)
+    //   const timestamp = parseInt(new Date().getTime() / 1000)
+    //   accessToken = MD5(member_id + nonce + timestamp + accessToken)
+    // }
     config.headers['Authorization'] = accessToken
   }
   return config

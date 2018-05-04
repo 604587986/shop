@@ -10,7 +10,7 @@
       </div>
     </div>
     <!-- 大图 -->
-    <div class="content">
+    <div class="login-content">
       <div class="prompt">
         <div>
           <i></i>
@@ -134,10 +134,10 @@
     layout: 'full',
     data() {
       return {
-        login_type: 'account',//'quick',
+        login_type: 'account', // 'quick',
         login_banner: 'http://data.andste.cc/developers/web/temp/images/background-banner.jpg',
         /** 图片验证码 */
-        val_code_url: API_Common.getValidateCodeUrl('LOGIN'),
+        val_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN'),
         quickForm: {},
         accountForm: {}
       }
@@ -145,7 +145,7 @@
     methods: {
       /** 改变图片验证码URL */
       handleChangeValUrl() {
-        this.val_code_url = API_Common.getValidateCodeUrl('LOGIN')
+        this.val_code_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN')
       },
       /** 登录事件 */
       handleLogin() {
@@ -185,7 +185,7 @@
       margin: 25px 5px;
     }
   }
-  .content .prompt {
+  .login-content .prompt {
     width: 100%;
     text-align: center;
     background: #fff8f0;
@@ -193,7 +193,7 @@
     padding: 10px 0;
     a { color: black }
   }
-  .content .login-banner {
+  .login-content .login-banner {
     background: #FF5E18;
     width: 100%;
     .bg-banner {
