@@ -249,14 +249,11 @@ export function aboveGoods(params) {
  * @returns {Promise<any>}
  */
 export function aboveDraftGoods(ids, params) {
-  const _params = params
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/draft-goods/${ids}/market`,
       method: 'put',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -349,14 +346,11 @@ export function getRecycleGoodsList(params) {
  * @constructor
  */
 export function RecycleReductionGoods(ids, params) {
-  const _params = params
-  const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}/revert`,
       method: 'put',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))

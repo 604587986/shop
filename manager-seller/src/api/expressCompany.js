@@ -37,7 +37,7 @@ export function openExpressPower(ids, params) {
       url: `/shops/logi-companies/${ids}`,
       method: 'post',
       loading: false,
-      params
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))

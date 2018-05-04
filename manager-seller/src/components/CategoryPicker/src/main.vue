@@ -82,7 +82,7 @@
 
       /** 选中项发生改变 */
       handleItemChange(val) {
-        this.$emit('changed', val[val.length - 1])
+        this.$emit('changed', val)
       },
 
       /** 找出对应的选项 */

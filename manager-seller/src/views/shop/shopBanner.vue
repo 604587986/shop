@@ -40,7 +40,7 @@
               v-model="item.shop_banner_link"></el-input>
             <el-upload
               class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="BASE_IMG_URL"
               :key="index"
               :limit="1"
               :on-success="uploadSuccess"
@@ -76,6 +76,9 @@
     name: 'shopBanner',
     data() {
       return {
+        /** 图片服务器地址 */
+        BASE_IMG_URL: process.env.BASE_IMG_URL,
+
         /** 列表loading状态 */
         loading: false,
 
@@ -130,14 +133,12 @@
         // this.uploadShopBanner = response
         // 此处应接收后台返回数据 重置列表
         this.uploadShopBanner.shop_banner_image = file.url
-        // console.log(response, file, fileList, 555)
         this.fileList = []
       },
 
       /** 新增幻灯片*/
       POST_AddSlide() {
         this.tableData.push({
-          shop_banner_id: '',
           shop_banner_link: '',
           shop_banner_image: 'http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/AAC7404DD7144969AC913857B575C976.png'
         })
@@ -145,12 +146,15 @@
 
       /** 删除幻灯片*/
       Del_Slide(item) {
+        console.log(item)
         this.$confirm('确定要删除此幻灯片么？', '确认信息')
           .then(() => {
-            this.tableData.forEach((row, index) => {
-              if (item.shop_banner_id === row.shop_banner_id) {
-                this.tableData.splice(index, 1)
-              }
+            API_ShopSlide.delShopSlide(item.shop_banner_id, {}).then(response => {
+              this.$message.success('删除成功')
+              this.GET_ShopSlideList()
+            }).catch(error => {
+              console.log(error)
+              this.$message.error('删除失败，请稍后再试！')
             })
           })
           .catch(() => {
@@ -159,7 +163,17 @@
 
       /** 保存幻灯片*/
       POST_SaveSlide() {
-        API_ShopSlide.saveShopSlideList(this.tableData).then(response => {
+        // 构造query数据
+        const _silde_url = this.tableData.map(key => { return key.shop_banner_link })
+        const _img = this.tableData.map(key => { return key.shop_banner_image })
+        const _silde_id = this.tableData.map(key => { return key.shop_banner_id || 0 })
+        const _params = {
+          silde_url: _silde_url,
+          img: _img,
+          silde_id: _silde_id
+        }
+        console.log(_params)
+        API_ShopSlide.saveShopSlide(_params).then(response => {
           this.$message.success('保存成功')
           this.GET_ShopSlideList()
         }).catch(error => {

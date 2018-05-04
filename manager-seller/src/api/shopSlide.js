@@ -13,7 +13,7 @@ import ShopSlideModel from '@/models/ShopSlideModel'
 export function getShopSlideList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/shop/banner/list',
+      url: '/shops/sildes',
       method: 'get',
       loading: false,
       params
@@ -26,18 +26,32 @@ export function getShopSlideList(params) {
 }
 
 /**
- * 保存店铺幻灯片列表（更新操作）
+ * 保存店铺幻灯片列表（更新/添加操作）
  * @param params
  * @returns {Promise<any>}
  */
-export function saveShopSlideList(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+export function saveShopSlide(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/shop/banner',
-      method: 'post',
-      data: _formData
+      url: '/shops/sildes',
+      method: 'put',
+      data: params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 删除幻灯片
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function delShopSlide(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/shops/sildes/${ids}`,
+      method: 'delete',
+      params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }

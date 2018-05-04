@@ -35,8 +35,7 @@ export function addShopNav(params) {
     request({
       url: '/shops/navigations',
       method: 'post',
-      params
-      // data: params
+      data: params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
@@ -52,8 +51,7 @@ export function editShopNav(id, params) {
     request({
       url: `/shops/navigations/${id}`,
       method: 'put',
-      params
-      // data: params
+      data: params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
