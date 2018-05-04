@@ -96,10 +96,12 @@ export const actions = {
       }
       function loginSccess(res) {
         const { access_token, refresh_token, ...user } = res
-        dispatch('getUserDataAction', user.uid)
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        resolve(res)
+        API_User.getUserInfo(user.uid).then(response => {
+          commit(types.SET_USER_INFO, response)
+          resolve(response)
+        }).catch(error => reject(error))
       }
     })
   },
