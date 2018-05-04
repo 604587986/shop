@@ -1,5 +1,5 @@
 /**
- * Created by Andste on 2018/5/3.
+ * Created by andste.cc@gmail.com on 2018/5/3.
  */
 
 import Cookies from 'js-cookie'
