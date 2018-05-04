@@ -44,23 +44,23 @@
                       <label for="mobile">
                         <i class="iconfont ea-icon-mobile"></i>
                       </label>
-                      <input id="mobile" placeholder="请输入手机号" maxlength="11" autofocus>
+                      <input id="mobile" v-model="quickForm.mobile" placeholder="请输入手机号" maxlength="11" autofocus>
                     </div>
                     <div class="item">
                       <label for="validcode-mobile">
                         <i class="iconfont ea-icon-safe"></i>
                       </label>
-                      <input id="validcode-mobile" placeholder="图片验证码" maxlength="4">
+                      <input id="validcode-mobile" v-model="quickForm.captcha" placeholder="图片验证码" maxlength="4">
                       <img class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="item item-form-t">
-                      <button class="send-sms-btn" type="button">获取手机验证码</button>
+                      <en-count-down-btn :start="sendValidMobileSms" class="send-sms-btn"/>
                     </div>
                     <div class="item item-form-p">
                       <label for="sms-code">
                         <i class="iconfont ea-icon-sms"></i>
                       </label>
-                      <input id="sms-code" placeholder="短信验证码" maxlength="6">
+                      <input id="sms-code" v-model="quickForm.sms_code" placeholder="短信验证码" maxlength="6">
                     </div>
                     <div class="forget">
                       <span><nuxt-link :to="'/find-password' + MixinForward">忘记密码</nuxt-link></span>
@@ -128,21 +128,46 @@
 
 <script>
   import { mapActions } from 'vuex'
+  import * as regExp from '@/utils/RegExp'
   import * as API_Common from '@/api/common'
+  import * as API_Passport from '@/api/passport'
   export default {
     name: 'login',
     layout: 'full',
     data() {
       return {
-        login_type: 'account', // 'quick',
+        login_type: 'quick', // 'account',
         login_banner: 'http://data.andste.cc/developers/web/temp/images/background-banner.jpg',
         /** 图片验证码 */
         val_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN'),
+        /** 快捷登录 表单 */
         quickForm: {},
+        /** 普通登录 表单 */
         accountForm: {}
       }
     },
     methods: {
+      /** 发送短信验证码异步回调 */
+      sendValidMobileSms() {
+        const { mobile, captcha } = this.quickForm
+        return new Promise((resolve, reject) => {
+          if (!mobile) {
+            this.$message.error('请输入手机号码！')
+            reject()
+          } else if (!regExp.mobile.test(mobile)) {
+            this.$message.error('手机号码格式有误！')
+            reject()
+          } else if (!captcha) {
+            this.$message.error('请输入图片验证码！')
+            reject()
+          } else {
+            API_Passport.sendLoginSms(mobile, captcha).then(() => {
+              this.$message.success('短信发送成功，请注意查收！')
+              resolve()
+            })
+          }
+        })
+      },
       /** 改变图片验证码URL */
       handleChangeValUrl() {
         this.val_code_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN')
@@ -372,6 +397,8 @@
     background-color: #516a77;
   }
   .send-sms-btn:disabled {
-    background-color: #ccc;
+    background-color: #ccc !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
   }
 </style>
