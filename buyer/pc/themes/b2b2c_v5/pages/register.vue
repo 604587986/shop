@@ -142,13 +142,13 @@
         /** 是否显示图片验证码 */
         showValidCode: false,
         /** 图片验证码URL */
-        valid_code_url: API_Common.getValidateCodeUrl('REGISTER')
+        valid_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER')
       }
     },
     methods: {
       /** 获取图片验证码 */
       changeValidCodeUrl() {
-        this.valid_code_url = API_Common.getValidateCodeUrl('REGISTER')
+        this.valid_code_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER')
       },
       /** 发送手机验证码异步方法 */
       sendValidMobileSms() {
