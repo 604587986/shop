@@ -44,7 +44,7 @@
           disabled: 'disabled'
         },
         /** 默认值映射的 数组 */
-        defaultArr: [162, 173]
+        defaultArr: []
       }
     },
     watch: {
