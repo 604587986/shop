@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getGoodsCollection(params) {
   return request({
-    url: 'collection/goods/list',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/goods/list',
     method: 'get',
     loading: false,
     message: false,
@@ -26,7 +26,7 @@ export function getGoodsCollection(params) {
  */
 export function collectionGoods(goods_id) {
   return request({
-    url: `collection/goods/${goods_id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/goods/${goods_id}`,
     method: 'post'
   })
 }
@@ -39,7 +39,7 @@ export function collectionGoods(goods_id) {
 export function deleteGoodsCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `collection/goods/${ids}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/goods/${ids}`,
     method: 'delete'
   })
 }
@@ -51,7 +51,7 @@ export function deleteGoodsCollection(ids) {
  */
 export function getShopCollection(params) {
   return request({
-    url: 'collection/shop/list',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/shop/list',
     method: 'get',
     params
   })
@@ -64,7 +64,7 @@ export function getShopCollection(params) {
  */
 export function collectionShop(shop_id) {
   return request({
-    url: `collection/shop/${shop_id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/shop/${shop_id}`,
     method: 'post'
   })
 }
@@ -77,7 +77,7 @@ export function collectionShop(shop_id) {
 export function deleteShopCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `collection/shop/${ids}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/shop/${ids}`,
     method: 'delete'
   })
 }

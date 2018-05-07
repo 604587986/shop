@@ -30,16 +30,17 @@ export function addCategory(params) {
  * @returns {Promise<any>}
  */
 export function editCategory(id, params) {
-  const _formData = new FormData()
-  _formData.append('name', params.category_name)
-  _formData.append('parent_id', params.parent_id)
-  _formData.append('category_order', params.category_order)
-  _formData.append('image', params.category_image)
+  const _params = {
+    name: params.category_name,
+    parent_id: params.parent_id,
+    category_order: params.category_order,
+    image: params.category_image
+  }
   return new Promise((resolve, reject) => {
     request({
       url: `goods/categories/${id}`,
-      method: 'post',
-      data: _formData
+      method: 'put',
+      data: _params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }

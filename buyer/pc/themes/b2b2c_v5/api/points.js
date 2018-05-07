@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getPointsData(params) {
   return request({
-    url: 'points/list',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/points/list',
     method: 'get',
     params
   })

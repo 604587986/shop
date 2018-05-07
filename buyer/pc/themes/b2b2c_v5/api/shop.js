@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getShopData(shop_id) {
   return request({
-    url: `shop/${shop_id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/shop/${shop_id}`,
     method: 'get'
   })
 }
@@ -24,7 +24,7 @@ export function getShopData(shop_id) {
 export function getShopGoods(params) {
   if(!params.page_size) params.page_size = 16
   return request({
-    url: 'shop/goods-list',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/shop/goods-list',
     method: 'get',
     params
   })

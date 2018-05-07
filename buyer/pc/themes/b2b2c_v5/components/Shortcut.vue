@@ -4,7 +4,7 @@
       <div v-if="user" class="login-status logined">
         <span>您好<nuxt-link to="/member">{{ user.uname }}</nuxt-link>，欢迎来到</span>
         <nuxt-link to="/">Javashop示例商城</nuxt-link>
-        <span>[<a href="javascript:;" @click="logout">退出</a>]</span>
+        <span>[<a href="javascript:;" @click="handleLogout">退出</a>]</span>
       </div>
       <div v-else class="login-status">
         <span>您好，欢迎来到</span>
@@ -91,7 +91,13 @@
     methods: {
       ...mapActions({
         logout: 'user/logoutAction'
-      })
+      }),
+      /** 账户登出 */
+      handleLogout() {
+        this.logout().then(() => {
+          this.$router.push({ path: '/' })
+        })
+      }
     }
   }
 </script>

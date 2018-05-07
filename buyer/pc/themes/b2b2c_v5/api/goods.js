@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getGoods(goods_id) {
   return request({
-    url: `goods/${goods_id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/goods/${goods_id}`,
     method: 'get'
   })
 }
@@ -23,7 +23,7 @@ export function getGoods(goods_id) {
  */
 export function getGoodsList(params) {
   return request({
-    url: 'goods/list',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/goods/list',
     method: 'get',
     params
   })

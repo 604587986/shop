@@ -2,6 +2,8 @@ import * as API_User from '@/api/user'
 import * as API_Passport from '@/api/passport'
 import * as types from './mutation-types'
 import Storage from '@/utils/storage'
+import { Base64 } from 'js-base64'
+import Foundation from '@/utils/Foundation'
 
 export const state = () => ({
   user: '',
@@ -36,7 +38,11 @@ export const mutations = {
    */
   [types.SET_ACCESS_TOKEN](state, token) {
     state.accessToken = token
-    process.client && Storage.setItem('accessToken', token)
+    if (process.client) {
+      const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1]
+      Storage.setItem('accessTokenExpires', access_token_time * 1000)
+      Storage.setItem('accessToken', token, {expires: 1})
+    }
   },
   /**
    * 移除访问令牌
@@ -44,6 +50,7 @@ export const mutations = {
    */
   [types.REMOVE_ACCESS_TOKEN](state) {
     state.accessToken = ''
+    Storage.removeItem('accessTokenExpires')
     process.client && Storage.removeItem('accessToken')
   },
   /**
@@ -53,7 +60,11 @@ export const mutations = {
    */
   [types.SET_REFRESH_TOKEN](state, token) {
     state.refreshToken = token
-    process.client && Storage.setItem('refreshToken', token)
+    if (process.client) {
+      const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1]
+      Storage.setItem('refreshTokenExpires', refresh_token_time * 1000)
+      Storage.setItem('refreshToken', token)
+    }
   },
   /**
    * 移除刷新令牌
@@ -61,6 +72,7 @@ export const mutations = {
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
     state.refreshToken = ''
+    Storage.removeItem('refreshTokenExpires')
     process.client && Storage.removeItem('refreshToken')
   }
 }
@@ -88,18 +100,21 @@ export const actions = {
    */
   loginAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
-      params.form.uuid = Storage.getItem('uuid')
       if (params.login_type === 'quick') {
-        API_Passport.loginByMobile()
+        const { mobile, captcha } = params.form
+        API_Passport.loginByMobile(mobile, captcha).then(loginSccess).catch(error => reject(error))
       } else {
+        params.form.uuid = Storage.getItem('uuid')
         API_Passport.login(params.form).then(loginSccess).catch(error => reject(error))
       }
       function loginSccess(res) {
-        const { access_token, refresh_token, ...user } = res
-        dispatch('getUserDataAction', user.uid)
+        const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        resolve(res)
+        API_User.getUserInfo(uid).then(response => {
+          commit(types.SET_USER_INFO, response)
+          resolve(response)
+        }).catch(error => reject(error))
       }
     })
   },
@@ -131,5 +146,61 @@ export const actions = {
         resolve(response)
       }).catch(error => reject(error))
     })
+  },
+  /**
+   * 移除用户信息
+   * @param commit
+   */
+  removeUserAction: ({ commit }) => {
+    commit(types.REMOVE_USER_INFO)
+  },
+  /**
+   * 注册【通过手机号】
+   * @param commit
+   * @param params
+   * @returns {Promise<any>}
+   */
+  registerByMobileAction: ({ commit }, params) => {
+    return new Promise((resolve, reject) => {
+      API_Passport.registerByMobile(params).then(res=> {
+        const { access_token, refresh_token, uid } = res
+        commit(types.SET_ACCESS_TOKEN, access_token)
+        commit(types.SET_REFRESH_TOKEN, refresh_token)
+        API_User.getUserInfo(uid).then(response => {
+          commit(types.SET_USER_INFO, response)
+          resolve(response)
+        }).catch(error => reject(error))
+      })
+    })
+  },
+  /**
+   * 设置accessToken
+   * @param commit
+   * @param accessToken
+   */
+  setAccessTokenAction: ({ commit }, accessToken) => {
+    commit(types.SET_ACCESS_TOKEN, accessToken)
+  },
+  /**
+   * 移除accessToken
+   * @param commit
+   */
+  removeAccessTokenAction: ({ commit }) => {
+    commit(types.REMOVE_ACCESS_TOKEN)
+  },
+  /**
+   * 设置refreshToken
+   * @param commit
+   * @param refreshToken
+   */
+  setRefreshTokenAction: ({ commit }, refreshToken) => {
+    commit(types.SET_REFRESH_TOKEN, refreshToken)
+  },
+  /**
+   * 移除refreshToken
+   * @param commit
+   */
+  removeRefreshTokenAction: ({ commit }) => {
+    commit(types.REMOVE_REFRESH_TOKEN)
   }
 }
