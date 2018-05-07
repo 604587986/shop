@@ -1,5 +1,5 @@
 /**
- * 店铺模型
+ * 店铺导航模型
  */
 
 import {
@@ -12,16 +12,24 @@ import {
 } from '@/framework'
 
 export default class ShopNavModel extends DataModel {
+  /** 导航id */
+  @ServerName('id')
+  nav_id
+
+  /** 店铺id */
+  @ServerName('shop_id')
+  shop_id
+
   /** 排序 */
   @ServerName('sort')
   shop_nav_sort
 
   /** 导航名称 */
-  @ServerName('nav_name')
+  @ServerName('name')
   shop_nav_name
 
   /** 是否显示 */
-  @ServerName('show')
+  @ServerName('disable')
   shop_nav_show
 
   /** URL */
@@ -29,6 +37,6 @@ export default class ShopNavModel extends DataModel {
   shop_nav_url
 
   /** 是否新窗口打开 */
-  @ServerName('_blank_show')
+  @ServerName('target')
   open_new_blank
 }

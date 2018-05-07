@@ -13,13 +13,13 @@ import ShopNavModel from '@/models/ShopNavModel'
 export function getShopNavList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/shop/nav/list',
+      url: '/shops/navigations',
       method: 'get',
       loading: false,
       params
     }).then(response => {
       const _response = response
-      _response.data = new ShopNavModel().map(response)
+      _response.data = new ShopNavModel().map(response.data)
       resolve(_response)
     }).catch(error => reject(error))
   })
@@ -31,13 +31,43 @@ export function getShopNavList(params) {
  * @returns {Promise<any>}
  */
 export function addShopNav(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'b2b2c/admin/shop/dis-shop.do',
+      url: '/shops/navigations',
       method: 'post',
-      data: _formData
+      data: params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 修改店铺导航
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function editShopNav(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/shops/navigations/${id}`,
+      method: 'put',
+      data: params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 删除店铺导航
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function delShopNav(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/shops/navigations/${id}`,
+      method: 'delete',
+      params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }

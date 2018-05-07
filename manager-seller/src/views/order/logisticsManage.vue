@@ -108,8 +108,8 @@
             <!--首重（kg）-->
             <el-table-column label="公司状态">
               <template slot-scope="scope">
-                <span v-if="scope.row.logistics_status == 0">未选择</span>
-                <span v-if="scope.row.logistics_status == 1" class="company-choosed">已选择</span>
+                <span v-if="!scope.row.shop_id">未选择</span>
+                <span v-if="scope.row.shop_id" class="company-choosed">已选择</span>
               </template>
             </el-table-column>
             <!--操作-->
@@ -118,13 +118,13 @@
                 <el-button
                   size="mini"
                   type="success"
-                  v-if="scope.row.logistics_status == 0"
+                  v-if="!scope.row.shop_id"
                   @click="handleLogisticsSwitch(scope.row)">开启
                 </el-button>
                 <el-button
                   size="mini"
                   type="danger"
-                  v-if="scope.row.logistics_status == 1"
+                  v-if="scope.row.shop_id"
                   @click="handleLogisticsSwitch(scope.row)">关闭
                 </el-button>
               </template>
@@ -301,7 +301,7 @@
       /** 获取物流公司信息*/
       GET_logisticsList() {
         this.loading = true
-        API_logistics.getExpressCompanyList(this.logisticsParams).then(response => {
+        API_logistics.getExpressCompanyList({}).then(response => {
           this.loading = false
           this.logisticsTableData = response.data
         }).catch(error => {
@@ -311,16 +311,29 @@
 
       /** 物流公司信息开启 /关闭 */
       handleLogisticsSwitch(row) {
-        const _tip = row.logistics_status === 1 ? '关闭' : '开启'
+        const _tip = row.shop_id ? '关闭' : '开启'
         this.$confirm(`确定要${_tip}么?`, '确认信息')
-          .then(() => this.switchLogistics(row))
+          .then(() => {
+            row.shop_id ? this.closeLogistics(row) : this.openLogistics(row)
+          })
           .catch(() => {
           })
       },
-      switchLogistics(row) {
-        const _tip = row.logistics_status === 1 ? '关闭' : '开启'
-        API_logistics.switchExpressPower(row.logistics_id, row).then(response => {
-          this.$message.success(`${_tip}成功`)
+
+      /** 执行关闭  */
+      closeLogistics(row) {
+        API_logistics.closeExpressPower(row.logistics_id, {}).then(response => {
+          this.$message.success('关闭成功')
+          this.GET_logisticsList()
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+
+      /** 执行开启 */
+      openLogistics(row) {
+        API_logistics.openExpressPower(row.logistics_id, {}).then(response => {
+          this.$message.success('开启成功')
           this.GET_logisticsList()
         }).catch(error => {
           console.log(error)

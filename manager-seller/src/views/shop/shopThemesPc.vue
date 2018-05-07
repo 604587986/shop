@@ -18,7 +18,7 @@
         <li v-for="item in tpl_list">
           <div class="tpl-theme">
             <div class="themes-img"
-                 :class='{"choosed-image":item.theme_id === tpl_choosed_id}'
+                 :class='{"choosed-image":item.themes_id === tpl_choosed_id}'
                  @click="chooseTheme(item)">
               <img v-if="item.theme_image" :src="item.theme_image" alt="" class="shop-theme-image">
             </div>
@@ -75,10 +75,10 @@
 
       /** 获取PC店铺主题列表*/
       GET_ShopThemesPc() {
-        API_ShopTheme.getShopThemeList({}).then(response => {
+        API_ShopTheme.getShopThemeList({ type: 'PC' }).then(response => {
           this.tpl_list = response.data
           this.tpl_list.forEach(elem => {
-            if (elem.selected === 1) {
+            if (elem.current_use === 1) {
               this.tpl_current = elem
             }
           })
@@ -89,7 +89,7 @@
 
       /** 选择模板主题*/
       chooseTheme(item) {
-        this.tpl_choosed_id = item.theme_id
+        this.tpl_choosed_id = item.themes_id
       },
 
       /** 预览*/

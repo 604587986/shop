@@ -1,9 +1,9 @@
 <template>
   <div class="bg-settings">
-    <el-form :model="shopDataForm" ref="shopDataForm" label-width="200px" class="demo-ruleForm">
+    <el-form :model="shopDataForm" ref="shopDataForm" :rules="rules" label-width="200px" class="demo-ruleForm">
       <!--身份证号-->
-      <el-form-item label="身份证号：" prop="card_id">
-        <span>{{ shopDataForm.card_id }}</span>
+      <el-form-item label="身份证号：" prop="legal_id">
+        <span>{{ shopDataForm.legal_id }}</span>
       </el-form-item>
       <!--店铺地址-->
       <el-form-item label="店铺地址：" prop="shop_address">
@@ -14,12 +14,12 @@
         </el-cascader>
       </el-form-item>
       <!--详细地址-->
-      <el-form-item label="详细地址：" prop="details_address">
-        <el-input v-model="shopDataForm.details_address" style="width: 200px;" auto-complete="off"></el-input>
+      <el-form-item label="详细地址：" prop="shop_add">
+        <el-input v-model="shopDataForm.shop_add" style="width: 200px;" auto-complete="off"></el-input>
       </el-form-item>
       <!--联系电话-->
-      <el-form-item label="联系电话：" prop="shop_phone">
-        <el-input v-model="shopDataForm.shop_phone" style="width: 200px;" auto-complete="off"></el-input>
+      <el-form-item label="联系电话：" prop="link_phone">
+        <el-input v-model.number="shopDataForm.link_phone" style="width: 200px;" auto-complete="off"></el-input>
       </el-form-item>
       <!--QQ-->
       <el-form-item label="QQ：" prop="shop_qq">
@@ -27,15 +27,15 @@
         <span> 设置店铺的客服QQ</span>
       </el-form-item>
       <!--店铺简介-->
-      <el-form-item label="店铺简介：" prop="shop_intro">
-        <UE v-model="shopDataForm.shop_intro" :defaultMsg="shopDataForm.shop_intro" style="width: 80%;"></UE>
+      <el-form-item label="店铺简介：" prop="shop_desc">
+        <UE v-model="shopDataForm.shop_desc" :defaultMsg="shopDataForm.shop_desc" style="width: 80%;"></UE>
       </el-form-item>
       <!--店铺logo-->
       <el-form-item label="店铺logo：" prop="shop_logo">
         <el-upload
           class="upload-demo"
           key="shop_logo"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="BASE_IMG_URL"
           :before-upload="handlePreviewLogo"
           :file-list="fileList_logo"
           ref="fileList_logo"
@@ -51,7 +51,7 @@
           class="upload-demo"
           key="shop_banner"
           :before-upload="handlePreviewBanner"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="BASE_IMG_URL"
           :file-list="fileList_banner"
           ref="fileList_banner"
           :limit="1"
@@ -70,35 +70,48 @@
 <script>
   import * as API_ShopSettings from '@/api/shopSettings'
   import { UE } from '@/components'
+  import { validatePhone } from '@/utils/validate'
   export default {
     name: 'shopSetting',
     components: {
       [UE.name]: UE
     },
     data() {
+      var validPhone = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请输入联系人电话'))
+        } else if (!validatePhone(value)) {
+          callback(new Error('请输入正确的11位手机号码'))
+        } else {
+          callback()
+        }
+      }
       return {
+        /** 图片服务器地址 */
+        BASE_IMG_URL: process.env.BASE_IMG_URL,
+
         /** 店铺信息*/
         shopDataForm: {
           /** 店铺ID*/
           shop_id: '',
 
           /** 身份证号*/
-          card_id: '',
+          legal_id: '',
 
           /** 店铺地址 */
           shop_address: '',
 
           /** 详细地址*/
-          details_address: '',
+          shop_add: '',
 
           /** 联系电话*/
-          shop_phone: '',
+          link_phone: '',
 
           /** QQ*/
           shop_qq: '',
 
           /** 店铺简介*/
-          shop_intro: '',
+          shop_desc: '',
 
           /** 店铺logo*/
           shop_logo: '',
@@ -131,7 +144,20 @@
         fileList_logo: [],
 
         /** 店铺banner图片存*/
-        fileList_banner: []
+        fileList_banner: [],
+
+        /** 校验规则 校验必填 */
+        rules: {
+          /** 详细地址 */
+          shop_add: [
+            { required: true, message: '请填写详细地址', trigger: 'changer,blur' }
+          ],
+          /** 联系人电话 */
+          link_phone: [
+            { required: true, message: '请填写联系人电话', trigger: 'changer,blur' },
+            { validator: validPhone, trigger: 'changer,blur' }
+          ]
+        }
       }
     },
     mounted() {
@@ -144,20 +170,29 @@
           this.shopDataForm = { ...response.data }
           this.fileList_logo = [{ url: this.shopDataForm.shop_logo }]
           this.fileList_banner = [{ url: this.shopDataForm.shop_banner }]
-          console.log(this.shopDataForm.shop_address)
         }).catch(error => {
           console.log(error)
         })
       },
 
       /** 保存店铺设置*/
-      handleSaveShopData() {
-        API_ShopSettings.saveShopSettings(this.shopDataForm.shop_id, this.shopDataForm).then(response => {
-          this.$message.success('保存店铺设置成功')
-          this.GET_ShopGradeData()
-        }).catch(error => {
-          this.$message.success('保存店铺设置失败')
-          console.log(error)
+      handleSaveShopData(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // 构造表单提交数据
+            const _params = {
+              ...this.shopDataForm
+            }
+            API_ShopSettings.saveShopSettings(_params).then(response => {
+              this.$message.success('保存店铺设置成功')
+              this.GET_ShopGradeData()
+            }).catch(error => {
+              this.$message.success('保存店铺设置失败')
+              console.log(error)
+            })
+          } else {
+            return false
+          }
         })
       },
 

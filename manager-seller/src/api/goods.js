@@ -209,14 +209,11 @@ export function getTplList(ids, params) {
  * @returns {Promise<any>}
  */
 export function underGoods(ids, params) {
-  const _params = params
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}/under`,
       method: 'put',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -229,9 +226,6 @@ export function underGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function aboveGoods(params) {
-  const _params = params
-  // const _formData = new FormData()
-  // Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: '/goods',
@@ -249,14 +243,11 @@ export function aboveGoods(params) {
  * @returns {Promise<any>}
  */
 export function aboveDraftGoods(ids, params) {
-  const _params = params
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/draft-goods/${ids}/market`,
       method: 'put',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -349,14 +340,11 @@ export function getRecycleGoodsList(params) {
  * @constructor
  */
 export function RecycleReductionGoods(ids, params) {
-  const _params = params
-  const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}/revert`,
       method: 'put',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -420,7 +408,7 @@ export function getWarningGoodsStockList(ids, params) {
       params
     }).then(response => {
       const _response = response
-      _response.data = new GoodsModel().map(_response.data)
+      _response.data = new GoodsModel().map(_response)
       resolve(_response)
     }).catch(error => reject(error))
   })

@@ -23,23 +23,23 @@
     },
     methods: {
       /** 获取店铺等级信息 */
-      GET_ShopGradeData() {
-        API_ShopGrade.getShopGradeData().then(response => {
-          this.shopGradeData = response
-        }).catch(error => {
-          console.log(error)
-        })
-      },
+      // GET_ShopGradeData() {
+      //   API_ShopGrade.getShopGradeData().then(response => {
+      //     this.shopGradeData = response
+      //   }).catch(error => {
+      //     console.log(error)
+      //   })
+      // },
 
       /** 提升等级*/
       handlePromoteGrade() {
-        API_ShopGrade.getShopGradeData(this.shopGradeData.shop_id, this.shopGradeData).then(response => {
-          this.$message.success('申请成功，请耐心等待！')
-          this.GET_ShopGradeData()
-        }).catch(error => {
-          this.$message.success('申请失败，请稍后重试！')
-          console.log(error)
-        })
+        // API_ShopGrade.getShopGradeData(this.shopGradeData.shop_id, this.shopGradeData).then(response => {
+        //   this.$message.success('申请成功，请耐心等待！')
+        //   this.GET_ShopGradeData()
+        // }).catch(error => {
+        //   this.$message.success('申请失败，请稍后重试！')
+        //   console.log(error)
+        // })
       }
     }
   }

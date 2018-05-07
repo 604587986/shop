@@ -215,7 +215,7 @@
         if (data !== '') {
           this.params = {
             ...this.params,
-            shop_cat_path: data
+            shop_cat_path: data.join('|')
           }
         }
         this.GET_GoodsList()

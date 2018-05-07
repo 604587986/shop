@@ -21,7 +21,7 @@
             <img :src="scope.row.goods_image" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column prop="goods_name" label="名称" align="left" width="450"/>
+        <el-table-column prop="goods_name" label="名称" align="left" />
         <el-table-column label="价格" width="120">
           <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
         </el-table-column>
@@ -34,7 +34,7 @@
         <el-table-column label="创建时间">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="状态" width="80" :formatter="marketStatus"/>
+        <el-table-column prop="market_enable" label="状态" :formatter="marketStatus"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -58,11 +58,13 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="库存信息" center :visible.sync="goodsWarningStockshow" width="40%">
+    <el-dialog title="库存信息" center :visible.sync="goodsWarningStockshow" width="40%" class="popinfo">
       <en-tabel-layout :tableData="goodsWarningStockDate" :loading="loading">
         <template slot="table-columns">
-          <el-table-column prop="enable_quantity" label="库存"/>
-          <el-table-column prop="deliver_goods_quantity" label="待发货数"/>
+          <el-table-column prop="sn" label="货号"/>
+          <el-table-column prop="goods_name" label="商品名称"/>
+          <el-table-column prop="quantity" label="库存"/>
+          <el-table-column prop="enable_quantity" label="可用库存"/>
         </template>
       </en-tabel-layout>
     </el-dialog>
@@ -123,7 +125,7 @@
 
       /** 销售状态格式化 */
       marketStatus(row, column, cellValue) {
-        return row.market_enable === 1 ? '售卖中' : '已下架'
+        return row.market_enable === 1 ? '上架' : '下架'
       },
 
       /** 搜索事件触发 */
@@ -135,19 +137,14 @@
         this.GET_WarningGoodsList()
       },
 
-      /** 高级搜索事件触发 */
-      advancedSearchEvent() {
+      /**  分类选择组件值发生改变 */
+      categoryChanged(val) {
         this.params = {
           ...this.params,
-          ...this.advancedForm
+          shop_cat_path: val.join('|')
         }
         delete this.params.keyword
-        this.GET_GoodsList()
-      },
-
-      /** 高级搜索中 分类选择组件值发生改变 */
-      categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
+        this.GET_WarningGoodsList()
       },
 
       GET_WarningGoodsList() {
@@ -168,13 +165,9 @@
 
       /** 查看库存信息 */
       handleWithdraw(row) {
-        const _ids = [row.goods_id].toString()
         this.goodsWarningStockshow = true
-        API_goods.getWarningGoodsStockList(_ids).then((response) => {
+        API_goods.getWarningGoodsStockList(row.goods_id).then((response) => {
           this.goodsWarningStockDate = response.data
-          this.goodsWarningStockDate.forEach((key) => {
-            this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
-          })
         }).catch(() => this.$message.error('查看库存商品信息出错，请稍后再试！'))
       }
     }
@@ -189,19 +182,21 @@
   .inner-toolbar {
     display: flex;
     width: 100%;
-    justify-content: space-between;
-  }
-
-  .toolbar-btns {
-
   }
 
   .toolbar-search {
     margin-right: 10px;
   }
-
-  /deep/ .toolbar {
-    display: none !important;
+  /deep/ .popinfo {
+    .toolbar {
+      display: none;
+    }
+    .el-dialog__body {
+      border: 1px solid #e5e5e5;
+      .el-table {
+        border: 1px solid #e5e5e5;
+      }
+    }
   }
 
   .goods-image {

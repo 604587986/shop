@@ -14,7 +14,7 @@ export function saveStockWarningNum(params) {
     request({
       url: '/shops/warning-counts',
       method: 'put',
-      params
+      data: params
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }

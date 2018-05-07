@@ -13,14 +13,18 @@ import {
 
 export default class ShopSlideModel extends DataModel {
   /** 店铺幻灯片id */
-  @ServerName('banner_id')
+  @ServerName('silde_id')
   shop_banner_id
 
+  /** 店铺id */
+  @ServerName('shop_id')
+  shop_id
+
   /** 店铺幻灯片链接 */
-  @ServerName('banner_link')
+  @ServerName('silde_url')
   shop_banner_link
 
   /** 店铺幻灯片图片 */
-  @ServerName('banner_image')
+  @ServerName('img')
   shop_banner_image
 }
