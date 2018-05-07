@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getUserInfo() {
   return request({
-    url: `http://192.168.2.5:7002/member`,
+    url: `member`,
     method: 'get'
   })
 }
