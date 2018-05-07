@@ -5,6 +5,7 @@ import Storage from '@/utils/storage'
 import Foundation from '@/utils/Foundation'
 import MD5 from 'md5'
 import GetFullUrl from '@/utils/urls'
+const qs = require('qs')
 
 // 创建axios实例
 const service = axios.create({
@@ -18,7 +19,10 @@ service.interceptors.request.use(config => {
   if (!/^http/.test(url)) {
     config.url = GetFullUrl(url)
   }
-  
+  /** 如果是post或put请求，用qs.stringify序列化参数 */
+  if (config.method === 'post' || config.method === 'put') {
+    config.data = qs.stringify(config.data)
+  }
   /** 配置全屏加载 */
   if (loading !== false) {
     config.loading = Loading.service({
@@ -28,6 +32,11 @@ service.interceptors.request.use(config => {
       text: '努力加载中...'
     })
   }
+  // 如果是刷新Token的请求，直接放行。
+  if (config.isRefreshTokenRequest) {
+    return config
+  }
+  // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
   if (accessToken) {
     // if (process.env.NODE_ENV === 'production') {
@@ -64,7 +73,7 @@ service.interceptors.response.use(
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
-    // if (error_response.status === 403) fedLogOut()
+    if (error_data.code === '109') fedLogOut()
     let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
     if (error.config.message !== false) {
       Vue.prototype.$message.error(error_data.message || _message)
@@ -83,9 +92,12 @@ const closeLoading = (target) => {
   }
 }
 
+/**
+ * 已被登出
+ */
 function fedLogOut() {
-  //
   Vue.prototype.$message.error('您已被登出！')
+  return Promise.reject(error)
 }
 
 export default service
