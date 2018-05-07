@@ -29,7 +29,7 @@ service.interceptors.request.use(config => {
     config.headers['Authorization'] = getToken() // 让每个请求携带令牌
   }
   /** 进行参数序列化 */
-  if (config.method === 'put' || config.method === 'post') {
+  if ((config.method === 'put' || config.method === 'post') && typeof config.data === 'string') {
     config.data = qs.stringify(config.data)
   }
   return config
