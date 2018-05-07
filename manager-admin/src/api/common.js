@@ -10,7 +10,8 @@ import request from '@/utils/request'
  * @returns {string}
  */
 export function getValidateCodeUrl(type) {
-  return `${process.env.BASE_API}/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
+  // return `${process.env.BASE_API}/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
+  return `http://localhost:9090/javashop/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
 }
 
 /**
@@ -18,5 +19,6 @@ export function getValidateCodeUrl(type) {
  * @type {string}
  */
 export function getUploadApi() {
-  return `${process.env.BASE_API}/core/upload.do`
+  // return `${process.env.BASE_API}/core/upload.do`
+  return `http://localhost:9090/javashop/core/upload.do`
 }

@@ -40,7 +40,7 @@ export function consultating(goods_id, content) {
   const _formData = new FormData()
   _formData.append('content', content)
   return request({
-    url: `/consulting/${goods_id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/consulting/${goods_id}`,
     method: 'post',
     data: _formData
   })

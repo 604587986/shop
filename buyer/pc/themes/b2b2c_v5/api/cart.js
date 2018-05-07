@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getCartList(params) {
   return request({
-    url: 'cart/list',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/cart/list',
     method: 'get',
     params
   })
@@ -25,7 +25,7 @@ export function getCartList(params) {
  */
 export function updateSkuNum(sku_id, num) {
   return request({
-    url: `cart/${sku_id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/cart/${sku_id}`,
     method: 'post',
     data: { num }
   })
@@ -39,7 +39,7 @@ export function updateSkuNum(sku_id, num) {
  */
 export function checkSku(sku_id, checked) {
   return request({
-    url: `cart/check-sku/${sku_id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/cart/check-sku/${sku_id}`,
     method: 'post',
     data: { checked }
   })
@@ -53,7 +53,7 @@ export function checkSku(sku_id, checked) {
  */
 export function checkShop(shop_id, checked) {
   return request({
-    url: `cart/check-shop/${shop_id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/cart/check-shop/${shop_id}`,
     method: 'post',
     data: { checked }
   })
@@ -66,7 +66,7 @@ export function checkShop(shop_id, checked) {
  */
 export function checkAll(checked) {
   return request({
-    url: 'cart/check-all',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/cart/check-all',
     method: 'post',
     data: { checked }
   })
@@ -80,7 +80,7 @@ export function checkAll(checked) {
 export function deleteSkuItem(sku_ids) {
   sku_ids = Array.isArray(sku_ids) ? sku_ids.join(',') : sku_ids
   return request({
-    url: `cart/${sku_ids}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/cart/${sku_ids}`,
     method: 'delete'
   })
 }
@@ -91,7 +91,7 @@ export function deleteSkuItem(sku_ids) {
  */
 export function cleanCart() {
   return request({
-    url: 'cart/clean',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/cart/clean',
     method: 'post'
   })
 }

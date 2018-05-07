@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getOrderList(params) {
   return request({
-    url: 'order/list',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/list',
     method: 'get',
     params
   })
@@ -24,7 +24,7 @@ export function getOrderList(params) {
  */
 export function getOrderDetail(order_sn) {
   return request({
-    url: `order/${order_sn}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/${order_sn}`,
     method: 'get'
   })
 }
@@ -39,7 +39,7 @@ export function cancelOrder(order_sn, reason) {
   const _formData = new FormData()
   _formData.append('reason', reason)
   return request({
-    url: `order/cancel`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/cancel`,
     method: 'post',
     data: _formData
   })
@@ -52,7 +52,7 @@ export function cancelOrder(order_sn, reason) {
  */
 export function confirmReceipt(order_sn) {
   return request({
-    url: `order/confirm-receipt/${order_sn}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/confirm-receipt/${order_sn}`,
     method: 'post'
   })
 }

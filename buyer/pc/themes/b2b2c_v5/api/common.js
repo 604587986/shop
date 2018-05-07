@@ -29,7 +29,7 @@ export const uploadApi = 'http://localhost:3001/javashop/core/upload.do'
 export function getHotKeywords() {
   return new Promise((resolve, reject) => {
     request({
-      url: 'hot-keywords',
+      url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/hot-keywords',
       method: 'get',
       loading: false
     }).then(response => resolve(response.slice(0, 7))).catch(error => reject(error))
@@ -44,7 +44,7 @@ export function getHotKeywords() {
 export function getAutoCompleteKeyword(keyword) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'auto-complete-keyword',
+      url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/auto-complete-keyword',
       method: 'get',
       loading: false,
       message: false,
@@ -62,7 +62,7 @@ export function getAutoCompleteKeyword(keyword) {
 export function getNavList() {
   return new Promise((resolve, reject) => {
     request({
-      url: 'nav/list',
+      url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/nav/list',
       method: 'get',
       loading: false,
       message: false
@@ -77,7 +77,7 @@ export function getNavList() {
 export function getCategoryList() {
   return new Promise((resolve, reject) => {
     request({
-      url: 'category/list',
+      url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/category/list',
       method: 'get',
       loading: false,
       message: false

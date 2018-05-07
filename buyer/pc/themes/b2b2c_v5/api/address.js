@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getAddressList() {
   return request({
-    url: 'address/list',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/address/list',
     method: 'get'
   })
 }
@@ -24,7 +24,7 @@ export function addAddress(params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
-    url: 'address',
+    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/address',
     method: 'post',
     data: _formData
   })
@@ -40,7 +40,7 @@ export function editAddress(id, params) {
   const _formData = new FormData()
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
-    url: `address/${id}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/address/${id}`,
     method: 'post',
     data: _formData
   })
@@ -54,7 +54,7 @@ export function editAddress(id, params) {
 export function deleteAddress(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `address/${ids}`,
+    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/address/${ids}`,
     method: 'delete'
   })
 }
