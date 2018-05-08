@@ -94,7 +94,7 @@ const closeLoading = (target) => {
 
 export default function request(options) {
   // 如果是服务端或者是请求的刷新token，不需要检查token直接请求。
-  if (!process.client || options.url === 'passport/token') {
+  if (process.server || options.url === 'passport/token') {
     console.log(options.url + ' | 服务端或者是请求的刷新token，不需要检查token直接请求。')
     return service(options)
   }
