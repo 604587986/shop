@@ -73,8 +73,13 @@ service.interceptors.response.use(
     closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
-    // 403 --> 没有登录、登录状态失效
-    if (error_data.code === '109') fedLogOut()
+    // 109 --> 没有登录、登录状态失效
+    if (error_data.code === '109') {
+      Vue.prototype.$message.error('您已被登出！')
+      const { $route, $router } = Vue.prototype.$nuxt
+      $router.push({ path: `/login?forward=${$route.fullPath}` })
+      return Promise.reject(error)
+    }
     let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
     if (error.config.message !== false) {
       Vue.prototype.$message.error(error_data.message || _message)
@@ -91,14 +96,6 @@ const closeLoading = (target) => {
   if (target.config.loading) {
     target.config.loading.close()
   }
-}
-
-/**
- * 已被登出
- */
-function fedLogOut() {
-  Vue.prototype.$message.error('您已被登出！')
-  return Promise.reject(error)
 }
 
 export default function request(options) {

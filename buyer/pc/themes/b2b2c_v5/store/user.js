@@ -50,6 +50,7 @@ export const mutations = {
    */
   [types.REMOVE_ACCESS_TOKEN](state) {
     state.accessToken = ''
+    process.client && Storage.removeItem('accessToken')
   },
   /**
    * 设置刷新令牌
@@ -59,9 +60,10 @@ export const mutations = {
   [types.SET_REFRESH_TOKEN](state, token) {
     state.refreshToken = token
     if (process.client) {
-      const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
-      const expires = new Date(refresh_token_time)
-      Storage.setItem('refreshToken', token, { expires })
+      // const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
+      // const expires = new Date(refresh_token_time)
+      // 不设置失效时间，由后端检测是否失效
+      Storage.setItem('refreshToken', token)
     }
   },
   /**
@@ -70,6 +72,7 @@ export const mutations = {
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
     state.refreshToken = ''
+    process.client && Storage.removeItem('refreshToken')
   }
 }
 
