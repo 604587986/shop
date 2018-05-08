@@ -80,7 +80,7 @@
         unfold: this.$route.path === '/'
       }
     },
-    created() {
+    mounted() {
       this.getCategoryData()
     },
     watch: {

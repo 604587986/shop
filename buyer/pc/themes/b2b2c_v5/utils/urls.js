@@ -13,9 +13,9 @@
  * @type {{base : string, passport : string, main : string}}
  */
 const dev_domain = {
-  base: 'http://192.168.2.5:7000/',
-  passport: 'http://192.168.2.5:7001/',
-  main: 'http://192.168.2.5:7002/'
+  base: 'http://yiqisi.s1.natapp.cc/base-api/',
+  passport: 'http://yiqisi.s1.natapp.cc/passport/',
+  main: 'http://yiqisi.s1.natapp.cc/buyer-api/'
 }
 
 /**
