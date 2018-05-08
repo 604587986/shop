@@ -18,9 +18,9 @@
         </el-alert>
         <el-alert type="info" title="" :closable="false">
           <h2>消费积分</h2>
-          <p>可用积分：105</p>
+          <p>可用积分：{{ points.consum_point }}</p>
           <h2>等级积分</h2>
-          <p>可用积分：205</p>
+          <p>可用积分：{{ points.gade_point }}</p>
         </el-alert>
       </div>
       <div v-show="type === 2" class="points-detail">
@@ -62,11 +62,16 @@
           page_no: 1,
           page_size: 10
         },
-        pointsData: ''
+        pointsData: '',
+        points: {
+          consum_point: '获取中...',
+          gade_point: '获取中...'
+        }
       }
     },
     mounted() {
       this.GET_Points()
+      this.GET_PointsData()
     },
     filters: {
       filterType(val) {
@@ -77,12 +82,25 @@
       /** 当前分页发生变化 */
       handleCurrentChange(page) {
         this.params.page_no = page
-        this.GET_Points()
+        this.GET_PointsData()
       },
-      GET_Points() {
+      /**
+       * 获取积分明细
+       * @constructor
+       */
+      GET_PointsData() {
         API_Points.getPointsData(this.params).then(response => {
           this.pointsData = response
           this.MixinScrollToTop()
+        })
+      },
+      /**
+       * 获取当前会员的积分
+       * @constructor
+       */
+      GET_Points() {
+        API_Points.getPoints().then(response => {
+          this.points = response
         })
       }
     }
