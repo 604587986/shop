@@ -20,8 +20,8 @@ service.interceptors.request.use(config => {
   if (!/^http/.test(url)) {
     config.url = GetFullUrl(url)
   }
-  /** 如果是post或put请求，用qs.stringify序列化参数 */
-  if (config.method === 'post' || config.method === 'put') {
+  /** 如果是post或put请求，并且Content-Type不为application/json，用qs.stringify序列化参数 */
+  if ((config.method === 'post' || config.method === 'put') && config.headers[config.method]['Content-Type'] !== 'application/json') {
     config.data = qs.stringify(config.data)
   }
   /** 配置全屏加载 */
