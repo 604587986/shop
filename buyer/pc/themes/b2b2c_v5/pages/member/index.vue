@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="item-content">
-          <empty v-if="orderList.length === 0">暂无订单...</empty>
+          <empty-member v-if="orderList.length === 0">暂无订单</empty-member>
           <template v-else>
             <div v-for="(item, index) in orderList" v-if="index < 3" :key="item.order_sn" class="order-item" >
               <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-image">
@@ -62,7 +62,7 @@
           <!--<nuxt-link to="/cart">查看全部 	&gt;&gt;</nuxt-link>-->
         <!--</div>-->
         <!--<div class="item-content">-->
-          <!--<empty v-if="cartSkuList.length === 0">暂无商品...</empty>-->
+          <!--<empty-member v-if="cartSkuList.length === 0">暂无商品</empty-member>-->
           <!--<template v-else>-->
             <!--<div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">-->
               <!--<nuxt-link :to="'/goods-' + goods.goods_id + '.html'" class="goods-image">-->
@@ -85,7 +85,7 @@
           <nuxt-link to="/member/my-collection#goods">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
-          <empty v-if="goodsCollectionList.length === 0">暂无收藏商品...</empty>
+          <empty-member v-if="goodsCollectionList.length === 0">暂无收藏商品</empty-member>
           <template v-else>
             <div
               v-for="(item, index) in goodsCollectionList"
@@ -112,7 +112,7 @@
           <nuxt-link to="/member/my-collection#shop">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
-          <empty v-if="goodsCollectionList.length === 0">暂无收藏店铺...</empty>
+          <empty-member v-if="goodsCollectionList.length === 0">暂无收藏店铺</empty-member>
           <template v-else>
             <div
               v-for="(item, index) in shopCollectionList"
@@ -153,12 +153,8 @@
 <script>
   import { mapActions, mapGetters } from 'vuex'
   import Swiper from 'swiper'
-  import Empty from './-empty'
   export default {
     name: 'member-index',
-    components: {
-      Empty
-    },
     mounted() {
       this.$nextTick(this.initShopSwiper)
     },

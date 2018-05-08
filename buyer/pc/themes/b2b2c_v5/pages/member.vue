@@ -23,6 +23,8 @@
   import { mapActions, mapGetters } from 'vuex'
   import Breadcrumb from '@/pages/member/-breadcrumb'
   import Menu from '@/pages/member/-menu'
+  import Empty from '@/pages/member/-empty'
+  Vue.component('empty-member', Empty)
   export default {
     name: 'member',
     middleware: 'auth-user',
