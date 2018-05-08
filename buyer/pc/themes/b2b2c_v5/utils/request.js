@@ -60,13 +60,6 @@ service.interceptors.response.use(
   response => {
     closeLoading(response)
     let _data = response.data
-    // if (typeof _data === 'string' && _data.indexOf('window.open(\'/javashop/admin/login.do\',\'_top\')') !== -1) {
-    //   fedLogOut()
-    //   return Promise.reject('登录失效')
-    // }
-    // if (_data.page_no && _data.page_size && _data.data_total) {
-    //   _data = new PaginationModel().map(_data)
-    // }
     return _data
   },
   error => {
