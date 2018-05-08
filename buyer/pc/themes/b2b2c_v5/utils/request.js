@@ -5,6 +5,7 @@ import Storage from '@/utils/storage'
 import Foundation from '@/utils/Foundation'
 import MD5 from 'md5'
 import GetFullUrl from '@/utils/urls'
+import checkToken from '@/utils/checkToken'
 const qs = require('qs')
 
 // 创建axios实例
@@ -100,4 +101,15 @@ function fedLogOut() {
   return Promise.reject(error)
 }
 
-export default service
+export default function request(options) {
+  // 如果是服务端或者是请求的刷新token，不需要检查token直接请求。
+  if (!process.client || options.url === 'passport/token') {
+    console.log(options.url + ' | 服务端或者是请求的刷新token，不需要检查token直接请求。')
+    return service(options)
+  }
+  return new Promise((resolve, reject) => {
+    checkToken(options).then(() => {
+      service(options).then(resolve).catch(reject)
+    })
+  })
+}
