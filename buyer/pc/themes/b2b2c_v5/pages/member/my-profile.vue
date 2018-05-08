@@ -13,7 +13,7 @@
           :show-file-list="false"
           :on-success="handleAvararUploadSuccess"
         >
-          <img v-if="profileForm.avatar" :src="profileForm.avatar" class="avatar">
+          <img v-if="profileForm.face" :src="profileForm.face" class="avatar">
           <img v-else src="https://misc.360buyimg.com/mtd/pc/common/img/no_login.jpg" title="求真相" class="avatar">
           <div class="eidt-mask">
             <i class="el-icon-edit-outline"></i>
@@ -118,7 +118,7 @@
       /** 默认地址 */
       defaultRegions() {
         const { user } = this.$store.state.user
-        if(!user) return null
+        if(!user || !user.province_id) return null
         return [
           user.province_id,
           user.city_id,
@@ -138,7 +138,7 @@
       },
       /** 头像上传成功 */
       handleAvararUploadSuccess(res) {
-        this.profileForm.avatar = res
+        this.profileForm.face = res.url
       },
       /** 保存资料提交表单 */
       submitProfile() {
