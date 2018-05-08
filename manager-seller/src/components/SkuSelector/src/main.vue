@@ -2,12 +2,9 @@
   <div class="container">
     <!--规格选择-->
     <sku-item
-      :skuData="skuData"
       :goodsId="goodsId"
       :goodsSkuInfo="goodsSkuInfo"
       :categoryId="categoryId"
-      @updateSkuItem="updateSkuItem"
-      @updateSkuVal="updateSkuVal"
       @updateSkuInfo="updateSkuInfo"
     ></sku-item>
     <!--规格设置-->
@@ -72,60 +69,23 @@
         /** 表格要抛出的固定属性数据 经过处理之后也是最终要抛出的数据*/
         fixData: [],
 
-        /** 规格选择部分跑出的计算数据 */
+        /** 规格选择部分抛出的计算数据 */
         choiceData: []
       }
     },
     mounted() {
-      if (this.goodsId) {
-        this.getSkuInfoByGoods()
-      } else {
-        this.getSkuInfoByCategory()
-      }
       /** 赋值给选择数据 同时计算表格数据 */
-      // this.skuInfo = this.goodsSkuInfo
-      // this.updateSkuInfo(this.skuInfo)
+      if (Array.isArray(this.goodsSkuInfo) && this.goodsSkuInfo.length > 0) {
+        this.skuInfo = this.goodsSkuInfo
+        this.updateSkuInfo(this.skuInfo)
+      }
     },
     methods: {
-      /** 根据分类id获取规格信息*/
-      getSkuInfoByCategory() {
-        API_goodsSku.getCategorySkuList(this.params).then(response => {
-          this.skuData = response.data
-        }).catch(error => {
-          console.log(error)
-        })
-      },
-      /** 根据商品id获取规格信息*/
-      getSkuInfoByGoods() {
-        API_goodsSku.getGoodsSkuList(this.params).then(response => {
-          this.skuData = response.data
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
-      },
-
-      /** 更新用户自定义规格项 */
-      updateSkuItem(item) {
-        const _params = {
-          ...item
-        }
-        // API_goodsSku.saveCustomSkuItem(this.categoryId, _params).then(response => {
-        //   this.skuData = response.data
-        // }).catch(error => {
-        //   console.log(error)
-        // })
-      },
-
-      /** 更新用户自定义规格值 */
-      updateSkuVal(target) {
-        // console.log(target, 456)
-      },
-
       /** 计算最终数据 */
       finalData() {
         /** 在此处可抛出最终数据 */
         this.fixData.forEach(key => {
+          this.$set(key, 'spec_list', [])
           this.choiceData.forEach(item => {
             if (Array.isArray(item)) {
               const _isExit = item.some(elem => {
@@ -161,6 +121,9 @@
         /** 计算表格数据 */
         this.skuInfo = target
         /** 构造表格数据 转换数据格式 */
+        if (this.skuInfo.length === 0) {
+          return
+        }
         const obj = this.skuInfo.map((key) => {
           return key.value_list.map((item) => {
             let map = new Map().set(key.spec_name, item.spec_value || '').set('spec_value_id', item.spec_value_id)
@@ -172,7 +135,6 @@
           })
         })
         this.skuInfo = this.printResult(this.combination(...obj))[1]
-        // console.log(this.skuInfo)
       },
 
       /** 重组数据*/
