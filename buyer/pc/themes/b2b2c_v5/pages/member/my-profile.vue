@@ -109,9 +109,6 @@
         }
       }
     },
-    mounted() {
-      window.axios = axios
-    },
     watch: {
       user(newVal, oldVal) {
         this.profileForm = JSON.parse(JSON.stringify(newVal))

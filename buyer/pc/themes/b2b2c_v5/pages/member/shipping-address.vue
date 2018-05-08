@@ -101,7 +101,6 @@
       }
     },
     mounted() {
-      window.axios = axios
       this.getAddressData()
     },
     computed: {
