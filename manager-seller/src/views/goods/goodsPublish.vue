@@ -456,15 +456,7 @@
           weight: '',
 
           /** 商品相册列表 */
-          goods_gallery_list: [
-            {
-              name: 'food.jpeg',
-              url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-            },
-            {
-              name: 'food2.jpeg',
-              url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-            }],
+          goods_gallery_list: [],
 
           /** 用来校验的商品相册 */
           goods_gallery: '',
@@ -615,7 +607,7 @@
     beforeRouteEnter(to, from, next) {
       next(vm => {
         if (vm.$route.query && vm.$route.query.goodsid) {
-          vm.currentStatus = vm.$route.query.isdraft || 0
+          vm.currentStatus = parseInt(vm.$route.query.isdraft) || 0
           vm.activeGoodsId = vm.$route.query.goodsid
           vm.activestep = vm.$route.query.isdraft ? 1 : 0
           if (vm.currentStatus === 1 && vm.$route.query.goodsid) {
@@ -678,7 +670,6 @@
       aboveGoods() {
         // 构造提交表单数据
         const _params = this.generateFormData(this.baseInfoForm)
-        console.log(_params)
         if (this.currentStatus !== 2) {
           /** 正常商品上架 */
           API_goods.aboveGoods(_params).then(response => {
@@ -744,8 +735,22 @@
       GET_GoodData() {
         API_goods.getGoodData(this.activeGoodsId, {}).then((response) => {
           /** 此处完成商品信息赋值 进行判断如果有值的话 */
-          this.baseInfoForm = response
-          console.log(this.baseInfoForm)
+          this.baseInfoForm = {
+            ...response
+          }
+          if (!this.baseInfoForm.exchange || !this.baseInfoForm.exchange.enable_exchange) {
+            this.baseInfoForm.exchange = {
+              /** 积分兑换所属分类 */
+              category_id: 0,
+              /** 是否允许积分兑换  1是 0否*/
+              enable_exchange: 1,
+              /** 兑换所需金额 */
+              exchange_money: 0,
+              /** 积分兑换使用的积分 */
+              exchange_point: 0
+            }
+          }
+          // console.log(this.baseInfoForm)
         }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
       },
 
@@ -762,7 +767,6 @@
         let _params = {
           ...data
         }
-        console.log(_params)
         // 删除不必要的表单数据
         delete _params.goods_gallery
         _params.goods_gallery_list.forEach(key => {
@@ -833,7 +837,6 @@
 
       /** 运费模板改变时触发 */
       changeTpl(val) {
-        console.log(val, 456456)
         // this.baseInfoForm.template_id = val
       },
 
@@ -916,8 +919,7 @@
 
       /** 规格选择器规格数据改变时触发 */
       finalSku(val) {
-        console.log(val, 4564564)
-        // this.baseInfoForm.sku_list
+        this.baseInfoForm.sku_list = val
       }
     }
   }

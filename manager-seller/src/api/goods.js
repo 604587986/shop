@@ -78,7 +78,7 @@ export function reserveStockGoods(goods_id, params) {
       url: `/goods/${goods_id}/quantity`,
       method: 'put',
       data: params,
-      header: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
