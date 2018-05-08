@@ -23,8 +23,8 @@
         <p>头像修改在保存后生效</p>
       </div>
       <el-form :model="profileForm" :rules="profileRules" ref="profileForm" label-width="100px" style="width:350px">
-        <el-form-item label="账户名称" prop="username">
-          <el-input v-model="profileForm.username" size="small" clearable></el-input>
+        <el-form-item label="账户名称" prop="uname">
+          <el-input v-model="profileForm.uname" size="small" clearable></el-input>
         </el-form-item>
         <!--<el-form-item label="真实姓名" prop="truename">-->
           <!--<el-input v-model="profileForm.truename" size="small" clearable></el-input>-->
@@ -87,7 +87,7 @@
         profileForm: JSON.parse(JSON.stringify(this.$store.state.user.user)) || {},
         /** 个人资料 表单规则 */
         profileRules: {
-          username: [
+          uname: [
             { required: true, message: '请输入真实姓名', trigger: 'blur' },
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
