@@ -31,6 +31,7 @@ export function getHotKeywords() {
     request({
       url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/hot-keywords',
       method: 'get',
+      dontCheckToken: true,
       loading: false
     }).then(response => resolve(response.slice(0, 7))).catch(error => reject(error))
   })
@@ -46,6 +47,7 @@ export function getAutoCompleteKeyword(keyword) {
     request({
       url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/auto-complete-keyword',
       method: 'get',
+      dontCheckToken: true,
       loading: false,
       message: false,
       params: {
@@ -64,6 +66,7 @@ export function getNavList() {
     request({
       url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/nav/list',
       method: 'get',
+      dontCheckToken: true,
       loading: false,
       message: false
     }).then(response => resolve(response.slice(0, 8))).catch(error => reject(error))
@@ -79,6 +82,7 @@ export function getCategoryList() {
     request({
       url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/category/list',
       method: 'get',
+      dontCheckToken: true,
       loading: false,
       message: false
     }).then(response => resolve(response.slice(0, 7))).catch(error => reject(error))
