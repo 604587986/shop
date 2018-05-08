@@ -13,7 +13,7 @@
   import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'EnNav',
-    created() {
+    mounted() {
       this.getNavData()
     },
     computed: {

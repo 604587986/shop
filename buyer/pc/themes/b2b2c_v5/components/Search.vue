@@ -46,7 +46,7 @@
         show_autocomplete: false
       }
     },
-    created() {
+    mounted() {
       API_Common.getHotKeywords().then(response => this.hot_keywords = response)
     },
     methods: {

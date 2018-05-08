@@ -60,7 +60,7 @@
         show_dorpdown: false
       }
     },
-    created() {
+    mounted() {
       this.$store.dispatch('cart/getCartDataAction')
     },
     computed: {
