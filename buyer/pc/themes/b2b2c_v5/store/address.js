@@ -73,7 +73,6 @@ export const actions = {
    */
   addAddressAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      console.log(params)
       API_Address.addAddress(params).then(response => {
         commit(types.ADD_ADDRESS, params)
         resolve(response)
@@ -88,7 +87,7 @@ export const actions = {
    */
   editAddressAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_Address.editAddress(params.address_id, params).then(response => {
+      API_Address.editAddress(params.addr_id, params).then(response => {
         commit(types.EDIT_ADDRESS, params)
         resolve(response)
       }).catch(error => reject(error))
@@ -108,14 +107,4 @@ export const actions = {
       }).then(error => reject(error))
     })
   }
-}
-
-/** getters */
-export const getters = {
-  /**
-   * 获取收货地址列表
-   * @param state
-   * @returns {*}
-   */
-  addressList: state => state.address.data
 }

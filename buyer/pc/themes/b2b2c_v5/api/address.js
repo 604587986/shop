@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getAddressList() {
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/address/list',
+    url: 'members/addresses',
     method: 'get'
   })
 }
@@ -21,12 +21,10 @@ export function getAddressList() {
  * @returns {AxiosPromise}
  */
 export function addAddress(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/address',
+    url: 'members/addresses',
     method: 'post',
-    data: _formData
+    data: params
   })
 }
 
@@ -37,12 +35,10 @@ export function addAddress(params) {
  * @returns {AxiosPromise}
  */
 export function editAddress(id, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/address/${id}`,
+    url: `members/address/${id}`,
     method: 'post',
-    data: _formData
+    data: params
   })
 }
 
