@@ -87,7 +87,8 @@ service.interceptors.response.use(
  */
 const closeLoading = (target) => {
   if (target.config.loading) {
-    target.config.loading.close()
+    // 延迟300毫秒关闭loading窗口，避免闪瞎眼
+    setTimeout(() => target.config.loading.close(), 300)
   }
 }
 
