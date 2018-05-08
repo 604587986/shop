@@ -30,7 +30,7 @@
       'en-breadcrumb': Breadcrumb,
       'en-menu': Menu
     },
-    created() {
+    mounted() {
       if (!this.user) this.getUserData()
       if (!this.orderData) this.getOrderData()
       if (!this.goodsCollectionData) this.getGoodsCollectionData()
