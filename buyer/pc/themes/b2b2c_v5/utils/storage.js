@@ -6,6 +6,8 @@ import Cookies from 'js-cookie'
 
 export default {
   setItem: (key, value, options) => {
+    options = options || {}
+    if (!options.path) options.path = '/'
     Cookies.set(key, value, options)
   },
   getItem: (key) => {

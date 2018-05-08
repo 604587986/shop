@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getGoodsCollection(params) {
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/goods/list',
+    url: 'members/collection/goods',
     method: 'get',
     loading: false,
     message: false,
@@ -26,20 +26,21 @@ export function getGoodsCollection(params) {
  */
 export function collectionGoods(goods_id) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/goods/${goods_id}`,
-    method: 'post'
+    url: 'members/collection/goods',
+    method: 'post',
+    data: { goods_id }
   })
 }
 
 /**
  * 删除商品收藏
- * @param ids 商品ID【集合或单个商品ID】
+ * @param ids 收藏ID【集合或单个商品ID】
  * @returns {AxiosPromise}
  */
 export function deleteGoodsCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/goods/${ids}`,
+    url: `members/collection/goods/${ids}`,
     method: 'delete'
   })
 }
@@ -51,7 +52,7 @@ export function deleteGoodsCollection(ids) {
  */
 export function getShopCollection(params) {
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/shop/list',
+    url: 'members/collection/shops',
     method: 'get',
     params
   })
@@ -64,8 +65,9 @@ export function getShopCollection(params) {
  */
 export function collectionShop(shop_id) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/shop/${shop_id}`,
-    method: 'post'
+    url: 'members/collection/shops',
+    method: 'post',
+    data: { shop_id }
   })
 }
 
@@ -77,7 +79,7 @@ export function collectionShop(shop_id) {
 export function deleteShopCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/collection/shop/${ids}`,
+    url: `members/collection/shops/${ids}`,
     method: 'delete'
   })
 }

@@ -5,6 +5,7 @@ import Storage from '@/utils/storage'
 import Foundation from '@/utils/Foundation'
 import MD5 from 'md5'
 import GetFullUrl from '@/utils/urls'
+import checkToken from '@/utils/checkToken'
 const qs = require('qs')
 
 // 创建axios实例
@@ -19,8 +20,8 @@ service.interceptors.request.use(config => {
   if (!/^http/.test(url)) {
     config.url = GetFullUrl(url)
   }
-  /** 如果是post或put请求，用qs.stringify序列化参数 */
-  if (config.method === 'post' || config.method === 'put') {
+  /** 如果是post或put请求，并且Content-Type不为application/json，用qs.stringify序列化参数 */
+  if ((config.method === 'post' || config.method === 'put') && config.headers[config.method]['Content-Type'] !== 'application/json') {
     config.data = qs.stringify(config.data)
   }
   /** 配置全屏加载 */
@@ -59,21 +60,19 @@ service.interceptors.response.use(
   response => {
     closeLoading(response)
     let _data = response.data
-    // if (typeof _data === 'string' && _data.indexOf('window.open(\'/javashop/admin/login.do\',\'_top\')') !== -1) {
-    //   fedLogOut()
-    //   return Promise.reject('登录失效')
-    // }
-    // if (_data.page_no && _data.page_size && _data.data_total) {
-    //   _data = new PaginationModel().map(_data)
-    // }
     return _data
   },
   error => {
     closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
-    // 403 --> 没有登录、登录状态失效
-    if (error_data.code === '109') fedLogOut()
+    // 109 --> 没有登录、登录状态失效
+    if (error_data.code === '109') {
+      Vue.prototype.$message.error('您已被登出！')
+      const { $route, $router } = Vue.prototype.$nuxt
+      $router.push({ path: `/login?forward=${$route.fullPath}` })
+      return Promise.reject(error)
+    }
     let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
     if (error.config.message !== false) {
       Vue.prototype.$message.error(error_data.message || _message)
@@ -88,16 +87,20 @@ service.interceptors.response.use(
  */
 const closeLoading = (target) => {
   if (target.config.loading) {
-    target.config.loading.close()
+    // 延迟300毫秒关闭loading窗口，避免闪瞎眼
+    setTimeout(() => target.config.loading.close(), 300)
   }
 }
 
-/**
- * 已被登出
- */
-function fedLogOut() {
-  Vue.prototype.$message.error('您已被登出！')
-  return Promise.reject(error)
+export default function request(options) {
+  // 如果是服务端或者是请求的刷新token，不需要检查token直接请求。
+  if (process.server || options.url === 'passport/token') {
+    console.log(options.url + ' | 服务端或者是请求的刷新token，不需要检查token直接请求。')
+    return service(options)
+  }
+  return new Promise((resolve, reject) => {
+    checkToken(options).then(() => {
+      service(options).then(resolve).catch(reject)
+    })
+  })
 }
-
-export default service

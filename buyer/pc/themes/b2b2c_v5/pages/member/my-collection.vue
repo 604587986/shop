@@ -8,128 +8,134 @@
     </div>
     <div class="collection-container">
       <div v-show="type === 'goods'" class="goods">
-        <ul>
-          <li
-            v-for="goods in goodsData.data"
-            :key="goods.goods_id"
-            :class="['coll-g-item', goods.show_del_pop && 'del-pop-show']"
-          >
-            <div class="goods-image">
-              <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" target="_blank">
-                <img :src="goods.goods_image" :alt="goods.goods_name">
-              </nuxt-link>
-              <div class="goods-delete" @click="goods.show_del_pop = 1">
-                <i class="iconfont ea-icon-delete"></i>
-              </div>
-              <div class="goods-image-btns">
-                <nuxt-link :to="'/shop/' + goods.shop_id">进入店铺</nuxt-link>
-                <a href="javascript:;" @click="handleAddToCart(goods)">加入购物车</a>
-              </div>
-            </div>
-            <div class="goods-name">
-              <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" target="_blank">
-                {{ goods.goods_name }}
-              </nuxt-link>
-            </div>
-            <div class="goods-price">
-              <div class="price">
-                <span>￥</span>
-                <strong>{{ goods.goods_price | unitPrice }}</strong>
-              </div>
-              <div v-if="goods.goods_original_price" class="original-price">
-                <span>￥</span>
-                <span>{{ goods.goods_original_price | unitPrice }}</span>
-              </div>
-            </div>
-            <div class="del-pop">
-              <div class="del-pop-bg"></div>
-              <div class="del-pop-box">
-                <div class="txt">确定删除？</div>
-                <div class="btns">
-                  <a href="javascript:;" @click="handleDeleteGoodsColl(goods)">确定</a>
-                  <a href="javascript:;" @click="goods.show_del_pop = 0">取消</a>
+        <template v-if="goodsData && goodsData.length > 0">
+          <ul>
+            <li
+              v-for="goods in goodsData.data"
+              :key="goods.goods_id"
+              :class="['coll-g-item', goods.show_del_pop && 'del-pop-show']"
+            >
+              <div class="goods-image">
+                <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" target="_blank">
+                  <img :src="goods.goods_image" :alt="goods.goods_name">
+                </nuxt-link>
+                <div class="goods-delete" @click="goods.show_del_pop = 1">
+                  <i class="iconfont ea-icon-delete"></i>
+                </div>
+                <div class="goods-image-btns">
+                  <nuxt-link :to="'/shop/' + goods.shop_id">进入店铺</nuxt-link>
+                  <a href="javascript:;" @click="handleAddToCart(goods)">加入购物车</a>
                 </div>
               </div>
-            </div>
-          </li>
-          <li class="clr"></li>
-        </ul>
-        <el-pagination
-          v-if="goodsData"
-          layout="prev, pager, next"
-          @current-change="handleGoodsCurrentChange"
-          :total="1000"/>
-      </div>
-      <div v-show="type === 'shop'" class="shop">
-        <ul>
-          <li v-for="shop in shopData.data" :key="shop.shop_id" :class="['coll-s-item', shop.show_del_pop && 'del-pop-show']">
-            <div class="shop-card">
-              <div class="shop-card-side">
-                <nuxt-link :to="'/shop/' + shop.shop_id">
-                  <img :src="shop.seller_avatar" :alt="shop.shop_name">
+              <div class="goods-name">
+                <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" target="_blank">
+                  {{ goods.goods_name }}
                 </nuxt-link>
               </div>
-              <div class="shop-card-main">
-                <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
-                <div class="shop-tools">
-                  <a href="javascript:;" @click="shop.show_del_pop = 1"><i class="iconfont ea-icon-delete"></i></a>
+              <div class="goods-price">
+                <div class="price">
+                  <span>￥</span>
+                  <strong>{{ goods.goods_price | unitPrice }}</strong>
                 </div>
-                <div class="shop-other">
-                  <p style="margin-bottom: 5px">店铺评分：</p>
-                  <p>描述相符: 4.5</p>
-                  <p>服务态度: 4.5</p>
-                  <p>发货速度: 4.5</p>
+                <div v-if="goods.goods_original_price" class="original-price">
+                  <span>￥</span>
+                  <span>{{ goods.goods_original_price | unitPrice }}</span>
                 </div>
               </div>
-            </div>
-            <div class="shop-content">
-              <div class="shop-goods-box">
-                <div class="goods-tab clearfix">
-                  <div v-for="tag in shop.tagList" :key="tag.tag_name" :class="['tab-item', tag.active && 'active']" @click="handleShopTabChanged(shop.tagList, tag)">
-                    {{ tag.tag_name }}
-                    <em>{{ tag.goods_num }}</em>
+              <div class="del-pop">
+                <div class="del-pop-bg"></div>
+                <div class="del-pop-box">
+                  <div class="txt">确定删除？</div>
+                  <div class="btns">
+                    <a href="javascript:;" @click="handleDeleteGoodsColl(goods)">确定</a>
+                    <a href="javascript:;" @click="goods.show_del_pop = 0">取消</a>
                   </div>
                 </div>
-                <nuxt-link :to="'/shop/' + shop.shop_id" class="see-more">查看更多&gt;&gt;</nuxt-link>
               </div>
-              <div class="shop-goods-list">
-                <ul v-for="tag in shop.tagList" :key="tag.tag_name" v-show="tag.active" class="goods-list">
-                  <li v-for="goods in tag.goodsList" :key="goods.goods_id" class="goods-item">
-                    <div class="goods-image">
-                      <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">
-                        <img :src="goods.goods_image" :alt="goods.goods_name">
-                      </nuxt-link>
-                    </div>
-                    <div class="goods-price">
-                      <div class="price">
-                        <span>￥</span>
-                        <strong>{{ goods.goods_price | unitPrice }}</strong>
-                      </div>
-                      <div v-if="goods.goods_original_price" class="original-price">
-                        <span>￥{{ goods.goods_original_price | unitPrice }}</span>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="del-pop">
-              <div class="del-pop-bg"></div>
-              <div class="del-pop-box">
-                <div class="txt">确定删除？</div>
-                <div class="btns">
-                  <a href="javascript:;" @click="handleDeleteShopColl(shop)">确定</a>
-                  <a href="javascript:;" @click="shop.show_del_pop = 0">取消</a>
+            </li>
+            <li class="clr"></li>
+          </ul>
+          <el-pagination
+            v-if="goodsData"
+            layout="prev, pager, next"
+            @current-change="handleGoodsCurrentChange"
+            :total="goodsData.data_total"/>
+        </template>
+        <empty-member v-else>暂无商品收藏</empty-member>
+      </div>
+      <div v-show="type === 'shop'" class="shop">
+        <template v-if="shopData && shopData.length > 0">
+          <ul>
+            <li v-for="shop in shopData.data" :key="shop.shop_id" :class="['coll-s-item', shop.show_del_pop && 'del-pop-show']">
+              <div class="shop-card">
+                <div class="shop-card-side">
+                  <nuxt-link :to="'/shop/' + shop.shop_id">
+                    <img :src="shop.seller_avatar" :alt="shop.shop_name">
+                  </nuxt-link>
+                </div>
+                <div class="shop-card-main">
+                  <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
+                  <div class="shop-tools">
+                    <a href="javascript:;" @click="shop.show_del_pop = 1"><i class="iconfont ea-icon-delete"></i></a>
+                  </div>
+                  <div class="shop-other">
+                    <p style="margin-bottom: 5px">店铺评分：</p>
+                    <p>描述相符: 4.5</p>
+                    <p>服务态度: 4.5</p>
+                    <p>发货速度: 4.5</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-        </ul>
-        <el-pagination
-          v-if="shopData"
-          layout="prev, pager, next"
-          @current-change="handleShopCurrentChange"
-          :total="1000"/>
+              <div class="shop-content">
+                <div class="shop-goods-box">
+                  <div class="goods-tab clearfix">
+                    <div v-for="tag in shop.tagList" :key="tag.tag_name" :class="['tab-item', tag.active && 'active']" @click="handleShopTabChanged(shop.tagList, tag)">
+                      {{ tag.tag_name }}
+                      <em>{{ tag.goods_num }}</em>
+                    </div>
+                  </div>
+                  <nuxt-link :to="'/shop/' + shop.shop_id" class="see-more">查看更多&gt;&gt;</nuxt-link>
+                </div>
+                <div class="shop-goods-list">
+                  <ul v-for="tag in shop.tagList" :key="tag.tag_name" v-show="tag.active" class="goods-list">
+                    <li v-for="goods in tag.goodsList" :key="goods.goods_id" class="goods-item">
+                      <div class="goods-image">
+                        <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">
+                          <img :src="goods.goods_image" :alt="goods.goods_name">
+                        </nuxt-link>
+                      </div>
+                      <div class="goods-price">
+                        <div class="price">
+                          <span>￥</span>
+                          <strong>{{ goods.goods_price | unitPrice }}</strong>
+                        </div>
+                        <div v-if="goods.goods_original_price" class="original-price">
+                          <span>￥{{ goods.goods_original_price | unitPrice }}</span>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="del-pop">
+                <div class="del-pop-bg"></div>
+                <div class="del-pop-box">
+                  <div class="txt">确定删除？</div>
+                  <div class="btns">
+                    <a href="javascript:;" @click="handleDeleteShopColl(shop)">确定</a>
+                    <a href="javascript:;" @click="shop.show_del_pop = 0">取消</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <el-pagination
+            v-if="shopData"
+            layout="prev, pager, next"
+            @current-change="handleShopCurrentChange"
+            :total="shopData.data_total"/>
+        </template>
+        <empty-member v-else>暂无店铺收藏</empty-member>
       </div>
     </div>
   </div>

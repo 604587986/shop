@@ -39,9 +39,9 @@ export const mutations = {
   [types.SET_ACCESS_TOKEN](state, token) {
     state.accessToken = token
     if (process.client) {
-      const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1]
-      Storage.setItem('accessTokenExpires', access_token_time * 1000)
-      Storage.setItem('accessToken', token, {expires: 1})
+      const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(access_token_time)
+      Storage.setItem('accessToken', token, { expires })
     }
   },
   /**
@@ -50,7 +50,6 @@ export const mutations = {
    */
   [types.REMOVE_ACCESS_TOKEN](state) {
     state.accessToken = ''
-    Storage.removeItem('accessTokenExpires')
     process.client && Storage.removeItem('accessToken')
   },
   /**
@@ -61,8 +60,9 @@ export const mutations = {
   [types.SET_REFRESH_TOKEN](state, token) {
     state.refreshToken = token
     if (process.client) {
-      const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1]
-      Storage.setItem('refreshTokenExpires', refresh_token_time * 1000)
+      // const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
+      // const expires = new Date(refresh_token_time)
+      // 不设置失效时间，由后端检测是否失效
       Storage.setItem('refreshToken', token)
     }
   },
@@ -72,7 +72,6 @@ export const mutations = {
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
     state.refreshToken = ''
-    Storage.removeItem('refreshTokenExpires')
     process.client && Storage.removeItem('refreshToken')
   }
 }
