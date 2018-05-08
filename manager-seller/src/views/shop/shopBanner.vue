@@ -164,14 +164,14 @@
       /** 保存幻灯片*/
       POST_SaveSlide() {
         // 构造query数据
-        const _silde_url = this.tableData.map(key => { return key.shop_banner_link })
-        const _img = this.tableData.map(key => { return key.shop_banner_image })
-        const _silde_id = this.tableData.map(key => { return key.shop_banner_id || 0 })
-        const _params = {
-          silde_url: _silde_url,
-          img: _img,
-          silde_id: _silde_id
-        }
+        console.log(this.tableData)
+        const _params = this.tableData.map(key => {
+          return {
+            img: key.shop_banner_image,
+            silde_url: key.shop_banner_link,
+            silde_id: key.shop_banner_id || ''
+          }
+        })
         console.log(_params)
         API_ShopSlide.saveShopSlide(_params).then(response => {
           this.$message.success('保存成功')
