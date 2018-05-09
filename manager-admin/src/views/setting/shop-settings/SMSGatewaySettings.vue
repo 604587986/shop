@@ -1,11 +1,15 @@
 <template>
   <div>
     <en-tabel-layout
-      :toolbar="false"
       pagination
       :tableData="tableData"
       :loading="loading"
     >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns">
+          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddSmsGateway">添加</el-button>
+        </div>
+      </div>
       <template slot="table-columns">
         <el-table-column prop="name" label="平台名称"/>
         <el-table-column label="启用状态">
@@ -79,6 +83,9 @@
         this.params.page_no = page
         this.GET_SmsGatewayList()
       },
+
+      /** 添加短信网关 */
+      handleAddSmsGateway() {},
 
       /** 修改短信网关 */
       handleEditSmsGateway(index, row) {},

@@ -13,7 +13,7 @@ import StorageSolutionModel from '@/models/StorageSolutionModel'
 export function getStorageSolutionList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/system/uploaders',
+      url: 'system/uploaders',
       method: 'get',
       loading: false,
       params
@@ -26,18 +26,38 @@ export function getStorageSolutionList(params) {
 }
 
 /**
+ * 添加储存方案
+ * @param params
+ * @returns {*}
+ */
+export function addStorageSolution(params) {
+  return request({
+    url: 'system/uploaders',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 获取储存方案配置项
+ * @param code
+ * @returns {*}
+ */
+export function getStorageSolutionConfig(code) {
+  return request({
+    url: `system/uploaders/${code}/setting`,
+    method: 'get'
+  })
+}
+
+/**
  * 开启储存方案
  * @param id
- * @returns {Promise<any>}
+ * @returns {*}
  */
 export function openStorageSolutionById(id) {
-  const _formData = new FormData()
-  _formData.append(id, null)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shop-core/admin/uploader/set-open.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `system/uploaders/${id}/open`,
+    method: 'post'
   })
 }

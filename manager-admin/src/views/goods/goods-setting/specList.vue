@@ -3,7 +3,7 @@
     <en-tabel-layout
       toolbar
       pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
       :selection-change="handleSelectionChange"
     >
@@ -45,14 +45,14 @@
       </template>
       <el-pagination
         slot="pagination"
-        v-if="pageData"
+        v-if="tableData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
@@ -81,30 +81,22 @@
       :visible.sync="dialogSpecValuesVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      title="编辑规格值"
       width="500px"
       class="spec-values-dialog"
     >
-      <span slot="title" class="el-dialog__title">
-        编辑规格值
-        <el-button type="text" size="mini" style="margin-left: 5px" @click="handleAddSpecValue">添加</el-button>
-      </span>
-      <el-table
-        :data="specValues"
-        style="width: 100%"
-        :header-cell-style="{textAlign: 'center'}"
-        :cell-style="{textAlign: 'center'}"
-      >
-        <el-table-column label="规格值">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.value"></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="150">
-          <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="handleDeleteSpecValue(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-select
+        v-model="specValues"
+        multiple
+        filterable
+        allow-create
+        default-first-option
+        no-data-text="添加规格值"
+        placeholder="输入后回车添加，且不可重复"
+        :popper-append-to-body="false"
+        popper-class="spec-values-popper"
+        class="spec-values-select"
+      />
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSpecValuesVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitSpecValuesForm">确 定</el-button>
@@ -134,10 +126,7 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
+        tableData: '',
 
         /** 被选数据 */
         selectedData: [],
@@ -158,25 +147,16 @@
           name: [
             { required: true, message: '请输入规格名称', trigger: 'blur' },
             { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
-          ],
-          memo: [
-            { required: true, message: '请输入规格备注', trigger: 'blur' },
-            { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
           ]
         },
         /** 编辑规格值 dialog */
         dialogSpecValuesVisible: false,
+        /** 现有规格值 */
+        selectedSpecValues: [],
         /** 编辑规格值 */
         specValues: [],
         /** 当前修改规格值的规格id */
-        cur_spec_id: 0,
-        /** 规格值 规则*/
-        specValuesRules: {
-          value: [
-            { required: true, message: '请输入规格值', trigger: 'blur' },
-            { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
-          ]
-        }
+        cur_spec_id: 0
       }
     },
     mounted() {
@@ -203,9 +183,7 @@
       /** 添加规格事件触发 */
       handleAddSpecs() {
         this.specForm = {
-          form_type: 'add',
-          name: '',
-          memo: ''
+          form_type: 'add'
         }
         this.dialogSpecTitle = '添加规格'
         this.dialogSpecVisible = true
@@ -243,20 +221,9 @@
       handleEditSpecVal(index, row) {
         API_spec.getSpecValues(row.id).then(response => {
           this.cur_spec_id = row.id
-          this.specValues = response.map(item => {
-            return { value: item.spec_value }
-          })
+          this.specValues = response.map(item => item.spec_value)
           this.dialogSpecValuesVisible = true
         })
-      },
-
-      /** 添加规格值 */
-      handleAddSpecValue() {
-        this.specValues.push({ value: '' })
-      },
-      /** 删除规格值 */
-      handleDeleteSpecValue(index, row) {
-        this.specValues.splice(index, 1)
       },
 
       /** 搜索事件触发 */
@@ -274,14 +241,16 @@
           if (valid) {
             if (this.specForm.form_type === 'add') {
               API_spec.addSpec(this.specForm).then(response => {
-                this.$message.success('添加成功！')
                 this.dialogSpecVisible = false
+                this.$message.success('添加成功！')
+                this.$refs[formName].resetFields()
                 this.GET_SpecsList()
               })
             } else {
               API_spec.eidtSpec(this.specForm.id, this.specForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogSpecVisible = false
+                this.$refs[formName].resetFields()
                 this.GET_SpecsList()
               })
             }
@@ -293,24 +262,11 @@
       },
 
       /** 修改规格值 表单提交 */
-      submitSpecValuesForm(formName) {
-        let flag = true
-        const _list = []
-        this.specValues.every(item => {
-          if (item.value === '') {
-            this.$message.error('表单填写有误，请检查！')
-            flag = false
-          } else {
-            _list.push(item.value)
-          }
-          return flag
+      submitSpecValuesForm() {
+        API_spec.saveSpecValues(this.cur_spec_id, this.specValues).then(response => {
+          this.$message.success('保存成功！')
+          this.dialogSpecValuesVisible = false
         })
-        if (flag) {
-          API_spec.saveSpecValues(this.cur_spec_id, _list).then(response => {
-            this.$message.success('保存成功！')
-            this.dialogSpecValuesVisible = false
-          })
-        }
       },
 
       /** 获取规格列表 */
@@ -318,15 +274,9 @@
         this.loading = true
         API_spec.getSpecs(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
+          this.tableData = response
+        }).catch(() => {
           this.loading = false
-          console.log(error)
         })
       },
 
@@ -354,5 +304,12 @@
   }
   /deep/ .spec-values-dialog {
     .el-dialog__body { padding: 0 20px }
+  }
+  /deep/ .spec-values-select {
+    width: 100%;
+    .el-input__suffix, .spec-values-popper { display: none }
+    .el-input--suffix .el-input__inner { padding-right: 0 }
+    .el-select__tags { max-width: 100% !important; }
+    .el-select__tags-text { user-select: none }
   }
 </style>

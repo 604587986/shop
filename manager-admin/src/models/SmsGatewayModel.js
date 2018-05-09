@@ -13,7 +13,7 @@ import {
 
 export default class SmsGatewayModel extends DataModel {
   /** 短信网关代码 */
-  @ServerName('code')
+  @ServerName('bean')
   code
 
   /** 短信网关配置 */
@@ -25,10 +25,10 @@ export default class SmsGatewayModel extends DataModel {
   id
 
   /** 短信网关是否开启 */
-  @ServerName('is_open')
+  @ServerName('open')
   is_open
 
   /** 短信网关名称 */
-  @ServerName('platform_name')
+  @ServerName('name')
   name
 }

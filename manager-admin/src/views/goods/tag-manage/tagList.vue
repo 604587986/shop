@@ -216,8 +216,8 @@
           if (valid) {
             if (this.tagForm.form_type === 'add') {
               API_tag.addTag(this.tagForm).then(response => {
-                this.$message.success('添加成功！')
                 this.dialogTagVisible = false
+                this.$message.success('添加成功！')
                 this.GET_TagList()
               }).catch(error => console.log(error))
             } else {

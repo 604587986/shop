@@ -27,29 +27,27 @@ export function getGoodsList(params) {
 
 /**
  * 下架商品
- * @param goods_id
- * @param reason
- * @returns {Promise<any>}
+ * @param goods_id 商品ID
+ * @param reason 下架原因
+ * @returns {*}
  */
 export function underGoods(goods_id, reason) {
-  const _formData = new FormData()
-  _formData.append('reason', reason)
   return request({
     url: `/goods/${goods_id}/under`,
-    method: 'post',
-    data: _formData
+    method: 'put',
+    data: { reason }
   })
 }
 
 /**
  * 上架商品
- * @param goods_id
+ * @param goods_id 商品ID
  * @returns {*}
  */
 export function upGoods(goods_id) {
   return request({
     url: `/goods/${goods_id}/up`,
-    method: 'post'
+    method: 'put'
   })
 }
 
@@ -80,12 +78,9 @@ export function getAuditGoods(params) {
  * @returns {*}
  */
 export function auditGoods(goods_id, params) {
-  const _formData = new FormData()
-  _formData.append('pass', params.pass)
-  _formData.append('message', params.message)
   return request({
     url: `goods/${goods_id}/auth`,
-    method: 'post',
-    data: _formData
+    method: 'put',
+    data: params
   })
 }

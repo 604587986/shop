@@ -77,7 +77,7 @@
         </el-form-item>
         <el-form-item label="品牌图片" prop="logo">
           <el-upload
-            :action="upload_api"
+            :action="MixinUploadApi"
             list-type="picture"
             :on-success="onImgUploadSuccess"
             :on-remove="onImgRemoved"
@@ -104,7 +104,6 @@
 
 <script>
   import * as API_brand from '@/api/brand'
-  import * as API_Common from '@/api/common'
   import { TableLayout, TableSearch } from '@/components'
   export default {
     name: 'brandList',
@@ -153,10 +152,11 @@
           name: [
             { required: true, message: '请输入品牌名称', trigger: 'blur' },
             { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+          ],
+          logo: [
+            { required: true, message: '请上传品牌logo' }
           ]
-        },
-        /** 上传API */
-        upload_api: API_Common.getUploadApi()
+        }
       }
     },
     mounted() {
@@ -196,7 +196,7 @@
 
       /** 图片上传成功触发 */
       onImgUploadSuccess(response) {
-        this.brandForm.logo = response
+        this.brandForm.logo = response.url
       },
       /** 图片移除触发 */
       onImgRemoved() {
@@ -236,8 +236,6 @@
       /** 添加品牌触发事件 */
       handleAddBrand() {
         this.brandForm = {
-          name: '',
-          logo: '',
           form_type: 'add',
           imgFileList: []
         }
@@ -249,20 +247,18 @@
       submitBrandForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (!this.brandForm.logo) {
-              this.$message.error('您还没有上传品牌LOGO，请检查！')
-              return
-            }
             if (this.brandForm.form_type === 'add') {
               API_brand.addBrand(this.brandForm).then(() => {
-                this.$message.success('添加成功！')
                 this.dialogBrandVisible = false
+                this.$message.success('添加成功！')
+                this.$refs[formName].resetFields()
                 this.GET_BrandList()
               })
             } else {
               API_brand.editBrand(this.brandForm.id, this.brandForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogBrandVisible = false
+                this.$refs[formName].resetFields()
                 this.GET_BrandList()
               })
             }

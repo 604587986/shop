@@ -18,7 +18,4 @@ export function getValidateCodeUrl(type) {
  * 图片上传API
  * @type {string}
  */
-export function getUploadApi() {
-  // return `${process.env.BASE_API}/core/upload.do`
-  return `http://localhost:9090/javashop/core/upload.do`
-}
+export const uploadApi = 'http://yiqisi.s1.natapp.cc/base-api/uploaders'

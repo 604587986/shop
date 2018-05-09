@@ -1,11 +1,15 @@
 <template>
   <div>
     <en-tabel-layout
-      :toolbar="false"
       pagination
-      :tableData="storageSolutionData.data"
+      :tableData="tableData.data"
       :loading="loading"
     >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns">
+          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddStorageSolution">添加</el-button>
+        </div>
+      </div>
       <template slot="table-columns">
         <el-table-column prop="name" label="储存方案名称"/>
         <el-table-column label="启用状态">
@@ -25,14 +29,14 @@
       </template>
       <el-pagination
         slot="pagination"
-        v-if="pageData"
+        v-if="tableData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
         :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
         :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="storageSolutionData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
   </div>
@@ -58,7 +62,7 @@
         },
 
         /** 储存方案列表数据 */
-        storageSolutionData: ''
+        tableData: ''
       }
     },
     mounted() {
@@ -77,6 +81,9 @@
         this.GET_StorageSolutiontList()
       },
 
+      /** 添加储存方案 */
+      handleAddStorageSolution() {},
+
       /** 开启储存方案 */
       handleOpenStorageSolution(index, row) {
         API_StorageSolution.openStorageSolutionById(row.code).then(response => {
@@ -93,7 +100,7 @@
         this.loading = true
         API_StorageSolution.getStorageSolutionList(this.params).then(response => {
           this.loading = false
-          this.storageSolutionData = response
+          this.tableData = response
         }).catch(() => (this.loading = false))
       }
     }

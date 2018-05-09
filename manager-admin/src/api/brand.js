@@ -28,32 +28,23 @@ export function getBrandList(params) {
 /**
  * 添加品牌
  * @param params
- * @returns {Promise<any>}
  */
 export function addBrand(params) {
-  const _formData = new FormData()
-  _formData.append('name', params.name)
-  _formData.append('logo', params.logo)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'goods/brands',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'goods/brands',
+    method: 'post',
+    data: params
   })
 }
 
 /**
  * 获取品牌详情
  * @param id
- * @returns {Promise<any>}
  */
 export function getBrandDetail(id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/brands/${id}`,
-      method: 'get'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/brands/${id}`,
+    method: 'get'
   })
 }
 
@@ -61,18 +52,12 @@ export function getBrandDetail(id) {
  * 编辑品牌
  * @param id
  * @param params
- * @returns {Promise<any>}
  */
 export function editBrand(id, params) {
-  const _formData = new FormData()
-  _formData.append('name', params.name)
-  _formData.append('logo', params.logo)
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/brands/${id}`,
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/brands/${id}`,
+    method: 'put',
+    data: params
   })
 }
 
@@ -83,11 +68,9 @@ export function editBrand(id, params) {
  */
 export function deleteBrand(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/brands/${ids}`,
-      method: 'delete'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/brands/${ids}`,
+    method: 'delete'
   })
 }
 
