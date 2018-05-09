@@ -26,8 +26,8 @@
         <div v-for="(param, index) in group.params" :key="param.param_id" class="param-item">
           <span>{{ param.param_name }} 【{{ param.param_type | paramTypeFilter }}】</span>
           <span>
-            <el-button type="text" size="mini" @click="handleEditParam(param, group)">编辑</el-button>
-            <el-button type="text" size="mini" style="color: #F56C6C" @click="handleDeleteParam(param)">删除</el-button>
+            <el-button type="text" size="mini" @click="handleEditParam(group, param)">编辑</el-button>
+            <el-button type="text" size="mini" style="color: #F56C6C" @click="handleDeleteParam(group, param)">删除</el-button>
             <el-button :disabled="index === 0" type="text" size="mini" @click="handleSortParam('up', group, param)">上移</el-button>
             <el-button :disabled="index === group.params.length - 1" type="text" size="mini" @click="handleSortParam('down', group, param)">下移</el-button>
           </span>
@@ -204,7 +204,7 @@
         this.dialogParamsVisible = true
       },
       /** 编辑参数 */
-      handleEditParam(params, group) {
+      handleEditParam(group, params) {
         this.paramForm = {
           ...params,
           group_id: group.group_id,
@@ -213,10 +213,10 @@
         this.dialogParamsVisible = true
       },
       /** 删除参数 */
-      handleDeleteParam(param) {
+      handleDeleteParam(group, param) {
         this.$confirm('确定要删除这个参数吗？', '提示', { type: 'warning' }).then(() => {
           API_Params.deleteParams(param.param_id).then(() => {
-            this.GET_CategoryParamsGroup()
+            group.params.splice(group.params.findIndex(item => item === param), 1)
             this.$message.success('删除成功！')
           })
         }).catch(() => {})
