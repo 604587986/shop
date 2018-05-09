@@ -84,7 +84,7 @@
 <script>
   import * as API_ShopNav from '@/api/shopNav'
   import { TableLayout, TableSearch } from '@/components'
-  import { validateLink } from '@/utils/validate'
+  import { validateURL } from '@/utils/validate'
   export default {
     name: 'shopNav',
     components: {
@@ -92,10 +92,10 @@
       [TableSearch.name]: TableSearch
     },
     data() {
-      var validLink = (rule, value, callback) => {
+      var validateURL = (rule, value, callback) => {
         if (!value) {
           callback(new Error('请输入链接地址'))
-        } else if (!validateLink(value)) {
+        } else if (!validateURL(value)) {
           callback(new Error('请输入正确的完整链接地址'))
         } else {
           callback()
@@ -144,7 +144,7 @@
             { required: true, message: '请填写排序', trigger: 'blur' }
           ],
           shop_nav_url: [
-            { validator: validLink, trigger: 'blur' }
+            { validator: validateURL, trigger: 'blur' }
           ]
         }
       }
