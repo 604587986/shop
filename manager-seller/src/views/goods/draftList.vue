@@ -146,9 +146,9 @@
 
       /** 草稿箱编辑 */
       handleDraftEdit(row) {
-        const _goods_id = row.goods_id || '0'
+        const _draft_goods_id = row.draft_goods_id || '0'
         // isdraft 草稿箱2
-        this.$router.push({ path: '/goods/good-publish', query: { goodsid: _goods_id, isdraft: 2 }})
+        this.$router.push({ path: '/goods/good-publish', query: { goodsid: _draft_goods_id, isdraft: 2 }})
       },
 
       /** 草稿箱商品删除 */
@@ -158,11 +158,13 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(row)
-          API_goods.deleteDraftGoods(row.goods_id, {}).then(() => {
+          API_goods.deleteDraftGoods(row.draft_goods_id, {}).then((response) => {
+            console.log(response)
             this.GET_DraftGoodsList()
             this.$message.success('删除草稿箱商品成功！')
-          }).catch(() => this.$message.error('删除草稿箱商品出错，请稍后再试！'))
+          }).catch((error) => {
+            this.$message.error(error)
+          })
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })

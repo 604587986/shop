@@ -3,7 +3,7 @@
     <!--规格选择-->
     <sku-item
       :goodsId="goodsId"
-      :goodsSkuInfo="goodsSkuInfo"
+      :productSkuInfo="productSkuInfo"
       :categoryId="categoryId"
       @updateSkuInfo="updateSkuInfo"
     ></sku-item>
@@ -44,10 +44,16 @@
       },
 
       /** 商品规格信息 */
-      goodsSkuInfo: []
+      goodsSkuInfo: {
+        type: Array,
+        default: []
+      }
     },
     data() {
       return {
+        /** 编辑时 传进来的商品规格信息计算之后的规格选择数据 */
+        productSkuInfo: [],
+
         /** 标准数据  请求回来的数据库现存规格数据 */
         skuData: [],
 
@@ -73,14 +79,33 @@
         choiceData: []
       }
     },
-    mounted() {
-      /** 赋值给选择数据 同时计算表格数据 */
-      if (Array.isArray(this.goodsSkuInfo) && this.goodsSkuInfo.length > 0) {
-        this.skuInfo = this.goodsSkuInfo
-        this.updateSkuInfo(this.skuInfo)
+    watch: {
+      goodsSkuInfo() {
+        this.chooseData()
       }
     },
     methods: {
+      /** 构造规格选择项所需数据的spec_id spec_value_id 数据*/
+      chooseData() {
+        if (this.goodsSkuInfo && Array.isArray(this.goodsSkuInfo) && this.goodsSkuInfo.length > 0) {
+          const _skuInfo = []
+          this.goodsSkuInfo.forEach(key => {
+            key.spec_list.forEach((item, index) => {
+              /** 如果spec_id存在 则不再添加sepc_id 只添加对应的spec_value_id  */
+              if (_skuInfo[index] && _skuInfo[index].spec_id && _skuInfo[index].spec_id === item.spec_id) {
+                _skuInfo[index].value_list.push({ ...item })
+              } else {
+                _skuInfo.push({
+                  spec_id: item.spec_id,
+                  value_list: [{ ...item }]
+                })
+              }
+            })
+          })
+          this.productSkuInfo = _skuInfo
+        }
+      },
+
       /** 计算最终数据 */
       finalData() {
         /** 在此处可抛出最终数据 */
@@ -114,6 +139,7 @@
 
       /** 更新规格选择部分skuInfo数据 */
       updateSkuInfo(target) {
+        debugger
         /** 计算选择数据 */
         let _target = target.map(key => { return key.value_list })
         this.choiceData = this.printResult(this.combination(..._target))[0]

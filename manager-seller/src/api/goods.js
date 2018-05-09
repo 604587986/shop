@@ -47,7 +47,7 @@ export function deleteGoods(ids, params) {
 }
 
 /**
- * 查询库存商品数据
+ * 查询库存商品数据  查询商品sku（规格）信息
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -232,7 +232,7 @@ export function aboveGoods(params) {
       url: '/goods',
       method: 'post',
       data: params,
-      header: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))

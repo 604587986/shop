@@ -136,7 +136,11 @@
           <div>
             <el-form-item label="商品规格："  style="width: 90%;text-align: left;">
               <!--规格选择器-->
-               <en-sku-selector :goodsId="activeGoodsId" :categoryId="categoryID" @finalSku="finalSku"></en-sku-selector>
+               <en-sku-selector
+                 :goodsId="activeGoodsId"
+                 :categoryId="categoryID"
+                 :goodsSkuInfo="skuList"
+                 @finalSku="finalSku"></en-sku-selector>
             </el-form-item>
             <el-form-item label="总库存：" prop="quantity" style="width: 20%;text-align: left;">
               <el-input v-model="baseInfoForm.quantity" disabled></el-input>
@@ -513,6 +517,9 @@
           intro: ''
         },
 
+        /** 用来向组件中传递的数据 */
+        skuList: [],
+
         /** 请求的商品参数组列表 */
         goodsParams: [
           {
@@ -615,7 +622,7 @@
             vm.GET_GoodDraftData()
           }
           // 查询商品参数
-          // vm.GET_GoodsParams()
+          vm.GET_GoodsParams()
         } else {
           vm.GET_NextLevelCategory()
         }
@@ -655,6 +662,8 @@
                 return
               }
               if (this.activestep++ > 2) return
+            } else {
+              this.$message.error('表单中存在未填写的值')
             }
           })
           return
@@ -749,6 +758,9 @@
             ...response
           }
           /** 商品相册校验属性 */
+          this.baseInfoForm.goods_gallery_list.forEach(key => {
+            this.$set(key, 'url', key.small)
+          })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list) {
@@ -767,7 +779,19 @@
               exchange_point: 0
             }
           }
-        }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
+          API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
+            /** 构造临时规格数据 */
+            this.skuList = response.map(key => {
+              const spec_list = key.spec_list.map(item => {
+                let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
+                return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+              })
+              let { cost, quantity, sn, weight } = key
+              const price = key.goods_price
+              return { cost, price, quantity, sn, weight, spec_list }
+            })
+          }).catch((error) => this.$message.error(error))
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 商家下架商品*/
@@ -795,11 +819,39 @@
 
       /** 查询单个草稿箱商品信息 */
       GET_GoodDraftData() {
-        // this.loading = true
-        API_goods.getGoodDraftData(this.activeGoodsId, { }).then((response) => {
-          this.loading = false
+        API_goods.getGoodDraftData(this.activeGoodsId, {}).then((response) => {
+          /** 此处完成商品信息赋值 进行判断如果有值的话 */
+          this.baseInfoForm = {
+            ...response
+          }
+          /** 商品相册校验属性 */
+          this.baseInfoForm.goods_gallery_list.forEach(key => {
+            this.$set(key, 'url', key.small)
+          })
+          this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+          /** 商品规格校验属性  */
+          if (!this.baseInfoForm.sku_list) {
+            this.baseInfoForm.sku_list = []
+          }
+          /** 积分相关设置 如果没有积分相关则设置为空 */
+          if (!this.baseInfoForm.exchange || !this.baseInfoForm.exchange.enable_exchange) {
+            this.baseInfoForm.exchange = {
+              /** 积分兑换所属分类 */
+              category_id: 0,
+              /** 是否允许积分兑换  1是 0否*/
+              enable_exchange: 1,
+              /** 兑换所需金额 */
+              exchange_money: 0,
+              /** 积分兑换使用的积分 */
+              exchange_point: 0
+            }
+          }
           this.baseInfoForm = response.data
-        }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
+          // debugger
+          // API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
+          //   debugger
+          // }).catch((error) => this.$message.error(error))
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 查询商品参数 */
@@ -942,17 +994,19 @@
             this.baseInfoForm.quantity += parseInt(key.quantity)
           }
         })
-        // 删除 因为对象浅拷贝造成的字段冗余（不必要的字段）
+        /** 删除 因为对象浅拷贝造成的字段冗余（不必要的字段）*/
         val.forEach(key => {
           key.spec_list.forEach(item => {
-            item.cost && delete item.cost
-            item.price && delete item.price
-            item.quantity && delete item.quantity
-            item.sn && delete item.sn
-            item.weight && delete item.weight
+            delete item.cost
+            delete item.price
+            delete item.quantity
+            delete item.sn
+            delete item.weight
           })
         })
         this.baseInfoForm.sku_list = val
+        /** 数据变化 */
+        this.baseInfoForm.has_changed = 1
       }
     }
   }
