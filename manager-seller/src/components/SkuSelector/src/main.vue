@@ -135,6 +135,8 @@
           })
         })
         this.skuInfo = this.printResult(this.combination(...obj))[1]
+        // 完成规格选择和计算之后 可抛出一次最终数据
+        this.skuTable(this.skuInfo)
       },
 
       /** 重组数据*/

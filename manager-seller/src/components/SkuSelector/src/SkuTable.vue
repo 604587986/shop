@@ -18,8 +18,15 @@
               <span v-else> {{ scope.row[item] }}</span>
             </span>
             <div v-else class="input-error-model">
-              <el-input  v-model.number="scope.row[item]" @blur="updateSkuTable(index)"></el-input>
-              <span class="input-error" v-show="index == activecloum">{{ valadatxt }}</span>
+              <el-input
+                v-model.number="scope.row[item]"
+                @input="updateSkuTable(index, scope, item)"
+                @blur="updateSkuTable(index, scope, item)">
+              </el-input>
+              <span
+                class="input-error"
+                v-show="isValidate(index, scope)">{{ valadatxt }}
+              </span>
             </div>
           </template>
         </el-table-column>
@@ -93,8 +100,8 @@
         /** 固定列校验提示内容 */
         valadatxt: '请输入数字值',
 
-        /** 当前点击的列的index */
-        activecloum: 0
+        /** 存储未通过校验的单元格位置  */
+        validateError: []
       }
     },
     methods: {
@@ -136,7 +143,7 @@
       /** 计算要合并列的位置 */
       concactArrayCom(index, item) {
         let _isMerge = false
-        /** 循环列 先循环第一列 若相同则合并 再循环第二列 依次循环 若不相同 则不合并 终止循环 */
+        /** 循环列 先循环第一列 若相同则合并 再循环第二列 依次循环 若不相同 则不合并并终止此列循环开始下一列循环 */
         let _currnetRow = []
         for (let i = 0, _len = this.tablehead.length - 5; i < _len; i++) {
           if (this.tablehead[i] === 'spec_value_id') {
@@ -158,6 +165,13 @@
           }
         }
         this.concactArray.push(_currnetRow)
+      },
+
+      /** 检测是否未通过数字校验 */
+      isValidate(index, scope) {
+        return this.validateError.some(key => {
+          return key[0] === index && key[1] === scope.$index
+        })
       },
 
       /** 批量设置价格*/
@@ -188,11 +202,24 @@
       },
 
       /** 数据改变之后 抛出数据 */
-      updateSkuTable(index) {
+      updateSkuTable(index, scope, item) {
         /** 进行自定义校验 */
-        this.activecloum = index
+        if (!Number.isInteger(scope.row[item]) && item !== 'sn') {
+          this.validateError.push([index, scope.$index])
+        } else {
+          this.validateError.forEach((key, _index) => {
+            if (key[0] === index && key[1] === scope.$index) {
+              this.validateError.splice(_index, 1)
+            }
+          })
+        }
         /** 异步更新skuInfo数据 */
         this.$emit('skuTable', this.tableData)
+      },
+
+      /** 生成货号 */
+      produceSn() {
+
       }
     }
   }
@@ -207,9 +234,6 @@
     justify-content: flex-start;
     align-items: center;
   }
-  .input-error-model {
-    padding-bottom: 15px;
-  }
   /*带校验模块*/
   .input-error-model {
     display: flex;
@@ -219,5 +243,18 @@
     align-items: stretch;
     color: red;
     line-height: 16px;
+    margin-bottom: 20px;
+    span {
+      color: #f56c6c;
+      font-size: 12px;
+      line-height: 1;
+      padding-top: 4px;
+      position: absolute;
+      top: 60%;
+      left: 6%;
+    }
+  }
+  /deep/ .validat_error {
+    border-color: red;
   }
 </style>
