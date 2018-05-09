@@ -166,7 +166,6 @@
       /** 编辑分类 */
       handleEditCat(cat) {
         const { parentData } = cat
-        console.log(cat)
         this.catForm = {
           ...this.catForm,
           form_type: 'eidt',
@@ -182,7 +181,7 @@
       },
       /** 图片上传成功时 */
       onImgUploadSuccess(res) {
-        this.catForm.category_image = res
+        this.catForm.category_image = res.url
       },
       /** 图片被移除时 */
       onImgRemove() {
@@ -197,12 +196,14 @@
               API_category.addCategory(this.catForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
+                this.$refs[formName].resetFields()
                 this.handleRefresh()
               })
             } else {
               API_category.editCategory(this.catForm.category_id, this.catForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
+                this.$refs[formName].resetFields()
                 this.handleRefresh()
               })
             }
@@ -227,8 +228,8 @@
             brandList: response,
             selectedBrandList: response.filter(item => item.selected).map(item => item.id)
           }
+          this.dialogBrandVisible = true
         }).catch(error => console.log(error))
-        this.dialogBrandVisible = true
       },
 
       /** 编辑关联品牌 表单提交 */
@@ -258,8 +259,8 @@
             specsList: response,
             selectedSpecsList: response.filter(item => item.selected).map(item => item.id)
           }
+          this.dialogSpecsVisible = true
         }).catch(error => console.log(error))
-        this.dialogSpecsVisible = true
       },
       /** 编辑关联规格 表单提交 */
       submitSpecsForm(formName) {

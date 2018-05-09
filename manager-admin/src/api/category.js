@@ -54,20 +54,14 @@ export function getBrandByCategoryId(category_id) {
 
 /**
  * 编辑分类关联品牌
- * @param category_id
- * @param params
- * @returns {Promise<any>}
+ * @param category_id 分类ID
+ * @param choose_brands 品牌数组
  */
-export function editCategoryBrand(category_id, params) {
-  const _formData = new FormData()
-  params.forEach(item => _formData.append('choose_brands', item))
-  _formData.append('category_id', category_id)
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/categories/${category_id}/brands`,
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function editCategoryBrand(category_id, choose_brands) {
+  return request({
+    url: `goods/categories/${category_id}/brands`,
+    method: 'put',
+    data: { choose_brands }
   })
 }
 
@@ -77,58 +71,47 @@ export function editCategoryBrand(category_id, params) {
  * @returns {Promise<any>}
  */
 export function getSpecsByCategoryId(category_id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/categories/${category_id}/specs`,
-      method: 'get'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/categories/${category_id}/specs`,
+    method: 'get'
   })
 }
 
 /**
  * 编辑分类关联规格
- * @param category_id
- * @param params
- * @returns {Promise<any>}
+ * @param category_id 分类ID
+ * @param choose_specs 规格数组
+ * @returns {*}
  */
-export function editCategorySpecs(category_id, params) {
-  const _formData = new FormData()
-  params.forEach(item => _formData.append('choose_specs', item))
-  _formData.append('category_id', category_id)
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/categories/${category_id}/specs`,
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function editCategorySpecs(category_id, choose_specs) {
+  return request({
+    url: `goods/categories/${category_id}/specs`,
+    method: 'put',
+    data: { choose_specs }
   })
 }
 
 /**
  * 删除分类
  * @param ids
- * @returns {Promise<any>}
+ * @returns {*}
  */
 export function deleteCategory(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/categories/${ids}`,
-      method: 'delete'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/categories/${ids}`,
+    method: 'delete'
   })
 }
 
 /**
  * 获取分类关联的参数
- * @param category_id
- * @returns {Promise<any>}
+ * @param category_id 分类ID
+ * @returns {*}
  */
 export function getCategoryParams(category_id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/categories/${category_id}/param`,
-      method: 'get'
-    }).then(response => resolve(response))
+  return request({
+    url: `goods/categories/${category_id}/param`,
+    method: 'get'
   })
 }
