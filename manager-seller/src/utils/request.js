@@ -30,7 +30,7 @@ service.interceptors.request.use(config => {
   }
   /** 进行参数序列化 */
   if ((config.method === 'put' || config.method === 'post') && config.headers['Content-Type'] !== 'application/json') {
-    config.data = qs.stringify(config.data)
+    config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   return config
 }, error => {
