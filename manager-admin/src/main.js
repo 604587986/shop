@@ -35,7 +35,7 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
-// register global utility mixin.
+// register global utility mixins.
 import mixin from './utils/mixin'
 Vue.mixin(mixin)
 
