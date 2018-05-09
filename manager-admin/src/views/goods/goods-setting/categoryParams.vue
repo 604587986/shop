@@ -9,7 +9,7 @@
         <el-button type="text" size="mini" @click="addGroupForm.show = false">取消</el-button>
       </div>
     </div>
-    <el-card v-for="group in paramsGroup" :key="group.group_id">
+    <el-card v-for="(group, index) in paramsGroup" :key="group.group_id">
       <div slot="header" class="clearfix">
         <span>参数组名：{{ group.group_name }}</span>
         <el-dropdown trigger="click" @command="handleGroupCommand" style="float: right">
@@ -17,19 +17,19 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item :command="{type: 'edit', group}">编辑</el-dropdown-item>
             <el-dropdown-item :command="{type: 'delete', group}">删除</el-dropdown-item>
-            <el-dropdown-item :command="{type: 'sort_up', group}">上移</el-dropdown-item>
-            <el-dropdown-item :command="{type: 'sort_down', group}">下移</el-dropdown-item>
+            <el-dropdown-item v-if="index !== 0" :command="{type: 'sort_up', group}">上移</el-dropdown-item>
+            <el-dropdown-item v-if="index !== paramsGroup.length - 1" :command="{type: 'sort_down', group}">下移</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
       <template v-if="group.params && group.params.length > 0">
-        <div v-for="param in group.params" :key="param.param_id" class="param-item">
+        <div v-for="(param, index) in group.params" :key="param.param_id" class="param-item">
           <span>{{ param.param_name }} 【{{ param.param_type | paramTypeFilter }}】</span>
           <span>
             <el-button type="text" size="mini" @click="handleEditParam(param, group)">编辑</el-button>
             <el-button type="text" size="mini" style="color: #F56C6C" @click="handleDeleteParam(param)">删除</el-button>
-            <el-button type="text" size="mini" @click="handleSortParam('up', param)">上移</el-button>
-            <el-button type="text" size="mini" @click="handleSortParam('down', param)">下移</el-button>
+            <el-button :disabled="index === 0" type="text" size="mini" @click="handleSortParam('up', group, param)">上移</el-button>
+            <el-button :disabled="index === group.params.length - 1" type="text" size="mini" @click="handleSortParam('down', group, param)">下移</el-button>
           </span>
         </div>
       </template>
@@ -186,7 +186,7 @@
       /** 参数组排序 */
       handleSortGroup(type, group) {
         API_Params.sortParamsGroup(group.group_id, type).then(() => {
-          this.GET_CategoryParamsGroup()
+          this.paramsGroup = this.swapaPlaces(this.paramsGroup, type, group)
           this.$message.success('修改成功！')
         })
       },
@@ -222,9 +222,9 @@
         }).catch(() => {})
       },
       /** 参数排序 */
-      handleSortParam(type, param) {
+      handleSortParam(type, group, param) {
         API_Params.sortParams(param.param_id, type).then(() => {
-          this.GET_CategoryParamsGroup()
+          group.params = this.swapaPlaces(group.params, type, param)
           this.$message.success('修改成功！')
         })
       },
@@ -256,6 +256,18 @@
             return false
           }
         })
+      },
+      /** 返回交换位置后的数组 */
+      swapaPlaces(arr, type, ele) {
+        const index = arr.findIndex(item => item === ele)
+        if (type === 'up') {
+          if (index === 0) return arr
+          arr[index] = arr.splice(index - 1, 1, arr[index])[0]
+        } else {
+          if (index === arr.length - 1) return arr
+          arr[index] = arr.splice(index + 1, 1, arr[index])[0]
+        }
+        return arr
       },
       /** 获取参数组 */
       GET_CategoryParamsGroup() {
