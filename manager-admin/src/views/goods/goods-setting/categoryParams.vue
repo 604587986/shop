@@ -22,7 +22,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <template v-if="group.params">
+      <template v-if="group.params && group.params.length > 0">
         <div v-for="param in group.params" :key="param.param_id" class="param-item">
           <span>{{ param.param_name }} 【{{ param.param_type | paramTypeFilter }}】</span>
           <span>
@@ -126,10 +126,10 @@
             group_name: _name,
             category_id: this.category_id
           }).then(response => {
-            this.$message.success('保存成功！')
             this.addGroupForm.group_name = ''
             this.addGroupForm.show = false
-            this.GET_CategoryParamsGroup()
+            this.$message.success('保存成功！')
+            this.paramsGroup.push(response)
           })
         }
       },
@@ -157,7 +157,7 @@
           cancelButtonText: '取消',
           inputValue: group.group_name,
           inputPattern: /.+/,
-          inputErrorMessage: '名称格式有误'
+          inputErrorMessage: '名称不能为空！'
         }).then(obj => {
           API_Params.editParamsGroup(group.group_id, {
             group_name: obj.value,
@@ -240,6 +240,7 @@
                 this.dialogParamsVisible = false
                 this.GET_CategoryParamsGroup()
                 this.$message.success('保存成功！')
+                this.$refs[formName].resetFields()
               })
             }
           } else {

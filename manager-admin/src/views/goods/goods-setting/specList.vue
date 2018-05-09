@@ -241,8 +241,8 @@
           if (valid) {
             if (this.specForm.form_type === 'add') {
               API_spec.addSpec(this.specForm).then(response => {
-                this.$message.success('添加成功！')
                 this.dialogSpecVisible = false
+                this.$message.success('添加成功！')
                 this.$refs[formName].resetFields()
                 this.GET_SpecsList()
               })

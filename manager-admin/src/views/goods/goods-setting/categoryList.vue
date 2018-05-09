@@ -194,8 +194,8 @@
           if (valid) {
             if (this.catForm.form_type === 'add') {
               API_category.addCategory(this.catForm).then(() => {
-                this.$message.success('保存成功！')
                 this.dialogCatVisible = false
+                this.$message.success('保存成功！')
                 this.$refs[formName].resetFields()
                 this.handleRefresh()
               })
@@ -238,8 +238,8 @@
           if (valid) {
             API_category.editCategoryBrand(this.brandForm.category_id, this.brandForm.selectedBrandList)
               .then(response => {
-                this.$message.success('编辑成功！')
                 this.dialogBrandVisible = false
+                this.$message.success('编辑成功！')
                 this.handleRefresh()
               }).catch(error => console.log(error))
           } else {
@@ -268,8 +268,8 @@
           if (valid) {
             API_category.editCategorySpecs(this.specsForm.category_id, this.specsForm.selectedSpecsList)
               .then(response => {
-                this.$message.success('保存成功！')
                 this.dialogSpecsVisible = false
+                this.$message.success('保存成功！')
                 this.handleRefresh()
               }).catch(error => console.log(error))
           } else {

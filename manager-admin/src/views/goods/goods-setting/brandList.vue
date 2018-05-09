@@ -249,8 +249,8 @@
           if (valid) {
             if (this.brandForm.form_type === 'add') {
               API_brand.addBrand(this.brandForm).then(() => {
-                this.$message.success('添加成功！')
                 this.dialogBrandVisible = false
+                this.$message.success('添加成功！')
                 this.$refs[formName].resetFields()
                 this.GET_BrandList()
               })
