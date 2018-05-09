@@ -183,9 +183,7 @@
       /** 添加规格事件触发 */
       handleAddSpecs() {
         this.specForm = {
-          form_type: 'add',
-          name: '',
-          memo: ''
+          form_type: 'add'
         }
         this.dialogSpecTitle = '添加规格'
         this.dialogSpecVisible = true
@@ -245,12 +243,14 @@
               API_spec.addSpec(this.specForm).then(response => {
                 this.$message.success('添加成功！')
                 this.dialogSpecVisible = false
+                this.$refs[formName].resetFields()
                 this.GET_SpecsList()
               })
             } else {
               API_spec.eidtSpec(this.specForm.id, this.specForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogSpecVisible = false
+                this.$refs[formName].resetFields()
                 this.GET_SpecsList()
               })
             }

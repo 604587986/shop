@@ -236,8 +236,6 @@
       /** 添加品牌触发事件 */
       handleAddBrand() {
         this.brandForm = {
-          name: '',
-          logo: '',
           form_type: 'add',
           imgFileList: []
         }
@@ -253,12 +251,14 @@
               API_brand.addBrand(this.brandForm).then(() => {
                 this.$message.success('添加成功！')
                 this.dialogBrandVisible = false
+                this.$refs[formName].resetFields()
                 this.GET_BrandList()
               })
             } else {
               API_brand.editBrand(this.brandForm.id, this.brandForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogBrandVisible = false
+                this.$refs[formName].resetFields()
                 this.GET_BrandList()
               })
             }
