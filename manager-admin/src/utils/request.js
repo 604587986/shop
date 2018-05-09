@@ -17,7 +17,7 @@ service.interceptors.request.use(config => {
   const is_put_post = config.method === 'put' || config.method === 'post'
   const not_json = config.headers[config.method]['Content-Type'] !== 'application/json'
   if (is_put_post && not_json) {
-    config.data = qs.stringify(config.data, config.dataArray ? { arrayFormat: 'repeat' } : undefined)
+    config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   // Do something before request is sent
   /** 配置全屏加载 */
