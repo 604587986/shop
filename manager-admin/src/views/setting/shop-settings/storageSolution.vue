@@ -1,11 +1,15 @@
 <template>
   <div>
     <en-tabel-layout
-      :toolbar="false"
       pagination
       :tableData="tableData.data"
       :loading="loading"
     >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns">
+          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddStorageSolution">添加</el-button>
+        </div>
+      </div>
       <template slot="table-columns">
         <el-table-column prop="name" label="储存方案名称"/>
         <el-table-column label="启用状态">
@@ -76,6 +80,9 @@
         this.params.page_no = page
         this.GET_StorageSolutiontList()
       },
+
+      /** 添加储存方案 */
+      handleAddStorageSolution() {},
 
       /** 开启储存方案 */
       handleOpenStorageSolution(index, row) {
