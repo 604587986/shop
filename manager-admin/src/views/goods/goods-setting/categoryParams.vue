@@ -96,8 +96,8 @@
             { required: true, message: '请输入参数名称', trigger: 'blur' },
             { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
           ],
-          param_type: [
-            { required: true, message: '请选择参数类型', trigger: 'change' }
+          options: [
+            { required: false, message: '请输入可选值', trigger: 'blur' }
           ]
         },
         /** 添加参数组 表单 */
@@ -109,6 +109,11 @@
     },
     created() {
       this.GET_CategoryParamsGroup()
+    },
+    watch: {
+      'paramForm.param_type': function paramType(newVal) {
+        this.paramsRules['options'][0].required = newVal === 2
+      }
     },
     filters: {
       paramTypeFilter(val) {
@@ -173,12 +178,8 @@
         this.$confirm('确定要删除这个参数组吗？', '提示', { type: 'warning' }).then(() => {
           const _id = group.group_id
           API_Params.deleteParamsGroup(_id).then(() => {
-            const _list = []
-            this.paramsGroup.forEach(item => {
-              if (item.group_id !== _id) _list.push(item)
-            })
-            this.paramsGroup = _list
             this.$message.success('删除成功！')
+            this.paramsGroup.splice(this.paramsGroup.findIndex(item => item.group_id === _id), 1)
           })
         }).catch(() => {})
       },
@@ -230,17 +231,24 @@
       /** 添加、编辑 表单提交 */
       submitParamForm(formName) {
         this.$refs[formName].validate((valid) => {
+          const { param_type, options, group_id, param_id } = this.paramForm
           if (valid) {
-            if (this.paramForm.param_type === 2 && !this.paramForm.options) {
-              this.$refs['paramOptionsInput'].focus()
-              this.$message.error('参数类型为：【选择项】"时，可选择值不能为空！')
-              return false
+            if (param_id) {
+              API_Params.editParams(param_id, this.paramForm).then(response => {
+                this.dialogParamsVisible = false
+                const group = this.paramsGroup.filter(item => item.group_id === group_id)[0]
+                const index = group.params.findIndex(item => item.param_id === param_id)
+                group.params[index] = response
+                this.$refs[formName].resetFields()
+                this.$message.success('保存成功！')
+              })
             } else {
               API_Params.addParams(this.paramForm).then(response => {
                 this.dialogParamsVisible = false
-                this.GET_CategoryParamsGroup()
-                this.$message.success('保存成功！')
+                const index = this.paramsGroup.findIndex(item => item.group_id === group_id)
+                this.paramsGroup[index].params.push(response)
                 this.$refs[formName].resetFields()
+                this.$message.success('保存成功！')
               })
             }
           } else {
