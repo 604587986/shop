@@ -92,7 +92,7 @@
           <el-form-item label="网站LOGO" prop="logo">
             <el-upload
               class="site-logo"
-              :action="upload_api"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="handleSiteLogoSuccess"
               :multiple="false">
@@ -301,7 +301,6 @@
 
 <script>
   import * as API_SystemSetting from '@/api/systemSetting'
-  import * as API_Common from '@/api/common'
   export default {
     name: 'systemSettings',
     data() {
@@ -337,10 +336,7 @@
 
         /** 积分设置 */
         pointForm: {},
-        pointRules: {},
-
-        /** 上传API */
-        upload_api: API_Common.getUploadApi()
+        pointRules: {}
       }
     },
     mounted() {},

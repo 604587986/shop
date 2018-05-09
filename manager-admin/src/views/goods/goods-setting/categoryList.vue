@@ -16,7 +16,7 @@
         <!--分类图片-->
         <el-form-item label="分类图片" prop="cat_img">
           <el-upload
-            :action="upload_api"
+            :action="MixinUploadApi"
             list-type="picture"
             :on-success="onImgUploadSuccess"
             :on-remove="onImgRemove"
@@ -87,7 +87,6 @@
 
 <script>
   import { GoodsCatsEdit } from '@/plugins/selector/vue'
-  import * as API_Common from '@/api/common'
   import * as API_category from '@/api/category'
   export default {
     name: 'categoryList',
@@ -143,9 +142,7 @@
           specsList: []
         },
         // 编辑关联规格 表单规则
-        specsRules: {},
-        // 上传接口
-        upload_api: API_Common.getUploadApi()
+        specsRules: {}
       }
     },
     methods: {
