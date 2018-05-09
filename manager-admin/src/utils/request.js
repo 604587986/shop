@@ -13,6 +13,12 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
+  // 如果是put/post请求，用qs.stringify序列化参数
+  const is_put_post = config.method === 'put' || config.method === 'post'
+  const not_json = config.headers[config.method]['Content-Type'] !== 'application/json'
+  if (is_put_post && not_json) {
+    config.data = qs.stringify(config.data, config.dataArray ? { arrayFormat: 'repeat' } : undefined)
+  }
   // Do something before request is sent
   /** 配置全屏加载 */
   if (config.loading !== false) {
@@ -26,9 +32,6 @@ service.interceptors.request.use(config => {
   // if (store.getters.token) {
   //   config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
   // }
-  if (config.method === 'put' || config.method === 'post') {
-    config.data = qs.stringify(config.data)
-  }
   return config
 }, error => {
   // Do something with request error
