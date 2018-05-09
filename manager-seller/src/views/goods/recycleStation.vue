@@ -28,12 +28,12 @@
 
     <template slot="table-columns">
       <el-table-column type="selection"/>
-      <el-table-column label="图片" width="120">
+      <el-table-column label="图片" >
         <template slot-scope="scope">
           <img :src="scope.row.goods_image" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="goods_name" label="名称" align="left" width="450"/>
+      <el-table-column prop="goods_name" label="名称" align="left" />
       <el-table-column label="价格">
         <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
       </el-table-column>
@@ -47,7 +47,7 @@
         <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
       </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope" width="200">
+        <template slot-scope="scope">
           <el-button
             size="mini"
             type="success"

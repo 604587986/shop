@@ -69,6 +69,12 @@
       categoryId: {
         type: Number,
         default: 0
+      },
+
+      /** 商品规格信息 */
+      productSkuInfo: {
+        type: Array,
+        default: []
       }
     },
     data() {
@@ -131,7 +137,29 @@
     mounted() {
       this.getSkuInfoByCategory()
     },
+    watch: {
+      productSkuInfo() {
+        this.getSkuInfo()
+      }
+    },
     methods: {
+      getSkuInfo() {
+        /** skuData 下拉列表数据存在时 检测其中对应的规格(spec_id)项 并且赋值于skuInfo中对应的规格项信息（描述 + 名称） */
+        if (this.skuData.length > 0) {
+          this.skuInfo = this.productSkuInfo
+          this.skuInfo.forEach(key => {
+            this.skuData.forEach(item => {
+              if (key.spec_id === item.spec_id) {
+                key.spec_name = item.spec_name
+                key.spec_memo = item.spec_memo
+              }
+            })
+          })
+          /** 触发一次数据转换（规格选择数据=> 规格表格数据） */
+          this.$emit('updateSkuInfo', this.skuInfo)
+        }
+      },
+
       /** 根据分类id获取规格信息*/
       getSkuInfoByCategory() {
         API_goodsSku.getCategorySkuList(680, {}).then(response => {
