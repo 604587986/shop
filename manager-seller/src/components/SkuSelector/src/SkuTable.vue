@@ -1,13 +1,12 @@
 <template>
   <div>
-    <el-form  status-icon label-width="0" :rules="rules" class="demo-ruleForm">
       <el-table
       :data="tableData"
       border
       :span-method="arraySpanMethod"
       style="width: 100%">
         <el-table-column
-          v-for="item in tablehead"
+          v-for="(item, index) in tablehead"
           v-if="item !== 'spec_value_id'"
           :key="item"
           :label="labeltxt(item)"
@@ -18,13 +17,13 @@
               <span v-if="item === 'price'"> {{ scope.row[item] | unitPrice('￥')}}</span>
               <span v-else> {{ scope.row[item] }}</span>
             </span>
-            <el-form-item v-else prop="scope.row[item]">
-              <el-input  v-model.number="scope.row[item]"></el-input>
-            </el-form-item>
+            <div v-else class="input-error-model">
+              <el-input  v-model.number="scope.row[item]" @blur="updateSkuTable(index)"></el-input>
+              <span class="input-error" v-show="index == activecloum">{{ valadatxt }}</span>
+            </div>
           </template>
         </el-table-column>
       </el-table>
-    </el-form>
     <div class="batch-all">
       <span>批量设置：</span>
       <div v-show="isShowBatch">
@@ -91,13 +90,11 @@
         /** 要合并的列的位置数组 */
         concactArray: [],
 
-        /** 固定列校验规则 */
-        rules: {
-          fixedValue: [
-            { required: true, message: `45463` },
-            { type: 'number', message: '请输入数字值' }
-          ]
-        }
+        /** 固定列校验提示内容 */
+        valadatxt: '请输入数字值',
+
+        /** 当前点击的列的index */
+        activecloum: 0
       }
     },
     methods: {
@@ -182,7 +179,7 @@
         this.activeVal === 1 ? this.tableData.forEach(key => { key.price = this.batch }) : this.tableData.forEach(key => { key.quantity = this.batch })
         this.isShowBatch = !this.isShowBatch
         /** 异步更新skuInfo数据 */
-        this.$emit('skuTable', this.skuInfo)
+        this.$emit('skuTable', this.tableData)
       },
 
       /** 取消批量设置值 */
@@ -191,8 +188,11 @@
       },
 
       /** 数据改变之后 抛出数据 */
-      submitData() {
-
+      updateSkuTable(index) {
+        /** 进行自定义校验 */
+        this.activecloum = index
+        /** 异步更新skuInfo数据 */
+        this.$emit('skuTable', this.tableData)
       }
     }
   }
@@ -206,5 +206,18 @@
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
+  }
+  .input-error-model {
+    padding-bottom: 15px;
+  }
+  /*带校验模块*/
+  .input-error-model {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    color: red;
+    line-height: 16px;
   }
 </style>

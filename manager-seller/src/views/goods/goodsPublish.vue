@@ -63,7 +63,10 @@
             </el-form-item>
             <el-form-item label="商品分组：" >
               <!--商品分类 获取分类列表 传入默认值-->
-              <en-category-picker @changed="changeGoodsCateGory" :clearable='true'/>
+              <en-category-picker
+                @changed="changeGoodsCateGory"
+                :clearable='true'
+                :defaultVal="baseInfoForm.shop_cat_id" />
             </el-form-item>
             <p class="goods-group-manager">
               商品可以从属于店铺的多个分类之下，店铺分类可以由 "商家中心 -> 商品 -> 分组管理" 中自定义
@@ -92,14 +95,14 @@
             <el-form-item label="商品名称：" prop="goods_name">
               <el-input v-model="baseInfoForm.goods_name" placeholder="3-60个字符"></el-input>
             </el-form-item>
-            <el-form-item label="商品编号：" prop="goods_sn">
-              <el-input v-model.number="baseInfoForm.goods_sn"></el-input>
+            <el-form-item label="商品编号：" prop="sn">
+              <el-input v-model.number="baseInfoForm.sn"></el-input>
             </el-form-item>
-            <el-form-item label="市场价格：" prop="market_price">
-              <el-input v-model.number="baseInfoForm.market_price"></el-input>
+            <el-form-item label="市场价格：" prop="mktprice">
+              <el-input v-model.number="baseInfoForm.mktprice"></el-input>
             </el-form-item>
-            <el-form-item label="商品价格：" prop="goods_price">
-              <el-input v-model.number="baseInfoForm.goods_price"></el-input>
+            <el-form-item label="商品价格：" prop="price">
+              <el-input v-model.number="baseInfoForm.price"></el-input>
             </el-form-item>
             <el-form-item label="成本价格：" prop="cost" >
               <el-input v-model.number="baseInfoForm.cost"></el-input>
@@ -112,6 +115,7 @@
                 class="avatar-uploader"
                 :action="BASE_IMG_URL"
                 list-type="picture-card"
+                :file-list="baseInfoForm.goods_gallery_list"
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
                 :on-remove="handleRemove"
@@ -134,8 +138,8 @@
               <!--规格选择器-->
                <en-sku-selector :goodsId="activeGoodsId" :categoryId="categoryID" @finalSku="finalSku"></en-sku-selector>
             </el-form-item>
-            <el-form-item label="总库存：" prop="summary_stock" style="width: 20%;text-align: left;">
-              <el-input v-model="baseInfoForm.summary_stock" disabled></el-input>
+            <el-form-item label="总库存：" prop="quantity" style="width: 20%;text-align: left;">
+              <el-input v-model="baseInfoForm.quantity" disabled></el-input>
             </el-form-item>
           </div>
         </div>
@@ -144,13 +148,13 @@
           <h4>seo</h4>
           <div>
             <el-form-item label="seo标题：">
-              <el-input placeholder="3-60个字符"></el-input>
+              <el-input placeholder="3-60个字符" v-model="baseInfoForm.page_title"></el-input>
             </el-form-item>
             <el-form-item label="seo关键字：" >
-              <el-input type="textarea"></el-input>
+              <el-input type="textarea" v-model="baseInfoForm.meta_keywords"></el-input>
             </el-form-item>
             <el-form-item label="seo描述：" >
-              <el-input type="textarea"></el-input>
+              <el-input type="textarea" v-model="baseInfoForm.meta_description"></el-input>
             </el-form-item>
           </div>
         </div>
@@ -158,7 +162,7 @@
         <div class="base-info-item">
           <h4>物流/其他</h4>
           <div>
-            <el-form-item label="运费：" style="width: 50%;">
+            <el-form-item label="运费：" style="width: 50%;" prop="template_id">
               <el-radio-group v-model="baseInfoForm.goods_transfee_charge">
                 <el-radio :label="1">卖家承担运费</el-radio>
                 <el-radio :label="0">买家承担运费</el-radio>
@@ -198,12 +202,12 @@
           </div>
         </div>
         <!--积分配置-->
-        <div class="base-info-item" v-show="isShowExchangeConfig">
+        <div class="base-info-item" v-if="isShowExchangeConfig">
           <h4>积分配置</h4>
-          <div>
-            <el-form-item label="兑换积分：" style="width: 50%;">
+          <div v-if="baseInfoForm.exchange">
+            <el-form-item label="兑换积分：" style="width: 50%;" prop="exchange_point">
               <el-input v-model="baseInfoForm.exchange.exchange_money" style="width: 100px;"></el-input> 元 +
-              <el-input v-model="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分 可兑换此商品
+              <el-input v-model.number="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分 可兑换此商品
             </el-form-item>
             <el-form-item label="积分商品分类：" >
               <el-select
@@ -344,7 +348,7 @@
           if (!Number.isInteger(value)) {
             callback(new Error('请输入数字值'))
           } else {
-            if (value > this.baseInfoForm.market_price) {
+            if (value > this.baseInfoForm.mktprice) {
               callback(new Error('市场价格必须大于成本价格'))
             } else {
               callback()
@@ -352,6 +356,32 @@
           }
         }, 1000)
       }
+
+      var checkTplId = (rule, value, callback) => {
+        if (this.baseInfoForm.goods_transfee_charge === 0 && !value) {
+          return callback(new Error('请选择一种模板'))
+        } else {
+          callback()
+        }
+      }
+
+      var checkExchangePoint = (rule, value, callback) => {
+        if (this.baseInfoForm.exchange.enable_exchange && !this.baseInfoForm.exchange.exchange_point) {
+          return callback(new Error('积分值不能为空'))
+        }
+        setTimeout(() => {
+          if (!Number.isInteger(this.baseInfoForm.exchange.exchange_point)) {
+            callback(new Error('请输入数字值'))
+          } else {
+            if (this.baseInfoForm.exchange.exchange_point <= 0) {
+              callback(new Error('请输入大于0的积分值'))
+            } else {
+              callback()
+            }
+          }
+        }, 1000)
+      }
+
       return {
         /** 图片服务器地址 */
         BASE_IMG_URL: process.env.BASE_IMG_URL,
@@ -402,22 +432,22 @@
         baseInfoForm: {
 
           /** 品牌id */
-          brand_id: '',
+          brand_id: 0,
 
           /** 商城分类id */
-          category_id: '',
+          category_id: 0,
 
           /** 商品名称 */
           goods_name: '',
 
           /** 商品编号 sn*/
-          goods_sn: '',
+          sn: '',
 
           /** 商品价格 */
           price: '',
 
-          /** 市场价格 mktprice*/
-          market_price: '',
+          /** 市场价格 */
+          mktprice: '',
 
           /** 成本价格 */
           cost: '',
@@ -431,8 +461,8 @@
           /** 用来校验的商品相册 */
           goods_gallery: '',
 
-          /** 商品总库存 quantity*/
-          summary_stock: 0,
+          /** 商品总库存 */
+          quantity: 0,
 
           /** 卖家承担运费1 买家承担运费0 */
           goods_transfee_charge: 1,
@@ -444,7 +474,7 @@
           market_enable: 1,
 
           /** 模板运费id */
-          template_id: '',
+          template_id: 0,
 
           /** 积分兑换 */
           exchange: {
@@ -462,7 +492,7 @@
           },
 
           /** 店铺分组id*/
-          shop_cat_id: '',
+          shop_cat_id: 0,
 
           /** seo描述 */
           meta_description: '',
@@ -470,7 +500,7 @@
           /** seo关键字 */
           meta_keywords: '',
 
-          /** seo关键字 */
+          /** seo标题 */
           page_title: '',
 
           /** 商品参数列表 */
@@ -486,57 +516,26 @@
         /** 请求的商品参数组列表 */
         goodsParams: [
           {
-            group_id: '1',
-            group_name: '主题',
+            group_id: '',
+            group_name: '',
             params: [
               {
-                param_id: 1,
-                param_name: '品牌',
+                param_id: 0,
+                param_name: '',
                 param_type: 1,
-                param_value: 'fask',
-                required: 1,
-                optionList: [
-                  { value: 1, label: '及sad' },
-                  { value: 2, label: '啥事' }
-                ]
-              }
-            ]
-          },
-          {
-            group_id: '21',
-            group_name: '小二',
-            params: [
-              {
-                param_id: 12,
-                param_name: '谁知道',
-                param_type: 2,
-                param_value: 'task',
+                param_value: '',
                 required: 0,
                 optionList: [
-                  { value: 1, label: '一部非' },
-                  { value: 2, label: '哈哈' }
+                  { value: 1, label: '' },
+                  { value: 2, label: '' }
                 ]
               }
             ]
           }
         ],
+
         /** 品牌列表 */
-        brandList: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        brandList: [],
 
         /** 运费模板列表 */
         tplList: [{
@@ -570,15 +569,15 @@
           goods_name: [
             { required: true, message: '请输入商品名称', trigger: 'blur' }
           ],
-          goods_sn: [
+          sn: [
             { required: true, message: '请输入商品编号', trigger: 'blur' },
             { type: 'number', message: '请输入数字值', trigger: 'blur' }
           ],
-          market_price: [
+          mktprice: [
             { required: true, message: '请输入市场价格', trigger: 'blur' },
             { validator: checkMarket, trigger: 'blur' }
           ],
-          goods_price: [
+          price: [
             { required: true, message: '请输入商品价格', trigger: 'blur' },
             { type: 'number', message: '请输入数字值', trigger: 'blur' }
           ],
@@ -593,8 +592,14 @@
           goods_gallery: [
             { required: true, message: '请选择商品相册', trigger: 'change' }
           ],
-          summary_stock: [
+          quantity: [
             { required: true, message: '请填写总库存', trigger: 'blur' }
+          ],
+          template_id: [
+            { validator: checkTplId, trigger: 'blur' }
+          ],
+          exchange_point: [
+            { validator: checkExchangePoint, trigger: 'blur' }
           ]
         }
       }
@@ -602,7 +607,7 @@
     beforeRouteEnter(to, from, next) {
       next(vm => {
         if (vm.$route.query && vm.$route.query.goodsid) {
-          vm.currentStatus = vm.$route.query.isdraft || 0
+          vm.currentStatus = parseInt(vm.$route.query.isdraft) || 0
           vm.activeGoodsId = vm.$route.query.goodsid
           vm.activestep = vm.$route.query.isdraft ? 1 : 0
           if (vm.currentStatus === 1 && vm.$route.query.goodsid) {
@@ -610,8 +615,8 @@
           } else if (vm.currentStatus === 2 && vm.$route.query.goodsid) {
             vm.GET_GoodDraftData()
           }
-          vm.GET_GoodsParams()
-          vm.GET_GoodsGroupList()
+          // 查询商品参数
+          // vm.GET_GoodsParams()
         } else {
           vm.GET_NextLevelCategory()
         }
@@ -633,8 +638,6 @@
         } else {
           // 获取改商城分类下 商品参数信息
           this.GET_GoodsParams()
-          // 获取当前店铺分组列表
-          this.GET_GoodsGroupList()
         }
 
         /** 2级校验 */
@@ -652,11 +655,13 @@
 
       /** 保存草稿 */
       saveDraft() {
-        API_goods.saveDraft(this.baseInfoForm).then(response => {
+        // 构造提交表单数据
+        const _params = this.generateFormData(this.baseInfoForm)
+        API_goods.saveDraft(_params).then(response => {
           this.$message.success('保存草稿成功')
           this.$router.push({ path: '/goods/draft-list' })
         }).catch(error => {
-          this.$message.success('保存草稿失败，请稍后重试！')
+          this.$message.error('保存草稿失败，请稍后重试！')
           console.log(error)
         })
       },
@@ -664,10 +669,10 @@
       /** 上架  */
       aboveGoods() {
         // 构造提交表单数据
-        if (this.currentStatus === 0) {
+        const _params = this.generateFormData(this.baseInfoForm)
+        if (this.currentStatus !== 2) {
           /** 正常商品上架 */
-          console.log(this.baseInfoForm, 363)
-          API_goods.aboveGoods(this.baseInfoForm).then(response => {
+          API_goods.aboveGoods(_params).then(response => {
             this.$message.success('上架商品成功')
             this.$router.push({ path: '/goods/goods-list' })
           }).catch(error => {
@@ -728,20 +733,48 @@
 
       /** 查询单个商品信息*/
       GET_GoodData() {
-        // this.loading = true
         API_goods.getGoodData(this.activeGoodsId, {}).then((response) => {
-          this.loading = false
-          this.baseInfoForm = response.data
+          /** 此处完成商品信息赋值 进行判断如果有值的话 */
+          this.baseInfoForm = {
+            ...response
+          }
+          if (!this.baseInfoForm.exchange || !this.baseInfoForm.exchange.enable_exchange) {
+            this.baseInfoForm.exchange = {
+              /** 积分兑换所属分类 */
+              category_id: 0,
+              /** 是否允许积分兑换  1是 0否*/
+              enable_exchange: 1,
+              /** 兑换所需金额 */
+              exchange_money: 0,
+              /** 积分兑换使用的积分 */
+              exchange_point: 0
+            }
+          }
+          // console.log(this.baseInfoForm)
         }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
       },
 
       /** 商家下架商品*/
       handleUnderGoods() {
-        // this.loading = true
         API_goods.underGoods(this.activeGoodsId, { }).then((response) => {
           this.loading = false
           this.$message.success('下架成功')
         }).catch(() => this.$message.error('下架商品失败，请稍后再试！'))
+      },
+
+      /** 构造表单数据 */
+      generateFormData(data) {
+        let _params = {
+          ...data
+        }
+        // 删除不必要的表单数据
+        delete _params.goods_gallery
+        _params.goods_gallery_list.forEach(key => {
+          delete key.name
+        })
+        // 临时数据
+        _params.exchange.enable_exchange = 1
+        return _params
       },
 
       /** 查询单个草稿箱商品信息 */
@@ -756,37 +789,27 @@
       /** 查询商品参数 */
       GET_GoodsParams() {
         // 处理数据 方便校验
-        let _paramsList = []
-        this.goodsParams.forEach(key => {
-          key.params.forEach(item => {
-            this.$set(item, 'group_id', key.group_id)
+        const goods_id = this.activeGoodsId || 0
+        API_goods.getGoodsParams(this.categoryID, { goods_id }).then((response) => {
+          this.loading = false
+          this.goodsParams = response.data
+          if (!response.data || response.data.length <= 0) {
+            return
+          }
+          let _paramsList = []
+          this.goodsParams.forEach(key => {
+            key.params.forEach(item => {
+              this.$set(item, 'group_id', key.group_id)
+            })
+            _paramsList = _paramsList.concat(key.params)
           })
-          _paramsList = _paramsList.concat(key.params)
-        })
-        this.baseInfoForm.goods_params_list = _paramsList
-        // const goods_id = this.activeGoodsId || 0
-        // API_goods.getGoodsParams(this.activeGoodsId, { goods_id }).then((response) => {
-        //   this.loading = false
-        //   this.goodsParams = response.data
-        //   let _paramsList = []
-        //   this.goodsParams.forEach(key => {
-        //     key.params.forEach(item => {
-        //       this.$set(item, 'group_id', key.group_id)
-        //     })
-        //     _paramsList = _paramsList.concat(key.params)
-        //   })
-        //   this.baseInfoForm.goods_params_list = _paramsList
-        // }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
-      },
-
-      /** 商品分组列表*/
-      GET_GoodsGroupList() {
-
+          this.baseInfoForm.goods_params_list = _paramsList
+        }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
       },
 
       /** 商品分组 改变时触发 */
       changeGoodsCateGory(val) {
-
+        this.baseInfoForm.shop_cat_id = val[val.length - 1]
       },
 
       /** 商品品牌列表 */
@@ -814,7 +837,7 @@
 
       /** 运费模板改变时触发 */
       changeTpl(val) {
-
+        // this.baseInfoForm.template_id = val
       },
 
       /** 积分商品商城分类列表 */
@@ -896,7 +919,7 @@
 
       /** 规格选择器规格数据改变时触发 */
       finalSku(val) {
-        console.log(val, 4564564)
+        this.baseInfoForm.sku_list = val
       }
     }
   }
