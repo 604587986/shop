@@ -152,6 +152,9 @@
           name: [
             { required: true, message: '请输入品牌名称', trigger: 'blur' },
             { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+          ],
+          logo: [
+            { required: true, message: '请上传品牌logo' }
           ]
         }
       }
@@ -193,7 +196,7 @@
 
       /** 图片上传成功触发 */
       onImgUploadSuccess(response) {
-        this.brandForm.logo = response
+        this.brandForm.logo = response.url
       },
       /** 图片移除触发 */
       onImgRemoved() {
@@ -246,10 +249,6 @@
       submitBrandForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (!this.brandForm.logo) {
-              this.$message.error('您还没有上传品牌LOGO，请检查！')
-              return
-            }
             if (this.brandForm.form_type === 'add') {
               API_brand.addBrand(this.brandForm).then(() => {
                 this.$message.success('添加成功！')
