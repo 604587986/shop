@@ -13,7 +13,7 @@ import SmsGateway from '@/models/SmsGatewayModel'
 export function getSmsGatewayList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/core/admin/sms/sms-listJson.do',
+      url: 'system/platforms',
       method: 'get',
       loading: false,
       params
@@ -26,17 +26,26 @@ export function getSmsGatewayList(params) {
 }
 
 /**
+ * 添加短信网关
+ * @param params
+ * @returns {*}
+ */
+export function addSmsGateway(params) {
+  return request({
+    url: 'system/platforms',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
  * 开启短信网关
  * @param id
- * @returns {Promise<any>}
+ * @returns {*}
  */
 export function openSmsGatewayById(id) {
-  const _params = { smsid: id }
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'core/admin/sms/set-open.do',
-      method: 'get',
-      params: _params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `/system/platforms/${id}/open`,
+    method: 'post'
   })
 }

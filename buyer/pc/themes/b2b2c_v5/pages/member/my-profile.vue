@@ -13,7 +13,7 @@
           :show-file-list="false"
           :on-success="handleAvararUploadSuccess"
         >
-          <img v-if="profileForm.avatar" :src="profileForm.avatar" class="avatar">
+          <img v-if="profileForm.face" :src="profileForm.face" class="avatar">
           <img v-else src="https://misc.360buyimg.com/mtd/pc/common/img/no_login.jpg" title="求真相" class="avatar">
           <div class="eidt-mask">
             <i class="el-icon-edit-outline"></i>
@@ -23,8 +23,8 @@
         <p>头像修改在保存后生效</p>
       </div>
       <el-form :model="profileForm" :rules="profileRules" ref="profileForm" label-width="100px" style="width:350px">
-        <el-form-item label="账户名称" prop="username">
-          <el-input v-model="profileForm.username" size="small" clearable></el-input>
+        <el-form-item label="账户名称" prop="uname">
+          <el-input v-model="profileForm.uname" size="small" clearable></el-input>
         </el-form-item>
         <!--<el-form-item label="真实姓名" prop="truename">-->
           <!--<el-input v-model="profileForm.truename" size="small" clearable></el-input>-->
@@ -87,7 +87,7 @@
         profileForm: JSON.parse(JSON.stringify(this.$store.state.user.user)) || {},
         /** 个人资料 表单规则 */
         profileRules: {
-          username: [
+          uname: [
             { required: true, message: '请输入真实姓名', trigger: 'blur' },
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
@@ -109,9 +109,6 @@
         }
       }
     },
-    mounted() {
-      window.axios = axios
-    },
     watch: {
       user(newVal, oldVal) {
         this.profileForm = JSON.parse(JSON.stringify(newVal))
@@ -121,7 +118,7 @@
       /** 默认地址 */
       defaultRegions() {
         const { user } = this.$store.state.user
-        if(!user) return null
+        if(!user || !user.province_id) return null
         return [
           user.province_id,
           user.city_id,
@@ -141,7 +138,7 @@
       },
       /** 头像上传成功 */
       handleAvararUploadSuccess(res) {
-        this.profileForm.avatar = res
+        this.profileForm.face = res.url
       },
       /** 保存资料提交表单 */
       submitProfile() {

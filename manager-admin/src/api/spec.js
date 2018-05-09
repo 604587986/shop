@@ -4,6 +4,7 @@
 
 import request from '@/utils/request'
 import SpecModel from '@/models/SpecModel'
+const specModel = new SpecModel()
 
 /**
  * 获取规格列表
@@ -18,9 +19,8 @@ export function getSpecs(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new SpecModel().map(response.data)
-      resolve(_response)
+      response.data = specModel.map(response.data)
+      resolve(response)
     }).catch(error => reject(error))
   })
 }
@@ -28,66 +28,56 @@ export function getSpecs(params) {
 /**
  * 添加规格
  * @param params
- * @returns {Promise<any>}
+ * @returns {*}
  */
 export function addSpec(params) {
-  const _formData = new FormData()
-  _formData.append('spec_name', params.name)
-  _formData.append('spec_memo', params.memo)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'goods/specs',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  const _params = {
+    spec_name: params.name,
+    spec_memo: params.memo
+  }
+  return request({
+    url: 'goods/specs',
+    method: 'post',
+    data: specModel.params(params)
   })
 }
 
 /**
- * 编辑
+ * 编辑规格
  * @param id
  * @param params
- * @returns {Promise<any>}
+ * @returns {*}
  */
 export function eidtSpec(id, params) {
-  const _formData = new FormData()
-  _formData.append('spec_name', params.name)
-  _formData.append('spec_memo', params.memo)
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/specs/${id}`,
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/specs/${id}`,
+    method: 'put',
+    data: specModel.params(params)
   })
 }
 
 /**
  * 删除规格
  * @param ids
- * @returns {Promise<any>}
+ * @returns {*}
  */
 export function deleteSpecs(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/specs/${ids}`,
-      method: 'delete'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/specs/${ids}`,
+    method: 'delete'
   })
 }
 
 /**
  * 获取规格值
- * @param spec_id
- * @returns {Promise<any>}
+ * @param spec_id 规格ID
+ * @returns {*}
  */
 export function getSpecValues(spec_id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/specs/${spec_id}/values`,
-      method: 'get'
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/specs/${spec_id}/values`,
+    method: 'get'
   })
 }
 
@@ -98,13 +88,9 @@ export function getSpecValues(spec_id) {
  * @returns {Promise<any>}
  */
 export function saveSpecValues(spec_id, value_list) {
-  const _formData = new FormData()
-  value_list.forEach(item => _formData.append('value_list', item))
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/specs/${spec_id}/values`,
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `goods/specs/${spec_id}/values`,
+    method: 'post',
+    data: { value_list }
   })
 }

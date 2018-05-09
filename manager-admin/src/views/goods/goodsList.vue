@@ -52,9 +52,8 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="danger"
-            :disabled="scope.row.market_enable === 0"
-            @click="handleWithdraw(scope.$index, scope.row)">下架</el-button>
+            :type="scope.row.market_enable === 0 ? 'primary' : 'danger'"
+            @click="handleOperateGoods(scope.$index, scope.row)">{{ scope.row.market_enable === 0 ? '上架' : '下架' }}</el-button>
         </template>
       </el-table-column>
     </template>
@@ -123,19 +122,26 @@
         this.GET_GoodsList()
       },
 
-      /** 单个商品下架操作确认 */
-      handleWithdraw(index, row) {
-        this.$prompt('请输入下架原因', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /.+/,
-          inputErrorMessage: '请填写下架原因！'
-        }).then(({ value }) => {
-          API_goods.underGoods(row.id, value).then(() => {
-            this.GET_GoodsList()
-            this.$message.success('下架商品成功！')
+      /** 单个商品上架、下架操作确认 */
+      handleOperateGoods(index, row) {
+        if (row.market_enable === 0) {
+          API_goods.upGoods(row.id).then(response => {
+            row.market_enable = 1
+            this.$message.success('上架商品成功！')
           })
-        })
+        } else {
+          this.$prompt('请输入下架原因', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /.+/,
+            inputErrorMessage: '请填写下架原因！'
+          }).then(({ value }) => {
+            API_goods.underGoods(row.id, value).then(() => {
+              row.market_enable = 0
+              this.$message.success('下架商品成功！')
+            })
+          })
+        }
       },
 
       /** 销售状态格式化 */

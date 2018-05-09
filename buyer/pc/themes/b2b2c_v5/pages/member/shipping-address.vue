@@ -15,18 +15,18 @@
         show-icon>
       </el-alert>
       <el-table
-        :data="addressList"
+        :data="address.data"
         :header-cell-style="{textAlign: 'center'}"
         cell-class-name="address-cell"
         style="width: 100%"
       >
-        <el-table-column prop="ship_name" label="收货人" width="100"/>
+        <el-table-column prop="name" label="收货人" width="100"/>
         <el-table-column label="所在地区" width="200" :formatter="areaFormatter"/>
-        <el-table-column prop="ship_address" label="详细地址" width="280" align="left"/>
-        <el-table-column prop="ship_alias" label="地址别名" width="100" align="left"/>
-        <el-table-column prop="ship_mobile" label="联系方式" width="120"/>
+        <el-table-column prop="addr" label="详细地址" width="280" align="left"/>
+        <el-table-column prop="ship_address_name" label="地址别名" width="100" align="left"/>
+        <el-table-column prop="mobile" label="联系方式" width="120"/>
         <el-table-column label="默认" width="60">
-          <template slot-scope="scope">{{ scope.row.is_default ? '是' : '否' }}</template>
+          <template slot-scope="scope">{{ scope.row.def_addr ? '是' : '否' }}</template>
         </el-table-column>
         <el-table-column label="操作" width="110">
           <template slot-scope="scope">
@@ -38,23 +38,23 @@
     </div>
     <div id="addressForm" style="display: none">
       <el-form :model="addressForm" :rules="addressRules" ref="addressForm" label-width="100px">
-        <el-form-item label="收货人姓名" prop="ship_name">
-          <el-input v-model="addressForm.ship_name" size="small"></el-input>
+        <el-form-item label="收货人姓名" prop="name">
+          <el-input v-model="addressForm.name" size="small"></el-input>
         </el-form-item>
-        <el-form-item label="联系方式" prop="ship_mobile">
-          <el-input v-model="addressForm.ship_mobile" size="small" :maxlength="11"></el-input>
+        <el-form-item label="联系方式" prop="mobile">
+          <el-input v-model="addressForm.mobile" size="small" :maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="收货地区">
           <en-address-select :default="addressForm.regions" @changed="handleAddressSelectChanged"/>
         </el-form-item>
-        <el-form-item label="详细地址" prop="ship_address">
-          <el-input v-model="addressForm.ship_address" size="small"></el-input>
+        <el-form-item label="详细地址" prop="addr">
+          <el-input v-model="addressForm.addr" size="small"></el-input>
         </el-form-item>
-        <el-form-item label="地址别名" prop="ship_alias">
-          <el-input v-model="addressForm.ship_alias" size="small"></el-input>
+        <el-form-item label="地址别名" prop="ship_address_name">
+          <el-input v-model="addressForm.ship_address_name" size="small"></el-input>
         </el-form-item>
         <el-form-item label="设置为默认">
-          <el-checkbox v-model="addressForm.is_default" :true-label="1" :false-label="0">默认</el-checkbox>
+          <el-checkbox v-model="addressForm.def_addr" :true-label="1" :false-label="0">默认</el-checkbox>
         </el-form-item>
       </el-form>
     </div>
@@ -77,11 +77,11 @@
         addressForm: {},
         /** 添加、编辑地址 表单规则 */
         addressRules: {
-          ship_name: [
+          name: [
             { required: true, message: '请输入收货人姓名', trigger: 'blur' },
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
-          ship_mobile: [
+          mobile: [
             { required: true, message: '请输入联系方式', trigger: 'blur' },
             { validator: (rule, value, callback) => {
               if (!regExp.mobile.test(value)) {
@@ -91,7 +91,7 @@
               }
            }, trigger: 'blur' }
           ],
-          ship_address: [
+          addr: [
             { required: true, message: '请输入详细地址', trigger: 'blur' },
             { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
           ]
@@ -101,13 +101,10 @@
       }
     },
     mounted() {
-      window.axios = axios
       this.getAddressData()
     },
     computed: {
-      ...mapGetters({
-        addressList: 'address/addressList'
-      })
+      ...mapGetters(['address'])
     },
     methods: {
       areaFormatter(row) {
@@ -117,7 +114,7 @@
       handleAddAddress() {
         this.addressForm = {
           is_default: 0,
-          ship_alias: ''
+          ship_address_name: ''
         }
         this.selectedRegions = ''
         this.openLayer({

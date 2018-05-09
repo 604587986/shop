@@ -58,7 +58,7 @@
 
         <el-form-item label="导航菜单图片">
           <el-upload
-            :action="upload_api"
+            :action="MixinUploadApi"
             list-type="picture"
             :on-success="onImgUploadSuccess"
             :on-remove="onImgRemoved"
@@ -80,7 +80,6 @@
 
 <script>
   import * as API_SiteMenu from '@/api/siteMenu'
-  import * as API_Common from '@/api/common'
   import { TableLayout } from '@/components'
   import Sortable from 'sortablejs'
   export default {
@@ -119,10 +118,7 @@
           url: [
             { required: true, message: '请输入导航菜单链接', trigger: 'blur' }
           ]
-        },
-
-        /** 上传API */
-        upload_api: API_Common.getUploadApi()
+        }
       }
     },
     mounted() {

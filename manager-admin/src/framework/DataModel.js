@@ -50,4 +50,16 @@ export default class DataModel {
     })
     return _isArray ? json : json[0]
   }
+  /**
+   * 将参数名反向映射为服务器参数名
+   * @param json
+   */
+  params(json) {
+    const alias = this.constructor.__serverName__
+    Object.keys(alias).forEach(key => {
+      json[alias[key]] = json[key]
+      delete json[key]
+    })
+    return json
+  }
 }

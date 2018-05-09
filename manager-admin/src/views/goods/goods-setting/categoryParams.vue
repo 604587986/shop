@@ -9,7 +9,7 @@
         <el-button type="text" size="mini" @click="addGroupForm.show = false">取消</el-button>
       </div>
     </div>
-    <el-card v-for="group in paramsGroup" :key="group.group_id">
+    <el-card v-for="(group, index) in paramsGroup" :key="group.group_id">
       <div slot="header" class="clearfix">
         <span>参数组名：{{ group.group_name }}</span>
         <el-dropdown trigger="click" @command="handleGroupCommand" style="float: right">
@@ -17,19 +17,19 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item :command="{type: 'edit', group}">编辑</el-dropdown-item>
             <el-dropdown-item :command="{type: 'delete', group}">删除</el-dropdown-item>
-            <el-dropdown-item :command="{type: 'sort_up', group}">上移</el-dropdown-item>
-            <el-dropdown-item :command="{type: 'sort_down', group}">下移</el-dropdown-item>
+            <el-dropdown-item v-if="index !== 0" :command="{type: 'sort_up', group}">上移</el-dropdown-item>
+            <el-dropdown-item v-if="index !== paramsGroup.length - 1" :command="{type: 'sort_down', group}">下移</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <template v-if="group.params">
-        <div v-for="param in group.params" :key="param.param_id" class="param-item">
+      <template v-if="group.params && group.params.length > 0">
+        <div v-for="(param, index) in group.params" :key="param.param_id" class="param-item">
           <span>{{ param.param_name }} 【{{ param.param_type | paramTypeFilter }}】</span>
           <span>
-            <el-button type="text" size="mini" @click="handleEditParam(param, group)">编辑</el-button>
-            <el-button type="text" size="mini" style="color: #F56C6C" @click="handleDeleteParam(param)">删除</el-button>
-            <el-button type="text" size="mini" @click="handleSortParam('up', param)">上移</el-button>
-            <el-button type="text" size="mini" @click="handleSortParam('down', param)">下移</el-button>
+            <el-button type="text" size="mini" @click="handleEditParam(group, param)">编辑</el-button>
+            <el-button type="text" size="mini" style="color: #F56C6C" @click="handleDeleteParam(group, param)">删除</el-button>
+            <el-button :disabled="index === 0" type="text" size="mini" @click="handleSortParam('up', group, param)">上移</el-button>
+            <el-button :disabled="index === group.params.length - 1" type="text" size="mini" @click="handleSortParam('down', group, param)">下移</el-button>
           </span>
         </div>
       </template>
@@ -96,8 +96,8 @@
             { required: true, message: '请输入参数名称', trigger: 'blur' },
             { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
           ],
-          param_type: [
-            { required: true, message: '请选择参数类型', trigger: 'change' }
+          options: [
+            { required: false, message: '请输入可选值', trigger: 'blur' }
           ]
         },
         /** 添加参数组 表单 */
@@ -109,6 +109,11 @@
     },
     created() {
       this.GET_CategoryParamsGroup()
+    },
+    watch: {
+      'paramForm.param_type': function paramType(newVal) {
+        this.paramsRules['options'][0].required = newVal === 2
+      }
     },
     filters: {
       paramTypeFilter(val) {
@@ -126,10 +131,10 @@
             group_name: _name,
             category_id: this.category_id
           }).then(response => {
-            this.$message.success('保存成功！')
             this.addGroupForm.group_name = ''
             this.addGroupForm.show = false
-            this.GET_CategoryParamsGroup()
+            this.$message.success('保存成功！')
+            this.paramsGroup.push(response)
           })
         }
       },
@@ -157,7 +162,7 @@
           cancelButtonText: '取消',
           inputValue: group.group_name,
           inputPattern: /.+/,
-          inputErrorMessage: '名称格式有误'
+          inputErrorMessage: '名称不能为空！'
         }).then(obj => {
           API_Params.editParamsGroup(group.group_id, {
             group_name: obj.value,
@@ -173,19 +178,15 @@
         this.$confirm('确定要删除这个参数组吗？', '提示', { type: 'warning' }).then(() => {
           const _id = group.group_id
           API_Params.deleteParamsGroup(_id).then(() => {
-            const _list = []
-            this.paramsGroup.forEach(item => {
-              if (item.group_id !== _id) _list.push(item)
-            })
-            this.paramsGroup = _list
             this.$message.success('删除成功！')
+            this.paramsGroup.splice(this.paramsGroup.findIndex(item => item.group_id === _id), 1)
           })
         }).catch(() => {})
       },
       /** 参数组排序 */
       handleSortGroup(type, group) {
         API_Params.sortParamsGroup(group.group_id, type).then(() => {
-          this.GET_CategoryParamsGroup()
+          this.paramsGroup = this.swapaPlaces(this.paramsGroup, type, group)
           this.$message.success('修改成功！')
         })
       },
@@ -203,7 +204,7 @@
         this.dialogParamsVisible = true
       },
       /** 编辑参数 */
-      handleEditParam(params, group) {
+      handleEditParam(group, params) {
         this.paramForm = {
           ...params,
           group_id: group.group_id,
@@ -212,33 +213,41 @@
         this.dialogParamsVisible = true
       },
       /** 删除参数 */
-      handleDeleteParam(param) {
+      handleDeleteParam(group, param) {
         this.$confirm('确定要删除这个参数吗？', '提示', { type: 'warning' }).then(() => {
           API_Params.deleteParams(param.param_id).then(() => {
-            this.GET_CategoryParamsGroup()
+            group.params.splice(group.params.findIndex(item => item === param), 1)
             this.$message.success('删除成功！')
           })
         }).catch(() => {})
       },
       /** 参数排序 */
-      handleSortParam(type, param) {
+      handleSortParam(type, group, param) {
         API_Params.sortParams(param.param_id, type).then(() => {
-          this.GET_CategoryParamsGroup()
+          group.params = this.swapaPlaces(group.params, type, param)
           this.$message.success('修改成功！')
         })
       },
       /** 添加、编辑 表单提交 */
       submitParamForm(formName) {
         this.$refs[formName].validate((valid) => {
+          const { param_type, options, group_id, param_id } = this.paramForm
           if (valid) {
-            if (this.paramForm.param_type === 2 && !this.paramForm.options) {
-              this.$refs['paramOptionsInput'].focus()
-              this.$message.error('参数类型为：【选择项】"时，可选择值不能为空！')
-              return false
+            if (param_id) {
+              API_Params.editParams(param_id, this.paramForm).then(response => {
+                this.dialogParamsVisible = false
+                const group = this.paramsGroup.filter(item => item.group_id === group_id)[0]
+                const index = group.params.findIndex(item => item.param_id === param_id)
+                group.params[index] = response
+                this.$refs[formName].resetFields()
+                this.$message.success('保存成功！')
+              })
             } else {
               API_Params.addParams(this.paramForm).then(response => {
                 this.dialogParamsVisible = false
-                this.GET_CategoryParamsGroup()
+                const index = this.paramsGroup.findIndex(item => item.group_id === group_id)
+                this.paramsGroup[index].params.push(response)
+                this.$refs[formName].resetFields()
                 this.$message.success('保存成功！')
               })
             }
@@ -247,6 +256,18 @@
             return false
           }
         })
+      },
+      /** 返回交换位置后的数组 */
+      swapaPlaces(arr, type, ele) {
+        const index = arr.findIndex(item => item === ele)
+        if (type === 'up') {
+          if (index === 0) return arr
+          arr[index] = arr.splice(index - 1, 1, arr[index])[0]
+        } else {
+          if (index === arr.length - 1) return arr
+          arr[index] = arr.splice(index + 1, 1, arr[index])[0]
+        }
+        return arr
       },
       /** 获取参数组 */
       GET_CategoryParamsGroup() {

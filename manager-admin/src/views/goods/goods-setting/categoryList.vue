@@ -16,7 +16,7 @@
         <!--分类图片-->
         <el-form-item label="分类图片" prop="cat_img">
           <el-upload
-            :action="upload_api"
+            :action="MixinUploadApi"
             list-type="picture"
             :on-success="onImgUploadSuccess"
             :on-remove="onImgRemove"
@@ -87,7 +87,6 @@
 
 <script>
   import { GoodsCatsEdit } from '@/plugins/selector/vue'
-  import * as API_Common from '@/api/common'
   import * as API_category from '@/api/category'
   export default {
     name: 'categoryList',
@@ -143,9 +142,7 @@
           specsList: []
         },
         // 编辑关联规格 表单规则
-        specsRules: {},
-        // 上传接口
-        upload_api: API_Common.getUploadApi()
+        specsRules: {}
       }
     },
     methods: {
@@ -169,7 +166,6 @@
       /** 编辑分类 */
       handleEditCat(cat) {
         const { parentData } = cat
-        console.log(cat)
         this.catForm = {
           ...this.catForm,
           form_type: 'eidt',
@@ -185,7 +181,7 @@
       },
       /** 图片上传成功时 */
       onImgUploadSuccess(res) {
-        this.catForm.category_image = res
+        this.catForm.category_image = res.url
       },
       /** 图片被移除时 */
       onImgRemove() {
@@ -198,14 +194,16 @@
           if (valid) {
             if (this.catForm.form_type === 'add') {
               API_category.addCategory(this.catForm).then(() => {
-                this.$message.success('保存成功！')
                 this.dialogCatVisible = false
+                this.$message.success('保存成功！')
+                this.$refs[formName].resetFields()
                 this.handleRefresh()
               })
             } else {
               API_category.editCategory(this.catForm.category_id, this.catForm).then(() => {
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
+                this.$refs[formName].resetFields()
                 this.handleRefresh()
               })
             }
@@ -230,8 +228,8 @@
             brandList: response,
             selectedBrandList: response.filter(item => item.selected).map(item => item.id)
           }
+          this.dialogBrandVisible = true
         }).catch(error => console.log(error))
-        this.dialogBrandVisible = true
       },
 
       /** 编辑关联品牌 表单提交 */
@@ -240,8 +238,8 @@
           if (valid) {
             API_category.editCategoryBrand(this.brandForm.category_id, this.brandForm.selectedBrandList)
               .then(response => {
-                this.$message.success('编辑成功！')
                 this.dialogBrandVisible = false
+                this.$message.success('编辑成功！')
                 this.handleRefresh()
               }).catch(error => console.log(error))
           } else {
@@ -261,8 +259,8 @@
             specsList: response,
             selectedSpecsList: response.filter(item => item.selected).map(item => item.id)
           }
+          this.dialogSpecsVisible = true
         }).catch(error => console.log(error))
-        this.dialogSpecsVisible = true
       },
       /** 编辑关联规格 表单提交 */
       submitSpecsForm(formName) {
@@ -270,8 +268,8 @@
           if (valid) {
             API_category.editCategorySpecs(this.specsForm.category_id, this.specsForm.selectedSpecsList)
               .then(response => {
-                this.$message.success('保存成功！')
                 this.dialogSpecsVisible = false
+                this.$message.success('保存成功！')
                 this.handleRefresh()
               }).catch(error => console.log(error))
           } else {
