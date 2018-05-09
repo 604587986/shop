@@ -3,7 +3,7 @@
     <en-tabel-layout
       :toolbar="false"
       pagination
-      :tableData="storageSolutionData.data"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <template slot="table-columns">
@@ -25,14 +25,14 @@
       </template>
       <el-pagination
         slot="pagination"
-        v-if="pageData"
+        v-if="tableData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
         :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
         :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="storageSolutionData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
   </div>
@@ -58,7 +58,7 @@
         },
 
         /** 储存方案列表数据 */
-        storageSolutionData: ''
+        tableData: ''
       }
     },
     mounted() {
@@ -93,7 +93,7 @@
         this.loading = true
         API_StorageSolution.getStorageSolutionList(this.params).then(response => {
           this.loading = false
-          this.storageSolutionData = response
+          this.tableData = response
         }).catch(() => (this.loading = false))
       }
     }
