@@ -57,10 +57,9 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(
-  response => {
-    closeLoading(response)
-    let _data = response.data
-    return _data
+  async response => {
+    await closeLoading(response)
+    return response.data
   },
   error => {
     closeLoading(error)
@@ -86,10 +85,13 @@ service.interceptors.response.use(
  * @param target
  */
 const closeLoading = (target) => {
-  if (target.config.loading) {
-    // 延迟300毫秒关闭loading窗口，避免闪瞎眼
-    setTimeout(() => target.config.loading.close(), 300)
-  }
+  if (!target.config.loading) return true
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      target.config.loading.close()
+      resolve()
+    }, 200)
+  })
 }
 
 export default function request(options) {
