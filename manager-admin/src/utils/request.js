@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { Loading } from 'element-ui'
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
@@ -22,32 +23,22 @@ service.interceptors.request.use(config => {
   // Do something before request is sent
   /** 配置全屏加载 */
   if (config.loading !== false) {
-    config.loading = Vue.prototype.$loading({
+    config.loading = Loading.service({
       lock: true,
-      background: 'rgba(0, 0, 0, 0.8)',
+      background: 'rgba(0, 0, 0, 0.7)',
       spinner: 'el-icon-loading',
       text: '请稍候...'
     })
   }
-  // if (store.getters.token) {
-  //   config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-  // }
   return config
 }, error => {
-  // Do something with request error
-  console.log(error) // for debug
   Promise.reject(error)
 })
 
 // respone拦截器
 service.interceptors.response.use(
-  response => {
-    closeLoading(response)
-    const _data = response.data
-    if (typeof _data === 'string' && _data.indexOf('window.open(\'/javashop/admin/login.do\',\'_top\')') !== -1) {
-      fedLogOut()
-      return Promise.reject('登录失效')
-    }
+  async response => {
+    await closeLoading(response)
     return response.data
   },
   error => {
@@ -67,12 +58,17 @@ service.interceptors.response.use(
 
 /**
  * 关闭全局加载
+ * 延迟200毫秒关闭，以免晃眼睛
  * @param target
  */
 const closeLoading = (target) => {
-  if (target.config.loading) {
-    target.config.loading.close()
-  }
+  if (!target.config.loading) return true
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      target.config.loading.close()
+      resolve()
+    }, 200)
+  })
 }
 
 function fedLogOut() {
