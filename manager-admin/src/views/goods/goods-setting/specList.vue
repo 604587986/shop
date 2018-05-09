@@ -3,7 +3,7 @@
     <en-tabel-layout
       toolbar
       pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
       :selection-change="handleSelectionChange"
     >
@@ -45,14 +45,14 @@
       </template>
       <el-pagination
         slot="pagination"
-        v-if="pageData"
+        v-if="tableData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
@@ -134,10 +134,7 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
+        tableData: '',
 
         /** 被选数据 */
         selectedData: [],
@@ -157,10 +154,6 @@
         specRules: {
           name: [
             { required: true, message: '请输入规格名称', trigger: 'blur' },
-            { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
-          ],
-          memo: [
-            { required: true, message: '请输入规格备注', trigger: 'blur' },
             { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
           ]
         },
@@ -318,15 +311,9 @@
         this.loading = true
         API_spec.getSpecs(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
+          this.tableData = response
+        }).catch(() => {
           this.loading = false
-          console.log(error)
         })
       },
 
