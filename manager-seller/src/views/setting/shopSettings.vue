@@ -7,11 +7,7 @@
       </el-form-item>
       <!--店铺地址-->
       <el-form-item label="店铺地址：" prop="shop_address">
-        <el-cascader
-          :options="areas"
-          v-model="selectedArea"
-          @change="handleChange">
-        </el-cascader>
+        <en-address-select :default="areas" @change="handleChange"></en-address-select>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
@@ -70,11 +66,13 @@
 <script>
   import * as API_ShopSettings from '@/api/shopSettings'
   import { UE } from '@/components'
+  import { AddressSelect } from '@/plugins/selector/vue'
   import { validatePhone } from '@/utils/validate'
   export default {
     name: 'shopSetting',
     components: {
-      [UE.name]: UE
+      [UE.name]: UE,
+      [AddressSelect.name]: AddressSelect
     },
     data() {
       var validPhone = (rule, value, callback) => {
@@ -92,14 +90,38 @@
 
         /** 店铺信息*/
         shopDataForm: {
-          /** 店铺ID*/
-          shop_id: '',
+          /** 店铺ID 目前使用3*/
+          shop_id: 3,
 
           /** 身份证号*/
           legal_id: '',
 
           /** 店铺地址 */
           shop_address: '',
+
+          /** 店铺所在省id */
+          shop_province_id: 1,
+
+          /** 店铺所在市id */
+          shop_city_id: 2,
+
+          /** 店铺所在县id */
+          shop_region_id: 3,
+
+          /** 店铺所在镇id */
+          shop_town_id: 4,
+
+          /** 店铺所在省 */
+          shop_province: '和别生',
+
+          /** 店铺所在市 */
+          shop_city: 'handnashi',
+
+          /** 店铺所在县 */
+          shop_region: 'safdas',
+
+          /** 店铺所在乡/镇 */
+          shop_town: 'gushenzhe',
 
           /** 详细地址*/
           shop_add: '',
@@ -187,7 +209,7 @@
               this.$message.success('保存店铺设置成功')
               this.GET_ShopGradeData()
             }).catch(error => {
-              this.$message.success('保存店铺设置失败')
+              this.$message.error(error)
               console.log(error)
             })
           } else {
