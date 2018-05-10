@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class BrandModel extends DataModel {
+export default class PaymentModel extends DataModel {
   /** 支付方式配置项 【各个客户端配置】 */
   @ServerName('enable_client')
   enable_client
