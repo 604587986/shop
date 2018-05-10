@@ -50,7 +50,7 @@
       },
       /** 表格数据 */
       tableData: {
-        default: null
+        default: () => ([])
       },
       /** 加载状态 */
       loading: {

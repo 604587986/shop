@@ -17,7 +17,7 @@ export default class SmtpModel extends DataModel {
   host
 
   /** Smtp ID */
-  @ServerName('brand_id')
+  @ServerName('id')
   id
 
   /** 最后一次发送时间 */
@@ -25,7 +25,7 @@ export default class SmtpModel extends DataModel {
   last_send_time
 
   /**  */
-  @ServerName('mail_from')
+  @ServerName('from')
   mail_from
 
   /** 最大可发信数 */
