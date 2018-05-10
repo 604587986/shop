@@ -12,8 +12,12 @@ import {
 } from '@/framework'
 
 export default class StorageSolutionModel extends DataModel {
-  /** 储存方案配置项 */
-  @ServerName('configItems')
+  /** 储存方案配置 */
+  @ServerName('config')
+  config
+
+  /** 储存方案参数配置项 */
+  @ServerName('config_items')
   configItems
 
   /** 储存方案ID */
@@ -21,14 +25,14 @@ export default class StorageSolutionModel extends DataModel {
   id
 
   /** 储存方案码 */
-  @ServerName('up_bean_id')
+  @ServerName('bean')
   code
 
   /** 储存方案名称 */
-  @ServerName('up_name')
+  @ServerName('name')
   name
 
   /** 储存方案是否已开启 */
-  @ServerName('up_open')
+  @ServerName('open')
   is_open
 }
