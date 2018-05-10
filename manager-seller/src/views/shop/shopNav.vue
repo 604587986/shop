@@ -92,7 +92,7 @@
       [TableSearch.name]: TableSearch
     },
     data() {
-      var validateURL = (rule, value, callback) => {
+      var shopNavURL = (rule, value, callback) => {
         if (!value) {
           callback(new Error('请输入链接地址'))
         } else if (!validateURL(value)) {
@@ -144,7 +144,7 @@
             { required: true, message: '请填写排序', trigger: 'blur' }
           ],
           shop_nav_url: [
-            { validator: validateURL, trigger: 'blur' }
+            { validator: shopNavURL, trigger: 'blur' }
           ]
         }
       }
