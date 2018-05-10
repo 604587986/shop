@@ -164,6 +164,7 @@
 
       /** 提交是smtp表单 */
       submitSmtpForm(formName) {
+        // Andste_TODO 2018/5/10: 接口对接未完成
         this.$refs[formName].validate(valid => {
           const { id } = this.smtpForm
           if (valid) {
@@ -191,6 +192,7 @@
 
       /** 发送测试邮件 */
       handleSendTestEmail() {
+        // Andste_TODO 2018/5/10: 接口对接未完成
         const { test_email, smtpForm } = this
         this.$refs['smtpForm'].validate(valid => {
           if (valid) {
