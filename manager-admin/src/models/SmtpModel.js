@@ -17,7 +17,7 @@ export default class SmtpModel extends DataModel {
   host
 
   /** Smtp ID */
-  @ServerName('brand_id')
+  @ServerName('id')
   id
 
   /** 最后一次发送时间 */
