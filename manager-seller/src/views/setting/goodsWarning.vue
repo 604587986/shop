@@ -43,10 +43,9 @@
       /** 获取当前库存预警数*/
       GET_stockWarningNum() {
         API_shopSettings.getShopData({}).then(response => {
-          console.log(response)
           this.stockWarningForm.stock_warning_num = response.data['stock_warning_num']
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -54,17 +53,14 @@
       handleSaveStockWarning(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.stockWarningForm.stock_warning_num)
             const _params = {
               warning_count: this.stockWarningForm.stock_warning_num
             }
-            console.log(_params)
             API_stockWarningNum.saveStockWarningNum(_params).then(response => {
               this.$message.success('修改成功')
               this.GET_stockWarningNum()
             }).catch(error => {
-              this.$message.error('修改失败，请稍后重试！')
-              console.log(error)
+              this.$message.error(error)
             })
           }
         })
