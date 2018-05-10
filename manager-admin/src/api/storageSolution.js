@@ -18,9 +18,8 @@ export function getStorageSolutionList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      // _response.data = new StorageSolutionModel().map(response.data)
-      resolve(_response)
+      response.data = new StorageSolutionModel().map(response.data)
+      resolve(response)
     }).catch(error => reject(error))
   })
 }
