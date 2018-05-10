@@ -25,7 +25,7 @@ export default class SmtpModel extends DataModel {
   last_send_time
 
   /**  */
-  @ServerName('mail_from')
+  @ServerName('from')
   mail_from
 
   /** 最大可发信数 */
