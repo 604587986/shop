@@ -71,3 +71,15 @@ export function getSmtpDetial(id) {
     method: 'get'
   })
 }
+
+/**
+ * 发送测试邮件
+ * @param params
+ */
+export function sendTestEmail(params) {
+  return request({
+    url: 'smtps/send',
+    method: 'post',
+    data: params
+  })
+}
