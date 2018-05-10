@@ -7,14 +7,8 @@
     >
       <template slot="table-columns">
         <el-table-column prop="name" label="支付方式"/>
-        <el-table-column label="已启用PC">
-          <template slot-scope="scope">{{ scope.row.pc_enable === 'YES' ? '已启用' : '未启用' }}</template>
-        </el-table-column>
-        <el-table-column prop="wap_enable" label="已启用WAP">
-          <template slot-scope="scope">{{ scope.row.wap_enable === 'YES' ? '已启用' : '未启用' }}</template>
-        </el-table-column>
-        <el-table-column prop="app_enable" label="已启用APP">
-          <template slot-scope="scope">{{ scope.row.app_enable === 'YES' ? '已启用' : '未启用' }}</template>
+        <el-table-column prop="is_retrace" label="是否支持原路退回">
+          <template slot-scope="scope">{{ scope.row.is_retrace ? '支持' : '不支持' }}</template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -37,6 +31,50 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
+    <el-dialog
+      :title="'配置支付方式 - ' + paymentForm.name"
+      :visible.sync="dialogPaymentVisible"
+      width="35%"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false">
+      <el-form :model="paymentForm" :rules="paymentRules" ref="paymentForm" label-width="140px">
+        <el-form-item label="支付方式图片" prop="image">
+          <el-upload
+            :action="MixinUploadApi"
+            :limit="1"
+            :on-remove="() => { paymentForm.image = '' }"
+            :on-success="(res) => { paymentForm.image = res.url }"
+            :file-list="paymentForm.image ? [{name: 'payment_image', url: paymentForm.image}] : []"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="原路退回" prop="is_retrace">
+          <el-radio-group v-model="paymentForm.is_retrace">
+            <el-radio :label="1">支持</el-radio>
+            <el-radio :label="0">不支持</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <template v-for="(client, index) in paymentForm.enable_client">
+          <el-form-item :label="client.name" prop="is_open">
+            <el-radio-group v-model="client.is_open">
+              <el-radio :label="1">开启</el-radio>
+              <el-radio :label="0">关闭</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <template v-if="client.is_open" v-for="(config, index) in client.config_list">
+            <el-form-item :label="config.text" prop="desc">
+              <el-input type="textarea" v-model="config.value"></el-input>
+            </el-form-item>
+          </template>
+        </template>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogPaymentVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitPaymentForm('paymentForm')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -58,7 +96,13 @@
           page_size: 10
         },
         /** 列表数据 */
-        tableData: null
+        tableData: '',
+        /** 支付方式 表单 */
+        paymentForm: {},
+        /** 支付方式 表单规则 */
+        paymentRules: {},
+        /** 支付方式 dialog */
+        dialogPaymentVisible: false
       }
     },
     mounted() {
@@ -78,9 +122,30 @@
       },
 
       /** 配置支付方式 */
-      handleEditPayment(index, row) {},
+      handleEditPayment(index, row) {
+        API_Payment.getPaymentDetail(row.code).then(response => {
+          console.log(response)
+          response.enable_client && response.enable_client.map(item => {
+            if (item.is_open === null) item.is_open = 0
+            return item
+          })
+          this.paymentForm = response
+          this.dialogPaymentVisible = true
+        })
+      },
 
-      /** 获取短信网关列表 */
+      /** 提交修改支付方式表单 */
+      submitPaymentForm(formName) {
+        // Andste_TODO 2018/5/10: 尚未添加表单校验
+        const { code } = this.paymentForm
+        API_Payment.editPayment(code, this.paymentForm).then(response => {
+          this.tableData.filter(item => item.code === code)[0] = response
+          this.dialogPaymentVisible = false
+          this.$message.success('保存成功！')
+        })
+      },
+
+      /** 获取支付方式列表 */
       GET_PaymentList() {
         this.loading = true
         API_Payment.getPaymentList(this.params).then(response => {

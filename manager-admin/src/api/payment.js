@@ -4,6 +4,7 @@
 
 import request from '@/utils/request'
 import PaymentModel from '@/models/PaymentModel'
+const paymentModel = new PaymentModel()
 
 /**
  * 获取支付方式列表
@@ -18,7 +19,7 @@ export function getPaymentList(params) {
       loading: false,
       params
     }).then(response => {
-      response.data = new PaymentModel().map(response.data)
+      response.data = paymentModel.map(response.data)
       resolve(response)
     }).catch(error => reject(error))
   })
@@ -51,8 +52,8 @@ export function editPayment(payment_plugin_id, payment_method) {
   return request({
     url: `payment/payment-methods/${payment_plugin_id}`,
     method: 'put',
-    headers: { 'Content-Type': 'appliaction/json' },
-    data: { payment_method }
+    headers: { 'Content-Type': 'application/json' },
+    data: { payment_method: paymentModel.params(payment_method) }
   })
 }
 
@@ -61,8 +62,10 @@ export function editPayment(payment_plugin_id, payment_method) {
  * @param payment_plugin_id
  */
 export function getPaymentDetail(payment_plugin_id) {
-  return request({
-    url: `payment/payment-methods/${payment_plugin_id}`,
-    method: 'get'
+  return new Promise((resolve, reject) => {
+    return request({
+      url: `payment/payment-methods/${payment_plugin_id}`,
+      method: 'get'
+    }).then(response => resolve(paymentModel.map(response))).catch(error => reject(error))
   })
 }

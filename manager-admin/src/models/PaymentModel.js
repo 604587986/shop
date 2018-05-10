@@ -24,10 +24,6 @@ export default class PaymentModel extends DataModel {
   @ServerName('is_retrace')
   is_retrace
 
-  /** 支付方式ID */
-  @ServerName('method_id')
-  id
-
   /** 支付方式名称 */
   @ServerName('method_name')
   name
@@ -35,8 +31,4 @@ export default class PaymentModel extends DataModel {
   /** 支付方式代码 */
   @ServerName('plugin_id')
   code
-
-  /** 是否支持原路退回 */
-  @ServerName('is_retrace')
-  is_retrace
 }
