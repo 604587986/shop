@@ -61,8 +61,8 @@ service.interceptors.response.use(
     await closeLoading(response)
     return response.data
   },
-  error => {
-    closeLoading(error)
+  async error => {
+    await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 109 --> 没有登录、登录状态失效
