@@ -100,25 +100,23 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        console.log(this.tableData, val)
         this.tableData = this.tableData.concat(val)
         // 去重 转化
         const res = new Map()
         this.tableData = this.tableData.filter((key) => !res.has(key.goods_id) && res.set(key.goods_id, 1))
-        console.log(this.tableData, 565)
       },
 
-      /** 标签商品列表**/
+      /** 获取标签下的商品列表**/
       getTagGoodsList() {
         this.loading = true
         const _tag_id = this.params.tag_id
-        API_goodsTag.getTagGoodsList(_tag_id, this.params).then(response => {
+        API_goodsTag.getTagGoodsList(_tag_id, {}).then(response => {
           this.loading = false
           this.tableData = response.data
           this.maxsize = 0
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -156,8 +154,7 @@
           this.$message.success('保存设置成功！')
         }).catch(error => {
           this.loading = false
-          this.$message.error('保存设置失败，请稍后再试！')
-          console.log(error)
+          this.$message.error(error)
         })
       }
     }

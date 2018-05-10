@@ -177,7 +177,7 @@
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -192,8 +192,7 @@
           this.$message.success('还原成功')
           this.GET_GoodsList()
         }).catch(error => {
-          this.$message.error('还原失败，请稍后再试')
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -203,7 +202,7 @@
         API_goods.RecycleDeleteGoods(_ids, {}).then(() => {
           this.GET_GoodsList()
           this.$message.success('删除商品成功！')
-        }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
+        }).catch((error) => this.$message.error(error))
       }
     }
   }

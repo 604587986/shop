@@ -10,8 +10,7 @@ import GoodsModel from '@/models/GoodsModel'
 export function getTagsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      // url: '/goods/tags',
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/tag/list',
+      url: '/goods/tags',
       method: 'get',
       loading: false,
       params
@@ -32,7 +31,6 @@ export function getTagGoodsList(id, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/tags/${id}/goods`,
-      // url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/tag/goods-list/${id}`,
       method: 'get',
       loading: false,
       params
@@ -50,15 +48,12 @@ export function getTagGoodsList(id, params) {
  * @returns {Promise<any>}
  */
 export function saveTagGoodsList(tag_id, goods_ids, params) {
-  const _params = params
-  const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/tags/${tag_id}/goods/${goods_ids}`,
       method: 'put',
       loading: false,
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))

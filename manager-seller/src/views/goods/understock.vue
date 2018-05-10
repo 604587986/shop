@@ -138,12 +138,14 @@
       },
 
       /**  分类选择组件值发生改变 */
-      categoryChanged(val) {
-        this.params = {
-          ...this.params,
-          shop_cat_path: val.join('|')
+      categoryChanged(data) {
+        delete this.params.shop_cat_path
+        if (data !== '') {
+          this.params = {
+            ...this.params,
+            shop_cat_path: '0|' + data.join('|') + '|'
+          }
         }
-        delete this.params.keyword
         this.GET_WarningGoodsList()
       },
 
@@ -159,7 +161,7 @@
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -168,7 +170,7 @@
         this.goodsWarningStockshow = true
         API_goods.getWarningGoodsStockList(row.goods_id).then((response) => {
           this.goodsWarningStockDate = response.data
-        }).catch(() => this.$message.error('查看库存商品信息出错，请稍后再试！'))
+        }).catch((error) => this.$message.error(error))
       }
     }
   }
