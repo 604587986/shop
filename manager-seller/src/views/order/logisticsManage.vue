@@ -59,7 +59,6 @@
           label-width="100px"
           class="demo-ruleForm"
           style="width: 30%;margin-left: 10%;">
-
           <el-form-item label="模板名称" prop="tpl_name">
             <el-input type="text" v-model="mouldForm.tpl_name" auto-complete="off"></el-input>
           </el-form-item>
@@ -139,14 +138,13 @@
 <script>
   import * as API_express from '@/api/expressMould'
   import * as API_logistics from '@/api/expressCompany'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { TableLayout, TableSearch } from '@/components'
 
   export default {
     name: 'logisticsManage',
     components: {
       [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker
+      [TableSearch.name]: TableSearch
     },
     data() {
       return {
@@ -235,7 +233,7 @@
           this.loading = false
           this.tableData = response.data
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -261,7 +259,7 @@
             API_express.deleteExpressMould(ids, {}).then(() => {
               this.$message.success('删除成功')
             }).catch(error => {
-              console.log(error)
+              this.$message.error(error)
             })
           })
           .catch(() => {
@@ -289,8 +287,7 @@
             API_express.saveExpressMould(this.mouldForm.tpl_id, this.mouldForm).then(() => {
               this.$message.success('保存成功')
             }).catch(error => {
-              this.$message.success('保存失败，请稍后再试！')
-              console.log(error)
+              this.$message.error(error)
             })
           } else {
             return false
@@ -305,7 +302,7 @@
           this.loading = false
           this.logisticsTableData = response.data
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -326,7 +323,7 @@
           this.$message.success('关闭成功')
           this.GET_logisticsList()
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -336,7 +333,7 @@
           this.$message.success('开启成功')
           this.GET_logisticsList()
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       }
     }
