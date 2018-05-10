@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import * as API_ShopGrade from '@/api/shopGrade'
+  import * as API_Shop from '@/api/shop'
   export default {
     name: 'gradeApplication',
     data() {
@@ -24,7 +24,7 @@
     methods: {
       /** 获取店铺等级信息 */
       // GET_ShopGradeData() {
-      //   API_ShopGrade.getShopGradeData().then(response => {
+      //   API_Shop.getShopGradeData().then(response => {
       //     this.shopGradeData = response
       //   }).catch(error => {
       //     console.log(error)
@@ -33,7 +33,7 @@
 
       /** 提升等级*/
       handlePromoteGrade() {
-        // API_ShopGrade.getShopGradeData(this.shopGradeData.shop_id, this.shopGradeData).then(response => {
+        // API_Shop.getShopGradeData(this.shopGradeData.shop_id, this.shopGradeData).then(response => {
         //   this.$message.success('申请成功，请耐心等待！')
         //   this.GET_ShopGradeData()
         // }).catch(error => {

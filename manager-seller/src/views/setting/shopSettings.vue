@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import * as API_ShopSettings from '@/api/shopSettings'
+  import * as API_Shop from '@/api/shop'
   import { UE } from '@/components'
   import { AddressSelect } from '@/plugins/selector/vue'
   import { validatePhone } from '@/utils/validate'
@@ -188,7 +188,7 @@
     methods: {
       /** 获取店铺信息 */
       GET_ShopGradeData() {
-        API_ShopSettings.getShopData().then(response => {
+        API_Shop.getShopData().then(response => {
           this.shopDataForm = { ...response.data }
           this.fileList_logo = [{ url: this.shopDataForm.shop_logo }]
           this.fileList_banner = [{ url: this.shopDataForm.shop_banner }]
@@ -205,7 +205,7 @@
             const _params = {
               ...this.shopDataForm
             }
-            API_ShopSettings.saveShopSettings(_params).then(response => {
+            API_Shop.saveShopSettings(_params).then(response => {
               this.$message.success('保存店铺设置成功')
               this.GET_ShopGradeData()
             }).catch(error => {

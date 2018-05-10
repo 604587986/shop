@@ -127,7 +127,7 @@
 
 <script>
 import * as API_Dashboard from '@/api/dashboard'
-
+import * as API_shop from '@/api/shop'
 export default {
   name: 'dashboard',
   mounted() {
@@ -165,6 +165,12 @@ export default {
   },
   created() {
     this.GET_DashBoard()
+    API_shop.getShopData({}).then(response => {
+      /** 使用vuex进行存储店铺信息 */
+      this.$store.dispatch('SetShop', response)
+    }).catch(error => {
+      this.$message.error(error)
+    })
   },
   methods: {
     /** 窗口缩放时计算table高度 */
