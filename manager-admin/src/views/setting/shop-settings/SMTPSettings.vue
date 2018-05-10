@@ -25,8 +25,8 @@
         </el-table-column>
       </template>
       <el-pagination
-        slot="pagination"
         v-if="tableData"
+        slot="pagination"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
         :current-page="params.page_no"
