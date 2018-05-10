@@ -12,16 +12,12 @@ import {
 } from '@/framework'
 
 export default class BrandModel extends DataModel {
-  /** 是否已启用APP */
-  @ServerName('app_enable')
-  app_enable
-
-  /** 支付方式配置项 */
-  @ServerName('configItems')
-  configItems
+  /** 支付方式配置项 【各个客户端配置】 */
+  @ServerName('enable_client')
+  enable_client
 
   /** 支付方式图片 */
-  @ServerName('img_url')
+  @ServerName('image')
   image
 
   /** 是否可原路退回 */
@@ -36,15 +32,11 @@ export default class BrandModel extends DataModel {
   @ServerName('method_name')
   name
 
-  /** 是否已启用PC */
-  @ServerName('pc_enable')
-  pc_enable
-
   /** 支付方式代码 */
   @ServerName('plugin_id')
   code
 
-  /** 是否已启用WAP */
-  @ServerName('wap_enable')
-  wap_enable
+  /** 是否支持原路退回 */
+  @ServerName('is_retrace')
+  is_retrace
 }
