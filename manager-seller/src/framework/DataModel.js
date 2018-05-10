@@ -58,8 +58,10 @@ export default class DataModel {
   params(json) {
     const alias = this.constructor.__serverName__
     Object.keys(alias).forEach(key => {
-      json[alias[key]] = json[key]
-      delete json[key]
+      if (alias[key] !== key) {
+        json[alias[key]] = json[key]
+        delete json[key]
+      }
     })
     return json
   }
