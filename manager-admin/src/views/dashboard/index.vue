@@ -97,39 +97,39 @@ export default {
     }
   },
   created() {
-    API_Dashboard.getDashboardData().then(response => {
-      this.loading = false
-      /** 新增商品 */
-      this.goodsList = response.goodsList
-      /** 新增会员 */
-      this.memberList = response.memberList
-      /** 销售统计 */
-      const IS = response.incomeStatistics
-      const nowDate = new Date()
-      const year = nowDate.getFullYear()
-      const month = nowDate.getMonth() + 1
-      this.sesalChart.setOption({
-        title: { text: `${year}年${month}月销售统计`, subtext: '单位(元)', x: 'center' },
-        tooltip: { trigger: 'item', formatter: '{a} <br/>{b} : {c} ({d}%)' },
-        legend: { orient: 'vertical', left: 'left', data: ['收款金额', '实收金额', '退款金额'] },
-        series: [
-          { name: '访问来源',
-            type: 'pie',
-            radius: '55%',
-            center: ['55%', '70%'],
-            data: [
-              { value: IS.receivables, name: '收款金额' },
-              { value: IS.paid, name: '实收金额' },
-              { value: IS.refund, name: '退款金额' }
-            ],
-            itemStyle: { emphasis: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }}
-          }
-        ]
-      })
-    }).catch(error => {
-      this.loading = false
-      console.log(error)
-    })
+    // API_Dashboard.getDashboardData().then(response => {
+    //   this.loading = false
+    //   /** 新增商品 */
+    //   this.goodsList = response.goodsList
+    //   /** 新增会员 */
+    //   this.memberList = response.memberList
+    //   /** 销售统计 */
+    //   const IS = response.incomeStatistics
+    //   const nowDate = new Date()
+    //   const year = nowDate.getFullYear()
+    //   const month = nowDate.getMonth() + 1
+    //   this.sesalChart.setOption({
+    //     title: { text: `${year}年${month}月销售统计`, subtext: '单位(元)', x: 'center' },
+    //     tooltip: { trigger: 'item', formatter: '{a} <br/>{b} : {c} ({d}%)' },
+    //     legend: { orient: 'vertical', left: 'left', data: ['收款金额', '实收金额', '退款金额'] },
+    //     series: [
+    //       { name: '访问来源',
+    //         type: 'pie',
+    //         radius: '55%',
+    //         center: ['55%', '70%'],
+    //         data: [
+    //           { value: IS.receivables, name: '收款金额' },
+    //           { value: IS.paid, name: '实收金额' },
+    //           { value: IS.refund, name: '退款金额' }
+    //         ],
+    //         itemStyle: { emphasis: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }}
+    //       }
+    //     ]
+    //   })
+    // }).catch(error => {
+    //   this.loading = false
+    //   console.log(error)
+    // })
   }
 }
 </script>

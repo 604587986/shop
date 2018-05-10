@@ -16,8 +16,11 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   // 如果是put/post请求，用qs.stringify序列化参数
   const is_put_post = config.method === 'put' || config.method === 'post'
-  const not_json = config.headers[config.method]['Content-Type'] !== 'application/json'
-  if (is_put_post && not_json) {
+  const is_json = config.headers['Content-Type'] === 'application/json'
+  if (is_put_post && is_json) {
+    config.data = JSON.stringify(config.data)
+  }
+  if (is_put_post && !is_json) {
     config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   // Do something before request is sent
@@ -41,8 +44,8 @@ service.interceptors.response.use(
     await closeLoading(response)
     return response.data
   },
-  error => {
-    closeLoading(error)
+  async error => {
+    await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效

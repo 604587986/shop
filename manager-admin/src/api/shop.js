@@ -18,64 +18,55 @@ export function getShopList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ShopModel().map(response.data)
-      resolve(_response)
+      response.data = new ShopModel().map(response.data)
+      resolve(response)
     }).catch(error => reject(error))
   })
 }
 
 /**
- * 关闭店铺
- * @param ids
- * @returns {Promise<any>}
+ * 获取店铺详情
+ * @param shop_id
  */
-export function closeShop(ids) {
-  if (!Array.isArray(ids)) ids = [ids]
-  const _formData = new FormData()
-  ids.forEach(item => _formData.append('shopId', item))
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/shop/dis-shop.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getShopDetail(shop_id) {
+  return request({
+    url: `shops/${shop_id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 关闭店铺
+ * @param shop_id
+ */
+export function closeShop(shop_id) {
+  return request({
+    url: `shops/disable/${shop_id}`,
+    method: 'put'
   })
 }
 
 /**
  * 恢复店铺
- * @param ids
- * @returns {Promise<any>}
+ * @param shop_id
  */
-export function recoverShop(ids) {
-  if (!Array.isArray(ids)) ids = [ids]
-  const _formData = new FormData()
-  ids.forEach(item => _formData.append('shopId', item))
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/shop/use-shop.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function recoverShop(shop_id) {
+  return request({
+    url: `shops/enable/${shop_id}`,
+    method: 'put'
   })
 }
 
 /**
- * 编辑店铺
- * @param id
+ * 修改审核店铺
+ * @param shop_id
  * @param params
- * @returns {Promise<any>}
  */
-export function editShop(id, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/shop/save-edit.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function editAuthShop(shop_id, params) {
+  return request({
+    url: `shops/${shop_id}`,
+    method: 'put',
+    data: params
   })
 }
 

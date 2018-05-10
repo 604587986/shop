@@ -1,8 +1,7 @@
 <template>
   <div>
     <en-tabel-layout
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -28,21 +27,49 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
+    <el-dialog
+      :title="smsForm.id ? '编辑SMS' : '添加SMS'"
+      :visible.sync="dialogSmsVisible"
+      width="500px"
+      append-to-body>
+      <el-form :model="smsForm" :rules="smsRules" ref="smsForm" size="small" label-width="120px">
+        <el-form-item label="平台名称" prop="name">
+          <el-input v-model="smsForm.name"/>
+        </el-form-item>
+        <el-form-item label="平台代码" prop="code">
+          <el-input v-model="smsForm.code"/>
+        </el-form-item>
+        <el-form-item label="是否开启" prop="is_open">
+          <el-radio-group v-model="smsForm.is_open">
+            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="配置" prop="config">
+          <el-input v-model="smsForm.config"/>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogSmsVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitSmsForm('smsForm')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  // Andste_TODO 2018/5/10: 未适配API
   import * as API_SmsGateway from '@/api/smsGateway'
   import { TableLayout } from '@/components'
   export default {
@@ -54,18 +81,19 @@
       return {
         /** 列表loading状态 */
         loading: false,
-
         /** 列表参数 */
         params: {
           page_no: 1,
           page_size: 10
         },
-
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        tableData: '',
+        /** sms 表单 */
+        smsForm: { is_open: 0 },
+        /** sms 表单规则 */
+        smsRules: {},
+        /** sms表单 dailog */
+        dialogSmsVisible: false
       }
     },
     mounted() {
@@ -85,7 +113,9 @@
       },
 
       /** 添加短信网关 */
-      handleAddSmsGateway() {},
+      handleAddSmsGateway() {
+        this.dialogSmsVisible = true
+      },
 
       /** 修改短信网关 */
       handleEditSmsGateway(index, row) {},
@@ -103,12 +133,7 @@
         this.loading = true
         API_SmsGateway.getSmsGatewayList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
+          this.tableData = response
         }).catch(error => {
           this.loading = false
           console.log(error)
