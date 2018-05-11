@@ -2,6 +2,7 @@
  * Created by andste.cc@gmail.com on 2018/5/9.
  */
 
+import Vue from 'vue'
 import * as API_Common from '@/api/common'
 
 export default {
@@ -15,6 +16,11 @@ export default {
     /** 返回克隆后的对象 */
     MixinClone(obj) {
       return JSON.parse(JSON.stringify(obj))
+    },
+    MixinSetTableData(tableData, id, response) {
+      const { data } = tableData
+      const index = data.findIndex(item => item.id === id)
+      Vue.set(data, index, response)
     }
   },
   computed: {}
