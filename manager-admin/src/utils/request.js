@@ -50,11 +50,8 @@ service.interceptors.response.use(
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
     if (error_response.status === 403) fedLogOut()
-    Message({
-      message: error_data.message || '出现错误，请稍后再试！',
-      type: 'error',
-      duration: 5 * 1000
-    })
+    let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
+    Vue.prototype.$message.error(error_data.message || _message)
     return Promise.reject(error)
   }
 )
