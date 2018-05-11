@@ -53,7 +53,7 @@
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
-      :title="brandForm.id ? '编辑品牌 - ' + brandForm.name : '添加品牌'"
+      :title="brandForm.id ? '编辑品牌' : '添加品牌'"
       :visible.sync="dialogBrandVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -64,7 +64,7 @@
         <el-form-item label="品牌名称" prop="name">
           <el-input v-model="brandForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="品牌图片" prop="logo">
+        <el-form-item label="品牌图片" prop="image">
           <el-upload
             :action="MixinUploadApi"
             list-type="picture"
@@ -121,7 +121,7 @@
             { required: true, message: '请输入品牌名称', trigger: 'blur' },
             { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
           ],
-          logo: [
+          image: [
             { required: true, message: '请上传品牌logo' }
           ]
         }
@@ -181,8 +181,7 @@
 
       /** 添加品牌触发事件 */
       handleAddBrand() {
-        this.brandForm = { imgFileList: [] }
-        this.dialogBrandTitle = '添加品牌'
+        this.brandForm = {}
         this.dialogBrandVisible = true
       },
 
@@ -203,7 +202,7 @@
                 this.$message.success('保存成功！')
                 this.dialogBrandVisible = false
                 this.$refs[formName].resetFields()
-                this.GET_BrandList()
+                this.MixinSetTableData(this.tableData, id, response)
               })
             }
           } else {

@@ -30,10 +30,12 @@ export function getBrandList(params) {
  * @param params
  */
 export function addBrand(params) {
-  return request({
-    url: 'goods/brands',
-    method: 'post',
-    data: brandModel.params(params)
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'goods/brands',
+      method: 'post',
+      data: brandModel.params(params)
+    }).then(response => resolve(brandModel.map(response))).catch(error => reject(error))
   })
 }
 
@@ -54,10 +56,12 @@ export function getBrandDetail(id) {
  * @param params
  */
 export function editBrand(id, params) {
-  return request({
-    url: `goods/brands/${id}`,
-    method: 'put',
-    data: brandModel.params(params)
+  return new Promise((resolve, reject) => {
+    request({
+      url: `goods/brands/${id}`,
+      method: 'put',
+      data: brandModel.params(params)
+    }).then(response => resolve(brandModel.map(response))).catch(error => reject(error))
   })
 }
 
