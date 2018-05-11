@@ -21,6 +21,10 @@
               size="mini"
               type="primary"
               @click="handleEditSmtp(scope.$index, scope.row)">修改</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDeleteSmtp(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </template>
@@ -39,6 +43,7 @@
     <el-dialog
       :title="smtpForm.id ? '编辑SMTP' : '添加SMTP'"
       :visible.sync="dialogSmtpVisible"
+      @close="handleDialogClosed"
       width="500px">
       <el-form :model="smtpForm" :rules="smtpRules" ref="smtpForm" size="small" label-width="120px">
         <el-form-item label="HOST" prop="host">
@@ -62,8 +67,8 @@
         <el-form-item label="每日最大发信数" prop="max_count">
           <el-input v-model="smtpForm.max_count"/>
         </el-form-item>
-        <el-form-item label="From" prop="from">
-          <el-input v-model="smtpForm.from"/>
+        <el-form-item label="From" prop="mail_from">
+          <el-input v-model="smtpForm.mail_from"/>
         </el-form-item>
         <el-form-item label="测试" :error="test_email_error">
           <el-input v-model="test_email">
@@ -105,9 +110,7 @@
         /** 列表数据 */
         tableData: '',
         /** smtp 表单 */
-        smtpForm: {
-          open_ssl: 1
-        },
+        smtpForm: {},
         /** smtp 表单规则*/
         smtpRules: {
           host: [required('请输入HOST')],
@@ -125,7 +128,7 @@
               /^[1-9]\d*$/.test(value) ? callback() : callback(new Error('发信数应为正整数！'))
             } }
           ],
-          from: [required('请输入From字段')]
+          mail_from: [required('请输入From字段')]
         },
         /** smtp表单 dialog */
         dialogSmtpVisible: false,
@@ -151,34 +154,49 @@
         this.GET_SmtpList()
       },
 
+      /** dialog关闭回调 */
+      handleDialogClosed() {
+        this.$refs.smtpForm.clearValidate()
+      },
+
       /** 添加smtp */
       handleAddSmtp() {
+        this.smtpForm = { open_ssl: 1 }
+        const { smtpForm } = this.$refs
+        smtpForm && smtpForm.resetFields()
         this.dialogSmtpVisible = true
       },
 
       /** 修改smtp */
       handleEditSmtp(index, row) {
-        this.smtpForm = row
+        this.smtpForm = this.MixinClone(row)
         this.dialogSmtpVisible = true
+      },
+
+      /** 删除smtp */
+      handleDeleteSmtp(index, row) {
+        this.$confirm('确定要删除这个SMTP吗？', '提示', { type: 'warning' }).then(() => {
+          API_Smtp.deleteSmtp(row.id).then(() => {
+            this.$message.success('删除成功！')
+            this.GET_SmtpList()
+          })
+        }).catch(() => {})
       },
 
       /** 提交是smtp表单 */
       submitSmtpForm(formName) {
-        // Andste_TODO 2018/5/10: 接口对接未完成
         this.$refs[formName].validate(valid => {
           const { id } = this.smtpForm
           if (valid) {
             if (id) {
               API_Smtp.editSmtp(id, this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
-                this.$refs[formName].resetFields()
                 this.$message.success('修改成功！')
-                this.tableData.filter(item => item.id === id)[0] = response
+                this.MixinSetTableData(this.tableData, id, response)
               })
             } else {
               API_Smtp.addSmtp(this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
-                this.$refs[formName].resetFields()
                 this.$message.success('保存成功！')
                 this.GET_SmtpList()
               })
@@ -192,7 +210,6 @@
 
       /** 发送测试邮件 */
       handleSendTestEmail() {
-        // Andste_TODO 2018/5/10: 接口对接未完成
         const { test_email, smtpForm } = this
         this.$refs['smtpForm'].validate(valid => {
           if (valid) {
@@ -218,15 +235,10 @@
         API_Smtp.getSmtpList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(error => {
+        }).catch(() => {
           this.loading = false
-          console.log(error)
         })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

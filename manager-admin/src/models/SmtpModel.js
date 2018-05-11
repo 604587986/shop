@@ -24,13 +24,13 @@ export default class SmtpModel extends DataModel {
   @ServerName('last_send_time')
   last_send_time
 
-  /**  */
-  @ServerName('from')
+  /** 来自邮箱 */
+  @ServerName('mail_from')
   mail_from
 
   /** 最大可发信数 */
   @ServerName('max_count')
-  max_count
+  max_count = 0
 
   /** Open SSL */
   @ServerName('open_ssl')
@@ -46,7 +46,7 @@ export default class SmtpModel extends DataModel {
 
   /** 已发送数 */
   @ServerName('send_count')
-  send_count
+  send_count = 0
 
   /** 用户名 */
   @ServerName('username')

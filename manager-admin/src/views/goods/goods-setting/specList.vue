@@ -1,8 +1,6 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
-      pagination
       :tableData="tableData.data"
       :loading="loading"
       :selection-change="handleSelectionChange"
@@ -44,8 +42,8 @@
         <el-button type="danger" size="mini" @click="deleteTheSpecs">删除选中</el-button>
       </template>
       <el-pagination
-        slot="pagination"
         v-if="tableData"
+        slot="pagination"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
         :current-page="params.page_no"
@@ -56,7 +54,7 @@
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
-      :title="dialogSpecTitle"
+      :title="specForm.id ? '编辑规格' : '添加规格'"
       :visible.sync="dialogSpecVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -134,13 +132,8 @@
         /** 添加、修改规格 dialog */
         dialogSpecVisible: false,
 
-        /** 添加、修改规格 dialog标题 */
-        dialogSpecTitle: '添加规格',
-
         /** 添加、修改规格 表单 */
-        specForm: {
-          form_type: 'add'
-        },
+        specForm: {},
 
         /** 添加、修改规格 规则 */
         specRules: {
@@ -182,20 +175,14 @@
 
       /** 添加规格事件触发 */
       handleAddSpecs() {
-        this.specForm = {
-          form_type: 'add'
-        }
+        this.specForm = {}
         this.dialogSpecTitle = '添加规格'
         this.dialogSpecVisible = true
       },
 
       /** 修改规格事件 */
       handleEditSpec(index, row) {
-        this.specForm = {
-          form_type: 'edit',
-          ...row
-        }
-        this.dialogSpecTitle = '编辑规格 - ' + row.name
+        this.specForm = this.MixinClone(row)
         this.dialogSpecVisible = true
       },
 
@@ -239,7 +226,8 @@
       submitSpecForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.specForm.form_type === 'add') {
+            const { id } = this.specForm
+            if (!id) {
               API_spec.addSpec(this.specForm).then(response => {
                 this.dialogSpecVisible = false
                 this.$message.success('添加成功！')
@@ -247,11 +235,11 @@
                 this.GET_SpecsList()
               })
             } else {
-              API_spec.eidtSpec(this.specForm.id, this.specForm).then(response => {
+              API_spec.eidtSpec(id, this.specForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogSpecVisible = false
                 this.$refs[formName].resetFields()
-                this.GET_SpecsList()
+                this.MixinSetTableData(this.tableData, id, response)
               })
             }
           } else {

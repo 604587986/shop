@@ -175,12 +175,12 @@ export const asyncRouterMap = [
       {
         path: '/shop/shop-theme-manage',
         component: _import('shop/shop-theme-manage/index'),
-        redirect: '/shop/shop-theme-manage/theme-list',
+        redirect: '/shop/shop-theme-manage/pc',
         name: 'shopThemeManage',
         meta: { title: 'shopThemeManage' },
         children: [
-          { path: 'theme-list', component: _import('shop/shop-theme-manage/themeList'), name: 'themeList', meta: { title: 'themeList' }},
-          { path: 'theme-list-wap', component: _import('shop/shop-theme-manage/themeListWap'), name: 'themeListWap', meta: { title: 'themeListWap' }}
+          { path: 'pc', component: _import('shop/shop-theme-manage/themeList'), name: 'themeList', meta: { title: 'themeList' }},
+          { path: 'wap', component: _import('shop/shop-theme-manage/themeListWap'), name: 'themeListWap', meta: { title: 'themeListWap' }}
         ]
       },
       {

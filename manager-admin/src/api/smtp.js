@@ -4,6 +4,7 @@
 
 import request from '@/utils/request'
 import SmtpModel from '@/models/SmtpModel'
+const smtpModel = new SmtpModel()
 
 /**
  * 获取smtp列表
@@ -18,7 +19,7 @@ export function getSmtpList(params) {
       loading: false,
       params
     }).then(response => {
-      response.data = new SmtpModel().map(response.data)
+      response.data = smtpModel.map(response.data)
       resolve(response)
     }).catch(error => reject(error))
   })
@@ -29,10 +30,12 @@ export function getSmtpList(params) {
  * @param params
  */
 export function addSmtp(params) {
-  return request({
-    url: 'smtps',
-    method: 'post',
-    data: params
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'smtps',
+      method: 'post',
+      data: smtpModel.params(params)
+    }).then(response => resolve(smtpModel.map(response))).catch(error => reject(error))
   })
 }
 
@@ -42,10 +45,12 @@ export function addSmtp(params) {
  * @param params
  */
 export function editSmtp(id, params) {
-  return request({
-    url: `smtps/${id}`,
-    method: 'post',
-    data: params
+  return new Promise((resolve, reject) => {
+    request({
+      url: `smtps/${id}`,
+      method: 'put',
+      data: smtpModel.params(params)
+    }).then(response => resolve(smtpModel.map(response))).catch(error => reject(error))
   })
 }
 
@@ -79,6 +84,7 @@ export function getSmtpDetial(id) {
 export function sendTestEmail(params) {
   return request({
     url: 'smtps/send',
+    timeout: 20000,
     method: 'post',
     data: params
   })

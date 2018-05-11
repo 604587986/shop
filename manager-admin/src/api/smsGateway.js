@@ -4,6 +4,7 @@
 
 import request from '@/utils/request'
 import SmsGateway from '@/models/SmsGatewayModel'
+const smsGateway = new SmsGateway()
 
 /**
  * 获取短信网关列表
@@ -18,23 +19,26 @@ export function getSmsGatewayList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new SmsGateway().map(response.data)
-      resolve(_response)
+      response.data = smsGateway.map(response.data)
+      resolve(response)
     }).catch(error => reject(error))
   })
 }
 
 /**
- * 添加短信网关
- * @param params
+ * 修改短信网关参数
+ * @param id 短信网关ID
+ * @param params 短信网关参数
  * @returns {*}
  */
-export function addSmsGateway(params) {
-  return request({
-    url: 'system/platforms',
-    method: 'post',
-    data: params
+export function editSmsGateway(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `system/platforms/${id}`,
+      method: 'put',
+      headers: { 'Content-Type': 'application/json' },
+      data: smsGateway.params(params)
+    }).then(response => resolve(smsGateway.map(response))).catch(error => reject(error))
   })
 }
 
