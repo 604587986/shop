@@ -1,9 +1,7 @@
 <template>
   <div>
     <en-tabel-layout
-      :toolbar="true"
-      :pagination="true"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
       :selection-change="handleSelectionChange"
     >
@@ -25,15 +23,6 @@
         </el-table-column>
         <!--品牌名称-->
         <el-table-column prop="name" label="品牌名称" />
-        <!--查看详细-->
-        <!--<el-table-column label="查看详细" width="150">-->
-          <!--<template slot-scope="scope">-->
-            <!--<el-button-->
-              <!--size="mini"-->
-              <!--type="text"-->
-              <!--@click="handleViewBrandDetail(scope.$index, scope.row)">查看详细</el-button>-->
-          <!--</template>-->
-        <!--</el-table-column>-->
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -52,19 +41,19 @@
         <el-button type="danger" size="mini" @click="deleteTheBrand">删除选中</el-button>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
-      :title="dialogBrandTitle"
+      :title="brandForm.id ? '编辑品牌 - ' + brandForm.name : '添加品牌'"
       :visible.sync="dialogBrandVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -79,9 +68,9 @@
           <el-upload
             :action="MixinUploadApi"
             list-type="picture"
-            :on-success="onImgUploadSuccess"
-            :on-remove="onImgRemoved"
-            :file-list="brandForm.imgFileList"
+            :on-success="(res) => { brandForm.image = res.url }"
+            :on-remove="() => { brandForm.image = '' }"
+            :file-list="brandForm.image ? [{ name: 'brand_image', url: brandForm.image }] : []"
             :multiple="false"
             :limit="1"
           >
@@ -95,10 +84,6 @@
         <el-button type="primary" @click="submitBrandForm('brandForm')">确 定</el-button>
       </span>
     </el-dialog>
-    <!--&lt;!&ndash;查看品牌详情&ndash;&gt;-->
-    <!--<el-dialog title="查看品牌详情" :visible.sync="dialogBrandDetailVisible" center>-->
-      <!--<div v-html="brandDetail"/>-->
-    <!--</el-dialog>-->
   </div>
 </template>
 
@@ -115,38 +100,21 @@
       return {
         /** 列表loading状态 */
         loading: false,
-
         /** 列表参数 */
         params: {
           page_no: 1,
           page_size: 10
         },
-
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
+        tableData: '',
         /** 被选数据 */
         selectedData: [],
 
-        // 添加、修改品牌dialogTitle
-        dialogBrandTitle: '添加品牌',
         // 添加、修改品牌 dialog
         dialogBrandVisible: false,
-        // 查看品牌详情 dialog
-        dialogBrandDetailVisible: false,
-
-        /** 品牌详情dialog 内容 */
-        brandDetail: '',
 
         /** 添加、修改品牌 表单 */
-        brandForm: {
-          name: '',
-          logo: '',
-          imgFileList: []
-        },
+        brandForm: {},
         /** 添加、修改品牌 表单规则 */
         brandRules: {
           name: [
@@ -163,11 +131,6 @@
       this.GET_BrandList()
     },
     methods: {
-      /** 查看详情 */
-      handleViewBrandDetail(index, row) {
-        this.brandDetail = row.brief || '暂无详情...'
-        this.dialogBrandDetailVisible = true
-      },
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
@@ -194,26 +157,9 @@
         this.GET_BrandList()
       },
 
-      /** 图片上传成功触发 */
-      onImgUploadSuccess(response) {
-        this.brandForm.logo = response.url
-      },
-      /** 图片移除触发 */
-      onImgRemoved() {
-        this.brandForm.logo = ''
-      },
-
       /** 修改品牌操作 */
       handleEditBrand(index, row) {
-        if (!row.url) row.url = ''
-        this.brandForm = {
-          ...this.brandForm,
-          ...row,
-          logo: row.image,
-          form_type: 'edit',
-          imgFileList: row.image ? [{ name: 'logo', url: row.image }] : []
-        }
-        this.dialogBrandTitle = '修改品牌 - ' + row.name
+        this.brandForm = this.MixinClone(row)
         this.dialogBrandVisible = true
       },
       /** 删除品牌操作 */
@@ -235,10 +181,7 @@
 
       /** 添加品牌触发事件 */
       handleAddBrand() {
-        this.brandForm = {
-          form_type: 'add',
-          imgFileList: []
-        }
+        this.brandForm = { imgFileList: [] }
         this.dialogBrandTitle = '添加品牌'
         this.dialogBrandVisible = true
       },
@@ -247,15 +190,16 @@
       submitBrandForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.brandForm.form_type === 'add') {
-              API_brand.addBrand(this.brandForm).then(() => {
+            const { id } = this.brandForm
+            if (!id) {
+              API_brand.addBrand(this.brandForm).then(response => {
                 this.dialogBrandVisible = false
                 this.$message.success('添加成功！')
                 this.$refs[formName].resetFields()
                 this.GET_BrandList()
               })
             } else {
-              API_brand.editBrand(this.brandForm.id, this.brandForm).then(() => {
+              API_brand.editBrand(id, this.brandForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogBrandVisible = false
                 this.$refs[formName].resetFields()
@@ -273,8 +217,7 @@
         this.loading = true
         API_brand.getBrandList(this.params).then(response => {
           this.loading = false
-          this.pageData = response
-          this.tableData = response.data
+          this.tableData = response
         }).catch(() => {
           this.loading = false
         })
