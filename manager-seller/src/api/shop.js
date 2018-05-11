@@ -18,7 +18,7 @@ export function getShopData(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
+      const _response = response || {}
       _response.data = new ShopModel().map(response)
       resolve(_response)
     }).catch(error => reject(error))
