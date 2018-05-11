@@ -39,6 +39,7 @@
     <el-dialog
       :title="smtpForm.id ? '编辑SMTP' : '添加SMTP'"
       :visible.sync="dialogSmtpVisible"
+      @close="handleDialogClosed"
       width="500px">
       <el-form :model="smtpForm" :rules="smtpRules" ref="smtpForm" size="small" label-width="120px">
         <el-form-item label="HOST" prop="host">
@@ -151,8 +152,16 @@
         this.GET_SmtpList()
       },
 
+      /** dialog关闭回调 */
+      handleDialogClosed() {
+        this.$refs.smtpForm.clearValidate()
+      },
+
       /** 添加smtp */
       handleAddSmtp() {
+        this.smtpForm = { open_ssl: 1 }
+        const { smtpForm } = this.$refs
+        smtpForm && smtpForm.resetFields()
         this.dialogSmtpVisible = true
       },
 
@@ -171,14 +180,12 @@
             if (id) {
               API_Smtp.editSmtp(id, this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
-                this.$refs[formName].resetFields()
                 this.$message.success('修改成功！')
                 this.tableData.filter(item => item.id === id)[0] = response
               })
             } else {
               API_Smtp.addSmtp(this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
-                this.$refs[formName].resetFields()
                 this.$message.success('保存成功！')
                 this.GET_SmtpList()
               })
@@ -218,9 +225,8 @@
         API_Smtp.getSmtpList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(error => {
+        }).catch(() => {
           this.loading = false
-          console.log(error)
         })
       }
     }
