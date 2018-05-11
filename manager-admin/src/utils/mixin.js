@@ -17,6 +17,7 @@ export default {
     MixinClone(obj) {
       return JSON.parse(JSON.stringify(obj))
     },
+    /** 用于修改单条表格数据后，set到tableData中 */
     MixinSetTableData(tableData, id, response) {
       const { data } = tableData
       const index = data.findIndex(item => item.id === id)
