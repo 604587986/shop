@@ -21,6 +21,10 @@
               size="mini"
               type="primary"
               @click="handleEditSmtp(scope.$index, scope.row)">修改</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDeleteSmtp(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </template>
@@ -171,6 +175,16 @@
         this.dialogSmtpVisible = true
       },
 
+      /** 删除smtp */
+      handleDeleteSmtp(index, row) {
+        this.$confirm('确定要删除这个SMTP吗？', '提示', { type: 'warning' }).then(() => {
+          API_Smtp.deleteSmtp(row.id).then(() => {
+            this.$message.success('删除成功！')
+            this.tableData.data.splice(index, 1)
+          })
+        }).catch(() => {})
+      },
+
       /** 提交是smtp表单 */
       submitSmtpForm(formName) {
         this.$refs[formName].validate(valid => {
@@ -183,6 +197,7 @@
                 this.tableData.data.filter(item => item.id === id)[0] = response
               })
             } else {
+              // Andste_TODO 2018/5/11: 保存成功后，后台未返回id
               API_Smtp.addSmtp(this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
                 this.$message.success('保存成功！')
