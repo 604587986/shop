@@ -54,7 +54,7 @@
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
-      :title="specForm.id ? '编辑规格 - ' + specForm.name : '添加规格'"
+      :title="specForm.id ? '编辑规格' : '添加规格'"
       :visible.sync="dialogSpecVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -239,7 +239,7 @@
                 this.$message.success('保存成功！')
                 this.dialogSpecVisible = false
                 this.$refs[formName].resetFields()
-                this.GET_SpecsList()
+                this.MixinSetTableData(this.tableData, id, response)
               })
             }
           } else {

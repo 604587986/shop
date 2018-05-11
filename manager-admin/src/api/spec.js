@@ -31,14 +31,12 @@ export function getSpecs(params) {
  * @returns {*}
  */
 export function addSpec(params) {
-  const _params = {
-    spec_name: params.name,
-    spec_memo: params.memo
-  }
-  return request({
-    url: 'goods/specs',
-    method: 'post',
-    data: specModel.params(params)
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'goods/specs',
+      method: 'post',
+      data: specModel.params(params)
+    }).then(response => resolve(specModel.map(response))).catch(error => reject(error))
   })
 }
 
@@ -49,10 +47,12 @@ export function addSpec(params) {
  * @returns {*}
  */
 export function eidtSpec(id, params) {
-  return request({
-    url: `goods/specs/${id}`,
-    method: 'put',
-    data: specModel.params(params)
+  return new Promise((resolve, reject) => {
+    request({
+      url: `goods/specs/${id}`,
+      method: 'put',
+      data: specModel.params(params)
+    }).then(response => resolve(specModel.map(response))).catch(error => reject(error))
   })
 }
 
