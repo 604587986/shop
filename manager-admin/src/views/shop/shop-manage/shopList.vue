@@ -1,9 +1,7 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -89,15 +87,15 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
   </div>
@@ -116,19 +114,13 @@
       return {
         /** 列表loading状态 */
         loading: false,
-
         /** 列表参数 */
         params: {
           page_no: 1,
           page_size: 10
         },
-
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
+        tableData: '',
         /** 高级搜索数据 */
         advancedForm: {},
         pickerOptions: {
@@ -247,12 +239,7 @@
         this.loading = true
         API_Shop.getShopList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
+          this.tableData = response
         }).catch(error => {
           this.loading = false
           console.log(error)
