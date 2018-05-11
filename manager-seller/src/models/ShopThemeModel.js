@@ -13,7 +13,7 @@ import {
 
 export default class ShopThemeModel extends DataModel {
   /** 模板ID */
-  @ServerName('themes_id')
+  @ServerName('id')
   themes_id
 
   /** 模板名称 */
@@ -32,7 +32,7 @@ export default class ShopThemeModel extends DataModel {
   @ServerName('current_use')
   current_use
 
-  /** 是否为默认 1为默认 反之为0 */
+  /** 是否为默认 1为默认 反之为0 后台用的 */
   @ServerName('is_default')
   is_default
 

@@ -76,15 +76,13 @@
       /** 获取PC店铺主题列表*/
       GET_ShopThemesPc() {
         API_ShopTheme.getShopThemeList({ type: 'PC' }).then(response => {
-          this.tpl_list = response.data
+          this.tpl_list = response
           this.tpl_list.forEach(elem => {
             if (elem.current_use === 1) {
               this.tpl_current = elem
             }
           })
-        }).catch(error => {
-          console.log(error)
-        })
+        }).catch(error => this.$message.error(error))
       },
 
       /** 选择模板主题*/
@@ -114,13 +112,9 @@
             API_ShopTheme.saveShopTheme(this.tpl_choosed_id, _params).then(() => {
               this.$message.success('切换成功')
               this.GET_ShopThemesPc()
-            }).catch((error) => {
-              console.log(error)
-              this.$message.error('切换失败，请稍后重试！')
-            })
+            }).catch((error) => this.$message.error(error))
           })
-          .catch(() => {
-          })
+          .catch(() => {})
       }
     }
   }
@@ -142,6 +136,7 @@
   .shop-theme-image {
     width: 100%;
     max-width: 200px;
+    min-height: 400px;
     cursor: pointer;
   }
 
@@ -226,6 +221,7 @@
 
   .zoom-img {
     width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -252,9 +248,11 @@
     margin: 0 auto;
     padding: 25px 0;
     width: 25%;
+    min-height: 80%;
     text-align: center;
     img {
       width: 100%;
+      height: 800px;
     }
   }
 </style>
