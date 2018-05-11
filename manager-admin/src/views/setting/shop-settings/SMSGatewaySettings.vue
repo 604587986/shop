@@ -69,7 +69,6 @@
 </template>
 
 <script>
-  // Andste_TODO 2018/5/10: 未适配API
   import * as API_SmsGateway from '@/api/smsGateway'
   import { TableLayout } from '@/components'
   export default {
@@ -118,7 +117,9 @@
       },
 
       /** 修改短信网关 */
-      handleEditSmsGateway(index, row) {},
+      handleEditSmsGateway(index, row) {
+        // Andste_TODO 2018/5/11: 修改未适配
+      },
 
       /** 开启短信网关 */
       handleOpenSmsGateway(index, row) {
