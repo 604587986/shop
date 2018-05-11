@@ -63,8 +63,8 @@
         <el-form-item label="每日最大发信数" prop="max_count">
           <el-input v-model="smtpForm.max_count"/>
         </el-form-item>
-        <el-form-item label="From" prop="from">
-          <el-input v-model="smtpForm.from"/>
+        <el-form-item label="From" prop="mail_from">
+          <el-input v-model="smtpForm.mail_from"/>
         </el-form-item>
         <el-form-item label="测试" :error="test_email_error">
           <el-input v-model="test_email">
@@ -126,7 +126,7 @@
               /^[1-9]\d*$/.test(value) ? callback() : callback(new Error('发信数应为正整数！'))
             } }
           ],
-          from: [required('请输入From字段')]
+          mail_from: [required('请输入From字段')]
         },
         /** smtp表单 dialog */
         dialogSmtpVisible: false,
@@ -173,7 +173,6 @@
 
       /** 提交是smtp表单 */
       submitSmtpForm(formName) {
-        // Andste_TODO 2018/5/10: 接口对接未完成
         this.$refs[formName].validate(valid => {
           const { id } = this.smtpForm
           if (valid) {
@@ -181,13 +180,13 @@
               API_Smtp.editSmtp(id, this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
                 this.$message.success('修改成功！')
-                this.tableData.filter(item => item.id === id)[0] = response
+                this.tableData.data.filter(item => item.id === id)[0] = response
               })
             } else {
               API_Smtp.addSmtp(this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
                 this.$message.success('保存成功！')
-                this.GET_SmtpList()
+                this.tableData.data.push(response)
               })
             }
           } else {
