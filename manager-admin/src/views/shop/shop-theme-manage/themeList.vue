@@ -41,7 +41,10 @@
       </el-pagination>
     </en-tabel-layout>
     <!--添加、编辑店铺模板 dialog-->
-    <el-dialog :title="(shopThemeForm.id ? '编辑' : '添加') + '店铺模板'" :visible.sync="dialogShopThemeVisible" width="450px">
+    <el-dialog
+      :title="(shopThemeForm.id ? '编辑' : '添加') + '店铺模板'"
+      :visible.sync="dialogShopThemeVisible"
+      width="450px">
       <el-form :model="shopThemeForm" :rules="shopThemeRules" ref="shopThemeForm" label-width="100px">
         <!--模板名称-->
         <el-form-item label="模板名称" prop="name">
@@ -52,7 +55,7 @@
           <el-input v-model="shopThemeForm.path" :maxlength="200" placeholder="请输入文件夹名称"></el-input>
         </el-form-item>
         <!--是否默认-->
-        <el-form-item v-if="shopThemeForm.form_type === 'edit'" label="是否默认">
+        <el-form-item label="是否默认">
           <el-radio-group v-model="shopThemeForm.is_default">
             <el-radio :label="1">是</el-radio>
             <el-radio :label="0">否</el-radio>
@@ -120,7 +123,10 @@
 
       /** 添加店铺模板 */
       handleAddShopTheme() {
-        this.shopThemeForm = {}
+        this.shopThemeForm = {
+          type: 'PC',
+          is_default: 0
+        }
         this.dialogShopThemeVisible = true
       },
 
@@ -155,7 +161,9 @@
               API_Shop.editShopTheme(id, this.shopThemeForm).then(resposne => {
                 this.dialogShopThemeVisible = false
                 this.$message.success('保存成功！')
-                this.GET_ShopThemeList()
+                const { data } = this.tableData
+                const index = data.findIndex(item => item.id === id)
+                this.$set(data, index, resposne)
               })
             }
           } else {
@@ -178,7 +186,3 @@
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
