@@ -1,7 +1,6 @@
 /**
- * 店铺模型
+ * 店铺相关模型
  */
-
 import {
   DataModel,
   Check,
@@ -11,6 +10,9 @@ import {
   UnitTypes
 } from '@/framework'
 
+/**
+ * 店铺模型
+ */
 export default class ShopModel extends DataModel {
   /** 银行开户名 */
   @ServerName('bank_account_name')
@@ -351,4 +353,29 @@ export default class ShopModel extends DataModel {
   /** WAP模板ID */
   @ServerName('wap_themeid')
   wap_theme_id
+}
+
+/**
+ * 店铺模板模型
+ */
+export class ShopThemeModel extends DataModel {
+  /** 模板ID */
+  @ServerName('id')
+  id
+
+  /** 模板名称 */
+  @ServerName('name')
+  name
+
+  /** 模板路径 */
+  @ServerName('path')
+  path
+
+  /** 是否为默认 */
+  @ServerName('is_default')
+  is_default
+
+  /** 模本类型【pc、wap】 */
+  @ServerName('type')
+  type
 }

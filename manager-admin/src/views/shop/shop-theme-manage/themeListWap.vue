@@ -1,9 +1,7 @@
 <template>
   <div>
     <en-tabel-layout
-      :toolbar="true"
-      :pagination="true"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -31,19 +29,22 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
     <!--添加、编辑店铺模板 dialog-->
-    <el-dialog :title="(shopThemeForm.form_type === 'add' ? '添加' : '编辑') + '店铺WAP模板'" :visible.sync="dialogShopThemeVisible" width="450px">
+    <el-dialog
+      :title="(shopThemeForm.id ? '编辑' : '添加') + '店铺模板'"
+      :visible.sync="dialogShopThemeVisible"
+      width="450px">
       <el-form :model="shopThemeForm" :rules="shopThemeRules" ref="shopThemeForm" label-width="100px">
         <!--模板名称-->
         <el-form-item label="模板名称" prop="name">
@@ -54,7 +55,7 @@
           <el-input v-model="shopThemeForm.path" :maxlength="200" placeholder="请输入文件夹名称"></el-input>
         </el-form-item>
         <!--是否默认-->
-        <el-form-item v-if="shopThemeForm.form_type === 'edit'" label="是否默认">
+        <el-form-item label="是否默认">
           <el-radio-group v-model="shopThemeForm.is_default">
             <el-radio :label="1">是</el-radio>
             <el-radio :label="0">否</el-radio>
@@ -70,7 +71,7 @@
 </template>
 
 <script>
-  import * as API_ShopTheme from '@/api/shopTheme'
+  import * as API_Shop from '@/api/shop'
   import { TableLayout } from '@/components'
   export default {
     name: 'themeListWap',
@@ -81,25 +82,18 @@
       return {
         /** 列表loading状态 */
         loading: false,
-
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          type: 'WAP'
         },
-
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
+        tableData: '',
         /** 添加、编辑店铺模板 dialog */
         dialogShopThemeVisible: false,
-
         /** 添加、编辑店铺模板 */
         shopThemeForm: {},
-
         /** 添加、编辑店铺模板 规则 */
         shopThemeRules: {
           name: [
@@ -129,26 +123,26 @@
 
       /** 添加店铺模板 */
       handleAddShopTheme() {
-        this.shopThemeForm = { form_type: 'add' }
+        this.shopThemeForm = {
+          type: 'WAP',
+          is_default: 0
+        }
         this.dialogShopThemeVisible = true
       },
 
       /** 编辑店铺模板 */
       handleEditShopTheme(index, row) {
-        this.shopThemeForm = {
-          ...row,
-          form_type: 'edit'
-        }
+        this.shopThemeForm = this.MixinClone(row)
         this.dialogShopThemeVisible = true
       },
 
       /** 删除店铺模板 */
       handleDeleteShopTheme(index, row) {
         this.$confirm('确定要删除这个模板吗？', '提示', { type: 'warning' }).then(() => {
-          API_ShopTheme.deleteShopWapTheme(row.id).then(response => {
+          API_Shop.deleteShopTheme(row.id).then(response => {
             this.$message.success('删除成功！')
             this.GET_ShopThemeList()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -156,18 +150,21 @@
       submitShopThemeForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.shopThemeForm.form_type === 'add') {
-              API_ShopTheme.addShopWapTheme(this.shopThemeForm).then(response => {
+            const { id } = this.shopThemeForm
+            if (!id) {
+              API_Shop.addShopTheme(this.shopThemeForm).then(response => {
                 this.dialogShopThemeVisible = false
                 this.$message.success('添加成功！')
                 this.GET_ShopThemeList()
-              }).catch(error => console.log(error))
+              })
             } else {
-              API_ShopTheme.editShopWapTheme(this.shopThemeForm.id, this.shopThemeForm).then(resposne => {
+              API_Shop.editShopTheme(id, this.shopThemeForm).then(resposne => {
                 this.dialogShopThemeVisible = false
                 this.$message.success('保存成功！')
-                this.GET_ShopThemeList()
-              }).catch(error => console.log(error))
+                const { data } = this.tableData
+                const index = data.findIndex(item => item.id === id)
+                this.$set(data, index, resposne)
+              })
             }
           } else {
             this.$message.error('表单填写有误，请检查！')
@@ -179,23 +176,13 @@
       /** 获取会员列表 */
       GET_ShopThemeList() {
         this.loading = true
-        API_ShopTheme.getShopWapThemeList(this.params).then(response => {
+        API_Shop.getShopThemeList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
+          this.tableData = response
+        }).catch(() => {
           this.loading = false
-          console.log(error)
         })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
