@@ -102,7 +102,6 @@
 
       /** 修改短信网关 */
       handleEditSmsGateway(index, row) {
-        // Andste_TODO 2018/5/11: 修改未适配
         this.smsForm = this.MixinClone(row)
         this.dialogSmsVisible = true
       },
