@@ -11,6 +11,11 @@ export default {
       MixinUploadApi: API_Common.uploadApi
     }
   },
-  methods: {},
+  methods: {
+    /** 返回克隆后的对象 */
+    MixinClone(obj) {
+      return JSON.parse(JSON.stringify(obj))
+    }
+  },
   computed: {}
 }
