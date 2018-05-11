@@ -1,14 +1,10 @@
 <template>
   <div>
     <en-tabel-layout
+      :toolbar="false"
       :tableData="tableData.data"
       :loading="loading"
     >
-      <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddSmsGateway">添加</el-button>
-        </div>
-      </div>
       <template slot="table-columns">
         <el-table-column prop="name" label="平台名称"/>
         <el-table-column label="启用状态">
@@ -39,26 +35,21 @@
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
-      :title="smsForm.id ? '编辑SMS' : '添加SMS'"
+      title="编辑短信网关参数"
       :visible.sync="dialogSmsVisible"
       width="500px"
       append-to-body>
-      <el-form :model="smsForm" :rules="smsRules" ref="smsForm" size="small" label-width="120px">
-        <el-form-item label="平台名称" prop="name">
-          <el-input v-model="smsForm.name"/>
-        </el-form-item>
-        <el-form-item label="平台代码" prop="code">
-          <el-input v-model="smsForm.code"/>
-        </el-form-item>
-        <el-form-item label="是否开启" prop="is_open">
-          <el-radio-group v-model="smsForm.is_open">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="0">否</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="配置" prop="config">
-          <el-input v-model="smsForm.config"/>
-        </el-form-item>
+      <el-form :model="smsForm" ref="smsForm" size="small" label-width="120px">
+        <template v-for="(config, index) in smsForm.config_items">
+          <el-form-item
+            :label="config.text"
+            :key="config.name"
+            :prop="'config_items.' + index + '.value'"
+            :rules="{ required: true, message: config.text + '不能为空', trigger: 'blur' }"
+          >
+            <el-input v-model="config.value"/>
+          </el-form-item>
+        </template>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSmsVisible = false">取 消</el-button>
@@ -69,7 +60,6 @@
 </template>
 
 <script>
-  // Andste_TODO 2018/5/10: 未适配API
   import * as API_SmsGateway from '@/api/smsGateway'
   import { TableLayout } from '@/components'
   export default {
@@ -90,8 +80,6 @@
         tableData: '',
         /** sms 表单 */
         smsForm: { is_open: 0 },
-        /** sms 表单规则 */
-        smsRules: {},
         /** sms表单 dailog */
         dialogSmsVisible: false
       }
@@ -112,13 +100,11 @@
         this.GET_SmsGatewayList()
       },
 
-      /** 添加短信网关 */
-      handleAddSmsGateway() {
+      /** 修改短信网关 */
+      handleEditSmsGateway(index, row) {
+        this.smsForm = this.MixinClone(row)
         this.dialogSmsVisible = true
       },
-
-      /** 修改短信网关 */
-      handleEditSmsGateway(index, row) {},
 
       /** 开启短信网关 */
       handleOpenSmsGateway(index, row) {
@@ -126,6 +112,22 @@
           this.$message.success('开启成功！')
           this.GET_SmsGatewayList()
         }).catch(error => console.log(error))
+      },
+
+      /** 修改短信网关参数 提交表单 */
+      submitSmsForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            API_SmsGateway.editSmsGateway(this.smsForm.id, this.smsForm).then(response => {
+              this.dialogSmsVisible = false
+              this.$message.success('修改成功！')
+              this.MixinSetTableData(this.tableData, this.id, response)
+            })
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        })
       },
 
       /** 获取短信网关列表 */

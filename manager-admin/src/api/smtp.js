@@ -48,7 +48,7 @@ export function editSmtp(id, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `smtps/${id}`,
-      method: 'post',
+      method: 'put',
       data: smtpModel.params(params)
     }).then(response => resolve(smtpModel.map(response))).catch(error => reject(error))
   })
@@ -84,6 +84,7 @@ export function getSmtpDetial(id) {
 export function sendTestEmail(params) {
   return request({
     url: 'smtps/send',
+    timeout: 20000,
     method: 'post',
     data: params
   })

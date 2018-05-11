@@ -110,9 +110,7 @@
         /** 列表数据 */
         tableData: '',
         /** smtp 表单 */
-        smtpForm: {
-          open_ssl: 1
-        },
+        smtpForm: {},
         /** smtp 表单规则*/
         smtpRules: {
           host: [required('请输入HOST')],
@@ -171,7 +169,7 @@
 
       /** 修改smtp */
       handleEditSmtp(index, row) {
-        this.smtpForm = row
+        this.smtpForm = this.MixinClone(row)
         this.dialogSmtpVisible = true
       },
 
@@ -180,7 +178,7 @@
         this.$confirm('确定要删除这个SMTP吗？', '提示', { type: 'warning' }).then(() => {
           API_Smtp.deleteSmtp(row.id).then(() => {
             this.$message.success('删除成功！')
-            this.tableData.data.splice(index, 1)
+            this.GET_SmtpList()
           })
         }).catch(() => {})
       },
@@ -194,14 +192,13 @@
               API_Smtp.editSmtp(id, this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
                 this.$message.success('修改成功！')
-                this.tableData.data.filter(item => item.id === id)[0] = response
+                this.MixinSetTableData(this.tableData, id, response)
               })
             } else {
-              // Andste_TODO 2018/5/11: 保存成功后，后台未返回id
               API_Smtp.addSmtp(this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
                 this.$message.success('保存成功！')
-                this.tableData.data.push(response)
+                this.GET_SmtpList()
               })
             }
           } else {
@@ -213,7 +210,6 @@
 
       /** 发送测试邮件 */
       handleSendTestEmail() {
-        // Andste_TODO 2018/5/10: 接口对接未完成
         const { test_email, smtpForm } = this
         this.$refs['smtpForm'].validate(valid => {
           if (valid) {
@@ -246,7 +242,3 @@
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
