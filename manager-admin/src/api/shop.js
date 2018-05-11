@@ -3,7 +3,9 @@
  */
 
 import request from '@/utils/request'
-import ShopModel from '@/models/ShopModel'
+import ShopModel, { ShopThemeModel } from '@/models/ShopModel'
+const shopModel = new ShopModel()
+const shopThemeModel = new ShopThemeModel()
 
 /**
  * 获取店铺列表
@@ -18,7 +20,7 @@ export function getShopList(params) {
       loading: false,
       params
     }).then(response => {
-      response.data = new ShopModel().map(response.data)
+      response.data = shopModel.map(response.data)
       resolve(response)
     }).catch(error => reject(error))
   })
@@ -110,5 +112,77 @@ export function auditShopLevelApply(id, status) {
       params: _params
       // data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取店铺模板列表
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getShopThemeList(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'shops/themes',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      response.data = shopThemeModel.map(response.data)
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 添加店铺模板
+ * @param params
+ * @returns {*}
+ */
+export function addShopTheme(params) {
+  return request({
+    url: 'shops/themes',
+    method: 'post',
+    data: shopThemeModel.params(params)
+  })
+}
+
+/**
+ * 获取店铺模板详情
+ * @param id
+ * @returns {Promise<any>}
+ */
+export function getShopThemeDetail(id) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `shops/themes/${id}`,
+      method: 'get'
+    }).then(response => resolve(shopThemeModel.map(response))).catch(error => reject(error))
+  })
+}
+
+/**
+ * 修改店铺模板
+ * @param id
+ * @param params
+ * @returns {*}
+ */
+export function editShopTheme(id, params) {
+  return request({
+    url: `shops/themes/${id}`,
+    method: 'put',
+    data: shopThemeModel.params(params)
+  })
+}
+
+/**
+ * 删除店铺模板
+ * @param id
+ * @returns {*}
+ */
+export function deleteShopTheme(id) {
+  return request({
+    url: `shops/themes/${id}`,
+    method: 'delete'
   })
 }
