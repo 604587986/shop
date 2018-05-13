@@ -1,3 +1,4 @@
+import GradePicker from './GradePicker'
 import TableLayout from './TableLayout'
 import TableSearch from './TableSearch'
 import RegionPick from './RegionPick'
@@ -8,6 +9,7 @@ import ShopPicker from './ShopPicker'
 import UE from './UE'
 
 export {
+  GradePicker,
   TableLayout,
   TableSearch,
   RegionPick,
