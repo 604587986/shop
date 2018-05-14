@@ -73,9 +73,8 @@ export default {
      * @returns {{width : string}}
      */
     columnWdith() {
-      const len = this.data.length
       return {
-        width: 100 / (len > 2 ? len : 3) + '%'
+        width: 100 / this.maxLevel + '%'
       }
     },
     /**
@@ -113,6 +112,7 @@ export default {
         // 如果有返回数据，或是数组没有第一个值
         // 说明后面没有数据了，这个时候可以直接完成
         if (!data || !data[0]) {
+          this.data.splice(this.curLevel, this.maxLevel - this.curLevel)
           this.handleRturnItem()
           return
         }
