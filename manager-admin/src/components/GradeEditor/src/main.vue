@@ -22,13 +22,13 @@
           v-show="!item.$hidden"
           @click="handleClickItem(item, itemIndex, columnIndex)"
           :class="['item', item.$active && 'active', item.$hover && 'hover']">
-          <div class="text-item">{{ item.text }}</div>
+          <div class="text-item">{{ item.$text }}</div>
           <div class="btns-item">
             <div class="inner-btns">
               <a
                 v-for="(btn, btnIndex) in btns"
                 :style="{color: btn.color || '#0a89c7'}"
-                @click="handleClickItemBtn(item, btn, btnIndex)"
+                @click="handleClickItemBtn(item, btn, btnIndex, columnIndex)"
                 href="javascript:;"
               >{{ btn.text }}</a>
             </div>

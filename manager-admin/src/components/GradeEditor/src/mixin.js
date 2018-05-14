@@ -171,11 +171,19 @@ export default {
      * @param item
      * @param btn
      * @param btnIndex
+     * @param columnIndex
      */
-    handleClickItemBtn(item, btn, btnIndex) {
+    handleClickItemBtn(item, btn, btnIndex, columnIndex) {
       const { onClick } = this.btns[btnIndex]
+      item = JSON.parse(JSON.stringify(item))
+      const parentArray = JSON.parse(JSON.stringify(this.data[columnIndex - 1] || ''))
+      const parent = parentArray && JSON.parse(JSON.stringify(parentArray.filter(_item => _item.$active)[0] || ''))
       this.curItem = item
-      typeof onClick === 'function' && onClick(item)
+      this.needDeleteParams.forEach(key => {
+        delete item[key]
+        delete parent[key]
+      })
+      typeof onClick === 'function' && onClick(item, parent, parentArray)
     },
     /**
      * 触发change事件
