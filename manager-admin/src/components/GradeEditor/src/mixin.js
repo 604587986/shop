@@ -175,10 +175,10 @@ export default {
      */
     handleClickItemBtn(item, btn, btnIndex, columnIndex) {
       const { onClick } = this.btns[btnIndex]
+      this.curItem = item
       item = JSON.parse(JSON.stringify(item))
       const parentArray = JSON.parse(JSON.stringify(this.data[columnIndex - 1] || ''))
       const parent = parentArray && JSON.parse(JSON.stringify(parentArray.filter(_item => _item.$active)[0] || ''))
-      this.curItem = item
       this.needDeleteParams.forEach(key => {
         delete item[key]
         delete parent[key]
@@ -199,22 +199,29 @@ export default {
      * 重新获取当前层级数据
      * type为edit，只刷新当前层次
      * type为delete，删除当前层次以及后面的层次
-     * @param type 刷新类型【edit, delete】
+     * @param type 刷新类型【edit, add, delete】
      * @param item
      */
     refresh(type, item) {
-      let { data, curItem } = this
+      let { data, curItem, paramsNames } = this
       const { $level } = curItem
       // 拿到操作的数据数组的引用
       const levelArray = data[$level]
       // 拿到操作的数据的索引
-      const index = levelArray.findIndex(item => item === curItem)
-      if (type === 'edit') {
-        const names = this.paramsNames
-        this.$set(this.data[$level], index, {
-          ...item,
-          $text: item[names.text]
+      const index = levelArray.findIndex(_item => _item.$active)
+      if (type === 'edit' && item) {
+        const _item = JSON.parse(JSON.stringify(item))
+        Object.keys(_item).forEach(key => {
+          if (_item[key] === undefined || _item[key] === undefined) delete _item[key]
         })
+        item[paramsNames.id] && (_item.$id = item[paramsNames.id])
+        item[paramsNames.text] && (_item.$text = item[paramsNames.text])
+        const obj = {
+          ...curItem,
+          ..._item
+        }
+        this.$set(data[$level], index, obj)
+        return
       }
       if (type === 'delete') {
         // 从当前层级数组中删除
@@ -228,7 +235,14 @@ export default {
         this.curLevel = $level + 1
         // 请求数据
         this.GET_ChildrenById(levelArray[index]['$id'])
+        return
       }
+      let id = 0
+      if (data[$level - 1]) {
+        id = data[$level - 1].filter(item => item.$active).$id
+      }
+      this.curLevel = $level + 1
+      this.GET_ChildrenById(id)
     },
     /**
      * 搜索关键字发生改变
