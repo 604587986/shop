@@ -206,7 +206,7 @@ export default {
       let { data, curItem, paramsNames } = this
       const { $level } = curItem
       // 拿到操作的数据数组的引用
-      const levelArray = data[$level]
+      const levelArray = data[$level] || []
       // 拿到操作的数据的索引
       const index = levelArray.findIndex(_item => _item.$active)
       if (type === 'edit' && item) {
@@ -223,25 +223,11 @@ export default {
         this.$set(data[$level], index, obj)
         return
       }
-      if (type === 'delete') {
-        // 从当前层级数组中删除
-        levelArray.splice(index, 1)
-        // 从所有数据中删除当前层级数组后面的数组
-        data.splice($level + 1, data.length - $level)
-        // 设置后一个数据的active为true
-        // index不用+1，因为前面删掉了一个
-        levelArray[index].$active = true
-        // 设置当前层级为操作的层级+1
-        this.curLevel = $level + 1
-        // 请求数据
-        this.GET_ChildrenById(levelArray[index]['$id'])
-        return
-      }
       let id = 0
       if (data[$level - 1]) {
-        id = data[$level - 1].filter(item => item.$active).$id
+        id = data[$level - 1].filter(item => item.$active)[0].$id
       }
-      this.curLevel = $level + 1
+      this.curLevel = $level
       this.GET_ChildrenById(id)
     },
     /**
@@ -268,6 +254,7 @@ export default {
      */
     handleClickAdd(columnIndex) {
       const { data, needDeleteParams } = this
+      this.curItem = { $level: columnIndex }
       const parentArray = JSON.parse(JSON.stringify(data[columnIndex - 1] || data[columnIndex]))
       const parent = parentArray.filter(item => item.$active)[0]
       parentArray.map(item => {
