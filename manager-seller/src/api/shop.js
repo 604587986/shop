@@ -72,3 +72,18 @@ export function promoteShopGrade(ids, params) {
   })
 }
 
+/**
+ * 修改店铺logo
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function updateShopLogo(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/shops/logos',
+      method: 'put',
+      data: params
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+

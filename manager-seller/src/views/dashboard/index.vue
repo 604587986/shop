@@ -13,7 +13,7 @@
             <el-upload
               class="upload-demo"
               style="display: none;"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="BASE_IMG_URL"
               :limit="1"
               :file-list="fileList"
               :on-success="uploaded">
@@ -135,6 +135,9 @@ export default {
   },
   data() {
     return {
+      /** 图片服务器地址 */
+      BASE_IMG_URL: process.env.BASE_IMG_URL,
+
       /** 加载中*/
       loading: false,
 
@@ -205,6 +208,11 @@ export default {
       // 更换图片 置空存储数组
       this.shop_info.shop_logo = file.url
       this.fileList = []
+      API_shop.updateShopLogo({ logo: file.url }).then(response => {
+        this.$message.success('店铺LOGO修改成功')
+      }).catch(error => {
+        this.$message.error(error)
+      })
     },
 
     /** 跳转商品列表*/
