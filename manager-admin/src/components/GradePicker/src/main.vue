@@ -1,13 +1,27 @@
 <template>
   <div :id="'grade-picker-' + _uid" class="grade-picker">
-    <div v-for="(column, columnIdnex) in data" class="column" :style="columnWdith">
+    <div v-for="(column, columnIndex) in data" class="column" :style="columnWdith">
+      <div class="search-column">
+        <input
+          type="text"
+          v-model="searchKeywords[columnIndex]"
+          class="input-search"
+          placeholder="输入关键词查找"
+          @input="handleSearchKeywordChange(columnIndex)"
+        >
+        <i class="icon-search"></i>
+      </div>
       <div class="inner-column">
+        <a href="javascript:;" class="add-column" @click="handleClickAdd(columnIndex)">
+          <i class="icon-add"></i>
+          添加{{ ['一', '二', '三', '四', '五', '六'][columnIndex] }}级地区
+        </a>
         <div
           v-for="(item, itemIndex) in column"
           :key="item.$id"
-          v-show="!item.hidden"
-          @click="handleClickItem(item, itemIndex, columnIdnex)"
-          :class="['item', item.$active && 'active']">
+          v-show="!item.$hidden"
+          @click="handleClickItem(item, itemIndex, columnIndex)"
+          :class="['item', item.$active && 'active', item.$hover && 'hover']">
           <div class="text-item">{{ item.text }}</div>
           <div class="btns-item">
             <div class="inner-btns">
@@ -20,6 +34,24 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div v-if="placeLevel !== null" class="column" :style="columnWdith">
+      <div class="search-column">
+        <input
+          type="text"
+          v-model="searchKeywords[placeLevel]"
+          class="input-search"
+          placeholder="输入关键词查找"
+          @input="handleSearchKeywordChange(placeLevel)"
+        >
+        <i class="icon-search"></i>
+      </div>
+      <div class="inner-column">
+        <a href="javascript:;" class="add-column" @click="handleClickAdd(placeLevel)">
+          <i class="icon-add"></i>
+          添加{{ ['一', '二', '三', '四', '五', '六'][placeLevel] }}级地区
+        </a>
       </div>
     </div>
   </div>
