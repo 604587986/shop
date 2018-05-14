@@ -474,7 +474,7 @@
           market_enable: 1,
 
           /** 模板运费id */
-          template_id: 0,
+          template_id: '',
 
           /** 积分兑换 */
           exchange: {
