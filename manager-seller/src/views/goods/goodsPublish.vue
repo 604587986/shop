@@ -136,10 +136,10 @@
             <el-form-item label="商品规格："  style="width: 90%;text-align: left;">
               <!--规格选择器-->
                <en-sku-selector
-                 :goodsId="activeGoodsId"
-                 :categoryId="categoryID"
+                 :categoryId="baseInfoForm.category_id"
+                 :isEditModel="currentStatus"
                  :goodsSkuInfo="skuList"
-                 @finalSku="finalSku"></en-sku-selector>
+                 @finalSku="finalSku"/>
             </el-form-item>
             <el-form-item label="总库存：" prop="quantity" style="width: 20%;text-align: left;">
               <el-input v-model="baseInfoForm.quantity" disabled></el-input>
@@ -174,7 +174,6 @@
                 v-model="baseInfoForm.template_id"
                 placeholder="请选择运费模板"
                 v-show="baseInfoForm.goods_transfee_charge === 0 "
-                @visible-change="getTplList"
                 @change="changeTpl"
               >
                 <el-option
@@ -393,7 +392,7 @@
         /** 加载中。。。 */
         loading: false,
 
-        /** 当前状态 默认发布商品0 编辑商品1 编辑草稿箱商品2 */
+        /** 当前状态/模式 默认发布商品0 编辑商品1 编辑草稿箱商品2 */
         currentStatus: 0,
 
         /** 当前激活步骤*/
@@ -419,9 +418,6 @@
 
         /** 当前商品id*/
         activeGoodsId: '',
-
-        /** 当前商城分类id */
-        categoryID: 0,
 
         /** 1级分类列表*/
         categoryListLevel1: [],
@@ -614,8 +610,11 @@
           } else if (vm.currentStatus === 2 && vm.$route.query.goodsid) {
             vm.GET_GoodDraftData()
           }
+          /** 查询品牌列表 */
           vm.getGoodsBrandList()
-          // 查询商品参数
+          /** 运费模板列表 */
+          vm.getTplList()
+          /** 查询商品参数 */
           vm.GET_GoodsParams()
         } else {
           vm.GET_NextLevelCategory()
@@ -701,7 +700,6 @@
               this.$router.push({ path: '/goods/goods-list' })
             }).catch(error => {
               this.$message.error(error)
-              console.log(error)
             })
           } else {
             /** 正常商品上架 */
@@ -710,7 +708,6 @@
               this.$router.push({ path: '/goods/goods-list' })
             }).catch(error => {
               this.$message.error(error)
-              console.log(error)
             })
           }
         } else {
@@ -720,7 +717,6 @@
             this.$router.push({ path: '/goods/goods-list' })
           }).catch(error => {
             this.$message.error(error)
-            console.log(error)
           })
         }
       },
@@ -769,7 +765,7 @@
           this.activeCategoryIndex3 = index
         }
         // 设置当前商城分类ID
-        this.categoryID = row.category_id
+        this.baseInfoForm.category_id = row.category_id
         this.GET_NextLevelCategory(row, level)
       },
 
@@ -822,7 +818,7 @@
       GET_GoodsParams() {
         // 处理数据 方便校验
         const goods_id = this.activeGoodsId || 0
-        API_goods.getGoodsParams(this.categoryID, { goods_id }).then((response) => {
+        API_goods.getGoodsParams(this.baseInfoForm.category_id, { goods_id }).then((response) => {
           this.loading = false
           this.goodsParams = response.data
           if (!response.data || response.data.length <= 0) {
@@ -859,7 +855,6 @@
           }
           /** 商品相册校验属性 */
           this.baseInfoForm.goods_gallery_list = response.gallery_list.map(key => {
-            console.log(key, 45)
             return {
               img_id: -1,
               url: key,
@@ -899,9 +894,8 @@
 
       /** 查询商品品牌列表 */
       getGoodsBrandList() {
-        API_goods.getGoodsBrandList(this.categoryID, { }).then((response) => {
+        API_goods.getGoodsBrandList(this.baseInfoForm.category_id, { }).then((response) => {
           this.brandList = response.data
-          console.log(this.brandList)
         }).catch((error) => this.$message.error(error))
       },
 
@@ -911,12 +905,10 @@
       },
 
       /** 运费模板列表 */
-      getTplList(val) {
-        if (val) {
-          API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
-            this.tplList = response.data
-          }).catch((error) => this.$message.error(error))
-        }
+      getTplList() {
+        API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
+          this.tplList = response.data
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 运费模板改变时触发 */
