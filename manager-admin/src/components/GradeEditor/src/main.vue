@@ -50,7 +50,7 @@
       <div class="inner-column">
         <a href="javascript:;" class="add-column" @click="handleClickAdd(placeLevel)">
           <i class="icon-add"></i>
-          添加{{ ['一', '二', '三', '四', '五', '六'][placeLevel] }}级地区
+          添加{{ ['一', '二', '三', '四', '五', '六'][placeLevel] }}级数据
         </a>
       </div>
     </div>
