@@ -33,7 +33,7 @@ export function addExpressCompany(params) {
   return request({
     url: 'shops/logi-companies',
     method: 'post',
-    data: params
+    data: expressCompanyModel.params(params)
   })
 }
 
@@ -68,6 +68,6 @@ export function editExpressCompany(id, params) {
   return request({
     url: `shops/logi-companies/${id}`,
     method: 'put',
-    data: params
+    data: expressCompanyModel.params(params)
   })
 }
