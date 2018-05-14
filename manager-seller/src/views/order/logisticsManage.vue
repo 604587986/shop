@@ -88,6 +88,7 @@
           </el-form-item>
           <el-form-item label="选择配送地区" prop="area">
             <el-button type="primary">选择地区</el-button>
+            <en-area-selector-dialog :showDialog="true"></en-area-selector-dialog>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveMould('mouldForm')">保存模板</el-button>
@@ -139,12 +140,14 @@
   import * as API_express from '@/api/expressMould'
   import * as API_logistics from '@/api/expressCompany'
   import { TableLayout, TableSearch } from '@/components'
+  import { AreaSelectorDialog } from '@/plugins/selector/vue'
 
   export default {
     name: 'logisticsManage',
     components: {
       [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch
+      [TableSearch.name]: TableSearch,
+      [AreaSelectorDialog.name]: AreaSelectorDialog
     },
     data() {
       return {
