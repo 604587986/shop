@@ -13,7 +13,7 @@ import {
 
 export default class GoodsTagModel extends DataModel {
   /** 所属卖家ID  标签ID*/
-  @ServerName('seller_id')
+  @ServerName('tag_id')
   tag_id
 
   /** 标签名字 */

@@ -13,14 +13,12 @@ import ShopThemeModel from '@/models/ShopThemeModel'
 export function getShopThemeList(params) {
   return new Promise((resolve, reject) => {
     request({
-      // url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/shop/themes/pc/list',
       url: '/shops/themes',
       method: 'get',
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ShopThemeModel().map(response)
+      const _response = new ShopThemeModel().map(response)
       resolve(_response)
     }).catch(error => reject(error))
   })

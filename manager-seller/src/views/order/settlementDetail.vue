@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="bg-settlement">
     <!--结算总结-->
-    <div>
+    <div class="sum-settlement">
       <div>
         <span>本期结算</span>
         <span>本期结算无误，我要
@@ -14,7 +14,7 @@
         <span>2017-11-01  至 2017-11-30</span>
       </p>
       <p>
-        <span>出账时间</span>
+        <span>出账时间：</span>
         <span>2017-12-01 00:10</span>
       </p>
       <p>
@@ -26,45 +26,86 @@
         <span>已出账</span>
       </p>
     </div>
-    <en-tabel-layout
-      pagination
-      :tableData="tableData"
-      :loading="loading"
-    >
-      <template slot="table-columns">
-        <!--订单号-->
-        <el-table-column prop="sn" label="订单编号"/>
-        <!--创建时间-->
-        <el-table-column label="下单时间">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
-        </el-table-column>
-        <el-table-column label="订单金额">
-          <template slot-scope="scope">{{ scope.row.order_amount | unixToDate }}</template>
-        </el-table-column>
-        <!--操作-->
-        <el-table-column label="操作" width="150">
-          <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="handleOperateRefund(scope.$index, scope.row)">查看</el-button>
+    <el-tabs type="border-card" @tab-click="handleToogle">
+      <el-tab-pane label="订单列表">
+        <en-tabel-layout
+          pagination
+          :tableData="tableData"
+          :loading="loading"
+        >
+          <template slot="table-columns">
+            <!--订单编号-->
+            <el-table-column prop="sn" label="订单编号"/>
+            <!--下单时间-->
+            <el-table-column label="下单时间">
+              <template slot-scope="scope">{{ scope.row.order_time | unixToDate }}</template>
+            </el-table-column>
+            <!--订单金额-->
+            <el-table-column label="订单金额">
+              <template slot-scope="scope">{{ scope.row.order_amount | unitPrice('￥') }}</template>
+            </el-table-column>
+            <!--操作-->
+            <el-table-column label="操作" width="150">
+              <template slot-scope="scope">
+                <el-button size="mini" type="text" @click="handleLookOrderDetails(scope.row)">查看</el-button>
+              </template>
+            </el-table-column>
           </template>
-        </el-table-column>
-      </template>
-      <el-pagination
-        slot="pagination"
-        v-if="pageData"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
-      </el-pagination>
-    </en-tabel-layout>
+          <el-pagination
+            slot="pagination"
+            v-if="pageData"
+            @size-change="handlePageSizeChange"
+            @current-change="handlePageCurrentChange"
+            :current-page="pageData.page_no"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageData.page_size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageData.data_total">
+          </el-pagination>
+        </en-tabel-layout>
+      </el-tab-pane>
+      <el-tab-pane label="退款订单">
+        <en-tabel-layout
+        pagination
+        :tableData="tableData"
+        :loading="loading"
+      >
+        <template slot="table-columns">
+          <!--退款金额-->
+          <el-table-column label="退款金额">
+            <template slot-scope="scope">{{ scope.row.refund_amount | unitPrice('￥') }}</template>
+          </el-table-column>
+          <!--退货单号-->
+          <el-table-column prop="refund_sn" label="退货单号" />
+          <!--订单编号-->
+          <el-table-column prop="sn" label="订单编号"/>
+          <!--会员名称-->
+          <el-table-column prop="member_name" label="会员名称"/>
+          <!--申请时间-->
+          <el-table-column label="申请时间" >
+            <template slot-scope="scope">{{ scope.row.order_time | unixToDate }}</template>
+          </el-table-column>
+        </template>
+        <el-pagination
+          slot="pagination"
+          v-if="pageData"
+          @size-change="handlePageSizeChange"
+          @current-change="handlePageCurrentChange"
+          :current-page="pageData.page_no"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="pageData.page_size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageData.data_total">
+        </el-pagination>
+      </en-tabel-layout>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-  import * as API_refund from '@/api/refund'
+  // import * as API_order from '@/api/refund'
+  import * as API_order from '@/api/order'
   import { TableLayout } from '@/components'
 
   export default {
@@ -73,12 +114,7 @@
       [TableLayout.name]: TableLayout
     },
     mounted() {
-      this.GET_RefundOrder()
-    },
-    filters: {
-      refuseTypeFilter(val) {
-        return val === 'return_money' ? '退款' : '退货'
-      }
+      this.GET_SettlementList()
     },
     data() {
       return {
@@ -102,23 +138,48 @@
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_RefundOrder()
+        this.GET_SettlementList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_RefundOrder()
+        this.GET_SettlementList()
       },
 
       /** 确认结算 */
-      handleConfirmSettlement() {
+      handleConfirmSettlement() { // 获取结算单号 入参传递
 
+      },
+
+      /** 查看订单详情 */
+      handleLookOrderDetails(row) { // 获取订单号 入参传递
+        this.$router.push({ path: `/order/detail/${row.sn}` })
       },
 
       /** 获取结算单数据 */
       GET_SettlementList() {
+        // this.loading = true
+        this.GET_OrderList()
+      },
+
+      /** 获取订单数据 */
+      GET_OrderList() {
         this.loading = true
+        API_order.getOrderList(this.params).then(response => {
+          this.loading = false
+          this.tableData = response.data
+          this.pageData = {
+            page_no: response.draw,
+            page_size: 10,
+            data_total: response.recordsTotal
+          }
+        }).catch(error => this.$message.error(error))
+      },
+
+      /** 切换状态 */
+      handleToogle(tab) {
+        // this.isRefund = parseInt(tab.index) === 1
       }
     }
   }
@@ -129,15 +190,37 @@
     text-align: center;
   }
 
-  .inner-toolbar {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding: 0 20px;
+  /** 结算单背景 */
+  .bg-settlement {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    background-color: #fff;
+    /** 结算总结 */
+    .sum-settlement {
+      padding: 10px;
+      border: 1px solid #F1F1F1;
+      background-color: #F9FAFC;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+      line-height: 30px;
+      font-size: 14px;
+      div {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        span:first-child {
+          font-size: 25px;
+          font-family: "Microsoft YaHei", "Microsoft JhengHei", SimSun, verdana, Tahoma, arial;
+        }
+        span:last-child {
+          font-size: 12px;
+        }
+      }
+    }
   }
 
-  .goods-image {
-    width: 50px;
-    height: 50px;
-  }
+
+
 </style>

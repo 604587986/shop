@@ -43,6 +43,10 @@ export class GoodsCategory extends DataModel {
 
 /** 发布商品分级查询*/
 export class GoodsCategoryLevel extends DataModel {
+  /** 商品分类ID */
+  @ServerName('category_id')
+  category_id
+
   /** 商品分类排序 */
   @ServerName('category_order')
   category_order
@@ -58,4 +62,8 @@ export class GoodsCategoryLevel extends DataModel {
   /** 分类父id */
   @ServerName('parent_id')
   category_parent_id
+
+  /** 分类路径 */
+  @ServerName('category_path')
+  category_path
 }

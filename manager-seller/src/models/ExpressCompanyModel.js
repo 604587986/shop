@@ -13,7 +13,7 @@ import {
 
 export default class ExpressCompanyModel extends DataModel {
   /** 物流公司ID */
-  @ServerName('logi_id ')
+  @ServerName('id')
   logistics_id
 
   /** 物流公司code */

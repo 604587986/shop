@@ -7,7 +7,7 @@
   >
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns">
-        <en-category-picker @changed="categoryChanged"/>
+        <en-category-picker @changed="categoryChanged" :clearable='true'/>
       </div>
       <div class="toolbar-search">
         <en-table-search @search="searchEvent" />
@@ -118,11 +118,11 @@
       /** 分类选择组件值发生改变 */
       categoryChanged(data) {
         delete this.params.keyword
-        delete this.params.category_path
+        delete this.params.shop_cat_path
         if (data !== '') {
           this.params = {
             ...this.params,
-            category_path: data.category_id
+            shop_cat_path: '0|' + data.join('|') + '|'
           }
         }
         this.GET_DraftGoodsList()
@@ -140,7 +140,7 @@
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -159,7 +159,6 @@
           type: 'warning'
         }).then(() => {
           API_goods.deleteDraftGoods(row.draft_goods_id, {}).then((response) => {
-            console.log(response)
             this.GET_DraftGoodsList()
             this.$message.success('删除草稿箱商品成功！')
           }).catch((error) => {

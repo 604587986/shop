@@ -96,7 +96,7 @@ export default class ShopModel extends DataModel {
   @ServerName('goods_num')
   goods_num
 
-  /**  */
+  /** 货品预警数量 */
   @ServerName('goods_warning_count')
   goods_warning_count
 
@@ -202,7 +202,7 @@ export default class ShopModel extends DataModel {
 
   /** 店铺所在地详细地址 */
   @ServerName('shop_add')
-  shop_addr
+  shop_add
 
   /**  */
   @ServerName('shop_auth')

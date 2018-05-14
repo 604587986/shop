@@ -59,7 +59,6 @@
           label-width="100px"
           class="demo-ruleForm"
           style="width: 30%;margin-left: 10%;">
-
           <el-form-item label="模板名称" prop="tpl_name">
             <el-input type="text" v-model="mouldForm.tpl_name" auto-complete="off"></el-input>
           </el-form-item>
@@ -89,6 +88,7 @@
           </el-form-item>
           <el-form-item label="选择配送地区" prop="area">
             <el-button type="primary">选择地区</el-button>
+            <en-area-selector-dialog :showDialog="true"></en-area-selector-dialog>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveMould('mouldForm')">保存模板</el-button>
@@ -139,14 +139,15 @@
 <script>
   import * as API_express from '@/api/expressMould'
   import * as API_logistics from '@/api/expressCompany'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { TableLayout, TableSearch } from '@/components'
+  import { AreaSelectorDialog } from '@/plugins/selector/vue'
 
   export default {
     name: 'logisticsManage',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker
+      [AreaSelectorDialog.name]: AreaSelectorDialog
     },
     data() {
       return {
@@ -235,7 +236,7 @@
           this.loading = false
           this.tableData = response.data
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -261,7 +262,7 @@
             API_express.deleteExpressMould(ids, {}).then(() => {
               this.$message.success('删除成功')
             }).catch(error => {
-              console.log(error)
+              this.$message.error(error)
             })
           })
           .catch(() => {
@@ -289,8 +290,7 @@
             API_express.saveExpressMould(this.mouldForm.tpl_id, this.mouldForm).then(() => {
               this.$message.success('保存成功')
             }).catch(error => {
-              this.$message.success('保存失败，请稍后再试！')
-              console.log(error)
+              this.$message.error(error)
             })
           } else {
             return false
@@ -305,7 +305,7 @@
           this.loading = false
           this.logisticsTableData = response.data
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -326,7 +326,7 @@
           this.$message.success('关闭成功')
           this.GET_logisticsList()
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -336,7 +336,7 @@
           this.$message.success('开启成功')
           this.GET_logisticsList()
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       }
     }

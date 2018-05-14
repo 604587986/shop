@@ -215,7 +215,7 @@
         if (data !== '') {
           this.params = {
             ...this.params,
-            shop_cat_path: data.join('|') + '|'
+            shop_cat_path: '0|' + data.join('|') + '|'
           }
         }
         this.GET_GoodsList()
@@ -233,7 +233,7 @@
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -286,7 +286,7 @@
           }
           this.goodsStockData = this.goodsStockData.length > 1 ? this.goodsStockData : this.goodsStockData[0]
         }).catch((error) => {
-          console.log(error)
+          this.$message.error(error)
           this.$message.error('请求库存数据出错，请稍后再试！')
         })
       },

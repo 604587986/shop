@@ -10,7 +10,9 @@
         <el-table-column prop="sn" label="结算编号"/>
         <!--起止时间-->
         <el-table-column label="起止时间">
-          <template slot-scope="scope">{{ scope.row.order_time | unixToDate }}</template>
+          <template slot-scope="scope">
+            {{ scope.row.order_time | unixToDate }} - {{ scope.row.order_time | unixToDate }}
+          </template>
         </el-table-column>
         <!--本期应收-->
         <el-table-column label="本期应收">
@@ -93,7 +95,8 @@
 
       /** 查看详情 */
       handleOperateOrder(index, row) {
-        // this.$router.push({ path: `/order/detail/${row.sn}` })
+        /** 传递结算单号 */
+        this.$router.push({ path: `/order/settlement-detail/${row.sn}` })
       },
 
       GET_OrderList() {
@@ -108,7 +111,7 @@
           }
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       }
     }

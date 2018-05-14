@@ -19,6 +19,7 @@
             </span>
             <div v-else class="input-error-model">
               <el-input
+                :disabled="isEditModel === 1 && item==='quantity'"
                 v-model.number="scope.row[item]"
                 @input="updateSkuTable(index, scope, item)"
                 @blur="updateSkuTable(index, scope, item)">
@@ -50,6 +51,13 @@
   export default {
     name: 'skuTable',
     props: {
+      /** 是否是编辑模式 1是 2不是 */
+      isEditModel: {
+        type: Number,
+        default: 1
+      },
+
+      /** 列表信息 */
       skuInfo: {
         type: Array,
         default: [{
@@ -60,6 +68,8 @@
           price: ''
         }]
       },
+
+      /** 表头信息 */
       tablehead: {
         type: Array,
         default: []
@@ -186,7 +196,7 @@
         const _desc = this.activeVal === 1 ? '价格' : '库存'
         if (!this.batch || !Number.isInteger(this.batch)) {
           this.batch = ''
-          this.$message.error(`请输入一个有效的库存${_desc}`)
+          this.$message.error(`请输入一个有效的${_desc}数据`)
           return
         }
         /** 批量设置 */
