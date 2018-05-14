@@ -1,5 +1,5 @@
 <template>
-  <div :id="'grade-picker-' + _uid" class="grade-picker">
+  <div :id="'grade-editor-' + _uid" class="grade-editor">
     <div v-for="(column, columnIndex) in data" class="column" :style="columnWdith">
       <div class="search-column">
         <input
@@ -60,7 +60,7 @@
 <script>
   import mixin from './mixin'
   export default {
-    name: 'GradePicker',
+    name: 'GradeEditor',
     mixins: [mixin]
   }
 </script>
