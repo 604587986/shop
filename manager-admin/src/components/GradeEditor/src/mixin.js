@@ -15,7 +15,11 @@ export default {
       /** 最后一级的数据 */
       lastItem: '',
       /** 需要删除的自定义的参数数组，用于返回数据时删除 */
-      needDeleteParams: ['$active', '$id', '$text']
+      needDeleteParams: ['$id', '$text', '$active', '$hidden'],
+      /** 各个搜索框关键字 */
+      searchKeywords: [],
+      /** 当前的搜索关键字，用来节流 */
+      curSearchKeyword: ''
     }
   },
   props: {
@@ -63,20 +67,26 @@ export default {
       default: () => []
     }
   },
-  components: {
-    'grade-column': {
-    }
-  },
   computed: {
     /**
      * 计算列宽度
      * @returns {{width : string}}
      */
     columnWdith() {
-      const len = this.data.length
       return {
-        width: 100 / (len > 2 ? len : 3) + '%'
+        width: 100 / this.maxLevel + '%'
       }
+    },
+    /**
+     * 占位的层级
+     * @returns {*}
+     */
+    placeLevel() {
+      const dataLen = this.data.length
+      const { maxLevel } = this
+      if (dataLen === 0) return 0
+      if (dataLen < maxLevel) return dataLen
+      if (dataLen === maxLevel) return null
     }
   },
   mounted() {
@@ -102,6 +112,7 @@ export default {
         // 如果有返回数据，或是数组没有第一个值
         // 说明后面没有数据了，这个时候可以直接完成
         if (!data || !data[0]) {
+          this.data.splice(this.curLevel, this.maxLevel - this.curLevel)
           this.handleRturnItem()
           return
         }
@@ -138,16 +149,17 @@ export default {
      * 点击item触发事件
      * @param item
      * @param itemIndex
-     * @param columnIdnex
+     * @param columnIndex
      */
-    handleClickItem(item, itemIndex, columnIdnex) {
+    handleClickItem(item, itemIndex, columnIndex) {
       if (item.$active) return
-      this.curLevel = columnIdnex + 1
-      this.$set(this.data, columnIdnex, this.data[columnIdnex].map(_item => {
+      this.curLevel = columnIndex + 1
+      this.$set(this.data, columnIndex, this.data[columnIndex].map(_item => {
         _item.$active = _item === item
         return _item
       }))
-      if (columnIdnex < this.maxLevel - 1) {
+      this.lastItem = item
+      if (columnIndex < this.maxLevel - 1) {
         this.GET_ChildrenById(item.$id)
       } else {
         this.handleRturnItem()
@@ -159,11 +171,19 @@ export default {
      * @param item
      * @param btn
      * @param btnIndex
+     * @param columnIndex
      */
-    handleClickItemBtn(item, btn, btnIndex) {
+    handleClickItemBtn(item, btn, btnIndex, columnIndex) {
       const { onClick } = this.btns[btnIndex]
       this.curItem = item
-      typeof onClick === 'function' && onClick(item)
+      item = JSON.parse(JSON.stringify(item))
+      const parentArray = JSON.parse(JSON.stringify(this.data[columnIndex - 1] || ''))
+      const parent = parentArray && JSON.parse(JSON.stringify(parentArray.filter(_item => _item.$active)[0] || ''))
+      this.needDeleteParams.forEach(key => {
+        delete item[key]
+        delete parent[key]
+      })
+      typeof onClick === 'function' && onClick(item, parent, parentArray)
     },
     /**
      * 触发change事件
@@ -179,35 +199,69 @@ export default {
      * 重新获取当前层级数据
      * type为edit，只刷新当前层次
      * type为delete，删除当前层次以及后面的层次
-     * @param type 刷新类型【edit, delete】
+     * @param type 刷新类型【edit, add, delete】
      * @param item
      */
     refresh(type, item) {
-      let { data, curItem } = this
+      let { data, curItem, paramsNames } = this
       const { $level } = curItem
       // 拿到操作的数据数组的引用
-      const levelArray = data[$level]
+      const levelArray = data[$level] || []
       // 拿到操作的数据的索引
-      const index = levelArray.findIndex(item => item === curItem)
-      if (type === 'edit') {
-        const names = this.paramsNames
-        this.$set(this.data[$level], index, {
-          ...item,
-          $text: item[names.text]
+      const index = levelArray.findIndex(_item => _item.$active)
+      if (type === 'edit' && item) {
+        const _item = JSON.parse(JSON.stringify(item))
+        Object.keys(_item).forEach(key => {
+          if (_item[key] === undefined || _item[key] === undefined) delete _item[key]
         })
-      } else {
-        // 从当前层级数组中删除
-        levelArray.splice(index, 1)
-        // 从所有数据中删除当前层级数组后面的数组
-        data.splice($level + 1, data.length - $level)
-        // 设置后一个数据的active为true
-        // index不用+1，因为前面删掉了一个
-        levelArray[index].$active = true
-        // 设置当前层级为操作的层级+1
-        this.curLevel = $level + 1
-        // 请求数据
-        this.GET_ChildrenById(levelArray[index]['$id'])
+        item[paramsNames.id] && (_item.$id = item[paramsNames.id])
+        item[paramsNames.text] && (_item.$text = item[paramsNames.text])
+        const obj = {
+          ...curItem,
+          ..._item
+        }
+        this.$set(data[$level], index, obj)
+        return
       }
+      let id = 0
+      if (data[$level - 1]) {
+        id = data[$level - 1].filter(item => item.$active)[0].$id
+      }
+      this.curLevel = $level
+      this.GET_ChildrenById(id)
+    },
+    /**
+     * 搜索关键字发生改变
+     * 将与关键字不匹配的$hidden设为true
+     * @param columnIndex
+     */
+    handleSearchKeywordChange(columnIndex) {
+      const keyword = this.searchKeywords[columnIndex]
+      if (keyword === this.curSearchKeyword) return
+      this.curSearchKeyword = keyword
+      this.$set(this.data, columnIndex, this.data[columnIndex].map(item => {
+        item.$hidden = keyword && item.$text.indexOf(keyword) === -1
+        return item
+      }))
+    },
+    /**
+     * 点击添加按钮
+     * 返回三个参数
+     * columnIndex 当前的层级
+     * parent 上一级
+     * parentArray 上一级的全部数据
+     * @param columnIndex
+     */
+    handleClickAdd(columnIndex) {
+      const { data, needDeleteParams } = this
+      this.curItem = { $level: columnIndex }
+      const parentArray = JSON.parse(JSON.stringify(data[columnIndex - 1] || data[columnIndex]))
+      const parent = parentArray.filter(item => item.$active)[0]
+      parentArray.map(item => {
+        needDeleteParams.forEach(key => delete item[key])
+        return item
+      })
+      this.$emit('add-click', columnIndex, parent, parentArray)
     }
   }
 }
