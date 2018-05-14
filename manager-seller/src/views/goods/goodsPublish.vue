@@ -778,7 +778,7 @@
           }
           /** 商品相册校验属性 */
           this.baseInfoForm.goods_gallery_list.forEach(key => {
-            this.$set(key, 'url', key.small)
+            this.$set(key, 'url', key.original)
           })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
@@ -949,6 +949,8 @@
           img_id: -1,
 
           original: fileList.url,
+
+          url: fileList.url,
 
           sort: 0,
 
