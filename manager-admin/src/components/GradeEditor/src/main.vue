@@ -14,7 +14,7 @@
       <div class="inner-column">
         <a href="javascript:;" class="add-column" @click="handleClickAdd(columnIndex)">
           <i class="icon-add"></i>
-          添加{{ ['一', '二', '三', '四', '五', '六'][columnIndex] }}级地区
+          添加{{ ['一', '二', '三', '四', '五', '六'][columnIndex] }}级数据
         </a>
         <div
           v-for="(item, itemIndex) in column"
