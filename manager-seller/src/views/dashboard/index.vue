@@ -194,7 +194,7 @@ export default {
         this.concat = response.concat
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
 

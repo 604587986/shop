@@ -81,8 +81,7 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
-        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+        goods_api: process.env.BASE_API + '/goods',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
