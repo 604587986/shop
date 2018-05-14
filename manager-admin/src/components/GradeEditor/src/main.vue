@@ -23,7 +23,7 @@
           @click="handleClickItem(item, itemIndex, columnIndex)"
           :class="['item', item.$active && 'active', item.$hover && 'hover']">
           <div class="text-item">{{ item.$text }}</div>
-          <div class="btns-item">
+          <div v-if="btns && btns.length > 0" class="btns-item">
             <div class="inner-btns">
               <a
                 v-for="(btn, btnIndex) in btns"
