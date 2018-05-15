@@ -44,8 +44,8 @@
         <el-form-item label="联系方式" prop="mobile">
           <el-input v-model="addressForm.mobile" size="small" :maxlength="11"></el-input>
         </el-form-item>
-        <el-form-item label="收货地区">
-          <en-address-select :default="addressForm.regions" @changed="handleAddressSelectChanged"/>
+        <el-form-item label="收货地区" prop="region">
+          <en-address-select :default="regions" @changed="(object) => { this.addressForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="addr">
           <el-input v-model="addressForm.addr" size="small"></el-input>
@@ -78,11 +78,11 @@
         /** 添加、编辑地址 表单规则 */
         addressRules: {
           name: [
-            { required: true, message: '请输入收货人姓名', trigger: 'blur' },
+            this.MixinRequired('请输入收货人姓名！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
           mobile: [
-            { required: true, message: '请输入联系方式', trigger: 'blur' },
+            this.MixinRequired('请输入联系方式！'),
             { validator: (rule, value, callback) => {
               if (!regExp.mobile.test(value)) {
                 callback(new Error('手机格式有误！'))
@@ -91,13 +91,14 @@
               }
            }, trigger: 'blur' }
           ],
+          region: [this.MixinRequired('请选择地址地区！')],
           addr: [
-            { required: true, message: '请输入详细地址', trigger: 'blur' },
+            this.MixinRequired('请输入详细地址！'),
             { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
           ]
         },
-        /** 当前选好的地区数据 */
-        selectedRegions: ''
+        /** 编辑地址时，暂存说操作的地址 */
+        regions: ''
       }
     },
     mounted() {
@@ -108,15 +109,14 @@
     },
     methods: {
       areaFormatter(row) {
-        return row.province + row.city + row.region + row.town
+        return row.province + row.city + row.county + row.town
       },
       /** 添加地址 */
       handleAddAddress() {
         this.addressForm = {
-          is_default: 0,
+          def_addr: 0,
           ship_address_name: ''
         }
-        this.selectedRegions = ''
         this.openLayer({
           title: '添加地址',
           yes: index => {
@@ -126,9 +126,8 @@
       },
       /** 编辑地址 */
       handleEaitAddress(row) {
-        this.addressForm = {...row}
-        this.addressForm.regions = [row.province_id, row.city_id, row.region_id || -1, row.town_id || -1]
-        this.selectedRegions = ''
+        this.addressForm = JSON.parse(JSON.stringify(row))
+        this.regions = [row.province_id, row.city_id, row.county_id || -1, row.town_id || -1]
         this.openLayer({
           yes: index => {
             this.submitAddressForm('edit', index)
@@ -138,28 +137,23 @@
       /** 删除地址 */
       handleDeleteAddress(row) {
         this.$layer.confirm('确认要删除这个地址吗？', () => {
-          this.deleteAddress(row.address_id).then(() => this.$message.success('删除成功！'))
+          this.deleteAddress(row.address_id).then(() => {
+            this.$message.success('删除成功！')
+            this.getAddressData()
+          })
         })
       },
       submitAddressForm(type, index) {
         this.$refs['addressForm'].validate((valid) => {
           if (valid) {
-            const regions = this.selectedRegions.regions
-            if (!regions) {
-              this.$message.error('您还没有选择地址！')
-              return false
-            }
-            const _params = {
-              ...this.addressForm,
-              ...regions
-            }
-            if (type === 'add') {
-              this.addAddress(_params).then(() => {
+            const { addr_id } = this.addressForm
+            if (!addr_id) {
+              this.addAddress(this.addressForm).then(() => {
                 this.$layer.close(index)
                 this.$message.success('保存成功！')
               })
             } else {
-              this.editAddress(_params).then(() => {
+              this.editAddress(this.addressForm).then(() => {
                 this.$layer.close(index)
                 this.$message.success('保存成功！')
               })
@@ -169,10 +163,6 @@
             return false
           }
         })
-      },
-      /** 地址选择插件发生改变 */
-      handleAddressSelectChanged(object) {
-        this.selectedRegions = object
       },
       /** 打开layer弹窗 */
       openLayer(params) {
