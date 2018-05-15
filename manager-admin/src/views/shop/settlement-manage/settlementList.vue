@@ -15,7 +15,7 @@
         <el-table-column label="收取佣金">
           <template slot-scope="scope">{{ scope.row.last_login_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="login_count_tm" label="退单金额"/>
+        <el-table-column prop="login_count" label="退单金额"/>
         <el-table-column prop="sex" label="退还佣金"/>
         <el-table-column prop="sex" label="本期应结"/>
         <el-table-column label="操作">

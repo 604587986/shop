@@ -48,10 +48,6 @@ export default class MemberModel extends DataModel {
   @ServerName('login_count')
   login_count
 
-  /** 会员等级 */
-  @ServerName('lv_name')
-  lv_name
-
   /** 会员ID */
   @ServerName('member_id')
   id

@@ -4,6 +4,7 @@
 
 import request from '@/utils/request'
 import MemberModel from '@/models/MemberModel'
+const memberModel = new MemberModel()
 
 /** 获取会员列表 */
 export function getMemberList(params) {
@@ -14,7 +15,7 @@ export function getMemberList(params) {
       loading: false,
       params
     }).then(response => {
-      response.data = new MemberModel().map(response.data)
+      response.data = memberModel.map(response.data)
       resolve(response)
     }).catch(error => reject(error))
   })
@@ -67,13 +68,11 @@ export function editMember(member_id, params) {
 
 /**
  * 删除会员
- * @param ids
- * @returns {Promise<any>}
+ * @param id
  */
-export function deleteMembers(ids) {
-  if (Array.isArray(ids)) ids = ids.join(',')
+export function deleteMember(id) {
   return request({
-    url: `/members/${ids}`,
+    url: `/members/${id}`,
     method: 'delete'
   })
 }
@@ -91,7 +90,7 @@ export function getRecycleMemberList(params) {
       loading: false,
       params
     }).then(response => {
-      response.data = new MemberModel().map(response.data)
+      response.data = memberModel.map(response.data)
       resolve(response)
     }).catch(error => reject(error))
   })

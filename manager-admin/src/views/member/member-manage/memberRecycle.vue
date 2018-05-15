@@ -18,7 +18,7 @@
         <el-table-column label="上次登录时间">
           <template slot-scope="scope">{{ scope.row.last_login_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="login_count_tm" label="本月登录次数"/>
+        <el-table-column prop="login_count" label="本月登录次数"/>
         <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
