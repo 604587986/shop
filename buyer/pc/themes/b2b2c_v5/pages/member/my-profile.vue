@@ -14,7 +14,7 @@
           :on-success="(res) => { profileForm.face = res.url }"
         >
           <img v-if="profileForm.face" :src="profileForm.face" class="avatar">
-          <img v-else src="https://misc.360buyimg.com/mtd/pc/common/img/no_login.jpg" title="求真相" class="avatar">
+          <img v-else src="~/assets/images/icon-noface.jpg" title="求真相" class="avatar">
           <div class="eidt-mask">
             <i class="el-icon-edit-outline"></i>
             <p>修改头像</p>
