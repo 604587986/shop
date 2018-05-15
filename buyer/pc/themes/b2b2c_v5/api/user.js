@@ -21,12 +21,10 @@ export function getUserInfo() {
  * @returns {AxiosPromise}
  */
 export function saveUserInfo(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
-    url: 'user/info',
-    method: 'post',
-    data: _formData
+    url: 'members',
+    method: 'put',
+    data: params
   })
 }
 
