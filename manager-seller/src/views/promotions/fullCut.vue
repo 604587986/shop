@@ -58,19 +58,19 @@
         </en-tabel-layout>
       </el-tab-pane>
       <el-tab-pane label="新增满优惠" name="add">
-        <el-row :gutter="20" type="flex" justify="space-around" >
-          <el-col :span="4">
-            <div class="activity-info activity-title">活动信息</div>
-            <div class="dicount-set activity-title">优惠设置</div>
-            <div class="activity-goods activity-title">活动商品</div>
-          </el-col>
-          <el-col :span="20">
-            <el-form
-              :model="activityForm" status-icon
-              :rules="rules" ref="activityForm"
-              label-width="100px"
-              class="demo-ruleForm">
-              <div class="activity-info">
+        <div class="content-goods-publish">
+          <el-form
+            :model="activityForm"
+            status-icon
+            :rules="rules"
+            label-position="right"
+            ref="activityForm"
+            label-width="120px"
+            class="demo-ruleForm">
+            <!--活动信息-->
+            <div class="base-info-item">
+              <h4>活动信息</h4>
+              <div>
                 <el-form-item  label="活动名称" prop="activity_name">
                   <el-input v-model="activityForm.activity_name" type="text" placeholder="不超过60个字符" ></el-input>
                 </el-form-item>
@@ -88,7 +88,11 @@
                   <UE v-model="activityForm.activity_desc" :defaultMsg="activityForm.activity_desc"></UE>
                 </el-form-item>
               </div>
-              <div class="dicount-set">
+            </div>
+            <!--优惠设置-->
+            <div class="base-info-item">
+              <h4>优惠设置</h4>
+              <div>
                 <el-form-item label="优惠门槛" prop="discount_threshold">
                   <div>
                     满 <el-input v-model="activityForm.discount_threshold" style="width: 100px;"></el-input>
@@ -96,84 +100,126 @@
                   </div>
                 </el-form-item>
                 <el-form-item label="优惠方式">
-                    <el-checkbox
-                      label="送优惠券"
-                      true-label="减5元"
-                      false-label="减现金（与打折活动只能选择一种）">
-                    </el-checkbox>
-                    <el-checkbox
-                      @change=""
-                      true-label="444"
-                      false-label="打折（与减现金活动只能选择一种）">
-                    </el-checkbox>
-                    <el-checkbox v-if="activityForm.discount_mode && activityForm.discount_mode.freePostage"
-                                 :checked="activityForm.discount_mode.freePostage" label="免邮费"></el-checkbox>
-                    <!--<el-checkbox :checked="discount_mode.freePostage" label="送赠品" ></el-checkbox>-->
+                  <div>
+                    <el-checkbox v-model="activityForm.isDiscount"/>
+                    <span v-show="activityForm.isDiscount">
+                    减现金（与打折活动只能选择一种）
+                  </span>
+                    <el-input
+                      v-show="activityForm.isDiscount"
+                      v-model="activityForm.discount_dimension"/>
+
+                    <el-checkbox v-model="!activityForm.isDiscount" @change="" />
+                    <span v-show="activityForm.isDiscount">
+                    减现金（与打折活动只能选择一种）
+                  </span>
+                    <el-input
+                      v-show="activityForm.isDiscount"
+                      v-model="activityForm.discount_dimension"/>
+                  </div>
+                  <el-checkbox label="打折（与减现金活动只能选择一种）">
+                    打折（与减现金活动只能选择一种）
+                  </el-checkbox>
+                  <div>
+                    <el-checkbox label="送积分" v-model="isIntegral" ></el-checkbox>
+                  </div>
+                  <div>
+                    <el-checkbox label="免邮费" v-model="freePostage" @change="changeFreePostage"></el-checkbox>
+                  </div>
+                  <div>
                     <el-checkbox label="送优惠券" ></el-checkbox>
-                </el-form-item>
-              </div>
-              <div class="activity-goods">
-                <el-form-item label="活动商品">
-                  <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
-                    <el-radio :label="1">全部商品参与</el-radio>
-                    <el-radio :label="0">部分商品参与</el-radio>
-                  </el-radio-group>
-                  <!--商品表格-->
-                  <div v-show="!goodsShow">
-                    <en-tabel-layout
-                      toolbar
-                      :tableData="goodsData"
-                      :loading="loading"
-                      :selectionChange="selectionChange"
-                    >
-                      <div slot="toolbar" class="inner-toolbar">
-                        <div class="toolbar-btns">
-                          <el-button type="success" @click="showGoodsSelector">选择商品</el-button>
-                          <el-button type="danger" @click="cancelall">批量取消</el-button>
-                        </div>
-                      </div>
-                      <template slot="table-columns">
-                        <el-table-column type="selection"/>
-                        <!--商品信息-->
-                        <el-table-column  label="商品信息">
-                          <template slot-scope="scope">
-                            <div>
-                              <img :src="scope.row.thumbnail" alt="" class="goods-image">
-                              <div>
-                                <span>{{ scope.row.goods_name }}</span>
-                                <span>{{ scope.row.price | unitPrice('￥') }}</span>
-                              </div>
-                            </div>
-                          </template>
-                        </el-table-column>
-                        <!--库存-->
-                        <el-table-column prop="enable_quantity" label="库存" />
-                        <!--操作-->
-                        <el-table-column label="操作" width="150">
-                          <template slot-scope="scope">
-                            <el-button
-                              size="mini"
-                              type="primary"
-                              @click="handleCancleJoin(scope.$index, scope.row)">取消参加
-                            </el-button>
-                          </template>
-                        </el-table-column>
-                      </template>
-                    </en-tabel-layout>
+                  </div>
+                  <div>
+                    <el-checkbox label="送赠品" v-model="isGift" @change="isChangeGift"></el-checkbox>
+                    <el-select v-show="isGift" v-model="activityForm.giftId" placeholder="请选择">
+                      <el-option
+                        v-for="item in giftList"
+                        @change="changeGift"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
+                    <el-button type="text" v-show="isGift" @click="addGift">新增</el-button>
                   </div>
                 </el-form-item>
               </div>
+            </div>
+            <!--活动商品-->
+            <div class="base-info-item">
+              <h4>活动商品</h4>
+              <div>
+                <div class="activity-goods">
+                    <el-form-item label="活动商品">
+                      <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
+                        <el-radio :label="1">全部商品参与</el-radio>
+                        <el-radio :label="0">部分商品参与</el-radio>
+                      </el-radio-group>
+                      <!--商品表格-->
+                      <div v-show="!goodsShow">
+                        <en-tabel-layout
+                          toolbar
+                          :tableData="goodsData"
+                          :loading="loading"
+                          :selectionChange="selectionChange"
+                        >
+                          <div slot="toolbar" class="inner-toolbar">
+                            <div class="toolbar-btns">
+                              <el-button type="success" @click="showGoodsSelector">选择商品</el-button>
+                              <el-button type="danger" @click="cancelall">批量取消</el-button>
+                            </div>
+                          </div>
+                          <template slot="table-columns">
+                            <el-table-column type="selection"/>
+                            <!--商品信息-->
+                            <el-table-column  label="商品信息">
+                              <template slot-scope="scope">
+                                <div>
+                                  <img :src="scope.row.thumbnail" alt="" class="goods-image">
+                                  <div>
+                                    <span>{{ scope.row.goods_name }}</span>
+                                    <span>{{ scope.row.price | unitPrice('￥') }}</span>
+                                  </div>
+                                </div>
+                              </template>
+                            </el-table-column>
+                            <!--库存-->
+                            <el-table-column prop="enable_quantity" label="库存" />
+                            <!--操作-->
+                            <el-table-column label="操作" width="150">
+                              <template slot-scope="scope">
+                                <el-button
+                                  size="mini"
+                                  type="primary"
+                                  @click="handleCancleJoin(scope.$index, scope.row)">取消参加
+                                </el-button>
+                              </template>
+                            </el-table-column>
+                          </template>
+                        </en-tabel-layout>
+                      </div>
+                    </el-form-item>
+                  </div>
+              </div>
+            </div>
+            <!--提交按钮-->
+            <div class="btn-submit">
               <el-form-item>
                 <el-button type="success" @click="handleSaveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
-            </el-form>
-          </el-col>
-        </el-row>
+            </div>
+          </el-form>
+        </div>
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
-    <en-goods-selector :show="showDialog" :api="goods_api" :defaultData="tableData" :maxLength="maxsize"
-                       @confirm="refreshFunc" @closed="showDialog = false"/>
+    <en-goods-selector
+      :show="showDialog" :api="goods_api" :defaultData="tableData"
+      :maxLength="maxsize" @confirm="refreshFunc" @closed="showDialog = false"/>
+    <!--赠品添加/修改-->
+    <add-gift
+      :giftModelShow="giftModelShow"
+      @saveGift="saveGift"/>
   </div>
 </template>
 
@@ -181,6 +227,7 @@
   import * as API_activity from '@/api/activity'
   import { TableLayout, TableSearch, CategoryPicker, UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
+  import { AddGift } from './components'
 
   export default {
     name: 'fullCut',
@@ -189,7 +236,8 @@
       [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [UE.name]: UE,
-      [GoodsSelector.name]: GoodsSelector
+      [GoodsSelector.name]: GoodsSelector,
+      [AddGift.name]: AddGift
     },
     data() {
       return {
@@ -222,23 +270,32 @@
           /** 优惠门槛*/
           discount_threshold: '',
 
-          /** 优惠方式*/
-          discount_mode: {
-            /** 优惠方式 打折/减现金  */
-            discount_way: '',
+          /** 是否满减 1打折/2减现金  */
+          isDiscount: 1,
 
-            /** 优惠力度 */
-            discount_dimension: '',
+          /** 优惠力度 打几折/减多少钱*/
+          discount_dimension: '',
 
-            /** 是否免邮费*/
-            freePostage: false,
+          /** 是否送积分 */
+          isIntegral: 1,
 
-            /** 赠品 代码 */
-            gift: '',
+          /** 积分 */
+          integral: 0,
 
-            /** 送优惠券 代码*/
-            coupon: ''
-          },
+          /** 是否免邮费 1免邮费*/
+          freePostage: 1,
+
+          /** 是否有赠品  */
+          isGift: 1,
+
+          /** 礼品id */
+          giftId: '',
+
+          /** 是否送优惠券 */
+          isCoupon: 1,
+
+          /** 优惠券Id */
+          couponId: '',
 
           /** 是否全部商品参与*/
           is_all_joined: '',
@@ -246,6 +303,39 @@
           /** 活动商品*/
           activity_goods: []
         },
+
+        /** 是否满减 1打折/2减现金  */
+        isDiscount: 1,
+
+        /** 优惠力度 打几折/减多少钱*/
+        discount_dimension: '',
+
+        /** 是否送积分 */
+        isIntegral: 1,
+
+        /** 积分 */
+        integral: 0,
+
+        /** 是否免邮费 1免邮费*/
+        freePostage: false,
+
+        /** 是否有赠品  */
+        isGift: false,
+
+        /** 礼品id */
+        giftId: '',
+
+        /** 是否送优惠券 */
+        isCoupon: 1,
+
+        /** 优惠券Id */
+        couponId: '',
+
+        /** 赠品列表 */
+        giftList: [],
+
+        /** 显示赠品弹框 */
+        giftModelShow: false,
 
         /** 表单校验规则*/
         rules: {
@@ -260,6 +350,7 @@
             { required: true, message: '请输入优惠门槛', trigger: 'change' }
           ]
         },
+
         /** 是否显示商品表格*/
         goodsShow: true,
 
@@ -273,8 +364,7 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
-        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
+        goods_api: process.env.BASE_API + '/goods',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
@@ -282,6 +372,8 @@
     },
     mounted() {
       this.GET_ActivityList()
+      /** 赠品列表 */
+      this.GET_giftList()
     },
     methods: {
 
@@ -421,6 +513,38 @@
         }
       },
 
+      /** 是否免邮费改变 */
+      changeFreePostage(val) {
+        this.freePostage = val
+        this.activityForm.freePostage = this.freePostage ? 1 : 0
+      },
+
+      /** 是否送赠品 */
+      isChangeGift(val) {
+        this.isGift = val
+        this.activityForm.isGift = this.isGift ? 1 : 0
+      },
+
+      /** 获取赠品列表 */
+      GET_giftList() {
+      },
+
+      /** 所选赠品变化时 */
+      changeGift(val) {
+        this.activityForm.giftId = val
+      },
+
+      /** 新增赠品 */
+      addGift() {
+        this.giftModelShow = true
+      },
+
+      /** 赠品监听  */
+      saveGift(target) {
+        this.giftModelShow = false
+        target && this.GET_giftList()
+      },
+
       /** 保存表单设置*/
       handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
@@ -430,19 +554,13 @@
                 this.$message.success('保存设置成功！')
                 this.activeName === 'express'
                 this.GET_ActivityList()
-              }).catch(error => {
-                console.log(error)
-                this.$message.error('保存设置失败，请稍后再试！')
-              })
+              }).catch(error => this.$message.error(error))
             } else {
               API_activity.addActivity(this.activityForm).then(response => {
                 this.$message.success('保存设置成功！')
                 this.activeName === 'express'
                 this.GET_ActivityList()
-              }).catch(error => {
-                console.log(error)
-                this.$message.error('保存设置失败，请稍后再试！')
-              })
+              }).catch(error => this.$message.error(error))
             }
           }
         })
@@ -456,42 +574,72 @@
     width: 50px;
     height: 50px;
   }
-  /*新增表单面板*/
-  #pane-add {
-    background: #fff;
-    padding: 10px;
-    border: 1px solid #9a9a9a;
+
+  /deep/ .el-form-item__content {
+    width: 85%;
+    /deep/ .el-input--medium {
+      width: 300px;
+    }
   }
-  .activity-info {
-    height: 460px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
+
+  /*百度UE*/
+  /deep/ #edui1 {
+    width: 100% !important;
   }
-  .dicount-set {
-    height: 130px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
-  }
-  .activity-goods {
-    min-height: 80px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
-  }
-  .activity-title {
-    text-align: center;
+
+  .content-goods-publish {
     padding: 15px;
-    color: #333;
-    font-size: 14px;
-    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid #ddd;
+    background: none repeat scroll 0 0 #fff;
   }
-  .discount-tip {
-    font-size: 12px;
-    line-height: 30px;
-    margin-left: 5px;
-    color: red;
+
+  /*表单信息*/
+  .el-form {
+    padding-bottom: 80px;
+    .el-form-item {
+      width: 100%;
+      text-align: left;
+    }
+    /*提交按钮*/
+    /deep/ .btn-submit {
+      width: 100%;
+      .el-form-item__content {
+        text-align: center;
+      }
+    }
+  }
+
+  /*平铺*/
+  div.base-info-item {
+    h4 {
+      padding:0 10px;
+      border: 1px solid #ddd;
+      background-color: #f8f8f8;
+      font-weight: bold;
+      color: #333;
+      font-size: 14px;
+      line-height: 40px;
+      text-align: left;
+    }
+    h4 + div {
+      margin-top: 15px;
+    }
+    .el-form-item {
+      margin-left: 5%;
+      min-width: 300px;
+    }
+    .el-form-item__content {
+      margin-left: 120px;
+      text-align: left;
+    }
+    p.goods-group-manager {
+      padding-left: 12.3%;
+      text-align: left;
+      color: #999;
+      font-size: 13px;
+    }
   }
 </style>
 
