@@ -164,7 +164,7 @@
           this.add_expanded(this.tableData)
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 

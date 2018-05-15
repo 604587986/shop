@@ -13,7 +13,7 @@
             <el-upload
               class="upload-demo"
               style="display: none;"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="BASE_IMG_URL"
               :limit="1"
               :file-list="fileList"
               :on-success="uploaded">
@@ -127,7 +127,7 @@
 
 <script>
 import * as API_Dashboard from '@/api/dashboard'
-
+import * as API_shop from '@/api/shop'
 export default {
   name: 'dashboard',
   mounted() {
@@ -135,6 +135,9 @@ export default {
   },
   data() {
     return {
+      /** 图片服务器地址 */
+      BASE_IMG_URL: process.env.BASE_IMG_URL,
+
       /** 加载中*/
       loading: false,
 
@@ -165,6 +168,12 @@ export default {
   },
   created() {
     this.GET_DashBoard()
+    API_shop.getShopData({}).then(response => {
+      /** 使用vuex进行存储店铺信息 */
+      this.$store.dispatch('SetShop', response)
+    }).catch(error => {
+      this.$message.error(error)
+    })
   },
   methods: {
     /** 窗口缩放时计算table高度 */
@@ -185,7 +194,7 @@ export default {
         this.concat = response.concat
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
 
@@ -199,6 +208,11 @@ export default {
       // 更换图片 置空存储数组
       this.shop_info.shop_logo = file.url
       this.fileList = []
+      API_shop.updateShopLogo({ logo: file.url }).then(response => {
+        this.$message.success('店铺LOGO修改成功')
+      }).catch(error => {
+        this.$message.error(error)
+      })
     },
 
     /** 跳转商品列表*/

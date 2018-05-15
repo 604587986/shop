@@ -7,7 +7,7 @@
   >
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns">
-        <en-category-picker @changed="categoryChanged"/>
+        <en-category-picker @changed="categoryChanged" :clearable='true'/>
       </div>
       <div class="toolbar-search">
         <en-table-search @search="searchEvent" />
@@ -118,11 +118,11 @@
       /** 分类选择组件值发生改变 */
       categoryChanged(data) {
         delete this.params.keyword
-        delete this.params.category_path
+        delete this.params.shop_cat_path
         if (data !== '') {
           this.params = {
             ...this.params,
-            category_path: data.category_id
+            shop_cat_path: '0|' + data.join('|') + '|'
           }
         }
         this.GET_DraftGoodsList()
@@ -140,15 +140,15 @@
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
       /** 草稿箱编辑 */
       handleDraftEdit(row) {
-        const _goods_id = row.goods_id || '0'
+        const _draft_goods_id = row.draft_goods_id || '0'
         // isdraft 草稿箱2
-        this.$router.push({ path: '/goods/good-publish', query: { goodsid: _goods_id, isdraft: 2 }})
+        this.$router.push({ path: '/goods/good-publish', query: { goodsid: _draft_goods_id, isdraft: 2 }})
       },
 
       /** 草稿箱商品删除 */
@@ -158,11 +158,12 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(row)
-          API_goods.deleteDraftGoods(row.goods_id, {}).then(() => {
+          API_goods.deleteDraftGoods(row.draft_goods_id, {}).then((response) => {
             this.GET_DraftGoodsList()
             this.$message.success('删除草稿箱商品成功！')
-          }).catch(() => this.$message.error('删除草稿箱商品出错，请稍后再试！'))
+          }).catch((error) => {
+            this.$message.error(error)
+          })
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })

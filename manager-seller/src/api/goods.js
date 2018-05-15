@@ -47,7 +47,7 @@ export function deleteGoods(ids, params) {
 }
 
 /**
- * 查询库存商品数据
+ * 查询库存商品数据  查询商品sku（规格）信息
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -86,7 +86,7 @@ export function reserveStockGoods(goods_id, params) {
 }
 
 /**
- * 查询商品参数 商品发布，获取所选分类关联的参数信息
+ * 商品发布   查询商品参数，获取所选分类关联的参数信息
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -105,7 +105,7 @@ export function getGoodsParams(ids, params) {
 }
 
 /**
- *  查询商品品类信息 商品发布  ids 为category_id 商城商品品类
+ * 查询商品品类信息  ids 为category_id 商城商品品类
  * @param ids
  * @param params
  * @returns {Promise<any>}
@@ -176,7 +176,7 @@ export function getGoodsBrandList(ids, params) {
       params
     }).then(response => {
       const _response = response
-      _response.data = new GoodsBrandModel().map(_response.data)
+      _response.data = new GoodsBrandModel().map(_response)
       resolve(_response)
     }).catch(error => reject(error))
   })
@@ -197,7 +197,7 @@ export function getTplList(ids, params) {
       params
     }).then(response => {
       const _response = response
-      _response.data = new ExpressMouldModel().map(_response.data)
+      _response.data = new ExpressMouldModel().map(_response)
       resolve(_response)
     }).catch(error => reject(error))
   })
@@ -232,7 +232,7 @@ export function aboveGoods(params) {
       url: '/goods',
       method: 'post',
       data: params,
-      header: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -240,16 +240,18 @@ export function aboveGoods(params) {
 }
 
 /**
- * 上架草稿箱正常商品
+ * 修改正常商品 编辑商品时用到
+ * @param id
  * @param params
  * @returns {Promise<any>}
  */
-export function aboveDraftGoods(ids, params) {
+export function editGoods(id, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/goods/draft-goods/${ids}/market`,
+      url: `/goods/${id}`,
       method: 'put',
-      data: params
+      data: params,
+      headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -266,7 +268,26 @@ export function saveDraft(params) {
     request({
       url: `/goods/draft-goods`,
       method: 'post',
-      data: params
+      data: params,
+      headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 上架草稿箱商品
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function aboveDraftGoods(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${ids}/market`,
+      method: 'put',
+      data: params,
+      headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))
@@ -274,6 +295,37 @@ export function saveDraft(params) {
 }
 
 /** 草稿箱商品 保存草稿 即 修改草稿箱商品 */
+export function editDraftGoods(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${id}`,
+      method: 'put',
+      data: params,
+      headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 查询草稿箱sku信息
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function draftSku(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${id}/skus`,
+      method: 'get',
+      data: params
+    }).then(response => {
+      const _response = new GoodsModel().map(response)
+      resolve(_response)
+    }).catch(error => reject(error))
+  })
+}
 
 /**
  * 获取草稿箱商品列表
@@ -361,14 +413,11 @@ export function RecycleReductionGoods(ids, params) {
  * @constructor
  */
 export function RecycleDeleteGoods(ids, params) {
-  const _params = params
-  const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `/goods/${ids}`,
       method: 'delete',
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     }).catch(error => reject(error))

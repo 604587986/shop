@@ -23,12 +23,12 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column label="图片">
+        <el-table-column label="图片" min-width="160">
           <template slot-scope="scope">
-            <img :src="scope.row.goods_image" class="goods-image"/>
+            <img :src="scope.row.goods_image" class="goods-image" />
           </template>
         </el-table-column>
-        <el-table-column prop="goods_name" label="名称"/>
+        <el-table-column prop="goods_name" label="名称" min-width="160"/>
         <el-table-column label="价格" >
           <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
         </el-table-column>
@@ -42,7 +42,7 @@
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus"/>
-        <el-table-column label="操作" width="280px">
+        <el-table-column label="操作" min-width="280">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -75,7 +75,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="30%" >
+    <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="30%" class="pop-sku">
       <div align="center">
         <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
           <el-form-item label="库存" prop="quantity" >
@@ -88,12 +88,12 @@
         <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
           <template slot="table-columns">
             <el-table-column prop="goods_name" label="商品名称"/>
-            <el-table-column label="库存" width="120">
+            <el-table-column label="库存">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.quantity" auto-complete="off" ></el-input>
               </template>
             </el-table-column>
-            <el-table-column  prop="deliver_goods_quantity" label="待发货数" width="120" />
+            <el-table-column  prop="deliver_goods_quantity" label="待发货数"  />
           </template>
         </en-tabel-layout>
       </div>
@@ -215,7 +215,7 @@
         if (data !== '') {
           this.params = {
             ...this.params,
-            shop_cat_path: data.join('|') + '|'
+            shop_cat_path: '0|' + data.join('|') + '|'
           }
         }
         this.GET_GoodsList()
@@ -233,7 +233,7 @@
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -286,7 +286,7 @@
           }
           this.goodsStockData = this.goodsStockData.length > 1 ? this.goodsStockData : this.goodsStockData[0]
         }).catch((error) => {
-          console.log(error)
+          this.$message.error(error)
           this.$message.error('请求库存数据出错，请稍后再试！')
         })
       },
@@ -332,6 +332,17 @@
 
   .toolbar-btns {
 
+  }
+
+  /deep/ .pop-sku {
+    .toolbar {
+      display: none;
+    }
+    .el-dialog__body {
+      .el-table {
+        border: 1px solid #e5e5e5;
+      }
+    }
   }
 
   .toolbar-search {

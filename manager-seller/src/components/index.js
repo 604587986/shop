@@ -4,7 +4,6 @@ import RegionPick from './RegionPick'
 import CategoryPicker from './CategoryPicker'
 import YearMonthPicker from './YearMonthPicker'
 import PriceRange from './PriceRange'
-import ShopPicker from './ShopPicker'
 import SkuSelector from './SkuSelector'
 import UE from './UE'
 
@@ -15,7 +14,6 @@ export {
   CategoryPicker,
   YearMonthPicker,
   PriceRange,
-  ShopPicker,
   SkuSelector,
   UE
 }

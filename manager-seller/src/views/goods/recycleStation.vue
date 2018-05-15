@@ -28,12 +28,12 @@
 
     <template slot="table-columns">
       <el-table-column type="selection"/>
-      <el-table-column label="图片" width="120">
+      <el-table-column label="图片" >
         <template slot-scope="scope">
           <img :src="scope.row.goods_image" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="goods_name" label="名称" align="left" width="450"/>
+      <el-table-column prop="goods_name" label="名称" align="left" />
       <el-table-column label="价格">
         <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
       </el-table-column>
@@ -47,7 +47,7 @@
         <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
       </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope" width="200">
+        <template slot-scope="scope">
           <el-button
             size="mini"
             type="success"
@@ -177,7 +177,7 @@
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -192,8 +192,7 @@
           this.$message.success('还原成功')
           this.GET_GoodsList()
         }).catch(error => {
-          this.$message.error('还原失败，请稍后再试')
-          console.log(error)
+          this.$message.error(error)
         })
       },
 
@@ -203,7 +202,7 @@
         API_goods.RecycleDeleteGoods(_ids, {}).then(() => {
           this.GET_GoodsList()
           this.$message.success('删除商品成功！')
-        }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
+        }).catch((error) => this.$message.error(error))
       }
     }
   }

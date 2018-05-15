@@ -1,12 +1,10 @@
 <template>
   <en-tabel-layout
-    toolbar
     pagination
     :tableData="tableData"
     :loading="loading"
   >
     <template slot="table-columns">
-      <!--<el-table-column prop="id" label="标签ID"/>-->
       <el-table-column prop="name" label="标签名称"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -89,7 +87,7 @@
           this.tableData = response.data
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
 

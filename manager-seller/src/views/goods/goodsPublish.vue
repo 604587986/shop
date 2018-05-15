@@ -75,14 +75,13 @@
               <el-select
                 v-model="baseInfoForm.brand_id"
                 filterable
-                @visible-change="getGoodsBrandList"
                 @change="changeGoodsBrand"
                 placeholder="请选择">
                 <el-option
                   v-for="item in brandList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  :key="item.brand_id"
+                  :label="item.brand_name"
+                  :value="item.brand_id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -96,7 +95,7 @@
               <el-input v-model="baseInfoForm.goods_name" placeholder="3-60个字符"></el-input>
             </el-form-item>
             <el-form-item label="商品编号：" prop="sn">
-              <el-input v-model.number="baseInfoForm.sn"></el-input>
+              <el-input v-model="baseInfoForm.sn"></el-input>
             </el-form-item>
             <el-form-item label="市场价格：" prop="mktprice">
               <el-input v-model.number="baseInfoForm.mktprice"></el-input>
@@ -136,7 +135,11 @@
           <div>
             <el-form-item label="商品规格："  style="width: 90%;text-align: left;">
               <!--规格选择器-->
-               <en-sku-selector :goodsId="activeGoodsId" :categoryId="categoryID" @finalSku="finalSku"></en-sku-selector>
+               <en-sku-selector
+                 :categoryId="baseInfoForm.category_id"
+                 :isEditModel="currentStatus"
+                 :goodsSkuInfo="skuList"
+                 @finalSku="finalSku"/>
             </el-form-item>
             <el-form-item label="总库存：" prop="quantity" style="width: 20%;text-align: left;">
               <el-input v-model="baseInfoForm.quantity" disabled></el-input>
@@ -171,24 +174,23 @@
                 v-model="baseInfoForm.template_id"
                 placeholder="请选择运费模板"
                 v-show="baseInfoForm.goods_transfee_charge === 0 "
-                @visible-change="getTplList"
                 @change="changeTpl"
               >
                 <el-option
                   v-for="item in tplList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  :key="item.tpl_id"
+                  :label="item.tpl_name"
+                  :value="item.tpl_id">
                 </el-option>
               </el-select>
             </el-form-item>
           </div>
         </div>
         <!--兑换许可-->
-        <div class="base-info-item">
+        <div class="base-info-item" v-if="parseInt(shopInfo.self_operated) === 1">
           <h4>兑换许可</h4>
           <div>
-            <el-form-item label="积分兑换：" >
+            <el-form-item label="积分兑换：" v-if="baseInfoForm.exchange && baseInfoForm.exchange.enable_exchange">
               <el-switch
                 v-model="baseInfoForm.exchange.enable_exchange"
                 active-color="#13ce66"
@@ -310,6 +312,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
   import { TableLayout, TableSearch, CategoryPicker, SkuSelector, UE } from '@/components'
@@ -389,7 +392,7 @@
         /** 加载中。。。 */
         loading: false,
 
-        /** 当前状态 默认发布商品0 编辑商品1 编辑草稿箱商品2 */
+        /** 当前状态/模式 默认发布商品0 编辑商品1 编辑草稿箱商品2 */
         currentStatus: 0,
 
         /** 当前激活步骤*/
@@ -416,9 +419,6 @@
         /** 当前商品id*/
         activeGoodsId: '',
 
-        /** 当前商城分类id */
-        categoryID: 0,
-
         /** 1级分类列表*/
         categoryListLevel1: [],
 
@@ -432,7 +432,7 @@
         baseInfoForm: {
 
           /** 品牌id */
-          brand_id: 0,
+          brand_id: '',
 
           /** 商城分类id */
           category_id: 0,
@@ -474,7 +474,7 @@
           market_enable: 1,
 
           /** 模板运费id */
-          template_id: 0,
+          template_id: '',
 
           /** 积分兑换 */
           exchange: {
@@ -513,6 +513,9 @@
           intro: ''
         },
 
+        /** 用来向组件中传递的数据 */
+        skuList: [],
+
         /** 请求的商品参数组列表 */
         goodsParams: [
           {
@@ -538,22 +541,10 @@
         brandList: [],
 
         /** 运费模板列表 */
-        tplList: [{
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }],
+        tplList: [],
 
         /** 积分商品列表 */
-        exchangeGoodsCatrgoryList: [{
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }],
+        exchangeGoodsCatrgoryList: [],
 
         /** 商品图片放大地址 */
         dialogImageUrl: '',
@@ -570,8 +561,7 @@
             { required: true, message: '请输入商品名称', trigger: 'blur' }
           ],
           sn: [
-            { required: true, message: '请输入商品编号', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { required: true, message: '请输入商品编号', trigger: 'blur' }
           ],
           mktprice: [
             { required: true, message: '请输入市场价格', trigger: 'blur' },
@@ -604,6 +594,11 @@
         }
       }
     },
+    computed: {
+      ...mapGetters([
+        'shopInfo'
+      ])
+    },
     beforeRouteEnter(to, from, next) {
       next(vm => {
         if (vm.$route.query && vm.$route.query.goodsid) {
@@ -615,8 +610,12 @@
           } else if (vm.currentStatus === 2 && vm.$route.query.goodsid) {
             vm.GET_GoodDraftData()
           }
-          // 查询商品参数
-          // vm.GET_GoodsParams()
+          /** 查询品牌列表 */
+          vm.getGoodsBrandList()
+          /** 运费模板列表 */
+          vm.getTplList()
+          /** 查询商品参数 */
+          vm.GET_GoodsParams()
         } else {
           vm.GET_NextLevelCategory()
         }
@@ -644,7 +643,20 @@
         if (this.activestep === 1) {
           this.$refs.baseInfoForm.validate((valid) => {
             if (valid) {
+              /** 是否自动生成货号校验 */
+              /** 规格值空校验 */
+              const _result = this.baseInfoForm.sku_list.every(key => {
+                return Object.values(key).every(item => {
+                  return item
+                })
+              })
+              if (!_result) {
+                this.$message.error('存在未填写的规格值')
+                return
+              }
               if (this.activestep++ > 2) return
+            } else {
+              this.$message.error('表单中存在未填写的值')
             }
           })
           return
@@ -657,13 +669,23 @@
       saveDraft() {
         // 构造提交表单数据
         const _params = this.generateFormData(this.baseInfoForm)
-        API_goods.saveDraft(_params).then(response => {
-          this.$message.success('保存草稿成功')
-          this.$router.push({ path: '/goods/draft-list' })
-        }).catch(error => {
-          this.$message.error('保存草稿失败，请稍后重试！')
-          console.log(error)
-        })
+        if (this.activeGoodsId) {
+          /** 修改草稿箱商品 */
+          API_goods.editDraftGoods(this.activeGoodsId, _params).then(response => {
+            this.$message.success('修改草稿箱商品成功')
+            this.$router.push({ path: '/goods/draft-list' })
+          }).catch(error => {
+            this.$message.error(error)
+          })
+        } else {
+          /** 保存草稿操作 */
+          API_goods.saveDraft(_params).then(response => {
+            this.$message.success('保存草稿成功')
+            this.$router.push({ path: '/goods/draft-list' })
+          }).catch(error => {
+            this.$message.error(error)
+          })
+        }
       },
 
       /** 上架  */
@@ -671,31 +693,48 @@
         // 构造提交表单数据
         const _params = this.generateFormData(this.baseInfoForm)
         if (this.currentStatus !== 2) {
-          /** 正常商品上架 */
-          API_goods.aboveGoods(_params).then(response => {
-            this.$message.success('上架商品成功')
-            this.$router.push({ path: '/goods/goods-list' })
-          }).catch(error => {
-            this.$message.error('上架商品失败，请稍后重试！')
-            console.log(error)
-          })
+          if (this.activeGoodsId) {
+            /** 修改正常商品 */
+            API_goods.editGoods(this.activeGoodsId, _params).then(response => {
+              this.$message.success('修改商品成功')
+              this.$router.push({ path: '/goods/goods-list' })
+            }).catch(error => {
+              this.$message.error(error)
+            })
+          } else {
+            /** 正常商品上架 */
+            API_goods.aboveGoods(_params).then(response => {
+              this.$message.success('上架商品成功')
+              this.$router.push({ path: '/goods/goods-list' })
+            }).catch(error => {
+              this.$message.error(error)
+            })
+          }
         } else {
           /**  草稿箱商品上架 */
-          API_goods.aboveDraftGoods(this.activeGoodsId, this.baseInfoForm).then(response => {
+          API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('上架草稿箱商品成功')
             this.$router.push({ path: '/goods/goods-list' })
           }).catch(error => {
-            this.$message.error('上架草稿箱商品失败，请稍后重试！')
-            console.log(error)
+            this.$message.error(error)
           })
         }
+      },
+
+      /** 下架*/
+      handleUnderGoods() {
+        API_goods.underGoods(this.activeGoodsId, { }).then((response) => {
+          this.loading = false
+          this.$message.success('下架成功')
+        }).catch(() => this.$message.error('下架商品失败，请稍后再试！'))
       },
 
       /** 查询下一级 商城商品分类*/
       GET_NextLevelCategory(row, level) {
         this.loading = true
-        const _id = row && row.parent_id || 0
-        API_goodsCategory.getGoodsCategoryLevelList(_id, { categoryLevel: this.categoryLevel }).then((response) => {
+        const _id = row && row.category_id !== 0 ? row.category_id : 0
+        API_goodsCategory.getGoodsCategoryLevelList(_id, { }).then((response) => {
+          this.loading = false
           if (level === 1) {
             this.categoryListLevel2 = response.data
             this.categoryListLevel3 = []
@@ -705,8 +744,7 @@
             this.categoryListLevel1 = response.data
           }
           this.categoryLevel = level
-          this.loading = false
-        }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 选择商城商品分类 */
@@ -727,7 +765,7 @@
           this.activeCategoryIndex3 = index
         }
         // 设置当前商城分类ID
-        this.categoryID = row.category_order
+        this.baseInfoForm.category_id = row.category_id
         this.GET_NextLevelCategory(row, level)
       },
 
@@ -738,6 +776,16 @@
           this.baseInfoForm = {
             ...response
           }
+          /** 商品相册校验属性 */
+          this.baseInfoForm.goods_gallery_list.forEach(key => {
+            this.$set(key, 'url', key.original)
+          })
+          this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+          /** 商品规格校验属性  */
+          if (!this.baseInfoForm.sku_list) {
+            this.baseInfoForm.sku_list = []
+          }
+          /** 积分相关设置 如果没有积分相关则设置为空 */
           if (!this.baseInfoForm.exchange || !this.baseInfoForm.exchange.enable_exchange) {
             this.baseInfoForm.exchange = {
               /** 积分兑换所属分类 */
@@ -750,47 +798,27 @@
               exchange_point: 0
             }
           }
-          // console.log(this.baseInfoForm)
-        }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
-      },
-
-      /** 商家下架商品*/
-      handleUnderGoods() {
-        API_goods.underGoods(this.activeGoodsId, { }).then((response) => {
-          this.loading = false
-          this.$message.success('下架成功')
-        }).catch(() => this.$message.error('下架商品失败，请稍后再试！'))
-      },
-
-      /** 构造表单数据 */
-      generateFormData(data) {
-        let _params = {
-          ...data
-        }
-        // 删除不必要的表单数据
-        delete _params.goods_gallery
-        _params.goods_gallery_list.forEach(key => {
-          delete key.name
-        })
-        // 临时数据
-        _params.exchange.enable_exchange = 1
-        return _params
-      },
-
-      /** 查询单个草稿箱商品信息 */
-      GET_GoodDraftData() {
-        // this.loading = true
-        API_goods.getGoodDraftData(this.activeGoodsId, { }).then((response) => {
-          this.loading = false
-          this.baseInfoForm = response.data
-        }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
+          /** 查询商品sku信息 */
+          API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
+            /** 构造临时规格数据 */
+            this.skuList = response.map(key => {
+              const spec_list = key.spec_list.map(item => {
+                let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
+                return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+              })
+              let { cost, quantity, sn, weight } = key
+              const price = key.goods_price
+              return { cost, price, quantity, sn, weight, spec_list }
+            })
+          }).catch((error) => this.$message.error(error))
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 查询商品参数 */
       GET_GoodsParams() {
         // 处理数据 方便校验
         const goods_id = this.activeGoodsId || 0
-        API_goods.getGoodsParams(this.categoryID, { goods_id }).then((response) => {
+        API_goods.getGoodsParams(this.baseInfoForm.category_id, { goods_id }).then((response) => {
           this.loading = false
           this.goodsParams = response.data
           if (!response.data || response.data.length <= 0) {
@@ -807,18 +835,68 @@
         }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
       },
 
-      /** 商品分组 改变时触发 */
+      /** 查询单个草稿箱商品信息 */
+      GET_GoodDraftData() {
+        API_goods.getGoodDraftData(this.activeGoodsId, {}).then((response) => {
+          /** 此处完成商品信息赋值 进行判断如果有值的话 */
+          this.baseInfoForm = {
+            ...response
+          }
+          /** 积分相关设置 如果没有积分相关则设置为空 */
+          this.baseInfoForm.exchange = {
+            /** 积分兑换所属分类 */
+            category_id: this.baseInfoForm.exchange_category_id || 0,
+            /** 是否允许积分兑换  1是 0否*/
+            enable_exchange: 1,
+            /** 兑换所需金额 */
+            exchange_money: this.baseInfoForm.exchange_money || 0,
+            /** 积分兑换使用的积分 */
+            exchange_point: this.baseInfoForm.exchange_point || 0
+          }
+          /** 商品相册校验属性 */
+          this.baseInfoForm.goods_gallery_list = response.gallery_list.map(key => {
+            return {
+              img_id: -1,
+              url: key,
+              original: key,
+              sort: 0
+            }
+          })
+          this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+          /** 商品规格校验属性  */
+          if (!this.baseInfoForm.sku_list) {
+            this.baseInfoForm.sku_list = []
+          }
+          /** 查询草稿箱sku信息 */
+          API_goods.draftSku(this.activeGoodsId, {}).then((response) => {
+            /** 构造临时规格数据 */
+            // this.skuList = response.map(key => {
+            //   const spec_list = key.spec_list.map(item => {
+            //     let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
+            //     return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+            //   })
+            //   let { cost, quantity, sn, weight } = key
+            //   const price = key.goods_price
+            //   return { cost, price, quantity, sn, weight, spec_list }
+            // })
+          }).catch((error) => this.$message.error(error))
+        }).catch((error) => this.$message.error(error))
+      },
+
+      /** 查询草稿箱商品参数 */
+      GET_GoodsDtagtParams() {
+      },
+
+      /** 商品分组组件 改变时触发 */
       changeGoodsCateGory(val) {
         this.baseInfoForm.shop_cat_id = val[val.length - 1]
       },
 
-      /** 商品品牌列表 */
-      getGoodsBrandList(val) {
-        if (val) {
-          API_goods.getGoodsBrandList(this.categoryID, { }).then((response) => {
-            this.brandList = response.data
-          }).catch(() => {})
-        }
+      /** 查询商品品牌列表 */
+      getGoodsBrandList() {
+        API_goods.getGoodsBrandList(this.baseInfoForm.category_id, { }).then((response) => {
+          this.brandList = response.data
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 商品品牌 改变时触发 */
@@ -827,25 +905,23 @@
       },
 
       /** 运费模板列表 */
-      getTplList(val) {
-        if (val) {
-          API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
-            this.tplList = response.data
-          }).catch(() => {})
-        }
+      getTplList() {
+        API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
+          this.tplList = response.data
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 运费模板改变时触发 */
       changeTpl(val) {
-        // this.baseInfoForm.template_id = val
+        this.baseInfoForm.template_id = val
       },
 
       /** 积分商品商城分类列表 */
       getGoodsCatrgory() {
-        API_goodsCategory.getGoodsCategoryLevelList(0, { categoryLevel: this.categoryLevel }).then((response) => {
+        API_goodsCategory.getGoodsCategoryLevelList(0, { }).then((response) => {
           this.exchangeGoodsCatrgoryList = response.data
           this.loading = false
-        }).catch(() => this.$message.error('获取分类出错，请稍后再试！'))
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 积分商品商城分类 改变时触发*/
@@ -873,6 +949,8 @@
           img_id: -1,
 
           original: fileList.url,
+
+          url: fileList.url,
 
           sort: 0,
 
@@ -919,7 +997,57 @@
 
       /** 规格选择器规格数据改变时触发 */
       finalSku(val) {
+        /** 动态修改总库存 每次设置为0  此处每次进行循环计算 存在性能浪费 */
+        this.baseInfoForm.quantity = 0
+        val.forEach(key => {
+          if (key.quantity && Number.isInteger(key.quantity)) {
+            this.baseInfoForm.quantity += parseInt(key.quantity)
+          }
+        })
+        /** 删除 因为对象浅拷贝造成的字段冗余（不必要的字段）*/
+        val.forEach(key => {
+          key.spec_list.forEach(item => {
+            delete item.cost
+            delete item.price
+            delete item.quantity
+            delete item.sn
+            delete item.weight
+          })
+        })
         this.baseInfoForm.sku_list = val
+        /** 规格数据是否存在变化 */
+        this.baseInfoForm.has_changed = 1
+      },
+
+      /** 构造表单数据 */
+      generateFormData(data) {
+        let _params = {
+          ...data
+        }
+        // 删除不必要的表单数据
+        delete _params.original
+        delete _params.exchange_category_id
+        delete _params.exchange_money
+        delete _params.exchange_point
+        delete _params.gallery_list
+        delete _params.goods_gallery
+        if (_params.goods_gallery_list) {
+          _params.goods_gallery_list.forEach(key => {
+            delete key.name
+            delete key.big
+            delete key.goods_id
+            delete key.isdefault
+            delete key.small
+            delete key.status
+            delete key.thumbnail
+            delete key.tiny
+            delete key.uid
+            delete key.url
+          })
+        }
+        // 临时数据
+        _params.exchange.enable_exchange = 1
+        return _params
       }
     }
   }

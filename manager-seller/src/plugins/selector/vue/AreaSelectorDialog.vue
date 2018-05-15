@@ -4,7 +4,6 @@
 
 <script>
 import $ from 'jquery'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import AreaSelector from '@/plugins/selector/js/jquery.areaSelector.js'
 export default {
   name: 'EnAreaSelectorDialog',
@@ -24,7 +23,6 @@ export default {
   },
   mounted() {
     if (this.showDialog) {
-      console.log(1)
       this.callAreaDialog()
     }
   },
@@ -43,6 +41,5 @@ export default {
 }
 </script>
 
-<style lang='scss'>
-
+<style lang='scss'  type="text/scss"  scoped>
 </style>

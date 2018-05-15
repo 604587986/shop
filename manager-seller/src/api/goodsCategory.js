@@ -84,14 +84,13 @@ export function updateGoodsCategory(ids, params) {
 export function getGoodsCategoryLevelList(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      // url: `/goods/category/${ids}/children`,
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/category-level/list',
+      url: `/goods/category/${ids}/children`,
       method: 'get',
       loading: false,
       params
     }).then(response => {
       const _response = response
-      _response.data = new GoodsCategoryModel.GoodsCategoryLevel().map(_response.data)
+      _response.data = new GoodsCategoryModel.GoodsCategoryLevel().map(_response)
       resolve(_response)
     }).catch(error => reject(error))
   })

@@ -15,7 +15,7 @@
       <p style="padding: 0 50px;">模板列表:</p>
       <ul>
         <li v-for="item in tpl_list">
-          <div class="tpl-theme" v-if="item.theme_image && item.theme_name">
+          <div class="tpl-theme">
             <div class="themes-img"
               :class='{"choosed-image":item.themes_id === tpl_choosed_id}'
               @click="chooseTheme(item)">
@@ -51,13 +51,13 @@
     data() {
       return {
         /** 当前模板*/
-        tpl_current: null,
+        tpl_current: {},
 
         /** 当前选中的模板的id*/
         tpl_choosed_id: '',
 
         /** 模板列表*/
-        tpl_list: null,
+        tpl_list: [],
 
         /** 隐藏区域显示*/
         zoom_img_show: true,
@@ -74,15 +74,13 @@
       /** 获取PC店铺主题列表*/
       GET_ShopThemes() {
         API_ShopTheme.getShopThemeList({ type: 'WAP' }).then(response => {
-          this.tpl_list = response.data
+          this.tpl_list = response
           this.tpl_list.forEach(elem => {
             if (elem.current_use === 1) {
               this.tpl_current = elem
             }
           })
-        }).catch(error => {
-          console.log(error)
-        })
+        }).catch(error => this.$message.error(error))
       },
 
       /** 选择模板主题*/
@@ -112,10 +110,7 @@
             API_ShopTheme.saveShopTheme(this.tpl_choosed_id, _params).then(() => {
               this.$message.success('切换成功')
               this.GET_ShopThemes()
-            }).catch((error) => {
-              console.log(error)
-              this.$message.error('切换失败，请稍后重试！')
-            })
+            }).catch((error) => this.$message.error(error))
           })
           .catch(() => {
           })
@@ -139,6 +134,7 @@
   /*图片*/
   .shop-theme-image {
     width: 100%;
+    min-height: 400px;
     max-width: 200px;
     cursor: pointer;
   }
@@ -264,6 +260,7 @@
       z-index: 1050;
       img {
         width: 100%;
+        min-height: 100%;
       }
     }
   }

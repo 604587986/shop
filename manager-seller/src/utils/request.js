@@ -30,7 +30,7 @@ service.interceptors.request.use(config => {
   }
   /** 进行参数序列化 */
   if ((config.method === 'put' || config.method === 'post') && config.headers['Content-Type'] !== 'application/json') {
-    config.data = qs.stringify(config.data)
+    config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   return config
 }, error => {
@@ -58,9 +58,9 @@ service.interceptors.response.use(
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
-    if (error_response.status === 403) fedLogOut()
+    if (error_response.code === 403) fedLogOut()
     Message({
-      message: error_data.error_message || '出现错误，请稍后再试！',
+      message: error_data.message || '出现错误，请稍后再试！',
       type: 'error',
       duration: 5 * 1000
     })
