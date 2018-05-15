@@ -252,7 +252,7 @@
         title: '支付和配送',
         children: [
           { name: 'paymentSettings', title: '支付方式' },
-          { name: 'expressCompanySettings', title: '配送方式' },
+          { name: 'expressSettings', title: '配送方式' },
           { name: 'regionalManagementSettings', title: '区域管理' }
         ]
       },

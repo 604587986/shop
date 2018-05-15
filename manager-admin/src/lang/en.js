@@ -121,7 +121,7 @@ export default {
 
     paymentAndDelivery: 'Payment And Delivery',
     payment: 'payment',
-    expressCompany: 'Express Company',
+    express: 'Express',
     regionalManagement: 'Regional Management',
 
     authSettings: 'Auth Settings',

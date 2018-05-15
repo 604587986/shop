@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class ExpressCompanyModel extends DataModel {
+export default class ExpressModel extends DataModel {
   /** 快递公司代码 */
   @ServerName('code')
   code
@@ -39,5 +39,4 @@ export default class ExpressCompanyModel extends DataModel {
   /** 快递公司名称 */
   @ServerName('name')
   name
-  // Andste_TODO 2018/5/14: 模型未适配
 }

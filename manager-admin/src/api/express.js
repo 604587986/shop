@@ -3,15 +3,15 @@
  */
 
 import request from '@/utils/request'
-import ExpressCompanyModel from '@/models/ExpressCompanyModel'
-const expressCompanyModel = new ExpressCompanyModel()
+import ExpressModel from '@/models/ExpressModel'
+const expressModel = new ExpressModel()
 
 /**
  * 获取物流公司列表
  * @param params
  * @returns {Promise<any>}
  */
-export function getExpressCompanyList(params) {
+export function getExpressList(params) {
   return new Promise((resolve, reject) => {
     request({
       url: 'shops/logi-companies',
@@ -19,7 +19,7 @@ export function getExpressCompanyList(params) {
       loading: false,
       params
     }).then(response => {
-      response.data = expressCompanyModel.map(response.data)
+      response.data = expressModel.map(response.data)
       resolve(response)
     }).catch(error => reject(error))
   })
@@ -29,11 +29,11 @@ export function getExpressCompanyList(params) {
  * 添加物流公司
  * @param params
  */
-export function addExpressCompany(params) {
+export function addExpress(params) {
   return request({
     url: 'shops/logi-companies',
     method: 'post',
-    data: expressCompanyModel.params(params)
+    data: expressModel.params(params)
   })
 }
 
@@ -41,7 +41,7 @@ export function addExpressCompany(params) {
  * 删除物流公司
  * @param id
  */
-export function deleteExpressCompany(id) {
+export function deleteExpress(id) {
   return request({
     url: 'shops/logi-companies',
     method: 'delete'
@@ -52,7 +52,7 @@ export function deleteExpressCompany(id) {
  * 获取物流公司详情
  * @param id
  */
-export function getExpressCompanyDetail(id) {
+export function getExpressDetail(id) {
   return request({
     url: `shops/logi-companies/${id}`,
     method: 'get'
@@ -64,10 +64,10 @@ export function getExpressCompanyDetail(id) {
  * @param id
  * @param params
  */
-export function editExpressCompany(id, params) {
+export function editExpress(id, params) {
   return request({
     url: `shops/logi-companies/${id}`,
     method: 'put',
-    data: expressCompanyModel.params(params)
+    data: expressModel.params(params)
   })
 }
