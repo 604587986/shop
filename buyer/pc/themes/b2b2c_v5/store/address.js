@@ -16,7 +16,7 @@ export const mutations = {
     state.address = data
   },
   /**
-   * 保存地址
+   * 添加地址
    * @param state
    * @param data
    */
@@ -26,11 +26,12 @@ export const mutations = {
   /**
    * 编辑地址
    * @param state
-   * @param params
+   * @param response
    */
-  [types.EDIT_ADDRESS](state, params) {
+  [types.EDIT_ADDRESS](state, response) {
+    const { addr_id } = response
     state.address.data = state.address.data.map(item => {
-      if (item.address_id === params.address_id) item = params
+      if (item.addr_id === addr_id) item = response
       return item
     })
   },
@@ -74,7 +75,7 @@ export const actions = {
   addAddressAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Address.addAddress(params).then(response => {
-        commit(types.ADD_ADDRESS, params)
+        commit(types.ADD_ADDRESS, response)
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -88,7 +89,7 @@ export const actions = {
   editAddressAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Address.editAddress(params.addr_id, params).then(response => {
-        commit(types.EDIT_ADDRESS, params)
+        commit(types.EDIT_ADDRESS, response)
         resolve(response)
       }).catch(error => reject(error))
     })
