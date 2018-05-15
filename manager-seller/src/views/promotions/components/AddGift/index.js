@@ -1,5 +1,5 @@
 /**
- * 添加赠品
+ * 添加/修改赠品
  */
 import Vue from 'vue'
 import AddGift from './main'

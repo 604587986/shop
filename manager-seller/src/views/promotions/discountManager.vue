@@ -73,57 +73,23 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="新增优惠券" :visible.sync="couponShow" width="40%" align="center">
-      <el-form :model="couponForm" label-position="right" label-width="160px">
-        <el-form-item label="优惠券名称">
-          <el-input
-            auto-complete="off"
-            v-model="couponForm.coupon_name"
-            placeholder="请输入10个以内的汉字"
-            label-width="100"></el-input>
-        </el-form-item>
-        <el-form-item label="优惠券面额（元）">
-          <el-input auto-complete="off"  v-model="couponForm.coupon_denomination" label-width="100"></el-input>
-        </el-form-item>
-        <el-form-item label="买家需要消费（元）">
-          <el-input auto-complete="off"  v-model="couponForm.coupon_use_limit" label-width="100"></el-input>
-        </el-form-item>
-        <el-form-item label="使用期限">
-          <el-date-picker
-            key="1"
-            v-model="couponForm.coupon_time_limit"
-            type="daterange"
-            range-separator="-"
-            value-format="timestamp"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="发行量（个）">
-          <el-input auto-complete="off"  v-model="couponForm.coupon_circulation" label-width="100"></el-input>
-        </el-form-item>
-        <el-form-item label="每人限领（个）">
-          <el-input auto-complete="off"  v-model="couponForm.coupon_used_num"  label-width="100"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="couponShow = false">取 消</el-button>
-        <el-button type="primary" @click="handleReserveCoupon">确 定</el-button>
-      </div>
-    </el-dialog>
+    <!--优惠券组件-->
+    <coupon :couponModelShow="couponModelShow" :currentcouponId="currentcouponId" :couponModelForm="couponModelForm"/>
   </div>
 </template>
 
 <script>
   import * as API_coupon from '@/api/coupon'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { Coupon } from './components'
 
   export default {
     name: 'discountManager',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker
+      [CategoryPicker.name]: CategoryPicker,
+      [Coupon.name]: Coupon
     },
     data() {
       return {
@@ -148,13 +114,13 @@
         },
 
         /** 优惠券弹框显示*/
-        couponShow: false,
+        couponModelShow: false,
 
         /** 当前优惠券ID*/
         currentcouponId: '',
 
         /** 优惠券表单*/
-        couponForm: {
+        couponModelForm: {
 
           /** 优惠券名称*/
           coupon_name: '',
@@ -240,39 +206,17 @@
           API_coupon.deleteCoupons(row.coupon_id, row).then(() => {
             this.GET_CouponsList()
             this.$message.success('删除优惠券成功！')
-          }).catch(() => this.$message.error('删除优惠券出错，请稍后再试！'))
+          }).catch((error) => this.$message.error(error))
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })
       },
 
-      /** 保存优惠券*/
-      handleReserveCoupon() {
-        const _params = {
-          ...this.couponForm,
-          coupon_time_start: this.couponForm.coupon_time_limit[0],
-          coupon_time_end: this.couponForm.coupon_time_limit[1]
-        }
-        if (this.currentcouponId) {
-          API_coupon.modifyCoupons(this.currentcouponId, _params).then(() => {
-            this.couponShow = false
-            this.$message.success('保存成功！')
-            this.GET_CouponsList()
-          }).catch(() => this.$message.error('保存失败，请稍后再试！'))
-        } else {
-          API_coupon.addCoupons(_params).then(() => {
-            this.couponShow = false
-            this.$message.success('保存成功！')
-            this.GET_CouponsList()
-          }).catch(() => this.$message.error('保存失败，请稍后再试！'))
-        }
-      },
-
       /** 修改*/
       handleEditCoupons(row) {
-        this.couponShow = true
+        this.couponModelShow = true
         this.currentcouponId = row.coupon_id
-        this.couponForm = {
+        this.couponModelForm = {
           ...row,
           coupon_time_limit: [parseInt(row.coupon_time_start) * 1000, parseInt(row.coupon_time_end) * 1000]
         }
@@ -280,21 +224,15 @@
 
       /** 新增优惠券*/
       handleAddCoupon() {
-        this.couponShow = true
+        this.couponModelShow = true
         this.currentcouponId = ''
-        this.couponForm = {
-          coupon_name: '',
+        this.couponModelForm = ''
+      },
 
-          coupon_denomination: '',
-
-          coupon_use_limit: '',
-
-          coupon_time_limit: [],
-
-          coupon_circulation: '',
-
-          coupon_used_num: ''
-        }
+      /** 优惠券监听 */
+      saveCoupon(target) {
+        this.couponModelShow = false
+        target && this.GET_CouponsList()
       }
     }
   }

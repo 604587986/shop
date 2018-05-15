@@ -71,7 +71,7 @@
             <div class="base-info-item">
               <h4>活动信息</h4>
               <div>
-                <el-form-item  label="活动名称" prop="activity_name">
+                <el-form-item  label="活动名称：" prop="activity_name">
                   <el-input v-model="activityForm.activity_name" type="text" placeholder="不超过60个字符" ></el-input>
                 </el-form-item>
                 <el-form-item label="生效时间" prop="take_effect_time">
@@ -93,13 +93,13 @@
             <div class="base-info-item">
               <h4>优惠设置</h4>
               <div>
-                <el-form-item label="优惠门槛" prop="discount_threshold">
+                <el-form-item label="优惠门槛：" prop="discount_threshold">
                   <div>
                     满 <el-input v-model="activityForm.discount_threshold" style="width: 100px;"></el-input>
                     元  <span class="discount-tip">消费达到此金额即可参与优惠</span>
                   </div>
                 </el-form-item>
-                <el-form-item label="优惠方式">
+                <el-form-item label="优惠方式：">
                   <div>
                     <el-checkbox v-model="activityForm.isDiscount"/>
                     <span v-show="activityForm.isDiscount">
@@ -127,8 +127,19 @@
                     <el-checkbox label="免邮费" v-model="freePostage" @change="changeFreePostage"></el-checkbox>
                   </div>
                   <div>
-                    <el-checkbox label="送优惠券" ></el-checkbox>
+                    <el-checkbox label="送优惠券" v-model="isCoupon" @change="isChangeCoupon"></el-checkbox>
+                    <el-select v-show="isCoupon" v-model="activityForm.couponId" placeholder="请选择">
+                      <el-option
+                        v-for="item in couponList"
+                        @change="changeGift"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
+                    <el-button type="text" v-show="isCoupon" @click="addGift">新增</el-button>
                   </div>
+                  <!--送赠品-->
                   <div>
                     <el-checkbox label="送赠品" v-model="isGift" @change="isChangeGift"></el-checkbox>
                     <el-select v-show="isGift" v-model="activityForm.giftId" placeholder="请选择">
@@ -319,17 +330,23 @@
         /** 是否免邮费 1免邮费*/
         freePostage: false,
 
-        /** 是否有赠品  */
-        isGift: false,
-
-        /** 礼品id */
-        giftId: '',
-
         /** 是否送优惠券 */
         isCoupon: 1,
 
         /** 优惠券Id */
         couponId: '',
+
+        /** 优惠券列表 */
+        couponList: [],
+
+        /** 显示优惠券弹框 */
+        couponModelShow: false,
+
+        /** 是否有赠品  */
+        isGift: false,
+
+        /** 礼品id */
+        giftId: '',
 
         /** 赠品列表 */
         giftList: [],
@@ -519,6 +536,12 @@
         this.activityForm.freePostage = this.freePostage ? 1 : 0
       },
 
+      /** 是否送优惠券 */
+      isChangeCoupon(val) {
+        this.isCoupon = val
+        this.activityForm.isCoupon = this.isCoupon ? 1 : 0
+      },
+
       /** 是否送赠品 */
       isChangeGift(val) {
         this.isGift = val
@@ -527,6 +550,7 @@
 
       /** 获取赠品列表 */
       GET_giftList() {
+
       },
 
       /** 所选赠品变化时 */
@@ -601,6 +625,10 @@
     .el-form-item {
       width: 100%;
       text-align: left;
+    }
+
+    /deep/.el-select>.el-input {
+      width: 200px;
     }
     /*提交按钮*/
     /deep/ .btn-submit {
