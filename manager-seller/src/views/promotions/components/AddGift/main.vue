@@ -40,7 +40,9 @@
       /** 当前赠品id */
       currentGiftId: {
         type: [String, Number],
-        default: ['', 0]
+        default: () => {
+          return ''
+        }
       },
 
       /** 赠品弹框显示*/
@@ -52,7 +54,9 @@
       /** 赠品编辑表单*/
       giftForm: {
         type: [Object, String],
-        default: [{}, '']
+        default: () => {
+          return {}
+        }
       }
     },
     watch: {
@@ -97,10 +101,10 @@
           gift_image: '',
 
           /** 赠品价格 */
-          gift_price: 2,
+          gift_price: 1,
 
           /** 实际库存 */
-          gift_real_stock: 8,
+          gift_real_stock: 1,
 
           /** 可用库存 */
           gift_usable_stock: 2,
