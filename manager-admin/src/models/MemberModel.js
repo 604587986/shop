@@ -32,9 +32,13 @@ export default class MemberModel extends DataModel {
   @ServerName('uname')
   username
 
-  /** 是否是卖家 */
-  @ServerName('is_store')
-  is_seller
+  /** 是否有店铺 */
+  @ServerName('have_shop')
+  have_shop
+
+  /** 店铺ID */
+  @ServerName('shop_id')
+  shop_id
 
   /** 最后登录时间 */
   @ServerName('last_login')
@@ -43,10 +47,6 @@ export default class MemberModel extends DataModel {
   /** 登录次数 */
   @ServerName('login_count')
   login_count
-
-  /** 会员等级ID */
-  @ServerName('lv_id')
-  lv_id
 
   /** 会员等级 */
   @ServerName('lv_name')
