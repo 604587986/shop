@@ -45,8 +45,8 @@
         <el-form-item label="物流公司代码" prop="code">
           <el-input v-model="expressForm.code"></el-input>
         </el-form-item>
-        <el-form-item label="快递鸟物流代码" prop="kdcode">
-          <el-input v-model="expressForm.kdcode"></el-input>
+        <el-form-item label="快递鸟物流代码" prop="kd_code">
+          <el-input v-model="expressForm.kd_code"></el-input>
         </el-form-item>
         <el-form-item label="电子面单" prop="support_waybill">
           <el-radio-group v-model="expressForm.support_waybill">
@@ -88,7 +88,7 @@
         expressRules: {
           name: [this.MixinRequired('请输入物流公司名称！')],
           code: [this.MixinRequired('请输入物流公司代码！')],
-          kdcode: [this.MixinRequired('请输入快递鸟物流代码！')]
+          kd_code: [this.MixinRequired('请输入快递鸟物流代码！')]
         },
         /** 快递公司 dialog */
         dialogExpressVisible: false
@@ -131,9 +131,14 @@
               API_Express.addExpress(this.expressForm).then(response => {
                 this.dialogExpressVisible = false
                 this.$message.success('添加成功！')
+                this.GET_ExpressList()
               })
             } else {
-              console.log('...')
+              API_Express.editExpress(id, this.expressForm).then(response => {
+                this.dialogExpressVisible = false
+                this.$message.success('保存成功！')
+                this.MixinSetTableData(this.tableData, id, response)
+              })
             }
           } else {
             this.$message.error('表单填写有误，请检查！')

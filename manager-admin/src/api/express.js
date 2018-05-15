@@ -30,10 +30,12 @@ export function getExpressList(params) {
  * @param params
  */
 export function addExpress(params) {
-  return request({
-    url: 'shops/logi-companies',
-    method: 'post',
-    data: expressModel.params(params)
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'shops/logi-companies',
+      method: 'post',
+      data: expressModel.params(params)
+    }).then(response => resolve(expressModel.map(response))).catch(error => reject(error))
   })
 }
 
@@ -65,9 +67,11 @@ export function getExpressDetail(id) {
  * @param params
  */
 export function editExpress(id, params) {
-  return request({
-    url: `shops/logi-companies/${id}`,
-    method: 'put',
-    data: expressModel.params(params)
+  return new Promise((resolve, reject) => {
+    request({
+      url: `shops/logi-companies/${id}`,
+      method: 'put',
+      data: expressModel.params(params)
+    }).then(response => resolve(expressModel.map(response))).catch(error => reject(error))
   })
 }
