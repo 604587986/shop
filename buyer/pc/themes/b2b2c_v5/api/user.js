@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getUserInfo() {
   return request({
-    url: `member`,
+    url: `members`,
     method: 'get'
   })
 }
@@ -36,7 +36,7 @@ export function saveUserInfo(params) {
  */
 export function logout() {
   return request({
-    url: `http://192.168.2.5:7002/member/logout`,
+    url: `members/logout`,
     method: 'post'
   })
 }
