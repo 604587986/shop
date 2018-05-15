@@ -32,25 +32,21 @@ export default class MemberModel extends DataModel {
   @ServerName('uname')
   username
 
-  /** 是否是卖家 */
-  @ServerName('is_store')
-  is_seller
+  /** 是否有店铺 */
+  @ServerName('have_shop')
+  have_shop
+
+  /** 店铺ID */
+  @ServerName('shop_id')
+  shop_id
 
   /** 最后登录时间 */
-  @ServerName('lastlogin')
+  @ServerName('last_login')
   last_login_time
 
-  /** 本月登录次数 tm --> this month */
-  @ServerName('logincount')
-  login_count_tm
-
-  /** 会员等级ID */
-  @ServerName('lv_id')
-  lv_id
-
-  /** 会员等级 */
-  @ServerName('lv_name')
-  lv_name
+  /** 登录次数 */
+  @ServerName('login_count')
+  login_count
 
   /** 会员ID */
   @ServerName('member_id')
@@ -81,7 +77,7 @@ export default class MemberModel extends DataModel {
   qq_id
 
   /** 注册时间 */
-  @ServerName('regtime')
+  @ServerName('create_time')
   register_time
 
   /** 注册IP */

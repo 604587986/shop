@@ -20,5 +20,11 @@ Vue.mixin({
       const { forward } = this.$route.query
       return forward ? `?forward=${forward}` : ''
     }
+  },
+  methods: {
+    /** 用得比较多，放到mixin里 */
+    MixinRequired(message, trigger) {
+      return { required: true, message, trigger: trigger || 'blur' }
+    }
   }
 })

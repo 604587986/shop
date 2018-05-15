@@ -22,7 +22,7 @@ export function getAddressList() {
  */
 export function addAddress(params) {
   return request({
-    url: 'members/addresses',
+    url: 'members/address',
     method: 'post',
     data: params
   })
@@ -37,20 +37,18 @@ export function addAddress(params) {
 export function editAddress(id, params) {
   return request({
     url: `members/address/${id}`,
-    method: 'post',
+    method: 'put',
     data: params
   })
 }
 
 /**
  * 删除收货地址
- * @param ids 地址ID集合【数组或单个ID】
- * @returns {AxiosPromise}
+ * @param id
  */
-export function deleteAddress(ids) {
-  if (Array.isArray(ids)) ids = ids.join(',')
+export function deleteAddress(id) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/address/${ids}`,
+    url: `members/address/${id}`,
     method: 'delete'
   })
 }

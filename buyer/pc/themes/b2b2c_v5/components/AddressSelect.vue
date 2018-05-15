@@ -7,7 +7,6 @@
     name: 'EnAddressSelect',
     props: {
       default: {
-        type: Array,
         default: null
       }
     },

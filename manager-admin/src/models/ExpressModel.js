@@ -11,7 +11,7 @@ import {
   UnitTypes
 } from '@/framework'
 
-export default class ExpressCompanyModel extends DataModel {
+export default class ExpressModel extends DataModel {
   /** 快递公司代码 */
   @ServerName('code')
   code

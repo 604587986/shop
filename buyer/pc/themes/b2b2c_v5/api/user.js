@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getUserInfo() {
   return request({
-    url: `member`,
+    url: `members`,
     method: 'get'
   })
 }
@@ -21,12 +21,10 @@ export function getUserInfo() {
  * @returns {AxiosPromise}
  */
 export function saveUserInfo(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
-    url: 'user/info',
-    method: 'post',
-    data: _formData
+    url: 'members',
+    method: 'put',
+    data: params
   })
 }
 
@@ -36,7 +34,7 @@ export function saveUserInfo(params) {
  */
 export function logout() {
   return request({
-    url: `http://192.168.2.5:7002/member/logout`,
+    url: `members/logout`,
     method: 'post'
   })
 }

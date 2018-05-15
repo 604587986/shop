@@ -11,10 +11,10 @@
           :action="MixinUploadApi"
           class="avatar-uploader"
           :show-file-list="false"
-          :on-success="handleAvararUploadSuccess"
+          :on-success="(res) => { profileForm.face = res.url }"
         >
           <img v-if="profileForm.face" :src="profileForm.face" class="avatar">
-          <img v-else src="https://misc.360buyimg.com/mtd/pc/common/img/no_login.jpg" title="求真相" class="avatar">
+          <img v-else src="~/assets/images/icon-noface.jpg" title="求真相" class="avatar">
           <div class="eidt-mask">
             <i class="el-icon-edit-outline"></i>
             <p>修改头像</p>
@@ -23,9 +23,9 @@
         <p>头像修改在保存后生效</p>
       </div>
       <el-form :model="profileForm" :rules="profileRules" ref="profileForm" label-width="100px" style="width:350px">
-        <el-form-item label="账户名称" prop="uname">
-          <el-input v-model="profileForm.uname" size="small" clearable></el-input>
-        </el-form-item>
+        <!--<el-form-item label="账户名称" prop="uname">-->
+          <!--<el-input v-model="profileForm.uname" size="small" clearable></el-input>-->
+        <!--</el-form-item>-->
         <!--<el-form-item label="真实姓名" prop="truename">-->
           <!--<el-input v-model="profileForm.truename" size="small" clearable></el-input>-->
         <!--</el-form-item>-->
@@ -45,12 +45,12 @@
             :picker-options="{disabledDate(time) { return time.getTime() > Date.now() }}"
             size="small"
             clearable
-            value-format="yyyy-MM-dd"
+            value-format="timestamp"
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="地区" required>
-          <en-address-select :default="defaultRegions" @changed="handleAddressSelectChanged"/>
+        <el-form-item label="地区" prop="region">
+          <en-address-select :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="address">
           <el-input v-model="profileForm.address" size="small" clearable></el-input>
@@ -88,22 +88,21 @@
         /** 个人资料 表单规则 */
         profileRules: {
           uname: [
-            { required: true, message: '请输入真实姓名', trigger: 'blur' },
+            this.MixinRequired('请输入真实姓名！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
-          truename: [
-            { required: true, message: '请输入真实姓名', trigger: 'blur' },
-            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
-          ],
+          // truename: [
+          //   this.MixinRequired('请输入真实姓名！'),
+          //   { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          // ],
           nickname: [
-            { required: true, message: '请输入昵称', trigger: 'blur' },
+            this.MixinRequired('请输入昵称！'),
             { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
           ],
-          birthday: [
-            { required: true, message: '请选择生日', trigger: 'change' }
-          ],
+          birthday: [this.MixinRequired('请选择生日！')],
+          region: [this.MixinRequired('请选择地区！')],
           address: [
-            { required: true, message: '请输入详细地址', trigger: 'blur' },
+            this.MixinRequired('请输入详细地址！'),
             { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
           ]
         }
@@ -122,7 +121,7 @@
         return [
           user.province_id,
           user.city_id,
-          user.region_id || -1,
+          user.county_id || -1,
           user.town_id || -1
         ]
       },
@@ -131,20 +130,13 @@
       })
     },
     methods: {
-      /** 地区选择器值发生改变 */
-      handleAddressSelectChanged(object) {
-        const { regions } = object
-        Object.keys(regions).forEach(key => this.profileForm[key] = regions[key] || '')
-      },
-      /** 头像上传成功 */
-      handleAvararUploadSuccess(res) {
-        this.profileForm.face = res.url
-      },
       /** 保存资料提交表单 */
       submitProfile() {
         this.$refs['profileForm'].validate((valid) => {
           if (valid) {
-            this.saveUserInfo(this.profileForm).then(() => {
+            const params = JSON.parse(JSON.stringify(this.profileForm))
+            params.birthday = parseInt(params.birthday / 1000)
+            this.saveUserInfo(params).then(() => {
               this.$message.success('修改成功！')
             })
           } else {

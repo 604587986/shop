@@ -1,11 +1,8 @@
 <template>
   <div>
     <en-tabel-layout
-      :toolbar="true"
-      :pagination="true"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
-      :selection-change="handleSelectionChange"
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
@@ -36,7 +33,6 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column type="selection" width="100"/>
         <el-table-column prop="username" label="用户名"/>
         <el-table-column prop="mobile" label="手机号"/>
         <el-table-column prop="email" label="电子邮箱"/>
@@ -46,31 +42,32 @@
         <el-table-column label="上次登录时间">
           <template slot-scope="scope">{{ scope.row.last_login_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="login_count_tm" label="本月登录次数"/>
+        <el-table-column prop="login_count" label="登录次数"/>
         <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="primary"
               @click="handleOperateMember(scope.$index, scope.row)">操作</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDeleteMember(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </template>
 
-      <template slot="pagination-toolbar">
-        <el-button type="danger" size="mini" @click="deleteMembers">删除选中</el-button>
-      </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="tableData.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="tableData.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
     <!--添加会员 dialog-->
@@ -87,7 +84,7 @@
             :type="pwdType"
             :maxlength="20"
           ></el-input>
-          <span class="show-pwd" @click="showPwd">
+          <span class="show-pwd" @click="pwdType = pwdType === 'password' ? 'text' : 'password'">
             <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
           </span>
         </el-form-item>
@@ -168,13 +165,7 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
-        /** 被选数据 */
-        selectedData: [],
+        tableData: '',
 
         /** 高级搜索数据 */
         advancedForm: {},
@@ -188,29 +179,29 @@
         /** 添加会员 表单规则 */
         addMemberRules: {
           uname: [
-            { required: true, message: '请输入用户名', trigger: 'blur' },
+            this.MixinRequired('请输入用户名！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
           password: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
+            this.MixinRequired('请输入密码！'),
             {
               validator: (rule, value, callback) => {
                 if (!RegExp.password.test(value)) {
                   callback(new Error('密码格式有误！'))
+                } else {
+                  callback()
                 }
               },
               trigger: 'blur'
             }
           ],
           nickname: [
-            { required: true, message: '请输入昵称', trigger: 'blur' },
+            this.MixinRequired('请输入昵称！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
-          birthday: [
-            { required: true, message: '请选择生日', trigger: 'blur' }
-          ],
+          birthday: [this.MixinRequired('请选择生日！')],
           email: [
-            { required: true, message: '请输入电子邮箱', trigger: 'blur' },
+            this.MixinRequired('请输入电子邮箱！'),
             {
               validator: (rule, value, callback) => {
                 if (!RegExp.email.test(value)) {
@@ -221,7 +212,7 @@
             }
           ],
           mobile: [
-            { required: true, message: '请输入手机号码', trigger: 'blur' },
+            this.MixinRequired('请输入手机号码！'),
             {
               validator: (rule, value, callback) => {
                 if (!RegExp.mobile.test(value)) {
@@ -232,7 +223,7 @@
             }
           ],
           address: [
-            { required: true, message: '请输入详细地址', trigger: 'blur' },
+            this.MixinRequired('请输入详细地址！'),
             { max: 50, message: '最长50个字符', trigger: 'blur' }
           ]
         },
@@ -255,14 +246,18 @@
         this.GET_MemberList()
       },
 
-      /** 当选择项发生变化 */
-      handleSelectionChange(val) {
-        this.selectedData = val.map(item => item.id)
-      },
-
       /** 操作会员 */
       handleOperateMember(index, row) {
         this.$router.push({ path: `/member/member-manage/edit/${row.id}` })
+      },
+
+      handleDeleteMember(index, row) {
+        this.$confirm('确定要删除这个会员吗？', '提示', { type: 'warning' }).then(() => {
+          API_Member.deleteMember(row.id).then(() => {
+            this.$message.success('删除成功！')
+            this.GET_MemberList()
+          })
+        }).catch(() => {})
       },
 
       /** 性别格式化 */
@@ -284,20 +279,6 @@
       handleAddMember() {
         this.addMemberForm = { sex: 1 }
         this.dialogAddMemberVisible = true
-      },
-
-      /** 删除选中会员 */
-      deleteMembers() {
-        if (this.selectedData.length < 1) {
-          this.$message.error('您未选中任何会员！')
-        } else {
-          this.$confirm('确定要删除这些会员吗？', '提示', { type: 'warning' }).then(() => {
-            API_Member.deleteMembers(this.selectedData).then(response => {
-              this.$message.success('会员删除成功！')
-              this.GET_MemberList()
-            }).catch(error => console.log(error))
-          }).catch(() => {})
-        }
       },
 
       /** 高级搜索事件触发 */
@@ -345,25 +326,14 @@
         }
       },
 
-      /** 显示 */
-      showPwd() {
-        this.pwdType = this.pwdType === 'password' ? 'text' : 'password'
-      },
-
       /** 获取会员列表 */
       GET_MemberList() {
         this.loading = true
         API_Member.getMemberList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
+          this.tableData = response
+        }).catch(() => {
           this.loading = false
-          console.log(error)
         })
       }
     }

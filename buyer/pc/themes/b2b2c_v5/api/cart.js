@@ -28,6 +28,7 @@ export function updateSkuNum(sku_id, num) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/cart/${sku_id}`,
     method: 'post',
+    loading: false,
     data: { num }
   })
 }

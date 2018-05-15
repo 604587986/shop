@@ -347,6 +347,7 @@ import axios from 'axios'
             var regionData = {};
             regionData['string'] = _this.titleView;
             regionData['regions'] = _this.regions;
+            regionData['last_id'] = _this.regions.town_id || _this.regions.region_id || _this.regions.city_id || _this.regions.province_id;
             var _callback = _this.options.callback;
             _callback && typeof(_callback) === 'function' && _callback(regionData);
             node.appTitleView.html(_this.titleView);

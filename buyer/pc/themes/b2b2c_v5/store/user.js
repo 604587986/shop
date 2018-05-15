@@ -86,6 +86,7 @@ export const actions = {
   getUserDataAction: ({ commit }, uid) => {
     return new Promise((resolve, reject) => {
       API_User.getUserInfo(uid).then(response => {
+        response.birthday *= 1000
         commit(types.SET_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
@@ -111,6 +112,7 @@ export const actions = {
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
         API_User.getUserInfo(uid).then(response => {
+          response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
           resolve(response)
         }).catch(error => reject(error))
@@ -141,6 +143,7 @@ export const actions = {
   saveUserInfoAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_User.saveUserInfo(params).then(response => {
+        response.birthday *= 1000
         commit(types.SET_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
