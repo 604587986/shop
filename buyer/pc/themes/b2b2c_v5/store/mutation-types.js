@@ -28,7 +28,7 @@ export const REMOVE_REFRESH_TOKEN = 'REMOVE_REFRESH_TOKEN'
 
 /** 收货地址相关 */
 // 设置地址数据
-export const SET_ADDRESS_DATA = 'SET_ADDRESS_DATA'
+export const SET_ADDRESS = 'SET_ADDRESS'
 // 添加地址
 export const ADD_ADDRESS = 'ADD_ADDRESS'
 // 编辑地址

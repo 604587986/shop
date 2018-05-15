@@ -96,7 +96,6 @@
       [TableLayout.name]: TableLayout
     },
     data() {
-      const required = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       return {
         /** 列表loading状态 */
         loading: false,
@@ -113,22 +112,22 @@
         smtpForm: {},
         /** smtp 表单规则*/
         smtpRules: {
-          host: [required('请输入HOST')],
+          host: [this.MixinRequired('请输入HOST')],
           port: [
-            required('请输入PORT'),
+            this.MixinRequired('请输入PORT'),
             { validator: (rule, value, callback) => {
               /^[1-9]\d*$/.test(value) ? callback() : callback(new Error('PORT应为正整数！'))
             } }
           ],
-          username: [required('请输入用户名')],
-          password: [required('请输入密码')],
+          username: [this.MixinRequired('请输入用户名')],
+          password: [this.MixinRequired('请输入密码')],
           max_count: [
-            required('请输入每日最大发信数'),
+            this.MixinRequired('请输入每日最大发信数'),
             { validator: (rule, value, callback) => {
               /^[1-9]\d*$/.test(value) ? callback() : callback(new Error('发信数应为正整数！'))
             } }
           ],
-          mail_from: [required('请输入From字段')]
+          mail_from: [this.MixinRequired('请输入From字段')]
         },
         /** smtp表单 dialog */
         dialogSmtpVisible: false,

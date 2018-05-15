@@ -20,7 +20,7 @@ export function getValidateCodeUrl(uuid, type) {
  * 图片上传API
  * @type {string}
  */
-export const uploadApi = 'http://yiqisi.s1.natapp.cc/base-api/uploaders'
+export const uploadApi = GetFullUrl('uploaders')
 
 /**
  * 获取热门关键字

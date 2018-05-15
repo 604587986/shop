@@ -22,6 +22,10 @@ export default {
       const { data } = tableData
       const index = data.findIndex(item => item.id === id)
       Vue.set(data, index, response)
+    },
+    /** 用于判断表单是否为空 */
+    MixinRequired(message, trigger) {
+      return { required: true, message, trigger: trigger || 'blur' }
     }
   },
   computed: {}

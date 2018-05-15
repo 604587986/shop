@@ -106,7 +106,7 @@
             } else {
               API_Region.editRegion(region_id, this.regionForm).then(response => {
                 this.dialogRegionVisible = false
-                this.$message.success('编辑成功！')
+                this.$message.success('保存成功！')
                 this.$refs['regionEditor'].refresh('edit', {
                   ...this.regionForm,
                   id: this.regionForm.region_id,

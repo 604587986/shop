@@ -418,7 +418,7 @@ export const asyncRouterMap = [
         meta: { title: 'paymentAndDelivery' },
         children: [
           { path: 'payment', component: _import('setting/payment-and-delivery/payment'), name: 'paymentSettings', meta: { title: 'payment' }},
-          { path: 'express-company', component: _import('setting/payment-and-delivery/expressCompany'), name: 'expressCompanySettings', meta: { title: 'expressCompany' }},
+          { path: 'express', component: _import('setting/payment-and-delivery/express'), name: 'expressSettings', meta: { title: 'express' }},
           { path: 'regional-management', component: _import('setting/payment-and-delivery/regionalManagement'), name: 'regionalManagementSettings', meta: { title: 'regionalManagement' }}
         ]
       },

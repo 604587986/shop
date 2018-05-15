@@ -2,7 +2,7 @@ import * as API_Address from '@/api/address'
 import * as types from './mutation-types'
 
 export const state = () => ({
-  address: {}
+  address: []
 })
 
 /** mutations */
@@ -12,11 +12,11 @@ export const mutations = {
    * @param state
    * @param data
    */
-  [types.SET_ADDRESS_DATA](state, data) {
+  [types.SET_ADDRESS](state, data) {
     state.address = data
   },
   /**
-   * 保存地址
+   * 添加地址
    * @param state
    * @param data
    */
@@ -26,26 +26,23 @@ export const mutations = {
   /**
    * 编辑地址
    * @param state
-   * @param params
+   * @param response
    */
-  [types.EDIT_ADDRESS](state, params) {
+  [types.EDIT_ADDRESS](state, response) {
+    const { addr_id } = response
     state.address.data = state.address.data.map(item => {
-      if (item.address_id === params.address_id) item = params
+      if (item.addr_id === addr_id) item = response
       return item
     })
   },
   /**
    * 删除地址
    * @param state
-   * @param ids
+   * @param id
    */
-  [types.DELETE_ADDRESS](state, ids) {
-    if (!Array.isArray(ids)) ids = [ids]
-    const _list = []
-    state.address.data.forEach(item => {
-      if (!ids.includes(item.address_id)) _list.push(item)
-    })
-    state.address.data = _list
+  [types.DELETE_ADDRESS](state, id) {
+    const index = state.address.findIndex(item => item.addr_id === id)
+    state.address.splice(index, 1)
   }
 }
 
@@ -54,13 +51,12 @@ export const actions = {
   /**
    * 获取收货地址数据
    * @param commit
-   * @param params
    * @returns {Promise<any>}
    */
-  getAddressDataAction: ({ commit }, params) => {
+  getAddressAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
       API_Address.getAddressList().then(response => {
-        commit(types.SET_ADDRESS_DATA, response)
+        commit(types.SET_ADDRESS, response)
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -74,7 +70,7 @@ export const actions = {
   addAddressAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Address.addAddress(params).then(response => {
-        commit(types.ADD_ADDRESS, params)
+        commit(types.ADD_ADDRESS, response)
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -88,7 +84,7 @@ export const actions = {
   editAddressAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Address.editAddress(params.addr_id, params).then(response => {
-        commit(types.EDIT_ADDRESS, params)
+        commit(types.EDIT_ADDRESS, response)
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -96,13 +92,13 @@ export const actions = {
   /**
    * 删除收货地址
    * @param commit
-   * @param ids
+   * @param id
    * @returns {Promise<any>}
    */
-  deleteAddressAction: ({ commit }, ids) => {
+  deleteAddressAction: ({ commit }, id) => {
     return new Promise((resolve, reject) => {
-      API_Address.deleteAddress(ids).then(response => {
-        commit(types.DELETE_ADDRESS, ids)
+      API_Address.deleteAddress(id).then(response => {
+        commit(types.DELETE_ADDRESS, id)
         resolve(response)
       }).then(error => reject(error))
     })

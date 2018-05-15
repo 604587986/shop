@@ -120,7 +120,7 @@ export default {
 
     paymentAndDelivery: '支付和配送',
     payment: '支付方式',
-    expressCompany: '配送方式',
+    express: '物流公司',
     regionalManagement: '区域管理',
 
     authSettings: '权限管理',
