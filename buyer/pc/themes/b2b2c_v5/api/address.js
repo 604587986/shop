@@ -22,7 +22,7 @@ export function getAddressList() {
  */
 export function addAddress(params) {
   return request({
-    url: 'members/addresses',
+    url: 'members/address',
     method: 'post',
     data: params
   })
@@ -37,7 +37,7 @@ export function addAddress(params) {
 export function editAddress(id, params) {
   return request({
     url: `members/address/${id}`,
-    method: 'post',
+    method: 'put',
     data: params
   })
 }
