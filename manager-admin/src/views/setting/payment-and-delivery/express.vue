@@ -18,7 +18,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleEditExpress(scope.$index, scope.row)">配置</el-button>
+              @click="handleEditExpress(scope.$index, scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </template>
@@ -54,6 +54,14 @@
             <el-radio :label="0">不支持</el-radio>
           </el-radio-group>
         </el-form-item>
+        <template v-if="expressForm.support_waybill">
+          <el-form-item label="客户号" prop="customer_name">
+            <el-input v-model="expressForm.customer_name"></el-input>
+          </el-form-item>
+          <el-form-item label="电子面单密码" prop="customer_pwd">
+            <el-input v-model="expressForm.customer_pwd"></el-input>
+          </el-form-item>
+        </template>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogExpressVisible = false">取 消</el-button>
@@ -68,9 +76,7 @@
   import { TableLayout } from '@/components'
   export default {
     name: 'expressSettings',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
+    components: { [TableLayout.name]: TableLayout },
     data() {
       return {
         /** 列表loading状态 */
@@ -88,10 +94,18 @@
         expressRules: {
           name: [this.MixinRequired('请输入物流公司名称！')],
           code: [this.MixinRequired('请输入物流公司代码！')],
-          kd_code: [this.MixinRequired('请输入快递鸟物流代码！')]
+          kd_code: [this.MixinRequired('请输入快递鸟物流代码！')],
+          customer_name: [{ required: false, message: '请输入物流公司客户号', trigger: 'blur' }],
+          customer_pwd: [{ required: false, message: '请输入物流公司电子面单密码', trigger: 'blur' }]
         },
         /** 快递公司 dialog */
         dialogExpressVisible: false
+      }
+    },
+    watch: {
+      'expressForm.support_waybill': function waybillChange(newVal) {
+        this.expressRules.customer_name[0].required = !!newVal
+        this.expressRules.customer_pwd[0].required = !!newVal
       }
     },
     mounted() {
@@ -159,7 +173,3 @@
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
