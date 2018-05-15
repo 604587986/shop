@@ -15,7 +15,7 @@
         show-icon>
       </el-alert>
       <el-table
-        :data="address.data"
+        :data="address"
         :header-cell-style="{textAlign: 'center'}"
         cell-class-name="address-cell"
         style="width: 100%"
@@ -102,7 +102,7 @@
       }
     },
     mounted() {
-      this.getAddressData()
+      this.getAddress()
     },
     computed: {
       ...mapGetters(['address'])
@@ -137,9 +137,9 @@
       /** 删除地址 */
       handleDeleteAddress(row) {
         this.$layer.confirm('确认要删除这个地址吗？', () => {
-          this.deleteAddress(row.address_id).then(() => {
+          this.deleteAddress(row.addr_id).then(() => {
             this.$message.success('删除成功！')
-            this.getAddressData()
+            this.getAddress()
           })
         })
       },
@@ -177,7 +177,7 @@
         })
       },
       ...mapActions({
-        getAddressData: 'address/getAddressDataAction',
+        getAddress: 'address/getAddressAction',
         deleteAddress: 'address/deleteAddressAction',
         addAddress: 'address/addAddressAction',
         editAddress: 'address/editAddressAction'
