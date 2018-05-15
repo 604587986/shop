@@ -216,7 +216,7 @@
             API_category.editCategoryBrand(this.brandForm.category_id, this.brandForm.selectedBrandList)
               .then(response => {
                 this.dialogBrandVisible = false
-                this.$message.success('编辑成功！')
+                this.$message.success('保存成功！')
               })
           } else {
             this.$message.error('表单填写有误，请检查！')
