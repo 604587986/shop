@@ -11,6 +11,8 @@
       <label class="label-sku">规格明细：</label>
       <sku-table
         :isEditModel="isEditModel"
+        :goodsId="goodsId"
+        :productSn="productSn"
         :skuInfo="skuInfo"
         :tablehead="tablehead"
         @skuTable="skuTable"
@@ -46,6 +48,18 @@
       isEditModel: {
         type: Number,
         default: 0
+      },
+
+      /** 当前商品Id */
+      goodsId: {
+        type: [String, Number],
+        default: ['', 0]
+      },
+
+      /** 是否自动生成货号 */
+      productSn: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -162,6 +176,9 @@
 
       /** 打印方法 */
       printResult(result) {
+        if (!result) {
+          result = []
+        }
         const _result = cloneObj(result)
         let _empty = []
         _empty.push(_result)
@@ -184,9 +201,13 @@
         _empty.push(result)
 
         /** 构造表头 */
-        this.tablehead = Object.keys(result[0]).filter(key => {
-          return key !== 'spec_value_id'
-        })
+        if (result[0]) {
+          this.tablehead = Object.keys(result[0]).filter(key => {
+            return key !== 'spec_value_id'
+          })
+        } else {
+          this.tablehead = []
+        }
         return _empty
       },
 
