@@ -37,12 +37,12 @@ export default class MemberModel extends DataModel {
   is_seller
 
   /** 最后登录时间 */
-  @ServerName('lastlogin')
+  @ServerName('last_login')
   last_login_time
 
-  /** 本月登录次数 tm --> this month */
-  @ServerName('logincount')
-  login_count_tm
+  /** 登录次数 */
+  @ServerName('login_count')
+  login_count
 
   /** 会员等级ID */
   @ServerName('lv_id')
@@ -81,7 +81,7 @@ export default class MemberModel extends DataModel {
   qq_id
 
   /** 注册时间 */
-  @ServerName('regtime')
+  @ServerName('create_time')
   register_time
 
   /** 注册IP */
