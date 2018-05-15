@@ -292,7 +292,7 @@
         <el-button
           type="primary"
           @click="next"
-          v-if="(currentStatus === 0 && activestep === 0) || activestep === 1">下一步</el-button>
+          v-if="activestep === 0 || activestep === 1">下一步</el-button>
         <el-button
           type="primary"
           @click="aboveGoods"
@@ -619,17 +619,22 @@
           vm.getGoodsBrandList()
           /** 运费模板列表 */
           vm.getTplList()
-          /** 查询商品参数 */
-          vm.GET_GoodsParams()
         } else {
           vm.GET_NextLevelCategory()
         }
+        /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
+        vm.GET_GoodsParams()
         next()
       })
     },
     methods: {
       /** 上一步*/
       pre() {
+        if (this.activestep === 1) {
+          this.$confirm('返回上一步会丢失本页数据?', '提示').then(() => {
+            this.GET_NextLevelCategory()
+          }).catch(() => {})
+        }
         if (this.activestep-- < 0) this.activestep = 0
       },
 
@@ -888,10 +893,29 @@
             // })
           }).catch((error) => this.$message.error(error))
         }).catch((error) => this.$message.error(error))
+        /** 查询草稿箱商品参数信息 */
+        this.GET_GoodsDtagtParams()
       },
 
-      /** 查询草稿箱商品参数 */
+      /** 查询草稿箱商品参数信息 */
       GET_GoodsDtagtParams() {
+        // 处理数据 方便校验
+        const goods_id = this.activeGoodsId || 1
+        API_goods.getGoodsDraftParams(goods_id).then((response) => {
+          this.loading = false
+          this.goodsParams = response.data
+          if (!response.data || response.data.length <= 0) {
+            return
+          }
+          let _paramsList = []
+          this.goodsParams.forEach(key => {
+            key.params.forEach(item => {
+              this.$set(item, 'group_id', key.group_id)
+            })
+            _paramsList = _paramsList.concat(key.params)
+          })
+          this.baseInfoForm.goods_params_list = _paramsList
+        }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
       },
 
       /** 商品分组组件 改变时触发 */
