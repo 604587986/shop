@@ -33,7 +33,6 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column type="selection" width="100"/>
         <el-table-column prop="username" label="用户名"/>
         <el-table-column prop="mobile" label="手机号"/>
         <el-table-column prop="email" label="电子邮箱"/>
@@ -43,7 +42,7 @@
         <el-table-column label="上次登录时间">
           <template slot-scope="scope">{{ scope.row.last_login_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="login_count" label="本月登录次数"/>
+        <el-table-column prop="login_count" label="登录次数"/>
         <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -256,6 +255,7 @@
         this.$confirm('确定要删除这个会员吗？', '提示', { type: 'warning' }).then(() => {
           API_Member.deleteMember(row.id).then(() => {
             this.$message.success('删除成功！')
+            this.GET_MemberList()
           })
         }).catch(() => {})
       },
