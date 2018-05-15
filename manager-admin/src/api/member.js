@@ -10,7 +10,7 @@ const memberModel = new MemberModel()
 export function getMemberList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/members',
+      url: 'members',
       method: 'get',
       loading: false,
       params
@@ -31,7 +31,7 @@ export function addMember(params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: '/members',
+      url: 'members',
       method: 'post',
       data: _formData
     }).then(response => resolve(response)).catch(error => reject(error))
@@ -40,29 +40,29 @@ export function addMember(params) {
 
 /**
  * 获取会员详情
- * @param member_id
+ * @param id
  * @returns {*}
  */
-export function getMemberDetail(member_id) {
+export function getMemberDetail(id) {
   return request({
-    url: `/members/${member_id}`,
+    url: `members/${id}`,
     method: 'get'
   })
 }
 
 /**
  * 修改会员
- * @param member_id
+ * @param id
  * @param params
  * @returns {*}
  */
-export function editMember(member_id, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  return request({
-    url: `/members/${member_id}`,
-    method: 'post',
-    data: _formData
+export function editMember(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `members/${id}`,
+      method: 'put',
+      data: memberModel.params(params)
+    }).then(response => resolve(memberModel.map(response))).catch(error => reject(error))
   })
 }
 
@@ -72,7 +72,7 @@ export function editMember(member_id, params) {
  */
 export function deleteMember(id) {
   return request({
-    url: `/members/${id}`,
+    url: `members/${id}`,
     method: 'delete'
   })
 }
@@ -83,9 +83,10 @@ export function deleteMember(id) {
  * @returns {Promise<any>}
  */
 export function getRecycleMemberList(params) {
+  params.disabled = -1
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/member/list-recycle-json.do',
+      url: 'members',
       method: 'get',
       loading: false,
       params
@@ -98,18 +99,11 @@ export function getRecycleMemberList(params) {
 
 /**
  * 恢复会员
- * @param ids
- * @returns {Promise<any>}
+ * @param id
  */
-export function recycleMember(ids) {
-  if (!Array.isArray(ids)) ids = [ids]
-  const _formData = new FormData()
-  ids.forEach(item => _formData.append('member_id', item))
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shop/admin/member/recycle-regain-member.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function recycleMember(id) {
+  return request({
+    url: `members/${id}`,
+    method: 'post'
   })
 }
