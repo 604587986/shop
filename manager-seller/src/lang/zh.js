@@ -32,7 +32,7 @@ export default {
     promotions: '促销管理',
     fullCut: '满减满赠',
     singleCut: '单品立减',
-    secondHalfPrice: '第二件半',
+    secondHalfPrice: '第二件半价',
     discountManager: '优惠管理',
     giftManager: '赠品管理',
     groupBuyManager: '团购管理',
