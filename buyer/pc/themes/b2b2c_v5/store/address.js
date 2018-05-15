@@ -55,10 +55,9 @@ export const actions = {
   /**
    * 获取收货地址数据
    * @param commit
-   * @param params
    * @returns {Promise<any>}
    */
-  getAddressDataAction: ({ commit }, params) => {
+  getAddressDataAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
       API_Address.getAddressList().then(response => {
         commit(types.SET_ADDRESS_DATA, response)
