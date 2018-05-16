@@ -58,23 +58,23 @@
         </en-tabel-layout>
       </el-tab-pane>
       <el-tab-pane label="新增单品立减" name="add">
-        <el-row :gutter="20" type="flex" justify="space-around" >
-          <el-col :span="4">
-            <div class="activity-info activity-title">活动信息</div>
-            <div class="dicount-set activity-title">优惠设置</div>
-            <div class="activity-goods activity-title">活动商品</div>
-          </el-col>
-          <el-col :span="20">
-            <el-form
-              :model="activityForm" status-icon
-              :rules="rules" ref="activityForm"
-              label-width="100px"
-              class="demo-ruleForm">
-              <div class="activity-info">
-                <el-form-item  label="活动名称" prop="activity_name">
-                  <el-input v-model="activityForm.activity_name" type="text" placeholder="不超过60个字符" ></el-input>
+        <div class="content-goods-publish">
+          <el-form
+            :model="activityForm"
+            status-icon
+            :rules="rules"
+            label-position="right"
+            ref="activityForm"
+            label-width="120px"
+            class="demo-ruleForm">
+            <!--活动信息-->
+            <div class="base-info-item">
+              <h4>活动信息</h4>
+              <div>
+                <el-form-item  label="活动名称：" prop="activity_name">
+                  <el-input v-model="activityForm.activity_name" style="width: 300px" placeholder="不超过60个字符" ></el-input>
                 </el-form-item>
-                <el-form-item label="生效时间" prop="take_effect_time">
+                <el-form-item label="生效时间：" prop="take_effect_time">
                   <el-date-picker
                     v-model="activityForm.take_effect_time"
                     type="datetimerange"
@@ -84,17 +84,25 @@
                     end-placeholder="结束日期">
                   </el-date-picker>
                 </el-form-item>
-                <el-form-item label="活动描述">
+                <el-form-item label="活动描述：">
                   <UE v-model="activityForm.activity_desc" :defaultMsg="activityForm.activity_desc"></UE>
                 </el-form-item>
               </div>
-              <div class="dicount-set">
-                <el-form-item label="优惠方式" prop="price_reduction">
+            </div>
+            <!--优惠方式-->
+            <div class="base-info-item">
+              <h4>优惠方式</h4>
+              <div>
+                <el-form-item label="优惠方式：" prop="price_reduction">
                   单品立减 <el-input v-model.number="activityForm.price_reduction" style="width: 150px;"></el-input> 元
                 </el-form-item>
               </div>
-              <div class="activity-goods">
-                <el-form-item label="活动商品">
+            </div>
+            <!--活动商品-->
+            <div class="base-info-item">
+              <h4>活动商品</h4>
+              <div>
+                <el-form-item label="活动商品：">
                   <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
                     <el-radio :label="1">全部商品参与</el-radio>
                     <el-radio :label="0">部分商品参与</el-radio>
@@ -144,12 +152,15 @@
                   </div>
                 </el-form-item>
               </div>
+            </div>
+            <!--提交按钮-->
+            <div class="btn-submit">
               <el-form-item>
                 <el-button type="success" @click="saveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
-            </el-form>
-          </el-col>
-        </el-row>
+            </div>
+          </el-form>
+        </div>
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
@@ -220,7 +231,7 @@
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'change' }
           ],
           price_reduction: [
-            { required: true, message: '请填写优惠金额', trigger: 'change' },
+            { required: true, message: '请填写优惠金额', trigger: 'blur' },
             { type: 'number', message: '请输入数字值' }
           ]
         },
@@ -395,41 +406,88 @@
     height: 50px;
   }
   /*新增表单面板*/
-  #pane-add {
-    background: #fff;
-    padding: 10px;
-    border: 1px solid #9a9a9a;
+  /deep/ .el-form-item__content {
+    width: 80%;
+    .el-input .el-input--medium {
+      max-width: 80%;
+    }
   }
-  .activity-info {
-    height: 460px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
+
+  /*百度UE*/
+  /deep/ #edui1 {
+    width: 100% !important;
   }
-  .dicount-set {
-    height: 80px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
-  }
-  .activity-goods {
-    min-height: 80px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
-  }
-  .activity-title {
-    text-align: center;
+
+  .content-goods-publish {
     padding: 15px;
-    color: #333;
-    font-size: 14px;
-    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid #ddd;
+    background: none repeat scroll 0 0 #fff;
   }
-  .discount-tip {
-    font-size: 12px;
-    line-height: 30px;
-    margin-left: 5px;
-    color: red;
+
+  /*表单信息*/
+  .el-form {
+    padding-bottom: 80px;
+    .el-form-item {
+      width: 100%;
+      text-align: left;
+
+      /*送积分*/
+      .integral-show {
+        .el-input {
+          width: 50px;
+        }
+      }
+      /** 下拉列表 */
+      /deep/ .el-select .el-select--medium {
+        width: 160px;
+      }
+    }
+    .discount-model {
+      div {
+        margin: 5px 0;
+      }
+    }
+
+    /*提交按钮*/
+    /deep/ .btn-submit {
+      width: 100%;
+      .el-form-item__content {
+        text-align: center;
+      }
+    }
+  }
+
+  /*平铺*/
+  div.base-info-item {
+    h4 {
+      padding:0 10px;
+      border: 1px solid #ddd;
+      background-color: #f8f8f8;
+      font-weight: bold;
+      color: #333;
+      font-size: 14px;
+      line-height: 40px;
+      text-align: left;
+    }
+    h4 + div {
+      margin-top: 15px;
+    }
+    .el-form-item {
+      margin-left: 5%;
+      min-width: 300px;
+    }
+    .el-form-item__content {
+      margin-left: 120px;
+      text-align: left;
+    }
+    p.goods-group-manager {
+      padding-left: 12.3%;
+      text-align: left;
+      color: #999;
+      font-size: 13px;
+    }
   }
 </style>
 
