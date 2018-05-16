@@ -42,9 +42,11 @@ export function addMember(params) {
  * @returns {*}
  */
 export function getMemberDetail(id) {
-  return request({
-    url: `members/${id}`,
-    method: 'get'
+  return new Promise((resolve, reject) => {
+    request({
+      url: `members/${id}`,
+      method: 'get'
+    }).then(response => resolve(memberModel.map(response))).catch(error => reject(error))
   })
 }
 
