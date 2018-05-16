@@ -43,9 +43,7 @@
         if (this.names) options.names = this.names;
         if (this.quick !== undefined) options.quick = this.quick;
         if (this.setInput !== undefined) options.setInput = this.setInput;
-        options.callback = (object) => {
-          this.$emit('changed', object)
-        };
+        options.callback = this.callback
         this.$nextTick(() => {
           $('#AS-' + this._uid).addressSelect(options);
         });
