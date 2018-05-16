@@ -42,7 +42,7 @@
 <script>
   import * as API_coupon from '@/api/coupon'
   export default {
-    name: 'main',
+    name: 'Coupon',
     props: {
       /** 是否显示优惠券弹框 */
       couponModelShow: {
@@ -52,8 +52,8 @@
 
       /** 当前优惠券Id */
       currentcouponId: {
-        type: Number,
-        default: 1
+        type: [Number, String],
+        default: [1, '']
       },
 
       /** 优惠券表单数据 */
@@ -101,10 +101,9 @@
         }
       }
     },
-    methods: {
+    methods: { // 缺少一道校验
       /** 取消 */
       handleCancelCoupon() {
-        this.couponShow = false
         this.$emit('saveCoupon', false)
       },
 
