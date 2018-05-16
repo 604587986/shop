@@ -14,9 +14,10 @@
             @advancedSearch="advancedSearchEvent"
             advanced
             placeholder="请输入会员名或手机号"
+            :advancedWidth="450"
           >
             <template slot="advanced-content">
-              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+              <el-form ref="advancedForm" :model="advancedForm" label-width="100px">
                 <el-form-item label="用户名">
                   <el-input size="medium" v-model="advancedForm.uname" clearable></el-input>
                 </el-form-item>
@@ -25,6 +26,23 @@
                 </el-form-item>
                 <el-form-item label="电子邮箱">
                   <el-input size="medium" v-model="advancedForm.email" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="会员性别">
+                  <el-radio-group v-model="advancedForm.sex">
+                    <el-radio :label="1">男</el-radio>
+                    <el-radio :label="0">女</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="注册时间区间">
+                  <el-date-picker
+                    v-model="advancedForm.register_time_range"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="timestamp"
+                    style="width: 324px">
+                  </el-date-picker>
                 </el-form-item>
               </el-form>
             </template>
@@ -277,11 +295,17 @@
       /** 高级搜索事件触发 */
       advancedSearchEvent() {
         const { advancedForm } = this
+        const { register_time_range } = advancedForm
         Object.keys(this.advancedForm).forEach(key => {
           if (advancedForm[key] !== undefined) {
             this.params[key] = advancedForm[key]
           }
         })
+        if (register_time_range && register_time_range.length === 2) {
+          this.params.start_time = register_time_range[0] / 1000
+          this.params.end_time = register_time_range[1] / 1000
+        }
+        delete this.params.register_time_range
         delete this.params.keyword
         this.GET_MemberList()
       },
