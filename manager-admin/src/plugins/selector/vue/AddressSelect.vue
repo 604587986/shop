@@ -14,7 +14,8 @@
         default: process.env.BASE_API
       },
       default: {
-        type: Array
+        type: Array,
+        default: () => ([])
       },
       names: {
         type: Object
@@ -46,7 +47,7 @@
           this.$emit('changed', object)
         };
         this.$nextTick(() => {
-          $('#' + this.el_id).addressSelect(options);
+          $('#AS-' + this._uid).addressSelect(options);
         });
       }
     }
