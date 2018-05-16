@@ -27,8 +27,7 @@ import axios from 'axios'
         this.index = 0;
 
         this.defaults = {
-            'host': null,
-            'appApi': '/system/regions/parent/',
+            'api': 'system/regions/parent/',
             'deData': null,
             'debug': false,
             'quick': false,
@@ -461,9 +460,7 @@ import axios from 'axios'
             var _this = this;
             var _region_id = region_id || 0;
             var _region_grade = region_grade || 0;
-            var _url = _this.options.host ? _this.options.host + _this.options.appApi : _this.options.appApi;
-            _url = _url.replace("@id", _region_id)
-            axios.get(_url).then(function (response) {
+            axios.get(_this.options.api.replace("@id", _region_id)).then(function (response) {
                 response.status === 200 && (function () {
                     _this.defaultArray.length > 0
                         ? _this.complyDeApi(response.data)
