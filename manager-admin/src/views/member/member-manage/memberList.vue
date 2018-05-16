@@ -128,7 +128,7 @@
         </el-form-item>
         <!--地区-->
         <el-form-item label="地区" prop="region" class="form-item-region">
-          <en-address-select :changed="(object) => { this.addMemberForm.region = object.last_id }"/>
+          <en-address-select @changed="(object) => { addMemberForm.region = object.last_id }"/>
         </el-form-item>
         <!--手机号码-->
         <el-form-item label="手机号码" prop="mobile">
