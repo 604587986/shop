@@ -1,20 +1,20 @@
 <template>
   <el-dialog title="新增优惠券" :visible.sync="couponShow" width="40%" align="center">
     <el-form :model="couponForm" label-position="right" label-width="160px">
-      <el-form-item label="优惠券名称">
+      <el-form-item label="优惠券名称：">
         <el-input
           auto-complete="off"
           v-model="couponForm.coupon_name"
           placeholder="请输入10个以内的汉字"
           label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="优惠券面额（元）">
+      <el-form-item label="优惠券面额（元）：">
         <el-input auto-complete="off"  v-model="couponForm.coupon_denomination" label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="买家需要消费（元）">
+      <el-form-item label="买家需要消费（元）：">
         <el-input auto-complete="off"  v-model="couponForm.coupon_use_limit" label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="使用期限">
+      <el-form-item label="使用期限：">
         <el-date-picker
           key="1"
           v-model="couponForm.coupon_time_limit"
@@ -25,10 +25,10 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="发行量（个）">
+      <el-form-item label="发行量（个）：">
         <el-input auto-complete="off"  v-model="couponForm.coupon_circulation" label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="每人限领（个）">
+      <el-form-item label="每人限领（个）：">
         <el-input auto-complete="off"  v-model="couponForm.coupon_used_num"  label-width="100"></el-input>
       </el-form-item>
     </el-form>
@@ -53,7 +53,9 @@
       /** 当前优惠券Id */
       currentcouponId: {
         type: [Number, String],
-        default: [1, '']
+        default: () => {
+          return 1
+        }
       },
 
       /** 优惠券表单数据 */

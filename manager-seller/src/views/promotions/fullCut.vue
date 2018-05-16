@@ -72,7 +72,7 @@
               <h4>活动信息</h4>
               <div>
                 <el-form-item  label="活动名称：" prop="activity_name">
-                  <el-input v-model="activityForm.activity_name" type="text" placeholder="不超过60个字符" ></el-input>
+                  <el-input v-model="activityForm.activity_name" style="width: 300px" placeholder="不超过60个字符" ></el-input>
                 </el-form-item>
                 <el-form-item label="生效时间" prop="take_effect_time">
                   <el-date-picker
@@ -99,49 +99,43 @@
                     元  <span class="discount-tip">消费达到此金额即可参与优惠</span>
                   </div>
                 </el-form-item>
-                <el-form-item label="优惠方式：">
+                <el-form-item label="优惠方式：" class="discount-model">
+                  <!--减现金-->
                   <div>
-                    <el-checkbox v-model="activityForm.isDiscount"/>
-                    <span v-show="activityForm.isDiscount">
-                    减现金（与打折活动只能选择一种）
-                  </span>
-                    <el-input
-                      v-show="activityForm.isDiscount"
-                      v-model="activityForm.discount_dimension"/>
-
-                    <el-checkbox v-model="!activityForm.isDiscount" @change="" />
-                    <span v-show="activityForm.isDiscount">
-                    减现金（与打折活动只能选择一种）
-                  </span>
-                    <el-input
-                      v-show="activityForm.isDiscount"
-                      v-model="activityForm.discount_dimension"/>
+                    <el-checkbox :label="reduceCashTxt" v-model="isReduceCash" @change="changeReduceCash"></el-checkbox>
+                    <span class="integral-show" v-show="isReduceCash"><el-input  size="mini" v-model="activityForm.reduce_cash"></el-input> 元</span>
                   </div>
-                  <el-checkbox label="打折（与减现金活动只能选择一种）">
-                    打折（与减现金活动只能选择一种）
-                  </el-checkbox>
+                  <!--打折-->
                   <div>
-                    <el-checkbox label="送积分" v-model="isIntegral" ></el-checkbox>
+                    <el-checkbox :label="discountTxt" v-model="isDiscount" @change="changeDiscount"></el-checkbox>
+                    <span class="integral-show" v-show="isDiscount"><el-input  size="mini" v-model="activityForm.discount_val"></el-input> 折</span>
                   </div>
+                  <!--送积分-->
+                  <div>
+                    <el-checkbox :label="integralTxt" v-model="isIntegral" @change="changeIntegral"></el-checkbox>
+                    <span class="integral-show" v-show="isIntegral"><el-input  size="mini" v-model="activityForm.integral"></el-input> 分</span>
+                  </div>
+                  <!--免邮费-->
                   <div>
                     <el-checkbox label="免邮费" v-model="freePostage" @change="changeFreePostage"></el-checkbox>
                   </div>
+                  <!--送优惠券-->
                   <div>
-                    <el-checkbox label="送优惠券" v-model="isCoupon" @change="isChangeCoupon"></el-checkbox>
+                    <el-checkbox :label="couponTxt" v-model="isCoupon" @change="isChangeCoupon"></el-checkbox>
                     <el-select v-show="isCoupon" v-model="activityForm.couponId" placeholder="请选择">
                       <el-option
                         v-for="item in couponList"
-                        @change="changeGift"
+                        @change="changeCoupon"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
                       </el-option>
                     </el-select>
-                    <el-button type="text" v-show="isCoupon" @click="addGift">新增</el-button>
+                    <el-button type="text" v-show="isCoupon" @click="addCoupon">新增</el-button>
                   </div>
                   <!--送赠品-->
                   <div>
-                    <el-checkbox label="送赠品" v-model="isGift" @change="isChangeGift"></el-checkbox>
+                    <el-checkbox :label="giftTxt" v-model="isGift" @change="isChangeGift"></el-checkbox>
                     <el-select v-show="isGift" v-model="activityForm.giftId" placeholder="请选择">
                       <el-option
                         v-for="item in giftList"
@@ -227,10 +221,15 @@
     <en-goods-selector
       :show="showDialog" :api="goods_api" :defaultData="tableData"
       :maxLength="maxsize" @confirm="refreshFunc" @closed="showDialog = false"/>
-    <!--赠品添加/修改-->
+    <!--赠品组件-->
     <add-gift
       :giftModelShow="giftModelShow"
       @saveGift="saveGift"/>
+    <!--优惠券组件-->
+    <Coupon
+      :couponModelShow="couponModelShow"
+      @saveCoupon="saveCoupon"
+    ></Coupon>
   </div>
 </template>
 
@@ -238,7 +237,7 @@
   import * as API_activity from '@/api/activity'
   import { TableLayout, TableSearch, CategoryPicker, UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
-  import { AddGift } from './components'
+  import { AddGift, Coupon } from './components'
 
   export default {
     name: 'fullCut',
@@ -248,7 +247,8 @@
       [CategoryPicker.name]: CategoryPicker,
       [UE.name]: UE,
       [GoodsSelector.name]: GoodsSelector,
-      [AddGift.name]: AddGift
+      [AddGift.name]: AddGift,
+      [Coupon.name]: Coupon
     },
     data() {
       return {
@@ -284,8 +284,11 @@
           /** 是否满减 1打折/2减现金  */
           isDiscount: 1,
 
-          /** 优惠力度 打几折/减多少钱*/
-          discount_dimension: '',
+          /** 打几折 */
+          discount_val: '',
+
+          /** 减多少钱*/
+          reduce_cash: '',
 
           /** 是否送积分 */
           isIntegral: 1,
@@ -299,7 +302,7 @@
           /** 是否有赠品  */
           isGift: 1,
 
-          /** 礼品id */
+          /** 赠品id */
           giftId: '',
 
           /** 是否送优惠券 */
@@ -315,26 +318,32 @@
           activity_goods: []
         },
 
-        /** 是否满减 1打折/2减现金  */
-        isDiscount: 1,
+        /** 是否减现金  */
+        isReduceCash: false,
 
-        /** 优惠力度 打几折/减多少钱*/
-        discount_dimension: '',
+        /** 减现金文本 */
+        reduceCashTxt: '减现金(与打折活动只能选择一种)',
+
+        /** 是否打折 */
+        isDiscount: false,
+
+        /** 打折文本 */
+        discountTxt: '打折(与减现金活动只能选择一种)',
 
         /** 是否送积分 */
-        isIntegral: 1,
+        isIntegral: false,
 
-        /** 积分 */
-        integral: 0,
+        /** 积分文本 */
+        integralTxt: '送积分',
 
         /** 是否免邮费 1免邮费*/
         freePostage: false,
 
         /** 是否送优惠券 */
-        isCoupon: 1,
+        isCoupon: false,
 
-        /** 优惠券Id */
-        couponId: '',
+        /** 优惠券显示文本 */
+        couponTxt: '送优惠券',
 
         /** 优惠券列表 */
         couponList: [],
@@ -345,8 +354,8 @@
         /** 是否有赠品  */
         isGift: false,
 
-        /** 礼品id */
-        giftId: '',
+        /** 赠品显示文本 */
+        giftTxt: '送赠品',
 
         /** 赠品列表 */
         giftList: [],
@@ -361,10 +370,10 @@
             { min: 0, max: 60, message: '长度在60个字符之内', trigger: 'blur' }
           ],
           take_effect_time: [
-            { type: 'array', required: true, message: '请选择生效时间', trigger: 'change' }
+            { type: 'array', required: true, message: '请选择生效时间', trigger: 'blur' }
           ],
           discount_threshold: [
-            { required: true, message: '请输入优惠门槛', trigger: 'change' }
+            { required: true, message: '请输入优惠门槛', trigger: 'blur' }
           ]
         },
 
@@ -403,7 +412,7 @@
         this.GET_ActivityList()
       },
 
-      /** 切换*/
+      /** 切换面板 */
       handleToggleClick(tab, event) {
         this.activeName = tab.name
         if (this.activeName === 'express') {
@@ -456,6 +465,7 @@
       selectionChange(val) {
         this.selectionids = val.map(item => item.goods_id)
       },
+
       /** 批量取消 */
       cancelall() {
         this.selectionids.forEach(key => {
@@ -530,6 +540,31 @@
         }
       },
 
+      /** 是否打折 */
+      changeDiscount(val) {
+        this.isDiscount = val
+        if (val) {
+          this.isReduceCash = !this.isDiscount
+          this.reduceCashTxt = this.isReduceCash ? '减' : '减现金(与打折活动只能选择一种)'
+        }
+        this.discountTxt = this.isDiscount ? '打' : '打折(与减现金活动只能选择一种)'
+      },
+
+      /** 是否减现金 */
+      changeReduceCash(val) {
+        this.isReduceCash = val
+        if (val) {
+          this.isDiscount = !this.isReduceCash
+          this.discountTxt = this.isDiscount ? '打' : '打折(与减现金活动只能选择一种)'
+        }
+        this.reduceCashTxt = this.isReduceCash ? '减' : '减现金(与打折活动只能选择一种)'
+      },
+
+      /** 是否送积分 */
+      changeIntegral(val) {
+        this.integralTxt = val ? '送' : '送积分'
+      },
+
       /** 是否免邮费改变 */
       changeFreePostage(val) {
         this.freePostage = val
@@ -540,12 +575,35 @@
       isChangeCoupon(val) {
         this.isCoupon = val
         this.activityForm.isCoupon = this.isCoupon ? 1 : 0
+        this.couponTxt = this.isCoupon ? '送' : '送优惠券'
+      },
+
+      /** 获取优惠券列表 */
+      GET_CouponsList() {
+
+      },
+
+      /** 所选优惠券变化时 */
+      changeCoupon(val) {
+        this.activityForm.couponId = val
+      },
+
+      /** 新增优惠券 */
+      addCoupon() {
+        this.couponModelShow = true
+      },
+
+      /** 优惠券监听 */
+      saveCoupon(target) {
+        this.couponModelShow = false
+        target && this.GET_CouponsList()
       },
 
       /** 是否送赠品 */
       isChangeGift(val) {
         this.isGift = val
         this.activityForm.isGift = this.isGift ? 1 : 0
+        this.giftTxt = this.isGift ? '送' : '送赠品'
       },
 
       /** 获取赠品列表 */
@@ -600,9 +658,9 @@
   }
 
   /deep/ .el-form-item__content {
-    width: 85%;
-    /deep/ .el-input--medium {
-      width: 300px;
+    width: 80%;
+    .el-input .el-input--medium {
+      max-width: 80%;
     }
   }
 
@@ -625,11 +683,24 @@
     .el-form-item {
       width: 100%;
       text-align: left;
+
+      /*送积分*/
+      .integral-show {
+        .el-input {
+          width: 50px;
+        }
+      }
+      /** 下拉列表 */
+      /deep/ .el-select .el-select--medium {
+        width: 160px;
+      }
+    }
+    .discount-model {
+      div {
+        margin: 5px 0;
+      }
     }
 
-    /deep/.el-select>.el-input {
-      width: 200px;
-    }
     /*提交按钮*/
     /deep/ .btn-submit {
       width: 100%;
