@@ -72,38 +72,47 @@
       </el-collapse>
       <!--订单状态-->
       <div class="order-status-info">
-        <div class="order-status">
-          <i class="el-icon-check"></i>  订单状态：{{ }}
-        </div>
-        <div class="order-item">
-          <span class="item-name"> 1、订单附言：</span>
-          <span class="item-value">{{ }}</span>
-        </div>
-        <div class="order-item">
-          <span class="item-name">2、送货时间：</span>
-          <span class="item-value">{{ }}</span>
-        </div>
-        <div class="order-item">
-          <span class="item-name">3、发票抬头：</span>
-          <span class="item-value">{{ }}</span>
-        </div>
-        <div class="order-item">
-          <span class="item-name">4、发票内容：</span>
-          <span class="item-value">{{ }}</span>
-        </div>
-        <div class="order-item">
-          <span class="item-name">5、物流信息：</span>
-          <span class="item-value">
+        <div>
+          <div class="order-status">
+            <i class="el-icon-check"></i>  订单状态：{{ }}
+          </div>
+          <div class="order-item">
+            <span class="item-name"> 1、订单附言：</span>
+            <span class="item-value">{{ }}</span>
+          </div>
+          <div class="order-item">
+            <span class="item-name">2、送货时间：</span>
+            <span class="item-value">{{ }}</span>
+          </div>
+          <div class="order-item">
+            <span class="item-name">3、发票抬头：</span>
+            <span class="item-value">{{ }}</span>
+          </div>
+          <div class="order-item">
+            <span class="item-name">4、发票内容：</span>
+            <span class="item-value">{{ }}</span>
+          </div>
+          <div class="order-item">
+            <span class="item-name">5、物流信息：</span>
+            <span class="item-value">
             <el-button type="text" @click="looklogistics">点击查看</el-button>
           </span>
+          </div>
+        </div>
+        <div class="opera-btn">
+          <el-button size="mini" type="primary" @click="adjustConsignee" >修改收货人信息</el-button>
+          <el-button size="mini" type="primary" @click="adjustPrice" >调整价格</el-button>
         </div>
       </div>
     </div>
     <!--订单状态 步骤条-->
     <el-steps :active="activestep" align-center finish-status="success" style="margin-top: 20px;">
       <el-step title="新订单" description=""></el-step>
-      <el-step title="已确认" description=""></el-step>
+      <el-step title="未付款" description=""></el-step>
+
+      <el-step title="已取消" description=""></el-step>
       <el-step title="已付款" description=""></el-step>
+
       <el-step title="已发货" description=""></el-step>
       <el-step title="已收货" description=""></el-step>
       <el-step title="已完成" description=""></el-step>
@@ -132,8 +141,6 @@
 
 <script>
   import * as API_order from '@/api/order'
-  import Foundation from '@/framework/Foundation'
-
   export default {
     name: 'orderDetail',
     data() {
@@ -166,9 +173,6 @@
     filters: {
       paymentTypeFilter(val) {
         return val === 'online' ? '在线支付' : '货到付款'
-      },
-      unixToDate(val) {
-        return Foundation.unixToDate(val)
       }
     },
     mounted() {
@@ -192,11 +196,14 @@
       looklogistics() {
       },
 
-      /** 订单信息、其他发票 */
-      countShowData() {
-        // const o = this.orderDetail
-        // const f = Foundation
-        this.orderInfo = []
+      /** 调整价格 */
+      adjustPrice() {
+
+      },
+
+      /** 修改收货人信息 */
+      adjustConsignee() {
+
       }
     }
   }
@@ -207,7 +214,6 @@
   .order-detail-container {
     background-color: #fff;
   }
-
 
   /*订单信息*/
   .order-info {
@@ -263,11 +269,17 @@
       }
     }
 
+    /*** 订单状态 */
     div.order-status-info{
       width:75%;
       padding:0 20px;
       border: 1px solid #e5e5e5;
       border-left: none;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: stretch;
       div.order-status {
         line-height: 40px;
         color: #333;
@@ -279,8 +291,12 @@
           font-weight: bold;
           font-size: 25px;
         }
-
       }
+      div.opera-btn {
+        text-align: right;
+        margin-bottom: 10px;
+      }
+
       div.order-item {
         color: #333;
         font-size: 15px;
