@@ -30,7 +30,7 @@
               value-key="spec_value"
               :fetch-suggestions="querySearchSkuValue"
               placeholder="请输入规格值名称"
-              @focus="getActiveSkuValue(index)"
+              @focus="getActiveSkuValue(index, item)"
               @blur.naitve="editSkuIValue(item, val, $index, index)"
               @select="handleSelectSkuValue">
               <template slot="append">
@@ -308,9 +308,15 @@
         })
       },
 
-      /** 获取当前规格值索引*/
-      getActiveSkuValue(index) {
+      /** 获取当前规格值索引 赋值当前对应规格项的规格值下拉列表*/
+      getActiveSkuValue(index, item) {
         this.activeSkuValIndex = index
+        /** 设置当前规格值列表 */
+        this.skuData.filter(key => {
+          if (item.spec_id === key.spec_id) {
+            this.specList = key.value_list || []
+          }
+        })
       },
 
       /** 点击查询输入规格值建议*/

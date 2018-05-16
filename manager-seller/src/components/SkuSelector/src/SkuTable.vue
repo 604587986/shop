@@ -36,7 +36,7 @@
       <span>批量设置：</span>
       <div v-show="isShowBatch">
         <el-button type="text" size="mini" @click="setBatch(1)">价格</el-button>
-        <el-button type="text" size="mini" @click="setBatch(2)">库存</el-button>
+        <el-button v-if="isEditModel !== 1" type="text" size="mini" @click="setBatch(2)">库存</el-button>
       </div>
       <div v-show="!isShowBatch">
         <el-input v-model.number="batch" size="mini" style="width: 100px;"></el-input>
@@ -51,10 +51,22 @@
   export default {
     name: 'skuTable',
     props: {
-      /** 是否是编辑模式 1是 2不是 */
+      /** 当前模式 发布商品0 编辑商品1 编辑草稿箱商品2 */
       isEditModel: {
         type: Number,
         default: 1
+      },
+
+      /** 是否自动生成货号 */
+      productSn: {
+        type: Boolean,
+        default: false
+      },
+
+      /** 当前商品Id */
+      goodsId: {
+        type: [String, Number],
+        default: ['', 0]
       },
 
       /** 列表信息 */
@@ -82,6 +94,17 @@
         this.tableData.forEach((key, index) => {
           this.concactArrayCom(index, key)
         })
+      },
+
+      /** 自动生成货号 */
+      productSn() {
+        if (this.productSn && this.tableData.length > 0) {
+          let count = 1
+          this.tableData.forEach(key => {
+            key.sn = this.goodsId + '-' + count
+            count++
+          })
+        }
       }
     },
     mounted() {
@@ -213,8 +236,8 @@
 
       /** 数据改变之后 抛出数据 */
       updateSkuTable(index, scope, item) {
-        /** 进行自定义校验 */
-        if (!Number.isInteger(scope.row[item]) && item !== 'sn') {
+        /** 进行自定义校验 判断是否是数字（小数也能通过） */
+        if (!/^[0-9]+.?[0-9]*$/.test(scope.row[item]) && item !== 'sn') { // 校验通过
           this.validateError.push([index, scope.$index])
         } else {
           this.validateError.forEach((key, _index) => {
@@ -225,11 +248,6 @@
         }
         /** 异步更新skuInfo数据 */
         this.$emit('skuTable', this.tableData)
-      },
-
-      /** 生成货号 */
-      produceSn() {
-
       }
     }
   }

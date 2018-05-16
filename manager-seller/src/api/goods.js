@@ -105,6 +105,25 @@ export function getGoodsParams(ids, params) {
 }
 
 /**
+ * 查询草稿箱商品参数
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGoodsDraftParams(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/draft-goods/${ids}/params`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+
+/**
  * 查询商品品类信息  ids 为category_id 商城商品品类
  * @param ids
  * @param params

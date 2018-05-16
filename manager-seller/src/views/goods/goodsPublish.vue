@@ -137,6 +137,8 @@
               <!--规格选择器-->
                <en-sku-selector
                  :categoryId="baseInfoForm.category_id"
+                 :goodsId="activeGoodsId"
+                 :productSn="productSn"
                  :isEditModel="currentStatus"
                  :goodsSkuInfo="skuList"
                  @finalSku="finalSku"/>
@@ -290,7 +292,7 @@
         <el-button
           type="primary"
           @click="next"
-          v-if="(currentStatus === 0 && activestep === 0) || activestep === 1">下一步</el-button>
+          v-if="activestep === 0 || activestep === 1">下一步</el-button>
         <el-button
           type="primary"
           @click="aboveGoods"
@@ -516,6 +518,9 @@
         /** 用来向组件中传递的数据 */
         skuList: [],
 
+        /** 是否自动生成货号 */
+        productSn: false,
+
         /** 请求的商品参数组列表 */
         goodsParams: [
           {
@@ -614,17 +619,22 @@
           vm.getGoodsBrandList()
           /** 运费模板列表 */
           vm.getTplList()
-          /** 查询商品参数 */
-          vm.GET_GoodsParams()
         } else {
           vm.GET_NextLevelCategory()
         }
+        /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
+        vm.GET_GoodsParams()
         next()
       })
     },
     methods: {
       /** 上一步*/
       pre() {
+        if (this.activestep === 1) {
+          this.$confirm('返回上一步会丢失本页数据?', '提示').then(() => {
+            this.GET_NextLevelCategory()
+          }).catch(() => {})
+        }
         if (this.activestep-- < 0) this.activestep = 0
       },
 
@@ -643,15 +653,7 @@
         if (this.activestep === 1) {
           this.$refs.baseInfoForm.validate((valid) => {
             if (valid) {
-              /** 是否自动生成货号校验 */
-              /** 规格值空校验 */
-              const _result = this.baseInfoForm.sku_list.every(key => {
-                return Object.values(key).every(item => {
-                  return item
-                })
-              })
-              if (!_result) {
-                this.$message.error('存在未填写的规格值')
+              if (!this.skuFormVali()) {
                 return
               }
               if (this.activestep++ > 2) return
@@ -670,6 +672,10 @@
         // 构造提交表单数据
         const _params = this.generateFormData(this.baseInfoForm)
         if (this.activeGoodsId) {
+          this.activeGoodsId = this.activeGoodsId || 1
+          if (!this.skuFormVali()) {
+            return
+          }
           /** 修改草稿箱商品 */
           API_goods.editDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('修改草稿箱商品成功')
@@ -678,6 +684,9 @@
             this.$message.error(error)
           })
         } else {
+          if (!this.skuFormVali()) {
+            return
+          }
           /** 保存草稿操作 */
           API_goods.saveDraft(_params).then(response => {
             this.$message.success('保存草稿成功')
@@ -690,6 +699,9 @@
 
       /** 上架  */
       aboveGoods() {
+        // if (!this.activeGoodsId && this.activeGoodsId !== 0) {
+        //   return '商品编号不存在'
+        // }
         // 构造提交表单数据
         const _params = this.generateFormData(this.baseInfoForm)
         if (this.currentStatus !== 2) {
@@ -881,10 +893,29 @@
             // })
           }).catch((error) => this.$message.error(error))
         }).catch((error) => this.$message.error(error))
+        /** 查询草稿箱商品参数信息 */
+        this.GET_GoodsDtagtParams()
       },
 
-      /** 查询草稿箱商品参数 */
+      /** 查询草稿箱商品参数信息 */
       GET_GoodsDtagtParams() {
+        // 处理数据 方便校验
+        const goods_id = this.activeGoodsId || 1
+        API_goods.getGoodsDraftParams(goods_id).then((response) => {
+          this.loading = false
+          this.goodsParams = response.data
+          if (!response.data || response.data.length <= 0) {
+            return
+          }
+          let _paramsList = []
+          this.goodsParams.forEach(key => {
+            key.params.forEach(item => {
+              this.$set(item, 'group_id', key.group_id)
+            })
+            _paramsList = _paramsList.concat(key.params)
+          })
+          this.baseInfoForm.goods_params_list = _paramsList
+        }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
       },
 
       /** 商品分组组件 改变时触发 */
@@ -1048,6 +1079,37 @@
         // 临时数据
         _params.exchange.enable_exchange = 1
         return _params
+      },
+
+      /** 商品规格选择器表单校验 */
+      skuFormVali() {
+        /** 是否自动生成货号校验 检测是否所有的货号都存在*/
+        const _sn = this.baseInfoForm.sku_list.filter(key => {
+          if (key === 'sn') {
+            return Object.values(key).every(item => {
+              return item
+            })
+          }
+        })
+        if (!_sn) {
+          this.$confirm('确认自动生成货号, 是否继续?', '提示').then(() => {
+            this.productSn = true
+          }).catch(() => {
+            this.$message.info({ message: '已取消自动生成' })
+          })
+          return false
+        }
+        /** 规格值空校验 */
+        const _result = this.baseInfoForm.sku_list.every(key => {
+          return Object.values(key).every(item => {
+            return item
+          })
+        })
+        if (!_result) {
+          this.$message.error('存在未填写的规格值')
+          return false
+        }
+        return true
       }
     }
   }
