@@ -17,14 +17,14 @@
           >
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+                <el-form-item label="用户名">
+                  <el-input size="medium" v-model="advancedForm.uname" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="商品编号">
-                  <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
+                <el-form-item label="手机号">
+                  <el-input size="medium" v-model="advancedForm.mobile" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="店铺名称">
-                  <el-input size="medium" v-model="advancedForm.shop_name"></el-input>
+                <el-form-item label="电子邮箱">
+                  <el-input size="medium" v-model="advancedForm.email" clearable></el-input>
                 </el-form-item>
               </el-form>
             </template>
@@ -261,28 +261,27 @@
         return row.sex === 1 ? '男' : '女'
       },
 
-      /** 搜索事件触发 */
-      searchEvent(data) {
-        this.params = {
-          ...this.params,
-          keyword: data
-        }
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
-        this.GET_MemberList()
-      },
-
       /** 添加会员 */
       handleAddMember() {
         this.addMemberForm = { sex: 1 }
         this.dialogAddMemberVisible = true
       },
 
+      /** 搜索事件触发 */
+      searchEvent(keyword) {
+        this.params.keyword = keyword
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.GET_MemberList()
+      },
+
       /** 高级搜索事件触发 */
       advancedSearchEvent() {
-        this.params = {
-          ...this.params,
-          ...this.advancedForm
-        }
+        const { advancedForm } = this
+        Object.keys(this.advancedForm).forEach(key => {
+          if (advancedForm[key] !== undefined) {
+            this.params[key] = advancedForm[key]
+          }
+        })
         delete this.params.keyword
         this.GET_MemberList()
       },
