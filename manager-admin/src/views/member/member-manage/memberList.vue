@@ -307,7 +307,6 @@
         }
         delete this.params.register_time_range
         delete this.params.keyword
-        // Andste_TODO 2018/5/16: 高级搜索后台sql报错
         this.GET_MemberList()
       },
 
