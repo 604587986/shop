@@ -62,7 +62,7 @@ export default class MemberModel extends DataModel {
 
   /** 昵称 */
   @ServerName('nickname')
-  nick_name
+  nickname
 
   /** 积分 */
   @ServerName('point')

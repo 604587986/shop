@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import * as API_Settlement from '@/api/settlement'
+  import * as API_Order from '@/api/order'
   import { TableLayout } from '@/components'
   export default {
     name: 'settlementList',
@@ -94,7 +94,7 @@
       /** 获取结算单列表 */
       GET_SettlementList() {
         this.loading = true
-        API_Settlement.getSettlementList(this.params).then(response => {
+        API_Order.getSettlementList(this.params).then(response => {
           this.loading = false
           this.tableData = response
         }).catch(() => {

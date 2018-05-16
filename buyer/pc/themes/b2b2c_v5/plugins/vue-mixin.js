@@ -8,12 +8,6 @@ Vue.mixin({
       MixinUploadApi: API_Common.uploadApi
     }
   },
-  methods: {
-    /** 滚动到顶部【动画】 */
-    MixinScrollToTop(top) {
-      $("html,body").animate({ scrollTop: top || 0 }, 300)
-    }
-  },
   computed: {
     /** 计算是否有forward */
     MixinForward() {
@@ -22,6 +16,11 @@ Vue.mixin({
     }
   },
   methods: {
+    /** 滚动到顶部【动画】 */
+    MixinScrollToTop(top) {
+      if (process.isServer) return
+      $("html,body").animate({ scrollTop: top || 0 }, 300)
+    },
     /** 用得比较多，放到mixin里 */
     MixinRequired(message, trigger) {
       return { required: true, message, trigger: trigger || 'blur' }

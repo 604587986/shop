@@ -95,6 +95,7 @@ export const asyncRouterMap = [
       { path: 'order-list', component: _import('order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
       { path: 'refund-list', component: _import('order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
       { path: 'receipt-history', component: _import('order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }},
+      { path: 'settlement-list', component: _import('order/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }},
       { path: 'detail/:sn', component: _import('order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
       { path: 'refund/:sn', component: _import('order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }}
     ]
@@ -160,16 +161,6 @@ export const asyncRouterMap = [
           { path: 'shop-list', component: _import('shop/shop-manage/shopList'), name: 'shopList', meta: { title: 'shopList' }},
           { path: 'shop-audit', component: _import('shop/shop-manage/shopAudit'), name: 'shopAudit', meta: { title: 'shopAudit' }},
           { path: 'edit/:shop_id', component: _import('shop/shop-manage/shopEdit'), name: 'shopEdit', hidden: true, meta: { title: 'shopEdit' }}
-        ]
-      },
-      {
-        path: '/shop/settlement-manage',
-        component: _import('shop/settlement-manage/index'),
-        redirect: '/shop/settlement-manage/settlement-list',
-        name: 'settlementManage',
-        meta: { title: 'settlementManage' },
-        children: [
-          { path: 'settlement-list', component: _import('shop/settlement-manage/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }}
         ]
       },
       {
