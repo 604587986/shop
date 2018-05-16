@@ -25,8 +25,7 @@
     this.index = 0;
     
     this.defaults = {
-      'host': 'http://localhost:9090/javashop/',
-      'appApi': 'api/base/region/get-children.do?regionid=',
+      'api': 'http://localhost:9090/javashop/api/base/region/get-children.do?regionid=@id',
       'deData': null,
       'debug': false,
       'quick': false,
@@ -468,10 +467,9 @@
       var _this = this;
       var _region_id = region_id || 0;
       var _region_grade = region_grade || 0;
-      var _url = _this.options.host ? _this.options.host + _this.options.appApi + _region_id : _this.options.appApi + _region_id;
       $.ajax({
         type: 'get',
-        url: _url,
+        url: _this.options.api.replace(/@id/, _region_id),
         success: function (res) {
           _this.defaultArray.length > 0
             ? _this.complyDeApi(res)

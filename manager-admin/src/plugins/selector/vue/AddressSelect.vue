@@ -9,9 +9,6 @@
   export default {
     name: 'EnAddressSelect',
     props: {
-      host: {
-        type: String
-      },
       api: {
         type: String,
         default: process.env.BASE_API
@@ -33,7 +30,6 @@
     },
     mounted() {
       const options = {};
-      if (this.host) options.host = this.host;
       if (this.api) options.appApi = this.api;
       if (this.deData) options.deData = this.deData;
       if (this.names) options.names = this.names;
