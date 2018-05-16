@@ -107,15 +107,14 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { TableLayout, TableSearch, CategoryPicker, SkuSelector } from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsList',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker,
-      [SkuSelector.name]: SkuSelector
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {

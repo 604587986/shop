@@ -1191,6 +1191,7 @@
   /*平铺*/
   div.base-info-item {
     h4 {
+      margin-bottom: 10px;
       padding:0 10px;
       border: 1px solid #ddd;
       background-color: #f8f8f8;

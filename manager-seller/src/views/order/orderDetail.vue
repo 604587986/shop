@@ -136,38 +136,58 @@
         </el-table-column>
       </el-table>
     </div>
+    <el-dialog :title="dialogTitle" :visible.sync="goodsStockshow" width="30%" class="pop-sku">
+      <div align="center">
+        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
+          <el-form-item prop="price" >
+            <el-input  v-model=""  ></el-input>
+          </el-form-item>
+        </el-form>
+        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
+          <el-form-item prop="price" >
+            <el-input  v-model=""  ></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="goodsStockshow = false">取 消</el-button>
+        <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import * as API_order from '@/api/order'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
   export default {
     name: 'orderDetail',
+    components: {
+      [TableLayout.name]: TableLayout,
+      [TableSearch.name]: TableSearch,
+      [CategoryPicker.name]: CategoryPicker
+    },
     data() {
       return {
         /** 列表loading状态 */
         loading: false,
 
-        /** 订单日志loading状态 */
-        loading_log: false,
-
         /** 订单详情数据 */
         orderDetail: null,
-
-        /** 订单日志 */
-        orderLog: [],
 
         /** 订单sn */
         sn: this.$route.params.sn,
 
-        /** 基本信息、发票信息、买家信息、商家信息 */
+        /** 各种信息 */
         orderInfo: [],
 
         /** 产品列表 */
         productList: null,
 
         /** 当前步骤*/
-        activestep: 2
+        activestep: 2,
+
+        dialogTitle: '调整价格'
       }
     },
     filters: {
@@ -308,7 +328,6 @@
       }
     }
   }
-
 
   /*商品列表*/
   .d-header {
