@@ -71,7 +71,7 @@
         origin: {
           sn: '',
           weight: '',
-          quantity: '',
+          quantity: 0,
           cost: '',
           price: ''
         },
@@ -225,6 +225,9 @@
           let { sn, weight, quantity, cost, price } = key
           return { sn, weight, quantity, cost, price }
         })
+        if (_result.length === 0) {
+          _result.push(this.origin)
+        }
         return _result
       },
 

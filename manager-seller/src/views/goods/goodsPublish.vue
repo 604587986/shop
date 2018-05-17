@@ -703,7 +703,7 @@
         //   return '商品编号不存在'
         // }
         // 构造提交表单数据
-        const _params = this.generateFormData(this.baseInfoForm)
+        let _params = this.generateFormData(this.baseInfoForm)
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
@@ -723,7 +723,9 @@
             })
           }
         } else {
-          /**  草稿箱商品上架 */
+          /**  草稿箱商品上架 构造是否上架字段 */
+          _params.market_enable = 0
+          _params.has_changed = _params.have_spec
           API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('上架草稿箱商品成功')
             this.$router.push({ path: '/goods/goods-list' })
@@ -810,6 +812,7 @@
               exchange_point: 0
             }
           }
+          // this.GET_CurCateGoryName(response.category_id)
           /** 查询商品sku信息 */
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
@@ -823,6 +826,14 @@
               return { cost, price, quantity, sn, weight, spec_list }
             })
           }).catch((error) => this.$message.error(error))
+        }).catch((error) => this.$message.error(error))
+      },
+
+      /** 查询当前商品分类名称 貌似并无卵用 */
+      GET_CurCateGoryName(category_id) {
+        const _id = category_id || 0
+        API_goodsCategory.getGoodsCategoryLevelList(_id, { }).then((response) => {
+          debugger
         }).catch((error) => this.$message.error(error))
       },
 
@@ -1078,6 +1089,8 @@
         }
         // 临时数据
         _params.exchange.enable_exchange = 1
+        /** 运费模板 */
+        _params.template_id = _params.template_id || 0
         return _params
       },
 
