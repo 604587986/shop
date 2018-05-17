@@ -835,7 +835,7 @@
         }).catch((error) => this.$message.error(error))
       },
 
-      /** 查询当前商品分类名称 貌似并无卵用 */
+      /** 查询当前商品分类名称  */
       GET_CurCateGoryName(category_id) {
         const _id = category_id || 0
         API_goodsCategory.getGoodsCategoryLevelList(_id, { }).then((response) => {
