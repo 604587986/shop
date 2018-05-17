@@ -2,50 +2,50 @@
   <div class="">
     <el-tabs type="border-card">
       <el-tab-pane label="编辑会员">
-        <el-form :model="editMmberForm" :rules="editMmberRules" ref="editMmberForm" inline label-width="100px">
-          <el-form-item label="用户名" prop="uname">
-            <el-input v-model="editMmberForm.uname" :maxlength="20"></el-input>
+        <el-form :model="editMemberForm" :rules="editMemberRules" ref="editMemberForm" inline label-width="100px">
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="editMemberForm.username" :maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input v-model="editMmberForm.password" placeholder="不填则不更改" :maxlength="20"></el-input>
+            <el-input v-model="editMemberForm.password" placeholder="不填则不更改" :maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="editMmberForm.email" :maxlength="50"></el-input>
+            <el-input v-model="editMemberForm.email" :maxlength="50"></el-input>
           </el-form-item>
           <el-form-item label="昵称" prop="nickname">
-            <el-input v-model="editMmberForm.nickname" :maxlength="20"></el-input>
+            <el-input v-model="editMemberForm.nickname" :maxlength="20"></el-input>
+          </el-form-item>
+          <el-form-item label="地区" class="form-item-region">
+            <en-address-select :default="defaultRegion" @changed="(object) => { editMemberForm.region = object.last_id }"/>
           </el-form-item>
           <el-form-item label="手机" prop="mobile" :maxlength="11">
-            <el-input v-model="editMmberForm.mobile"></el-input>
+            <el-input v-model="editMemberForm.mobile"></el-input>
           </el-form-item>
           <el-form-item label="生日" prop="birthday">
             <el-date-picker
-              v-model="editMmberForm.birthday"
+              v-model="editMemberForm.birthday"
               type="date"
               :editable="false"
-              value-format="yyyy-MM-dd"
+              value-format="timestamp"
               placeholder="选择生日"
               :picker-options="{disabledDate(time) { return time.getTime() > Date.now() }}">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="性别" prop="sex" class="form-item-sex">
-            <el-radio v-model="editMmberForm.sex" :label="1">男</el-radio>
-            <el-radio v-model="editMmberForm.sex" :label="0">女</el-radio>
-          </el-form-item>
-          <el-form-item label="地区" class="form-item-region">
-            <en-address-select :changed="addressSelectChanged"/>
+            <el-radio v-model="editMemberForm.sex" :label="1">男</el-radio>
+            <el-radio v-model="editMemberForm.sex" :label="0">女</el-radio>
           </el-form-item>
           <el-form-item label="详细地址" prop="address">
-            <el-input v-model="editMmberForm.address" :maxlength="50"></el-input>
+            <el-input v-model="editMemberForm.address" :maxlength="50"></el-input>
           </el-form-item>
           <el-form-item label="邮编">
-            <el-input v-model="editMmberForm.zip" :maxlength="6"></el-input>
+            <el-input v-model="editMemberForm.zip" :maxlength="6"></el-input>
           </el-form-item>
           <el-form-item label="固定电话">
-            <el-input v-model="editMmberForm.tel"></el-input>
+            <el-input v-model="editMemberForm.tel"></el-input>
           </el-form-item>
         </el-form>
-        <el-button type="primary">保存修改</el-button>
+        <el-button type="primary" @click="submitEditMemberForm('editMemberForm')">保存修改</el-button>
       </el-tab-pane>
       <el-tab-pane label="TA的订单">
         <el-table
@@ -137,6 +137,8 @@
 
 <script>
   import { AddressSelect } from '@/plugins/selector/vue'
+  import * as API_Member from '@/api/member'
+  import { RegExp } from '@/framework'
   export default {
     name: 'memberEdit',
     components: {
@@ -146,30 +148,33 @@
       return {
         member_id: this.$route.params.id,
         // 编辑会员 表单
-        editMmberForm: { sex: 1 },
+        editMemberForm: {},
         // 编辑会员 表单规则
-        editMmberRules: {
-          uname: [
-            { required: true, message: '请输入会员名称', trigger: 'blur' },
+        editMemberRules: {
+          username: [
+            this.MixinRequired('请输入会员名称！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
-          email: [
-            { required: true, message: '请输入邮箱', trigger: 'blur' }
-          ],
+          email: [this.MixinRequired('请输入邮箱！')],
           nickname: [
-            { required: true, message: '请输入昵称', trigger: 'blur' },
+            this.MixinRequired('请输入昵称！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
           mobile: [
-            { required: true, message: '请输入昵称', trigger: 'blur' }
+            this.MixinRequired('请输入手机号！'),
+            { validator: (rule, value, callback) => {
+              if (!RegExp.mobile.test(value)) {
+                callback(new Error('手机格式格式有误！'))
+              } else {
+                callback()
+              }
+            } }
           ],
-          birthday: [
-            { required: true, message: '请选择生日', trigger: 'blur' }
-          ],
-          address: [
-            { required: true, message: '请输入详细地址', trigger: 'blur' }
-          ]
+          birthday: [this.MixinRequired('请选择生日！')],
+          address: [this.MixinRequired('请输入详细地址！')]
         },
+        /** 地区id数组 */
+        defaultRegion: null,
         // 会员订单列表
         orderList: [],
         // 编辑积分 表单
@@ -193,12 +198,32 @@
         shipList: []
       }
     },
+    mounted() {
+      this.GET_MemberDetail()
+    },
     methods: {
-      /** 编辑会员 地址发生改变 */
-      addressSelectChanged(region) {},
-
+      /** 提交修改会员表单 */
+      submitEditMemberForm(formName) {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            API_Member.editMember(this.editMemberForm.id, this.editMemberForm).then(response => {
+              this.$message.success('修改成功！')
+              console.log(response)
+            })
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        })
+      },
       /** 获取会员详情 */
-      GET_MemberDetail() {}
+      GET_MemberDetail() {
+        API_Member.getMemberDetail(this.member_id).then(response => {
+          response.birthday *= 1000
+          this.editMemberForm = response
+          this.defaultRegion = [response.province_id, response.city_id, response.county_id || -1, response.town_id || -1]
+        })
+      }
     }
   }
 </script>

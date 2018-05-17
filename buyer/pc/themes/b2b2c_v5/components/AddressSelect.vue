@@ -25,8 +25,7 @@
       initAddressSelect() {
         this.$nextTick(() => {
           $(this.$el).addressSelect({
-            host: 'http://localhost:3001/javashop/',
-            appApi: 'api/base/region/get-children.do?regionid=@id',
+            api: 'http://localhost:3001/javashop/api/base/region/get-children.do?regionid=@id',
             callback: this.callback,
             deData: this.default
           })

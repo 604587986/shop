@@ -99,3 +99,65 @@ export function cancleOrder(sn) {
     }).then(response => resolve(response)).catch(error => reject(error))
   })
 }
+
+/**
+ * 获取结算单列表
+ * @param params
+ */
+export function getSettlementList(params) {
+  return request({
+    url: 'order/bills',
+    method: 'get'
+  })
+}
+
+/**
+ * 获取结算单详情
+ * @param id
+ * @returns {Promise<any>}
+ */
+export function getSettlementDetail(id) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `order/bills/${id}`,
+      method: 'get'
+    })
+  })
+}
+
+/**
+ * 获取账单中的订单列表或者退款单列表
+ * @param id
+ * @param type
+ * @returns {Promise<any>}
+ */
+export function getSettlementOrderList(id, type) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `order/bills/${id}/${type}`,
+      method: 'get'
+    }).then(response => resolve(response)).catch(error => reject(error))
+  })
+}
+
+/**
+ * 对账单进行下一步操作
+ * @param id
+ */
+export function operateSettlement(id) {
+  return request({
+    url: `order/bills/${id}/next`,
+    method: 'put'
+  })
+}
+
+/**
+ * 获取所有周期结算单列表统计
+ * @param id
+ */
+export function getSettlementStatistics(id) {
+  return request({
+    url: 'order/bills/statistics',
+    method: 'get'
+  })
+}

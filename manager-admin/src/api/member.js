@@ -27,14 +27,12 @@ export function getMemberList(params) {
  * @returns {Promise<any>}
  */
 export function addMember(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: 'members',
       method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+      data: memberModel.params(params)
+    }).then(response => resolve(memberModel.map(response))).catch(error => reject(error))
   })
 }
 
@@ -44,9 +42,11 @@ export function addMember(params) {
  * @returns {*}
  */
 export function getMemberDetail(id) {
-  return request({
-    url: `members/${id}`,
-    method: 'get'
+  return new Promise((resolve, reject) => {
+    request({
+      url: `members/${id}`,
+      method: 'get'
+    }).then(response => resolve(memberModel.map(response))).catch(error => reject(error))
   })
 }
 
