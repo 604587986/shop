@@ -47,8 +47,8 @@
                 :show-file-list="false"
                 :on-success="getImgUrl"
                 :before-upload="beforeImgUpload">
-                <img v-if="val.spec_image" :src="val.spec_image" class="avatar sku-image" @click="handleClickImg(index)">
-                <i v-else class="el-icon-plus avatar-uploader-icon"  @click="handleClickImg(index)"></i>
+                <img v-show="val.spec_image" :src="val.spec_image" class="avatar sku-image" @click="handleClickImg(index)">
+                <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon"  @click="handleClickImg(index)"></i>
               </el-upload>
             </div>
           </div>
@@ -180,16 +180,7 @@
 
       /** 添加规格项 */
       addSkuItem() {
-        this.skuInfo.push({
-          /** 规格描述 */
-          spec_memo: '',
-
-          /** 规格名称 */
-          spec_name: '',
-
-          /** 规格值列表 */
-          value_list: []
-        })
+        this.skuInfo.push({})
       },
 
       /** 移除当前规格项 进行数据变化*/
@@ -221,7 +212,9 @@
       handleSelectSkuItem(item) {
         /** 检测当前项是否已选择过 */
         const exited = this.skuInfo.some((key) => {
-          return key.spec_name === item.spec_name
+          if (key && key.spec_name) {
+            return key.spec_name === item.spec_name
+          }
         })
         const _skuInfo = this.skuInfo.filter((key) => {
           return key.spec_name === item.spec_name
@@ -236,9 +229,7 @@
         this.$set(this.skuInfo[this.activeSkuItemIndex], 'spec_memo', item.spec_memo || '')
         this.$set(this.skuInfo[this.activeSkuItemIndex], 'spec_name', item.spec_name || '')
         this.$set(this.skuInfo[this.activeSkuItemIndex], 'spec_id', item.spec_id || '')
-        this.$set(this.skuInfo[this.activeSkuItemIndex], 'value_list', [{
-          spec_id: item.spec_id
-        }])
+        this.$set(this.skuInfo[this.activeSkuItemIndex], 'value_list', [])
         /** 设置当前规格值列表 */
         this.skuData.filter(key => {
           if (item.spec_id === key.spec_id) {
@@ -249,8 +240,8 @@
 
       /** 编辑规格项结束时触发添加事件 blur */
       editSkuItem(item, $index) {
-        // 检测是否为空 检测是否有item.value_list[0].spec_id值 如果有则说明是选择而非编辑的终止方法的执行
-        if (!item.spec_name || (item.value_list[0] && item.value_list[0].spec_id)) {
+        /** 检测是否为空 检测是否有item.value_list[0].spec_id值 如果有则说明是选择而非编辑的终止方法的执行 */
+        if (!item.spec_name || (item.value_list && item.value_list[0] && item.value_list[0].spec_id)) {
           return
         }
         /** 更新用户自定义规格项  */
@@ -262,9 +253,7 @@
           this.$set(this.skuInfo[$index], 'spec_memo', response.spec_memo || '')
           this.$set(this.skuInfo[$index], 'spec_name', response.spec_name || '')
           this.$set(this.skuInfo[$index], 'spec_id', response.spec_id || '')
-          this.$set(this.skuInfo[this.activeSkuItemIndex], 'value_list', [{
-            spec_id: response.spec_id
-          }])
+          this.$set(this.skuInfo[this.activeSkuItemIndex], 'value_list', [])
         }).catch(error => this.$message.error(error))
       },
 
@@ -290,22 +279,12 @@
           this.$message.warning('请选择规格项')
           return
         }
-        this.skuInfo[$index].value_list.push({
-          /** 规格项id */
-          spec_id: item.spec_id,
-
-          /** 规格值名字 */
-          spec_value: '',
-
-          /** 规格值id */
-          spec_value_id: '',
-
-          /** 规格值图片 */
-          spec_image: '',
-
-          /** 该规格是否有图片，1 有 0 没有  默认0*/
-          spec_type: 0
-        })
+        this.skuInfo[$index].value_list.push({})
+        // this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_id', val.spec_id)
+        // this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', val.spec_value)
+        // this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value_id', val.spec_value_id)
+        // this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', '')
+        // this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', 0)
       },
 
       /** 获取当前规格值索引 赋值当前对应规格项的规格值下拉列表*/
@@ -343,10 +322,14 @@
       handleSelectSkuValue(val) {
         /** 检测是否已存在*/
         const exited = this.skuInfo[this.activeSkuItemIndex].value_list.some((key) => {
-          return key.spec_value === val.spec_value
+          if (key.spec_value) {
+            return key.spec_value === val.spec_value
+          }
         })
         const _value_list = this.skuInfo[this.activeSkuItemIndex].value_list.filter((key) => {
-          return key.spec_value === val.spec_value
+          if (key.spec_value) {
+            return key.spec_value === val.spec_value
+          }
         })
         if (exited && _value_list.length > 1) {
           this.$message.error('当前项已存在，请重新选择或者编辑！')
@@ -354,28 +337,38 @@
           return
         }
         /** 更新skuInfo数据 */
-        this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex] = val
+        if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_image) {
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_id', val.spec_id)
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', val.spec_value)
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value_id', val.spec_value_id)
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', '')
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', 0)
+        } else {
+          this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_id = val.spec_id
+          this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value = val.spec_value
+          this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value_id = val.spec_value_id
+        }
         this.$emit('updateSkuInfo', this.skuInfo)
       },
 
       /** 编辑规格值时触发 */
       editSkuIValue(item, val, $index, index) {
-        // 检测是否为空 检测是否有spec_value_id值 如果有则说明是选择而非编辑的终止方法的执行
+        /** 检测是否为空 检测是否有spec_value_id值 如果有则说明是选择而非编辑的终止方法的执行 */
         if (!val.spec_value || val.spec_value_id) {
           return
         }
         /** 更新用户自定义规格值 */
-        API_goodsSku.saveCustomSkuValue(val.spec_id, { value_name: val.spec_value }).then(response => {
+        API_goodsSku.saveCustomSkuValue(item.spec_id, { value_name: val.spec_value }).then(response => {
           this.$message.success('添加自定义规格值成功')
           /** 更新下拉列表规格值数据 */
           this.getSkuInfoByCategory()
-          /** 更新skuInfo数据 */
-          this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex] = {
-            spec_id: response.spec_id,
-            spec_value: response.spec_value,
-            spec_value_id: response.spec_value_id,
-            spec_image: '',
-            spec_type: 0
+          /** 更新skuInfo数据 为当前规格值添加响应数据 */
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_id', response.spec_id)
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', response.spec_value)
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value_id', response.spec_value_id)
+          if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_image) {
+            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', '')
+            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', 0)
           }
           this.$emit('updateSkuInfo', this.skuInfo)
         }).catch(error => this.$message.error(error))
@@ -403,8 +396,16 @@
       /** 文件上传成功之后的钩子 */
       getImgUrl(response, file, fileList) {
         /** 更新skuInfo数据 */
-        this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', file.url)
-        this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', 1)
+        if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value) {
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_id', '')
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', '')
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value_id', '')
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', file.url)
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', 1)
+        } else {
+          this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_image = file.url
+          this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_type = 1
+        }
         this.$emit('updateSkuInfo', this.skuInfo)
       }
     }
