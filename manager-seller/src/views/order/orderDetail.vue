@@ -2,9 +2,9 @@
   <div v-loading="loading" class="order-detail-container">
     <div class="order-info">
       <!--accordion-->
-      <el-collapse  class="order-collapse">
+      <el-collapse  class="order-collapse" :value="['order','other']">
         <!--订单信息-->
-        <el-collapse-item title="订单信息">
+        <el-collapse-item title="订单信息" name="order">
           <div class="order-item">
             <span class="item-name">收货地址：</span>
             <span class="item-value">{{ }}</span>
@@ -51,7 +51,7 @@
           </div>
         </el-collapse-item>
         <!--其他信息（发票、备注）-->
-        <el-collapse-item title="其他信息（发票、备注）">
+        <el-collapse-item title="其他信息（发票、备注）" name="other">
           <div class="order-item">
             <span class="item-name">订单附言：</span>
             <span class="item-value">{{ }}</span>
@@ -100,8 +100,8 @@
           </div>
         </div>
         <div class="opera-btn">
-          <el-button size="mini" type="primary" @click="adjustConsignee" >修改收货人信息</el-button>
-          <el-button size="mini" type="primary" @click="adjustPrice" >调整价格</el-button>
+          <el-button size="mini" plain type="info" @click="adjustConsignee" >修改收货人信息</el-button>
+          <el-button size="mini" plain type="info" @click="adjustPrice" >调整价格</el-button>
         </div>
       </div>
     </div>
@@ -136,23 +136,51 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog :title="dialogTitle" :visible.sync="goodsStockshow" width="30%" class="pop-sku">
+    <!--调整价格 / 修改收货人信息-->
+    <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="30%" align="center">
       <div align="center">
-        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
-          <el-form-item prop="price" >
-            <el-input  v-model=""  ></el-input>
+        <el-input v-show="triggerStatus === 1" v-model="adjustedPrice"style="width: 75%;"></el-input>
+        <el-form
+          :model="ConsigneeForm"
+          v-show="triggerStatus === 2"
+          style="width: 75%;"
+          label-position="right"
+          label-width="90px">
+          <el-form-item label="收货人：" prop="consignee_person">
+            <el-input  v-model="ConsigneeForm.consignee_person" ></el-input>
           </el-form-item>
-        </el-form>
-        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
-          <el-form-item prop="price" >
-            <el-input  v-model=""  ></el-input>
+          <el-form-item label="手机：" prop="phone" >
+            <el-input  v-model.number="ConsigneeForm.phone" ></el-input>
+          </el-form-item>
+          <el-form-item label="配送地区：" prop="area" >
+            <el-input  v-model="ConsigneeForm.area" ></el-input>
+          </el-form-item>
+          <el-form-item label="详细地址：" prop="address" >
+            <el-input  v-model="ConsigneeForm.address" ></el-input>
+          </el-form-item>
+          <el-form-item label="送货时间：" prop="send_time" >
+            <el-input  v-model="ConsigneeForm.send_time" ></el-input>
+          </el-form-item>
+          <el-form-item label="订单备注：" prop="mark" >
+            <el-input  type="textarea" v-model="ConsigneeForm.mark" ></el-input>
           </el-form-item>
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="goodsStockshow = false">取 消</el-button>
-        <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
+        <el-button @click="cancelOrderDetail">取 消</el-button>
+        <el-button type="primary" @click="reserveOrderDetail">确 定</el-button>
       </div>
+    </el-dialog>
+    <!--查看物流信息-->
+    <el-dialog title="物流信息" :visible.sync="logisticsShow" width="30%" align="center">
+      <a href="">快递查询</a>
+      <div>
+        <span>时间：</span>
+        <span>备注：</span>
+        <span>物流公司：</span>
+        <span>快递单号：</span>
+      </div>
+      <span class="desc">法师打发打发</span>
     </el-dialog>
   </div>
 </template>
@@ -185,9 +213,43 @@
         productList: null,
 
         /** 当前步骤*/
-        activestep: 2,
+        activestep: 5,
 
-        dialogTitle: '调整价格'
+        /** 物流信息弹框是否显示 */
+        logisticsShow: false,
+
+        /** 订单详情 修改收货人信息 调整价格 弹框 */
+        orderDetailShow: false,
+
+        /** 价格标题 */
+        dialogTitle: '调整价格',
+
+        /** 触发状态 1调整价格 2修改收货人信息*/
+        triggerStatus: -1,
+
+        /** 被调整的价格 */
+        adjustedPrice: 0,
+
+        /** 收货人信息 */
+        ConsigneeForm: {
+          /** 收货人 */
+          consignee_person: '',
+
+          /** 手机号码 */
+          phone: 12,
+
+          /** 地区 */
+          area: '',
+
+          /** 详细地址 */
+          address: '',
+
+          /** 送货时间 */
+          send_time: '',
+
+          /** 备注 */
+          mark: ''
+        }
       }
     },
     filters: {
@@ -214,16 +276,33 @@
 
       /** 查看物流信息*/
       looklogistics() {
+        this.logisticsShow = true
       },
 
       /** 调整价格 */
       adjustPrice() {
-
+        this.dialogTitle = '调整价格'
+        this.orderDetailShow = true
+        this.triggerStatus = 1
       },
 
       /** 修改收货人信息 */
       adjustConsignee() {
+        this.dialogTitle = '修改收货人信息'
+        this.orderDetailShow = true
+        this.triggerStatus = 2
+      },
 
+      /** 取消保存 */
+      cancelOrderDetail() {
+        this.orderDetailShow = false
+        this.triggerStatus = -1
+      },
+
+      /** 保存按钮 */
+      reserveOrderDetail() {
+        this.orderDetailShow = false
+        this.triggerStatus = 1
       }
     }
   }

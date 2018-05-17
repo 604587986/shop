@@ -320,17 +320,10 @@
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
-  /deep/ .el-table__body {
-    min-width: 100%;
-  }
   .inner-toolbar {
     display: flex;
     width: 100%;
     justify-content: space-between;
-  }
-
-  .toolbar-btns {
-
   }
 
   /deep/ .pop-sku {
