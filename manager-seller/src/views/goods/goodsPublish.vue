@@ -239,9 +239,12 @@
         ref="goods_params_list"
         label-width="120px"
         class="demo-ruleForm">
-        <el-collapse>
+        <el-collapse :value="collapseVal">
           <el-collapse-item
-            v-for="paramsgroup in  goodsParams" :title="paramsgroup.group_name" :key="paramsgroup.group_id">
+            v-for="paramsgroup in  goodsParams"
+            :title="paramsgroup.group_name"
+            :key="paramsgroup.group_id"
+            :name="paramsgroup.group_id">
             <el-form-item
               v-for="(goods_params_list, index) in baseInfoForm.goods_params_list"
               v-if="paramsgroup.group_id === goods_params_list.group_id"
@@ -541,6 +544,9 @@
             ]
           }
         ],
+
+        /** */
+        collapseVal: [],
 
         /** 品牌列表 */
         brandList: [],
@@ -844,6 +850,7 @@
         API_goods.getGoodsParams(this.baseInfoForm.category_id, { goods_id }).then((response) => {
           this.loading = false
           this.goodsParams = response.data
+          this.collapseVal = this.goodsParams.map(key => { return key.group_id })
           if (!response.data || response.data.length <= 0) {
             return
           }
@@ -855,7 +862,7 @@
             _paramsList = _paramsList.concat(key.params)
           })
           this.baseInfoForm.goods_params_list = _paramsList
-        }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
+        }).catch((error) => this.$message.error(error))
       },
 
       /** 查询单个草稿箱商品信息 */
