@@ -74,9 +74,10 @@
           </div>
         </el-collapse-item>
       </el-collapse>
-      <!--订单状态-->
+      <!--订单状态 / 物流信息-->
       <div class="order-status-info">
-        <div>
+        <!--订单状态-->
+        <div v-if="logisticsStatus">
           <div class="order-status">
             <i class="el-icon-check"></i>  订单状态：{{ }}
           </div>
@@ -102,6 +103,46 @@
             <el-button type="text" @click="looklogistics">点击查看</el-button>
           </span>
           </div>
+        </div>
+        <!--物流信息-->
+        <div v-if="!logisticsStatus">
+          <en-tabel-layout
+            toolbar
+            :tableData="logisticsData"
+            :loading="loading"
+          >
+            <div slot="toolbar" class="inner-toolbar">
+              <span style="line-height: 35px;">物流信息</span>
+              <el-button type="primary" size="mini" @click="addLogisticsInfo">添加物流信息</el-button>
+            </div>
+            <template slot="table-columns">
+              <!--公司名称-->
+              <el-table-column prop="sn" label="公司名称"/>
+              <!--物流单号-->
+              <el-table-column label="物流单号">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.sn"></el-input>
+                </template>
+              </el-table-column>
+              <!--是否支持电子面单-->
+              <el-table-column label="是否支持电子面单">
+                <template slot-scope="scope">
+                  <span>不支持电子面单</span>
+                  <el-button type="text" @click="produceElectronicSurface">生成电子面单</el-button>
+                </template>
+              </el-table-column>
+              <!--操作-->
+              <el-table-column label="操作" width="150">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    plain type="primary"
+                    @click="deliverGoods(scope.$index, scope.row)">发货
+                  </el-button>
+                </template>
+              </el-table-column>
+            </template>
+          </en-tabel-layout>
         </div>
         <div class="opera-btn">
           <el-button
@@ -225,6 +266,12 @@
         /** 产品列表 */
         productList: null,
 
+        /** 订单状态/物流信息状态显示 */
+        logisticsStatus: true,
+
+        /** 物流信息 */
+        logisticsData: null,
+
         /** 物流信息弹框是否显示 */
         logisticsShow: false,
 
@@ -308,6 +355,21 @@
         this.dialogTitle = '调整价格'
         this.orderDetailShow = true
         this.triggerStatus = 1
+      },
+
+      /** 生成电子面单 */
+      produceElectronicSurface() {
+
+      },
+
+      /** 发货 */
+      deliverGoods() {
+
+      },
+
+      /** 添加物流信息 */
+      addLogisticsInfo() {
+
       },
 
       /** 修改收货人信息 */
