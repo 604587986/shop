@@ -65,6 +65,10 @@
             <span class="item-value">{{ }}</span>
           </div>
           <div class="order-item">
+            <span class="item-name">税号：</span>
+            <span class="item-value">{{ }}</span>
+          </div>
+          <div class="order-item">
             <span class="item-name">发票内容：</span>
             <span class="item-value">{{ }}</span>
           </div>
@@ -100,22 +104,19 @@
           </div>
         </div>
         <div class="opera-btn">
-          <el-button size="mini" plain type="info" @click="adjustConsignee" >修改收货人信息</el-button>
-          <el-button size="mini" plain type="info" @click="adjustPrice" >调整价格</el-button>
+          <el-button
+            v-if="activestep === 2 || activestep === 3 || activestep === 4"
+            size="mini"
+            plain
+            type="info"
+            @click="adjustConsignee" >修改收货人信息</el-button>
+          <el-button v-if="activestep === 2" size="mini" plain type="info" @click="adjustPrice" >调整价格</el-button>
         </div>
       </div>
     </div>
     <!--订单状态 步骤条-->
-    <el-steps :active="activestep" align-center finish-status="success" style="margin-top: 20px;">
-      <el-step title="新订单" description=""></el-step>
-      <el-step title="未付款" description=""></el-step>
-
-      <el-step title="已取消" description=""></el-step>
-      <el-step title="已付款" description=""></el-step>
-
-      <el-step title="已发货" description=""></el-step>
-      <el-step title="已收货" description=""></el-step>
-      <el-step title="已完成" description=""></el-step>
+    <el-steps :active="activestep" align-center style="margin-top: 20px;">
+      <el-step v-for="item in stepList" :title="item.label" :key="item.label" status="error" description=""></el-step>
     </el-steps>
     <!--商品列表-->
     <div>
@@ -139,7 +140,9 @@
     <!--调整价格 / 修改收货人信息-->
     <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="30%" align="center">
       <div align="center">
+        <!--调整价格-->
         <el-input v-show="triggerStatus === 1" v-model="adjustedPrice"style="width: 75%;"></el-input>
+        <!--修改收货人信息-->
         <el-form
           :model="ConsigneeForm"
           v-show="triggerStatus === 2"
@@ -158,11 +161,21 @@
           <el-form-item label="详细地址：" prop="address" >
             <el-input  v-model="ConsigneeForm.address" ></el-input>
           </el-form-item>
-          <el-form-item label="送货时间：" prop="send_time" >
-            <el-input  v-model="ConsigneeForm.send_time" ></el-input>
+          <el-form-item label="送货时间：" prop="send_time" style="text-align: left;">
+            <el-select v-model="ConsigneeForm.send_time" placeholder="请选择">
+              <el-option label="任意时间" value="1"></el-option>
+              <el-option label="仅工作日" value="2"></el-option>
+              <el-option label="仅休息日" value="3"></el-option>
+              <!--<el-option-->
+                <!--v-for="item in options"-->
+                <!--:key="item.value"-->
+                <!--:label="item.label"-->
+                <!--:value="item.value">-->
+              <!--</el-option>-->
+            </el-select>
           </el-form-item>
-          <el-form-item label="订单备注：" prop="mark" >
-            <el-input  type="textarea" v-model="ConsigneeForm.mark" ></el-input>
+          <el-form-item label="订单备注：" prop="mark">
+            <el-input  type="textarea" v-model="ConsigneeForm.mark" placeholder="限500字" maxlength="500"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -212,16 +225,13 @@
         /** 产品列表 */
         productList: null,
 
-        /** 当前步骤*/
-        activestep: 5,
-
         /** 物流信息弹框是否显示 */
         logisticsShow: false,
 
-        /** 订单详情 修改收货人信息 调整价格 弹框 */
+        /** 弹框显示 */
         orderDetailShow: false,
 
-        /** 价格标题 */
+        /** 弹框标题 */
         dialogTitle: '调整价格',
 
         /** 触发状态 1调整价格 2修改收货人信息*/
@@ -236,7 +246,7 @@
           consignee_person: '',
 
           /** 手机号码 */
-          phone: 12,
+          phone: '',
 
           /** 地区 */
           area: '',
@@ -249,7 +259,21 @@
 
           /** 备注 */
           mark: ''
-        }
+        },
+
+        /** 步骤状态 当前步骤*/
+        activestep: 2,
+
+        /** 步骤list 存在0已完成 1未完成 2未开始 3正在进行 四种状态*/
+        stepList: [
+          { label: '新订单', setp_status: 0 },
+          { label: '已确认', setp_status: 1 },
+          { label: '未付款', setp_status: 2 },
+          { label: '已付款', setp_status: 3 },
+          { label: '已发货', setp_status: 2 },
+          { label: '已收货', setp_status: 0 },
+          { label: '已完成', setp_status: 0 }
+        ]
       }
     },
     filters: {
