@@ -88,7 +88,7 @@
           </el-form-item>
           <el-form-item label="选择配送地区" prop="area">
             <el-button type="primary">选择地区</el-button>
-            <en-area-selector-dialog :showDialog="true"></en-area-selector-dialog>
+            <en-area-selector-dialog :showDialog="false"></en-area-selector-dialog>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveMould('mouldForm')">保存模板</el-button>

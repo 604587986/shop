@@ -5,6 +5,8 @@
 //  一些兼容扩展
 import axios from 'axios'
 
+var Authorization = 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6Miwic3ViIjoiU0VMTEVSIiwic2VsbGVySWQiOjMsInJvbGVzIjpbIkJVWUVSIiwiU0VMTEVSIl0sInNlbGxlck5hbWUiOiLnjovls7Dlupfpk7oxMTEiLCJ1c2VybmFtZSI6ImtpbmdhcGV4In0.rFV567biYKAgNuw1eA4roV8k2d6YyJRLAmIBhi0MxxKDnq_lGvK-GU1J6RmYjzYWwi3G9TyxhMJuV7klWk5o1Q'
+
 let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
 ;(function() {
   /**
@@ -44,7 +46,7 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
     this.default = {
       host: '',
       api: api,
-      cateApi: '/goods-info/category/children?category=0&string=format',
+      cateApi: '/goods/category/0/children',
       maxLength: 0, // 表示商品选择数量不限制
       defaultData: [],
       confirm: function() {
@@ -452,11 +454,14 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
         })()
       axios
         .get(_this.options.url, {
-          params: _formData
+          params: _formData,
+          headers: {
+            Authorization: Authorization
+          }
         })
         .then(res => {
           $this && $this.remove()
-          _this.__FUN__dataProcessing(res.data.result)
+          _this.__FUN__dataProcessing(res.data)
           _this.callback()
         })
         .catch(() => {
@@ -618,6 +623,7 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
                     </div>\
                     '
       }
+      debugger
       items.length === this.params.formData.page_size &&
         (_itemEle +=
           '<button type="button" class="__GSR__item-loadmore">加载更多...</button>')

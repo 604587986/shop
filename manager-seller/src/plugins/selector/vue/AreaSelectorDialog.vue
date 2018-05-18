@@ -5,6 +5,7 @@
 <script>
 import $ from 'jquery'
 import AreaSelector from '@/plugins/selector/js/jquery.areaSelector.js'
+import '../css/areaSelector.css'
 export default {
   name: 'EnAreaSelectorDialog',
   props: ['defaultData', 'showDialog'],
@@ -41,5 +42,6 @@ export default {
 }
 </script>
 
-<style lang='scss'  type="text/scss"  scoped>
+<style lang='scss'  type="text/scss" >
+
 </style>
