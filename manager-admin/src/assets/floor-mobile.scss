@@ -50,21 +50,22 @@
     height: 100%;
     &:hover .mask-bg-floor { display: block }
   }
-  .left {
+  .left, .right {
+    width: 50%;
+    height: 100%;
     float: left;
     .mask-floor { border-right: none }
   }
   .right { float: right }
   .top .mask-floor, .middle .mask-floor { border-bottom: none }
+  /** tpl-23 单列单张大图模块 */
   .tpl-23 .layout-item {}
+  /** tpl-24 左一右二图片模块 */
   .tpl-24 {
-    .left, .right {
-      width: 50%; height: 100%
-    }
-    .left .layout-item { height: 100% }
-    .layout-item {
-      width: 100%;
-      height: 50%;
-    }
+    .right .layout-item { height: 50% }
+  }
+  /** tpl-25 左二右一图片模块 */
+  .tpl-25 {
+    .left .layout-item { height: 50% }
   }
 }

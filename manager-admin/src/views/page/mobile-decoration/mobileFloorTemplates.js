@@ -80,8 +80,22 @@ export default {
   // 左二右一图片模块
   25: {
     mixins: [mixin],
-    template: `<div class="floor-layout">
-                 <floor-mask @click="cc"/>
+    template: `<div class="floor-layout tpl-25">
+                 <div class="layout-main">
+                   <div class="left">
+                     <div class="layout-item top">
+                       <floor-mask @click="cc"/>
+                     </div>
+                     <div class="layout-item">
+                       <floor-mask @click="cc"/>
+                     </div>
+                   </div>
+                 <div class="right">
+                     <div class="layout-item">
+                       <floor-mask @click="cc"/>
+                     </div>
+                   </div>
+                 </div>
                </div>`
   },
   // 三列单行图片模块
