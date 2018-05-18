@@ -101,8 +101,12 @@ export default {
   // 三列单行图片模块
   26: {
     mixins: [mixin],
-    template: `<div class="floor-layout">
-                 <floor-mask @click="cc"/>
+    template: `<div class="floor-layout tpl-26">
+                 <div class="layout-main">
+                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                 </div>
                </div>`
   },
   // 五列单行小图模块
