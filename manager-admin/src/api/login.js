@@ -13,13 +13,11 @@ export function loginByUsername(username, password, validcode) {
     password,
     valid_code: validcode
   }
-  const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
   return request({
-    url: 'core/admin/admin-user/login.do',
+    url: 'http://localhost:9090/javashop/core/admin/admin-user/login.do',
     method: 'post',
     loading: false,
-    data: _formData
+    data: _params
   })
 }
 
