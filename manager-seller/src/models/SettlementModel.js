@@ -13,26 +13,26 @@ import {
 
 export default class SettlementModel extends DataModel {
   /** 结算编号 */
-  @ServerName('order_sn')
-  order_sn
+  @ServerName('bill_sn')
+  bill_sn
 
   /** 开始时间 */
-  @ServerName('order_time')
-  order_time
+  @ServerName('start_time')
+  start_time
 
   /** 结束时间 */
-  @ServerName('order_time')
-  order_time
+  @ServerName('end_time')
+  end_time
 
   /** 本期应收 */
-  @ServerName('order_amount')
-  order_amount
+  @ServerName('price')
+  bill_price
 
   /** 结算状态 */
-  @ServerName('order_status')
-  order_status
+  @ServerName('status')
+  bill_status
 
   /** 付款时间 */
-  @ServerName('order_num')
-  order_num
+  @ServerName('pay_time')
+  pay_time
 }

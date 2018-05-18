@@ -45,5 +45,3 @@ export function getBillDetails(ids, params) {
     }).catch(error => reject(error))
   })
 }
-
-
