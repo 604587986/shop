@@ -112,7 +112,15 @@ export default {
   // 五列单行小图模块
   27: {
     mixins: [mixin],
-    template: `<div class="floor-layout">27</div>`
+    template: `<div class="floor-layout tpl-27">
+                   <div class="layout-main">
+                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                 </div>
+               </div>`
   },
   // 焦点广告图模块
   28: {
