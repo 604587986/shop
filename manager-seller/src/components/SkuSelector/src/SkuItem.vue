@@ -39,6 +39,7 @@
             </el-autocomplete>
             <!--规格值图片 上传列表-->
             <div v-show="$index === 0 && checkedImage">
+              {{ val }}
               <el-upload
                 class="avatar-uploader"
                 style="text-align: center; margin-top: 10px;"
@@ -74,7 +75,9 @@
       /** 商品规格信息 */
       productSkuInfo: {
         type: Array,
-        default: []
+        default: () => {
+          return []
+        }
       }
     },
     data() {
@@ -396,6 +399,7 @@
       /** 文件上传成功之后的钩子 */
       getImgUrl(response, file, fileList) {
         /** 更新skuInfo数据 */
+        debugger
         if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value) {
           this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_id', '')
           this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', '')
