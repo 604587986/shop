@@ -144,8 +144,6 @@
     position: relative;
     width: 100%;
     min-height: 50px;
-    border: 1px dashed #ccc;
-    margin-bottom: -1px;
     box-sizing: border-box;
     &.item-23 { height: 130px }
     &.item-24 { height: 130px }
@@ -178,5 +176,8 @@
     &:hover .panel-handle {
       display: block;
     }
+  }
+  .floor-item + .floor-item {
+    margin-top: -1px;
   }
 </style>
