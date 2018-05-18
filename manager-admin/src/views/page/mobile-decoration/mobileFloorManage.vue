@@ -161,7 +161,7 @@
       display: none;
       position: absolute;
       top: 0;
-      right: -27px;
+      right: -25px;
       .icon-handle {
         display: block;
         cursor: pointer;
