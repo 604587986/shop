@@ -14,7 +14,8 @@ export function getTplList(type) {
     : ''
   return request({
     url,
-    method: 'get'
+    method: 'get',
+    loading: false
   })
 }
 
@@ -28,6 +29,7 @@ export function getFloorList(type) {
     : ''
   return request({
     url,
-    method: 'get'
+    method: 'get',
+    loading: false
   })
 }
