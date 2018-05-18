@@ -3,21 +3,22 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
-  &:hover /deep/ .mask-floor {
-    display: block;
-  }
 }
 /deep/ {
   .mask-floor {
-    display: none;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 10;
+    border: 1px dashed #ccc;
+  }
+  .mask-bg-floor {
+    display: none;
+    width: 100%;
+    height: 100%;
     background: rgba(0,0,0,.5);
-    transition: all .2s ease;
   }
   .mask-btn-floor {
     position: absolute;
@@ -35,5 +36,35 @@
     cursor: pointer;
     &:focus { outline: none }
     .svg-icon { margin-right: 3px }
+  }
+  .layout-main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    clear: both;
+  }
+  .layout-item {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    &:hover .mask-bg-floor { display: block }
+  }
+  .left {
+    float: left;
+    .mask-floor { border-right: none }
+  }
+  .right { float: right }
+  .top .mask-floor, .middle .mask-floor { border-bottom: none }
+  .tpl-23 .layout-item {}
+  .tpl-24 {
+    .left, .right {
+      width: 50%; height: 100%
+    }
+    .left .layout-item { height: 100% }
+    .layout-item {
+      width: 100%;
+      height: 50%;
+    }
   }
 }
