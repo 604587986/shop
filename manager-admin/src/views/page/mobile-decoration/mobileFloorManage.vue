@@ -9,15 +9,18 @@
       </draggable>
     </div>
     <div class="draggable-box">
-      <draggable v-model="floorList" :options="floorOptions" class="floor-list">
-        <div
-          v-for="item in floorList"
-          :class="'item-' + item.tpl_id"
-          v-html="item.tpl_content"
-          class="floor-item"
-        >
-        </div>
-      </draggable>
+      <div class="floor-top"></div>
+      <div class="floor-body">
+        <draggable v-model="floorList" :options="floorOptions" class="floor-list">
+          <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
+            <component :is="templates[item.tpl_id]" :data="item"></component>
+            <div class="panel-handle">
+              <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
+              <span class="icon-handle handle-delete" @click="floorList.splice(index, 1)"><svg-icon icon-class="delete"/></span>
+            </div>
+          </div>
+        </draggable>
+      </div>
     </div>
   </div>
 </template>
@@ -25,31 +28,28 @@
 <script>
   import draggable from 'vuedraggable'
   import * as API_Floor from '@/api/floor'
+  import templates from './mobileFloorTemplates'
   export default {
     name: 'mobileFloorManage',
     components: { draggable },
     data() {
       return {
+        templates,
         /** 模板列表 */
         tplList: [],
         /** 模板配置 */
         tplOptions: {
-          group: {
-            name: 'tplGroup',
-            pull: 'clone',
-            put: false
-          },
+          group: { name: 'tplGroup', pull: 'clone', put: false },
           sort: false
         },
         /** 楼层列表 */
         floorList: [],
         /** 楼层配置 */
         floorOptions: {
-          group: {
-            name: 'tplGroup',
-            put: true
-          },
-          sort: true
+          animation: 150,
+          group: { name: 'tplGroup', put: true },
+          sort: true,
+          handle: '.handle-move'
         }
       }
     },
@@ -60,7 +60,10 @@
       /** 获取模板列表 */
       GET_FloorTplList() {
         API_Floor.getTpllist('mobile').then(response => {
-          this.tplList = response
+          this.tplList = response.map(item => {
+            item.isEdit = true
+            return item
+          })
         })
       }
     }
@@ -72,13 +75,14 @@
   .floor-container {
     display: flex;
     justify-content: space-around;
-    background-color: #fff;
+    background-color: #E5E7EA;
     padding: 10px;
     min-height: 500px;
   }
   .draggable-box {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     width: 50%;
     &.floor { align-items: start }
   }
@@ -86,6 +90,7 @@
     display: flex;
     flex-wrap: wrap;
     width: 122px * 3;
+    background-color: #fff;
   }
   .tpl-item {
     display: flex;
@@ -120,12 +125,23 @@
     color: #ACB0B9;
     font-size: 12px;
   }
+  .floor-top {
+    width: 322px;
+    height: 24px;
+    background: url("../../../assets/icons-mobile-template.png") no-repeat -30px -100px;
+  }
+  .floor-body {
+    width: 375px;
+    height: 667px - 24px;
+    overflow-y: scroll;
+  }
   .floor-list {
     width: 322px;
-    height: auto;
-    min-height: 500px;
+    min-height: 667px - 24px;
+    background-color: #fff;
   }
   .floor-item {
+    position: relative;
     width: 100%;
     min-height: 50px;
     border: 1px dashed #ccc;
@@ -143,5 +159,24 @@
     &.item-32 { height: 125px }
     &.item-37 { height: 220px }
     &.item-42 { height: 40px }
+    .panel-handle {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: -27px;
+      .icon-handle {
+        display: block;
+        cursor: pointer;
+        text-align: center;
+      }
+      .svg-icon {
+        width: 25px;
+        height: 25px;
+        background-color: #fff;
+      }
+    }
+    &:hover .panel-handle {
+      display: block;
+    }
   }
 </style>
