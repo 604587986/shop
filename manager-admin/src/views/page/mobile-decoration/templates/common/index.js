@@ -23,8 +23,9 @@ export default {
     template: `<div class="floor-layout tpl-23">
                  <div class="layout-main">
                    <div class="layout-item">
-                     <floor-mask/>
-                   </div>
+                       <floor-image :url="data.blockList[0].block_value"/>
+                       <floor-mask/>
+                     </div>
                  </div>
                </div>`
   },
@@ -44,14 +45,17 @@ export default {
                  <div class="layout-main">
                    <div class="left">
                      <div class="layout-item">
+                       <floor-image :url="data.blockList[0].block_value"/>
                        <floor-mask @click="cc"/>
                      </div>
                    </div>
                    <div class="right">
                      <div class="layout-item top">
+                       <floor-image :url="data.blockList[1].block_value"/>
                        <floor-mask @click="cc"/>
                      </div>
                      <div class="layout-item">
+                       <floor-image :url="data.blockList[2].block_value"/>
                        <floor-mask @click="cc"/>
                      </div>
                    </div>
@@ -253,6 +257,12 @@ export default {
         { block_type: 'TEXT', block_value: '' }
       ]
     },
-    template: `<div class="floor-layout">42</div>`
+    template: `<div class="floor-layout">
+                 <div class="layout-main">
+                   <div class="layout-item">
+                     <floor-mask/>
+                   </div>
+                 </div>
+               </div>`
   }
 }

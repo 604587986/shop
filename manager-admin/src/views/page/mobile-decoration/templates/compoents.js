@@ -1,5 +1,6 @@
 /**
  * Created by andste.cc@gmail.com on 2018/5/18.
+ * 手机楼层公共组件
  */
 
 import Vue from 'vue'
@@ -27,4 +28,12 @@ Vue.component('floor-mask', {
       ]
     )
   }
+})
+
+Vue.component('floor-image', {
+  props: ['url'],
+  template: `<div class="layout-image">
+               <img v-if="url" :src="url">
+               <div v-else class="no-image"></div>
+             </div>`
 })
