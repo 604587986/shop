@@ -2,40 +2,94 @@
  * Created by andste.cc@gmail.com on 2018/5/17.
  */
 
+import Vue from 'vue'
+
+/** mixin */
 const mixin = {
   props: ['data'],
   data() {
-    console.log(this.data)
     return {
       aa: 'bb'
     }
   },
-  methods: {}
+  methods: {
+    cc() {
+      console.log('cc')
+    }
+  }
 }
+
+/** 遮罩 */
+Vue.component('floor-mask', {
+  functional: true,
+  render: function(createElement, context) {
+    const { click } = context.listeners
+    return createElement(
+      'div',
+      { class: 'mask-floor' },
+      [
+        createElement(
+          'div',
+          { class: 'mask-bg-floor' },
+          [
+            createElement(
+              'button',
+              { type: 'button', class: 'mask-btn-floor', on: { click }},
+              [createElement('svg-icon', { props: { 'icon-class': 'pen-leather' }}), '编辑']
+            )
+          ]
+        )
+      ]
+    )
+  }
+})
 
 export default {
   // 单列单张大图模块
   23: {
     mixins: [mixin],
-    template: `<div class="floor-layout">
-                  <div>23</div>
-                  <div v-if="data.isEdit" class="mask-floor"><button type="button" class="mask-btn-floor"><svg-icon icon-class="pen-leather"/>编辑</button></div>
+    template: `<div class="floor-layout tpl-23">
+                 <div class="layout-main">
+                   <div class="layout-item">
+                     <floor-mask @click="cc"/>
+                   </div>
+                 </div>
                </div>`
   },
   // 左一右二图片模块
   24: {
     mixins: [mixin],
-    template: `<div class="floor-layout">24</div>`
+    template: `<div class="floor-layout tpl-24">
+                 <div class="layout-main">
+                   <div class="left">
+                     <div class="layout-item">
+                       <floor-mask @click="cc"/>
+                     </div>
+                   </div>
+                   <div class="right">
+                     <div class="layout-item top">
+                       <floor-mask @click="cc"/>
+                     </div>
+                     <div class="layout-item">
+                       <floor-mask @click="cc"/>
+                     </div>
+                   </div>
+                 </div>
+               </div>`
   },
   // 左二右一图片模块
   25: {
     mixins: [mixin],
-    template: `<div class="floor-layout">25</div>`
+    template: `<div class="floor-layout">
+                 <floor-mask @click="cc"/>
+               </div>`
   },
   // 三列单行图片模块
   26: {
     mixins: [mixin],
-    template: `<div class="floor-layout">26</div>`
+    template: `<div class="floor-layout">
+                 <floor-mask @click="cc"/>
+               </div>`
   },
   // 五列单行小图模块
   27: {
