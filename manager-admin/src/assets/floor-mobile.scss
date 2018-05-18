@@ -53,8 +53,8 @@
     width: 50%;
     height: 100%;
     float: left;
-    .mask-floor { border-right: none }
   }
+  .left .mask-floor { border-right: none }
   .right { float: right }
   .top .mask-floor, .middle .mask-floor { border-bottom: none }
   @mixin layout-item-neighbor {
