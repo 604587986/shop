@@ -107,6 +107,10 @@
   .tpl-29 {
     @extend .tpl-27;
     .layout-item { width: percentage(1/4) }
+    .no-image { background-size: 70% }
+  }
+  .tpl-30 {
+    .no-image { background-size: 17.5% 75% }
   }
   /** tpl-31 四列单行小图片模块 */
   .tpl-31 {
@@ -116,5 +120,8 @@
   .tpl-32 {
     .layout-item { width: 50%; float: left }
     .left .layout-item { width: 100% }
+    .right .no-image {
+      background-size: 75% auto;
+    }
   }
 }
