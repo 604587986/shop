@@ -78,14 +78,17 @@ export default {
                  <div class="layout-main">
                    <div class="left">
                      <div class="layout-item top">
+                       <floor-image :url="data.blockList[0].block_value"/>
                        <floor-mask @click="cc"/>
                      </div>
                      <div class="layout-item">
+                       <floor-image :url="data.blockList[1].block_value"/>
                        <floor-mask @click="cc"/>
                      </div>
                    </div>
                  <div class="right">
                      <div class="layout-item">
+                       <floor-image :url="data.blockList[2].block_value"/>
                        <floor-mask @click="cc"/>
                      </div>
                    </div>
@@ -106,9 +109,18 @@ export default {
     },
     template: `<div class="floor-layout tpl-26">
                  <div class="layout-main">
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[0].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[1].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[2].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
                  </div>
                </div>`
   },
@@ -128,11 +140,26 @@ export default {
     },
     template: `<div class="floor-layout tpl-27">
                  <div class="layout-main">
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[0].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[1].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[2].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[3].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[4].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
                  </div>
                </div>`
   },
@@ -165,10 +192,22 @@ export default {
     },
     template: `<div class="floor-layout tpl-29">
                  <div class="layout-main">
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[0].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[1].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[2].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[3].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
                  </div>
                </div>`
   },
@@ -184,7 +223,10 @@ export default {
     },
     template: `<div class="floor-layout tpl-30">
                  <div class="layout-main">
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[0].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
                  </div>
                </div>`
   },
@@ -203,10 +245,22 @@ export default {
     },
     template: `<div class="floor-layout tpl-31">
                  <div class="layout-main">
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
-                   <div class="layout-item"><floor-mask @click="cc"/></div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[0].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[1].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[2].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-image :url="data.blockList[3].block_value"/>
+                     <floor-mask @click="cc"/>
+                   </div>
                  </div>
                </div>`
   },
@@ -225,11 +279,20 @@ export default {
     template: `<div class="floor-layout tpl-32">
                  <div class="layout-main">
                    <div class="left">
-                     <div class="layout-item"><floor-mask/></div>
+                     <div class="layout-item">
+                       <floor-image :url="data.blockList[0].block_value"/>
+                       <floor-mask/>
+                     </div>
                    </div>
                    <div class="right">
-                     <div class="layout-item"><floor-mask/></div>
-                     <div class="layout-item"><floor-mask/></div>
+                     <div class="layout-item">
+                       <floor-image :url="data.blockList[1].block_value"/>
+                       <floor-mask/>
+                     </div>
+                     <div class="layout-item">
+                       <floor-image :url="data.blockList[2].block_value"/>
+                       <floor-mask/>
+                     </div>
                    </div>
                  </div>
                </div>`
