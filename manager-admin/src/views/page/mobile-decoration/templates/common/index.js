@@ -9,11 +9,6 @@ export default {
   23: {
     mixins: [mixin],
     title: '单列单张大图模块',
-    methods: {
-      onClick() {
-        console.log(this.data)
-      }
-    },
     dataTpl: {
       tpl_id: 23,
       blockList: [
@@ -24,7 +19,7 @@ export default {
                  <div class="layout-main">
                    <div class="layout-item">
                        <floor-image :url="data.blockList[0].block_value"/>
-                       <floor-mask/>
+                       <floor-mask @click="selectImg(0)"/>
                      </div>
                  </div>
                </div>`
@@ -32,7 +27,7 @@ export default {
   // 左一右二图片模块
   24: {
     mixins: [mixin],
-    title: '单列单张大图模块',
+    title: '左一右二图片模块',
     dataTpl: {
       tpl_id: 24,
       blockList: [
@@ -46,17 +41,17 @@ export default {
                    <div class="left">
                      <div class="layout-item">
                        <floor-image :url="data.blockList[0].block_value"/>
-                       <floor-mask @click="cc"/>
+                       <floor-mask @click="selectImg(0)"/>
                      </div>
                    </div>
                    <div class="right">
                      <div class="layout-item top">
                        <floor-image :url="data.blockList[1].block_value"/>
-                       <floor-mask @click="cc"/>
+                       <floor-mask @click="selectImg(1)"/>
                      </div>
                      <div class="layout-item">
                        <floor-image :url="data.blockList[2].block_value"/>
-                       <floor-mask @click="cc"/>
+                       <floor-mask @click="selectImg(2)"/>
                      </div>
                    </div>
                  </div>
@@ -79,17 +74,17 @@ export default {
                    <div class="left">
                      <div class="layout-item top">
                        <floor-image :url="data.blockList[0].block_value"/>
-                       <floor-mask @click="cc"/>
+                       <floor-mask @click="selectImg(0)"/>
                      </div>
                      <div class="layout-item">
                        <floor-image :url="data.blockList[1].block_value"/>
-                       <floor-mask @click="cc"/>
+                       <floor-mask @click="selectImg(1)"/>
                      </div>
                    </div>
                  <div class="right">
                      <div class="layout-item">
                        <floor-image :url="data.blockList[2].block_value"/>
-                       <floor-mask @click="cc"/>
+                       <floor-mask @click="selectImg(2)"/>
                      </div>
                    </div>
                  </div>
@@ -111,15 +106,15 @@ export default {
                  <div class="layout-main">
                    <div class="layout-item">
                      <floor-image :url="data.blockList[0].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(0)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[1].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(1)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[2].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(2)"/>
                    </div>
                  </div>
                </div>`
@@ -142,23 +137,23 @@ export default {
                  <div class="layout-main">
                    <div class="layout-item">
                      <floor-image :url="data.blockList[0].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(0)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[1].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(1)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[2].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(2)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[3].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(3)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[4].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(4)"/>
                    </div>
                  </div>
                </div>`
@@ -194,19 +189,19 @@ export default {
                  <div class="layout-main">
                    <div class="layout-item">
                      <floor-image :url="data.blockList[0].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(0)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[1].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(1)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[2].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(2)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[3].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(3)"/>
                    </div>
                  </div>
                </div>`
@@ -225,7 +220,7 @@ export default {
                  <div class="layout-main">
                    <div class="layout-item">
                      <floor-image :url="data.blockList[0].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(0)"/>
                    </div>
                  </div>
                </div>`
@@ -247,19 +242,19 @@ export default {
                  <div class="layout-main">
                    <div class="layout-item">
                      <floor-image :url="data.blockList[0].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(0)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[1].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(1)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[2].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(2)"/>
                    </div>
                    <div class="layout-item">
                      <floor-image :url="data.blockList[3].block_value"/>
-                     <floor-mask @click="cc"/>
+                     <floor-mask @click="selectImg(3)"/>
                    </div>
                  </div>
                </div>`
@@ -281,17 +276,17 @@ export default {
                    <div class="left">
                      <div class="layout-item">
                        <floor-image :url="data.blockList[0].block_value"/>
-                       <floor-mask/>
+                       <floor-mask @click="selectImg(0)"/>
                      </div>
                    </div>
                    <div class="right">
                      <div class="layout-item">
                        <floor-image :url="data.blockList[1].block_value"/>
-                       <floor-mask/>
+                       <floor-mask @click="selectImg(1)"/>
                      </div>
                      <div class="layout-item">
                        <floor-image :url="data.blockList[2].block_value"/>
-                       <floor-mask/>
+                       <floor-mask @click="selectImg(2)"/>
                      </div>
                    </div>
                  </div>
