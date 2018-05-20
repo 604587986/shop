@@ -30,6 +30,7 @@ Vue.component('floor-mask', {
   }
 })
 
+/** 楼层图片【如果链接为空，则显示占位图】 */
 Vue.component('floor-image', {
   props: ['url'],
   template: `<div class="layout-image">

@@ -13,7 +13,7 @@
       <div class="floor-body">
         <draggable v-model="floorList" :options="floorOptions" class="floor-list">
           <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
-            <component :is="templates[item.tpl_id]" :data="item"></component>
+            <component :is="templates[item.tpl_id]" :data="item" @change="(data) => handleFloorChange(index, data)"></component>
             <div class="panel-handle">
               <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
               <span class="icon-handle handle-delete" @click="floorList.splice(index, 1)"><svg-icon icon-class="delete"/></span>
@@ -58,6 +58,10 @@
       this.GET_FloorList()
     },
     methods: {
+      handleFloorChange(index, data) {
+        console.log('handleFloorChange:', index, data)
+        this.$set(this.floorList, index, data)
+      },
       /** 获取模板列表 */
       GET_FloorList() {
         API_Floor.getFloorList('mobile').then(response => {
