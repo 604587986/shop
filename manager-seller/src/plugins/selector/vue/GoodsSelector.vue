@@ -9,10 +9,10 @@ export default {
   name: 'EnGoodsSelector',
   props: {
     /** 默认数据 */
-    defaultData: {
+    defaultInfo: {
       type: Array
     },
-    /** 最大可选个数 */
+    /** 最大可选个数 0代表无数量限制*/
     maxLength: {
       type: Number,
       maxLength: 1
@@ -35,9 +35,14 @@ export default {
   },
   data() {
     return {
-      options: {
+
+    }
+  },
+  methods: {
+    showSelector() {
+      const _options = {
         api: this.api,
-        defaultData: this.defaultData,
+        defaultData: this.defaultInfo,
         maxLength: this.maxLength,
         confirm: data => {
           // 触发回调
@@ -47,11 +52,7 @@ export default {
           this.$emit('closed')
         }
       }
-    }
-  },
-  methods: {
-    showSelector() {
-      $.GoodsAdminSelector(this.options)
+      $.GoodsAdminSelector(_options)
     }
   },
   mounted() {
@@ -67,6 +68,9 @@ export default {
       } else {
         this.showSelector()
       }
+    },
+    defaultInfo() {
+      this.defaultData = this.defaultInfo
     }
   }
 }

@@ -46,7 +46,7 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
     this.default = {
       host: '',
       api: api,
-      cateApi: '/goods/category/0/children',
+      cateApi: process.env.BASE_API +'/goods/category/0/children',
       maxLength: 0, // 表示商品选择数量不限制
       defaultData: [],
       confirm: function() {
@@ -461,7 +461,7 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
         })
         .then(res => {
           $this && $this.remove()
-          _this.__FUN__dataProcessing(res.data)
+          _this.__FUN__dataProcessing(res.data.data)
           _this.callback()
         })
         .catch(() => {
@@ -469,13 +469,21 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
         })
     },
     __XHR__getGoodsDataBySn: function(sn) {
-      if (!sn) {
+      let _sn = ''
+      if (sn && sn.goods_id) { // 是对象
+        _sn = sn.goods_id
+      }
+      if (!_sn) {
         this.options.defaultData = []
         return
       }
       var _this = this
       axios
-        .get('/shop/goodslist?sn=' + sn)
+        .get(`${process.env.BASE_API}/goods/${_sn}/details`,{
+          headers: {
+            Authorization: Authorization
+          }
+        })
         .then(res => {
           _this.__FUN__dataProcessing(res.data[0])
         })
@@ -486,7 +494,11 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
     __XHR__getcateDatas: function() {
       var _this = this
       axios
-        .get(_this.options.cateApi)
+        .get(_this.options.cateApi, {
+          headers: {
+            Authorization: Authorization
+          }
+        })
         .then(res => {
           _this.__FUN__cateoryDataProcessing(res.data)
         })
@@ -623,7 +635,6 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
                     </div>\
                     '
       }
-      debugger
       items.length === this.params.formData.page_size &&
         (_itemEle +=
           '<button type="button" class="__GSR__item-loadmore">加载更多...</button>')

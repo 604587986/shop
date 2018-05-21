@@ -2,6 +2,7 @@
   <en-tabel-layout
     pagination
     :tableData="tableData"
+    :stripe="false"
     :loading="loading"
   >
     <template slot="table-columns">
