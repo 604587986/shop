@@ -8,6 +8,7 @@
     <div slot="title" class="image-picker-title">图片上传</div>
     <div class="image-picker-body">
       <el-upload
+        ref="elUpload"
         class="upload-box"
         drag
         :limit="limit"
@@ -108,7 +109,15 @@
       },
       handleConfirm() {
         let list = this.fileList.filter(item => item.status === 'success')
-        this.$emit('confirm', JSON.parse(JSON.stringify(list)))
+        this.$emit('confirm', list.map(item => {
+          return {
+            uid: item.raw.uid,
+            blob: item.url,
+            url: item.response.url
+          }
+        }))
+        this.$refs['elUpload'].clearFiles()
+        this.fileList = []
       }
     }
   }
