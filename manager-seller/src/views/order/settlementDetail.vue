@@ -160,7 +160,7 @@
       /** 获取结算单数据 */
       GET_SettlementList() {
         this.loading = true
-        API_Settlement.getBillDetails({bill_id: this.billId}).then(response => {
+        API_Settlement.getBillDetails({ bill_id: this.billId }).then(response => {
           this.loading = false
           this.settlementData = response.data
         }).catch(error => this.$message.error(error))
