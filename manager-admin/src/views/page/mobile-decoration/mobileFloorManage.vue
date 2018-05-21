@@ -1,37 +1,56 @@
 <template>
-  <div class="floor-container">
-    <div class="draggable-box floor">
-      <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
-        <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
-          <div class="img-tpl"></div>
-          <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
-        </div>
-      </draggable>
-    </div>
-    <div class="draggable-box">
-      <div class="floor-top"></div>
-      <div class="floor-body">
-        <draggable v-model="floorList" :options="floorOptions" class="floor-list">
-          <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
-            <component :is="templates[item.tpl_id]" :data="item" is-edit @change="(data) => handleFloorChange(index, data)"></component>
-            <div class="panel-handle">
-              <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
-              <span class="icon-handle handle-delete" @click="floorList.splice(index, 1)"><svg-icon icon-class="delete"/></span>
-            </div>
+  <div>
+    <div class="floor-container">
+      <div class="draggable-box floor">
+        <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
+          <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
+            <div class="img-tpl"></div>
+            <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
           </div>
         </draggable>
       </div>
+      <div class="draggable-box">
+        <div class="floor-top"></div>
+        <div class="floor-body">
+          <draggable v-model="floorList" :options="floorOptions" class="floor-list">
+            <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
+              <component
+                :is="templates[item.tpl_id]"
+                :data="item"
+                is-edit
+                @handle-edit="(target, targetIndex) => handleEditFloor(index, target, targetIndex)"
+              ></component>
+              <div class="panel-handle">
+                <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
+                <span class="icon-handle handle-delete" @click="floorList.splice(index, 1)"><svg-icon icon-class="delete"/></span>
+              </div>
+            </div>
+          </draggable>
+        </div>
+      </div>
     </div>
+    <en-image-picker
+      :show="dialogShow"
+      :default-data="defaultData"
+      @close="dialogShow = false"
+      @confirm="handleImagePickerConfirm"
+      :limit="10"
+      multiple
+    />
   </div>
 </template>
 
 <script>
   import draggable from 'vuedraggable'
+  import { ImagePicker } from '@/components'
   import * as API_Floor from '@/api/floor'
   import templates, { templateArray } from './templates'
   export default {
     name: 'mobileFloorManage',
-    components: { draggable },
+    components: {
+      draggable,
+      [ImagePicker.name]: ImagePicker
+    },
     data() {
       return {
         templates,
@@ -51,16 +70,31 @@
           group: { name: 'tplGroup', put: true },
           sort: true,
           handle: '.handle-move'
-        }
+        },
+        dialogShow: false,
+        defaultData: ''
       }
     },
     mounted() {
       this.GET_FloorList()
     },
     methods: {
-      handleFloorChange(index, data) {
-        console.log('handleFloorChange:', index, data)
-        this.$set(this.floorList, index, data)
+      handleEditFloor(index, target, targetIndex) {
+        this.editOptions = {
+          index,
+          target,
+          targetIndex
+        }
+        this.defaultData = target.blockList[targetIndex]
+        this.dialogShow = true
+      },
+      /** 图片上传组件确认 */
+      handleImagePickerConfirm(fileList) {
+        this.dialogShow = false
+        const { index, target, targetIndex } = this.editOptions
+        const { url = '' } = fileList[0] || {}
+        target.blockList[targetIndex].block_value = url
+        this.$set(this.floorList, index, target)
       },
       /** 获取模板列表 */
       GET_FloorList() {
