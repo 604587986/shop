@@ -3,29 +3,29 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
-  &:hover /deep/ .mask-floor {
-    display: block;
-  }
 }
 /deep/ {
   .mask-floor {
-    display: none;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 10;
+    border: 1px dashed #ccc;
+  }
+  .mask-bg-floor {
+    display: none;
+    width: 100%;
+    height: 100%;
     background: rgba(0,0,0,.5);
-    transition: all .2s ease;
   }
   .mask-btn-floor {
     position: absolute;
     z-index: 4;
     top: 5px;
-    right: 10px;
+    right: 5px;
     font-size: 12px;
-    font-family: 宋体;
     color: rgb(0, 0, 0);
     box-shadow: rgba(0, 0, 0, 0.5) 0 0 2px;
     background: rgba(255, 255, 255, 0.8);
@@ -35,5 +35,93 @@
     cursor: pointer;
     &:focus { outline: none }
     .svg-icon { margin-right: 3px }
+  }
+  .layout-main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    clear: both;
+  }
+  .layout-item {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    &:hover .mask-bg-floor { display: block }
+  }
+  .layout-image {
+    width: 100%;
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+    .no-image {
+      width: 100%;
+      height: 100%;
+      background-image: url("../../../assets/icon-no-image.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: auto 75%;
+    }
+  }
+  .left, .right {
+    width: 50%;
+    height: 100%;
+    float: left;
+  }
+  .left .mask-floor { border-right: none }
+  .right { float: right }
+  .top .mask-floor, .middle .mask-floor { border-bottom: none }
+  @mixin layout-item-neighbor {
+    .layout-item + .layout-item .mask-floor{ border-left: none }
+  }
+
+  /** tpl-23 单列单张大图模块 */
+  .tpl-23 .layout-item {}
+  /** tpl-24 左一右二图片模块 */
+  .tpl-24 {
+    .right .layout-item { height: 50% }
+  }
+  /** tpl-25 左二右一图片模块 */
+  .tpl-25 {
+    .left .layout-item { height: 50% }
+  }
+  /** tpl-26 左二右一图片模块 */
+  .tpl-26 {
+    .layout-item {
+      float: left;
+      width: percentage(1/3)
+    }
+    @include layout-item-neighbor;
+  }
+  /** tpl-27 五列单行小图模块 */
+  .tpl-27 {
+    .layout-item {
+      float: left;
+      width: percentage(1/5);
+    }
+    @include layout-item-neighbor;
+  }
+  /** tpl-29 四列单行图片模块 */
+  .tpl-29 {
+    @extend .tpl-27;
+    .layout-item { width: percentage(1/4) }
+    .no-image { background-size: 70% }
+  }
+  .tpl-30 {
+    .no-image { background-size: 17.5% 75% }
+  }
+  /** tpl-31 四列单行小图片模块 */
+  .tpl-31 {
+    @extend .tpl-29
+  }
+  /** tpl-32 左一右二竖排模板 */
+  .tpl-32 {
+    .layout-item { width: 50%; float: left }
+    .left .layout-item { width: 100% }
+    .right .no-image {
+      background-size: 75% auto;
+    }
   }
 }

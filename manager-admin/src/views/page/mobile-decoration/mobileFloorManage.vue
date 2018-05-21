@@ -1,10 +1,10 @@
 <template>
   <div class="floor-container">
     <div class="draggable-box floor">
-      <draggable v-model="tplList" :options="tplOptions" class="tpl-list">
-        <div v-for="item in tplList" :class="'item-' + item.tpl_id" class="tpl-item">
+      <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
+        <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
           <div class="img-tpl"></div>
-          <span class="text-tpl">{{ item.tpl_name }}</span>
+          <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
         </div>
       </draggable>
     </div>
@@ -13,7 +13,7 @@
       <div class="floor-body">
         <draggable v-model="floorList" :options="floorOptions" class="floor-list">
           <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
-            <component :is="templates[item.tpl_id]" :data="item"></component>
+            <component :is="templates[item.tpl_id]" :data="item" @change="(data) => handleFloorChange(index, data)"></component>
             <div class="panel-handle">
               <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
               <span class="icon-handle handle-delete" @click="floorList.splice(index, 1)"><svg-icon icon-class="delete"/></span>
@@ -28,13 +28,14 @@
 <script>
   import draggable from 'vuedraggable'
   import * as API_Floor from '@/api/floor'
-  import templates from './mobileFloorTemplates'
+  import templates, { templateArray } from './templates'
   export default {
     name: 'mobileFloorManage',
     components: { draggable },
     data() {
       return {
         templates,
+        templateArray,
         /** 模板列表 */
         tplList: [],
         /** 模板配置 */
@@ -54,13 +55,17 @@
       }
     },
     mounted() {
-      this.GET_FloorTplList()
+      this.GET_FloorList()
     },
     methods: {
+      handleFloorChange(index, data) {
+        console.log('handleFloorChange:', index, data)
+        this.$set(this.floorList, index, data)
+      },
       /** 获取模板列表 */
-      GET_FloorTplList() {
-        API_Floor.getTpllist('mobile').then(response => {
-          this.tplList = response.map(item => {
+      GET_FloorList() {
+        API_Floor.getFloorList('mobile').then(response => {
+          this.floorList = response.map(item => {
             item.isEdit = true
             return item
           })
@@ -84,7 +89,7 @@
     justify-content: center;
     flex-direction: column;
     width: 50%;
-    &.floor { align-items: start }
+    &.floor { align-items: center }
   }
   .tpl-list {
     display: flex;
@@ -144,8 +149,6 @@
     position: relative;
     width: 100%;
     min-height: 50px;
-    border: 1px dashed #ccc;
-    margin-bottom: -1px;
     box-sizing: border-box;
     &.item-23 { height: 130px }
     &.item-24 { height: 130px }
@@ -155,7 +158,7 @@
     &.item-28 { height: 150px }
     &.item-29 { height: 105px }
     &.item-30 { height: 40px }
-    &.item-31 { height: 65px }
+    &.item-31 { height: 80px }
     &.item-32 { height: 125px }
     &.item-37 { height: 220px }
     &.item-42 { height: 40px }
@@ -163,7 +166,7 @@
       display: none;
       position: absolute;
       top: 0;
-      right: -27px;
+      right: -25px;
       .icon-handle {
         display: block;
         cursor: pointer;
@@ -178,5 +181,8 @@
     &:hover .panel-handle {
       display: block;
     }
+  }
+  .floor-item + .floor-item {
+    margin-top: -1px;
   }
 </style>
