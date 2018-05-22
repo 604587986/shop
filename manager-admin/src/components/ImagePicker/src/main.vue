@@ -7,7 +7,28 @@
     width="805px">
     <div slot="title" class="image-picker-title">图片上传</div>
     <div class="image-picker-body">
+      <div v-show="curEdit" class="upload-box edit">
+        <div class="el-upload-dragger">
+          <div class="opt-body">
+            <div class="inner-opt">
+              <div v-for="(opt, index) in operation" class="item-opt">
+                <div v-if="opt.type === 'select'" class="input-with-select el-input el-input--small el-input-group el-input-group--prepend">
+                  <div class="el-input-group__prepend">{{ opt.label }}</div>
+                  <el-select v-model="opt.value" slot="append" placeholder="请选择">
+                    <el-option v-for="op in opt.options" :label="op.text" :value="op.value" :key="op.text"></el-option>
+                  </el-select>
+                </div>
+                <el-input v-else placeholder="请输入内容" v-model="opt.value" class="input-with-select">
+                  <template slot="prepend">{{ opt.label }}</template>
+                </el-input>
+              </div>
+            </div>
+          </div>
+          <div class="opt-footer"></div>
+        </div>
+      </div>
       <el-upload
+        v-show="!curEdit"
         ref="elUpload"
         class="upload-box"
         drag
@@ -15,6 +36,7 @@
         :multiple="multiple"
         :show-file-list="false"
         :on-change="(_file, _fileList) => { fileList = _fileList }"
+        :on-success="onSuccess"
         :action="MixinUploadApi"
         :on-exceed="() => { $message.error('文件数量超过限制！') }"
       >
@@ -38,7 +60,7 @@
             :percentage="parseInt(file.percentage, 10)">
           </el-progress>
           <span class="el-upload-list__item-actions">
-            <span class="el-upload-list__item-preview">
+            <span v-if="file.status === 'success'" class="el-upload-list__item-preview">
               <i class="el-icon-edit-outline" @click="handleEditItem(index)"></i>
             </span>
             <span class="el-upload-list__item-delete">
@@ -66,23 +88,33 @@
   export default {
     name: 'EnImagePicker',
     props: {
+      /** 显示dialog */
       show: {
         type: Boolean,
         default: false
       },
+      /** 最大可上传个数 */
       limit: {
         type: Number,
         default: 10
       },
+      /** 是否可多选 */
       multiple: {
         type: Boolean,
         default: false
+      },
+      /** 自定义参数 */
+      operation: {
+        type: Array,
+        default: () => ([])
       }
     },
     data() {
       return {
         dialogVisible: this.show,
-        fileList: []
+        fileList: [],
+        dataMap: new Map(),
+        curEdit: 1
       }
     },
     watch: {
@@ -105,7 +137,18 @@
     },
     methods: {
       handleEditItem(index) {
-        console.log(index)
+        this.curEdit = this.dataMap.get(this.fileList[index].uid)
+        console.log(this.fileList[index].uid)
+      },
+      onSuccess(response, file, fileList) {
+        const obj = {
+          response,
+          uid: file.uid,
+          operation: JSON.parse(JSON.stringify(this.operation))
+        }
+        this.dataMap.set(file.uid, obj)
+        console.log(this.dataMap)
+        console.log(response, file, fileList)
       },
       handleConfirm() {
         let list = this.fileList.filter(item => item.status === 'success')
@@ -130,13 +173,24 @@
     padding-bottom: 20px;
     border-bottom: $border-style;
   }
+  .image-picker-body {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
   /deep/ {
     .el-dialog__body {
       padding: 0 20px;
     }
     .upload-box {
       display: flex;
-      flex-direction: column-reverse;
+      align-self: center;
+      margin-bottom: 10px;
+      &:hover .inner-opt { border-color: #409EFF }
+      &.edit .el-upload-dragger {
+        cursor: auto;
+        text-align: left;
+      }
     }
     .el-upload-list{
       display: block;
@@ -164,12 +218,39 @@
       height: auto;
       line-height: normal;
       border: none;
-      margin-bottom: 10px;
       align-self: center;
+    }
+    .el-upload-dragger {
+      width: 600px;
     }
     .el-upload-list__item {
       width: 142px;
       height: 142px;
+    }
+    .opt-body {
+      height: 130px;
+      margin: 10px 10px 0 10px;
+    }
+    .inner-opt {
+      width: 100%;
+      height: 100%;
+      border-bottom: 1px dashed #d9d9d9;
+      overflow-y: auto;
+    }
+    .item-opt {
+      display: inline-block;
+      position: relative;
+      width: 284px;
+      font-size: 12px;
+      margin-bottom: 10px;
+      &:nth-child(2n) { margin-left: 10px }
+      .el-input-group--prepend .el-select .el-input.is-focus .el-input__inner {
+        border-color: #409EFF
+      }
+    }
+    .opt-footer {
+      height: 40px;
+      text-align: center;
     }
   }
   .image-picker-body {
