@@ -11,70 +11,49 @@
         <div class="el-upload-dragger">
           <div class="opt-body">
             <div class="inner-opt">
-              <div v-for="(opt, index) in operation" class="item-opt">
+              <div v-for="(opt, index) in curEdit.operation" class="item-opt">
                 <div v-if="opt.type === 'select'" class="input-with-select el-input el-input--small el-input-group el-input-group--prepend">
                   <div class="el-input-group__prepend">{{ opt.label }}</div>
-                  <el-select v-model="opt.value" slot="append" placeholder="请选择">
+                  <el-select v-model="opt.value" size="small" slot="append" placeholder="请选择">
                     <el-option v-for="op in opt.options" :label="op.text" :value="op.value" :key="op.text"></el-option>
                   </el-select>
                 </div>
-                <el-input v-else placeholder="请输入内容" v-model="opt.value" class="input-with-select">
+                <el-input v-else placeholder="请输入内容" v-model="opt.value" size="small" class="input-with-select">
                   <template slot="prepend">{{ opt.label }}</template>
                 </el-input>
               </div>
             </div>
           </div>
-          <div class="opt-footer"></div>
+          <div class="opt-footer">
+            <el-button type="primary" size="small" @click="handleSaveEdit">保存</el-button>
+            <el-button size="small" @click="curEdit = ''">取消</el-button>
+          </div>
         </div>
       </div>
       <el-upload
-        v-show="!curEdit"
         ref="elUpload"
         class="upload-box"
         drag
         :limit="limit"
         :multiple="multiple"
-        :show-file-list="false"
-        :on-change="(_file, _fileList) => { fileList = _fileList }"
+        :show-file-list="true"
+        list-type="picture-card"
         :on-success="onSuccess"
+        :on-remove="onRemove"
+        :on-preview="handleEditItem"
         :action="MixinUploadApi"
         :on-exceed="() => { $message.error('文件数量超过限制！') }"
+        :file-list="fileList"
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       </el-upload>
-      <ul class="el-upload-list el-upload-list--picture-card">
-        <li
-          v-for="(file, index) in fileList"
-          tabindex="0"
-          class="el-upload-list__item is-success"
-        >
-          <img :src="file.status === 'success' ? file.response.url : file.url" class="el-upload-list__item-thumbnail"/>
-          <label class="el-upload-list__item-status-label" :class="[file.status === 'error' && 'error']">
-            <i v-if="file.status === 'success'" class="el-icon-check"></i>
-            <i v-if="file.status === 'error'" class="el-icon-circle-close-outline"></i>
-          </label>
-          <el-progress
-            v-if="file.status === 'uploading'"
-            type="circle"
-            :percentage="parseInt(file.percentage, 10)">
-          </el-progress>
-          <span class="el-upload-list__item-actions">
-            <span v-if="file.status === 'success'" class="el-upload-list__item-preview">
-              <i class="el-icon-edit-outline" @click="handleEditItem(index)"></i>
-            </span>
-            <span class="el-upload-list__item-delete">
-              <i class="el-icon-delete" @click="fileList.splice(index, 1)"></i>
-            </span>
-          </span>
-        </li>
-      </ul>
     </div>
     <div slot="footer" class="image-picker-footer">
       <div class="upload-status-num">
         最多可上传个数：<span>{{ limit }}</span>
-        已上传个数：<span>{{ uploadSuccessNum }}</span>
-        正在上传个数：<span>{{ uploadingNum }}</span>
+        已上传个数：<span>{{ nums.successUpload }}</span>
+        还可上传传个数：<span>{{ nums.canUpload }}</span>
       </div>
       <span>
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -103,6 +82,10 @@
         type: Boolean,
         default: false
       },
+      /** 默认数据 */
+      defaultData: {
+        default: () => ([])
+      },
       /** 自定义参数 */
       operation: {
         type: Array,
@@ -114,7 +97,11 @@
         dialogVisible: this.show,
         fileList: [],
         dataMap: new Map(),
-        curEdit: 1
+        curEdit: '',
+        nums: {
+          successUpload: 0,
+          canUpload: 0
+        }
       }
     },
     watch: {
@@ -123,44 +110,73 @@
       },
       dialogVisible(newVal) {
         newVal === false && this.$emit('close')
+      },
+      defaultData(newVal) {
+        if (!newVal) return
+        this.fileList = JSON.parse(JSON.stringify(newVal))
+        const file = this.fileList[0]
+        setTimeout(() => {
+          this.onSuccess({ url: file.url }, {
+            uid: file.uid,
+            url: file.url
+          })
+          // console.log(this.fileList[0].uid)
+        })
       }
     },
     computed: {
-      /** 计算已上传个数 */
-      uploadSuccessNum() {
-        return this.fileList.filter(item => item.status === 'success').length
-      },
-      /** 计算正在上传个数 */
-      uploadingNum() {
-        return this.fileList.filter(item => item.status === 'uploading').length
-      }
     },
     methods: {
-      handleEditItem(index) {
-        this.curEdit = this.dataMap.get(this.fileList[index].uid)
-        console.log(this.fileList[index].uid)
+      /** 编辑图片的自定义参数 */
+      handleEditItem(file) {
+        this.curEdit = JSON.parse(JSON.stringify(this.dataMap.get(file.uid)))
+        console.log(file.uid)
       },
+      /** 图片上传成功 */
       onSuccess(response, file, fileList) {
+        console.log('onSuccess', response, file, fileList)
         const obj = {
           response,
           uid: file.uid,
+          blob: file.url,
           operation: JSON.parse(JSON.stringify(this.operation))
         }
         this.dataMap.set(file.uid, obj)
+        this.countNums()
         console.log(this.dataMap)
-        console.log(response, file, fileList)
       },
+      /** 移除时触发 */
+      onRemove(file, fileList) {
+        this.dataMap.delete(file.uid)
+        this.countNums()
+      },
+      /** 保存自定义参数 */
+      handleSaveEdit() {
+        this.dataMap.set(this.curEdit.uid, this.curEdit)
+        this.curEdit = ''
+      },
+      /** 确认 */
       handleConfirm() {
-        let list = this.fileList.filter(item => item.status === 'success')
-        this.$emit('confirm', list.map(item => {
-          return {
-            uid: item.raw.uid,
-            blob: item.url,
-            url: item.response.url
-          }
-        }))
+        const list = []
+        this.dataMap.forEach((value, key, map) => {
+          const opt = {}
+          value.operation.forEach(item => (opt[item.name] = item.value))
+          list.push({
+            uid: key,
+            blob: value.blob,
+            response: value.response,
+            operation: opt
+          })
+        })
+        this.$emit('confirm', list)
         this.$refs['elUpload'].clearFiles()
-        this.fileList = []
+        this.dataMap = new Map()
+      },
+      countNums() {
+        this.nums = {
+          successUpload: this.dataMap.size,
+          canUpload: this.limit - this.dataMap.size
+        }
       }
     }
   }
@@ -175,6 +191,7 @@
   }
   .image-picker-body {
     display: flex;
+    position: relative;
     flex-direction: column;
     margin-bottom: 10px;
   }
@@ -184,10 +201,15 @@
     }
     .upload-box {
       display: flex;
+      flex-direction: column-reverse;
       align-self: center;
-      margin-bottom: 10px;
       &:hover .inner-opt { border-color: #409EFF }
       &.edit .el-upload-dragger {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        z-index: 99;
+        margin-left: -300px;
         cursor: auto;
         text-align: left;
       }
@@ -195,23 +217,12 @@
     .el-upload-list{
       display: block;
       max-height: 200px;
+      min-width: 765px;
       min-height: 180px;
       overflow-y: scroll;
-      border: 1px dashed #d9d9d9;
+      border: 1px solid #d9d9d9;
       padding: 10px 0 10px 10px;
-      &:hover { border: 1px dashed #409EFF }
-    }
-    .el-upload-list__item-status-label.error {
-      background: #f56c6c;
-    }
-    .el-icon-circle-close-outline { color: #fff }
-    .el-progress {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      justify-content: center;
-      align-items: center;
-      background-color: #fff;
+      &:hover { border-color: #409EFF }
     }
     .el-upload {
       width: auto;
@@ -219,6 +230,7 @@
       line-height: normal;
       border: none;
       align-self: center;
+      margin-bottom: 10px;
     }
     .el-upload-dragger {
       width: 600px;
@@ -251,6 +263,13 @@
     .opt-footer {
       height: 40px;
       text-align: center;
+      .el-button {
+        width: 78px;
+        height: 28px;
+        line-height: 28px;
+        padding: 0;
+        margin-top: 5px;
+      }
     }
   }
   .image-picker-body {

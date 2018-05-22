@@ -32,6 +32,7 @@
     <en-image-picker
       :show="dialogShow"
       :default-data="defaultData"
+      :operation="operation"
       @close="dialogShow = false"
       @confirm="handleImagePickerConfirm"
       :limit="10"
@@ -72,7 +73,28 @@
           handle: '.handle-move'
         },
         dialogShow: false,
-        defaultData: ''
+        defaultData: '',
+        /** 自定义操作参数 */
+        operation: [{
+          label: '链接类型',
+          name: 'opt_type',
+          type: 'select',
+          options: [
+            { text: '无操作', value: 'none' },
+            { text: '连接地址', value: 'link' },
+            { text: '关键字', value: 'keyword' },
+            { text: '商品序号', value: 'goods-sn' },
+            { text: '店铺编号', value: 'shop-sn' },
+            { text: '商品分类', value: 'goods-cat' }
+          ],
+          value: 'none'
+        }, {
+          label: '链接值',
+          name: 'opt_value'
+        }, {
+          label: '图片描述',
+          name: 'opt_detail'
+        }]
       }
     },
     mounted() {
@@ -85,15 +107,22 @@
           target,
           targetIndex
         }
-        this.defaultData = target.blockList[targetIndex]
+        const blockData = JSON.parse(JSON.stringify(target.blockList[targetIndex]))
+        this.defaultData = blockData.block_value ? [{
+          url: blockData.block_value,
+          opt: blockData.block_opt
+        }] : null
         this.dialogShow = true
       },
       /** 图片上传组件确认 */
       handleImagePickerConfirm(fileList) {
+        const file = fileList[0]
+        let opt = file ? file.operation : {}
+        let url = file ? file.response.url : ''
         this.dialogShow = false
         const { index, target, targetIndex } = this.editOptions
-        const { url = '' } = fileList[0] || {}
         target.blockList[targetIndex].block_value = url
+        target.blockList[targetIndex].block_opt = opt
         this.$set(this.floorList, index, target)
       },
       /** 获取模板列表 */
