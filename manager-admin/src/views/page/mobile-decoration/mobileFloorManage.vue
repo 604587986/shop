@@ -1,37 +1,57 @@
 <template>
-  <div class="floor-container">
-    <div class="draggable-box floor">
-      <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
-        <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
-          <div class="img-tpl"></div>
-          <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
-        </div>
-      </draggable>
-    </div>
-    <div class="draggable-box">
-      <div class="floor-top"></div>
-      <div class="floor-body">
-        <draggable v-model="floorList" :options="floorOptions" class="floor-list">
-          <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
-            <component :is="templates[item.tpl_id]" :data="item" @change="(data) => handleFloorChange(index, data)"></component>
-            <div class="panel-handle">
-              <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
-              <span class="icon-handle handle-delete" @click="floorList.splice(index, 1)"><svg-icon icon-class="delete"/></span>
-            </div>
+  <div>
+    <div class="floor-container">
+      <div class="draggable-box floor">
+        <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
+          <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
+            <div class="img-tpl"></div>
+            <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
           </div>
         </draggable>
       </div>
+      <div class="draggable-box">
+        <div class="floor-top"></div>
+        <div class="floor-body">
+          <draggable v-model="floorList" :options="floorOptions" class="floor-list">
+            <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
+              <component
+                :is="templates[item.tpl_id]"
+                :data="item"
+                is-edit
+                @handle-edit="(target, targetIndex) => handleEditFloor(index, target, targetIndex)"
+              ></component>
+              <div class="panel-handle">
+                <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
+                <span class="icon-handle handle-delete" @click="floorList.splice(index, 1)"><svg-icon icon-class="delete"/></span>
+              </div>
+            </div>
+          </draggable>
+        </div>
+      </div>
     </div>
+    <en-image-picker
+      :show="dialogShow"
+      :default-data="defaultData"
+      :operation="operation"
+      @close="dialogShow = false"
+      @confirm="handleImagePickerConfirm"
+      :limit="10"
+      multiple
+    />
   </div>
 </template>
 
 <script>
   import draggable from 'vuedraggable'
+  import { ImagePicker } from '@/components'
   import * as API_Floor from '@/api/floor'
   import templates, { templateArray } from './templates'
   export default {
     name: 'mobileFloorManage',
-    components: { draggable },
+    components: {
+      draggable,
+      [ImagePicker.name]: ImagePicker
+    },
     data() {
       return {
         templates,
@@ -51,24 +71,64 @@
           group: { name: 'tplGroup', put: true },
           sort: true,
           handle: '.handle-move'
-        }
+        },
+        dialogShow: false,
+        defaultData: '',
+        /** 自定义操作参数 */
+        operation: [{
+          label: '链接类型',
+          name: 'opt_type',
+          type: 'select',
+          options: [
+            { text: '无操作', value: 'none' },
+            { text: '连接地址', value: 'link' },
+            { text: '关键字', value: 'keyword' },
+            { text: '商品序号', value: 'goods-sn' },
+            { text: '店铺编号', value: 'shop-sn' },
+            { text: '商品分类', value: 'goods-cat' }
+          ],
+          value: 'none'
+        }, {
+          label: '链接值',
+          name: 'opt_value'
+        }, {
+          label: '图片描述',
+          name: 'opt_detail'
+        }]
       }
     },
     mounted() {
       this.GET_FloorList()
     },
     methods: {
-      handleFloorChange(index, data) {
-        console.log('handleFloorChange:', index, data)
-        this.$set(this.floorList, index, data)
+      handleEditFloor(index, target, targetIndex) {
+        this.editOptions = {
+          index,
+          target,
+          targetIndex
+        }
+        const blockData = JSON.parse(JSON.stringify(target.blockList[targetIndex]))
+        this.defaultData = blockData.block_value ? [{
+          url: blockData.block_value,
+          opt: blockData.block_opt
+        }] : null
+        this.dialogShow = true
+      },
+      /** 图片上传组件确认 */
+      handleImagePickerConfirm(fileList) {
+        const file = fileList[0]
+        let opt = file ? file.operation : {}
+        let url = file ? file.response.url : ''
+        this.dialogShow = false
+        const { index, target, targetIndex } = this.editOptions
+        target.blockList[targetIndex].block_value = url
+        target.blockList[targetIndex].block_opt = opt
+        this.$set(this.floorList, index, target)
       },
       /** 获取模板列表 */
       GET_FloorList() {
         API_Floor.getFloorList('mobile').then(response => {
-          this.floorList = response.map(item => {
-            item.isEdit = true
-            return item
-          })
+          this.floorList = response
         })
       }
     }

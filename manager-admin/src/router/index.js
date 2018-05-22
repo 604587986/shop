@@ -249,9 +249,9 @@ export const asyncRouterMap = [
           title: 'pcDecoration'
         },
         children: [
-          { path: 'pc-theme', component: _import('page/pc-decoration/pcThemeManage'), name: 'pcThemeManage', meta: { title: 'pcThemeManage' }},
-          { path: 'pc-floor', component: _import('page/pc-decoration/pcFloorManage'), name: 'pcFloorManage', meta: { title: 'pcFloorManage' }},
-          { path: 'pc-focus', component: _import('page/pc-decoration/pcFocusManage'), name: 'pcFocusManage', meta: { title: 'pcFocusManage' }}
+          { path: 'theme', component: _import('page/pc-decoration/pcThemeManage'), name: 'pcThemeManage', meta: { title: 'pcThemeManage' }},
+          { path: 'floor', component: _import('page/pc-decoration/pcFloorManage'), name: 'pcFloorManage', meta: { title: 'pcFloorManage' }},
+          { path: 'focus', component: _import('page/pc-decoration/pcFocusManage'), name: 'pcFocusManage', meta: { title: 'pcFocusManage' }}
         ]
       },
       {
@@ -263,9 +263,9 @@ export const asyncRouterMap = [
           title: 'mobileDecoration'
         },
         children: [
-          { path: 'mobile-theme', component: _import('page/mobile-decoration/mobileThemeManage'), name: 'mobileThemeManage', meta: { title: 'mobileThemeManage' }},
-          { path: 'mobile-floor', component: _import('page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' }},
-          { path: 'mobile-focus', component: _import('page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }}
+          { path: 'theme', component: _import('page/mobile-decoration/mobileThemeManage'), name: 'mobileThemeManage', meta: { title: 'mobileThemeManage' }},
+          { path: 'floor', component: _import('page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' }},
+          { path: 'focus', component: _import('page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }}
         ]
       },
       {

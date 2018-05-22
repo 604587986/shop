@@ -7,25 +7,25 @@ import Vue from 'vue'
 /** mixin */
 export default {
   props: {
+    /** 数据 */
     data: {
       type: Object,
       default: () => ({})
+    },
+    /** 是否为编辑模式 */
+    isEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
-    return {
-      floorData: JSON.parse(JSON.stringify(this.data))
-    }
+    return {}
   },
   methods: {
-    cc() {
-      console.log('cc')
-    },
     /** 选择图片 */
     selectImg(index) {
       const data = JSON.parse(JSON.stringify(this.data))
-      data.blockList[index].block_value = 'http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/2A70E151F2D14E26B1CF4BD2CC6AC849.jpg'
-      this.$emit('change', data)
+      this.$emit('handle-edit', data, index)
     }
   }
 }
