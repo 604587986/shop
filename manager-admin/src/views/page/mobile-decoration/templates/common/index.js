@@ -324,17 +324,48 @@ export default {
     dataTpl: {
       tpl_id: 37,
       blockList: [
-        { block_type: 'IMAGE', block_value: '', block_opt: '' },
-        { block_type: 'IMAGE', block_value: '', block_opt: '' }
+        { block_type: 'GOODS', block_value: '', block_opt: '' },
+        { block_type: 'GOODS', block_value: '', block_opt: '' }
       ]
+    },
+    filters: {
+      formatPrice(price) {
+        if (!price) return ''
+        return '￥' + String(Number(price).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      }
+    },
+    methods: {
+      handleEdit(index) {
+        const goods = {
+          goods_id: 123,
+          goods_name: 'vivo X9s 4GB+64GB 玫瑰金 移动联通电信4G拍照手机 双卡双待',
+          goods_price: 2399.99,
+          goods_image: 'http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/4A10ED8667CA49C7BCAE9486DF21D4AC.jpg_300x300'
+        }
+        this.data.blockList[index].block_value = goods
+      }
     },
     template: `<div class="floor-layout tpl-37">
                  <div class="layout-main">
                    <div class="layout-item">
-                     <floor-mask/>
+                     <div class="goods-item">
+                       <div class="image-goods">
+                         <img :src="data.blockList[0].block_value.goods_image">
+                       </div>
+                       <div class="name-goods">{{ data.blockList[0].block_value.goods_name }}</div>
+                       <div class="price-goods">{{ data.blockList[0].block_value.goods_price | formatPrice }}</div>
+                     </div>
+                     <floor-mask @click="handleEdit(0)"/>
                    </div>
                    <div class="layout-item">
-                     <floor-mask/>
+                     <div class="goods-item">
+                       <div class="image-goods">
+                         <img :src="data.blockList[1].block_value.goods_image">
+                       </div>
+                       <div class="name-goods">{{ data.blockList[0].block_value.goods_name }}</div>
+                       <div class="price-goods">{{ data.blockList[0].block_value.goods_price | formatPrice }}</div>
+                     </div>
+                     <floor-mask @click="handleEdit(1)"/>
                    </div>
                  </div>
                </div>`

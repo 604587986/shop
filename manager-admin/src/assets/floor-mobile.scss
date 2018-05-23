@@ -134,14 +134,42 @@
   }
   /** tpl-37 商品模块 */
   .tpl-37 {
-    & + .tpl-37 { margin-top: 20px }
+    margin-top: 10px;
     .layout-main {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
     }
     .layout-item {
-      width: 49%;
+      width: 47%;
       height: 100%;
+    }
+    .image-goods {
+      position: relative;
+      width: 100%;
+      &:before {
+        content: "";
+        display: inline-block;
+        padding-bottom: 100%;
+        width: .1px;
+        vertical-align: middle;
+      }
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .name-goods {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .price-goods {
+      color: #f42424;
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px dashed #ccc;
     }
   }
   /** tpl-42 文本模块 */
