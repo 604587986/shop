@@ -317,10 +317,10 @@ export default {
                  </div>
                </div>`
   },
-  // 手动选择商品模块
+  // 商品模块
   37: {
     mixins: [mixin],
-    title: '手动选择商品模块',
+    title: '商品模块',
     dataTpl: {
       tpl_id: 37,
       blockList: [
@@ -328,7 +328,16 @@ export default {
         { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
-    template: `<div class="floor-layout">37</div>`
+    template: `<div class="floor-layout tpl-37">
+                 <div class="layout-main">
+                   <div class="layout-item">
+                     <floor-mask/>
+                   </div>
+                   <div class="layout-item">
+                     <floor-mask/>
+                   </div>
+                 </div>
+               </div>`
   },
   // 文本模块
   42: {

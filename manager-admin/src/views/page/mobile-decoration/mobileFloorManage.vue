@@ -219,7 +219,10 @@
     &.item-30 { height: 40px }
     &.item-31 { height: 80px }
     &.item-32 { height: 125px }
-    &.item-37 { height: 220px }
+    &.item-37 {
+      height: 220px;
+      & + .item-37 { margin-top: 10px }
+    }
     &.item-42 { height: 40px }
     .panel-handle {
       display: none;
