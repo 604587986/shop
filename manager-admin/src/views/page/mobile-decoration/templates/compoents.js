@@ -7,7 +7,8 @@ import Vue from 'vue'
 
 /** 遮罩 */
 Vue.component('floor-mask', {
-  template: `<div v-if="$parent.isEdit" class="mask-floor" @click="$emit('click')">
+  props: ['isEdit'],
+  template: `<div v-if="isEdit === undefined ? $parent.isEdit : isEdit" class="mask-floor" @click="$emit('click')">
                <div class="mask-bg-floor">
                  <button type="button" class="mask-btn-floor">
                    <svg-icon icon-class="pen-leather"></svg-icon>编辑

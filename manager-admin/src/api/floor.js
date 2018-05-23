@@ -25,7 +25,7 @@ export function getTplList(type) {
  */
 export function getFloorList(type) {
   const url = type === 'mobile'
-    ? 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/floor/mobile'
+    ? 'http://www.andste.cc/mock/5aa72c250d9d060b4b99b466/admin/floor/mobile'
     : ''
   return request({
     url,
