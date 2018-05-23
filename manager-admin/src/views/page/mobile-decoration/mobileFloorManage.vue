@@ -208,7 +208,6 @@
   .floor-item {
     position: relative;
     width: 100%;
-    min-height: 50px;
     box-sizing: border-box;
     &.item-23 { height: 130px }
     &.item-24 { height: 130px }
