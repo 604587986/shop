@@ -42,7 +42,7 @@
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus"/>
-        <el-table-column label="操作" min-width="280">
+        <el-table-column label="操作" min-width="200">
           <template slot-scope="scope">
             <el-button
               size="mini"
