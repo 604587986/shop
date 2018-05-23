@@ -3,6 +3,8 @@
  */
 
 import mixin from '../mixin'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 
 export default {
   // 单列单张大图模块
@@ -170,7 +172,30 @@ export default {
         { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
-    template: `<div class="floor-layout">28</div>`
+    data() {
+      return {
+        swiperOption: {
+          pagination: {
+            el: '.swiper-pagination',
+            dynamicBullets: true
+          }
+        }
+      }
+    },
+    components: { swiper, swiperSlide },
+    template: `<div class="floor-layout tpl-28">
+                 <div class="layout-main">
+                   <swiper :options="swiperOption">
+                     <swiper-slide v-for="(block, index) in data.blockList" :key="index">
+                       <div class="layout-item">
+                         <floor-image :url="block.block_value"/>
+                         <floor-mask :is-edit="isEdit" @click="selectImg(index)"/>
+                       </div>
+                     </swiper-slide>
+                     <div class="swiper-pagination" slot="pagination"></div>
+                   </swiper>
+                 </div>
+               </div>`
   },
   // 四列单行图片模块
   29: {

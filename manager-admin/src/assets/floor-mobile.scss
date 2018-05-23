@@ -103,6 +103,12 @@
     }
     @include layout-item-neighbor;
   }
+  .tpl-28 {
+    .swiper-container {
+      width: 100%;
+      height: 100%;
+    }
+  }
   /** tpl-29 四列单行图片模块 */
   .tpl-29 {
     @extend .tpl-27;
