@@ -103,6 +103,7 @@
     }
     @include layout-item-neighbor;
   }
+  /** tpl-28 轮播图模块 */
   .tpl-28 {
     .swiper-container {
       width: 100%;
@@ -115,6 +116,7 @@
     .layout-item { width: percentage(1/4) }
     .no-image { background-size: 70% }
   }
+  /** tpl-30 标题或间隔性模块 */
   .tpl-30 {
     .no-image { background-size: 17.5% 75% }
   }
@@ -128,6 +130,13 @@
     .left .layout-item { width: 100% }
     .right .no-image {
       background-size: 75% auto;
+    }
+  }
+  /** tpl-42 文本模块 */
+  .tpl-42 {
+    .layout-item {
+      line-height: 40px;
+      padding: 0 10px;
     }
   }
 }
