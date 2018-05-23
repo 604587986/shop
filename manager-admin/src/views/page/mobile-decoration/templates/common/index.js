@@ -12,7 +12,7 @@ export default {
     dataTpl: {
       tpl_id: 23,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-23">
@@ -31,9 +31,9 @@ export default {
     dataTpl: {
       tpl_id: 24,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-24">
@@ -64,9 +64,9 @@ export default {
     dataTpl: {
       tpl_id: 25,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-25">
@@ -97,9 +97,9 @@ export default {
     dataTpl: {
       tpl_id: 26,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-26">
@@ -126,11 +126,11 @@ export default {
     dataTpl: {
       tpl_id: 27,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-27">
@@ -165,9 +165,9 @@ export default {
     dataTpl: {
       tpl_id: 28,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout">28</div>`
@@ -179,10 +179,10 @@ export default {
     dataTpl: {
       tpl_id: 29,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-29">
@@ -213,7 +213,7 @@ export default {
     dataTpl: {
       tpl_id: 30,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-30">
@@ -232,10 +232,10 @@ export default {
     dataTpl: {
       tpl_id: 31,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-31">
@@ -266,9 +266,9 @@ export default {
     dataTpl: {
       tpl_id: 32,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout tpl-32">
@@ -299,8 +299,8 @@ export default {
     dataTpl: {
       tpl_id: 37,
       blockList: [
-        { block_type: 'IMAGE', block_value: '' },
-        { block_type: 'IMAGE', block_value: '' }
+        { block_type: 'IMAGE', block_value: '', block_opt: '' },
+        { block_type: 'IMAGE', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout">37</div>`
@@ -312,7 +312,7 @@ export default {
     dataTpl: {
       tpl_id: 42,
       blockList: [
-        { block_type: 'TEXT', block_value: '' }
+        { block_type: 'TEXT', block_value: '', block_opt: '' }
       ]
     },
     template: `<div class="floor-layout">
