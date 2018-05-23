@@ -132,6 +132,18 @@
       background-size: 75% auto;
     }
   }
+  /** tpl-37 商品模块 */
+  .tpl-37 {
+    & + .tpl-37 { margin-top: 20px }
+    .layout-main {
+      display: flex;
+      justify-content: space-between;
+    }
+    .layout-item {
+      width: 49%;
+      height: 100%;
+    }
+  }
   /** tpl-42 文本模块 */
   .tpl-42 {
     .layout-item {
