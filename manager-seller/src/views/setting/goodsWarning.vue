@@ -5,8 +5,8 @@
         label="库存预警数"
         prop="goods_warning_count"
         :rules="[
-          { required: true, message: '数量不能为空' },
-          { type: 'number', message: '库存预警数必须为数字值' }
+          { required: true, message: '数量不能为空', trigger: 'blur' },
+          { type: 'number', message: '库存预警数必须为数字值', trigger: 'blur' }
         ]"
       >
         <el-input
