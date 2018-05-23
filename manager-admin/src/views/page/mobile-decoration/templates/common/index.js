@@ -160,10 +160,10 @@ export default {
                  </div>
                </div>`
   },
-  // 焦点广告图模块
+  // 轮播图模块
   28: {
     mixins: [mixin],
-    title: '焦点广告图模块',
+    title: '轮播图模块',
     dataTpl: {
       tpl_id: 28,
       blockList: [
@@ -340,10 +340,23 @@ export default {
         { block_type: 'TEXT', block_value: '', block_opt: '' }
       ]
     },
-    template: `<div class="floor-layout">
+    methods: {
+      hanldeEdit() {
+        this.$prompt('请输入文本内容', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /.+/,
+          inputErrorMessage: '文本不能为空！'
+        }).then(({ value }) => {
+          this.data.blockList[0].block_value = value
+        }).catch(() => {})
+      }
+    },
+    template: `<div class="floor-layout tpl-42">
                  <div class="layout-main">
                    <div class="layout-item">
-                     <floor-mask/>
+                     <div>{{ data.blockList[0].block_value }}</div>
+                     <floor-mask @click="hanldeEdit"/>
                    </div>
                  </div>
                </div>`
