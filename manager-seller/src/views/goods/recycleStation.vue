@@ -147,8 +147,7 @@
       handlReductionRecycle(row) {
         this.$confirm('确认还原吗？', '提示')
           .then(() => this.ReductionGoods(row.goods_id))
-          .catch(() => {
-          })
+          .catch(() => {})
       },
 
       /** 批量还原 */
@@ -191,8 +190,6 @@
         API_goods.RecycleReductionGoods(ids, {}).then(response => {
           this.$message.success('还原成功')
           this.GET_GoodsList()
-        }).catch(error => {
-          this.$message.error(error)
         })
       },
 
@@ -202,7 +199,7 @@
         API_goods.RecycleDeleteGoods(_ids, {}).then(() => {
           this.GET_GoodsList()
           this.$message.success('删除商品成功！')
-        }).catch((error) => this.$message.error(error))
+        })
       }
     }
   }

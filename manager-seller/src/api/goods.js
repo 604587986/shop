@@ -23,7 +23,7 @@ export function getGoodsList(params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -41,8 +41,9 @@ export function deleteGoods(ids, params) {
       method: 'put',
       data: _params
     }).then(response => {
-      resolve(response)
-    }).catch(error => reject(error))
+      const _response = new GoodsModel().map(response)
+      resolve(_response)
+    })
   })
 }
 
@@ -62,7 +63,7 @@ export function getGoodsStockList(ids, params) {
     }).then(response => {
       const _response = new GoodsModel().map(response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -81,7 +82,7 @@ export function reserveStockGoods(goods_id, params) {
       headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -100,7 +101,7 @@ export function getGoodsParams(ids, params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -119,7 +120,7 @@ export function getGoodsDraftParams(ids, params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -138,7 +139,7 @@ export function getGoodsCatrgory(ids, params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -157,7 +158,7 @@ export function getGoodData(ids, params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -176,7 +177,7 @@ export function getGoodDraftData(ids, params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -197,7 +198,7 @@ export function getGoodsBrandList(ids, params) {
       const _response = response
       _response.data = new GoodsBrandModel().map(_response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -218,7 +219,7 @@ export function getTplList(ids, params) {
       const _response = response
       _response.data = new ExpressMouldModel().map(_response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -236,7 +237,7 @@ export function underGoods(ids, params) {
       data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -254,7 +255,7 @@ export function aboveGoods(params) {
       headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -273,7 +274,7 @@ export function editGoods(id, params) {
       headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -291,7 +292,7 @@ export function saveDraft(params) {
       headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -309,7 +310,7 @@ export function aboveDraftGoods(ids, params) {
       headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -323,7 +324,7 @@ export function editDraftGoods(id, params) {
       headers: { 'Content-Type': 'application/json' }
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -342,7 +343,7 @@ export function draftSku(id, params) {
     }).then(response => {
       const _response = new GoodsModel().map(response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -362,7 +363,7 @@ export function getDraftGoodsList(params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -381,7 +382,7 @@ export function deleteDraftGoods(ids, params) {
       data: _params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -401,7 +402,7 @@ export function getRecycleGoodsList(params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -420,7 +421,7 @@ export function RecycleReductionGoods(ids, params) {
       data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -439,7 +440,7 @@ export function RecycleDeleteGoods(ids, params) {
       data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -459,7 +460,7 @@ export function getWarningGoodsList(params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -480,6 +481,6 @@ export function getWarningGoodsStockList(ids, params) {
       const _response = response
       _response.data = new GoodsModel().map(_response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }

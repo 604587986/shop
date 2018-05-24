@@ -138,9 +138,6 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       },
 
@@ -161,8 +158,6 @@
           API_goods.deleteDraftGoods(row.draft_goods_id, {}).then((response) => {
             this.GET_DraftGoodsList()
             this.$message.success('删除草稿箱商品成功！')
-          }).catch((error) => {
-            this.$message.error(error)
           })
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })

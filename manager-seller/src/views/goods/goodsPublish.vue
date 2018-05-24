@@ -686,8 +686,6 @@
           API_goods.editDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('修改草稿箱商品成功')
             this.$router.push({ path: '/goods/draft-list' })
-          }).catch(error => {
-            this.$message.error(error)
           })
         } else {
           if (!this.skuFormVali()) {
@@ -697,8 +695,6 @@
           API_goods.saveDraft(_params).then(response => {
             this.$message.success('保存草稿成功')
             this.$router.push({ path: '/goods/draft-list' })
-          }).catch(error => {
-            this.$message.error(error)
           })
         }
       },
@@ -716,16 +712,12 @@
             API_goods.editGoods(this.activeGoodsId, _params).then(response => {
               this.$message.success('修改商品成功')
               this.$router.push({ path: '/goods/goods-list' })
-            }).catch(error => {
-              this.$message.error(error)
             })
           } else {
             /** 正常商品上架 */
             API_goods.aboveGoods(_params).then(response => {
               this.$message.success('上架商品成功')
               this.$router.push({ path: '/goods/goods-list' })
-            }).catch(error => {
-              this.$message.error(error)
             })
           }
         } else {
@@ -735,8 +727,6 @@
           API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('上架草稿箱商品成功')
             this.$router.push({ path: '/goods/goods-list' })
-          }).catch(error => {
-            this.$message.error(error)
           })
         }
       },
@@ -746,7 +736,7 @@
         API_goods.underGoods(this.activeGoodsId, { }).then((response) => {
           this.loading = false
           this.$message.success('下架成功')
-        }).catch(() => this.$message.error('下架商品失败，请稍后再试！'))
+        })
       },
 
       /** 查询下一级 商城商品分类*/
@@ -764,7 +754,7 @@
             this.categoryListLevel1 = response.data
           }
           this.categoryLevel = level
-        }).catch((error) => this.$message.error(error))
+        })
       },
 
       /** 选择商城商品分类 */
@@ -831,16 +821,16 @@
               const price = key.goods_price
               return { cost, price, quantity, sn, weight, spec_list }
             })
-          }).catch((error) => this.$message.error(error))
-        }).catch((error) => this.$message.error(error))
+          })
+        })
       },
 
       /** 查询当前商品分类名称  */
       GET_CurCateGoryName(category_id) {
         const _id = category_id || 0
         API_goodsCategory.getGoodsCategoryLevelList(_id, { }).then((response) => {
-          debugger
-        }).catch((error) => this.$message.error(error))
+
+        })
       },
 
       /** 查询商品参数 */
@@ -862,7 +852,7 @@
             _paramsList = _paramsList.concat(key.params)
           })
           this.baseInfoForm.goods_params_list = _paramsList
-        }).catch((error) => this.$message.error(error))
+        })
       },
 
       /** 查询单个草稿箱商品信息 */
@@ -909,8 +899,8 @@
             //   const price = key.goods_price
             //   return { cost, price, quantity, sn, weight, spec_list }
             // })
-          }).catch((error) => this.$message.error(error))
-        }).catch((error) => this.$message.error(error))
+          })
+        })
         /** 查询草稿箱商品参数信息 */
         this.GET_GoodsDtagtParams()
       },
@@ -933,7 +923,7 @@
             _paramsList = _paramsList.concat(key.params)
           })
           this.baseInfoForm.goods_params_list = _paramsList
-        }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
+        })
       },
 
       /** 商品分组组件 改变时触发 */
@@ -945,7 +935,7 @@
       getGoodsBrandList() {
         API_goods.getGoodsBrandList(this.baseInfoForm.category_id, { }).then((response) => {
           this.brandList = response.data
-        }).catch((error) => this.$message.error(error))
+        })
       },
 
       /** 商品品牌 改变时触发 */
@@ -957,7 +947,7 @@
       getTplList() {
         API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
           this.tplList = response.data
-        }).catch((error) => this.$message.error(error))
+        })
       },
 
       /** 运费模板改变时触发 */
@@ -970,7 +960,7 @@
         API_goodsCategory.getGoodsCategoryLevelList(0, { }).then((response) => {
           this.exchangeGoodsCatrgoryList = response.data
           this.loading = false
-        }).catch((error) => this.$message.error(error))
+        })
       },
 
       /** 积分商品商城分类 改变时触发*/

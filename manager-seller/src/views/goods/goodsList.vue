@@ -156,9 +156,6 @@
     mounted() {
       this.GET_GoodsList()
     },
-    computed: {
-
-    },
     beforeRouteEnter(to, from, next) {
       next(vm => {
         if (vm.$route.query) {
@@ -230,9 +227,6 @@
             data_total: response.data_total
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       },
 
@@ -264,7 +258,7 @@
           API_goods.deleteGoods(_ids).then(() => {
             this.GET_GoodsList()
             this.$message.success('删除商品成功！')
-          }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
+          })
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })
@@ -284,9 +278,6 @@
             })
           }
           this.goodsStockData = this.goodsStockData.length > 1 ? this.goodsStockData : this.goodsStockData[0]
-        }).catch((error) => {
-          this.$message.error(error)
-          this.$message.error('请求库存数据出错，请稍后再试！')
         })
       },
 
@@ -310,7 +301,7 @@
           this.goodsStockshow = false
           this.$message.success('库存商品保存成功')
           this.GET_GoodsList()
-        }).catch(() => this.$message.error('库存商品保存出错，请稍后再试！'))
+        })
       }
     }
   }

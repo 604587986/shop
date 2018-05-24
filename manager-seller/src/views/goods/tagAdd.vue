@@ -116,9 +116,6 @@
           this.loading = false
           this.tableData = response.data
           this.maxsize = 0
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       },
 
@@ -156,9 +153,6 @@
         API_goodsTag.saveTagGoodsList(_tag_id, _goods_ids, this.params).then(response => {
           this.loading = false
           this.$message.success('保存设置成功！')
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       }
     }
