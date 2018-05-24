@@ -108,8 +108,6 @@
         API_ShopSlide.getShopSlideList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
-        }).catch(error => {
-          console.log(error)
         })
       },
 
@@ -146,25 +144,17 @@
 
       /** 删除幻灯片*/
       Del_Slide(item) {
-        console.log(item)
         this.$confirm('确定要删除此幻灯片么？', '确认信息')
           .then(() => {
             API_ShopSlide.delShopSlide(item.shop_banner_id, {}).then(response => {
               this.$message.success('删除成功')
               this.GET_ShopSlideList()
-            }).catch(error => {
-              console.log(error)
-              this.$message.error('删除失败，请稍后再试！')
             })
-          })
-          .catch(() => {
-          })
+          }).catch(() => {})
       },
 
       /** 保存幻灯片*/
       POST_SaveSlide() {
-        // 构造query数据
-        console.log(this.tableData)
         const _params = this.tableData.map(key => {
           return {
             img: key.shop_banner_image,
@@ -172,13 +162,9 @@
             silde_id: key.shop_banner_id || ''
           }
         })
-        console.log(_params)
-        API_ShopSlide.saveShopSlide(_params).then(response => {
+        API_ShopSlide.saveShopSlide(_params).then(() => {
           this.$message.success('保存成功')
           this.GET_ShopSlideList()
-        }).catch(error => {
-          console.log(error)
-          this.$message.error('保存失败，请稍后再试！')
         })
       }
     }

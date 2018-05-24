@@ -26,7 +26,7 @@ export default {
     shop: 'Manage Shop',
     shopThemesPc: 'shop Themes Pc',
     shopThemesWap: 'shop Themes Wap',
-    shopBanner: 'shop Banner',
+    shopSlide: 'shop Slide',
     shopNav: 'shop Nav',
 
     promotions: 'promotions',

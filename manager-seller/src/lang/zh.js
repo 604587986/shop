@@ -26,7 +26,7 @@ export default {
     shop: '店铺管理',
     shopThemesPc: '店铺模板',
     shopThemesWap: 'Wap店铺',
-    shopBanner: '店铺幻灯',
+    shopSlide: '店铺幻灯',
     shopNav: '店铺导航',
 
     promotions: '促销管理',

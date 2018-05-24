@@ -192,8 +192,6 @@
           this.shopDataForm = { ...response.data }
           this.fileList_logo = [{ url: this.shopDataForm.shop_logo }]
           this.fileList_banner = [{ url: this.shopDataForm.shop_banner }]
-        }).catch(error => {
-          console.log(error)
         })
       },
 
@@ -201,26 +199,19 @@
       handleSaveShopData(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // 构造表单提交数据
             const _params = {
               ...this.shopDataForm
             }
             API_Shop.saveShopSettings(_params).then(response => {
               this.$message.success('保存店铺设置成功')
               this.GET_ShopGradeData()
-            }).catch(error => {
-              this.$message.error(error)
-              console.log(error)
             })
-          } else {
-            return false
           }
         })
       },
 
-      /** 操作级联地区选择器改变时 触发*/
+      /** 操作地区选择器改变时 触发*/
       handleChange(val) {
-        console.log(val, 585)
         this.selectedArea = val
       },
 

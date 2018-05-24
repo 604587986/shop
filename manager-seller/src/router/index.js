@@ -96,7 +96,7 @@ export const asyncRouterMap = [
     children: [
       { path: 'shop-themes-pc', component: _import('shop/shopThemesPc'), name: 'shopThemesPc', meta: { title: 'shopThemesPc' }},
       { path: 'shop-themes-wap', component: _import('shop/shopThemesWap'), name: 'shopThemesWap', meta: { title: 'shopThemesWap' }},
-      { path: 'shop-banner', component: _import('shop/shopBanner'), name: 'shopBanner', meta: { title: 'shopBanner' }},
+      { path: 'shop-slide', component: _import('shop/shopSlide'), name: 'shopSlide', meta: { title: 'shopSlide' }},
       { path: 'shop-nav', component: _import('shop/shopNav'), name: 'shopNav', meta: { title: 'shopNav' }}
     ]
   },

@@ -43,8 +43,6 @@
       GET_stockWarningNum() {
         API_shop.getShopData({}).then(response => {
           this.stockWarningForm.goods_warning_count = response.data['goods_warning_count']
-        }).catch(error => {
-          this.$message.error(error)
         })
       },
 
@@ -55,11 +53,9 @@
             const _params = {
               warning_count: this.stockWarningForm.goods_warning_count
             }
-            API_shop.saveStockWarningNum(_params).then(response => {
+            API_shop.saveStockWarningNum(_params).then(() => {
               this.$message.success('修改成功')
               this.GET_stockWarningNum()
-            }).catch(error => {
-              this.$message.error(error)
             })
           }
         })

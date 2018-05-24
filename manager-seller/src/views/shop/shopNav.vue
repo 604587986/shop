@@ -175,9 +175,6 @@
             page_size: response.page_size,
             data_total: response.data_total
           }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       },
 
@@ -212,9 +209,6 @@
           this.$message.success('删除成功')
           this.addShopNavshow = false
           this.GET_ShopNavList()
-        }).catch(error => {
-          console.log(error)
-          this.$message.error('删除失败，请稍后重试！')
         })
       },
 
@@ -222,36 +216,20 @@
       POST_AddShopNav(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const _params = {
-              name: this.navform.shop_nav_name,
-              disable: this.navform.shop_nav_show,
-              sort: this.navform.shop_nav_sort,
-              nav_url: this.navform.shop_nav_url,
-              target: this.navform.open_new_blank
-            }
+            const _params = { ... this.navform }
             if (this.isEdit === 2) {
-              // 添加导航
-              API_ShopNav.addShopNav(_params).then(response => {
+              API_ShopNav.addShopNav(_params).then(() => {
                 this.$message.success('保存成功')
                 this.addShopNavshow = false
                 this.GET_ShopNavList()
-              }).catch(error => {
-                console.log(error)
-                this.$message.error('保存失败，请稍后重试！')
               })
             } else if (this.isEdit === 1) {
-              // 编辑 导航
-              API_ShopNav.editShopNav(this.navId, _params).then(response => {
+              API_ShopNav.editShopNav(this.navId, _params).then(() => {
                 this.$message.success('保存成功')
                 this.addShopNavshow = false
                 this.GET_ShopNavList()
-              }).catch(error => {
-                console.log(error)
-                this.$message.error('保存失败，请稍后重试！')
               })
             }
-          } else {
-            return false
           }
         })
       }

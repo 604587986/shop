@@ -20,7 +20,7 @@ export function getShopThemeList(params) {
     }).then(response => {
       const _response = new ShopThemeModel().map(response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -36,7 +36,7 @@ export function saveShopTheme(id, params) {
       url: `/shops/themes/${id}`,
       method: 'put',
       params
-    }).then(response => resolve(response)).catch(error => reject(error))
+    }).then(response => resolve(response))
   })
 }
 
