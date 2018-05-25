@@ -113,9 +113,6 @@
             page_size: 10,
             data_total: response.recordsTotal
           }
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       }
     }

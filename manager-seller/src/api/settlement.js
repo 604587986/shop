@@ -22,7 +22,7 @@ export function getSettleMentList(params) {
       const _response = response
       _response.data = new SettleMentModel().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -41,7 +41,7 @@ export function getBillDetails(ids, params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -63,7 +63,7 @@ export function getOrderList(id, type, params) {
       const _response = response
       _response.data = new OrderModel().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -82,6 +82,6 @@ export function confirmSettle(id, params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }

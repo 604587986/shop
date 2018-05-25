@@ -163,14 +163,19 @@
         API_Settlement.getBillDetails({ bill_id: this.billId }).then(response => {
           this.loading = false
           this.settlementData = response.data
-        }).catch(error => this.$message.error(error))
+        })
       },
 
-      /** 确认结算 */
-      handleConfirmSettlement() { // 获取结算单号 入参传递
+      /** 确认下一步操作 */
+      handleConfirmSettlement() {
+      //   for(let value in this.settlementData.operate_allowable){
+      //     if (this.settlementData.operate_allowable[value]) {
+      //
+      //     }
+      //   }
         API_Settlement.confirmSettle(this.billId, {}).then(response => {
           this.settlementData = { ...response }
-        }).catch(error => this.$message.error(error))
+        })
       },
 
       /** 获取订单列表 */
@@ -184,7 +189,7 @@
             page_size: response.page_size,
             data_total: response.data_total
           }
-        }).catch(error => this.$message.error(error))
+        })
       },
 
       /** 分页大小发生改变 */
@@ -200,7 +205,7 @@
       },
 
       /** 查看订单详情 */
-      handleLookOrderDetails(row) { // 获取订单号 入参传递
+      handleLookOrderDetails(row) {
         this.$router.push({ path: `/order/detail/${row.sn}` })
       },
 
