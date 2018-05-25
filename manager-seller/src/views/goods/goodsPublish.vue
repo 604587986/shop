@@ -253,7 +253,10 @@
               :prop="'goods_params_list.' + index + '.param_value'"
               :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'blur' }"
             >
-              <el-input v-if="goods_params_list.param_type === 1 " v-model="goods_params_list.param_value" ></el-input>
+              <el-input
+                v-if="goods_params_list.param_type === 1"
+                v-model="goods_params_list.param_value" >
+              </el-input>
               <el-select
                 v-if="goods_params_list.param_type === 2"
                 v-model="goods_params_list.param_value"
@@ -299,7 +302,8 @@
         <el-button
           type="primary"
           @click="aboveGoods"
-          v-if="(currentStatus === 0 && activestep === 2) || (currentStatus === 1 && activestep !== 0) || (currentStatus === 2 && activestep === 1)"
+          v-if="(currentStatus === 0 && activestep === 2) || (currentStatus === 1 && activestep !== 0)
+          || (currentStatus === 2 && activestep === 1)"
         >上架</el-button>
         <el-button
           type="primary"
@@ -675,7 +679,6 @@
 
       /** 保存草稿 */
       saveDraft() {
-        // 构造提交表单数据
         const _params = this.generateFormData(this.baseInfoForm)
         if (this.activeGoodsId) {
           this.activeGoodsId = this.activeGoodsId || 1
@@ -701,10 +704,6 @@
 
       /** 上架  */
       aboveGoods() {
-        // if (!this.activeGoodsId && this.activeGoodsId !== 0) {
-        //   return '商品编号不存在'
-        // }
-        // 构造提交表单数据
         let _params = this.generateFormData(this.baseInfoForm)
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
@@ -733,8 +732,7 @@
 
       /** 下架*/
       handleUnderGoods() {
-        API_goods.underGoods(this.activeGoodsId, { }).then((response) => {
-          this.loading = false
+        API_goods.underGoods(this.activeGoodsId, { }).then(() => {
           this.$message.success('下架成功')
         })
       },
@@ -753,8 +751,7 @@
           } else if (!level) {
             this.categoryListLevel1 = response.data
           }
-          this.categoryLevel = level
-        }).catch(() => this.loading = false)
+        }).catch(() => { this.loading = false })
       },
 
       /** 选择商城商品分类 */
@@ -842,7 +839,7 @@
             _paramsList = _paramsList.concat(key.params)
           })
           this.baseInfoForm.goods_params_list = _paramsList
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /** 查询单个草稿箱商品信息 */
@@ -930,7 +927,7 @@
 
       /** 商品品牌 改变时触发 */
       changeGoodsBrand(val) {
-
+        this.baseInfoForm.brand_id = val
       },
 
       /** 运费模板列表 */
@@ -953,9 +950,15 @@
         })
       },
 
+      /** 积分兑换开关值改变时触发 */
+      handleSwitchexchange(val) {
+        this.isShowExchangeConfig = val
+        this.baseInfoForm.exchange.enable_exchange = 1
+      },
+
       /** 积分商品商城分类 改变时触发*/
       changeExangeCategory(val) {
-
+        this.baseInfoForm.exchange.category_id = val
       },
 
       /** 文件列表移除文件时的钩子  图片删除校验*/
@@ -1019,11 +1022,6 @@
         return isType && isLt1M && !isExit
       },
 
-      /** 积分兑换开关值改变时触发 */
-      handleSwitchexchange(val) {
-        this.isShowExchangeConfig = val
-      },
-
       /** 规格选择器规格数据改变时触发 */
       finalSku(val) {
         /** 动态修改总库存 每次设置为0  此处每次进行循环计算 存在性能浪费 */
@@ -1081,7 +1079,7 @@
         return _params
       },
 
-      /** 商品规格选择器表单校验 */
+      /** 商品规格选择器校验 */
       skuFormVali() {
         /** 是否自动生成货号校验 检测是否所有的货号都存在*/
         const _sn = this.baseInfoForm.sku_list.filter(key => {
