@@ -754,7 +754,7 @@
             this.categoryListLevel1 = response.data
           }
           this.categoryLevel = level
-        })
+        }).catch(() => this.loading = false)
       },
 
       /** 选择商城商品分类 */
@@ -792,7 +792,7 @@
           })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
-          if (!this.baseInfoForm.sku_list) {
+          if (!this.baseInfoForm.sku_list || !Array.isArray(this.baseInfoForm.sku_list)) {
             this.baseInfoForm.sku_list = []
           }
           /** 积分相关设置 如果没有积分相关则设置为空 */
@@ -808,7 +808,6 @@
               exchange_point: 0
             }
           }
-          // this.GET_CurCateGoryName(response.category_id)
           /** 查询商品sku信息 */
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
@@ -825,17 +824,8 @@
         })
       },
 
-      /** 查询当前商品分类名称  */
-      GET_CurCateGoryName(category_id) {
-        const _id = category_id || 0
-        API_goodsCategory.getGoodsCategoryLevelList(_id, { }).then((response) => {
-
-        })
-      },
-
       /** 查询商品参数 */
       GET_GoodsParams() {
-        // 处理数据 方便校验
         const goods_id = this.activeGoodsId || 0
         API_goods.getGoodsParams(this.baseInfoForm.category_id, { goods_id }).then((response) => {
           this.loading = false
@@ -890,15 +880,15 @@
           /** 查询草稿箱sku信息 */
           API_goods.draftSku(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
-            // this.skuList = response.map(key => {
-            //   const spec_list = key.spec_list.map(item => {
-            //     let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
-            //     return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
-            //   })
-            //   let { cost, quantity, sn, weight } = key
-            //   const price = key.goods_price
-            //   return { cost, price, quantity, sn, weight, spec_list }
-            // })
+            this.skuList = response.map(key => {
+              const spec_list = key.spec_list.map(item => {
+                let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
+                return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+              })
+              let { cost, quantity, sn, weight } = key
+              const price = key.goods_price
+              return { cost, price, quantity, sn, weight, spec_list }
+            })
           })
         })
         /** 查询草稿箱商品参数信息 */

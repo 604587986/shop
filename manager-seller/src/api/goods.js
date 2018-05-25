@@ -23,7 +23,7 @@ export function getGoodsList(params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    })
+    }).catch(() => resolve())
   })
 }
 
@@ -40,9 +40,6 @@ export function deleteGoods(ids, params) {
       url: `/goods/${ids}/recycle`,
       method: 'put',
       data: _params
-    }).then(response => {
-      const _response = new GoodsModel().map(response)
-      resolve(_response)
     })
   })
 }
@@ -80,8 +77,6 @@ export function reserveStockGoods(goods_id, params) {
       method: 'put',
       data: params,
       headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -235,8 +230,6 @@ export function underGoods(ids, params) {
       url: `/goods/${ids}/under`,
       method: 'put',
       data: params
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -253,8 +246,6 @@ export function aboveGoods(params) {
       method: 'post',
       data: params,
       headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -272,8 +263,6 @@ export function editGoods(id, params) {
       method: 'put',
       data: params,
       headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -290,8 +279,6 @@ export function saveDraft(params) {
       method: 'post',
       data: params,
       headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -308,8 +295,6 @@ export function aboveDraftGoods(ids, params) {
       method: 'put',
       data: params,
       headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -322,8 +307,6 @@ export function editDraftGoods(id, params) {
       method: 'put',
       data: params,
       headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -363,7 +346,7 @@ export function getDraftGoodsList(params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    })
+    }).catch(() => resolve())
   })
 }
 
@@ -380,8 +363,6 @@ export function deleteDraftGoods(ids, params) {
       url: `/goods/draft-goods/${ids}`,
       method: 'delete',
       data: _params
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -402,7 +383,7 @@ export function getRecycleGoodsList(params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    })
+    }).catch(() => resolve())
   })
 }
 
@@ -419,8 +400,6 @@ export function RecycleReductionGoods(ids, params) {
       url: `/goods/${ids}/revert`,
       method: 'put',
       data: params
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -438,8 +417,6 @@ export function RecycleDeleteGoods(ids, params) {
       url: `/goods/${ids}`,
       method: 'delete',
       data: params
-    }).then(response => {
-      resolve(response)
     })
   })
 }
@@ -460,7 +437,7 @@ export function getWarningGoodsList(params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    })
+    }).catch(() => resolve())
   })
 }
 

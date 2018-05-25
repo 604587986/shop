@@ -41,24 +41,16 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(
-  response => {
-    closeLoading(response)
-    let _data = response.data
-    if (typeof _data === 'string' && _data.indexOf('window.open(\'/javashop/admin/login.do\',\'_top\')') !== -1) {
-      fedLogOut()
-      return Promise.reject('登录失效')
-    }
-    if (_data.page_no && _data.page_size && _data.data_total) {
-      _data = new PaginationModel().map(_data)
-    }
-    return _data
+  async response => {
+    await closeLoading(response)
+    return response.data
   },
-  error => {
-    closeLoading(error)
+  async error => {
+    await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
-    if (error_response.code === 403) fedLogOut()
+    if (error_response.status === 403) fedLogOut()
     let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
     Vue.prototype.$message.error(error_data.message || _message)
     return Promise.reject(error)

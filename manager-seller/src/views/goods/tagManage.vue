@@ -86,7 +86,7 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        })
+        }).catch(() => this.loading = false)
       },
 
       /** 标签商品设置 */

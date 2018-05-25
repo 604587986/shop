@@ -227,7 +227,7 @@
             data_total: response.data_total
           }
           this.tableData = response.data
-        })
+        }).catch(() => this.loading = false)
       },
 
       /** 发布商品*/

@@ -162,7 +162,7 @@
           this.tableData = this.transData(this.tableData)
           // 为分组数据增加展开状态
           this.add_expanded(this.tableData)
-        })
+        }).catch(() => this.loading = false)
       },
 
       /** 删除分组 */

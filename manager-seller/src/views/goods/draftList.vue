@@ -138,7 +138,7 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        })
+        }).catch(() => this.loading = false)
       },
 
       /** 草稿箱编辑 */

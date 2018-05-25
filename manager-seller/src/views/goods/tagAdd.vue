@@ -116,7 +116,7 @@
           this.loading = false
           this.tableData = response.data
           this.maxsize = 0
-        })
+        }).catch(() => this.loading = false)
       },
 
       /**  取消参加 */

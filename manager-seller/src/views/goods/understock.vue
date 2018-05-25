@@ -159,7 +159,7 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        })
+        }).catch(() => this.loading = false)
       },
 
       /** 查看库存信息 */
