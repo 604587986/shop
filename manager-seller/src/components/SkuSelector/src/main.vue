@@ -71,7 +71,7 @@
         origin: {
           sn: '',
           weight: '',
-          quantity: '',
+          quantity: 0,
           cost: '',
           price: ''
         },
@@ -124,14 +124,19 @@
       /** 更新得到skuItem（skuInfo）数据 */
       updateSkuInfo(target) {
         /** 计算选择数据 */
-        let _target = target.map(key => { return key.value_list })
+        let _target = target.map(key => {
+          if (!key.value_list) {
+            return []
+          }
+          return key.value_list
+        })
         this.choiceData = this.printResult(this.combination(..._target))[0]
         /** 构造表格数据 转换数据格式 */
         this.skuInfo = target
-        if (this.skuInfo.length === 0) {
-          return
-        }
         const obj = this.skuInfo.map((key) => {
+          if (!key.value_list) {
+            return []
+          }
           return key.value_list.map((item) => {
             let map = new Map().set(key.spec_name, item.spec_value || '').set('spec_value_id', item.spec_value_id)
             let obj = Object.create(null)
@@ -149,9 +154,11 @@
       /** 重组数据*/
       combination() {
         var heads = arguments[0]
-        for (let i = 1, len = arguments.length; i < len; i++) {
-          if (arguments[i].length) {
-            heads = this.addNewType(heads, arguments[i])
+        if (arguments && arguments.length) {
+          for (let i = 1, len = arguments.length; i < len; i++) {
+            if (arguments[i].length) {
+              heads = this.addNewType(heads, arguments[i])
+            }
           }
         }
         return heads
@@ -225,6 +232,9 @@
           let { sn, weight, quantity, cost, price } = key
           return { sn, weight, quantity, cost, price }
         })
+        if (_result.length === 0) {
+          _result.push(this.origin)
+        }
         return _result
       },
 

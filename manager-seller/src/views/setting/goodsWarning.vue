@@ -5,8 +5,8 @@
         label="库存预警数"
         prop="goods_warning_count"
         :rules="[
-          { required: true, message: '数量不能为空' },
-          { type: 'number', message: '库存预警数必须为数字值' }
+          { required: true, message: '数量不能为空', trigger: 'blur' },
+          { type: 'number', message: '库存预警数必须为数字值', trigger: 'blur' }
         ]"
       >
         <el-input
@@ -43,8 +43,6 @@
       GET_stockWarningNum() {
         API_shop.getShopData({}).then(response => {
           this.stockWarningForm.goods_warning_count = response.data['goods_warning_count']
-        }).catch(error => {
-          this.$message.error(error)
         })
       },
 
@@ -55,11 +53,9 @@
             const _params = {
               warning_count: this.stockWarningForm.goods_warning_count
             }
-            API_shop.saveStockWarningNum(_params).then(response => {
+            API_shop.saveStockWarningNum(_params).then(() => {
               this.$message.success('修改成功')
               this.GET_stockWarningNum()
-            }).catch(error => {
-              this.$message.error(error)
             })
           }
         })

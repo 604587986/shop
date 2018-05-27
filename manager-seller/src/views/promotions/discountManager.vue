@@ -74,7 +74,12 @@
       </el-pagination>
     </en-tabel-layout>
     <!--优惠券组件-->
-    <coupon :couponModelShow="couponModelShow" :currentcouponId="currentcouponId" :couponModelForm="couponModelForm"/>
+    <Coupon
+      :couponModelShow="couponModelShow"
+      :currentcouponId="currentcouponId"
+      :couponModelForm="couponModelForm"
+      @saveCoupon="saveCoupon"
+    ></Coupon>
   </div>
 </template>
 
@@ -226,7 +231,7 @@
       handleAddCoupon() {
         this.couponModelShow = true
         this.currentcouponId = ''
-        this.couponModelForm = ''
+        this.couponModelForm = { }
       },
 
       /** 优惠券监听 */

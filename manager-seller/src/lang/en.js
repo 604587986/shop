@@ -26,7 +26,7 @@ export default {
     shop: 'Manage Shop',
     shopThemesPc: 'shop Themes Pc',
     shopThemesWap: 'shop Themes Wap',
-    shopBanner: 'shop Banner',
+    shopSlide: 'shop Slide',
     shopNav: 'shop Nav',
 
     promotions: 'promotions',
@@ -75,5 +75,10 @@ export default {
     val_password: 'Please enter the administrator password!',
     val_validcode: 'Please enter the image verification code!',
     val_form: 'Fill in the form is incorrect, please check!'
+  },
+  tagsView: {
+    close: 'Close',
+    closeOthers: 'Close Others',
+    closeAll: 'Close All'
   }
 }

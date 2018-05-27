@@ -42,7 +42,7 @@
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus"/>
-        <el-table-column label="操作" min-width="280">
+        <el-table-column label="操作" min-width="200">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -107,15 +107,14 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { TableLayout, TableSearch, CategoryPicker, SkuSelector } from '@/components'
+  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsList',
     components: {
       [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker,
-      [SkuSelector.name]: SkuSelector
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {
@@ -156,9 +155,6 @@
     },
     mounted() {
       this.GET_GoodsList()
-    },
-    computed: {
-
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
@@ -231,10 +227,7 @@
             data_total: response.data_total
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /** 发布商品*/
@@ -265,7 +258,7 @@
           API_goods.deleteGoods(_ids).then(() => {
             this.GET_GoodsList()
             this.$message.success('删除商品成功！')
-          }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
+          })
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })
@@ -285,9 +278,6 @@
             })
           }
           this.goodsStockData = this.goodsStockData.length > 1 ? this.goodsStockData : this.goodsStockData[0]
-        }).catch((error) => {
-          this.$message.error(error)
-          this.$message.error('请求库存数据出错，请稍后再试！')
         })
       },
 
@@ -311,7 +301,7 @@
           this.goodsStockshow = false
           this.$message.success('库存商品保存成功')
           this.GET_GoodsList()
-        }).catch(() => this.$message.error('库存商品保存出错，请稍后再试！'))
+        })
       }
     }
   }
@@ -321,17 +311,10 @@
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
-  /deep/ .el-table__body {
-    min-width: 100%;
-  }
   .inner-toolbar {
     display: flex;
     width: 100%;
     justify-content: space-between;
-  }
-
-  .toolbar-btns {
-
   }
 
   /deep/ .pop-sku {

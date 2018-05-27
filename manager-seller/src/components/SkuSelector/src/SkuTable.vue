@@ -75,7 +75,7 @@
         default: [{
           sn: '',
           weight: '',
-          quantity: '',
+          quantity: 0,
           cost: '',
           price: ''
         }]

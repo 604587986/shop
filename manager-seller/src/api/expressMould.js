@@ -6,22 +6,44 @@ import request from '@/utils/request'
 import ExpressMouldModel from '@/models/ExpressMouldModel'
 
 /**
- * 获取快递模板列表
+ * 运费模版列表
+ * @param ids
  * @param params
  * @returns {Promise<any>}
  */
-export function getExpressMouldList(params) {
+export function getTplList(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logistics/tpl/list',
+      url: `/shops/ship-templates`,
       method: 'get',
       loading: false,
       params
     }).then(response => {
       const _response = response
-      _response.data = new ExpressMouldModel().map(response)
+      _response.data = new ExpressMouldModel().map(_response)
       resolve(_response)
     }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 查询单个运费模版
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getSimpleTpl(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/shops/ship-templates/${id}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new ExpressMouldModel().map(_response)
+      resolve(_response)
+    })
   })
 }
 
@@ -31,36 +53,47 @@ export function getExpressMouldList(params) {
  * @returns {Promise<any>}
  */
 export function deleteExpressMould(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logistics/tpl/${ids}`,
+      url: `/shops/ship-templates/${ids}`,
       method: 'delete',
-      data: _formData
+      params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
 /**
- * 更新（修改/添加）模板
+ * 更新运费模板
  * @param ids
  * @param params
  * @returns {Promise<any>}
  */
 export function saveExpressMould(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logistics/tpl/reserve/${ids}`,
-      method: 'post',
-      data: _formData
-    }).then(response => {
-      resolve(response)
-    }).catch(error => reject(error))
+      url: `/shops/ship-templates/${ids}`,
+      method: 'put',
+      data: new ExpressMouldModel().params(params)
+    })
   })
 }
 
+/**
+ * 添加运费模版
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function addExpressMould(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/shops/ship-templates',
+      method: 'post',
+      data: new ExpressMouldModel().params(params)
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}

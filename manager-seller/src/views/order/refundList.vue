@@ -69,8 +69,8 @@
       <template slot="table-columns">
         <!--退款ID-->
         <!--<el-table-column prop="id" label="售后ID"/>-->
-        <!--退货单号-->
-        <el-table-column prop="sn" label="退货单号"/>
+        <!--退款、货单号-->
+        <el-table-column prop="sn" label="退款、货单号"/>
         <!--订单号-->
         <el-table-column prop="sn" label="订单号"/>
         <!--会员名称-->

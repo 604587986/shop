@@ -10,22 +10,27 @@
       </div>
       <p>
         <span>结算单号：</span>
-        <span>B20171201582232</span>
-        <span>2017-11-01  至 2017-11-30</span>
+        <span>{{ settlementData.bill_sn }}</span>
+        <span>{{ settlementData.start_time | unixToDate }}  至 {{ settlementData.end_time | unixToDate }}</span>
       </p>
       <p>
         <span>出账时间：</span>
-        <span>2017-12-01 00:10</span>
+        <span>{{ settlementData.create_time | unixToDate }}</span>
       </p>
       <p>
         <span>本期应收：</span>
-        <span>￥21,943.00 = ￥21,943.00 (订单金额) - ￥0.00 (佣金金额) - ￥0.00 (退单金额) + ￥0.00 (退还佣金)</span>
+        <span>{{ settlementData.price | unitPrice('￥') }} = {{ settlementData.bill_price | unitPrice('￥') }} (订单金额) -
+          {{ settlementData.commi_price | unitPrice('￥') }} (佣金金额) - {{ settlementData.refund_price | unitPrice('￥') }} (退单金额)
+          + {{ settlementData.refund_commi_price | unitPrice('￥') }} (退还佣金) -
+          {{ settlementData.cod_price | unitPrice('￥') }} (货到付款金额)
+          + {{ settlementData.cod_refund_price | unitPrice('￥') }} (货到付款退款金额)</span>
       </p>
       <p>
         <span>结算状态：</span>
-        <span>已出账</span>
+        <span>{{ settlementData.status_text}}</span>
       </p>
     </div>
+    <!--表格-->
     <el-tabs type="border-card" @tab-click="handleToogle">
       <el-tab-pane label="订单列表">
         <en-tabel-layout
@@ -104,8 +109,7 @@
 </template>
 
 <script>
-  // import * as API_order from '@/api/refund'
-  import * as API_order from '@/api/order'
+  import * as API_Settlement from '@/api/settlement'
   import { TableLayout } from '@/components'
 
   export default {
@@ -115,9 +119,27 @@
     },
     mounted() {
       this.GET_SettlementList()
+      this.GET_orderList()
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.billId = vm.$route.params.sn
+        vm.GET_SettlementList()
+        vm.GET_orderList()
+        next()
+      })
     },
     data() {
       return {
+        /** 账单id */
+        billId: this.$route.params.sn,
+
+        /** 账单类型 */
+        bill_type: '1',
+
+        /** 结算单数据 */
+        settlementData: {},
+
         /** 列表loading状态 */
         loading: false,
 
@@ -128,13 +150,48 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null
+        pageData: []
       }
     },
     methods: {
+      /** 获取结算单数据 */
+      GET_SettlementList() {
+        this.loading = true
+        API_Settlement.getBillDetails({ bill_id: this.billId }).then(response => {
+          this.loading = false
+          this.settlementData = response.data
+        })
+      },
+
+      /** 确认下一步操作 */
+      handleConfirmSettlement() {
+      //   for(let value in this.settlementData.operate_allowable){
+      //     if (this.settlementData.operate_allowable[value]) {
+      //
+      //     }
+      //   }
+        API_Settlement.confirmSettle(this.billId, {}).then(response => {
+          this.settlementData = { ...response }
+        })
+      },
+
+      /** 获取订单列表 */
+      GET_orderList() {
+        this.loading = true
+        API_Settlement.getOrderList(this.billId, this.bill_type, this.params).then(response => {
+          this.loading = false
+          this.tableData = response.data
+          this.pageData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
+        })
+      },
+
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
@@ -147,39 +204,14 @@
         this.GET_SettlementList()
       },
 
-      /** 确认结算 */
-      handleConfirmSettlement() { // 获取结算单号 入参传递
-
-      },
-
       /** 查看订单详情 */
-      handleLookOrderDetails(row) { // 获取订单号 入参传递
+      handleLookOrderDetails(row) {
         this.$router.push({ path: `/order/detail/${row.sn}` })
-      },
-
-      /** 获取结算单数据 */
-      GET_SettlementList() {
-        // this.loading = true
-        this.GET_OrderList()
-      },
-
-      /** 获取订单数据 */
-      GET_OrderList() {
-        this.loading = true
-        API_order.getOrderList(this.params).then(response => {
-          this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => this.$message.error(error))
       },
 
       /** 切换状态 */
       handleToogle(tab) {
-        // this.isRefund = parseInt(tab.index) === 1
+        this.bill_type = parseInt(tab.index) === 1
       }
     }
   }

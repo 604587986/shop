@@ -7,28 +7,32 @@
     >
       <template slot="table-columns">
         <!--结算编号-->
-        <el-table-column prop="sn" label="结算编号"/>
+        <el-table-column prop="bill_sn" label="结算编号"/>
         <!--起止时间-->
         <el-table-column label="起止时间">
           <template slot-scope="scope">
-            {{ scope.row.order_time | unixToDate }} - {{ scope.row.order_time | unixToDate }}
+            {{ scope.row.start_time | unixToDate }} - {{ scope.row.end_time | unixToDate }}
           </template>
         </el-table-column>
         <!--本期应收-->
         <el-table-column label="本期应收">
-          <template slot-scope="scope">{{ scope.row.order_amount | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.bill_price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--结算状态-->
-        <el-table-column prop="order_status_text" label="结算状态"/>
+        <el-table-column prop="bill_status" label="结算状态"/>
         <!--付款时间-->
-        <el-table-column prop="pay_status_text" label="付款时间"/>
+        <el-table-column label="付款时间">
+          <template slot-scope="scope">
+            {{ scope.row.pay_time | unixToDate }}
+          </template>
+        </el-table-column>
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateOrder(scope.$index, scope.row)">查看详情
+              @click="handleQueryDetail(scope.$index, scope.row)">查看详情
             </el-button>
           </template>
         </el-table-column>
@@ -49,7 +53,7 @@
 </template>
 
 <script>
-  import * as API_order from '@/api/order'
+  import * as API_settlement from '@/api/settlement'
   import { TableLayout, TableSearch, CategoryPicker } from '@/components'
 
   export default {
@@ -78,30 +82,30 @@
       }
     },
     mounted() {
-      this.GET_OrderList()
+      this.GET_SetTelMentList()
     },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_OrderList()
+        this.GET_SetTelMentList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_OrderList()
+        this.GET_SetTelMentList()
       },
 
-      /** 查看详情 */
-      handleOperateOrder(index, row) {
-        /** 传递结算单号 */
+      /** 查看详情 传递结算单号*/
+      handleQueryDetail(index, row) {
         this.$router.push({ path: `/order/settlement-detail/${row.sn}` })
       },
 
-      GET_OrderList() {
+      /** 获取结算单列表 */
+      GET_SetTelMentList() {
         this.loading = true
-        API_order.getOrderList(this.params).then(response => {
+        API_settlement.getSettleMentList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
@@ -109,9 +113,6 @@
             page_size: 10,
             data_total: response.recordsTotal
           }
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       }
     }

@@ -82,7 +82,7 @@
               this.tpl_current = elem
             }
           })
-        }).catch(error => this.$message.error(error))
+        })
       },
 
       /** 选择模板主题*/
@@ -112,9 +112,8 @@
             API_ShopTheme.saveShopTheme(this.tpl_choosed_id, _params).then(() => {
               this.$message.success('切换成功')
               this.GET_ShopThemesPc()
-            }).catch((error) => this.$message.error(error))
-          })
-          .catch(() => {})
+            })
+          }).catch(() => {})
       }
     }
   }

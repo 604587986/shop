@@ -159,10 +159,7 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /** 查看库存信息 */
@@ -170,7 +167,7 @@
         this.goodsWarningStockshow = true
         API_goods.getWarningGoodsStockList(row.goods_id).then((response) => {
           this.goodsWarningStockDate = response.data
-        }).catch((error) => this.$message.error(error))
+        })
       }
     }
   }

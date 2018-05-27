@@ -58,23 +58,23 @@
         </en-tabel-layout>
       </el-tab-pane>
       <el-tab-pane label="新增第二件半价活动" name="add">
-        <el-row :gutter="20" type="flex" justify="space-around" >
-          <el-col :span="4">
-            <div class="activity-info activity-title">活动信息</div>
-            <div class="dicount-set activity-title">优惠设置</div>
-            <div class="activity-goods activity-title">活动商品</div>
-          </el-col>
-          <el-col :span="20">
-            <el-form
-              :model="activityForm" status-icon
-              :rules="rules" ref="activityForm"
-              label-width="100px"
-              class="demo-ruleForm">
-              <div class="activity-info">
-                <el-form-item  label="活动名称" prop="activity_name">
-                  <el-input v-model="activityForm.activity_name" type="text" placeholder="不超过60个字符" ></el-input>
+        <div class="content-goods-publish">
+          <el-form
+            :model="activityForm"
+            status-icon
+            :rules="rules"
+            label-position="right"
+            ref="activityForm"
+            label-width="120px"
+            class="demo-ruleForm">
+            <!--活动信息-->
+            <div class="base-info-item">
+              <h4>活动信息</h4>
+              <div>
+                <el-form-item  label="活动名称：" prop="activity_name">
+                  <el-input v-model="activityForm.activity_name" style="width: 300px" placeholder="不超过60个字符" ></el-input>
                 </el-form-item>
-                <el-form-item label="生效时间" prop="take_effect_time">
+                <el-form-item label="生效时间：" prop="take_effect_time">
                   <el-date-picker
                     v-model="activityForm.take_effect_time"
                     type="datetimerange"
@@ -84,72 +84,85 @@
                     end-placeholder="结束日期">
                   </el-date-picker>
                 </el-form-item>
-                <el-form-item label="活动描述">
+                <el-form-item label="活动描述：">
                   <UE v-model="activityForm.activity_desc" :defaultMsg="activityForm.activity_desc"></UE>
                 </el-form-item>
               </div>
-              <div class="dicount-set">
-                <el-form-item label="优惠方式">
+            </div>
+            <!--优惠设置-->
+            <div class="base-info-item">
+              <h4>优惠设置</h4>
+              <div>
+                <el-form-item label="优惠方式：">
                   第二件半价
                 </el-form-item>
               </div>
-              <div class="activity-goods">
-                <el-form-item label="活动商品">
-                  <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
-                    <el-radio :label="1">全部商品参与</el-radio>
-                    <el-radio :label="0">部分商品参与</el-radio>
-                  </el-radio-group>
-                  <!--商品选择器-->
-                  <div v-show="!goodsShow">
-                    <en-tabel-layout
-                      toolbar
-                      :tableData="goodsData"
-                      :loading="loading"
-                      :selectionChange="selectionChange"
-                    >
-                      <div slot="toolbar" class="inner-toolbar">
-                        <div class="toolbar-btns">
-                          <el-button type="success" @click="showGoodsSelector">选择商品</el-button>
-                          <el-button type="danger" @click="cancelall">批量取消</el-button>
+            </div>
+            <!--活动商品-->
+            <div class="base-info-item">
+              <h4>活动商品</h4>
+              <div>
+                <div class="activity-goods">
+                  <el-form-item label="活动商品：">
+                    <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
+                      <el-radio :label="1">全部商品参与</el-radio>
+                      <el-radio :label="0">部分商品参与</el-radio>
+                    </el-radio-group>
+                    <!--商品表格-->
+                    <div v-show="!goodsShow">
+                      <en-tabel-layout
+                        toolbar
+                        :tableData="goodsData"
+                        :loading="loading"
+                        :selectionChange="selectionChange"
+                      >
+                        <div slot="toolbar" class="inner-toolbar">
+                          <div class="toolbar-btns">
+                            <el-button type="success" @click="showGoodsSelector">选择商品</el-button>
+                            <el-button type="danger" @click="cancelall">批量取消</el-button>
+                          </div>
                         </div>
-                      </div>
-                      <template slot="table-columns">
-                        <el-table-column type="selection"/>
-                        <!--商品信息-->
-                        <el-table-column  label="商品信息">
-                          <template slot-scope="scope">
-                            <div>
-                              <img :src="scope.row.thumbnail" alt="" class="goods-image">
+                        <template slot="table-columns">
+                          <el-table-column type="selection"/>
+                          <!--商品信息-->
+                          <el-table-column  label="商品信息">
+                            <template slot-scope="scope">
                               <div>
-                                <span>{{ scope.row.goods_name }}</span>
-                                <span>{{ scope.row.price | unitPrice('￥') }}</span>
+                                <img :src="scope.row.thumbnail" alt="" class="goods-image">
+                                <div>
+                                  <span>{{ scope.row.goods_name }}</span>
+                                  <span>{{ scope.row.price | unitPrice('￥') }}</span>
+                                </div>
                               </div>
-                            </div>
-                          </template>
-                        </el-table-column>
-                        <!--库存-->
-                        <el-table-column prop="enable_quantity" label="库存" />
-                        <!--操作-->
-                        <el-table-column label="操作" width="150">
-                          <template slot-scope="scope">
-                            <el-button
-                              size="mini"
-                              type="primary"
-                              @click="handleCancleJoin(scope.$index, scope.row)">取消参加
-                            </el-button>
-                          </template>
-                        </el-table-column>
-                      </template>
-                    </en-tabel-layout>
-                  </div>
-                </el-form-item>
+                            </template>
+                          </el-table-column>
+                          <!--库存-->
+                          <el-table-column prop="enable_quantity" label="库存" />
+                          <!--操作-->
+                          <el-table-column label="操作" width="150">
+                            <template slot-scope="scope">
+                              <el-button
+                                size="mini"
+                                type="primary"
+                                @click="handleCancleJoin(scope.$index, scope.row)">取消参加
+                              </el-button>
+                            </template>
+                          </el-table-column>
+                        </template>
+                      </en-tabel-layout>
+                    </div>
+                  </el-form-item>
+                </div>
               </div>
+            </div>
+            <!--提交按钮-->
+            <div class="btn-submit">
               <el-form-item>
                 <el-button type="success" @click="handleSaveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
-            </el-form>
-          </el-col>
-        </el-row>
+            </div>
+          </el-form>
+        </div>
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
@@ -401,41 +414,88 @@
     height: 50px;
   }
   /*新增表单面板*/
-  #pane-add {
-    background: #fff;
-    padding: 10px;
-    border: 1px solid #9a9a9a;
+  /deep/ .el-form-item__content {
+    width: 80%;
+    .el-input .el-input--medium {
+      max-width: 80%;
+    }
   }
-  .activity-info {
-    height: 460px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
+
+  /*百度UE*/
+  /deep/ #edui1 {
+    width: 100% !important;
   }
-  .dicount-set {
-    height: 80px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
-  }
-  .activity-goods {
-    min-height: 80px;
-    margin: 10px 0 10px 10px;
-    padding: 10px;
-    background-color: #f8f8f8;
-  }
-  .activity-title {
-    text-align: center;
+
+  .content-goods-publish {
     padding: 15px;
-    color: #333;
-    font-size: 14px;
-    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid #ddd;
+    background: none repeat scroll 0 0 #fff;
   }
-  .discount-tip {
-    font-size: 12px;
-    line-height: 30px;
-    margin-left: 5px;
-    color: red;
+
+  /*表单信息*/
+  .el-form {
+    padding-bottom: 80px;
+    .el-form-item {
+      width: 100%;
+      text-align: left;
+
+      /*送积分*/
+      .integral-show {
+        .el-input {
+          width: 50px;
+        }
+      }
+      /** 下拉列表 */
+      /deep/ .el-select .el-select--medium {
+        width: 160px;
+      }
+    }
+    .discount-model {
+      div {
+        margin: 5px 0;
+      }
+    }
+
+    /*提交按钮*/
+    /deep/ .btn-submit {
+      width: 100%;
+      .el-form-item__content {
+        text-align: center;
+      }
+    }
+  }
+
+  /*平铺*/
+  div.base-info-item {
+    h4 {
+      padding:0 10px;
+      border: 1px solid #ddd;
+      background-color: #f8f8f8;
+      font-weight: bold;
+      color: #333;
+      font-size: 14px;
+      line-height: 40px;
+      text-align: left;
+    }
+    h4 + div {
+      margin-top: 15px;
+    }
+    .el-form-item {
+      margin-left: 5%;
+      min-width: 300px;
+    }
+    .el-form-item__content {
+      margin-left: 120px;
+      text-align: left;
+    }
+    p.goods-group-manager {
+      padding-left: 12.3%;
+      text-align: left;
+      color: #999;
+      font-size: 13px;
+    }
   }
 </style>
 

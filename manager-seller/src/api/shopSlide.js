@@ -21,7 +21,7 @@ export function getShopSlideList(params) {
       const _response = response
       _response.data = new ShopSlideModel().map(response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -36,7 +36,7 @@ export function saveShopSlide(params) {
       url: '/shops/sildes',
       method: 'put',
       data: params
-    }).then(response => resolve(response)).catch(error => reject(error))
+    }).then(response => resolve(response))
   })
 }
 
@@ -52,6 +52,6 @@ export function delShopSlide(ids, params) {
       url: `/shops/sildes/${ids}`,
       method: 'delete',
       params
-    }).then(response => resolve(response)).catch(error => reject(error))
+    }).then(response => resolve(response))
   })
 }

@@ -2,6 +2,7 @@
   <en-tabel-layout
     pagination
     :tableData="tableData"
+    :stripe="false"
     :loading="loading"
   >
     <template slot="table-columns">
@@ -85,10 +86,7 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /** 标签商品设置 */

@@ -13,10 +13,10 @@
         <el-table-column label="商品信息" width="1000px" header-align="left">
           <template slot-scope="scope">
             <div class="goods_info">
-              <img :src="scope.row.goods_image" class="goods-image"/>
+              <img :src="scope.row.thumbnail" class="goods-image"/>
               <div class="goodsinfo-txt">
                 <span class="goods_name">{{scope.row.goods_name}}</span>
-                <span class="goods_price">{{ scope.row.goods_price | unitPrice('￥') }}</span>
+                <span class="goods_price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
             </div>
           </template>
@@ -40,7 +40,7 @@
     <en-goods-selector
       :show="showDialog"
       :api="goods_api"
-      :defaultData="tableData"
+      :defaultInfo="tableData"
       :maxLength="maxsize"
       @confirm="refreshFunc"
       @closed="showDialog = false"/>
@@ -72,7 +72,7 @@
           tag_id: ''
         },
         /** 标签商品列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 标签商品已选择项id的集合 */
         selectionids: [],
@@ -84,7 +84,10 @@
         goods_api: process.env.BASE_API + '/goods',
 
         /** 显示/隐藏商品选择器 */
-        showDialog: false
+        showDialog: false,
+
+        /** 商品ids */
+        goodsIds: []
       }
     },
     mounted() {
@@ -113,10 +116,7 @@
           this.loading = false
           this.tableData = response.data
           this.maxsize = 0
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /**  取消参加 */
@@ -147,13 +147,12 @@
       /** 保存设置 */
       savesetup() {
         const _tag_id = this.params.tag_id
-        const _goods_ids = this.selectionids.toString()
+        const _goods_ids = this.tableData.map(key => {
+          return key.goods_id
+        })
         API_goodsTag.saveTagGoodsList(_tag_id, _goods_ids, this.params).then(response => {
           this.loading = false
           this.$message.success('保存设置成功！')
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       }
     }

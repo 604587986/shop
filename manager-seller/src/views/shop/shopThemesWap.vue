@@ -80,7 +80,7 @@
               this.tpl_current = elem
             }
           })
-        }).catch(error => this.$message.error(error))
+        })
       },
 
       /** 选择模板主题*/
@@ -94,7 +94,7 @@
         this.zoom_img_show = !this.zoom_img_show
       },
 
-      /** 关闭放大图*/
+      /** 关闭放大图 */
       closeZoom() {
         this.zoom_img_show = !this.zoom_img_show
       },
@@ -110,10 +110,8 @@
             API_ShopTheme.saveShopTheme(this.tpl_choosed_id, _params).then(() => {
               this.$message.success('切换成功')
               this.GET_ShopThemes()
-            }).catch((error) => this.$message.error(error))
-          })
-          .catch(() => {
-          })
+            })
+          }).catch(() => {})
       }
     }
   }

@@ -112,7 +112,7 @@
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
-        vm.GET_GoodsList()
+        vm.GET_RecycleGoodsList()
         next()
       })
     },
@@ -121,13 +121,13 @@
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_GoodsList()
+        this.GET_RecycleGoodsList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_GoodsList()
+        this.GET_RecycleGoodsList()
       },
 
       /** 单个商品彻底删除操作确认 */
@@ -147,8 +147,7 @@
       handlReductionRecycle(row) {
         this.$confirm('确认还原吗？', '提示')
           .then(() => this.ReductionGoods(row.goods_id))
-          .catch(() => {
-          })
+          .catch(() => {})
       },
 
       /** 批量还原 */
@@ -162,10 +161,10 @@
           ...this.params,
           keyword: data
         }
-        this.GET_GoodsList()
+        this.GET_RecycleGoodsList()
       },
 
-      GET_GoodsList() {
+      GET_RecycleGoodsList() {
         this.loading = true
         API_goods.getRecycleGoodsList(this.params).then(response => {
           this.loading = false
@@ -190,9 +189,7 @@
       ReductionGoods(ids) {
         API_goods.RecycleReductionGoods(ids, {}).then(response => {
           this.$message.success('还原成功')
-          this.GET_GoodsList()
-        }).catch(error => {
-          this.$message.error(error)
+          this.GET_RecycleGoodsList()
         })
       },
 
@@ -200,9 +197,9 @@
       DELETE_Recycles(ids) {
         const _ids = ids.toString()
         API_goods.RecycleDeleteGoods(_ids, {}).then(() => {
-          this.GET_GoodsList()
+          this.GET_RecycleGoodsList()
           this.$message.success('删除商品成功！')
-        }).catch((error) => this.$message.error(error))
+        })
       }
     }
   }

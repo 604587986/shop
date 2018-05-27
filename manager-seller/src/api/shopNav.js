@@ -21,7 +21,7 @@ export function getShopNavList(params) {
       const _response = response
       _response.data = new ShopNavModel().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -35,8 +35,8 @@ export function addShopNav(params) {
     request({
       url: '/shops/navigations',
       method: 'post',
-      data: params
-    }).then(response => resolve(response)).catch(error => reject(error))
+      data: new ShopNavModel().params(params)
+    }).then(response => resolve(response))
   })
 }
 
@@ -51,8 +51,8 @@ export function editShopNav(id, params) {
     request({
       url: `/shops/navigations/${id}`,
       method: 'put',
-      data: params
-    }).then(response => resolve(response)).catch(error => reject(error))
+      data: new ShopNavModel().params(params)
+    }).then(response => resolve(response))
   })
 }
 
@@ -68,6 +68,6 @@ export function delShopNav(id, params) {
       url: `/shops/navigations/${id}`,
       method: 'delete',
       params
-    }).then(response => resolve(response)).catch(error => reject(error))
+    }).then(response => resolve(response))
   })
 }

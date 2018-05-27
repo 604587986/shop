@@ -239,9 +239,12 @@
         ref="goods_params_list"
         label-width="120px"
         class="demo-ruleForm">
-        <el-collapse>
+        <el-collapse :value="collapseVal">
           <el-collapse-item
-            v-for="paramsgroup in  goodsParams" :title="paramsgroup.group_name" :key="paramsgroup.group_id">
+            v-for="paramsgroup in  goodsParams"
+            :title="paramsgroup.group_name"
+            :key="paramsgroup.group_id"
+            :name="paramsgroup.group_id">
             <el-form-item
               v-for="(goods_params_list, index) in baseInfoForm.goods_params_list"
               v-if="paramsgroup.group_id === goods_params_list.group_id"
@@ -250,7 +253,10 @@
               :prop="'goods_params_list.' + index + '.param_value'"
               :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'blur' }"
             >
-              <el-input v-if="goods_params_list.param_type === 1 " v-model="goods_params_list.param_value" ></el-input>
+              <el-input
+                v-if="goods_params_list.param_type === 1"
+                v-model="goods_params_list.param_value" >
+              </el-input>
               <el-select
                 v-if="goods_params_list.param_type === 2"
                 v-model="goods_params_list.param_value"
@@ -296,7 +302,8 @@
         <el-button
           type="primary"
           @click="aboveGoods"
-          v-if="(currentStatus === 0 && activestep === 2) || (currentStatus === 1 && activestep !== 0) || (currentStatus === 2 && activestep === 1)"
+          v-if="(currentStatus === 0 && activestep === 2) || (currentStatus === 1 && activestep !== 0)
+          || (currentStatus === 2 && activestep === 1)"
         >上架</el-button>
         <el-button
           type="primary"
@@ -542,6 +549,9 @@
           }
         ],
 
+        /** */
+        collapseVal: [],
+
         /** 品牌列表 */
         brandList: [],
 
@@ -669,7 +679,6 @@
 
       /** 保存草稿 */
       saveDraft() {
-        // 构造提交表单数据
         const _params = this.generateFormData(this.baseInfoForm)
         if (this.activeGoodsId) {
           this.activeGoodsId = this.activeGoodsId || 1
@@ -680,8 +689,6 @@
           API_goods.editDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('修改草稿箱商品成功')
             this.$router.push({ path: '/goods/draft-list' })
-          }).catch(error => {
-            this.$message.error(error)
           })
         } else {
           if (!this.skuFormVali()) {
@@ -691,54 +698,43 @@
           API_goods.saveDraft(_params).then(response => {
             this.$message.success('保存草稿成功')
             this.$router.push({ path: '/goods/draft-list' })
-          }).catch(error => {
-            this.$message.error(error)
           })
         }
       },
 
       /** 上架  */
       aboveGoods() {
-        // if (!this.activeGoodsId && this.activeGoodsId !== 0) {
-        //   return '商品编号不存在'
-        // }
-        // 构造提交表单数据
-        const _params = this.generateFormData(this.baseInfoForm)
+        let _params = this.generateFormData(this.baseInfoForm)
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
             API_goods.editGoods(this.activeGoodsId, _params).then(response => {
               this.$message.success('修改商品成功')
               this.$router.push({ path: '/goods/goods-list' })
-            }).catch(error => {
-              this.$message.error(error)
             })
           } else {
             /** 正常商品上架 */
             API_goods.aboveGoods(_params).then(response => {
               this.$message.success('上架商品成功')
               this.$router.push({ path: '/goods/goods-list' })
-            }).catch(error => {
-              this.$message.error(error)
             })
           }
         } else {
-          /**  草稿箱商品上架 */
+          /**  草稿箱商品上架 构造是否上架字段 */
+          _params.market_enable = 0
+          _params.has_changed = _params.have_spec
           API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('上架草稿箱商品成功')
             this.$router.push({ path: '/goods/goods-list' })
-          }).catch(error => {
-            this.$message.error(error)
           })
         }
       },
 
       /** 下架*/
       handleUnderGoods() {
-        API_goods.underGoods(this.activeGoodsId, { }).then((response) => {
-          this.loading = false
+        API_goods.underGoods(this.activeGoodsId, { }).then(() => {
           this.$message.success('下架成功')
-        }).catch(() => this.$message.error('下架商品失败，请稍后再试！'))
+        })
       },
 
       /** 查询下一级 商城商品分类*/
@@ -755,8 +751,7 @@
           } else if (!level) {
             this.categoryListLevel1 = response.data
           }
-          this.categoryLevel = level
-        }).catch((error) => this.$message.error(error))
+        }).catch(() => { this.loading = false })
       },
 
       /** 选择商城商品分类 */
@@ -794,7 +789,7 @@
           })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
-          if (!this.baseInfoForm.sku_list) {
+          if (!this.baseInfoForm.sku_list || !Array.isArray(this.baseInfoForm.sku_list)) {
             this.baseInfoForm.sku_list = []
           }
           /** 积分相关设置 如果没有积分相关则设置为空 */
@@ -822,17 +817,17 @@
               const price = key.goods_price
               return { cost, price, quantity, sn, weight, spec_list }
             })
-          }).catch((error) => this.$message.error(error))
-        }).catch((error) => this.$message.error(error))
+          })
+        })
       },
 
       /** 查询商品参数 */
       GET_GoodsParams() {
-        // 处理数据 方便校验
         const goods_id = this.activeGoodsId || 0
         API_goods.getGoodsParams(this.baseInfoForm.category_id, { goods_id }).then((response) => {
           this.loading = false
           this.goodsParams = response.data
+          this.collapseVal = this.goodsParams.map(key => { return key.group_id })
           if (!response.data || response.data.length <= 0) {
             return
           }
@@ -844,7 +839,7 @@
             _paramsList = _paramsList.concat(key.params)
           })
           this.baseInfoForm.goods_params_list = _paramsList
-        }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
+        }).catch(() => { this.loading = false })
       },
 
       /** 查询单个草稿箱商品信息 */
@@ -882,17 +877,17 @@
           /** 查询草稿箱sku信息 */
           API_goods.draftSku(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
-            // this.skuList = response.map(key => {
-            //   const spec_list = key.spec_list.map(item => {
-            //     let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
-            //     return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
-            //   })
-            //   let { cost, quantity, sn, weight } = key
-            //   const price = key.goods_price
-            //   return { cost, price, quantity, sn, weight, spec_list }
-            // })
-          }).catch((error) => this.$message.error(error))
-        }).catch((error) => this.$message.error(error))
+            this.skuList = response.map(key => {
+              const spec_list = key.spec_list.map(item => {
+                let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
+                return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+              })
+              let { cost, quantity, sn, weight } = key
+              const price = key.goods_price
+              return { cost, price, quantity, sn, weight, spec_list }
+            })
+          })
+        })
         /** 查询草稿箱商品参数信息 */
         this.GET_GoodsDtagtParams()
       },
@@ -915,7 +910,7 @@
             _paramsList = _paramsList.concat(key.params)
           })
           this.baseInfoForm.goods_params_list = _paramsList
-        }).catch(() => this.$message.error('获取参数出错，请稍后再试！'))
+        })
       },
 
       /** 商品分组组件 改变时触发 */
@@ -927,19 +922,19 @@
       getGoodsBrandList() {
         API_goods.getGoodsBrandList(this.baseInfoForm.category_id, { }).then((response) => {
           this.brandList = response.data
-        }).catch((error) => this.$message.error(error))
+        })
       },
 
       /** 商品品牌 改变时触发 */
       changeGoodsBrand(val) {
-
+        this.baseInfoForm.brand_id = val
       },
 
       /** 运费模板列表 */
       getTplList() {
         API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
           this.tplList = response.data
-        }).catch((error) => this.$message.error(error))
+        })
       },
 
       /** 运费模板改变时触发 */
@@ -952,12 +947,18 @@
         API_goodsCategory.getGoodsCategoryLevelList(0, { }).then((response) => {
           this.exchangeGoodsCatrgoryList = response.data
           this.loading = false
-        }).catch((error) => this.$message.error(error))
+        })
+      },
+
+      /** 积分兑换开关值改变时触发 */
+      handleSwitchexchange(val) {
+        this.isShowExchangeConfig = val
+        this.baseInfoForm.exchange.enable_exchange = 1
       },
 
       /** 积分商品商城分类 改变时触发*/
       changeExangeCategory(val) {
-
+        this.baseInfoForm.exchange.category_id = val
       },
 
       /** 文件列表移除文件时的钩子  图片删除校验*/
@@ -1021,11 +1022,6 @@
         return isType && isLt1M && !isExit
       },
 
-      /** 积分兑换开关值改变时触发 */
-      handleSwitchexchange(val) {
-        this.isShowExchangeConfig = val
-      },
-
       /** 规格选择器规格数据改变时触发 */
       finalSku(val) {
         /** 动态修改总库存 每次设置为0  此处每次进行循环计算 存在性能浪费 */
@@ -1078,10 +1074,12 @@
         }
         // 临时数据
         _params.exchange.enable_exchange = 1
+        /** 运费模板 */
+        _params.template_id = _params.template_id || 0
         return _params
       },
 
-      /** 商品规格选择器表单校验 */
+      /** 商品规格选择器校验 */
       skuFormVali() {
         /** 是否自动生成货号校验 检测是否所有的货号都存在*/
         const _sn = this.baseInfoForm.sku_list.filter(key => {
@@ -1191,6 +1189,7 @@
   /*平铺*/
   div.base-info-item {
     h4 {
+      margin-bottom: 10px;
       padding:0 10px;
       border: 1px solid #ddd;
       background-color: #f8f8f8;

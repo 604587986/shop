@@ -4,7 +4,6 @@
 
 import request from '@/utils/request'
 import OrderModel from '@/models/OrderModel'
-import OrderLogModel from '@/models/OrderLogModel'
 import ProductModel from '@/models/ProductModel'
 
 /**
@@ -47,55 +46,77 @@ export function getOrderDetail(sn) {
 }
 
 /**
- * 根据订单sn获取订单日志
- * @param sn
+ * 更新价格  调整价格
+ * @param ids
  * @returns {Promise<any>}
  */
-export function getOrderLog(sn) {
+export function updateGoodPrice(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `order-query/admin/order/${sn}/log.do`,
-      method: 'get',
-      loading: false
+      url: `877`,
+      method: 'put',
+      loading: false,
+      data: params
     }).then(response => {
-      const _response = new OrderLogModel().map(response)
-      resolve(_response)
+      resolve(response)
     }).catch(error => reject(error))
   })
 }
 
 /**
- * 确认收款
- * @param sn
+ * 修改收货人信息
+ * @param ids
  * @param params
  * @returns {Promise<any>}
  */
-export function confirmPay(sn, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  _formData.append('ordersn', sn)
+export function updateConsigneeInfo(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'order-opration/admin/order/pay.do',
-      method: 'post',
-      data: _formData
-    })
+      url: `877`,
+      method: 'put',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
   })
 }
 
 /**
- * 取消订单
- * @param sn
+ * 发货
+ * @param ids
+ * @param params
  * @returns {Promise<any>}
  */
-export function cancleOrder(sn) {
-  const _formData = new FormData()
-  _formData.append('reson', '管理员取消')
+export function deliveryGoods(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `order-opration/admin/order/cancel/${sn}.do`,
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+      url: `877`,
+      method: 'put',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
   })
 }
+
+/**
+ * 生成电子面单
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function generateElectronicSurface(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `877`,
+      method: 'put',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    }).catch(error => reject(error))
+  })
+}
+

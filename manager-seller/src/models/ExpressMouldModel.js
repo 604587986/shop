@@ -36,7 +36,7 @@ export default class ExpressMouldModel extends DataModel {
   @ServerName('continued_price')
   continued_price
 
-  /** 模板类型 */
+  /** 模版类型，1 重量算运费 2 计件算运费*/
   @ServerName('type')
   tpl_type
 
@@ -44,7 +44,7 @@ export default class ExpressMouldModel extends DataModel {
   @ServerName('area')
   tpl_area
 
-  /** 地区ID */
+  /** 地区ID ,分隔*/
   @ServerName('area_id')
   tpl_area_id
 

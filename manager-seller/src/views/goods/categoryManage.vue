@@ -162,10 +162,7 @@
           this.tableData = this.transData(this.tableData)
           // 为分组数据增加展开状态
           this.add_expanded(this.tableData)
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /** 删除分组 */
@@ -174,7 +171,7 @@
         API_goodsCategory.deleteGoodsCategory(_id).then(() => {
           this.GET_GoodsCategoryList()
           this.$message.success('删除商品成功！')
-        }).catch(() => this.$message.error('删除商品出错，请稍后再试！'))
+        })
       },
 
       /** 新增商品分组 */
@@ -239,13 +236,13 @@
             this.goodsCategoryShow = false
             this.$message.success('添加成功')
             this.GET_GoodsCategoryList()
-          }).catch(() => this.$message.error('添加商品分组信息出错，请稍后再试'))
+          })
         } else { // 编辑
           API_goodsCategory.updateGoodsCategory(this.categoryID, params).then(response => {
             this.goodsCategoryShow = false
             this.$message.success('编辑成功')
             this.GET_GoodsCategoryList()
-          }).catch(() => this.$message.error('更新商品分组信息出错，请稍后再试'))
+          })
         }
       },
 

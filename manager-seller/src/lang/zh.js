@@ -26,7 +26,7 @@ export default {
     shop: '店铺管理',
     shopThemesPc: '店铺模板',
     shopThemesWap: 'Wap店铺',
-    shopBanner: '店铺幻灯',
+    shopSlide: '店铺幻灯',
     shopNav: '店铺导航',
 
     promotions: '促销管理',
@@ -75,5 +75,10 @@ export default {
     val_password: '请输入管理员密码',
     val_validcode: '请输入图片验证码',
     val_form: '表单填写有误，请检查！'
+  },
+  tagsView: {
+    close: '关闭',
+    closeOthers: '关闭其它',
+    closeAll: '关闭所有'
   }
 }
