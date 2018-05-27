@@ -107,6 +107,12 @@
     watch: {
       show(newVal) {
         this.dialogVisible = newVal
+        if (newVal === false) {
+          this.curEdit = ''
+          this.fileList = []
+          this.dataMap = new Map()
+          this.countNums()
+        }
       },
       dialogVisible(newVal) {
         newVal === false && this.$emit('close')
