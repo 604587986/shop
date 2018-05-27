@@ -130,8 +130,6 @@
         const { uid } = file
         const curData = JSON.parse(JSON.stringify(this.dataMap.get(uid)))
         const deTarget = this.fileList.filter(item => item.uid === uid)[0]
-        console.log('aa: ', curData)
-        console.log('deTarget: ', deTarget)
         if (deTarget.opt) {
           curData.operation.forEach(opt => {
             opt.value = deTarget.opt[opt.name]
