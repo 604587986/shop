@@ -114,27 +114,33 @@
       defaultData(newVal) {
         if (!newVal) return
         this.fileList = JSON.parse(JSON.stringify(newVal))
-        const file = this.fileList[0]
         setTimeout(() => {
-          this.onSuccess({ url: file.url }, {
-            uid: file.uid,
-            url: file.url
+          this.fileList.forEach(item => {
+            this.onSuccess({ url: item.url }, {
+              uid: item.uid,
+              url: item.url
+            })
           })
-          // console.log(this.fileList[0].uid)
         })
       }
     },
-    computed: {
-    },
     methods: {
-      /** 编辑图片的自定义参数 */
+      /** 编辑自定义参数 */
       handleEditItem(file) {
-        this.curEdit = JSON.parse(JSON.stringify(this.dataMap.get(file.uid)))
-        console.log(file.uid)
+        const { uid } = file
+        const curData = JSON.parse(JSON.stringify(this.dataMap.get(uid)))
+        const deTarget = this.fileList.filter(item => item.uid === uid)[0]
+        console.log('aa: ', curData)
+        console.log('deTarget: ', deTarget)
+        if (deTarget.opt) {
+          curData.operation.forEach(opt => {
+            opt.value = deTarget.opt[opt.name]
+          })
+        }
+        this.curEdit = curData
       },
       /** 图片上传成功 */
       onSuccess(response, file, fileList) {
-        console.log('onSuccess', response, file, fileList)
         const obj = {
           response,
           uid: file.uid,
@@ -143,7 +149,6 @@
         }
         this.dataMap.set(file.uid, obj)
         this.countNums()
-        console.log(this.dataMap)
       },
       /** 移除时触发 */
       onRemove(file, fileList) {
@@ -213,6 +218,7 @@
         cursor: auto;
         text-align: left;
       }
+      .el-icon-zoom-in:before { content: '\E616' }
     }
     .el-upload-list{
       display: block;
