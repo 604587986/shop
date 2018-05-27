@@ -22,8 +22,8 @@ export default {
     return {}
   },
   methods: {
-    /** 选择图片 */
-    selectImg(index) {
+    /** 点击遮罩 */
+    onClickMask(index) {
       const data = JSON.parse(JSON.stringify(this.data))
       this.$emit('handle-edit', data, index)
     }
