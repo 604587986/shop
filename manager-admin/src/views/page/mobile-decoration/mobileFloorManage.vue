@@ -16,7 +16,7 @@
             <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
               <component
                 :is="templates[item.tpl_id]"
-                :data="item"
+                :data="JSON.parse(JSON.stringify(item))"
                 is-edit
                 @handle-edit="(target, targetIndex) => handleEditFloor(index, target, targetIndex)"
               ></component>
@@ -30,10 +30,10 @@
       </div>
     </div>
     <en-image-picker
-      :show="dialogShow"
+      :show="dialogImageShow"
       :default-data="defaultData"
       :operation="operation"
-      @close="dialogShow = false"
+      @close="dialogImageShow = false"
       @confirm="handleImagePickerConfirm"
       :limit="10"
       multiple
@@ -72,7 +72,7 @@
           sort: true,
           handle: '.handle-move'
         },
-        dialogShow: false,
+        dialogImageShow: false,
         defaultData: '',
         /** 自定义操作参数 */
         operation: [{
@@ -102,24 +102,50 @@
     },
     methods: {
       handleEditFloor(index, target, targetIndex) {
+        const type = target.blockList[targetIndex].block_type
         this.editOptions = {
           index,
           target,
           targetIndex
         }
         const blockData = JSON.parse(JSON.stringify(target.blockList[targetIndex]))
-        this.defaultData = blockData.block_value ? [{
-          url: blockData.block_value,
-          opt: blockData.block_opt
-        }] : null
-        this.dialogShow = true
+        if (type === 'IMAGE') {
+          this.defaultData = blockData.block_value ? [{
+            url: blockData.block_value,
+            opt: blockData.block_opt
+          }] : null
+          this.dialogImageShow = true
+        } else if (type === 'GOODS') {
+          const goods = {
+            goods_id: 123,
+            goods_name: 'vivo X9s 4GB+64GB 玫瑰金 移动联通电信4G拍照手机 双卡双待',
+            goods_price: 2399.99,
+            goods_image: 'http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/4A10ED8667CA49C7BCAE9486DF21D4AC.jpg_300x300'
+          }
+          const { index, target, targetIndex } = this.editOptions
+          target.blockList[targetIndex].block_value = goods
+          this.$set(this.floorList, index, target)
+        } else if (type === 'TEXT') {
+          this.$prompt('请输入文本内容', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /.+/,
+            inputErrorMessage: '文本不能为空！'
+          }).then(({ value }) => {
+            console.log(value)
+            // this.data.blockList[0].block_value = value
+          }).catch(() => {})
+          console.log('文本模块')
+        } else if (type === 'BRAND') {
+          console.log('品牌模块')
+        }
       },
       /** 图片上传组件确认 */
       handleImagePickerConfirm(fileList) {
         const file = fileList[0]
         let opt = file ? file.operation : {}
         let url = file ? file.response.url : ''
-        this.dialogShow = false
+        this.dialogImageShow = false
         const { index, target, targetIndex } = this.editOptions
         target.blockList[targetIndex].block_value = url
         target.blockList[targetIndex].block_opt = opt
