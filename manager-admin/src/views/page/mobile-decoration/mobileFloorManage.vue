@@ -38,19 +38,25 @@
       :limit="10"
       multiple
     />
+    <!--api="http://yiqisi.s1.natapp.cc/seller-api/goods"-->
+    <en-goods-picker
+      :show="dialogGoodsShow"
+      @close="dialogGoodsShow = false"
+    />
   </div>
 </template>
 
 <script>
   import draggable from 'vuedraggable'
-  import { ImagePicker } from '~/ui-components'
+  import { ImagePicker, GoodsPicker } from '~/ui-components'
   import * as API_Floor from '@/api/floor'
   import templates, { templateArray } from './templates'
   export default {
     name: 'mobileFloorManage',
     components: {
       draggable,
-      [ImagePicker.name]: ImagePicker
+      [ImagePicker.name]: ImagePicker,
+      [GoodsPicker.name]: GoodsPicker
     },
     data() {
       return {
@@ -73,6 +79,7 @@
           handle: '.handle-move'
         },
         dialogImageShow: false,
+        dialogGoodsShow: false,
         defaultData: '',
         /** 自定义操作参数 */
         operation: [{
@@ -122,6 +129,7 @@
             goods_price: 2399.99,
             goods_image: 'http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/4A10ED8667CA49C7BCAE9486DF21D4AC.jpg_300x300'
           }
+          this.dialogGoodsShow = true
           const { index, target, targetIndex } = this.editOptions
           target.blockList[targetIndex].block_value = goods
           this.$set(this.floorList, index, target)
