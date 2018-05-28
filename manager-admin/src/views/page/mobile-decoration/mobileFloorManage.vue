@@ -43,7 +43,7 @@
 
 <script>
   import draggable from 'vuedraggable'
-  import { ImagePicker } from '@/components'
+  import { ImagePicker } from 'ui-picker'
   import * as API_Floor from '@/api/floor'
   import templates, { templateArray } from './templates'
   export default {
