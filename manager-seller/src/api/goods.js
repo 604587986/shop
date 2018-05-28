@@ -246,6 +246,8 @@ export function aboveGoods(params) {
       method: 'post',
       data: params,
       headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -307,6 +309,8 @@ export function editDraftGoods(id, params) {
       method: 'put',
       data: params,
       headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      resolve(response)
     })
   })
 }
