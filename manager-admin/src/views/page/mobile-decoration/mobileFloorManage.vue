@@ -41,7 +41,9 @@
     <!--api="http://yiqisi.s1.natapp.cc/seller-api/goods"-->
     <en-goods-picker
       :show="dialogGoodsShow"
+      :limit="0"
       @close="dialogGoodsShow = false"
+      @confirm="handleGoodsPickerConfirm"
     />
   </div>
 </template>
@@ -123,16 +125,7 @@
           }] : null
           this.dialogImageShow = true
         } else if (type === 'GOODS') {
-          const goods = {
-            goods_id: 123,
-            goods_name: 'vivo X9s 4GB+64GB 玫瑰金 移动联通电信4G拍照手机 双卡双待',
-            goods_price: 2399.99,
-            goods_image: 'http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/4A10ED8667CA49C7BCAE9486DF21D4AC.jpg_300x300'
-          }
           this.dialogGoodsShow = true
-          const { index, target, targetIndex } = this.editOptions
-          target.blockList[targetIndex].block_value = goods
-          this.$set(this.floorList, index, target)
         } else if (type === 'TEXT') {
           this.$prompt('请输入文本内容', '提示', {
             confirmButtonText: '确定',
@@ -158,6 +151,13 @@
         target.blockList[targetIndex].block_value = url
         target.blockList[targetIndex].block_opt = opt
         this.$set(this.floorList, index, target)
+      },
+      /** 商品选择器确认 */
+      handleGoodsPickerConfirm(list) {
+        const { index, target, targetIndex } = this.editOptions
+        target.blockList[targetIndex].block_value = this.MixinClone(list[0])
+        this.$set(this.floorList, index, target)
+        this.dialogGoodsShow = false
       },
       /** 获取模板列表 */
       GET_FloorList() {
