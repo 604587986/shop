@@ -1020,7 +1020,6 @@
             let temp = this.baseInfoForm.goods_gallery_list[evt.oldIndex]
             this.baseInfoForm.goods_gallery_list[evt.oldIndex] = this.baseInfoForm.goods_gallery_list[evt.newIndex]
             this.baseInfoForm.goods_gallery_list[evt.newIndex] = temp
-            console.log(this.baseInfoForm.goods_gallery_list)
           }
         })
       },
