@@ -40,36 +40,38 @@
         </div>
       </div>
     </en-tabel-layout>
-    <table class="my-table">
-      <thead>
-      <tr class="bg-order">
-        <th>咨询</th>
-        <th>操作</th>
-      </tr>
-      </thead>
-      <tbody v-for="item in tableData">
-      <tr class="bg-order">
-        <td colspan="2" class="base-info">
-          <!--商品名称-->
-          <a href="#" class="goods-name">{{ item.goods_name }}</a>
-          咨询用户：<span class="member-name">{{ item.member_name}} </span>
-          咨询时间：<span>{{ item.consultation_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
-        </td>
-      </tr>
-      <tr>
-        <!--咨询-->
-        <td>
-          <h4>咨询问题：</h4>
-          <p>{{ item.consultation_content }}</p>
-        </td>
-        <!--操作-->
-        <td class="opera-btn">
-          <h4>回复咨询：</h4>
-          <p>{{ item.reply_content }}</p>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="my-table-out">
+      <table class="my-table">
+        <thead>
+        <tr class="bg-order">
+          <th>咨询</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody v-for="item in tableData">
+        <tr class="bg-order">
+          <td colspan="2" class="base-info">
+            <!--商品名称-->
+            <a href="#" class="goods-name">{{ item.goods_name }}</a>
+            咨询用户：<span class="member-name">{{ item.member_name}} </span>
+            咨询时间：<span>{{ item.consultation_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+          </td>
+        </tr>
+        <tr>
+          <!--咨询-->
+          <td>
+            <h4>咨询问题：</h4>
+            <p>{{ item.consultation_content }}</p>
+          </td>
+          <!--操作-->
+          <td class="opera-btn">
+            <h4>回复咨询：</h4>
+            <p>{{ item.reply_content }}</p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
     <el-pagination
       slot="pagination"
       v-if="pageData"
@@ -181,6 +183,12 @@
   }
 
   /*表格信息*/
+  .my-table-out{
+    overflow-y: scroll;
+    text-overflow: ellipsis;
+    width: 100%;
+    max-height: 800px;
+  }
   .my-table {
     .bg-order {
       background: #FAFAFA;
@@ -242,11 +250,19 @@
   }
 
   /*分页信息*/
+  section>div {
+    position: relative;
+  }
   .el-pagination {
     text-align: right;
     width: 100%;
     background: #ffffff;
     height: 40px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-top: 1px solid #e5e5e5;
+    padding: 5px 20px;
   }
 </style>
 

@@ -47,55 +47,57 @@
         </div>
       </div>
     </en-tabel-layout>
-    <table class="my-table" v-loading="loading">
-      <thead>
-      <tr class="bg-order">
-        <th class="shoplist-header">评论</th>
-        <th style="width: 120px;">用户</th>
-        <th style="width: 240px;">时间</th>
-        <th style="width: 120px;">操作</th>
-      </tr>
-      </thead>
-      <tbody v-for="item in tableData">
-      <tr style="width: 100%;height: 10px;"></tr>
-      <tr class="bg-order">
-        <!--商品名称-->
-        <td colspan="4"><a href="" class="shop-name">{{ item.shop_name }}</a></td>
-      </tr>
-      <tr>
-        <!--评论-->
-        <td>
-          <div class="comment-content">
-            <!--评论内容-->
-            <p v-if="item.comment_content" class="comment-info">
-              <i class="comment-content-name">评论内容 :</i> {{ item.comment_content }}
-            </p>
-            <!--评论图片信息-->
-            <p v-if="item.comment_images && item.comment_images.length > 0">
-              <img v-for="imgsrc in item.comment_images" :src="imgsrc" class="goods-image"/>
-            </p>
-            <!--回复评论-->
-            <p v-if="item.seller_reply " class="reply-comment">
-              <i class="seller-reply">回复评论 :</i> {{ item.seller_reply }}
-            </p>
-          </div>
-        </td>
-        <!--用户-->
-        <td>{{ item.member_name }}</td>
-        <!--时间-->
-        <td>{{item.create_time | unixToDate }}</td>
-        <!--操作-->
-        <td>
-          <el-button
-            size="mini"
-            type="primary"
-            v-if="item.seller_replied==0"
-            @click="handleReplyComment(item)">回复
-          </el-button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="my-table-out">
+      <table class="my-table" v-loading="loading">
+        <thead>
+        <tr class="bg-order">
+          <th class="shoplist-header">评论</th>
+          <th style="width: 120px;">用户</th>
+          <th style="width: 240px;">时间</th>
+          <th style="width: 120px;">操作</th>
+        </tr>
+        </thead>
+        <tbody v-for="item in tableData">
+        <tr style="width: 100%;height: 10px;"></tr>
+        <tr class="bg-order">
+          <!--商品名称-->
+          <td colspan="4"><a href="" class="shop-name">{{ item.shop_name }}</a></td>
+        </tr>
+        <tr>
+          <!--评论-->
+          <td>
+            <div class="comment-content">
+              <!--评论内容-->
+              <p v-if="item.comment_content" class="comment-info">
+                <i class="comment-content-name">评论内容 :</i> {{ item.comment_content }}
+              </p>
+              <!--评论图片信息-->
+              <p v-if="item.comment_images && item.comment_images.length > 0">
+                <img v-for="imgsrc in item.comment_images" :src="imgsrc" class="goods-image"/>
+              </p>
+              <!--回复评论-->
+              <p v-if="item.seller_reply " class="reply-comment">
+                <i class="seller-reply">回复评论 :</i> {{ item.seller_reply }}
+              </p>
+            </div>
+          </td>
+          <!--用户-->
+          <td>{{ item.member_name }}</td>
+          <!--时间-->
+          <td>{{item.create_time | unixToDate }}</td>
+          <!--操作-->
+          <td>
+            <el-button
+              size="mini"
+              type="primary"
+              v-if="item.seller_replied==0"
+              @click="handleReplyComment(item)">回复
+            </el-button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
     <el-pagination
       slot="pagination"
       v-if="pageData"
@@ -299,6 +301,12 @@
   }
 
   /*表格信息*/
+  .my-table-out{
+    overflow-y: scroll;
+    text-overflow: ellipsis;
+    width: 100%;
+    max-height: 800px;
+  }
   .my-table {
     .bg-order {
       background: #FAFAFA;
@@ -310,6 +318,7 @@
     font-size: 14px;
     font-bold: 700;
     thead {
+      width: 100%;
       th {
         border: 1px solid #ebeef5;
         border-collapse: collapse;
@@ -318,6 +327,7 @@
       }
     }
     tbody {
+      width: 100%;
       margin-top: 10px;
       td {
         border: 1px solid #ebeef5;
@@ -361,11 +371,19 @@
   }
 
   /*分页信息*/
+  section>div {
+    position: relative;
+  }
   .el-pagination {
     text-align: right;
     width: 100%;
     background: #ffffff;
     height: 40px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-top: 1px solid #e5e5e5;
+    padding: 5px 20px;
   }
 
 </style>

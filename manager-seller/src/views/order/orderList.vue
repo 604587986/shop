@@ -426,11 +426,19 @@
   }
 
   /*分页信息*/
+  section>div {
+    position: relative;
+  }
   .el-pagination {
     text-align: right;
     width: 100%;
     background: #ffffff;
     height: 40px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-top: 1px solid #e5e5e5;
+    padding: 5px 20px;
   }
 </style>
 
