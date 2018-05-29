@@ -12,6 +12,7 @@
     "test": "npm run lint"
   },
   "dependencies": {
+    "ajv": "^6.0.0",
     "axios": "0.17.1",
     "clipboard": "1.7.1",
     "codemirror": "5.32.0",
@@ -28,6 +29,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "particles.js": "^2.0.0",
+    "prettier": "^1.12.1",
     "screenfull": "3.3.2",
     "showdown": "1.8.5",
     "simplemde": "1.11.2",

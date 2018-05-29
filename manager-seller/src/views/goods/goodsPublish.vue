@@ -977,7 +977,6 @@
 
       /** 文件列表上传成功时的钩子  上传成功校验 */
       handleSuccess(file, fileList) {
-        debugger
         this.baseInfoForm.goods_gallery_list.push({
           img_id: -1,
 
