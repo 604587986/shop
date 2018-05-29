@@ -705,6 +705,10 @@
 
       /** 上架  */
       aboveGoods() {
+        if (this.baseInfoForm.activeGoodsId === 0) {
+          this.$message.error('严重错误，商城分类Id不可为0')
+          return
+        }
         let _params = this.generateFormData(this.baseInfoForm)
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
