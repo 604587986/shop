@@ -29,7 +29,6 @@
                 </el-form-item>
                 <el-form-item label="回复状态">
                   <el-select v-model="advancedForm.is_reply" placeholder="请选择" clearable>
-                    <el-option label="全部" value="0"/>
                     <el-option label="已回复" value="1"/>
                     <el-option label="未回复" value="2"/>
                   </el-select>
@@ -64,9 +63,12 @@
             <p>{{ item.consultation_content }}</p>
           </td>
           <!--操作-->
-          <td class="opera-btn">
+          <td class="opera-btn" v-if="item.is_reply === 1">
             <h4>回复咨询：</h4>
             <p>{{ item.reply_content }}</p>
+          </td>
+          <td class="opera-btn" v-if="item.is_reply === 2">
+            <el-button size="mini" type="primary" @click="handleReply(item)">回复</el-button>
           </td>
         </tr>
         </tbody>
@@ -83,6 +85,28 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="pageData.data_total">
     </el-pagination>
+    <el-dialog title="回复咨询"  :visible.sync="isReplyShow" width="30%">
+      <div align="center">
+        <el-form :model="replyForm" ref="replyForm" label-position="right" label-width="100px">
+          <el-form-item label="当前状态:" prop="auth_status" >
+            <span class="desc-span">{{ replyForm.auth_status }}</span>
+          </el-form-item>
+          <el-form-item label="咨询内容:" prop="consultation_content" >
+            <span class="desc-span">{{ replyForm.consultation_content }}</span>
+          </el-form-item>
+          <el-form-item
+            label="回复内容:"
+            prop="reply_content"
+            :rules="{ required: true, message: '请填写回复内容' ,trigger: 'blur' }">
+            <el-input type="textarea" v-model="replyForm.reply_content"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer">
+        <el-button @click="isReplyShow = false">取 消</el-button>
+        <el-button type="primary" @click="confirmReply">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -118,7 +142,23 @@
         advancedForm: {},
 
         /** 表格最大高度 */
-        tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
+        tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15),
+
+        /** 回复操作框是否显示 */
+        isReplyShow: false,
+
+        /** 回复表单 */
+        replyForm: {
+
+          /** 当前审核状态 */
+          auth_status: '',
+
+          /** 咨询问题 */
+          consultation_content: '',
+
+          /** 回复内容 */
+          reply_content: ''
+        }
       }
     },
     mounted() {
@@ -172,9 +212,19 @@
             page_size: 10,
             data_total: response.recordsTotal
           }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
+        })
+      },
+
+      /** 回复操作 */
+      handleReply(row) {
+        this.isReplyShow = true
+        this.replyForm = { ...row }
+      },
+
+      /** 确认回复 */
+      confirmReply() {
+        this.$refs['replyForm'].validate((valid) => {
+          // if (valid) { }
         })
       }
     }
@@ -271,6 +321,13 @@
     right: 0;
     border-top: 1px solid #e5e5e5;
     padding: 5px 20px;
+  }
+
+  /** 弹框信息 */
+  .desc-span {
+    display: block;
+    text-align: left;
+    width: 100%;
   }
 </style>
 
