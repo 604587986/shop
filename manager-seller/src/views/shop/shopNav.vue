@@ -64,7 +64,7 @@
         <el-form-item label="URL" prop="shop_nav_url">
           <el-input v-model="navform.shop_nav_url" auto-complete="off" label-width="100"></el-input>
           <span>请填写包含http://的完整URL地址，否则会跳转到外链</span>
-          <span>例: http://localhost:8080/b2b2c/index.html填写http://localhost:8080/b2b2c/index.html</span>
+          <span>例: http://www.baidu.com填写http://www.baidu.com</span>
         </el-form-item>
         <el-form-item label="新窗口打开" prop="open_new_blank">
           <el-radio-group v-model="navform.open_new_blank">
@@ -141,7 +141,8 @@
             { required: true, message: '请填写导航名称', trigger: 'blur' }
           ],
           shop_nav_sort: [
-            { required: true, message: '请填写排序', trigger: 'blur' }
+            { required: true, message: '请填写排序', trigger: 'blur' },
+            { type: 'number', message: '请填写数字值', trigger: 'blur' }
           ],
           shop_nav_url: [
             { validator: shopNavURL, trigger: 'blur' }
@@ -156,13 +157,13 @@
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_GoodsList()
+        this.GET_ShopNavList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_GoodsList()
+        this.GET_ShopNavList()
       },
 
       GET_ShopNavList() {
