@@ -47,7 +47,7 @@
         </div>
       </div>
     </en-tabel-layout>
-    <div class="my-table-out">
+    <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
       <table class="my-table" v-loading="loading">
         <thead>
         <tr class="bg-order">
@@ -204,13 +204,22 @@
 
           /** 回复内容 */
           reply_content: ''
-        }
+        },
+
+        /** 表格最大高度 */
+        tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
       }
     },
     mounted() {
       this.GET_CommmentsList()
+      window.onresize = this.countTableHeight
     },
     methods: {
+
+      /** 计算高度 */
+      countTableHeight() {
+        this.tableHeight = (document.body.clientHeight - 54 - 35 - 50)
+      },
 
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {

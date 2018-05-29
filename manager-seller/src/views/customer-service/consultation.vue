@@ -40,7 +40,7 @@
         </div>
       </div>
     </en-tabel-layout>
-    <div class="my-table-out">
+    <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
       <table class="my-table">
         <thead>
         <tr class="bg-order">
@@ -115,13 +115,21 @@
         pageData: null,
 
         /** 高级搜索数据 */
-        advancedForm: {}
+        advancedForm: {},
+
+        /** 表格最大高度 */
+        tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
       }
     },
     mounted() {
       this.GET_ConsultationList()
+      window.onresize = this.countTableHeight
     },
     methods: {
+      /** 计算高度 */
+      countTableHeight() {
+        this.tableHeight = (document.body.clientHeight - 54 - 35 - 50)
+      },
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size

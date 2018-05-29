@@ -71,7 +71,7 @@
         </div>
       </div>
     </en-tabel-layout>
-    <div class="my-table-out">
+    <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
       <table class="my-table">
         <thead>
         <tr class="bg-order">
@@ -129,7 +129,6 @@
         </tbody>
       </table>
     </div>
-
     <el-pagination
       slot="pagination"
       v-if="pageData"
@@ -215,7 +214,10 @@
           { value: 1, label: '待付款' },
           { value: 2, label: '待发货' },
           { value: 3, label: '待收货' }
-        ]
+        ],
+
+        /** 表格最大高度 */
+        tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
       }
     },
     filters: {
@@ -228,6 +230,7 @@
         this.orderStatus = this.params.orderStatus = this.$route.query.orderStatus
       }
       this.GET_OrderList()
+      window.onresize = this.countTableHeight
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
@@ -239,6 +242,10 @@
       })
     },
     methods: {
+      /** 计算高度 */
+      countTableHeight() {
+        this.tableHeight = (document.body.clientHeight - 54 - 35 - 50)
+      },
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
