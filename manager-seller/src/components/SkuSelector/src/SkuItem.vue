@@ -48,6 +48,7 @@
                 :action="BASE_IMG_URL"
                 :show-file-list="false"
                 :on-success="getImgUrl"
+                :on-progress="upLoading"
                 :before-upload="beforeImgUpload">
                 <img v-show="val.spec_image" :src="val.spec_image" class="avatar sku-image" @click="handleClickImg(index)">
                 <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon"  @click="handleClickImg(index)"></i>
@@ -392,9 +393,10 @@
         this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_id', val.spec_id)
         this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', val.spec_value || '')
         this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value_id', val.spec_value_id || '')
-        this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', '')
-        this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', 0)
-
+        if (this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_type !== 1) {
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', '')
+          this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', 0)
+        }
         this.$emit('updateSkuInfo', this.skuInfo)
       },
 
@@ -438,6 +440,10 @@
       /** 点击已上传的图片 或者 i标签 */
       handleClickImg(index) {
         this.activeSkuValIndex = index
+      },
+
+      /** 文件正在上传时的钩子 */
+      upLoading(event, file, fileList) {
       },
 
       /** 文件上传成功之后的钩子 */
