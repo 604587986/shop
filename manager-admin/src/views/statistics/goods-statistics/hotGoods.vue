@@ -12,19 +12,7 @@
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <el-select
-            v-model="params.shop_id"
-            placeholder="请选择"
-            @change="shopChange"
-            style="width: 150px"
-          >
-            <el-option label="全平台" :value="0"/>
-            <el-option
-              v-for="item in shopList"
-              :key="item.shop_id"
-              :label="item.shop_name"
-              :value="item.shop_id"/>
-          </el-select>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">
@@ -41,7 +29,7 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import { CategoryPicker, YearMonthPicker } from '@/components'
+  import { CategoryPicker, YearMonthPicker, ShopPicker } from '@/components'
   import hotGoodsPrice from './hotGoodsPrice'
   import hotGoodsNum from './hotGoodsNum'
   import { Foundation } from '@/framework'
@@ -50,6 +38,7 @@
     components: {
       [YearMonthPicker.name]: YearMonthPicker,
       [CategoryPicker.name]: CategoryPicker,
+      [ShopPicker.name]: ShopPicker,
       HotGoodsPrice: hotGoodsPrice,
       HotGoodsNum: hotGoodsNum
     },
@@ -61,14 +50,11 @@
         params: {
           year: '',
           month: '',
-          type: 1,
-          cat_id: 0,
-          shop_id: 0
+          circle: 'MONTH',
+          categroy: 0,
+          seller_id: 0
         }
       }
-    },
-    created() {
-      this.GET_ShopList()
     },
     watch: {
       cur_tab() {
@@ -80,7 +66,7 @@
       yearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.type = object.type === 'month' ? 1 : 2
+        this.params.circle = object.type.toLocaleUpperCase()
         this.change_flag++
       },
       /** 店铺发生改变 */
@@ -89,14 +75,8 @@
       },
       /** 商品分类发生改变 */
       categoryChanged(data) {
-        this.params.cat_id = data.category_id || 0
+        this.params.categroy = data.category_id || 0
         this.change_flag++
-      },
-      /** 获取店铺列表 */
-      GET_ShopList() {
-        API_Shop.getShopList().then(response => {
-          this.shopList = response.data
-        }).catch(error => console.log(error))
       }
     }
   }
