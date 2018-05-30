@@ -112,12 +112,11 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { CategoryPicker, TableSearch } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsAudit',
     components: {
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {

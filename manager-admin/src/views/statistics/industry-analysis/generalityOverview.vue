@@ -44,13 +44,12 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { CategoryPicker, ShopPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'generalityOverview',
     components: {
-      [CategoryPicker.name]: CategoryPicker,
-      [ShopPicker.name]: ShopPicker
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {

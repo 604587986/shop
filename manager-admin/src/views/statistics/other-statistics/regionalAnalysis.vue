@@ -27,7 +27,6 @@
 </template>
 
 <script>
-  import { ShopPicker } from '@/components'
   import RegionalAnalysisMember from './regionalAnalysisMember'
   import RegionalAnalysisNum from './regionalAnalysisNum'
   import RegionalAnalysisPrice from './regionalAnalysisPrice'
@@ -36,7 +35,6 @@
   export default {
     name: 'regionalAnalysis',
     components: {
-      [ShopPicker.name]: ShopPicker,
       RegionalAnalysisMember,
       RegionalAnalysisNum,
       RegionalAnalysisPrice

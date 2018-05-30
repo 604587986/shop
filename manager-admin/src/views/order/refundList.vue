@@ -111,12 +111,11 @@
 
 <script>
   import * as API_refund from '@/api/refund'
-  import { CategoryPicker, TableSearch } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'refundList',
     components: {
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     mounted() {

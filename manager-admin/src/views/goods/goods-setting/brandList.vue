@@ -89,13 +89,9 @@
 
 <script>
   import * as API_brand from '@/api/brand'
-  import { TableSearch } from '@/components'
 
   export default {
     name: 'brandList',
-    components: {
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */
