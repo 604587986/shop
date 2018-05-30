@@ -3,7 +3,6 @@ import TableSearch from './TableSearch'
 import RegionPick from './RegionPick'
 import CategoryPicker from './CategoryPicker'
 import PriceRange from './PriceRange'
-import ShopPicker from './ShopPicker'
 import UE from './UE'
 
 export {
@@ -12,6 +11,5 @@ export {
   RegionPick,
   CategoryPicker,
   PriceRange,
-  ShopPicker,
   UE
 }

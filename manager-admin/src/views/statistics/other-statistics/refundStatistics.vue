@@ -18,15 +18,11 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { ShopPicker } from '@/components'
   import { Foundation } from '@/framework'
   import echartsOptions from '../echartsOptions'
 
   export default {
     name: 'refundStatistics',
-    components: {
-      [ShopPicker.name]: ShopPicker
-    },
     data() {
       return {
         loading: false,

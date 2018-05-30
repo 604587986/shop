@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import { CategoryPicker, ShopPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
   import hotGoodsPrice from './hotGoodsPrice'
   import hotGoodsNum from './hotGoodsNum'
 
@@ -36,7 +36,6 @@
     name: 'hotGoods',
     components: {
       [CategoryPicker.name]: CategoryPicker,
-      [ShopPicker.name]: ShopPicker,
       HotGoodsPrice: hotGoodsPrice,
       HotGoodsNum: hotGoodsNum
     },
