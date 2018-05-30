@@ -28,7 +28,6 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import { PriceRange } from '@/components'
   import CustomerPriceDistributionPrice from './customerPriceDistributionPrice'
   import CustomerPriceDistributionPeriod from './customerPriceDistributionPeriod'
   import CustomerPriceDistributionFrequency from './customerPriceDistributionFrequency'
@@ -36,7 +35,6 @@
   export default {
     name: 'customerPriceDistribution',
     components: {
-      [PriceRange.name]: PriceRange,
       CustomerPriceDistributionPrice,
       CustomerPriceDistributionPeriod,
       CustomerPriceDistributionFrequency
