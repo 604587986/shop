@@ -28,15 +28,14 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import { YearMonthPicker, ShopPicker, PriceRange } from '@/components'
+  import { PriceRange, ShopPicker } from '@/components'
   import CustomerPriceDistributionPrice from './customerPriceDistributionPrice'
   import CustomerPriceDistributionPeriod from './customerPriceDistributionPeriod'
   import CustomerPriceDistributionFrequency from './customerPriceDistributionFrequency'
-  import { Foundation } from '@/framework'
+
   export default {
     name: 'customerPriceDistribution',
     components: {
-      [YearMonthPicker.name]: YearMonthPicker,
       [ShopPicker.name]: ShopPicker,
       [PriceRange.name]: PriceRange,
       CustomerPriceDistributionPrice,

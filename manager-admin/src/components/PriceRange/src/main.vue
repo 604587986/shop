@@ -50,7 +50,7 @@
       }
       this.defaultRange.forEach((item, index) => {
         const preRange = this.defaultRange[index - 1]
-        if (item[0] >= item[1] || preRange && preRange[1] >= item[0]) {
+        if (item[0] >= item[1] || preRange && preRange[0] >= item[0]) {
           throw new Error('传入默认价格区间格式有误！')
         }
       })
@@ -67,8 +67,8 @@
         const defaultRange = this.defaultRange
         const last_range = defaultRange[defaultRange.length - 1]
         // 如果最后一组第二个值为空、为0或小于等于前一个值，则不增加
-        // 新增数组第一个值为前一组第一个值+1，第二个值默认为前一个值+1
-        this.defaultRange.push([last_range[1] + 1, last_range[1] + 2])
+        // 新增数组第一个值为前一组第一个值1，第二个值默认为前一个值+1
+        this.defaultRange.push([last_range[1], last_range[1] + 1])
       },
       /** 删除一个区间 */
       handleDeleteRange() {

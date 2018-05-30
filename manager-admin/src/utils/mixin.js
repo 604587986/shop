@@ -4,6 +4,7 @@
 
 import Vue from 'vue'
 import * as API_Common from '@/api/common'
+import { Foundation } from '@/framework'
 
 export default {
   data() {
@@ -26,6 +27,10 @@ export default {
     /** 用于判断表单是否为空 */
     MixinRequired(message, trigger) {
       return { required: true, message, trigger: trigger || 'blur' }
+    },
+    /** 格式化金钱 */
+    MixinFormatPrice(row, column, cellValue, index) {
+      return '￥' + Foundation.formatPrice(cellValue)
     }
   },
   computed: {}

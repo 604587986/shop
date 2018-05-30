@@ -44,12 +44,9 @@
 
 <script>
   import * as API_Order from '@/api/order'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'settlementList',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

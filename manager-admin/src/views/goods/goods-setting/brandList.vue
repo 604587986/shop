@@ -89,11 +89,11 @@
 
 <script>
   import * as API_brand from '@/api/brand'
-  import { TableLayout, TableSearch } from '@/components'
+  import { TableSearch } from '@/components'
+
   export default {
     name: 'brandList',
     components: {
-      [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch
     },
     data() {

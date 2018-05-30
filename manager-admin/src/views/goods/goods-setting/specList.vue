@@ -105,11 +105,11 @@
 
 <script>
   import * as API_spec from '@/api/spec'
-  import { TableLayout, TableSearch } from '@/components'
+  import { TableSearch } from '@/components'
+
   export default {
     name: 'specList',
     components: {
-      [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch
     },
     data() {

@@ -43,12 +43,9 @@
 
 <script>
   import * as API_Member from '@/api/member'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'memberRecycle',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

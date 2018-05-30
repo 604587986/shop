@@ -45,13 +45,9 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import { TableLayout } from '@/components'
 
   export default {
     name: 'shopAudit',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

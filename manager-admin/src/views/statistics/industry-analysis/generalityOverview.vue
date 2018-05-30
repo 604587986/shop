@@ -44,11 +44,11 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout, CategoryPicker, ShopPicker } from '@/components'
+  import { CategoryPicker, ShopPicker } from '@/components'
+
   export default {
     name: 'generalityOverview',
     components: {
-      [TableLayout.name]: TableLayout,
       [CategoryPicker.name]: CategoryPicker,
       [ShopPicker.name]: ShopPicker
     },

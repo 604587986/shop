@@ -48,12 +48,9 @@
 
 <script>
   import * as API_Decoration from '@/api/decoration'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'pcFloorManage',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

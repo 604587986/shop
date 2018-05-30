@@ -66,13 +66,10 @@
 
 <script>
   import * as API_SiteMenu from '@/api/siteMenu'
-  import { TableLayout } from '@/components'
   import Sortable from 'sortablejs'
+
   export default {
     name: 'pcSiteMenu',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

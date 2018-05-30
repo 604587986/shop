@@ -84,95 +84,91 @@ export function addMemberStatistics(params) {
 /**
  * 价格销量
  * @param params
- * @returns {Promise<any>}
  */
 export function getPriceSales(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  _formData.append('store_id', params.shop_id)
-  _formData.append('cycle_type', params.type)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/goodsStatis/get-price-sales-json.do',
-      method: 'post',
-      loading: false,
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/goods/price/sales',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取热卖商品下单金额
  * @param params
- * @returns {Promise<any>}
  */
-export function hotGoodsPrice(params) {
-  params.store_id = params.shop_id
-  params.cycle_type = params.type
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/goodsStatis/get-hot-goods-money-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      const _response = response
-      _response.data = response.data.chartsjson.map(item => {
-        item.price = item.y
-        return item
-      })
-      resolve(_response)
-    }).catch(error => reject(error))
+export function getHotGoodsPrice(params) {
+  return request({
+    url: 'statistics/goods/hot/money',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取热卖商品下单金额表格数据
+ * @param params
+ */
+export function getHotGoodsPricePage(params) {
+  return request({
+    url: 'statistics/goods/hot/money/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取热卖商品下单量
  * @param params
- * @returns {Promise<any>}
  */
-export function hotGoodsNum(params) {
-  params.store_id = params.shop_id
-  params.cycle_type = params.type
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/goodsStatis/get-hot-goods-num-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      const _response = response
-      _response.data = response.data.chartsjson.map(item => {
-        item.num = item.y
-        return item
-      })
-      resolve(_response)
-    }).catch(error => reject(error))
+export function getHotGoodsNum(params) {
+  return request({
+    url: 'statistics/goods/hot/num',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取热卖商品下单量表格数据
+ * @param params
+ */
+export function getHotGoodsNumPage(params) {
+  return request({
+    url: 'statistics/goods/hot/num/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取收藏排行
  * @param params
- * @returns {Promise<any>}
  */
 export function getGoodsCollectTop(params) {
-  params.shopId = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/b2b2c/admin/goodsStatis/get-collect-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      const _response = response
-      _response.data = response.data.map(item => {
-        item.num = item.y
-        item.name = item.goods_name
-        return item
-      })
-      resolve(_response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'statistics/goods/collect',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取收藏排行表格数据
+ * @param params
+ */
+export function getGoodsCollectTopPage(params) {
+  return request({
+    url: 'statistics/goods/collect/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -453,3 +449,15 @@ export function getRefundStatisticsData(params) {
   })
 }
 
+/**
+ * 商品销售明细
+ * @param params
+ */
+export function getGoodsSaleDetail(params) {
+  return request({
+    url: 'statistics/goods/sale/details',
+    method: 'get',
+    loading: false,
+    params
+  })
+}

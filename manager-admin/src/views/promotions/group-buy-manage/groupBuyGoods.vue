@@ -46,11 +46,11 @@
 
 <script>
   import * as API_GroupBuy from '@/api/groupBuy'
-  import { TableLayout, TableSearch } from '@/components'
+  import { TableSearch } from '@/components'
+
   export default {
     name: 'groupBuyGoods',
     components: {
-      [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch
     },
     data() {

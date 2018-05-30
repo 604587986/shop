@@ -46,12 +46,9 @@
 
 <script>
   import * as API_AuthSetting from '@/api/authSetting'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'roleManage',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

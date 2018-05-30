@@ -255,12 +255,16 @@ export default {
     handleClickAdd(columnIndex) {
       const { data, needDeleteParams } = this
       this.curItem = { $level: columnIndex }
-      const parentArray = JSON.parse(JSON.stringify(data[columnIndex - 1] || data[columnIndex]))
-      const parent = parentArray.filter(item => item.$active)[0]
-      parentArray.map(item => {
-        needDeleteParams.forEach(key => delete item[key])
-        return item
-      })
+      let parent
+      let parentArray
+      if (columnIndex !== 0) {
+        parent = parentArray.filter(item => item.$active)[0]
+        parentArray = JSON.parse(JSON.stringify(data[columnIndex - 1] || data[columnIndex]))
+        parentArray.map(item => {
+          needDeleteParams.forEach(key => delete item[key])
+          return item
+        })
+      }
       this.$emit('add-click', columnIndex, parent, parentArray)
     }
   }
