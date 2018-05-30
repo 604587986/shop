@@ -31,7 +31,7 @@
     </div>
     <en-image-picker
       :show="dialogImageShow"
-      :default-data="defaultData"
+      :default-data="defaultImageData"
       :operation="operation"
       @close="dialogImageShow = false"
       @confirm="handleImagePickerConfirm"
@@ -41,6 +41,7 @@
     <!--api="http://yiqisi.s1.natapp.cc/seller-api/goods"-->
     <en-goods-picker
       :show="dialogGoodsShow"
+      :default-data="defaultGoodsData"
       :limit="0"
       @close="dialogGoodsShow = false"
       @confirm="handleGoodsPickerConfirm"
@@ -82,7 +83,10 @@
         },
         dialogImageShow: false,
         dialogGoodsShow: false,
-        defaultData: '',
+        /** 图片默认数据 */
+        defaultImageData: '',
+        /** 商品默认数据 */
+        defaultGoodsData: [],
         /** 自定义操作参数 */
         operation: [{
           label: '链接类型',
@@ -119,12 +123,15 @@
         }
         const blockData = JSON.parse(JSON.stringify(target.blockList[targetIndex]))
         if (type === 'IMAGE') {
-          this.defaultData = blockData.block_value ? [{
+          this.defaultImageData = blockData.block_value ? [{
             url: blockData.block_value,
             opt: blockData.block_opt
           }] : null
           this.dialogImageShow = true
         } else if (type === 'GOODS') {
+          // 填充默认数据
+          console.log(blockData)
+          this.defaultGoodsData = blockData.block_value ? [blockData.block_value.sn] : []
           this.dialogGoodsShow = true
         } else if (type === 'TEXT') {
           this.$prompt('请输入文本内容', '提示', {
@@ -155,7 +162,7 @@
       /** 商品选择器确认 */
       handleGoodsPickerConfirm(list) {
         const { index, target, targetIndex } = this.editOptions
-        target.blockList[targetIndex].block_value = this.MixinClone(list[0])
+        target.blockList[targetIndex].block_value = this.MixinClone(list[0] || '')
         this.$set(this.floorList, index, target)
         this.dialogGoodsShow = false
       },

@@ -25,9 +25,9 @@
 </template>
 
 <script>
-  import * as API_Statistics from '@/api/statistics';
-  import { CategoryPicker, PriceRange, ShopPicker, YearMonthPicker } from '@/components';
-  import echartsOptions from '../echartsOptions';
+  import * as API_Statistics from '@/api/statistics'
+  import { CategoryPicker, PriceRange, ShopPicker, YearMonthPicker } from '@/components'
+  import echartsOptions from '../echartsOptions'
 
   export default {
     name: 'priceSales',

@@ -2,7 +2,7 @@
  * 统计相关API
  */
 
-import request from '@/utils/request';
+import request from '@/utils/request'
 
 const a = 'bbb'
 
