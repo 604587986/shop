@@ -345,21 +345,14 @@
         }
         /** 检测是否已存在*/
         const _value_list = this.skuInfo[this.activeSkuItemIndex].value_list.filter((key) => {
-          if (key.spec_value_id) {
-            return key.spec_value_id === val.spec_value_id
+          if (key.spec_value) {
+            return key.spec_value === val.spec_value
           }
         })
         if (_value_list.length > 0) {
           this.$message.error('当前规格值已存在，请重新选择或者编辑！')
           if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value_id) {
             this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', '')
-          } else {
-            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_id', this.activeSkuVal.spec_id)
-            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', this.activeSkuVal.spec_value || '')
-            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value_id', this.activeSkuVal.spec_value_id || '')
-            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_image', '')
-            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_type', this.activeSkuVal.spec_type || 0)
-            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', this.activeSkuVal.spec_value || '')
           }
           return
         }

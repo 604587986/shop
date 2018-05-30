@@ -101,22 +101,24 @@
       chooseData() {
         const _skuInfo = []
         this.goodsSkuInfo.forEach(key => {
-          key.spec_list.forEach((item, index) => {
-            /** 如果spec_id存在 则不再添加sepc_id 只添加对应的spec_value_id  */
-            if (_skuInfo[index] && _skuInfo[index].spec_id && _skuInfo[index].spec_id === item.spec_id) {
-              const _isexit = _skuInfo[index].value_list.some(key => {
-                return key.spec_value_id === item.spec_value_id
-              })
-              if (!_isexit) {
-                _skuInfo[index].value_list.push(item)
+          if (key && key.spec_list && Array.isArray(key.spec_list)) {
+            key.spec_list.forEach((item, index) => {
+              /** 如果spec_id存在 则不再添加sepc_id 只添加对应的spec_value_id  */
+              if (_skuInfo[index] && _skuInfo[index].spec_id && _skuInfo[index].spec_id === item.spec_id) {
+                const _isexit = _skuInfo[index].value_list.some(key => {
+                  return key.spec_value_id === item.spec_value_id
+                })
+                if (!_isexit) {
+                  _skuInfo[index].value_list.push(item)
+                }
+              } else {
+                _skuInfo.push({
+                  spec_id: item.spec_id,
+                  value_list: [item]
+                })
               }
-            } else {
-              _skuInfo.push({
-                spec_id: item.spec_id,
-                value_list: [item]
-              })
-            }
-          })
+            })
+          }
         })
         this.productSkuInfo = _skuInfo
       },

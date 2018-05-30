@@ -817,13 +817,15 @@
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
             this.skuList = response.map(key => {
-              const spec_list = key.spec_list.map(item => {
-                let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
-                return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
-              })
-              let { cost, quantity, sn, weight } = key
-              const price = key.goods_price
-              return { cost, price, quantity, sn, weight, spec_list }
+              if (key.spec_list && Array.isArray(key.spec_list)) {
+                const spec_list = key.spec_list.map(item => {
+                  let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
+                  return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+                })
+                let { cost, quantity, sn, weight } = key
+                const price = key.goods_price
+                return { cost, price, quantity, sn, weight, spec_list }
+              }
             })
           })
         })

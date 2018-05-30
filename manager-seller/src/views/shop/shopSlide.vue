@@ -107,7 +107,7 @@
         this.loading = true
         API_ShopSlide.getShopSlideList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
+          this.tableData = response
         })
       },
 
@@ -128,9 +128,8 @@
 
       /** 上传成功钩子*/
       uploadSuccess(response, file, fileList) {
-        // this.uploadShopBanner = response
-        // 此处应接收后台返回数据 重置列表
-        this.uploadShopBanner.shop_banner_image = file.url
+        this.uploadShopBanner.shop_banner_image = response.url
+        this.uploadShopBanner.shop_banner_link = response.url
         this.fileList = []
       },
 
@@ -155,14 +154,7 @@
 
       /** 保存幻灯片*/
       POST_SaveSlide() {
-        const _params = this.tableData.map(key => {
-          return {
-            img: key.shop_banner_image,
-            silde_url: key.shop_banner_link,
-            silde_id: key.shop_banner_id
-          }
-        })
-        API_ShopSlide.saveShopSlide(_params).then(() => {
+        API_ShopSlide.saveShopSlide(this.tableData).then(() => {
           this.$message.success('保存成功')
           this.GET_ShopSlideList()
         })
