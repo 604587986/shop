@@ -149,26 +149,26 @@ export function getHotGoodsNumPage(params) {
 /**
  * 获取收藏排行
  * @param params
- * @returns {Promise<any>}
  */
 export function getGoodsCollectTop(params) {
-  params.shopId = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'statistics/goods/collect',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      console.log(response)
-      // const _response = response
-      // _response.data = response.data.map(item => {
-      //   item.num = item.y
-      //   item.name = item.goods_name
-      //   return item
-      // })
-      // resolve(_response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'statistics/goods/collect',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取收藏排行表格数据
+ * @param params
+ */
+export function getGoodsCollectTopPage(params) {
+  return request({
+    url: 'statistics/goods/collect/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
