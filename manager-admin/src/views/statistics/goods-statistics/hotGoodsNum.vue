@@ -19,6 +19,7 @@
   import * as API_Statistics from '@/api/statistics'
   import { TableLayout } from '@/components'
   import echartsOptions from '../echartsOptions'
+
   export default {
     name: 'hotGoodsNum',
     components: {
@@ -51,26 +52,26 @@
       GET_HotGoodsNum() {
         if (this.curTab !== 'num' || this.loading) return
         this.loading = true
-        API_Statistics.getHotGoodsNum(this.params).then(response => {
+        Promise.all([
+          API_Statistics.getHotGoodsNum(this.params),
+          API_Statistics.getHotGoodsNumPage(this.params)
+        ]).then(responses => {
           this.loading = false
-          const { data: _data, localName: _name } = response.series
-          const { xAxis } = response
+          this.tableData = responses[1]
+          const { data: _data, localName: _name } = responses[0].series
+          const { xAxis } = responses[0]
           this.echarts.setOption(echartsOptions({
             titleText: '热卖商品销量TOP' + xAxis.length,
             tooltipFormatter: function(params) {
               params = params[0]
               const member_name = _name[params.dataIndex]
-              return `商品名称：${member_name}<br/>${params.seriesName}：${params.value}`
+              return `商品名称：${member_name}<br/>商品销量：${params.value}`
             },
-            seriesName: '商品销量',
             seriesData: _data,
             xAxisData: xAxis
           }))
           this.echarts.resize()
         }).catch(() => { this.loading = false })
-        API_Statistics.getHotGoodsNumPage(this.params).then(response => {
-          this.tableData = response
-        })
       }
     }
   }

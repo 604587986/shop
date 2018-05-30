@@ -20,6 +20,7 @@
   import { TableLayout } from '@/components'
   import echartsOptions from '../echartsOptions'
   import { Foundation } from '@/framework'
+
   export default {
     name: 'hotGoodsPrice',
     components: {
@@ -56,26 +57,26 @@
       GET_HotGoodsPrice() {
         if (this.curTab !== 'price' || this.loading) return
         this.loading = true
-        API_Statistics.getHotGoodsPrice(this.params).then(response => {
+        Promise.all([
+          API_Statistics.getHotGoodsPrice(this.params),
+          API_Statistics.getHotGoodsPricePage(this.params)
+        ]).then(responses => {
           this.loading = false
-          const { data: _data, localName: _name } = response.series
-          const { xAxis } = response
+          this.tableData = responses[1]
+          const { data: _data, localName: _name } = responses[0].series
+          const { xAxis } = responses[0]
           this.echarts.setOption(echartsOptions({
             titleText: '热卖商品销量TOP',
             tooltipFormatter: function(params) {
               params = params[0]
               const member_name = _name[params.dataIndex]
-              return `商品名称：${member_name}<br/>${params.seriesName}：￥${Foundation.formatPrice(params.value)}`
+              return `商品名称：${member_name}<br/>销售金额：￥${Foundation.formatPrice(params.value)}`
             },
-            seriesName: '销售金额',
             seriesData: _data,
             xAxisData: xAxis
           }))
           this.echarts.resize()
         }).catch(() => { this.loading = false })
-        API_Statistics.getHotGoodsPricePage(this.params).then(response => {
-          this.tableData = response
-        })
       }
     }
   }

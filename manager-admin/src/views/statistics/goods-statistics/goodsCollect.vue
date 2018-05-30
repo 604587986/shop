@@ -83,12 +83,11 @@
         Promise.all([
           API_Statistics.getGoodsCollectTop(this.params),
           API_Statistics.getGoodsCollectTopPage(this.params)
-        ]).then(values => {
+        ]).then(responses => {
           this.loading = false
-          this.tableData = values[1]
-          const { data: _data, name: _name, localName } = values[0].series
-          const { xAxis } = values[0]
-          console.log(values[0])
+          this.tableData = responses[1]
+          const { data: _data, name: _name, localName } = responses[0].series
+          const { xAxis } = responses[0]
           this.echarts.setOption(echartsOptions({
             titleText: '商品收藏TOP' + xAxis.length,
             tooltipFormatter: function(params) {
