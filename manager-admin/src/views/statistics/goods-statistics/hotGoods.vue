@@ -58,7 +58,7 @@
       yearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.circle = object.type.toLocaleUpperCase()
+        this.params.circle = object.type
       }
     }
   }
