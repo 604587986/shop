@@ -4,7 +4,7 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker :clearable="true" @changed="categoryChanged"/>
+          <en-category-picker :clearable="true" @changed="(category) => { params.categroy = category.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
           <span>订单周期：</span>
@@ -28,11 +28,10 @@
 </template>
 
 <script>
-  import * as API_Shop from '@/api/shop'
-  import { CategoryPicker, YearMonthPicker, ShopPicker } from '@/components'
+  import {CategoryPicker, ShopPicker, YearMonthPicker} from '@/components'
   import hotGoodsPrice from './hotGoodsPrice'
   import hotGoodsNum from './hotGoodsNum'
-  import { Foundation } from '@/framework'
+
   export default {
     name: 'hotGoods',
     components: {
@@ -45,8 +44,6 @@
     data() {
       return {
         cur_tab: 'price',
-        shopList: [],
-        change_flag: 1,
         params: {
           year: '',
           month: '',
@@ -56,27 +53,12 @@
         }
       }
     },
-    watch: {
-      cur_tab() {
-        this.change_flag++
-      }
-    },
     methods: {
       /** 年月份发生变化 */
       yearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
         this.params.circle = object.type.toLocaleUpperCase()
-        this.change_flag++
-      },
-      /** 店铺发生改变 */
-      shopChange() {
-        this.change_flag++
-      },
-      /** 商品分类发生改变 */
-      categoryChanged(data) {
-        this.params.categroy = data.category_id || 0
-        this.change_flag++
       }
     }
   }
