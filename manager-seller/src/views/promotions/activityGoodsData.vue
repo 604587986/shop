@@ -41,13 +41,11 @@
 
 <script>
   import * as API_LimitTime from '@/api/limitTime'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'activityGoodsData',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {

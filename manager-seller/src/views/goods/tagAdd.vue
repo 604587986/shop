@@ -49,14 +49,12 @@
 
 <script>
   import * as API_goodsTag from '@/api/goodsTag'
-  import { CategoryPicker, TableLayout, TableSearch } from '@/components'
+  import { CategoryPicker } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
 
   export default {
     name: 'tagAdd',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [GoodsSelector.name]: GoodsSelector
     },
@@ -185,6 +183,10 @@
     .goods_price {
       color: #f60;
     }
+  }
+  .goods-image {
+    width: 50px;
+    height: 50px;
   }
 
 </style>

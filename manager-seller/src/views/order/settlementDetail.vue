@@ -110,13 +110,8 @@
 
 <script>
   import * as API_Settlement from '@/api/settlement'
-  import { TableLayout } from '@/components'
-
   export default {
     name: 'settlementDetail',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     mounted() {
       this.GET_SettlementList()
       this.GET_orderList()

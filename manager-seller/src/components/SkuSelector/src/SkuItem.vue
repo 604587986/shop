@@ -3,7 +3,6 @@
     <el-form  :model="skuForm" >
       <div v-for="(item, $index) in skuInfo" :key="$index">
         <el-form-item label="规格名：" prop="spec_name">
-          <!--:disabled="item.spec_name ? true : false"-->
           <el-autocomplete
             style="width: 170px;"
             class="inline-input"
@@ -23,7 +22,6 @@
         <el-form-item label="规格值：" prop="spec_value">
           <!--规格值文本列表-->
           <div  v-for="(val, index) in item.value_list" :key="index" style="padding: 10px 10px 10px 0;">
-            <!--:disabled="val.spec_value ? true : false"-->
             <el-autocomplete
               class="inline-input"
               style="width: 170px;"
@@ -46,7 +44,6 @@
                 style="text-align: center; margin-top: 10px;"
                 :key="index"
                 :action="BASE_IMG_URL"
-                :show-file-list="false"
                 :on-success="getImgUrl"
                 :on-progress="upLoading"
                 :before-upload="beforeImgUpload">
@@ -113,7 +110,10 @@
         activeSkuValIndex: 0,
 
         /** 当前规格值 */
-        activeSkuVal: {}
+        activeSkuVal: {},
+
+        /** 开始上传为true */
+        upLoadStatus: false
       }
     },
     mounted() {
@@ -408,10 +408,12 @@
 
       /** 文件正在上传时的钩子 */
       upLoading(event, file, fileList) {
+        this.upLoadStatus = true
       },
 
       /** 文件上传成功之后的钩子 */
       getImgUrl(response, file, fileList) {
+        this.upLoadStatus = false
         /** 更新skuInfo数据 */
         let _arr = cloneObj(this.skuInfo[this.activeSkuItemIndex])
         this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_image', response.url)

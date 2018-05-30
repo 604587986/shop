@@ -31,12 +31,10 @@
 
 <script>
   import * as API_collectionStatistics from '@/api/collectionStatistics'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
   export default {
     name: 'collectStatistics',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {

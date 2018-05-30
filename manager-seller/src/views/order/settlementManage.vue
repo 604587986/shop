@@ -54,13 +54,11 @@
 
 <script>
   import * as API_settlement from '@/api/settlement'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'settlementManage',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {

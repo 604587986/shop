@@ -171,14 +171,12 @@
 
 <script>
   import * as API_activity from '@/api/activity'
-  import { TableLayout, TableSearch, CategoryPicker, UE } from '@/components'
+  import { CategoryPicker, UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
 
   export default {
     name: 'singleCut',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [UE.name]: UE,
       [GoodsSelector.name]: GoodsSelector

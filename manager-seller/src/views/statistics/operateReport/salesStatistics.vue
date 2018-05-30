@@ -56,14 +56,11 @@
 
 <script>
   import * as API_salesStatistics from '@/api/salesStatistics'
-  import { YearMonthPicker, TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
   export default {
     name: 'salesStatistics',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker,
-      [YearMonthPicker.name]: YearMonthPicker
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {

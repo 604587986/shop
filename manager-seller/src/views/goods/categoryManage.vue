@@ -89,13 +89,8 @@
 
 <script>
   import * as API_goodsCategory from '@/api/goodsCategory'
-  import { TableLayout } from '@/components'
-
   export default {
     name: 'categoryManage',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

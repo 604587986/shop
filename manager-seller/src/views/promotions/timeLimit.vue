@@ -63,13 +63,11 @@
 
 <script>
   import * as API_limitTime from '@/api/limitTime'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'timeLimit',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {

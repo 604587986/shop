@@ -85,14 +85,12 @@
 
 <script>
   import * as API_coupon from '@/api/coupon'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
   import { Coupon } from './components'
 
   export default {
     name: 'discountManager',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [Coupon.name]: Coupon
     },

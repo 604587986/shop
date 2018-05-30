@@ -111,7 +111,7 @@
             </el-form-item>
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
-                class="avatar-uploader"
+                class="avatar-uploader goods-images"
                 :action="BASE_IMG_URL"
                 list-type="picture-card"
                 :file-list="baseInfoForm.goods_gallery_list"
@@ -324,13 +324,11 @@
   import { mapGetters } from 'vuex'
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
-  import { TableLayout, TableSearch, CategoryPicker, SkuSelector, UE } from '@/components'
+  import { CategoryPicker, SkuSelector, UE } from '@/components'
   import Sortable from 'sortablejs'
   export default {
     name: 'goodsPublish',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [SkuSelector.name]: SkuSelector,
       [UE.name]: UE
@@ -1315,25 +1313,28 @@
   }
 
   /*图片上传组件第一张图设置封面*/
-  /deep/ li.el-upload-list__item:first-child {
-    position: relative;
+  /deep/ .goods-images {
+    /deep/ li.el-upload-list__item:first-child {
+      position: relative;
+    }
+    /deep/ li.el-upload-list__item:first-child:after {
+      content:"封";
+      color:#fff;
+      font-weight:bold;
+      font-size: 12px;
+      position: absolute;
+      left: -15px;
+      top: -6px;
+      width: 40px;
+      height: 24px;
+      padding-top: 6px;
+      background: #13ce66;
+      text-align: center;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      -webkit-box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+      box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+    }
   }
-  /deep/ li.el-upload-list__item:first-child:after {
-    content:"封";
-    color:#fff;
-    font-weight:bold;
-    font-size: 12px;
-    position: absolute;
-    left: -15px;
-    top: -6px;
-    width: 40px;
-    height: 24px;
-    padding-top: 6px;
-    background: #13ce66;
-    text-align: center;
-    -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-    -webkit-box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
-    box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
-  }
+
 </style>

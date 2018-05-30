@@ -63,14 +63,11 @@
 
 <script>
   import * as API_HotGoods from '@/api/hotGoods'
-  import { YearMonthPicker, TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
   export default {
     name: 'hotSellingGoods',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker,
-      [YearMonthPicker.name]: YearMonthPicker
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {

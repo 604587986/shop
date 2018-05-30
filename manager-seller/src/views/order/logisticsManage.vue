@@ -102,15 +102,12 @@
 
 <script>
   import * as API_express from '@/api/expressMould'
-  import { TableLayout, TableSearch } from '@/components'
   import { LogisticsCompany } from './components'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
 
   export default {
     name: 'logisticsManage',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [LogisticsCompany.name]: LogisticsCompany,
       [AreaSelectorDialog.name]: AreaSelectorDialog
     },

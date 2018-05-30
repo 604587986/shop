@@ -235,15 +235,13 @@
 
 <script>
   import * as API_activity from '@/api/activity'
-  import { TableLayout, TableSearch, CategoryPicker, UE } from '@/components'
+  import { CategoryPicker, UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   import { AddGift, Coupon } from './components'
 
   export default {
     name: 'fullCut',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [UE.name]: UE,
       [GoodsSelector.name]: GoodsSelector,

@@ -112,13 +112,11 @@
 
 <script>
   import * as API_consultation from '@/api/consultation'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'consultation',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {

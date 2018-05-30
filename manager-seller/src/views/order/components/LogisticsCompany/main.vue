@@ -38,13 +38,8 @@
 
 <script>
   import * as API_logistics from '@/api/expressCompany'
-  import { TableLayout, TableSearch } from '@/components'
   export default {
     name: 'LogisticsCompany',
-    components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */

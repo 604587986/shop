@@ -13,12 +13,8 @@
 
 <script>
   import * as API_trafficStatistics from '@/api/trafficStatistics'
-  import { YearMonthPicker } from '@/components'
   export default {
     name: 'trafficStatistics',
-    components: {
-      [YearMonthPicker.name]: YearMonthPicker
-    },
     data() {
       return {
         /** 列表loading状态 */

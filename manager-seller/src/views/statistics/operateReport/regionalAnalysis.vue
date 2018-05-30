@@ -20,12 +20,8 @@
 
 <script>
   import * as API_regionalAnalysis from '@/api/regionalAnalysis'
-  import { YearMonthPicker } from '@/components'
   export default {
     name: 'regionalAnalysis',
-    components: {
-      [YearMonthPicker.name]: YearMonthPicker
-    },
     data() {
       return {
         /** 列表loading状态 */
