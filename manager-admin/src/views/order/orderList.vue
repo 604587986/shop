@@ -117,13 +117,9 @@
 
 <script>
   import * as API_order from '@/api/order'
-  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'orderList',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
     data() {
       return {
         /** 列表loading状态 */

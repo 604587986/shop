@@ -325,6 +325,7 @@
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
   import { TableLayout, TableSearch, CategoryPicker, SkuSelector, UE } from '@/components'
+  import Sortable from 'sortablejs'
   export default {
     name: 'goodsPublish',
     components: {
@@ -704,6 +705,10 @@
 
       /** 上架  */
       aboveGoods() {
+        if (this.baseInfoForm.activeGoodsId === 0) {
+          this.$message.error('严重错误，商城分类Id不可为0')
+          return
+        }
         let _params = this.generateFormData(this.baseInfoForm)
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
@@ -787,6 +792,9 @@
           this.baseInfoForm.goods_gallery_list.forEach(key => {
             this.$set(key, 'url', key.original)
           })
+          this.$nextTick(() => {
+            this.setSort()
+          })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list || !Array.isArray(this.baseInfoForm.sku_list)) {
@@ -868,6 +876,9 @@
               original: key,
               sort: 0
             }
+          })
+          this.$nextTick(() => {
+            this.setSort()
           })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
@@ -977,26 +988,44 @@
 
       /** 文件列表上传成功时的钩子  上传成功校验 */
       handleSuccess(file, fileList) {
-        debugger
         this.baseInfoForm.goods_gallery_list.push({
           img_id: -1,
 
-          original: fileList.url,
+          original: file.url,
 
-          url: fileList.url,
+          url: file.url,
 
           sort: 0,
 
-          name: fileList.name
+          name: file.name
         })
         this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
         this.$refs['baseInfoForm'].validateField('goods_gallery')
+        this.$nextTick(() => {
+          this.setSort()
+        })
       },
 
       /** 点击已上传的文件链接时的钩子 放大 */
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url
         this.dialogImage = true
+      },
+
+      /** 拖拽改变图片顺序 */
+      setSort() {
+        const el = document.querySelectorAll('div.avatar-uploader > ul.el-upload-list--picture-card')[0]
+        this.sortable = Sortable.create(el, {
+          ghostClass: 'sortable-ghost',
+          setData: function(dataTransfer) {
+
+          },
+          onEnd: evt => {
+            let temp = this.baseInfoForm.goods_gallery_list[evt.oldIndex]
+            this.baseInfoForm.goods_gallery_list[evt.oldIndex] = this.baseInfoForm.goods_gallery_list[evt.newIndex]
+            this.baseInfoForm.goods_gallery_list[evt.newIndex] = temp
+          }
+        })
       },
 
       /** 图片上传之前的校验  */
@@ -1283,4 +1312,26 @@
     text-align: center;
   }
 
+  /*图片上传组件第一张图设置封面*/
+  /deep/ li.el-upload-list__item:first-child {
+    position: relative;
+  }
+  /deep/ li.el-upload-list__item:first-child:after {
+    content:"封";
+    color:#fff;
+    font-weight:bold;
+    font-size: 12px;
+    position: absolute;
+    left: -15px;
+    top: -6px;
+    width: 40px;
+    height: 24px;
+    padding-top: 6px;
+    background: #13ce66;
+    text-align: center;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+    box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+  }
 </style>

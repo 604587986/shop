@@ -138,6 +138,11 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
+          this.tableData.forEach(key => {
+            if (!key.goods_image) {
+              key.goods_image = key.gallery_list[0]
+            }
+          })
         }).catch(() => { this.loading = false })
       },
 

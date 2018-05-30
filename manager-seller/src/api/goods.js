@@ -40,6 +40,8 @@ export function deleteGoods(ids, params) {
       url: `/goods/${ids}/recycle`,
       method: 'put',
       data: _params
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -77,6 +79,8 @@ export function reserveStockGoods(goods_id, params) {
       method: 'put',
       data: params,
       headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -230,6 +234,8 @@ export function underGoods(ids, params) {
       url: `/goods/${ids}/under`,
       method: 'put',
       data: params
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -265,6 +271,8 @@ export function editGoods(id, params) {
       method: 'put',
       data: params,
       headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -281,6 +289,8 @@ export function saveDraft(params) {
       method: 'post',
       data: params,
       headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -297,6 +307,8 @@ export function aboveDraftGoods(ids, params) {
       method: 'put',
       data: params,
       headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -367,6 +379,8 @@ export function deleteDraftGoods(ids, params) {
       url: `/goods/draft-goods/${ids}`,
       method: 'delete',
       data: _params
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -404,6 +418,8 @@ export function RecycleReductionGoods(ids, params) {
       url: `/goods/${ids}/revert`,
       method: 'put',
       data: params
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -421,6 +437,8 @@ export function RecycleDeleteGoods(ids, params) {
       url: `/goods/${ids}`,
       method: 'delete',
       data: params
+    }).then(response => {
+      resolve(response)
     })
   })
 }

@@ -74,13 +74,9 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsList',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
     data() {
       return {
         /** 列表loading状态 */

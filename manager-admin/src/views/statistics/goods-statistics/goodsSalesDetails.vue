@@ -44,13 +44,9 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsSalesDetails',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
     data() {
       return {
         loading: false,
