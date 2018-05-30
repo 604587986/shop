@@ -105,13 +105,9 @@
 
 <script>
   import * as API_spec from '@/api/spec'
-  import { TableSearch } from '@/components'
 
   export default {
     name: 'specList',
-    components: {
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */

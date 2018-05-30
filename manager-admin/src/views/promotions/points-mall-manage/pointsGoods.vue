@@ -51,13 +51,9 @@
 
 <script>
   import * as API_PointGoods from '@/api/pointGoods'
-  import { TableSearch } from '@/components'
 
   export default {
     name: 'pointsGoods',
-    components: {
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */

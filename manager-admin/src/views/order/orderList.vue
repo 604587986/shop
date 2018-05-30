@@ -117,12 +117,11 @@
 
 <script>
   import * as API_order from '@/api/order'
-  import { CategoryPicker, TableSearch } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'orderList',
     components: {
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {

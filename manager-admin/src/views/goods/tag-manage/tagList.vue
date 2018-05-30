@@ -84,13 +84,9 @@
 
 <script>
   import * as API_tag from '@/api/tag'
-  import { TableSearch } from '@/components'
 
   export default {
     name: 'tagList',
-    components: {
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */

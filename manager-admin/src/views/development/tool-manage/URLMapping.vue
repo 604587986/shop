@@ -84,13 +84,9 @@
 
 <script>
   import * as API_URLMapping from '@/api/URLMapping'
-  import { TableSearch } from '@/components'
 
   export default {
     name: 'URLMapping',
-    components: {
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */

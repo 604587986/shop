@@ -56,13 +56,9 @@
 
 <script>
   import * as API_HotKeyword from '@/api/hotKeyword'
-  import { TableSearch } from '@/components'
 
   export default {
     name: 'hotKeyword',
-    components: {
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */

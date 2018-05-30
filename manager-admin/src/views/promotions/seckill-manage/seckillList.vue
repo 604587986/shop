@@ -120,13 +120,9 @@
 
 <script>
   import * as API_Seckill from '@/api/seckill'
-  import { TableSearch } from '@/components'
 
   export default {
     name: 'seckillList',
-    components: {
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */
