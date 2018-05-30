@@ -4,9 +4,9 @@
       <slot name="toolbar"></slot>
     </div>
     <el-table
+      v-bind="$attrs"
       :data="tableData"
       :max-height="tabHeight"
-      border
       :row-key="rowKey"
       :stripe="stripe"
       :header-cell-style="{textAlign: 'center'}"
@@ -88,12 +88,6 @@
     width: 100%;
     height: 100%;
     position: relative;
-    .el-table--border {
-      border: none;
-    }
-    .el-table--border::after {
-      width: 0;
-    }
   }
   /** 工具栏样式 */
   .toolbar {
