@@ -159,7 +159,7 @@
           return {
             img: key.shop_banner_image,
             silde_url: key.shop_banner_link,
-            silde_id: key.shop_banner_id || ''
+            silde_id: key.shop_banner_id
           }
         })
         API_ShopSlide.saveShopSlide(_params).then(() => {

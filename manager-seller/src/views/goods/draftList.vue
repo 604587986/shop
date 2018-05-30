@@ -88,8 +88,11 @@
         pageData: null
       }
     },
-    mounted() {
-      this.GET_DraftGoodsList()
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.GET_DraftGoodsList()
+        next()
+      })
     },
     methods: {
 

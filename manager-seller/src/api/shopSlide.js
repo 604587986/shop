@@ -35,6 +35,7 @@ export function saveShopSlide(params) {
     request({
       url: '/shops/sildes',
       method: 'put',
+      headers: { 'Content-Type': 'application/json' },
       data: params
     }).then(response => resolve(response))
   })

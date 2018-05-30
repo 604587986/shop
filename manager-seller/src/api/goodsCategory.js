@@ -33,6 +33,8 @@ export function deleteGoodsCategory(params) {
     request({
       url: `/shops/cats/${ids}`,
       method: 'delete'
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -49,6 +51,8 @@ export function addGoodsCategory(params) {
       url: '/shops/cats',
       method: 'post',
       data: params
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -65,6 +69,8 @@ export function updateGoodsCategory(ids, params) {
       url: `/shops/cats/${ids}`,
       method: 'put',
       data: params
+    }).then(response => {
+      resolve(response)
     })
   })
 }
