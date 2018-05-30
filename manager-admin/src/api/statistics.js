@@ -4,6 +4,8 @@
 
 import request from '@/utils/request';
 
+const a = 'bbb'
+
 /** 会员分析 */
 
 /**
