@@ -111,13 +111,9 @@
 
 <script>
   import * as API_refund from '@/api/refund'
-  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'refundList',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
     mounted() {
       this.GET_RefundOrder()
     },

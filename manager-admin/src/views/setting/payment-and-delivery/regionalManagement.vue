@@ -35,11 +35,10 @@
 </template>
 
 <script>
-  import { GradeEditor } from '@/components'
   import * as API_Region from '@/api/region'
+
   export default {
     name: 'regionalManagement',
-    components: { GradeEditor },
     data() {
       return {
         // api

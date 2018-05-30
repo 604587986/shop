@@ -49,7 +49,6 @@
         </el-select>
       </el-form-item>
       <el-form-item label="团购介绍">
-        <UE :defaultMsg="form.group_buy_remark" ref="ue"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存编辑</el-button>
@@ -60,12 +59,9 @@
 
 <script>
   import * as API_GroupBuy from '@/api/groupBuy'
-  import { UE } from '@/components'
+
   export default {
     name: 'groupBuyGoodsInfo',
-    components: {
-      [UE.name]: UE
-    },
     data() {
       return {
         form: this.$route.params,

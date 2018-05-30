@@ -26,14 +26,10 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { CategoryPicker } from '@/components'
   import echartsOptions from '../echartsOptions'
 
   export default {
     name: 'priceSales',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
     data() {
       return {
         loading: false,

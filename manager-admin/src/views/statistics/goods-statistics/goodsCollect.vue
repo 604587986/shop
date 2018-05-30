@@ -37,13 +37,9 @@
   import Vue from 'vue'
   import * as API_Statistics from '@/api/statistics'
   import echartsOptions from '../echartsOptions'
-  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsCollect',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
     data() {
       console.log(Vue.options)
       return {

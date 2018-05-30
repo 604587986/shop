@@ -4,7 +4,8 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-import EnComponent from '~/ui-components'
+import UIComponents from '~/ui-components'
+import EnComponents from '@/components'
 
 import '@/styles/index.scss' // global css
 import App from './App'
@@ -28,7 +29,8 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 
-Vue.use(EnComponent)
+Vue.use(UIComponents)
+Vue.use(EnComponents)
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
