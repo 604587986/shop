@@ -16,14 +16,9 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout } from '@/components'
-  import { Foundation } from '@/framework'
 
   export default {
     name: 'customerPriceDistributionFrequency',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     props: ['params', 'curTab', 'change_flag'],
     data() {
       return {

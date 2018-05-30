@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <div v-loading="loading" id="hot-goods-num-chart" style="height: 300px"></div>
+  <div v-loading="loading">
+    <div id="hot-goods-num-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
       :pagination="false"
-      :tableData="tableData"
+      :tableData="tableData.data"
     >
       <template slot="table-columns">
         <el-table-column type="index" width="150" label="排名"/>
-        <el-table-column prop="name" label="商品名称"/>
-        <el-table-column prop="num" label="商品销量"/>
+        <el-table-column prop="goods_name" label="商品名称"/>
+        <el-table-column prop="ordernum" label="商品销量"/>
       </template>
     </en-tabel-layout>
   </div>
@@ -17,19 +17,16 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout } from '@/components'
   import echartsOptions from '../echartsOptions'
+
   export default {
     name: 'hotGoodsNum',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     props: ['params', 'curTab'],
     data() {
       return {
         loading: false,
         /** 列表数据 */
-        tableData: null
+        tableData: ''
       }
     },
     mounted() {
@@ -41,42 +38,37 @@
       curTab() {
         this.GET_HotGoodsNum()
       },
-      'params.year': 'GET_HotGoodsNum',
-      'params.month': 'GET_HotGoodsNum',
-      'params.cat_id': 'GET_HotGoodsNum',
-      'params.shop_id': 'GET_HotGoodsNum'
+      params: {
+        handler: 'GET_HotGoodsNum',
+        deep: true
+      }
     },
     methods: {
       /** 获取会员下单量 */
       GET_HotGoodsNum() {
         if (this.curTab !== 'num' || this.loading) return
         this.loading = true
-        API_Statistics.hotGoodsNum(this.params).then(response => {
+        Promise.all([
+          API_Statistics.getHotGoodsNum(this.params),
+          API_Statistics.getHotGoodsNumPage(this.params)
+        ]).then(responses => {
           this.loading = false
-          const data = response.data.sort((x, y) => x.num < y.num)
-          this.tableData = data
-          const _data = data.map(item => item.num)
-          const _name = data.map(item => item.name)
+          this.tableData = responses[1]
+          const { data: _data, localName: _name } = responses[0].series
+          const { xAxis } = responses[0]
           this.echarts.setOption(echartsOptions({
-            titleText: '热卖商品销量TOP',
+            titleText: '热卖商品销量TOP' + xAxis.length,
             tooltipFormatter: function(params) {
               params = params[0]
               const member_name = _name[params.dataIndex]
-              return `商品名称：${member_name}<br/>${params.seriesName}：${params.value}`
+              return `商品名称：${member_name}<br/>商品销量：${params.value}`
             },
-            seriesName: '商品销量',
-            seriesData: _data
+            seriesData: _data,
+            xAxisData: xAxis
           }))
           this.echarts.resize()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

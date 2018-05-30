@@ -117,14 +117,9 @@
 
 <script>
   import * as API_order from '@/api/order'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+
   export default {
     name: 'orderList',
-    components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
-      [CategoryPicker.name]: CategoryPicker
-    },
     data() {
       return {
         /** 列表loading状态 */

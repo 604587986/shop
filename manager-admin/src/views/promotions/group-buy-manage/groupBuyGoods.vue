@@ -46,13 +46,9 @@
 
 <script>
   import * as API_GroupBuy from '@/api/groupBuy'
-  import { TableLayout, TableSearch } from '@/components'
+
   export default {
     name: 'groupBuyGoods',
-    components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */

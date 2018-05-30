@@ -57,12 +57,9 @@
 
 <script>
   import * as API_ElectronicReceipt from '@/api/electronicReceipt'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'electronicReceipt',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

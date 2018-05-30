@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import md5 from 'js-md5'
 /**
  * 登录
  * @param username
@@ -10,7 +10,7 @@ import request from '@/utils/request'
 export function loginByUsername(username, password, validcode) {
   const _params = {
     username,
-    password,
+    password: md5(password),
     valid_code: validcode
   }
   return request({

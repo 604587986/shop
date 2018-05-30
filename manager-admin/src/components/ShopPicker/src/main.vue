@@ -18,6 +18,7 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
+
   export default {
     name: 'EnShopPicker',
     data() {

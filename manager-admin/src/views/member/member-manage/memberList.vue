@@ -157,14 +157,12 @@
 
 <script>
   import * as API_Member from '@/api/member'
-  import { TableLayout, TableSearch } from '@/components'
   import { AddressSelect } from '@/plugins/selector/vue'
   import { RegExp } from '@/framework'
+
   export default {
     name: 'memberList',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [AddressSelect.name]: AddressSelect
     },
     data() {

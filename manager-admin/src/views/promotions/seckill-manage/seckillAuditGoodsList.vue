@@ -45,12 +45,9 @@
 
 <script>
   import * as API_Seckill from '@/api/seckill'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'seckillAuditGoodsList',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

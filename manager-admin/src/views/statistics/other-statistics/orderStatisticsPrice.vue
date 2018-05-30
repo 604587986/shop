@@ -28,14 +28,11 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout } from '@/components'
   import echartsOptions from '../echartsOptions'
   import { Foundation } from '@/framework'
+
   export default {
     name: 'orderStatisticsPrice',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     props: ['params', 'curTab', 'changeFlag'],
     data() {
       return {

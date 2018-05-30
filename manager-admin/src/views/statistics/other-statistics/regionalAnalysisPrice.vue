@@ -6,15 +6,11 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout } from '@/components'
   import echartsOptionsMap from '../echartsOptionsMap'
 
   export default {
     name: 'regionalAnalysis',
     props: ['params', 'cur_tab', 'changed_flag'],
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

@@ -68,12 +68,9 @@
 
 <script>
   import * as API_Article from '@/api/article'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'articleModel',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

@@ -18,14 +18,10 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { YearMonthPicker, ShopPicker } from '@/components'
   import echartsOptions from '../echartsOptions'
+
   export default {
     name: 'trafficAnalysisIndex',
-    components: {
-      [YearMonthPicker.name]: YearMonthPicker,
-      [ShopPicker.name]: ShopPicker
-    },
     data() {
       return {
         loading: false,

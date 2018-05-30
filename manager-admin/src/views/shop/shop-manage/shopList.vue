@@ -103,13 +103,9 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import { TableLayout, TableSearch } from '@/components'
+
   export default {
     name: 'shopList',
-    components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch
-    },
     data() {
       return {
         /** 列表loading状态 */

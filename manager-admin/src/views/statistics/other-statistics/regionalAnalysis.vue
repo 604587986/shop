@@ -27,17 +27,14 @@
 </template>
 
 <script>
-  import * as API_Statistics from '@/api/statistics'
-  import { YearMonthPicker, ShopPicker } from '@/components'
   import RegionalAnalysisMember from './regionalAnalysisMember'
   import RegionalAnalysisNum from './regionalAnalysisNum'
   import RegionalAnalysisPrice from './regionalAnalysisPrice'
   import echartMapChina from '@/assets/echart-map-china'
+
   export default {
     name: 'regionalAnalysis',
     components: {
-      [YearMonthPicker.name]: YearMonthPicker,
-      [ShopPicker.name]: ShopPicker,
       RegionalAnalysisMember,
       RegionalAnalysisNum,
       RegionalAnalysisPrice

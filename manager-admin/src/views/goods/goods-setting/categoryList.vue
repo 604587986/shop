@@ -88,11 +88,10 @@
 </template>
 
 <script>
-  import { GradeEditor } from '@/components'
   import * as API_category from '@/api/category'
+
   export default {
     name: 'categoryList',
-    components: { GradeEditor },
     data() {
       return {
         itemBtns: [

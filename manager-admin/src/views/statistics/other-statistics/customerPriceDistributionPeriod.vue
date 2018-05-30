@@ -4,13 +4,10 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout } from '@/components'
   import echartsOptions from '../echartsOptions'
+
   export default {
     name: 'customerPriceDistributionPeriod',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     props: ['params', 'curTab', 'change_flag'],
     data() {
       return {

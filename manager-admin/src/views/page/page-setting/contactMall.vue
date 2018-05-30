@@ -56,12 +56,9 @@
 
 <script>
   import * as API_ContactMall from '@/api/contactMall'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'contacMall',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

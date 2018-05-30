@@ -54,12 +54,9 @@
 
 <script>
   import * as API_Receipt from '@/api/receipt'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'receiptHistory',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */
