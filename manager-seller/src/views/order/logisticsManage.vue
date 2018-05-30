@@ -282,11 +282,11 @@
 
           tpl_type: '',
 
-          tpl_area: ['北京'],
+          tpl_area: {},
 
-          tpl_area_id: '1',
+          tpl_area_id: '{ 5, 142, 143 }',
 
-          tpl_area_json: []
+          tpl_area_json: ''
         }
       },
 

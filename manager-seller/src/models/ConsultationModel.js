@@ -36,6 +36,10 @@ export default class ConsultationModel extends DataModel {
   @ServerName('is_reply')
   is_reply
 
+  /** 审核状态 */
+  @ServerName('auth_status')
+  auth_status
+
   /** 回复内容 */
   @ServerName('reply_content')
   reply_content
