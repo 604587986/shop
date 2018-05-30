@@ -34,11 +34,9 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
 Vue.use(jsonp)
 
-
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
-
 
 Vue.mixin(mixin)
 
