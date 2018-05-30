@@ -2,7 +2,7 @@
  * 统计相关API
  */
 
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 const a = 'bbb'
 
@@ -451,3 +451,15 @@ export function getRefundStatisticsData(params) {
   })
 }
 
+/**
+ * 商品销售明细
+ * @param params
+ */
+export function getGoodsSaleDetail(params) {
+  return request({
+    url: 'statistics/goods/sale/details',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
