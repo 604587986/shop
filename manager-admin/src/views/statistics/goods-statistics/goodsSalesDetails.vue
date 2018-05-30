@@ -90,7 +90,6 @@
         this.loading = true
         API_Statistics.getGoodsSaleDetail(this.params).then(response => {
           this.loading = false
-          console.log(response)
           this.tableData = response
         })
       }
