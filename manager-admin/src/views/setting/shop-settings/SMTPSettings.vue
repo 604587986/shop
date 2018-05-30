@@ -88,13 +88,10 @@
 
 <script>
   import * as API_Smtp from '@/api/smtp'
-  import { TableLayout } from '@/components'
   import regExp from '@/framework/RegExp'
+
   export default {
     name: 'SMTPSettings',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

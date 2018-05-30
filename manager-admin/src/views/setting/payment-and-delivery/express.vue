@@ -73,10 +73,9 @@
 
 <script>
   import * as API_Express from '@/api/express'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'expressSettings',
-    components: { [TableLayout.name]: TableLayout },
     data() {
       return {
         /** 列表loading状态 */

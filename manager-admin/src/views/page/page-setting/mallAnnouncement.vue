@@ -56,12 +56,9 @@
 
 <script>
   import * as API_MallAnnoun from '@/api/mallAnnouncement'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'mallAnnouncement',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

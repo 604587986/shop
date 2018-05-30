@@ -61,12 +61,9 @@
 
 <script>
   import * as API_SmsGateway from '@/api/smsGateway'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'SMSGatewaySettings',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

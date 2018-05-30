@@ -51,12 +51,9 @@
 
 <script>
   import * as API_Comment from '@/api/comment'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'goodsAskList',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

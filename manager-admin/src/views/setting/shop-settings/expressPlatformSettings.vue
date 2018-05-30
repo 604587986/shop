@@ -40,12 +40,9 @@
 
 <script>
   import * as API_ExpressPlatform from '@/api/expressPlatform'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'expressPlatformSettings',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

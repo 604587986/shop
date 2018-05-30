@@ -18,13 +18,10 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout } from '@/components'
   import echartsOptions from '../echartsOptions'
+
   export default {
     name: 'orderAmountOrder',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     props: ['params', 'curTab'],
     data() {
       return {

@@ -6,8 +6,7 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout } from '@/components'
-  import echartsOptions from '../echartsOptions'
+
   export default {
     name: 'industryScaleOrder',
     props: ['params', 'curTab'],

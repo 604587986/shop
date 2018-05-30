@@ -56,11 +56,11 @@
 
 <script>
   import * as API_HotKeyword from '@/api/hotKeyword'
-  import { TableLayout, TableSearch } from '@/components'
+  import { TableSearch } from '@/components'
+
   export default {
     name: 'hotKeyword',
     components: {
-      [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch
     },
     data() {

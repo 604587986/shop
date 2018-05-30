@@ -77,12 +77,9 @@
 
 <script>
   import * as API_Notification from '@/api/notification'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'notificationHistory',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

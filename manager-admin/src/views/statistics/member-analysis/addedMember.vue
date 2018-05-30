@@ -29,15 +29,10 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { YearMonthPicker, TableLayout } from '@/components'
-  import { Foundation } from '@/framework'
   import echartsOptions from '../echartsOptions'
+
   export default {
     name: 'addedMember',
-    components: {
-      [YearMonthPicker.name]: YearMonthPicker,
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         loading: false,

@@ -26,13 +26,12 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { CategoryPicker, PriceRange, ShopPicker, YearMonthPicker } from '@/components'
+  import { CategoryPicker, PriceRange, ShopPicker } from '@/components'
   import echartsOptions from '../echartsOptions'
 
   export default {
     name: 'priceSales',
     components: {
-      [YearMonthPicker.name]: YearMonthPicker,
       [CategoryPicker.name]: CategoryPicker,
       [PriceRange.name]: PriceRange,
       [ShopPicker.name]: ShopPicker

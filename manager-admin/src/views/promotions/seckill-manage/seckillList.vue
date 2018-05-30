@@ -120,11 +120,11 @@
 
 <script>
   import * as API_Seckill from '@/api/seckill'
-  import { TableLayout, TableSearch } from '@/components'
+  import { TableSearch } from '@/components'
+
   export default {
     name: 'seckillList',
     components: {
-      [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch
     },
     data() {

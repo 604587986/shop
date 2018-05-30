@@ -28,14 +28,13 @@
 </template>
 
 <script>
-  import { CategoryPicker, ShopPicker, YearMonthPicker } from '@/components'
+  import { CategoryPicker, ShopPicker } from '@/components'
   import hotGoodsPrice from './hotGoodsPrice'
   import hotGoodsNum from './hotGoodsNum'
 
   export default {
     name: 'hotGoods',
     components: {
-      [YearMonthPicker.name]: YearMonthPicker,
       [CategoryPicker.name]: CategoryPicker,
       [ShopPicker.name]: ShopPicker,
       HotGoodsPrice: hotGoodsPrice,

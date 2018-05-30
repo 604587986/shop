@@ -37,14 +37,13 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import { YearMonthPicker, ShopPicker } from '@/components'
+  import { ShopPicker } from '@/components'
   import orderStatisticsPrice from './orderStatisticsPrice'
   import orderStatisticsOrder from './orderStatisticsOrder'
-  import { Foundation } from '@/framework'
+
   export default {
     name: 'orderStatistics',
     components: {
-      [YearMonthPicker.name]: YearMonthPicker,
       [ShopPicker.name]: ShopPicker,
       orderStatisticsPrice,
       orderStatisticsOrder

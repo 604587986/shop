@@ -41,13 +41,9 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { YearMonthPicker, TableLayout } from '@/components'
+
   export default {
     name: 'salesRevenueStatistics',
-    components: {
-      [YearMonthPicker.name]: YearMonthPicker,
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

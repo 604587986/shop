@@ -40,15 +40,13 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import { YearMonthPicker } from '@/components'
   import industryScaleOrder from './industryScaleOrder'
   import industryScaleGoods from './industryScaleGoods'
   import industryScalePrice from './industryScalePrice'
-  import { Foundation } from '@/framework'
+
   export default {
     name: 'industryScale',
     components: {
-      [YearMonthPicker.name]: YearMonthPicker,
       IndustryScaleOrder: industryScaleOrder,
       IndustryScaleGoods: industryScaleGoods,
       IndustryScalePrice: industryScalePrice

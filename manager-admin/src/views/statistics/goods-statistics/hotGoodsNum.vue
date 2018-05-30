@@ -17,14 +17,10 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { TableLayout } from '@/components'
   import echartsOptions from '../echartsOptions'
 
   export default {
     name: 'hotGoodsNum',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     props: ['params', 'curTab'],
     data() {
       return {

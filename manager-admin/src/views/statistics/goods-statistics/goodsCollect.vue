@@ -34,19 +34,19 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import * as API_Statistics from '@/api/statistics'
   import echartsOptions from '../echartsOptions'
-  import { CategoryPicker, ShopPicker, TableLayout, YearMonthPicker } from '@/components'
+  import { CategoryPicker, ShopPicker } from '@/components'
 
   export default {
     name: 'goodsCollect',
     components: {
-      [TableLayout.name]: TableLayout,
       [CategoryPicker.name]: CategoryPicker,
-      [ShopPicker.name]: ShopPicker,
-      [YearMonthPicker.name]: YearMonthPicker
+      [ShopPicker.name]: ShopPicker
     },
     data() {
+      console.log(Vue.options)
       return {
         loading: false,
         tableData: '',

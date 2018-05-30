@@ -51,11 +51,11 @@
 
 <script>
   import * as API_PointGoods from '@/api/pointGoods'
-  import { TableLayout, TableSearch } from '@/components'
+  import { TableSearch } from '@/components'
+
   export default {
     name: 'pointsGoods',
     components: {
-      [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch
     },
     data() {

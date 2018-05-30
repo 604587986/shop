@@ -51,16 +51,12 @@
 
 <script>
   import draggable from 'vuedraggable'
-  import { ImagePicker, GoodsPicker } from '~/ui-components'
   import * as API_Floor from '@/api/floor'
   import templates, { templateArray } from './templates'
+
   export default {
     name: 'mobileFloorManage',
-    components: {
-      draggable,
-      [ImagePicker.name]: ImagePicker,
-      [GoodsPicker.name]: GoodsPicker
-    },
+    components: { draggable },
     data() {
       return {
         templates,

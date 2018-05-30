@@ -79,12 +79,9 @@
 
 <script>
   import * as API_HelpCenter from '@/api/helpCenter'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'helpCenter',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

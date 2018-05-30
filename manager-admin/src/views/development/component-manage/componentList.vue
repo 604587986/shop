@@ -64,12 +64,9 @@
 
 <script>
   import * as API_Component from '@/api/component'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'componentList',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

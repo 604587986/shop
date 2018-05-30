@@ -91,12 +91,9 @@
 
 <script>
   import * as API_GroupBuy from '@/api/groupBuy'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'groupBuyList',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

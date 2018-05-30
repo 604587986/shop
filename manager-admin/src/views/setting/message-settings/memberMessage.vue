@@ -43,12 +43,9 @@
 
 <script>
   import * as API_MessageSetting from '@/api/messageSetting'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'memberMessage',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

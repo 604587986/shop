@@ -80,12 +80,9 @@
 
 <script>
   import * as API_Payment from '@/api/payment'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'payment',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

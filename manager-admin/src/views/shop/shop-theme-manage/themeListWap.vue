@@ -72,12 +72,9 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import { TableLayout } from '@/components'
+
   export default {
     name: 'themeListWap',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

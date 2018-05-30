@@ -84,11 +84,11 @@
 
 <script>
   import * as API_URLMapping from '@/api/URLMapping'
-  import { TableLayout, TableSearch } from '@/components'
+  import { TableSearch } from '@/components'
+
   export default {
     name: 'URLMapping',
     components: {
-      [TableLayout.name]: TableLayout,
       [TableSearch.name]: TableSearch
     },
     data() {
