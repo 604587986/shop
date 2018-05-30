@@ -132,8 +132,7 @@
         })
         this.choiceData = this.printResult(this.combination(..._target))[0]
         /** 构造表格数据 转换数据格式 */
-        this.skuInfo = target
-        const obj = this.skuInfo.map((key) => {
+        const obj = target.map((key) => {
           if (!key.value_list) {
             return []
           }
