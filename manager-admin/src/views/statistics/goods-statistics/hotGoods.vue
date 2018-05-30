@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import {CategoryPicker, ShopPicker, YearMonthPicker} from '@/components'
+  import { CategoryPicker, ShopPicker, YearMonthPicker } from '@/components'
   import hotGoodsPrice from './hotGoodsPrice'
   import hotGoodsNum from './hotGoodsNum'
 
