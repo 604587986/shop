@@ -2,9 +2,7 @@
  * 统计相关API
  */
 
-import request from '@/utils/request';
-
-const a = 'bbb'
+import request from '@/utils/request'
 
 /** 会员分析 */
 
