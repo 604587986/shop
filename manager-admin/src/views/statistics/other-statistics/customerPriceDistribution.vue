@@ -3,23 +3,31 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
+          <span>商品分类</span>
+          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+        </div>
+        <div class="chart-header-item">
           <span>查询周期：</span>
           <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <en-shop-picker/>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
+        </div>
+        <div v-if="cur_tab === 'price'" class="chart-header-item">
+          <span>价格区间：</span>
+          <en-price-range :default-range="priceRange" @changed="(range) => { priceRange = range }"/>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">
         <el-tab-pane label="客单价分布" name="price">
-          <customer-price-distribution-price :params="params" :cur-tab="cur_tab" :change_flag="change_flag"/>
+          <customer-price-distribution-price :params="params" :cur-tab="cur_tab" :price-range="priceRange"/>
         </el-tab-pane>
         <el-tab-pane label="购买时段分布" name="period">
-          <customer-price-distribution-period :params="params" :cur-tab="cur_tab" :change_flag="change_flag"/>
+          <customer-price-distribution-period :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
         <el-tab-pane label="购买频次分析表" name="frequency">
-          <customer-price-distribution-frequency :params="params" :cur-tab="cur_tab" :change_flag="change_flag"/>
+          <customer-price-distribution-frequency :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -41,29 +49,22 @@
     data() {
       return {
         cur_tab: 'price',
-        shopList: [],
-        change_flag: 1,
         params: {
-          start_date: '',
-          end_date: '',
-          shop_id: 0,
-          sections: 0
-        }
-      }
-    },
-    created() {
-      this.GET_ShopList()
-    },
-    watch: {
-      cur_tab() {
-        this.change_flag++
+          year: '',
+          month: '',
+          circle: 'MONTH',
+          categroy: 0,
+          seller_id: 0
+        },
+        priceRange: [[0, 100], [100, 1000], [1000, 10000], [10000, 50000]]
       }
     },
     methods: {
       /** 年月份发生变化 */
       handleYearMonthChanged(object) {
-        this.params.start_date = object.start_time
-        this.params.end_date = object.end_time
+        this.params.year = object.year
+        this.params.month = object.month
+        this.params.circle = object.type
       }
     }
   }
