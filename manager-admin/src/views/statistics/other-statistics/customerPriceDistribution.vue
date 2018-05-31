@@ -27,7 +27,6 @@
 </template>
 
 <script>
-  import * as API_Shop from '@/api/shop'
   import CustomerPriceDistributionPrice from './customerPriceDistributionPrice'
   import CustomerPriceDistributionPeriod from './customerPriceDistributionPeriod'
   import CustomerPriceDistributionFrequency from './customerPriceDistributionFrequency'
@@ -65,17 +64,6 @@
       handleYearMonthChanged(object) {
         this.params.start_date = object.start_time
         this.params.end_date = object.end_time
-        this.change_flag++
-      },
-      /** 店铺发生改变 */
-      shopChange() {
-        this.change_flag++
-      },
-      /** 获取店铺列表 */
-      GET_ShopList() {
-        API_Shop.getShopList().then(response => {
-          this.shopList = response.data
-        }).catch(error => console.log(error))
       }
     }
   }

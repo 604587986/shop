@@ -55,7 +55,7 @@
     methods: {
       /** 年月份发生变化 */
       handleYearMonthChanged(object) {
-        this.params.type = object.type === 'month' ? 1 : 2
+        this.params.circle = object.type === 'month' ? 1 : 2
         this.params.start_date = object.start_time
         this.params.lastStart_date = object.last_start_time
         this.params.end_date = object.end_time

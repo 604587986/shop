@@ -48,7 +48,7 @@
         params: {
           year: '',
           month: '',
-          type: 'MONTH',
+          circle: 'MONTH',
           categroy: 0,
           seller_id: 0
         }
@@ -59,7 +59,7 @@
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.type = object.type
+        this.params.circle = object.type
       }
     }
   }
