@@ -35,9 +35,7 @@
       })
     },
     watch: {
-      curTab() {
-        this.GET_HotGoodsNum()
-      },
+      curTab: 'GET_HotGoodsNum',
       params: {
         handler: 'GET_HotGoodsNum',
         deep: true

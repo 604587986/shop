@@ -4,7 +4,7 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker :clearable="true" @changed="(category) => { params.category = category.category_id || 0 }"/>
+          <en-category-picker :clearable="true" @changed="(category) => { params.categroy = category.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
           <span>订单周期：</span>
