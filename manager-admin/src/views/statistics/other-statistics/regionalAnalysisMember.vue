@@ -34,7 +34,6 @@
         this.loading = true
         API_Statistics.getRegionalAnalysisMember(this.params).then(response => {
           this.loading = false
-          console.log(response)
           const { data, name } = response
           const _data = data.map((item, index) => ({ name: name[index], value: data[index] }))
           this.echarts.setOption(echartsOptionsMap({

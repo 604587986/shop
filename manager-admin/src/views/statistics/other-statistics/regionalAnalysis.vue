@@ -93,7 +93,6 @@
         API_Statistics.getRegionalAnalysisTable(this.params).then(response => {
           this.loading = false
           this.tableData = response
-          console.log(response)
         }).catch(() => { this.loading = false })
       }
     }
