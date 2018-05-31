@@ -10,7 +10,7 @@
     >
       <template slot="table-columns">
         <el-table-column type="selection"/>
-        <el-table-column label="商品信息" width="1000px"style="text-align: left">
+        <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
             <div class="goods_info">
               <img :src="scope.row.thumbnail || scope.row.goods_image" class="goods-image"/>
@@ -22,7 +22,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="quantity" label="库存"/>
+        <el-table-column prop="buy_count" label="库存"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -164,6 +164,11 @@
 <style type="text/scss" lang="scss" scoped>
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
+  }
+  /deep/ thead>tr {
+    /deep/ th:nth-child(2) {
+      text-align: left !important;
+    }
   }
 
   .goods_info {
