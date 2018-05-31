@@ -1,12 +1,12 @@
 <template>
   <el-cascader
-    v-bind="$attrs"
     :options="options"
     change-on-select
     @change="handleItemChange"
     :props="props"
     separator="/"
     size="medium"
+    v-bind="$attrs"
   ></el-cascader>
 </template>
 

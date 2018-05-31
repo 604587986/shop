@@ -1,11 +1,11 @@
 <template>
   <div style="display: inline-block">
     <el-select
-      v-bind="$attrs"
       v-model="shop_id"
       placeholder="请选择"
       @change="handleShopChanged"
       style="width: 150px"
+      v-bind="$attrs"
     >
       <el-option label="全平台" :value="0"/>
       <el-option
