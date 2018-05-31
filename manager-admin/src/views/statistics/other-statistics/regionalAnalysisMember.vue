@@ -30,7 +30,6 @@
     methods: {
       /** 获取下单会员数据 */
       GET_RegionalAnalysisMember() {
-        console.log('member')
         if (this.curTab !== 'member' || this.loading) return
         this.loading = true
         API_Statistics.getRegionalAnalysisMember(this.params).then(response => {
