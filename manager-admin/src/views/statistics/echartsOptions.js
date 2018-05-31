@@ -1,11 +1,5 @@
 /**
  * echarts基本配置项
- * options.color
- * options.titleText
- * options.tooltipFormatter
- * options.xAxisData
- * options.seriesName
- * options.seriesData
  */
 
 export default function(options) {
@@ -14,8 +8,9 @@ export default function(options) {
     color: options.color || ['#3398DB'],
     title: {
       x: 'center',
-      text: options.titleText || '排行TOP10'
+      text: options.titleText || ''
     },
+    legend: options.legend || null,
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
