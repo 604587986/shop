@@ -4,7 +4,7 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>查询周期：</span>
-          <en-year-month-picker @changed="yearMonthChanged"/>
+          <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
       </div>
       <div id="added-member-chart" style="height: 300px"></div>
@@ -54,7 +54,7 @@
     },
     methods: {
       /** 年月份发生变化 */
-      yearMonthChanged(object) {
+      handleYearMonthChanged(object) {
         this.params.type = object.type === 'month' ? 1 : 2
         this.params.start_date = object.start_time
         this.params.lastStart_date = object.last_start_time
