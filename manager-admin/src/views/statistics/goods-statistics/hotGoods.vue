@@ -12,7 +12,7 @@
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop.shop_id }"/>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">
@@ -28,14 +28,14 @@
 </template>
 
 <script>
-  import hotGoodsPrice from './hotGoodsPrice'
-  import hotGoodsNum from './hotGoodsNum'
+  import HotGoodsPrice from './hotGoodsPrice'
+  import HotGoodsNum from './hotGoodsNum'
 
   export default {
     name: 'hotGoods',
     components: {
-      HotGoodsPrice: hotGoodsPrice,
-      HotGoodsNum: hotGoodsNum
+      HotGoodsPrice,
+      HotGoodsNum
     },
     data() {
       return {
