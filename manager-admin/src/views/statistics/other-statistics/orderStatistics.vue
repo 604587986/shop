@@ -23,11 +23,28 @@
           <order-statistics-order :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
       </el-tabs>
+      <en-tabel-layout
+        :toolbar="false"
+        :pagination="false"
+        :tableData="tableData.data"
+      >
+        <template slot="table-columns">
+          <el-table-column prop="sn" label="订单号"/>
+          <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="下单日期"/>
+          <el-table-column prop="order_price" :formatter="MixinFormatPrice" label="订单金额"/>
+          <el-table-column prop="paymoney" :formatter="MixinFormatPrice" label="实付金额"/>
+          <el-table-column prop="member_name" label="会员名称"/>
+          <el-table-column label="订单状态">
+            <template slot-scope="scope">{{ scope.row.order_status | unixOrderStatus }}</template>
+          </el-table-column>
+        </template>
+      </en-tabel-layout>
     </el-card>
   </div>
 </template>
 
 <script>
+  import * as API_Statistics from '@/api/statistics'
   import orderStatisticsPrice from './orderStatisticsPrice'
   import orderStatisticsOrder from './orderStatisticsOrder'
 
@@ -49,8 +66,13 @@
           order_status: 99,
           categroy: 0,
           seller_id: 0
-        }
+        },
+        loading: false,
+        tableData: ''
       }
+    },
+    mounted() {
+      this.GET_OrderStatisticsPage()
     },
     methods: {
       /** 年月份发生变化 */
@@ -60,6 +82,15 @@
         this.params.start_time = object.start_time
         this.params.end_time = object.end_time
         this.params.type = object.type
+      },
+      /** 获取订单统计表格数据 */
+      GET_OrderStatisticsPage() {
+        // Andste_TODO 2018/5/31: 参数适配未完成
+        this.loading = true
+        API_Statistics.getOrderStatisticsPage(this.params).then(response => {
+          this.loading = false
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
