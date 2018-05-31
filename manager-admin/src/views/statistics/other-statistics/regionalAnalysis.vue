@@ -3,30 +3,49 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
+          <span>商品分类</span>
+          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+        </div>
+        <div class="chart-header-item">
           <span>查询周期：</span>
           <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
-          <span>选择店铺：</span>
-          <en-shop-picker @changed="handleShopChanged"/>
+          <span>店铺：</span>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop.shop_id }"/>
         </div>
       </div>
-      <el-tabs v-model="cur_tab" type="card" @tab-click="handleTabChanged">
+      <el-tabs v-model="cur_tab" type="card">
         <el-tab-pane label="下单会员" name="member">
-          <regional-analysis-member :params="params" :cur_tab="cur_tab" :changed_flag="changed_flag"/>
+          <regional-analysis-member :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
         <el-tab-pane label="下单量" name="num">
-          <regional-analysis-num :params="params" :cur_tab="cur_tab" :changed_flag="changed_flag"/>
+          <regional-analysis-num :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
         <el-tab-pane label="下单金额" name="price">
-          <regional-analysis-price :params="params" :cur_tab="cur_tab" :changed_flag="changed_flag"/>
+          <regional-analysis-price :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
       </el-tabs>
+      <en-tabel-layout
+        :toolbar="false"
+        :pagination="false"
+        :tableData="tableData.data"
+        :loading="loading"
+        border
+      >
+        <template slot="table-columns">
+          <el-table-column prop="region_name" label="地区"/>
+          <el-table-column prop="member_num" label="下单会员数"/>
+          <el-table-column prop="sn_num" label="下单量"/>
+          <el-table-column prop="order_price" label="下单金额"/>
+        </template>
+      </en-tabel-layout>
     </el-card>
   </div>
 </template>
 
 <script>
+  import * as API_Statistics from '@/api/statistics'
   import RegionalAnalysisMember from './regionalAnalysisMember'
   import RegionalAnalysisNum from './regionalAnalysisNum'
   import RegionalAnalysisPrice from './regionalAnalysisPrice'
@@ -41,34 +60,41 @@
     },
     data() {
       return {
-        changed_flag: 0,
         cur_tab: 'member',
         params: {
           year: '',
           month: '',
-          shop_id: 0,
-          cycle_type: 1
-        }
+          circle: 'MONTH',
+          categroy: 0,
+          seller_id: 0
+        },
+        loading: false,
+        tableData: ''
       }
     },
     created() {
       this.$echarts.registerMap('china', echartMapChina)
+    },
+    watch: {
+      params: {
+        handler: 'GET_RegionalAnalysisTable',
+        deep: true
+      }
     },
     methods: {
       /** 年月发生改变 */
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.changed_flag++
+        this.params.circle = object.type
       },
-      /** 店铺发生改变 */
-      handleShopChanged(shop) {
-        this.params.shop_id = shop.shop_id
-        this.changed_flag++
-      },
-      /** Tab发生改变 */
-      handleTabChanged($tab) {
-        this.params.type = Number($tab.index) + 1
+      GET_RegionalAnalysisTable() {
+        this.loading = true
+        API_Statistics.getRegionalAnalysisTable(this.params).then(response => {
+          this.loading = false
+          this.tableData = response
+          console.log(response)
+        }).catch(() => { this.loading = false })
       }
     }
   }
