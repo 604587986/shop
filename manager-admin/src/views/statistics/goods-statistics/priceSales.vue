@@ -4,7 +4,7 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker :clearable="true" @changed="categoryChanged"/>
+          <en-category-picker clearable @changed="categoryChanged"/>
         </div>
         <div class="chart-header-item">
           <span>销售周期：</span>
