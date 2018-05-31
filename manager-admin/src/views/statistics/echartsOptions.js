@@ -19,7 +19,7 @@ export default function(options) {
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      formatter: options.tooltipFormatter
+      formatter: options.tooltipFormatter || null
     },
     grid: {
       left: '3%',
@@ -27,15 +27,20 @@ export default function(options) {
       bottom: '3%',
       containLabel: true
     },
-    xAxis: [
+    xAxis: options.xAxis || [
       {
         type: 'category',
-        data: options.xAxisData || ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+        data: options.xAxisData || [],
         axisTick: { alignWithLabel: true }
       }
     ],
-    yAxis: [{ type: 'value' }],
-    series: [
+    yAxis: options.yAxis || [
+      {
+        type: options.yAxisType || 'value',
+        data: options.yAxisData || []
+      }
+    ],
+    series: options.series || [
       {
         name: options.seriesName || '数量',
         type: options.seriesType || 'bar',
