@@ -83,14 +83,9 @@
 
 <script>
   import * as API_ShopNav from '@/api/shopNav'
-  import { TableLayout, TableSearch } from '@/components'
   import { validateURL } from '@/utils/validate'
   export default {
     name: 'shopNav',
-    components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch
-    },
     data() {
       var shopNavURL = (rule, value, callback) => {
         if (!value) {

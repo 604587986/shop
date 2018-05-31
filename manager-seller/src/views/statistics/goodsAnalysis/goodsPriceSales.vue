@@ -12,13 +12,11 @@
 
 <script>
   import * as API_goodsPriceStatistics from '@/api/goodsPriceStatistics'
-  import { YearMonthPicker, CategoryPicker, PriceRange } from '@/components'
+  import { CategoryPicker } from '@/components'
   export default {
     name: 'goodsPriceSales',
     components: {
-      [YearMonthPicker.name]: YearMonthPicker,
-      [CategoryPicker.name]: CategoryPicker,
-      [PriceRange.name]: PriceRange
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {

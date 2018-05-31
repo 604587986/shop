@@ -54,6 +54,8 @@ export function saveTagGoodsList(tag_id, goods_ids, params) {
       method: 'put',
       loading: false,
       data: params
+    }).then(response => {
+      resolve(response)
     })
   })
 }

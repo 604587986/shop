@@ -34,13 +34,8 @@
 
 <script>
   import * as API_goodsTag from '@/api/goodsTag'
-  import { TableLayout } from '@/components'
-
   export default {
     name: 'tagManage',
-    components: {
-      [TableLayout.name]: TableLayout
-    },
     data() {
       return {
         /** 列表loading状态 */

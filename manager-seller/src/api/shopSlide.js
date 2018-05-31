@@ -18,8 +18,7 @@ export function getShopSlideList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ShopSlideModel().map(response)
+      const _response = new ShopSlideModel().map(response)
       resolve(_response)
     })
   })
@@ -31,11 +30,19 @@ export function getShopSlideList(params) {
  * @returns {Promise<any>}
  */
 export function saveShopSlide(params) {
+  const _params = params.map(key => {
+    return {
+      silde_id: key.shop_banner_id,
+      silde_url: key.shop_banner_link,
+      img: key.shop_banner_image
+    }
+  })
   return new Promise((resolve, reject) => {
     request({
       url: '/shops/sildes',
       method: 'put',
-      data: params
+      headers: { 'Content-Type': 'application/json' },
+      data: _params
     }).then(response => resolve(response))
   })
 }

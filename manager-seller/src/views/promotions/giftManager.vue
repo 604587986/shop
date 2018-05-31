@@ -71,14 +71,12 @@
 
 <script>
   import * as API_Gift from '@/api/gift'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
   import { AddGift } from './components'
 
   export default {
     name: 'giftManager',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [AddGift.name]: AddGift
     },

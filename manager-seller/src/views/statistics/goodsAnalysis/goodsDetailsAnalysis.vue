@@ -58,13 +58,11 @@
 
 <script>
   import * as API_goodsDetailsStatistics from '@/api/goodsDetailsStatistics'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'goodsDetails',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {

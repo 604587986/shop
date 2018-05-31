@@ -61,13 +61,11 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
 
   export default {
     name: 'draftList',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {
@@ -88,8 +86,11 @@
         pageData: null
       }
     },
-    mounted() {
-      this.GET_DraftGoodsList()
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.GET_DraftGoodsList()
+        next()
+      })
     },
     methods: {
 

@@ -4,6 +4,7 @@ import 'normalize.css/normalize.css'// A modern alternative to CSS resets
 
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import EnComponents from '～/ui-components'
 
 import '@/styles/index.scss' // global css
 
@@ -22,6 +23,7 @@ Vue.use(Element, {
   size: 'medium',
   i18n: (key, value) => i18n.t(key, value)
 })
+Vue.use(EnComponents)
 
 // 全局注册echarts、jsonp
 import echarts from 'echarts'

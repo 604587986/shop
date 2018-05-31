@@ -86,13 +86,11 @@
 
 <script>
   import * as API_limitTime from '@/api/limitTime'
-  import { TableLayout, TableSearch, CategoryPicker } from '@/components'
+  import { CategoryPicker } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
     name: 'addTimeLimit',
     components: {
-      [TableLayout.name]: TableLayout,
-      [TableSearch.name]: TableSearch,
       [CategoryPicker.name]: CategoryPicker,
       [GoodsSelector.name]: GoodsSelector
     },
