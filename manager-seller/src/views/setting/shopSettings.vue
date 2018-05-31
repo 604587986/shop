@@ -7,7 +7,7 @@
       </el-form-item>
       <!--店铺地址-->
       <el-form-item label="店铺地址：" prop="shop_address">
-        <en-address-select :default="areas" @change="handleChange"></en-address-select>
+        <en-region-picker  @change="handleChange"></en-region-picker>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
@@ -66,13 +66,11 @@
 <script>
   import * as API_Shop from '@/api/shop'
   import { UE } from '@/components'
-  import { AddressSelect } from '@/plugins/selector/vue'
   import { validatePhone } from '@/utils/validate'
   export default {
     name: 'shopSetting',
     components: {
-      [UE.name]: UE,
-      [AddressSelect.name]: AddressSelect
+      [UE.name]: UE
     },
     data() {
       var validPhone = (rule, value, callback) => {
@@ -143,21 +141,7 @@
         },
 
         /** 地区信息*/
-        areas: [{
-          value: 'zhinan',
-          label: '指南',
-          children: [{
-            value: 'shejiyuanze',
-            label: '设计原则',
-            children: [{
-              value: 'yizhi',
-              label: '一致'
-            }, {
-              value: 'fankui',
-              label: '反馈'
-            }]
-          }]
-        }],
+        areas: [],
 
         /** 已选中的地区信息*/
         selectedArea: [],
