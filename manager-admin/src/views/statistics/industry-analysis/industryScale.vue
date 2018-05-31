@@ -3,24 +3,16 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
-          <span>订单周期：</span>
+          <span>商品分类</span>
+          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+        </div>
+        <div class="chart-header-item">
+          <span>查询周期：</span>
           <en-year-month-picker @changed="yearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <el-select
-            v-model="params.shop_id"
-            placeholder="请选择"
-            @change="shopChange"
-            style="width: 150px"
-          >
-            <el-option label="全平台" :value="0"/>
-            <el-option
-              v-for="item in shopList"
-              :key="item.shop_id"
-              :label="item.shop_name"
-              :value="item.shop_id"/>
-          </el-select>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">
@@ -39,7 +31,6 @@
 </template>
 
 <script>
-  import * as API_Shop from '@/api/shop'
   import industryScaleOrder from './industryScaleOrder'
   import industryScaleGoods from './industryScaleGoods'
   import industryScalePrice from './industryScalePrice'
@@ -54,22 +45,13 @@
     data() {
       return {
         cur_tab: 'order',
-        shopList: [],
-        change_flag: 1,
         params: {
           year: '',
           month: '',
-          type: 1,
-          shop_id: 0
+          type: 'MONTH',
+          categroy: 0,
+          seller_id: 0
         }
-      }
-    },
-    created() {
-      this.GET_ShopList()
-    },
-    watch: {
-      cur_tab() {
-        this.change_flag++
       }
     },
     methods: {
@@ -77,18 +59,7 @@
       yearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.type = object.type === 'month' ? 1 : 2
-        this.change_flag++
-      },
-      /** 店铺发生改变 */
-      shopChange() {
-        this.change_flag++
-      },
-      /** 获取店铺列表 */
-      GET_ShopList() {
-        API_Shop.getShopList().then(response => {
-          this.shopList = response.data
-        }).catch(error => console.log(error))
+        this.params.type = object.type
       }
     }
   }

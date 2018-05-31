@@ -3,40 +3,48 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
-          <span>订单周期：</span>
+          <span>商品分类</span>
+          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+        </div>
+        <div class="chart-header-item">
+          <span>查询周期：</span>
           <en-year-month-picker @changed="yearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <el-select
-            v-model="params.shop_id"
-            placeholder="请选择"
-            @change="shopChange"
-            style="width: 150px"
-          >
-            <el-option label="全平台" :value="0"/>
-            <el-option
-              v-for="item in shopList"
-              :key="item.shop_id"
-              :label="item.shop_name"
-              :value="item.shop_id"/>
-          </el-select>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">
         <el-tab-pane label="下单金额" name="price">
-          <order-statistics-price :params="params" :cur-tab="cur_tab" :change-flag="change_flag"/>
+          <order-statistics-price :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
         <el-tab-pane label="下单量" name="order">
-          <order-statistics-order :params="params" :cur-tab="cur_tab" :change-flag="change_flag"/>
+          <order-statistics-order :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
       </el-tabs>
+      <en-tabel-layout
+        :toolbar="false"
+        :pagination="false"
+        :tableData="tableData.data"
+      >
+        <template slot="table-columns">
+          <el-table-column prop="sn" label="订单号"/>
+          <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="下单日期"/>
+          <el-table-column prop="order_price" :formatter="MixinFormatPrice" label="订单金额"/>
+          <el-table-column prop="paymoney" :formatter="MixinFormatPrice" label="实付金额"/>
+          <el-table-column prop="member_name" label="会员名称"/>
+          <el-table-column label="订单状态">
+            <template slot-scope="scope">{{ scope.row.order_status | unixOrderStatus }}</template>
+          </el-table-column>
+        </template>
+      </en-tabel-layout>
     </el-card>
   </div>
 </template>
 
 <script>
-  import * as API_Shop from '@/api/shop'
+  import * as API_Statistics from '@/api/statistics'
   import orderStatisticsPrice from './orderStatisticsPrice'
   import orderStatisticsOrder from './orderStatisticsOrder'
 
@@ -49,26 +57,22 @@
     data() {
       return {
         cur_tab: 'price',
-        shopList: [],
-        change_flag: 1,
         params: {
           year: '',
           month: '',
           start_time: '',
           end_time: '',
-          type: 1,
+          type: 'MONTH',
           order_status: 99,
-          shop_id: 0
-        }
+          categroy: 0,
+          seller_id: 0
+        },
+        loading: false,
+        tableData: ''
       }
     },
-    created() {
-      this.GET_ShopList()
-    },
-    watch: {
-      cur_tab() {
-        this.change_flag++
-      }
+    mounted() {
+      this.GET_OrderStatisticsPage()
     },
     methods: {
       /** 年月份发生变化 */
@@ -77,18 +81,16 @@
         this.params.month = object.month
         this.params.start_time = object.start_time
         this.params.end_time = object.end_time
-        this.params.type = object.type === 'month' ? 1 : 2
-        this.change_flag++
+        this.params.type = object.type
       },
-      /** 店铺发生改变 */
-      shopChange() {
-        this.change_flag++
-      },
-      /** 获取店铺列表 */
-      GET_ShopList() {
-        API_Shop.getShopList().then(response => {
-          this.shopList = response.data
-        }).catch(error => console.log(error))
+      /** 获取订单统计表格数据 */
+      GET_OrderStatisticsPage() {
+        // Andste_TODO 2018/5/31: 参数适配未完成
+        this.loading = true
+        API_Statistics.getOrderStatisticsPage(this.params).then(response => {
+          this.loading = false
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }

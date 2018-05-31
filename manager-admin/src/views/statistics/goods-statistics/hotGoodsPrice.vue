@@ -9,7 +9,7 @@
       <template slot="table-columns">
         <el-table-column type="index" width="150" label="排名"/>
         <el-table-column prop="goods_name" label="商品名称"/>
-        <el-table-column prop="price" :formatter="priceFormatter" label="销售金额"/>
+        <el-table-column prop="price" :formatter="MixinFormatPrice" label="销售金额"/>
       </template>
     </en-tabel-layout>
   </div>
@@ -36,19 +36,13 @@
       })
     },
     watch: {
-      curTab() {
-        this.GET_HotGoodsPrice()
-      },
+      curTab: 'GET_HotGoodsPrice',
       params: {
         handler: 'GET_HotGoodsPrice',
         deep: true
       }
     },
     methods: {
-      /** 金额格式化 */
-      priceFormatter(row) {
-        return `￥${Foundation.formatPrice(row.price)}`
-      },
       /** 获取会员下单量 */
       GET_HotGoodsPrice() {
         if (this.curTab !== 'price' || this.loading) return

@@ -136,8 +136,8 @@
         // Andste_TODO 2018/5/10: 尚未添加表单校验
         const { code } = this.paymentForm
         API_Payment.editPayment(code, this.paymentForm).then(response => {
-          this.tableData.filter(item => item.code === code)[0] = response
           this.dialogPaymentVisible = false
+          this.GET_PaymentList()
           this.$message.success('保存成功！')
         })
       },

@@ -31,6 +31,10 @@ export default {
     /** 格式化金钱 */
     MixinFormatPrice(row, column, cellValue, index) {
       return '￥' + Foundation.formatPrice(cellValue)
+    },
+    /** 格式化时间戳 */
+    MixinUnixToDate(row, column, cellValue, index) {
+      return Foundation.unixToDate(cellValue)
     }
   },
   computed: {}

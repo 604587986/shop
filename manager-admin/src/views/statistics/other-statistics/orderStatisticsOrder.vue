@@ -1,15 +1,14 @@
 <template>
-  <div>
-    <div v-loading="loading" id="order-statistics-order-chart" style="height: 300px"></div>
-  </div>
+  <div v-loading="loading" id="order-statistics-order-chart" style="height: 300px"></div>
 </template>
 
 <script>
   import * as API_Statistics from '@/api/statistics'
   import echartsOptions from '../echartsOptions'
+
   export default {
     name: 'orderStatisticsOrder',
-    props: ['params', 'curTab', 'changeFlag'],
+    props: ['params', 'curTab'],
     data() {
       return {
         loading: false
@@ -21,39 +20,53 @@
       })
     },
     watch: {
-      curTab() {
-        this.GET_OrderStatisticsOrder()
-      },
-      'changeFlag': 'GET_OrderStatisticsOrder'
+      curTab: 'GET_OrderStatisticsOrder',
+      params: {
+        handler: 'GET_OrderStatisticsOrder',
+        deep: true
+      }
     },
     methods: {
       /** 获取会员下单量 */
       GET_OrderStatisticsOrder() {
         if (this.curTab !== 'order' || this.loading) return
         this.loading = true
-        const type_str = this.params.type === 1 ? '日' : '月'
+        const { type } = this.params
+        const type_str = this.params.type === 'MONTH' ? '日' : '月'
         API_Statistics.getOrderStatisticsOrder(this.params).then(response => {
           this.loading = false
-          const data = response.message
-          const _data = data
-          const _date = data.map((item, index) => {
-            return index + 1
-          })
+          const { xAxis } = response
+          const series0 = response.series[0]
+          const series1 = response.series[1]
           this.echarts.setOption(echartsOptions({
-            titleText: `订单销售量统计（${type_str}）`,
+            color: ['#c23531', '#2f4554'],
+            titleText: `订单下单量统计（${type === 'MONTH' ? '月' : '年'}）`,
             tooltipFormatter: (params) => {
-              params = params[0]
-              return `日期（${type_str}）：${params.dataIndex + 1}<br/>${params.seriesName}：${params.value}`
+              return `日期：${params[0].dataIndex + 1}${type_str}<br/>
+                      ${params[0].marker}${params[0].seriesName}下单数量：${params[0].value}<br/>
+                      ${params[1].marker}${params[1].seriesName}下单数量：${params[1].value}`
             },
-            xAxisData: _date,
-            seriesName: '下单量',
-            seriesData: _data
+            legend: {
+              right: 50,
+              data: [series0.name, series1.name]
+            },
+            xAxisData: xAxis,
+            seriesName: '下单数量',
+            series: [
+              {
+                type: 'line',
+                name: series0.name,
+                data: series0.data
+              },
+              {
+                type: 'line',
+                name: series1.name,
+                data: series1.data
+              }
+            ]
           }))
           this.echarts.resize()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }

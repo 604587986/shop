@@ -177,66 +177,52 @@ export function getGoodsCollectTopPage(params) {
 /**
  * 获取行业规模下单量
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScaleOrder(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/order/quantity',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取行业规模下单商品数量
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScaleGoods(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/goods/num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取行业规模下单金额
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScalePrice(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/order/money',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取概括总览数据
  * @param params
- * @returns {Promise<any>}
  */
 export function getGeneralityOverviewData(params) {
-  params.category_id = params.cat_id
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/collect-data.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/overview',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -292,58 +278,44 @@ export function getTrafficAnalysisGoodsData(params) {
 }
 
 /** 其它统计 */
+
 /**
- * 下单金额
+ * 订单统计 - 下单金额
  * @param params
- * @returns {Promise<any>}
  */
 export function getOrderStatisticsPrice(params) {
-  params.store_id = params.shop_id
-  params.cycle_type = params.type
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/salesStatis/get-sale-money-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/order/order/money',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
- * 下单金额表格数据
+ * 订单统计 - 下单量
  * @param params
- * @returns {Promise<any>}
- */
-export function getOrderStatisticsPrideTable(params) {
-  params.store_id = params.shop_id
-  params.ststus = params.order_status
-  params.cycle_type = params.type
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/salesStatis/list-json.do',
-      method: 'post',
-      loading: false,
-      params
-    }).then(resposne => resolve(resposne)).catch(error => reject(error))
-  })
-}
-
-/**
- * 下单量
- * @param params
- * @returns {Promise<any>}
  */
 export function getOrderStatisticsOrder(params) {
-  params.store_id = params.shop_id
-  params.cycle_type = params.type
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/salesStatis/get-sale-num-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/order/order/num',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 订单统计 - 下单量表格数据
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getOrderStatisticsPage(params) {
+  return request({
+    url: 'statistics/order/order/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

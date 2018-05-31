@@ -4,6 +4,7 @@
 
 import request from '@/utils/request'
 import PaymentModel from '@/models/PaymentModel'
+
 const paymentModel = new PaymentModel()
 
 /**
@@ -53,7 +54,7 @@ export function editPayment(payment_plugin_id, payment_method) {
     url: `payment/payment-methods/${payment_plugin_id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
-    data: { payment_method: paymentModel.params(payment_method) }
+    data: { ...paymentModel.params(payment_method) }
   })
 }
 

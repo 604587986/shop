@@ -28,9 +28,7 @@
       }
     },
     created() {
-      API_Shop.getShopList().then(response => {
-        this.shopList = response.data
-      }).catch(error => console.log(error))
+      API_Shop.getShopList().then(response => (this.shopList = response.data))
     },
     methods: {
       handleShopChanged() {
