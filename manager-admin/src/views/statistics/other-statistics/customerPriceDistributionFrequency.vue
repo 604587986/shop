@@ -30,11 +30,7 @@
       }
     },
     watch: {
-      curTab: 'GET_CustomerPriceDistributionFrequency',
-      params: {
-        handler: 'GET_CustomerPriceDistributionFrequency',
-        deep: true
-      }
+      curTab: 'GET_CustomerPriceDistributionFrequency'
     },
     methods: {
       GET_CustomerPriceDistributionFrequency() {
