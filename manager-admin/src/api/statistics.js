@@ -177,66 +177,52 @@ export function getGoodsCollectTopPage(params) {
 /**
  * 获取行业规模下单量
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScaleOrder(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/order/quantity',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取行业规模下单商品数量
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScaleGoods(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/goods/num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取行业规模下单金额
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScalePrice(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/order/money',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取概括总览数据
  * @param params
- * @returns {Promise<any>}
  */
 export function getGeneralityOverviewData(params) {
-  params.category_id = params.cat_id
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/collect-data.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/overview',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
