@@ -13,7 +13,7 @@
       </div>
       <ul class="links">
         <li>
-          <div class="dt"><a target="_blank" href="/">商家中心</a></div>
+          <div class="dt"><nuxt-link to="/shop/apply">商家中心</nuxt-link></div>
         </li>
         <li class="spacer"></li>
         <li class="dorpdown">
