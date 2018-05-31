@@ -1,29 +1,5 @@
 <template>
-  <div>
-    <div v-loading="loading" id="order-statistics-price-chart" style="height: 300px"></div>
-    <en-tabel-layout
-      :toolbar="false"
-      :pagination="false"
-      :tableData="tableData"
-    >
-      <template slot="table-columns">
-        <el-table-column prop="sn" label="订单号"/>
-        <el-table-column label="下单日期">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
-        </el-table-column>
-        <el-table-column label="订单金额">
-          <template slot-scope="scope">{{ scope.row.order_price | unitPrice('￥') }}</template>
-        </el-table-column>
-        <el-table-column label="实付金额">
-          <template slot-scope="scope">{{ scope.row.paymoney | unitPrice('￥') }}</template>
-        </el-table-column>
-        <el-table-column prop="member_name" label="会员名称"/>
-        <el-table-column label="订单状态">
-          <template slot-scope="scope">{{ scope.row.order_status | unixOrderStatus }}</template>
-        </el-table-column>
-      </template>
-    </en-tabel-layout>
-  </div>
+  <div v-loading="loading" id="order-statistics-price-chart" style="height: 300px"></div>
 </template>
 
 <script>
@@ -32,13 +8,11 @@
   import { Foundation } from '@/framework'
 
   export default {
-    name: 'orderStatisticsPrice',
-    props: ['params', 'curTab', 'changeFlag'],
+    name: 'orderStatisticsOrder',
+    props: ['params', 'curTab'],
     data() {
       return {
-        loading: false,
-        /** 列表数据 */
-        tableData: null
+        loading: false
       }
     },
     mounted() {
@@ -47,47 +21,54 @@
       })
     },
     watch: {
-      'changeFlag': ['GET_OrderStatisticsPrice', 'GET_OrderStatisticsPriceTable']
+      curTab: 'GET_OrderStatisticsPrice',
+      params: {
+        handler: 'GET_OrderStatisticsPrice',
+        deep: true
+      }
     },
     methods: {
-      /** 获取会员下单量 */
+      /** 获取会员下单金额 */
       GET_OrderStatisticsPrice() {
         if (this.curTab !== 'price' || this.loading) return
         this.loading = true
-        const type_str = this.params.type === 1 ? '日' : '月'
+        const { type } = this.params
+        const type_str = this.params.type === 'MONTH' ? '日' : '月'
         API_Statistics.getOrderStatisticsPrice(this.params).then(response => {
           this.loading = false
-          const data = response.message
-          const _data = data
-          const _date = data.map((item, index) => {
-            return index + 1
-          })
+          const { xAxis } = response
+          const series0 = response.series[0]
+          const series1 = response.series[1]
           this.echarts.setOption(echartsOptions({
-            titleText: `订单销售额统计（${type_str}）`,
+            color: ['#c23531', '#2f4554'],
+            titleText: `订单销金额统计（${type === 'MONTH' ? '月' : '年'}）`,
             tooltipFormatter: (params) => {
-              params = params[0]
-              return `日期（${type_str}）：${params.dataIndex + 1}<br/>${params.seriesName}：￥${Foundation.formatPrice(params.value)}`
+              return `日期：${params[0].dataIndex + 1}${type_str}<br/>
+                      ${params[0].marker}${params[0].seriesName}下单金额：￥${Foundation.formatPrice(params[0].value)}<br/>
+                      ${params[1].marker}${params[1].seriesName}下单金额：￥${Foundation.formatPrice(params[1].value)}`
             },
-            xAxisData: _date,
+            legend: {
+              right: 50,
+              data: [series0.name, series1.name]
+            },
+            xAxisData: xAxis,
             seriesName: '下单金额',
-            seriesData: _data
+            series: [
+              {
+                type: 'line',
+                name: series0.name,
+                data: series0.data
+              },
+              {
+                type: 'line',
+                name: series1.name,
+                data: series1.data
+              }
+            ]
           }))
           this.echarts.resize()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
-      },
-      /** 获取表格数据 */
-      GET_OrderStatisticsPriceTable() {
-        API_Statistics.getOrderStatisticsPrideTable(this.params).then(response => {
-          this.tableData = response.data.sort((x, y) => x.paymoney < y.paymoney)
-        }).catch(error => console.log(error))
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

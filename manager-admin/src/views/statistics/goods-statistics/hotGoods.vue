@@ -7,7 +7,7 @@
           <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
-          <span>订单周期：</span>
+          <span>查询周期：</span>
           <en-year-month-picker @changed="yearMonthChanged"/>
         </div>
         <div class="chart-header-item">

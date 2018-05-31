@@ -3,7 +3,7 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
-          <span>订单周期：</span>
+          <span>查询周期：</span>
           <en-year-month-picker @changed="handleYearMonthChanged" :optional="false"/>
         </div>
       </div>
