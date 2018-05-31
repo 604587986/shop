@@ -8,7 +8,7 @@
 
   export default {
     name: 'customerPriceDistributionPrice',
-    props: ['params', 'curTab', 'change_flag'],
+    props: ['params', 'curTab', 'priceRange'],
     data() {
       return {
         loading: false
@@ -20,33 +20,37 @@
       })
     },
     watch: {
-      'change_flag': 'GET_CustomerPriceDistributionPrice'
+      curTab: 'GET_CustomerPriceDistributionPrice',
+      priceRange: 'GET_CustomerPriceDistributionPrice',
+      params: {
+        handler: 'GET_CustomerPriceDistributionPrice',
+        deep: true
+      }
     },
     methods: {
       GET_CustomerPriceDistributionPrice() {
         if (this.curTab !== 'price' || this.loading) return
         this.loading = true
-        API_Statistics.getOrderPriceDistribution(this.params).then(response => {
+        const params = JSON.parse(JSON.stringify(this.params))
+        params.prices = []
+        this.priceRange.forEach((item, index) => {
+          params.prices.push(item[0])
+          if (index === this.priceRange.length - 1) {
+            params.prices.push(item[1])
+          }
+        })
+        API_Statistics.getOrderPriceDistribution(params).then(response => {
           this.loading = false
-          const data = response.data
-          const _data = data.map(item => item.num)
-          const _price = data.map(item => item.elt_data)
+          const { data, name, localName } = response.series
+          const { xAxis } = response
           this.echarts.setOption(echartsOptions({
-            titleText: '客单价分布图',
-            tooltipFormatter: function(params) {
-              params = params[0]
-              const price_range = _price[params.dataIndex]
-              return `价格区间：${price_range}<br/>${params.seriesName}：${params.value}`
-            },
-            xAxisData: _price,
+            titleText: name,
+            xAxisData: xAxis,
             seriesName: '下单量',
-            seriesData: _data
+            seriesData: data
           }))
           this.echarts.resize()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
