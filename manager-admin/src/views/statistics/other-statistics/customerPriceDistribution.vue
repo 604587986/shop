@@ -4,15 +4,15 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }" :disabled="cur_tab === 'frequency'"/>
         </div>
         <div class="chart-header-item">
           <span>查询周期：</span>
-          <en-year-month-picker @changed="handleYearMonthChanged"/>
+          <en-year-month-picker @changed="handleYearMonthChanged" :disabled="cur_tab === 'frequency'"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }" :disabled="cur_tab === 'frequency'"/>
         </div>
         <div v-if="cur_tab === 'price'" class="chart-header-item">
           <span>价格区间：</span>
