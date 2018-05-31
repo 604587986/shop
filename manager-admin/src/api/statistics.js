@@ -365,51 +365,39 @@ export function getRegionAnalysis(params) {
 /**
  * 获取客单价分布
  * @param params
- * @returns {Promise<any>}
  */
 export function getOrderPriceDistribution(params) {
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-order-price-dis.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/order/unit/price',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取购买时段分布
  * @param params
- * @returns {Promise<any>}
  */
 export function getBuyTimeDistribution(params) {
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-buy-time-dis.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => console.log(error))
+  return request({
+    url: 'statistics/order/unit/time',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取购买频次数据
  * @param params
- * @returns {Promise<any>}
  */
 export function getBuyFrequency(params) {
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-buy-fre.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/order/unit/num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
