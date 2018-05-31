@@ -3,12 +3,16 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
+          <span>商品分类</span>
+          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+        </div>
+        <div class="chart-header-item">
           <span>查询周期：</span>
           <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <en-shop-picker @changed="handleShopChanged"/>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop.shop_id }"/>
         </div>
       </div>
       <div id="refund-statistics-chart" style="height: 300px"></div>
@@ -29,54 +33,51 @@
         params: {
           year: '',
           month: '',
-          type: 1,
-          shop_id: 0
+          circle: 'MONTH',
+          categroy: 0,
+          seller_id: 0
         }
       }
     },
     mounted() {
       this.$nextTick(() => {
         this.echarts = this.$echarts.init(document.getElementById('refund-statistics-chart'))
-        this.GET_RefundStatistics()
       })
+    },
+    watch: {
+      params: {
+        handler: 'GET_RefundStatistics',
+        deep: true
+      }
     },
     methods: {
       /** 年月发生改变 */
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.circle = object.type === 'month' ? 1 : 2
-        this.GET_RefundStatistics()
-      },
-      /** 店铺发生改变 */
-      handleShopChanged(shop) {
-        this.params.shop_id = shop.shop_id
-        this.GET_RefundStatistics()
+        this.params.circle = object.type
       },
       /** 获取退款金额统计 */
       GET_RefundStatistics() {
-        if (this.loading) return
         this.loading = true
-        const date_type = this.params.type === 1 ? '日' : '月'
-        API_Statistics.getRefundStatisticsData(this.params).then(response => {
+        const { circle } = this.params
+        const date_type = circle === 'MONTH' ? '月' : '年'
+        API_Statistics.getRefundStatistics(this.params).then(response => {
           this.loading = false
-          const _data = response.message
-          const _date = response.message.map((item, index) => index + 1)
+          const { data, name, localName } = response.series
+          const { xAxis } = response
           this.echarts.setOption(echartsOptions({
             titleText: `退款金额统计（${date_type}）`,
             tooltipFormatter: (params) => {
               params = params[0]
-              return `日期（${date_type}）：${params.dataIndex + 1}<br/>${params.seriesName}：￥${Foundation.formatPrice(params.value)}`
+              return `日期：${params.dataIndex + 1}${circle === 'MONTH' ? '日' : '月'}<br/>${params.marker}退款金额：￥${Foundation.formatPrice(params.value)}`
             },
-            xAxisData: _date,
+            xAxisData: xAxis,
             seriesName: '退款金额',
-            seriesData: _data
+            seriesData: data
           }))
           this.echarts.resize()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }

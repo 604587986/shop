@@ -404,18 +404,13 @@ export function getBuyFrequency(params) {
 /**
  * 获取退款统计
  * @param params
- * @returns {Promise<any>}
  */
-export function getRefundStatisticsData(params) {
-  params.cycle_type = params.type
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/orderReturnedStatistics/returned-statistics-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getRefundStatistics(params) {
+  return request({
+    url: 'statistics/order/return/money',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
