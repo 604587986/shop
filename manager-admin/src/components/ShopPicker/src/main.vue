@@ -1,6 +1,7 @@
 <template>
   <div style="display: inline-block">
     <el-select
+      v-bind="$attrs"
       v-model="shop_id"
       placeholder="请选择"
       @change="handleShopChanged"
