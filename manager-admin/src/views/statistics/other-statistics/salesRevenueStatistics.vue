@@ -26,6 +26,7 @@
       <en-tabel-layout
         :toolbar="false"
         :tableData="tableData.data"
+        border
       >
         <template slot="table-columns">
           <el-table-column prop="goods_name" label="商品名称"/>
