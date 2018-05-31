@@ -45,7 +45,7 @@
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.type = object.type === 'month' ? 1 : 2
+        this.params.circle = object.type === 'month' ? 1 : 2
         this.GET_RefundStatistics()
       },
       /** 店铺发生改变 */

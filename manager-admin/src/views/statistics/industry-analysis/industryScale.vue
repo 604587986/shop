@@ -8,7 +8,7 @@
         </div>
         <div class="chart-header-item">
           <span>查询周期：</span>
-          <en-year-month-picker @changed="yearMonthChanged"/>
+          <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
@@ -48,7 +48,7 @@
         params: {
           year: '',
           month: '',
-          type: 'MONTH',
+          circle: 'MONTH',
           categroy: 0,
           seller_id: 0
         }
@@ -56,10 +56,10 @@
     },
     methods: {
       /** 年月份发生变化 */
-      yearMonthChanged(object) {
+      handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.type = object.type
+        this.params.circle = object.type
       }
     }
   }

@@ -128,7 +128,7 @@
         </el-form-item>
         <!--地区-->
         <el-form-item label="地区" prop="region" class="form-item-region">
-          <en-address-select @changed="(object) => { addMemberForm.region = object.last_id }"/>
+          <en-region-picker @changed="(object) => { addMemberForm.region = object.last_id }"/>
         </el-form-item>
         <!--手机号码-->
         <el-form-item label="手机号码" prop="mobile">
@@ -157,14 +157,10 @@
 
 <script>
   import * as API_Member from '@/api/member'
-  import { AddressSelect } from '@/plugins/selector/vue'
   import { RegExp } from '@/framework'
 
   export default {
     name: 'memberList',
-    components: {
-      [AddressSelect.name]: AddressSelect
-    },
     data() {
       return {
         /** 列表loading状态 */

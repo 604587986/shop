@@ -4,7 +4,7 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>查询周期：</span>
-          <en-year-month-picker @changed="yearMonthChanged"/>
+          <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-  import * as API_Shop from '@/api/shop'
   import CustomerPriceDistributionPrice from './customerPriceDistributionPrice'
   import CustomerPriceDistributionPeriod from './customerPriceDistributionPeriod'
   import CustomerPriceDistributionFrequency from './customerPriceDistributionFrequency'
@@ -62,20 +61,9 @@
     },
     methods: {
       /** 年月份发生变化 */
-      yearMonthChanged(object) {
+      handleYearMonthChanged(object) {
         this.params.start_date = object.start_time
         this.params.end_date = object.end_time
-        this.change_flag++
-      },
-      /** 店铺发生改变 */
-      shopChange() {
-        this.change_flag++
-      },
-      /** 获取店铺列表 */
-      GET_ShopList() {
-        API_Shop.getShopList().then(response => {
-          this.shopList = response.data
-        }).catch(error => console.log(error))
       }
     }
   }

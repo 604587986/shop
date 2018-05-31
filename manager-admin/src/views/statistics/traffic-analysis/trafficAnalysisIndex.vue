@@ -47,7 +47,7 @@
       handleYearMonthChanged(object) {
         this.params.start_date = object.start_time
         this.params.end_date = object.end_time
-        this.params.type = object.type === 'month' ? 0 : 1
+        this.params.circle = object.type === 'month' ? 0 : 1
         this.changed_flag++
       },
       /** 店铺发生改变 */
