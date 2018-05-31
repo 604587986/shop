@@ -44,9 +44,9 @@
           const { data, name, localName } = response.series
           const { xAxis } = response
           this.echarts.setOption(echartsOptions({
-            titleText: name,
+            titleText: '客单价分布',
             xAxisData: xAxis,
-            seriesName: '下单量',
+            seriesName: name,
             seriesData: data
           }))
           this.echarts.resize()
