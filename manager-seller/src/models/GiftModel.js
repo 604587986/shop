@@ -22,7 +22,7 @@ export class Gift extends DataModel {
   gift_name
 
   /** 赠品图片 */
-  @ServerName('gift_image')
+  @ServerName('gift_img')
   gift_image
 
   /** 赠品价格 */
@@ -30,14 +30,14 @@ export class Gift extends DataModel {
   gift_price
 
   /** 实际库存 */
-  @ServerName('gift_real_stock')
+  @ServerName('actual_store')
   gift_real_stock
 
   /** 可用库存 */
-  @ServerName('gift_usable_stock')
+  @ServerName('enable_store')
   gift_usable_stock
 
   /** 创建时间 */
-  @ServerName('gift_creat_time')
+  @ServerName('create_time')
   gift_creat_time
 }

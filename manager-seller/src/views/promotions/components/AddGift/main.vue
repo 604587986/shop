@@ -1,25 +1,26 @@
 <template>
   <el-dialog title="新增赠品" :visible.sync="giftShow" width="40%" align="center">
-    <el-form :model="giftModelForm" label-position="right" label-width="160px">
-      <el-form-item label="赠品名称：">
+    <el-form :model="giftModelForm" label-position="right" :rules="rules" label-width="160px">
+      <el-form-item label="赠品名称：" prop="gift_name">
         <el-input
           auto-complete="off"
           v-model="giftModelForm.gift_name"
           placeholder="不超过20个字"
+          maxlength="20"
           label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="赠品价格：">
-        <el-input auto-complete="off"  v-model="giftModelForm.gift_price" label-width="100"></el-input>
+      <el-form-item label="赠品价格：" prop="gift_price">
+        <el-input v-model.number="giftModelForm.gift_price" label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="赠品库存：">
-        <el-input auto-complete="off"  v-model="giftModelForm.gift_usable_stock" label-width="100"></el-input>
+      <el-form-item label="赠品库存：" prop="gift_usable_stock">
+        <el-input auto-complete="off"  v-model.number="giftModelForm.gift_usable_stock" label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="赠品图片：">
         <el-upload
           class="upload-demo"
           :action="BASE_IMG_URL"
           :file-list="fileList"
-          :limit="1"
+          :on-success="uploadSuccess"
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
@@ -49,38 +50,39 @@
       giftModelShow: {
         type: Boolean,
         default: false
-      },
-
-      /** 赠品编辑表单*/
-      giftForm: {
-        type: [Object, String],
-        default: () => {
-          return {}
-        }
       }
     },
     watch: {
+      giftShow() {
+        !this.giftShow && this.$emit('saveGift', false)
+      },
       giftModelShow() {
         this.giftShow = this.giftModelShow
       },
-
-      giftForm() {
-        if (this.giftForm) {
-          this.giftModelForm = { ...this.giftForm }
+      currentGiftId() {
+        if (this.currentGiftId) {
+          this.GET_giftDetails()
         } else {
           this.giftModelForm = {
+            /** 赠品名称 */
             gift_name: '',
 
+            /** 赠品图片 */
             gift_image: '',
 
-            gift_price: 2,
+            /** 赠品价格 */
+            gift_price: 0,
 
-            gift_real_stock: 8,
+            /** 实际库存 */
+            gift_real_stock: 0,
 
-            gift_usable_stock: 2,
+            /** 可用库存 */
+            gift_usable_stock: 0,
 
+            /** 创建时间 */
             gift_creat_time: ''
           }
+          this.fileList = []
         }
       }
     },
@@ -104,20 +106,48 @@
           gift_price: 1,
 
           /** 实际库存 */
-          gift_real_stock: 1,
+          gift_real_stock: 0,
 
           /** 可用库存 */
-          gift_usable_stock: 2,
+          gift_usable_stock: 0,
 
           /** 创建时间 */
           gift_creat_time: ''
         },
 
         /** 存储上传的图片*/
-        fileList: []
+        fileList: [],
+
+        /** 校验规则 */
+        rules: {
+          gift_name: [
+            { required: true, message: '请输入赠品名称', trigger: 'blur' }
+          ],
+          gift_price: [
+            { required: true, message: '请输入赠品价格', trigger: 'blur' },
+            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+          ],
+          gift_usable_stock: [
+            { required: true, message: '请输入赠品库存', trigger: 'blur' },
+            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+          ]
+        }
       }
     },
+    mounted() {
+      this.currentGiftId && this.GET_giftDetails()
+    },
     methods: {
+      /** 查询一个赠品详情 */
+      GET_giftDetails() {
+        this.$nextTick(() => {
+          API_Gift.getGiftDetails(this.currentGiftId, {}).then((response) => {
+            this.giftModelForm = { ...response }
+            this.fileList = [{ url: this.giftModelForm.gift_image }]
+          })
+        })
+      },
+
       /** 取消 */
       handleCancelGifts() {
         this.$emit('saveGift', false)
@@ -131,20 +161,29 @@
             this.giftShow = false
             this.$message.success('保存成功！')
             this.$emit('saveGift', true)
-          }).catch((error) => this.$message.error(error))
+          })
         } else {
           // 新增
           API_Gift.addGifts(this.giftModelForm).then(() => {
             this.giftShow = false
             this.$message.success('保存成功！')
             this.$emit('saveGift', true)
-          }).catch((error) => this.$message.error(error))
+          })
         }
+      },
+
+      /** 上传成功之后 */
+      uploadSuccess(response, file, fileList) {
+        this.giftModelForm.gift_image = response.url
+        this.fileList.shift()
+        this.fileList.push(response)
       }
     }
   }
 </script>
 
 <style lang="scss" type="scss" scoped>
-
+  .upload-demo {
+    text-align: left;
+  }
 </style>

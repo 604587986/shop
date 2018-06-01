@@ -18,7 +18,7 @@
         <el-table-column prop="gift_name" label="赠品名称" />
         <el-table-column label="赠品图片" >
           <template slot-scope="scope">
-            <img :src="scope.row.gift_image" alt="">
+            <img :src="scope.row.gift_image" class="goods-image" alt="">
           </template>
         </el-table-column>
         <el-table-column  label="赠品价格">
@@ -64,8 +64,7 @@
     <add-gift
       :currentGiftId="currentGiftId"
       :giftModelShow="giftModelShow"
-      :giftForm="giftForm"
-      @saveGift="saveGift"></add-gift>
+      @saveGift="saveGift"/>
   </div>
 </template>
 
@@ -163,9 +162,6 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       },
 
@@ -176,10 +172,10 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          API_Gift.deleteGifts(row.gift_id, row).then(() => {
+          API_Gift.deleteGifts(row.gift_id).then(() => {
             this.GET_GiftsList()
             this.$message.success('删除赠品成功！')
-          }).catch((error) => this.$message.error(error))
+          })
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })
@@ -189,16 +185,11 @@
       handleEditGifts(row) {
         this.giftModelShow = true
         this.currentGiftId = row.gift_id
-        this.giftForm = {
-          ...row
-        }
       },
 
       /** 新增赠品*/
       handelAddGifts() {
         this.giftModelShow = true
-        this.currentGiftId = ''
-        this.giftForm = ''
       },
 
       /** 保存结果 */

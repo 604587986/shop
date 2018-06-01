@@ -13,7 +13,7 @@ import * as GiftModel from '@/models/GiftModel'
 export function getGiftsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/list',
+      url: '/promotion/full-discount-gifts',
       method: 'get',
       loading: false,
       params
@@ -21,7 +21,7 @@ export function getGiftsList(params) {
       const _response = response
       _response.data = new GiftModel.Gift().map(_response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -31,18 +31,15 @@ export function getGiftsList(params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function deleteGifts(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+export function deleteGifts(ids) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/${ids}`,
+      url: `/promotion/full-discount-gifts/${ids}`,
       method: 'delete',
-      loading: false,
-      data: _formData
+      loading: false
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -53,17 +50,16 @@ export function deleteGifts(ids, params) {
  * @returns {Promise<any>}
  */
 export function saveGifts(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/reserve/${ids}`,
-      method: 'post',
+      url: `/promotion/full-discount-gifts/${ids}`,
+      method: 'put',
+      headers: { 'Content-Type': 'application/json' },
       loading: false,
-      data: _formData
+      data: new GiftModel.Gift().params(params)
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -73,16 +69,35 @@ export function saveGifts(ids, params) {
  * @returns {Promise<any>}
  */
 export function addGifts(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/gifts/increase',
+      url: '/promotion/full-discount-gifts',
       method: 'post',
+      headers: { 'Content-Type': 'application/json' },
       loading: false,
-      data: _formData
+      data: new GiftModel.Gift().params(params)
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
+  })
+}
+
+/**
+ * 查询一个赠品详情
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGiftDetails(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/promotion/full-discount-gifts/${id}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = new GiftModel.Gift().map(response)
+      resolve(_response)
+    })
   })
 }
