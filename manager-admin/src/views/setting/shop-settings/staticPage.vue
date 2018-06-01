@@ -86,9 +86,8 @@
         }
         this.$confirm('确定要生成静态页吗？', '提示', { type: 'warning' }).then(() => {
           const choose = this.checkedPages.map(item => item.value)
-          const params = { choosePages: choose }
+          const params = { choose_pages: choose }
           API_StaticPage.createStaticPage(params).then(response => {
-            console.log(response)
             this.GET_Progress()
           })
         }).catch(() => {})
@@ -96,14 +95,15 @@
       /** 获取生成进度 */
       GET_Progress() {
         API_Progress.getProgressById('page_create').then(response => {
-          console.log(response)
-          // const { percentage, status, status_text } = response.data
-          // this.percentage = percentage
-          // this.status = status
-          // this.status_text = status_text
-          // if (response.data.status !== 'success') {
-          //   setTimeout(this.GET_Progress, 1000)
-          // }
+          const { text, status, percentage } = response
+          this.percentage = percentage
+          this.status = status
+          this.status_text = text
+          if (status === 'SUCCESS') {
+            this.$message.success('静态页生成完成！')
+          } else {
+            setTimeout(this.GET_Progress, 1000)
+          }
         })
       }
     }
