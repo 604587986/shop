@@ -131,13 +131,12 @@
                 <!--送优惠券-->
                 <el-form-item prop="couponId" class="discount-model">
                   <el-checkbox :label="couponTxt" v-model="isCoupon" @change="isChangeCoupon"></el-checkbox>
-                  <el-select v-show="isCoupon" v-model="activityForm.couponId" placeholder="请选择">
+                  <el-select v-show="isCoupon" v-model="activityForm.couponId" placeholder="请选择" @change="changeCoupon">
                     <el-option
                       v-for="item in couponList"
-                      @change="changeCoupon"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      :key="item.coupon_id"
+                      :label="item.coupon_name"
+                      :value="item.coupon_id">
                     </el-option>
                   </el-select>
                   <el-button type="text" v-show="isCoupon" @click="addCoupon">新增</el-button>
@@ -244,6 +243,7 @@
   import { mapGetters } from 'vuex'
   import * as API_activity from '@/api/activity'
   import * as API_Gift from '@/api/gift'
+  import * as API_coupon from '@/api/coupon'
   import { CategoryPicker, UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   import { AddGift, Coupon } from './components'
@@ -497,6 +497,7 @@
     mounted() {
       this.GET_FullCutActivityList()
       /** 优惠券列表 */
+      this.GET_CouponsList()
       /** 赠品列表 */
       this.GET_giftList()
     },
@@ -631,7 +632,6 @@
       /** 获取单个商品详情 */
       GET_FullCutActivityDetails(id) {
         API_activity.getFullCutActivityDetails(id, {}).then((response) => {
-          console.log(response)
           this.activityForm = {
             ...response,
             activity_id: id,
@@ -758,7 +758,9 @@
 
       /** 获取优惠券列表 */
       GET_CouponsList() {
-
+        API_coupon.getCouponsList(this.params).then(response => {
+          this.couponList = response.data
+        })
       },
 
       /** 所选优惠券变化时 */

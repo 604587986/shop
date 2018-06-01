@@ -1,6 +1,6 @@
 <template>
   <div>
-    <grade-editor
+    <en-grade-editor
       ref="gradeEditor"
       :api="categoryApi"
       :params-names="{id: 'category_id', text: 'name'}"

@@ -66,7 +66,7 @@ service.interceptors.response.use(
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 109 --> 没有登录、登录状态失效
-    if (error_data.code === '109') {
+    if (error_data.code === '109' || error_data.code === '001') {
       Vue.prototype.$message.error('您已被登出！')
       const { $route, $router } = Vue.prototype.$nuxt
       $router.push({ path: `/login?forward=${$route.fullPath}` })

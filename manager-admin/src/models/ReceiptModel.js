@@ -2,14 +2,7 @@
  * 发票模型
  */
 
-import {
-  DataModel,
-  Check,
-  CheckTypes,
-  ServerName,
-  Unit,
-  UnitTypes
-} from '@/framework'
+import { DataModel, ServerName } from '@/framework'
 
 export default class ReceiptModel extends DataModel {
   /** 是否需要发票 */
@@ -36,10 +29,10 @@ export default class ReceiptModel extends DataModel {
 /** 发票内容模型 */
 export class ReceiptContentModel extends DataModel {
   /** 发票内容ID */
-  @ServerName('contentid')
+  @ServerName('id')
   id
 
   /** 发票内容 */
-  @ServerName('receipt_content')
+  @ServerName('content')
   content
 }

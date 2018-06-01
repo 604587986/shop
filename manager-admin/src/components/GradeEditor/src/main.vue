@@ -59,8 +59,9 @@
 
 <script>
   import mixin from './mixin'
+
   export default {
-    name: 'GradeEditor',
+    name: 'EnGradeEditor',
     mixins: [mixin]
   }
 </script>

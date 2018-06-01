@@ -253,7 +253,7 @@
       }
     },
     mounted() {
-      this.GET_ActivityList()
+      this.GET_SecondHalfActivityList()
     },
     methods: {
 
@@ -263,14 +263,14 @@
           ...this.params,
           goods_status: data
         }
-        this.GET_ActivityList()
+        this.GET_SecondHalfActivityList()
       },
 
       /** 切换面板*/
       handleToggleClick(tab, event) {
         this.activeName = tab.name
         if (this.activeName === 'express') {
-          this.GET_ActivityList()
+          this.GET_SecondHalfActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
             activity_id: '',
@@ -325,13 +325,11 @@
       },
 
       /** 获取活动信息*/
-      GET_ActivityList() {
+      GET_SecondHalfActivityList() {
         this.loading = true
-        API_activity.getActivityList(this.params).then(response => {
+        API_activity.getSecondHalfActivityList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
-        }).catch(error => {
-          console.log(error)
         })
       },
 
@@ -355,12 +353,9 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteActivity(row.activity_id, row).then(response => {
+        API_activity.deleteSeconedHalfActivity(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
-          this.GET_ActivityList()
-        }).catch(error => {
-          console.log(error)
-          this.$message.error('删除失败，请稍后再试！')
+          this.GET_SecondHalfActivityList()
         })
       },
 
@@ -381,22 +376,16 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.activityForm.activity_id) {
-              API_activity.saveActivity(this.activityForm.activity_id, this.activityForm).then(response => {
+              API_activity.saveSeconedHalfActivity(this.activityForm.activity_id, this.activityForm).then(response => {
                 this.$message.success('保存设置成功！')
                 this.activeName === 'seconedHalfList'
-                this.GET_ActivityList()
-              }).catch(error => {
-                console.log(error)
-                this.$message.error('保存设置失败，请稍后再试！')
+                this.GET_SecondHalfActivityList()
               })
             } else {
-              API_activity.addActivity(this.activityForm).then(response => {
-                this.$message.success('保存设置成功！')
+              API_activity.addSeconedHalfActivity(this.activityForm).then(response => {
+                this.$message.success('添加成功！')
                 this.activeName === 'seconedHalfList'
-                this.GET_ActivityList()
-              }).catch(error => {
-                console.log(error)
-                this.$message.error('保存设置失败，请稍后再试！')
+                this.GET_SecondHalfActivityList()
               })
             }
           }

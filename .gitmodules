@@ -1,9 +1,15 @@
-[submodule "ui-components"]
-	path = ui-components
-	url = git@code.aliyun.com:javashop/ui-components.git
 [submodule "manager-seller/ui-components"]
 	path = manager-seller/ui-components
 	url = git@code.aliyun.com:javashop/ui-components.git
+[submodule "manager-admin/ui-components"]
+	path = manager-admin/ui-components
+	url = git@code.aliyun.com:javashop/ui-components.git
+[submodule "manager-admin/ui-domain"]
+	path = manager-admin/ui-domain
+	url = git@code.aliyun.com:javashop/ui-domain.git
 [submodule "manager-seller/ui-domain"]
 	path = manager-seller/ui-domain
+	url = git@code.aliyun.com:javashop/ui-domain.git
+[submodule "buyer/pc/themes/b2b2c_v5/ui-domain"]
+	path = buyer/pc/themes/b2b2c_v5/ui-domain
 	url = git@code.aliyun.com:javashop/ui-domain.git

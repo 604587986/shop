@@ -255,7 +255,7 @@
       }
     },
     mounted() {
-      this.GET_ActivityList()
+      this.GET_SingleCutActivityList()
     },
     methods: {
 
@@ -265,14 +265,14 @@
           ...this.params,
           goods_status: data
         }
-        this.GET_ActivityList()
+        this.GET_SingleCutActivityList()
       },
 
       /** 切换面板*/
       handleToggleClick(tab, event) {
         this.activeName = tab.name
         if (this.activeName === 'express') {
-          this.GET_ActivityList()
+          this.GET_SingleCutActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
             activity_id: '',
@@ -326,9 +326,9 @@
       },
 
       /** 获取活动信息*/
-      GET_ActivityList() {
+      GET_SingleCutActivityList() {
         this.loading = true
-        API_activity.getActivityList(this.params).then(response => {
+        API_activity.getSingleCutActivityList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
         }).catch(error => {
@@ -350,18 +350,14 @@
       handleDeleteFullCut(row) {
         this.$confirm('确认删除当前项？', '确认信息')
           .then(() => this.toDelActivity(row))
-          .catch(() => {
-          })
+          .catch(() => {})
       },
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteActivity(row.activity_id, row).then(response => {
+        API_activity.deleteSingleCutActivity(row.activity_id, row).then(response => {
           this.$message.success('删除成功！')
-          this.GET_ActivityList()
-        }).catch(error => {
-          console.log(error)
-          this.$message.error('删除失败，请稍后再试！')
+          this.GET_SingleCutActivityList()
         })
       },
 
@@ -383,13 +379,10 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const _ids = this.activityForm.activity_id || -1
-            API_activity.addActivity(_ids, this.activityForm).then(response => {
+            API_activity.addSingleCutActivity(_ids, this.activityForm).then(response => {
               this.$message.success('保存设置成功！')
               this.activeName === 'singleCutList'
-              this.GET_ActivityList()
-            }).catch(error => {
-              console.log(error)
-              this.$message.error('删除失败，请稍后再试！')
+              this.GET_SingleCutActivityList()
             })
           }
         })

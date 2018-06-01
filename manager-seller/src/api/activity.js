@@ -6,14 +6,116 @@ import request from '@/utils/request'
 import * as ActivityModel from '@/models/ActivityModel'
 
 /**
- * 获取活动模型列表
+ * 获取满减活动列表
  * @param params
  * @returns {Promise<any>}
  */
-export function getActivityList(params) {
+export function getFullCutActivityList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/list',
+      url: '/promotion/full-discounts',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new ActivityModel.Activity().map(response.data)
+      resolve(_response)
+    })
+  })
+}
+
+/**
+ * 删除满减活动
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ * @constructor
+ */
+export function deleteFullCutActivity(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/promotion/full-discounts/${ids}`,
+      method: 'delete',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 新增满减活动
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ * @constructor
+ */
+export function addFullCutActivity(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/promotion/full-discounts',
+      method: 'post',
+      loading: false,
+      headers: { 'Content-Type': 'application/json' },
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 修改满减活动内容
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ * @constructor
+ */
+export function saveFullCutActivity(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/promotion/full-discounts/${ids}`,
+      method: 'put',
+      loading: false,
+      headers: { 'Content-Type': 'application/json' },
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 获取满减单个活动详情
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getFullCutActivityDetails(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/promotion/full-discounts/${ids}`,
+      method: 'get',
+      loading: false,
+      data: params
+    }).then(response => {
+      const _response = new ActivityModel.Activity().map(response)
+      resolve(_response)
+    })
+  })
+}
+
+/**
+ * 获取单品立减活动列表
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getSingleCutActivityList(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/promotion/minus',
       method: 'get',
       loading: false,
       params
@@ -26,88 +128,133 @@ export function getActivityList(params) {
 }
 
 /**
- * 删除活动模型
+ * 删除单品立减活动
  * @param ids
  * @param params
  * @returns {Promise<any>}
- * @constructor
  */
-export function deleteActivity(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+export function deleteSingleCutActivity(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/${ids}`,
+      url: `/promotion/minus/${ids}`,
       method: 'delete',
       loading: false,
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
 /**
- * 新增活动
- * @param ids
+ * 新增单品立减活动
  * @param params
  * @returns {Promise<any>}
- * @constructor
  */
-export function addActivity(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+export function addSingleCutActivity(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/increase',
+      url: '/promotion/minus',
       method: 'post',
       loading: false,
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
 /**
- * 保存活动 更新
+ * 修改单品立减活动
  * @param ids
  * @param params
  * @returns {Promise<any>}
- * @constructor
  */
-export function saveActivity(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+export function saveSingleCutActivity(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/reserve/${ids}`,
-      method: 'post',
+      url: `/promotion/minus/${ids}`,
+      method: 'put',
       loading: false,
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
 /**
- * 获取活动详情
+ * 获取第二件半价活动列表
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getSecondHalfActivityList(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/promotion/half-prices',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = response
+      _response.data = new ActivityModel.Activity().map(response.data)
+      resolve(_response)
+    })
+  })
+}
+
+/**
+ * 删除第二件半价活动
  * @param ids
  * @param params
  * @returns {Promise<any>}
  */
-export function getActivityDetails(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+export function deleteSeconedHalfActivity(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/activitys/reserve/${ids}`,
-      method: 'post',
+      url: `/promotion/half-prices/${ids}`,
+      method: 'delete',
       loading: false,
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
+  })
+}
+
+/**
+ * 新增第二件半价活动
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function addSeconedHalfActivity(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/promotion/half-prices',
+      method: 'post',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 修改第二件半价活动
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function saveSeconedHalfActivity(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/promotion/half-prices/${ids}`,
+      method: 'put',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
   })
 }
