@@ -93,8 +93,6 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          console.log(error)
         })
       },
 

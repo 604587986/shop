@@ -119,7 +119,6 @@
 
         /** 商品选择器列表api*/
         goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
-        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
@@ -135,19 +134,14 @@
         API_limitTime.getLimitTimeActivityDetails(this.activityID, {}).then(response => {
           this.loading = false
           this.activityData = response.data
-        }).catch(error => {
-          console.log(error)
         })
       },
 
       /** 确定报名 */
       handleSignUp() {
-        API_limitTime.signUpLimitTimeActivity(this.activityID, this.signForm).then(response => {
+        API_limitTime.signUpLimitTimeActivity(this.signForm).then(response => {
           this.$message.success('报名成功')
           this.$router.push({ path: '/promotions/activity-goods-data' })
-        }).catch(error => {
-          console.log(error)
-          this.$message.error('报名失败，请稍后重试！')
         })
       },
 
