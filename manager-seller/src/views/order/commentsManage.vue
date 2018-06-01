@@ -94,6 +94,9 @@
           </td>
         </tr>
         </tbody>
+        <div v-if="tableData.length === 0 " class="empty-block">
+          暂无数据
+        </div>
       </table>
     </div>
     <el-pagination
@@ -155,10 +158,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 高级搜索数据 */
         advancedForm: {
@@ -211,7 +214,6 @@
       window.onresize = this.countTableHeight
     },
     methods: {
-
       /** 计算高度 */
       countTableHeight() {
         this.tableHeight = (document.body.clientHeight - 54 - 35 - 50)
@@ -278,9 +280,6 @@
         API_comment.replyComment(this.commentForm).then(response => {
           this.replyCommentShow = false
           this.$message.success('保存成功')
-        }).catch(error => {
-          this.$message.error('保存失败，请稍后再试！')
-          console.log(error)
         })
       }
     }
@@ -300,6 +299,22 @@
 
   .toolbar-search {
     margin-right: 10px;
+  }
+
+  /*暂无数据时的样式*/
+  /deep/ .el-table__empty-block {
+    display: none;
+  }
+
+  .empty-block {
+    position: relative;
+    min-height: 60px;
+    line-height: 60px;
+    text-align: center;
+    width: 200%;
+    height: 100%;
+    font-size: 14px;
+    color: #606266;
   }
 
   /*表格信息*/

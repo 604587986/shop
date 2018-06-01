@@ -13,7 +13,7 @@ import CommentModel from '@/models/CommentModel'
 export function getCommentList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/order/comment/list',
+      url: '/member/comments',
       method: 'get',
       loading: false,
       params
@@ -21,40 +21,7 @@ export function getCommentList(params) {
       const _response = response
       _response.data = new CommentModel().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
-  })
-}
-
-/**
- * 获取评论详情
- * @param id
- * @returns {Promise<any>}
- */
-export function getCommentDetail(id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shop/admin/comments/detail.do',
-      method: 'get',
-      params: { commentId: id }
-    }).then(response => resolve(response)).catch(error => console.log(error))
-  })
-}
-
-/**
- * 删除评论
- * @param ids
- * @returns {Promise<any>}
- */
-export function deleteComment(ids) {
-  if (!Array.isArray(ids)) ids = [ids]
-  const _formData = new FormData()
-  ids.forEach(item => _formData.append('comment_id', item))
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shop/admin/comments/delete.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+    })
   })
 }
 
@@ -63,14 +30,12 @@ export function deleteComment(ids) {
  * @param params
  * @returns {Promise<any>}
  */
-export function replyComment(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
+export function replyComment(id, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/order/comment/reply',
+      url: `/member/comments/${id}/reply`,
       method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+      data: params
+    }).then(response => resolve(response))
   })
 }

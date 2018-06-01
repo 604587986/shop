@@ -248,6 +248,7 @@
     padding: 0 20px;
   }
 
+  /*暂无数据时的样式*/
   /deep/ .el-table__empty-block {
     display: none;
   }
