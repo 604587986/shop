@@ -5,6 +5,7 @@
       placeholder="请选择"
       @change="handleShopChanged"
       style="width: 150px"
+      v-bind="$attrs"
     >
       <el-option label="全平台" :value="0"/>
       <el-option
@@ -28,9 +29,7 @@
       }
     },
     created() {
-      API_Shop.getShopList().then(response => {
-        this.shopList = response.data
-      }).catch(error => console.log(error))
+      API_Shop.getShopList().then(response => (this.shopList = response.data))
     },
     methods: {
       handleShopChanged() {

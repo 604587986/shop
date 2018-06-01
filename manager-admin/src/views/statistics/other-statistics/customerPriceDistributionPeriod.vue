@@ -8,7 +8,7 @@
 
   export default {
     name: 'customerPriceDistributionPeriod',
-    props: ['params', 'curTab', 'change_flag'],
+    props: ['params', 'curTab'],
     data() {
       return {
         loading: false
@@ -20,7 +20,11 @@
       })
     },
     watch: {
-      'change_flag': 'GET_CustomerPriceDistributionPeriod'
+      curTab: 'GET_CustomerPriceDistributionPeriod',
+      params: {
+        handler: 'GET_CustomerPriceDistributionPeriod',
+        deep: true
+      }
     },
     methods: {
       GET_CustomerPriceDistributionPeriod() {
@@ -28,30 +32,21 @@
         this.loading = true
         API_Statistics.getBuyTimeDistribution(this.params).then(response => {
           this.loading = false
-          const data = response.data.sort((x, y) => x.num < y.num)
-          const _data = data.map(item => item.num)
-          const _hour = data.map(item => item.hour_num)
+          const { data, name, localName } = response.series
+          const { xAxis } = response
           this.echarts.setOption(echartsOptions({
-            titleText: '购买时段分布图',
+            titleText: '购买时段分布',
             tooltipFormatter: function(params) {
               params = params[0]
-              const hour = _hour[params.dataIndex]
-              return `时段：${hour}<br/>${params.seriesName}：${params.value}`
+              return `时段：${xAxis[params.dataIndex]}点<br/>${params.marker}${name}：${params.value}`
             },
-            xAxisData: _hour,
-            seriesName: '下单量',
-            seriesData: _data
+            xAxisData: xAxis,
+            seriesName: name,
+            seriesData: data
           }))
           this.echarts.resize()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

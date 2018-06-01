@@ -1,38 +1,49 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading">
     <el-card>
       <div slot="header" class="chart-header">
-        <div class="chart-header-item">
-          <span>订单周期：</span>
-          <en-year-month-picker @changed="handleYearMonthChanged" :optional="false"/>
+        <div slot="header" class="chart-header">
+          <div class="chart-header-item">
+            <span>商品分类</span>
+            <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+          </div>
+          <div class="chart-header-item">
+            <span>查询周期：</span>
+            <en-year-month-picker @changed="handleYearMonthChanged"/>
+          </div>
+          <div class="chart-header-item">
+            <span>店铺：</span>
+            <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
+          </div>
         </div>
+      </div>
+      <div class="total-box">
+        销售收入总览：
+        <span>收款金额: {{ MixinFormatPrice('', '', totalData.receiveMoney || 0) }}</span>
+        <span>退款金额: {{ MixinFormatPrice('', '', totalData.refundMoney || 0) }}</span>
+        <span>实收金额: {{ MixinFormatPrice('', '', totalData.realMoney || 0) }}</span>
       </div>
       <en-tabel-layout
         :toolbar="false"
-        :pagination="true"
-        :tableData="tableData"
-        :loading="loading"
+        :tableData="tableData.data"
+        border
       >
         <template slot="table-columns">
-          <el-table-column prop="name" label="商品名称"/>
-          <el-table-column prop="t_num" label="商品数量" width="100"/>
-          <el-table-column label="商品单价" width="150">
-            <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
-          </el-table-column>
-          <el-table-column label="订单金额" width="150">
-            <template slot-scope="scope">{{ scope.row.t_price | unitPrice('￥') }}</template>
-          </el-table-column>
+          <el-table-column prop="goods_name" label="商品名称"/>
+          <el-table-column prop="price" :formatter="MixinFormatPrice" label="商品单价"/>
+          <el-table-column prop="goods_num" label="商品数量" width="100"/>
+          <el-table-column prop="total" :formatter="MixinFormatPrice" label="订单金额"/>
         </template>
         <el-pagination
+          v-if="tableData"
           slot="pagination"
-          v-if="pageData"
-          @size-change="handlePageSizeChange"
-          @current-change="handlePageCurrentChange"
-          :current-page="pageData.page_no"
+          @size-change="(page_size) => { params.page_size = page_size }"
+          @current-change="(page_no) => { params.page_no = page_no }"
+          :current-page="params.page_no"
           :page-sizes="[10, 20, 50, 100]"
-          :page-size="pageData.page_size"
+          :page-size="params.page_size"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="pageData.data_total">
+          :total="tableData.data_total">
         </el-pagination>
       </en-tabel-layout>
     </el-card>
@@ -48,58 +59,51 @@
       return {
         /** 列表loading状态 */
         loading: false,
-
         /** 列表参数 */
         params: {
           page_no: 1,
           page_size: 10,
           year: '',
-          month: ''
+          month: '',
+          start_time: '',
+          end_time: '',
+          circle: 'MONTH',
+          order_status: 99,
+          categroy: 0,
+          seller_id: 0
         },
-
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        tableData: '',
+        /** 总览 */
+        totalData: ''
       }
     },
-    created() {},
+    watch: {
+      params: {
+        handler: 'GET_SalesRevenueStatistics',
+        deep: true
+      }
+    },
     methods: {
-      /** 分页大小发生改变 */
-      handlePageSizeChange(size) {
-        this.params.page_size = size
-        this.GET_SalesRevenueStatisticsData()
-      },
-
-      /** 分页页数发生改变 */
-      handlePageCurrentChange(page) {
-        this.params.page_no = page
-        this.GET_SalesRevenueStatisticsData()
-      },
-
       /** 年月发生改变 */
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.GET_SalesRevenueStatisticsData()
+        this.params.circle = object.type
       },
 
       /** 获取销售收入统计 */
-      GET_SalesRevenueStatisticsData() {
+      GET_SalesRevenueStatistics() {
         this.loading = true
-        API_Statistics.getSalesRevenueStatistics(this.params).then(response => {
+        Promise.all([
+          API_Statistics.getSalesRevenueStatisticsPage(this.params),
+          API_Statistics.getSalesRevenueStatisticsTotal(this.params)
+        ]).then(responses => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = responses[0]
+          this.totalData = responses[1]
+          // Andste_TODO 2018/5/31: 返回参数不规范
+        }).catch(() => { this.loading = false })
       }
     }
   }
@@ -116,5 +120,9 @@
   .chart-header-item {
     display: inline-block;
     margin-right: 30px;
+  }
+  .total-box {
+    padding: 10px;
+    span { margin-left: 15px }
   }
 </style>

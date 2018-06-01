@@ -4,15 +4,15 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker :clearable="true" @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
-          <span>订单周期：</span>
-          <en-year-month-picker @changed="yearMonthChanged"/>
+          <span>查询周期：</span>
+          <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop.shop_id }"/>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">
@@ -28,14 +28,14 @@
 </template>
 
 <script>
-  import hotGoodsPrice from './hotGoodsPrice'
-  import hotGoodsNum from './hotGoodsNum'
+  import HotGoodsPrice from './hotGoodsPrice'
+  import HotGoodsNum from './hotGoodsNum'
 
   export default {
     name: 'hotGoods',
     components: {
-      HotGoodsPrice: hotGoodsPrice,
-      HotGoodsNum: hotGoodsNum
+      HotGoodsPrice,
+      HotGoodsNum
     },
     data() {
       return {
@@ -51,7 +51,7 @@
     },
     methods: {
       /** 年月份发生变化 */
-      yearMonthChanged(object) {
+      handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
         this.params.circle = object.type

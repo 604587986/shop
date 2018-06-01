@@ -4,11 +4,11 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker :clearable="true" @changed="(category) => { params.category = category.category_id || 0 }"/>
+          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
-          <span>订单周期：</span>
-          <en-year-month-picker @changed="yearMonthChanged"/>
+          <span>查询周期：</span>
+          <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
@@ -72,7 +72,7 @@
     },
     methods: {
       /** 年月份发生变化 */
-      yearMonthChanged(object) {
+      handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
         this.params.circle = object.type

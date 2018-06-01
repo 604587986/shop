@@ -3,7 +3,7 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
-          <span>订单周期：</span>
+          <span>查询周期：</span>
           <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
@@ -47,7 +47,7 @@
       handleYearMonthChanged(object) {
         this.params.start_date = object.start_time
         this.params.end_date = object.end_time
-        this.params.type = object.type === 'month' ? 0 : 1
+        this.params.circle = object.type === 'month' ? 0 : 1
         this.changed_flag++
       },
       /** 店铺发生改变 */

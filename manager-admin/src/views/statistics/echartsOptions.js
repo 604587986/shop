@@ -1,11 +1,5 @@
 /**
  * echarts基本配置项
- * options.color
- * options.titleText
- * options.tooltipFormatter
- * options.xAxisData
- * options.seriesName
- * options.seriesData
  */
 
 export default function(options) {
@@ -14,12 +8,13 @@ export default function(options) {
     color: options.color || ['#3398DB'],
     title: {
       x: 'center',
-      text: options.titleText || '排行TOP10'
+      text: options.titleText || ''
     },
+    legend: options.legend || null,
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      formatter: options.tooltipFormatter
+      formatter: options.tooltipFormatter || null
     },
     grid: {
       left: '3%',
@@ -27,15 +22,20 @@ export default function(options) {
       bottom: '3%',
       containLabel: true
     },
-    xAxis: [
+    xAxis: options.xAxis || [
       {
         type: 'category',
-        data: options.xAxisData || ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+        data: options.xAxisData || [],
         axisTick: { alignWithLabel: true }
       }
     ],
-    yAxis: [{ type: 'value' }],
-    series: [
+    yAxis: options.yAxis || [
+      {
+        type: options.yAxisType || 'value',
+        data: options.yAxisData || []
+      }
+    ],
+    series: options.series || [
       {
         name: options.seriesName || '数量',
         type: options.seriesType || 'bar',

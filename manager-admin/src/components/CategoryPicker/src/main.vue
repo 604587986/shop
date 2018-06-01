@@ -3,11 +3,10 @@
     :options="options"
     change-on-select
     @change="handleItemChange"
-    :clearable="clearable"
     :props="props"
     separator="/"
-    clearable
     size="medium"
+    v-bind="$attrs"
   ></el-cascader>
 </template>
 
@@ -19,11 +18,6 @@
       maxLevel: {
         type: Number,
         default: 4
-      },
-      /** 是否可以清空 */
-      clearable: {
-        type: Boolean,
-        default: false
       }
     },
     data() {

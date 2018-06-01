@@ -16,7 +16,7 @@
             <el-input v-model="editMemberForm.nickname" :maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="地区" class="form-item-region">
-            <en-address-select :default="defaultRegion" @changed="(object) => { editMemberForm.region = object.last_id }"/>
+            <en-region-picker :default="defaultRegion" @changed="(object) => { editMemberForm.region = object.last_id }"/>
           </el-form-item>
           <el-form-item label="手机" prop="mobile" :maxlength="11">
             <el-input v-model="editMemberForm.mobile"></el-input>
@@ -136,14 +136,11 @@
 </template>
 
 <script>
-  import { AddressSelect } from '@/plugins/selector/vue'
   import * as API_Member from '@/api/member'
   import { RegExp } from '@/framework'
+
   export default {
     name: 'memberEdit',
-    components: {
-      [AddressSelect.name]: AddressSelect
-    },
     data() {
       return {
         member_id: this.$route.params.id,
@@ -221,7 +218,9 @@
         API_Member.getMemberDetail(this.member_id).then(response => {
           response.birthday *= 1000
           this.editMemberForm = response
-          this.defaultRegion = [response.province_id, response.city_id, response.county_id || -1, response.town_id || -1]
+          if (response.province_id) {
+            this.defaultRegion = [response.province_id, response.city_id, response.county_id || -1, response.town_id || -1]
+          }
         })
       }
     }

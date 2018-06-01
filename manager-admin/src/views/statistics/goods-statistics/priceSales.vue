@@ -4,11 +4,11 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker :clearable="true" @changed="categoryChanged"/>
+          <en-category-picker clearable @changed="(categroy) => { params.categroy = categroy.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
           <span>销售周期：</span>
-          <en-year-month-picker @changed="yearMonthChanged"/>
+          <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
@@ -57,14 +57,10 @@
     },
     methods: {
       /** 年月份发生变化 */
-      yearMonthChanged(object) {
+      handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
         this.params.circle = object.type
-      },
-      /** 商品分类发生改变 */
-      categoryChanged(data) {
-        this.params.categroy = data.category_id || 0
       },
       /** 价格区间发生改变 */
       handleRriceRangeChanged(range) {

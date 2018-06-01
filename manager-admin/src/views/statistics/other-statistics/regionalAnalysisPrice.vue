@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div id="regional-analysis-price-chart" style="height: 600px"></div>
-  </div>
+  <div id="regional-analysis-price-chart" v-loading="loading" style="height: 600px"></div>
 </template>
 
 <script>
@@ -10,62 +8,43 @@
 
   export default {
     name: 'regionalAnalysis',
-    props: ['params', 'cur_tab', 'changed_flag'],
+    props: ['params', 'curTab'],
     data() {
       return {
         /** 列表loading状态 */
-        loading: false,
-
-        /** 列表参数 */
-        table_params: {
-          page_no: 1,
-          page_size: 10
-        },
-
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        loading: false
       }
     },
     watch: {
-      'changed_flag': 'GET_RegionalAnalysisPrice',
-      'cur_tab': 'GET_RegionalAnalysisPrice'
+      curTab: 'GET_RegionalAnalysisPrice',
+      params: {
+        handler: 'GET_RegionalAnalysisPrice',
+        deep: true
+      }
     },
     mounted() {
       this.$nextTick(() => {
         this.echarts = this.$echarts.init(document.getElementById('regional-analysis-price-chart'))
-        this.GET_RegionalAnalysisPrice()
       })
     },
     methods: {
       /** 获取下单会员数据 */
       GET_RegionalAnalysisPrice() {
-        if (this.cur_tab !== 'price' || this.loading) return
+        if (this.curTab !== 'price' || this.loading) return
         this.loading = true
-        const params = {
-          ...this.params,
-          type: 3
-        }
-        API_Statistics.getRegionAnalysis(params).then(response => {
+        API_Statistics.getRegionalAnalysisPrice(this.params).then(response => {
           this.loading = false
-          const _data = response.message
+          const { data, name } = response
+          const _data = data.map((item, index) => ({ name: name[index], value: data[index] }))
           this.echarts.setOption(echartsOptionsMap({
             titleText: '下单金额分布',
             seriesName: '下单金额',
-            seriesData: _data
+            seriesData: _data,
+            visualMapMax: Math.max(...data)
           }))
           this.echarts.resize()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

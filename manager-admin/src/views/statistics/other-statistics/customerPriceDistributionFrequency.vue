@@ -3,12 +3,14 @@
     <en-tabel-layout
       :toolbar="false"
       :pagination="false"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
+      border
     >
       <template slot="table-columns">
-        <el-table-column prop="buy_num" label="购买频次"/>
+        <el-table-column prop="order_num" label="购买频次"/>
         <el-table-column prop="member_num" label="下单会员数量"/>
+        <el-table-column prop="percent" label="人数占比"/>
       </template>
     </en-tabel-layout>
   </div>
@@ -19,33 +21,26 @@
 
   export default {
     name: 'customerPriceDistributionFrequency',
-    props: ['params', 'curTab', 'change_flag'],
+    props: ['params', 'curTab'],
     data() {
       return {
         loading: false,
         /** 列表数据 */
-        tableData: null
+        tableData: ''
       }
     },
     watch: {
-      'change_flag': 'GET_CustomerPriceDistributionFrequency'
+      curTab: 'GET_CustomerPriceDistributionFrequency'
     },
     methods: {
       GET_CustomerPriceDistributionFrequency() {
         if (this.curTab !== 'frequency' || this.loading) return
         this.loading = true
-        API_Statistics.getBuyFrequency(this.params).then(response => {
+        API_Statistics.getBuyFrequency().then(response => {
           this.loading = false
-          this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

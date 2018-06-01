@@ -7,59 +7,80 @@ import request from '@/utils/request'
 /** 会员分析 */
 
 /**
- * 会员下单量
+ * 获取会员下单量
  * @param params
- * @returns {Promise<any>}
  */
-export function memberOrderNum(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  _formData.append('store_id', params.shop_id)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-order-num-top.do',
-      method: 'post',
-      loading: false,
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getMemberOrderNum(params) {
+  return request({
+    url: 'statistics/member/order/quantity',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
- * 会员订单商品量
+ * 获取会员下单量表格数据
  * @param params
- * @returns {Promise<any>}
  */
-export function memberGoodsNum(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  _formData.append('store_id', params.shop_id)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-goods-num-top.do',
-      method: 'post',
-      loading: false,
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getMemberOrderNumPage(params) {
+  return request({
+    url: 'statistics/member/order/quantity/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
- * 会员订单金额
+ * 获取会员下单商品数
  * @param params
- * @returns {Promise<any>}
  */
-export function memberPriceNum(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  _formData.append('store_id', params.shop_id)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-order-price-top.do',
-      method: 'post',
-      loading: false,
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getMemberGoodsNum(params) {
+  return request({
+    url: 'statistics/member/order/goods/num',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取会员下单商品数表格数据
+ * @param params
+ */
+export function getMemberGoodsNumPage(params) {
+  return request({
+    url: 'statistics/member/order/goods/num/page',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取会员下单金额
+ * @param params
+ */
+export function getMemberPrice(params) {
+  return request({
+    url: 'statistics/member/order/money',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取会员下单金额表格数据
+ * @param params
+ */
+export function getMemberPricePage(params) {
+  return request({
+    url: 'statistics/member/order/money/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -177,66 +198,52 @@ export function getGoodsCollectTopPage(params) {
 /**
  * 获取行业规模下单量
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScaleOrder(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/order/quantity',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取行业规模下单商品数量
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScaleGoods(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/goods/num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取行业规模下单金额
  * @param params
- * @returns {Promise<any>}
  */
 export function getIndustryScalePrice(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/industry-order.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/order/money',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取概括总览数据
  * @param params
- * @returns {Promise<any>}
  */
 export function getGeneralityOverviewData(params) {
-  params.category_id = params.cat_id
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/industryStatistics/collect-data.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/industry/overview',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -292,160 +299,174 @@ export function getTrafficAnalysisGoodsData(params) {
 }
 
 /** 其它统计 */
+
 /**
- * 下单金额
+ * 订单统计 - 下单金额
  * @param params
- * @returns {Promise<any>}
  */
 export function getOrderStatisticsPrice(params) {
-  params.store_id = params.shop_id
-  params.cycle_type = params.type
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/salesStatis/get-sale-money-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/order/order/money',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
- * 下单金额表格数据
+ * 订单统计 - 下单量
  * @param params
- * @returns {Promise<any>}
- */
-export function getOrderStatisticsPrideTable(params) {
-  params.store_id = params.shop_id
-  params.ststus = params.order_status
-  params.cycle_type = params.type
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/salesStatis/list-json.do',
-      method: 'post',
-      loading: false,
-      params
-    }).then(resposne => resolve(resposne)).catch(error => reject(error))
-  })
-}
-
-/**
- * 下单量
- * @param params
- * @returns {Promise<any>}
  */
 export function getOrderStatisticsOrder(params) {
-  params.store_id = params.shop_id
-  params.cycle_type = params.type
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/salesStatis/get-sale-num-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/order/order/num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
- * 获取销售收入统计
+ * 订单统计 - 下单量表格数据
  * @param params
  * @returns {Promise<any>}
  */
-export function getSalesRevenueStatistics(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/salesStatis/sale-income-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getOrderStatisticsPage(params) {
+  return request({
+    url: 'statistics/order/order/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
- * 获取区域分析
+ * 获取销售收入统计表格数据
  * @param params
- * @returns {Promise<any>}
  */
-export function getRegionAnalysis(params) {
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/regionOrderStatistics/region-type-list-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getSalesRevenueStatisticsPage(params) {
+  return request({
+    url: 'statistics/order/sales/money',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取销售收入总览
+ * @param params
+ */
+export function getSalesRevenueStatisticsTotal(params) {
+  return request({
+    url: 'statistics/order/sales/total',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取区域分析表格
+ * @param params
+ */
+export function getRegionalAnalysisTable(params) {
+  return request({
+    url: 'statistics/order/region/form',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取区域分析下单会员数
+ * @param params
+ */
+export function getRegionalAnalysisMember(params) {
+  return request({
+    url: 'statistics/order/region/member',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取区域分析下单金额
+ * @param params
+ */
+export function getRegionalAnalysisPrice(params) {
+  return request({
+    url: 'statistics/order/region/money',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取区域分析下单量
+ * @param params
+ */
+export function getRegionalAnalysisNum(params) {
+  return request({
+    url: 'statistics/order/region/num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取客单价分布
  * @param params
- * @returns {Promise<any>}
  */
 export function getOrderPriceDistribution(params) {
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-order-price-dis.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/order/unit/price',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取购买时段分布
  * @param params
- * @returns {Promise<any>}
  */
 export function getBuyTimeDistribution(params) {
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-buy-time-dis.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => console.log(error))
+  return request({
+    url: 'statistics/order/unit/time',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取购买频次数据
  * @param params
- * @returns {Promise<any>}
  */
 export function getBuyFrequency(params) {
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-buy-fre.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'statistics/order/unit/num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取退款统计
  * @param params
- * @returns {Promise<any>}
  */
-export function getRefundStatisticsData(params) {
-  params.cycle_type = params.type
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/orderReturnedStatistics/returned-statistics-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getRefundStatistics(params) {
+  return request({
+    url: 'statistics/order/return/money',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

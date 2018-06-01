@@ -80,7 +80,7 @@
                       <label for="password">
                         <i class="iconfont ea-icon-password"></i>
                       </label>
-                      <input id="password" v-model="accountForm.password" placeholder="请输入密码" maxlength="20">
+                      <input id="password" v-model="accountForm.password" type="password" placeholder="请输入密码" maxlength="20">
                     </div>
                     <div class="item">
                       <label for="validcode">

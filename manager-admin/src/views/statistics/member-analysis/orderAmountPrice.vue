@@ -1,16 +1,15 @@
 <template>
-  <div>
-    <div v-loading="loading" id="price-chart" style="height: 300px"></div>
+  <div v-loading="loading">
+    <div id="price-chart" style="height: 300px"></div>
     <en-tabel-layout
       :toolbar="false"
       :pagination="false"
-      :tableData="tableData"
+      :tableData="tableData.data"
     >
       <template slot="table-columns">
         <el-table-column type="index" width="150" label="排名"/>
-        <el-table-column prop="nickname" label="会员昵称"/>
-        <el-table-column prop="name" label="会员用户名"/>
-        <el-table-column prop="price" :formatter="priceFormatter" label="下单总金额"/>
+        <el-table-column prop="membername" label="会员昵称"/>
+        <el-table-column prop="totalmoney" :formatter="MixinFormatPrice" label="下单金额"/>
       </template>
     </en-tabel-layout>
   </div>
@@ -18,7 +17,6 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { Foundation } from '@/framework'
   import echartsOptions from '../echartsOptions'
 
   export default {
@@ -28,7 +26,7 @@
       return {
         loading: false,
         /** 列表数据 */
-        tableData: null
+        tableData: ''
       }
     },
     mounted() {
@@ -37,47 +35,38 @@
       })
     },
     watch: {
-      curTab() {
-        this.GET_MemberAmountPrice()
-      },
-      'params.end_date': 'GET_MemberAmountPrice',
-      'params.shop_id': 'GET_MemberAmountPrice'
+      curTab: 'GET_MemberAmountPrice',
+      params: {
+        handler: 'GET_MemberAmountPrice',
+        deep: true
+      }
     },
     methods: {
-      /** 金额格式化 */
-      priceFormatter(row) {
-        return `￥${Foundation.formatPrice(row.price)}`
-      },
       /** 获取会员下单量 */
       GET_MemberAmountPrice() {
         if (this.curTab !== 'price' || this.loading) return
         this.loading = true
-        API_Statistics.memberPriceNum(this.params).then(response => {
+        Promise.all([
+          API_Statistics.getMemberPrice(this.params),
+          API_Statistics.getMemberPricePage(this.params)
+        ]).then(responses => {
           this.loading = false
-          const data = response.data.sort((x, y) => x.price < y.price)
-          this.tableData = data
-          const _data = data.map(item => item.price)
-          const _name = data.map(item => item.name)
+          this.tableData = responses[1]
+          const { data, name, localName } = responses[0].series
+          const { xAxis } = responses[0]
           this.echarts.setOption(echartsOptions({
-            titleText: '买家排行TOP10',
+            titleText: '会员下单金额',
             tooltipFormatter: function(params) {
               params = params[0]
-              const member_name = _name[params.dataIndex]
-              return `买家：${member_name}<br/>${params.seriesName}：￥${Foundation.formatPrice(params.value)}`
+              return `会员名称：${localName[params.dataIndex]}<br/>${params.marker}${params.seriesName}：${params.value}`
             },
-            seriesName: '订单总金额',
-            seriesData: _data
+            seriesName: name,
+            seriesData: data,
+            xAxisData: xAxis
           }))
           this.echarts.resize()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
