@@ -4,8 +4,6 @@
 
 import request from '@/utils/request'
 
-export const Api = 'http://yiqisi.s1.natapp.cc/base-api/regions/@id'
-
 /**
  * 添加地区
  * @param params

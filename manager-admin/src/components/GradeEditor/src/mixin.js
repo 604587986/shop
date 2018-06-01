@@ -30,7 +30,7 @@ export default {
      */
     api: {
       type: String,
-      default: 'http://localhost:9090/javashop/shop/admin/region/list-children.do?parentid=@id'
+      required: true
     },
     /**
      * 主要参数的参数名
