@@ -1,9 +1,7 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -12,6 +10,7 @@
         </div>
       </div>
       <template slot="table-columns">
+        <el-table-column prop="id" label="发票ID"/>
         <el-table-column prop="content" label="发票内容"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -27,15 +26,15 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
   </div>
@@ -58,10 +57,7 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        tableData: ''
       }
     },
     mounted() {
@@ -91,7 +87,7 @@
           API_Receipt.addReceiptContent(value).then(response => {
             this.$message.success('添加成功！')
             this.GET_ReceiptContentList()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -108,7 +104,7 @@
           API_Receipt.editReceiptContent(row.id, value).then(response => {
             this.$message.success('修改成功！')
             this.GET_ReceiptContentList()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -118,7 +114,7 @@
           API_Receipt.deleteReceiptContent(row.id).then(response => {
             this.$message.success('删除成功！')
             this.GET_ReceiptContentList()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -127,16 +123,8 @@
         this.loading = true
         API_Receipt.getReceiptContentList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
