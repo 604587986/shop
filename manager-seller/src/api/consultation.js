@@ -13,7 +13,7 @@ import ConsultationModel from '@/models/ConsultationModel'
 export function getConsultationList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/consultation/list',
+      url: '/member/asks',
       method: 'get',
       loading: false,
       params
@@ -21,6 +21,26 @@ export function getConsultationList(params) {
       const _resposne = response
       _resposne.data = new ConsultationModel().map(response.data)
       resolve(_resposne)
-    }).catch(error => reject(error))
+    })
+  })
+}
+
+/**
+ * 回复咨询
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function replyConsultationList(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/member/asks/${id}/reply`,
+      method: 'put',
+      loading: false,
+      headers: { 'Content-Type': 'application/json' },
+      data: new ConsultationModel().params(params)
+    }).then(response => {
+      resolve(response)
+    })
   })
 }

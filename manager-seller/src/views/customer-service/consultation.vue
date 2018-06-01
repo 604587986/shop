@@ -4,7 +4,6 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns"></div>
@@ -40,7 +39,7 @@
       </div>
     </en-tabel-layout>
     <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
-      <table class="my-table">
+      <table class="my-table" v-loading="loading">
         <thead>
         <tr class="bg-order">
           <th>咨询</th>
@@ -48,30 +47,33 @@
         </tr>
         </thead>
         <tbody v-for="item in tableData">
-        <tr class="bg-order">
-          <td colspan="2" class="base-info">
-            <!--商品名称-->
-            <a href="#" class="goods-name">{{ item.goods_name }}</a>
-            咨询用户：<span class="member-name">{{ item.member_name}} </span>
-            咨询时间：<span>{{ item.consultation_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
-          </td>
-        </tr>
-        <tr>
-          <!--咨询-->
-          <td>
-            <h4>咨询问题：</h4>
-            <p>{{ item.consultation_content }}</p>
-          </td>
-          <!--操作-->
-          <td class="opera-btn" v-if="item.is_reply === 1">
-            <h4>回复咨询：</h4>
-            <p>{{ item.reply_content }}</p>
-          </td>
-          <td class="opera-btn" v-if="item.is_reply === 2">
-            <el-button size="mini" type="primary" @click="handleReply(item)">回复</el-button>
-          </td>
-        </tr>
+          <tr class="bg-order">
+            <td colspan="2" class="base-info">
+              <!--商品名称-->
+              <a href="#" class="goods-name">{{ item.goods_name }}</a>
+              咨询用户：<span class="member-name">{{ item.member_name}} </span>
+              咨询时间：<span>{{ item.consultation_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+            </td>
+          </tr>
+          <tr>
+            <!--咨询-->
+            <td>
+              <h4>咨询问题：</h4>
+              <p>{{ item.consultation_content }}</p>
+            </td>
+            <!--操作-->
+            <td class="opera-btn" v-if="item.is_reply === 1">
+              <h4>回复咨询：</h4>
+              <p>{{ item.reply_content }}</p>
+            </td>
+            <td class="opera-btn" v-if="item.is_reply === 2">
+              <el-button size="mini" type="primary" @click="handleReply(item)">回复</el-button>
+            </td>
+          </tr>
         </tbody>
+        <div v-if="tableData.length === 0 " class="empty-block">
+          暂无数据
+        </div>
       </table>
     </div>
     <el-pagination
@@ -131,7 +133,7 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
         pageData: null,
@@ -222,7 +224,15 @@
       /** 确认回复 */
       confirmReply() {
         this.$refs['replyForm'].validate((valid) => {
-          // if (valid) { }
+          if (valid) {
+            const _params = {
+              reply_content: this.replyForm.reply_content
+            }
+            API_consultation.replyConsultationList(this.replyForm.ask_id, _params).then(() => {
+              this.$message.success('回复成功')
+              this.GET_ConsultationList()
+            })
+          }
         })
       }
     }
@@ -236,6 +246,21 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
+  }
+
+  /deep/ .el-table__empty-block {
+    display: none;
+  }
+
+  .empty-block {
+    position: relative;
+    min-height: 60px;
+    line-height: 60px;
+    text-align: center;
+    width: 200%;
+    height: 100%;
+    font-size: 14px;
+    color: #606266;
   }
 
   /*表格信息*/

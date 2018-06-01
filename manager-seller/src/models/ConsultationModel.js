@@ -13,34 +13,34 @@ import {
 
 export default class ConsultationModel extends DataModel {
   /** 咨询ID */
-  @ServerName('consultation_id')
+  @ServerName('ask_id')
   consultation_id
 
   /** 咨询内容 */
-  @ServerName('consultation_content')
+  @ServerName('content')
   consultation_content
 
   /** 咨询时间 */
-  @ServerName('consultation_time')
+  @ServerName('create_time')
   consultation_time
 
   /** 商品名称 */
   @ServerName('goods_name')
   goods_name
 
-  /** 会员名称 */
+  /** 会员/卖家名称 */
   @ServerName('member_name')
   member_name
 
   /** 回复状态 */
-  @ServerName('is_reply')
+  @ServerName('reply_status')
   is_reply
 
   /** 审核状态 */
-  @ServerName('auth_status')
+  @ServerName('status')
   auth_status
 
   /** 回复内容 */
-  @ServerName('reply_content')
+  @ServerName('reply')
   reply_content
 }
