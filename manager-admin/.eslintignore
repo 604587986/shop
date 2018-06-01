@@ -3,3 +3,4 @@ config/*.js
 src/assets
 src/plugins
 ui-components
+ui-domain
