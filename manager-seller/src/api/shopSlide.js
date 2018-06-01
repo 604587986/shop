@@ -32,7 +32,7 @@ export function getShopSlideList(params) {
 export function saveShopSlide(params) {
   const _params = params.map(key => {
     return {
-      silde_id: key.shop_banner_id,
+      silde_id: key.shop_banner_id || 0,
       silde_url: key.shop_banner_link,
       img: key.shop_banner_image
     }

@@ -10,18 +10,19 @@
     >
       <template slot="table-columns">
         <el-table-column type="selection"/>
-        <el-table-column label="商品信息" width="1000px" header-align="left">
+        <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
             <div class="goods_info">
-              <img :src="scope.row.thumbnail" class="goods-image"/>
+              <img :src="scope.row.thumbnail || scope.row.goods_image" class="goods-image"/>
               <div class="goodsinfo-txt">
                 <span class="goods_name">{{scope.row.goods_name}}</span>
-                <span class="goods_price">{{ scope.row.price | unitPrice('￥') }}</span>
+                <span class="goods_price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>
+                <span class="goods_price" v-if="scope.row.goods_price">{{ scope.row.goods_price | unitPrice('￥') }}</span>
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="quantity" label="库存"/>
+        <el-table-column prop="buy_count" label="库存"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -88,9 +89,12 @@
         goodsIds: []
       }
     },
-    mounted() {
-      this.params.tag_id = this.$route.params.tag_id
-      this.getTagGoodsList()
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.params.tag_id = vm.$route.params.tag_id
+        vm.getTagGoodsList()
+        next()
+      })
     },
     methods: {
       /**  显示商品选择器*/
@@ -160,6 +164,11 @@
 <style type="text/scss" lang="scss" scoped>
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
+  }
+  /deep/ thead>tr {
+    /deep/ th:nth-child(2) {
+      text-align: left !important;
+    }
   }
 
   .goods_info {

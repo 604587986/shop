@@ -3,9 +3,7 @@
     <en-tabel-layout
       toolbar
       pagination
-      :tableData="tableData"
-      :loading="loading"
-    >
+      :tableData="tableData">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
         </div>
@@ -261,9 +259,6 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       },
 
@@ -315,15 +310,16 @@
     max-height: 800px;
   }
   .my-table {
-    .bg-order {
-      background: #FAFAFA;
-    }
     width: 100%;
+    margin-bottom: 40px;
     background: #ffffff;
     border-collapse: collapse;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
     font-size: 14px;
     font-bold: 700;
+    .bg-order {
+      background: #FAFAFA;
+    }
     thead {
       width: 100%;
       th {
@@ -384,8 +380,8 @@
   .el-pagination {
     text-align: right;
     width: 100%;
-    background: #ffffff;
     height: 40px;
+    background: #ffffff;
     position: absolute;
     bottom: 0;
     right: 0;

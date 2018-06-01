@@ -4,7 +4,6 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
@@ -335,15 +334,16 @@
     max-height: 800px;
   }
   .my-table {
-    .bg-order {
-      background: #FAFAFA;
-    }
     width: 100%;
+    margin-bottom: 40px;
     background: #ffffff;
     border-collapse: collapse;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
     font-size: 14px;
     font-bold: 700;
+    .bg-order {
+      background: #FAFAFA;
+    }
     thead {
       th {
         padding: 20px 0;

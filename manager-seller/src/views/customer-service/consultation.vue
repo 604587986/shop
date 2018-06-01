@@ -250,6 +250,7 @@
       background: #FAFAFA;
     }
     width: 100%;
+    margin-bottom: 40px;
     background: #ffffff;
     border-collapse: collapse;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;

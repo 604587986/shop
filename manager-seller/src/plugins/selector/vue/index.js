@@ -3,7 +3,6 @@ import AreaSelectorDialog from './AreaSelectorDialog'
 // import SkuEditor from './SkuEditor'
 // import SkuRender from './SkuRender'
 // import TextSelectorDialog from './TextSelectorDialog'
-import AddressSelect from './AddressSelect'
 import GoodsCatsEdit from './GoodsCatsEdit'
 import GoodsSelector from './GoodsSelector'
 
@@ -13,7 +12,6 @@ export {
   // SkuRender,
   // TextSelectorDialog,
   AreaSelectorDialog,
-  AddressSelect,
   GoodsCatsEdit,
   GoodsSelector
 }
