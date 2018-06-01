@@ -29,10 +29,11 @@
 <script>
   import * as API_StaticPage from '@/api/staticPage'
   import * as API_Progress from '@/api/progress'
+
   const pageOptions = [
-    { text: '首页', value: 'index' },
-    { text: '商品页', value: 'goods' },
-    { text: '帮助中心', value: 'help' }
+    { text: '首页', value: 'INDEX' },
+    { text: '商品页', value: 'GOODS' },
+    { text: '帮助中心', value: 'HELP' }
   ]
   export default {
     name: 'staticPage',
@@ -41,7 +42,7 @@
         percentage: 0,
         status: '',
         status_text: '',
-        address: 'http://localhost:8080/javashop',
+        address: '',
         checkAll: true,
         checkedPages: pageOptions,
         pages: pageOptions,
@@ -51,18 +52,22 @@
     created() {
       /** 检查是否有静态页生成任务 */
       API_Progress.hasSameTask('page_create').then(response => {
-        if (response.data.has_task === 1) {
+        if (response.message === true) {
           this.status = 'doing'
           this.GET_Progress()
         }
-      }).catch(error => console.log(error))
+      })
+      /** 获取静态页生成地址 */
+      API_StaticPage.getStaticPageAddress().then(response => {
+        this.address = response.message
+      })
     },
     methods: {
       /** 保存静态页地址 */
       handleSaveAddress() {
         API_StaticPage.saveStaticPageAddress(this.address).then(response => {
           this.$message.success('保存成功！')
-        }).catch(error => console.log(error))
+        })
       },
       handleCheckAllChange(val) {
         this.checkedPages = val ? pageOptions : []
@@ -80,23 +85,26 @@
           return false
         }
         this.$confirm('确定要生成静态页吗？', '提示', { type: 'warning' }).then(() => {
-          const params = this.checkedPages.map(item => item.value)
+          const choose = this.checkedPages.map(item => item.value)
+          const params = { choosePages: choose }
           API_StaticPage.createStaticPage(params).then(response => {
+            console.log(response)
             this.GET_Progress()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
       /** 获取生成进度 */
       GET_Progress() {
         API_Progress.getProgressById('page_create').then(response => {
-          const { percentage, status, status_text } = response.data
-          this.percentage = percentage
-          this.status = status
-          this.status_text = status_text
-          if (response.data.status !== 'success') {
-            setTimeout(this.GET_Progress, 1000)
-          }
-        }).catch(error => console.log(error))
+          console.log(response)
+          // const { percentage, status, status_text } = response.data
+          // this.percentage = percentage
+          // this.status = status
+          // this.status_text = status_text
+          // if (response.data.status !== 'success') {
+          //   setTimeout(this.GET_Progress, 1000)
+          // }
+        })
       }
     }
   }
