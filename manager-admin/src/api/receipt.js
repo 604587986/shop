@@ -33,14 +33,13 @@ export function getHistoryReceiptList(params) {
 export function getReceiptContentList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'shop/admin/receipt/list-json.do',
+      url: 'receipt-contents',
       method: 'get',
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ReceiptContentModel().map(response.data)
-      resolve(_response)
+      response.data = new ReceiptContentModel().map(response.data)
+      resolve(response)
     }).catch(error => reject(error))
   })
 }
@@ -48,17 +47,12 @@ export function getReceiptContentList(params) {
 /**
  * 添加发票内容
  * @param content
- * @returns {Promise<any>}
  */
 export function addReceiptContent(content) {
-  const _formData = new FormData()
-  _formData.append('receipt_content', content)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shop/admin/receipt/add-save.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: 'receipt-contents',
+    method: 'post',
+    data: { content }
   })
 }
 
@@ -66,34 +60,22 @@ export function addReceiptContent(content) {
  * 编辑发票内容
  * @param id
  * @param content
- * @returns {Promise<any>}
  */
 export function editReceiptContent(id, content) {
-  const _formData = new FormData()
-  _formData.append('contentid', id)
-  _formData.append('receipt_content', content)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shop/admin/receipt/edit-save.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `receipt-contents/${id}`,
+    method: 'put',
+    data: { content }
   })
 }
 
 /**
  * 删除发票内容
  * @param id
- * @returns {Promise<any>}
  */
 export function deleteReceiptContent(id) {
-  const _formData = new FormData()
-  _formData.append('contentid', id)
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shop/admin/receipt/delete.do',
-      method: 'post',
-      data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+  return request({
+    url: `receipt-contents/${id}`,
+    method: 'delete'
   })
 }

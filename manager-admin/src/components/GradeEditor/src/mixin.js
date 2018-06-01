@@ -4,6 +4,7 @@
  */
 
 import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -258,8 +259,8 @@ export default {
       let parent
       let parentArray
       if (columnIndex !== 0) {
-        parent = parentArray.filter(item => item.$active)[0]
         parentArray = JSON.parse(JSON.stringify(data[columnIndex - 1] || data[columnIndex]))
+        parent = parentArray.filter(item => item.$active)[0]
         parentArray.map(item => {
           needDeleteParams.forEach(key => delete item[key])
           return item

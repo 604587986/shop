@@ -1,10 +1,11 @@
 <template>
   <div>
-    <grade-editor
+    <en-grade-editor
       ref="regionEditor"
       :api="regionApi"
       :btns="btns"
       :maxLevel="4"
+      :params-names="{id: 'id', text: 'local_name'}"
       @add-click="handleAdd"
     />
     <el-dialog
@@ -65,13 +66,7 @@
     methods: {
       /** 编辑地区 */
       handleEdit(region) {
-        region = JSON.parse(JSON.stringify(region))
-        this.regionForm = {
-          region_id: region.id,
-          local_name: region.text,
-          zipcode: region.zipcode,
-          cod: Number(region.cod) || 0
-        }
+        this.regionForm = JSON.parse(JSON.stringify(region))
         this.dialogRegionVisible = true
       },
       /** 删除地区 */
@@ -85,8 +80,9 @@
       },
       /** 添加地区 */
       handleAdd(region, parent) {
+        console.log(region, parent)
         this.regionForm = {
-          p_region_id: parent.id,
+          p_region_id: parent ? parent.id : 0,
           cod: 1
         }
         this.dialogRegionVisible = true

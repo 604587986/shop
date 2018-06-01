@@ -4,7 +4,7 @@
 
 import request from '@/utils/request'
 
-export const Api = 'http://localhost:9090/javashop/shop/admin/region/list-children.do?parentid=@id'
+export const Api = 'http://yiqisi.s1.natapp.cc/base-api/regions/@id'
 
 /**
  * 添加地区
@@ -12,7 +12,7 @@ export const Api = 'http://localhost:9090/javashop/shop/admin/region/list-childr
  */
 export function addRegion(params) {
   return request({
-    url: 'http://localhost:9090/javashop/shop/admin/region/save-add-children.do',
+    url: 'regions',
     method: 'post',
     data: params
   })
@@ -25,8 +25,8 @@ export function addRegion(params) {
  */
 export function editRegion(id, params) {
   return request({
-    url: 'http://localhost:9090/javashop/shop/admin/region/save-edit.do',
-    method: 'post',
+    url: `regions/${id}`,
+    method: 'put',
     data: params
   })
 }
@@ -37,9 +37,8 @@ export function editRegion(id, params) {
  */
 export function deleteRegion(id) {
   return request({
-    url: 'http://localhost:9090/javashop/shop/admin/region/delete.do',
-    method: 'post',
-    data: { region_id: id }
+    url: `regions/${id}`,
+    method: 'delete'
   })
 }
 
