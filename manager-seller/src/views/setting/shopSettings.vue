@@ -7,7 +7,7 @@
       </el-form-item>
       <!--店铺地址-->
       <el-form-item label="店铺地址：" prop="shop_address">
-        <en-region-picker  @change="handleChange"></en-region-picker>
+        <en-region-picker  @changed="handleChange"></en-region-picker>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
@@ -15,7 +15,7 @@
       </el-form-item>
       <!--联系电话-->
       <el-form-item label="联系电话：" prop="link_phone">
-        <el-input v-model.number="shopDataForm.link_phone" style="width: 200px;" auto-complete="off"></el-input>
+        <el-input v-model="shopDataForm.link_phone" style="width: 200px;" auto-complete="off"></el-input>
       </el-form-item>
       <!--QQ-->
       <el-form-item label="QQ：" prop="shop_qq">
@@ -32,12 +32,13 @@
           class="upload-demo"
           key="shop_logo"
           :action="BASE_IMG_URL"
-          :before-upload="handlePreviewLogo"
+          :on-success="uploadSuccessLogo"
           :file-list="fileList_logo"
           ref="fileList_logo"
-          :limit="1"
           list-type="picture">
-          <el-button size="small" type="primary">上传<i class="el-icon-upload el-icon--right"></i></el-button>
+          <el-button size="small" type="primary">
+            上传<i class="el-icon-upload el-icon--right"></i>
+          </el-button>
           <div slot="tip" class="el-upload__tip">此处为您的店铺logo，将显示在店铺Logo栏里。 （请上传200x60规格的图片！）</div>
         </el-upload>
       </el-form-item>
@@ -46,11 +47,10 @@
         <el-upload
           class="upload-demo"
           key="shop_banner"
-          :before-upload="handlePreviewBanner"
+          :on-success="uploadSuccessBanner"
           :action="BASE_IMG_URL"
           :file-list="fileList_banner"
           ref="fileList_banner"
-          :limit="1"
           list-type="picture">
           <el-button size="small" type="primary">上传<i class="el-icon-upload el-icon--right"></i></el-button>
           <div slot="tip" class="el-upload__tip">此处为您的店铺条幅，将显示在移动端。（请上传638x158规格的图片！） </div>
@@ -89,37 +89,13 @@
         /** 店铺信息*/
         shopDataForm: {
           /** 店铺ID 目前使用3*/
-          shop_id: 3,
+          shop_id: 0,
 
           /** 身份证号*/
           legal_id: '',
 
           /** 店铺地址 */
           shop_address: '',
-
-          /** 店铺所在省id */
-          shop_province_id: 1,
-
-          /** 店铺所在市id */
-          shop_city_id: 2,
-
-          /** 店铺所在县id */
-          shop_region_id: 3,
-
-          /** 店铺所在镇id */
-          shop_town_id: 4,
-
-          /** 店铺所在省 */
-          shop_province: '和别生',
-
-          /** 店铺所在市 */
-          shop_city: 'handnashi',
-
-          /** 店铺所在县 */
-          shop_region: 'safdas',
-
-          /** 店铺所在乡/镇 */
-          shop_town: 'gushenzhe',
 
           /** 详细地址*/
           shop_add: '',
@@ -176,6 +152,8 @@
           this.shopDataForm = { ...response.data }
           this.fileList_logo = [{ url: this.shopDataForm.shop_logo }]
           this.fileList_banner = [{ url: this.shopDataForm.shop_banner }]
+          this.areas = [this.shopDataForm.shop_province_id, this.shopDataForm.shop_city_id,
+            this.shopDataForm.shop_region_id || -1, this.shopDataForm.shop_town_id || -1]
         })
       },
 
@@ -186,6 +164,13 @@
             const _params = {
               ...this.shopDataForm
             }
+            if (!_params.legal_id) {
+              _params.legal_id = '130426199304143912'
+            }
+            if (!_params.shop_id) {
+              _params.shop_id = 3
+            }
+
             API_Shop.saveShopSettings(_params).then(response => {
               this.$message.success('保存店铺设置成功')
               this.GET_ShopGradeData()
@@ -196,19 +181,21 @@
 
       /** 操作地区选择器改变时 触发*/
       handleChange(val) {
-        this.selectedArea = val
+        this.shopDataForm.shop_region = val.last_id
       },
 
-      /** 上传logo之前*/
-      handlePreviewLogo() {
-        // this.fileList_logo = []
-        // this.$refs.fileList_logo.clearFiles()
+      /** 上传logo成功以后*/
+      uploadSuccessLogo(response, file, fileList) {
+        this.fileList_logo.shift()
+        this.fileList_logo.push(response)
+        this.shopDataForm.shop_logo = response.url
       },
 
-      /** 上传banner之前*/
-      handlePreviewBanner() {
-        // this.fileList_banner = []
-        // this.$refs.fileList_banner.clearFiles()
+      /** 上传banner成功之后*/
+      uploadSuccessBanner(response, file, fileList) {
+        this.fileList_banner.shift()
+        this.fileList_banner.push(response)
+        this.shopDataForm.shop_banner = response.url
       }
     }
   }
@@ -220,5 +207,8 @@
     border: 1px solid #FAFAFA;
     margin: 15px;
     padding: 10px;
+  }
+  /deep/ .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
+    line-height: 24px;
   }
 </style>

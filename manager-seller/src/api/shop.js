@@ -31,12 +31,12 @@ export function getShopData(params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function saveShopSettings(ids, params) {
+export function saveShopSettings(params) {
   return new Promise((resolve, reject) => {
     request({
       url: '/shops',
       method: 'put',
-      data: new ShopModel().params(params)
+      data: params
     }).then(response => resolve(response))
   })
 }
