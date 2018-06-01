@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
+      <!--满优惠列表-->
       <el-tab-pane label="满优惠列表" name="fullList">
         <en-tabel-layout
           toolbar
@@ -32,7 +33,7 @@
               </template>
             </el-table-column>
             <!--活动类型-->
-            <el-table-column prop="activity_type" label="活动类型"/>
+            <el-table-column prop="activity_type" label="活动类型" :formatter="activityType" />
             <!--活动状态-->
             <el-table-column label="活动状态">
               <template slot-scope="scope">
@@ -57,6 +58,7 @@
           </template>
         </en-tabel-layout>
       </el-tab-pane>
+      <!--新增满优惠-->
       <el-tab-pane label="新增满优惠" name="add">
         <div class="content-goods-publish">
           <el-form
@@ -502,6 +504,11 @@
       this.GET_giftList()
     },
     methods: {
+      /** 活动类型 */
+      activityType(row, column, cellValue) {
+        return row.is_discount === '满优惠'
+        // return row.is_discount === 1 ? '满减' : '满赠'
+      },
 
       /** 搜索事件触发 */
       searchEvent(data) {
@@ -515,61 +522,63 @@
       /** 切换面板 */
       handleToggleClick(tab, event) {
         this.activeName = tab.name
-        if (this.activeName === 'express') {
-          this.GET_FullCutActivityList()
-        } else if (this.activeName === 'add') {
-          this.activityForm = {
-            /** 活动名称/标题*/
-            activity_name: '',
+        switch (this.activeName) {
+          case 'express':
+            this.GET_FullCutActivityList()
+            break
+          case 'add':
+            this.activityForm = {
+              /** 活动名称/标题*/
+              activity_name: '',
 
-            /** 生效时间*/
-            take_effect_time: [],
+              /** 生效时间*/
+              take_effect_time: [],
 
-            /** 活动描述*/
-            activity_desc: '',
+              /** 活动描述*/
+              activity_desc: '',
 
-            /** 优惠门槛*/
-            discount_threshold: '',
+              /** 优惠门槛*/
+              discount_threshold: '',
 
-            /** 是否打折 */
-            isDiscount: 0,
+              /** 是否打折 */
+              isDiscount: 0,
 
-            /** 打几折 */
-            discount_val: '',
+              /** 打几折 */
+              discount_val: '',
 
-            /** 是否减现金 */
-            isReduceCash: 0,
+              /** 是否减现金 */
+              isReduceCash: 0,
 
-            /** 减多少钱*/
-            reduce_cash: '',
+              /** 减多少钱*/
+              reduce_cash: '',
 
-            /** 是否送积分 */
-            isIntegral: 0,
+              /** 是否送积分 */
+              isIntegral: 0,
 
-            /** 积分 */
-            integral: 0,
+              /** 积分 */
+              integral: 0,
 
-            /** 是否免邮费*/
-            freePostage: 0,
+              /** 是否免邮费*/
+              freePostage: 0,
 
-            /** 是否有赠品  */
-            isGift: 0,
+              /** 是否有赠品  */
+              isGift: 0,
 
-            /** 赠品id */
-            giftId: '',
+              /** 赠品id */
+              giftId: '',
 
-            /** 是否送优惠券 */
-            isCoupon: 0,
+              /** 是否送优惠券 */
+              isCoupon: 0,
 
-            /** 优惠券Id */
-            couponId: '',
+              /** 优惠券Id */
+              couponId: '',
 
-            /** 是否全部商品参与*/
-            is_all_joined: '',
+              /** 是否全部商品参与*/
+              is_all_joined: '',
 
-            /** 活动商品*/
-            activity_goods: []
-          }
+              /** 活动商品*/
+              activity_goods: []
+            }
         }
       },
 
@@ -638,6 +647,13 @@
             take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
           }
           this.goodsShow = this.activityForm.is_all_joined === 1
+          /** 处理优惠数据 */
+          this.isDiscount = this.activityForm.isDiscount === 1
+          this.isReduceCash = this.activityForm.isReduceCash === 1
+          this.isIntegral = this.activityForm.isIntegral === 1
+          this.freePostage = this.activityForm.freePostage === 1
+          this.isCoupon = this.activityForm.isCoupon === 1
+          this.isGift = this.activityForm.isGift === 1
         })
       },
 
