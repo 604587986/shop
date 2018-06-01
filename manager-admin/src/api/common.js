@@ -2,7 +2,9 @@
  * 公共API
  */
 
-import request from '@/utils/request'
+const domain = require('../../ui-domain')
+const envPro = process.env.NODE_ENV === 'production'
+const baseApi = envPro ? domain.pro.base : domain.dev.base
 
 /**
  * 获取图片验证码URL
@@ -18,4 +20,10 @@ export function getValidateCodeUrl(type) {
  * 图片上传API
  * @type {string}
  */
-export const uploadApi = 'http://yiqisi.s1.natapp.cc/base-api/uploaders'
+export const uploadApi = baseApi + '/uploaders'
+
+/**
+ * 地区选择API
+ * @type {string}
+ */
+export const regionApi = baseApi + '/regions/@id/children'
