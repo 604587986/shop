@@ -13,7 +13,7 @@ import * as CouponModel from '@/models/CouponModel'
 export function getCouponsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/list',
+      url: '/promotion/coupons',
       method: 'get',
       loading: false,
       params
@@ -21,7 +21,7 @@ export function getCouponsList(params) {
       const _response = response
       _response.data = new CouponModel.Coupon().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -33,17 +33,15 @@ export function getCouponsList(params) {
  * @constructor
  */
 export function deleteCoupons(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/${ids}`,
+      url: `/promotion/coupons/${ids}`,
       method: 'delete',
       loading: false,
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -55,17 +53,16 @@ export function deleteCoupons(ids, params) {
  * @constructor
  */
 export function modifyCoupons(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/reserve/${ids}`,
-      method: 'post',
+      url: `/promotion/coupons/${ids}`,
+      method: 'put',
       loading: false,
-      data: _formData
+      headers: { 'Content-Type': 'application/json' },
+      data: new CouponModel.Coupon().params(params)
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -76,16 +73,35 @@ export function modifyCoupons(ids, params) {
  * @constructor
  */
 export function addCoupons(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/coupons/increase',
+      url: '/promotion/coupons',
       method: 'post',
+      headers: { 'Content-Type': 'application/json' },
       loading: false,
-      data: _formData
+      data: new CouponModel.Coupon().params(params)
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
+  })
+}
+
+/**
+ * 查询一个优惠券的详情
+ * @param id
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getCouponDetails(id, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/promotion/coupons/${id}`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      const _response = new CouponModel.Coupon().map(response)
+      resolve(_response)
+    })
   })
 }

@@ -18,30 +18,38 @@ export class Coupon extends DataModel {
   coupon_id
 
   /** 优惠券名称 */
-  @ServerName('coupon_name')
+  @ServerName('title')
   coupon_name
 
   /** 优惠券面额（元） */
-  @ServerName('coupon_denomination')
+  @ServerName('coupon_price')
   coupon_denomination
 
-  /** 使用限制（元） */
-  @ServerName('coupon_use_limit')
+  /** 消费门槛/使用限制（元） */
+  @ServerName('coupon_threshold_price')
   coupon_use_limit
 
   /** 使用时限  开始时间  */
-  @ServerName('coupon_time_start')
+  @ServerName('start_time')
   coupon_time_start
 
   /** 使用时限  结束时间  */
-  @ServerName('coupon_time_end')
+  @ServerName('end_time')
   coupon_time_end
 
   /** 发行量（个） */
-  @ServerName('coupon_circulation')
+  @ServerName('create_num')
   coupon_circulation
 
   /** 已使用量（个） */
-  @ServerName('coupon_used_num')
+  @ServerName('used_num')
   coupon_used_num
+
+  /** 每人限领数量（个） */
+  @ServerName('limit_num')
+  coupon_limit_num
+
+  /** 已被领取数量（个） */
+  @ServerName('received_num')
+  coupon_received_num
 }

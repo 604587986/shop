@@ -77,7 +77,6 @@
     <Coupon
       :couponModelShow="couponModelShow"
       :currentcouponId="currentcouponId"
-      :couponModelForm="couponModelForm"
       @saveCoupon="saveCoupon"
     ></Coupon>
   </div>
@@ -193,9 +192,10 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
+          /** 已经使用量 */
+          this.tableData.forEach(key => {
+            key.coupon_used_num = key.coupon_used_num || 0
+          })
         })
       },
 
@@ -209,7 +209,7 @@
           API_coupon.deleteCoupons(row.coupon_id, row).then(() => {
             this.GET_CouponsList()
             this.$message.success('删除优惠券成功！')
-          }).catch((error) => this.$message.error(error))
+          })
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })
@@ -219,17 +219,11 @@
       handleEditCoupons(row) {
         this.couponModelShow = true
         this.currentcouponId = row.coupon_id
-        this.couponModelForm = {
-          ...row,
-          coupon_time_limit: [parseInt(row.coupon_time_start) * 1000, parseInt(row.coupon_time_end) * 1000]
-        }
       },
 
       /** 新增优惠券*/
       handleAddCoupon() {
         this.couponModelShow = true
-        this.currentcouponId = ''
-        this.couponModelForm = { }
       },
 
       /** 优惠券监听 */
