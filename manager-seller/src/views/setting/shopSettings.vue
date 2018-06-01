@@ -7,7 +7,7 @@
       </el-form-item>
       <!--店铺地址-->
       <el-form-item label="店铺地址：" prop="shop_address">
-        <en-region-picker  @changed="handleChange"></en-region-picker>
+        <en-region-picker :api="areasapi" @changed="handleChange"></en-region-picker>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
@@ -85,6 +85,8 @@
       return {
         /** 图片服务器地址 */
         BASE_IMG_URL: process.env.BASE_IMG_URL,
+
+        areasapi: `${process.env.BASE_REGION}/regions/@id/children`,
 
         /** 店铺信息*/
         shopDataForm: {
