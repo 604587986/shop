@@ -12,8 +12,8 @@
       <el-form-item label="赠品价格：" prop="gift_price">
         <el-input v-model.number="giftModelForm.gift_price" label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="赠品库存：" prop="gift_usable_stock">
-        <el-input auto-complete="off"  v-model.number="giftModelForm.gift_usable_stock" label-width="100"></el-input>
+      <el-form-item label="赠品库存：" prop="gift_real_stock">
+        <el-input auto-complete="off"  v-model.number="giftModelForm.gift_real_stock" label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="赠品图片：">
         <el-upload
