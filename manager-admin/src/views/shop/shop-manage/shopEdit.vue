@@ -70,7 +70,7 @@
           <el-form-item label="营业执照">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="handleLicenceImgSuccess">
               <img v-if="shopForm.licence_img" :src="shopForm.licence_img" class="avatar">

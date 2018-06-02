@@ -1,9 +1,7 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <template slot="table-columns">
@@ -21,9 +19,7 @@
         <el-table-column prop="shop_name" label="店铺名称"/>
         <el-table-column prop="goods_name" label="商品名称" width="400"/>
         <el-table-column prop="category_name" label="商品分类"/>
-        <el-table-column label="商品价格">
-          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice("￥") }}</template>
-        </el-table-column>
+        <el-table-column prop="goods_price" :formatter="MixinFormatPrice" label="商品价格"/>
         <el-table-column label="商品状态">
           <template slot-scope="scope">{{ scope.row.goods_status | statusFilter }}</template>
         </el-table-column>
@@ -35,22 +31,22 @@
       </template>
 
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
   </div>
 </template>
 
 <script>
-  import * as API_PointGoods from '@/api/pointGoods'
+  import * as API_Promotion from '@/api/promotion'
 
   export default {
     name: 'pointsGoods',
@@ -66,13 +62,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        tableData: ''
       }
     },
-    mounted() {
+    created() {
       this.GET_PointGoodsList()
     },
     filters: {
@@ -104,18 +97,10 @@
       /** 获取会员列表 */
       GET_PointGoodsList() {
         this.loading = true
-        API_PointGoods.getPointGoodsList(this.params).then(response => {
+        API_Promotion.getExchangeGoods(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
