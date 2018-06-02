@@ -25,10 +25,10 @@
                 </el-form-item>
                 <el-form-item label="店铺状态">
                   <el-select v-model="advancedForm.shop_status" placeholder="请选择" clearable>
-                    <el-option label="全部" value="all"/>
-                    <el-option label="已开启" value="open"/>
-                    <el-option label="已关闭" value="closed"/>
-                    <el-option label="待审核" value="apply"/>
+                    <el-option label="全部" value="ALL"/>
+                    <el-option label="已开启" value="OPEN"/>
+                    <el-option label="已关闭" value="CLOSE"/>
+                    <el-option label="待审核" value="APPLY"/>
                     <el-option label="审核未通过" value="refused"/>
                   </el-select>
                 </el-form-item>
@@ -59,7 +59,7 @@
         <!--会员名称-->
         <el-table-column prop="member_name" label="会员名称"/>
         <!--创建时间-->
-        <el-table-column label="创建时间">
+        <el-table-column prop="shop_create_time" label="创建时间">
           <template slot-scope="scope">{{ scope.row.shop_create_time | unixToDate('yyyy-MM-dd') }}</template>
         </el-table-column>
         <!--店铺状态-->
@@ -74,12 +74,12 @@
               type="primary"
               @click="handleEditOrder(scope.$index, scope.row)">修改</el-button>
             <el-button
-              v-if="scope.row.shop_status === 'open'"
+              v-if="scope.row.shop_status === 'OPEN'"
               size="mini"
               type="danger"
               @click="handleCloseOrder(scope.$index, scope.row)">关闭</el-button>
             <el-button
-              v-if="scope.row.shop_status === 'closed'"
+              v-if="scope.row.shop_status === 'CLOSED'"
               size="mini"
               type="success"
               @click="handleRecoverOrder(scope.$index, scope.row)">恢复</el-button>
@@ -158,9 +158,9 @@
       statusFilter(val) {
         switch (val) {
           case 'refused': return '审核未通过'
-          case 'apply': return '待审核'
-          case 'open': return '开启中'
-          case 'closed': return '已关闭'
+          case 'APPLY': return '待审核'
+          case 'OPEN': return '开启中'
+          case 'CLOSED': return '已关闭'
           default: return '未知状态'
         }
       }
@@ -180,26 +180,26 @@
 
       /** 编辑店铺 */
       handleEditOrder(index, row) {
-        this.$router.push({ path: `/shop/shop-manage/edit/${row.id}` })
+        this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}` })
       },
 
       /** 关闭店铺 */
       handleCloseOrder(index, row) {
         this.$confirm('确定要关闭这个店铺吗？', '提示', { type: 'warning' }).then(() => {
-          API_Shop.closeShop(row.id).then(response => {
+          API_Shop.closeShop(row.shop_id).then(response => {
             this.$message.success('关闭成功！')
             this.GET_ShopList()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
-      /** 恢复店铺 */
+      /** 开启店铺 */
       handleRecoverOrder(index, row) {
-        this.$confirm('确定要恢复这个店铺吗？', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确定要开启这个店铺吗？', '提示', { type: 'warning' }).then(() => {
           API_Shop.recoverShop(row.id).then(response => {
-            this.$message.success('恢复成功！')
+            this.$message.success('开启成功！')
             this.GET_ShopList()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -236,10 +236,7 @@
         API_Shop.getShopList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
