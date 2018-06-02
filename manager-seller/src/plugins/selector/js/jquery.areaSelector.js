@@ -1,4 +1,4 @@
-/* 
+/*
  *  地区选择器
  *  @author: chenxiaobo
  *  @date: 2017-9-18
@@ -111,7 +111,7 @@ let areaHTML =
                     background: white;\
                 }\
                 .area-container .depth-one>div{\
-                    height: 20px;\
+                    height: 30px;\
                     padding: 5px 0;\
                     line-height: 18px;\
                 }\
@@ -318,10 +318,9 @@ let bindClickListener = function(which) {
 }
 
 // 请求并初次渲染数据.(仅渲染第一层,省级)
-let requestAndFirstRenderData = function() {
-  axios.get('/api/base/region/get?depth=3').then(response => {
-    areaData = response.data
-
+let requestAndFirstRenderData = function(api, props) {
+  axios.get(api).then(response => {
+    areaData = mapArea(response.data, props)
     // 遍历各省插入到HTML中
     let li
     areaData.forEach(function(province) {
@@ -1137,7 +1136,7 @@ let startDefault = function(sourceData) {
 
   let dividedData = divideData(sourceData)
 
-  /* 
+  /*
         * 处理level 3 数据, 增加第一层数据的id
         * 即p_p_regions_id
         * 然后如果检测到此父级地区全选的话, 删除这些相关第三层数据.
@@ -1176,7 +1175,7 @@ let startDefault = function(sourceData) {
     })
   }
 
-  /* 
+  /*
          * 处理level 2 数据,
          * 如果检测到此父级地区全选的话, 删除这些相关第二层数据.
          */
@@ -1256,6 +1255,35 @@ let startDefault = function(sourceData) {
   }, 500)
 }
 
+/** 数据映射 */
+let mapArea = function(arr, props) {
+  if (!arr || !Array.isArray(arr) || !props) return arr
+  const result = []
+  const configurableProps = ['level', 'local_name', 'p_regions_id', 'region_id']
+  const childrenProp = props.children || 'children'
+  arr.forEach(function(item) {
+    const itemCopy = {}
+    Object.keys(props).forEach(key => {
+      configurableProps.forEach(prop => {
+        let name = props[prop]
+        let value = item[name]
+        if (value === undefined) {
+          name = prop
+          value = item[name]
+        }
+        if(prop === key && value !== undefined) {
+          itemCopy[prop] = value
+        }
+      })
+    })
+    if (Array.isArray(item[childrenProp])) {
+      itemCopy[childrenProp] = mapArea(item[childrenProp], props)
+    }
+    result.push(itemCopy)
+  })
+  return result
+}
+
 export default {
   show: function(options) {
     // 把回调函数赋值给全局变量
@@ -1276,7 +1304,7 @@ export default {
       // 设置cover遮罩层的高度为body的高
       $('.cover').css('height', document.documentElement.clientHeight)
     }
-    requestAndFirstRenderData()
+    requestAndFirstRenderData(options.api, options.props)
     startDefault(options.defaultData)
   }
 }

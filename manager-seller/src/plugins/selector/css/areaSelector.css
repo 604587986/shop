@@ -30,3 +30,31 @@
   background-color: #337ab7;
   border-color: #2e6da4;
 }
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+}
+
+.area-selector-container .body h3 {
+  height: 39px;
+  width: 100%;
+  text-align: center;
+  line-height: 39px;
+  font-size: 14px;
+  background-color: #f6f6f6;
+}
+.area-container .body >div > ul {
+  margin-top: 10px;
+}
+li {
+  list-style: none;
+}
+
+div.item {
+  height: 30px !important;
+  padding: 5px 0;
+  line-height: 18px;
+}

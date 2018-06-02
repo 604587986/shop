@@ -56,25 +56,25 @@
         <el-form
           :model="mouldForm" status-icon
           :rules="rules" ref="mouldForm"
-          label-width="100px"
+          label-width="160px"
           class="demo-ruleForm"
-          style="width: 30%;margin-left: 10%;">
-          <el-form-item label="模板名称" prop="tpl_name">
+          style="width: 30%;margin-left: 3%;">
+          <el-form-item label="模板名称:" prop="tpl_name">
             <el-input type="text" v-model="mouldForm.tpl_name" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.tpl_type === 1 ? '首重（kg）': '首件（个）'" prop="first_company">
+          <el-form-item :label="mouldForm.tpl_type === 1 ? '首重（kg）:': '首件（个）:'" prop="first_company">
             <el-input type="text" v-model.number="mouldForm.first_company" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="运费（元）" prop="first_price">
+          <el-form-item label="运费（元）:" prop="first_price">
             <el-input v-model.number="mouldForm.first_price"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.tpl_type === 1 ? '续重（kg）':'续件（个）'" prop="continued_company">
+          <el-form-item :label="mouldForm.tpl_type === 1 ? '续重（kg）:':'续件（个）:'" prop="continued_company">
             <el-input v-model.number="mouldForm.continued_company"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.tpl_type === 1? '续重运费（元）':'续件运费（元）'" prop="continued_price">
+          <el-form-item :label="mouldForm.tpl_type === 1? '续重运费（元）:':'续件运费（元）:'" prop="continued_price">
             <el-input v-model.number="mouldForm.continued_price"></el-input>
           </el-form-item>
-          <el-form-item label="模板类型" prop="tpl_type">
+          <el-form-item label="模板类型:" prop="tpl_type">
             <el-select v-model.number="mouldForm.tpl_type" placeholder="请选择">
               <el-option
                 v-for="item in tplTypeList"
@@ -84,9 +84,15 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="选择配送地区" prop="area">
+          <el-form-item label="选择配送地区:" prop="area">
             <el-button type="primary" @click="chooseArea">选择地区</el-button>
-            <en-area-selector-dialog :showDialog="areaDialog"></en-area-selector-dialog>
+            <en-area-selector-dialog
+              :propertys="props"
+              :api="areaApi"
+              :showDialog="areaDialog"
+              @confirmFunc="confirmFunc"
+              @hideDialogFunc="hideDialogFunc"
+            ></en-area-selector-dialog>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveMould('mouldForm')">保存模板</el-button>
@@ -130,6 +136,26 @@
 
         /** 地区选择器 */
         areaDialog: false,
+
+        areaApi: `${process.env.BASE_REGION}/regions/depth/3`,
+
+        /** 地址选择器 映射属性 */
+        props: {
+          /** 等级 */
+          level: 'level',
+
+          /** 标签名 */
+          local_name: 'localName',
+
+          /** 父地区id */
+          p_regions_id: 'parentId',
+
+          /**  地区id */
+          region_id: 'id',
+
+          /** 子选项 */
+          children: 'children'
+        },
 
         /** 模板表单信息 */
         mouldForm: {
@@ -229,6 +255,17 @@
       /** 选择配送地区 */
       chooseArea() {
         this.areaDialog = true
+      },
+
+      /** 地区选择器确认回调 */
+      confirmFunc(val) {
+        console.log(val)
+        this.areaDialog = false
+      },
+
+      /** 地区选择器取消回调 */
+      hideDialogFunc() {
+        this.areaDialog = false
       },
 
       /** 获取快递模板信息*/
