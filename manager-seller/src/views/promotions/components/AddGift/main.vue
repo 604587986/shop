@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="新增赠品" :visible.sync="giftShow" width="40%" align="center">
-    <el-form :model="giftModelForm" label-position="right" :rules="rules" label-width="160px">
+    <el-form :model="giftModelForm" label-position="right" :rules="rules" label-width="100px">
       <el-form-item label="赠品名称：" prop="gift_name">
         <el-input
           auto-complete="off"
@@ -10,10 +10,10 @@
           label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="赠品价格：" prop="gift_price">
-        <el-input v-model.number="giftModelForm.gift_price" label-width="100"></el-input>
+        <el-input v-model.number="giftModelForm.gift_price"></el-input>
       </el-form-item>
       <el-form-item label="赠品库存：" prop="gift_real_stock">
-        <el-input auto-complete="off"  v-model.number="giftModelForm.gift_real_stock" label-width="100"></el-input>
+        <el-input auto-complete="off"  v-model.number="giftModelForm.gift_real_stock"></el-input>
       </el-form-item>
       <el-form-item label="赠品图片：">
         <el-upload

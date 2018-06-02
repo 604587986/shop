@@ -37,7 +37,7 @@
         <el-table-column prop="coupon_name" label="优惠券名称" />
         <el-table-column prop="coupon_denomination" label="优惠券面额（元）" />
         <el-table-column prop="coupon_use_limit" label="使用限制"  />
-        <el-table-column label="使用期限" width="450">
+        <el-table-column label="使用期限" >
           <template slot-scope="scope">
             {{ scope.row.coupon_time_start | unixToDate('yyyy-MM-dd') }}~
             {{ scope.row.coupon_time_end | unixToDate('yyyy-MM-dd') }}

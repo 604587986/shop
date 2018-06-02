@@ -12,7 +12,7 @@
       <el-form-item label="优惠券面额（元）：" prop="coupon_denomination">
         <el-input auto-complete="off"  v-model.number="couponForm.coupon_denomination" label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="买家需要消费（元）：" prop="coupon_use_limit">
+      <el-form-item label="买家需消费（元）：" prop="coupon_use_limit">
         <el-input auto-complete="off"  v-model.number="couponForm.coupon_use_limit" label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="使用期限：" style="text-align: left">
@@ -220,5 +220,7 @@
 </script>
 
 <style lang="scss" type="scss" scoped>
-
+  .el-date-editor {
+    width: 100%;
+  }
 </style>
