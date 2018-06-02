@@ -129,7 +129,7 @@ import axios from 'axios'
             node.appContent.on('click', '.app-address-area-a', function () {
                 var $this        = $(this),
                     region_id    = $this.attr('region_id'),
-                    region_grade = $this.attr('region_grade'),
+                    region_grade = Number($this.attr('region_grade')),
                     local_name   = $this.attr('local_title');
 
                 //  计算当前a标签所在盒子索引
@@ -158,7 +158,6 @@ import axios from 'axios'
 
                 //  根据字数调整body宽度
                 _this.wordCount(_index);
-
                 if (region_grade === 4) {
                   _this.complete();
                 } else {
