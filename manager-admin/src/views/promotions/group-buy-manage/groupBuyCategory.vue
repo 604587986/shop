@@ -65,8 +65,6 @@
 </template>
 
 <script>
-  import * as API_GroupBuy from '@/api/groupBuy'
-
   export default {
     name: 'groupBuyCategory',
     data() {
@@ -143,11 +141,11 @@
       submitAddGroupBuyForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_GroupBuy.addGroupBuyCategory(this.groupBuyForm).then(response => {
-              this.dialogAddGroupBuyVisible = false
-              this.$message.success('添加成功！')
-              this.GET_GroupBuyCategoryList()
-            }).catch(error => console.log(error))
+            // API_GroupBuy.addGroupBuyCategory(this.groupBuyForm).then(response => {
+            //   this.dialogAddGroupBuyVisible = false
+            //   this.$message.success('添加成功！')
+            //   this.GET_GroupBuyCategoryList()
+            // }).catch(error => console.log(error))
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -169,26 +167,26 @@
       /** 获取会员列表 */
       GET_GroupBuyCategoryList() {
         this.loading = true
-        API_GroupBuy.getGroupBuyCategoryList(this.params).then(response => {
-          this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        // API_GroupBuy.getGroupBuyCategoryList(this.params).then(response => {
+        //   this.loading = false
+        //   this.tableData = response.data
+        //   this.pageData = {
+        //     page_no: response.draw,
+        //     page_size: 10,
+        //     data_total: response.recordsTotal
+        //   }
+        // }).catch(error => {
+        //   this.loading = false
+        //   console.log(error)
+        // })
       },
 
       /** 删除团购分类 */
       DELETE_GroupBuyCategory(ids) {
-        API_GroupBuy.deleteGroupBuyCategory(ids).then(response => {
-          this.$message.success('删除成功！')
-          this.GET_GroupBuyCategoryList()
-        }).catch(error => console.log(error))
+        // API_Promotion.deleteGroupBuyCategory(ids).then(response => {
+        //   this.$message.success('删除成功！')
+        //   this.GET_GroupBuyCategoryList()
+        // }).catch(error => console.log(error))
       }
     }
   }

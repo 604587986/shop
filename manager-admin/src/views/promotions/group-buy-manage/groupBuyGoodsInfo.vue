@@ -58,7 +58,6 @@
 </template>
 
 <script>
-  import * as API_GroupBuy from '@/api/groupBuy'
 
   export default {
     name: 'groupBuyGoodsInfo',
@@ -78,9 +77,9 @@
         this.$refs['form'].validate((valid) => {
           if (valid) {
             this.form.group_buy_remark = this.$refs['ue'].getUEContent()
-            API_GroupBuy.editGroupBuyGoods(this.form).then(response => {
-              this.$message.success('保存成功！')
-            }).catch(error => console.log(error))
+            // API_GroupBuy.editGroupBuyGoods(this.form).then(response => {
+            //   this.$message.success('保存成功！')
+            // }).catch(error => console.log(error))
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -90,13 +89,13 @@
 
       /** 获取团购分类列表 */
       GET_CategroyList() {
-        API_GroupBuy.getGroupBuyCategoryList().then(response => {
-          this.options = response.data.map(item => {
-            item.label = item.name
-            item.value = item.id
-            return item
-          })
-        }).catch(error => console.log(error))
+        // API_GroupBuy.getGroupBuyCategoryList().then(response => {
+        //   this.options = response.data.map(item => {
+        //     item.label = item.name
+        //     item.value = item.id
+        //     return item
+        //   })
+        // }).catch(error => console.log(error))
       }
     }
   }

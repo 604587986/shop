@@ -1,9 +1,7 @@
 <template>
   <div>
     <en-tabel-layout
-      :toolbar="true"
-      :pagination="true"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -38,15 +36,15 @@
       </template>
 
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
 
@@ -54,8 +52,8 @@
     <el-dialog title="添加团购" :visible.sync="dialogAddGroupBuyVisible" width="650px">
       <el-form :model="groupBuyForm" :rules="groupBuyRules" ref="groupBuyForm" label-width="120px">
         <!--团购活动名称-->
-        <el-form-item label="活动名称" prop="name">
-          <el-input v-model="groupBuyForm.name" :maxlength="20"></el-input>
+        <el-form-item label="活动名称" prop="act_name">
+          <el-input v-model="groupBuyForm.act_name" :maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="活动时间段" prop="time_range">
           <el-date-picker
@@ -70,9 +68,9 @@
           </el-date-picker>
         </el-form-item>
         <!--报名截止时间-->
-        <el-form-item label="报名截止时间" prop="apply_deadline">
+        <el-form-item label="报名截止时间" prop="join_end_time">
           <el-date-picker
-            v-model="groupBuyForm.apply_deadline"
+            v-model="groupBuyForm.join_end_time"
             type="datetime"
             :editable="false"
             value-format="yyyy-MM-dd hh:mm:ss"
@@ -90,7 +88,7 @@
 </template>
 
 <script>
-  import * as API_GroupBuy from '@/api/groupBuy'
+  import * as API_Promotion from '@/api/promotion'
 
   export default {
     name: 'groupBuyList',
@@ -106,25 +104,16 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
+        tableData: '',
 
         /** 添加团购 表单 */
         groupBuyForm: {},
 
         /** 添加团购 表单规则 */
         groupBuyRules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
-          ],
-          time_range: [
-            { required: true, message: '请选择活动时间段', trigger: 'blur' }
-          ],
-          apply_deadline: [
-            { required: true, message: '请选择截止报名时间', trigger: 'blur' }
-          ]
+          act_name: [this.MixinRequired('请输入活动名称！')],
+          time_range: [this.MixinRequired('请选择活动时间段！')],
+          join_end_time: [this.MixinRequired('请选择截止报名时间！')]
         },
 
         /** 添加团购 dialog */
@@ -166,10 +155,10 @@
       /** 删除团购 */
       handleDeleteGroupBuy(index, row) {
         this.$confirm('确定要删除这个团购活动吗？', '提示', { type: 'warning' }).then(() => {
-          API_GroupBuy.deleteGroupBuy(row.act_id).then(response => {
+          API_Promotion.deleteGroupBuyActivity(row.act_id).then(response => {
             this.$message.success('删除成功！')
             this.GET_GroupBuyList()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -184,11 +173,11 @@
             }
             this.groupBuyForm.start_time = _time_range[0]
             this.groupBuyForm.end_time = _time_range[1]
-            API_GroupBuy.addGroupBuy(this.groupBuyForm).then(response => {
+            API_Promotion.addGrouBuyActivity(this.groupBuyForm).then(response => {
               this.dialogAddGroupBuyVisible = false
               this.$message.success('添加成功！')
               this.GET_GroupBuyList()
-            }).catch(error => console.log(error))
+            })
           } else {
             this.$message.error('表单填写有误，请检查！')
           }
@@ -198,21 +187,12 @@
       /** 获取会员列表 */
       GET_GroupBuyList() {
         this.loading = true
-        API_GroupBuy.getGroupBuyList(this.params).then(response => {
+        API_Promotion.getGroupBuyActives(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
-
   }
 </script>
 
