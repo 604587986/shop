@@ -159,8 +159,12 @@ import axios from 'axios'
                 //  根据字数调整body宽度
                 _this.wordCount(_index);
 
-                //  调用API接口获取数据
-                _this.accessApi(region_id, region_grade);
+                if (region_grade === 4) {
+                  _this.complete();
+                } else {
+                  //  调用API接口获取数据
+                  _this.accessApi(region_id, region_grade);
+                }
 
             });
         },
@@ -301,7 +305,7 @@ import axios from 'axios'
             for (var i = 0, len = result.length; i < len; i++) {
                 var local_title = result[i]['local_name'],
                     local_name  = local_title.substring(0, 8);
-                _this.region_li += '<li><a href="javascript: void(0);" class="app-address-area-a" local_title="' + local_title + '" region_id="' + result[i].region_id + '" region_grade="' + result[i]['region_grade'] + '">' + local_name + '</a> </li>';
+                _this.region_li += '<li><a href="javascript: void(0);" class="app-address-area-a" local_title="' + local_title + '" region_id="' + result[i].id + '" region_grade="' + result[i]['region_grade'] + '">' + local_name + '</a> </li>';
             }
             if (region_grade !== 0 && _this.node.app.find('.app-address-tab-a').eq(region_grade).length === 0) {
                 _this.createElement();
@@ -424,7 +428,7 @@ import axios from 'axios'
 
             //  遍历数据组织结构
             for (var i = 0, len = result.length; i < len; i++) {
-                var region_id   = result[i]['region_id'],
+                var region_id   = result[i]['id'],
                     local_title = result[i]['local_name'],
                     local_name  = local_title.substring(0, 8);
                 _this.region_li += '<li><a href="javascript: void(0);" class="app-address-area-a" local_title="' + local_title + '" region_id="' + region_id + '" region_grade="' + result[i]['region_grade'] + '">' + local_name + '</a> </li>';
