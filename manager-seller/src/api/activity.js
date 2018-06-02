@@ -123,7 +123,7 @@ export function getSingleCutActivityList(params) {
       const _response = response
       _response.data = new ActivityModel.Activity().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -157,6 +157,7 @@ export function addSingleCutActivity(params) {
       url: '/promotion/minus',
       method: 'post',
       loading: false,
+      headers: { 'Content-Type': 'application/json' },
       data: params
     }).then(response => {
       resolve(response)
@@ -176,9 +177,30 @@ export function saveSingleCutActivity(ids, params) {
       url: `/promotion/minus/${ids}`,
       method: 'put',
       loading: false,
+      headers: { 'Content-Type': 'application/json' },
       data: params
     }).then(response => {
       resolve(response)
+    })
+  })
+}
+
+/**
+ * 获取一个单品立减活动洗详情
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getSingleCutActivityDetails(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/promotion/minus/${ids}`,
+      method: 'get',
+      loading: false,
+      data: params
+    }).then(response => {
+      const _response = new ActivityModel.Activity().map(response)
+      resolve(_response)
     })
   })
 }

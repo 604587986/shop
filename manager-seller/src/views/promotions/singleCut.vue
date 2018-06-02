@@ -32,11 +32,11 @@
               </template>
             </el-table-column>
             <!--活动类型-->
-            <el-table-column prop="activity_type" label="活动类型"/>
+            <el-table-column prop="activity_type" label="活动类型" :formatter="activityType"/>
             <!--活动状态-->
             <el-table-column label="活动状态">
               <template slot-scope="scope">
-                <span>{{ scope.row.activity_status }}</span>
+                <span>{{ scope.row.activity_status || 0 }}</span>
               </template>
             </el-table-column>
             <!--操作-->
@@ -102,7 +102,7 @@
             <div class="base-info-item">
               <h4>活动商品</h4>
               <div>
-                <el-form-item label="活动商品：">
+                <el-form-item label="活动商品：" prop="is_all_joined">
                   <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
                     <el-radio :label="1">全部商品参与</el-radio>
                     <el-radio :label="0">部分商品参与</el-radio>
@@ -182,6 +182,13 @@
       [GoodsSelector.name]: GoodsSelector
     },
     data() {
+      var checkRange = (rule, value, callback) => {
+        if (!value && value !== 0) {
+          return callback(new Error('请选择商品参与方式'))
+        } else {
+          callback()
+        }
+      }
       return {
         /** 当前面板的名字*/
         activeName: 'singleCutList',
@@ -198,7 +205,7 @@
         /** 新增满减表单信息*/
         activityForm: {
           /** 活动ID*/
-          activity_id: '',
+          activity_minus_id: '',
 
           /** 活动名称*/
           activity_name: '',
@@ -210,7 +217,7 @@
           activity_desc: '',
 
           /** 优惠方式 减价金额*/
-          price_reduction: 20,
+          price_reduction: 0,
 
           /** 是否全部商品参与*/
           is_all_joined: '',
@@ -226,11 +233,16 @@
             { min: 0, max: 60, message: '长度在60个字符之内', trigger: 'blur' }
           ],
           take_effect_time: [
-            { type: 'array', required: true, message: '请选择生效时间', trigger: 'change' }
+            { type: 'array', required: true, message: '请选择生效时间', trigger: 'blur' }
           ],
           price_reduction: [
             { required: true, message: '请填写优惠金额', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值' }
+            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+          ],
+
+          /** 商品参与方式 */
+          is_all_joined: [
+            { validator: checkRange, trigger: 'change' }
           ]
         },
 
@@ -248,7 +260,6 @@
 
         /** 商品选择器列表api*/
         goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
-        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
@@ -258,6 +269,10 @@
       this.GET_SingleCutActivityList()
     },
     methods: {
+      /** 活动类型 */
+      activityType(row, column, cellValue) {
+        return '单品立减'
+      },
 
       /** 搜索事件触发 */
       searchEvent(data) {
@@ -275,7 +290,7 @@
           this.GET_SingleCutActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
-            activity_id: '',
+            activity_minus_id: '',
             activity_name: '',
             take_effect_time: [],
             activity_desc: '',
@@ -313,6 +328,7 @@
       selectionChange(val) {
         this.selectionids = val.map(item => item.goods_id)
       },
+
       /** 批量取消 */
       cancelall() {
         this.selectionids.forEach(key => {
@@ -331,19 +347,26 @@
         API_activity.getSingleCutActivityList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
-        }).catch(error => {
-          console.log(error)
         })
       },
 
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
-        this.activityForm = {
-          ...row,
-          take_effect_time: [parseInt(row.start_time) * 1000, parseInt(row.end_time) * 1000]
+        this.GET_SingleCutActivityDetails(row.activity_minus_id)
+      },
+
+      /** 查询一个单品立减活动信息 */
+      GET_SingleCutActivityDetails(id) {
+        if (id) {
+          API_activity.getSingleCutActivityDetails(id, {}).then(response => {
+            this.activityForm = {
+              ...response,
+              take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
+            }
+            this.goodsShow = this.activityForm.is_all_joined === 1
+          })
         }
-        this.goodsShow = this.activityForm.is_all_joined === 1
       },
 
       /** 删除活动 */
@@ -355,7 +378,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteSingleCutActivity(row.activity_id, row).then(response => {
+        API_activity.deleteSingleCutActivity(row.activity_minus_id, {}).then(response => {
           this.$message.success('删除成功！')
           this.GET_SingleCutActivityList()
         })
@@ -365,12 +388,26 @@
       handleAddSingleCut() {
         this.activeName = 'add'
         this.activityForm = {
-          activity_id: '',
+          /** 活动ID*/
+          activity_minus_id: '',
+
+          /** 活动名称*/
           activity_name: '',
+
+          /** 生效时间*/
           take_effect_time: [],
+
+          /** 活动描述*/
           activity_desc: '',
-          price_reduction: '',
-          activity_goods: ''
+
+          /** 优惠方式 减价金额*/
+          price_reduction: 0,
+
+          /** 是否全部商品参与*/
+          is_all_joined: '',
+
+          /** 活动商品*/
+          activity_goods: []
         }
       },
 
@@ -378,14 +415,62 @@
       saveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const _ids = this.activityForm.activity_id || -1
-            API_activity.addSingleCutActivity(_ids, this.activityForm).then(response => {
-              this.$message.success('保存设置成功！')
-              this.activeName === 'singleCutList'
-              this.GET_SingleCutActivityList()
-            })
+            const _params = this.generateFormData(this.activityForm)
+            delete _params.take_effect_time
+            if (this.activityForm.activity_minus_id) {
+              API_activity.saveSingleCutActivity(this.activityForm.activity_minus_id, _params).then(response => {
+                this.$message.success('修改成功！')
+                this.activeName === 'singleCutList'
+                this.GET_SingleCutActivityList()
+              })
+            } else {
+              API_activity.addSingleCutActivity(_params).then(response => {
+                this.$message.success('添加成功！')
+                this.activeName === 'singleCutList'
+                this.GET_SingleCutActivityList()
+              })
+            }
           }
         })
+      },
+
+      /** 构造表单数据 */
+      generateFormData(data) {
+        const _params = {
+          /** 活动名称/标题 */
+          title: data.activity_name,
+
+          /** 活动开始时间 */
+          start_time: data.take_effect_time[0] / 1000,
+
+          /** 活动结束时间 */
+          end_time: data.take_effect_time[1] / 1000,
+
+          /** 活动描述 */
+          description: data.activity_desc,
+
+          /** 单品立减金额 */
+          single_reduction_value: data.price_reduction,
+
+          /** 商品参与方式 */
+          range_type: data.is_all_joined,
+
+          /** 参与商品列表 */
+          goods_list: data.activity_goods || []
+          //   [{
+          //   goods_id
+          //
+          //   name
+          //
+          //   sku_id
+          //
+          //   thumbnail
+          // }]
+
+          // /** 商家ID */
+          // shop_id: seller_id
+        }
+        return _params
       }
     }
   }

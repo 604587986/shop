@@ -41,7 +41,7 @@ export class Activity extends DataModel {
   @ServerName('is_full_minus')
   isReduceCash
 
-  /** 优惠减价金额 （满减/单减）*/
+  /** 优惠减价金额 （满减）*/
   @ServerName('minus_value')
   reduce_cash
 
@@ -80,4 +80,12 @@ export class Activity extends DataModel {
   /** 活动描述/说明 */
   @ServerName('description')
   activity_desc
+
+  /** 单品立减活动id */
+  @ServerName('minus_id')
+  activity_minus_id
+
+  /** 单品立减金额 */
+  @ServerName('single_reduction_value')
+  price_reduction
 }
