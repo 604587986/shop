@@ -107,7 +107,8 @@
       /** 搜索事件触发 */
       searchEvent(data) {
         this.params = {
-          ...this.params
+          ...this.params,
+          keyword: data
         }
         this.GET_LimitActivityList()
       },
