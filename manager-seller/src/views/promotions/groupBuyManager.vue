@@ -169,9 +169,6 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       },
 
@@ -195,7 +192,7 @@
           API_groupBuy.deleteGroupBuyGoods(row.goods_id, row).then(() => {
             this.GET_ActivityGoodsList()
             this.$message.success('删除团购商品成功！')
-          }).catch(() => this.$message.error('删除团购商品出错，请稍后再试！'))
+          })
         }).catch(() => {
           this.$message.info({ message: '已取消删除' })
         })

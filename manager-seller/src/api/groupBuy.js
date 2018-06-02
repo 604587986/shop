@@ -13,7 +13,7 @@ import * as GroupBuyModel from '../models/GroupBuyModel'
 export function getGroupBuyGoodsList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/group/buy/list',
+      url: '/promotion/group-buy-goods',
       method: 'get',
       loading: false,
       params
@@ -21,7 +21,7 @@ export function getGroupBuyGoodsList(params) {
       const _response = response
       _response.data = new GroupBuyModel.GroupBuyGoods().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -32,17 +32,15 @@ export function getGroupBuyGoodsList(params) {
  * @returns {Promise<any>}
  */
 export function deleteGroupBuyGoods(ids, params) {
-  const _formdata = new FormData()
-  Object.keys(params).forEach(key => _formdata.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/group/buy/${ids}`,
+      url: `/promotion/group-buy-goods/${ids}`,
       method: 'delete',
       loading: false,
-      data: _formdata
+      data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -53,17 +51,16 @@ export function deleteGroupBuyGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function saveGroupBuyGoods(ids, params) {
-  const _formdata = new FormData()
-  Object.keys(params).forEach(key => _formdata.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/group/buy/reserve/${ids}`,
-      method: 'post',
+      url: `/promotion/group-buy-goods/${ids}`,
+      method: 'put',
       loading: false,
-      data: _formdata
+      headers: { 'Content-type': 'application/json' },
+      data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -83,7 +80,7 @@ export function addGroupBuyGoods(params) {
       data: _formdata
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -106,7 +103,7 @@ export function getGroupBuyGoodsDetails(ids, params) {
       const _response = response
       _response.data = new GroupBuyModel.GroupBuyDetails().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -126,7 +123,7 @@ export function getGroupBuyActivityList(params) {
       const _response = response
       _response.data = new GroupBuyModel.GroupBuyActivitys().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 

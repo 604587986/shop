@@ -294,8 +294,6 @@
       GET_AllGroupBuyActivitys() {
         API_groupBuy.getGroupBuyActivityList().then(response => {
           this.gruopBuyActivitys = response.data
-        }).catch(error => {
-          console.log(error)
         })
       },
 
@@ -303,9 +301,6 @@
       GET_GroupBuyGoodsDetails(id) {
         API_groupBuy.getGroupBuyGoodsDetails(id, {}).then(response => {
           this.gruopBuyForm = { ...response.data }
-          console.log(this.gruopBuyForm, 555)
-        }).catch(error => {
-          console.log(error)
         })
       },
       /** 显示商品选择器*/
@@ -338,16 +333,10 @@
         if (this.$route.params.goods_id) {
           API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(response => {
             this.$message.success('提交成功')
-          }).catch(error => {
-            console.log(error)
-            this.$message.error('提交失败，请稍后再试！')
           })
         } else {
           API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(response => {
             this.$message.success('提交成功')
-          }).catch(error => {
-            console.log(error)
-            this.$message.error('提交失败，请稍后再试！')
           })
         }
       }
