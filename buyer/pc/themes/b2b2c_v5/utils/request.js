@@ -72,9 +72,11 @@ service.interceptors.response.use(
       $router.push({ path: `/login?forward=${$route.fullPath}` })
       return Promise.reject(error)
     }
-    let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
-    if (error.config.message !== false) {
-      Vue.prototype.$message.error(error_data.message || _message)
+    if (process.client) {
+      let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
+      if (error.config.message !== false) {
+        Vue.prototype.$message.error(error_data.message || _message)
+      }
     }
     return Promise.reject(error)
   }
