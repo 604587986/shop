@@ -188,7 +188,7 @@
             </el-form-item>
           </div>
         </div>
-        <!--兑换许可-->
+        <!--兑换许可 自营店显示-->
         <div class="base-info-item" v-if="parseInt(shopInfo.self_operated) === 1">
           <h4>兑换许可</h4>
           <div>

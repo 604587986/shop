@@ -13,6 +13,16 @@
             <el-option key="0" label="未出售（已下架）" :value="0"/>
             <el-option key="1" label="出售中（已上架）" :value="1"/>
           </el-select>
+          <!--商品类型-->
+          <el-select
+            v-model="goods_type"
+            v-if="parseInt(shopInfo.self_operated) === 1"
+            placeholder="请选择商品类型"
+            @change="changeGoodsType"
+            clearable>
+            <el-option key="NORMAL" label="全部商品" :value="NORMAL"/>
+            <el-option key="POINT" label="积分商品" :value="POINT"/>
+          </el-select>
           <!--商品分组 获取分组列表-->
           <en-category-picker @changed="changeGoodsCateGory" :clearable='true'/>
           <el-button @click="publishGoods" type="success">发布商品</el-button>
@@ -107,8 +117,8 @@
 
 <script>
   import * as API_goods from '@/api/goods'
+  import { mapGetters } from 'vuex'
   import { CategoryPicker } from '@/components'
-
   export default {
     name: 'goodsList',
     components: {
@@ -135,6 +145,9 @@
         /** 商品状态 是否上架 0代表已下架，1代表已上架 */
         marketEnable: 0,
 
+        /** 商品类型 NORMAL 正常商品 POINT 积分商品 */
+        goods_type: 'NORMAL',
+
         /** 当前商品分组*/
         categoryId: '',
 
@@ -150,6 +163,11 @@
         /** 商品库存列表数据*/
         goodsStockData: {}
       }
+    },
+    computed: {
+      ...mapGetters([
+        'shopInfo'
+      ])
     },
     mounted() {
       this.GET_GoodsList()
@@ -198,6 +216,18 @@
           this.params = {
             ...this.params,
             market_enable: val
+          }
+        }
+        this.GET_GoodsList()
+      },
+
+      /** 切换商品类型 */
+      changeGoodsType(val) {
+        delete this.params.goods_type
+        if (val !== '') {
+          this.params = {
+            ...this.params,
+            goods_type: val
           }
         }
         this.GET_GoodsList()
