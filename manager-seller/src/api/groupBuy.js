@@ -57,7 +57,7 @@ export function saveGroupBuyGoods(ids, params) {
       method: 'put',
       loading: false,
       headers: { 'Content-type': 'application/json' },
-      data: params
+      data: new GroupBuyModel.GroupBuyDetails().params(params)
     }).then(response => {
       resolve(response)
     })
@@ -70,14 +70,13 @@ export function saveGroupBuyGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function addGroupBuyGoods(params) {
-  const _formdata = new FormData()
-  Object.keys(params).forEach(key => _formdata.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/group/buy/increase',
+      url: '/promotion/group-buy-goods',
       method: 'post',
       loading: false,
-      data: _formdata
+      headers: { 'Content-type': 'application/json' },
+      data: new GroupBuyModel.GroupBuyDetails().params(params)
     }).then(response => {
       resolve(response)
     })
@@ -85,30 +84,27 @@ export function addGroupBuyGoods(params) {
 }
 
 /**
- * 获取团购商品详情
+ * 获取一个团购商品详情
  * @param ids
  * @param params
  * @returns {Promise<any>}
  */
 export function getGroupBuyGoodsDetails(ids, params) {
-  const _formdata = new FormData()
-  Object.keys(params).forEach(key => _formdata.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/group/buy/details/${ids}`,
-      method: 'post',
+      url: `/promotion/group-buy-goods/${ids}`,
+      method: 'get',
       loading: false,
-      data: _formdata
+      data: params
     }).then(response => {
-      const _response = response
-      _response.data = new GroupBuyModel.GroupBuyDetails().map(response.data)
+      const _response = new GroupBuyModel.GroupBuyDetails().map(response)
       resolve(_response)
     })
   })
 }
 
 /**
- * 获取团购活动列表 （待审核）
+ * 获取团购活动列表 （待审核状态可显示）
  * @param params
  * @returns {Promise<any>}
  */

@@ -14,15 +14,15 @@ import {
 /** 团购商品列表模型 */
 export class GroupBuyGoods extends DataModel {
   /** 活动ID */
-  @ServerName('activity_id')
+  @ServerName('act_id')
   activity_id
 
-  /** 活动名称 */
-  @ServerName('activity_name')
+  /** 活动/团购名称 */
+  @ServerName('gb_name')
   activity_name
 
   /** 活动副标题 */
-  @ServerName('activity_subtitle')
+  @ServerName('gb_title')
   activity_subtitle
 
   /** 商品ID */
@@ -34,7 +34,7 @@ export class GroupBuyGoods extends DataModel {
   goods_name
 
   /** 团购图片 */
-  @ServerName('group_buy_image')
+  @ServerName('img_url')
   group_buy_image
 
   /** 审核状态 */
@@ -42,7 +42,7 @@ export class GroupBuyGoods extends DataModel {
   examine_status
 
   /** 活动时间（开始时间） */
-  @ServerName('start_time')
+  @ServerName('add_time')
   start_time
 
   /** 结束时间 */
@@ -50,11 +50,11 @@ export class GroupBuyGoods extends DataModel {
   end_time
 
   /** 活动别名 */
-  @ServerName('alias')
+  @ServerName('remark')
   alias
 
   /** 活动状态 */
-  @ServerName('activity_status')
+  @ServerName('gb_status')
   activity_status
 
   /** 团购状态  1已团购 0未团购*/
@@ -65,19 +65,19 @@ export class GroupBuyGoods extends DataModel {
 /** 团购商品详情模型 */
 export class GroupBuyDetails extends DataModel {
   /** 活动ID */
-  @ServerName('activity_id')
+  @ServerName('act_id')
   activity_id
 
-  /** 活动名称 */
-  @ServerName('activity_name')
-  activity_name
+  // /** 活动名称 */
+  // @ServerName('gb_name')
+  // activity_name
 
   /** 团购名称 */
-  @ServerName('group_buy_name')
+  @ServerName('gb_name')
   group_buy_name
 
   /** 团购副标题 */
-  @ServerName('group_buy_subtitle')
+  @ServerName('gb_title')
   group_buy_subtitle
 
   /** 团购商品ID */
@@ -89,15 +89,15 @@ export class GroupBuyDetails extends DataModel {
   goods_name
 
   /** 店铺价格 */
-  @ServerName('shop_price')
+  @ServerName('original_price')
   shop_price
 
   /** 团购价格 */
-  @ServerName('group_buy_price')
+  @ServerName('price')
   group_buy_price
 
   /** 团购图片 */
-  @ServerName('group_buy_image')
+  @ServerName('img_url')
   group_buy_image
 
   /** 商品库存数 */
@@ -105,31 +105,31 @@ export class GroupBuyDetails extends DataModel {
   goods_stock
 
   /** 商品总数 */
-  @ServerName('goods_summary')
+  @ServerName('goods_num')
   goods_summary
 
-  /** 团购类别 */
-  @ServerName('group_buy_category')
+  /** 团购类别id */
+  @ServerName('cat_id')
   group_buy_category
 
-  /** 所属区域 */
-  @ServerName('the_area')
+  /** 所属区域id */
+  @ServerName('area_id')
   the_area
 
   /** 虚拟数量 */
-  @ServerName('goods_virtual')
+  @ServerName('visual_num')
   goods_virtual
 
   /** 限购数量 */
-  @ServerName('goods_limit_buy')
+  @ServerName('limit_num')
   goods_limit_buy
 
   /** 团购介绍 */
-  @ServerName('group_buy_intro')
+  @ServerName('remark')
   group_buy_intro
 }
 
-/** 团购商品详情模型 */
+/** 团购活动模型 */
 export class GroupBuyActivitys extends DataModel {
   /** 活动ID */
   @ServerName('activity_id')

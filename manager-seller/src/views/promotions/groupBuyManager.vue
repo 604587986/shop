@@ -83,7 +83,6 @@
 <script>
   import * as API_groupBuy from '@/api/groupBuy'
   import { CategoryPicker } from '@/components'
-
   export default {
     name: 'groupBuyManager',
     components: {
@@ -97,8 +96,7 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10,
-          goods_status: 0
+          page_size: 10
         },
 
         /** 列表数据 */
@@ -124,21 +122,24 @@
         ]
       }
     },
-    mounted() {
-      this.GET_ActivityGoodsList()
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.GET_GroupGoodsList()
+        next()
+      })
     },
     methods: {
 
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_ActivityGoodsList()
+        this.GET_GroupGoodsList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_ActivityGoodsList()
+        this.GET_GroupGoodsList()
       },
 
       /** 搜索事件触发 */
@@ -147,19 +148,19 @@
           ...this.params,
           activity_name: data
         }
-        this.GET_ActivityGoodsList()
+        this.GET_GroupGoodsList()
       },
 
       /** 团购状态发生改变*/
       groupBuyStatusChange(val) {
         this.params = {
           ...this.params,
-          examine_status: val
+          gb_status: val
         }
-        this.GET_ActivityGoodsList()
+        this.GET_GroupGoodsList()
       },
 
-      GET_ActivityGoodsList() {
+      GET_GroupGoodsList() {
         this.loading = true
         API_groupBuy.getGroupBuyGoodsList(this.params).then(response => {
           this.loading = false
@@ -190,7 +191,7 @@
           type: 'warning'
         }).then(() => {
           API_groupBuy.deleteGroupBuyGoods(row.goods_id, row).then(() => {
-            this.GET_ActivityGoodsList()
+            this.GET_GroupGoodsList()
             this.$message.success('删除团购商品成功！')
           })
         }).catch(() => {

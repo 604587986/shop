@@ -208,7 +208,6 @@
 
         /** 商品选择器列表api*/
         goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
-        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
@@ -297,12 +296,6 @@
         })
       },
 
-      /** 获取团购商品详情*/
-      GET_GroupBuyGoodsDetails(id) {
-        API_groupBuy.getGroupBuyGoodsDetails(id, {}).then(response => {
-          this.gruopBuyForm = { ...response.data }
-        })
-      },
       /** 显示商品选择器*/
       chooseGroupBuyGoods() {
         this.showDialog = true
@@ -328,17 +321,11 @@
         this.showAgreement = false
       },
 
-      /** 保存团购商品*/
-      handleSaveGroupBuyGoods(ids) {
-        if (this.$route.params.goods_id) {
-          API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(response => {
-            this.$message.success('提交成功')
-          })
-        } else {
-          API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(response => {
-            this.$message.success('提交成功')
-          })
-        }
+      /** 新增团购商品*/
+      handleSaveGroupBuyGoods() {
+        API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(response => {
+          this.$message.success('添加成功')
+        })
       }
     }
   }
