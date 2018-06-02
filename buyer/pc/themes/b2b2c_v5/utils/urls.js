@@ -15,6 +15,6 @@ export default function getFullUrl(url) {
     : domain.dev
   let _url = _domain.buyer + '/' + url
   if (/^\/?passport($|\/)/.test(url)) _url = _domain.passport + '/' + url
-  if (/^\/?captchas($|\/)|^\/?uploaders($|\/)/.test(url)) _url = _domain.base + '/' + url
+  if (/^\/?captchas($|\/)|^\/?uploaders($|\/)|^\/?regions($|\/)/.test(url)) _url = _domain.base + '/' + url
   return _url.replace(/([^:])\/\//g, '$1/')
 }

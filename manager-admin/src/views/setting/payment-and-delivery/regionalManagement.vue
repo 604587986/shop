@@ -43,7 +43,7 @@
     data() {
       return {
         // api
-        regionApi: API_Region.Api,
+        regionApi: process.env.BASE_API + '/regions/@id/children',
         btns: [
           { text: '编辑', onClick: this.handleEdit },
           { text: '删除', onClick: this.handleDelete, color: 'red' }

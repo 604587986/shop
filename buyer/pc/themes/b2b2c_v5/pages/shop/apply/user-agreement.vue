@@ -40,6 +40,7 @@
 </template>
 
 <script>
+  import * as API_Shop from '@/api/shop'
   export default {
     name: "user-agreement",
     data() {
@@ -47,10 +48,12 @@
     },
     methods: {
       handleNextStep() {
-        if (!this.agreed) {
-          this.$message.error('请阅读并同意店铺入驻协议！')
+        if (this.agreed) {
+          API_Shop.initApplyShop().then(response => {
+            this.$router.push({ name: 'shop-apply-basic-info' })
+          })
         } else {
-          this.$router.push({ name: 'shop-apply-basic-info' })
+          this.$message.error('请阅读并同意店铺入驻协议！')
         }
       }
     }

@@ -18,15 +18,16 @@
         <el-form-item label="开户银行支行名称：" prop="bank_name">
           <el-input v-model.trim="finlQuafForm.bank_name" :maxlength="18" clearable></el-input>
         </el-form-item>
-        <el-form-item label="开户银行所在地：" prop="bank_province">
-          <en-address-select @changed="handleAddressSelectChanged"/>
+        <el-form-item label="开户银行所在地：" prop="bank_region">
+          <en-region-picker :api="MixinRegionApi" @changed="(object) => { finlQuafForm.bank_region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="开户银行许可证电子版：" prop="bank_img">
           <el-upload
             :action="MixinUploadApi"
-            :on-success="res => handleImgUploadSuccess('bank_img', res)"
-            :on-remove="handleImgRemove('bank_img')"
+            :on-success="(res) => { finlQuafForm.bank_img = res.url }"
+            :on-remove="() => { finlQuafForm.bank_img = '' }"
             :limit="1"
+            :file-list="finlQuafForm.bank_img ? [{name: 'bank_img', url: finlQuafForm.bank_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -42,9 +43,10 @@
         <el-form-item label="税务登记证电子版：" prop="taxes_certificate_img">
           <el-upload
             :action="MixinUploadApi"
-            :on-success="res => handleImgUploadSuccess('taxes_certificate_img', res)"
-            :on-remove="handleImgRemove('taxes_certificate_img')"
+            :on-success="(res) => { finlQuafForm.taxes_certificate_img = res.url }"
+            :on-remove="() => { finlQuafForm.taxes_certificate_img = '' }"
             :limit="1"
+            :file-list="finlQuafForm.taxes_certificate_img ? [{name: 'taxes_certificate_img', url: finlQuafForm.taxes_certificate_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -61,28 +63,40 @@
 
 <script>
   import * as regExp from '@/utils/RegExp'
+  import * as API_Shop from '@/api/shop'
+  import EnRegionPicker from "@/components/RegionPicker";
   export default {
     name: "financial-qualification",
+    components: {EnRegionPicker},
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
       return {
         /** 基础信息 表单 */
-        finlQuafForm: {},
+        finlQuafForm: {
+          bank_account_name: '',
+          bank_number: '',
+          bank_name: '',
+          bank_img: '',
+          taxes_certificate_num: '',
+          taxes_distinguish_num: '',
+          taxes_certificate_img: '',
+          bank_region: ''
+        },
         /** 基础信息 表单规则 */
         finlQuafRules: {
-          bank_account_name: [ req_rule('请输入银行开户名') ],
-          bank_number: [ req_rule('请输入法定代表人身份证号') ],
-          bank_name: [ req_rule('请输入开户银行支行名称')],
-          bank_province: [ req_rule('请选择开户银行所在地') ],
-          bank_img: [ req_rule('请上传开户银行许可证电子版') ],
-          taxes_certificate_num: [ req_rule('请输入税务登记证号') ],
+          bank_account_name: [ req_rule('请输入银行开户名！') ],
+          bank_number: [ req_rule('请输入法定代表人身份证号！') ],
+          bank_name: [ req_rule('请输入开户银行支行名称！')],
+          bank_region: [ req_rule('请选择开户银行所在地！') ],
+          bank_img: [ req_rule('请上传开户银行许可证电子版！') ],
+          taxes_certificate_num: [ req_rule('请输入税务登记证号！') ],
           taxes_distinguish_num: [
-            req_rule('请输入纳税人识别号'),
+            req_rule('请输入纳税人识别号！'),
             {
               validator: (rule, value, callback) => {
                 if (!regExp.TINumber.test(value)) {
-                  callback(new Error('纳税人识别号格式有误'))
+                  callback(new Error('纳税人识别号格式有误！'))
                 } else {
                   callback()
                 }
@@ -90,34 +104,29 @@
               trigger: 'blur'
             }
           ],
-          taxes_certificate_img: [ req_rule('请上税务登记证电子版') ]
+          taxes_certificate_img: [ req_rule('请上税务登记证电子版！') ]
         }
       }
+    },
+    mounted() {
+      API_Shop.getApplyShopInfo().then(response => {
+        // Andste_TODO 2018/6/2: 返回数据里没有地区信息
+        Object.keys(this.finlQuafForm).forEach(key => this.finlQuafForm[key] = response[key])
+      })
     },
     methods: {
       /** 下一步 */
       handleNextStep() {
         this.$refs['finlQuafForm'].validate((valid) => {
           if (valid) {
-            this.$router.push({ name: 'shop-apply-shop-info' })
+            API_Shop.applyShopStep(3, this.finlQuafForm).then(response => {
+              this.$router.push({ name: 'shop-apply-shop-info' })
+            })
           } else {
             this.$message.error('表单填写有误，请核对！')
             return false
           }
         })
-      },
-      /** 地址选择插件值发生改变 */
-      handleAddressSelectChanged(object) {
-        const { regions } = object
-        Object.keys(regions).forEach(key => this.finlQuafForm[`bank_${key}`] = regions[key] || '')
-      },
-      /** 图片上传成功 */
-      handleImgUploadSuccess(img_name, res) {
-        this.finlQuafForm[img_name] = res
-      },
-      /** 图片被移除 */
-      handleImgRemove(img_name) {
-        this.finlQuafForm[img_name] = ''
       }
     }
   }

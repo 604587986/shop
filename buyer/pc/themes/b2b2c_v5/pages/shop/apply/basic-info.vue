@@ -18,7 +18,7 @@
           <el-input v-model="basicInfoForm.compant_address" clearable></el-input>
         </el-form-item>
         <el-form-item label="公司电话：" prop="compant_phone">
-          <el-input v-model="basicInfoForm.compant_phone" clearable></el-input>
+          <el-input v-model="basicInfoForm.compant_phone" clearable :maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="公司邮箱：" prop="compant_email">
           <el-input v-model="basicInfoForm.compant_email" clearable></el-input>
@@ -50,6 +50,7 @@
 
 <script>
   import * as regExp from '@/utils/RegExp'
+  import * as API_Shop from '@/api/shop'
   export default {
     name: "basic-info",
     data() {
@@ -57,7 +58,16 @@
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'blur' })
       return {
         /** 基础信息 表单 */
-        basicInfoForm: {},
+        basicInfoForm: {
+          company_name: '',
+          compant_address: '',
+          compant_phone: '',
+          compant_email: '',
+          employee_num: '',
+          reg_money: '',
+          link_name: '',
+          link_phone: ''
+        },
         /** 基础信息 表单规则 */
         basicInfoRules: {
           company_name: [ req_rule('请输入公司名称'), len_rule(1, 20) ],
@@ -118,11 +128,20 @@
         }
       }
     },
+    mounted() {
+      API_Shop.getApplyShopInfo().then(response => {
+        Object.keys(this.basicInfoForm).forEach(key => this.basicInfoForm[key] = response[key])
+      })
+    },
     methods: {
       /** 下一步 */
       handleNextStep() {
         this.$refs['basicInfoForm'].validate((valid) => {
           if (valid) {
+            this.basicInfoForm.reg_monety = this.basicInfoForm.reg_money
+            API_Shop.applyShopStep(1, this.basicInfoForm).then(response => {
+              console.log(response)
+            })
             this.$router.push({ name: 'shop-apply-auth-info' })
           } else {
             this.$message.error('表单填写有误，请核对！')

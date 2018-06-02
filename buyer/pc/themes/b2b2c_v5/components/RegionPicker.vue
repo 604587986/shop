@@ -1,13 +1,17 @@
 <template>
-  <div :id="_uid"></div>
+  <div></div>
 </template>
 
 <script>
   export default {
-    name: 'EnAddressSelect',
+    name: 'EnRegionPicker',
     props: {
       default: {
         default: null
+      },
+      api: {
+        type: String,
+        required: true
       }
     },
     watch: {
@@ -25,7 +29,7 @@
       initAddressSelect() {
         this.$nextTick(() => {
           $(this.$el).addressSelect({
-            api: 'http://localhost:3001/javashop/api/base/region/get-children.do?regionid=@id',
+            api: this.api,
             callback: this.callback,
             deData: this.default
           })

@@ -12,12 +12,12 @@
         <el-form-item label="店铺名称：" prop="shop_name">
           <el-input v-model.trim="shopInfoForm.shop_name" clearable></el-input>
         </el-form-item>
-        <el-form-item label="店铺地址：" prop="shop_province">
-          <en-address-select @changed="handleAddressSelectChanged"/>
+        <el-form-item label="店铺地址：" prop="shop_region">
+          <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopInfoForm.shop_region = object.last_id }"/>
         </el-form-item>
-        <el-form-item label="经营类目：" prop="checkedCategorys">
+        <el-form-item label="经营类目：" prop="goods_management_category">
           <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChanged">全选</el-checkbox>
-          <el-checkbox-group v-model="shopInfoForm.checkedCategorys" @change="handleCheckedCategorysChange">
+          <el-checkbox-group v-model="shopInfoForm.goods_management_category" @change="handleCheckedCategorysChange">
             <el-checkbox v-for="cate in categorys" :label="cate" :key="cate.category_id">{{cate.label}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
@@ -32,8 +32,11 @@
 
 <script>
   import * as regExp from '@/utils/RegExp'
+  import * as API_Shop from '@/api/shop'
+  import EnRegionPicker from "@/components/RegionPicker";
   export default {
     name: "shop-info",
+    components: {EnRegionPicker},
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
@@ -54,39 +57,45 @@
         checkAll: false,
         /** 基础信息 表单 */
         shopInfoForm: {
-          checkedCategorys: []
+          shop_name: '',
+          goods_management_category: [],
+          shop_region: ''
         },
         /** 基础信息 表单规则 */
         shopInfoRules: {
           shop_name: [ req_rule('请输入店铺名称'), len_rule(1, 10) ],
-          shop_province: [ req_rule('请选择店铺地址') ],
-          checkedCategorys: [
+          shop_region: [ req_rule('请选择店铺地址') ],
+          goods_management_category: [
             { type: 'array', required: true, message: '请至少选择一个经营类目', trigger: 'change' }
           ]
         }
       }
+    },
+    mounted() {
+      API_Shop.getApplyShopInfo().then(response => {
+        // Andste_TODO 2018/6/2: 返回数据里没有地区信息
+        Object.keys(this.shopInfoForm).forEach(key => this.shopInfoForm[key] = response[key])
+      })
     },
     methods: {
       /** 下一步 */
       handleNextStep() {
         this.$refs['shopInfoForm'].validate((valid) => {
           if (valid) {
-            this.$router.push({ name: 'shop-apply-success' })
+            const params = JSON.parse(JSON.stringify(this.shopInfoForm))
+            params.goods_management_category = params.goods_management_category.map(item => item.category_id).join(',')
+            API_Shop.applyShopStep(4, params).then(response => {
+              this.$router.push({ name: 'shop-apply-success' })
+            })
           } else {
             this.$message.error('表单填写有误，请核对！')
             return false
           }
         })
       },
-      /** 地址选择插件值发生改变 */
-      handleAddressSelectChanged(object) {
-        const { regions } = object
-        Object.keys(regions).forEach(key => this.shopInfoForm[`shop_${key}`] = regions[key] || '')
-      },
       /** 经营类目全选框发生改变 */
       handleCheckAllChanged(checked) {
-        console.log(checked)
-        this.shopInfoForm.checkedCategorys = checked ? this.categorys : []
+        this.shopInfoForm.goods_management_category = checked ? this.categorys : []
         this.isIndeterminate = false
       },
       /** 选中的经营类目发生改变 */

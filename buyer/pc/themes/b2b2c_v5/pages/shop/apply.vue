@@ -26,8 +26,8 @@
   import applyHeader from './apply/-apply-header'
   import applyMenu from './apply/-apply-menu'
   import applySteps from './apply/-apply-steps'
-  import { AddressSelect } from '@/components'
-  Vue.component(AddressSelect.name, AddressSelect)
+  import { RegionPicker } from '@/components'
+  Vue.component(RegionPicker.name, RegionPicker)
 
   export default {
     name: 'apply',
