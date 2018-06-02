@@ -254,6 +254,7 @@ export function addSeconedHalfActivity(params) {
     request({
       url: '/promotion/half-prices',
       method: 'post',
+      headers: { 'Content-Type': 'application/json' },
       loading: false,
       data: params
     }).then(response => {
@@ -273,6 +274,7 @@ export function saveSeconedHalfActivity(ids, params) {
     request({
       url: `/promotion/half-prices/${ids}`,
       method: 'put',
+      headers: { 'Content-Type': 'application/json' },
       loading: false,
       data: params
     }).then(response => {
@@ -280,3 +282,24 @@ export function saveSeconedHalfActivity(ids, params) {
     })
   })
 }
+
+/**
+ * 获取一个第二件半价活动详情
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getSeconedHalfActivityDetails(ids, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/promotion/half-prices/${ids}`,
+      method: 'get',
+      loading: false,
+      data: params
+    }).then(response => {
+      const _response = new ActivityModel.Activity().map(response)
+      resolve(_response)
+    })
+  })
+}
+

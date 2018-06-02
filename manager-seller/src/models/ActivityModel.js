@@ -88,4 +88,8 @@ export class Activity extends DataModel {
   /** 单品立减金额 */
   @ServerName('single_reduction_value')
   price_reduction
+
+  /** 第二件半价活动id */
+  @ServerName('hp_id')
+  activity_hp_id
 }

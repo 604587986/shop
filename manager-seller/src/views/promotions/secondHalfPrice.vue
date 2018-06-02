@@ -32,11 +32,11 @@
               </template>
             </el-table-column>
             <!--活动类型-->
-            <el-table-column prop="activity_type" label="活动类型"/>
+            <el-table-column prop="activity_type" label="活动类型" :formatter="activityType"/>
             <!--活动状态-->
             <el-table-column label="活动状态">
               <template slot-scope="scope">
-                <span>{{ scope.row.activity_status }}</span>
+                <span>{{ scope.row.activity_status || 0 }}</span>
               </template>
             </el-table-column>
             <!--操作-->
@@ -103,7 +103,7 @@
               <h4>活动商品</h4>
               <div>
                 <div class="activity-goods">
-                  <el-form-item label="活动商品：">
+                  <el-form-item label="活动商品：" prop="is_all_joined">
                     <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
                       <el-radio :label="1">全部商品参与</el-radio>
                       <el-radio :label="0">部分商品参与</el-radio>
@@ -184,6 +184,13 @@
       [GoodsSelector.name]: GoodsSelector
     },
     data() {
+      var checkRange = (rule, value, callback) => {
+        if (!value && value !== 0) {
+          return callback(new Error('请选择商品参与方式'))
+        } else {
+          callback()
+        }
+      }
       return {
         /** 当前面板的名字*/
         activeName: 'seconedHalfList',
@@ -200,7 +207,7 @@
         /** 新增满减表单信息*/
         activityForm: {
           /** 活动ID*/
-          activity_id: '',
+          activity_hp_id: '',
 
           /** 活动名称*/
           activity_name: '',
@@ -229,6 +236,10 @@
           ],
           take_effect_time: [
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'change' }
+          ],
+          /** 商品参与方式 */
+          is_all_joined: [
+            { validator: checkRange, trigger: 'change' }
           ]
         },
 
@@ -246,7 +257,6 @@
 
         /** 商品选择器列表api*/
         goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
-        // goods_api: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/goods/list',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
@@ -256,6 +266,10 @@
       this.GET_SecondHalfActivityList()
     },
     methods: {
+      /** 活动类型 */
+      activityType(row, column, cellValue) {
+        return '第二件半价'
+      },
 
       /** 搜索事件触发 */
       searchEvent(data) {
@@ -273,7 +287,7 @@
           this.GET_SecondHalfActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
-            activity_id: '',
+            activity_hp_id: '',
             activity_name: '',
             take_effect_time: [],
             activity_desc: '',
@@ -296,7 +310,6 @@
 
       /** 显示商品选择器*/
       showGoodsSelector() {
-        console.log(2125123)
         this.showDialog = true
       },
 
@@ -336,11 +349,20 @@
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
-        this.activityForm = {
-          ...row,
-          take_effect_time: [parseInt(row.start_time) * 1000, parseInt(row.end_time) * 1000]
+        this.GET_SingleCutActivityDetails(row.activity_hp_id)
+      },
+
+      /** 查询一个第二件半价活动信息 */
+      GET_SingleCutActivityDetails(id) {
+        if (id) {
+          API_activity.getSeconedHalfActivityDetails(id, {}).then(response => {
+            this.activityForm = {
+              ...response,
+              take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
+            }
+            this.goodsShow = this.activityForm.is_all_joined === 1
+          })
         }
-        this.goodsShow = this.activityForm.is_all_joined === 1
       },
 
       /** 删除活动 */
@@ -353,7 +375,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteSeconedHalfActivity(row.activity_id, row).then(response => {
+        API_activity.deleteSeconedHalfActivity(row.activity_hp_id, {}).then(response => {
           this.$message.success('删除成功！')
           this.GET_SecondHalfActivityList()
         })
@@ -375,14 +397,16 @@
       handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.activityForm.activity_id) {
-              API_activity.saveSeconedHalfActivity(this.activityForm.activity_id, this.activityForm).then(response => {
+            const _params = this.generateFormData(this.activityForm)
+            delete _params.take_effect_time
+            if (this.activityForm.activity_hp_id) {
+              API_activity.saveSeconedHalfActivity(this.activityForm.activity_hp_id, _params).then(() => {
                 this.$message.success('保存设置成功！')
                 this.activeName === 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
               })
             } else {
-              API_activity.addSeconedHalfActivity(this.activityForm).then(response => {
+              API_activity.addSeconedHalfActivity(_params).then(() => {
                 this.$message.success('添加成功！')
                 this.activeName === 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
@@ -390,6 +414,42 @@
             }
           }
         })
+      },
+
+      /** 构造表单数据 */
+      generateFormData(data) {
+        const _params = {
+          /** 活动名称/标题 */
+          title: data.activity_name,
+
+          /** 活动开始时间 */
+          start_time: data.take_effect_time[0] / 1000,
+
+          /** 活动结束时间 */
+          end_time: data.take_effect_time[1] / 1000,
+
+          /** 活动描述 */
+          description: data.activity_desc,
+
+          /** 商品参与方式 */
+          range_type: data.is_all_joined,
+
+          /** 参与商品列表 */
+          goods_list: data.activity_goods || []
+          //   [{
+          //   goods_id
+          //
+          //   name
+          //
+          //   sku_id
+          //
+          //   thumbnail
+          // }]
+
+          // /** 商家ID */
+          // shop_id: seller_id
+        }
+        return _params
       }
     }
   }
