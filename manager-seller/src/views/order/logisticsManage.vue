@@ -253,7 +253,7 @@
 
       /** 地区选择器确认回调 */
       confirmFunc(val) {
-        this.mouldForm.tpl_area = val
+        this.mouldForm.tpl_area = JSON.stringify(val)
         this.areaDialog = false
       },
 
@@ -277,7 +277,7 @@
         this.tplOperaName = '修改模版'
         API_express.getSimpleTpl(row.tpl_id, {}).then((response) => {
           this.mouldForm = { ...response }
-          this.mouldForm.area = response.tpl_area_json
+          this.mouldForm.tpl_area = response.tpl_area_json
         })
       },
 
@@ -327,7 +327,8 @@
               continued_company: this.mouldForm.continued_company,
               continued_price: this.mouldForm.continued_price,
               type: parseInt(this.mouldForm.tpl_type),
-              area: JSON.stringify(this.mouldForm.tpl_area)
+              area_id: '54',
+              area: this.mouldForm.tpl_area
             }
             if (this.mouldForm.tpl_id) {
               API_express.saveExpressMould(this.mouldForm.tpl_id, _params).then(() => {

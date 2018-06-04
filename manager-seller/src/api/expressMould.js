@@ -74,7 +74,6 @@ export function saveExpressMould(ids, params) {
     request({
       url: `/shops/ship-templates/${ids}`,
       method: 'put',
-      headers: { 'Content-Type': 'application/json' },
       data: params
     }).then(response => {
       resolve(response)
@@ -93,7 +92,6 @@ export function addExpressMould(params) {
     request({
       url: '/shops/ship-templates',
       method: 'post',
-      headers: { 'Content-Type': 'application/json' },
       data: params
     }).then(response => {
       resolve(response)
