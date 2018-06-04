@@ -8,6 +8,7 @@ import axios from 'axios'
 export default {
   data() {
     return {
+      loading: false,
       data: [],
       /** 当前层级 */
       curLevel: 0,
@@ -101,10 +102,12 @@ export default {
      * @constructor
      */
     GET_ChildrenById(id) {
+      this.loading = true
       axios({
         url: this.api.replace(/@id/, id),
         method: 'get'
       }).then(response => {
+        this.loading = false
         const { data } = response
         // 如果有返回数据，且不为数组，抛出错误。
         if (data && !Array.isArray(data)) {
@@ -125,7 +128,7 @@ export default {
           return item
         })
         this.dataProcessing(response.data)
-      })
+      }).catch(() => { this.loading = false })
     },
     /**
      * 数据处理

@@ -82,7 +82,7 @@
       handleAdd(region, parent) {
         console.log(region, parent)
         this.regionForm = {
-          p_region_id: parent ? parent.id : 0,
+          parent_id: parent ? parent.id : 0,
           cod: 1
         }
         this.dialogRegionVisible = true
