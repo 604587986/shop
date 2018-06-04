@@ -310,7 +310,9 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        this.activityForm.activity_goods = val
+        if (val) {
+          this.activityForm.activity_goods = val
+        }
       },
 
       /** 显示商品选择器*/

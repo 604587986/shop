@@ -12,7 +12,7 @@
         <el-table-column type="selection"/>
         <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
-            <div class="goods_info">
+            <div class="goods-info">
               <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
               <img v-if="scope.row.goods_image" :src="scope.row.goods_image" class="goods-image"/>
               <div class="goodsinfo-txt">
@@ -176,7 +176,7 @@
     }
   }
 
-  .goods_info {
+  .goods-info {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

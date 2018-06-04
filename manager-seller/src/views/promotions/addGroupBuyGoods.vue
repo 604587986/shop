@@ -207,7 +207,7 @@
         maxsize: 1,
 
         /** 商品选择器列表api*/
-        goods_api: process.env.BASE_API + '/shop/seller/goods/search.do',
+        goods_api: `${process.env.BASE_API}/goods`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
@@ -303,7 +303,9 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        this.gruopBuyForm.goods_name = val.goods_name
+        if (val && val.goods_name) {
+          this.gruopBuyForm.goods_name = val.goods_name
+        }
       },
 
       /** 图片上传成功时的钩子*/
