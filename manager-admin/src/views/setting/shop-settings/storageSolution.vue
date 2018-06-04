@@ -1,15 +1,16 @@
 <template>
   <div>
     <en-tabel-layout
+      :toolbar="false"
       pagination
       :tableData="tableData.data"
       :loading="loading"
     >
-      <div slot="toolbar" class="inner-toolbar">
+      <!--<div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddStorageSolution">添加</el-button>
         </div>
-      </div>
+      </div>-->
       <template slot="table-columns">
         <el-table-column prop="name" label="储存方案名称"/>
         <el-table-column label="启用状态">
@@ -23,7 +24,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleEditStorageSolution(scope.$index, scope.row)">设置</el-button>
+              @click="handleEditStorageSolution(scope.$index, scope.row)">修改</el-button>
           </template>
         </el-table-column>
       </template>
@@ -39,6 +40,24 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
+    <el-dialog
+      :title="'修改储存方案 - ' + storageForm.name"
+      :visible.sync="dialogStorageVisible"
+      width="35%"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false">
+      <el-form :model="storageForm" :rules="storageRules" ref="storageForm" label-width="140px">
+        <template v-for="(config, index) in storageForm.configItems">
+          <el-form-item :label="config.text">
+            <el-input placeholder="请输入内容" v-model="config.value" clearable/>
+          </el-form-item>
+        </template>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogStorageVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitStorageForm('storageForm')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,9 +76,14 @@
           page_no: 1,
           page_size: 10
         },
+        tableData: '',
 
-        /** 储存方案列表数据 */
-        tableData: ''
+        /** 修改储存方案 表单*/
+        storageForm: '',
+        /** 修改储存方案 表单规则 */
+        storageRules: {},
+        /** 修改储存方案 dialog */
+        dialogStorageVisible: false
       }
     },
     mounted() {
@@ -86,11 +110,30 @@
         API_StorageSolution.openStorageSolutionById(row.code).then(response => {
           this.$message.success('开启成功！')
           this.GET_StorageSolutiontList()
-        }).catch(error => console.log(error))
+        })
       },
 
-      /** 配置储存方案 */
-      handleEditStorageSolution(index, row) {},
+      /** 修改储存方案 */
+      handleEditStorageSolution(index, row) {
+        this.storageForm = this.MixinClone(row)
+        this.dialogStorageVisible = true
+      },
+
+      /** 修改储存方案 提交表单 */
+      submitStorageForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            API_StorageSolution.editStorageSolution(this.storageForm.id, this.storageForm).then(response => {
+              this.dialogStorageVisible = false
+              this.GET_StorageSolutiontList()
+              this.$message.success('修改成功！')
+            })
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        })
+      },
 
       /** 获取储存方案列表 */
       GET_StorageSolutiontList() {
@@ -103,7 +146,3 @@
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
