@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <el-form :model="shopForm" :rules="shopRules" ref="shopForm" inline label-width="130px">
       <el-tabs type="border-card">
         <el-tab-pane label="基本信息">
@@ -31,48 +31,48 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="营业执照信息">
-          <el-form-item label="法定代表人姓名" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="法人姓名" prop="legal_name">
+            <el-input v-model="shopForm.legal_name" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="身份证号" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="法人身份证号" prop="legal_id">
+            <el-input v-model="shopForm.legal_id" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="营业执照号" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="营业执照号" prop="license_num">
+            <el-input v-model="shopForm.license_num" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="法定经营范围" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="法定经营范围" prop="scope">
+            <el-input v-model="shopForm.scope" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="营业执照所在地" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="营业执照所在地" prop="license_region">
+            <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopForm.license_region = object.last_id }"/>
           </el-form-item>
-          <el-form-item label="营业执照详细地址 " prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="营业执照详细地址 " prop="license_add">
+            <el-input v-model="shopForm.license_add" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="成立日期" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="成立日期" prop="establish_date">
+            <el-input v-model="shopForm.establish_date" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="营业执照有效期" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="营业执照有效期" prop="licence_start">
+            <el-input v-model="shopForm.licence_start" :maxlength="50"></el-input>
           </el-form-item>
           <br>
-          <el-form-item label="法人身份证">
+          <el-form-item label="法人身份证" prop="legal_img">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="MixinRegionApi"
               :show-file-list="false"
-              :on-success="handleLegalImgSuccess">
+              :on-success="(res) => { shopForm.legal_img = res.url }">
               <img v-if="shopForm.legal_img" :src="shopForm.legal_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
           <br>
-          <el-form-item label="营业执照">
+          <el-form-item label="营业执照" prop="licence_img">
             <el-upload
               class="avatar-uploader"
               :action="MixinUploadApi"
               :show-file-list="false"
-              :on-success="handleLicenceImgSuccess">
+              :on-success="(res) => { shopForm.licence_img = res.url }">
               <img v-if="shopForm.licence_img" :src="shopForm.licence_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -83,49 +83,49 @@
             <el-input v-model="shopForm.organization_code" :maxlength="50"></el-input>
           </el-form-item>
           <br>
-          <el-form-item label="组织机构代码证件">
+          <el-form-item label="组织机构代码证件" prop="code_img">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="MixinRegionApi"
               :show-file-list="false"
-              :on-success="handleLicenceImgSuccess">
+              :on-success="(res) => { shopForm.code_img = res.url }">
               <img v-if="shopForm.code_img" :src="shopForm.code_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="一般纳税人证明">
-          <el-form-item label="一般纳税人证明">
+          <el-form-item label="一般纳税人证明" prop="taxes_img">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="MixinRegionApi"
               :show-file-list="false"
-              :on-success="handleLicenceImgSuccess">
+              :on-success="(res) => { shopForm.taxes_img = res.url }">
               <img v-if="shopForm.taxes_img" :src="shopForm.taxes_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="开户行银行许可证">
-          <el-form-item label="银行开户名" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="银行开户名" prop="bank_account_name">
+            <el-input v-model="shopForm.bank_account_name" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="公司银行账号" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="公司银行账号" prop="bank_number">
+            <el-input v-model="shopForm.bank_number" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="开户银行支行名称" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="开户银行支行名称" prop="bank_name">
+            <el-input v-model="shopForm.bank_name" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="开户行所在地" prop="company_name">
-            <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
+          <el-form-item label="开户行所在地" prop="bank_region">
+            <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopForm.bank_region = object.last_id }"/>
           </el-form-item>
           <br>
-          <el-form-item label="开户行许可证">
+          <el-form-item label="开户行许可证" prop="bank_img">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="MixinRegionApi"
               :show-file-list="false"
-              :on-success="handleLicenceImgSuccess">
+              :on-success="(res) => { shopForm.bank_img = res.url }">
               <img v-if="shopForm.bank_img" :src="shopForm.bank_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -139,12 +139,12 @@
             <el-input v-model="shopForm.taxes_distinguish_num" :maxlength="50"></el-input>
           </el-form-item>
           <br>
-          <el-form-item label="税务登记证">
+          <el-form-item label="税务登记证" prop="taxes_certificate_img">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="MixinRegionApi"
               :show-file-list="false"
-              :on-success="handleLicenceImgSuccess">
+              :on-success="(res) => { shopForm.taxes_certificate_img = res.url }">
               <img v-if="shopForm.taxes_certificate_img" :src="shopForm.taxes_certificate_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -154,17 +154,17 @@
           <el-form-item label="店铺名称" prop="shop_name">
             <el-input v-model="shopForm.shop_name" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="店铺地址">
-            <el-input v-model="shopForm.shop_name" :maxlength="50"></el-input>
+          <el-form-item label="店铺所在地" prop="shop_region">
+            <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopForm.shop_region = object.last_id }" />
           </el-form-item>
-          <el-form-item label="用金比例">
-            <el-input v-model="shopForm.shop_name" :maxlength="50">
+          <el-form-item label="用金比例" prop="shop_commission">
+            <el-input v-model="shopForm.shop_commission" :maxlength="50">
               <template slot="append">%</template>
             </el-input>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="经营类目">
-          <el-form-item label="经营类目" class="form-item-cat">
+          <el-form-item label="经营类目" prop="goods_management_category" class="form-item-cat">
             <el-checkbox :indeterminate="isIndeterminateCat" v-model="checkAllCat" @change="handleCheckAllCatChange">全选</el-checkbox>
             <div style="margin: 15px 0;"></div>
             <el-checkbox-group v-model="checkedCats" @change="handleCheckedCatsChange">
@@ -181,6 +181,8 @@
 </template>
 
 <script>
+  import * as API_Shop from '@/api/shop'
+
   const categroy = [
     { label: '数码家电', id: 1 },
     { label: '食品饮料', id: 2 },
@@ -196,22 +198,55 @@
     name: 'shopEdit',
     data() {
       return {
+        shop_id: this.$route.params.shop_id,
+        loading: false,
         shopForm: {},
-        shopRules: {},
+        shopRules: {
+          company_name: [this.MixinRequired('公司名称不能为空！')],
+          compant_address: [this.MixinRequired('公司地址不能为空！')],
+          compant_phone: [this.MixinRequired('公司电话不能为空！')],
+          employee_num: [this.MixinRequired('公司员工数不能为空！')],
+          reg_money: [this.MixinRequired('公注册资金不能为空！')],
+          link_name: [this.MixinRequired('联系姓名不能为空！')],
+          link_phone: [this.MixinRequired('联系电话不能为空！')],
+          compant_email: [this.MixinRequired('公司电子邮箱不能为空！')],
+          legal_name: [this.MixinRequired('法人姓名不能为空！')],
+          legal_id: [this.MixinRequired('法人身份证不能为空！')],
+          license_num: [this.MixinRequired('营业执照不能为空！')],
+          scope: [this.MixinRequired('法定经营范围不能为空！')],
+          license_region: [this.MixinRequired('请选择营业执照所在地！')],
+          license_add: [this.MixinRequired('营业执照详细地址不能为空！')],
+          establish_date: [this.MixinRequired('请选择公司成立日期！')],
+          licence_start: [this.MixinRequired('请选择营业执照有效期开始时间！')],
+          licence_end: [this.MixinRequired('请选择营业执照有效期结束时间！')],
+          legal_img: [this.MixinRequired('请上传法人身份证！')],
+          licence_img: [this.MixinRequired('请上传营业执照！')],
+          organization_code: [this.MixinRequired('组织机构代码不能为空！')],
+          code_img: [this.MixinRequired('请上传组织机构拯证件！')],
+          taxes_img: [this.MixinRequired('请上传一般纳税人证明！')],
+          bank_account_name: [this.MixinRequired('银行开户名不能为空！')],
+          bank_number: [this.MixinRequired('公司银行账号不能为空！')],
+          bank_name: [this.MixinRequired('开户银行支行名称不能为空！')],
+          bank_region: [this.MixinRequired('请选择开户行所在地！')],
+          bank_img: [this.MixinRequired('请上传开户行许可证！')],
+          taxes_certificate_num: [this.MixinRequired('税务登记证号不能为空！')],
+          taxes_distinguish_num: [this.MixinRequired('纳税人识别号不能为空！')],
+          taxes_certificate_img: [this.MixinRequired('请选择税务登记证！')],
+          shop_name: [this.MixinRequired('店铺名称不能为空！')],
+          shop_region: [this.MixinRequired('请选择店铺所在地！')],
+          shop_commission: [this.MixinRequired('店铺佣金比例不能为空！')],
+          goods_management_category: [this.MixinRequired('请选择店铺经营类目！')]
+        },
         isIndeterminateCat: true,
         checkAllCat: false,
         checkedCats: [1, 2],
         cats: categroy
       }
     },
-    mounted() {},
+    mounted() {
+      this.GET_ShopDetail()
+    },
     methods: {
-      /** 法定代表人身份证上传成功 */
-      handleLegalImgSuccess() {},
-
-      /** 营业执照上传成功 */
-      handleLicenceImgSuccess() {},
-
       /** 经营类目全选 */
       handleCheckAllCatChange(val) {
         this.checkedCats = val ? categroy.map(item => item.id) : []
@@ -223,22 +258,23 @@
         let checkedCount = value.length
         this.checkAllCat = checkedCount === this.cats.length
         this.isIndeterminateCat = checkedCount > 0 && checkedCount < this.cats.length
+      },
+      /** 获取店铺详情 */
+      GET_ShopDetail() {
+        this.loading = true
+        API_Shop.getShopDetail(this.shop_id).then(response => {
+          this.loading = false
+          this.shopForm = response
+          console.log(response)
+        })
       }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  /deep/ .el-form-item--medium .el-form-item__content {
+  /deep/ .el-form-item--small .el-form-item__content {
     width: 180px;
-  }
-
-  /deep/ .el-input-number--medium {
-    width: 180px;
-  }
-
-  /deep/ .form-item-cat.el-form-item--medium .el-form-item__content {
-    width: auto;
   }
 
   /deep/ .avatar-uploader .el-upload {
@@ -252,6 +288,11 @@
     }
   }
 
+  /deep/ .avatar-uploader {
+    width: 180px;
+    height: 180px;
+    img { width: 100%; height: 100% }
+  }
   /deep/ .avatar-uploader .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
@@ -269,4 +310,5 @@
     border-top: 0;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
   }
+  /deep/ .form-item-cat .el-form-item__content { width: auto }
 </style>
