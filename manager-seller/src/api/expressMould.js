@@ -40,8 +40,7 @@ export function getSimpleTpl(id, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ExpressMouldModel().map(_response)
+      const _response = new ExpressMouldModel().map(response)
       resolve(_response)
     })
   })
@@ -75,7 +74,10 @@ export function saveExpressMould(ids, params) {
     request({
       url: `/shops/ship-templates/${ids}`,
       method: 'put',
-      data: new ExpressMouldModel().params(params)
+      headers: { 'Content-Type': 'application/json' },
+      data: params
+    }).then(response => {
+      resolve(response)
     })
   })
 }
@@ -91,7 +93,8 @@ export function addExpressMould(params) {
     request({
       url: '/shops/ship-templates',
       method: 'post',
-      data: new ExpressMouldModel().params(params)
+      headers: { 'Content-Type': 'application/json' },
+      data: params
     }).then(response => {
       resolve(response)
     })

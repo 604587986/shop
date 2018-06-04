@@ -181,13 +181,7 @@
           tpl_type: '',
 
           /** 模板地区*/
-          tpl_area: '',
-
-          /** 模板地区id ,分隔 */
-          tpl_area_id: '',
-
-          /** 模板地区json */
-          tpl_area_json: []
+          tpl_area: ''
         },
 
         /** 模板类型列表 */
@@ -259,7 +253,7 @@
 
       /** 地区选择器确认回调 */
       confirmFunc(val) {
-        console.log(val)
+        this.mouldForm.tpl_area = val
         this.areaDialog = false
       },
 
@@ -283,6 +277,7 @@
         this.tplOperaName = '修改模版'
         API_express.getSimpleTpl(row.tpl_id, {}).then((response) => {
           this.mouldForm = { ...response }
+          this.mouldForm.area = response.tpl_area_json
         })
       },
 
@@ -292,6 +287,7 @@
         this.$confirm(`确定要删除模板么?`, '确认信息')
           .then(() => {
             API_express.deleteExpressMould(_id, {}).then(() => {
+              this.GET_ExpressMould()
               this.$message.success('删除成功')
             })
           }).catch(() => { this.$message.info('取消删除操作') })
@@ -316,11 +312,7 @@
 
           tpl_type: '',
 
-          tpl_area: {},
-
-          tpl_area_id: '{ 5, 142, 143 }',
-
-          tpl_area_json: ''
+          tpl_area: ''
         }
       },
 
@@ -328,23 +320,27 @@
       saveMould(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            let _params = {
+              name: this.mouldForm.tpl_name,
+              first_company: this.mouldForm.first_company,
+              first_price: this.mouldForm.first_price,
+              continued_company: this.mouldForm.continued_company,
+              continued_price: this.mouldForm.continued_price,
+              type: parseInt(this.mouldForm.tpl_type),
+              area: JSON.stringify(this.mouldForm.tpl_area)
+            }
             if (this.mouldForm.tpl_id) {
-              const _params = {
-                ...this.mouldForm
-              }
               API_express.saveExpressMould(this.mouldForm.tpl_id, _params).then(() => {
                 this.$message.success('修改成功')
+                this.GET_ExpressMould()
                 this.activeName = 'express'
                 this.tplOperaName = '新增模板'
               })
             } else {
-              const _params = {
-                ...this.mouldForm
-              }
-              delete _params.tpl_id
-              _params.tpl_type = parseInt(_params.tpl_type)
+              delete _params.template_id
               API_express.addExpressMould(_params).then(() => {
                 this.$message.success('添加成功')
+                this.GET_ExpressMould()
                 this.activeName = 'express'
               })
             }
