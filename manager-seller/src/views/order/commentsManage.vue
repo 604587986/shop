@@ -311,7 +311,7 @@
     min-height: 60px;
     line-height: 60px;
     text-align: center;
-    width: 200%;
+    width: 139%;
     height: 100%;
     font-size: 14px;
     color: #606266;
