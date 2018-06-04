@@ -13,7 +13,8 @@
         <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
             <div class="goods_info">
-              <img :src="scope.row.thumbnail || scope.row.goods_image" class="goods-image"/>
+              <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
+              <img v-if="scope.row.goods_image" :src="scope.row.goods_image" class="goods-image"/>
               <div class="goodsinfo-txt">
                 <span class="goods_name">{{scope.row.goods_name}}</span>
                 <span class="goods_price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>
@@ -96,6 +97,10 @@
         next()
       })
     },
+    mounted() {
+      this.params.tag_id = this.$route.params.tag_id
+      this.getTagGoodsList()
+    },
     methods: {
       /**  显示商品选择器*/
       selectgoodslist() {
@@ -118,7 +123,7 @@
           this.loading = false
           this.tableData = response.data
           this.maxsize = 0
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /**  取消参加 */
