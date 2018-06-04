@@ -133,12 +133,11 @@
 
       /** 提交修改支付方式表单 */
       submitPaymentForm(formName) {
-        // Andste_TODO 2018/5/10: 尚未添加表单校验
         const { code } = this.paymentForm
         API_Payment.editPayment(code, this.paymentForm).then(response => {
           this.dialogPaymentVisible = false
-          this.GET_PaymentList()
           this.$message.success('保存成功！')
+          this.GET_PaymentList()
         })
       },
 
@@ -148,14 +147,8 @@
         API_Payment.getPaymentList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(() => {
-          this.loading = false
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
