@@ -1,14 +1,7 @@
 /**
  * 店铺相关模型
  */
-import {
-  DataModel,
-  Check,
-  CheckTypes,
-  ServerName,
-  Unit,
-  UnitTypes
-} from '@/framework'
+import { DataModel, ServerName } from '@/framework'
 
 /**
  * 店铺模型
@@ -230,8 +223,8 @@ export default class ShopModel extends DataModel {
   @ServerName('shop_commission')
   shop_commission
 
-  /**  */
-  @ServerName('shop_createtime')
+  /** 店铺创建时间 */
+  @ServerName('establish_date')
   shop_create_time
 
   /**  */

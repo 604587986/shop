@@ -57,7 +57,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          shop_status: 'apply'
+          disable: 'APPLY'
         },
 
         /** 列表数据 */

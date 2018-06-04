@@ -45,7 +45,6 @@
 </template>
 
 <script>
-  import * as API_GroupBuy from '@/api/groupBuy'
 
   export default {
     name: 'groupBuyGoods',
@@ -93,18 +92,18 @@
       /** 获取团购活动详情商品列表 */
       GET_GroupBuyGoodsList() {
         this.loading = true
-        API_GroupBuy.getGroupBuyGoodsList(this.params).then(response => {
-          this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        // API_GroupBuy.getGroupBuyGoodsList(this.params).then(response => {
+        //   this.loading = false
+        //   this.tableData = response.data
+        //   this.pageData = {
+        //     page_no: response.draw,
+        //     page_size: 10,
+        //     data_total: response.recordsTotal
+        //   }
+        // }).catch(error => {
+        //   this.loading = false
+        //   console.log(error)
+        // })
       }
     }
   }

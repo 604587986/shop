@@ -40,6 +40,7 @@
     />
     <!--api="http://yiqisi.s1.natapp.cc/seller-api/goods"-->
     <en-goods-picker
+      api="http://localhost:9090/javashop/shop/admin/goods/search.do"
       :show="dialogGoodsShow"
       :default-data="defaultGoodsData"
       :limit="0"

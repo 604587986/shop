@@ -5,7 +5,9 @@ Vue.mixin({
   data() {
     return {
       /** 图片上传API */
-      MixinUploadApi: API_Common.uploadApi
+      MixinUploadApi: API_Common.uploadApi,
+      /** 地区上传API */
+      MixinRegionApi: API_Common.regionApi
     }
   },
   computed: {

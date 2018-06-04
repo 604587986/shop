@@ -29,3 +29,36 @@ export function getShopGoods(params) {
     params
   })
 }
+
+/**
+ * 会员初始化店铺信息
+ */
+export function initApplyShop() {
+  return request({
+    url: 'shops',
+    method: 'post'
+  })
+}
+
+/**
+ * 获取店铺信息
+ */
+export function getApplyShopInfo() {
+  return request({
+    url: 'shops',
+    method: 'get'
+  })
+}
+
+/**
+ * 会员申请开店步骤
+ * @param step
+ * @param params
+ */
+export function applyShopStep(step, params) {
+  return request({
+    url: `shops/step${step}`,
+    method: 'put',
+    data: params
+  })
+}

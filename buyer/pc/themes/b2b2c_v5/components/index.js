@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import AddressSelect from './AddressSelect'
+import RegionPicker from './RegionPicker'
 import Logo from './Logo'
 import CartStep from './CartStep'
 import Category from './Category'
@@ -14,7 +14,7 @@ import ShopStar from './ShopStar'
 import Shortcut from './Shortcut'
 
 export {
-  AddressSelect,
+  RegionPicker,
   Logo,
   CartStep,
   Category,

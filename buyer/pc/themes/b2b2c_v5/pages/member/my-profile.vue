@@ -50,7 +50,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="地区" prop="region">
-          <en-address-select :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
+          <en-region-picker :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="address">
           <el-input v-model="profileForm.address" size="small" clearable></el-input>
@@ -73,12 +73,10 @@
   Vue.use(DatePicker)
   Vue.use(Upload)
   import { mapGetters, mapActions } from 'vuex'
-  import { AddressSelect } from '@/components'
+  import EnRegionPicker from "@/components/RegionPicker";
   export default {
     name: 'my-profile',
-    components: {
-      [AddressSelect.name]: AddressSelect
-    },
+    components: { EnRegionPicker },
     data() {
       return {
         /** 地区 */

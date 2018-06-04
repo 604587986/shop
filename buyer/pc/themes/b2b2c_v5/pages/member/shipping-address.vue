@@ -45,7 +45,7 @@
           <el-input v-model="addressForm.mobile" size="small" :maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="收货地区" prop="region">
-          <en-address-select :default="regions" @changed="(object) => { this.addressForm.region = object.last_id }"/>
+          <en-region-picker :default="regions" @changed="(object) => { this.addressForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="addr">
           <el-input v-model="addressForm.addr" size="small"></el-input>
@@ -64,13 +64,11 @@
 <script>
   import Vue from 'vue'
   import { mapActions, mapGetters } from 'vuex'
-  import { AddressSelect } from '@/components'
   import * as regExp from '@/utils/RegExp'
+  import EnRegionPicker from "@/components/RegionPicker";
   export default {
     name: 'shipping-address',
-    components: {
-      [AddressSelect.name]: AddressSelect
-    },
+    components: { EnRegionPicker },
     data() {
       return {
         /** 添加、编辑地址 表单 */

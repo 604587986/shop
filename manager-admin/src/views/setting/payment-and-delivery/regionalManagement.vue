@@ -43,7 +43,7 @@
     data() {
       return {
         // api
-        regionApi: API_Region.Api,
+        regionApi: process.env.BASE_API + '/regions/@id/children',
         btns: [
           { text: '编辑', onClick: this.handleEdit },
           { text: '删除', onClick: this.handleDelete, color: 'red' }
@@ -82,7 +82,7 @@
       handleAdd(region, parent) {
         console.log(region, parent)
         this.regionForm = {
-          p_region_id: parent ? parent.id : 0,
+          parent_id: parent ? parent.id : 0,
           cod: 1
         }
         this.dialogRegionVisible = true

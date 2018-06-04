@@ -23,6 +23,12 @@ export function getValidateCodeUrl(uuid, type) {
 export const uploadApi = GetFullUrl('uploaders')
 
 /**
+ * 地区API
+ * @type {string}
+ */
+export const regionApi = GetFullUrl('regions/@id/children')
+
+/**
  * 获取热门关键字
  * @returns {Promise<any>}
  */
