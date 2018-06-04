@@ -12,6 +12,8 @@
           </div>
         </swiper-slide>
         <div class="swiper-pagination swiper-pagination-white" slot="pagination"></div>
+        <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+        <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
       </swiper>
       <el-button type="primary" class="add-focus-btn" @click="hanldeAddFocus">新增焦点图</el-button>
     </div>
@@ -40,6 +42,10 @@
         swiperOption: {
           pagination: {
             el: '.swiper-pagination'
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
           }
         },
         /** 图片编辑器 显示 */
