@@ -37,8 +37,7 @@ export function replyConsultationList(id, params) {
       url: `/member/asks/${id}/reply`,
       method: 'put',
       loading: false,
-      headers: { 'Content-Type': 'application/json' },
-      data: new ConsultationModel().params(params)
+      data: params
     }).then(response => {
       resolve(response)
     })

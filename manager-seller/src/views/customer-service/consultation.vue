@@ -24,12 +24,16 @@
                   <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="咨询内容">
-                  <el-input size="medium" v-model="advancedForm.consultation_content" clearable></el-input>
+                  <el-input size="medium" v-model="advancedForm.content" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="回复状态">
-                  <el-select v-model="advancedForm.is_reply" placeholder="请选择" clearable>
-                    <el-option label="已回复" value="1"/>
-                    <el-option label="未回复" value="2"/>
+                  <el-select v-model="advancedForm.reply_status" placeholder="请选择" clearable>
+                    <el-option
+                      v-for="item in replyStatusList"
+                      :label="item.label"
+                      :value="item.value"
+                      :key="item.value"
+                    />
                   </el-select>
                 </el-form-item>
               </el-form>
@@ -91,10 +95,12 @@
       <div align="center">
         <el-form :model="replyForm" ref="replyForm" label-position="right" label-width="100px">
           <el-form-item label="当前状态:" prop="auth_status" >
-            <span class="desc-span">{{ replyForm.auth_status }}</span>
+            <span class="desc-span" v-if="replyForm.auth_status === 1">审核通过</span>
+            <span class="desc-span" v-if="replyForm.auth_status === 0">审核失败</span>
+            <span class="desc-span" v-if="replyForm.auth_status === 2">审核中</span>
           </el-form-item>
-          <el-form-item label="咨询内容:" prop="consultation_content" >
-            <span class="desc-span">{{ replyForm.consultation_content }}</span>
+          <el-form-item label="咨询内容:" prop="content" >
+            <span class="desc-span">{{ replyForm.content }}</span>
           </el-form-item>
           <el-form-item
             label="回复内容:"
@@ -139,7 +145,21 @@
         pageData: null,
 
         /** 高级搜索数据 */
-        advancedForm: {},
+        advancedForm: {
+          member_name: '',
+
+          goods_name: '',
+
+          content: '',
+
+          reply_status: 1
+        },
+
+        /** 回复状态列表 */
+        replyStatusList: [
+          { label: '已回复', value: 1 },
+          { label: '未回复', value: 2 }
+        ],
 
         /** 表格最大高度 */
         tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15),
@@ -154,7 +174,7 @@
           auth_status: '',
 
           /** 咨询问题 */
-          consultation_content: '',
+          content: '',
 
           /** 回复内容 */
           reply_content: ''
@@ -170,6 +190,7 @@
       countTableHeight() {
         this.tableHeight = (document.body.clientHeight - 54 - 35 - 50)
       },
+
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
@@ -194,6 +215,7 @@
 
       /** 高级搜索事件触发 */
       advancedSearchEvent() {
+        delete this.params.keyword
         this.params = {
           ...this.params,
           ...this.advancedForm
@@ -228,8 +250,9 @@
             const _params = {
               reply_content: this.replyForm.reply_content
             }
-            API_consultation.replyConsultationList(this.replyForm.ask_id, _params).then(() => {
+            API_consultation.replyConsultationList(this.replyForm.consultation_id, _params).then(() => {
               this.$message.success('回复成功')
+              this.isReplyShow = false
               this.GET_ConsultationList()
             })
           }
@@ -310,6 +333,8 @@
       }
       td.base-info {
         font-weight: bold;
+        color: #333;
+        font-size: 13px;
 
         /*商品名称*/
         a.goods-name {
