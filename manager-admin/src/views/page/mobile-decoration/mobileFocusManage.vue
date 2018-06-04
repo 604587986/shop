@@ -11,7 +11,7 @@
             </div>
           </div>
         </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
+        <div class="swiper-pagination swiper-pagination-white" slot="pagination"></div>
       </swiper>
       <el-button type="primary" class="add-focus-btn" @click="hanldeAddFocus">新增焦点图</el-button>
     </div>
@@ -37,7 +37,11 @@
       return {
         client_type: 'APP',
         focusList: [],
-        swiperOption: {},
+        swiperOption: {
+          pagination: {
+            el: '.swiper-pagination'
+          }
+        },
         /** 图片编辑器 显示 */
         dialogImageShow: false,
         defaultImageData: null,
@@ -68,7 +72,9 @@
       },
       /** 删除焦点图 */
       handleDeleteFocus(index) {
-        this.focusList.splice(index, 1)
+        this.$confirm('确定要删除这个焦点图吗？', '提示', { type: 'warning' }).then(() => {
+          this.focusList.splice(index, 1)
+        }).catch(() => {})
       },
       /** 图片上传组件确认 */
       handleImagePickerConfirm(fileList) {
