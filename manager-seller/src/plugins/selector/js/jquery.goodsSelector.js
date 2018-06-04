@@ -4,8 +4,10 @@
  */
 //  一些兼容扩展
 import axios from 'axios'
+import { getToken } from '@/utils/auth'
 
-var Authorization = 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6Miwic3ViIjoiU0VMTEVSIiwic2VsbGVySWQiOjMsInJvbGVzIjpbIkJVWUVSIiwiU0VMTEVSIl0sInNlbGxlck5hbWUiOiLnjovls7Dlupfpk7oxMTEiLCJ1c2VybmFtZSI6ImtpbmdhcGV4In0.rFV567biYKAgNuw1eA4roV8k2d6YyJRLAmIBhi0MxxKDnq_lGvK-GU1J6RmYjzYWwi3G9TyxhMJuV7klWk5o1Q'
+// 获取令牌
+var Authorization = getToken()
 
 let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
 ;(function() {
