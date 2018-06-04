@@ -3,23 +3,27 @@
     <el-tabs type="border-card">
       <el-tab-pane label="编辑会员">
         <el-form :model="editMemberForm" :rules="editMemberRules" ref="editMemberForm" inline label-width="100px">
-          <el-form-item label="用户名" prop="username">
+          <!--<el-form-item label="用户名" prop="username">
             <el-input v-model="editMemberForm.username" :maxlength="20"></el-input>
+          </el-form-item>-->
+          <el-form-item label="昵称" prop="nickname">
+            <el-input v-model="editMemberForm.nickname" :maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input v-model="editMemberForm.password" placeholder="不填则不更改" :maxlength="20"></el-input>
           </el-form-item>
+          <el-form-item label="地区" prop="region" class="form-item-region">
+            <en-region-picker :api="MixinRegionApi" :default="defaultRegion" @changed="(object) => { editMemberForm.region = object.last_id }"/>
+          </el-form-item>
+          <el-form-item label="会员备注">
+            <el-input placeholder="请输入会员备注" v-model="editMemberForm.remark" clearable>
+            </el-input>
+          </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="editMemberForm.email" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="昵称" prop="nickname">
-            <el-input v-model="editMemberForm.nickname" :maxlength="20"></el-input>
-          </el-form-item>
-          <el-form-item label="地区" class="form-item-region">
-            <en-region-picker :default="defaultRegion" @changed="(object) => { editMemberForm.region = object.last_id }"/>
-          </el-form-item>
-          <el-form-item label="手机" prop="mobile" :maxlength="11">
-            <el-input v-model="editMemberForm.mobile"></el-input>
+          <el-form-item label="手机" prop="mobile">
+            <el-input v-model="editMemberForm.mobile" :maxlength="11"></el-input>
           </el-form-item>
           <el-form-item label="生日" prop="birthday">
             <el-date-picker
@@ -66,7 +70,7 @@
             <el-input-number v-model="editPointForm.changedPoint" :min="1" :max="99999999" label="描述文字"></el-input-number>
           </el-form-item>
         </el-form>
-        <el-button type="primary">保存修改</el-button>
+        <el-button type="primary" @click="submitEditMemberForm('editMemberForm')">保存修改</el-button>
       </el-tab-pane>
       <el-tab-pane label="等级积分">
         <el-table
@@ -108,18 +112,6 @@
           <el-table-column prop="address" label="商家回复"></el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="会员备注">
-        <el-form :model="memberRemarkForm" ref="memberRemarkForm" label-width="100px">
-          <el-form-item label="会员备注">
-            <el-input
-              placeholder="请输入会员备注"
-              v-model="memberRemarkForm.remark"
-              clearable>
-            </el-input>
-          </el-form-item>
-        </el-form>
-        <el-button type="primary">保存修改</el-button>
-      </el-tab-pane>
       <el-tab-pane label="TA的收货地址">
         <el-table
           :data="shipList"
@@ -138,7 +130,7 @@
 <script>
   import * as API_Member from '@/api/member'
   import { RegExp } from '@/framework'
-
+  // Andste_TODO 2018/6/4: 编辑备注需要独立出来
   export default {
     name: 'memberEdit',
     data() {
@@ -148,15 +140,25 @@
         editMemberForm: {},
         // 编辑会员 表单规则
         editMemberRules: {
-          username: [
-            this.MixinRequired('请输入会员名称！'),
-            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          // username: [
+          //   this.MixinRequired('请输入会员名称！'),
+          //   { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          // ],
+          email: [
+            this.MixinRequired('请输入邮箱！'),
+            { validator: (rule, value, callback) => {
+              if (!RegExp.email.test(value)) {
+                callback(new Error('邮箱格式有误！'))
+              } else {
+                callback()
+              }
+            } }
           ],
-          email: [this.MixinRequired('请输入邮箱！')],
           nickname: [
             this.MixinRequired('请输入昵称！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
+          region: [this.MixinClone('请选择地区！')],
           mobile: [
             this.MixinRequired('请输入手机号！'),
             { validator: (rule, value, callback) => {
@@ -187,10 +189,6 @@
         askList: [],
         // 评论列表
         commentList: [],
-        // 会员备注 表单
-        memberRemarkForm: {
-          remark: ''
-        },
         // 收货地址列表
         shipList: []
       }
@@ -203,7 +201,9 @@
       submitEditMemberForm(formName) {
         this.$refs[formName].validate(valid => {
           if (valid) {
-            API_Member.editMember(this.editMemberForm.id, this.editMemberForm).then(response => {
+            const params = this.MixinClone(this.editMemberForm)
+            params.birthday /= 1000
+            API_Member.editMember(params.id, params).then(response => {
               this.$message.success('修改成功！')
               console.log(response)
             })
