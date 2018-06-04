@@ -11,7 +11,7 @@
       <label class="label-sku">规格明细：</label>
       <sku-table
         :isEditModel="isEditModel"
-        :goodsId="goodsId"
+        :goodsSn="goodsSn"
         :productSn="productSn"
         :skuInfo="skuInfo"
         :tablehead="tablehead"
@@ -52,6 +52,12 @@
 
       /** 当前商品Id */
       goodsId: {
+        type: [String, Number],
+        default: ['', 0]
+      },
+
+      /** 当前商品编号 */
+      goodsSn: {
         type: [String, Number],
         default: ['', 0]
       },

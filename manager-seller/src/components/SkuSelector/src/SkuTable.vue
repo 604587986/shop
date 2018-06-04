@@ -63,8 +63,8 @@
         default: false
       },
 
-      /** 当前商品Id */
-      goodsId: {
+      /** 当前商品编号 */
+      goodsSn: {
         type: [String, Number],
         default: ['', 0]
       },
@@ -99,11 +99,14 @@
       /** 自动生成货号 */
       productSn() {
         if (this.productSn && this.tableData.length > 0) {
+          console.log(65)
           let count = 1
           this.tableData.forEach(key => {
-            key.sn = this.goodsId + '-' + count
+            key.sn = this.goodsSn + '-' + count
             count++
           })
+          /** 异步更新skuInfo数据 */
+          this.$emit('skuTable', this.tableData)
         }
       }
     },

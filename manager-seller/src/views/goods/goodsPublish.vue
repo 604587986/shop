@@ -138,6 +138,7 @@
                <en-sku-selector
                  :categoryId="baseInfoForm.category_id"
                  :goodsId="activeGoodsId"
+                 :goodsSn="baseInfoForm.sn"
                  :productSn="productSn"
                  :isEditModel="currentStatus"
                  :goodsSkuInfo="skuList"
@@ -1111,15 +1112,12 @@
 
       /** 商品规格选择器校验 */
       skuFormVali() {
+        this.productSn = false
         /** 是否自动生成货号校验 检测是否所有的货号都存在*/
-        const _sn = this.baseInfoForm.sku_list.filter(key => {
-          if (key === 'sn') {
-            return Object.values(key).every(item => {
-              return item
-            })
-          }
+        const _sn = this.baseInfoForm.sku_list.every(key => {
+          return key.sn === ''
         })
-        if (!_sn) {
+        if (_sn) {
           this.$confirm('确认自动生成货号, 是否继续?', '提示').then(() => {
             this.productSn = true
           }).catch(() => {
@@ -1128,12 +1126,16 @@
           return false
         }
         /** 规格值空校验 */
-        const _result = this.baseInfoForm.sku_list.every(key => {
-          return Object.values(key).every(item => {
-            return item
+        let _result = false
+        this.baseInfoForm.sku_list.forEach(key => {
+          Object.values(key).forEach(item => {
+            if (!item && item !== 0) {
+              _result = true
+            }
           })
         })
-        if (!_result) {
+        console.log(_result)
+        if (_result) {
           this.$message.error('存在未填写的规格值')
           return false
         }

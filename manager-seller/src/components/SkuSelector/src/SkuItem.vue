@@ -349,7 +349,7 @@
             return key.spec_value === val.spec_value
           }
         })
-        if (_value_list.length > 0) {
+        if (_value_list.length > 1) {
           this.$message.error('当前规格值已存在，请重新选择或者编辑！')
           if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value_id) {
             this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', '')
@@ -370,6 +370,19 @@
       editSkuIValue(item, val, $index, index) {
         /** 检测是否为空 检测是否有spec_value_id值 如果有则说明是选择而非编辑的终止方法的执行 */
         if (!val.spec_value || val.spec_value_id) {
+          return
+        }
+        /** 检测是否已存在*/
+        const _value_list = this.skuInfo[this.activeSkuItemIndex].value_list.filter((key) => {
+          if (key.spec_value) {
+            return key.spec_value === val.spec_value
+          }
+        })
+        if (_value_list.length > 1) {
+          this.$message.error('当前规格值已存在，请重新选择或者编辑！')
+          if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value_id) {
+            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', '')
+          }
           return
         }
         /** 更新用户自定义规格值 */
@@ -498,6 +511,10 @@
         img.sku-image {
           width: 120px;
           height: 120px;
+        }
+        a.el-upload-list__item-name {
+          white-space: nowrap;
+          text-overflow:ellipsis;
         }
         i.avatar-uploader-icon {
           font-size: 28px;
