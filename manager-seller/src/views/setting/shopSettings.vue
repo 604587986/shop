@@ -96,8 +96,8 @@
           /** 身份证号*/
           legal_id: '',
 
-          /** 店铺地址 */
-          shop_address: '',
+          /** 店铺地址id */
+          shop_region: '',
 
           /** 详细地址*/
           shop_add: '',
@@ -151,7 +151,7 @@
       /** 获取店铺信息 */
       GET_ShopGradeData() {
         API_Shop.getShopData().then(response => {
-          this.shopDataForm = { ...response.data }
+          this.shopDataForm = { ...response }
           this.fileList_logo = [{ url: this.shopDataForm.shop_logo }]
           this.fileList_banner = [{ url: this.shopDataForm.shop_banner }]
           this.areas = [this.shopDataForm.shop_province_id, this.shopDataForm.shop_city_id,
@@ -166,13 +166,6 @@
             const _params = {
               ...this.shopDataForm
             }
-            if (!_params.legal_id) {
-              _params.legal_id = '130426199304143912'
-            }
-            if (!_params.shop_id) {
-              _params.shop_id = 3
-            }
-
             API_Shop.saveShopSettings(_params).then(response => {
               this.$message.success('保存店铺设置成功')
               this.GET_ShopGradeData()

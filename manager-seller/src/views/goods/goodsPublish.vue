@@ -1134,7 +1134,6 @@
             }
           })
         })
-        console.log(_result)
         if (_result) {
           this.$message.error('存在未填写的规格值')
           return false

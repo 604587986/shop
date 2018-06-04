@@ -60,6 +60,10 @@ export default class ShopModel extends DataModel {
   @ServerName('shop_name')
   shop_name
 
+  /** 店铺简介 */
+  @ServerName('shop_desc')
+  shop_desc
+
   /** 店铺所在省份 */
   @ServerName('shop_province')
   shop_province
