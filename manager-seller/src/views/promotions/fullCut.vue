@@ -172,7 +172,7 @@
                       <div v-show="!goodsShow">
                         <en-tabel-layout
                           toolbar
-                          :tableData="goodsData"
+                          :tableData="activityForm.activity_goods"
                           :loading="loading"
                           :selectionChange="selectionChange"
                         >
@@ -187,10 +187,10 @@
                             <!--商品信息-->
                             <el-table-column  label="商品信息">
                               <template slot-scope="scope">
-                                <div>
+                                <div class="goods-info">
                                   <img :src="scope.row.thumbnail" alt="" class="goods-image">
                                   <div>
-                                    <span>{{ scope.row.goods_name }}</span>
+                                    <a>{{ scope.row.goods_name }}</a>
                                     <span>{{ scope.row.price | unitPrice('￥') }}</span>
                                   </div>
                                 </div>
@@ -226,9 +226,20 @@
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
+    <!--<en-goods-picker-->
+      <!--:show="showDialog"-->
+      <!--:api="goods_api"-->
+      <!--:defaultData="tableData"-->
+      <!--:limit="maxsize"-->
+      <!--@confirm="refreshFunc"-->
+      <!--@close="showDialog = false"/>-->
     <en-goods-selector
-      :show="showDialog" :api="goods_api" :defaultData="tableData"
-      :maxLength="maxsize" @confirm="refreshFunc" @closed="showDialog = false"/>
+      :show="showDialog"
+      :api="goods_api"
+      :defaultData="tableData"
+      :maxLength="maxsize"
+      @confirm="refreshFunc"
+      @closed="showDialog = false"/>
     <!--赠品组件-->
     <add-gift
       :giftModelShow="giftModelShow"
@@ -440,9 +451,6 @@
         /** 是否显示商品表格*/
         goodsShow: true,
 
-        /** 表格商品数据*/
-        goodsData: null,
-
         /** 选择的goods_id*/
         selectionids: [],
 
@@ -450,7 +458,7 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: process.env.BASE_API + '/goods',
+        goods_api: `${process.env.BASE_API}/goods`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
@@ -588,7 +596,7 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        this.goodsData = val
+        this.activityForm.activity_goods = val
       },
 
       /** 显示商品选择器*/
@@ -598,9 +606,9 @@
 
       /** 取消参加*/
       handleCancleJoin(index, row) {
-        this.goodsData.forEach((elem, _index) => {
+        this.activityForm.activity_goods.forEach((elem, _index) => {
           if (index === _index) {
-            this.goodsData.splice(_index, 1)
+            this.activityForm.activity_goods.splice(_index, 1)
           }
         })
       },
@@ -613,9 +621,9 @@
       /** 批量取消 */
       cancelall() {
         this.selectionids.forEach(key => {
-          this.goodsData.forEach((elem, index) => {
+          this.activityForm.activity_goods.forEach((elem, index) => {
             if (elem.goods_id === key) {
-              this.goodsData.splice(index, 1)
+              this.activityForm.activity_goods.splice(index, 1)
             }
           })
           this.$message.success('批量取消成功！')
@@ -898,19 +906,14 @@
           range_type: data.is_all_joined,
 
           /** 参与商品列表 */
-          goods_list: data.activity_goods || []
-          //   [{
-          //   goods_id
-          //
-          //   name
-          //
-          //   sku_id
-          //
-          //   thumbnail
-          // }]
-
-          // /** 商家ID */
-          // shop_id: seller_id
+          goods_list: data.activity_goods.map(key => {
+            return {
+              goods_id: key.goods_id,
+              name: key.goods_name,
+              sku_id: key.sn,
+              thumbnail: key.thumbnail
+            }
+          })
         }
         return _params
       }
@@ -973,6 +976,25 @@
       .el-form-item__content {
         text-align: center;
       }
+    }
+  }
+
+  /** 表格信息 */
+  .goods-info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    div {
+      a {
+        color: #409EFF;
+      }
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 
