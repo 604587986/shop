@@ -427,6 +427,7 @@ export default {
       clear: both;
       display: block;
       overflow: hidden;
+      margin-bottom: 10px;
       padding: 10px;
       background-color: #fcf8e3;
       border: 1px solid #fbeed5;
