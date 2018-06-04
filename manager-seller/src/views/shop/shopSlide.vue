@@ -63,7 +63,7 @@
           </div>
         </li>
       </ul>
-      <div style="width: 100%;text-align: center;">
+      <div class="save-btn">
         <el-button type="success" size="medium" @click="POST_SaveSlide">保存</el-button>
       </div>
     </div>
@@ -267,6 +267,12 @@
           }
         }
       }
+    }
+    /*保存幻灯片*/
+    .save-btn {
+      margin-top: 10px;
+      width: 100%;
+      text-align: center;
     }
   }
 </style>
