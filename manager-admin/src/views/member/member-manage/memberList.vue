@@ -128,7 +128,7 @@
         </el-form-item>
         <!--地区-->
         <el-form-item label="地区" prop="region" class="form-item-region">
-          <en-region-picker @changed="(object) => { addMemberForm.region = object.last_id }"/>
+          <en-region-picker :api="MixinRegionApi" @changed="(object) => { addMemberForm.region = object.last_id }"/>
         </el-form-item>
         <!--手机号码-->
         <el-form-item label="手机号码" prop="mobile">
@@ -314,7 +314,7 @@
               this.dialogAddMemberVisible = false
               this.$message.success('添加成功！')
               this.GET_MemberList()
-            }).catch(error => console.log(error))
+            })
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -328,9 +328,7 @@
         API_Member.getMemberList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(() => {
-          this.loading = false
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }

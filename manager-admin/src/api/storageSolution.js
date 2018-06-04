@@ -5,6 +5,8 @@
 import request from '@/utils/request'
 import StorageSolutionModel from '@/models/StorageSolutionModel'
 
+const storageSolutionModel = new StorageSolutionModel()
+
 /**
  * 获取储存方案列表
  * @param params
@@ -18,7 +20,7 @@ export function getStorageSolutionList(params) {
       loading: false,
       params
     }).then(response => {
-      response.data = new StorageSolutionModel().map(response.data)
+      response.data = storageSolutionModel.map(response.data)
       resolve(response)
     }).catch(error => reject(error))
   })
@@ -34,6 +36,20 @@ export function addStorageSolution(params) {
     url: 'system/uploaders',
     method: 'post',
     data: params
+  })
+}
+
+/**
+ * 编辑储存方案
+ * @param id
+ * @param params
+ */
+export function editStorageSolution(id, params) {
+  return request({
+    url: `system/uploaders/${id}`,
+    method: 'put',
+    headers: { 'Content-Type': 'application/json' },
+    data: storageSolutionModel.params(params)
   })
 }
 

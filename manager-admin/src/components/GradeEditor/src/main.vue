@@ -1,5 +1,5 @@
 <template>
-  <div :id="'grade-editor-' + _uid" class="grade-editor">
+  <div :id="'grade-editor-' + _uid" class="grade-editor" v-loading="loading">
     <div v-for="(column, columnIndex) in data" class="column" :style="columnWdith">
       <div class="search-column">
         <input
