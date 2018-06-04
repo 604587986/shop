@@ -105,18 +105,18 @@
       },
       GET_FocusList() {
         this.loading = true
-        API_Floor.getFocus('APP').then(response => {
+        API_Floor.getFocus('PC').then(response => {
           // this.focusList = response
           this.focusList = [
             {
               id: 1,
-              client_type: 'APP',
+              client_type: 'PC',
               operation_param: '啊飒飒',
               operation_type: 'keyword',
               pic_url: 'http://192.168.2.5:7000/statics/attachment/null/2018/6/4/18/11590701.jpg'
             }, {
               id: 2,
-              client_type: 'APP',
+              client_type: 'PC',
               operation_param: '2222',
               operation_type: 'goods-sn',
               pic_url: 'http://192.168.2.5:7000/statics/attachment/null/2018/6/4/18/27422074.jpg'
