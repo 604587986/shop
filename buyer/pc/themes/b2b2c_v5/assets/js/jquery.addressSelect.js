@@ -5,7 +5,7 @@
 
 import axios from 'axios'
 
-  ;(function ($, window, document, undefined) {
+(function ($, window, document, undefined) {
   var addressSelect = function (ele, opts) {
     this.$element = ele;
     //  全局节点
