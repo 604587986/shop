@@ -99,6 +99,17 @@ export function getRecycleMemberList(params) {
 }
 
 /**
+ * 恢复会员
+ * @param id
+ */
+export function recycleMember(id) {
+  return request({
+    url: `members/${id}`,
+    method: 'post'
+  })
+}
+
+/**
  * 获取会员收货地址列表
  * @param member_id
  * @param params
@@ -112,13 +123,62 @@ export function getMemberAddress(member_id, params) {
   })
 }
 
-/**
- * 恢复会员
- * @param id
- */
-export function recycleMember(id) {
+export function getMemberListAsk(member_id, params) {
   return request({
-    url: `members/${id}`,
-    method: 'post'
+    url: ''
+  })
+}
+
+export function getMemberListComments(member_id, params) {
+  return request({
+    url: ''
+  })
+}
+
+/**
+ * 获取会员咨询列表
+ * @param params
+ */
+export function getMemberAsks(params) {
+  return request({
+    url: 'member/asks',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 删除会员咨询
+ * @param ask_id
+ */
+export function deleteMemberAsk(ask_id) {
+  return request({
+    url: `member/asks/${ask_id}`,
+    method: 'delete'
+  })
+}
+
+/**
+ * 获取会员评论列表
+ * @param params
+ */
+export function getMemberComments(params) {
+  return request({
+    url: 'member/comments',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 删除会员评论
+ * @param comment_id
+ */
+export function deleteMemberComments(comment_id) {
+  return request({
+    url: `member/comments/${comment_id}`,
+    method: 'delete'
   })
 }
