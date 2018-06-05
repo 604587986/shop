@@ -3,9 +3,6 @@
  */
 
 import request from '@/utils/request'
-import ShopModel, { ShopThemeModel } from '@/models/ShopModel'
-const shopModel = new ShopModel()
-const shopThemeModel = new ShopThemeModel()
 
 /**
  * 获取店铺列表
@@ -13,16 +10,11 @@ const shopThemeModel = new ShopThemeModel()
  * @returns {Promise<any>}
  */
 export function getShopList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shops',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = shopModel.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'shops',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -78,17 +70,11 @@ export function editAuthShop(shop_id, params) {
  * @returns {Promise<any>}
  */
 export function getShopLevelApplyList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/shop/level-audit-list-json.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      const _response = response
-      _response.data = new ShopModel().map(response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'b2b2c/admin/shop/level-audit-list-json.do',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -98,20 +84,11 @@ export function getShopLevelApplyList(params) {
  * @param status
  * @returns {Promise<any>}
  */
-export function auditShopLevelApply(id, status) {
-  const _params = {
-    storeId: id,
-    store_level_apply_status: status
-  }
-  const _formData = new FormData()
-  Object.keys(_params).forEach(key => _formData.append(key, _params[key]))
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/shop/level-audit.do',
-      method: 'post',
-      params: _params
-      // data: _formData
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function auditShopLevelApply(id, params) {
+  return request({
+    url: 'b2b2c/admin/shop/level-audit.do',
+    method: 'post',
+    data: params
   })
 }
 
@@ -121,16 +98,11 @@ export function auditShopLevelApply(id, status) {
  * @returns {Promise<any>}
  */
 export function getShopThemeList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'shops/themes',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = shopThemeModel.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'shops/themes',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -143,7 +115,7 @@ export function addShopTheme(params) {
   return request({
     url: 'shops/themes',
     method: 'post',
-    data: shopThemeModel.params(params)
+    data: params
   })
 }
 
@@ -153,11 +125,9 @@ export function addShopTheme(params) {
  * @returns {Promise<any>}
  */
 export function getShopThemeDetail(id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `shops/themes/${id}`,
-      method: 'get'
-    }).then(response => resolve(shopThemeModel.map(response))).catch(error => reject(error))
+  return request({
+    url: `shops/themes/${id}`,
+    method: 'get'
   })
 }
 
@@ -171,7 +141,7 @@ export function editShopTheme(id, params) {
   return request({
     url: `shops/themes/${id}`,
     method: 'put',
-    data: shopThemeModel.params(params)
+    data: params
   })
 }
 

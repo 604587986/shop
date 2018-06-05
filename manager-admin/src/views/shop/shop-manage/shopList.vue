@@ -24,7 +24,7 @@
                   <el-input size="medium" v-model="advancedForm.member_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="店铺状态">
-                  <el-select v-model="advancedForm.shop_status" placeholder="请选择" clearable>
+                  <el-select v-model="advancedForm.shop_disable" placeholder="请选择" clearable>
                     <el-option label="全部" value="ALL"/>
                     <el-option label="已开启" value="OPEN"/>
                     <el-option label="已关闭" value="CLOSE"/>
@@ -42,7 +42,7 @@
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    value-format="yyyy-MM-dd"
+                    value-format="timestamp"
                     :picker-options="pickerOptions">
                   </el-date-picker>
                 </el-form-item>
@@ -59,12 +59,10 @@
         <!--会员名称-->
         <el-table-column prop="member_name" label="会员名称"/>
         <!--创建时间-->
-        <el-table-column prop="shop_create_time" label="创建时间">
-          <template slot-scope="scope">{{ scope.row.shop_create_time | unixToDate('yyyy-MM-dd') }}</template>
-        </el-table-column>
+        <el-table-column prop="shop_createtime" :formatter="MixinUnixToDate" label="创建时间"/>
         <!--店铺状态-->
         <el-table-column label="店铺状态">
-          <template slot-scope="scope">{{ scope.row.shop_status | statusFilter }}</template>
+          <template slot-scope="scope">{{ scope.row.shop_disable | statusFilter }}</template>
         </el-table-column>
         <!--操作-->
         <el-table-column label="操作" width="150">
@@ -72,17 +70,17 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleEditOrder(scope.$index, scope.row)">修改</el-button>
+              @click="handleEditShop(scope.$index, scope.row)">修改</el-button>
             <el-button
-              v-if="scope.row.shop_status === 'OPEN'"
+              v-if="scope.row.shop_disable === 'OPEN'"
               size="mini"
               type="danger"
-              @click="handleCloseOrder(scope.$index, scope.row)">关闭</el-button>
+              @click="handleCloseShop(scope.$index, scope.row)">关闭</el-button>
             <el-button
-              v-if="scope.row.shop_status === 'CLOSED'"
+              v-if="scope.row.shop_disable === 'CLOSED'"
               size="mini"
               type="success"
-              @click="handleRecoverOrder(scope.$index, scope.row)">恢复</el-button>
+              @click="handleOpenShop(scope.$index, scope.row)">开启</el-button>
           </template>
         </el-table-column>
       </template>
@@ -113,7 +111,8 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          shop_disable: 'ALL'
         },
         /** 列表数据 */
         tableData: '',
@@ -157,7 +156,7 @@
     filters: {
       statusFilter(val) {
         switch (val) {
-          case 'refused': return '审核未通过'
+          case 'REFUSED': return '审核未通过'
           case 'APPLY': return '待审核'
           case 'OPEN': return '开启中'
           case 'CLOSED': return '已关闭'
@@ -179,12 +178,12 @@
       },
 
       /** 编辑店铺 */
-      handleEditOrder(index, row) {
+      handleEditShop(index, row) {
         this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}` })
       },
 
       /** 关闭店铺 */
-      handleCloseOrder(index, row) {
+      handleCloseShop(index, row) {
         this.$confirm('确定要关闭这个店铺吗？', '提示', { type: 'warning' }).then(() => {
           API_Shop.closeShop(row.shop_id).then(response => {
             this.$message.success('关闭成功！')
@@ -194,9 +193,9 @@
       },
 
       /** 开启店铺 */
-      handleRecoverOrder(index, row) {
+      handleOpenShop(index, row) {
         this.$confirm('确定要开启这个店铺吗？', '提示', { type: 'warning' }).then(() => {
-          API_Shop.recoverShop(row.id).then(response => {
+          API_Shop.recoverShop(row.shop_id).then(response => {
             this.$message.success('开启成功！')
             this.GET_ShopList()
           })
@@ -221,12 +220,12 @@
         }
         delete this.params.start_time
         delete this.params.end_time
-        if (this.advancedForm.order_time_range) {
-          this.params.start_time = this.advancedForm.order_time_range[0]
-          this.params.end_time = this.advancedForm.order_time_range[1]
+        if (this.advancedForm.shop_time_range) {
+          this.params.start_time = this.advancedForm.shop_time_range[0] /= 1000
+          this.params.end_time = this.advancedForm.shop_time_range[1] /= 1000
         }
         delete this.params.keyword
-        delete this.params.order_time_range
+        delete this.params.shop_time_range
         this.GET_ShopList()
       },
 
@@ -235,6 +234,10 @@
         this.loading = true
         API_Shop.getShopList(this.params).then(response => {
           this.loading = false
+          response.data.map(item => {
+            item.shop_createtime *= 1000
+            return item
+          })
           this.tableData = response
         }).catch(() => { this.loading = false })
       }
