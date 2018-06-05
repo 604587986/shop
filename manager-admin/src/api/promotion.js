@@ -150,3 +150,87 @@ export function reviewGroupBuyGoods(id, params) {
     data: params
   })
 }
+
+/**
+ * 获取限时抢购列表
+ * @param params
+ */
+export function getSeckillList(params) {
+  return request({
+    url: 'promotion/seckills',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 增加限时抢购
+ * @param params
+ */
+export function addSeckill(params) {
+  return request({
+    url: 'promotion/seckills',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 获取限时抢购详情
+ * @param id
+ */
+export function getSeckillDetail(id) {
+  return request({
+    url: `promotion/seckills/${id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 修改限时抢购
+ * @param id
+ * @param params
+ */
+export function editSeckill(id, params) {
+  return request({
+    url: `promotion/seckills/${id}`,
+    method: 'put',
+    data: params
+  })
+}
+
+/**
+ * 删除限时抢购
+ * @param id
+ */
+export function deleteSeckill(id) {
+  return request({
+    url: `promotion/seckills/${id}`,
+    method: 'delete'
+  })
+}
+
+/**
+ * 发布限时抢购
+ * @param id
+ * @param params
+ */
+export function releaseSeckill(id, params) {
+  return request({
+    url: `promotion/seckills/${id}/release`,
+    method: 'post'
+  })
+}
+
+/**
+ * 审核商品
+ * @param apply_id
+ * @param params
+ */
+export function reviewSeckill(apply_id, params) {
+  return request({
+    url: `promotion/seckills/review/${apply_id}`,
+    method: 'post'
+  })
+}
