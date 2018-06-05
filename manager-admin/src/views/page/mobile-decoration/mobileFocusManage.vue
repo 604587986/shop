@@ -61,6 +61,7 @@
     methods: {
       /** 新增焦点图片 */
       hanldeAddFocus() {
+        this.curEditIndex = null
         this.dialogImageShow = true
       },
       /** 编辑焦点图 */
@@ -100,7 +101,6 @@
           API_Floor.editFocus(this.focusList[curEditIndex].id, params).then(response => {
             this.focusList[curEditIndex] = response
             this.$message.success('修改成功！')
-            this.curEditIndex = null
           })
         } else {
           API_Floor.addFocus(params).then(response => {
