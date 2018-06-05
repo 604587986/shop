@@ -113,15 +113,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="TA的收货地址">
-        <el-table
-          :data="shipList"
-          style="width: 100%">
-          <el-table-column prop="sn" label="收货人"/>
-          <el-table-column prop="name" label="所在地区"></el-table-column>
-          <el-table-column prop="address" label="详细地址"></el-table-column>
-          <el-table-column prop="address" label="手机号码"></el-table-column>
-          <el-table-column prop="address" label="默认"></el-table-column>
-        </el-table>
+        <member-list-address :member-id="member_id"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -130,9 +122,13 @@
 <script>
   import * as API_Member from '@/api/member'
   import { RegExp } from '@/framework'
-  // Andste_TODO 2018/6/4: 编辑备注需要独立出来
+  import MemberListAddress from './memberListAddress'
+
   export default {
     name: 'memberEdit',
+    components: {
+      MemberListAddress
+    },
     data() {
       return {
         member_id: this.$route.params.id,

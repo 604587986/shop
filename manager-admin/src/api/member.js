@@ -4,6 +4,7 @@
 
 import request from '@/utils/request'
 import MemberModel from '@/models/MemberModel'
+
 const memberModel = new MemberModel()
 
 /** 获取会员列表 */
@@ -94,6 +95,20 @@ export function getRecycleMemberList(params) {
       response.data = memberModel.map(response.data)
       resolve(response)
     }).catch(error => reject(error))
+  })
+}
+
+/**
+ * 获取会员收货地址列表
+ * @param member_id
+ * @param params
+ */
+export function getMemberAddress(member_id, params) {
+  return request({
+    url: `members/addresses/${member_id}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
