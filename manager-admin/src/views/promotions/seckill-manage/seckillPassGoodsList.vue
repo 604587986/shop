@@ -32,8 +32,6 @@
 </template>
 
 <script>
-  import * as API_Seckill from '@/api/seckill'
-
   export default {
     name: 'seckillPassGoodsList',
     data() {
@@ -73,18 +71,18 @@
       /** 获取待审核商品列表 */
       GET_SeckillPassGoodsList() {
         this.loading = true
-        API_Seckill.getPassGoodsList(this.$route.params.id).then(response => {
-          this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        // API_Seckill.getPassGoodsList(this.$route.params.id).then(response => {
+        //   this.loading = false
+        //   this.tableData = response.data
+        //   this.pageData = {
+        //     page_no: response.draw,
+        //     page_size: 10,
+        //     data_total: response.recordsTotal
+        //   }
+        // }).catch(error => {
+        //   this.loading = false
+        //   console.log(error)
+        // })
       }
     }
   }

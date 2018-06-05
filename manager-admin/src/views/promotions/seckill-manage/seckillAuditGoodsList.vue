@@ -44,8 +44,6 @@
 </template>
 
 <script>
-  import * as API_Seckill from '@/api/seckill'
-
   export default {
     name: 'seckillAuditGoodsList',
     data() {
@@ -85,45 +83,45 @@
       /** 通过限时抢购商品 */
       handlePassGoods(index, row) {
         this.$confirm('确定要通过这个商品？', '提示', { type: 'warning' }).then(() => {
-          API_Seckill.passSeckillAuditGoods(row.apply_id).then(response => {
-            this.$message.success('该商品已通过！')
-            this.GET_SeckillAuditGoodsList()
-          }).catch(error => console.log(error))
+          // API_Seckill.passSeckillAuditGoods(row.apply_id).then(response => {
+          //   this.$message.success('该商品已通过！')
+          //   this.GET_SeckillAuditGoodsList()
+          // }).catch(error => console.log(error))
         }).catch(() => {})
       },
 
       /** 拒绝限时抢购商品 */
       handleRejectGoods(index, row) {
-        this.$confirm('确定要通过这个商品？', '提示', { type: 'warning' }).then(() => {
-          this.$prompt('请输入拒绝原因', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            inputPattern: /.+/,
-            inputErrorMessage: '请输入拒绝原因'
-          }).then(({ value }) => {
-            API_Seckill.passSeckillAuditGoods(row.apply_id, value).then(response => {
-              this.$message.success('该商品已拒绝！')
-              this.GET_SeckillAuditGoodsList()
-            }).catch(error => console.log(error))
-          }).catch(() => {})
-        }).catch(() => {})
+        // this.$confirm('确定要通过这个商品？', '提示', { type: 'warning' }).then(() => {
+        //   this.$prompt('请输入拒绝原因', '提示', {
+        //     confirmButtonText: '确定',
+        //     cancelButtonText: '取消',
+        //     inputPattern: /.+/,
+        //     inputErrorMessage: '请输入拒绝原因'
+        //   }).then(({ value }) => {
+        //     API_Seckill.passSeckillAuditGoods(row.apply_id, value).then(response => {
+        //       this.$message.success('该商品已拒绝！')
+        //       this.GET_SeckillAuditGoodsList()
+        //     }).catch(error => console.log(error))
+        //   }).catch(() => {})
+        // }).catch(() => {})
       },
 
       /** 获取待审核商品列表 */
       GET_SeckillAuditGoodsList() {
         this.loading = true
-        API_Seckill.getAuditGoodsList(this.$route.params.id).then(response => {
-          this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        // API_Seckill.getAuditGoodsList(this.$route.params.id).then(response => {
+        //   this.loading = false
+        //   this.tableData = response.data
+        //   this.pageData = {
+        //     page_no: response.draw,
+        //     page_size: 10,
+        //     data_total: response.recordsTotal
+        //   }
+        // }).catch(error => {
+        //   this.loading = false
+        //   console.log(error)
+        // })
       }
     }
   }
