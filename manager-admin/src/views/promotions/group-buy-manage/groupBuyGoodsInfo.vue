@@ -58,7 +58,6 @@
 </template>
 
 <script>
-
   export default {
     name: 'groupBuyGoodsInfo',
     data() {
