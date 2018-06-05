@@ -65,7 +65,7 @@ import axios from 'axios'
       _this.selectTab();
 
       //  初始化一级地区
-      if (_this.options.deData) {
+      if (_this.options.deData && _this.options.deData[0]) {
         //  有默认值
         _this.hasDefault();
       } else {
