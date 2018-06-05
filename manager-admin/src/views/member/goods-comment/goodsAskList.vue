@@ -7,9 +7,7 @@
     >
       <template slot="table-columns">
         <el-table-column prop="member_name" label="会员名称"/>
-        <el-table-column label="咨询论日期">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
-        </el-table-column>
+        <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="咨询论日期"/>
         <el-table-column prop="content" label="咨询内容" width="500"/>
         <el-table-column label="审核状态">
           <template slot-scope="scope">{{ scope.row.status | statusFilter }}</template>
