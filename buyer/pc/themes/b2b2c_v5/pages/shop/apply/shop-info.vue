@@ -13,7 +13,7 @@
           <el-input v-model.trim="shopInfoForm.shop_name" clearable></el-input>
         </el-form-item>
         <el-form-item label="店铺地址：" prop="shop_region">
-          <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopInfoForm.shop_region = object.last_id }"/>
+          <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { shopInfoForm.shop_region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="经营类目：" prop="goods_management_category">
           <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChanged">全选</el-checkbox>
@@ -41,6 +41,7 @@
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
       return {
+        defaultRegions: null,
         /** 分类 */
         categorys: [
           { category_id: 491, label: '数码家电' },
@@ -73,8 +74,9 @@
     },
     mounted() {
       API_Shop.getApplyShopInfo().then(response => {
-        // Andste_TODO 2018/6/2: 返回数据里没有地区信息
         Object.keys(this.shopInfoForm).forEach(key => this.shopInfoForm[key] = response[key])
+        const { shop_province_id, shop_city_id, shop_county_id, shop_town_id } = response
+        this.defaultRegions = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
       })
     },
     methods: {

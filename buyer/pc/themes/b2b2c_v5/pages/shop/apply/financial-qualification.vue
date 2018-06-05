@@ -19,7 +19,7 @@
           <el-input v-model.trim="finlQuafForm.bank_name" :maxlength="18" clearable></el-input>
         </el-form-item>
         <el-form-item label="开户银行所在地：" prop="bank_region">
-          <en-region-picker :api="MixinRegionApi" @changed="(object) => { finlQuafForm.bank_region = object.last_id }"/>
+          <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { finlQuafForm.bank_region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="开户银行许可证电子版：" prop="bank_img">
           <el-upload
@@ -72,6 +72,7 @@
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
       return {
+        defaultRegions: null,
         /** 基础信息 表单 */
         finlQuafForm: {
           bank_account_name: '',
@@ -110,8 +111,9 @@
     },
     mounted() {
       API_Shop.getApplyShopInfo().then(response => {
-        // Andste_TODO 2018/6/2: 返回数据里没有地区信息
         Object.keys(this.finlQuafForm).forEach(key => this.finlQuafForm[key] = response[key])
+        const { bank_province_id, bank_city_id, bank_county_id, bank_town_id } = response
+        this.defaultRegions = [bank_province_id, bank_city_id, bank_county_id, bank_town_id]
       })
     },
     methods: {
