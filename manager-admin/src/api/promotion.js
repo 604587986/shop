@@ -98,6 +98,7 @@ export function addGrouBuyActivity(params) {
   return request({
     url: 'promotion/group-buy-actives',
     method: 'post',
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
@@ -122,6 +123,7 @@ export function editGroupBuyActivity(id, params) {
   return request({
     url: `promotion/group-buy-actives/${id}`,
     method: 'put',
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
@@ -151,6 +153,12 @@ export function reviewGroupBuyGoods(id, params) {
   })
 }
 
+export function getGroupBuyGoodsList(params) {
+  return request({
+    url: `promotion/group-buy-goods`
+  })
+}
+
 /**
  * 获取限时抢购列表
  * @param params
@@ -172,6 +180,7 @@ export function addSeckill(params) {
   return request({
     url: 'promotion/seckills',
     method: 'post',
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
@@ -196,6 +205,7 @@ export function editSeckill(id, params) {
   return request({
     url: `promotion/seckills/${id}`,
     method: 'put',
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
