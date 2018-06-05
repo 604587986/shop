@@ -300,7 +300,7 @@
           setTimeout(() => {
             if (!Number.isInteger(value)) {
               callback(new Error('请输入数字值'))
-            } else if (value <= 0 && value >= 10) {
+            } else if (value <= 0 || value >= 10) {
               callback(new Error('不合法的打折'))
             } else {
               callback()
@@ -586,6 +586,13 @@
               /** 活动商品*/
               activity_goods: []
             }
+            /** 处理优惠数据 */
+            this.isDiscount = false
+            this.isReduceCash = false
+            this.isIntegral = false
+            this.freePostage = false
+            this.isCoupon = false
+            this.isGift = false
         }
       },
 
@@ -736,6 +743,12 @@
           /** 活动商品*/
           activity_goods: []
         }
+        this.isDiscount = false
+        this.isReduceCash = false
+        this.isIntegral = false
+        this.freePostage = false
+        this.isCoupon = false
+        this.isGift = false
       },
 
       /** 是否打折 */

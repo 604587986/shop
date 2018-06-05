@@ -22,7 +22,7 @@ export function getTplList(ids, params) {
       const _response = response
       _response.data = new ExpressMouldModel().map(_response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
