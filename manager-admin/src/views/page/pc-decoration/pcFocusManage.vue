@@ -6,8 +6,8 @@
           <div class="focus-item">
             <img :src="focus.pic_url" class="focus-image">
             <div class="opt-box">
-              <i class="opt-btn el-icon-edit-outline" title="编辑" @click="handleEditFocus(focus)"></i>
-              <i class="opt-btn el-icon-delete" title="删除" @click="handleDeleteFocus(index)"></i>
+              <i class="opt-btn el-icon-edit-outline" title="编辑" @click="handleEditFocus(focus, index)"></i>
+              <i class="opt-btn el-icon-delete" title="删除" @click="handleDeleteFocus(focus, index)"></i>
             </div>
           </div>
         </swiper-slide>
@@ -37,7 +37,7 @@
     components: { swiper, swiperSlide },
     data() {
       return {
-        client_type: 'APP',
+        client_type: 'PC',
         focusList: [],
         swiperOption: {
           pagination: {
@@ -52,7 +52,7 @@
         dialogImageShow: false,
         defaultImageData: null,
         /** 正在编辑的 */
-        curEdit: null
+        curEditIndex: null
       }
     },
     created() {
@@ -61,6 +61,7 @@
     methods: {
       /** 新增焦点图片 */
       hanldeAddFocus() {
+        this.curEditIndex = null
         this.dialogImageShow = true
       },
       /** 编辑焦点图 */
@@ -77,58 +78,43 @@
         this.dialogImageShow = true
       },
       /** 删除焦点图 */
-      handleDeleteFocus(index) {
+      handleDeleteFocus(focus, index) {
         this.$confirm('确定要删除这个焦点图吗？', '提示', { type: 'warning' }).then(() => {
-          this.focusList.splice(index, 1)
+          API_Floor.deleteFocus(focus.id).then(() => {
+            this.$message.success('删除成功！')
+            this.focusList.splice(index, 1)
+          })
         }).catch(() => {})
       },
       /** 图片上传组件确认 */
       handleImagePickerConfirm(fileList) {
         this.dialogImageShow = false
+        const { curEditIndex } = this
         const file = fileList[0]
         const params = {
-          ...this.curEdit,
+          client_type: this.client_type,
           pic_url: file.response.url,
           operation_type: file.operation.opt_type,
           operation_param: file.operation.opt_value
         }
-        if (this.curEdit) {
-          Object.keys(params).forEach(key => {
-            this.curEdit[key] = params[key]
+        if (curEditIndex) {
+          API_Floor.editFocus(this.focusList[curEditIndex].id, params).then(response => {
+            this.focusList[curEditIndex] = params
+            this.$message.success('修改成功！')
           })
-          this.$message.success('修改成功！')
-          // API_Floor.editFocus(this.curEdit.id, params).then(response => {
-          // Andste_TODO 2018/6/4: 修改成功
-          // })
         } else {
-          // API_Floor.addFocus(params).then(response => {
-          //   console.log(response)
-          //   this.$message.success('添加成功！')
-          // })
-          this.$message.success('添加成功！')
-          this.focusList.push(params)
+          API_Floor.addFocus(params).then(response => {
+            this.focusList.push(response)
+            this.$message.success('添加成功！')
+          })
         }
       },
       GET_FocusList() {
         this.loading = true
-        API_Floor.getFocus('APP').then(response => {
-          // this.focusList = response
-          this.focusList = [
-            {
-              id: 1,
-              client_type: 'APP',
-              operation_param: '啊飒飒',
-              operation_type: 'keyword',
-              pic_url: 'http://192.168.2.5:7000/statics/attachment/null/2018/6/4/18/11590701.jpg'
-            }, {
-              id: 2,
-              client_type: 'APP',
-              operation_param: '2222',
-              operation_type: 'goods-sn',
-              pic_url: 'http://192.168.2.5:7000/statics/attachment/null/2018/6/4/18/27422074.jpg'
-            }
-          ]
-        })
+        API_Floor.getFocus(this.client_type).then(response => {
+          this.loading = false
+          this.focusList = response
+        }).catch(() => { this.loading = false })
       }
     }
   }

@@ -1,11 +1,8 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
-      :selection-change="handleSelectionChange"
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
@@ -14,11 +11,14 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column type="selection" width="100"/>
-        <el-table-column prop="name" label="活动名称"/>
-        <el-table-column prop="order" label="排序"/>
+        <el-table-column prop="cat_name" label="活动名称"/>
+        <el-table-column prop="cat_order" label="排序"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleEditGroupBuy(scope.$index, scope.row)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -27,37 +27,33 @@
         </el-table-column>
       </template>
 
-      <template slot="pagination-toolbar">
-        <el-button type="danger" size="mini" @click="deleteSelected">删除选中</el-button>
-      </template>
-
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
 
     <!--添加团购分类 dialog-->
-    <el-dialog title="添加团购分类" :visible.sync="dialogAddGroupBuyVisible" width="500px">
+    <el-dialog title="添加团购分类" :visible.sync="dialogGroupBuyVisible" width="500px">
       <el-form :model="groupBuyForm" :rules="groupBuyRules" ref="groupBuyForm" label-width="120px">
         <!--分类名称-->
-        <el-form-item label="分类名称" prop="name">
-          <el-input v-model="groupBuyForm.name" :maxlength="20" clearable></el-input>
+        <el-form-item label="分类名称" prop="cat_name">
+          <el-input v-model="groupBuyForm.cat_name" :maxlength="20" clearable></el-input>
         </el-form-item>
         <!--排序-->
-        <el-form-item label="排序" prop="order">
-          <el-input-number v-model="groupBuyForm.order" controls-position="right" :min="1" :max="99999999"/>
+        <el-form-item label="排序" prop="cat_order">
+          <el-input-number v-model="groupBuyForm.cat_order" controls-position="right" :min="1" :max="99999999"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogAddGroupBuyVisible = false">取 消</el-button>
+        <el-button @click="dialogGroupBuyVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitAddGroupBuyForm('groupBuyForm')">确 定</el-button>
       </div>
     </el-dialog>
@@ -65,6 +61,8 @@
 </template>
 
 <script>
+  import * as API_Promotion from '@/api/promotion'
+
   export default {
     name: 'groupBuyCategory',
     data() {
@@ -79,13 +77,7 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
-        /** 被选数据 */
-        selectedData: [],
+        tableData: '',
 
         /** 添加团购分类 表单 */
         groupBuyForm: {},
@@ -98,7 +90,7 @@
         },
 
         /** 添加团购分类 dialog */
-        dialogAddGroupBuyVisible: false
+        dialogGroupBuyVisible: false
       }
     },
     mounted() {
@@ -125,15 +117,24 @@
       /** 添加团购分类 */
       handleAddGroupBuy() {
         this.groupBuyForm = {
-          order: (() => Math.max.apply(null, this.tableData.map(item => item.order)))() + 1
+          cat_order: (() => Math.max.apply(null, this.tableData.data.map(item => item.cat_order)))() + 1
         }
-        this.dialogAddGroupBuyVisible = true
+        this.dialogGroupBuyVisible = true
       },
 
-      /** 删除团购 */
+      /** 编辑团购分类 */
+      handleEditGroupBuy(index, row) {
+        this.groupBuyForm = this.MixinClone(row)
+        this.dialogGroupBuyVisible = true
+      },
+
+      /** 删除团购分类 */
       handleDeleteGroupBuy(index, row) {
         this.$confirm('确定要通过申请吗？', '提示', { type: 'warning' }).then(() => {
-          this.DELETE_GroupBuyCategory(row.id)
+          API_Promotion.deleteGroupBuyCategory(row.cat_id).then(() => {
+            this.GET_GroupBuyCategoryList()
+            this.$message.success('删除成功！')
+          })
         }).catch(() => {})
       },
 
@@ -141,11 +142,20 @@
       submitAddGroupBuyForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // API_GroupBuy.addGroupBuyCategory(this.groupBuyForm).then(response => {
-            //   this.dialogAddGroupBuyVisible = false
-            //   this.$message.success('添加成功！')
-            //   this.GET_GroupBuyCategoryList()
-            // }).catch(error => console.log(error))
+            const { cat_id } = this.groupBuyForm
+            if (cat_id) {
+              API_Promotion.editGroupBuyCategory(cat_id, this.groupBuyForm).then(response => {
+                this.dialogGroupBuyVisible = false
+                this.$message.success('编辑成功！')
+                this.GET_GroupBuyCategoryList()
+              })
+            } else {
+              API_Promotion.addGroupBuyCategory(this.groupBuyForm).then(response => {
+                this.dialogGroupBuyVisible = false
+                this.$message.success('添加成功！')
+                this.GET_GroupBuyCategoryList()
+              })
+            }
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -153,40 +163,13 @@
         })
       },
 
-      /** 删除选中 */
-      deleteSelected() {
-        if (this.selectedData.length < 1) {
-          this.$message.error('您未选中任何会员！')
-        } else {
-          this.$confirm('确定要删除这些会员吗？', '提示', { type: 'warning' }).then(() => {
-            this.DELETE_GroupBuyCategory(this.selectedData)
-          }).catch(() => {})
-        }
-      },
-
       /** 获取会员列表 */
       GET_GroupBuyCategoryList() {
         this.loading = true
-        // API_GroupBuy.getGroupBuyCategoryList(this.params).then(response => {
-        //   this.loading = false
-        //   this.tableData = response.data
-        //   this.pageData = {
-        //     page_no: response.draw,
-        //     page_size: 10,
-        //     data_total: response.recordsTotal
-        //   }
-        // }).catch(error => {
-        //   this.loading = false
-        //   console.log(error)
-        // })
-      },
-
-      /** 删除团购分类 */
-      DELETE_GroupBuyCategory(ids) {
-        // API_Promotion.deleteGroupBuyCategory(ids).then(response => {
-        //   this.$message.success('删除成功！')
-        //   this.GET_GroupBuyCategoryList()
-        // }).catch(error => console.log(error))
+        API_Promotion.getGroupBuyCategory(this.params).then(response => {
+          this.loading = false
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }

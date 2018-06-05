@@ -98,6 +98,7 @@ export function addGrouBuyActivity(params) {
   return request({
     url: 'promotion/group-buy-actives',
     method: 'post',
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
@@ -122,6 +123,7 @@ export function editGroupBuyActivity(id, params) {
   return request({
     url: `promotion/group-buy-actives/${id}`,
     method: 'put',
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
@@ -148,5 +150,159 @@ export function reviewGroupBuyGoods(id, params) {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     data: params
+  })
+}
+
+export function getGroupBuyGoodsList(params) {
+  return request({
+    url: `promotion/group-buy-goods`
+  })
+}
+
+/**
+ * 获取团购分类列表
+ * @param params
+ */
+export function getGroupBuyCategory(params) {
+  return request({
+    url: 'promotion/group-buy-cats',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 添加团购分类
+ * @param params
+ */
+export function addGroupBuyCategory(params) {
+  return request({
+    url: 'promotion/group-buy-cats',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    data: params
+  })
+}
+
+/**
+ * 获取团购详情
+ * @param id
+ */
+export function getGroupBuyCategoryDetail(id) {
+  return request({
+    url: `promotion/group-buy-cats/${id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 编辑团购分类
+ * @param id
+ * @param params
+ */
+export function editGroupBuyCategory(id, params) {
+  return request({
+    url: `promotion/group-buy-cats/${id}`,
+    method: 'put',
+    headers: { 'Content-Type': 'application/json' },
+    data: params
+  })
+}
+
+/**
+ * 删除团购分类
+ * @param id
+ */
+export function deleteGroupBuyCategory(id) {
+  return request({
+    url: `promotion/group-buy-cats/${id}`,
+    method: 'delete'
+  })
+}
+
+/**
+ * 获取限时抢购列表
+ * @param params
+ */
+export function getSeckillList(params) {
+  return request({
+    url: 'promotion/seckills',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 增加限时抢购
+ * @param params
+ */
+export function addSeckill(params) {
+  return request({
+    url: 'promotion/seckills',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    data: params
+  })
+}
+
+/**
+ * 获取限时抢购详情
+ * @param id
+ */
+export function getSeckillDetail(id) {
+  return request({
+    url: `promotion/seckills/${id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 修改限时抢购
+ * @param id
+ * @param params
+ */
+export function editSeckill(id, params) {
+  return request({
+    url: `promotion/seckills/${id}`,
+    method: 'put',
+    headers: { 'Content-Type': 'application/json' },
+    data: params
+  })
+}
+
+/**
+ * 删除限时抢购
+ * @param id
+ */
+export function deleteSeckill(id) {
+  return request({
+    url: `promotion/seckills/${id}`,
+    method: 'delete'
+  })
+}
+
+/**
+ * 发布限时抢购
+ * @param id
+ * @param params
+ */
+export function releaseSeckill(id, params) {
+  return request({
+    url: `promotion/seckills/${id}/release`,
+    method: 'post'
+  })
+}
+
+/**
+ * 审核商品
+ * @param apply_id
+ * @param params
+ */
+export function reviewSeckill(apply_id, params) {
+  return request({
+    url: `promotion/seckills/review/${apply_id}`,
+    method: 'post'
   })
 }

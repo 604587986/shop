@@ -1,15 +1,15 @@
 <template>
-  <el-form :model="siteForm" :rules="siteRules" ref="siteForm" label-width="130px" style="width: 500px">
-    <el-form-item label="网站名称" prop="name">
-      <el-input v-model="siteForm.name"></el-input>
+  <el-form :model="siteForm" :rules="siteRules" ref="siteForm" label-width="130px" v-loading="loading" style="width: 500px">
+    <el-form-item label="网站名称" prop="site_name">
+      <el-input v-model="siteForm.site_name"></el-input>
     </el-form-item>
     <el-form-item label="网站标题" prop="title">
       <el-input v-model="siteForm.title"></el-input>
     </el-form-item>
-    <el-form-item label="关键字" prop="keyword">
+    <el-form-item label="关键字" prop="keywords">
       <el-tag
         class="site-tag"
-        v-for="tag in siteForm.tags"
+        v-for="tag in siteForm.keywords"
         :key="tag"
         closable
         :disable-transitions="false"
@@ -42,7 +42,7 @@
         class="site-logo"
         :action="MixinUploadApi"
         :show-file-list="false"
-        :on-success="handleSiteLogoSuccess"
+        :on-success="(res) => { siteForm.logo = res.url }"
         :multiple="false">
         <img v-if="siteForm.logo" :src="siteForm.logo" class="site-logo-img">
         <i v-else class="el-icon-plus logo-uploader-icon"></i>
@@ -61,25 +61,31 @@
     name: 'systemSettingsSite',
     data() {
       return {
+        loading: true,
         /** 站点设置 */
-        siteForm: {
-          tags: [],
-          logo: ''
+        siteForm: {},
+        siteRules: {
+          site_name: [this.MixinRequired('网站名称不能为空！')],
+          title: [this.MixinRequired('网站标题不能为空！')],
+          keywords: [{ type: 'array', required: true, message: '请至少添加一个关键词！', trigger: 'change' }],
+          descript: [this.MixinRequired('网站描述不能为空！')],
+          logo: [this.MixinRequired('请上传网站LOGO！')]
         },
-        siteRules: {},
         siteTagInputVisible: false,
         siteTagInputValue: ''
       }
     },
     created() {
       API_SystemSetting.getSiteSetting().then(response => {
-        console.log(response)
-      })
+        this.loading = false
+        this.siteForm = response
+        this.siteForm.keywords = response.keywords.split(',')
+      }).catch(() => { this.loading = false })
     },
     methods: {
       /** 关键字标签关闭 */
       handleCloseSiteTag(tag) {
-        this.siteForm.tags.splice(this.siteForm.tags.indexOf(tag), 1)
+        this.siteForm.keywords.splice(this.siteForm.keywords.indexOf(tag), 1)
       },
       /** 显示关键字输入框 */
       showSiteTagInput() {
@@ -91,18 +97,20 @@
       /** 关键字输入确认 */
       handleSiteTagInputConfirm() {
         let inputValue = this.siteTagInputValue
-        if (this.siteForm.tags.filter(item => item === inputValue).length > 0) {
+        if (this.siteForm.keywords.includes(inputValue)) {
           this.$message.error('不能出现重复的关键字！')
         } else if (inputValue) {
-          this.siteForm.tags.push(inputValue)
+          this.siteForm.keywords.push(inputValue)
+          this.siteTagInputVisible = false
+          this.siteTagInputValue = ''
         }
-        this.siteTagInputVisible = false
-        this.siteTagInputValue = ''
       },
       submitForm() {
         this.$refs['siteForm'].validate((valid) => {
           if (valid) {
-            API_SystemSetting.editSiteSetting(this.sysForm).then(() => {
+            const params = this.MixinClone(this.siteForm)
+            params.keywords = params.keywords.join(',')
+            API_SystemSetting.editSiteSetting(params).then(() => {
               this.$message.success('修改成功！')
             })
           } else {
@@ -110,10 +118,6 @@
             return false
           }
         })
-      },
-      /** 网站LOGO上传成功 */
-      handleSiteLogoSuccess(res, file) {
-        this.siteForm.logo = res
       }
     }
   }

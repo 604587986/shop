@@ -12,7 +12,7 @@
         <el-table-column prop="member_name" label="会员名称"/>
         <!--所在地-->
         <el-table-column label="所在地">
-          <template slot-scope="scope">{{ scope.row.shop_province + scope.row.shop_city + scope.row.shop_region + scope.row.shop_town }}</template>
+          <template slot-scope="scope">{{ scope.row.shop_province + scope.row.shop_city + scope.row.shop_county + scope.row.shop_town }}</template>
         </el-table-column>
         <!--店铺状态-->
         <el-table-column label="店铺状态">
@@ -57,7 +57,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          disable: 'APPLY'
+          shop_disable: 'APPLY'
         },
 
         /** 列表数据 */
@@ -70,10 +70,10 @@
     filters: {
       statusFilter(val) {
         switch (val) {
-          case 'refused': return '审核未通过'
-          case 'apply': return '待审核'
-          case 'open': return '开启中'
-          case 'closed': return '已关闭'
+          case 'REFUSED': return '审核未通过'
+          case 'APPLY': return '待审核'
+          case 'OPEN': return '开启中'
+          case 'CLOSED': return '已关闭'
           default: return '未知状态'
         }
       }
@@ -93,7 +93,7 @@
 
       /** 审核店铺 */
       handleAuditShop(index, row) {
-        this.$router.push({ path: `/shop/shop-manage/edit/${row.id}` })
+        this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}` })
       },
 
       /** 获取店铺审核列表 */
@@ -102,15 +102,8 @@
         API_Shop.getShopList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

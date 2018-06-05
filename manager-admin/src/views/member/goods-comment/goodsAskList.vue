@@ -2,17 +2,12 @@
   <div>
     <en-tabel-layout
       :toolbar="false"
-      :pagination="true"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
-      :selection-change="handleSelectionChange"
     >
       <template slot="table-columns">
-        <el-table-column type="selection" width="100"/>
         <el-table-column prop="member_name" label="会员名称"/>
-        <el-table-column label="咨询论日期">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
-        </el-table-column>
+        <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="咨询论日期"/>
         <el-table-column prop="content" label="咨询内容" width="500"/>
         <el-table-column label="审核状态">
           <template slot-scope="scope">{{ scope.row.status | statusFilter }}</template>
@@ -30,27 +25,23 @@
           </template>
         </el-table-column>
       </template>
-
-      <template slot="pagination-toolbar">
-        <el-button type="danger" size="mini" @click="deleteComments">删除选中</el-button>
-      </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
   </div>
 </template>
 
 <script>
-  import * as API_Comment from '@/api/comment'
+  import * as API_Member from '@/api/member'
 
   export default {
     name: 'goodsAskList',
@@ -66,13 +57,7 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
-        /** 被选数据 */
-        selectedData: []
+        tableData: ''
       }
     },
     mounted() {
@@ -107,62 +92,27 @@
 
       /** 查看评论详情 */
       handleViewComment(index, row) {
-        this.GET_CommentDetail(row.id)
+        // Andste_TODO 2018/6/5: 缺少查看咨询详情API
       },
 
       /** 删除评论 */
       handleDeleteComment(index, row) {
         this.$confirm('确定要删除这条评论吗？', '提示', { type: 'warning' }).then(() => {
-          this.DELETE_Comment(row.id)
+          API_Member.deleteMemberAsk(row.ask_id).then(() => {
+            this.$message.success('删除成功！')
+            this.GET_AskList()
+          })
         }).catch(() => {})
-      },
-
-      /** 批量删除 */
-      deleteComments() {
-        if (this.selectedData.length < 1) {
-          this.$message.error('您未选中任何评论！')
-        } else {
-          this.$confirm('确定要删除这些评论吗？', '提示', { type: 'warning' }).then(() => {
-            this.DELETE_Comment(this.selectedData)
-          }).catch(() => {})
-        }
-      },
-
-      /** 获取评论详情 */
-      GET_CommentDetail(id) {
-        API_Comment.getAskDetail(id).then(response => {
-          console.log(response)
-        }).catch(error => console.log(error))
-      },
-
-      /** 删除评论 */
-      DELETE_Comment(ids) {
-        API_Comment.deleteAsk(ids).then(response => {
-          this.$message.success('删除成功！')
-          this.GET_AskList()
-        }).catch(error => console.log(error))
       },
 
       /** 获取评论列表 */
       GET_AskList() {
         this.loading = true
-        API_Comment.getAskList(this.params).then(response => {
+        API_Member.getMemberAsks(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

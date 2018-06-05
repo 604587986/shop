@@ -31,7 +31,7 @@
           <el-input v-model.trim="authInfoForm.license_num" clearable></el-input>
         </el-form-item>
         <el-form-item label="营业执照所在地：" prop="license_region">
-          <en-region-picker :api="MixinRegionApi" @changed="(object) => { authInfoForm.license_region = object.last_id }"/>
+          <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { authInfoForm.license_region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="营业执照详细地址：" prop="license_add">
           <el-input v-model.trim="authInfoForm.license_add" clearable></el-input>
@@ -130,6 +130,7 @@
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符` })
       return {
+        defaultRegions: null,
         /** 基础信息 表单 */
         authInfoForm: {
           legal_name: '',
@@ -204,12 +205,13 @@
     },
     mounted() {
       API_Shop.getApplyShopInfo().then(response => {
-        // Andste_TODO 2018/6/2: 返回数据里没有地区信息
         const { establish_date, licence_start, licence_end } = response
         establish_date && (response.establish_date *= 1000)
         licence_start && (response.licence_start *= 1000)
         licence_end && (response.licence_end *= 1000)
         Object.keys(this.authInfoForm).forEach(key => this.authInfoForm[key] = response[key])
+        const { license_province_id, license_city_id, license_county_id, license_town_id } = response
+        this.defaultRegions = [license_province_id, license_city_id, license_county_id, license_town_id]
       })
     },
     methods: {
