@@ -68,9 +68,15 @@
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
+              v-if="scope.row.shop_disable !== 'APPLY'"
               size="mini"
               type="primary"
               @click="handleEditShop(scope.$index, scope.row)">修改</el-button>
+            <el-button
+              v-if="scope.row.shop_disable === 'APPLY'"
+              size="mini"
+              type="primary"
+              @click="$router.push({ path: `/shop/shop-manage/edit/${scope.row.shop_id}` })">审核</el-button>
             <el-button
               v-if="scope.row.shop_disable === 'OPEN'"
               size="mini"
