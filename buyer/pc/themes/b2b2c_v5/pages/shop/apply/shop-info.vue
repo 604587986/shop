@@ -13,12 +13,12 @@
           <el-input v-model.trim="shopInfoForm.shop_name" clearable></el-input>
         </el-form-item>
         <el-form-item label="店铺地址：" prop="shop_region">
-          <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopInfoForm.shop_region = object.last_id }"/>
+          <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { shopInfoForm.shop_region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="经营类目：" prop="goods_management_category">
           <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChanged">全选</el-checkbox>
           <el-checkbox-group v-model="shopInfoForm.goods_management_category" @change="handleCheckedCategorysChange">
-            <el-checkbox v-for="cate in categorys" :label="cate" :key="cate.category_id">{{cate.label}}</el-checkbox>
+            <el-checkbox v-for="cate in categorys" :label="cate" :key="cate.id">{{cate.label}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
@@ -41,17 +41,19 @@
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
       return {
+        defaultRegions: null,
         /** 分类 */
+        // Andste_TODO 2018/6/5: 经营类目暂未适配
         categorys: [
-          { category_id: 491, label: '数码家电' },
-          { category_id: 492, label: '食品饮料' },
-          { category_id: 493, label: '进口食品' },
-          { category_id: 494, label: '美容化妆' },
-          { category_id: 495, label: '母婴玩具' },
-          { category_id: 496, label: '厨房用品' },
-          { category_id: 497, label: '钟表箱包' },
-          { category_id: 498, label: '营养保健' },
-          { category_id: 499, label: '服装鞋靴' }
+          { id: 1, label: '数码家电' },
+          { id: 2, label: '食品饮料' },
+          { id: 3, label: '进口食品' },
+          { id: 4, label: '美容化妆' },
+          { id: 5, label: '母婴玩具' },
+          { id: 6, label: '厨房用品' },
+          { id: 7, label: '钟表箱包' },
+          { id: 8, label: '营养保健' },
+          { id: 9, label: '服装鞋靴' }
         ],
         isIndeterminate: false,
         checkAll: false,
@@ -73,8 +75,9 @@
     },
     mounted() {
       API_Shop.getApplyShopInfo().then(response => {
-        // Andste_TODO 2018/6/2: 返回数据里没有地区信息
         Object.keys(this.shopInfoForm).forEach(key => this.shopInfoForm[key] = response[key])
+        const { shop_province_id, shop_city_id, shop_county_id, shop_town_id } = response
+        this.defaultRegions = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
       })
     },
     methods: {
@@ -83,7 +86,7 @@
         this.$refs['shopInfoForm'].validate((valid) => {
           if (valid) {
             const params = JSON.parse(JSON.stringify(this.shopInfoForm))
-            params.goods_management_category = params.goods_management_category.map(item => item.category_id).join(',')
+            params.goods_management_category = params.goods_management_category.map(item => item.id).join(',')
             API_Shop.applyShopStep(4, params).then(response => {
               this.$router.push({ name: 'shop-apply-success' })
             })

@@ -19,9 +19,9 @@
       </div>
       <div class="total-box">
         销售收入总览：
-        <span>收款金额: {{ MixinFormatPrice('', '', totalData.receiveMoney || 0) }}</span>
-        <span>退款金额: {{ MixinFormatPrice('', '', totalData.refundMoney || 0) }}</span>
-        <span>实收金额: {{ MixinFormatPrice('', '', totalData.realMoney || 0) }}</span>
+        <span>收款金额: {{ MixinFormatPrice('', '', totalData.receive_money || 0) }}</span>
+        <span>退款金额: {{ MixinFormatPrice('', '', totalData.refund_money || 0) }}</span>
+        <span>实收金额: {{ MixinFormatPrice('', '', totalData.real_money || 0) }}</span>
       </div>
       <en-tabel-layout
         :toolbar="false"

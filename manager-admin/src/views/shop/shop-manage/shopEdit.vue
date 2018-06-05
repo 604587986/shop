@@ -44,7 +44,7 @@
             <el-input v-model="shopForm.scope" :maxlength="50"></el-input>
           </el-form-item>
           <el-form-item label="营业执照所在地" prop="license_region">
-            <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopForm.license_region = object.last_id }"/>
+            <en-region-picker :api="MixinRegionApi" :default="defaultRegionLicense" @changed="(object) => { shopForm.license_region = object.last_id }"/>
           </el-form-item>
           <el-form-item label="营业执照详细地址 " prop="license_add">
             <el-input v-model="shopForm.license_add" :maxlength="50"></el-input>
@@ -117,7 +117,7 @@
             <el-input v-model="shopForm.bank_name" :maxlength="50"></el-input>
           </el-form-item>
           <el-form-item label="开户行所在地" prop="bank_region">
-            <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopForm.bank_region = object.last_id }"/>
+            <en-region-picker :api="MixinRegionApi" :default="defaultRegionBank" @changed="(object) => { shopForm.bank_region = object.last_id }"/>
           </el-form-item>
           <br>
           <el-form-item label="开户行许可证" prop="bank_img">
@@ -155,7 +155,7 @@
             <el-input v-model="shopForm.shop_name" :maxlength="50"></el-input>
           </el-form-item>
           <el-form-item label="店铺所在地" prop="shop_region">
-            <en-region-picker :api="MixinRegionApi" @changed="(object) => { shopForm.shop_region = object.last_id }" />
+            <en-region-picker :api="MixinRegionApi" :default="defaultRegionShop" @changed="(object) => { shopForm.shop_region = object.last_id }" />
           </el-form-item>
           <el-form-item label="用金比例" prop="shop_commission">
             <el-input v-model="shopForm.shop_commission" :maxlength="50">
@@ -182,7 +182,7 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-
+  // Andste_TODO 2018/6/5: 经营类目暂未适配
   const categroy = [
     { label: '数码家电', id: 1 },
     { label: '食品饮料', id: 2 },
@@ -240,7 +240,10 @@
         isIndeterminateCat: true,
         checkAllCat: false,
         checkedCats: [1, 2],
-        cats: categroy
+        cats: categroy,
+        defaultRegionLicense: null,
+        defaultRegionBank: null,
+        defaultRegionShop: null
       }
     },
     mounted() {
@@ -265,6 +268,14 @@
         API_Shop.getShopDetail(this.shop_id).then(response => {
           this.loading = false
           this.shopForm = response
+          const {
+            license_province_id, license_city_id, license_county_id, license_town_id,
+            bank_province_id, bank_city_id, bank_county_id, bank_town_id,
+            shop_province_id, shop_city_id, shop_county_id, shop_town_id
+          } = response
+          this.defaultRegionLicense = [license_province_id, license_city_id, license_county_id, license_town_id]
+          this.defaultRegionBank = [bank_province_id, bank_city_id, bank_county_id, bank_town_id]
+          this.defaultRegionShop = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
           console.log(response)
         })
       }
