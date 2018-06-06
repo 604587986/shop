@@ -7,6 +7,7 @@
   >
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns">
+        <span>店铺分组:</span>
         <en-category-picker @changed="categoryChanged" :clearable='true'/>
       </div>
       <div class="toolbar-search">
@@ -178,6 +179,11 @@
     text-align: center;
   }
 
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
   .inner-toolbar {
     display: flex;
     width: 100%;
@@ -185,7 +191,11 @@
   }
 
   .toolbar-btns {
-
+    span {
+      display: inline-block;
+      font-size: 14px;
+      color: #606266;
+    }
   }
 
   .toolbar-search {

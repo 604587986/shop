@@ -9,24 +9,32 @@
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <!--商品状态 上架 下架-->
-          <el-select v-model="marketEnable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
-            <el-option key="0" label="未出售（已下架）" :value="0"/>
-            <el-option key="1" label="出售中（已上架）" :value="1"/>
-          </el-select>
+          <div class="conditions">
+            <span>商品状态:</span>
+            <el-select v-model="marketEnable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
+              <el-option key="0" label="未出售（已下架）" :value="0"/>
+              <el-option key="1" label="出售中（已上架）" :value="1"/>
+            </el-select>
+          </div>
           <!--商品类型-->
-          <el-select
-            v-model="goods_type"
-            v-if="parseInt(shopInfo.self_operated) === 1"
-            placeholder="请选择商品类型"
-            @change="changeGoodsType"
-            clearable>
-            <el-option key="NORMAL" label="全部商品" :value="NORMAL"/>
-            <el-option key="POINT" label="积分商品" :value="POINT"/>
-          </el-select>
+          <div v-if="parseInt(shopInfo.self_operated) === 1" class="conditions">
+            <span>商品类型:</span>
+            <el-select
+              v-model="goods_type"
+              placeholder="请选择商品类型"
+              @change="changeGoodsType"
+              clearable>
+              <el-option key="NORMAL" label="全部商品" :value="NORMAL"/>
+              <el-option key="POINT" label="积分商品" :value="POINT"/>
+            </el-select>
+          </div>
           <!--商品分组 获取分组列表-->
-          <en-category-picker @changed="changeGoodsCateGory" :clearable='true'/>
-          <el-button @click="publishGoods" type="success">发布商品</el-button>
-          <el-button @click="gotoRecycle" type="primary">回收站</el-button>
+          <div class="conditions">
+            <span>店铺分组:</span>
+            <en-category-picker size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
+          </div>
+          <el-button @click="publishGoods" type="success" class="conditions">发布商品</el-button>
+          <el-button @click="gotoRecycle" type="primary" class="conditions">回收站</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
@@ -336,9 +344,15 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
+
   .inner-toolbar {
     display: flex;
     width: 100%;
@@ -358,6 +372,24 @@
 
   .toolbar-search {
     margin-right: 10px;
+  }
+
+  div.toolbar-btns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    div {
+      span {
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+      }
+    }
+    .conditions {
+      margin-right: 30px;
+    }
   }
 
   .goods-image {
