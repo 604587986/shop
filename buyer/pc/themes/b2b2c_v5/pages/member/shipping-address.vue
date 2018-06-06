@@ -51,7 +51,7 @@
           <el-input v-model="addressForm.addr" size="small"></el-input>
         </el-form-item>
         <el-form-item label="地址别名" prop="ship_address_name">
-          <el-input v-model="addressForm.ship_address_name" size="small"></el-input>
+          <el-input v-model="addressForm.ship_address_name" size="small" placeholder="公司、家里、学校或其它"></el-input>
         </el-form-item>
         <el-form-item label="设置为默认">
           <el-checkbox v-model="addressForm.def_addr" :true-label="1" :false-label="0">默认</el-checkbox>
