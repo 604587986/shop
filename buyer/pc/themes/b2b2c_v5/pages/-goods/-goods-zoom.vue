@@ -98,6 +98,7 @@
     width: 80px;
     height: 400px;
     border-right: 1px solid #ededed;
+    .swiper-wrapper { flex-direction: column }
     .swiper-slide {
       display: block;
       position: relative;
