@@ -12,9 +12,21 @@ import request from '@/utils/request'
  */
 export function getComments(params) {
   return request({
-    url: '/comments',
+    url: 'member/comments',
     method: 'get',
     params
+  })
+}
+
+/**
+ * 订单评论
+ * @param params
+ */
+export function commentsOrder(params) {
+  return request({
+    url: 'member/comments',
+    method: 'post',
+    data: params
   })
 }
 
@@ -25,7 +37,7 @@ export function getComments(params) {
  */
 export function getConsultations(params) {
   return request({
-    url: '/consultations',
+    url: 'member/asks',
     method: 'get',
     params
   })
@@ -34,14 +46,15 @@ export function getConsultations(params) {
 /**
  * 商品咨询
  * @param goods_id
- * @param content
+ * @param ask_content
  */
-export function consultating(goods_id, content) {
-  const _formData = new FormData()
-  _formData.append('content', content)
+export function consultating(goods_id, ask_content) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/consulting/${goods_id}`,
+    url: 'member/asks',
     method: 'post',
-    data: _formData
+    data: {
+      goods_id,
+      ask_content
+    }
   })
 }

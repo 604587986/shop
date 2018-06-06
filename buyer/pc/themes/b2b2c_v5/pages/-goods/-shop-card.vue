@@ -1,6 +1,6 @@
 <template>
   <div id="shop-card" class="shop-card">
-    <nuxt-link :to="'/shop?shop_id=' + goods.shop_id" class="shop-title">{{ goods.shop_name }}</nuxt-link>
+    <nuxt-link :to="'/shop?shop_id=' + goods.seller_id" class="shop-title">{{ goods.shop_name }}</nuxt-link>
     <img :src="goods.shop_logo" :alt="goods.shop_name" class="shop-logo">
     <div class="shop-rate">
       <div class="rate-item">
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="shop-btns">
-      <nuxt-link :to="'/shop?shop_id=' + goods.shop_id" class="shop-btn into">进入商家店铺</nuxt-link>
+      <nuxt-link :to="'/shop?shop_id=' + goods.seller_id" class="shop-btn into">进入商家店铺</nuxt-link>
       <a href="javascript:;" @click="collectionShop" class="shop-btn collection">
         {{ goods.shop_collected ? '已收藏' : '收藏店铺' }}({{ goods.shop_collection_num }})
       </a>

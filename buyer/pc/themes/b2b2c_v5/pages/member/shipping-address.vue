@@ -45,7 +45,7 @@
           <el-input v-model="addressForm.mobile" size="small" :maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="收货地区" prop="region">
-          <en-region-picker :default="regions" @changed="(object) => { this.addressForm.region = object.last_id }"/>
+          <en-region-picker :api="MixinRegionApi" :default="regions" @changed="(object) => { this.addressForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="addr">
           <el-input v-model="addressForm.addr" size="small"></el-input>
@@ -144,15 +144,14 @@
       submitAddressForm(type, index) {
         this.$refs['addressForm'].validate((valid) => {
           if (valid) {
+            this.$layer.close(index)
             const { addr_id } = this.addressForm
             if (!addr_id) {
               this.addAddress(this.addressForm).then(() => {
-                this.$layer.close(index)
                 this.$message.success('保存成功！')
               })
             } else {
               this.editAddress(this.addressForm).then(() => {
-                this.$layer.close(index)
                 this.$message.success('保存成功！')
               })
             }

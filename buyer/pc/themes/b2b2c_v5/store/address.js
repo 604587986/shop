@@ -30,7 +30,7 @@ export const mutations = {
    */
   [types.EDIT_ADDRESS](state, response) {
     const { addr_id } = response
-    state.address.data = state.address.data.map(item => {
+    state.address = state.address.map(item => {
       if (item.addr_id === addr_id) item = response
       return item
     })
@@ -67,10 +67,10 @@ export const actions = {
    * @param params
    * @returns {Promise<any>}
    */
-  addAddressAction: ({ commit }, params) => {
+  addAddressAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
       API_Address.addAddress(params).then(response => {
-        commit(types.ADD_ADDRESS, response)
+        dispatch('getAddressAction')
         resolve(response)
       }).catch(error => reject(error))
     })

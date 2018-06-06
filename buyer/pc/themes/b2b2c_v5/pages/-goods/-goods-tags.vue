@@ -61,6 +61,10 @@
 </template>
 
 <script>
+  /**
+   * 标签商品模块
+   * 例如热销商品、新品上架等等
+   */
   export default {
     name: 'goods-tags',
     props: ['tagGoods']

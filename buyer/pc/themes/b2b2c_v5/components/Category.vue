@@ -6,12 +6,12 @@
   >
     <nuxt-link to="/goods-list" class="category-title">全部商品分类</nuxt-link>
     <div v-show="unfold" class="category-layer">
-      <div v-for="item in categoryList" :key="item.category_id" class="category-item">
+      <div v-for="(item, index) in categoryList" v-if="index < 7" :key="item.category_id" class="category-item">
         <div class="item-content">
           <i class="item-icon"></i>
           <div class="item-title">
             <strong>
-              <nuxt-link :to="'/goods-list?cat_id=' + item.category_id">{{ item.category_name }}</nuxt-link>
+              <nuxt-link :to="'/goods-list?cat_id=' + item.category_id">{{ item.name }}</nuxt-link>
             </strong>
             <span>
               <template v-for="(_item, _index) in item.children">
@@ -20,7 +20,7 @@
                   :key="_item.catrgory_id"
                   :to="'/goods-list?cat_id=' + _item.category_id"
                 >
-                  {{ _item.category_name }}
+                  {{ _item.name }}
                 </nuxt-link>
               </template>
             </span>
@@ -38,7 +38,7 @@
                 <span>
                   <dl v-for="_item in item.children" :key="_item.category_id">
                     <dt>
-                      <nuxt-link :to="'/goods-list?cat_id=' + _item.category_id">{{ _item.category_name }}</nuxt-link>
+                      <nuxt-link :to="'/goods-list?cat_id=' + _item.category_id">{{ _item.name }}</nuxt-link>
                     </dt>
                     <dd>
                       <nuxt-link
@@ -46,7 +46,7 @@
                         :key="__item.category_id"
                         :to="'/goods-list?cat_id=' + __item.category_id"
                       >
-                        {{ __item.category_name }}
+                        {{ __item.name }}
                       </nuxt-link>
                     </dd>
                   </dl>
@@ -57,9 +57,9 @@
               </div>
             </div>
             <div class="item-layer-right">
-              <div v-for="brand in item.brands" :key="brand.brand_id" class="brand-item">
+              <div v-for="(brand, index) in item.brand_list" v-if="index < 20" :key="index" class="brand-item">
                 <nuxt-link :to="'/goods-list?brand_id=' + brand.brand_id">
-                  <img :src="brand.brand_image" :alt="brand.brand_name">
+                  <img :src="brand.logo" :alt="brand.name">
                 </nuxt-link>
               </div>
             </div>

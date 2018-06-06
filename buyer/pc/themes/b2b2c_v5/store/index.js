@@ -1,5 +1,5 @@
 import * as types from './mutation-types'
-import * as API_Common from '@/api/common'
+import * as API_Home from '@/api/home'
 import uuidv1 from 'uuid/v1'
 import Cookie from 'cookie'
 import Storage from '@/utils/storage'
@@ -57,13 +57,13 @@ export const actions = {
   },
   /** 获取导航栏数据 */
   getNavData: ({ commit }) => {
-    API_Common.getNavList().then(response => {
+    API_Home.getNav().then(response => {
       commit(types.SET_NAV_DATA, response)
     })
   },
   /** 获取分类数据 */
   getCategoryData: ({ commit }) => {
-    API_Common.getCategoryList().then(response => {
+    API_Home.getCategory().then(response => {
       commit(types.SET_CATEGORY_DATA, response)
     })
   }

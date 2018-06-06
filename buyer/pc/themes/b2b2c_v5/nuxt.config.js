@@ -56,7 +56,8 @@ module.exports = {
   css: [
     '~assets/styles/normalize.css',
     '~assets/styles/base.css',
-    '~assets/styles/page-transletion.scss'
+    '~assets/styles/page-transletion.scss',
+    'swiper/dist/css/swiper.css'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
@@ -65,7 +66,8 @@ module.exports = {
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
-    { src: '~plugins/address-selecter', ssr: false }
+    { src: '~plugins/address-selecter', ssr: false },
+    { src: '~plugins/vue-swiper', ssr: false }
   ],
   router: {
     scrollBehavior: function (to, from, savedPosition) {

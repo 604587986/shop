@@ -13,7 +13,7 @@ export const mutations = {
    * @param data
    */
   [types.SET_CART_DATA](state, data) {
-    state.shopList = data.data
+    state.shopList = data
   },
   /**
    * 更新货品数量
