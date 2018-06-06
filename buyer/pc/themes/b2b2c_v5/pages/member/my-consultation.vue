@@ -8,22 +8,22 @@
     <template v-if="consultation && consultation.data.length > 0">
       <div class="consultation-container">
         <ul>
-          <li v-for="consultation in consultation.data" :key="consultation.consultation_id" class="comment-item">
+          <li v-for="consultation in consultation.data" :key="consultation.ask_id" class="comment-item">
             <div class="comment-title">
-              <nuxt-link :to="'/goods-' + consultation.goods.goods_id + '.html'" target="_blank">{{ consultation.goods.goods_name }}</nuxt-link>
-              <span>{{ consultation.consultation_time | unixToDate }}</span>
+              <nuxt-link :to="'/goods-' + consultation.goods_id + '.html'" target="_blank">{{ consultation.goods_name }}</nuxt-link>
+              <span>{{ consultation.create_time | unixToDate }}</span>
             </div>
             <div class="comment-body">
               <div class="comment-content">
                 <strong>咨询内容：</strong>
                 <div>
-                  <p>{{ consultation.consultation_content }}</p>
+                  <p>{{ consultation.content }}</p>
                 </div>
               </div>
               <div class="comment-content seller-reply">
                 <strong>商家回复：</strong>
                 <div>
-                  <p>{{ consultation.seller_reply }}</p>
+                  <p>{{ consultation.reply || '暂未回复' }}</p>
                 </div>
               </div>
             </div>
