@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getAfterSale(params) {
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/after-sale',
+    url: 'after-sales/refunds',
     method: 'get',
     params
   })
