@@ -12,8 +12,11 @@
           <div class="conditions">
             <span>商品状态:</span>
             <el-select v-model="marketEnable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
-              <el-option key="0" label="未出售（已下架）" :value="0"/>
-              <el-option key="1" label="出售中（已上架）" :value="1"/>
+              <el-option
+                v-for="item in goodsStatusList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"/>
             </el-select>
           </div>
           <!--商品类型-->
@@ -150,8 +153,15 @@
         /** 列表分页数据 */
         pageData: null,
 
+        /** 商品状态列表 */
+        goodsStatusList: [
+          { value: -1, label: '请选择' },
+          { value: 0, label: '未出售（已下架）' },
+          { value: 1, label: '出售中（已上架）' }
+        ],
+
         /** 商品状态 是否上架 0代表已下架，1代表已上架 */
-        marketEnable: 0,
+        marketEnable: -1,
 
         /** 商品类型 NORMAL 正常商品 POINT 积分商品 */
         goods_type: 'NORMAL',
@@ -220,7 +230,7 @@
       /** 切换上下架状态*/
       changeGoodsStatus(val) {
         delete this.params.market_enable
-        if (val !== '') {
+        if (val !== '' && val !== -1) {
           this.params = {
             ...this.params,
             market_enable: val
