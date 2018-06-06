@@ -1,14 +1,14 @@
 <template>
   <div id="goods">
-    <bread-nav :goods-sn="goods.goods_sn"/>
+    <bread-nav :goods-sn="goods.sn"/>
     <div class="content">
-      <goods-zoom :images="goods.goods_gallery" :cur-img="curImg"/>
+      <goods-zoom :images="goods.gallery_list" :cur-img="curImg"/>
       <goods-info :goods="goods"/>
       <shop-card :goods="goods"/>
     </div>
     <div class="details">
       <div class="inner w">
-        <goods-tags :tag-goods="goods.tagGoods"/>
+        <!--<goods-tags :tag-goods="goods.tagGoods"/>-->
         <div class="detail-container">
           <div class="detail-tabs">
             <div
@@ -42,6 +42,7 @@
         return
       }
       API_Goods.getGoods(query.goods_id).then(response => {
+        console.log('goods-response: ', response)
         callback(null, { goods: response })
       }).catch(e => {
         callback({ statusCode: e.response.status })

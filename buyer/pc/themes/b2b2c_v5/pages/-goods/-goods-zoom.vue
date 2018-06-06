@@ -30,6 +30,10 @@
 </template>
 
 <script>
+  /**
+   * 商品相册模块
+   * 缩略图啥的
+   */
   import Swiper from 'swiper'
   import { PicZoom } from '@/components'
   export default {
@@ -141,5 +145,9 @@
   .zoom-box {
     width: 400px;
     height: 400px;
+    /deep/ img {
+      width: 100% !important;
+      height: 100% !important;
+    }
   }
 </style>

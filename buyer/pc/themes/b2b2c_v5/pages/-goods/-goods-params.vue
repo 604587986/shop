@@ -15,6 +15,9 @@
 </template>
 
 <script>
+  /**
+   * 商品参数模块
+   */
   export default {
     name: "goods-params",
     props: ['goodsParams']

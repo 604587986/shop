@@ -8,6 +8,10 @@
 </template>
 
 <script>
+  /**
+   * 商品咨询模块
+   * 这里可以对商品进行咨询
+   */
   import * as API_Comments from '@/api/comments'
   export default {
     name: "goods-consulting",
