@@ -65,7 +65,7 @@ export function getShopCollection(params) {
  */
 export function collectionShop(shop_id) {
   return request({
-    url: 'members/collection/shops',
+    url: 'members/collection/shop',
     method: 'post',
     data: { shop_id }
   })
@@ -73,13 +73,11 @@ export function collectionShop(shop_id) {
 
 /**
  * 删除店铺收藏
- * @param ids 店铺ID【集合或单个ID】
- * @returns {AxiosPromise}
+ * @param id
  */
-export function deleteShopCollection(ids) {
-  if (Array.isArray(ids)) ids = ids.join(',')
+export function deleteShopCollection(id) {
   return request({
-    url: `members/collection/shops/${ids}`,
+    url: `members/collection/shop/${id}`,
     method: 'delete'
   })
 }
