@@ -20,7 +20,7 @@ import './permission' // permission control
 import * as filters from './filters' // global filter
 
 Vue.use(Element, {
-  size: 'medium',
+  size: 'small',
   i18n: (key, value) => i18n.t(key, value)
 })
 Vue.use(EnComponents)
