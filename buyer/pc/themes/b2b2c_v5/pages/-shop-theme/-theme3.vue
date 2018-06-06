@@ -1,7 +1,7 @@
 <template>
   <div id="shop-theme-3" class="container">
     <theme3-header :shop="shop"/>
-    <en-banner :banners="shop.shop_banner"/>
+    <en-shop-banner :banners="shop.shop_banner"/>
     <div class="shop-tags">
       <div class="tags-container">
         <div class="item hot">

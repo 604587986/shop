@@ -11,7 +11,6 @@ import Operation from './Operation'
 import PicZoom from './PicZoom'
 import Search from './Search'
 import Settleup from './Settleup'
-import ShopStar from './ShopStar'
 import Shortcut from './Shortcut'
 
 export {
@@ -27,6 +26,5 @@ export {
   PicZoom,
   Search,
   Settleup,
-  ShopStar,
   Shortcut
 }
