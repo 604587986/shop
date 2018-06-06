@@ -75,7 +75,6 @@
       },
       /** 鼠标悬浮在左侧缩略图上，切换放大镜图片 */
       handleHoverTumb(event, image) {
-        console.log(image)
         if (event.type === 'mouseenter') {
           this.images.map(item => {
             item.active = false
