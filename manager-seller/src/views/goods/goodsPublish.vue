@@ -1112,6 +1112,10 @@
 
       /** 商品规格选择器校验 */
       skuFormVali() {
+        /** 如果并未选择规格 */
+        if (Array.isArray(this.baseInfoForm.sku_list) && this.baseInfoForm.sku_list.length === 0) {
+          return true
+        }
         this.productSn = false
         /** 是否自动生成货号校验 检测是否所有的货号都存在*/
         const _sn = this.baseInfoForm.sku_list.every(key => {
