@@ -1,9 +1,36 @@
 <template>
   <div id="goods-consulting" class="goods-consulting">
-    <div class="inner">
+    <div class="inner-consulting">
       <span class="consu-tip">因厂家更改商品包装、场地、附配件等不做提前通知，且每位咨询者购买、提问时间等不同。为此，客服回复的咨询只针对当前当天咨询问题，给您带来的不便还请谅解，谢谢！</span>
       <a href="javascript:;" class="want-consu-btn" @click="handleShowPrompt">我要咨询</a>
     </div>
+    <div v-if="consulting" class="content-consulting">
+      <div v-for="consult in consulting.data" :key="consult.ask_id" class="item-consulting">
+        <div class="cons-left">
+          <!--// Andste_TODO 2018/6/6: 会员头像没有参数-->
+          <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/CBFBB8EBCC324ED3A69BF0F2B0D7B50E.jpeg" class="face-consulting">
+          <div class="name-consulting" :title="consult.member_name">{{ consult.member_name }}</div>
+        </div>
+        <div class="cons-right">
+          <div class="time-cons">{{ consult.create_time | unixToDate }}</div>
+          <div class="box-cons">
+            <div class="content-cons">{{ consult.content }}</div>
+            <template v-if="consult.reply_status === 1">
+              <p>掌柜回复：</p>
+              <div class="reply-cons">{{ consult.reply }}</div>
+            </template>
+          </div>
+        </div>
+        <span class="clr"></span>
+      </div>
+    </div>
+    <el-pagination
+      @current-change="handleCurrentPageChange"
+      :current-page.sync="params.page_no"
+      :page-size="params.page_size"
+      layout="total, prev, pager, next"
+      :total="consulting.data_total">
+    </el-pagination>
   </div>
 </template>
 
@@ -22,32 +49,39 @@
           page_no: 1,
           page_size: 10
         },
-        consulting: []
+        consulting: ''
       }
     },
     mounted() {
       this.GET_Consulting()
     },
     methods: {
+      /** 当页数发生改变时 */
+      handleCurrentPageChange(page_no) {
+        this.params.page_no = page_no
+        this.GET_Consulting()
+      },
       /** 显示咨询窗 */
       handleShowPrompt() {
         this.$layer.prompt({
           formType: 2,
           title: '向商家咨询',
           maxlength: 150,
-          area: ['300px', '60px']
+          area: ['300px', '60px'],
+          scrollbar: false
         }, (value, index, elem) => {
           if (!value.trim()) return false
           layer.close(index)
           API_Comments.consultating(this.goodsId, value).then(() => {
             this.$message.success('提交成功，请等待审核')
+            this.GET_Consulting()
           })
         })
       },
       /** 获取咨询列表 */
       GET_Consulting() {
         API_Comments.getConsultations(this.params).then(response => {
-          console.log(response)
+          this.consulting = response
         })
       }
     }
@@ -58,7 +92,7 @@
   .goods-consulting {
     background-color: #fff;
     padding: 40px 30px 30px;
-    .inner {
+    .inner-consulting {
       position: relative;
       border: 1px solid #d7d7d7;
       height: 67px;
@@ -83,6 +117,55 @@
       top: 30px;
       right: 30px;
       &:hover { background-color: #ba4943 }
+    }
+    .content-consulting {
+      border-top: 1px dashed #ccc;
+      margin-top: 20px;
+    }
+    .item-consulting {
+      margin-top: 15px;
+    }
+    .cons-left {
+      float: left;
+      width: 70px;
+      .face-consulting, .name-consulting {
+        width: 50px;
+        height: 50px;
+        text-align: center;
+      }
+      .name-consulting {
+        height: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    .cons-right {
+      float: left;
+      box-sizing: border-box;
+      width: 900px - 70px;
+      min-height: 100px;
+      padding: 20px;
+      background-color: #fafafa;
+      .time-cons {
+        padding: 10px;
+        text-align: right;
+        font-size: 14px;
+        border-bottom: 1px dashed #ccc;
+      }
+      .box-cons {
+        width: 900px - 70px - 40px;
+        background-color: #fff;
+        min-height: 50px;
+        margin-top: 10px;
+        box-sizing: border-box;
+        padding: 10px;
+        p { color: #da4f49 }
+      }
+    }
+    /deep/ .el-pagination {
+      text-align: right;
+      padding: 10px 0;
     }
   }
 </style>
