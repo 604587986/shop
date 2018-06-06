@@ -119,19 +119,17 @@
       user: 'getValidImgUrl'
     },
     computed: {
-      ...mapGetters({
-        user: 'user'
-      })
+      ...mapGetters(['user', 'uuid'])
     },
     methods: {
       /** 获取图片验证码URL */
       getValidImgUrl() {
         if (!this.user) return
-        this.valid_img_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'UPDATEPASSWORDMOBILE' + this.user.mobile)
+        this.valid_img_url = API_Common.getValidateCodeUrl(this.uuid, 'MODIFY_PASSWORD')
       },
       /** 获取修改密码图片验证码URL */
       getChangeImgUrl() {
-        this.change_img_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'membervalid')
+        this.change_img_url = API_Common.getValidateCodeUrl(this.uuid, 'MODIFY_PASSWORD')
       },
       /** 发送手机验证码 */
       sendValidMobileSms() {
@@ -140,7 +138,7 @@
             if (valid) {
               const { mobile } = this.user
               const { img_code } = this.validImgCodeForm
-              API_Safe.sendMobileSms('UPDATEPASSWORDMOBILE', mobile, img_code).then(() => {
+              API_Safe.sendUpdatePasswordMobileCode('MODIFY_PASSWORD', mobile, img_code).then(() => {
                 this.$message.success('验证码发送成功，请注意查收！')
                 resolve()
               }).catch(() => {

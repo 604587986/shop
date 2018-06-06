@@ -79,3 +79,42 @@ export function bindMobile(mobile) {
   })
 }
 
+/**
+ * 发送更换密码的手机验证码
+ * @param mobile
+ * @param params
+ */
+export function sendUpdatePasswordMobileCode(mobile, params) {
+  return request({
+    url: 'members/security/send-val-code',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 修改密码
+ * @param params
+ */
+export function updatePassword(params) {
+  return request({
+    url: 'members/security/update-password',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 发送绑定手机验证码
+ * @param mobile
+ * @param params
+ */
+export function sendBindCode(mobile, params) {
+  return request({
+    url: `members/security/send-bind-code/${mobile}`,
+    method: 'post',
+    data: params
+  })
+}
+
+

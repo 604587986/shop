@@ -5,36 +5,39 @@
         <li class="active">我的评论</li>
       </ul>
     </div>
-    <div class="comments-container">
-      <ul>
-        <li v-for="comment in comments.data" :key="comment.comment_id" class="comment-item">
-          <div class="comment-title">
-            <nuxt-link :to="'/goods-' + comment.goods.goods_id + '.html'">{{ comment.goods.goods_name }}</nuxt-link>
-            <span>{{ comment.comment_time | unixToDate }}</span>
-          </div>
-          <div class="comment-body">
-            <strong>我的评论：</strong>
-            <div>
-              <p>{{ comment.comment_content }}</p>
-              <div v-if="comment.gallery && comment.gallery.length > 0" class="comment-gallery">
-                <template v-for="(gallery, index) in comment.gallery">
-                  <img :src="gallery" :key="index" class="comment-thumbnail">
-                </template>
+    <template v-if="comments && comments.data.length > 0">
+      <div class="comments-container">
+        <ul>
+          <li v-for="comment in comments.data" :key="comment.comment_id" class="comment-item">
+            <div class="comment-title">
+              <nuxt-link :to="'/goods-' + comment.goods_id + '.html'">{{ comment.goods_name }}</nuxt-link>
+              <span>{{ comment.create_time | unixToDate }}</span>
+            </div>
+            <div class="comment-body">
+              <strong>我的评论：</strong>
+              <div>
+                <p>{{ comment.content }}</p>
+                <div v-if="comment.images && comment.images.length > 0" class="comment-gallery">
+                  <template v-for="(image, index) in comment.comment.images">
+                    <img :src="image" :key="index" class="comment-thumbnail">
+                  </template>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="member-pagination" v-if="comments">
-      <el-pagination
-        @current-change="handleCurrentPageChange"
-        :current-page.sync="params.page_no"
-        :page-size="params.page_size"
-        layout="total, prev, pager, next"
-        :total="comments.data_total">
-      </el-pagination>
-    </div>
+          </li>
+        </ul>
+      </div>
+      <div class="member-pagination" v-if="comments">
+        <el-pagination
+          @current-change="handleCurrentPageChange"
+          :current-page.sync="params.page_no"
+          :page-size="params.page_size"
+          layout="total, prev, pager, next"
+          :total="comments.data_total">
+        </el-pagination>
+      </div>
+    </template>
+    <empty-member v-else>暂无评论</empty-member>
   </div>
 </template>
 

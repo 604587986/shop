@@ -8,6 +8,7 @@ import {
   Footer,
   Header,
   Nav,
+  Operation,
   Search,
   Settleup,
   ShopStar,
@@ -22,6 +23,7 @@ Vue.component(CountDownBtn.name, CountDownBtn)
 Vue.component(Footer.name, Footer)
 Vue.component(Header.name, Header)
 Vue.component(Nav.name, Nav)
+Vue.component(Operation.name, Operation)
 Vue.component(Search.name, Search)
 Vue.component(Settleup.name, Settleup)
 Vue.component(ShopStar.name, ShopStar)
