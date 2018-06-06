@@ -8,11 +8,11 @@
     <div class="after-sale-container">
       <el-table :data="afterSale.data" style="width: 100%">
         <el-table-column label="申请时间">
-          <template slot-scope="scope">{{ scope.row.apply_time | unixToDate }}</template>
+          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
         <el-table-column prop="order_sn" label="订单号"/>
-        <el-table-column prop="refund_way" label="售后类型"/>
-        <el-table-column prop="apply_status" label="售后状态" width="150"/>
+        <el-table-column prop="refund_type" label="售后类型"/>
+        <el-table-column prop="refund_status_text" label="售后状态" width="150"/>
         <el-table-column label="操作" width="100">
           <template slot-scope="scope">
             <nuxt-link :to="'/member/after-sale/detail?order_sn=' + scope.row.order_sn">查看</nuxt-link>
