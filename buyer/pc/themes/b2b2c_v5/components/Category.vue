@@ -57,9 +57,9 @@
               </div>
             </div>
             <div class="item-layer-right">
-              <div v-for="brand in item.brands" :key="brand.brand_id" class="brand-item">
+              <div v-for="(brand, index) in item.brand_list" v-if="index < 20" :key="index" class="brand-item">
                 <nuxt-link :to="'/goods-list?brand_id=' + brand.brand_id">
-                  <img :src="brand.brand_image" :alt="brand.brand_name">
+                  <img :src="brand.logo" :alt="brand.name">
                 </nuxt-link>
               </div>
             </div>
