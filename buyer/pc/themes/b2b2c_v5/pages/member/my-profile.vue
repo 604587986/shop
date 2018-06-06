@@ -50,10 +50,13 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="地区" prop="region">
-          <en-region-picker :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
+          <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="address">
           <el-input v-model="profileForm.address" size="small" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="profileForm.email" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="邮编">
           <el-input v-model="profileForm.zip" size="small" clearable></el-input>
@@ -73,7 +76,8 @@
   Vue.use(DatePicker)
   Vue.use(Upload)
   import { mapGetters, mapActions } from 'vuex'
-  import EnRegionPicker from "@/components/RegionPicker";
+  import EnRegionPicker from "@/components/RegionPicker"
+  import * as regExp from '@/utils/RegExp'
   export default {
     name: 'my-profile',
     components: { EnRegionPicker },
@@ -102,6 +106,18 @@
           address: [
             this.MixinRequired('请输入详细地址！'),
             { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+          ],
+          email: [
+            this.MixinRequired('请输入邮箱地址！'),
+            { validator: (rule, value, callback) => {
+                if (!regExp.email.test(value)) {
+                  callback(new Error('邮箱格式不正确！'))
+                } else {
+                  callback()
+                }
+              },
+              trigger: 'blur'
+            }
           ]
         }
       }
@@ -119,8 +135,8 @@
         return [
           user.province_id,
           user.city_id,
-          user.county_id || -1,
-          user.town_id || -1
+          user.county_id,
+          user.town_id
         ]
       },
       ...mapGetters({
@@ -133,7 +149,7 @@
         this.$refs['profileForm'].validate((valid) => {
           if (valid) {
             const params = JSON.parse(JSON.stringify(this.profileForm))
-            params.birthday = parseInt(params.birthday / 1000)
+            params.birthday /= 1000
             this.saveUserInfo(params).then(() => {
               this.$message.success('修改成功！')
             })

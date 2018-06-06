@@ -1,9 +1,9 @@
 <template>
   <div id="goods-tags" class="goods-tags">
-    <div v-if="tagGoods.hotGoods" class="item-tag">
+    <div v-if="hotGoods" class="item-tag">
       <h5 class="title-tag">热销商品</h5>
       <ul class="goods-list">
-        <template v-for="(goods, index) in tagGoods.hotGoods">
+        <template v-for="(goods, index) in hotGoods">
           <li
             v-if="index < 5"
             :key="goods.goods_id"
@@ -19,10 +19,10 @@
         </template>
       </ul>
     </div>
-    <div v-if="tagGoods.newGoods" class="item-tag">
+    <div v-if="newGoods" class="item-tag">
       <h5 class="title-tag">最新上架</h5>
       <ul class="goods-list">
-        <template v-for="(goods, index) in tagGoods.newGoods">
+        <template v-for="(goods, index) in newGoods">
           <li
             v-if="index < 5"
             :key="goods.goods_id"
@@ -38,10 +38,10 @@
         </template>
       </ul>
     </div>
-    <div v-if="tagGoods.recGoods" class="item-tag">
+    <div v-if="recGoods" class="item-tag">
       <h5 class="title-tag">店铺推荐</h5>
       <ul class="goods-list">
-        <template v-for="(goods, index) in tagGoods.recGoods">
+        <template v-for="(goods, index) in recGoods">
           <li
             v-if="index < 5"
             :key="goods.goods_id"
@@ -67,7 +67,13 @@
    */
   export default {
     name: 'goods-tags',
-    props: ['tagGoods']
+    data() {
+      return {
+        hotGoods: null,
+        newGoods: null,
+        recGoods: null
+      }
+    }
   }
 </script>
 

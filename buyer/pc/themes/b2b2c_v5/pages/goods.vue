@@ -1,14 +1,14 @@
 <template>
   <div id="goods">
-    <bread-nav :goods-sn="goods.sn"/>
+    <bread-nav :goods="goods"/>
     <div class="content">
       <goods-zoom :images="goods.gallery_list" :cur-img="curImg"/>
       <goods-info :goods="goods"/>
-      <shop-card :goods="goods"/>
+      <shop-card :shop-id="goods.seller_id"/>
     </div>
     <div class="details">
       <div class="inner w">
-        <!--<goods-tags :tag-goods="goods.tagGoods"/>-->
+        <goods-tags/>
         <div class="detail-container">
           <div class="detail-tabs">
             <div
@@ -32,8 +32,11 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import * as API_Goods from '@/api/goods'
   import * as GoodsComponents from '@/pages/-goods'
+  import { Pagination } from 'element-ui'
+  Vue.use(Pagination)
 	export default {
 		name: 'goods',
     asyncData({ query }, callback) {
@@ -42,7 +45,6 @@
         return
       }
       API_Goods.getGoods(query.goods_id).then(response => {
-        console.log('goods-response: ', response)
         callback(null, { goods: response })
       }).catch(e => {
         callback({ statusCode: e.response.status })
@@ -68,6 +70,11 @@
         tabs: ['商品详情', '规格参数', '商品评论', '商品咨询', '销售记录'].map((item, index) => ({ title: item, active: index === 0 })),
         curTab: '商品详情'
       }
+    },
+    mounted() {
+		  console.log(this.goods)
+      // 用于服务端记录浏览次数，每次+1【服务端去重】
+		  API_Goods.visitGoods(this.goods.goods_id)
     },
     methods: {
 		  /** 商品详情tab点击事件 */
