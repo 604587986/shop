@@ -8,7 +8,7 @@
     </div>
     <div class="details">
       <div class="inner w">
-        <!--<goods-tags :tag-goods="goods.tagGoods"/>-->
+        <goods-tags/>
         <div class="detail-container">
           <div class="detail-tabs">
             <div

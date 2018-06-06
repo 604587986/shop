@@ -24,7 +24,7 @@
       </template>
     </div>
     <div class="zoom-box">
-      <pic-zoom :url="current.small" :big-url="current.big" scroll style="width: 400px;height: 400px"></pic-zoom>
+      <pic-zoom :url="current.original" :big-url="current.original" scroll style="width: 400px;height: 400px"></pic-zoom>
     </div>
   </div>
 </template>
@@ -75,6 +75,7 @@
       },
       /** 鼠标悬浮在左侧缩略图上，切换放大镜图片 */
       handleHoverTumb(event, image) {
+        console.log(image)
         if (event.type === 'mouseenter') {
           this.images.map(item => {
             item.active = false

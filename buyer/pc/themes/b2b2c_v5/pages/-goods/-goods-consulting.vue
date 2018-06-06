@@ -16,6 +16,18 @@
   export default {
     name: "goods-consulting",
     props: ['goodsId'],
+    data() {
+      return {
+        params: {
+          page_no: 1,
+          page_size: 10
+        },
+        consulting: []
+      }
+    },
+    mounted() {
+      this.GET_Consulting()
+    },
     methods: {
       /** 显示咨询窗 */
       handleShowPrompt() {
@@ -26,10 +38,16 @@
           area: ['300px', '60px']
         }, (value, index, elem) => {
           if (!value.trim()) return false
+          layer.close(index)
           API_Comments.consultating(this.goodsId, value).then(() => {
             this.$message.success('提交成功，请等待审核')
-            layer.close(index)
           })
+        })
+      },
+      /** 获取咨询列表 */
+      GET_Consulting() {
+        API_Comments.getConsultations(this.params).then(response => {
+          console.log(response)
         })
       }
     }
