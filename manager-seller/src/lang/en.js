@@ -21,7 +21,6 @@ export default {
     settlementDetail: 'settlement Detail',
     receiptHistory: 'Receipt History',
     orderDetail: 'Order Detail',
-    refundDetail: 'Refund Detail',
 
     shop: 'Manage Shop',
     shopThemesPc: 'shop Themes Pc',
