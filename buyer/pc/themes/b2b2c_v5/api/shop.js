@@ -62,3 +62,15 @@ export function applyShopStep(step, params) {
     data: params
   })
 }
+
+/**
+ * 获取店铺基本信息
+ * @param shop_id
+ */
+export function getShopBaseInfo(shop_id) {
+  return request({
+    url: `shops/${shop_id}`,
+    method: 'get',
+    loading: false
+  })
+}

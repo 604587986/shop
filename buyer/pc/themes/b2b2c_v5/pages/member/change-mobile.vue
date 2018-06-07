@@ -112,15 +112,13 @@
       user: 'getValidImgUrl'
     },
     computed: {
-      ...mapGetters({
-        user: 'user'
-      })
+      ...mapGetters(['user', 'uuid'])
     },
     methods: {
       /** 获取图片验证码URL */
       getValidImgUrl() {
         if (!this.user) return
-        this.valid_img_url = API_Common.getValidateCodeUrl('BINDINGMOBILE' + this.user.mobile)
+        this.valid_img_url = API_Common.getValidateCodeUrl(this.uuid, 'BIND_MOBILE')
       },
       /** 发送手机验证码 */
       sendValidMobileSms() {

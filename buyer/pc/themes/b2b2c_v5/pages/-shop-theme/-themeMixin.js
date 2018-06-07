@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import * as API_Shop from '@/api/shop'
 import * as API_Collection from '@/api/collection'
-import banner from '@/components/ShopBanner'
+import ShopBanner from './-shop-banner'
+import ShopStar from './-shop-star'
 
 export default {
   data() {
@@ -16,10 +17,11 @@ export default {
     }
   },
   components: {
-    'en-banner': banner
+    'en-shop-banner': ShopBanner,
+    'en-shop-star': ShopStar
   },
   mounted() {
-  
+
   },
   methods: {
     collectionShop() {

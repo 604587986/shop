@@ -4,6 +4,10 @@
 </template>
 
 <script>
+  /**
+   * 商品评论模块
+   * 这里只负责展示商品的评论
+   */
   export default {
     name: "goods-comments"
   }

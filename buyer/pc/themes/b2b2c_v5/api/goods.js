@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getGoods(goods_id) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/goods/${goods_id}`,
+    url: `goods/${goods_id}`,
     method: 'get'
   })
 }
@@ -26,5 +26,28 @@ export function getGoodsList(params) {
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/goods/list',
     method: 'get',
     params
+  })
+}
+
+/**
+ * 记录商品浏览次数
+ * @param goods_id
+ */
+export function visitGoods(goods_id) {
+  return request({
+    url: `goods/${goods_id}/visit`,
+    method: 'get'
+  })
+}
+
+/**
+ * 获取商品sku列表
+ * @param goods_id
+ */
+export function getGoodsSkus(goods_id) {
+  return request({
+    url: `goods/${goods_id}/skus`,
+    method: 'get',
+    loading: false
   })
 }

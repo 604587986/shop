@@ -31,7 +31,8 @@
         <span>若已丢失或停用，请立即更换，</span><span style="color:#cc0000;">避免账户被盗</span>
       </div>
       <div class="fore3">
-        <nuxt-link to="/member/change-mobile">修改</nuxt-link>
+        <nuxt-link v-if="user.mobile" to="/member/change-mobile">修改</nuxt-link>
+        <nuxt-link v-else to="/member/bind-mobile">绑定</nuxt-link>
       </div>
     </div>
   </div>

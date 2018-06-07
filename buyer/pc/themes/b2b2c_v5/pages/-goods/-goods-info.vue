@@ -8,7 +8,7 @@
         <div class="pro-title">价格</div>
         <div class="pro-content price">
           <span>￥</span>
-          <strong>{{ goods.goods_price | unitPrice }}</strong>
+          <strong>{{ goods.price | unitPrice }}</strong>
         </div>
       </div>
       <div class="pro-list">
@@ -37,6 +37,10 @@
 </template>
 
 <script>
+  /**
+   * 商品信息模块
+   * 包括商品名称、商品价格、购买数量、加入购物车等等
+   */
   export default {
     name: 'goods-info',
     props: ['goods'],

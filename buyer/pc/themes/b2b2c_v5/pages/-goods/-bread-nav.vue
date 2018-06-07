@@ -4,11 +4,11 @@
       <span class="left-nav">
         <nuxt-link to="/">首页</nuxt-link>
         &gt;
-        <nuxt-link to="/notebook">笔记本</nuxt-link>
+        <nuxt-link to="/notebook">{{ goods.category_name }}</nuxt-link>
         &gt;
-        <nuxt-link to="/">戴尔DELL INS15-7567湛黑版15.6英寸笔记本电脑i7-7700 8G 1T+128G固态GTX1050t</nuxt-link>
+        <a href="javascript:;">{{ goods.goods_name }}</a>
       </span>
-      <span>商品编码：{{ goodsSn }}</span>
+      <span>商品编码：{{ goods.sn }}</span>
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@
 <script>
   export default {
     name: "bread-nav",
-    props: ['goodsSn']
+    props: ['goods']
   }
 </script>
 

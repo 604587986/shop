@@ -5,39 +5,42 @@
         <li class="active">我的咨询</li>
       </ul>
     </div>
-    <div class="consultation-container">
-      <ul>
-        <li v-for="consultation in consultation.data" :key="consultation.consultation_id" class="comment-item">
-          <div class="comment-title">
-            <nuxt-link :to="'/goods-' + consultation.goods.goods_id + '.html'" target="_blank">{{ consultation.goods.goods_name }}</nuxt-link>
-            <span>{{ consultation.consultation_time | unixToDate }}</span>
-          </div>
-          <div class="comment-body">
-            <div class="comment-content">
-              <strong>咨询内容：</strong>
-              <div>
-                <p>{{ consultation.consultation_content }}</p>
+    <template v-if="consultation && consultation.data.length > 0">
+      <div class="consultation-container">
+        <ul>
+          <li v-for="consultation in consultation.data" :key="consultation.ask_id" class="comment-item">
+            <div class="comment-title">
+              <nuxt-link :to="'/goods-' + consultation.goods_id + '.html'" target="_blank">{{ consultation.goods_name }}</nuxt-link>
+              <span>{{ consultation.create_time | unixToDate }}</span>
+            </div>
+            <div class="comment-body">
+              <div class="comment-content">
+                <strong>咨询内容：</strong>
+                <div>
+                  <p>{{ consultation.content }}</p>
+                </div>
+              </div>
+              <div class="comment-content seller-reply">
+                <strong>商家回复：</strong>
+                <div>
+                  <p>{{ consultation.reply || '暂未回复' }}</p>
+                </div>
               </div>
             </div>
-            <div class="comment-content seller-reply">
-              <strong>商家回复：</strong>
-              <div>
-                <p>{{ consultation.seller_reply }}</p>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="member-pagination" v-if="consultation">
-      <el-pagination
-        @current-change="handleCurrentPageChange"
-        :current-page.sync="params.page_no"
-        :page-size="params.page_size"
-        layout="total, prev, pager, next"
-        :total="consultation.data_total">
-      </el-pagination>
-    </div>
+          </li>
+        </ul>
+      </div>
+      <div class="member-pagination" v-if="consultation">
+        <el-pagination
+          @current-change="handleCurrentPageChange"
+          :current-page.sync="params.page_no"
+          :page-size="params.page_size"
+          layout="total, prev, pager, next"
+          :total="consultation.data_total">
+        </el-pagination>
+      </div>
+    </template>
+    <empty-member v-else>暂无咨询</empty-member>
   </div>
 </template>
 

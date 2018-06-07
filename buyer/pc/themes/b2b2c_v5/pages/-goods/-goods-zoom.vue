@@ -24,12 +24,16 @@
       </template>
     </div>
     <div class="zoom-box">
-      <pic-zoom :url="current.small" :big-url="current.big" scroll style="width: 400px;height: 400px"></pic-zoom>
+      <pic-zoom :url="current.original" :big-url="current.original" scroll style="width: 400px;height: 400px"></pic-zoom>
     </div>
   </div>
 </template>
 
 <script>
+  /**
+   * 商品相册模块
+   * 缩略图啥的
+   */
   import Swiper from 'swiper'
   import { PicZoom } from '@/components'
   export default {
@@ -98,6 +102,7 @@
     width: 80px;
     height: 400px;
     border-right: 1px solid #ededed;
+    .swiper-wrapper { flex-direction: column }
     .swiper-slide {
       display: block;
       position: relative;
@@ -140,5 +145,9 @@
   .zoom-box {
     width: 400px;
     height: 400px;
+    /deep/ img {
+      width: 100% !important;
+      height: 100% !important;
+    }
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div id="shop-card" class="shop-card">
-    <nuxt-link :to="'/shop?shop_id=' + goods.shop_id" class="shop-title">{{ goods.shop_name }}</nuxt-link>
-    <img :src="goods.shop_logo" :alt="goods.shop_name" class="shop-logo">
+    <nuxt-link :to="'/shop?shop_id=' + shopId" class="shop-title">{{ shopBaseInfo.shop_name }}</nuxt-link>
+    <img :src="shopBaseInfo.shop_logo" :alt="shopBaseInfo.shop_name" class="shop-logo">
     <div class="shop-rate">
       <div class="rate-item">
         <h5>描述</h5>
@@ -17,34 +17,50 @@
       </div>
     </div>
     <div class="shop-btns">
-      <nuxt-link :to="'/shop?shop_id=' + goods.shop_id" class="shop-btn into">进入商家店铺</nuxt-link>
+      <nuxt-link :to="'/shop?shop_id=' + shopId" class="shop-btn into">进入商家店铺</nuxt-link>
       <a href="javascript:;" @click="collectionShop" class="shop-btn collection">
-        {{ goods.shop_collected ? '已收藏' : '收藏店铺' }}({{ goods.shop_collection_num }})
+        {{ false ? '已收藏' : '收藏店铺' }}({{ shopBaseInfo.shop_collect }})
       </a>
     </div>
     <div class="shop-contact">
-      <h5>店铺名称：<span>{{ goods.shop_name }}</span></h5>
-      <h5>所&ensp;在&ensp;地：<span title="河北-廊坊市-三河市-燕郊镇">河北-廊坊市-三河市-燕郊镇</span></h5>
+      <h5>店铺名称：<span>{{ shopBaseInfo.shop_name }}</span></h5>
+      <h5>所&ensp;在&ensp;地：<span :title="shopRegions">{{ shopRegions }}</span></h5>
     </div>
   </div>
 </template>
 
 <script>
+  import * as API_Shop from '@/api/shop'
   import * as API_Collection from '@/api/collection'
   export default {
     name: "shop-card",
-    props: ['goods'],
+    props: ['shopId'],
+    data: () => ({
+      shopBaseInfo: ''
+    }),
+    mounted() {
+      API_Shop.getShopBaseInfo(this.shopId).then(response => {
+        this.shopBaseInfo = response
+      })
+    },
+    computed: {
+      shopRegions() {
+        if (!this.shopBaseInfo) return ''
+        const d = this.shopBaseInfo
+        return `${d.shop_province}-${d.shop_city}-${d.shop_county}${d.shop_town ? ('-' + d.shop_town) : ''}`
+      }
+    },
     methods: {
       collectionShop() {
-        const { shop_collected, shop_id } = this.goods
-        if (shop_collected) {
-          this.$message.error('您已经收藏过这个店铺啦！')
-          return false
-        }
-        API_Collection.collectionShop(shop_id).then(() => {
-          this.$message.success('收藏店铺成功！')
-          this.goods.shop_collected = true
-          this.goods.shop_collection_num += 1
+        // const { shop_collected, shop_id } = this.goods
+        // if (shop_collected) {
+        //   this.$message.error('您已经收藏过这个店铺啦！')
+        //   return false
+        // }
+        API_Collection.collectionShop(this.shopId).then(() => {
+          // this.$message.success('收藏店铺成功！')
+          // this.goods.shop_collected = true
+          this.shopBaseInfo.shop_collect += 1
         })
       }
     }
