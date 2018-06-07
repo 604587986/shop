@@ -70,7 +70,7 @@
               <h4>回复咨询：</h4>
               <p>{{ item.reply_content }}</p>
             </td>
-            <td class="opera-btn" v-if="item.is_reply === 2">
+            <td class="opera-btn" v-if="item.is_reply === 0">
               <el-button size="mini" type="primary" @click="handleReply(item)">回复</el-button>
             </td>
           </tr>
@@ -153,7 +153,7 @@
         /** 回复状态列表 */
         replyStatusList: [
           { label: '已回复', value: 1 },
-          { label: '未回复', value: 2 }
+          { label: '未回复', value: 0 }
         ],
 
         /** 表格最大高度 */
@@ -232,6 +232,7 @@
       handleReply(row) {
         this.isReplyShow = true
         this.replyForm = {
+          consultation_id: row.consultation_id,
           /** 咨询问题 */
           content: row.consultation_content,
 
