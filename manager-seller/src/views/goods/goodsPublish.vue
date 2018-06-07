@@ -850,7 +850,9 @@
           }
           let _paramsList = []
           this.goodsParams.forEach(key => {
-            _paramsList = _paramsList.concat(key.params)
+            if (key && key.params) {
+              _paramsList = _paramsList.concat(key.params)
+            }
           })
           this.baseInfoForm.goods_params_list = _paramsList
         })
@@ -921,7 +923,9 @@
           }
           let _paramsList = []
           this.goodsParams.forEach(key => {
-            _paramsList = _paramsList.concat(key.params)
+            if (key && key.params) {
+              _paramsList = _paramsList.concat(key.params)
+            }
           })
           this.baseInfoForm.goods_params_list = _paramsList
         })
