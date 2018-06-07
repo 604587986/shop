@@ -1,56 +1,18 @@
 <template>
   <div id="goods-tags" class="goods-tags">
-    <div v-if="hotGoods" class="item-tag">
-      <h5 class="title-tag">热销商品</h5>
+    <div v-for="tag in tagGoods" :key="tag.key" class="item-tag">
+      <h5 class="title-tag">{{ tag.title }}</h5>
       <ul class="goods-list">
-        <template v-for="(goods, index) in hotGoods">
+        <template v-for="(goods, index) in tag.data">
           <li
             v-if="index < 5"
             :key="goods.goods_id"
             class="goods-item">
             <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">
-              <img :src="goods.goods_image" :alt="goods.goods_name" class="goods-image">
+              <img :src="goods.thumbnail" :alt="goods.goods_name" class="goods-image">
               <div class="goods-info">
                 <div class="goods-name">{{ goods.goods_name }}</div>
-                <div class="goods-price">￥{{ goods.goods_price | unitPrice }}</div>
-              </div>
-            </nuxt-link>
-          </li>
-        </template>
-      </ul>
-    </div>
-    <div v-if="newGoods" class="item-tag">
-      <h5 class="title-tag">最新上架</h5>
-      <ul class="goods-list">
-        <template v-for="(goods, index) in newGoods">
-          <li
-            v-if="index < 5"
-            :key="goods.goods_id"
-            class="goods-item">
-            <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">
-              <img :src="goods.goods_image" :alt="goods.goods_name" class="goods-image">
-              <div class="goods-info">
-                <div class="goods-name">{{ goods.goods_name }}</div>
-                <div class="goods-price">￥{{ goods.goods_price | unitPrice }}</div>
-              </div>
-            </nuxt-link>
-          </li>
-        </template>
-      </ul>
-    </div>
-    <div v-if="recGoods" class="item-tag">
-      <h5 class="title-tag">店铺推荐</h5>
-      <ul class="goods-list">
-        <template v-for="(goods, index) in recGoods">
-          <li
-            v-if="index < 5"
-            :key="goods.goods_id"
-            class="goods-item">
-            <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">
-              <img :src="goods.goods_image" :alt="goods.goods_name" class="goods-image">
-              <div class="goods-info">
-                <div class="goods-name">{{ goods.goods_name }}</div>
-                <div class="goods-price">￥{{ goods.goods_price | unitPrice }}</div>
+                <div class="goods-price">￥{{ goods.price | unitPrice }}</div>
               </div>
             </nuxt-link>
           </li>
@@ -65,14 +27,28 @@
    * 标签商品模块
    * 例如热销商品、新品上架等等
    */
+  import * as API_Goods from '@/api/goods'
   export default {
     name: 'goods-tags',
+    props: ['shopId'],
     data() {
       return {
+        tagGoods: [
+          { title: '热销商品', key: 'hot', data: null },
+          { title: '最新上架', key: 'new', data: null },
+          { title: '店铺推荐', key: 'recommend', data: null }
+        ],
         hotGoods: null,
         newGoods: null,
         recGoods: null
       }
+    },
+    mounted() {
+      this.tagGoods.forEach(item => {
+        API_Goods.getTagGoods(this.shopId, item.key, 10).then(response => {
+          item.data = response
+        })
+      })
     }
   }
 </script>
