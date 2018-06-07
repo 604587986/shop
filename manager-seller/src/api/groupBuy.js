@@ -116,8 +116,7 @@ export function getGroupBuyActivityList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GroupBuyModel.GroupBuyActivitys().map(response.data)
+      const _response = new GroupBuyModel.GroupBuyActivitys().map(response)
       resolve(_response)
     })
   })

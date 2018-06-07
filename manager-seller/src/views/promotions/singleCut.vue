@@ -298,7 +298,7 @@
             activity_desc: '',
             discount_threshold: '',
             price_reduction: '',
-            activity_goods: ''
+            activity_goods: []
           }
         }
       },
@@ -476,6 +476,12 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
   .goods-image {
     width: 50px;
     height: 50px;

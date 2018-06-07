@@ -226,13 +226,6 @@
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
-    <!--<en-goods-picker-->
-      <!--:show="showDialog"-->
-      <!--:api="goods_api"-->
-      <!--:defaultData="tableData"-->
-      <!--:limit="maxsize"-->
-      <!--@confirm="refreshFunc"-->
-      <!--@close="showDialog = false"/>-->
     <en-goods-selector
       :show="showDialog"
       :api="goods_api"
@@ -937,6 +930,14 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
+  /deep/ .toolbar {
+    padding: 15px;
+  }
   /*商品图片*/
   .goods-image {
     width: 50px;
