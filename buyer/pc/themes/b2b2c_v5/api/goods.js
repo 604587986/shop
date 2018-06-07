@@ -51,3 +51,50 @@ export function getGoodsSkus(goods_id) {
     loading: false
   })
 }
+
+/**
+ * 获取商品咨询列表
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsConsultations(goods_id, params) {
+  return request({
+    url: `goods/${goods_id}/asks`,
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取商品评论列表
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsComments(goods_id, params) {
+  return request({
+    url: `goods/${goods_id}/comments`,
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取标签商品
+ * @param seller_id 卖家id
+ * @param mark      标签 hot：热卖 new：新品 recommend：推荐
+ * @param num       获取个数
+ */
+export function getTagGoods(seller_id, mark = 'hot', num = 5) {
+  return request({
+    url: `goods/tags/${mark}/goods`,
+    method: 'get',
+    loading: false,
+    params: {
+      seller_id,
+      mark,
+      num
+    }
+  })
+}
