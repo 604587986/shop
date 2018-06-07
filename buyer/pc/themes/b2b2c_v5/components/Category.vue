@@ -118,7 +118,7 @@
     height: 40px;
     background-color: #f42424;
     flex-shrink: 0;
-    z-index: 10;
+    z-index: 20;
     .category-title {
       display: block;
       font-size: 18px;
