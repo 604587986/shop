@@ -3,7 +3,6 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-import PaginationModel from '@/models/PaginationModel'
 const qs = require('qs')
 
 // 创建axios实例

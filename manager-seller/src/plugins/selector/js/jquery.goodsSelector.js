@@ -305,7 +305,7 @@ let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属
             _this.__DOM__appendItem(datas)
           })()
         : (function() {
-            alert('暂无数据。。。')
+           console.log('暂无数据。。。')
           })()
     },
     //  分类数据处理

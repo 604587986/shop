@@ -164,9 +164,21 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const _params = {
-              ...this.shopDataForm
+              shop_add: this.shopDataForm.shop_add,
+
+              link_phone: this.shopDataForm.link_phone,
+
+              shop_logo: this.shopDataForm.shop_logo,
+
+              shop_banner: this.shopDataForm.shop_banner,
+
+              shop_desc: this.shopDataForm.shop_desc || '',
+
+              shop_qq: this.shopDataForm.shop_qq,
+
+              shop_region: this.shopDataForm.shop_region
             }
-            API_Shop.saveShopSettings(_params).then(response => {
+            API_Shop.saveShopSettings(_params).then(() => {
               this.$message.success('保存店铺设置成功')
               this.GET_ShopGradeData()
             })

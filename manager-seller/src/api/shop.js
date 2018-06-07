@@ -36,6 +36,7 @@ export function saveShopSettings(params) {
     request({
       url: '/shops',
       method: 'put',
+      loading: false,
       data: params
     }).then(response => resolve(response))
   })
@@ -51,6 +52,7 @@ export function saveStockWarningNum(params) {
     request({
       url: '/shops/warning-counts',
       method: 'put',
+      loading: false,
       data: params
     }).then(response => resolve(response))
   })

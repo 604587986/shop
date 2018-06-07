@@ -23,18 +23,18 @@
           <!--文字信息-->
           <div class="shop-info">
             <div class="shop-info-basic">
-              <span>{{dashBoardData.shop_info.shop_name}}</span>
-              <span>（用户名：{{dashBoardData.shop_info.seller_name}}）</span>
+              <span>{{shop_info.shop_name}}</span>
+              <span>（用户名：{{shop_info.member_name}}）</span>
             </div>
             <div class="shop-info-credit">
               <span>
-                卖家信用：{{dashBoardData.shop_info.shop_credit}}
+                卖家信用：{{shop_info.shop_credit}}
               </span>
-              <div class="shop-icon">
-                <img src="http://localhost:8080/javashop/themes/b2b2cv4/images/cert_autonym.gif" alt="">
-                <img src="http://localhost:8080/javashop/themes/b2b2cv4/images/cert_material.gif" alt="">
-              </div>
-              <span>店铺地址：{{dashBoardData.shop_info.shop_address}}</span>
+              <div></div>
+              <span>店铺地址：{{shop_info.shop_province}}
+                {{shop_info.shop_city}}
+                {{shop_info.shop_county}}
+                {{shop_info.shop_town}}</span>
             </div>
           </div>
           <!--动态评分-->
@@ -43,15 +43,15 @@
             <div class="active-score">
               <div>
                 <span>描述</span>
-                <span>{{dashBoardData.shop_score.describe}}分</span>
+                <span>{{shop_info.shop_desccredit}}分</span>
               </div>
               <div>
                 <span>服务</span>
-                <span>{{dashBoardData.shop_score.service}}分</span>
+                <span>{{shop_info.shop_servicecredit}}分</span>
               </div>
               <div>
                 <span>发货</span>
-                <span>{{dashBoardData.shop_score.delivery}}分</span>
+                <span>{{shop_info.shop_deliverycredit}}分</span>
               </div>
             </div>
           </div>
@@ -169,10 +169,9 @@ export default {
   created() {
     this.GET_DashBoard()
     API_shop.getShopData({}).then(response => {
+      this.shop_info = response
       /** 使用vuex进行存储店铺信息 */
       this.$store.dispatch('SetShop', response)
-    }).catch(error => {
-      this.$message.error(error)
     })
   },
   methods: {
@@ -187,14 +186,10 @@ export default {
       API_Dashboard.getDashboardData().then(response => {
         this.loading = false
         this.dashBoardData = response
-        this.shop_info = response.shop_info
         this.shop_prompt = response.shop_prompt
         this.shop_announcement = response.shop_announcement
         this.trading_prompt = response.trading_prompt
         this.concat = response.concat
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
       })
     },
 
@@ -203,15 +198,12 @@ export default {
       this.$refs.uploadBtn.click()
     },
 
-    /** 上传成功后的钩子*/
+    /** 上传成功后的钩子 更换图片 置空存储数组*/
     uploaded(response, file, fileList) {
-      // 更换图片 置空存储数组
       this.shop_info.shop_logo = file.url
       this.fileList = []
       API_shop.updateShopLogo({ logo: file.url }).then(response => {
         this.$message.success('店铺LOGO修改成功')
-      }).catch(error => {
-        this.$message.error(error)
       })
     },
 

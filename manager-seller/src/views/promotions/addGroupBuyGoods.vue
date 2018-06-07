@@ -1,10 +1,12 @@
 <template>
   <div class="bg-group-buy">
-    <el-form ref="gruopBuyForm" :model="gruopBuyForm" label-width="120px" >
+    <el-form ref="gruopBuyForm" :model="gruopBuyForm" :rules="rules" label-width="120px" >
       <!--团购活动-->
-      <el-form-item label="团购活动">
-        <el-select v-model="gruopBuyForm.group_activity" placeholder="选择要参加的团购活动及时间段">
-          <el-option v-for="item in gruopBuyActivitys" :key="item.activity_id"
+      <el-form-item label="团购活动" prop="activity_id">
+        <el-select v-model="gruopBuyForm.activity_id" placeholder="选择要参加的团购活动及时间段">
+          <el-option
+            v-for="item in gruopBuyActivitys"
+            :key="item.activity_id"
             :label="item.activity_desc"
             :value="item.activity_id">
           </el-option>
@@ -12,11 +14,12 @@
         <span class="activity-tip">选择要参加的团购活动及时间段</span>
       </el-form-item>
       <!--团购名称-->
-      <el-form-item label="团购名称">
+      <el-form-item label="团购名称" prop="group_buy_name">
         <el-input
           v-model="gruopBuyForm.group_buy_name"
           :style="{ width:inputLength +'px' }"
-          placeholder="团购标题名称长度最多可输入30个字符"></el-input>
+          placeholder="团购标题名称长度最多可输入30个字符">
+        </el-input>
         <span class="activity-tip">团购标题名称长度最多可输入30个字符</span>
       </el-form-item>
       <!--团购副标题-->
@@ -24,54 +27,54 @@
          <el-input
            v-model="gruopBuyForm.group_buy_subtitle"
            :style="{ width:inputLength +'px' }"
-           placeholder="团购副标题针对团购特殊说明"></el-input>
+           placeholder="团购副标题针对团购特殊说明">
+         </el-input>
         <span class="activity-tip">团购副标题针对团购特殊说明</span>
       </el-form-item>
       <!--团购商品-->
-      <el-form-item label="团购商品">
-        <el-button type="primary" @click="chooseGroupBuyGoods" v-if="gruopBuyForm.goods_name">
+      <el-form-item label="团购商品" prop="goods_name">
+        <el-button v-if="gruopBuyForm.goods_name" type="primary" @click="chooseGroupBuyGoods" >
           {{ gruopBuyForm.goods_name }}
         </el-button>
-        <el-button type="primary" @click="chooseGroupBuyGoods" v-else>
+        <el-button v-else type="primary" @click="chooseGroupBuyGoods" >
           选择商品
         </el-button>
-        <span class="activity-tip">点击上方输入框从已发布商品中选择要参加团购的商品，
-          如没有找到您想要参加团购的商品，请重新发布该商品后再选择。</span>
+        <span class="activity-tip">
+          点击上方输入框从已发布商品中选择要参加团购的商品，如没有找到您想要参加团购的商品，请重新发布该商品后再选择。
+        </span>
       </el-form-item>
       <!--店铺价格-->
-      <el-form-item label="店铺价格" v-if="gruopBuyForm.goods_name">
+      <el-form-item label="店铺价格" v-if="gruopBuyForm.goods_name" >
         <span>{{ gruopBuyForm.shop_price | unitPrice('￥')}}</span>
       </el-form-item>
       <!--团购价格-->
-      <el-form-item label="团购价格">
+      <el-form-item label="团购价格" prop="group_buy_price">
         <el-input
           type="text"
           :style="{ width:inputLength +'px' }"
-          v-model.number="gruopBuyForm.group_buy_price"></el-input>
-        <span class="activity-tip">团购价格为该商品参加活动时的促销价格必须是0.01~1000000之间的数字(单位：元)团购价格应包含邮费，
-          团购商品系统默认不收取邮费</span>
+          v-model.number="gruopBuyForm.group_buy_price">
+        </el-input>
+        <span class="activity-tip">
+          团购价格为该商品参加活动时的促销价格必须是0.01~1000000之间的数字(单位：元)团购价格应包含邮费，团购商品系统默认不收取邮费
+        </span>
       </el-form-item>
       <!--团购图片-->
-      <el-form-item label="团购图片">
+      <el-form-item label="团购图片" prop="">
         <el-upload
           class="upload-demo"
-          drag
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :limit="1"
+          :action="BASE_IMG_URL"
           :file-list="fileList"
           :on-success="handleSuccess"
           list-type="picture">
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
-        <img :src="gruopBuyForm.group_buy_image" alt="" class="goods-image">
       </el-form-item>
       <!--商品库存数-->
       <el-form-item label="商品库存数" v-if="gruopBuyForm.goods_name">
         <span>{{ gruopBuyForm.goods_stock}}</span>
       </el-form-item>
       <!--商品总数-->
-      <el-form-item label="商品总数">
+      <el-form-item label="商品总数" prop="goods_summary">
         <el-input :style="{ width:inputLength +'px' }"  v-model.number="gruopBuyForm.goods_summary"></el-input>
         <span class="activity-tip">团购商品总数应等于或小于该商品库存数量，请提前确认要参与活动的商品库存数量足够充足</span>
       </el-form-item>
@@ -87,31 +90,20 @@
         </el-select>
         <span class="activity-tip">请选择团购商品的所属类别</span>
       </el-form-item>
-      <!--所属区域-->
-      <el-form-item label="所属区域" v-if="gruopBuyForm.goods_name">
-        <el-select v-model="gruopBuyForm.the_area" placeholder="请选择">
-          <el-option
-            v-for="item in theAreas"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
       <!--虚拟数量-->
-      <el-form-item label="虚拟数量">
+      <el-form-item label="虚拟数量" prop="goods_virtual">
         <el-input
           type="text"
-          v-model="gruopBuyForm.goods_virtual"
+          v-model.number="gruopBuyForm.goods_virtual"
           :style="{ width:inputLength +'px' }"
           placeholder="虚拟购买数量，只用于前台显示，不影响成交记录"></el-input>
         <span class="activity-tip">虚拟购买数量，只用于前台显示，不影响成交记录</span>
       </el-form-item>
       <!--限购数量-->
-      <el-form-item label="限购数量">
+      <el-form-item label="限购数量" prop="goods_limit_buy">
         <el-input
           type="text"
-          v-model="gruopBuyForm.goods_limit_buy"
+          v-model.number="gruopBuyForm.goods_limit_buy"
           :style="{ width:inputLength +'px' }"
           placeholder="每个买家ID可团购的最大数量，不限数量请填 '0'"></el-input>
         <span class="activity-tip">每个买家ID可团购的最大数量，不限数量请填 '0'</span>
@@ -123,9 +115,8 @@
       <!--查看用户注册协议-->
       <el-form-item>
         <el-checkbox :checked="allowAgreement">
-          我已阅读
-          <el-button type="text" @click="lookAgreement">团购服务协议</el-button>
-          并同意</el-checkbox>
+          我已阅读<el-button type="text" @click="lookAgreement">团购服务协议</el-button>并同意
+        </el-checkbox>
       </el-form-item>
       <!--操作-->
       <el-form-item>
@@ -184,6 +175,7 @@
 
 <script>
   import * as API_groupBuy from '@/api/groupBuy'
+  import { unixToDate } from '@/utils/index'
   import { UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
@@ -194,6 +186,9 @@
     },
     data() {
       return {
+        /** 图片服务器地址 */
+        BASE_IMG_URL: process.env.BASE_IMG_URL,
+
         /** input框长度*/
         inputLength: 300,
 
@@ -238,9 +233,6 @@
           /** 活动ID */
           activity_id: '',
 
-          /** 活动名称 */
-          activity_name: '',
-
           /** 团购名称 */
           group_buy_name: '',
 
@@ -282,6 +274,13 @@
 
           /** 团购介绍 */
           group_buy_intro: ''
+        },
+
+        /** 表单校验规则 */
+        rules: {
+          activity_id: [
+            // { required: true, message: '', trigger: 'blur'}
+          ]
         }
       }
     },
@@ -292,7 +291,10 @@
       /** 获取团购活动列表*/
       GET_AllGroupBuyActivitys() {
         API_groupBuy.getGroupBuyActivityList().then(response => {
-          this.gruopBuyActivitys = response.data
+          this.gruopBuyActivitys = response
+          this.gruopBuyActivitys.forEach(key => {
+            this.$set(key, 'activity_desc', `${key.activity_name}  ${unixToDate(key.start_time, 'yyyy-MM-dd')}~${unixToDate(key.end_time, 'yyyy-MM-dd')}`)
+          })
         })
       },
 
@@ -304,13 +306,16 @@
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
         if (val && val.goods_name) {
+          this.gruopBuyForm.goods_id = val.goods_id
           this.gruopBuyForm.goods_name = val.goods_name
+          this.gruopBuyForm.shop_price = val.price
+          this.gruopBuyForm.goods_stock = val.quantity
         }
       },
 
       /** 图片上传成功时的钩子*/
       handleSuccess(response, file, fileList) {
-        this.gruopBuyForm.goods_image = response.url
+        this.gruopBuyForm.group_buy_image = response.url
       },
 
       /** 查看用户注册协议*/
@@ -325,6 +330,7 @@
 
       /** 新增团购商品*/
       handleSaveGroupBuyGoods() {
+        this.gruopBuyForm.the_area = 0
         API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(response => {
           this.$message.success('添加成功')
         })
@@ -356,5 +362,9 @@
     font-size: 12px;
     line-height: 22px;
   }
+  /deep/.el-select {
+    width: 320px;
+  }
 </style>
+
 

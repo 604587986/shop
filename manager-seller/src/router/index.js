@@ -78,7 +78,6 @@ export const asyncRouterMap = [
       { path: 'order-list', component: _import('order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
       { path: 'detail/:sn', component: _import('order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
       { path: 'refund-list', component: _import('order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
-      { path: 'refund/:sn', component: _import('order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }},
       { path: 'logistics-manage', component: _import('order/logisticsManage'), name: 'logisticsManage', meta: { title: 'logisticsManage' }},
       { path: 'comments-manage', component: _import('order/commentsManage'), name: 'commentsManage', meta: { title: 'commentsManage' }},
       { path: 'settlement-manage', component: _import('order/settlementManage'), name: 'settlementManage', meta: { title: 'settlementManage' }},

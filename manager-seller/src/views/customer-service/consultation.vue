@@ -94,11 +94,6 @@
     <el-dialog title="回复咨询"  :visible.sync="isReplyShow" width="30%">
       <div align="center">
         <el-form :model="replyForm" ref="replyForm" label-position="right" label-width="100px">
-          <el-form-item label="当前状态:" prop="auth_status" >
-            <span class="desc-span" v-if="replyForm.auth_status === 1">审核通过</span>
-            <span class="desc-span" v-if="replyForm.auth_status === 0">审核失败</span>
-            <span class="desc-span" v-if="replyForm.auth_status === 2">审核中</span>
-          </el-form-item>
           <el-form-item label="咨询内容:" prop="content" >
             <span class="desc-span">{{ replyForm.content }}</span>
           </el-form-item>
@@ -169,10 +164,6 @@
 
         /** 回复表单 */
         replyForm: {
-
-          /** 当前审核状态 */
-          auth_status: '',
-
           /** 咨询问题 */
           content: '',
 
@@ -240,7 +231,13 @@
       /** 回复操作 */
       handleReply(row) {
         this.isReplyShow = true
-        this.replyForm = { ...row }
+        this.replyForm = {
+          /** 咨询问题 */
+          content: row.consultation_content,
+
+          /** 回复内容 */
+          reply_content: row.reply_content
+        }
       },
 
       /** 确认回复 */

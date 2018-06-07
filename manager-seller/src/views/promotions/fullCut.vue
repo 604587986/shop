@@ -226,13 +226,6 @@
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
-    <!--<en-goods-picker-->
-      <!--:show="showDialog"-->
-      <!--:api="goods_api"-->
-      <!--:defaultData="tableData"-->
-      <!--:limit="maxsize"-->
-      <!--@confirm="refreshFunc"-->
-      <!--@close="showDialog = false"/>-->
     <en-goods-selector
       :show="showDialog"
       :api="goods_api"
@@ -300,7 +293,7 @@
           setTimeout(() => {
             if (!Number.isInteger(value)) {
               callback(new Error('请输入数字值'))
-            } else if (value <= 0 && value >= 10) {
+            } else if (value <= 0 || value >= 10) {
               callback(new Error('不合法的打折'))
             } else {
               callback()
@@ -586,6 +579,13 @@
               /** 活动商品*/
               activity_goods: []
             }
+            /** 处理优惠数据 */
+            this.isDiscount = false
+            this.isReduceCash = false
+            this.isIntegral = false
+            this.freePostage = false
+            this.isCoupon = false
+            this.isGift = false
         }
       },
 
@@ -736,6 +736,12 @@
           /** 活动商品*/
           activity_goods: []
         }
+        this.isDiscount = false
+        this.isReduceCash = false
+        this.isIntegral = false
+        this.freePostage = false
+        this.isCoupon = false
+        this.isGift = false
       },
 
       /** 是否打折 */
@@ -924,6 +930,14 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
+  /deep/ .toolbar {
+    padding: 15px;
+  }
   /*商品图片*/
   .goods-image {
     width: 50px;

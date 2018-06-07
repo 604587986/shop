@@ -36,14 +36,6 @@ export default class ShopModel extends DataModel {
   @ServerName('shop_banner')
   shop_banner
 
-  /** 店铺所在城市 */
-  @ServerName('shop_city')
-  shop_city
-
-  /** 店铺所在城市ID */
-  @ServerName('shop_city_id')
-  shop_city_id
-
   /** 店铺ID */
   @ServerName('shop_id')
   shop_id
@@ -64,14 +56,6 @@ export default class ShopModel extends DataModel {
   @ServerName('shop_desc')
   shop_desc
 
-  /** 店铺所在省份 */
-  @ServerName('shop_province')
-  shop_province
-
-  /** 店铺所在省份ID */
-  @ServerName('shop_province_id')
-  shop_province_id
-
   /** 店铺联系QQ */
   @ServerName('shop_qq')
   shop_qq
@@ -83,6 +67,30 @@ export default class ShopModel extends DataModel {
   /** 店铺所在地区ID */
   @ServerName('shop_region_id')
   shop_region_id
+
+  /** 店铺所在省份 */
+  @ServerName('shop_province')
+  shop_province
+
+  /** 店铺所在省份ID */
+  @ServerName('shop_province_id')
+  shop_province_id
+
+  /** 店铺所在城市 */
+  @ServerName('shop_city')
+  shop_city
+
+  /** 店铺所在城市ID */
+  @ServerName('shop_city_id')
+  shop_city_id
+
+  /** 店铺所在县 */
+  @ServerName('shop_county')
+  shop_county
+
+  /** 店铺所在县ID */
+  @ServerName('shop_county_id')
+  shop_county_id
 
   /** 店铺所在乡镇 */
   @ServerName('shop_town')

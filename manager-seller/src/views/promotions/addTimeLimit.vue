@@ -1,86 +1,87 @@
 <template>
-  <div v-if="activityData" class="sign-up-bg">
-    <el-row :gutter="20">
-      <el-col :span="4">
+  <div class="sign-up-bg">
+    <el-form
+      :model="activityData"
+      status-icon
+      label-position="right"
+      ref="activityData"
+      label-width="120px"
+      class="demo-ruleForm">
+      <!--活动日期-->
+      <div class="base-info-item">
+        <h4>活动日期</h4>
         <div>
-          活动日期
+          <p>{{ activityData.start_time | unixToDate }}</p>
         </div>
-      </el-col>
-      <el-col :span="19">
-        <p>{{ activityData.start_time | unixToDate }}</p>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="4">
+      </div>
+      <!--报名截止日期-->
+      <div class="base-info-item">
+        <h4>报名截止日期</h4>
         <div>
-          报名截止日期
+          <p>{{ activityData.sign_end_time | unixToDate }}</p>
         </div>
-      </el-col>
-      <el-col :span="19">
-        <p>{{ activityData.sign_end_time | unixToDate }}</p>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="4">
+      </div>
+      <!--申请规则-->
+      <div class="base-info-item">
+        <h4>申请规则</h4>
         <div>
-          申请规则
+          <p>{{activityData.application_rules}}</p>
         </div>
-      </el-col>
-      <el-col :span="19">
-        <p>{{activityData.application_rules}}</p>
-      </el-col>
-    </el-row>
-    <el-row :gutter="19">
-      <el-col :span="4">
+      </div>
+      <!--抢购阶段-->
+      <div class="base-info-item">
+        <h4>抢购阶段</h4>
         <div>
-          抢购阶段
-        </div>
-      </el-col>
-      <el-col :span="19">
-        <div v-for="(item, $index) in activityData.panic_buy">
-          <div class="panic-buy">
-            <span>{{ item }}:00</span>
-            <el-button type="primary" @click="selectgoodslist($index)">选择商品</el-button>
-          </div>
-          <div>
-            <en-tabel-layout
-              v-if="tableData && tableData.length >= 1"
-              :tableData="tableData[$index]"
-              :loading="loading"
-            >
-              <template slot="table-columns">
-                <el-table-column label="商品名称">
-                  <template slot-scope="scope">
-                    <a href="" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="price" label="商品价格" width="100"/>
-                <el-table-column label="活动价">
-                  <template slot-scope="scope">
-                    <el-input ></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column label="售空数量">
-                  <template slot-scope="scope">
-                    <el-input ></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作" width="70">
-                  <template slot-scope="scope">
-                    <i class="el-icon-error icon-close" @click="handleDelgoods($index,scope.row)"></i>
-                  </template>
-                </el-table-column>
-              </template>
-            </en-tabel-layout>
+          <div v-for="(item, $index) in activityData.panic_buy">
+            <div class="panic-buy">
+              <span>{{ item }}:00</span>
+              <el-button type="primary" @click="selectgoodslist($index)">选择商品</el-button>
+            </div>
+            <div>
+              <en-tabel-layout
+                v-if="tableData && tableData.length >= 1"
+                :tableData="tableData[$index]"
+                :loading="loading"
+              >
+                <template slot="table-columns">
+                  <el-table-column label="商品名称">
+                    <template slot-scope="scope">
+                      <a href="" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="price" label="商品价格" width="100"/>
+                  <el-table-column label="活动价">
+                    <template slot-scope="scope">
+                      <el-input ></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="售空数量">
+                    <template slot-scope="scope">
+                      <el-input ></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" width="70">
+                    <template slot-scope="scope">
+                      <i class="el-icon-error icon-close" @click="handleDelgoods($index,scope.row)"></i>
+                    </template>
+                  </el-table-column>
+                </template>
+              </en-tabel-layout>
+            </div>
           </div>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </el-form>
     <div style="text-align: center;">
       <el-button type="success" @click="handleSignUp">确定报名</el-button>
     </div>
-    <en-goods-selector :show="showDialog" :api="goods_api" :defaultData="tableData" :maxLength="maxsize"
-                       @confirm="refreshFunc" @closed="showDialog = false"/>
+    <en-goods-selector
+      :show="showDialog"
+      :api="goods_api"
+      :defaultData="tableData"
+      :maxLength="maxsize"
+      @confirm="refreshFunc"
+      @closed="showDialog = false"/>
   </div>
 </template>
 

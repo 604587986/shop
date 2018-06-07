@@ -3,45 +3,102 @@
  */
 
 import request from '@/utils/request'
-import RefundModel from '@/models/RefundModel'
-import GoodsModel from '@/models/GoodsModel'
+import * as RefundModel from '@/models/RefundModel'
 
 /**
- * 获取退款单列表
+ * 获取退款/货单列表
  * @param params
  * @returns {Promise<any>}
  */
 export function getRefundList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'after-sale/admin/refund-all.do',
+      url: '/after-sales/refunds',
       method: 'get',
       loading: false,
       params
     }).then(response => {
       const _response = response
-      _response.data = new RefundModel().map(response.data)
+      _response.data = new RefundModel.Refund().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
 /**
- * 获取售后详情
+ * 退款/货 详情
  * @param sn
  * @returns {Promise<any>}
  */
-export function getRefundDetail(sn) {
+export function getRefundDetails(sn) {
   return new Promise((resolve, reject) => {
     request({
-      url: `after-sale/admin/refund/${sn}.do`,
+      url: '/after-sales/refunds/{sn}',
       method: 'get',
       loading: false
     }).then(response => {
       const _response = response
-      _response.goods = new GoodsModel().map(response.goods)
-      _response.refund = new RefundModel().map(response.refund)
+      _response.refund = new RefundModel.Refund().map(response.refund)
+      _response.refund_goods_do = new RefundModel.RefundGoods().map(response.refund_goods_do)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
+  })
+}
+
+/**
+ * 卖家审核退款/退货
+ * @param sn
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function refundAuth(sn, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/after-sales/audits/{sn}',
+      method: 'post',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 卖家执行退款
+ * @param sn
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function toRefund(sn, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/after-sales/refunds/{sn}',
+      method: 'post',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 入库操作
+ * @param sn
+ * @param params
+ * @returns {Promise<any>}
+ * @constructor
+ */
+export function wareHousing(sn, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/after-sales/stock-ins/{sn}',
+      method: 'post',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
   })
 }

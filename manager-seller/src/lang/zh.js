@@ -21,7 +21,6 @@ export default {
     settlementDetail: '结算详情',
     receiptHistory: '发票历史',
     orderDetail: '订单详情',
-    refundDetail: '售后详情',
 
     shop: '店铺管理',
     shopThemesPc: '店铺模板',
