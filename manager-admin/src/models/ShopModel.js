@@ -60,16 +60,16 @@ export default class ShopModel extends DataModel {
   code_img
 
   /** 公司地址 */
-  @ServerName('compant_address')
-  compant_address
+  @ServerName('company_address')
+  company_address
 
   /** 公司电子邮箱 */
-  @ServerName('compant_email')
-  compant_email
+  @ServerName('company_email')
+  company_email
 
   /** 公司电话 */
-  @ServerName('compant_phone')
-  compant_phone
+  @ServerName('company_phone')
+  company_phone
 
   /** 公司名称 */
   @ServerName('company_name')

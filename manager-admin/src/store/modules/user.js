@@ -1,5 +1,5 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getUserInfo, logout } from '@/api/login'
+import { getToken, removeToken, setToken } from '@/utils/auth'
 
 const user = {
   state: {
@@ -44,16 +44,20 @@ const user = {
     LoginByUsername({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password, userInfo.validcode).then(response => {
-          // 后台暂时没有返回数据，模拟一个
-          response = { data: { token: 'Admin-Token=admin' }}
-          const data = response.data
-          commit('SET_TOKEN', data.token)
-          setToken(response.data.token)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        const token = '123'
+        commit('SET_TOKEN', token)
+        setToken(token)
+        resolve()
+        // loginByUsername(username, userInfo.password, userInfo.validcode).then(response => {
+        //   // 后台暂时没有返回数据，模拟一个
+        //   response = { data: { token: 'Admin-Token=admin' }}
+        //   const data = response.data
+        //   commit('SET_TOKEN', data.token)
+        //   setToken(response.data.token)
+        //   resolve()
+        // }).catch(error => {
+        //   reject(error)
+        // })
       })
     },
 

@@ -43,6 +43,8 @@
 </template>
 
 <script>
+  import * as API_Promotion from '@/api/promotion'
+
   export default {
     name: 'groupBuyGoods',
     data() {
@@ -54,7 +56,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          actid: this.$route.params.id
+          act_id: this.$route.params.id
         },
 
         /** 列表数据 */
@@ -86,6 +88,7 @@
       /** 获取团购活动详情商品列表 */
       GET_GroupBuyGoodsList() {
         this.loading = true
+        API_Promotion.getGroupBuyActivityDetail()
         // API_GroupBuy.getGroupBuyGoodsList(this.params).then(response => {
         //   this.loading = false
         //   this.tableData = response.data
