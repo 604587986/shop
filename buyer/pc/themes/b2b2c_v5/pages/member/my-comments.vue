@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import * as API_Comments from '@/api/comments'
+  import * as API_Members from '@/api/members'
   export default {
     name: 'my-comments',
     data() {
@@ -64,7 +64,7 @@
         this.GET_Comments()
       },
       GET_Comments() {
-        API_Comments.getComments(this.params).then(response => {
+        API_Members.getComments(this.params).then(response => {
           this.comments = response
           this.MixinScrollToTop()
         })

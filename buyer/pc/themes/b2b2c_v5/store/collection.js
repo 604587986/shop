@@ -1,4 +1,4 @@
-import * as API_Collection from '@/api/collection'
+import * as API_Members from '@/api/members'
 import * as types from './mutation-types'
 
 export const state = () => ({
@@ -62,7 +62,7 @@ export const actions = {
    */
   getGoodsCollectionDataAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_Collection.getGoodsCollection(params).then(response => {
+      API_Members.getGoodsCollection(params).then(response => {
         commit(types.SET_COLLECTION_GOODS, response)
         resolve(response)
       }).catch(error => reject(error))
@@ -76,7 +76,7 @@ export const actions = {
    */
   deleteGoodsCollectionAction: ({ commit }, ids) => {
     return new Promise((resolve, reject) => {
-      API_Collection.deleteGoodsCollection(ids).then(response => {
+      API_Members.deleteGoodsCollection(ids).then(response => {
         commit(types.DELETE_COLLECTION_GOODS, ids)
         resolve(response)
       }).catch(error => reject(error))
@@ -90,7 +90,7 @@ export const actions = {
    */
   getShopCollectionDataAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_Collection.getShopCollection(params).then(response => {
+      API_Members.getShopCollection(params).then(response => {
         commit(types.SET_COLLECTION_SHOP, response)
         resolve(response)
       }).catch(error => reject(error))
@@ -104,7 +104,7 @@ export const actions = {
    */
   deleteShopCollectionAction: ({ commit }, ids) => {
     return new Promise((resolve, reject) => {
-      API_Collection.deleteShopCollection(ids).then(response => {
+      API_Members.deleteShopCollection(ids).then(response => {
         commit(types.DELETE_COLLECTION_SHOP, ids)
         resolve(response)
       }).catch(error => reject(error))

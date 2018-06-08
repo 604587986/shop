@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import * as API_Shop from '@/api/shop'
-import * as API_Collection from '@/api/collection'
+import * as API_Members from '@/api/members'
 import ShopBanner from './-shop-banner'
 import ShopStar from './-shop-star'
 
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     collectionShop() {
-      API_Collection.collectionShop(this.shop_id).then(() => {
+      API_Members.collectionShop(this.shop_id).then(() => {
         this.$message.success('收藏成功！')
       })
     }

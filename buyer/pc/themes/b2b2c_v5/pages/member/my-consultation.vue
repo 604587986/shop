@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import * as API_Consultation from '@/api/comments'
+  import * as API_Members from '@/api/members'
   export default {
     name: 'my-consultation',
     data() {
@@ -68,7 +68,7 @@
       },
       /** 获取我的咨询 */
       GET_Consulatation() {
-        API_Consultation.getConsultations(this.params).then(response => {
+        API_Members.getConsultations(this.params).then(response => {
           this.consultation = response
           this.MixinScrollToTop()
         })

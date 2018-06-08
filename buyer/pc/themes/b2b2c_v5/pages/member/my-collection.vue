@@ -142,7 +142,7 @@
 </template>
 
 <script>
-  import * as API_Collection from '@/api/collection'
+  import * as API_Members from '@/api/members'
   export default {
     name: 'my-collection',
     data() {
@@ -187,7 +187,7 @@
       },
       /** 删除商品收藏 */
       handleDeleteGoodsColl(goods) {
-        API_Collection.deleteGoodsCollection(goods.goods_id).then(() => {
+        API_Members.deleteGoodsCollection(goods.goods_id).then(() => {
           this.GET_Collection('goods')
         })
       },
@@ -198,7 +198,7 @@
       },
       /** 删除店铺收藏 */
       handleDeleteShopColl(shop) {
-        API_Collection.deleteShopCollection(shop.shop_id).then(() => {
+        API_Members.deleteShopCollection(shop.shop_id).then(() => {
           this.GET_Collection('shop')
         })
       },
@@ -217,7 +217,7 @@
       /** 获取收藏 */
       GET_Collection(type) {
         if (type === 'goods') {
-          API_Collection.getGoodsCollection(this.params_goods).then(response => {
+          API_Members.getGoodsCollection(this.params_goods).then(response => {
             response.data.map(item => {
               // 初始化是否显示删除遮罩标识
               item.show_del_pop = 0
@@ -227,7 +227,7 @@
             this.MixinScrollToTop()
           })
         } else {
-          API_Collection.getShopCollection(this.params_shop).then(response => {
+          API_Members.getShopCollection(this.params_shop).then(response => {
             response.data.map(item => {
               // 初始化是否显示删除遮罩标识
               item.show_del_pop = 0

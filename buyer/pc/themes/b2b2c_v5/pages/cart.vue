@@ -119,7 +119,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import * as API_Cart from '@/api/cart'
+  import * as API_Trade from '@/api/trade'
   import * as regExp from '@/utils/RegExp'
   export default {
     name: 'cart',

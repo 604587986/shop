@@ -8,7 +8,7 @@
     </div>
     <div class="details">
       <div class="inner w">
-        <goods-tags/>
+        <goods-tags :shop-id="goods.seller_id"/>
         <div class="detail-container">
           <div class="detail-tabs">
             <div
@@ -47,6 +47,7 @@
       API_Goods.getGoods(query.goods_id).then(response => {
         callback(null, { goods: response })
       }).catch(e => {
+        console.log(e)
         callback({ statusCode: e.response.status })
       })
     },
@@ -72,7 +73,7 @@
       }
     },
     mounted() {
-		  console.log(this.goods)
+		  console.log('goods: ', this)
       // 用于服务端记录浏览次数，每次+1【服务端去重】
 		  API_Goods.visitGoods(this.goods.goods_id)
     },
