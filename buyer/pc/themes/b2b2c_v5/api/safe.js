@@ -15,6 +15,7 @@ export function sendMobileSms(type, mobile, validcode) {
   return request({
     url: `${process.env.VALIDATE_CODE_API}/api/shop/member/send-sms-code.do`,
     method: 'get',
+    needToken: true,
     params: {
       validcode,
       mobile,
@@ -36,6 +37,7 @@ export function validMobileSms(type, mobile, mobile_code, img_code) {
   return request({
     url: `${process.env.VALIDATE_CODE_API}/api/shop/member/member-mobile-validate.do`,
     method: 'get',
+    needToken: true,
     params: {
       validcode: img_code,
       mobileCode: mobile_code,
@@ -60,6 +62,7 @@ export function changePassword(new_password, rep_password, img_code) {
   return request({
     url: `${process.env.VALIDATE_CODE_API}/api/shop/member/update-password.do`,
     method: 'post',
+    needToken: true,
     data: _formData
   })
 }
@@ -75,6 +78,7 @@ export function bindMobile(mobile) {
   return request({
     url: '',
     method: 'post',
+    needToken: true,
     data: _formData
   })
 }
@@ -88,6 +92,7 @@ export function sendUpdatePasswordMobileCode(mobile, params) {
   return request({
     url: 'members/security/send-val-code',
     method: 'post',
+    needToken: true,
     data: params
   })
 }
@@ -100,6 +105,7 @@ export function updatePassword(params) {
   return request({
     url: 'members/security/update-password',
     method: 'post',
+    needToken: true,
     data: params
   })
 }
@@ -113,6 +119,7 @@ export function sendBindCode(mobile, params) {
   return request({
     url: `members/security/send-bind-code/${mobile}`,
     method: 'post',
+    needToken: true,
     data: params
   })
 }

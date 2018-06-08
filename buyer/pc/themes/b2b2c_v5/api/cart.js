@@ -13,7 +13,6 @@ export function getCartList(params) {
   return request({
     url: 'trade/carts',
     method: 'get',
-    dontCheckToken: true,
     params
   })
 }
