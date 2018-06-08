@@ -87,7 +87,7 @@ service.interceptors.response.use(
  * @param target
  */
 const closeLoading = (target) => {
-  if (!target.config.loading) return true
+  if (!target.config || !target.config.loading) return true
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       target.config.loading.close()
