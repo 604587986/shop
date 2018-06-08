@@ -39,7 +39,8 @@
    * 商品咨询模块
    * 这里可以对商品进行咨询
    */
-  import * as API_Comments from '@/api/comments'
+  import * as API_Goods from '@/api/goods'
+  import * as API_Members from '@/api/members'
   export default {
     name: "goods-consulting",
     props: ['goodsId'],
@@ -72,15 +73,15 @@
         }, (value, index, elem) => {
           if (!value.trim()) return false
           layer.close(index)
-          API_Comments.consultating(this.goodsId, value).then(() => {
-            this.$message.success('提交成功，请等待审核')
+          API_Members.consultating(this.goodsId, value).then(() => {
+            this.$message.success('提交成功！')
             this.GET_Consulting()
           })
         })
       },
       /** 获取咨询列表 */
       GET_Consulting() {
-        API_Comments.getConsultations(this.params).then(response => {
+        API_Goods.getGoodsConsultations(this.goodsId, this.params).then(response => {
           this.consulting = response
         })
       }

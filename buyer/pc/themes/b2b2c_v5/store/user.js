@@ -1,4 +1,4 @@
-import * as API_User from '@/api/user'
+import * as API_Members from '@/api/members'
 import * as API_Passport from '@/api/passport'
 import * as types from './mutation-types'
 import Storage from '@/utils/storage'
@@ -38,6 +38,10 @@ export const mutations = {
    */
   [types.SET_ACCESS_TOKEN](state, token) {
     state.accessToken = token
+    if (process.server) {
+      // 如果cookie携带了token，将它配置给axios【仅服务端用，客户端依然从客户端的cookie获取】
+     global.ACCESS_TOKEN = token
+    }
     if (process.client) {
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
@@ -85,7 +89,7 @@ export const actions = {
    */
   getUserDataAction: ({ commit }, uid) => {
     return new Promise((resolve, reject) => {
-      API_User.getUserInfo(uid).then(response => {
+      API_Members.getUserInfo(uid).then(response => {
         response.birthday *= 1000
         commit(types.SET_USER_INFO, response)
         resolve(response)
@@ -111,7 +115,7 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        API_User.getUserInfo(uid).then(response => {
+        API_Members.getUserInfo(uid).then(response => {
           response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
           resolve(response)
@@ -126,7 +130,7 @@ export const actions = {
    */
   logoutAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
-      API_User.logout().then(() => {
+      API_Members.logout().then(() => {
         commit(types.REMOVE_USER_INFO)
         commit(types.REMOVE_ACCESS_TOKEN)
         commit(types.REMOVE_REFRESH_TOKEN)
@@ -142,7 +146,7 @@ export const actions = {
    */
   saveUserInfoAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_User.saveUserInfo(params).then(response => {
+      API_Members.saveUserInfo(params).then(response => {
         response.birthday *= 1000
         commit(types.SET_USER_INFO, response)
         resolve(response)
@@ -168,7 +172,7 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        API_User.getUserInfo(uid).then(response => {
+        API_Members.getUserInfo(uid).then(response => {
           commit(types.SET_USER_INFO, response)
           resolve(response)
         }).catch(error => reject(error))

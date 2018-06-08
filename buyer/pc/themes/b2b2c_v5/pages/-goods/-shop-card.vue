@@ -31,7 +31,7 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  import * as API_Collection from '@/api/collection'
+  import * as API_Members from '@/api/members'
   export default {
     name: "shop-card",
     props: ['shopId'],
@@ -39,9 +39,9 @@
       shopBaseInfo: ''
     }),
     mounted() {
-      API_Shop.getShopBaseInfo(this.shopId).then(response => {
-        this.shopBaseInfo = response
-      })
+      // API_Shop.getShopBaseInfo(this.shopId).then(response => {
+      //   this.shopBaseInfo = response
+      // })
     },
     computed: {
       shopRegions() {
@@ -57,7 +57,7 @@
         //   this.$message.error('您已经收藏过这个店铺啦！')
         //   return false
         // }
-        API_Collection.collectionShop(this.shopId).then(() => {
+        API_Members.collectionShop(this.shopId).then(() => {
           // this.$message.success('收藏店铺成功！')
           // this.goods.shop_collected = true
           this.shopBaseInfo.shop_collect += 1

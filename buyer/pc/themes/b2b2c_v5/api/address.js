@@ -11,7 +11,8 @@ import request from '@/utils/request'
 export function getAddressList() {
   return request({
     url: 'members/addresses',
-    method: 'get'
+    method: 'get',
+    needToken: true
   })
 }
 
@@ -24,6 +25,7 @@ export function addAddress(params) {
   return request({
     url: 'members/address',
     method: 'post',
+    needToken: true,
     data: params
   })
 }
@@ -38,6 +40,7 @@ export function editAddress(id, params) {
   return request({
     url: `members/address/${id}`,
     method: 'put',
+    needToken: true,
     data: params
   })
 }
@@ -49,6 +52,7 @@ export function editAddress(id, params) {
 export function deleteAddress(id) {
   return request({
     url: `members/address/${id}`,
-    method: 'delete'
+    method: 'delete',
+    needToken: true
   })
 }

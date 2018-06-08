@@ -26,7 +26,7 @@
           </span>
           <a href="javascript:;" @click="handleBuyNumChanged('+')" class="oper-num up"></a>
         </div>
-        <span style="margin-left: 15px">仅剩 {{ 99 }} 件，抓紧时间购买哦！</span>
+        <span style="margin-left: 15px">仅剩 {{ goods.quantity }} 件，抓紧时间购买哦！</span>
       </div>
     </div>
     <div class="buy-btns">
@@ -41,13 +41,44 @@
    * 商品信息模块
    * 包括商品名称、商品价格、购买数量、加入购物车等等
    */
+  import * as API_Goods from '@/api/goods'
   export default {
     name: 'goods-info',
     props: ['goods'],
-    data() {
-      return {
-        buyNum: 1
-      }
+    data: () => ({
+      buyNum: 1,
+      skuMap: new Map(),
+      specList: []
+    }),
+    mounted() {
+      API_Goods.getGoodsSkus(this.goods.goods_id).then(response => {
+        const specMap = new Map()
+        response.forEach((sku, index) => {
+          const { spec_list } = sku
+          const spec_value_ids = []
+          const spec_values = []
+          spec_list.forEach(spec => {
+            spec_values.push(spec.spec_value)
+            spec_value_ids.push(spec.spec_value_id)
+            const _spec = JSON.parse(JSON.stringify(spec))
+            _spec.sku = sku
+            if (index === 0) {
+              specMap.set(spec.spec_id, [_spec])
+            } else {
+              specMap.get(spec.spec_id).push(_spec)
+            }
+          })
+          console.log(spec_values.join(' - '))
+          // console.log(spec_value_ids.join('-'))
+          this.skuMap.set(spec_value_ids.join('-'), sku)
+        })
+        specMap.forEach((value, key, map) => {
+          this.specList.push(value)
+        })
+        console.log('skuMap: ', this.skuMap)
+        console.log('specMap: ', specMap)
+        console.log('skuList: ', response)
+      })
     },
     methods: {
       /** 购买数量增加减少 */
