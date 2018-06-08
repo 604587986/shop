@@ -22,7 +22,12 @@
         default: ''
       },
       config: {
-        type: Object
+        type: Object,
+        default: () => {
+          return {
+            serverUrl: `${process.env.BASE_REGION}/ueditor/`
+          }
+        }
       }
     },
     watch: {
