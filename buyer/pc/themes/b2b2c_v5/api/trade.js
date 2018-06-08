@@ -13,6 +13,7 @@ export function getCarts(show_type = 'all') {
   return request({
     url: 'trade/carts',
     method: 'get',
+    needToken: true,
     loading: false,
     params: { show_type }
   })
@@ -41,7 +42,8 @@ export function addToCart(sku_id, num = 1, activity_id) {
  */
 export function cleanCarts() {
   return request({
-    url: 'trade/carts'
+    url: 'trade/carts',
+    method: 'delete'
   })
 }
 
