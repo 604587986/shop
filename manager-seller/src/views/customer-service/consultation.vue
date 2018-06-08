@@ -70,7 +70,7 @@
               <h4>回复咨询：</h4>
               <p>{{ item.reply_content }}</p>
             </td>
-            <td class="opera-btn" v-if="item.is_reply === 2">
+            <td class="opera-btn" v-if="item.is_reply === 0">
               <el-button size="mini" type="primary" @click="handleReply(item)">回复</el-button>
             </td>
           </tr>
@@ -94,11 +94,6 @@
     <el-dialog title="回复咨询"  :visible.sync="isReplyShow" width="30%">
       <div align="center">
         <el-form :model="replyForm" ref="replyForm" label-position="right" label-width="100px">
-          <el-form-item label="当前状态:" prop="auth_status" >
-            <span class="desc-span" v-if="replyForm.auth_status === 1">审核通过</span>
-            <span class="desc-span" v-if="replyForm.auth_status === 0">审核失败</span>
-            <span class="desc-span" v-if="replyForm.auth_status === 2">审核中</span>
-          </el-form-item>
           <el-form-item label="咨询内容:" prop="content" >
             <span class="desc-span">{{ replyForm.content }}</span>
           </el-form-item>
@@ -158,7 +153,7 @@
         /** 回复状态列表 */
         replyStatusList: [
           { label: '已回复', value: 1 },
-          { label: '未回复', value: 2 }
+          { label: '未回复', value: 0 }
         ],
 
         /** 表格最大高度 */
@@ -169,10 +164,6 @@
 
         /** 回复表单 */
         replyForm: {
-
-          /** 当前审核状态 */
-          auth_status: '',
-
           /** 咨询问题 */
           content: '',
 
@@ -240,7 +231,14 @@
       /** 回复操作 */
       handleReply(row) {
         this.isReplyShow = true
-        this.replyForm = { ...row }
+        this.replyForm = {
+          consultation_id: row.consultation_id,
+          /** 咨询问题 */
+          content: row.consultation_content,
+
+          /** 回复内容 */
+          reply_content: row.reply_content
+        }
       },
 
       /** 确认回复 */

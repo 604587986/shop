@@ -243,12 +243,13 @@
         <el-collapse :value="collapseVal">
           <el-collapse-item
             v-for="paramsgroup in  goodsParams"
+            v-if="paramsgroup"
             :title="paramsgroup.group_name"
             :key="paramsgroup.group_id"
             :name="paramsgroup.group_id">
             <el-form-item
               v-for="(goods_params_list, index) in baseInfoForm.goods_params_list"
-              v-if="paramsgroup.group_id === goods_params_list.group_id"
+              v-if="goods_params_list && goods_params_list.group_id && paramsgroup.group_id === goods_params_list.group_id"
               :key="goods_params_list.param_id"
               :label="`${goods_params_list.param_name}：`"
               :prop="'goods_params_list.' + index + '.param_value'"
@@ -266,7 +267,7 @@
                 @change="changeGoodsBrand"
                 placeholder="请选择">
                 <el-option
-                  v-for="option in goods_params_list.optionList"
+                  v-for="option in goods_params_list.option_list"
                   :key="option.value"
                   :label="option.label"
                   :value="option.value">
@@ -540,7 +541,7 @@
                 param_type: 1,
                 param_value: '',
                 required: 0,
-                optionList: [
+                option_list: [
                   { value: 1, label: '' },
                   { value: 2, label: '' }
                 ]
@@ -643,9 +644,11 @@
         if (this.activestep === 1) {
           this.$confirm('返回上一步会丢失本页数据?', '提示').then(() => {
             this.GET_NextLevelCategory()
+            if (this.activestep-- < 0) this.activestep = 0
           }).catch(() => {})
+        } else {
+          this.activestep--
         }
-        if (this.activestep-- < 0) this.activestep = 0
       },
 
       /** 下一步*/
@@ -663,6 +666,7 @@
         if (this.activestep === 1) {
           this.$refs.baseInfoForm.validate((valid) => {
             if (valid) {
+              /** 规格校验 */
               if (!this.skuFormVali()) {
                 return
               }
@@ -680,20 +684,18 @@
       /** 保存草稿 */
       saveDraft() {
         const _params = this.generateFormData(this.baseInfoForm)
+        /** 规格校验 */
+        if (!this.skuFormVali()) {
+          return
+        }
         if (this.activeGoodsId) {
           this.activeGoodsId = this.activeGoodsId || 1
-          if (!this.skuFormVali()) {
-            return
-          }
           /** 修改草稿箱商品 */
           API_goods.editDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('修改草稿箱商品成功')
             this.$router.push({ path: '/goods/draft-list' })
           })
         } else {
-          if (!this.skuFormVali()) {
-            return
-          }
           /** 保存草稿操作 */
           API_goods.saveDraft(_params).then(response => {
             this.$message.success('保存草稿成功')
@@ -706,6 +708,10 @@
       aboveGoods() {
         if (this.baseInfoForm.activeGoodsId === 0) {
           this.$message.error('严重错误，商城分类Id不可为0')
+          return
+        }
+        /** 规格校验 */
+        if (!this.skuFormVali()) {
           return
         }
         let _params = this.generateFormData(this.baseInfoForm)
@@ -816,7 +822,7 @@
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
             this.skuList = response.map(key => {
-              if (key.spec_list && Array.isArray(key.spec_list)) {
+              if (key && key.spec_list && Array.isArray(key.spec_list)) {
                 const spec_list = key.spec_list.map(item => {
                   let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
                   return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
@@ -835,20 +841,23 @@
         const goods_id = this.activeGoodsId || 0
         API_goods.getGoodsParams(this.baseInfoForm.category_id, { goods_id }).then((response) => {
           this.loading = false
-          this.goodsParams = response.data
-          this.collapseVal = this.goodsParams.map(key => { return key.group_id })
-          if (!response.data || response.data.length <= 0) {
+          this.goodsParams = response
+          this.collapseVal = this.goodsParams.map(key => {
+            if (key.group_id) {
+              return key.group_id
+            }
+          })
+          if (!response || response.length <= 0) {
             return
           }
           let _paramsList = []
           this.goodsParams.forEach(key => {
-            key.params.forEach(item => {
-              this.$set(item, 'group_id', key.group_id)
-            })
-            _paramsList = _paramsList.concat(key.params)
+            if (key && key.params) {
+              _paramsList = _paramsList.concat(key.params)
+            }
           })
           this.baseInfoForm.goods_params_list = _paramsList
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 查询单个草稿箱商品信息 */
@@ -890,13 +899,15 @@
           API_goods.draftSku(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
             this.skuList = response.map(key => {
-              const spec_list = key.spec_list.map(item => {
-                let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
-                return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
-              })
-              let { cost, quantity, sn, weight } = key
-              const price = key.goods_price
-              return { cost, price, quantity, sn, weight, spec_list }
+              if (key && key.spec_list && Array.isArray(key.spec_list)) {
+                const spec_list = key.spec_list.map(item => {
+                  let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
+                  return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+                })
+                let { cost, quantity, sn, weight } = key
+                const price = key.goods_price
+                return { cost, price, quantity, sn, weight, spec_list }
+              }
             })
           })
         })
@@ -910,16 +921,15 @@
         const goods_id = this.activeGoodsId || 1
         API_goods.getGoodsDraftParams(goods_id).then((response) => {
           this.loading = false
-          this.goodsParams = response.data
-          if (!response.data || response.data.length <= 0) {
+          this.goodsParams = response
+          if (!response || response.length <= 0) {
             return
           }
           let _paramsList = []
           this.goodsParams.forEach(key => {
-            key.params.forEach(item => {
-              this.$set(item, 'group_id', key.group_id)
-            })
-            _paramsList = _paramsList.concat(key.params)
+            if (key && key.params) {
+              _paramsList = _paramsList.concat(key.params)
+            }
           })
           this.baseInfoForm.goods_params_list = _paramsList
         })
@@ -1112,9 +1122,13 @@
 
       /** 商品规格选择器校验 */
       skuFormVali() {
+        /** 如果并未选择规格 */
+        if (Array.isArray(this.baseInfoForm.sku_list) && this.baseInfoForm.sku_list.length === 0) {
+          return true
+        }
         this.productSn = false
         /** 是否自动生成货号校验 检测是否所有的货号都存在*/
-        const _sn = this.baseInfoForm.sku_list.every(key => {
+        const _sn = this.baseInfoForm.sku_list.some(key => {
           return key.sn === ''
         })
         if (_sn) {

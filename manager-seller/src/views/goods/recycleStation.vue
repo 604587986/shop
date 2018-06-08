@@ -9,13 +9,11 @@
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns">
         <el-button
-          size="mini"
           type="danger"
           :disabled="selectionids.length === 0"
           @click="handleDeleteRecycles()">批量删除
         </el-button>
         <el-button
-          size="mini"
           type="success"
           :disabled="selectionids.length === 0"
           @click="handlReductionRecycles()">批量还原
@@ -204,6 +202,12 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }

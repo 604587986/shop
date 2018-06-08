@@ -55,7 +55,7 @@ export function getLimitTimeActivityDetails(ids, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/promotion/seckill-applys/${ids}`,
-      method: 'post',
+      method: 'get',
       loading: false,
       data: params
     }).then(response => {
@@ -80,25 +80,6 @@ export function signUpLimitTimeActivity(ids, params) {
       method: 'post',
       loading: false,
       data: new LimitTimeModel.LimitTimeActivitydetails().params(params)
-    }).then(response => {
-      resolve(response)
-    })
-  })
-}
-
-/**
- * 删除限时抢购申请 取消报名
- * @param ids
- * @param params
- * @returns {Promise<any>}
- */
-export function deleteLimitTimeActivity(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/seckill-applys/${ids}`,
-      method: 'delete',
-      loading: false,
-      params
     }).then(response => {
       resolve(response)
     })

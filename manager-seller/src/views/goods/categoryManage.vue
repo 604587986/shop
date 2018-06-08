@@ -70,7 +70,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="排序">
-          <el-input v-model.number="goodsCatData.sort" auto-complete="off" style="width: 70%;"></el-input>
+          <el-input v-model.number="goodsCatData.sort" auto-complete="off" style="width: 70%;text-align: center;"></el-input>
         </el-form-item>
         <el-form-item label="显示状态">
           <el-radio-group v-model="goodsCatData.is_show" style="width: 70%;">
@@ -313,6 +313,11 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }

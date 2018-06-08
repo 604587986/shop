@@ -131,7 +131,7 @@
         if (this.categoryId && this.categoryId > 0) {
           API_goodsSku.getCategorySkuList(this.categoryId, {}).then(response => {
             this.skuData = response
-          }).catch(error => this.$message.error(error))
+          })
         }
       },
 

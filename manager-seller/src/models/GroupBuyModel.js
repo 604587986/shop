@@ -68,10 +68,6 @@ export class GroupBuyDetails extends DataModel {
   @ServerName('act_id')
   activity_id
 
-  // /** 活动名称 */
-  // @ServerName('gb_name')
-  // activity_name
-
   /** 团购名称 */
   @ServerName('gb_name')
   group_buy_name
@@ -132,10 +128,18 @@ export class GroupBuyDetails extends DataModel {
 /** 团购活动模型 */
 export class GroupBuyActivitys extends DataModel {
   /** 活动ID */
-  @ServerName('activity_id')
+  @ServerName('act_id')
   activity_id
 
-  /** 活动描述  名称 + 时间段  */
-  @ServerName('activity_desc')
-  activity_desc
+  /** 活动名称  */
+  @ServerName('act_name')
+  activity_name
+
+  /** 开始时间  */
+  @ServerName('start_time')
+  start_time
+
+  /** 结束时间  */
+  @ServerName('end_time')
+  end_time
 }

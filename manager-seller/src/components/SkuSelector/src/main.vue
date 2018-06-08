@@ -203,13 +203,21 @@
           if (!Array.isArray(result[i])) {
             result[i] = [result[i]]
           }
-          if (this.isEditModel === 0) {
-            result[i] = Object.assign({ }, ...result[i], this.origin)
+          /** 处理spec_value_id数据标记 */
+          let _arr = []
+          result[i].forEach(key => {
+            _arr.push(key.spec_value_id)
+          })
+          const _result_sim = cloneObj(result[i])
+          _result_sim[_result_sim.length - 1].spec_value_id = _arr.join('|')
+
+          if (this.isEditModel === 0) { // 发布商品
+            result[i] = Object.assign({ }, ..._result_sim, this.origin)
           } else {
             const value_ids = result[i].map(key => {
               return key.spec_value_id
             }).join('|')
-            result[i] = Object.assign({ }, ...result[i], ...this.isSpecValIdsExit(value_ids))
+            result[i] = Object.assign({ }, ..._result_sim, ...this.isSpecValIdsExit(value_ids))
           }
         }
         _empty.push(result)
@@ -227,17 +235,24 @@
 
       /** 寻找goodsSkuInfo中的spec_values_id相同项 并且返回 对应的固定规格数据 */
       isSpecValIdsExit(ids) {
+        if (!this.goodsSkuInfo || (Array.isArray(this.goodsSkuInfo) && this.goodsSkuInfo.length === 0)) {
+          return []
+        }
         let _result = this.goodsSkuInfo.filter(key => {
-          const _ids = key.spec_list.map(item => {
-            return item.spec_value_id
-          }).join('|')
-          if (ids === _ids) {
-            return key
+          if (key && key.spec_list && Array.isArray(key.spec_list)) {
+            const _ids = key.spec_list.map(item => {
+              return item.spec_value_id
+            }).join('|')
+            if (ids === _ids) {
+              return key
+            }
           }
         })
         _result = _result.map(key => {
-          let { sn, weight, quantity, cost, price } = key
-          return { sn, weight, quantity, cost, price }
+          if (key) {
+            let { sn, weight, quantity, cost, price } = key
+            return { sn, weight, quantity, cost, price }
+          }
         })
         if (_result.length === 0) {
           _result.push(this.origin)
@@ -261,13 +276,17 @@
           this.$set(key, 'spec_list', [])
           this.choiceData.forEach(item => {
             if (Array.isArray(item)) {
-              const _isExit = item.some(elem => {
-                return elem.spec_value_id === key.spec_value_id
+              const _isExit = item.every(elem => {
+                return key.spec_value_id.indexOf(String(elem.spec_value_id)) !== -1
               })
               if (_isExit) {
+                item.forEach(key => {
+                  key.spec_value_id = parseInt(key.spec_value_id)
+                })
                 key.spec_list = item
               }
-            } else if (item.spec_value_id === key.spec_value_id) {
+            } else if (parseInt(item.spec_value_id) === parseInt(key.spec_value_id)) {
+              item.spec_value_id = parseInt(item.spec_value_id)
               key.spec_list.push(item)
             }
           })

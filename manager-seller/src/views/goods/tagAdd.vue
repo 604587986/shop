@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-button type="primary" @click="selectgoodslist" style="margin-bottom: 15px;">选择商品</el-button>
     <en-tabel-layout
       toolbar
       pagination
@@ -8,6 +7,12 @@
       :loading="loading"
       :selectionChange="selectionChange"
     >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns">
+          <el-button type="primary" @click="selectgoodslist" >选择商品</el-button>
+          <el-button type="danger" @click="cancelall" >批量取消</el-button>
+        </div>
+      </div>
       <template slot="table-columns">
         <el-table-column type="selection"/>
         <el-table-column label="商品信息" width="1000px">
@@ -35,7 +40,6 @@
         </el-table-column>
       </template>
     </en-tabel-layout>
-    <el-button type="danger" @click="cancelall" style="margin-top: 15px;">批量取消</el-button>
     <div style="text-align: center">
       <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
     </div>
@@ -167,6 +171,11 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }

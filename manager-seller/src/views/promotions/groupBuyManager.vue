@@ -8,15 +8,18 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-select v-model="currentGroupBuyStatus" placeholder="请选择" @change="groupBuyStatusChange">
+          <div class="conditions">
+            <span>活动状态:</span>
+            <el-select v-model="currentGroupBuyStatus" placeholder="请选择" @change="groupBuyStatusChange">
             <el-option
-              v-for="item in groupBuyStatus"
-              :key="item.group_buy_status_id"
-              :label="item.group_buy_status_name"
-              :value="item.group_buy_status_id">
-            </el-option>
-          </el-select>
-          <el-button type="primary" @click="handleAddGroupBuyGoods">新增团购商品</el-button>
+                v-for="item in groupBuyStatus"
+                :key="item.group_buy_status_id"
+                :label="item.group_buy_status_name"
+                :value="item.group_buy_status_id">
+              </el-option>
+            </el-select>
+          </div>
+          <el-button type="primary" class="" @click="handleAddGroupBuyGoods">新增团购商品</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent"/>
@@ -203,6 +206,30 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
+  div.toolbar-btns {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    div {
+      span {
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+      }
+    }
+    .conditions {
+      margin-right: 30px;
+    }
+  }
+
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }

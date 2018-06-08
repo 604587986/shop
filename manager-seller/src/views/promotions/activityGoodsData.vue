@@ -3,8 +3,7 @@
     <en-tabel-layout
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <template slot="table-columns">
         <el-table-column prop="goods_name" label="商品名称"/>
         <el-table-column label="活动时间">
@@ -107,5 +106,46 @@
 <style type="text/scss" lang="scss" scoped>
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
+  }
+
+  /*平铺*/
+  div.base-info-item {
+    h4 {
+      margin-bottom: 10px;
+      padding:0 10px;
+      border: 1px solid #ddd;
+      background-color: #f8f8f8;
+      font-weight: bold;
+      color: #333;
+      font-size: 14px;
+      line-height: 40px;
+      text-align: left;
+    }
+    .el-form-item {
+      margin-left: 5%;
+      width: 22%;
+      min-width: 300px;
+    }
+    .el-form-item__content {
+      margin-left: 120px;
+      text-align: left;
+    }
+    p.goods-group-manager {
+      padding-left: 12.3%;
+      text-align: left;
+      color: #999;
+      font-size: 13px;
+    }
+
+    /*积分提示*/
+    p.exchange-tip {
+      margin:0;
+      padding: 10px;
+      padding-left: 15%;
+      text-align: left;
+      color: #8a6d3b;
+      background: #fcf8e3;
+      border: 1px solid #faebcc;
+    }
   }
 </style>
