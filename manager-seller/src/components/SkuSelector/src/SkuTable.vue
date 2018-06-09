@@ -99,7 +99,6 @@
       /** 自动生成货号 */
       productSn() {
         if (this.productSn && this.tableData.length > 0) {
-          console.log(65)
           let count = 1
           this.tableData.forEach(key => {
             key.sn = this.goodsSn + '-' + count

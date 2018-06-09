@@ -62,21 +62,20 @@ service.interceptors.response.use(
     return response.data
   },
   async error => {
+    if (process.server) return Promise.reject(error)
     await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 109 --> 没有登录、登录状态失效
-    if (error_data.code === '109' || error_data.code === '001') {
+    if (error_data.code === '109') {
       Vue.prototype.$message.error('您已被登出！')
       const { $route, $router } = Vue.prototype.$nuxt
       $router.push({ path: `/login?forward=${$route.fullPath}` })
       return Promise.reject(error)
     }
-    if (process.client) {
-      let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
-      if (error.config.message !== false) {
-        Vue.prototype.$message.error(error_data.message || _message)
-      }
+    let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
+    if (error.config.message !== false) {
+      Vue.prototype.$message.error(error_data.message || _message)
     }
     return Promise.reject(error)
   }

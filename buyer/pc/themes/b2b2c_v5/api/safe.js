@@ -5,123 +5,105 @@
 import request from '@/utils/request'
 
 /**
- * 发送手机验证码
- * @param type 验证类型
- * @param mobile 手机号
- * @param validcode 图片验证码
- * @returns {AxiosPromise}
+ * 发送绑定手机验证码
+ * @param mobile
+ * @param captcha
+ * @param uuid
  */
-export function sendMobileSms(type, mobile, validcode) {
+export function sendBindMobileSms(mobile, captcha, uuid) {
   return request({
-    url: `${process.env.VALIDATE_CODE_API}/api/shop/member/send-sms-code.do`,
-    method: 'get',
-    needToken: true,
-    params: {
-      validcode,
-      mobile,
-      key: type,
-      _: new Date().getTime()
-    }
-  })
-}
-
-/**
- * 校验短信验证码
- * @param type 验证类型
- * @param mobile 手机号
- * @param mobile_code 手机验证码
- * @param img_code 图片验证码
- * @returns {AxiosPromise}
- */
-export function validMobileSms(type, mobile, mobile_code, img_code) {
-  return request({
-    url: `${process.env.VALIDATE_CODE_API}/api/shop/member/member-mobile-validate.do`,
-    method: 'get',
-    needToken: true,
-    params: {
-      validcode: img_code,
-      mobileCode: mobile_code,
-      mobile,
-      key: type
-    }
-  })
-}
-
-/**
- * 修改密码
- * @param new_password 新密码
- * @param rep_password 确认新密码
- * @param img_code 图片验证码
- * @returns {AxiosPromise}
- */
-export function changePassword(new_password, rep_password, img_code) {
-  const _formData = new FormData()
-  _formData.append('newpassword', new_password)
-  _formData.append('re_passwd', rep_password)
-  _formData.append('authCode', img_code)
-  return request({
-    url: `${process.env.VALIDATE_CODE_API}/api/shop/member/update-password.do`,
+    url: `members/security/bind/send/${mobile}`,
     method: 'post',
     needToken: true,
-    data: _formData
+    data: {
+      uuid,
+      captcha
+    }
   })
 }
 
 /**
  * 绑定手机号
- * @param mobile 手机号
- * @returns {AxiosPromise}
- */
-export function bindMobile(mobile) {
-  const _formData = new FormData()
-  _formData.append('mobile', mobile)
-  return request({
-    url: '',
-    method: 'post',
-    needToken: true,
-    data: _formData
-  })
-}
-
-/**
- * 发送更换密码的手机验证码
  * @param mobile
- * @param params
+ * @param sms_code
  */
-export function sendUpdatePasswordMobileCode(mobile, params) {
+export function bindMobile(mobile, sms_code) {
   return request({
-    url: 'members/security/send-val-code',
-    method: 'post',
+    url: `members/security/bind/${mobile}`,
+    method: 'put',
     needToken: true,
-    data: params
+    data: { sms_code }
   })
 }
 
 /**
- * 修改密码
- * @param params
+ * 发送手机验证码
+ * 在修改手机号和更改密码时通用
+ * @param uuid
+ * @param captcha
  */
-export function updatePassword(params) {
+export function sendMobileSms(uuid, captcha) {
   return request({
-    url: 'members/security/update-password',
+    url: 'members/security/send',
     method: 'post',
-    needToken: true,
-    data: params
+    data: {
+      uuid,
+      captcha
+    }
   })
 }
 
 /**
- * 发送绑定手机验证码
+ * 验证更换手机号短信
+ * @param sms_code
+ */
+export function validChangeMobileSms(sms_code) {
+  return request({
+    url: 'members/security/exchange-bind',
+    method: 'get',
+    params: { sms_code }
+  })
+}
+
+/**
+ * 更换手机号
  * @param mobile
- * @param params
+ * @param sms_code
  */
-export function sendBindCode(mobile, params) {
+export function changeMobile(mobile, sms_code) {
   return request({
-    url: `members/security/send-bind-code/${mobile}`,
-    method: 'post',
-    needToken: true,
-    data: params
+    url: `members/security/exchange-bind/${mobile}`,
+    method: 'put',
+    data: { sms_code }
   })
 }
 
+/**
+ * 验证更改密码手机短信
+ * @param sms_code
+ */
+export function validChangePasswordSms(sms_code) {
+  return request({
+    url: 'members/security/password',
+    method: 'get',
+    params: { sms_code }
+  })
+}
 
+/**
+ * 更改密码
+ * @param uuid
+ * @param captcha
+ * @param password
+ */
+export function changePassword(uuid, captcha, password) {
+  return request({
+    url: 'members/security/password',
+    method: 'put',
+    data: {
+      uuid,
+      captcha,
+      password
+    }
+  })
+}

@@ -684,20 +684,18 @@
       /** 保存草稿 */
       saveDraft() {
         const _params = this.generateFormData(this.baseInfoForm)
+        /** 规格校验 */
+        if (!this.skuFormVali()) {
+          return
+        }
         if (this.activeGoodsId) {
           this.activeGoodsId = this.activeGoodsId || 1
-          if (!this.skuFormVali()) {
-            return
-          }
           /** 修改草稿箱商品 */
           API_goods.editDraftGoods(this.activeGoodsId, _params).then(response => {
             this.$message.success('修改草稿箱商品成功')
             this.$router.push({ path: '/goods/draft-list' })
           })
         } else {
-          if (!this.skuFormVali()) {
-            return
-          }
           /** 保存草稿操作 */
           API_goods.saveDraft(_params).then(response => {
             this.$message.success('保存草稿成功')
@@ -710,6 +708,10 @@
       aboveGoods() {
         if (this.baseInfoForm.activeGoodsId === 0) {
           this.$message.error('严重错误，商城分类Id不可为0')
+          return
+        }
+        /** 规格校验 */
+        if (!this.skuFormVali()) {
           return
         }
         let _params = this.generateFormData(this.baseInfoForm)
@@ -820,7 +822,7 @@
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
             this.skuList = response.map(key => {
-              if (key.spec_list && Array.isArray(key.spec_list)) {
+              if (key && key.spec_list && Array.isArray(key.spec_list)) {
                 const spec_list = key.spec_list.map(item => {
                   let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
                   return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
@@ -850,7 +852,9 @@
           }
           let _paramsList = []
           this.goodsParams.forEach(key => {
-            _paramsList = _paramsList.concat(key.params)
+            if (key && key.params) {
+              _paramsList = _paramsList.concat(key.params)
+            }
           })
           this.baseInfoForm.goods_params_list = _paramsList
         })
@@ -895,13 +899,15 @@
           API_goods.draftSku(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
             this.skuList = response.map(key => {
-              const spec_list = key.spec_list.map(item => {
-                let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
-                return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
-              })
-              let { cost, quantity, sn, weight } = key
-              const price = key.goods_price
-              return { cost, price, quantity, sn, weight, spec_list }
+              if (key && key.spec_list && Array.isArray(key.spec_list)) {
+                const spec_list = key.spec_list.map(item => {
+                  let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
+                  return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+                })
+                let { cost, quantity, sn, weight } = key
+                const price = key.goods_price
+                return { cost, price, quantity, sn, weight, spec_list }
+              }
             })
           })
         })
@@ -921,7 +927,9 @@
           }
           let _paramsList = []
           this.goodsParams.forEach(key => {
-            _paramsList = _paramsList.concat(key.params)
+            if (key && key.params) {
+              _paramsList = _paramsList.concat(key.params)
+            }
           })
           this.baseInfoForm.goods_params_list = _paramsList
         })
@@ -1120,7 +1128,7 @@
         }
         this.productSn = false
         /** 是否自动生成货号校验 检测是否所有的货号都存在*/
-        const _sn = this.baseInfoForm.sku_list.every(key => {
+        const _sn = this.baseInfoForm.sku_list.some(key => {
           return key.sn === ''
         })
         if (_sn) {

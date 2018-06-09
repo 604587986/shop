@@ -6,11 +6,11 @@
           <el-form-item label="公司名称" prop="company_name">
             <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="公司地址" prop="compant_address">
-            <el-input v-model="shopForm.compant_address" :maxlength="50"></el-input>
+          <el-form-item label="公司地址" prop="company_address">
+            <el-input v-model="shopForm.company_address" :maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="公司电话" prop="compant_phone">
-            <el-input v-model="shopForm.compant_phone" :maxlength="20"></el-input>
+          <el-form-item label="公司电话" prop="company_phone">
+            <el-input v-model="shopForm.company_phone" :maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="员工总数" prop="employee_num">
             <el-input-number v-model="shopForm.employee_num" :min="1" :max="99999999"/>
@@ -26,8 +26,8 @@
           <el-form-item label="联系电话" prop="link_phone">
             <el-input v-model="shopForm.link_phone" :maxlength="11"></el-input>
           </el-form-item>
-          <el-form-item label="电子邮箱" prop="compant_email">
-            <el-input v-model="shopForm.compant_email" :maxlength="50"></el-input>
+          <el-form-item label="电子邮箱" prop="company_email">
+            <el-input v-model="shopForm.company_email" :maxlength="50"></el-input>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="营业执照信息">
@@ -203,13 +203,13 @@
         shopForm: {},
         shopRules: {
           company_name: [this.MixinRequired('公司名称不能为空！')],
-          compant_address: [this.MixinRequired('公司地址不能为空！')],
-          compant_phone: [this.MixinRequired('公司电话不能为空！')],
+          company_address: [this.MixinRequired('公司地址不能为空！')],
+          company_phone: [this.MixinRequired('公司电话不能为空！')],
           employee_num: [this.MixinRequired('公司员工数不能为空！')],
           reg_money: [this.MixinRequired('公注册资金不能为空！')],
           link_name: [this.MixinRequired('联系姓名不能为空！')],
           link_phone: [this.MixinRequired('联系电话不能为空！')],
-          compant_email: [this.MixinRequired('公司电子邮箱不能为空！')],
+          company_email: [this.MixinRequired('公司电子邮箱不能为空！')],
           legal_name: [this.MixinRequired('法人姓名不能为空！')],
           legal_id: [this.MixinRequired('法人身份证不能为空！')],
           license_num: [this.MixinRequired('营业执照不能为空！')],

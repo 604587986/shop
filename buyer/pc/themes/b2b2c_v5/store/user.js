@@ -87,9 +87,9 @@ export const actions = {
    * @param commit
    * @param params
    */
-  getUserDataAction: ({ commit }, uid) => {
+  getUserDataAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
-      API_Members.getUserInfo(uid).then(response => {
+      API_Members.getUserInfo().then(response => {
         response.birthday *= 1000
         commit(types.SET_USER_INFO, response)
         resolve(response)

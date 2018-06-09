@@ -14,14 +14,14 @@
         <el-form-item label="公司名称：" prop="company_name">
           <el-input v-model="basicInfoForm.company_name" clearable></el-input>
         </el-form-item>
-        <el-form-item label="公司地址：" prop="compant_address">
-          <el-input v-model="basicInfoForm.compant_address" clearable></el-input>
+        <el-form-item label="公司地址：" prop="company_address">
+          <el-input v-model="basicInfoForm.company_address" clearable></el-input>
         </el-form-item>
-        <el-form-item label="公司电话：" prop="compant_phone">
-          <el-input v-model="basicInfoForm.compant_phone" clearable :maxlength="11"></el-input>
+        <el-form-item label="公司电话：" prop="company_phone">
+          <el-input v-model="basicInfoForm.company_phone" clearable :maxlength="11"></el-input>
         </el-form-item>
-        <el-form-item label="公司邮箱：" prop="compant_email">
-          <el-input v-model="basicInfoForm.compant_email" clearable></el-input>
+        <el-form-item label="公司邮箱：" prop="company_email">
+          <el-input v-model="basicInfoForm.company_email" clearable></el-input>
         </el-form-item>
         <el-form-item label="员工总数：" prop="employee_num">
           <el-input v-model="basicInfoForm.employee_num" clearable>
@@ -60,9 +60,9 @@
         /** 基础信息 表单 */
         basicInfoForm: {
           company_name: '',
-          compant_address: '',
-          compant_phone: '',
-          compant_email: '',
+          company_address: '',
+          company_phone: '',
+          company_email: '',
           employee_num: '',
           reg_money: '',
           link_name: '',
@@ -71,9 +71,9 @@
         /** 基础信息 表单规则 */
         basicInfoRules: {
           company_name: [ req_rule('请输入公司名称'), len_rule(1, 20) ],
-          compant_address: [ req_rule('请输入公司地址'), len_rule(1, 100) ],
-          compant_phone: [ req_rule('请输入公司电话'), len_rule(6, 11)],
-          compant_email: [
+          company_address: [ req_rule('请输入公司地址'), len_rule(1, 100) ],
+          company_phone: [ req_rule('请输入公司电话'), len_rule(6, 11)],
+          company_email: [
             req_rule('请输入公司邮箱'),
             { validator: (rule, value, callback) => {
               if (!regExp.email.test(value)) {

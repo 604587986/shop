@@ -35,13 +35,15 @@
   export default {
     name: "shop-card",
     props: ['shopId'],
-    data: () => ({
-      shopBaseInfo: ''
-    }),
+    data() {
+      return {
+        shopBaseInfo: ''
+      }
+    },
     mounted() {
-      // API_Shop.getShopBaseInfo(this.shopId).then(response => {
-      //   this.shopBaseInfo = response
-      // })
+      API_Shop.getShopBaseInfo(this.shopId).then(response => {
+        this.shopBaseInfo = response
+      })
     },
     computed: {
       shopRegions() {
