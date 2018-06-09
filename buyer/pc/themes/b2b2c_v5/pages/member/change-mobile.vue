@@ -1,53 +1,65 @@
 <template>
   <div id="change-mobile">
-    <div v-show="step === 1" class="valid-mobile-container">
-      <el-alert type="info" title="" :closable="false">
-        <h2>为什么要进行身份验证？</h2>
-        <p>1. 为保障您的账户信息安全，在变更账户中的重要信息时需要身份验证，感谢您的理解与支持。 </p>
-        <p>2. 验证身份遇到问题？请提供用户名，手机号，历史发票，点击联系我司 在线客服 或者拨打400*****400咨询。</p>
-      </el-alert>
-      <el-form v-if="user" :model="validImgCodeForm" :rules="validImgCodeRules" ref="validImgCodeForm" label-width="110px">
-        <el-form-item label="已验证手机：">
-          <h2>{{ user.mobile | secrecyMobile }}</h2>
-        </el-form-item>
-        <el-form-item label="图片验证码：" prop="img_code" class="img-code">
-          <el-input v-model="validImgCodeForm.img_code" placeholder="请输入图片验证码" clearable :maxlength="4">
-            <img slot="append" :src="valid_img_url" @click="getValidImgUrl">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <el-form :model="validSmsCodeForm" :rules="validSmsCodeRules" ref="validSmsCodeForm" label-width="110px">
-        <el-form-item label="短信验证码：" prop="sms_code" class="sms-code">
-          <el-input v-model="validSmsCodeForm.sms_code" placeholder="请输入短信验证码" clearable :maxlength="6">
-            <en-count-down-btn :time="20" :start="sendValidMobileSms" @end="handleCountDownEnd" slot="append"/>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <el-button @click.stop="submitValForm">提交验证</el-button>
-        </el-form-item>
-      </el-form>
+    <el-alert v-if="step === 1" type="info" title="" :closable="false">
+      <h2>为什么要进行身份验证？</h2>
+      <p>1. 为保障您的账户信息安全，在变更账户中的重要信息时需要身份验证，感谢您的理解与支持。 </p>
+      <p>2. 验证身份遇到问题？请提供用户名，手机号，历史发票，点击联系我司 在线客服 或者拨打400*****400咨询。</p>
+    </el-alert>
+    <el-alert v-if="step === 2 || step === 3" type="info" title="" :closable="false">
+      <h2>为什么要验证手机？</h2>
+      <p>1. 验证手机可加强账户安全，您可以使用已验证手机快速找回密码或支付密码。 </p>
+      <p>2. 已验证手机可用于接收账户余额变动提醒。</p>
+    </el-alert>
+    <template v-if="step !== 3">
+      <div v-show="step === 1" class="valid-mobile-container">
+        <el-form v-if="user" :model="validMobileForm" :rules="validMobileRules" ref="validMobileForm" label-width="110px">
+          <el-form-item label="已验证手机：">
+            <h2>{{ user.mobile | secrecyMobile }}</h2>
+          </el-form-item>
+          <el-form-item label="图片验证码：" prop="img_code" class="img-code">
+            <el-input v-model="validMobileForm.img_code" placeholder="请输入图片验证码" clearable :maxlength="4">
+              <img slot="append" :src="valid_img_url" @click="getValidImgUrl">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="短信验证码：" prop="sms_code" class="sms-code">
+            <el-input v-model="validMobileForm.sms_code" placeholder="请输入短信验证码" clearable :maxlength="6">
+              <en-count-down-btn :time="60" :start="sendValidMobileSms" slot="append"/>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-button @click.stop="submitValMobileForm">提交验证</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-show="step === 2" class="change-mobile-container">
+        <el-form :model="changeMobileForm" :rules="changeMobileRules" ref="changeMobileForm" label-width="160px">
+          <el-form-item label="请输入手机号：" prop="mobile">
+            <el-input v-model="changeMobileForm.mobile" placeholder="请输入手机号" :maxlength="11"></el-input>
+          </el-form-item>
+          <el-form-item label="图片验证码：" prop="img_code" class="img-code">
+            <el-input v-model="changeMobileForm.img_code" placeholder="请输入图片验证码" clearable :maxlength="4">
+              <img slot="append" :src="valid_img_url" @click="getValidImgUrl">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="请输入短信验证码：" prop="sms_code">
+            <el-input v-model="changeMobileForm.sms_code" placeholder="请输入短信验证码" auto-complete="off">
+              <en-count-down-btn :time="60" :start="sendChangeMobileSms" slot="append"/>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-button @click.stop="submitChangeForm">确认修改</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </template>
+    <div v-else class="change-success-container">
+      <div class="inner-success">
+        <img src="../../assets/images/icon-success.png" class="icon-success">
+        <div class="success-title">
+          <p class="p1">您已成功更换手机号：<span class="success-mobile">{{changeMobileForm.mobile | secrecyMobile }}</span></p>
+          <p class="p2">您可能需要：<nuxt-link to="/member/account-safe">返回安全中心</nuxt-link></p>
+        </div>
     </div>
-    <div v-show="step === 2" class="change-mobile-container">
-      <el-alert type="info" title="" :closable="false">
-        <h2>为什么要验证手机？</h2>
-        <p>1. 验证手机可加强账户安全，您可以使用已验证手机快速找回密码或支付密码。 </p>
-        <p>2. 已验证手机可用于接收账户余额变动提醒。</p>
-      </el-alert>
-      <el-form :model="changeMobileForm" :rules="changeMobileRules" ref="changeMobileForm" label-width="160px">
-        <el-form-item label="请输入手机号：" prop="mobile">
-          <el-input v-model="changeMobileForm.mobile" placeholder="请输入手机号" :maxlength="11"></el-input>
-        </el-form-item>
-      </el-form>
-      <el-form :model="changeCodeForm" :rules="changeCodeRules" ref="changeCodeForm" label-width="160px">
-        <el-form-item label="请输入短信验证码：" prop="mobile_code">
-          <el-input v-model="changeCodeForm.mobide_code" placeholder="请输入短信验证码" auto-complete="off">
-            <en-count-down-btn :time="20" :start="sendChangeMobileSms" @end="handleCountDownEnd" slot="append"/>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <el-button @click.stop="submitChangeForm">确认修改</el-button>
-        </el-form-item>
-      </el-form>
     </div>
   </div>
 </template>
@@ -63,53 +75,39 @@
       return {
         /** 步骤 */
         step: 1,
-        /** 图片验证码 表单 */
-        validImgCodeForm: { img_code: '' }, // 图片验证码
-        /** 图片验证码 表单规则 */
-        validImgCodeRules: {
-          img_code: [ { required: true, message: '请输入图片验证码', trigger: 'blur' } ]
-        },
-        /** 短信验证码 表单 */
-        validSmsCodeForm: { sms_code: '' }, // 短信验证码
-        /** 短信验证码 表单规则 */
-        validSmsCodeRules: {
-          sms_code: [ { required: true, message: '请输入短信验证码', trigger: 'blur' } ]
+        /** 校验手机号 表单 */
+        validMobileForm: {}, // 图片验证码
+        /** 校验手机号 表单规则 */
+        validMobileRules: {
+          img_code: [{ required: true, message: '请输入图片验证码', trigger: 'blur' }],
+          sms_code: [{ required: true, message: '请输入短信验证码', trigger: 'blur' }]
         },
         /** 图片验证码URL */
         valid_img_url: '',
         /** 更换手机 表单 */
-        changeMobileForm: { mobile: '' }, // 手机号
+        changeMobileForm: {},
         /** 更换手机 表单规则 */
         changeMobileRules: {
           mobile: [
+            this.MixinRequired('请填写手机号！'),
             {
               required: true,
               validator: (rule, value, callback) => {
-                if (!value) {
-                  callback(new Error('请输入手机号'))
-                } else if (!regExp.mobile.test(value)) {
-                  callback(new Error('手机号码格式不正确'))
+                if (!regExp.mobile.test(value)) {
+                  callback(new Error('手机号码格式不正确！'))
                 } else {
                   callback()
                 }
-              },
-              trigger: 'blur'
+              }
             }
-          ]
-        },
-        changeCodeForm: { mobile_code: '' }, // 手机验证码
-        changeCodeRules: {
-          mobile_code: [
-            { required: true, message: '请输入短信验证码', trigger: 'blur' }
-          ]
+          ],
+          img_code: [this.MixinRequired('请输入图片验证码！')],
+          sms_code: [this.MixinRequired('请输入短信验证码！')],
         }
       }
     },
     mounted() {
       this.getValidImgUrl()
-    },
-    watch: {
-      user: 'getValidImgUrl'
     },
     computed: {
       ...mapGetters(['user', 'uuid'])
@@ -117,44 +115,33 @@
     methods: {
       /** 获取图片验证码URL */
       getValidImgUrl() {
-        if (!this.user) return
-        this.valid_img_url = API_Common.getValidateCodeUrl(this.uuid, 'BIND_MOBILE')
+        this.valid_img_url = API_Common.getValidateCodeUrl(this.uuid, this.step === 1 ? 'VALIDATE_MOBILE' : 'BIND_MOBILE')
       },
       /** 发送手机验证码 */
       sendValidMobileSms() {
         return new Promise((resolve, reject) => {
-          this.$refs['validImgCodeForm'].validate((valid) => {
-            if (valid) {
-              const { mobile } = this.user
-              const { img_code } = this.validImgCodeForm
-              API_Safe.sendMobileSms('BINDINGMOBILE', mobile, img_code).then(() => {
-                this.$message.success('验证码发送成功，请注意查收！')
-                resolve()
-              }).catch(() => {
-                reject()
-              })
-            } else {
-              this.$message.error('图片验证码不能为空！')
+          this.$refs['validMobileForm'].validateField('img_code', (error) => {
+            if (error) {
               reject()
+            } else {
+              const { uuid } = this
+              const { img_code } = this.validMobileForm
+              API_Safe.sendMobileSms(this.uuid, img_code).then(() => {
+                this.$message.success('发送成功，请注意查收！')
+                resolve()
+              }).catch(reject)
             }
           })
         })
       },
-      /** 倒计时结束 */
-      handleCountDownEnd() {
-        this.getValidImgUrl()
-      },
-      /** 手机验证 */
-      submitValForm() {
-        this.$refs['validSmsCodeForm'].validate((valid) => {
+      /** 校验更换手机号验证码 */
+      submitValMobileForm() {
+        this.$refs['validMobileForm'].validate((valid) => {
           if (valid) {
-            const { mobile } = this.user
-            const { sms_code } = this.validSmsCodeForm
-            const { img_code } = this.validImgCodeForm
-            API_Safe.validMobileSms('UPDATEPASSWORDMOBILE', mobile, sms_code, img_code).then(() => {
-              setTimeout(() => {
-                this.step = 2
-              }, 200)
+            const { sms_code } = this.validMobileForm
+            API_Safe.validChangeMobileSms(sms_code).then(() => {
+              this.step = 2
+              this.getValidImgUrl()
             })
           } else {
             this.$message.error('表单填写有误，请检查！')
@@ -165,27 +152,32 @@
       /** 修改手机号 发送验证码 */
       sendChangeMobileSms() {
         return new Promise((resolve, reject) => {
-          this.$refs['changeMobileForm'].validate((valid) => {
-            if (valid) {
-              API_Safe.sendMobileSms().then(() => {
-                this.$message.success('验证码发送成功，请注意查收！')
-                resolve()
-              }).catch(error => reject(error))
-            } else {
-              this.$message.error('请输入有效的手机号码！')
-              reject()
-            }
+          const form = this.$refs['changeMobileForm']
+          form.validateField('mobile', (error1) => {
+            form.validateField('img_code', (error2) => {
+              if (error1 || error2) {
+                reject()
+              } else {
+                const { uuid } = this
+                const { mobile, img_code } = this.changeMobileForm
+                API_Safe.sendBindMobileSms(mobile, img_code, uuid).then(() => {
+                  this.$message.success('验证码发送成功，请注意查收！')
+                  resolve()
+                }).catch(reject)
+              }
+            })
           })
         })
       },
       /** 确认修改 */
       submitChangeForm() {
-        this.$refs['changeCodeForm'].validate((valid) => {
+        this.$refs['changeMobileForm'].validate((valid) => {
           if (valid) {
-            API_Safe.validMobileSms().then(() => {
-              API_Safe.bindMobile().then(() => {
-                // ...
-              })
+            const { mobile, sms_code } = this.changeMobileForm
+            API_Safe.changeMobile(mobile, sms_code).then(() => {
+              this.$message.success('更换成功！')
+              this.$store.dispatch('user/getUserDataAction')
+              this.step = 3
             })
           } else {
             this.$message.error('请输入手机验证码！')
@@ -198,12 +190,12 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ .el-alert {
+    h2 { margin: 20px 0 }
+    p { margin-bottom: 10px }
+  }
   .valid-mobile-container, .change-mobile-container {
     width: 100%;
-    /deep/ .el-alert {
-      h2 { margin: 20px 0 }
-      p { margin-bottom: 10px }
-    }
     /deep/ .el-form {
       margin-top: 10px;
       padding-left: 24px
@@ -220,6 +212,42 @@
     }
     /deep/ .sms-code {
       .el-input__inner { width: 190px }
+    }
+  }
+  .change-success-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 300px;
+    .inner-success {
+      display: flex;
+      margin-top: 30px;
+    }
+    .icon-success {
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+    }
+    .success-title {
+      .p1 {
+        font-size: 16px;
+        color: #333;
+        span {
+          display: inline-block;
+          padding: 3px 5px;
+          background-color: #1E9DFF;
+          color: #fff;
+          border-radius: 10px;
+        }
+      }
+      .p2 {
+        font-size: 12px;
+        color: #666;
+        a {
+          color: #071BC9;
+          &:hover { color: #f42424 }
+        }
+      }
     }
   }
 </style>

@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item label="请输入短信验证码：" prop="sms_code" class="sms-code">
           <el-input v-model="bindMobileForm.sms_code" placeholder="请输入短信验证码" auto-complete="off" :maxlength="6">
-            <en-count-down-btn :time="20" :start="sendBindMobileSms" slot="append"/>
+            <en-count-down-btn :time="60" :start="sendBindMobileSms" slot="append"/>
           </el-input>
         </el-form-item>
         <el-form-item label="">
@@ -57,8 +57,7 @@
                 } else {
                   callback()
                 }
-              },
-              trigger: 'blur'
+              }
             }
           ],
           captcha: [this.MixinRequired('请填写图片验证码！')],
