@@ -47,8 +47,11 @@
       API_Goods.getGoods(query.goods_id).then(response => {
         callback(null, { goods: response })
       }).catch(e => {
-        console.log(e)
-        callback({ statusCode: e.response.status })
+        let _statusCode = 200
+        if (e.code === 'ECONNREFUSED') {
+          _statusCode = 502
+        }
+        callback({ statusCode: _statusCode })
       })
     },
     head() {

@@ -23,7 +23,7 @@
           <el-form :model="valiSmsForm" :rules="valiSmsRules" ref="valiSmsForm" label-width="120px" style="width: 370px">
             <el-form-item label="短信验证码：" prop="sms_code">
               <el-input v-model="valiSmsForm.sms_code" :maxlength="6">
-                <en-count-down-btn :time="20" :start="sendValidMobileSms" @end="handleCountDownEnd" slot="append"/>
+                <en-count-down-btn :time="60" :start="sendValidMobileSms" @end="handleCountDownEnd" slot="append"/>
               </el-input>
             </el-form-item>
             <el-form-item label="">

@@ -45,11 +45,13 @@
   export default {
     name: 'goods-info',
     props: ['goods'],
-    data: () => ({
-      buyNum: 1,
-      skuMap: new Map(),
-      specList: []
-    }),
+    data() {
+      return {
+        buyNum: 1,
+        skuMap: new Map(),
+        specList: []
+      }
+    },
     mounted() {
       API_Goods.getGoodsSkus(this.goods.goods_id).then(response => {
         const specMap = new Map()
@@ -57,15 +59,15 @@
           const { spec_list } = sku
           const spec_value_ids = []
           const spec_values = []
-          spec_list.forEach(spec => {
+          spec_list.forEach((spec, index) => {
             spec_values.push(spec.spec_value)
             spec_value_ids.push(spec.spec_value_id)
             const _spec = JSON.parse(JSON.stringify(spec))
-            _spec.sku = sku
-            if (index === 0) {
+            const _specs = specMap.get(spec.spec_id) || []
+            if (!_specs[0]) {
               specMap.set(spec.spec_id, [_spec])
-            } else {
-              specMap.get(spec.spec_id).push(_spec)
+            } else if (_specs.findIndex(item => item.spec_value_id === _spec.spec_value_id) === -1) {
+              _specs.push(_spec)
             }
           })
           console.log(spec_values.join(' - '))

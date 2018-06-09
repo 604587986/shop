@@ -19,9 +19,13 @@
     </div>
     <div class="safe-item">
       <div class="fore1"><strong>登录密码</strong></div>
-      <div class="fore2"><span>互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</span></div>
+      <div class="fore2">
+        <span v-if="!user.mobile">互联网账号存在被盗风险，建议您先绑定手机号。</span>
+        <span v-else>互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</span>
+      </div>
       <div class="fore3">
-        <nuxt-link to="/member/change-password">修改</nuxt-link>
+        <nuxt-link v-if="!user.mobile" to="/member/bind-mobile">绑定</nuxt-link>
+        <nuxt-link v-else to="/member/change-password">修改</nuxt-link>
       </div>
     </div>
     <div class="safe-item">
