@@ -7,7 +7,7 @@
       </el-form-item>
       <!--店铺地址-->
       <el-form-item label="店铺地址：" prop="shop_address">
-        <en-region-picker :api="areasapi" @changed="handleChange"></en-region-picker>
+        <en-region-picker :api="areasapi" :default="areas" @changed="handleChange"></en-region-picker>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
@@ -24,7 +24,7 @@
       </el-form-item>
       <!--店铺简介-->
       <el-form-item label="店铺简介：" prop="shop_desc">
-        <UE v-model="shopDataForm.shop_desc" :defaultMsg="shopDataForm.shop_desc" style="width: 80%;"></UE>
+        <UE v-model="shopDataForm.shop_desc" ref="UE" :defaultMsg="shopDataForm.shop_desc" style="width: 80%;"></UE>
       </el-form-item>
       <!--店铺logo-->
       <el-form-item label="店铺logo：" prop="shop_logo">
@@ -155,12 +155,13 @@
           this.fileList_logo = [{ url: this.shopDataForm.shop_logo }]
           this.fileList_banner = [{ url: this.shopDataForm.shop_banner }]
           this.areas = [this.shopDataForm.shop_province_id, this.shopDataForm.shop_city_id,
-            this.shopDataForm.shop_region_id || -1, this.shopDataForm.shop_town_id || -1]
+            this.shopDataForm.shop_county_id || -1, this.shopDataForm.shop_town_id || -1]
         })
       },
 
       /** 保存店铺设置*/
       handleSaveShopData(formName) {
+        this.shopDataForm.shop_desc = this.$refs['UE'].getUEContent()
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const _params = {
@@ -217,5 +218,8 @@
   }
   /deep/ .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
     line-height: 24px;
+  }
+  /deep/ .upload-demo {
+    width: 80%;
   }
 </style>

@@ -120,6 +120,7 @@
               } else {
                 _skuInfo.push({
                   spec_id: item.spec_id,
+                  spec_name: item.spec_name,
                   value_list: [item]
                 })
               }
@@ -145,7 +146,8 @@
             return []
           }
           return key.value_list.map((item) => {
-            let map = new Map().set(key.spec_name, item.spec_value || '').set('spec_value_id', item.spec_value_id)
+            let map = new Map().set(key.spec_name, item.spec_value || '')
+              .set('spec_value_id', item.spec_value_id)
             let obj = Object.create(null)
             for (let [k, v] of map) {
               obj[k] = v

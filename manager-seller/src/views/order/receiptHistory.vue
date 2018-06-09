@@ -134,6 +134,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    display: none;
+  }
+
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }

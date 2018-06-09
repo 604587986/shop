@@ -261,6 +261,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
   /* 工具条*/
   .inner-toolbar {
     display: flex;

@@ -266,7 +266,7 @@
           this.$set(this.skuInfo[$index], 'spec_id', response.spec_id || '')
           this.$set(this.skuInfo[$index], 'value_list', [])
           this.$emit('updateSkuInfo', this.skuInfo)
-        }).catch(error => this.$message.error(error))
+        })
       },
 
       /** 选中/不选中 添加规格图片 是否显示上传组件*/
@@ -296,6 +296,7 @@
         this.activeSkuItemIndex = $index
         this.$set(this.skuInfo[$index].value_list, this.skuInfo[$index].value_list.length, {
           spec_id: item.spec_id,
+          spec_name: item.spec_name,
           spec_value: '',
           spec_value_id: '',
           spec_image: '',
@@ -359,6 +360,7 @@
         /** 更新skuInfo数据 */
         let _arr = cloneObj(this.skuInfo[this.activeSkuItemIndex])
         this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_id', val.spec_id)
+        this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_name', _arr.spec_name)
         this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_value', val.spec_value || '')
         this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_value_id', val.spec_value_id || '')
         this.$set(this.skuInfo, this.activeSkuItemIndex, _arr)
@@ -393,6 +395,7 @@
           /** 更新skuInfo数据 为当前规格值添加响应数据 */
           let _arr = cloneObj(this.skuInfo[this.activeSkuItemIndex])
           this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_id', response.spec_id)
+          this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_name', response.spec_name || '')
           this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_value', response.spec_value || '')
           this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_value_id', response.spec_value_id || '')
           this.$set(this.skuInfo, this.activeSkuItemIndex, _arr)
