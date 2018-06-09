@@ -9,16 +9,19 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
+          <div class="conditions">
+            <span>消息类型:</span>
+            <el-select v-model="current_category" placeholder="请选择"  @change="handleChangeMsgCategory">
+              <el-option
+                v-for="item in msg_categorys"
+                :key="item.msg_category_id"
+                :label="item.msg_category_label"
+                :value="item.msg_category_id">
+              </el-option>
+            </el-select>
+          </div>
           <el-button @click="handleDeleteAllMsgs" type="danger">全部删除</el-button>
           <el-button @click="handleSignReadAllMsgs" type="primary">标记为已读</el-button>
-          <el-select v-model="current_category" placeholder="请选择"  @change="handleChangeMsgCategory">
-            <el-option
-              v-for="item in msg_categorys"
-              :key="item.msg_category_id"
-              :label="item.msg_category_label"
-              :value="item.msg_category_id">
-            </el-option>
-          </el-select>
         </div>
       </div>
       <template slot="table-columns">
@@ -141,9 +144,6 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       },
 
@@ -190,8 +190,6 @@
         API_Messages.deleteMsgs(ids, {}).then(response => {
           this.$message.success('删除成功！')
           this.GET_MsgsList()
-        }).catch(error => {
-          console.log(error)
         })
       },
 
@@ -214,8 +212,6 @@
       signReadMsgs(ids) {
         API_Messages.signMsgs(ids, {}).then(response => {
           this.GET_MsgsList()
-        }).catch(error => {
-          console.log(error)
         })
       }
     }
@@ -223,6 +219,11 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
+
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }
@@ -233,8 +234,22 @@
     justify-content: space-between;
   }
 
-  .toolbar-btns {
-
+  div.toolbar-btns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    div {
+      span {
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+      }
+    }
+    .conditions {
+      margin-right: 30px;
+    }
   }
 
   .toolbar-search {

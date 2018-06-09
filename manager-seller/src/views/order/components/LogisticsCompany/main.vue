@@ -1,7 +1,5 @@
 <template>
   <en-tabel-layout
-    toolbar
-    pagination
     :tableData="logisticsTableData"
     :loading="loading"
   >
@@ -105,5 +103,8 @@
   .company-choosed {
     font-weight: bold;
     color: #e90101;
+  }
+  /deep/ div.toolbar {
+    display: none;
   }
 </style>

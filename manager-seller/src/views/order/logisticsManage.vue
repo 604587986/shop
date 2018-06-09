@@ -353,6 +353,9 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  /deep/ div.toolbar {
+    height: 70px;
+    padding: 20px 0;
+  }
 </style>
 

@@ -41,8 +41,7 @@
               <en-tabel-layout
                 v-if="tableData && tableData.length >= 1"
                 :tableData="tableData[$index]"
-                :loading="loading"
-              >
+                :loading="loading">
                 <template slot="table-columns">
                   <el-table-column label="商品名称">
                     <template slot-scope="scope">
