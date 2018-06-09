@@ -27,18 +27,50 @@ export default function checkToken(options) {
   const { $store } = Vue.prototype.$nuxt
   // 返回异步方法
   return new Promise((resolve, reject) => {
-    // 1. user/accessToken/refreshToken都没有，放行所有API。
-    if (!user && !accessToken && !refreshToken) {
-      console.log(options.url + ' | user/accessToken/refreshToken都没有，放行所有API。')
+    /**
+     * 如果accessToken、user、refreshToken都存在。
+     * 说明必要条件都存在，可以直接通过，并且不需要后续操作。
+     */
+    if (accessToken && user && refreshToken) {
       resolve()
       return
     }
-    // 2. 不存在accessToken，但是user/refreshToken存在。
+    /**
+     * 如果需要Token，但是refreshToken或者user没有。
+     * 说明登录已失效、或者cookie有问题，需要重新登录。
+     */
+    if (options.needToken && (!refreshToken)) {
+      $store.dispatch('user/removeUserAction')
+      $store.dispatch('user/removeAccessTokenAction')
+      $store.dispatch('user/removeRefreshTokenAction')
+      resolve()
+      return
+    }
+    /**
+     * 如果不需要Token，并且没有。
+     * 但是如果有refreshToken或user，说明只是Token过期。需要到下一步去获取新的Token
+     * 但是有accessToken并且有，说明
+     */
+    if (!options.needToken && !accessToken && (!user || !refreshToken)) {
+      resolve()
+      return
+    }
+    /**
+     * 不存在accessToken，但是user/refreshToken存在。
+     * 说明用户已登录，只是accessToken过期，需要重新获取accessToken。
+     * 如果没有needToken，说明不需要等待获取到新的accessToken后再请求。
+     * 否则，需要等待
+     */
     if (!accessToken && user && refreshToken) {
-      // 如果没有刷新token锁，需要刷新token
-      // 如果有刷新token锁，则进入循环检测
+      /**
+       * 如果没有刷新token锁，需要刷新token。
+       * 如果有刷新token锁，则进入循环检测。
+       */
       if (!window.__refreshTokenLock__) {
-        console.log(options.url + ' | 这个请求，需要等待刷新token。')
+        console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
+        // 如果不需要Token，则不需要等拿到新的Token再请求。
+        if (!options.needToken) resolve()
+        // 开始请求新的Token，并加锁。
         window.__refreshTokenLock__ = request({
           url: 'passport/token',
           method: 'post',
@@ -48,7 +80,7 @@ export default function checkToken(options) {
           $store.dispatch('user/setRefreshTokenAction', response.refreshToken)
           window.__refreshTokenLock__ = null
           console.log(options.url + ' | 已拿到新的token。')
-          resolve()
+          options.needToken && resolve()
         }).catch(error => {
           window.__refreshTokenLock__ = undefined
           $store.dispatch('user/removeUserAction')
@@ -56,8 +88,8 @@ export default function checkToken(options) {
           $store.dispatch('user/removeRefreshTokenAction')
         })
       } else {
-        if (options.dontCheckToken) {
-          console.log(options.url + ' | 不需要检查token，直接通过...')
+        if (!options.needToken) {
+          console.log(options.url + ' | 不需要Token，直接通过...')
           resolve()
           return
         }
@@ -75,7 +107,7 @@ export default function checkToken(options) {
             __RTK__ === null
               ? resolve()
               : checkLock()
-          }, 300)
+          }, 500)
         }
       }
       return

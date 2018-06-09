@@ -13,6 +13,7 @@ export function getAfterSale(params) {
   return request({
     url: 'after-sales/refunds',
     method: 'get',
+    needToken: true,
     params
   })
 }
@@ -28,6 +29,7 @@ export function applyAfterSale(params) {
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/after-sale',
     method: 'get',
+    needToken: true,
     data: _formData
   })
 }
@@ -40,6 +42,7 @@ export function applyAfterSale(params) {
 export function getAfterSaleDetail(sn) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/after-sale/${sn}`,
-    method: 'get'
+    method: 'get',
+    needToken: true
   })
 }

@@ -1,4 +1,4 @@
-import * as API_Cart from '@/api/cart'
+import * as API_Trade from '@/api/trade'
 import * as types from './mutation-types'
 
 export const state = () => ({
@@ -124,7 +124,7 @@ export const actions = {
    */
   getCartDataAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_Cart.getCartList(params).then(response => {
+      API_Trade.getCarts(params).then(response => {
         commit(types.SET_CART_DATA, response)
         resolve(response)
       }).catch(error => reject(error))
@@ -138,7 +138,7 @@ export const actions = {
    */
   updateSkuNumAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_Cart.updateSkuNum(params.sku_id, params.num).then(response => {
+      API_Trade.getCarts(params.sku_id, params.num).then(response => {
         commit(types.UPDATE_SKU_NUM, params)
         resolve(response)
       }).catch(error => reject(error))
@@ -152,7 +152,7 @@ export const actions = {
    */
   checkSkuItemAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_Cart.checkSku(params.sku_id, params.checked).then(response => {
+      API_Trade.checkAll(params.sku_id, params.checked).then(response => {
         commit(types.CHECK_SKU_ITEM, params)
         resolve(response)
       }).catch(error => reject(error))
@@ -166,7 +166,7 @@ export const actions = {
    */
   checkShopSkuAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
-      API_Cart.checkShop(params.shop_id, params.checked).then(resposne => {
+      API_Trade.checkShop(params.shop_id, params.checked).then(resposne => {
         commit(types.CHECK_SHOP_SKU, params)
         resolve(resposne)
       }).catch(error => reject(error))
@@ -180,7 +180,7 @@ export const actions = {
    */
   checkAllAction: ({ commit }, checked) => {
     return new Promise((resolve, reject) => {
-      API_Cart.checkAll(checked).then(response => {
+      API_Trade.checkAll(checked).then(response => {
         commit(types.CHECK_ALL, checked)
         resolve(response)
       }).catch(error => reject(error))
@@ -195,7 +195,7 @@ export const actions = {
    */
   deleteSkuItemAction: ({ commit, dispatch }, sku_ids) => {
     return new Promise((resolve, reject) => {
-      API_Cart.deleteSkuItem(sku_ids).then(response => {
+      API_Trade.checkAll(sku_ids).then(response => {
         commit(types.DELETE_SKU_ITEMS, sku_ids)
         resolve(response)
       }).catch(error => reject(error))
@@ -208,7 +208,7 @@ export const actions = {
    */
   cleanCartAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
-      API_Cart.cleanCart().then(response => {
+      API_Trade.cleanCarts().then(response => {
         commit(types.CLEAN_CART)
         resolve(response)
       }).catch(error => reject(error))

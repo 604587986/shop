@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import * as API_Points from '@/api/points'
+  import * as API_Members from '@/api/members'
   export default {
     name: 'my-points',
     data() {
@@ -89,7 +89,7 @@
        * @constructor
        */
       GET_PointsData() {
-        API_Points.getPointsData(this.params).then(response => {
+        API_Members.getPointsData(this.params).then(response => {
           this.pointsData = response
           this.MixinScrollToTop()
         })
@@ -99,7 +99,7 @@
        * @constructor
        */
       GET_Points() {
-        API_Points.getPoints().then(response => {
+        API_Members.getPoints().then(response => {
           this.points = response
         })
       }

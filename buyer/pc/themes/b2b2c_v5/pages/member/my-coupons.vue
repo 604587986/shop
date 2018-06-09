@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import * as API_Coupons from '@/api/coupons'
+  import * as API_Members from '@/api/members'
   export default {
     name: 'my-coupons',
     data() {
@@ -62,7 +62,7 @@
         this.GET_Coupons()
       },
       GET_Coupons() {
-        API_Coupons.getCoupons(this.params).then(response => {
+        API_Members.getCoupons(this.params).then(response => {
           this.coupons = response
           this.MixinScrollToTop()
         })

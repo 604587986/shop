@@ -13,6 +13,7 @@ export function getOrderList(params) {
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/list',
     method: 'get',
+    needToken: true,
     params
   })
 }
@@ -25,7 +26,8 @@ export function getOrderList(params) {
 export function getOrderDetail(order_sn) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/${order_sn}`,
-    method: 'get'
+    method: 'get',
+    needToken: true
   })
 }
 
@@ -41,6 +43,7 @@ export function cancelOrder(order_sn, reason) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/cancel`,
     method: 'post',
+    needToken: true,
     data: _formData
   })
 }
@@ -53,6 +56,7 @@ export function cancelOrder(order_sn, reason) {
 export function confirmReceipt(order_sn) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/confirm-receipt/${order_sn}`,
-    method: 'post'
+    method: 'post',
+    needToken: true
   })
 }
