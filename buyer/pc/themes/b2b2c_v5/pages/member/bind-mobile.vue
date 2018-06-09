@@ -88,6 +88,7 @@
             form.validateField('captcha', (error2) => {
               if (error1 || error2) {
                 reject()
+                this.$message.error('表单填写有误，请检查！')
               } else {
                 const { uuid } = this
                 const { mobile, captcha } = this.bindMobileForm

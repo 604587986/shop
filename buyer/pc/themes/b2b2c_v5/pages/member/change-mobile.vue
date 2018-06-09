@@ -123,6 +123,7 @@
           this.$refs['validMobileForm'].validateField('img_code', (error) => {
             if (error) {
               reject()
+              this.$message.error('请输入图片验证码！')
             } else {
               const { uuid } = this
               const { img_code } = this.validMobileForm
@@ -157,6 +158,7 @@
             form.validateField('img_code', (error2) => {
               if (error1 || error2) {
                 reject()
+                this.$message.success('表单填写有误，请检查！')
               } else {
                 const { uuid } = this
                 const { mobile, img_code } = this.changeMobileForm
