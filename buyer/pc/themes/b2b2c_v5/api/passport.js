@@ -98,3 +98,86 @@ export function registerByMobile(params) {
     data: params
   })
 }
+
+/**
+ * 验证手机验证码
+ * @param mobile   手机号码
+ * @param scene    业务场景
+ * @param sms_code 短信验证码
+ */
+export function validMobileSms(mobile, scene, sms_code) {
+  return request({
+    url: `passport/smscode/${mobile}`,
+    method: 'get',
+    params: {
+      scene,
+      sms_code
+    }
+  })
+}
+
+/**
+ * 验证账户信息
+ * @param uuid
+ * @param captcha
+ * @param account
+ */
+export function validAccount(uuid, captcha, account) {
+  return request({
+    url: 'passport/find-pwd',
+    method: 'get',
+    params: {
+      uuid,
+      captcha,
+      account
+    }
+  })
+}
+
+/**
+ * 发送找回密码短信
+ * @param uuid
+ * @param captcha
+ */
+export function sendFindPasswordSms(uuid, captcha) {
+  return request({
+    url: 'passport/find-pwd/send',
+    method: 'post',
+    data: {
+      uuid,
+      captcha
+    }
+  })
+}
+
+/**
+ * 校验找回密码验证码
+ * @param uuid
+ * @param sms_code
+ */
+export function validFindPasswordSms(uuid, sms_code) {
+  return request({
+    url: 'passport/find-pwd/valid',
+    method: 'get',
+    params: {
+      uuid,
+      sms_code
+    }
+  })
+}
+
+/**
+ * 修改密码【找回密码用】
+ * @param uuid
+ * @param password
+ */
+export function changePassword(uuid, password) {
+  return request({
+    url: 'passport/find-pwd/update-password',
+    method: 'put',
+    data: {
+      uuid,
+      password
+    }
+  })
+}
