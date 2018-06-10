@@ -4,19 +4,19 @@
     <el-table-column label="商品名称" class-name="goods-name-img">
       <template slot-scope="scope">
         <nuxt-link :to="'/goods-' + scope.row.goods_id + '.html'" target="_blank">
-          <img :src="scope.row.goods_image">
+          <img :src="image || scope.row.goods_image">
         </nuxt-link>
-        <nuxt-link :to="'/goods-' + scope.row.goods_id + '.html'" target="_blank" class="goods-name">{{ scope.row.goods_name }}</nuxt-link>
+        <nuxt-link :to="'/goods-' + scope.row.goods_id + '.html'" target="_blank" class="goods-name">{{ name || scope.row.goods_name }}</nuxt-link>
       </template>
     </el-table-column>
     <el-table-column label="商品单价" width="120">
-      <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
+      <template slot-scope="scope">{{ (price || scope.row.price) | unitPrice('￥') }}</template>
     </el-table-column>
     <el-table-column label="数量" width="90">
-      <template slot-scope="scope">{{ scope.row.num }}</template>
+      <template slot-scope="scope">{{ num || scope.row.num }}</template>
     </el-table-column>
     <el-table-column label="商品小计" width="120">
-      <template slot-scope="scope">{{ scope.row.goods_total | unitPrice('￥') }}</template>
+      <template slot-scope="scope">{{ (total || (num || scope.row.num) * (price || scope.row.price)) | unitPrice('￥') }}</template>
     </el-table-column>
   </el-table>
 </template>
@@ -24,12 +24,7 @@
 <script>
   export default {
     name: 'member-sku-list',
-    props: {
-      skuList: {
-        type: Array,
-        required: true
-      }
-    }
+    props: ['skuList', 'image', 'name', 'price', 'num', 'total']
   }
 </script>
 
