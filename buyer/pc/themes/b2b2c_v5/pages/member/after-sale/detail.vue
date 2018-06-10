@@ -3,8 +3,8 @@
     <div v-if="detail" class="order-detail">
       <h1>订单信息</h1>
       <div class="detail-list">
-        <dl><dt>订单编号：</dt><dd>20180412000001</dd></dl>
-        <dl class="top-line"><dt>申请时间：</dt><dd>2018-04-12 17:08</dd></dl>
+        <dl><dt>订单编号：</dt><dd>{{ detail.order_sn }}</dd></dl>
+        <dl class="top-line"><dt>申请时间：</dt><dd>{{ create_time | unixToDate }}</dd></dl>
         <dl><dt>状态：</dt><dd><span>申请中</span></dd></dl>
         <dl><dt>申请售后原因：</dt><dd>收到商品与描述不符</dd></dl>
         <dl><dt>申请售后详细描述：</dt><dd>我TM就是想退货！！！</dd></dl>
@@ -12,8 +12,8 @@
         <dl><dt>申请售后金额：</dt><dd>2449</dd></dl>
       </div>
     </div>
-    <div v-if="detail" class="goods-list">
-      <sku-list :skuList="detail.skuList"></sku-list>
+    <div v-if="sku" class="goods-list">
+      <sku-list :skuList="[sku]" :num="sku.return_num"></sku-list>
     </div>
   </div>
 </template>
@@ -24,15 +24,14 @@
   export default {
     name: 'detail',
     validate({ query }) {
-      return !!query.order_sn
+      return !!query.sn
     },
-    components: {
-      SkuList
-    },
+    components: { SkuList },
     data() {
       return {
-        sn: this.$route.query.order_sn,
-        detail: ''
+        sn: this.$route.query.sn,
+        detail: '',
+        sku: ''
       }
     },
     mounted() {
@@ -41,7 +40,8 @@
     methods: {
       GET_AfterSaleDetail() {
         API_AfterSale.getAfterSaleDetail(this.sn).then(response => {
-          this.detail = response
+          this.detail = response.refund
+          this.sku = response.refund_goods_do
         })
       }
     }

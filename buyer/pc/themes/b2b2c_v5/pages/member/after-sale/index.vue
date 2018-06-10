@@ -10,12 +10,12 @@
         <el-table-column label="申请时间">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="order_sn" label="订单号"/>
-        <el-table-column prop="refund_type" label="售后类型"/>
+        <el-table-column prop="sn" label="退货(款)单编号"/>
+        <el-table-column prop="refuse_type_text" label="售后类型"/>
         <el-table-column prop="refund_status_text" label="售后状态" width="150"/>
         <el-table-column label="操作" width="100">
           <template slot-scope="scope">
-            <nuxt-link :to="'/member/after-sale/detail?order_sn=' + scope.row.order_sn">查看</nuxt-link>
+            <nuxt-link :to="'/member/after-sale/detail?sn=' + scope.row.sn">查看</nuxt-link>
           </template>
         </el-table-column>
       </el-table>

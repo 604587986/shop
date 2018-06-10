@@ -41,7 +41,7 @@ export function applyAfterSale(params) {
  */
 export function getAfterSaleDetail(sn) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/after-sale/${sn}`,
+    url: `after-sales/refund/${sn}`,
     method: 'get',
     needToken: true
   })
