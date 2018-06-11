@@ -1,6 +1,6 @@
 <template>
   <div class="bg-out">
-    <el-button type="success" @click="lookshop">查看店铺</el-button>
+    <el-button type="primary" @click="lookshop">查看店铺</el-button>
     <hr/>
     <!--当前模板-->
     <p style="padding: 0 50px;">当前模板:</p>
@@ -29,7 +29,7 @@
       </ul>
       <hr/>
       <div style="width: 100%;text-align: center;">
-        <el-button type="success" @click="POST_SaveCurrrentTpl">保存修改</el-button>
+        <el-button type="primary" @click="POST_SaveCurrrentTpl">保存修改</el-button>
       </div>
     </div>
     <div class="zoom-img" :class="{'zoom-img-show': zoom_img_show }">

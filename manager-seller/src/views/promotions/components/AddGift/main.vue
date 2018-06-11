@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="新增赠品" :visible.sync="giftShow" width="40%" align="center">
+  <el-dialog title="新增赠品" :visible.sync="giftShow" width="30%">
     <el-form :model="giftModelForm" label-position="right" :rules="rules" label-width="100px">
       <el-form-item label="赠品名称：" prop="gift_name">
         <el-input

@@ -8,17 +8,16 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-            <el-button type="success" @click="handleAddCoupon">新增</el-button>
+            <el-button type="primary" @click="handleAddCoupon">新增</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search
             @search="searchEvent"
             @advancedSearch="advancedSearchEvent"
-            advanced
-          >
+            advanced>
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="有效期（在此日期内）">
+                <el-form-item label="有效期">
                   <el-date-picker
                     key="0"
                     v-model="advancedForm.coupon_time_limit"
@@ -48,12 +47,10 @@
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="success"
               @click="handleEditCoupons(scope.row)">修改
             </el-button>
             <el-button
-              size="mini"
               type="danger"
               @click="handleDeleteGoods(scope.row)">删除
             </el-button>

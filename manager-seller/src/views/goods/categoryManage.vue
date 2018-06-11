@@ -3,11 +3,10 @@
     <en-tabel-layout
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button type="success" @click="addGoodsCategory">新增商品分组</el-button>
+          <el-button type="primary" @click="addGoodsCategory">新增商品分组</el-button>
         </div>
       </div>
       <template slot="table-columns">
@@ -18,8 +17,10 @@
               <i v-if="!scope.row._expanded && scope.row.level===1" class="el-icon-plus icon_expanded_level1"></i>
             </span>
             <span v-else>
-              <svg-icon v-if="scope.row.level===2" iconClass="leftbotcorner"
-                        className="leftbotcorner-icon icon_expanded_level2"></svg-icon>
+              <svg-icon
+                v-if="scope.row.level===2" iconClass="leftbotcorner"
+                className="leftbotcorner-icon icon_expanded_level2">
+              </svg-icon>
               <i v-if="scope.row.level===1" class="el-icon-minus icon_expanded_level1"></i>
             </span>
             <span>{{ scope.row.shop_cat_name }}</span>
@@ -35,18 +36,15 @@
         <el-table-column label="操作" width="350">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="success"
               @click="handleEditGoodsCategory(scope.$index, scope.row)">编辑
             </el-button>
             <el-button
-              size="mini"
-              type="warning"
+              type="danger"
               @click="handleDeleteGoodsCategory(scope.row)">删除
             </el-button>
             <el-button
               v-if=" scope.row.level === 1 "
-              size="mini"
               type="primary"
               @click="handleAddSonCategory(scope.$index, scope.row)">新增下级
             </el-button>
@@ -54,13 +52,13 @@
         </el-table-column>
       </template>
     </en-tabel-layout>
-    <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="30%" align="center">
+    <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="25%">
       <el-form :model="goodsCatData" label-position="right" label-width="80px">
         <el-form-item label="分组名称">
-          <el-input v-model="goodsCatData.category_name" auto-complete="off" style="width: 70%;"></el-input>
+          <el-input v-model="goodsCatData.category_name" auto-complete="off" style="width: 100%;"></el-input>
         </el-form-item>
         <el-form-item label="上级分组">
-          <el-select v-model="goodsCatData.category_parent" placeholder="请选择" style="width: 70%;">
+          <el-select v-model="goodsCatData.category_parent" placeholder="请选择" style="width: 100%;">
             <el-option
               v-for="item in datafirst"
               :key="item.shop_cat_id"
@@ -70,7 +68,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="排序">
-          <el-input v-model.number="goodsCatData.sort" auto-complete="off" style="width: 70%;text-align: center;"></el-input>
+          <el-input v-model.number="goodsCatData.sort" auto-complete="off" style="width: 100%;text-align: center;"></el-input>
         </el-form-item>
         <el-form-item label="显示状态">
           <el-radio-group v-model="goodsCatData.is_show" style="width: 70%;">
@@ -79,7 +77,7 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer" align="center">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="goodsCategoryShow = false">取 消</el-button>
         <el-button type="primary" @click="reserveCategoryGoods">确 定</el-button>
       </div>

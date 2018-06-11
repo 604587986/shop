@@ -36,8 +36,8 @@
             <span>店铺分组:</span>
             <en-category-picker size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
           </div>
-          <el-button @click="publishGoods" type="success" class="conditions">发布商品</el-button>
-          <el-button @click="gotoRecycle" type="primary" class="conditions">回收站</el-button>
+          <el-button @click="publishGoods" type="primary"  class="conditions">发布商品</el-button>
+          <el-button @click="gotoRecycle"  type="primary" class="conditions">回收站</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
@@ -63,7 +63,7 @@
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus"/>
-        <el-table-column label="操作" min-width="200">
+        <el-table-column label="操作" min-width="200" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
               size="mini"

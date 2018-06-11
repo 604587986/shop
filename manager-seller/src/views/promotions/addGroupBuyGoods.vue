@@ -93,7 +93,6 @@
       <!--虚拟数量-->
       <el-form-item label="虚拟数量" prop="goods_virtual">
         <el-input
-          type="text"
           v-model.number="gruopBuyForm.goods_virtual"
           :style="{ width:inputLength +'px' }"
           placeholder="虚拟购买数量，只用于前台显示，不影响成交记录"></el-input>
@@ -102,7 +101,6 @@
       <!--限购数量-->
       <el-form-item label="限购数量" prop="goods_limit_buy">
         <el-input
-          type="text"
           v-model.number="gruopBuyForm.goods_limit_buy"
           :style="{ width:inputLength +'px' }"
           placeholder="每个买家ID可团购的最大数量，不限数量请填 '0'"></el-input>

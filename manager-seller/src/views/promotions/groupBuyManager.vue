@@ -54,13 +54,11 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
-              size="mini"
-              type="primary"
+              type="success"
               v-if="scope.row.examine_status !== 1"
               @click="handleEditGroupGoods(scope.row)">编辑
             </el-button>
             <el-button
-              size="mini"
               type="danger"
               v-if="scope.row.examine_status !== 1"
               @click="handleDeleteGroupGoods(scope.row)">删除

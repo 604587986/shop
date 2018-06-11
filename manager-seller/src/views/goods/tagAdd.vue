@@ -28,12 +28,16 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="buy_count" label="库存"/>
+        <el-table-column label="库存">
+          <template slot-scope="scope">
+             <span v-if="scope.row.buy_count || scope.row.buy_count === 0">{{ scope.row.buy_count }}</span>
+             <span v-if="scope.row.quantity || scope.row.quantity === 0 ">{{ scope.row.quantity }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
-              size="mini"
-              type="primary"
+              type="danger"
               @click="canceljoin(scope)">取消参加
             </el-button>
           </template>
@@ -113,8 +117,9 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        this.tableData = this.tableData.concat(val)
-        // 去重 转化
+        // this.tableData = this.tableData.concat(val)
+        this.tableData = val
+        /** 去重 转化 */
         const res = new Map()
         this.tableData = this.tableData.filter((key) => !res.has(key.goods_id) && res.set(key.goods_id, 1))
       },
