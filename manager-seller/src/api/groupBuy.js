@@ -37,7 +37,7 @@ export function deleteGroupBuyGoods(ids, params) {
       url: `/promotion/group-buy-goods/${ids}`,
       method: 'delete',
       loading: false,
-      data: params
+      params
     }).then(response => {
       resolve(response)
     })

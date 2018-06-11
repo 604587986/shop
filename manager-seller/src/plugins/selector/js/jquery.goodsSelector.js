@@ -6,8 +6,8 @@
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
 
-// 获取令牌
-var Authorization = getToken()
+// 获取令牌 getToken()
+var Authorization =  'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
 
 let hideDialogFunc // 在关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
 ;(function() {

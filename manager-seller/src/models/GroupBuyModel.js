@@ -17,6 +17,10 @@ export class GroupBuyGoods extends DataModel {
   @ServerName('act_id')
   activity_id
 
+  /** 团购ID */
+  @ServerName('gb_id')
+  gb_id
+
   /** 活动/团购名称 */
   @ServerName('gb_name')
   activity_name
@@ -49,13 +53,17 @@ export class GroupBuyGoods extends DataModel {
   @ServerName('end_time')
   end_time
 
-  /** 活动别名 */
+  /** 活动备注 */
   @ServerName('remark')
-  alias
+  remark
 
   /** 活动状态 */
   @ServerName('gb_status')
   activity_status
+
+  /** 团购状态  已团购数量 */
+  @ServerName('buy_num')
+  buy_num
 
   /** 团购状态  1已团购 0未团购*/
   @ServerName('is_signed')

@@ -342,6 +342,7 @@
   .el-form-item  {
     padding-left: 12%;
     border-bottom: 1px dotted #E6E6E6;
+    padding-bottom: 15px;
   }
   .bg-group-buy {
     background-color: #fff;
@@ -363,6 +364,10 @@
   }
   /deep/.el-select {
     width: 320px;
+  }
+  /*团购图片上传组件*/
+  .upload-demo {
+     width: 30%;
   }
 </style>
 

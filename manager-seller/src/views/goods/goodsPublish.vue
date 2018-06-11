@@ -60,6 +60,7 @@
               <span>{{ activeCategoryName1 }}</span>
               <span v-show="activeCategoryName2"> > {{ activeCategoryName2 }}</span>
               <span v-show="activeCategoryName3"> > {{ activeCategoryName3 }}</span>
+              <span v-if="!activeCategoryName1">{{ baseInfoForm.category_name }}</span>
             </el-form-item>
             <el-form-item label="商品分组：" >
               <!--商品分类 获取分类列表 传入默认值-->
@@ -154,13 +155,13 @@
           <h4>seo</h4>
           <div>
             <el-form-item label="seo标题：">
-              <el-input placeholder="3-60个字符" v-model="baseInfoForm.page_title"></el-input>
+              <el-input placeholder="3-60个字符" class="seo-text"  v-model="baseInfoForm.page_title"></el-input>
             </el-form-item>
             <el-form-item label="seo关键字：" >
-              <el-input type="textarea" v-model="baseInfoForm.meta_keywords"></el-input>
+              <el-input type="textarea" class="seo-text" rows="5" v-model="baseInfoForm.meta_keywords"></el-input>
             </el-form-item>
             <el-form-item label="seo描述：" >
-              <el-input type="textarea" v-model="baseInfoForm.meta_description"></el-input>
+              <el-input type="textarea" class="seo-text" rows="5" v-model="baseInfoForm.meta_description"></el-input>
             </el-form-item>
           </div>
         </div>
@@ -446,6 +447,9 @@
 
           /** 商城分类id */
           category_id: 0,
+
+          /** 商城分类 名称 */
+          category_name: '',
 
           /** 商品名称 */
           goods_name: '',
@@ -824,8 +828,8 @@
             this.skuList = response.map(key => {
               if (key && key.spec_list && Array.isArray(key.spec_list)) {
                 const spec_list = key.spec_list.map(item => {
-                  let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
-                  return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+                  let { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name } = item
+                  return { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name }
                 })
                 let { cost, quantity, sn, weight } = key
                 const price = key.goods_price
@@ -1269,6 +1273,14 @@
       color: #8a6d3b;
       background: #fcf8e3;
       border: 1px solid #faebcc;
+    }
+
+    /*teatarea*/
+    /deep/ .el-textarea {
+      width: 150%;
+    }
+    .seo-text {
+      width: 150%;
     }
   }
 
