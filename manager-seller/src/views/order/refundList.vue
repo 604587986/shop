@@ -58,16 +58,28 @@
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
         <!--类型-->
-        <el-table-column prop="refuse_type" label="类型"/>
+        <el-table-column prop="refuse_type_text" label="类型"/>
         <!--状态-->
         <el-table-column prop="refund_status_text" label="状态"/>
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.allow" type="text" @click="handleOperateRefund(scope.row)">查看</el-button>
-            <el-button v-if="scope.row.allow" type="text" @click="handleOperateRefund(scope.row)">审核</el-button>
-            <el-button v-if="scope.row.allow" type="text" @click="handleOperateRefund(scope.row)">退款</el-button>
-            <el-button v-if="scope.row.allow" type="text" @click="handleOperateRefund(scope.row)">入库</el-button>
+            <el-button
+              v-if="scope.row.allow_seller_approval"
+              type="text"
+              @click="handleOperateRefund(scope.row)">审核</el-button>
+            <el-button
+              v-if="scope.row.allow_seller_refund"
+              type="text"
+              @click="handleOperateRefund(scope.row)">退款</el-button>
+            <el-button
+              v-if="scope.row.allow_stock_in"
+              type="text"
+              @click="handleOperateRefund(scope.row)">入库</el-button>
+            <el-button
+              v-if="!scope.row.allow_stock_in && !scope.row.allow_seller_approval && !scope.row.allow_seller_approval"
+              type="text"
+              @click="handleOperateRefund(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -84,65 +96,65 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="退款、退货审核" :visible.sync="goodsRefundshow" width="30%" align="center">
+    <el-dialog title="退款、退货审核" :visible.sync="goodsRefundshow" width="50%" align="center">
       <div align="center">
         <div class="refund-info">
           <!--订单信息-->
           <div class="order-info">
             <h4>订单信息</h4>
             <div class="order-info-item">
-              <span>{{currentType}}单号:</span><span>{{ refundInfo.sn }}</span>
+              <span>{{currentType}}单号: </span><span>{{ refundInfo.sn }}</span>
             </div>
             <div class="order-info-item">
-              <span>关联订单:</span><span>{{ refundInfo.order_sn }}</span>
+              <span>关联订单: </span><span>{{ refundInfo.order_sn }}</span>
             </div>
             <div class="order-info-item">
-              <span>支付金额:</span><span>{{ }}</span>
+              <span>商品单价: </span><span>{{ refundInfo.price | unitPrice('¥') }}</span>
             </div>
             <div class="order-info-item">
-              <span>申请退款金额:</span><span>{{ refundInfo.refund_price }}</span>
+              <span>申请退款金额: </span><span>{{ refundInfo.refund_price | unitPrice('¥')}}</span>
             </div>
             <div class="order-info-item">
-              <span>{{currentType}}人:</span><span>{{  }}</span>
+              <span>{{currentType}}人: </span><span>{{  refundInfo.member_name}}</span>
             </div>
             <div class="order-info-item">
-              <span>{{currentType}}状态:</span><span>{{  }}</span>
+              <span>{{currentType}}状态: </span><span>{{ refundInfo.refund_status_text }}</span>
             </div>
           </div>
           <!--退款/货信息-->
           <div class="refund-info-relations">
             <div class="order-info-item">
-              <span>申请时间:</span><span>{{ refundInfo.create_time }}</span>
+              <span>申请时间: </span><span>{{ refundInfo.create_time | unixToDate }}</span>
             </div>
             <div class="order-info-item">
-              <span>{{currentType}}原因:</span><span>{{ refundInfo.refund_reason }}</span>
+              <span>{{currentType}}原因: </span><span>{{ refundInfo.refund_reason }}</span>
             </div>
             <div class="order-info-item">
-              <span>详细描述:</span><span>{{  }}</span>
+              <span>详细描述: </span><span>{{ refundInfo.customer_remark }}</span>
             </div>
             <div class="order-info-item">
-              <span>退款金额:</span>
-              <el-input v-if="authOpera" v-model="refundMoney"></el-input>元
-              <span v-if="authOpera">{{  }}</span>
+              <span>退款金额: </span>
+              <el-input v-if="authOpera.allow_seller_refund" v-model="refundMoney"></el-input>
+              <span v-if="!authOpera.allow_seller_refund">{{ refundInfo.refund_price | unitPrice('¥') }}</span>
             </div>
             <div class="order-info-item order-info-remark">
-              <span>审核备注:</span>
-              <el-input v-if="authOpera" type="textarea" v-model="remark"></el-input>
-              <span v-if="authOpera">{{  }}</span>
+              <span>审核备注: </span>
+              <el-input v-if="authOpera.allow_seller_approval" type="textarea" v-model="remark"></el-input>
+              <span v-if="!authOpera.allow_seller_approval">{{ remark }}</span>
             </div>
             <!--审核-->
-            <div class="order-info-item" v-if="authOpera">
-              <span>审核:</span>
+            <div class="order-info-item" v-if="authOpera.allow_seller_approval">
+              <span>审核: </span>
               <el-button type="success" size="mini"  @click="handleRefundAuth(1)">通过</el-button>
               <el-button type="danger" size="mini"  @click="handleRefundAuth(0)">不通过</el-button>
             </div>
             <!--退款-->
-            <div class="order-info-item" v-if="authOpera">
-              <span>退款:</span>
+            <div class="order-info-item" v-if="authOpera.allow_seller_refund">
+              <span>退款: </span>
               <el-button type="primary" size="mini"  @click="handleRefund">退款完成</el-button>
             </div>
             <!--入库-->
-            <div class="order-info-item" v-if="authOpera">
+            <div class="order-info-item" v-if="authOpera.allow_stock_in">
               <span>入库:</span>
               <el-button type="primary" size="mini"  @click="handleWareHousing">确认入库</el-button>
             </div>
@@ -157,7 +169,11 @@
               </template>
             </el-table-column>
             <el-table-column prop="goods_name" label="商品名称"/>
-            <el-table-column  prop="price" label="单价"/>
+            <el-table-column  prop="price" label="单价">
+              <template slot-scope="scope">
+                {{ scope.row.price | unitPrice('￥') }}
+              </template>
+            </el-table-column>
             <el-table-column  prop="ship_num" label="购买数量"/>
             <el-table-column  prop="return_num" label="退货数量"/>
           </template>
@@ -230,7 +246,7 @@
         refundGoodsData: [],
 
         /** 弹框是否显示 */
-        goodsRefundshow: true
+        goodsRefundshow: false
       }
     },
     methods: {
@@ -294,13 +310,14 @@
 
       /** 查看退款/货单详细 */
       getRefundDetails(row) {
-        this.currentType = row.refuse_type
+        this.currentType = row.refuse_type_text
         this.currentSn = row.sn
-        this.authOpera = row.operate_allowable
+        this.authOpera = row.after_sale_operate_allowable
         API_refund.getRefundDetails(row.sn).then(response => {
           this.goodsRefundshow = true
           this.refundInfo = response.refund
-          this.refundGoodsData = response.refund_goods_do
+          this.refundGoodsData = []
+          this.refundGoodsData.push(response.refund_goods_do)
         })
       },
 
@@ -366,14 +383,16 @@
     flex-direction: row;
     justify-content: space-between;
     border: 1px solid #f2f2f2;
+    border-collapse: collapse;
     div {
       flex-grow: 1;
       width: 50%;
     }
     /* 订单信息 */
     div.order-info {
-      height: 100%;
       padding-bottom: 5px;
+      border-right: 1px solid #f2f2f2;
+      border-collapse: collapse;
       h4 {
        text-align: left;
        font-size: 13px;
@@ -404,8 +423,7 @@
 
   /** 退货信息相关 */
   .refund-info-relations {
-    border-left: 1px solid #f2f2f2;
-    height: 100%;
+    border-collapse: collapse;
     .order-info-item {
       text-align: left;
       width: 100%;
