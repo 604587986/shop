@@ -54,7 +54,7 @@
     },
     watch: {
       specImg(newVal, oldVal) {
-        this.current = { original: newVal }
+        this.current = { original: newVal.original }
       }
     },
     methods: {
@@ -120,7 +120,7 @@
       position: absolute;
       left: 0;
       top: 0;
-      background: url(~/assets/images/icons-goods.png) no-repeat -141px -238px;
+      background: url(../../assets/images/icons-goods.png) no-repeat -141px -238px;
     }
     .swiper-btn {
       position: absolute;

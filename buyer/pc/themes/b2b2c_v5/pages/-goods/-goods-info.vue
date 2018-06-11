@@ -1,19 +1,37 @@
 <template>
   <div id="goods-info" class="goods-info">
-    <div class="pro-name bottom-border" :title="goods.goods_id">
-      <h1>{{ goods.goods_name }}</h1>
+    <div class="pro-name bottom-border" :title="goodsInfo.goods_name">
+      <h1>{{ goodsInfo.goods_name }}</h1>
     </div>
     <div class="pro-details">
       <div class="pro-list">
         <div class="pro-title">价格</div>
         <div class="pro-content price">
           <span>￥</span>
-          <strong>{{ goods.price | unitPrice }}</strong>
+          <strong>{{ goodsInfo.price | unitPrice }}</strong>
         </div>
       </div>
       <div class="pro-list">
         <div class="pro-title">温馨提示</div>
         <div class="pro-content">本商品无质量问题不支持退换货</div>
+      </div>
+    </div>
+    <div class="pro-spec">
+      <div v-for="(spec, specIndex) in specList" :key="spec.spec_id" class="pro-list">
+        <div class="pro-title">{{ spec.spec_name }}</div>
+        <div class="pro-content">
+          <button
+            v-for="spec_val in spec.valueList"
+            :key="spec_val.spec_value_id"
+            :class="['spec-val-btn', spec_val.selected && 'selected', spec.spec_type === 1 && 'spec-image']"
+            @click="handleClickSpec(spec, specIndex, spec_val)"
+            type="button"
+          >
+            <img v-if="spec.spec_type === 1" :src="spec_val['spec_value_img'].thumbnail">
+            <span class="spec-text">{{ spec_val.spec_value }}</span>
+            <i class="icon-spec-selected"></i>
+          </button>
+        </div>
       </div>
     </div>
     <div class="pro-list buy-num">
@@ -26,12 +44,12 @@
           </span>
           <a href="javascript:;" @click="handleBuyNumChanged('+')" class="oper-num up"></a>
         </div>
-        <span style="margin-left: 15px">仅剩 {{ goods.quantity }} 件，抓紧时间购买哦！</span>
+        <span style="margin-left: 15px">仅剩 {{ goodsInfo.quantity }} 件，抓紧时间购买哦！</span>
       </div>
     </div>
     <div class="buy-btns">
-      <button type="button" class="buy-btn buy"></button>
-      <button type="button" class="buy-btn add"></button>
+      <button type="button" class="buy-btn buy" @click="handleBuyNow"></button>
+      <button type="button" class="buy-btn add" @click="handleAddToCart"></button>
     </div>
   </div>
 </template>
@@ -42,59 +60,128 @@
    * 包括商品名称、商品价格、购买数量、加入购物车等等
    */
   import * as API_Goods from '@/api/goods'
+  import * as API_Trade from '@/api/trade'
   export default {
     name: 'goods-info',
     props: ['goods'],
     data() {
       return {
+        goodsInfo: JSON.parse(JSON.stringify(this.goods)),
+        // 购买数量
         buyNum: 1,
+        // skuMap
         skuMap: new Map(),
-        specList: []
+        // 规格列表
+        specList: [],
+        // 被选中规格Map
+        selectedSpecMap: new Map(),
+        // 被选中sku
+        selectedSku: ''
       }
     },
     mounted() {
       API_Goods.getGoodsSkus(this.goods.goods_id).then(response => {
-        const specMap = new Map()
-        response.forEach((sku, index) => {
+        const specList = []
+        response.forEach((sku, skuIndex) => {
           const { spec_list } = sku
           const spec_value_ids = []
-          const spec_values = []
-          spec_list.forEach((spec, index) => {
-            spec_values.push(spec.spec_value)
+          spec_list.forEach((spec, specIndex) => {
+            const _specIndex = specList.findIndex(_spec => _spec['spec_id'] === spec.spec_id)
+            const _spec = {
+              spec_id: spec.spec_id,
+              spec_name: spec.spec_name,
+              spec_type: spec.spec_type
+            }
+            const _value = {
+              spec_value: spec.spec_value,
+              spec_value_id: spec.spec_value_id,
+              spec_value_img: {
+                original: spec.spec_image,
+                thumbnail: spec.thumbnail
+              }
+            }
             spec_value_ids.push(spec.spec_value_id)
-            const _spec = JSON.parse(JSON.stringify(spec))
-            const _specs = specMap.get(spec.spec_id) || []
-            if (!_specs[0]) {
-              specMap.set(spec.spec_id, [_spec])
-            } else if (_specs.findIndex(item => item.spec_value_id === _spec.spec_value_id) === -1) {
-              _specs.push(_spec)
+            if(_specIndex === -1){
+              specList.push({..._spec, valueList: [{..._value}]})
+            }else if(specList[_specIndex]['valueList'].findIndex(_value => _value['spec_value_id'] === spec['spec_value_id']) === -1) {
+              specList[_specIndex]['valueList'].push({ ..._value })
             }
           })
-          console.log(spec_values.join(' - '))
-          // console.log(spec_value_ids.join('-'))
           this.skuMap.set(spec_value_ids.join('-'), sku)
         })
-        specMap.forEach((value, key, map) => {
-          this.specList.push(value)
-        })
-        console.log('skuMap: ', this.skuMap)
-        console.log('specMap: ', specMap)
-        console.log('skuList: ', response)
+        this.specList = specList
+        // 初始化规格
+        this.initSpec()
       })
     },
     methods: {
+      /** 初始化规格 */
+      initSpec() {
+        const _selectedSpecVals = []
+        this.specList.forEach(spec => {
+          spec.valueList.forEach((val, index) => {
+            if (index === 0) {
+              val.selected = true
+              this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
+              _selectedSpecVals.push(val.spec_value_id)
+            }
+          })
+        })
+        this.handleSelectedSku()
+      },
+      /** 选择规格 */
+      handleClickSpec(spec, specIndex, spec_val) {
+        if (spec.spec_type === 1 ) {
+          this.$emit('spec-img-change', JSON.parse(JSON.stringify(spec_val.spec_value_img)))
+        }
+        if (spec_val.selected) return
+        spec.valueList.map(item => {
+          item.selected = item.spec_value_id === spec_val.spec_value_id
+          return item
+        })
+        this.$set(this.specList, specIndex, spec)
+        this.selectedSpecMap.set(spec.spec_id, spec_val.spec_value_id)
+        this.handleSelectedSku()
+      },
       /** 购买数量增加减少 */
       handleBuyNumChanged(symbol) {
-        const isAdd = symbol === '+'
-        if (isAdd) {
-          this.buyNum += 1
+        if (symbol === '+') {
+          const { quantity } = this.selectedSku
+          if (quantity === 0) {
+            this.$message.error('该规格暂时缺货！')
+          } else if (this.buyNum >= quantity) {
+            this.$message.error('超过最大库存！')
+          } else {
+            this.buyNum += 1
+          }
         } else {
           if (this.buyNum < 2) {
             this.$message.error('不能再少啦！')
-            return false
+          } else {
+            this.buyNum -= 1
           }
-          this.buyNum -= 1
         }
+      },
+      /** 根据已选规格选出对应的sku */
+      handleSelectedSku() {
+        const spec_vals = []
+        this.selectedSpecMap.forEach((value, key, map) => spec_vals.push(value))
+        const sku = this.skuMap.get(spec_vals.join('-'))
+        this.selectedSku = sku
+        this.goodsInfo = { ...this.goodsInfo, ...sku }
+        this.buyNum = sku.quantity === 0 ? 0 : 1
+      },
+      /** 立即购买 */
+      handleBuyNow() {},
+      /** 加入购物车 */
+      handleAddToCart() {
+        const { num } = this
+        const { sku_id } = this.selectedSku
+        API_Trade.addToCart(sku_id, num).then(response => {
+          this.$confirm('加入购物车成功！要去看看吗？', () => {
+            this.$router.push({ path: '/checkout' })
+          })
+        })
       }
     }
   }
@@ -102,8 +189,8 @@
 
 <style type="text/scss" lang="scss" scoped>
   .pro-name, .pro-details {
-    background: url(../../assets/images/icons-goods.png) repeat-x;
-    background-position: 0 bottom;
+    background: url(../../assets/images/icons-goods.png) repeat-x 0 bottom;
+    padding-bottom: 15px;
   }
   .goods-info {
     padding-left: 30px;
@@ -120,7 +207,6 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
-        padding-bottom: 20px;
       }
     }
     .pro-details {
@@ -204,5 +290,39 @@
     width: 307px;
     min-height: 33px;
     line-height: 33px;
+  }
+  .pro-spec { margin-top: 10px }
+  .spec-val-btn {
+    position: relative;
+    border: 2px solid #e2e1e3;
+    color: black;
+    padding: 10px 15px;
+    margin: 0 5px 5px 0;
+    cursor: pointer;
+    &.selected {
+      border-color: #f42424;
+      .icon-spec-selected{ display: block }
+    }
+    &.spec-image {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 25px;
+      img { width: 100%; height: 100% }
+      .spec-text {
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        margin-left: -12px;
+      }
+    }
+    .icon-spec-selected {
+      position: absolute;
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJUExURUxpcf8AN////7f4NBoAAAABdFJOUwBA5thmAAAAMUlEQVQI103MAQ4AMAQEQev/j66i6YrEXIKIX9jY2NjYyDmhZnlCo5rdyWvebfYDVAcSmABbA7WD+QAAAABJRU5ErkJggg==)  ;
+      right: 0;
+      bottom: 0;
+      display: none;
+      width: 12px;
+      height: 12px;
+    }
   }
 </style>
