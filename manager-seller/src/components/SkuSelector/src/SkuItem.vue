@@ -44,6 +44,7 @@
                 style="text-align: center; margin-top: 10px;"
                 :key="index"
                 :action="BASE_IMG_URL"
+                :show-file-list="false"
                 :on-success="getImgUrl"
                 :on-progress="upLoading"
                 :before-upload="beforeImgUpload">
@@ -282,6 +283,7 @@
               })
             }
           })
+          this.$emit('updateSkuInfo', this.skuInfo)
         }
       },
 
@@ -431,12 +433,13 @@
       getImgUrl(response, file, fileList) {
         this.upLoadStatus = false
         /** 更新skuInfo数据 */
-        let _arr = cloneObj(this.skuInfo[this.activeSkuItemIndex])
-        this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_image', response.url)
-        this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_type', 1)
-        this.$set(this.skuInfo, this.activeSkuItemIndex, _arr)
-
-        this.$emit('updateSkuInfo', this.skuInfo)
+        if (this.activeSkuItemIndex === 0) {
+          let _arr = cloneObj(this.skuInfo[this.activeSkuItemIndex])
+          this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_image', response.url)
+          this.$set(_arr.value_list[this.activeSkuValIndex], 'spec_type', 1)
+          this.$set(this.skuInfo, this.activeSkuItemIndex, _arr)
+          this.$emit('updateSkuInfo', this.skuInfo)
+        }
       }
     }
   }
