@@ -1,11 +1,9 @@
 import GradeEditor from './GradeEditor'
-import CategoryPicker from './CategoryPicker'
 import ShopPicker from './ShopPicker'
 import UE from './UE'
 
 const components = {
   GradeEditor,
-  CategoryPicker,
   ShopPicker
 }
 
@@ -19,7 +17,6 @@ export default components
 
 export {
   GradeEditor,
-  CategoryPicker,
   ShopPicker,
   UE
 }
