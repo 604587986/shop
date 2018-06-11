@@ -64,10 +64,10 @@
     },
     head() {
 		  return {
-		    title: `${this.goods.goods_name}-Javashop多店铺示例商城`,
+		    title: `${this.goods.page_title}-Javashop多店铺示例商城`,
         meta: [
-          { hid: 'keywords', name: 'keywords', content: '最好的Java网店系统,Java多用户商城,Java商城定制开发' },
-          { hid: 'description', name: 'description', content: `${this.goods.goods_name}-Javashop多店铺示例商城` },
+          { hid: 'keywords', name: 'keywords', content: this.goods.meta_keywords },
+          { hid: 'description', name: 'description', content: `${this.goods.meta_description}-Javashop多店铺示例商城` },
           { 'http-equiv': 'mobile-agent', content: `format=xhtml; url=/goods?goods_id=${this.goods.goods_id}` },
           { 'http-equiv': 'mobile-agent', content: `format=html5; url=/goods?goods_id=${this.goods.goods_id}` }
         ]
