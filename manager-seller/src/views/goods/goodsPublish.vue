@@ -268,9 +268,9 @@
                 placeholder="请选择">
                 <el-option
                   v-for="option in goods_params_list.option_list"
-                  :key="option.value"
-                  :label="option.label"
-                  :value="option.value">
+                  :key="option"
+                  :label="option"
+                  :value="option">
                 </el-option>
               </el-select>
             </el-form-item>

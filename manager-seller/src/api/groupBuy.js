@@ -75,7 +75,7 @@ export function addGroupBuyGoods(params) {
       url: '/promotion/group-buy-goods',
       method: 'post',
       loading: false,
-      headers: { 'Content-type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       data: new GroupBuyModel.GroupBuyDetails().params(params)
     }).then(response => {
       resolve(response)
