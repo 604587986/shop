@@ -206,7 +206,7 @@
       },
       /** 删除 */
       handleDelete(sku) {
-        this.$layer.confirm('确认要删除这个货品吗？', () => {
+        this.$confirm('确认要删除这个货品吗？', () => {
           this.deleteSkuItem(sku.sku_id).then(response => {
             this.$message.success('删除成功！')
           })
@@ -214,7 +214,7 @@
       },
       /** 批量删除 */
       handleBatchDelete() {
-        this.$layer.confirm('确认要删除这些货品吗？', () => {
+        this.$confirm('确认要删除这些货品吗？', () => {
           // 筛选出已选中的
           const _sku_list = this.skuList.filter(item => item.checked).map(item => item.sku_id)
           this.deleteSkuItem(_sku_list).then(response => {
@@ -224,7 +224,7 @@
       },
       /** 清空购物车 */
       handleCleanCart() {
-        this.$layer.confirm('确认要清空购物车吗？', () => {
+        this.$confirm('确认要清空购物车吗？', () => {
           this.cleanCart().then(() => this.$message.success('购物车已清空！'))
         })
       },

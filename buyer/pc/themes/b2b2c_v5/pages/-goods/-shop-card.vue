@@ -5,15 +5,15 @@
     <div class="shop-rate">
       <div class="rate-item">
         <h5>描述</h5>
-        <span>{{ 4.5 }}分</span>
+        <span>{{ shopBaseInfo.shop_description_credit }}分</span>
       </div>
       <div class="rate-item">
         <h5>服务</h5>
-        <span>{{ 4.5 }}分</span>
+        <span>{{ shopBaseInfo.shop_service_credit }}分</span>
       </div>
       <div class="rate-item">
         <h5>发货</h5>
-        <span>{{ 4.5 }}分</span>
+        <span>{{ shopBaseInfo.shop_delivery_credit }}分</span>
       </div>
     </div>
     <div class="shop-btns">
@@ -86,11 +86,13 @@
       width: 190px;
       height: 50px;
       margin-left: 10px;
+      margin-top: 5px;
     }
     .shop-rate {
       display: flex;
       justify-content: space-between;
       padding: 0 10px;
+      margin-top: 8px;
       .rate-item {
         width: (210px - 20px) / 3;
         text-align: center;

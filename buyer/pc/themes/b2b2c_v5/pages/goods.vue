@@ -2,12 +2,16 @@
   <div id="goods">
     <bread-nav :goods="goods"/>
     <div class="content">
-      <goods-zoom :images="goods.gallery_list" :cur-img="curImg"/>
-      <goods-info :goods="goods"/>
+      <!--商品相册-->
+      <goods-zoom :images="goods.gallery_list" :spec-img="specImage"/>
+      <!--商品信息【包括规格、优惠券、促销等】-->
+      <goods-info :goods="goods" @spec-img-change="(img) => { this.specImage = img }"/>
+      <!--店铺卡片-->
       <shop-card :shop-id="goods.seller_id"/>
     </div>
     <div class="details">
       <div class="inner w">
+        <!--店铺标签商品推荐-->
         <goods-tags :shop-id="goods.seller_id"/>
         <div class="detail-container">
           <div class="detail-tabs">
@@ -20,9 +24,13 @@
           </div>
           <div class="detail-content">
             <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.goods_intro"></div>
+            <!--商品参数-->
             <goods-params v-show="curTab === '规格参数'" :goods-params="goods.goods_params"/>
+            <!--商品评论-->
             <goods-comments v-show="curTab === '商品评论'"/>
+            <!--商品咨询-->
             <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
+            <!--销售记录-->
             <sales-record v-show="curTab === '销售记录'" />
           </div>
         </div>
@@ -69,14 +77,13 @@
     data() {
 		  return {
         goods: '',
-        /** 当前要展示的图片 */
-        curImg: '',
+        /** 规格图片 */
+        specImage: '',
         tabs: ['商品详情', '规格参数', '商品评论', '商品咨询', '销售记录'].map((item, index) => ({ title: item, active: index === 0 })),
         curTab: '商品详情'
       }
     },
     mounted() {
-		  console.log('goods: ', this)
       // 用于服务端记录浏览次数，每次+1【服务端去重】
 		  API_Goods.visitGoods(this.goods.goods_id)
     },

@@ -134,7 +134,7 @@
       },
       /** 删除地址 */
       handleDeleteAddress(row) {
-        this.$layer.confirm('确认要删除这个地址吗？', () => {
+        this.$confirm('确认要删除这个地址吗？', () => {
           this.deleteAddress(row.addr_id).then(() => {
             this.$message.success('删除成功！')
             this.getAddress()

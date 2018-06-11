@@ -28,7 +28,7 @@ export function getCarts(show_type = 'all') {
 export function addToCart(sku_id, num = 1, activity_id) {
   return request({
     url: 'trade/carts',
-    method: 'get',
+    method: 'post',
     params: {
       sku_id,
       num,
