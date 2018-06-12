@@ -86,8 +86,15 @@
         /** 会员注册 表单规则 */
         registerRules: {
           username: [
-            { required: true, message: '请输入会员昵称', trigger: 'blur' },
+            this.MixinRequired('请输入账户名！'),
             { min: 2, max: 10, message: '长度在 2 到 10 个字符' },
+            { validator: (rule, value, callback) => {
+                if (!/[^\d]+/.test(value)) {
+                  callback(new Error('账户名不能为纯数字！'))
+                } else {
+                  callback()
+                }
+              } },
             { validator: (rule, value, callback) => {
               API_Passport.checkUsernameRepeat(value).then(response => {
                   if (response.exist) {
@@ -122,7 +129,7 @@
               } }
           ],
           mobile: [
-            { required: true, message: '请输入手机号码', trigger: 'blur' },
+            this.MixinRequired('请输入手机号码！'),
             { validator: (rule, value, callback) => {
               if (!regExp.mobile.test(value)) {
                 callback(new Error('手机格式有误！'))
@@ -140,8 +147,8 @@
               }
             } }
           ],
-          vali_code: [{ required: true, message: '请输入图片验证码' }],
-          sms_code: [{ required: true, message: '请输入短信验证码' }]
+          vali_code: [this.MixinRequired('请输入图片验证码！')],
+          sms_code: [this.MixinRequired('请输入短信验证码！')]
         },
         requiredMobile: '',
         requiredValCode: '',
