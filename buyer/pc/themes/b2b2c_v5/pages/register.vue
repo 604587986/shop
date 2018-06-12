@@ -63,7 +63,7 @@
   Vue.use(Input)
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'register',
     layout: 'full',
@@ -89,12 +89,19 @@
             this.MixinRequired('请输入账户名！'),
             { min: 2, max: 10, message: '长度在 2 到 10 个字符' },
             { validator: (rule, value, callback) => {
-                if (!/[^\d]+/.test(value)) {
-                  callback(new Error('账户名不能为纯数字！'))
-                } else {
-                  callback()
-                }
-              } },
+              if (!RegExp.userName.test(value)) {
+                callback(new Error('只支持汉字、字母、数字、“-”、“_”的组合！'))
+              } else {
+                callback()
+              }
+            } },
+            { validator: (rule, value, callback) => {
+              if (!/[^\d]+/.test(value)) {
+                callback(new Error('账户名不能为纯数字！'))
+              } else {
+                callback()
+              }
+            } },
             { validator: (rule, value, callback) => {
               API_Passport.checkUsernameRepeat(value).then(response => {
                   if (response.exist) {
@@ -110,7 +117,7 @@
           password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
             { validator: (rule, value, callback) => {
-              if (!regExp.password.test(value)) {
+              if (!RegExp.password.test(value)) {
                 callback(new Error('密码应为6-20位数字、英文字母！'))
               } else {
                 callback()
@@ -131,7 +138,7 @@
           mobile: [
             this.MixinRequired('请输入手机号码！'),
             { validator: (rule, value, callback) => {
-              if (!regExp.mobile.test(value)) {
+              if (!RegExp.mobile.test(value)) {
                 callback(new Error('手机格式有误！'))
               } else {
                 API_Passport.checkMobileRepeat(value).then(response => {

@@ -64,7 +64,7 @@
 <script>
   import Vue from 'vue'
   import { mapActions, mapGetters } from 'vuex'
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   import EnRegionPicker from "@/components/RegionPicker";
   export default {
     name: 'shipping-address',
@@ -82,7 +82,7 @@
           mobile: [
             this.MixinRequired('请输入联系方式！'),
             { validator: (rule, value, callback) => {
-              if (!regExp.mobile.test(value)) {
+              if (!RegExp.mobile.test(value)) {
                 callback(new Error('手机格式有误！'))
               } else {
                 callback()

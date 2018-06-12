@@ -68,7 +68,7 @@
   import { mapActions, mapGetters } from 'vuex'
   import * as API_Common from '@/api/common'
   import * as API_Safe from '@/api/safe'
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'change-mobile',
     data() {
@@ -93,7 +93,7 @@
             {
               required: true,
               validator: (rule, value, callback) => {
-                if (!regExp.mobile.test(value)) {
+                if (!RegExp.mobile.test(value)) {
                   callback(new Error('手机号码格式不正确！'))
                 } else {
                   callback()

@@ -3,7 +3,7 @@
     <div class="find-container w">
       <h1>找回密码<span>请您填写下面的表单来修改密码</span></h1>
       <div class="find-content">
-        <div v-show="step === 1" class="find-item mobile">
+        <div v-show="step === 1" class="find-item RegExp">
           <el-form :model="validAccountForm" :rules="validAccountRules" ref="validAccountForm" label-width="120px" style="width: 370px">
             <el-form-item label="账户名：" prop="account" :error="accountError">
               <el-input v-model="validAccountForm.account"></el-input>
@@ -18,10 +18,10 @@
             </el-form-item>
           </el-form>
         </div>
-        <div v-show="step === 2" class="find-item mobile">
+        <div v-show="step === 2" class="find-item RegExp">
           <el-form :model="validMobileForm" :rules="validMobileRules" ref="validMobileForm" label-width="120px" style="width: 370px">
             <el-form-item label="手机号码：">
-              <span>{{ validMobileForm.mobile }}</span>
+              <span>{{ validMobileForm.RegExp }}</span>
             </el-form-item>
             <el-form-item label="图片验证码：" prop="img_code" class="vali-img">
               <el-input v-model="validMobileForm.img_code" :maxlength="4">
@@ -38,7 +38,7 @@
             </el-form-item>
           </el-form>
         </div>
-        <div v-show="step === 3" class="find-item mobile">
+        <div v-show="step === 3" class="find-item RegExp">
           <el-form :model="changePasswordForm" :rules="changePasswordRules" ref="changePasswordForm" label-width="140px">
             <el-form-item label="请输入密码：" prop="password">
               <el-input v-model="changePasswordForm.password" placeholder="请输入密码" type="password"></el-input>
@@ -62,7 +62,7 @@
   import { Form, FormItem, Input } from 'element-ui'
   import * as API_Passport from '@/api/passport'
   import * as API_Common from '@/api/common'
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
 
   Vue.use(Form)
   Vue.use(FormItem)
@@ -101,7 +101,7 @@
             this.MixinRequired('请输入新的登录密码！'),
             {
               validator: (rule, value, callback) => {
-                if (!regExp.password.test(value)) {
+                if (!RegExp.password.test(value)) {
                   callback(new Error('密码应为6-20位英文或数字！'))
                 } else {
                   callback()
@@ -145,7 +145,7 @@
             const { uuid } = this
             const { account, img_code } = this.validAccountForm
             API_Passport.validAccount(uuid, img_code, account).then((response) => {
-              this.validMobileForm.mobile = response.mobile
+              this.validMobileForm.RegExp = response.RegExp
               this.validMobileForm.uname = response.uname
               this.validMobileForm.uuid = response.uuid
               this.step = 2
@@ -275,7 +275,7 @@
       position: relative;
       width: 794px;
     }
-    .find-item.mobile {
+    .find-item.RegExp {
       /deep/ .vali-img .el-input-group__append { padding: 0 }
       img { height: 38px; cursor: pointer }
       .next-btn { width: 250px }

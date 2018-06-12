@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
   import EnRegionPicker from "@/components/RegionPicker";
   export default {
@@ -96,7 +96,7 @@
             req_rule('请输入纳税人识别号！'),
             {
               validator: (rule, value, callback) => {
-                if (!regExp.TINumber.test(value)) {
+                if (!RegExp.TINumber.test(value)) {
                   callback(new Error('纳税人识别号格式有误！'))
                 } else {
                   callback()

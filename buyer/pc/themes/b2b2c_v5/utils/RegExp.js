@@ -22,3 +22,6 @@ export const TINumber = /^((\d{6}[0-9A-Z]{9})|([0-9A-Za-z]{2}\d{6}[0-9A-Za-z]{10
 
 /** 身份证 */
 export const cardID = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+
+/** 用户名【汉字、字母、数字、“-”、“_”的组合】 */
+export const userName = /^[A-Za-z0-9_\-\u4e00-\u9fa5]$/

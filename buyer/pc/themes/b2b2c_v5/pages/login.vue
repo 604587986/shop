@@ -128,10 +128,9 @@
 
 <script>
   import { mapActions } from 'vuex'
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
-  import { mobile } from "@/utils/RegExp";
   export default {
     name: 'login',
     layout: 'full',
@@ -160,7 +159,7 @@
           if (!mobile) {
             this.$message.error('请输入手机号码！')
             reject()
-          } else if (!regExp.mobile.test(mobile)) {
+          } else if (!RegExp.mobile.test(mobile)) {
             this.$message.error('手机号码格式有误！')
             reject()
           } else if (!captcha) {
@@ -185,7 +184,7 @@
         const login_type = this.login_type
         const form = login_type === 'quick' ? this.quickForm : this.accountForm
         if (login_type === 'quick') {
-          if (!form.mobile || !regExp.mobile.test(form.mobile) || !form.sms_code) {
+          if (!form.mobile || !RegExp.mobile.test(form.mobile) || !form.sms_code) {
             this.$message.error('表单填写有误，请检查！')
             return false
           }
