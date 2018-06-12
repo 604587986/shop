@@ -93,22 +93,22 @@
           <h4>商品信息</h4>
           <div>
             <el-form-item label="商品名称：" prop="goods_name">
-              <el-input v-model="baseInfoForm.goods_name" placeholder="3-60个字符"></el-input>
+              <el-input v-model="baseInfoForm.goods_name" maxlength="60" minlength="3" placeholder="3-60个字符"></el-input>
             </el-form-item>
             <el-form-item label="商品编号：" prop="sn">
               <el-input v-model="baseInfoForm.sn"></el-input>
             </el-form-item>
             <el-form-item label="市场价格：" prop="mktprice">
-              <el-input v-model.number="baseInfoForm.mktprice"></el-input>
+              <el-input v-model="baseInfoForm.mktprice"></el-input>
             </el-form-item>
             <el-form-item label="商品价格：" prop="price">
-              <el-input v-model.number="baseInfoForm.price"></el-input>
+              <el-input v-model="baseInfoForm.price"></el-input>
             </el-form-item>
             <el-form-item label="成本价格：" prop="cost" >
-              <el-input v-model.number="baseInfoForm.cost"></el-input>
+              <el-input v-model="baseInfoForm.cost"></el-input>
             </el-form-item>
             <el-form-item label="商品重量(kg)：" prop="weight">
-              <el-input v-model.number="baseInfoForm.weight"></el-input>
+              <el-input v-model="baseInfoForm.weight"></el-input>
             </el-form-item>
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
@@ -178,8 +178,7 @@
                 v-model="baseInfoForm.template_id"
                 placeholder="请选择运费模板"
                 v-show="baseInfoForm.goods_transfee_charge === 0 "
-                @change="changeTpl"
-              >
+                @change="changeTpl">
                 <el-option
                   v-for="item in tplList"
                   :key="item.tpl_id"
@@ -254,8 +253,7 @@
               :key="goods_params_list.param_id"
               :label="`${goods_params_list.param_name}：`"
               :prop="'goods_params_list.' + index + '.param_value'"
-              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'blur' }"
-            >
+              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'blur' }">
               <el-input
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
@@ -328,6 +326,7 @@
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
   import { CategoryPicker, SkuSelector, UE } from '@/components'
+  import { validatePrice } from '@/utils/validate'
   import Sortable from 'sortablejs'
   export default {
     name: 'goodsPublish',
@@ -337,19 +336,45 @@
       [UE.name]: UE
     },
     data() {
+      var checkSn = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('商品编号不能为空'))
+        }
+        setTimeout(() => {
+          if (!/^[a-zA-Z0-9_\\-]+$/g.test(value)) {
+            callback(new Error('请输入数字、字母、下划线或者中划线'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+
       var checkMarket = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('市场价格不能为空'))
         }
         setTimeout(() => {
-          if (!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'))
+          if (!validatePrice(value)) {
+            callback(new Error('请输入正整数或者两位小数'))
           } else {
             if (value < this.baseInfoForm.cost) {
-              callback(new Error('市场价格必须大于成本价格'))
+              callback(new Error('市场价格必须大于等于成本价格'))
             } else {
               callback()
             }
+          }
+        }, 1000)
+      }
+
+      var checkPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('商品价格不能为空'))
+        }
+        setTimeout(() => {
+          if (!validatePrice(value)) {
+            callback(new Error('请输入正整数或者两位小数'))
+          } else {
+            callback()
           }
         }, 1000)
       }
@@ -359,14 +384,27 @@
           return callback(new Error('成本价格不能为空'))
         }
         setTimeout(() => {
-          if (!Number.isInteger(value)) {
+          if (!validatePrice(value)) {
             callback(new Error('请输入数字值'))
           } else {
             if (value > this.baseInfoForm.mktprice) {
-              callback(new Error('市场价格必须大于成本价格'))
+              callback(new Error('市场价格必须大于等于成本价格'))
             } else {
               callback()
             }
+          }
+        }, 1000)
+      }
+
+      var checkWeight = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('重量不能为空'))
+        }
+        setTimeout(() => {
+          if (!validatePrice(value)) {
+            callback(new Error('请输入正整数或者两位小数'))
+          } else {
+            callback()
           }
         }, 1000)
       }
@@ -581,7 +619,7 @@
             { required: true, message: '请输入商品名称', trigger: 'blur' }
           ],
           sn: [
-            { required: true, message: '请输入商品编号', trigger: 'blur' }
+            { validator: checkSn, trigger: 'blur' }
           ],
           mktprice: [
             { required: true, message: '请输入市场价格', trigger: 'blur' },
@@ -589,7 +627,7 @@
           ],
           price: [
             { required: true, message: '请输入商品价格', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkPrice, trigger: 'blur' }
           ],
           cost: [
             { required: true, message: '请输入成本价格', trigger: 'blur' },
@@ -597,7 +635,7 @@
           ],
           weight: [
             { required: true, message: '请输入商品重量', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkWeight, trigger: 'blur' }
           ],
           goods_gallery: [
             { required: true, message: '请选择商品相册', trigger: 'change' }
@@ -630,10 +668,6 @@
           } else if (vm.currentStatus === 2 && vm.$route.query.goodsid) {
             vm.GET_GoodDraftData()
           }
-          /** 查询品牌列表 */
-          vm.getGoodsBrandList()
-          /** 运费模板列表 */
-          vm.getTplList()
         } else {
           vm.GET_NextLevelCategory()
         }
@@ -662,8 +696,12 @@
           this.$message.error('请选择商品分类')
           return
         } else {
-          // 获取改商城分类下 商品参数信息
+          /** 获取改商城分类下 商品参数信息 */
           this.GET_GoodsParams()
+          /** 查询品牌列表 */
+          this.getGoodsBrandList()
+          /** 运费模板列表 */
+          this.getTplList()
         }
 
         /** 2级校验 */
@@ -689,19 +727,19 @@
       saveDraft() {
         const _params = this.generateFormData(this.baseInfoForm)
         /** 规格校验 */
-        if (!this.skuFormVali()) {
+        if (!this.skuFormVali(true)) {
           return
         }
         if (this.activeGoodsId) {
           this.activeGoodsId = this.activeGoodsId || 1
           /** 修改草稿箱商品 */
-          API_goods.editDraftGoods(this.activeGoodsId, _params).then(response => {
+          API_goods.editDraftGoods(this.activeGoodsId, _params).then(() => {
             this.$message.success('修改草稿箱商品成功')
             this.$router.push({ path: '/goods/draft-list' })
           })
         } else {
           /** 保存草稿操作 */
-          API_goods.saveDraft(_params).then(response => {
+          API_goods.saveDraft(_params).then(() => {
             this.$message.success('保存草稿成功')
             this.$router.push({ path: '/goods/draft-list' })
           })
@@ -822,6 +860,10 @@
               exchange_point: 0
             }
           }
+          /** 查询品牌列表 */
+          this.getGoodsBrandList()
+          /** 运费模板列表 */
+          this.getTplList()
           /** 查询商品sku信息 */
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
@@ -899,14 +941,18 @@
           if (!this.baseInfoForm.sku_list) {
             this.baseInfoForm.sku_list = []
           }
+          /** 查询品牌列表 */
+          this.getGoodsBrandList()
+          /** 运费模板列表 */
+          this.getTplList()
           /** 查询草稿箱sku信息 */
           API_goods.draftSku(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
             this.skuList = response.map(key => {
               if (key && key.spec_list && Array.isArray(key.spec_list)) {
                 const spec_list = key.spec_list.map(item => {
-                  let { spec_id, spec_image, spec_type, spec_value, spec_value_id } = item
-                  return { spec_id, spec_image, spec_type, spec_value, spec_value_id }
+                  let { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name } = item
+                  return { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name }
                 })
                 let { cost, quantity, sn, weight } = key
                 const price = key.goods_price
@@ -1125,7 +1171,7 @@
       },
 
       /** 商品规格选择器校验 */
-      skuFormVali() {
+      skuFormVali(isDraft) {
         /** 如果并未选择规格 */
         if (Array.isArray(this.baseInfoForm.sku_list) && this.baseInfoForm.sku_list.length === 0) {
           return true
@@ -1142,6 +1188,10 @@
             this.$message.info({ message: '已取消自动生成' })
           })
           return false
+        }
+        if (isDraft) {
+          this.productSn = true
+          return true
         }
         /** 规格值空校验 */
         let _result = false

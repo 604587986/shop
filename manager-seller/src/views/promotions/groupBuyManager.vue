@@ -4,8 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <div class="conditions">
@@ -104,10 +103,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 当前团购状态*/
         currentGroupBuyStatus: 0,
@@ -164,6 +163,7 @@
         this.GET_GroupGoodsList()
       },
 
+      /** 获取团购商品列表 */
       GET_GroupGoodsList() {
         this.loading = true
         API_groupBuy.getGroupBuyGoodsList(this.params).then(response => {
