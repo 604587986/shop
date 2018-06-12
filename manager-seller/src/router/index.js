@@ -26,9 +26,9 @@ export const constantRouterMap = [
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
   {
-    path: '',
+    path: '/',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/dashboard',
     children: [{
       path: 'dashboard',
       component: _import('dashboard/index'),
