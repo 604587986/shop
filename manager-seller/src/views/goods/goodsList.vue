@@ -36,8 +36,8 @@
             <span>店铺分组:</span>
             <en-category-picker size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
           </div>
-          <el-button @click="publishGoods" type="success" class="conditions">发布商品</el-button>
-          <el-button @click="gotoRecycle" type="primary" class="conditions">回收站</el-button>
+          <el-button @click="publishGoods" type="primary"  class="conditions">发布商品</el-button>
+          <el-button @click="gotoRecycle"  type="primary" class="conditions">回收站</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
@@ -63,21 +63,18 @@
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus"/>
-        <el-table-column label="操作" min-width="200">
+        <el-table-column label="操作" min-width="200" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="success"
               @click="handleEditGoods(scope.row)">编辑
             </el-button>
             <el-button
-              size="mini"
               type="danger"
               :disabled="scope.row.market_enable === 1 "
               @click="handleDeleteGoods(scope.row)">删除
             </el-button>
             <el-button
-              size="mini"
               type="primary"
               @click="handleStockGoods(scope.row)">库存
             </el-button>
@@ -96,7 +93,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="30%" class="pop-sku">
+    <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="35%" class="pop-sku">
       <div align="center">
         <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
           <el-form-item label="库存" prop="quantity" >
@@ -114,7 +111,7 @@
                 <el-input v-model="scope.row.quantity" auto-complete="off" ></el-input>
               </template>
             </el-table-column>
-            <el-table-column  prop="deliver_goods_quantity" label="待发货数"  />
+            <el-table-column  prop="deliver_goods_quantity" label="待发货数" />
           </template>
         </en-tabel-layout>
       </div>
@@ -405,6 +402,26 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+
+  .pop-sku {
+    /deep/ .el-table__body-wrapper {
+      max-height: 400px;
+      overflow-y: scroll;
+    }
+  }
+
+
+  /deep/ div.cell {
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    display:-webkit-box;
+
+    -webkit-box-orient:vertical;
+
+    -webkit-line-clamp:2;
   }
 
 </style>

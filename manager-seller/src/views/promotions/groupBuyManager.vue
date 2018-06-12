@@ -28,7 +28,7 @@
       <template slot="table-columns">
         <el-table-column label="商品图片" >
           <template slot-scope="scope">
-            <img :src="scope.row.goods_image" class="goods-image"/>
+            <img :src="scope.row.group_buy_image" class="goods-image"/>
           </template>
         </el-table-column>
         <el-table-column label="团购名称" >
@@ -39,28 +39,29 @@
         </el-table-column>
         <el-table-column  label="活动信息" >
           <template slot-scope="scope">
-            <div>{{ scope.row.alias }}</div>
-            <div>{{ scope.row.start_time | unixToDate }} - {{ scope.row.end_time | unixToDate }}</div>
+            <div>{{ scope.row.activity_name }}</div>
+            <div>{{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
+              - {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
+            </div>
           </template>
         </el-table-column>
-        <el-table-column prop="is_signed" label="已团购" />
+        <!--已团购数量-->
+        <el-table-column prop="buy_num" label="已团购" />
         <el-table-column label="活动状态" width="120">
           <template slot-scope="scope">
-            <span v-if="scope.row.examine_status == 1">已审核</span>
-            <span v-if="scope.row.examine_status == 0">已驳回</span>
-            <span v-if="scope.row.examine_status == 2">审核中</span>
+            <span v-if="scope.row.activity_status == 1">已审核</span>
+            <span v-if="scope.row.activity_status == 0">已驳回</span>
+            <span v-if="scope.row.activity_status == 2">审核中</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
-              size="mini"
-              type="primary"
+              type="success"
               v-if="scope.row.examine_status !== 1"
               @click="handleEditGroupGoods(scope.row)">编辑
             </el-button>
             <el-button
-              size="mini"
               type="danger"
               v-if="scope.row.examine_status !== 1"
               @click="handleDeleteGroupGoods(scope.row)">删除
@@ -168,9 +169,9 @@
         API_groupBuy.getGroupBuyGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
         })
@@ -183,17 +184,13 @@
 
       /** 编辑团购商品 */
       handleEditGroupGoods(row) {
-        this.$router.push({ path: `edit-group-buy-goods/${row.goods_id}` })
+        this.$router.push({ path: `edit-group-buy-goods/${row.gb_id}` })
       },
 
       /** 删除团购商品 */
       handleDeleteGroupGoods(row) {
-        this.$confirm('确认删除此团购商品, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          API_groupBuy.deleteGroupBuyGoods(row.goods_id, row).then(() => {
+        this.$confirm('确认删除此团购商品, 是否继续?', '提示', { type: 'warning' }).then(() => {
+          API_groupBuy.deleteGroupBuyGoods(row.gb_id, {}).then(() => {
             this.GET_GroupGoodsList()
             this.$message.success('删除团购商品成功！')
           })

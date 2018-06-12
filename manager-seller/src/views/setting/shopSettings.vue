@@ -57,7 +57,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" @click="handleSaveShopData('shopDataForm')">保存修改</el-button>
+        <el-button type="primary" @click="handleSaveShopData('shopDataForm')">保存修改</el-button>
       </el-form-item>
     </el-form>
   </div>

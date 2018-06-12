@@ -93,7 +93,6 @@
       <!--虚拟数量-->
       <el-form-item label="虚拟数量" prop="goods_virtual">
         <el-input
-          type="text"
           v-model.number="gruopBuyForm.goods_virtual"
           :style="{ width:inputLength +'px' }"
           placeholder="虚拟购买数量，只用于前台显示，不影响成交记录"></el-input>
@@ -102,7 +101,6 @@
       <!--限购数量-->
       <el-form-item label="限购数量" prop="goods_limit_buy">
         <el-input
-          type="text"
           v-model.number="gruopBuyForm.goods_limit_buy"
           :style="{ width:inputLength +'px' }"
           placeholder="每个买家ID可团购的最大数量，不限数量请填 '0'"></el-input>
@@ -333,6 +331,7 @@
         this.gruopBuyForm.the_area = 0
         API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(response => {
           this.$message.success('添加成功')
+          this.$router.push({ path: '/promotions/group-buy-manager' })
         })
       }
     }
@@ -343,6 +342,7 @@
   .el-form-item  {
     padding-left: 12%;
     border-bottom: 1px dotted #E6E6E6;
+    padding-bottom: 15px;
   }
   .bg-group-buy {
     background-color: #fff;
@@ -364,6 +364,10 @@
   }
   /deep/.el-select {
     width: 320px;
+  }
+  /*团购图片上传组件*/
+  .upload-demo {
+     width: 30%;
   }
 </style>
 

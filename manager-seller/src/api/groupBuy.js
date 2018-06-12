@@ -37,7 +37,7 @@ export function deleteGroupBuyGoods(ids, params) {
       url: `/promotion/group-buy-goods/${ids}`,
       method: 'delete',
       loading: false,
-      data: params
+      params
     }).then(response => {
       resolve(response)
     })
@@ -75,7 +75,7 @@ export function addGroupBuyGoods(params) {
       url: '/promotion/group-buy-goods',
       method: 'post',
       loading: false,
-      headers: { 'Content-type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       data: new GroupBuyModel.GroupBuyDetails().params(params)
     }).then(response => {
       resolve(response)

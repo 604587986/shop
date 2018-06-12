@@ -72,7 +72,7 @@
       </div>
     </el-form>
     <div style="text-align: center;">
-      <el-button type="success" @click="handleSignUp">确定报名</el-button>
+      <el-button type="primary" @click="handleSignUp">确定报名</el-button>
     </div>
     <en-goods-selector
       :show="showDialog"

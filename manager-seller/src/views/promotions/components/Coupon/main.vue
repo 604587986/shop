@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="新增优惠券" :visible.sync="couponShow" width="40%" align="center">
+  <el-dialog title="新增优惠券" :visible.sync="couponShow" width="30%">
     <el-form :model="couponForm" label-position="right" :rules="rules"  label-width="160px">
       <el-form-item label="优惠券名称：" prop="coupon_name">
         <el-input
@@ -17,7 +17,6 @@
       </el-form-item>
       <el-form-item label="使用期限：" style="text-align: left">
         <el-date-picker
-          key="1"
           v-model="couponForm.coupon_time_limit"
           type="daterange"
           range-separator="-"

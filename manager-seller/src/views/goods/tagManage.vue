@@ -3,21 +3,15 @@
     pagination
     :tableData="tableData"
     :stripe="false"
-    :loading="loading"
-  >
+    :loading="loading">
     <template slot="table-columns">
       <el-table-column prop="name" label="标签名称"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="addtag(scope.row)">标签商品设置
-          </el-button>
+          <el-button type="primary" @click="addtag(scope.row)">标签商品设置</el-button>
         </template>
       </el-table-column>
     </template>
-
     <el-pagination
       slot="pagination"
       v-if="pageData"
@@ -93,6 +87,9 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ div.toolbar {
+    display: none;
+  }
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
   }

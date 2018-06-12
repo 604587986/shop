@@ -8,7 +8,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button type="success" @click="handelAddGifts">新增</el-button>
+          <el-button type="primary" @click="handelAddGifts">新增</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
@@ -36,12 +36,10 @@
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="success"
               @click="handleEditGifts(scope.row)">修改
             </el-button>
             <el-button
-              size="mini"
               type="danger"
               @click="handleDeleteGifts(scope.row)">删除
             </el-button>

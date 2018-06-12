@@ -38,7 +38,6 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="primary"
               @click="handleWithdraw(scope.row)">查看
             </el-button>

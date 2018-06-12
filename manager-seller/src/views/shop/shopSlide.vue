@@ -46,7 +46,7 @@
               :on-success="uploadSuccess"
               :file-list="fileList"
               list-type="picture">
-              <el-button type="primary" size="mini" @click="uploadSlide(item)">
+              <el-button type="primary" @click="uploadSlide(item)">
                 上传
                 <i class="el-icon-upload el-icon--right"></i>
               </el-button>
@@ -64,7 +64,7 @@
         </li>
       </ul>
       <div class="save-btn">
-        <el-button type="success" size="medium" @click="POST_SaveSlide">保存</el-button>
+        <el-button type="primary" size="medium" @click="POST_SaveSlide">保存</el-button>
       </div>
     </div>
   </div>
@@ -198,8 +198,8 @@
 
   /*操作幻灯片*/
   .shopBanner-operaSlide {
+    padding-top: 40px;
     border-top: 1px solid #eee;
-    /*height: 300px;*/
     ul {
       display: flex;
       flex-wrap: nowrap;

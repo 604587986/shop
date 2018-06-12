@@ -14,7 +14,7 @@
           @click="handleDeleteRecycles()">批量删除
         </el-button>
         <el-button
-          type="success"
+          type="primary"
           :disabled="selectionids.length === 0"
           @click="handlReductionRecycles()">批量还原
         </el-button>
@@ -47,12 +47,10 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
-            size="mini"
-            type="success"
+            type="primary"
             @click="handlReductionRecycle(scope.row)">还原
           </el-button>
           <el-button
-            size="mini"
             type="danger"
             @click="handleDeleteRecycle(scope.$index, scope.row)">删除
           </el-button>

@@ -60,8 +60,6 @@
         API_logistics.getExpressCompanyList({}).then(response => {
           this.loading = false
           this.logisticsTableData = response.data
-        }).catch(error => {
-          this.$message.error(error)
         })
       },
 
@@ -81,8 +79,6 @@
         API_logistics.closeExpressPower(row.logistics_id, {}).then(response => {
           this.$message.success('关闭成功')
           this.GET_logisticsList()
-        }).catch(error => {
-          this.$message.error(error)
         })
       },
 
@@ -91,8 +87,6 @@
         API_logistics.openExpressPower(row.logistics_id, {}).then(response => {
           this.$message.success('开启成功')
           this.GET_logisticsList()
-        }).catch(error => {
-          this.$message.error(error)
         })
       }
     }

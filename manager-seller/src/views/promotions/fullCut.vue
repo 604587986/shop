@@ -11,7 +11,7 @@
         >
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
-              <el-button type="success" @click="handleAddFullCut">新增</el-button>
+              <el-button type="primary" @click="handleAddFullCut">新增</el-button>
             </div>
             <div class="toolbar-search">
               <en-table-search @search="searchEvent"/>
@@ -44,12 +44,10 @@
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
                 <el-button
-                  size="mini"
-                  type="primary"
+                  type="success"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
-                  size="mini"
                   type="danger"
                   @click="handleDeleteFullCut(scope.row)">删除
                 </el-button>
@@ -178,7 +176,7 @@
                         >
                           <div slot="toolbar" class="inner-toolbar">
                             <div class="toolbar-btns">
-                              <el-button type="success" @click="showGoodsSelector">选择商品</el-button>
+                              <el-button type="primary" @click="showGoodsSelector">选择商品</el-button>
                               <el-button type="danger" @click="cancelall">批量取消</el-button>
                             </div>
                           </div>
@@ -202,8 +200,7 @@
                             <el-table-column label="操作" width="150">
                               <template slot-scope="scope">
                                 <el-button
-                                  size="mini"
-                                  type="primary"
+                                  type="danger"
                                   @click="handleCancleJoin(scope.$index, scope.row)">取消参加
                                 </el-button>
                               </template>
@@ -218,7 +215,7 @@
             <!--提交按钮-->
             <div class="btn-submit">
               <el-form-item>
-                <el-button type="success" @click="handleSaveActivity('activityForm')">保存设置</el-button>
+                <el-button type="primary" @click="handleSaveActivity('activityForm')">保存设置</el-button>
               </el-form-item>
             </div>
           </el-form>
@@ -294,7 +291,7 @@
             if (!Number.isInteger(value)) {
               callback(new Error('请输入数字值'))
             } else if (value <= 0 || value >= 10) {
-              callback(new Error('不合法的打折'))
+              callback(new Error('打折数字只能在1-9之间'))
             } else {
               callback()
             }
@@ -918,7 +915,6 @@
             return {
               goods_id: key.goods_id,
               name: key.goods_name,
-              sku_id: key.sn,
               thumbnail: key.thumbnail
             }
           })

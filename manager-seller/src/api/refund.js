@@ -33,7 +33,7 @@ export function getRefundList(params) {
 export function getRefundDetails(sn) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/after-sales/refunds/{sn}',
+      url: `/after-sales/refunds/${sn}`,
       method: 'get',
       loading: false
     }).then(response => {

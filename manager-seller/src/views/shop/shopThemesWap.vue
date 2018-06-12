@@ -28,7 +28,7 @@
       </ul>
       <hr/>
       <div style="width: 100%;text-align: center;">
-        <el-button type="success" @click="POST_SaveCurrrentTpl">保存修改</el-button>
+        <el-button type="primary" @click="POST_SaveCurrrentTpl">保存修改</el-button>
       </div>
     </div>
     <div class="zoom-img" :class="{'zoom-img-show': zoom_img_show }">

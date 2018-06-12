@@ -54,7 +54,7 @@ export function getLimitTimeGoodsList(params) {
 export function getLimitTimeActivityDetails(ids, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/promotion/seckill-applys/${ids}`,
+      url: `/promotion/seckill-applys/${ids}/seckill`,
       method: 'get',
       loading: false,
       data: params

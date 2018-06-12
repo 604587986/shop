@@ -29,16 +29,14 @@
             <span>{{ scope.row.sign_condition }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="primary"
               v-if="scope.row.is_signed === 0"
               @click="handleSignUpTimeLimt(scope.row)">报名
             </el-button>
             <el-button
-              size="mini"
               type="primary"
               v-if="scope.row.is_signed === 1"
               @click="activityGoodsInfo(scope.row)">已报名

@@ -8,7 +8,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button @click="showaddShopNav" type="success">新增</el-button>
+          <el-button @click="showaddShopNav" type="primary">新增</el-button>
         </div>
       </div>
       <template slot="table-columns">
@@ -23,12 +23,10 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="success"
               @click="handleEditShopNav(scope.row)">编辑
             </el-button>
             <el-button
-              size="mini"
               type="danger"
               @click="handleDelShopNav(scope.row)">删除
             </el-button>
@@ -47,7 +45,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="新增导航" :visible.sync="addShopNavshow"  width="30%" align="center">
+    <el-dialog title="新增导航" :visible.sync="addShopNavshow"  width="30%">
       <el-form :model="navform" :rules="rules" ref="navform">
         <el-form-item label="导航名称" prop="shop_nav_name">
           <el-input v-model="navform.shop_nav_name" auto-complete="off" label-width="100"></el-input>
@@ -73,7 +71,7 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer" align="center">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="addShopNavshow = false">取 消</el-button>
         <el-button type="primary" @click="POST_AddShopNav('navform')">保 存</el-button>
       </div>

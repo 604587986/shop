@@ -45,11 +45,11 @@
       <!--团购价格-->
       <el-form-item label="团购价格">
         <el-input
-          type="text"
           :style="{ width:inputLength +'px' }"
           v-model.number="gruopBuyForm.group_buy_price"></el-input>
-        <span class="activity-tip">团购价格为该商品参加活动时的促销价格必须是0.01~1000000之间的数字(单位：元)团购价格应包含邮费，
-          团购商品系统默认不收取邮费</span>
+        <span class="activity-tip">
+          团购价格为该商品参加活动时的促销价格必须是0.01~1000000之间的数字(单位：元)团购价格应包含邮费，团购商品系统默认不收取邮费
+        </span>
       </el-form-item>
       <!--团购图片-->
       <el-form-item label="团购图片">
@@ -101,7 +101,6 @@
       <!--虚拟数量-->
       <el-form-item label="虚拟数量">
         <el-input
-          type="text"
           v-model="gruopBuyForm.goods_virtual"
           :style="{ width:inputLength +'px' }"
           placeholder="虚拟购买数量，只用于前台显示，不影响成交记录"></el-input>
@@ -110,7 +109,6 @@
       <!--限购数量-->
       <el-form-item label="限购数量">
         <el-input
-          type="text"
           v-model="gruopBuyForm.goods_limit_buy"
           :style="{ width:inputLength +'px' }"
           placeholder="每个买家ID可团购的最大数量，不限数量请填 '0'"></el-input>
@@ -137,7 +135,8 @@
       :show="showDialog"
       :api="goods_api"
       :maxLength="maxsize"
-      @confirm="refreshFunc" @closed="showDialog = false"/>
+      @confirm="refreshFunc"
+      @closed="showDialog = false"/>
     <!--用户注册协议-->
     <el-dialog
       title="用户注册协议"

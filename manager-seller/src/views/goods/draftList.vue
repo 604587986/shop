@@ -33,19 +33,16 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
-            size="mini"
-            type="primary"
+            type="success"
             @click="handleDraftEdit(scope.row)">编辑
           </el-button>
           <el-button
-            size="mini"
             type="danger"
             @click="handleDraftDel(scope.row)">删除
           </el-button>
         </template>
       </el-table-column>
     </template>
-
     <el-pagination
       slot="pagination"
       v-if="pageData"
@@ -151,18 +148,13 @@
       /** 草稿箱编辑 */
       handleDraftEdit(row) {
         const _draft_goods_id = row.draft_goods_id || '0'
-        // isdraft 草稿箱2
         this.$router.push({ path: '/goods/good-publish', query: { goodsid: _draft_goods_id, isdraft: 2 }})
       },
 
       /** 草稿箱商品删除 */
       handleDraftDel(row) {
-        this.$confirm('确认删除此草稿箱商品, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          API_goods.deleteDraftGoods(row.draft_goods_id, {}).then((response) => {
+        this.$confirm('确认删除此草稿箱商品, 是否继续?', '提示', { type: 'warning' }).then(() => {
+          API_goods.deleteDraftGoods(row.draft_goods_id, {}).then(() => {
             this.GET_DraftGoodsList()
             this.$message.success('删除草稿箱商品成功！')
           })
