@@ -61,6 +61,10 @@ export class GroupBuyGoods extends DataModel {
   @ServerName('gb_status')
   activity_status
 
+  /** 活动状态文本 */
+  @ServerName('gb_status_text')
+  activity_status_text
+
   /** 团购状态  已团购数量 */
   @ServerName('buy_num')
   buy_num
@@ -118,7 +122,7 @@ export class GroupBuyDetails extends DataModel {
 
   /** 所属区域id */
   @ServerName('area_id')
-  the_area
+  area_id
 
   /** 虚拟数量 */
   @ServerName('visual_num')

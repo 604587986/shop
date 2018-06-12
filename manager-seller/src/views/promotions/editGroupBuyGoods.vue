@@ -1,18 +1,20 @@
 <template>
   <div class="bg-group-buy">
-    <el-form ref="gruopBuyForm" :model="gruopBuyForm" label-width="120px" >
+    <el-form ref="gruopBuyForm" :model="gruopBuyForm" :rules="rules" label-width="120px" status-icon>
       <!--团购活动-->
-      <el-form-item label="团购活动">
-        <el-select v-model="gruopBuyForm.group_activity" placeholder="选择要参加的团购活动及时间段">
-          <el-option v-for="item in gruopBuyActivitys" :key="item.activity_id"
-                     :label="item.activity_desc"
-                     :value="item.activity_id">
+      <el-form-item label="团购活动" prop="activity_id">
+        <el-select v-model="gruopBuyForm.activity_id" placeholder="选择要参加的团购活动及时间段">
+          <el-option
+            v-for="item in gruopBuyActivitys"
+            :key="item.activity_id"
+            :label="item.activity_desc"
+            :value="item.activity_id">
           </el-option>
         </el-select>
         <span class="activity-tip">选择要参加的团购活动及时间段</span>
       </el-form-item>
       <!--团购名称-->
-      <el-form-item label="团购名称">
+      <el-form-item label="团购名称" prop="group_buy_name">
         <el-input
           v-model="gruopBuyForm.group_buy_name"
           :style="{ width:inputLength +'px' }"
@@ -39,11 +41,11 @@
           如没有找到您想要参加团购的商品，请重新发布该商品后再选择。</span>
       </el-form-item>
       <!--店铺价格-->
-      <el-form-item label="店铺价格" v-if="gruopBuyForm.goods_name">
+      <el-form-item label="店铺价格">
         <span>{{ gruopBuyForm.shop_price | unitPrice('￥')}}</span>
       </el-form-item>
       <!--团购价格-->
-      <el-form-item label="团购价格">
+      <el-form-item label="团购价格" prop="group_buy_price">
         <el-input
           :style="{ width:inputLength +'px' }"
           v-model.number="gruopBuyForm.group_buy_price"></el-input>
@@ -52,27 +54,25 @@
         </span>
       </el-form-item>
       <!--团购图片-->
-      <el-form-item label="团购图片">
+      <el-form-item label="团购图片" prop="group_buy_image">
         <el-upload
           class="upload-demo"
-          drag
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :limit="1"
+          :action="BASE_IMG_URL"
           :file-list="fileList"
+          :on-remove="handleRemove"
           :on-success="handleSuccess"
           list-type="picture">
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <span v-model="gruopBuyForm.group_buy_image"></span>
+          <el-button type="primary">点击上传</el-button>
         </el-upload>
-        <img :src="gruopBuyForm.group_buy_image" alt="" class="goods-image">
       </el-form-item>
       <!--商品库存数-->
-      <el-form-item label="商品库存数" v-if="gruopBuyForm.goods_name">
-        <span>{{ gruopBuyForm.goods_stock}}</span>
-      </el-form-item>
+      <!--<el-form-item label="商品库存数" v-if="gruopBuyForm.goods_name">-->
+        <!--<span>{{ gruopBuyForm.goods_stock}}</span>-->
+      <!--</el-form-item>-->
       <!--商品总数-->
-      <el-form-item label="商品总数">
-        <el-input :style="{ width:inputLength +'px' }"  v-model.number="gruopBuyForm.goods_summary"></el-input>
+      <el-form-item label="商品总数" prop="goods_summary">
+        <el-input :style="{ width:inputLength +'px' }"  v-model="gruopBuyForm.goods_summary"></el-input>
         <span class="activity-tip">团购商品总数应等于或小于该商品库存数量，请提前确认要参与活动的商品库存数量足够充足</span>
       </el-form-item>
       <!--团购类别-->
@@ -89,7 +89,7 @@
       </el-form-item>
       <!--所属区域-->
       <el-form-item label="所属区域" v-if="gruopBuyForm.goods_name">
-        <el-select v-model="gruopBuyForm.the_area" placeholder="请选择">
+        <el-select v-model="gruopBuyForm.area_id" placeholder="请选择">
           <el-option
             v-for="item in theAreas"
             :key="item.value"
@@ -175,7 +175,7 @@
         <p>  14、本协议仅为javashop商城团购协议示例，不作为正式协议使用。</p>
       </div>
       <span slot="footer" class="dialog-footer">
-    <el-button type="danger" @click="showAgreement = false, allowAgreement = true ">同意并继续</el-button>
+    <el-button type="danger" @click="allowContinue">同意并继续</el-button>
   </span>
     </el-dialog>
   </div>
@@ -183,6 +183,8 @@
 
 <script>
   import * as API_groupBuy from '@/api/groupBuy'
+  import { unixToDate } from '@/utils/index'
+  import Reg from '@/framework/RegExp'
   import { UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
@@ -192,7 +194,54 @@
       [GoodsSelector.name]: GoodsSelector
     },
     data() {
+      const checkGroupBuyPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('团购价格不能为空'))
+        }
+        setTimeout(() => {
+          if (!Reg.price.test(value)) {
+            callback(new Error('请输入正确的价格'))
+          } else if (value < 0.01 || value > 1000000) {
+            callback(new Error('团购价格须在0.01～1000000 之间'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+      const checkGoodsSummary = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('商品总数不能为空'))
+        }
+        setTimeout(() => {
+          if (!Reg.integer.test(value)) {
+            callback(new Error('请输入正整数'))
+          } else if (parseInt(value) < 1) {
+            callback(new Error('商品总数不得小于1'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+      const checkGroupImage = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请上传团购图片'))
+        } else {
+          callback()
+        }
+      }
+      const checkAgreement = (rule, value, callback) => {
+        setTimeout(() => {
+          if (!this.gruopBuyForm.is_allow_agreement) {
+            callback(new Error('请阅读用户注册协议，并自行决定是否勾选'))
+          } else {
+            callback()
+          }
+        }, 500)
+      }
       return {
+        /** 图片服务器地址 */
+        BASE_IMG_URL: process.env.BASE_IMG_URL,
+
         /** input框长度*/
         inputLength: 300,
 
@@ -204,6 +253,9 @@
 
         /** 商品选择器最大长度*/
         maxsize: 1,
+
+        /** 团购图片 */
+        fileList: [],
 
         /** 商品选择器列表api*/
         goods_api: `${process.env.BASE_API}/goods`,
@@ -228,9 +280,6 @@
 
         /** 团购活动*/
         gruopBuyActivitys: [],
-
-        /** 上传的图片*/
-        fileList: [],
 
         /** 团购活动表单*/
         gruopBuyForm: {
@@ -259,7 +308,7 @@
           group_buy_price: '',
 
           /** 团购图片 */
-          group_buy_image: '',
+          group_buy_image: [],
 
           /** 商品库存数 */
           goods_stock: '',
@@ -271,7 +320,7 @@
           group_buy_category: '',
 
           /** 所属区域 */
-          the_area: '',
+          area_id: '',
 
           /** 虚拟数量 */
           goods_virtual: '',
@@ -281,6 +330,39 @@
 
           /** 团购介绍 */
           group_buy_intro: ''
+        },
+
+        /** 表单校验规则 */
+        rules: {
+          /** 团购活动id */
+          activity_id: [
+            { required: true, message: '请选择团购活动', trigger: 'change' }
+          ],
+
+          /** 团购名称 */
+          group_buy_name: [
+            { required: true, message: '请填写团购名称', trigger: 'blur' }
+          ],
+
+          /** 团购价格 */
+          group_buy_price: [
+            { validator: checkGroupBuyPrice, trigger: 'blur' }
+          ],
+
+          /** 团购图片 */
+          group_buy_image: [
+            { validator: checkGroupImage, trigger: 'change' },
+            { required: true, message: '请上传团购图片', trigger: 'change' }
+          ],
+
+          /** 商品总数 */
+          goods_summary: [
+            { validator: checkGoodsSummary, trigger: 'blur' }
+          ],
+
+          is_allow_agreement: [
+            { validator: checkAgreement, trigger: 'change' }
+          ]
         }
       }
     },
@@ -292,14 +374,18 @@
       /** 获取团购活动列表*/
       GET_AllGroupBuyActivitys() {
         API_groupBuy.getGroupBuyActivityList().then(response => {
-          this.gruopBuyActivitys = response.data
+          this.gruopBuyActivitys = response
+          this.gruopBuyActivitys.forEach(key => {
+            this.$set(key, 'activity_desc', `${key.activity_name}  ${unixToDate(key.start_time, 'yyyy-MM-dd')}~${unixToDate(key.end_time, 'yyyy-MM-dd')}`)
+          })
         })
       },
 
       /** 获取团购商品详情*/
       GET_GroupBuyGoodsDetails(id) {
         API_groupBuy.getGroupBuyGoodsDetails(id, {}).then(response => {
-          this.gruopBuyForm = { ...response.data }
+          this.gruopBuyForm = { ...response }
+          this.fileList = [{ url: this.gruopBuyForm.group_buy_image }]
         })
       },
       /** 显示商品选择器*/
@@ -312,9 +398,19 @@
         this.gruopBuyForm.goods_name = val.goods_name
       },
 
-      /** 图片上传成功时的钩子*/
+      /** 图片上传成功时的钩子 上传成功校验*/
       handleSuccess(response, file, fileList) {
-        this.gruopBuyForm.goods_image = response.url
+        this.fileList.shift()
+        this.fileList.push(response)
+        this.gruopBuyForm.group_buy_image = response.url
+        this.$refs['gruopBuyForm'].validateField('group_buy_image')
+      },
+
+      /** 文件列表移除文件时的钩子  图片删除校验*/
+      handleRemove(file, fileList) {
+        this.fileList = []
+        this.gruopBuyForm.group_buy_image = ''
+        this.$refs['gruopBuyForm'].validateField('group_buy_image')
       },
 
       /** 查看用户注册协议*/
@@ -327,13 +423,25 @@
         this.showAgreement = false
       },
 
+      /** 同意并继续 */
+      allowContinue() {
+        this.showAgreement = false
+        this.gruopBuyForm.is_allow_agreement = true
+      },
+
       /** 保存团购商品*/
       handleSaveGroupBuyGoods() {
-        if (this.$route.params.goods_id) {
-          API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(() => {
-            this.$message.success('修改成功')
-          })
-        }
+        this.$refs['gruopBuyForm'].validate((valid) => {
+          if (valid) {
+            this.gruopBuyForm.area_id = 0
+            if (this.$route.params.goods_id) {
+              API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(() => {
+                this.$message.success('修改成功')
+                this.$router.push({ path: '/promotions/group-buy-manager' })
+              })
+            }
+          }
+        })
       }
     }
   }
@@ -343,6 +451,7 @@
   .el-form-item  {
     padding-left: 12%;
     border-bottom: 1px dotted #E6E6E6;
+    padding-bottom: 15px;
   }
   .bg-group-buy {
     background-color: #fff;
@@ -361,6 +470,13 @@
     color: #bbb;
     font-size: 12px;
     line-height: 22px;
+  }
+  /deep/.el-select {
+    width: 320px;
+  }
+  /*团购图片上传组件*/
+  .upload-demo {
+    width: 30%;
   }
 </style>
 

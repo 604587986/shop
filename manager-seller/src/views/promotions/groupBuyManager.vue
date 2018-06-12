@@ -40,19 +40,13 @@
           <template slot-scope="scope">
             <div>{{ scope.row.activity_name }}</div>
             <div>{{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
-              - {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
+              —— {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
             </div>
           </template>
         </el-table-column>
         <!--已团购数量-->
         <el-table-column prop="buy_num" label="已团购" />
-        <el-table-column label="活动状态" width="120">
-          <template slot-scope="scope">
-            <span v-if="scope.row.activity_status == 1">已审核</span>
-            <span v-if="scope.row.activity_status == 0">已驳回</span>
-            <span v-if="scope.row.activity_status == 2">审核中</span>
-          </template>
-        </el-table-column>
+        <el-table-column prop="activity_status_text" label="活动状态" />
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
