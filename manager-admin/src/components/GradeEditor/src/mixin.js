@@ -85,7 +85,7 @@ export default {
      */
     columnWdith() {
       return {
-        width: 100 / this.maxLevel + '%'
+        width: 100 / (this.maxLevel >= 3 ? this.maxLevel : 3) + '%'
       }
     },
     /**
