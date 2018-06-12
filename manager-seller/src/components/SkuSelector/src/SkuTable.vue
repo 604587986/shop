@@ -1,37 +1,38 @@
 <template>
   <div>
-      <el-table
-      :data="tableData"
-      border
-      :span-method="arraySpanMethod"
-      style="width: 100%">
-        <el-table-column
-          v-for="(item, index) in tablehead"
-          v-if="item !== 'spec_value_id'"
-          :key="item"
-          :label="labeltxt(item)"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span v-if="checkFixed(item)">
-              <span v-if="item === 'price'"> {{ scope.row[item] | unitPrice('￥')}}</span>
-              <span v-else> {{ scope.row[item] }}</span>
+    <el-table
+    :data="tableData"
+    border
+    :span-method="arraySpanMethod"
+    style="width: 100%">
+      <el-table-column
+        v-for="(item, index) in tablehead"
+        v-if="item !== 'spec_value_id'"
+        :key="item"
+        :label="labeltxt(item)"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span v-if="checkFixed(item)">
+            <span v-if="item === 'price'"> {{ scope.row[item] | unitPrice('￥')}}</span>
+            <span v-else> {{ scope.row[item] }}</span>
+          </span>
+          <div v-else class="input-error-model">
+            <el-input
+              :disabled="isEditModel === 1 && item==='quantity'"
+              v-model.number="scope.row[item]"
+              @input="updateSkuTable(index, scope, item)"
+              @blur="updateSkuTable(index, scope, item)">
+            </el-input>
+            <span
+              class="input-error"
+              v-show="isValidate(index, scope)">{{ valadatxt }}
             </span>
-            <div v-else class="input-error-model">
-              <el-input
-                :disabled="isEditModel === 1 && item==='quantity'"
-                v-model.number="scope.row[item]"
-                @input="updateSkuTable(index, scope, item)"
-                @blur="updateSkuTable(index, scope, item)">
-              </el-input>
-              <span
-                class="input-error"
-                v-show="isValidate(index, scope)">{{ valadatxt }}
-              </span>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+    <p v-if="isEditModel === 1" class="stock-tip"> 提示: 编辑商品规格时不允许进行库存编辑，请到商品列表单独维护库存 </p>
     <div class="batch-all">
       <span>批量设置：</span>
       <div v-show="isShowBatch">
@@ -286,5 +287,10 @@
   }
   /deep/ .validat_error {
     border-color: red;
+  }
+
+  p.stock-tip {
+    color: #f00;
+    font-size: 13px;
   }
 </style>
