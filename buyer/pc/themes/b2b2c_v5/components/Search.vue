@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import * as API_Common from '@/api/common'
+  import * as API_Home from '@/api/home'
   export default {
     name: 'EnSearch',
     props: {},
@@ -47,7 +47,8 @@
       }
     },
     mounted() {
-      API_Common.getHotKeywords().then(response => this.hot_keywords = response)
+       /** 获取热门关键词 */
+      API_Home.getHotKeywords().then(response => this.hot_keywords = response)
     },
     methods: {
       /** 关键字发生改变 */
