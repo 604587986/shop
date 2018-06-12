@@ -2,7 +2,7 @@
  * 收货地址相关API
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取收货地址列表
@@ -11,7 +11,7 @@ import request from '@/utils/request'
 export function getAddressList() {
   return request({
     url: 'members/addresses',
-    method: 'get',
+    method: Method.GET,
     needToken: true
   })
 }
@@ -24,7 +24,7 @@ export function getAddressList() {
 export function addAddress(params) {
   return request({
     url: 'members/address',
-    method: 'post',
+    method: Method.POST,
     needToken: true,
     data: params
   })
@@ -39,7 +39,7 @@ export function addAddress(params) {
 export function editAddress(id, params) {
   return request({
     url: `members/address/${id}`,
-    method: 'put',
+    method: Method.PUT,
     needToken: true,
     data: params
   })
@@ -52,7 +52,7 @@ export function editAddress(id, params) {
 export function deleteAddress(id) {
   return request({
     url: `members/address/${id}`,
-    method: 'delete',
+    method: Method.DELETE,
     needToken: true
   })
 }

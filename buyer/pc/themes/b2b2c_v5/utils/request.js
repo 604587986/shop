@@ -95,6 +95,19 @@ const closeLoading = (target) => {
   })
 }
 
+export const ContentType = {
+  JSON: {
+    'Content-Type': 'application/json'
+  }
+}
+
+export const Method = {
+  GET: 'get',
+  POST: 'post',
+  PUT: 'put',
+  DELETE: 'delete'
+}
+
 export default function request(options) {
   // 如果是服务端或者是请求的刷新token，不需要检查token直接请求。
   if (process.server || options.url === 'passport/token') {
