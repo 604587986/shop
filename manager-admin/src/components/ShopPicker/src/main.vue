@@ -2,7 +2,7 @@
   <div style="display: inline-block">
     <el-select
       v-model="shop_id"
-      placeholder="请选择"
+      placeholder="选择店铺"
       @change="handleShopChanged"
       style="width: 150px"
       v-bind="$attrs"

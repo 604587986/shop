@@ -1,43 +1,43 @@
 import Vue from 'vue'
 
-const _layer = {
-  /** 将原生属性挂载进来，然后再扩展属性 */
-  ...window.layer,
-  /**
-   * 普通alert弹框
-   * @param message
-   * @param fn
-   * @returns {*|void}
-   */
-  alert: function (message, fn) {
-    return window.layer.alert(message || '', {
-      scrollbar: false
-    }, function (index) {
-      let __ = true
-      typeof (fn) === 'function' && (__ = fn(index))
-      __ !== false && window.layer.close(index)
-    })
-  },
-
-  /**
-   * 操作确认
-   * @param message
-   * @param fn
-   * @returns {*|boolean}
-   */
-  confirm: function (message, fn) {
-    return window.layer.confirm(message || '确认这个操作吗？', {
-      icon: 3,
-      title: '提示',
-      scrollbar: false
-    }, function (index) {
-      let __ = true
-      typeof (fn) === 'function' && (__ = fn(index))
-      __ !== false && window.layer.close(index)
-    });
-  }
+/**
+ * 普通alert弹框
+ * @param message
+ * @param fn
+ * @returns {*|void}
+ */
+const alert = function (message, fn) {
+  return window.layer.alert(message || '', {
+    scrollbar: false
+  }, function (index) {
+    let __ = true
+    typeof (fn) === 'function' && (__ = fn(index))
+    __ !== false && window.layer.close(index)
+  })
+}
+/**
+ * 操作确认
+ * @param message
+ * @param fn
+ * @returns {*|boolean}
+ */
+const confirm = function (message, fn) {
+  return window.layer.confirm(message || '确认这个操作吗？', {
+    icon: 3,
+    title: '提示',
+    scrollbar: false
+  }, function (index) {
+    let __ = true
+    typeof (fn) === 'function' && (__ = fn(index))
+    __ !== false && window.layer.close(index)
+  });
 }
 
+/**
+ * 消息提示
+ * @type {{success : (function(*=, *=, *=) : *), error : (function(*=, *=, *=) : *)}}
+ * @private
+ */
 const _message = {
   /**
    * 成功提示
@@ -79,5 +79,7 @@ const _message = {
 }
 
 // 注册到Vue原型链上
-Vue.prototype.$layer = _layer
+Vue.prototype.$layer = window.layer
+Vue.prototype.$alert = alert
+Vue.prototype.$confirm = confirm
 Vue.prototype.$message = _message

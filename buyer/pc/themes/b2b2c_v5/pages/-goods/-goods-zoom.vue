@@ -38,7 +38,7 @@
   import { PicZoom } from '@/components'
   export default {
     name: "goods-zoom",
-    props: ['images', 'curImg'],
+    props: ['images', 'specImg'],
     components: { PicZoom },
     data() {
       const _current = this.images[0]
@@ -53,8 +53,8 @@
       })
     },
     watch: {
-      curImg(newVal, oldVal) {
-        this.current = { small: newVal, big: newVal }
+      specImg(newVal, oldVal) {
+        this.current = { original: newVal.original }
       }
     },
     methods: {
@@ -120,7 +120,7 @@
       position: absolute;
       left: 0;
       top: 0;
-      background: url(~/assets/images/icons-goods.png) no-repeat -141px -238px;
+      background: url(../../assets/images/icons-goods.png) no-repeat -141px -238px;
     }
     .swiper-btn {
       position: absolute;
