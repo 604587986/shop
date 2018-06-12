@@ -2,6 +2,7 @@
   <div>
     <en-grade-editor
       ref="gradeEditor"
+      type-text="分类"
       :api="categoryApi"
       :params-names="{id: 'category_id', text: 'name'}"
       :btns="itemBtns"

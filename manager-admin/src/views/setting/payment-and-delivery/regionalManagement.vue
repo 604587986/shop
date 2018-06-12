@@ -2,6 +2,7 @@
   <div>
     <en-grade-editor
       ref="regionEditor"
+      type-text="地区"
       :api="regionApi"
       :btns="btns"
       :maxLevel="4"
