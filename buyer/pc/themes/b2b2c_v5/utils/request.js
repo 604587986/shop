@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import { Loading } from 'element-ui'
 import Storage from '@/utils/storage'
-import Foundation from '@/utils/Foundation'
+import { Foundation } from '~/ui-utils'
 import MD5 from 'md5'
 import GetFullUrl from '@/utils/urls'
 import checkToken from '@/utils/checkToken'
@@ -28,15 +28,12 @@ service.interceptors.request.use(config => {
   if (loading !== false) {
     config.loading = Loading.service({
       fullscreen: true,
-      background: 'rgba(0,0,0,.6)',
-      lock: true,
-      text: '努力加载中...'
+      background: 'rgba(255,255,255,.3)',
+      spinner: 'icon-custom-loading',
+      lock: true
     })
   }
-  // 如果是刷新Token的请求，直接放行。
-  if (config.isRefreshTokenRequest) {
-    return config
-  }
+
   // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
   if (accessToken) {
@@ -93,6 +90,19 @@ const closeLoading = (target) => {
       resolve()
     }, 200)
   })
+}
+
+export const ContentType = {
+  JSON: {
+    'Content-Type': 'application/json'
+  }
+}
+
+export const Method = {
+  GET: 'get',
+  POST: 'post',
+  PUT: 'put',
+  DELETE: 'delete'
 }
 
 export default function request(options) {

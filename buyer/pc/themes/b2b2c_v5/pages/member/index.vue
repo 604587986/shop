@@ -3,11 +3,11 @@
     <div class="user-title">
       <div class="user-item">
         <div class="user-avatar">
-          <img src="http://data.andste.cc/developers/ios/3AF40BFD-BDAA-4DBE-BEB1-842149CAEF4E.gif">
+          <img :src="user.face">
         </div>
         <div class="user-info">
           <p>Andste</p>
-          <p>联系方式：{{ '13888888888' | secrecyMobile }} </p>
+          <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
         </div>
       </div>
       <div class="other-item">
@@ -44,7 +44,7 @@
                   <img :src="item.skuList[0].goods_image">
                 </nuxt-link>
               <div class="order-info">
-                  <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-name">{{ item.skuList[0].goods_name }}</nuxt-link>
+                  <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-name">{{ item.skuList[0].name }}</nuxt-link>
                   <p>下单时间：2018-03-23 17:44:59</p>
                   <p>订单金额：<span class="price">￥343.80</span></p>
                   <p class="order-status-num"><span>订单状态：未付款</span><span>订单内共有（{{ item.skuList.length }}）种商品</span></p>
@@ -56,27 +56,27 @@
           </template>
         </div>
       </div>
-      <!--<div class="item right cart">-->
-        <!--<div class="item-title">-->
-          <!--<h2>购物车</h2>-->
-          <!--<nuxt-link to="/cart">查看全部 	&gt;&gt;</nuxt-link>-->
-        <!--</div>-->
-        <!--<div class="item-content">-->
-          <!--<empty-member v-if="cartSkuList.length === 0">暂无商品</empty-member>-->
-          <!--<template v-else>-->
-            <!--<div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">-->
-              <!--<nuxt-link :to="'/goods-' + goods.goods_id + '.html'" class="goods-image">-->
-                <!--<img :src="item.goods_image" :alt="item.goods_name">-->
-              <!--</nuxt-link>-->
-              <!--<div class="goods-name">-->
-                <!--<nuxt-link :to="'/goods-' + goods.goods_id + '.html'">{{ item.goods_name }}</nuxt-link>-->
-                <!--<p><em>￥{{ item.price | unitPrice }}</em> <span>x {{ item.num }}</span></p>-->
-              <!--</div>-->
-              <!--<a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>-->
-            <!--</div>-->
-          <!--</template>-->
-        <!--</div>-->
-      <!--</div>-->
+      <div class="item right cart">
+        <div class="item-title">
+          <h2>购物车</h2>
+          <nuxt-link to="/cart">查看全部 	&gt;&gt;</nuxt-link>
+        </div>
+        <div class="item-content">
+          <empty-member v-if="cartSkuList.length === 0">暂无商品</empty-member>
+          <template v-else>
+            <div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">
+              <nuxt-link :to="'/goods-' + item.goods_id + '.html'" class="goods-image">
+                <img :src="item.goods_image" :alt="item.name">
+              </nuxt-link>
+              <div class="goods-name">
+                <nuxt-link :to="'/goods-' + item.goods_id + '.html'">{{ item.name }}</nuxt-link>
+                <p><em>￥{{ item.purchase_price | unitPrice }}</em> <span>x {{ item.num }}</span></p>
+              </div>
+              <a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
     <div class="box-item">
       <div class="item left goods-collection">
@@ -94,9 +94,9 @@
               class="goods-collection-item"
             >
               <nuxt-link :to="'/goods-' + item.goods_id + '.html'">
-                <img :src="item.goods_image" :alt="item.goods_name" class="goods-image">
+                <img :src="item.goods_image" :alt="item.name" class="goods-image">
               </nuxt-link>
-              <span class="goods-name">{{ item.goods_name }}</span>
+              <span class="goods-name">{{ item.name }}</span>
               <div class="goods-price">
                 <span>￥{{ item.goods_price | unitPrice }}</span>
                 <a href="javascript:;" class="delete-btn" @click="handleDeleteGoodsCollection(item)">删除</a>
@@ -133,10 +133,10 @@
                     v-for="goods in item.goodsList"
                     :key="goods.goods_id"
                     :to="'/goods-' + goods.goods_id + '.html'"
-                    :title="goods.goods_name"
+                    :title="goods.name"
                     class="swiper-slide"
                   >
-                    <img :src="goods.goods_image" :alt="goods.goods_name" class="shop-goods-image">
+                    <img :src="goods.goods_image" :alt="goods.name" class="shop-goods-image">
                   </nuxt-link>
                 </div>
                 <div class="swiper-button-prev swiper-button-white"></div>
@@ -159,6 +159,7 @@
     },
     computed: {
       ...mapGetters({
+        user: 'user',
         cartSkuList: 'cart/skuList',
         orderList: 'order/orderList',
         goodsCollectionList: 'collection/goodsCollectionList',

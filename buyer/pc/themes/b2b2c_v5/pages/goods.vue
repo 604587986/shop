@@ -100,7 +100,7 @@
 	}
 </script>
 
-<style type="text/scss" lang="scss">
+<style type="text/scss" lang="scss" scoped>
   .content {
     display: flex;
     justify-content: space-between;

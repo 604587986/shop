@@ -49,7 +49,7 @@
 </template>
 
 <script>
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
   export default {
     name: "basic-info",
@@ -76,7 +76,7 @@
           company_email: [
             req_rule('请输入公司邮箱'),
             { validator: (rule, value, callback) => {
-              if (!regExp.email.test(value)) {
+              if (!RegExp.email.test(value)) {
                 callback(new Error('邮箱格式不正确！'))
               } else {
                 callback()
@@ -88,7 +88,7 @@
           employee_num: [
             req_rule('请输入员工人数'),
             { validator: (rule, value, callback) => {
-              if (!regExp.integer.test(value)) {
+              if (!RegExp.integer.test(value)) {
                 callback(new Error('员工人数应为正整数，且不为零！'))
               } else {
                 callback()
@@ -100,7 +100,7 @@
           reg_money: [
             req_rule('请输入注册金额'),
             { validator: (rule, value, callback) => {
-                if (!regExp.integer.test(value)) {
+                if (!RegExp.integer.test(value)) {
                   callback(new Error('注册资金应为正整数，且不为零！'))
                 } else {
                   callback()
@@ -116,7 +116,7 @@
           link_phone: [
             req_rule('请输入联系人电话'),
             { validator: (rule, value, callback) => {
-                if (!regExp.mobile.test(value)) {
+                if (!RegExp.mobile.test(value)) {
                   callback(new Error('联系人电话格式不正确！'))
                 } else {
                   callback()

@@ -6,24 +6,6 @@
 import axios from 'axios'
 
 export default {
-  data() {
-    return {
-      loading: false,
-      data: [],
-      /** 当前层级 */
-      curLevel: 0,
-      /** 当前操作的层级 */
-      curItem: '',
-      /** 最后一级的数据 */
-      lastItem: '',
-      /** 需要删除的自定义的参数数组，用于返回数据时删除 */
-      needDeleteParams: ['$id', '$text', '$active', '$hidden'],
-      /** 各个搜索框关键字 */
-      searchKeywords: [],
-      /** 当前的搜索关键字，用来节流 */
-      curSearchKeyword: ''
-    }
-  },
   props: {
     /**
      * 获取数据API
@@ -67,6 +49,33 @@ export default {
     btns: {
       type: Array,
       default: () => []
+    },
+    /**
+     * 编辑器类型文字描述
+     * 用于显示在"添加x级typeText"
+     * 例如：添加x级分类
+     */
+    typeText: {
+      type: String,
+      default: '数据'
+    }
+  },
+  data() {
+    return {
+      loading: false,
+      data: [],
+      /** 当前层级 */
+      curLevel: 0,
+      /** 当前操作的层级 */
+      curItem: '',
+      /** 最后一级的数据 */
+      lastItem: '',
+      /** 需要删除的自定义的参数数组，用于返回数据时删除 */
+      needDeleteParams: ['$id', '$text', '$active', '$hidden'],
+      /** 各个搜索框关键字 */
+      searchKeywords: [],
+      /** 当前的搜索关键字，用来节流 */
+      curSearchKeyword: ''
     }
   },
   computed: {
@@ -76,7 +85,7 @@ export default {
      */
     columnWdith() {
       return {
-        width: 100 / this.maxLevel + '%'
+        width: 100 / (this.maxLevel > 3 ? this.maxLevel : 3) + '%'
       }
     },
     /**

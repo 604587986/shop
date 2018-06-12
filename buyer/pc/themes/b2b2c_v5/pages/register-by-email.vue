@@ -61,7 +61,7 @@
   Vue.use(Form)
   Vue.use(FormItem)
   Vue.use(Input)
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'register-by-email',
     validate() {
@@ -86,7 +86,7 @@
             { required: true, message: '请输入邮箱', trigger: 'blur' },
             {
               validator: (rule, value, callback) => {
-                if (!regExp.email.test(value)) {
+                if (!RegExp.email.test(value)) {
                   callback(new Error('邮箱格式不正确！'))
                 } else {
                   callback()
@@ -99,7 +99,7 @@
             { required: true, message: '请输入密码', trigger: 'blur' },
             {
               validator: (rule, value, callback) => {
-                if (!regExp.password.test(value)) {
+                if (!RegExp.password.test(value)) {
                   callback(new Error('密码应为6-20位数字、英文字母！'))
                 } else {
                   callback()

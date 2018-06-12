@@ -67,7 +67,7 @@
 <script>
   import Vue from 'vue'
   import * as API_Shop from '@/api/shop'
-  import Foundation from '@/utils/Foundation'
+  import { Foundation } from '~/ui-utils'
   const theme1Header = () => import('@/pages/-shop-theme/-theme1-header')
   const theme2Header = () => import('@/pages/-shop-theme/-theme2-header')
   const theme3Header = () => import('@/pages/-shop-theme/-theme3-header')

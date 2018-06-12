@@ -2,7 +2,7 @@
  * 站内消息相关API
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取消息列表
@@ -14,7 +14,7 @@ export function getMessages(params) {
   params.page_size = params.page_size || 5
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message',
-    method: 'get',
+    method: Method.GET,
     params
   })
 }
@@ -29,7 +29,7 @@ export function getMesssagesAsUnread(params) {
   params.page_size = params.page_size || 5
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message',
-    method: 'get',
+    method: Method.GET,
     params
   })
 }
@@ -42,7 +42,7 @@ export function getMesssagesAsUnread(params) {
 export function messageMarkAsRead(ids) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message/${ids}`,
-    method: 'post'
+    method: Method.POST
   })
 }
 
@@ -54,6 +54,6 @@ export function messageMarkAsRead(ids) {
 export function deleteMessage(ids) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message/${ids}`,
-    method: 'delete'
+    method: Method.DELETE
   })
 }

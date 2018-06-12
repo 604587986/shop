@@ -2,7 +2,7 @@
  * 商品相关API
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取商品详情
@@ -12,7 +12,7 @@ import request from '@/utils/request'
 export function getGoods(goods_id) {
   return request({
     url: `goods/${goods_id}`,
-    method: 'get'
+    method: Method.GET
   })
 }
 
@@ -24,7 +24,7 @@ export function getGoods(goods_id) {
 export function getGoodsList(params) {
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/goods/list',
-    method: 'get',
+    method: Method.GET,
     params
   })
 }
@@ -36,7 +36,7 @@ export function getGoodsList(params) {
 export function visitGoods(goods_id) {
   return request({
     url: `goods/${goods_id}/visit`,
-    method: 'get'
+    method: Method.GET
   })
 }
 
@@ -47,7 +47,7 @@ export function visitGoods(goods_id) {
 export function getGoodsSkus(goods_id) {
   return request({
     url: `goods/${goods_id}/skus`,
-    method: 'get',
+    method: Method.GET,
     loading: false
   })
 }
@@ -60,7 +60,7 @@ export function getGoodsSkus(goods_id) {
 export function getGoodsConsultations(goods_id, params) {
   return request({
     url: `goods/${goods_id}/asks`,
-    method: 'get',
+    method: Method.GET,
     loading: false,
     params
   })
@@ -74,7 +74,7 @@ export function getGoodsConsultations(goods_id, params) {
 export function getGoodsComments(goods_id, params) {
   return request({
     url: `goods/${goods_id}/comments`,
-    method: 'get',
+    method: Method.GET,
     loading: false,
     params
   })
@@ -89,7 +89,7 @@ export function getGoodsComments(goods_id, params) {
 export function getTagGoods(seller_id, mark = 'hot', num = 5) {
   return request({
     url: `goods/tags/${mark}/goods`,
-    method: 'get',
+    method: Method.GET,
     loading: false,
     params: {
       seller_id,

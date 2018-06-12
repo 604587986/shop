@@ -2,7 +2,7 @@
  * 申请售后相关API
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取售后列表
@@ -12,7 +12,7 @@ import request from '@/utils/request'
 export function getAfterSale(params) {
   return request({
     url: 'after-sales/refunds',
-    method: 'get',
+    method: Method.GET,
     needToken: true,
     params
   })
@@ -28,7 +28,7 @@ export function applyAfterSale(params) {
   Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/after-sale',
-    method: 'get',
+    method: Method.GET,
     needToken: true,
     data: _formData
   })
@@ -42,7 +42,7 @@ export function applyAfterSale(params) {
 export function getAfterSaleDetail(sn) {
   return request({
     url: `after-sales/refund/${sn}`,
-    method: 'get',
+    method: Method.GET,
     needToken: true
   })
 }

@@ -1,4 +1,4 @@
-import Foundation from './Foundation'
+import { Foundation } from '~/ui-utils'
 
 /**
  * 金钱单位置换  2999 --> 2,999.00

@@ -4,11 +4,11 @@
       <h1>订单信息</h1>
       <div class="detail-list">
         <dl><dt>订单编号：</dt><dd>{{ detail.order_sn }}</dd></dl>
-        <dl class="top-line"><dt>申请时间：</dt><dd>{{ create_time | unixToDate }}</dd></dl>
-        <dl><dt>状态：</dt><dd><span>申请中</span></dd></dl>
-        <dl><dt>申请售后原因：</dt><dd>收到商品与描述不符</dd></dl>
-        <dl><dt>申请售后详细描述：</dt><dd>我TM就是想退货！！！</dd></dl>
-        <dl><dt>退款方式：</dt><dd>支付宝</dd></dl>
+        <dl class="top-line"><dt>申请时间：</dt><dd>{{ detail.create_time | unixToDate }}</dd></dl>
+        <dl><dt>状态：</dt><dd><span>{{ detail.refund_status_text }}</span></dd></dl>
+        <dl><dt>申请售后原因：</dt><dd>{{ detail.refund_reason }}</dd></dl>
+        <dl><dt>申请售后详细描述：</dt><dd>{{ detail.finance_remark }}</dd></dl>
+        <dl><dt>退款方式：</dt><dd>{{ detail.account_type_text }}</dd></dl>
         <dl><dt>申请售后金额：</dt><dd>2449</dd></dl>
       </div>
     </div>
