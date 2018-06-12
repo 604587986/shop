@@ -81,7 +81,7 @@
         this.$confirm('确定要删除这个积分分类吗？', '提示', { type: 'warning' }).then(() => {
           API_Promotion.deleteExchangeCat(cat.category_id).then(() => {
             this.$message.success('删除成功！')
-            this.GET_ExchangeCats()
+            this.$refs['gradeEditor'].refresh('delete')
           })
         }).catch(() => {})
       },

@@ -140,7 +140,7 @@
     },
     methods: {
       /** 添加分类 */
-      handleAddCat(cat, parent, parentArray) {
+      handleAddCat(level, parent, parentArray) {
         this.catForm = {
           parent_id: parent ? parent.category_id : 0,
           parent_datas: parentArray,

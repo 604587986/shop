@@ -80,8 +80,7 @@
         }).catch(() => {})
       },
       /** 添加地区 */
-      handleAdd(region, parent) {
-        console.log(region, parent)
+      handleAdd(level, parent, parentArray) {
         this.regionForm = {
           parent_id: parent ? parent.id : 0,
           cod: 1
