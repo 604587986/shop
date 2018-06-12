@@ -2,7 +2,7 @@
  * Created by andste.cc@gmail.com on 2018/6/8.
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取优惠券列表
@@ -12,7 +12,7 @@ import request from '@/utils/request'
 export function getCoupons(params) {
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/coupons',
-    method: 'get',
+    method: Method.GET,
     needToken: true,
     params
   })
@@ -26,8 +26,8 @@ export function getCoupons(params) {
 export function getPoints() {
   return request({
     url: 'members/points/current',
-    needToken: true,
-    method: 'get'
+    method: Method.GET,
+    needToken: true
   })
 }
 
@@ -39,7 +39,7 @@ export function getPoints() {
 export function getPointsData(params) {
   return request({
     url: 'members/points',
-    method: 'get',
+    method: Method.GET,
     needToken: true,
     params
   })
@@ -53,7 +53,7 @@ export function getPointsData(params) {
 export function getComments(params) {
   return request({
     url: 'member/comments',
-    method: 'get',
+    method: Method.GET,
     needToken: true,
     params
   })
@@ -66,7 +66,7 @@ export function getComments(params) {
 export function commentsOrder(params) {
   return request({
     url: 'member/comments',
-    method: 'post',
+    method: Method.POST,
     needToken: true,
     data: params
   })
@@ -80,7 +80,7 @@ export function commentsOrder(params) {
 export function getConsultations(params) {
   return request({
     url: 'member/asks',
-    method: 'get',
+    method: Method.GET,
     needToken: true,
     params
   })
@@ -94,7 +94,7 @@ export function getConsultations(params) {
 export function consultating(goods_id, ask_content) {
   return request({
     url: 'member/asks',
-    method: 'post',
+    method: Method.POST,
     needToken: true,
     data: {
       goods_id,
@@ -111,7 +111,7 @@ export function consultating(goods_id, ask_content) {
 export function getGoodsCollection(params) {
   return request({
     url: 'members/collection/goods',
-    method: 'get',
+    method: Method.GET,
     loading: false,
     message: false,
     params
@@ -126,7 +126,7 @@ export function getGoodsCollection(params) {
 export function collectionGoods(goods_id) {
   return request({
     url: 'members/collection/goods',
-    method: 'post',
+    method: Method.POST,
     data: { goods_id }
   })
 }
@@ -140,7 +140,7 @@ export function deleteGoodsCollection(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
     url: `members/collection/goods/${ids}`,
-    method: 'delete',
+    method: Method.DELETE,
     needToken: true
   })
 }
@@ -153,7 +153,7 @@ export function deleteGoodsCollection(ids) {
 export function getShopCollection(params) {
   return request({
     url: 'members/collection/shops',
-    method: 'get',
+    method: Method.GET,
     needToken: true,
     params
   })
@@ -167,7 +167,7 @@ export function getShopCollection(params) {
 export function collectionShop(shop_id) {
   return request({
     url: 'members/collection/shop',
-    method: 'post',
+    method: Method.POST,
     needToken: true,
     data: { shop_id }
   })
@@ -180,7 +180,7 @@ export function collectionShop(shop_id) {
 export function deleteShopCollection(id) {
   return request({
     url: `members/collection/shop/${id}`,
-    method: 'delete',
+    method: Method.DELETE,
     needToken: true
   })
 }
@@ -192,7 +192,7 @@ export function deleteShopCollection(id) {
 export function getUserInfo() {
   return request({
     url: `members`,
-    method: 'get',
+    method: Method.GET,
     needToken: true
   })
 }
@@ -205,7 +205,7 @@ export function getUserInfo() {
 export function saveUserInfo(params) {
   return request({
     url: 'members',
-    method: 'put',
+    method: Method.PUT,
     needToken: true,
     data: params
   })
@@ -218,7 +218,7 @@ export function saveUserInfo(params) {
 export function logout() {
   return request({
     url: `members/logout`,
-    method: 'post',
+    method: Method.POST,
     needToken: true
   })
 }

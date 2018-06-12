@@ -2,6 +2,7 @@
   <div>
     <en-grade-editor
       ref="gradeEditor"
+      type-text="分类"
       :api="categoryApi"
       :params-names="{id: 'category_id', text: 'name'}"
       :btns="itemBtns"
@@ -139,7 +140,7 @@
     },
     methods: {
       /** 添加分类 */
-      handleAddCat(cat, parent, parentArray) {
+      handleAddCat(level, parent, parentArray) {
         this.catForm = {
           parent_id: parent ? parent.category_id : 0,
           parent_datas: parentArray,

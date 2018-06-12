@@ -2,7 +2,7 @@
  * 订单相关API
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取订单列表
@@ -12,7 +12,7 @@ import request from '@/utils/request'
 export function getOrderList(params) {
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/list',
-    method: 'get',
+    method: Method.GET,
     needToken: true,
     params
   })
@@ -26,7 +26,7 @@ export function getOrderList(params) {
 export function getOrderDetail(order_sn) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/${order_sn}`,
-    method: 'get',
+    method: Method.GET,
     needToken: true
   })
 }
@@ -42,7 +42,7 @@ export function cancelOrder(order_sn, reason) {
   _formData.append('reason', reason)
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/cancel`,
-    method: 'post',
+    method: Method.POST,
     needToken: true,
     data: _formData
   })
@@ -56,7 +56,7 @@ export function cancelOrder(order_sn, reason) {
 export function confirmReceipt(order_sn) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/confirm-receipt/${order_sn}`,
-    method: 'post',
+    method: Method.POST,
     needToken: true
   })
 }

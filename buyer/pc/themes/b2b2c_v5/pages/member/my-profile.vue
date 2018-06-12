@@ -77,7 +77,7 @@
   Vue.use(Upload)
   import { mapGetters, mapActions } from 'vuex'
   import EnRegionPicker from "@/components/RegionPicker"
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'my-profile',
     components: { EnRegionPicker },
@@ -110,7 +110,7 @@
           email: [
             this.MixinRequired('请输入邮箱地址！'),
             { validator: (rule, value, callback) => {
-                if (!regExp.email.test(value)) {
+                if (!RegExp.email.test(value)) {
                   callback(new Error('邮箱格式不正确！'))
                 } else {
                   callback()

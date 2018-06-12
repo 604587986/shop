@@ -2,7 +2,7 @@
  * 安全相关API
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 发送绑定手机验证码
@@ -13,7 +13,7 @@ import request from '@/utils/request'
 export function sendBindMobileSms(mobile, captcha, uuid) {
   return request({
     url: `members/security/bind/send/${mobile}`,
-    method: 'post',
+    method: Method.POST,
     needToken: true,
     data: {
       uuid,
@@ -30,7 +30,7 @@ export function sendBindMobileSms(mobile, captcha, uuid) {
 export function bindMobile(mobile, sms_code) {
   return request({
     url: `members/security/bind/${mobile}`,
-    method: 'put',
+    method: Method.PUT,
     needToken: true,
     data: { sms_code }
   })
@@ -45,7 +45,7 @@ export function bindMobile(mobile, sms_code) {
 export function sendMobileSms(uuid, captcha) {
   return request({
     url: 'members/security/send',
-    method: 'post',
+    method: Method.POST,
     data: {
       uuid,
       captcha
@@ -60,7 +60,7 @@ export function sendMobileSms(uuid, captcha) {
 export function validChangeMobileSms(sms_code) {
   return request({
     url: 'members/security/exchange-bind',
-    method: 'get',
+    method: Method.GET,
     params: { sms_code }
   })
 }
@@ -73,7 +73,7 @@ export function validChangeMobileSms(sms_code) {
 export function changeMobile(mobile, sms_code) {
   return request({
     url: `members/security/exchange-bind/${mobile}`,
-    method: 'put',
+    method: Method.PUT,
     data: { sms_code }
   })
 }
@@ -85,7 +85,7 @@ export function changeMobile(mobile, sms_code) {
 export function validChangePasswordSms(sms_code) {
   return request({
     url: 'members/security/password',
-    method: 'get',
+    method: Method.GET,
     params: { sms_code }
   })
 }
@@ -99,7 +99,7 @@ export function validChangePasswordSms(sms_code) {
 export function changePassword(uuid, captcha, password) {
   return request({
     url: 'members/security/password',
-    method: 'put',
+    method: Method.PUT,
     data: {
       uuid,
       captcha,

@@ -120,7 +120,7 @@
 </template>
 
 <script>
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
   import EnRegionPicker from "@/components/RegionPicker";
   export default {
@@ -155,7 +155,7 @@
             req_rule('请输入法定代表人身份证号！'),
             {
               validator: (rule, value, callback) => {
-                if (!regExp.cardID.test(value)) {
+                if (!RegExp.cardID.test(value)) {
                   callback(new Error('身份证号格式不正确'))
                 } else {
                   callback()

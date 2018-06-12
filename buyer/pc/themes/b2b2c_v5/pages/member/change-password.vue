@@ -55,7 +55,7 @@
   import { mapGetters } from 'vuex'
   import * as API_Common from '@/api/common'
   import * as API_Safe from '@/api/safe'
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'change-password',
     data() {
@@ -83,7 +83,7 @@
             this.MixinRequired('请输入新的登录密码！'),
             {
               validator: (rule, value, callback) => {
-                if (!regExp.password.test(value)) {
+                if (!RegExp.password.test(value)) {
                   callback(new Error('密码应为6-20位英文或数字！'))
                 } else {
                   callback()

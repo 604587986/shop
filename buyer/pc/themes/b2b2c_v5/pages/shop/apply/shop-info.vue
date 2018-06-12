@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
   import EnRegionPicker from "@/components/RegionPicker";
   export default {

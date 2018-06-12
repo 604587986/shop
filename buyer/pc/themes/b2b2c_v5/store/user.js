@@ -3,7 +3,7 @@ import * as API_Passport from '@/api/passport'
 import * as types from './mutation-types'
 import Storage from '@/utils/storage'
 import { Base64 } from 'js-base64'
-import Foundation from '@/utils/Foundation'
+import { Foundation } from '~/ui-utils'
 
 export const state = () => ({
   user: '',

@@ -2,7 +2,7 @@
  * 公共API
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 import Storage from '@/utils/storage'
 import GetFullUrl from '@/utils/urls'
 
@@ -36,7 +36,7 @@ export function getHotKeywords() {
   return new Promise((resolve, reject) => {
     request({
       url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/hot-keywords',
-      method: 'get',
+      method: Method.GET,
       loading: false
     }).then(response => resolve(response.slice(0, 7))).catch(error => reject(error))
   })
@@ -51,7 +51,7 @@ export function getAutoCompleteKeyword(keyword) {
   return new Promise((resolve, reject) => {
     request({
       url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/auto-complete-keyword',
-      method: 'get',
+      method: Method.GET,
       loading: false,
       message: false,
       params: {
@@ -69,7 +69,7 @@ export function getNavList() {
   return new Promise((resolve, reject) => {
     request({
       url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/nav/list',
-      method: 'get',
+      method: Method.GET,
       loading: false,
       message: false
     }).then(response => resolve(response.slice(0, 8))).catch(error => reject(error))

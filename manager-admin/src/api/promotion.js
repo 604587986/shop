@@ -5,15 +5,13 @@
 import request from '@/utils/request'
 
 /**
- * 获取积分兑换分类列表
- * @param params
+ * 获取积分分类下级
+ * @param parent_id
  */
-export function getExchangeCats(params) {
+export function getExchangeCatsChildren(parent_id = 0) {
   return request({
-    url: 'promotion/exchange-cats',
-    method: 'get',
-    loading: false,
-    params
+    url: `promotion/exchange-cats/${parent_id}/children`,
+    method: 'get'
   })
 }
 
@@ -33,7 +31,7 @@ export function addExchangeCat(params) {
  * 获取积分兑换分类详情
  * @param id
  */
-export function getExchangeCatDetail(id) {
+export function getExchangeCatsDetail(id) {
   return request({
     url: `promotion/exchange-cats/${id}`,
     method: 'get'
@@ -60,7 +58,7 @@ export function editExhcangeCat(id, params) {
 export function deleteExchangeCat(id) {
   return request({
     url: `promotion/exchange-cats/${id}`,
-    method: 'delte'
+    method: 'delete'
   })
 }
 

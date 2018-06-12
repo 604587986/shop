@@ -2,7 +2,7 @@
  * 店铺相关API
  */
 
-import request from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取店铺数据
@@ -12,7 +12,7 @@ import request from '@/utils/request'
 export function getShopData(shop_id) {
   return request({
     url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/shop/${shop_id}`,
-    method: 'get'
+    method: Method.GET
   })
 }
 
@@ -25,7 +25,7 @@ export function getShopGoods(params) {
   if(!params.page_size) params.page_size = 16
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/shop/goods-list',
-    method: 'get',
+    method: Method.GET,
     params
   })
 }
@@ -36,7 +36,7 @@ export function getShopGoods(params) {
 export function initApplyShop() {
   return request({
     url: 'shops',
-    method: 'post'
+    method: Method.POST
   })
 }
 
@@ -46,7 +46,7 @@ export function initApplyShop() {
 export function getApplyShopInfo() {
   return request({
     url: 'shops',
-    method: 'get'
+    method: Method.GET
   })
 }
 
@@ -58,7 +58,7 @@ export function getApplyShopInfo() {
 export function applyShopStep(step, params) {
   return request({
     url: `shops/step${step}`,
-    method: 'put',
+    method: Method.PUT,
     data: params
   })
 }
@@ -70,7 +70,7 @@ export function applyShopStep(step, params) {
 export function getShopBaseInfo(shop_id) {
   return request({
     url: `shops/${shop_id}`,
-    method: 'get',
+    method: Method.GET,
     loading: false
   })
 }

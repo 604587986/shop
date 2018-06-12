@@ -2,6 +2,7 @@
   <div>
     <en-grade-editor
       ref="regionEditor"
+      type-text="地区"
       :api="regionApi"
       :btns="btns"
       :maxLevel="4"
@@ -79,8 +80,7 @@
         }).catch(() => {})
       },
       /** 添加地区 */
-      handleAdd(region, parent) {
-        console.log(region, parent)
+      handleAdd(level, parent, parentArray) {
         this.regionForm = {
           parent_id: parent ? parent.id : 0,
           cod: 1

@@ -41,7 +41,7 @@
   import { mapGetters } from 'vuex'
   import * as API_Safe from '@/api/safe'
   import * as API_Common from '@/api/common'
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'bind-mobile',
     data() {
@@ -52,7 +52,7 @@
             this.MixinRequired('请填写手机号码！'),
             {
               validator: (rule, value, callback) => {
-                if (!regExp.mobile.test(value)) {
+                if (!RegExp.mobile.test(value)) {
                   callback(new Error('手机格式有误！'))
                 } else {
                   callback()
