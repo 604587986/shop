@@ -3,51 +3,40 @@
  */
 
 import request from '@/utils/request'
-import MemberModel from '@/models/MemberModel'
 
-const memberModel = new MemberModel()
-
-/** 获取会员列表 */
+/**
+ * 获取会员列表
+ * @param params
+ */
 export function getMemberList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'members',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = memberModel.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'members',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 添加会员
  * @param params
- * @returns {Promise<any>}
  */
 export function addMember(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'members',
-      method: 'post',
-      data: memberModel.params(params)
-    }).then(response => resolve(memberModel.map(response))).catch(error => reject(error))
+  return request({
+    url: 'members',
+    method: 'post',
+    data: params
   })
 }
 
 /**
  * 获取会员详情
  * @param id
- * @returns {*}
  */
 export function getMemberDetail(id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `members/${id}`,
-      method: 'get'
-    }).then(response => resolve(memberModel.map(response))).catch(error => reject(error))
+  return request({
+    url: `members/${id}`,
+    method: 'get'
   })
 }
 
@@ -55,15 +44,12 @@ export function getMemberDetail(id) {
  * 修改会员
  * @param id
  * @param params
- * @returns {*}
  */
 export function editMember(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `members/${id}`,
-      method: 'put',
-      data: memberModel.params(params)
-    }).then(response => resolve(memberModel.map(response))).catch(error => reject(error))
+  return request({
+    url: `members/${id}`,
+    method: 'put',
+    data: params
   })
 }
 
@@ -81,20 +67,13 @@ export function deleteMember(id) {
 /**
  * 获取会员回收站列表
  * @param params
- * @returns {Promise<any>}
  */
 export function getRecycleMemberList(params) {
-  params.disabled = -1
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'members',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = memberModel.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'members',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
