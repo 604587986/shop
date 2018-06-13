@@ -12,7 +12,7 @@
         <!--收货人信息 start-->
         <checkout-address
           :address-id="params.address_id"
-          @change="(id) => { params.address_id = id}"
+          @change="handleAddressSelect"
         />
         <!--收货人信息 end-->
 
@@ -94,38 +94,12 @@
         <!--发票信息 end-->
       </div>
       <div class="ckt-total">
-        <div class="total-ckt-total">
-          <div class="details-ckt-total">
-            <ul class="ul-details-ckt-total">
-              <li>
-                <span class="title-details-ckt-total">商品总金额：</span>
-                <em class="price-details-ckt-total">￥12,485.00</em>
-                <div class="clear-details-ckt-total"></div>
-              </li>
-              <li class="li_discount_price">
-                <span class="title-details-ckt-total">优惠金额：</span>
-                <em class="price-details-ckt-total">-￥0.00</em>
-                <div class="clear-details-ckt-total"></div>
-              </li>
-              <li>
-                <span class="title-details-ckt-total">运费总计：</span>
-                <em class="price-details-ckt-total">￥0.00</em>
-                <div class="clear-details-ckt-total"></div>
-              </li>
-            </ul>
-          </div>
-          <div class="summary-ckt-total">
-            <div class="amounts-payable-ckt">
-              <span class="title-details-ckt-total amounts">应付金额：</span>
-              <em class="price-details-ckt-total amounts">￥12,485.00</em>
-              <div class="clear-details-ckt-total"></div>
-            </div>
-          </div>            </div>
-        <div class="summary-ckt-total">
+        <checkout-total :order-total="orderTotal"/>
+        <div v-if="selectedAddress" class="summary-ckt-total">
           <div class="address-info-ckt">
             <span>收货人信息：</span>
-            <span id="address-info">河北 石家庄市 辛集市 辛集镇 12312313</span>
-            <span>&nbsp;收货人：&nbsp;<em id="address-name">王先生</em>&nbsp;<em id="address-mobile">13333333333</em></span>
+            <span>{{ formatterAddress(selectedAddress) }}</span>
+            <span>&nbsp;收货人：&nbsp;<em>{{ selectedAddress.name }}</em>&nbsp;<em>{{ selectedAddress.mobile }}</em></span>
           </div>
         </div>
         <div class="bill-btn-ckt">
@@ -146,6 +120,7 @@
   import CheckoutPayment from './-checkout-payment'
   import CheckoutInventory from './-checkout-inventory'
   import CheckoutTime from './-checkout-time'
+  import CheckoutTotal from './-checkout-total'
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-index',
@@ -153,18 +128,35 @@
       CheckoutAddress,
       CheckoutPayment,
       CheckoutInventory,
-      CheckoutTime
+      CheckoutTime,
+      CheckoutTotal
     },
     data() {
       return {
-        params: ''
+        // 结算参数
+        params: '',
+        // 订单总金额
+        orderTotal: {},
+        // 当前已选的地址
+        selectedAddress: ''
       }
     },
     mounted() {
       // 获取默认结算数据
       API_Trade.getCheckoutParams().then(response => this.params = response)
+      // 获取订单金额
+      API_Trade.getOrderTotal().then(response => this.orderTotal = response)
     },
     methods: {
+      /** 格式化地址信息 */
+      formatterAddress(address) {
+        return `${address.province} ${address.city} ${address.county} ${address.town} ${address.addr}`
+      },
+      /** 收货地址选择 */
+      handleAddressSelect(address) {
+        this.params.address_id = address.addr_id
+        this.selectedAddress = address
+      },
       /** 提交订单 */
       handleCreateTrade() {
         /** 先调用创建订单接口，再跳转到收银台 */
