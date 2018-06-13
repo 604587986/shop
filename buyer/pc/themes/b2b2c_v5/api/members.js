@@ -52,7 +52,7 @@ export function getPointsData(params) {
  */
 export function getComments(params) {
   return request({
-    url: 'member/comments',
+    url: 'members/comments',
     method: Method.GET,
     needToken: true,
     params
@@ -65,7 +65,7 @@ export function getComments(params) {
  */
 export function commentsOrder(params) {
   return request({
-    url: 'member/comments',
+    url: 'members/comments',
     method: Method.POST,
     needToken: true,
     data: params
@@ -79,7 +79,7 @@ export function commentsOrder(params) {
  */
 export function getConsultations(params) {
   return request({
-    url: 'member/asks',
+    url: 'members/asks',
     method: Method.GET,
     needToken: true,
     params
@@ -93,7 +93,7 @@ export function getConsultations(params) {
  */
 export function consultating(goods_id, ask_content) {
   return request({
-    url: 'member/asks',
+    url: 'members/asks',
     method: Method.POST,
     needToken: true,
     data: {

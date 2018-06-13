@@ -39,3 +39,16 @@ export function getCategory(parent_id = 0) {
     loading: false
   })
 }
+
+/**
+ * 获取热门关键词
+ * @param num
+ */
+export function getHotKeywords(num = 7) {
+  return request({
+    url: 'pages/hot-keywords',
+    method: Method.GET,
+    loading: false,
+    params: { num }
+  })
+}
