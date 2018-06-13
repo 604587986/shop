@@ -97,6 +97,7 @@
         const address = JSON.parse(JSON.stringify(this.$store.getters.address))
         if (address.length === 0) return address
         const selIndex = address.findIndex(item => item.addr_id === this.addressId)
+        if (selIndex === -1) return []
         const selAddress = JSON.parse(JSON.stringify(address[selIndex]))
         address.splice(selIndex, 1)
         address.splice(0, 0, selAddress)
