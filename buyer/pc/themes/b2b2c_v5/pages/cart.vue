@@ -28,21 +28,29 @@
                 <a href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
-                <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
+                <nuxt-link :to="'/shop?shop_id=' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>
               </div>
               <div class="shop-body">
-                <div v-for="sku in shop.skuList" :key="sku.sku_id" class="sku-item">
+                <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item">
                   <div class="item clearfix">
                     <a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
                       <i class="iconfont ea-icon-check"></i>
                     </a>
                     <nuxt-link :to="'/goods-' + sku.sku_id + '.html'" class="sku-pic">
-                      <img :src="sku.goods_image" :alt="sku.goods_name">
+                      <img :src="sku.goods_image" :alt="sku.name">
                     </nuxt-link>
-                    <nuxt-link :to="'/goods-' + sku.sku_id + '.html'" class="sku-name">
-                      {{ sku.goods_name }}
-                    </nuxt-link>
-                    <div class="sku-price">{{ sku.price | unitPrice }}</div>
+                    <div class="sku-name-box">
+                      <nuxt-link :to="'/goods-' + sku.sku_id + '.html'" class="sku-name">
+                        {{ sku.name }}
+                      </nuxt-link>
+                      <span v-if="sku.spec_list && sku.spec_list.length > 0" class="sku-spec">
+                        {{ formatterSkuSpec(sku) }}
+                      </span>
+                    </div>
+                    <div class="sku-price">
+                      <span v-if="sku.purchase_price < sku.original_price" class="original-price">{{ sku.original_price | unitPrice }}</span>
+                      {{ sku.purchase_price | unitPrice }}
+                    </div>
                     <div class="sku-num">
                       <div class="num-action clearfix">
                         <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
@@ -54,14 +62,15 @@
                           @focus="handleSkuNumFocus(sku)"
                           @change="handleSkuNumChanged($event, sku)"
                         >
-                        <a class="oper" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
+                        <!--// Andste_TODO 2018/6/12: 缺少库存参数-->
+                        <a :class="['oper', sku.num >= sku.enable_quantity && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
                       </div>
                     </div>
                     <div class="sku-weight">
-                      {{ (sku.num * sku.weight).toFixed(2) }}
+                      {{ (sku.num * sku.goods_weight).toFixed(2) }}
                     </div>
                     <div class="sku-total">
-                      {{ sku.price * sku.num | unitPrice }}
+                      {{ sku.subtotal | unitPrice }}
                     </div>
                     <div class="sku-action">
                       <i class="iconfont ea-icon-delete" @click="handleDelete(sku)"></i>
@@ -71,11 +80,11 @@
               </div>
               <div class="shop-footer">
                 <div class="shop-footer-item">
-                  重量：<span>4.90kg</span>
+                  重量：<span>{{ shop.weight.toFixed(2) }}kg</span>
                 </div>
                 <div class="shop-footer-item price">
                   <em>￥</em>
-                  <span>1622.00</span>
+                  <span>{{ shop.price.total_price | unitPrice }}</span>
                 </div>
               </div>
             </div>
@@ -120,7 +129,7 @@
 <script>
   import { mapActions, mapGetters } from 'vuex'
   import * as API_Trade from '@/api/trade'
-  import * as regExp from '@/utils/RegExp'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'cart',
     layout: 'full',
@@ -176,7 +185,7 @@
       },
       /** 勾选、取消勾选店铺 */
       handleCheckShop(shop) {
-        this.checkShopSku({ shop_id: shop.shop_id, checked: shop.checked ? 0 : 1 })
+        this.checkShopSku({ shop_id: shop.seller_id, checked: shop.checked ? 0 : 1 })
       },
       /** 全选、取消全选 */
       handleCheckAll() {
@@ -185,6 +194,10 @@
       /** 更新商品数量 */
       handleUpdateSkuNum(sku, symbol) {
         if (symbol === '-' && sku.num < 2) return
+        if (symbol === '+' && sku.num >= sku.enable_quantity) {
+          this.$message.error('超过最大库存！')
+          return
+        }
         let _num = symbol === '+' ? sku.num + 1 : sku.num - 1
         this.updateSkuNum({sku_id: sku.sku_id, num: _num})
       },
@@ -195,7 +208,7 @@
       /** 输入框值发生改变 */
       handleSkuNumChanged(event, sku) {
         const _value = event.target.value
-        if (!regExp.integer.test(_value)) {
+        if (!RegExp.integer.test(_value)) {
           this.$message.error('您的输入不合法！')
           event.target.value = this.current_input_value
           return
@@ -231,6 +244,10 @@
       /** 去结算 */
       handleCheckout() {
         this.$router.push({ path: '/checkout' })
+      },
+      /**  格式化规格 */
+      formatterSkuSpec(sku) {
+        return sku.spec_list.map(spec => spec.spec_value).join(' - ')
       },
       /** 监听页面滚动，实现结算栏浮起、固定 */
       countCheckBarFiexd(event) {
