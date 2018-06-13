@@ -3,8 +3,6 @@
  */
 
 import request from '@/utils/request'
-import BrandModel from '@/models/BrandModel'
-const brandModel = new BrandModel()
 
 /**
  * 获取品牌列表
@@ -12,16 +10,11 @@ const brandModel = new BrandModel()
  * @returns {Promise<any>}
  */
 export function getBrandList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'goods/brands',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = brandModel.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'goods/brands',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -30,12 +23,10 @@ export function getBrandList(params) {
  * @param params
  */
 export function addBrand(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'goods/brands',
-      method: 'post',
-      data: brandModel.params(params)
-    }).then(response => resolve(brandModel.map(response))).catch(error => reject(error))
+  return request({
+    url: 'goods/brands',
+    method: 'post',
+    data: params
   })
 }
 
@@ -56,12 +47,10 @@ export function getBrandDetail(id) {
  * @param params
  */
 export function editBrand(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/brands/${id}`,
-      method: 'put',
-      data: brandModel.params(params)
-    }).then(response => resolve(brandModel.map(response))).catch(error => reject(error))
+  return request({
+    url: `goods/brands/${id}`,
+    method: 'put',
+    data: params
   })
 }
 

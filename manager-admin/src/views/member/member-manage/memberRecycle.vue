@@ -5,14 +5,14 @@
       :loading="loading"
     >
       <template slot="table-columns">
-        <el-table-column prop="username" label="用户名"/>
+        <el-table-column prop="uname" label="用户名"/>
         <el-table-column prop="mobile" label="手机号"/>
         <el-table-column prop="email" label="电子邮箱"/>
         <el-table-column label="注册时间">
-          <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
+          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
         <el-table-column label="上次登录时间">
-          <template slot-scope="scope">{{ scope.row.last_login_time | unixToDate }}</template>
+          <template slot-scope="scope">{{ scope.row.last_login | unixToDate }}</template>
         </el-table-column>
         <el-table-column prop="login_count" label="登录次数"/>
         <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
@@ -80,7 +80,7 @@
       /** 恢复会员操作 */
       handleRecoverMember(index, row) {
         this.$confirm('确定要恢复这个会员吗？', '提示', { type: 'warning' }).then(() => {
-          API_Member.recycleMember(row.id).then(() => {
+          API_Member.recycleMember(row.member_id).then(() => {
             this.$message.success('会员恢复成功！')
             this.GET_RecycleMemberList()
           })
@@ -98,14 +98,8 @@
         API_Member.getRecycleMemberList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(() => {
-          this.loading = false
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

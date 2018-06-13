@@ -2,21 +2,15 @@
   <div>
     <en-tabel-layout
       :toolbar="false"
-      pagination
-      :tableData="tableData.data"
       :loading="loading"
+      :tableData="tableData.data"
     >
-      <!--<div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddStorageSolution">添加</el-button>
-        </div>
-      </div>-->
       <template slot="table-columns">
         <el-table-column prop="name" label="储存方案名称"/>
         <el-table-column label="启用状态">
           <template slot-scope="scope">
-            {{ scope.row.is_open === 1 ? '已开启' : '已关闭' }}
-            <el-button v-if="scope.row.is_open === 0" type="text" @click="handleOpenStorageSolution(scope.$index, scope.row)">开启</el-button>
+            {{ scope.row.open === 1 ? '已开启' : '已关闭' }}
+            <el-button v-if="scope.row.open === 0" type="text" @click="handleOpenStorageSolution(scope.$index, scope.row)">开启</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -47,7 +41,7 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false">
       <el-form :model="storageForm" :rules="storageRules" ref="storageForm" label-width="140px">
-        <template v-for="(config, index) in storageForm.configItems">
+        <template v-for="(config, index) in storageForm.config_items">
           <el-form-item :label="config.text">
             <el-input placeholder="请输入内容" v-model="config.value" clearable/>
           </el-form-item>
@@ -101,9 +95,6 @@
         this.params.page_no = page
         this.GET_StorageSolutiontList()
       },
-
-      /** 添加储存方案 */
-      handleAddStorageSolution() {},
 
       /** 开启储存方案 */
       handleOpenStorageSolution(index, row) {

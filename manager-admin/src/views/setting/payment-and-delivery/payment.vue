@@ -6,7 +6,7 @@
       :loading="loading"
     >
       <template slot="table-columns">
-        <el-table-column prop="name" label="支付方式"/>
+        <el-table-column prop="method_name" label="支付方式"/>
         <el-table-column prop="is_retrace" label="是否支持原路退回">
           <template slot-scope="scope">{{ scope.row.is_retrace ? '支持' : '不支持' }}</template>
         </el-table-column>
@@ -32,7 +32,7 @@
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
-      :title="'配置支付方式 - ' + paymentForm.name"
+      :title="'配置支付方式 - ' + paymentForm.method_name"
       :visible.sync="dialogPaymentVisible"
       width="35%"
       :close-on-click-modal="false"
@@ -120,7 +120,7 @@
 
       /** 配置支付方式 */
       handleEditPayment(index, row) {
-        API_Payment.getPaymentDetail(row.code).then(response => {
+        API_Payment.getPaymentDetail(row.plugin_id).then(response => {
           console.log(response)
           response.enable_client && response.enable_client.map(item => {
             if (item.is_open === null) item.is_open = 0
@@ -133,8 +133,8 @@
 
       /** 提交修改支付方式表单 */
       submitPaymentForm(formName) {
-        const { code } = this.paymentForm
-        API_Payment.editPayment(code, this.paymentForm).then(response => {
+        const { plugin_id } = this.paymentForm
+        API_Payment.editPayment(plugin_id, this.paymentForm).then(response => {
           this.dialogPaymentVisible = false
           this.$message.success('保存成功！')
           this.GET_PaymentList()

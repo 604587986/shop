@@ -10,7 +10,7 @@
           <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddBrand">添加</el-button>
         </div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent"/>
+          <!--<en-table-search @search="searchEvent"/>-->
         </div>
       </div>
       <template slot="table-columns">
@@ -18,7 +18,7 @@
         <!--品牌图片-->
         <el-table-column label="品牌图片" width="150">
           <template slot-scope="scope">
-            <img :src="scope.row.image" class="goods-image"/>
+            <img :src="scope.row.logo" class="goods-image"/>
           </template>
         </el-table-column>
         <!--品牌名称-->
@@ -53,7 +53,7 @@
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
-      :title="brandForm.id ? '编辑品牌' : '添加品牌'"
+      :title="brandForm.brand_id ? '编辑品牌' : '添加品牌'"
       :visible.sync="dialogBrandVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -64,13 +64,13 @@
         <el-form-item label="品牌名称" prop="name">
           <el-input v-model="brandForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="品牌图片" prop="image">
+        <el-form-item label="品牌图片" prop="logo">
           <el-upload
             :action="MixinUploadApi"
             list-type="picture"
-            :on-success="(res) => { brandForm.image = res.url }"
-            :on-remove="() => { brandForm.image = '' }"
-            :file-list="brandForm.image ? [{ name: 'brand_image', url: brandForm.image }] : []"
+            :on-success="(res) => { brandForm.logo = res.url }"
+            :on-remove="() => { brandForm.logo = '' }"
+            :file-list="brandForm.logo ? [{ name: 'brand_image', url: brandForm.logo }] : []"
             :multiple="false"
             :limit="1"
           >
@@ -114,12 +114,10 @@
         /** 添加、修改品牌 表单规则 */
         brandRules: {
           name: [
-            { required: true, message: '请输入品牌名称', trigger: 'blur' },
+            this.MixinRequired('请输入品牌名称！'),
             { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
           ],
-          image: [
-            { required: true, message: '请上传品牌logo' }
-          ]
+          logo: [this.MixinRequired('请上传品牌logo！')]
         }
       }
     },
@@ -141,7 +139,7 @@
 
       /** 当选择项发生变化 */
       handleSelectionChange(val) {
-        this.selectedData = val.map(item => item.id)
+        this.selectedData = val.map(item => item.brand_id)
       },
 
       /** 搜索事件触发 */
@@ -161,7 +159,7 @@
       /** 删除品牌操作 */
       handleDeleteBrand(index, row) {
         this.$confirm('确定要删除这个品牌吗？', '提示', { type: 'warning' }).then(() => {
-          this.DELETE_Brand(row.id)
+          this.DELETE_Brand(row.brand_id)
         }).catch(() => {})
       },
       /** 删除选中品牌操作 */
@@ -185,8 +183,8 @@
       submitBrandForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const { id } = this.brandForm
-            if (!id) {
+            const { brand_id } = this.brandForm
+            if (!brand_id) {
               API_brand.addBrand(this.brandForm).then(response => {
                 this.dialogBrandVisible = false
                 this.$message.success('添加成功！')
@@ -194,11 +192,11 @@
                 this.GET_BrandList()
               })
             } else {
-              API_brand.editBrand(id, this.brandForm).then(response => {
+              API_brand.editBrand(brand_id, this.brandForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogBrandVisible = false
                 this.$refs[formName].resetFields()
-                this.MixinSetTableData(this.tableData, id, response)
+                this.MixinSetTableData(this.tableData, 'brand_id', brand_id, response)
               })
             }
           } else {
@@ -213,9 +211,7 @@
         API_brand.getBrandList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(() => {
-          this.loading = false
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /** 删除品牌 */

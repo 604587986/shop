@@ -4,7 +4,7 @@
 
 import Vue from 'vue'
 import * as API_Common from '@/api/common'
-import { Foundation } from '@/framework'
+import { Foundation } from '~/ui-utils'
 
 export default {
   data() {
@@ -21,9 +21,9 @@ export default {
       return JSON.parse(JSON.stringify(obj))
     },
     /** 用于修改单条表格数据后，set到tableData中 */
-    MixinSetTableData(tableData, id, response) {
+    MixinSetTableData(tableData, idName, id, response) {
       const { data } = tableData
-      const index = data.findIndex(item => item.id === id)
+      const index = data.findIndex(item => item[idName] === id)
       Vue.set(data, index, response)
     },
     /** 用于判断表单是否为空 */

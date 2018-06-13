@@ -38,9 +38,8 @@
       :limit="10"
       multiple
     />
-    <!--api="http://yiqisi.s1.natapp.cc/seller-api/goods"-->
     <en-goods-picker
-      api="http://localhost:9090/javashop/shop/admin/goods/search.do"
+      :api="goodsListApi"
       :show="dialogGoodsShow"
       :default-data="defaultGoodsData"
       :limit="0"
@@ -60,6 +59,8 @@
     components: { draggable },
     data() {
       return {
+        // 获取商品列表API
+        goodsListApi: process.env.BASE_API + '/goods',
         templates,
         templateArray,
         /** 模板列表 */

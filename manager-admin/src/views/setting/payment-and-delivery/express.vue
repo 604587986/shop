@@ -12,7 +12,7 @@
       <template slot="table-columns">
         <el-table-column prop="name" label="公司名称"/>
         <el-table-column prop="code" label="公司代码"/>
-        <el-table-column prop="kd_code" label="快递鸟代码"/>
+        <el-table-column prop="kdcode" label="快递鸟代码"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -45,16 +45,16 @@
         <el-form-item label="物流公司代码" prop="code">
           <el-input v-model="expressForm.code"></el-input>
         </el-form-item>
-        <el-form-item label="快递鸟物流代码" prop="kd_code">
-          <el-input v-model="expressForm.kd_code"></el-input>
+        <el-form-item label="快递鸟物流代码" prop="kdcode">
+          <el-input v-model="expressForm.kdcode"></el-input>
         </el-form-item>
-        <el-form-item label="电子面单" prop="support_waybill">
-          <el-radio-group v-model="expressForm.support_waybill">
+        <el-form-item label="电子面单" prop="is_waybill">
+          <el-radio-group v-model="expressForm.is_waybill">
             <el-radio :label="1">支持</el-radio>
             <el-radio :label="0">不支持</el-radio>
           </el-radio-group>
         </el-form-item>
-        <template v-if="expressForm.support_waybill">
+        <template v-if="expressForm.is_waybill">
           <el-form-item label="客户号" prop="customer_name">
             <el-input v-model="expressForm.customer_name"></el-input>
           </el-form-item>
@@ -93,16 +93,16 @@
         expressRules: {
           name: [this.MixinRequired('请输入物流公司名称！')],
           code: [this.MixinRequired('请输入物流公司代码！')],
-          kd_code: [this.MixinRequired('请输入快递鸟物流代码！')],
-          customer_name: [{ required: false, message: '请输入物流公司客户号', trigger: 'blur' }],
-          customer_pwd: [{ required: false, message: '请输入物流公司电子面单密码', trigger: 'blur' }]
+          kdcode: [this.MixinRequired('请输入快递鸟物流代码！')],
+          customer_name: [this.MixinRequired('请输入物流公司客户号！')],
+          customer_pwd: [this.MixinRequired('请输入物流公司电子面单密码！')]
         },
         /** 快递公司 dialog */
         dialogExpressVisible: false
       }
     },
     watch: {
-      'expressForm.support_waybill': function waybillChange(newVal) {
+      'expressForm.is_waybill': function waybillChange(newVal) {
         this.expressRules.customer_name[0].required = !!newVal
         this.expressRules.customer_pwd[0].required = !!newVal
       }
@@ -150,7 +150,7 @@
               API_Express.editExpress(id, this.expressForm).then(response => {
                 this.dialogExpressVisible = false
                 this.$message.success('保存成功！')
-                this.MixinSetTableData(this.tableData, id, response)
+                this.MixinSetTableData(this.tableData, 'id', id, response)
               })
             }
           } else {

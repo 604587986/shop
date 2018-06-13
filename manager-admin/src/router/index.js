@@ -428,18 +428,17 @@ export const asyncRouterMap = [
   {
     path: '/development',
     component: Layout,
-    redirect: '/development/tool-manage/url-mapping',
+    redirect: '/development/tool-manage/menu-manage',
     name: 'development',
     meta: { title: 'development', icon: 'development-manage' },
     children: [
       {
         path: '/development/tool-manage',
         component: () => import('@/views/development/tool-manage/index'),
-        redirect: '/development/tool-manage/url-mapping',
+        redirect: '/development/tool-manage/menu-manage',
         name: 'toolManage',
         meta: { title: 'toolManage' },
         children: [
-          { path: 'url-mapping', component: () => import('@/views/development/tool-manage/URLMapping'), name: 'urlMapping', meta: { title: 'URLMapping' }},
           { path: 'menu-manage', component: () => import('@/views/development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }},
           { path: 'data-output', component: () => import('@/views/development/tool-manage/dataOutput'), name: 'dataOutput', meta: { title: 'dataOutput' }},
           { path: 'clear-example-data', component: () => import('@/views/development/tool-manage/clearExampleData'), name: 'clearExampleData', meta: { title: 'clearExampleData' }}

@@ -22,7 +22,7 @@
 
 <script>
   import * as API_Statistics from '@/api/statistics'
-  import { Foundation } from '@/framework'
+  import { Foundation } from '~/ui-utils'
   import echartsOptions from '../echartsOptions'
 
   export default {
