@@ -46,7 +46,6 @@
 </template>
 
 <script>
-
   export default {
     name: 'pcThemeManage',
     data() {
