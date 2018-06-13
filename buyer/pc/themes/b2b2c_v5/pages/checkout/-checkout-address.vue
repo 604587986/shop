@@ -73,11 +73,10 @@
    * 收货地址组件
    */
   import Vue from 'vue'
-  import { Checkbox, Form, FormItem, Input } from 'element-ui'
+  import { Checkbox, Form, FormItem } from 'element-ui'
   Vue.use(Checkbox)
   Vue.use(Form)
   Vue.use(FormItem)
-  Vue.use(Input)
   import { mapGetters, mapActions } from 'vuex'
   import addressMixin from '@/pages/member/addressMixin'
   import * as API_Trade from '@/api/trade'
