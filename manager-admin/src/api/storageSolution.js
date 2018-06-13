@@ -3,33 +3,23 @@
  */
 
 import request from '@/utils/request'
-import StorageSolutionModel from '@/models/StorageSolutionModel'
-
-const storageSolutionModel = new StorageSolutionModel()
 
 /**
  * 获取储存方案列表
  * @param params
- * @returns {Promise<any>}
  */
 export function getStorageSolutionList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'system/uploaders',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = storageSolutionModel.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'system/uploaders',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 添加储存方案
  * @param params
- * @returns {*}
  */
 export function addStorageSolution(params) {
   return request({
@@ -49,7 +39,7 @@ export function editStorageSolution(id, params) {
     url: `system/uploaders/${id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
-    data: storageSolutionModel.params(params)
+    data: params
   })
 }
 
