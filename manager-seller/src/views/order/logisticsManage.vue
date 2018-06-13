@@ -64,13 +64,13 @@
             <el-input type="text" v-model.number="mouldForm.first_company" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="运费（元）:" prop="first_price">
-            <el-input v-model.number="mouldForm.first_price"></el-input>
+            <el-input v-model="mouldForm.first_price"></el-input>
           </el-form-item>
           <el-form-item :label="mouldForm.tpl_type === 1 ? '续重（kg）:':'续件（个）:'" prop="continued_company">
             <el-input v-model.number="mouldForm.continued_company"></el-input>
           </el-form-item>
           <el-form-item :label="mouldForm.tpl_type === 1? '续重运费（元）:':'续件运费（元）:'" prop="continued_price">
-            <el-input v-model.number="mouldForm.continued_price"></el-input>
+            <el-input v-model="mouldForm.continued_price"></el-input>
           </el-form-item>
           <el-form-item label="模板类型:" prop="tpl_type">
             <el-select v-model.number="mouldForm.tpl_type" placeholder="请选择">
@@ -106,6 +106,7 @@
 
 <script>
   import * as API_express from '@/api/expressMould'
+  import Reg from '@/framework/RegExp'
   import { LogisticsCompany } from './components'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
 
@@ -116,6 +117,30 @@
       [AreaSelectorDialog.name]: AreaSelectorDialog
     },
     data() {
+      const checkFirstPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('首重运费不能为空'))
+        }
+        setTimeout(() => {
+          if (!Reg.price.test(value)) {
+            callback(new Error('请输入正确的金额'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+      const checkContinuedPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('续重运费不能为空'))
+        }
+        setTimeout(() => {
+          if (!Reg.price.test(value)) {
+            callback(new Error('请输入正确的金额'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
       return {
         /** 当前面板的名字*/
         activeName: 'express',
@@ -199,7 +224,7 @@
           ],
           first_price: [
             { required: true, message: '请输入首重运费', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkFirstPrice, trigger: 'blur' }
           ],
           continued_company: [
             { required: true, message: '请输入续重数量', trigger: 'blur' },
@@ -207,7 +232,7 @@
           ],
           continued_price: [
             { required: true, message: '请输入续重运费', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkContinuedPrice, trigger: 'blur' }
           ],
           tpl_type: [
             { required: true, message: '请选择模板类型', trigger: 'blur' }
@@ -288,7 +313,7 @@
               this.GET_ExpressMould()
               this.$message.success('删除成功')
             })
-          }).catch(() => { this.$message.info('取消删除操作') })
+          })
       },
 
       /** 新增模板 */
