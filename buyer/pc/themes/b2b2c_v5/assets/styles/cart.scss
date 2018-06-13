@@ -105,10 +105,12 @@
           height: 100%;
         }
       }
-      .sku-name {
+      .sku-name-box {
         float: left;
         width: 275px;
         padding-left: 20px;
+      }
+      .sku-name {
         overflow: hidden;
         color: #333333;
         font-size: 12px;
@@ -117,12 +119,19 @@
         -webkit-line-clamp: 2;
         &:hover { color: #f42424 }
       }
+      .sku-spec {
+        color: #ff9800;
+        margin-top: 5px;
+      }
       .sku-price {
         position: relative;
         float: left;
         width: 165px;
         text-align: right;
         font-size: 12px;
+      }
+      .original-price {
+        text-decoration:line-through
       }
       .sku-num {
         display: flex;

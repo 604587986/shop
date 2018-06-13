@@ -13,8 +13,8 @@
       <button type="button" class="search-btn shop" @click="handleSearchShop">搜店铺</button>
     </div>
     <ul class="search-hot-keywords">
-      <li v-for="item in hot_keywords" :key="item">
-        <nuxt-link :to="'/goods-list?keyword=' + item">{{ item }}</nuxt-link>
+      <li v-for="item in hot_keywords" :key="item.id">
+        <nuxt-link :to="'/goods-list?keyword=' + item">{{ item.hot_name }}</nuxt-link>
       </li>
     </ul>
     <div v-show="show_autocomplete && autoCompleteData.length > 0" class="search-autocomplete">

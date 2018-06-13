@@ -179,7 +179,7 @@
         const { sku_id } = this.selectedSku
         API_Trade.addToCart(sku_id, num).then(response => {
           this.$confirm('加入购物车成功！要去看看吗？', () => {
-            this.$router.push({ path: '/checkout' })
+            this.$router.push({ path: '/cart' })
           })
         })
       }

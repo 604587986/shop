@@ -3,13 +3,13 @@
 </template>
 
 <script>
-  import * as API_Trade from '@/api/trade'
+  /**
+   * 这里只是作为路由容器
+   * 主要的代码在checkout/index.vue里
+   */
   export default {
     name: 'checkout',
     layout: 'full',
-    middleware: 'auth-user',
-    mounted() {
-      API_Trade.getCarts()
-    }
+    middleware: 'auth-user'
   }
 </script>

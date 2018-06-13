@@ -29,20 +29,6 @@ export const uploadApi = GetFullUrl('uploaders')
 export const regionApi = GetFullUrl('regions/@id/children')
 
 /**
- * 获取热门关键字
- * @returns {Promise<any>}
- */
-export function getHotKeywords() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/hot-keywords',
-      method: Method.GET,
-      loading: false
-    }).then(response => resolve(response.slice(0, 7))).catch(error => reject(error))
-  })
-}
-
-/**
  * 搜索关键字自动完成
  * @param keyword 关键词
  * @returns {Promise<any>}
