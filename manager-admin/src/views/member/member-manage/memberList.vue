@@ -157,7 +157,7 @@
 
 <script>
   import * as API_Member from '@/api/member'
-  import { RegExp } from '@/framework'
+  import { RegExp } from '~/ui-utils'
   // Andste_TODO 2018/6/13: 订单列表、积分、等级积分、消费积分、咨询、评论未适配
   export default {
     name: 'memberList',

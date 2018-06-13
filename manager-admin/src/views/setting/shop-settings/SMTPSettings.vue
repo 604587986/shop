@@ -88,7 +88,7 @@
 
 <script>
   import * as API_Smtp from '@/api/smtp'
-  import regExp from '@/framework/RegExp'
+  import { RegExp } from '~/ui-utils'
 
   export default {
     name: 'SMTPSettings',
@@ -209,7 +209,7 @@
         const { test_email, smtpForm } = this
         this.$refs['smtpForm'].validate(valid => {
           if (valid) {
-            if (!regExp.email.test(test_email)) {
+            if (!RegExp.email.test(test_email)) {
               this.test_email_error = '邮箱地址格式不正确！'
               return false
             }

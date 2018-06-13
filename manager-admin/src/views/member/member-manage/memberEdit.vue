@@ -121,7 +121,7 @@
 
 <script>
   import * as API_Member from '@/api/member'
-  import { RegExp } from '@/framework'
+  import { RegExp } from '~/ui-utils'
   import MemberListAddress from './memberListAddress'
 
   export default {

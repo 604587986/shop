@@ -4,7 +4,7 @@
 
 import Vue from 'vue'
 import * as API_Common from '@/api/common'
-import { Foundation } from '@/framework'
+import { Foundation } from '~/ui-utils'
 
 export default {
   data() {
