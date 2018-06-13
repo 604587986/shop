@@ -126,7 +126,8 @@ export function getTotal() {
 export function getCheckoutParams() {
   return request({
     url: 'trade/checkout-params',
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
 
@@ -137,7 +138,8 @@ export function getCheckoutParams() {
 export function setAddressId(address_id) {
   return request({
     url: `trade/checkout-params/addressId/${address_id}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -149,6 +151,7 @@ export function setPaymentType(payment_type = 'ONLINE') {
   return request({
     url: 'trade/checkout-params/payment-type',
     method: Method.POST,
+    needToken: true,
     data: { payment_type }
   })
 }
@@ -161,6 +164,7 @@ export function setRecepit(params) {
   return request({
     url: 'trade/checkout-params/receipt',
     method: Method.POST,
+    needToken: true,
     headers: {
       ...ContentType.JSON
     },
@@ -176,6 +180,7 @@ export function setReceiveTime(receive_time) {
   return request({
     url: 'trade/checkout-params/receive-time',
     method: Method.POST,
+    needToken: true,
     data: { receive_time }
   })
 }
@@ -188,6 +193,7 @@ export function setRemark(remark) {
   return request({
     url: 'trade/checkout-params/remark',
     method: Method.POST,
+    needToken: true,
     data: { remark }
   })
 }
@@ -208,6 +214,7 @@ export function getOrderTotal() {
 export function createTrade() {
   return request({
     url: 'trade/orders/create',
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
