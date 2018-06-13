@@ -7,8 +7,7 @@
     <div v-if="consulting" class="content-consulting">
       <div v-for="consult in consulting.data" :key="consult.ask_id" class="item-consulting">
         <div class="cons-left">
-          <!--// Andste_TODO 2018/6/6: 会员头像没有参数-->
-          <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/CBFBB8EBCC324ED3A69BF0F2B0D7B50E.jpeg" class="face-consulting">
+          <en-face :url="consult.member_face" class="face-consulting"/>
           <div class="name-consulting" :title="consult.member_name">{{ consult.member_name }}</div>
         </div>
         <div class="cons-right">
