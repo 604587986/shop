@@ -33,6 +33,8 @@ export const SET_ADDRESS = 'SET_ADDRESS'
 export const ADD_ADDRESS = 'ADD_ADDRESS'
 // 编辑地址
 export const EDIT_ADDRESS = 'EDIT_ADDRESS'
+// 谁知为默认地址
+export const SET_DEFAULT_ADDRESS = 'SET_DEFAULT_ADDRESS'
 // 删除地址
 export const DELETE_ADDRESS = 'DELETE_ADDRESS'
 
