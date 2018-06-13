@@ -65,19 +65,21 @@
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.allow_seller_approval"
+              v-if="scope.row.after_sale_operate_allowable.allow_seller_approval"
               type="primary"
               @click="handleOperateRefund(scope.row)">审核</el-button>
             <el-button
-              v-if="scope.row.allow_seller_refund"
+              v-if="scope.row.after_sale_operate_allowable.allow_seller_refund"
               type="primary"
               @click="handleOperateRefund(scope.row)">退款</el-button>
             <el-button
-              v-if="scope.row.allow_stock_in"
+              v-if="scope.row.after_sale_operate_allowable.allow_stock_in"
               type="primary"
               @click="handleOperateRefund(scope.row)">入库</el-button>
             <el-button
-              v-if="!scope.row.allow_stock_in && !scope.row.allow_seller_approval && !scope.row.allow_seller_approval"
+              v-if="!scope.row.after_sale_operate_allowable.allow_stock_in &&
+              !scope.row.after_sale_operate_allowable.allow_seller_approval &&
+              !scope.row.after_sale_operate_allowable.allow_seller_refund"
               type="primary"
               @click="handleOperateRefund(scope.row)">查看</el-button>
           </template>
@@ -124,38 +126,40 @@
           <!--退款/货信息-->
           <div class="refund-info-relations">
             <div class="order-info-item">
-              <span>申请时间: </span><span>{{ refundInfo.create_time | unixToDate }}</span>
+              <span>申请时间:  </span><span>{{ refundInfo.create_time | unixToDate }}</span>
             </div>
             <div class="order-info-item">
               <span>{{currentType}}原因: </span><span>{{ refundInfo.refund_reason }}</span>
             </div>
             <div class="order-info-item">
-              <span>详细描述: </span><span>{{ refundInfo.customer_remark }}</span>
+              <span>详细描述:  </span><span>{{ refundInfo.customer_remark }}</span>
             </div>
             <div class="order-info-item">
-              <span>退款金额: </span>
-              <el-input v-if="authOpera.allow_seller_refund" v-model="refundMoney"></el-input>
-              <span v-if="!authOpera.allow_seller_refund">{{ refundInfo.refund_price | unitPrice('¥') }}</span>
+              <span>退款金额:  </span>
+              <el-input v-if="authOpera.allow_seller_approval" v-model="refundMoney"></el-input>
+              <span v-if="!authOpera.allow_seller_approval">
+                {{ refundInfo.refund_price | unitPrice('¥') }}
+              </span>
             </div>
             <div class="order-info-item order-info-remark">
-              <span>审核备注: </span>
+              <span>审核备注:  </span>
               <el-input v-if="authOpera.allow_seller_approval" type="textarea" v-model="remark"></el-input>
               <span v-if="!authOpera.allow_seller_approval">{{ remark }}</span>
             </div>
             <!--审核-->
             <div class="order-info-item" v-if="authOpera.allow_seller_approval">
-              <span>审核: </span>
+              <span>审核:  </span>
               <el-button type="success" size="mini"  @click="handleRefundAuth(1)">通过</el-button>
               <el-button type="danger" size="mini"  @click="handleRefundAuth(0)">不通过</el-button>
             </div>
             <!--退款-->
             <div class="order-info-item" v-if="authOpera.allow_seller_refund">
-              <span>退款: </span>
+              <span>退款:  </span>
               <el-button type="primary" size="mini"  @click="handleRefund">退款完成</el-button>
             </div>
             <!--入库-->
             <div class="order-info-item" v-if="authOpera.allow_stock_in">
-              <span>入库:</span>
+              <span>入库: </span>
               <el-button type="primary" size="mini"  @click="handleWareHousing">确认入库</el-button>
             </div>
           </div>
@@ -301,9 +305,9 @@
           this.loading = false
           this.tableData = response.data
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
         })
       },
@@ -318,37 +322,51 @@
           this.refundInfo = response.refund
           this.refundGoodsData = []
           this.refundGoodsData.push(response.refund_goods_do)
+          this.refundInfo.price = response.refund_goods_do.price
         })
       },
 
       /** 卖家审核退款/货 */
       handleRefundAuth(agree) {
-        const _params = {
-          agree: agree,
-          refund_price: this.refundMoney,
-          remark: this.remark
-        }
-        API_refund.refundAuth(this.currentSn, _params).then(() => {
-          this.goodsRefundshow = false
-        })
+        const _tip = agree === 1 ? '通过' : '不通过'
+        this.$confirm(`确认${_tip}审核么?`, '确认信息', { type: 'warning' })
+          .then(() => {
+            const _params = {
+              agree: agree,
+              refund_price: this.refundMoney,
+              remark: this.remark
+            }
+            API_refund.refundAuth(this.currentSn, _params).then(() => {
+              this.goodsRefundshow = false
+              this.GET_RefundOrder()
+            })
+          }).catch(() => {})
       },
 
       /** 卖家执行退款 */
-      handleRefund(row) {
-        const _params = {}
-        API_refund.toRefund(row.sn, _params).then(() => {
-          this.goodsRefundshow = false
-        })
+      handleRefund() {
+        this.$confirm(`确认退款?`, '确认信息', { type: 'warning' })
+          .then(() => {
+            const _params = {}
+            API_refund.toRefund(this.currentSn, _params).then(() => {
+              this.goodsRefundshow = false
+              this.GET_RefundOrder()
+            })
+          }).catch(() => { })
       },
 
       /** 卖家执行入库操作 */
-      handleWareHousing(row) {
-        const _params = {
-          remark: ''
-        }
-        API_refund.wareHousing(row.sn, _params).then(() => {
-          this.goodsRefundshow = false
-        })
+      handleWareHousing() {
+        this.$confirm(`确定要执行入库操作么?`, '确认信息', { type: 'warning' })
+          .then(() => {
+            const _params = {
+              remark: ''
+            }
+            API_refund.wareHousing(this.currentSn, _params).then(() => {
+              this.goodsRefundshow = false
+              this.GET_RefundOrder()
+            })
+          }).catch(() => { })
       }
     }
   }

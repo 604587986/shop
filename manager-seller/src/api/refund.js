@@ -54,7 +54,7 @@ export function getRefundDetails(sn) {
 export function refundAuth(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/after-sales/audits/{sn}',
+      url: `/after-sales/audits/${sn}`,
       method: 'post',
       loading: false,
       data: params
@@ -73,7 +73,7 @@ export function refundAuth(sn, params) {
 export function toRefund(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/after-sales/refunds/{sn}',
+      url: `/after-sales/refunds/${sn}`,
       method: 'post',
       loading: false,
       data: params
@@ -93,7 +93,7 @@ export function toRefund(sn, params) {
 export function wareHousing(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/after-sales/stock-ins/{sn}',
+      url: `/after-sales/stock-ins/${sn}`,
       method: 'post',
       loading: false,
       data: params
