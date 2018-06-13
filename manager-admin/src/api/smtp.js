@@ -3,8 +3,6 @@
  */
 
 import request from '@/utils/request'
-import SmtpModel from '@/models/SmtpModel'
-const smtpModel = new SmtpModel()
 
 /**
  * 获取smtp列表
@@ -12,16 +10,11 @@ const smtpModel = new SmtpModel()
  * @returns {Promise<any>}
  */
 export function getSmtpList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'smtps',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = smtpModel.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'smtps',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -30,12 +23,10 @@ export function getSmtpList(params) {
  * @param params
  */
 export function addSmtp(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'smtps',
-      method: 'post',
-      data: smtpModel.params(params)
-    }).then(response => resolve(smtpModel.map(response))).catch(error => reject(error))
+  return request({
+    url: 'smtps',
+    method: 'post',
+    data: params
   })
 }
 
@@ -45,12 +36,10 @@ export function addSmtp(params) {
  * @param params
  */
 export function editSmtp(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `smtps/${id}`,
-      method: 'put',
-      data: smtpModel.params(params)
-    }).then(response => resolve(smtpModel.map(response))).catch(error => reject(error))
+  return request({
+    url: `smtps/${id}`,
+    method: 'put',
+    data: params
   })
 }
 
