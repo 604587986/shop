@@ -1,6 +1,6 @@
 <template>
   <div class="sku-item-content">
-    <el-form  :model="skuForm" >
+    <el-form  :model="skuForm" @submit.native.prevent>
       <div v-for="(item, $index) in skuInfo" :key="$index">
         <el-form-item label="规格名：" prop="spec_name">
           <el-autocomplete
@@ -12,6 +12,7 @@
             placeholder="请输入规格项名称"
             :select-when-unmatched='true'
             @focus="getActiveSkuItem($index, item)"
+            @keyup.enter.native="editSkuItem(item, $index)"
             @blur.naitve="editSkuItem(item, $index)"
             @select="handleSelectSkuItem">
           </el-autocomplete>
@@ -31,6 +32,7 @@
               :fetch-suggestions="querySearchSkuValue"
               placeholder="请输入规格值名称"
               @focus="getActiveSkuValue(index, $index ,item, val)"
+              @keyup.enter.native="editSkuIValue(item, val, $index, index)"
               @blur.naitve="editSkuIValue(item, val, $index, index)"
               @select="handleSelectSkuValue">
               <template slot="append">
