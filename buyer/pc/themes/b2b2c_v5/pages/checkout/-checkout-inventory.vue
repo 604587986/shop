@@ -99,18 +99,14 @@
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-inventory',
-    props: ['remark'],
+    props: ['inventoryList', 'remark'],
     data() {
       return {
-        inventoryList: [],
         iRemark: this.remark
       }
     },
     watch: {
       remark(newVal) { this.iRemark = newVal }
-    },
-    mounted() {
-      API_Trade.getCarts('checked').then(response => this.inventoryList = response)
     },
     methods: {
       handleSetRemark() {
