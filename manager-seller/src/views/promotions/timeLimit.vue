@@ -41,6 +41,7 @@
               v-if="scope.row.is_signed === 1"
               @click="activityGoodsInfo(scope.row)">已报名
             </el-button>
+            <span v-if="scope.row.is_signed === 2">已截止</span>
           </template>
         </el-table-column>
       </template>
@@ -117,9 +118,9 @@
         API_limitTime.getLimitTimeActivityList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
         })
@@ -133,7 +134,7 @@
 
       /** 活动商品信息 已报名*/
       activityGoodsInfo(row) {
-        this.$router.push({ path: '/promotions/activity-goods-data' })
+        this.$router.push({ path: `/promotions/activity-goods-data/${row.activity_id}` })
       }
     }
   }

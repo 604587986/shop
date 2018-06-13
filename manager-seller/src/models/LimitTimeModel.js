@@ -33,7 +33,7 @@ export class LimitTimeActivitys extends DataModel {
   @ServerName('seckill_rule')
   sign_condition
 
-  /** 报名状态  1已报名 0未报名*/
+  /** 报名状态   0未报名 1已报名 2已截止*/
   @ServerName('is_apply')
   is_signed
 }
@@ -42,39 +42,27 @@ export class LimitTimeActivitys extends DataModel {
 export class LimitTimeActivitydetails extends DataModel {
   /** 活动ID */
   @ServerName('seckill_id')
-  activity_id
+  seckill_id
 
   /** 活动名称 */
   @ServerName('seckill_name')
-  activity_name
+  seckill_name
 
-  /** 活动副标题 */
-  @ServerName('activity_subname')
-  activity_subname
+  /** 申请规则 */
+  @ServerName('seckill_rule')
+  seckill_rule
 
-  /** 商品ID */
-  @ServerName('goods_id')
-  goods_id
+  /** 申请状态 */
+  @ServerName('seckill_status')
+  seckill_status
 
-  /** 商品名称 */
-  @ServerName('goods_name')
-  goods_name
+  /** 活动时间 */
+  @ServerName('start_day')
+  start_day
 
-  /** 商品图片 */
-  @ServerName('goods_image')
-  goods_image
-
-  /** 审核状态 */
-  @ServerName('examine_status')
-  examine_status
-
-  /** 活动时间（开始时间） */
-  @ServerName('start_time')
-  start_time
-
-  /** 结束时间 */
-  @ServerName('end_time')
-  end_time
+  /** 截止报名时间 */
+  @ServerName('apply_end_time')
+  apply_end_time
 }
 
 /** 限时活动商品列表 */

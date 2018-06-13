@@ -87,9 +87,9 @@
         API_LimitTime.getLimitTimeGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
         })
