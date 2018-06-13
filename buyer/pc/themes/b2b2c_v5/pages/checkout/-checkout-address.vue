@@ -106,7 +106,7 @@
       /** 选择收货地址 */
       handleSelectAddress(item) {
         API_Trade.setAddressId(item.addr_id).then(response => {
-          this.$message.success('地址设置成功！')
+          this.$message.success('设置成功！')
           this.$emit('change', item.addr_id)
         })
       },

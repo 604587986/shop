@@ -10,94 +10,17 @@
       <div class="ckt-title">填写并核对订单信息</div>
       <div class="ckt-content">
         <!--收货人信息 start-->
-        <div class="ckt-item info">
-          <div class="top-ckt">
-            <span class="title-top">收货人信息</span>
-            <span class="other-top"><a href="javascript: void(0);" class="c-new-address">新增收货地址</a></span>
-            <div class="clearfix"></div>
-          </div>
-
-          <!--地址列表-->
-          <div class="center-ckt-info" style="height: 126px;">
-            <ul id="address_list"><!-- 创建会员收货地址标签 -->
-              <!-- 获取收货地址的id -->
-              <input type="hidden" id="regionid" value="3">
-              <li class="li-ckt-info" data-address_id="24">
-                <div class="ckt-checkbox info"> <!--w: 150px-->
-                  <span title="公司">公司</span>
-                </div>
-                <div class="name-li-ckt-info" title="张先生">张先生</div>
-                <div class="address-li-ckt-info" title="西藏 拉萨市 林周县 边交林乡 12312313" data-title="西藏 拉萨市 林周县 边交林乡 12312313">西藏 拉萨市 林周县 边交林乡 12312313</div>  <!--40个字符长度-->
-                <div class="mobile-li-ckt-info" title="13333333333">13333333333</div>
-                <div class="default-li-ckt-info">默认地址</div>
-                <div class="operate-li-ckt-info">
-
-                  <a href="javascript: void(0);" class="edit" address_id="24">编辑</a>
-
-                </div>
-              </li>
-              <li class="li-ckt-info" data-address_id="22">
-                <div class="ckt-checkbox info"> <!--w: 150px-->
-                  <span title="公司">公司</span>
-                </div>
-                <div class="name-li-ckt-info" title="李先生">李先生</div>
-                <div class="address-li-ckt-info" title="山西省 太原市 阳曲县 中心镇建设管理办公室 12312313" data-title="山西省 太原市 阳曲县 中心镇建设管理办公室 12312313">山西省 太原市 阳曲县 中心镇建设管理办公室 12312313</div>  <!--40个字符长度-->
-                <div class="mobile-li-ckt-info" title="13333333333">13333333333</div>
-                <div class="operate-li-ckt-info">
-                  <a href="javascript: void(0);" class="set" address_id="22">设置为默认</a>
-                  <a href="javascript: void(0);" class="edit" address_id="22">编辑</a>
-                  <a href="javascript: void(0);" class="delete" address_id="22">删除</a>
-                </div>
-              </li>
-              <li class="li-ckt-info selected" data-address_id="23">
-                <div class="ckt-checkbox info selected"> <!--w: 150px-->
-                  <span title="公司">公司</span>
-                </div>
-                <div class="name-li-ckt-info" title="王先生">王先生</div>
-                <div class="address-li-ckt-info" title="河北 石家庄市 辛集市 辛集镇 12312313" data-title="河北 石家庄市 辛集市 辛集镇 12312313">河北 石家庄市 辛集市 辛集镇 12312313</div>  <!--40个字符长度-->
-                <div class="mobile-li-ckt-info" title="13333333333">13333333333</div>
-                <div class="operate-li-ckt-info">
-                  <a href="javascript: void(0);" class="set" address_id="23">设置为默认</a>
-                  <a href="javascript: void(0);" class="edit" address_id="23">编辑</a>
-                  <a href="javascript: void(0);" class="delete" address_id="23">删除</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <!--地址列表 end-->
-
-          <div class="collapse-ckt-info show more">
-            <span class="more-collapse-ckt">收起地址</span>
-            <i class="icon-collapse-ckt-info more"></i>
-          </div>
-          <div class="placeholder-20"></div>
-        </div>
+        <checkout-address
+          :address-id="params.address_id"
+          @change="(id) => { params.address_id = id}"
+        />
         <!--收货人信息 end-->
 
         <!--支付方式 start-->
-        <div class="ckt-item payment">
-          <div class="top-ckt">
-            <span class="title-top">支付方式</span>
-            <span class="other-top"><a href="javascript: void(0);" class=""></a></span>
-            <div class="clearfix"></div>
-          </div>
-          <div class="content-ckt-pay">
-            <ul class="ul-ckt-pay min">
-              <li class="ckt-checkbox pay" data-payment_type="online">
-                <span>在线支付</span>
-              </li>
-              <li class="ckt-checkbox pay selected" data-payment_type="cod">
-                <span>货到付款</span>
-              </li>
-            </ul>
-          </div>
-          <div class="collapse-ckt-pay">
-            <span class="more-collapse-ckt">更多方式</span>
-            <i class="icon-collapse-ckt-pay"></i>
-          </div>
-          <div class="placeholder-20"></div>
-        </div>
-        <input type="hidden" name="typeId" value="0">
+        <checkout-payment
+          :payment-type="params.payment_type"
+          @change="(type) => { params.payment_type = type }"
+        />
         <!--支付方式 end-->
 
         <!--配送清单 start-->
@@ -389,7 +312,7 @@
           </div>
         </div>
         <div class="bill-btn-ckt">
-          <nuxt-link to="/checkout/cashier" class="bill_btn">提交订单</nuxt-link>
+          <a href="javascript:;" class="bill_btn" @click="handleCreateTrade">提交订单</a>
         </div>
       </div>
     </div>
@@ -397,8 +320,34 @@
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex'
+  import CheckoutAddress from './-checkout-address'
+  import CheckoutPayment from './-checkout-payment'
+  import * as API_Trade from '@/api/trade'
   export default {
-    name: 'checkout-index'
+    name: 'checkout-index',
+    components: {
+      CheckoutAddress,
+      CheckoutPayment
+    },
+    data() {
+      return {
+        params: ''
+      }
+    },
+    mounted() {
+      // 获取默认结算数据
+      API_Trade.getCheckoutParams().then(response => this.params = response)
+    },
+    methods: {
+      /** 提交订单 */
+      handleCreateTrade() {
+        /** 先调用创建订单接口，再跳转到收银台 */
+        API_Trade.createTrade().then(response => {
+          this.$router.push({ path: '/checkout/cashier' })
+        })
+      }
+    }
   }
 </script>
 
