@@ -188,7 +188,7 @@
               API_Smtp.editSmtp(id, this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
                 this.$message.success('修改成功！')
-                this.MixinSetTableData(this.tableData, id, response)
+                this.MixinSetTableData(this.tableData, 'id', id, response)
               })
             } else {
               API_Smtp.addSmtp(this.smtpForm).then(response => {
