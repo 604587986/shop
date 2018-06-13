@@ -3,40 +3,29 @@
  */
 
 import request from '@/utils/request'
-import SpecModel from '@/models/SpecModel'
-const specModel = new SpecModel()
 
 /**
  * 获取规格列表
  * @param params
- * @returns {Promise<any>}
  */
 export function getSpecs(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'goods/specs',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = specModel.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'goods/specs',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 添加规格
  * @param params
- * @returns {*}
  */
 export function addSpec(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'goods/specs',
-      method: 'post',
-      data: specModel.params(params)
-    }).then(response => resolve(specModel.map(response))).catch(error => reject(error))
+  return request({
+    url: 'goods/specs',
+    method: 'post',
+    data: params
   })
 }
 
@@ -44,15 +33,12 @@ export function addSpec(params) {
  * 编辑规格
  * @param id
  * @param params
- * @returns {*}
  */
 export function eidtSpec(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `goods/specs/${id}`,
-      method: 'put',
-      data: specModel.params(params)
-    }).then(response => resolve(specModel.map(response))).catch(error => reject(error))
+  return request({
+    url: `goods/specs/${id}`,
+    method: 'put',
+    data: params
   })
 }
 

@@ -10,15 +10,15 @@
           <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddSpecs">添加</el-button>
         </div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent"/>
+          <!--<en-table-search @search="searchEvent"/>-->
         </div>
       </div>
       <template slot="table-columns">
         <el-table-column type="selection" width="100"/>
         <!--规格名称-->
-        <el-table-column prop="name" label="规格名称"/>
+        <el-table-column prop="spec_name" label="规格名称"/>
         <!--规格备注-->
-        <el-table-column prop="memo" label="规格备注"/>
+        <el-table-column prop="spec_memo" label="规格备注"/>
 
         <!--操作-->
         <el-table-column label="操作" width="350">
@@ -54,7 +54,7 @@
       </el-pagination>
     </en-tabel-layout>
     <el-dialog
-      :title="specForm.id ? '编辑规格' : '添加规格'"
+      :title="specForm.spec_id ? '编辑规格' : '添加规格'"
       :visible.sync="dialogSpecVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -62,12 +62,12 @@
     >
       <el-form :model="specForm" :rules="specRules" ref="specForm" label-width="100px">
         <!--规格名称-->
-        <el-form-item label="规格名称" prop="name">
-          <el-input v-model="specForm.name"></el-input>
+        <el-form-item label="规格名称" prop="spec_name">
+          <el-input v-model="specForm.spec_name"></el-input>
         </el-form-item>
         <!--规格备注-->
-        <el-form-item label="规格备注" prop="memo">
-          <el-input v-model="specForm.memo"></el-input>
+        <el-form-item label="规格备注" prop="spec_memo">
+          <el-input v-model="specForm.spec_memo"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -133,8 +133,8 @@
 
         /** 添加、修改规格 规则 */
         specRules: {
-          name: [
-            { required: true, message: '请输入规格名称', trigger: 'blur' },
+          spec_name: [
+            this.MixinRequired('请输入规格名称！'),
             { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
           ]
         },
@@ -166,7 +166,7 @@
 
       /** 当选择项发生变化 */
       handleSelectionChange(val) {
-        this.selectedData = val.map(item => item.id)
+        this.selectedData = val.map(item => item.spec_id)
       },
 
       /** 添加规格事件触发 */
@@ -185,7 +185,7 @@
       /** 删除规格事件 */
       handleDeleteSpec(index, row) {
         this.$confirm('确定要删除这个规格吗？', '提示', { type: 'warning' }).then(() => {
-          this.DELETE_Specs(row.id)
+          this.DELETE_Specs(row.spec_id)
         }).catch(() => {})
       },
 
@@ -202,8 +202,8 @@
 
       /** 修改规格值事件 */
       handleEditSpecVal(index, row) {
-        API_spec.getSpecValues(row.id).then(response => {
-          this.cur_spec_id = row.id
+        API_spec.getSpecValues(row.spec_id).then(response => {
+          this.cur_spec_id = row.spec_id
           this.specValues = response.map(item => item.spec_value)
           this.dialogSpecValuesVisible = true
         })
@@ -222,8 +222,8 @@
       submitSpecForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const { id } = this.specForm
-            if (!id) {
+            const { spec_id } = this.specForm
+            if (!spec_id) {
               API_spec.addSpec(this.specForm).then(response => {
                 this.dialogSpecVisible = false
                 this.$message.success('添加成功！')
@@ -231,11 +231,11 @@
                 this.GET_SpecsList()
               })
             } else {
-              API_spec.eidtSpec(id, this.specForm).then(response => {
+              API_spec.eidtSpec(spec_id, this.specForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogSpecVisible = false
                 this.$refs[formName].resetFields()
-                this.MixinSetTableData(this.tableData, id, response)
+                this.MixinSetTableData(this.tableData, 'spec_id', spec_id, response)
               })
             }
           } else {
