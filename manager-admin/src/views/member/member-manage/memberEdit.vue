@@ -199,7 +199,7 @@
           if (valid) {
             const params = this.MixinClone(this.editMemberForm)
             params.birthday /= 1000
-            API_Member.editMember(params.id, params).then(response => {
+            API_Member.editMember(params.member_id, params).then(response => {
               this.$message.success('修改成功！')
               console.log(response)
             })

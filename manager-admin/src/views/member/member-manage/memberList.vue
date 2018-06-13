@@ -51,14 +51,14 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column prop="username" label="用户名"/>
+        <el-table-column prop="uname" label="用户名"/>
         <el-table-column prop="mobile" label="手机号"/>
         <el-table-column prop="email" label="电子邮箱"/>
         <el-table-column label="注册时间">
-          <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
+          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
         <el-table-column label="上次登录时间">
-          <template slot-scope="scope">{{ scope.row.last_login_time | unixToDate }}</template>
+          <template slot-scope="scope">{{ scope.row.last_login | unixToDate }}</template>
         </el-table-column>
         <el-table-column prop="login_count" label="登录次数"/>
         <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
@@ -67,7 +67,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="() => { $router.push({ path: `/member/member-manage/edit/${scope.row.id}` }) }">操作</el-button>
+              @click="() => { $router.push({ path: `/member/member-manage/edit/${scope.row.member_id}` }) }">操作</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -92,8 +92,8 @@
     <el-dialog title="添加会员" :visible.sync="dialogAddMemberVisible" width="650px">
       <el-form :model="addMemberForm" :rules="addMemberRules" ref="addMemberForm" label-width="100px" inline>
         <!--用户名-->
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="addMemberForm.username" :maxlength="20"></el-input>
+        <el-form-item label="用户名" prop="uname">
+          <el-input v-model="addMemberForm.uname" :maxlength="20"></el-input>
         </el-form-item>
         <!--密码-->
         <el-form-item label="密码" prop="password">
@@ -158,7 +158,7 @@
 <script>
   import * as API_Member from '@/api/member'
   import { RegExp } from '@/framework'
-
+  // Andste_TODO 2018/6/13: 订单列表、积分、等级积分、消费积分、咨询、评论未适配
   export default {
     name: 'memberList',
     data() {
@@ -186,7 +186,7 @@
 
         /** 添加会员 表单规则 */
         addMemberRules: {
-          username: [
+          uname: [
             this.MixinRequired('请输入用户名！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
@@ -261,7 +261,7 @@
 
       handleDeleteMember(index, row) {
         this.$confirm('确定要删除这个会员吗？', '提示', { type: 'warning' }).then(() => {
-          API_Member.deleteMember(row.id).then(() => {
+          API_Member.deleteMember(row.member_id).then(() => {
             this.$message.success('删除成功！')
             this.GET_MemberList()
           })
