@@ -73,3 +73,12 @@ export function secrecyMobile(mobile) {
   }
   return mobile.replace(/(\d{3})(\d{4})(\d{4})/, '$1****$3')
 }
+
+/**
+ * 格式化货品的规格
+ * @param sku
+ * @returns {*}
+ */
+export function formatterSkuSpec(sku) {
+  return sku.spec_list.map(spec => spec.spec_value).join(' - ')
+}

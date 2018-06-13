@@ -161,6 +161,10 @@ input[type="number"]{
   color: #f42424;
 }
 
+.sku-spec {
+  color: #ff9800;
+}
+
 .icon-custom-loading {
   display: inline-block;
   width: 100px;

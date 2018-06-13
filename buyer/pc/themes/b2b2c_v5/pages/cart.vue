@@ -44,7 +44,7 @@
                         {{ sku.name }}
                       </nuxt-link>
                       <span v-if="sku.spec_list && sku.spec_list.length > 0" class="sku-spec">
-                        {{ formatterSkuSpec(sku) }}
+                        {{ sku | formatterSkuSpec }}
                       </span>
                     </div>
                     <div class="sku-price">
@@ -244,10 +244,6 @@
       /** 去结算 */
       handleCheckout() {
         this.$router.push({ path: '/checkout' })
-      },
-      /**  格式化规格 */
-      formatterSkuSpec(sku) {
-        return sku.spec_list.map(spec => spec.spec_value).join(' - ')
       },
       /** 监听页面滚动，实现结算栏浮起、固定 */
       countCheckBarFiexd(event) {
