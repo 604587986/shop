@@ -36,6 +36,17 @@ export const mutations = {
     })
   },
   /**
+   * 设置默认地址
+   * @param state
+   * @param id
+   */
+  [types.SET_DEFAULT_ADDRESS](state, id) {
+    state.address = state.address.map(item => {
+      item.def_addr = item.addr_id === id
+      return item
+    })
+  },
+  /**
    * 删除地址
    * @param state
    * @param id
@@ -101,6 +112,18 @@ export const actions = {
         commit(types.DELETE_ADDRESS, id)
         resolve(response)
       }).then(error => reject(error))
+    })
+  },
+  /**
+   * 设置默认地址
+   * @param commit
+   * @param id
+   * @returns {Promise<any>}
+   */
+  setDefaultAddressAction: ({ commit }, id) => {
+    return new Promise((resolve, reject) => {
+      commit(types.SET_DEFAULT_ADDRESS, id)
+      // API_Address
     })
   }
 }
