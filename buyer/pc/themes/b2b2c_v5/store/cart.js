@@ -23,7 +23,7 @@ export const mutations = {
   [types.UPDATE_SKU_NUM](state, params) {
     state.shopList.every(shop => {
       let flag = true
-      shop.skuList.every(item => {
+      shop.sku_list.every(item => {
         if (item.sku_id === params.sku_id) {
           item.num = params.num
           flag = false
@@ -42,7 +42,7 @@ export const mutations = {
     state.shopList.every(shop => {
       let flag = true
       let _checked = 1
-      shop.skuList.forEach(item => {
+      shop.sku_list.forEach(item => {
         if (item.sku_id === params.sku_id) {
           item.checked = params.checked
           flag = false
@@ -62,7 +62,7 @@ export const mutations = {
     state.shopList.every(shop => {
       if (shop.shop_id === params.shop_id) {
         shop.checked = params.checked
-        shop.skuList.map(sku => {
+        shop.sku_list.map(sku => {
           sku.checked = params.checked
           return sku
         })
@@ -79,7 +79,7 @@ export const mutations = {
   [types.CHECK_ALL](state, checked) {
     state.shopList = state.shopList.map(shop => {
       shop.checked = checked
-      shop.skuList.map(sku => {
+      shop.sku_list.map(sku => {
         sku.checked = checked
         return sku
       })
@@ -96,11 +96,11 @@ export const mutations = {
     const _shopList = []
     state.shopList.forEach(shop => {
       const _skuList = []
-      shop.skuList.forEach(sku => {
+      shop.sku_list.forEach(sku => {
         if (!sku_ids.includes(sku.sku_id)) _skuList.push(sku)
       })
       if (_skuList.length > 0) {
-        shop.skuList = _skuList
+        shop.sku_list = _skuList
         _shopList.push(shop)
       }
     })
@@ -136,10 +136,11 @@ export const actions = {
    * @param params
    * @returns {Promise<any>}
    */
-  updateSkuNumAction: ({ commit }, params) => {
+  updateSkuNumAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
-      API_Trade.getCarts(params.sku_id, params.num).then(response => {
-        commit(types.UPDATE_SKU_NUM, params)
+      API_Trade.updateSkuNum(params.sku_id, params.num).then(response => {
+        // commit(types.UPDATE_SKU_NUM, params)
+        dispatch('getCartDataAction')
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -150,10 +151,11 @@ export const actions = {
    * @param params
    * @returns {Promise<any>}
    */
-  checkSkuItemAction: ({ commit }, params) => {
+  checkSkuItemAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
-      API_Trade.checkAll(params.sku_id, params.checked).then(response => {
-        commit(types.CHECK_SKU_ITEM, params)
+      API_Trade.updateSkuChecked(params.sku_id, params.checked).then(response => {
+        // commit(types.CHECK_SKU_ITEM, params)
+        dispatch('getCartDataAction')
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -164,10 +166,11 @@ export const actions = {
    * @param params
    * @returns {Promise<any>}
    */
-  checkShopSkuAction: ({ commit }, params) => {
+  checkShopSkuAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
       API_Trade.checkShop(params.shop_id, params.checked).then(resposne => {
-        commit(types.CHECK_SHOP_SKU, params)
+        // commit(types.CHECK_SHOP_SKU, params)
+        dispatch('getCartDataAction')
         resolve(resposne)
       }).catch(error => reject(error))
     })
@@ -178,10 +181,11 @@ export const actions = {
    * @param checked
    * @returns {Promise<any>}
    */
-  checkAllAction: ({ commit }, checked) => {
+  checkAllAction: ({ commit, dispatch }, checked) => {
     return new Promise((resolve, reject) => {
       API_Trade.checkAll(checked).then(response => {
-        commit(types.CHECK_ALL, checked)
+        // commit(types.CHECK_ALL, checked)
+        dispatch('getCartDataAction')
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -195,8 +199,9 @@ export const actions = {
    */
   deleteSkuItemAction: ({ commit, dispatch }, sku_ids) => {
     return new Promise((resolve, reject) => {
-      API_Trade.checkAll(sku_ids).then(response => {
-        commit(types.DELETE_SKU_ITEMS, sku_ids)
+      API_Trade.deleteSkuItem(sku_ids).then(response => {
+        // commit(types.DELETE_SKU_ITEMS, sku_ids)
+        dispatch('getCartDataAction')
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -206,10 +211,11 @@ export const actions = {
    * @param commit
    * @returns {Promise<any>}
    */
-  cleanCartAction: ({ commit }) => {
+  cleanCartAction: ({ commit, dispatch }) => {
     return new Promise((resolve, reject) => {
       API_Trade.cleanCarts().then(response => {
-        commit(types.CLEAN_CART)
+        // commit(types.CLEAN_CART)
+        dispatch('getCartDataAction')
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -225,7 +231,7 @@ export const getters = {
    */
   skuList: state => {
     const _skuList = []
-    state.shopList.forEach(item => _skuList.push(...item.skuList))
+    state.shopList.forEach(item => _skuList.push(...item.sku_list))
     return _skuList
   },
   /**
@@ -241,7 +247,7 @@ export const getters = {
   allCount: state => {
     let _allCount = 0
     state.shopList.forEach(shop => {
-      shop.skuList.forEach(item => _allCount += item.num)
+      shop.sku_list.forEach(item => _allCount += item.num)
     })
     return _allCount
   },
@@ -253,7 +259,7 @@ export const getters = {
   checkedCount: state => {
     let _checkedCount = 0
     state.shopList.forEach(shop => {
-      shop.skuList.forEach(item => {
+      shop.sku_list.forEach(item => {
         if (item.checked) _checkedCount += item.num
       })
     })
