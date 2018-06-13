@@ -351,6 +351,10 @@
 
   .title-item-inventory .store-name {
     float: left;
+    a {
+      color: #005ea7;
+      &:hover { color: #f42424}
+    }
   }
 
   .title-item-inventory .store-total {
@@ -592,6 +596,15 @@
     padding-left: 10px;
     padding-right: 10px;
     text-align: left;
+    a {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .sku-spec {
+      display: block;
+    }
   }
 
   .img-gooods-inventory {
@@ -634,16 +647,15 @@
   }
 
   .bottom-ckt-inventory {
+    display: flex;
+    align-items: center;
     margin-top: 15px;
     clear: both;
-  }
-
-  .bottom-ckt-inventory input {
-    width: 250px;
-    height: 15px;
-    padding: 5px 10px;
-    margin-right: 5px;
-    display: inline-block;
+    /deep/ .el-input {
+      width: 275px;
+      margin-right: 15px;
+    }
+    .remark-tip { color: #F56C6C }
   }
 
   .ckt-item.invoice {
