@@ -160,3 +160,11 @@ input[type="number"]{
 .price {
   color: #f42424;
 }
+
+.icon-custom-loading {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  background: url("../images/loading.gif") no-repeat;
+  background-size: 100% 100%;
+}

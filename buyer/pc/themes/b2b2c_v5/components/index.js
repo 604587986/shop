@@ -4,6 +4,7 @@ import Logo from './Logo'
 import CartStep from './CartStep'
 import Category from './Category'
 import CountDownBtn from './CountDownBtn'
+import Face from './Face'
 import Footer from './Footer'
 import Header from './Header'
 import Nav from './Nav'
@@ -20,6 +21,7 @@ export {
   Category,
   CountDownBtn,
   Footer,
+  Face,
   Header,
   Nav,
   Operation,
