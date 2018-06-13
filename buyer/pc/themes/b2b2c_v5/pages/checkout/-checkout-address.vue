@@ -68,6 +68,10 @@
 </template>
 
 <script>
+  /**
+   * 结算页
+   * 收货地址组件
+   */
   import Vue from 'vue'
   import { Checkbox, Form, FormItem, Input } from 'element-ui'
   Vue.use(Checkbox)
@@ -79,6 +83,7 @@
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-address',
+    // 和个人中心共用mixin
     mixins: [addressMixin],
     props: ['addressId'],
     data() {

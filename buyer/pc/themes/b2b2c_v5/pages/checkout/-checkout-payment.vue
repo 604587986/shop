@@ -30,6 +30,10 @@
 </template>
 
 <script>
+  /**
+   * 结算页
+   * 支付类型组件
+   */
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-payment',
