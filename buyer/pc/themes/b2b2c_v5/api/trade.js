@@ -112,7 +112,7 @@ export function checkShop(shop_id, checked) {
 /**
  * 获取购物车总价
  */
-export function getTotal() {
+export function getCartTotal() {
   return request({
     url: 'trade/carts/total',
     method: Method.GET,
@@ -204,7 +204,8 @@ export function setRemark(remark) {
 export function getOrderTotal() {
   return request({
     url: 'trade/orders/total',
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
 
