@@ -160,10 +160,14 @@
 
       /** 删除分组 */
       handleDeleteGoodsCategory(row) {
-        const _id = row.shop_cat_id
-        API_goodsCategory.deleteGoodsCategory(_id).then(() => {
-          this.GET_GoodsCategoryList()
-          this.$message.success('删除商品成功！')
+        this.$confirm('确认删除此分类, 是否继续?', '提示', { type: 'warning' }).then(() => {
+          const _id = row.shop_cat_id
+          API_goodsCategory.deleteGoodsCategory(_id).then(() => {
+            this.GET_GoodsCategoryList()
+            this.$message.success('删除商品成功！')
+          })
+        }).catch(() => {
+          this.$message.info({ message: '已取消删除' })
         })
       },
 

@@ -30,7 +30,6 @@
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="primary"
               @click="handleQueryDetail(scope.$index, scope.row)">查看详情
             </el-button>

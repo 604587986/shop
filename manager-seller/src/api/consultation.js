@@ -13,7 +13,7 @@ import ConsultationModel from '@/models/ConsultationModel'
 export function getConsultationList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/member/asks',
+      url: '/members/asks',
       method: 'get',
       loading: false,
       params
@@ -34,7 +34,7 @@ export function getConsultationList(params) {
 export function replyConsultationList(id, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/member/asks/${id}/reply`,
+      url: `/members/asks/${id}/reply`,
       method: 'put',
       loading: false,
       data: params

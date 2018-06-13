@@ -73,7 +73,12 @@
               <div>
                 <!--活动名称-->
                 <el-form-item  label="活动名称：" prop="activity_name">
-                  <el-input v-model="activityForm.activity_name" style="width: 300px" placeholder="不超过60个字符" ></el-input>
+                  <el-input
+                    v-model="activityForm.activity_name"
+                    style="width: 300px"
+                    placeholder="不超过60个字符"
+                    maxLength="60">
+                  </el-input>
                 </el-form-item>
                 <!--生效时间 开始时间--截止时间-->
                 <el-form-item label="生效时间：" prop="take_effect_time">
@@ -83,7 +88,9 @@
                     value-format="timestamp"
                     range-separator="-"
                     start-placeholder="开始日期"
-                    end-placeholder="结束日期">
+                    end-placeholder="结束日期"
+                    :picker-options="pickoptions"
+                  >
                   </el-date-picker>
                 </el-form-item>
                 <!--活动描述-->
@@ -335,6 +342,13 @@
 
         /** 列表数据*/
         tableData: null,
+
+        /** 日期选择器选项 */
+        pickoptions: {
+          disabledDate: (time) => {
+            return time.getTime() < Date.now() - 8.64e7
+          }
+        },
 
         /** 新增满减表单信息*/
         activityForm: {
@@ -665,7 +679,7 @@
 
       /** 删除满减优惠活动 */
       handleDeleteFullCut(row) {
-        this.$confirm('确认删除当前项？', '确认信息')
+        this.$confirm('确认删除当前项？', '确认信息', { type: 'warning' })
           .then(() => this.toDelActivity(row))
           .catch(() => {})
       },

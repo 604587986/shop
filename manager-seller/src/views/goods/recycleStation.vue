@@ -126,10 +126,9 @@
 
       /** 单个商品彻底删除操作确认 */
       handleDeleteRecycle(index, row) {
-        this.$confirm('确认彻底删除吗？', '提示')
+        this.$confirm('确认彻底删除吗？', '提示', { type: 'warning' })
           .then(() => this.DELETE_Recycles(row.goods_id))
-          .catch(() => {
-          })
+          .catch(() => { })
       },
 
       /** 批量删除 */
@@ -139,7 +138,7 @@
 
       /**  回收站单个商品还原 */
       handlReductionRecycle(row) {
-        this.$confirm('确认还原吗？', '提示')
+        this.$confirm('确认还原吗？', '提示', { type: 'warning' })
           .then(() => this.ReductionGoods(row.goods_id))
           .catch(() => {})
       },

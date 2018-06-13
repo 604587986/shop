@@ -66,19 +66,19 @@
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.allow_seller_approval"
-              type="text"
+              type="primary"
               @click="handleOperateRefund(scope.row)">审核</el-button>
             <el-button
               v-if="scope.row.allow_seller_refund"
-              type="text"
+              type="primary"
               @click="handleOperateRefund(scope.row)">退款</el-button>
             <el-button
               v-if="scope.row.allow_stock_in"
-              type="text"
+              type="primary"
               @click="handleOperateRefund(scope.row)">入库</el-button>
             <el-button
               v-if="!scope.row.allow_stock_in && !scope.row.allow_seller_approval && !scope.row.allow_seller_approval"
-              type="text"
+              type="primary"
               @click="handleOperateRefund(scope.row)">查看</el-button>
           </template>
         </el-table-column>
