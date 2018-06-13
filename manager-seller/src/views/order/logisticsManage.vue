@@ -10,7 +10,7 @@
         >
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
-              <el-button type="success" @click="handleAddMould">新增模板</el-button>
+              <el-button type="primary" @click="handleAddMould">新增模板</el-button>
             </div>
           </div>
           <template slot="table-columns">
@@ -38,13 +38,11 @@
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
                 <el-button
-                  size="mini"
-                  type="text"
+                  type="success"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
-                  size="mini"
-                  type="text"
+                  type="danger"
                   @click="handleDeleteMould(scope.row)">删除
                 </el-button>
               </template>
@@ -284,7 +282,7 @@
       /** 删除模板*/
       handleDeleteMould(row) {
         const _id = row.tpl_id
-        this.$confirm(`确定要删除模板么?`, '确认信息')
+        this.$confirm(`确定要删除模板么?`, '确认信息', { type: 'warning' })
           .then(() => {
             API_express.deleteExpressMould(_id, {}).then(() => {
               this.GET_ExpressMould()

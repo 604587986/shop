@@ -24,7 +24,7 @@
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
-              size="mini"
+              type="primary"
               @click="handleOperateReceipt(scope.$index, scope.row)">查看
             </el-button>
           </template>

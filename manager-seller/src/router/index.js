@@ -26,9 +26,9 @@ export const constantRouterMap = [
   { path: '/404', component: _import('errorPage/404'), hidden: true },
   { path: '/401', component: _import('errorPage/401'), hidden: true },
   {
-    path: '',
+    path: '/',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/dashboard',
     children: [{
       path: 'dashboard',
       component: _import('dashboard/index'),
@@ -115,7 +115,7 @@ export const asyncRouterMap = [
       { path: 'group-buy-manager', component: _import('promotions/groupBuyManager'), name: 'groupBuyManager', meta: { title: 'groupBuyManager' }},
       { path: 'group-time-limit', component: _import('promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit' }},
       { path: 'add-time-limit', component: _import('promotions/addTimeLimit'), name: 'addTimeLimit', meta: { title: 'addTimeLimit' }, hidden: true },
-      { path: 'activity-goods-data', component: _import('promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData' }, hidden: true },
+      { path: 'activity-goods-data/:id', component: _import('promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData' }, hidden: true },
       { path: 'add-group-buy-goods', component: _import('promotions/addGroupBuyGoods'), name: 'addGroupBuyGoods', meta: { title: 'addGroupBuyGoods' }, hidden: true },
       { path: 'edit-group-buy-goods/:goods_id', component: _import('promotions/editGroupBuyGoods'), name: 'editGroupBuyGoods', meta: { title: 'editGroupBuyGoods' }, hidden: true }
     ]

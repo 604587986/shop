@@ -13,7 +13,7 @@ import CommentModel from '@/models/CommentModel'
 export function getCommentList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/member/comments',
+      url: '/members/comments',
       method: 'get',
       loading: false,
       params
@@ -33,7 +33,7 @@ export function getCommentList(params) {
 export function replyComment(id, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/member/comments/${id}/reply`,
+      url: `/members/comments/${id}/reply`,
       method: 'post',
       data: params
     }).then(response => resolve(response))

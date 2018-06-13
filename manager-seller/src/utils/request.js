@@ -26,7 +26,7 @@ service.interceptors.request.use(config => {
   }
   /** 设置令牌 */
   if (store.getters.token) {
-    config.headers['Authorization'] = getToken() // 让每个请求携带令牌
+    config.headers['Authorization'] = 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'// 让每个请求携带令牌
   }
   /** 进行参数序列化 */
   if ((config.method === 'put' || config.method === 'post') && config.headers['Content-Type'] !== 'application/json') {

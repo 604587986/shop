@@ -56,7 +56,7 @@ export function saveGroupBuyGoods(ids, params) {
       url: `/promotion/group-buy-goods/${ids}`,
       method: 'put',
       loading: false,
-      headers: { 'Content-type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       data: new GroupBuyModel.GroupBuyDetails().params(params)
     }).then(response => {
       resolve(response)
@@ -95,7 +95,7 @@ export function getGroupBuyGoodsDetails(ids, params) {
       url: `/promotion/group-buy-goods/${ids}`,
       method: 'get',
       loading: false,
-      data: params
+      params
     }).then(response => {
       const _response = new GroupBuyModel.GroupBuyDetails().map(response)
       resolve(_response)

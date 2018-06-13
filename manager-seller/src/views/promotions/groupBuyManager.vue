@@ -4,8 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <div class="conditions">
@@ -41,19 +40,13 @@
           <template slot-scope="scope">
             <div>{{ scope.row.activity_name }}</div>
             <div>{{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
-              - {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
+              —— {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
             </div>
           </template>
         </el-table-column>
         <!--已团购数量-->
         <el-table-column prop="buy_num" label="已团购" />
-        <el-table-column label="活动状态" width="120">
-          <template slot-scope="scope">
-            <span v-if="scope.row.activity_status == 1">已审核</span>
-            <span v-if="scope.row.activity_status == 0">已驳回</span>
-            <span v-if="scope.row.activity_status == 2">审核中</span>
-          </template>
-        </el-table-column>
+        <el-table-column prop="activity_status_text" label="活动状态" />
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -104,10 +97,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 当前团购状态*/
         currentGroupBuyStatus: 0,
@@ -164,6 +157,7 @@
         this.GET_GroupGoodsList()
       },
 
+      /** 获取团购商品列表 */
       GET_GroupGoodsList() {
         this.loading = true
         API_groupBuy.getGroupBuyGoodsList(this.params).then(response => {

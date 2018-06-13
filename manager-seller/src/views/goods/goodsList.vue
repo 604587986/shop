@@ -251,7 +251,7 @@
       /** 切换分组*/
       changeGoodsCateGory(data) {
         delete this.params.shop_cat_path
-        if (data !== '') {
+        if (data && Array.isArray(data) && data.length !== 0) {
           this.params = {
             ...this.params,
             shop_cat_path: '0|' + data.join('|') + '|'
@@ -292,11 +292,7 @@
 
       /** 删除商品 */
       handleDeleteGoods(row) {
-        this.$confirm('确认删除此商品, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+        this.$confirm('确认删除此商品, 是否继续?', '提示', { type: 'warning' }).then(() => {
           const _ids = [row.goods_id].toString()
           API_goods.deleteGoods(_ids).then(() => {
             this.GET_GoodsList()

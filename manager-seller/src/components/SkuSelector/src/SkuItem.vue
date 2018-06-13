@@ -245,14 +245,26 @@
         if (!item.spec_name || item.spec_id) {
           return
         }
-        /** 判断规格项的值是否已存在 */
+        /** 判断规格项的值是否已选择 */
         const _items = this.skuInfo.filter(key => {
           return key.spec_name === item.spec_name
         })
 
-        /** 如果已经存在则提示已存在 不允许添加 */
+        /** 如果已经选择则提示已存在 不允许添加 */
         if (_items.length > 1) {
-          this.$message.error('当前规格项已存在')
+          this.$message.error('当前规格项已选择，请选择其他规格项')
+          return
+        }
+
+        /** 判断当前规格项已存在 */
+        const _isexit = this.skuData.filter(key => {
+          return key.spec_name === item.spec_name
+        })
+
+        /** 如果已经存在则提示已存在 不允许添加 */
+        if (_isexit.length >= 1) {
+          this.$message.error('当前规格项已存在，请选择')
+          this.$set(this.skuInfo[this.activeSkuItemIndex], 'spec_name', '')
           return
         }
 
@@ -376,19 +388,33 @@
         if (!val.spec_value || val.spec_value_id) {
           return
         }
-        /** 检测是否已存在*/
+        /** 检测是否已选*/
         const _value_list = this.skuInfo[this.activeSkuItemIndex].value_list.filter((key) => {
           if (key.spec_value) {
             return key.spec_value === val.spec_value
           }
         })
         if (_value_list.length > 1) {
-          this.$message.error('当前规格值已存在，请重新选择或者编辑！')
+          this.$message.error('当前规格值已选，请重新选择或者编辑！')
           if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value_id) {
             this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', '')
           }
           return
         }
+
+        /** 判断当前规格值已存在 */
+        const _isexit = this.specList.filter(key => {
+          return key.spec_value === val.spec_value
+        })
+        /** 如果已经存在则提示已存在 不允许添加 */
+        if (_isexit.length >= 1) {
+          this.$message.error('当前规格值已存在，请选择')
+          if (!this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex].spec_value_id) {
+            this.$set(this.skuInfo[this.activeSkuItemIndex].value_list[this.activeSkuValIndex], 'spec_value', '')
+          }
+          return
+        }
+
         /** 更新用户自定义规格值 */
         API_goodsSku.saveCustomSkuValue(item.spec_id, { value_name: val.spec_value }).then(response => {
           this.$message.success('添加自定义规格值成功')

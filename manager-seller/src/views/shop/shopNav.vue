@@ -57,7 +57,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="排序" prop="shop_nav_sort">
-          <el-input v-model.number="navform.shop_nav_sort" auto-complete="off" label-width="100"></el-input>
+          <el-input v-model="navform.shop_nav_sort" auto-complete="off" label-width="100"></el-input>
         </el-form-item>
         <el-form-item label="URL" prop="shop_nav_url">
           <el-input v-model="navform.shop_nav_url" auto-complete="off" label-width="100"></el-input>
@@ -81,15 +81,24 @@
 
 <script>
   import * as API_ShopNav from '@/api/shopNav'
-  import { validateURL } from '@/utils/validate'
+  import Reg from '@/framework/RegExp'
   export default {
     name: 'shopNav',
     data() {
-      var shopNavURL = (rule, value, callback) => {
+      const shopNavURL = (rule, value, callback) => {
         if (!value) {
           callback(new Error('请输入链接地址'))
-        } else if (!validateURL(value)) {
+        } else if (!Reg.uri.test(value)) {
           callback(new Error('请输入正确的完整链接地址'))
+        } else {
+          callback()
+        }
+      }
+      const shopNavSort = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请输入排序'))
+        } else if (!Reg.integer.test(value)) {
+          callback(new Error('请输入正整数'))
         } else {
           callback()
         }
@@ -134,8 +143,7 @@
             { required: true, message: '请填写导航名称', trigger: 'blur' }
           ],
           shop_nav_sort: [
-            { required: true, message: '请填写排序', trigger: 'blur' },
-            { type: 'number', message: '请填写数字值', trigger: 'blur' }
+            { validator: shopNavSort, trigger: 'blur' }
           ],
           shop_nav_url: [
             { validator: shopNavURL, trigger: 'blur' }
@@ -198,11 +206,15 @@
 
       /** 删除店铺导航 */
       handleDelShopNav(row) {
-        const _params = {}
-        API_ShopNav.delShopNav(row.nav_id, _params).then(response => {
-          this.$message.success('删除成功')
-          this.addShopNavshow = false
-          this.GET_ShopNavList()
+        this.$confirm('确认删除此导航, 是否继续?', '提示', { type: 'warning' }).then(() => {
+          const _params = {}
+          API_ShopNav.delShopNav(row.nav_id, _params).then(response => {
+            this.$message.success('删除成功')
+            this.addShopNavshow = false
+            this.GET_ShopNavList()
+          })
+        }).catch(() => {
+          this.$message.info({ message: '已取消删除' })
         })
       },
 

@@ -57,11 +57,9 @@ export function getLimitTimeActivityDetails(ids, params) {
       url: `/promotion/seckill-applys/${ids}/seckill`,
       method: 'get',
       loading: false,
-      data: params
+      params
     }).then(response => {
-      const _response = response
-      _response.data = new LimitTimeModel.LimitTimeActivitydetails().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -73,13 +71,14 @@ export function getLimitTimeActivityDetails(ids, params) {
  * @returns {Promise<any>}
  * @constructor
  */
-export function signUpLimitTimeActivity(ids, params) {
+export function signUpLimitTimeActivity(params) {
   return new Promise((resolve, reject) => {
     request({
       url: '/promotion/seckill-applys',
       method: 'post',
       loading: false,
-      data: new LimitTimeModel.LimitTimeActivitydetails().params(params)
+      headers: { 'Content-Type': 'application/json' },
+      data: params
     }).then(response => {
       resolve(response)
     })
