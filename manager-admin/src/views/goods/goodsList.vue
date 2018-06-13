@@ -1,7 +1,5 @@
 <template>
   <en-tabel-layout
-    toolbar
-    pagination
     :tableData="goodsData.data"
     :loading="loading"
   >
@@ -36,11 +34,11 @@
     <template slot="table-columns">
       <el-table-column label="商品图片" width="120">
         <template slot-scope="scope">
-          <img :src="scope.row.image" class="goods-image"/>
+          <img :src="scope.row.thumbnail" class="goods-image"/>
         </template>
       </el-table-column>
       <el-table-column prop="sn" label="商品编号" width="200"/>
-      <el-table-column prop="name" label="商品名称" align="left"/>
+      <el-table-column prop="goods_name" label="商品名称" align="left"/>
       <!--<el-table-column prop="category_name" label="商品分类"/>-->
       <el-table-column prop="seller_name" label="店铺名称" width="150"/>
       <el-table-column label="商品价格" width="120">
@@ -120,7 +118,7 @@
       /** 单个商品上架、下架操作确认 */
       handleOperateGoods(index, row) {
         if (row.market_enable === 0) {
-          API_goods.upGoods(row.id).then(response => {
+          API_goods.upGoods(row.goods_id).then(response => {
             row.market_enable = 1
             this.$message.success('上架商品成功！')
           })
@@ -131,7 +129,7 @@
             inputPattern: /.+/,
             inputErrorMessage: '请填写下架原因！'
           }).then(({ value }) => {
-            API_goods.underGoods(row.id, value).then(() => {
+            API_goods.underGoods(row.goods_id, value).then(() => {
               row.market_enable = 0
               this.$message.success('下架商品成功！')
             })
@@ -191,9 +189,6 @@
     justify-content: space-between;
   }
 
-  .toolbar-btns {
-
-  }
   .toolbar-search {
     margin-right: 10px;
   }
@@ -202,5 +197,4 @@
     width: 50px;
     height: 50px;
   }
-
 </style>
