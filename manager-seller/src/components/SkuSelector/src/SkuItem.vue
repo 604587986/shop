@@ -1,6 +1,6 @@
 <template>
   <div class="sku-item-content">
-    <el-form  :model="skuForm" >
+    <el-form  :model="skuForm" @submit.native.prevent>
       <div v-for="(item, $index) in skuInfo" :key="$index">
         <el-form-item label="规格名：" prop="spec_name">
           <el-autocomplete
@@ -12,6 +12,7 @@
             placeholder="请输入规格项名称"
             :select-when-unmatched='true'
             @focus="getActiveSkuItem($index, item)"
+            @keyup.enter.native="editSkuItem(item, $index)"
             @blur.naitve="editSkuItem(item, $index)"
             @select="handleSelectSkuItem">
           </el-autocomplete>
@@ -31,6 +32,7 @@
               :fetch-suggestions="querySearchSkuValue"
               placeholder="请输入规格值名称"
               @focus="getActiveSkuValue(index, $index ,item, val)"
+              @keyup.enter.native="editSkuIValue(item, val, $index, index)"
               @blur.naitve="editSkuIValue(item, val, $index, index)"
               @select="handleSelectSkuValue">
               <template slot="append">
@@ -48,7 +50,10 @@
                 :on-success="getImgUrl"
                 :on-progress="upLoading"
                 :before-upload="beforeImgUpload">
-                <img v-show="val.spec_image" :src="val.spec_image" class="avatar sku-image" @click="handleClickImg(index)">
+                <img v-show="val.spec_image" :src="val.spec_image" class="sku-image" @click="handleClickImg(index)">
+                <span class="el-upload-img-actions" v-show="val.spec_image">
+                  <i class="el-icon-delete" @click.stop="handleDeleteImg(index)"></i>
+                </span>
                 <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon"  @click="handleClickImg(index)"></i>
               </el-upload>
             </div>
@@ -450,6 +455,18 @@
         this.activeSkuValIndex = index
       },
 
+      /** 删除当前图片 */
+      handleDeleteImg(index) {
+        /** 更新skuInfo数据 */
+        if (this.activeSkuItemIndex === 0) {
+          let _arr = cloneObj(this.skuInfo[this.activeSkuItemIndex])
+          this.$set(_arr.value_list[index], 'spec_image', '')
+          this.$set(_arr.value_list[index], 'spec_type', 0)
+          this.$set(this.skuInfo, this.activeSkuItemIndex, _arr)
+          this.$emit('updateSkuInfo', this.skuInfo)
+        }
+      },
+
       /** 文件正在上传时的钩子 */
       upLoading(event, file, fileList) {
         this.upLoadStatus = true
@@ -543,6 +560,7 @@
         img.sku-image {
           width: 120px;
           height: 120px;
+          border-radius: 4px;
         }
         a.el-upload-list__item-name {
           white-space: nowrap;
@@ -565,6 +583,36 @@
       }
     }
   }
+  /deep/ .el-upload {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    /** 为规格图添加删除功能 */
+    .el-upload-img-actions {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      left: 0;
+      top: 0;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 4px;
+      color: #fff;
+      opacity: 0;
+      font-size: 20px;
+      background-color: rgba(0,0,0,.5);
+      -webkit-transition: opacity .3s;
+      transition: opacity .3s;
+      i {
+        margin: 0 3px;
+        margin-top: 40%;
+      }
+    }
+    .el-upload-img-actions:hover {
+      opacity: 1;
+    }
+  }
+
 
   /*禁止编辑时的样式覆盖*/
   /deep/ input.el-input.is-disabled {
