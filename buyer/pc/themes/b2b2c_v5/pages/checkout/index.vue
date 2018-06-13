@@ -28,24 +28,10 @@
         <!--配送清单 end-->
 
         <!--送货时间 start-->
-        <div class="ckt-item time">
-          <div class="top-ckt">
-            <span class="title-top">送货时间</span>
-            <div class="clearfix"></div>
-          </div>
-          <div class="content-ckt time">
-            <div class="ckt-checkbox time selected">
-              <span>任意时间</span>
-            </div>
-            <div class="ckt-checkbox time">
-              <span>仅工作日</span>
-            </div>
-            <div class="ckt-checkbox time">
-              <span>仅休息日</span>
-            </div>
-          </div>
-          <div class="placeholder-20"></div>
-        </div>
+        <checkout-time
+          :receive-time="params.receive_time"
+          @change="(time) => { params.receive_time = time }"
+        />
         <!--送货时间 end-->
 
         <!--发票信息 start-->
@@ -159,13 +145,15 @@
   import CheckoutAddress from './-checkout-address'
   import CheckoutPayment from './-checkout-payment'
   import CheckoutInventory from './-checkout-inventory'
+  import CheckoutTime from './-checkout-time'
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-index',
     components: {
       CheckoutAddress,
       CheckoutPayment,
-      CheckoutInventory
+      CheckoutInventory,
+      CheckoutTime
     },
     data() {
       return {

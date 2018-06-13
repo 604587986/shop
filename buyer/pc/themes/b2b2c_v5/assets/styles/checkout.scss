@@ -62,6 +62,8 @@
     height: 26px;
     line-height: 26px;
     border: 2px solid #ff3500;
+  }
+  .li-ckt-info.selected .ckt-checkbox, .ckt-checkbox.selected {
     background: url("~/assets/images/icon-ckt-selected.png") no-repeat bottom right;
     background-size: 20px 20px;
   }
@@ -651,7 +653,7 @@
     align-items: center;
     margin-top: 15px;
     clear: both;
-    /deep/ .el-input {
+    .el-input {
       width: 275px;
       margin-right: 15px;
     }
