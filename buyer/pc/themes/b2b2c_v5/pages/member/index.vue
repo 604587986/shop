@@ -39,10 +39,10 @@
           </div>
         </div>
         <div class="item-content">
-          <empty-member v-if="orderList.length === 0">暂无订单</empty-member>
+          <empty-member v-if="!orderData || orderData.data.length === 0">暂无订单</empty-member>
           <template v-else>
             <!--// Andste_TODO 2018/6/14: product_list 需要更换为 sku_list-->
-            <div v-for="(order, index) in orderList" v-if="index < 3" :key="order.sn" class="order-item" >
+            <div v-for="(order, index) in orderData.data" v-if="index < 3" :key="order.sn" class="order-item" >
               <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" target="_blank" class="goods-image">
                 <img :src="order.product_list[0].goods_image"/>
               </nuxt-link>
@@ -89,10 +89,10 @@
           <nuxt-link to="/member/my-collection#goods">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
-          <empty-member v-if="goodsCollectionList.length === 0">暂无收藏商品</empty-member>
+          <empty-member v-if="!goodsCollectionData || goodsCollectionData.data.length === 0">暂无收藏商品</empty-member>
           <template v-else>
             <div
-              v-for="(item, index) in goodsCollectionList"
+              v-for="(item, index) in goodsCollectionData.data"
               v-if="index < 8"
               :key="item.goods_id"
               class="goods-collection-item"
@@ -116,16 +116,16 @@
           <nuxt-link to="/member/my-collection#shop">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
-          <empty-member v-if="goodsCollectionList.length === 0">暂无收藏店铺</empty-member>
+          <empty-member v-if="!shopCollectionData || shopCollectionData.data.length === 0">暂无收藏店铺</empty-member>
           <template v-else>
             <div
-              v-for="(item, index) in shopCollectionList"
+              v-for="(item, index) in shopCollectionData.data"
               v-if="index < 4"
               :key="item.shop_id"
               class="shop-collection-item"
             >
               <div class="shop-info">
-                <img :src="item.shop_logo" :alt="item.shop_name" :title="item.shop_name">
+                <img :src="item.logo" :alt="item.shop_name" :title="item.shop_name">
                 <div class="shop-btns">
                   <a href="javascript:;">进入店铺</a>
                   <a href="javascript:;" @click="handleDeleteShopCollection(item)">取消关注</a>
@@ -160,18 +160,21 @@
     name: 'member-index',
     mounted() {
       this.$nextTick(this.initShopSwiper)
+      !this.orderData && this.getOrderData()
+      !this.goodsCollectionData && this.getGoodsCollectionData()
+      !this.shopCollectionData && this.getShopCollectionData()
     },
     computed: {
       ...mapGetters({
         user: 'user',
         cartSkuList: 'cart/skuList',
-        orderList: 'order/orderList',
-        goodsCollectionList: 'collection/goodsCollectionList',
-        shopCollectionList: 'collection/shopCollectionList'
+        orderData: 'order/orderData',
+        goodsCollectionData: 'collection/goodsCollectionData',
+        shopCollectionData: 'collection/shopCollectionData'
       })
     },
     watch: {
-      shopCollectionList: 'initShopSwiper'
+      shopCollectionData: 'initShopSwiper'
     },
     methods: {
       /** 删除购物车货品 */
@@ -208,6 +211,12 @@
         // })
       },
       ...mapActions({
+        /** 获取订单列表 */
+        getOrderData: 'order/getOrderDataAction',
+        /** 获取商品收藏列表 */
+        getGoodsCollectionData: 'collection/getGoodsCollectionDataAction',
+        /** 获取店铺收藏列表 */
+        getShopCollectionData: 'collection/getShopCollectionDataAction',
         /** 删除购物车货品 */
         deleteSkuItem: 'cart/deleteSkuItemAction',
         /** 删除商品收藏 */
