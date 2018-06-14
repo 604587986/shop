@@ -100,7 +100,7 @@
       /** 把选中的地址放到第一个 */
       addressList() {
         const address = JSON.parse(JSON.stringify(this.$store.getters.address))
-        if (address.length === 0) return address
+        if (!address || address.length === 0) return address
         const selIndex = address.findIndex(item => item.addr_id === this.addressId)
         if (selIndex === -1) return []
         const selAddress = JSON.parse(JSON.stringify(address[selIndex]))
