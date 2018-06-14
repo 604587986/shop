@@ -674,20 +674,18 @@
     .remark-tip { color: #F56C6C }
   }
 
-  .ckt-item.invoice {
+  .ckt-item.receipt {
     margin-top: 20px;
     margin-bottom: 20px;
     border-bottom: none;
-  }
-
-  .content-ckt.invoice > div {
-    float: left;
-    margin-left: 20px;
-  }
-
-  .content-ckt.invoice .edit-invoice {
-    margin-left: 25px;
-    color: #005ea7;
+    .content-ckt .item {
+      float: left;
+      margin-left: 20px;
+    }
+    .edit-btn {
+      margin-left: 20px;
+      color: #005ea7;
+    }
   }
 
   .ckt-checkbox.time {
@@ -701,28 +699,28 @@
     width: 123px;
   }
 
-  .invoice-dialog {
+  .receipt-dialog {
     width: 400px;
     margin: 0 auto;
   }
 
-  .invoice-content {
+  .receipt-content {
     clear: both;
   }
 
-  .ckt-checkbox.head-invoice {
+  .ckt-checkbox.head-receipt {
     width: 295px;
     padding-left: 10px;
     margin-bottom: 10px;
     text-align: left;
   }
 
-  .ckt-checkbox.head-invoice.selected {
+  .ckt-checkbox.head-receipt.selected {
     width: 293px;
     padding-left: 10px;
   }
 
-  .ckt-checkbox.head-invoice:hover {
+  .ckt-checkbox.head-receipt:hover {
     border: 1px solid #dddddd;
     width: 295px;
     height: 28px;
@@ -731,7 +729,7 @@
     margin-bottom: 10px;
   }
 
-  .ckt-checkbox.head-invoice.selected:hover {
+  .ckt-checkbox.head-receipt.selected:hover {
     width: 293px;
     border: 2px solid #ff3500;
     height: 26px;
@@ -739,21 +737,21 @@
     padding-left: 10px;
   }
 
-  .title-invoice-head,
-  .items-invoice-head {
+  .title-receipt-head,
+  .items-receipt-head {
     float: left;
   }
 
-  .title-invoice-head {
+  .title-receipt-head {
     font-weight: bold;
     margin-top: 15px;
   }
 
-  .items-invoice-head {
+  .items-receipt-head {
     margin-left: 20px;
   }
 
-  .company-invoice-input {
+  .company-receipt-input {
     display: none;
     padding-left: 10px;
     width: 230px;
@@ -761,16 +759,16 @@
     outline: none;
   }
 
-  .company-invoice-input:focus {
+  .company-receipt-input:focus {
     border: none;
     outline: none;
   }
 
-  .company-invoice-input.shows {
+  .company-receipt-input.shows {
     display: inline-block;
   }
 
-  .ckt-checkbox.content-invoice {
+  .ckt-checkbox.content-receipt {
     float: left;
     width: 70px;
     margin-left: 10px;
@@ -778,8 +776,8 @@
     margin-bottom: 10px;
   }
 
-  .ckt-checkbox.content-invoice:hover,
-  .ckt-checkbox.content-invoice.selected {
+  .ckt-checkbox.content-receipt:hover,
+  .ckt-checkbox.content-receipt.selected {
     width: 68px;
   }
 
@@ -900,15 +898,15 @@
 
   /***** 2017-07-01新增发票样式 ******/
 
-  .invoice-dialog {
+  .receipt-dialog {
     width: auto;
   }
 
-  .ckt-checkbox.head-invoice {
+  .ckt-checkbox.head-receipt {
     position: relative;
   }
 
-  .company-invoice-input {
+  .company-receipt-input {
     position: absolute;
     top: 0;
     left: 10px;
@@ -917,67 +915,11 @@
     padding-left: 0;
   }
 
-  .ckt-checkbox.content-invoice {
+  .ckt-checkbox.content-receipt {
     margin-top: 0;
     margin-bottom: 10px;
   }
-
-  .ckt-checkbox.head-invoice.selected .company-invoice-input {
-    height: 26px;
-    line-height: 26px;
-  }
-
-  .duty-invoice-input {
-    padding-left: 10px;
-    height: 28px;
-    line-height: 28px;
-    width: 230px;
-    outline: none;
-    margin: 10px;
-    border: 1px solid #ddd;
-  }
-
-  .title-invoice-head {
-    width: 120px;
-    height: 30px;
-    line-height: 30px;
-    clear: both;
-    text-align: right;
-    margin: 0;
-  }
-
-  .items-invoice-head {
-    color: #666;
-    margin-left: 10px;
-  }
-
-  .items-invoice-head .__btns__ {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 5px;
-  }
-
-  .items-invoice-head .__editing__ .__btns__ {
-    display: block;
-  }
-
-  .items-invoice-head .__btns__.show {
-    display: block;
-  }
-
-  .items-invoice-head .__btns__ .__update__ {
-    display: none;
-  }
-
-  .items-invoice-head .__btns__ a {
-    color: #005ea7;
-    margin-right: 10px;
-  }
-  .items-invoice-head .__btns__ a:hover {
-    color: #C81623;
-  }
-
+  
   .remark-confirm-btn {
     height: 12px;
     line-height: 12px;
