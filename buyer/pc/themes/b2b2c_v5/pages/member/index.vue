@@ -289,7 +289,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 400px;
+    height: 410px;
     z-index: 1;
     font-family: "Hiragino Sans GB", "Microsoft Yahei", arial, 宋体, "Helvetica Neue", Helvetica, STHeiTi, sans-serif;;
     .item {
@@ -299,6 +299,7 @@
       border: 1px solid #e7e7e7;
       transition: all .3s ease-out;
       z-index: 2;
+      overflow: hidden;
       .item-title {
         display: flex;
         align-content: center;
