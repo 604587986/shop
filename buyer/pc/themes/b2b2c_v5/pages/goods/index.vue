@@ -1,9 +1,11 @@
 <template>
-  <nuxt-child/>
+  <div id="goods-index">
+
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'goods'
+    name: 'goods-index'
   }
 </script>
