@@ -7,7 +7,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-select v-model="orderStatus" placeholder="请选择订单状态" @change="changeOrderStatus">
+          <el-select v-model="orderStatus" placeholder="请选择订单状态" @change="changeOrderStatus" clearable>
             <el-option
               v-for="item in orderStatusList"
               :key="item.value"
@@ -26,16 +26,13 @@
           >
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="订单号">
+                <el-form-item label="订单编号">
                   <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="收货人">
-                  <el-input size="medium" v-model="advancedForm.ship_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品名称">
                   <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="买家名字">
+                <el-form-item label="买家姓名">
                   <el-input size="medium" v-model="advancedForm.buyer_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="下单日期">
@@ -48,21 +45,8 @@
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    value-format="yyyy-MM-dd"
-                    :picker-options="pickerOptions">
+                    value-format="yyyy-MM-dd">
                   </el-date-picker>
-                </el-form-item>
-                <el-form-item label="订单状态">
-                  <el-select v-model="advancedForm.order_status" placeholder="请选择" clearable>
-                    <el-option label="新订单" value="NEW"/>
-                    <el-option label="已确认" value="CONFIRM"/>
-                    <el-option label="已付款" value="PAID_OFF"/>
-                    <el-option label="已发货" value="SHIPPED"/>
-                    <el-option label="已收货" value="ROG"/>
-                    <el-option label="已完成" value="COMPLETE"/>
-                    <el-option label="已取消" value="CANCELLED"/>
-                    <el-option label="售后中" value="AFTE_SERVICE"/>
-                  </el-select>
                 </el-form-item>
               </el-form>
             </template>
@@ -85,10 +69,9 @@
         <tbody v-for="item in tableData">
         <tr style="width: 100%;height: 10px;"></tr>
         <tr class="bg-order">
-          <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
+          <td class="shoplist-content-out" colspan="5">订单编号：{{item.order_sn}}</td>
           <td>
             <el-button
-              size="mini"
               type="text"
               @click="handleOperateOrder(item)">查看详情
             </el-button>
@@ -97,13 +80,13 @@
         <tr>
           <!--商品-->
           <td>
-            <p v-for="shop in item.skuList" class="shoplist-content">
+            <p v-for="shop in item.sku_list" class="shoplist-content">
               <span class="goods-info">
                 <img :src="shop.goods_image" alt="" class="goods-image"/>
-                <a href="#">{{ shop.goods_name }}</a>
+                <a :href="'/goods/' + shop.goods_id">{{ shop.name }}</a>
               </span>
               <span>
-                <span>{{shop.goods_price | unitPrice('￥')}}</span> × <span>1</span>
+                <span>{{shop.original_price | unitPrice('￥')}}</span> × <span>{{ shop.num }}</span>
               </span>
             </p>
           </td>
@@ -122,6 +105,8 @@
               <span class="order-amount">{{ item.order_amount | unitPrice('￥')}}</span>
               <!--运费/邮费-->
               <span>运费({{ item.shipping_amount | unitPrice('￥') }})</span>
+              <!--支付方式-->
+              <span>{{ item.payment_name }}</span>
             </div>
           </td>
         </tr>
@@ -171,36 +156,6 @@
 
         /** 高级搜索数据 */
         advancedForm: {},
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now()
-          },
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        },
 
         /** 订单状态 */
         orderStatus: '',
@@ -217,16 +172,10 @@
         tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
       }
     },
-    filters: {
-      paymentTypeFilter(val) {
-        return val === 'online' ? '在线支付' : '货到付款'
-      }
-    },
     mounted() {
       if (this.$route.query) {
         this.orderStatus = this.params.orderStatus = this.$route.query.orderStatus
       }
-      this.GET_OrderList()
       window.onresize = this.countTableHeight
     },
     beforeRouteEnter(to, from, next) {
@@ -243,6 +192,7 @@
       countTableHeight() {
         this.tableHeight = (document.body.clientHeight - 54 - 35 - 50)
       },
+
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
@@ -257,9 +207,13 @@
 
       /** 订单状态改变 */
       changeOrderStatus(data) {
-        this.params = {
-          ...this.params,
-          orderStatus: data
+        delete this.params.keyword
+        delete this.params.order_status
+        if (data) {
+          this.params = {
+            ...this.params,
+            order_status: data
+          }
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_OrderList()
@@ -271,6 +225,7 @@
           ...this.params,
           keyword: data
         }
+        delete this.params.order_status
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_OrderList()
       },
@@ -294,7 +249,7 @@
 
       /** 查看、操作订单 */
       handleOperateOrder(item) {
-        this.$router.push({ path: `/order/detail/${item.sn}` })
+        this.$router.push({ path: `/order/detail/${item.order_sn}` })
       },
 
       GET_OrderList() {
@@ -303,13 +258,10 @@
           this.loading = false
           this.tableData = response.data
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       }
     }
