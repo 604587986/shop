@@ -1,6 +1,12 @@
 <template>
   <div class="bg-settings">
-    <el-form :model="shopDataForm" ref="shopDataForm" :rules="rules" label-width="200px" class="demo-ruleForm">
+    <el-form
+      :model="shopDataForm"
+      ref="shopDataForm"
+      :rules="rules"
+      label-width="200px"
+      class="demo-ruleForm"
+      status-icon>
       <!--身份证号-->
       <el-form-item label="身份证号：" prop="legal_id">
         <span>{{ shopDataForm.legal_id }}</span>
@@ -66,7 +72,7 @@
 <script>
   import * as API_Shop from '@/api/shop'
   import { UE } from '@/components'
-  import { validatePhone } from '@/utils/validate'
+  import { RegExp } from '～/ui-utils'
   export default {
     name: 'shopSetting',
     components: {
@@ -76,7 +82,7 @@
       var validPhone = (rule, value, callback) => {
         if (!value) {
           callback(new Error('请输入联系人电话'))
-        } else if (!validatePhone(value)) {
+        } else if (!RegExp.mobile.test(value)) {
           callback(new Error('请输入正确的11位手机号码'))
         } else {
           callback()
@@ -138,8 +144,8 @@
           ],
           /** 联系人电话 */
           link_phone: [
-            { required: true, message: '请填写联系人电话', trigger: 'changer,blur' },
-            { validator: validPhone, trigger: 'changer,blur' }
+            { required: true, message: '请填写联系人电话', trigger: 'blur' },
+            { validator: validPhone, trigger: 'blur' }
           ]
         }
       }

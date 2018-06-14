@@ -31,7 +31,7 @@
           <img :src="scope.row.goods_image" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="goods_name" label="名称" align="left" />
+      <el-table-column prop="goods_name" label="名称" />
       <el-table-column label="价格">
         <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
       </el-table-column>

@@ -168,55 +168,55 @@
               <h4>活动商品</h4>
               <div>
                 <div class="activity-goods">
-                    <el-form-item label="活动商品" prop="is_all_joined">
-                      <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
-                        <el-radio :label="1">全部商品参与</el-radio>
-                        <el-radio :label="0">部分商品参与</el-radio>
-                      </el-radio-group>
-                      <!--商品表格-->
-                      <div v-show="!goodsShow">
-                        <en-tabel-layout
-                          toolbar
-                          :tableData="activityForm.activity_goods"
-                          :loading="loading"
-                          :selectionChange="selectionChange"
-                        >
-                          <div slot="toolbar" class="inner-toolbar">
-                            <div class="toolbar-btns">
-                              <el-button type="primary" @click="showGoodsSelector">选择商品</el-button>
-                              <el-button type="danger" @click="cancelall">批量取消</el-button>
-                            </div>
+                  <el-form-item label="活动商品" prop="is_all_joined">
+                    <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
+                      <el-radio :label="1">全部商品参与</el-radio>
+                      <el-radio :label="0">部分商品参与</el-radio>
+                    </el-radio-group>
+                    <!--商品表格-->
+                    <div v-show="!goodsShow">
+                      <en-tabel-layout
+                        toolbar
+                        :tableData="activityForm.activity_goods"
+                        :loading="loading"
+                        :selectionChange="selectionChange"
+                      >
+                        <div slot="toolbar" class="inner-toolbar">
+                          <div class="toolbar-btns">
+                            <el-button type="primary" @click="showGoodsSelector">选择商品</el-button>
+                            <el-button type="danger" @click="cancelall">批量取消</el-button>
                           </div>
-                          <template slot="table-columns">
-                            <el-table-column type="selection"/>
-                            <!--商品信息-->
-                            <el-table-column  label="商品信息">
-                              <template slot-scope="scope">
-                                <div class="goods-info">
-                                  <img :src="scope.row.thumbnail" alt="" class="goods-image">
-                                  <div>
-                                    <a>{{ scope.row.goods_name }}</a>
-                                    <span>{{ scope.row.price | unitPrice('￥') }}</span>
-                                  </div>
+                        </div>
+                        <template slot="table-columns">
+                          <el-table-column type="selection"/>
+                          <!--商品信息-->
+                          <el-table-column  label="商品信息">
+                            <template slot-scope="scope">
+                              <div class="goods-info">
+                                <img :src="scope.row.thumbnail" alt="" class="goods-image">
+                                <div>
+                                  <a>{{ scope.row.goods_name }}</a>
+                                  <span>{{ scope.row.price | unitPrice('￥') }}</span>
                                 </div>
-                              </template>
-                            </el-table-column>
-                            <!--库存-->
-                            <el-table-column prop="enable_quantity" label="库存" />
-                            <!--操作-->
-                            <el-table-column label="操作" width="150">
-                              <template slot-scope="scope">
-                                <el-button
-                                  type="danger"
-                                  @click="handleCancleJoin(scope.$index, scope.row)">取消参加
-                                </el-button>
-                              </template>
-                            </el-table-column>
-                          </template>
-                        </en-tabel-layout>
-                      </div>
-                    </el-form-item>
-                  </div>
+                              </div>
+                            </template>
+                          </el-table-column>
+                          <!--库存-->
+                          <el-table-column prop="enable_quantity" label="库存" />
+                          <!--操作-->
+                          <el-table-column label="操作" width="150">
+                            <template slot-scope="scope">
+                              <el-button
+                                type="danger"
+                                @click="handleCancleJoin(scope.$index, scope.row)">取消参加
+                              </el-button>
+                            </template>
+                          </el-table-column>
+                        </template>
+                      </en-tabel-layout>
+                    </div>
+                  </el-form-item>
+                </div>
               </div>
             </div>
             <!--提交按钮-->

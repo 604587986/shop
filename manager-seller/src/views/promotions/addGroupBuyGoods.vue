@@ -177,7 +177,7 @@
 <script>
   import * as API_groupBuy from '@/api/groupBuy'
   import { unixToDate } from '@/utils/index'
-  import Reg from '@/framework/RegExp'
+  import { RegExp } from '～/ui-utils'
   import { UE } from '@/components'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
@@ -192,7 +192,7 @@
           return callback(new Error('团购价格不能为空'))
         }
         setTimeout(() => {
-          if (!Reg.price.test(value)) {
+          if (!RegExp.money.test(value)) {
             callback(new Error('请输入正确的价格'))
           } else if (value < 0.01 || value > 1000000) {
             callback(new Error('团购价格须在0.01～1000000 之间'))
@@ -206,7 +206,7 @@
           return callback(new Error('商品总数不能为空'))
         }
         setTimeout(() => {
-          if (!Reg.integer.test(value)) {
+          if (!RegExp.integer.test(value)) {
             callback(new Error('请输入正整数'))
           } else if (parseInt(value) < 1) {
             callback(new Error('商品总数不得小于1'))
