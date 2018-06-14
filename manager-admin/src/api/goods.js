@@ -52,6 +52,7 @@ export function getAuditGoods(params) {
   return request({
     url: `/goods`,
     method: 'get',
+    loading: false,
     params
   })
 }
