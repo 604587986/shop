@@ -121,10 +121,6 @@
           this.$message.success('设置成功！')
           this.$emit('change', item)
         })
-      },
-      /** 设置默认地址 */
-      handleSetDefaultAddress(item) {
-        this.setDefaultAddress(item.addr_id).then(() => this.$message.success('设置成功！'))
       }
     }
   }
