@@ -326,7 +326,7 @@
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
   import { CategoryPicker, SkuSelector, UE } from '@/components'
-  import { validatePrice } from '@/utils/validate'
+  import { RegExp } from '～/ui-utils'
   import Sortable from 'sortablejs'
   export default {
     name: 'goodsPublish',
@@ -354,7 +354,7 @@
           return callback(new Error('市场价格不能为空'))
         }
         setTimeout(() => {
-          if (!validatePrice(value)) {
+          if (!RegExp.money.test(value)) {
             callback(new Error('请输入正整数或者两位小数'))
           } else {
             if (value < this.baseInfoForm.cost) {
@@ -371,7 +371,7 @@
           return callback(new Error('商品价格不能为空'))
         }
         setTimeout(() => {
-          if (!validatePrice(value)) {
+          if (!RegExp.money.test(value)) {
             callback(new Error('请输入正整数或者两位小数'))
           } else {
             callback()
@@ -384,7 +384,7 @@
           return callback(new Error('成本价格不能为空'))
         }
         setTimeout(() => {
-          if (!validatePrice(value)) {
+          if (!RegExp.money.test(value)) {
             callback(new Error('请输入数字值'))
           } else {
             if (value > this.baseInfoForm.mktprice) {
@@ -401,7 +401,7 @@
           return callback(new Error('重量不能为空'))
         }
         setTimeout(() => {
-          if (!validatePrice(value)) {
+          if (!RegExp.money.test(value)) {
             callback(new Error('请输入正整数或者两位小数'))
           } else {
             callback()

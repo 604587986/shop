@@ -118,8 +118,7 @@
                       toolbar
                       :tableData="activityForm.activity_goods"
                       :loading="loading"
-                      :selectionChange="selectionChange"
-                    >
+                      :selectionChange="selectionChange">
                       <div slot="toolbar" class="inner-toolbar">
                         <div class="toolbar-btns">
                           <el-button type="primary" @click="showGoodsSelector">选择商品</el-button>

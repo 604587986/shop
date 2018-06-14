@@ -221,6 +221,7 @@
       /** 新增优惠券*/
       handleAddCoupon() {
         this.couponModelShow = true
+        this.currentcouponId = ''
       },
 
       /** 优惠券监听 */

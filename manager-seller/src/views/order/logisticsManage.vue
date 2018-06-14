@@ -106,7 +106,7 @@
 
 <script>
   import * as API_express from '@/api/expressMould'
-  import Reg from '@/framework/RegExp'
+  import { RegExp } from '～/ui-utils'
   import { LogisticsCompany } from './components'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
 
@@ -122,7 +122,7 @@
           return callback(new Error('首重运费不能为空'))
         }
         setTimeout(() => {
-          if (!Reg.price.test(value)) {
+          if (!RegExp.money.test(value)) {
             callback(new Error('请输入正确的金额'))
           } else {
             callback()
@@ -134,7 +134,7 @@
           return callback(new Error('续重运费不能为空'))
         }
         setTimeout(() => {
-          if (!Reg.price.test(value)) {
+          if (!RegExp.money.test(value)) {
             callback(new Error('请输入正确的金额'))
           } else {
             callback()

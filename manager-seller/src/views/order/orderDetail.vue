@@ -179,7 +179,7 @@
       </el-table>
     </div>
     <!--调整价格 / 修改收货人信息-->
-    <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="30%" align="center">
+    <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="30%">
       <div align="center">
         <!--调整价格-->
         <el-input v-show="triggerStatus === 1" v-model="adjustedPrice"style="width: 75%;"></el-input>
@@ -226,7 +226,7 @@
       </div>
     </el-dialog>
     <!--查看物流信息-->
-    <el-dialog title="物流信息" :visible.sync="logisticsShow" width="30%" align="center">
+    <el-dialog title="物流信息" :visible.sync="logisticsShow" width="30%">
       <a href="">快递查询</a>
       <div>
         <span>时间：</span>

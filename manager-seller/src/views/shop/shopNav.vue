@@ -81,14 +81,14 @@
 
 <script>
   import * as API_ShopNav from '@/api/shopNav'
-  import Reg from '@/framework/RegExp'
+  import { RegExp } from '～/ui-utils'
   export default {
     name: 'shopNav',
     data() {
       const shopNavURL = (rule, value, callback) => {
         if (!value) {
           callback(new Error('请输入链接地址'))
-        } else if (!Reg.uri.test(value)) {
+        } else if (!RegExp.URL.test(value)) {
           callback(new Error('请输入正确的完整链接地址'))
         } else {
           callback()
@@ -97,7 +97,7 @@
       const shopNavSort = (rule, value, callback) => {
         if (!value) {
           callback(new Error('请输入排序'))
-        } else if (!Reg.integer.test(value)) {
+        } else if (!RegExp.integer.test(value)) {
           callback(new Error('请输入正整数'))
         } else {
           callback()

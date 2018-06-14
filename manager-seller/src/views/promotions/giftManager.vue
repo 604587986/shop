@@ -188,6 +188,7 @@
       /** 新增赠品*/
       handelAddGifts() {
         this.giftModelShow = true
+        this.currentGiftId = ''
       },
 
       /** 保存结果 */

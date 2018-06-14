@@ -77,7 +77,7 @@
 <script>
   import * as API_limitTime from '@/api/limitTime'
   import { CategoryPicker } from '@/components'
-  import Reg from '@/framework/RegExp'
+  import { RegExp } from '～/ui-utils'
   import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
     name: 'addTimeLimit',
@@ -91,7 +91,7 @@
           return callback(new Error('价格不能为空'))
         }
         setTimeout(() => {
-          if (!Reg.price.test(value)) {
+          if (!RegExp.money.test(value)) {
             callback(new Error('请输入正确的价格'))
           } else {
             callback()
@@ -103,7 +103,7 @@
           return callback(new Error('售空数量不能为空'))
         }
         setTimeout(() => {
-          if (!Reg.integer.test(value)) {
+          if (!RegExp.integer.test(value)) {
             callback(new Error('请输入一个正整数'))
           } else {
             callback()

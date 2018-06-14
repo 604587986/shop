@@ -30,15 +30,13 @@
         <el-table-column label="发送时间" width="200" >
           <template slot-scope="scope">{{ scope.row.send_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column label="操作" width="200" class="opera-btn">
           <template slot-scope="scope">
             <el-button
-              size="mini"
               type="danger"
               @click="handleDeleteMsgs(scope.row)">删除
             </el-button>
             <el-button
-              size="mini"
               type="primary"
               v-if="!scope.row.is_read"
               @click="handleSignRead(scope.row)">标记为已读
@@ -261,5 +259,10 @@
     height: 50px;
   }
 
+  /deep/.opera-btn {
+    div.cell {
+      text-align: left;
+    }
+  }
 </style>
 
