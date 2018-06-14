@@ -3,25 +3,17 @@
  */
 
 import request from '@/utils/request'
-import SmsGateway from '@/models/SmsGatewayModel'
-const smsGateway = new SmsGateway()
 
 /**
  * 获取短信网关列表
  * @param params
- * @returns {Promise<any>}
  */
 export function getSmsGatewayList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'system/platforms',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      response.data = smsGateway.map(response.data)
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: 'system/platforms',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -32,13 +24,11 @@ export function getSmsGatewayList(params) {
  * @returns {*}
  */
 export function editSmsGateway(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `system/platforms/${id}`,
-      method: 'put',
-      headers: { 'Content-Type': 'application/json' },
-      data: smsGateway.params(params)
-    }).then(response => resolve(smsGateway.map(response))).catch(error => reject(error))
+  return request({
+    url: `system/platforms/${id}`,
+    method: 'put',
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 

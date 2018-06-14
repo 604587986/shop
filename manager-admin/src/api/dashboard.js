@@ -4,9 +4,6 @@
 
 import request from '@/utils/request'
 
-import GoodsModel from '@/models/GoodsModel'
-import MemberModel from '@/models/MemberModel'
-
 export function getDashboardData() {
   const nowDate = new Date()
   const year = nowDate.getFullYear()
@@ -25,8 +22,8 @@ export function getDashboardData() {
   return new Promise((resolve, reject) => {
     Promise.all(alls).then(values => resolve({
       incomeStatistics: values[0].data,
-      memberList: new MemberModel().map(values[1].data),
-      goodsList: new GoodsModel().map(values[2].data)
+      memberList: values[1].data,
+      goodsList: values[2].data
     })).catch(error => reject(error))
   })
 }

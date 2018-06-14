@@ -5,7 +5,7 @@
 <script>
   import * as API_Statistics from '@/api/statistics'
   import echartsOptions from '../echartsOptions'
-  import { Foundation } from '@/framework'
+  import { Foundation } from '~/ui-utils'
 
   export default {
     name: 'orderStatisticsOrder',

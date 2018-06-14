@@ -1,4 +1,4 @@
-import Foundation from '@/framework/Foundation'
+import { Foundation } from '~/ui-utils'
 
 function pluralize(time, label) {
   if (time === 1) {

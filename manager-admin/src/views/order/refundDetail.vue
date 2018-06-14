@@ -36,7 +36,7 @@
 
 <script>
   import * as API_Refund from '@/api/refund'
-  import Foundation from '@/framework/Foundation'
+
   export default {
     name: 'refundDetail',
     data() {

@@ -9,8 +9,8 @@
         <el-table-column prop="name" label="平台名称"/>
         <el-table-column label="启用状态">
           <template slot-scope="scope">
-            {{ scope.row.is_open === 1 ? '已开启' : '已关闭' }}
-            <el-button v-if="scope.row.is_open === 0" type="text" @click="handleOpenSmsGateway(scope.$index, scope.row)">开启</el-button>
+            {{ scope.row.open === 1 ? '已开启' : '已关闭' }}
+            <el-button v-if="scope.row.open === 0" type="text" @click="handleOpenSmsGateway(scope.$index, scope.row)">开启</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -76,7 +76,7 @@
         /** 列表数据 */
         tableData: '',
         /** sms 表单 */
-        smsForm: { is_open: 0 },
+        smsForm: { open: 0 },
         /** sms表单 dailog */
         dialogSmsVisible: false
       }
@@ -108,7 +108,7 @@
         API_SmsGateway.openSmsGatewayById(row.id).then(response => {
           this.$message.success('开启成功！')
           this.GET_SmsGatewayList()
-        }).catch(error => console.log(error))
+        })
       },
 
       /** 修改短信网关参数 提交表单 */
@@ -118,7 +118,7 @@
             API_SmsGateway.editSmsGateway(this.smsForm.id, this.smsForm).then(response => {
               this.dialogSmsVisible = false
               this.$message.success('修改成功！')
-              this.MixinSetTableData(this.tableData, this.id, response)
+              this.MixinSetTableData(this.tableData, 'id', this.id, response)
             })
           } else {
             this.$message.error('表单填写有误，请检查！')
@@ -133,15 +133,8 @@
         API_SmsGateway.getSmsGatewayList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

@@ -46,8 +46,6 @@
 </template>
 
 <script>
-  import * as API_Decoration from '@/api/decoration'
-
   export default {
     name: 'mobileThemeManage',
     data() {
@@ -103,28 +101,28 @@
       /** 删除模板 */
       handleDeleteTpl(index, row) {
         this.$confirm('确定要删除这个模板吗？', '提示', { type: 'warning' }).then(() => {
-          API_Decoration.deleteTpl(row.tpl_id).then(response => {
-            this.$message.success('删除成功！')
-            this.GET_TplList()
-          }).catch(error => console.log(error))
+          // API_Decoration.deleteTpl(row.tpl_id).then(response => {
+          //   this.$message.success('删除成功！')
+          //   this.GET_TplList()
+          // }).catch(error => console.log(error))
         }).catch(() => {})
       },
 
       /** 获取模板列表 */
       GET_TplList() {
         this.loading = true
-        API_Decoration.getTplList('Mobile', this.params).then(response => {
-          this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        // API_Decoration.getTplList('Mobile', this.params).then(response => {
+        //   this.loading = false
+        //   this.tableData = response.data
+        //   this.pageData = {
+        //     page_no: response.draw,
+        //     page_size: 10,
+        //     data_total: response.recordsTotal
+        //   }
+        // }).catch(error => {
+        //   this.loading = false
+        //   console.log(error)
+        // })
       }
     }
   }

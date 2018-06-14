@@ -68,7 +68,8 @@
 
 <script>
   import * as API_order from '@/api/order'
-  import Foundation from '@/framework/Foundation'
+  import { Foundation } from '~/ui-utils'
+
   export default {
     name: 'orderDetail',
     data() {

@@ -88,7 +88,7 @@
 
 <script>
   import * as API_Smtp from '@/api/smtp'
-  import regExp from '@/framework/RegExp'
+  import { RegExp } from '~/ui-utils'
 
   export default {
     name: 'SMTPSettings',
@@ -188,7 +188,7 @@
               API_Smtp.editSmtp(id, this.smtpForm).then(response => {
                 this.dialogSmtpVisible = false
                 this.$message.success('修改成功！')
-                this.MixinSetTableData(this.tableData, id, response)
+                this.MixinSetTableData(this.tableData, 'id', id, response)
               })
             } else {
               API_Smtp.addSmtp(this.smtpForm).then(response => {
@@ -209,7 +209,7 @@
         const { test_email, smtpForm } = this
         this.$refs['smtpForm'].validate(valid => {
           if (valid) {
-            if (!regExp.email.test(test_email)) {
+            if (!RegExp.email.test(test_email)) {
               this.test_email_error = '邮箱地址格式不正确！'
               return false
             }
