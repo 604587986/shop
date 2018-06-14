@@ -1,37 +1,23 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const _import = require('./_import_' + process.env.NODE_ENV)
-// in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
-// detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
 
 Vue.use(Router)
 
 /* Layout */
-import Layout from '../views/layout/Layout'
+import Layout from '@/views/layout/Layout'
 
-/**
- * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
- * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    role: ['admin','editor']     will control the page role (you can set multiple roles)
-    title: 'title'               the name show in submenu and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar,
-    noCache: true                if fasle ,the page will no be cached(default is false)
-  }
- **/
 export const constantRouterMap = [
-  { path: '/login', component: _import('login/index'), hidden: true },
-  { path: '/authredirect', component: _import('login/authredirect'), hidden: true },
-  { path: '/404', component: _import('errorPage/404'), hidden: true },
-  { path: '/401', component: _import('errorPage/401'), hidden: true },
+  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/authredirect', component: () => import('@/views/login/authredirect'), hidden: true },
+  { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
+  { path: '/401', component: () => import('@/views/errorPage/401'), hidden: true },
   {
-    path: '/',
+    path: '',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: 'dashboard',
     children: [{
       path: 'dashboard',
-      component: _import('dashboard/index'),
+      component: () => import('@/views/dashboard/index'),
       name: 'dashboard',
       meta: { title: 'dashboard', icon: 'dashboard' }
     }]
@@ -56,14 +42,14 @@ export const asyncRouterMap = [
       icon: 'goods-manage'
     },
     children: [
-      { path: 'goods-list', component: _import('goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
-      { path: 'draft-list', component: _import('goods/draftList'), name: 'draftList', meta: { title: 'draftList' }},
-      { path: 'category-manage', component: _import('goods/categoryManage'), name: 'categoryManage', meta: { title: 'categoryManage' }},
-      { path: 'tag-manage', component: _import('goods/tagManage'), name: 'tagManage', meta: { title: 'tagManage' }},
-      { path: 'tag-add/:tag_id', component: _import('goods/tagAdd'), name: 'tagAdd', meta: { title: 'tagAdd' }, hidden: true },
-      { path: 'recycle-station', component: _import('goods/recycleStation'), name: 'recycleStation', meta: { title: 'recycleStation' }},
-      { path: 'understock', component: _import('goods/understock'), name: 'understock', meta: { title: 'understock' }},
-      { path: 'good-publish', component: _import('goods/goodsPublish'), name: 'goodPublish', meta: { title: 'goodPublish' }, hidden: true }
+      { path: 'goods-list', component: () => import('@/views/goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
+      { path: 'draft-list', component: () => import('@/views/goods/draftList'), name: 'draftList', meta: { title: 'draftList' }},
+      { path: 'category-manage', component: () => import('@/views/goods/categoryManage'), name: 'categoryManage', meta: { title: 'categoryManage' }},
+      { path: 'tag-manage', component: () => import('@/views/goods/tagManage'), name: 'tagManage', meta: { title: 'tagManage' }},
+      { path: 'tag-add/:tag_id', component: () => import('@/views/goods/tagAdd'), name: 'tagAdd', meta: { title: 'tagAdd' }, hidden: true },
+      { path: 'recycle-station', component: () => import('@/views/goods/recycleStation'), name: 'recycleStation', meta: { title: 'recycleStation' }},
+      { path: 'understock', component: () => import('@/views/goods/understock'), name: 'understock', meta: { title: 'understock' }},
+      { path: 'good-publish', component: () => import('@/views/goods/goodsPublish'), name: 'goodPublish', meta: { title: 'goodPublish' }, hidden: true }
     ]
   },
   // 订单管理
@@ -75,14 +61,14 @@ export const asyncRouterMap = [
     redirect: '/order/order-list',
     meta: { title: 'order', icon: 'order-manage' },
     children: [
-      { path: 'order-list', component: _import('order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
-      { path: 'detail/:sn', component: _import('order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
-      { path: 'refund-list', component: _import('order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
-      { path: 'logistics-manage', component: _import('order/logisticsManage'), name: 'logisticsManage', meta: { title: 'logisticsManage' }},
-      { path: 'comments-manage', component: _import('order/commentsManage'), name: 'commentsManage', meta: { title: 'commentsManage' }},
-      { path: 'settlement-manage', component: _import('order/settlementManage'), name: 'settlementManage', meta: { title: 'settlementManage' }},
-      { path: 'settlement-detail/:sn', component: _import('order/settlementDetail'), name: 'settlementDetail', meta: { title: 'settlementDetail' }, hidden: true },
-      { path: 'receipt-history', component: _import('order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }}
+      { path: 'order-list', component: () => import('@/views/order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
+      { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
+      { path: 'refund-list', component: () => import('@/views/order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
+      { path: 'logistics-manage', component: () => import('@/views/order/logisticsManage'), name: 'logisticsManage', meta: { title: 'logisticsManage' }},
+      { path: 'comments-manage', component: () => import('@/views/order/commentsManage'), name: 'commentsManage', meta: { title: 'commentsManage' }},
+      { path: 'settlement-manage', component: () => import('@/views/order/settlementManage'), name: 'settlementManage', meta: { title: 'settlementManage' }},
+      { path: 'settlement-detail/:sn', component: () => import('@/views/order/settlementDetail'), name: 'settlementDetail', meta: { title: 'settlementDetail' }, hidden: true },
+      { path: 'receipt-history', component: () => import('@/views/order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }}
     ]
   },
   // 店铺管理
@@ -93,10 +79,10 @@ export const asyncRouterMap = [
     name: 'shop',
     meta: { title: 'shop', icon: 'shop-manage' },
     children: [
-      { path: 'shop-themes-pc', component: _import('shop/shopThemesPc'), name: 'shopThemesPc', meta: { title: 'shopThemesPc' }},
-      { path: 'shop-themes-wap', component: _import('shop/shopThemesWap'), name: 'shopThemesWap', meta: { title: 'shopThemesWap' }},
-      { path: 'shop-slide', component: _import('shop/shopSlide'), name: 'shopSlide', meta: { title: 'shopSlide' }},
-      { path: 'shop-nav', component: _import('shop/shopNav'), name: 'shopNav', meta: { title: 'shopNav' }}
+      { path: 'shop-themes-pc', component: () => import('@/views/shop/shopThemesPc'), name: 'shopThemesPc', meta: { title: 'shopThemesPc' }},
+      { path: 'shop-themes-wap', component: () => import('@/views/shop/shopThemesWap'), name: 'shopThemesWap', meta: { title: 'shopThemesWap' }},
+      { path: 'shop-slide', component: () => import('@/views/shop/shopSlide'), name: 'shopSlide', meta: { title: 'shopSlide' }},
+      { path: 'shop-nav', component: () => import('@/views/shop/shopNav'), name: 'shopNav', meta: { title: 'shopNav' }}
     ]
   },
   // 促销管理
@@ -107,17 +93,17 @@ export const asyncRouterMap = [
     name: 'promotions',
     meta: { title: 'promotions', icon: 'promotions-manage' },
     children: [
-      { path: 'full-cut', component: _import('promotions/fullCut'), name: 'fullCut', meta: { title: 'fullCut' }},
-      { path: 'single-cut', component: _import('promotions/singleCut'), name: 'singleCut', meta: { title: 'singleCut' }},
-      { path: 'second-half-price', component: _import('promotions/secondHalfPrice'), name: 'secondHalfPrice', meta: { title: 'secondHalfPrice' }},
-      { path: 'discount-manager', component: _import('promotions/discountManager'), name: 'discountManager', meta: { title: 'discountManager' }},
-      { path: 'gift-manager', component: _import('promotions/giftManager'), name: 'giftManager', meta: { title: 'giftManager' }},
-      { path: 'group-buy-manager', component: _import('promotions/groupBuyManager'), name: 'groupBuyManager', meta: { title: 'groupBuyManager' }},
-      { path: 'group-time-limit', component: _import('promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit' }},
-      { path: 'add-time-limit', component: _import('promotions/addTimeLimit'), name: 'addTimeLimit', meta: { title: 'addTimeLimit' }, hidden: true },
-      { path: 'activity-goods-data/:id', component: _import('promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData' }, hidden: true },
-      { path: 'add-group-buy-goods', component: _import('promotions/addGroupBuyGoods'), name: 'addGroupBuyGoods', meta: { title: 'addGroupBuyGoods' }, hidden: true },
-      { path: 'edit-group-buy-goods/:goods_id', component: _import('promotions/editGroupBuyGoods'), name: 'editGroupBuyGoods', meta: { title: 'editGroupBuyGoods' }, hidden: true }
+      { path: 'full-cut', component: () => import('@/views/promotions/fullCut'), name: 'fullCut', meta: { title: 'fullCut' }},
+      { path: 'single-cut', component: () => import('@/views/promotions/singleCut'), name: 'singleCut', meta: { title: 'singleCut' }},
+      { path: 'second-half-price', component: () => import('@/views/promotions/secondHalfPrice'), name: 'secondHalfPrice', meta: { title: 'secondHalfPrice' }},
+      { path: 'discount-manager', component: () => import('@/views/promotions/discountManager'), name: 'discountManager', meta: { title: 'discountManager' }},
+      { path: 'gift-manager', component: () => import('@/views/promotions/giftManager'), name: 'giftManager', meta: { title: 'giftManager' }},
+      { path: 'group-buy-manager', component: () => import('@/views/promotions/groupBuyManager'), name: 'groupBuyManager', meta: { title: 'groupBuyManager' }},
+      { path: 'group-time-limit', component: () => import('@/views/promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit' }},
+      { path: 'add-time-limit', component: () => import('@/views/promotions/addTimeLimit'), name: 'addTimeLimit', meta: { title: 'addTimeLimit' }, hidden: true },
+      { path: 'activity-goods-data/:id', component: () => import('@/views/promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData' }, hidden: true },
+      { path: 'add-group-buy-goods', component: () => import('@/views/promotions/addGroupBuyGoods'), name: 'addGroupBuyGoods', meta: { title: 'addGroupBuyGoods' }, hidden: true },
+      { path: 'edit-group-buy-goods/:goods_id', component: () => import('@/views/promotions/editGroupBuyGoods'), name: 'editGroupBuyGoods', meta: { title: 'editGroupBuyGoods' }, hidden: true }
     ]
   },
   // 统计
@@ -128,34 +114,34 @@ export const asyncRouterMap = [
     name: 'statistics',
     meta: { title: 'statistics', icon: 'statistics-manage' },
     children: [
-      { path: 'generality-overview', component: _import('statistics/generalityOverview'), name: 'generalityOverview', meta: { title: 'generalityOverview' }},
+      { path: 'generality-overview', component: () => import('@/views/statistics/generalityOverview'), name: 'generalityOverview', meta: { title: 'generalityOverview' }},
       {
         path: '/statistics/goods-analysis',
-        component: _import('statistics/goodsAnalysis/index'),
+        component: () => import('@/views/statistics/goodsAnalysis/index'),
         redirect: '/statistics/goods-analysis/goods-details',
         name: 'goodsAnalysis',
         meta: { title: 'goodsAnalysis' },
         children: [
-          { path: 'goods-details', component: _import('statistics/goodsAnalysis/goodsDetailsAnalysis'), name: 'goodsDetailsAnalysis', meta: { title: 'goodsDetailsAnalysis' }},
-          { path: 'price-sales', component: _import('statistics/goodsAnalysis/goodsPriceSales'), name: 'goodsPriceSales', meta: { title: 'goodsPriceSales' }},
-          { path: 'hot-selling-goods', component: _import('statistics/goodsAnalysis/hotSellingGoods'), name: 'hotSellingGoods', meta: { title: 'hotSellingGoods' }}
+          { path: 'goods-details', component: () => import('@/views/statistics/goodsAnalysis/goodsDetailsAnalysis'), name: 'goodsDetailsAnalysis', meta: { title: 'goodsDetailsAnalysis' }},
+          { path: 'price-sales', component: () => import('@/views/statistics/goodsAnalysis/goodsPriceSales'), name: 'goodsPriceSales', meta: { title: 'goodsPriceSales' }},
+          { path: 'hot-selling-goods', component: () => import('@/views/statistics/goodsAnalysis/hotSellingGoods'), name: 'hotSellingGoods', meta: { title: 'hotSellingGoods' }}
         ]
       },
       {
         path: '/statistics/operate-report',
-        component: _import('statistics/operateReport/index'),
+        component: () => import('@/views/statistics/operateReport/index'),
         redirect: '/statistics/goods-analysis/goods-details',
         name: 'operateReport',
         meta: { title: 'operateReport' },
         children: [
-          { path: 'regional-analysis', component: _import('statistics/operateReport/regionalAnalysis'), name: 'regionalAnalysis', meta: { title: 'regionalAnalysis' }},
-          { path: 'sales-statistics', component: _import('statistics/operateReport/salesStatistics'), name: 'salesStatistics', meta: { title: 'salesStatistics' }},
-          { path: 'buy-analysis', component: _import('statistics/operateReport/buyAnalysis'), name: 'buyAnalysis', meta: { title: 'buyAnalysis' }}
+          { path: 'regional-analysis', component: () => import('@/views/statistics/operateReport/regionalAnalysis'), name: 'regionalAnalysis', meta: { title: 'regionalAnalysis' }},
+          { path: 'sales-statistics', component: () => import('@/views/statistics/operateReport/salesStatistics'), name: 'salesStatistics', meta: { title: 'salesStatistics' }},
+          { path: 'buy-analysis', component: () => import('@/views/statistics/operateReport/buyAnalysis'), name: 'buyAnalysis', meta: { title: 'buyAnalysis' }}
         ]
       },
-      { path: 'traffic-statistics', component: _import('statistics/trafficStatistics'), name: 'trafficStatistics', meta: { title: 'trafficStatistics' }},
-      { path: 'collect-statistics', component: _import('statistics/collectStatistics'), name: 'collectStatistics', meta: { title: 'collectStatistics' }},
-      { path: 'log-manage', component: _import('statistics/logManage'), name: 'logManage', meta: { title: 'logManage' }}
+      { path: 'traffic-statistics', component: () => import('@/views/statistics/trafficStatistics'), name: 'trafficStatistics', meta: { title: 'trafficStatistics' }},
+      { path: 'collect-statistics', component: () => import('@/views/statistics/collectStatistics'), name: 'collectStatistics', meta: { title: 'collectStatistics' }},
+      { path: 'log-manage', component: () => import('@/views/statistics/logManage'), name: 'logManage', meta: { title: 'logManage' }}
     ]
   },
   // 客服管理
@@ -166,8 +152,8 @@ export const asyncRouterMap = [
     name: 'customer',
     meta: { title: 'customer', icon: 'user' },
     children: [
-      { path: 'consultation', component: _import('customer-service/consultation'), name: 'consultation', meta: { title: 'consultation' }},
-      { path: 'message', component: _import('customer-service/message'), name: 'message', meta: { title: 'message' }}
+      { path: 'consultation', component: () => import('@/views/customer-service/consultation'), name: 'consultation', meta: { title: 'consultation' }},
+      { path: 'message', component: () => import('@/views/customer-service/message'), name: 'message', meta: { title: 'message' }}
     ]
   },
   // 设置
@@ -178,9 +164,9 @@ export const asyncRouterMap = [
     name: 'setting',
     meta: { title: 'setting', icon: 'setting-manage' },
     children: [
-      { path: 'shop-setting', component: _import('setting/shopSettings'), name: 'shopSettings', meta: { title: 'shopSettings' }},
-      { path: 'goods-warning', component: _import('setting/goodsWarning'), name: 'goodsWarning', meta: { title: 'goodsWarning' }},
-      { path: 'grade-application', component: _import('setting/gradeApplication'), name: 'gradeApplication', meta: { title: 'gradeApplication' }, hidden: true }
+      { path: 'shop-setting', component: () => import('@/views/setting/shopSettings'), name: 'shopSettings', meta: { title: 'shopSettings' }},
+      { path: 'goods-warning', component: () => import('@/views/setting/goodsWarning'), name: 'goodsWarning', meta: { title: 'goodsWarning' }},
+      { path: 'grade-application', component: () => import('@/views/setting/gradeApplication'), name: 'gradeApplication', meta: { title: 'gradeApplication' }, hidden: true }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }
