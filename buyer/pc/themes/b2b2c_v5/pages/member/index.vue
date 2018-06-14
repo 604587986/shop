@@ -10,6 +10,7 @@
           <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
         </div>
       </div>
+      <!--// Andste_TODO 2018/6/14: 缺少API-->
       <div class="other-item">
         <p>我的订单</p>
         <i class="iconfont ea-icon-my-order"></i>
@@ -39,18 +40,19 @@
         <div class="item-content">
           <empty-member v-if="orderList.length === 0">暂无订单</empty-member>
           <template v-else>
-            <div v-for="(item, index) in orderList" v-if="index < 3" :key="item.order_sn" class="order-item" >
-              <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-image">
-                  <img :src="item.skuList[0].goods_image">
+            <!--// Andste_TODO 2018/6/14: product_list 需要更换为 sku_list-->
+            <div v-for="(order, index) in orderList" v-if="index < 3" :key="order.sn" class="order-item" >
+              <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" target="_blank" class="goods-image">
+                  <img :src="order.product_list[0].goods_image">
                 </nuxt-link>
               <div class="order-info">
-                  <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-name">{{ item.skuList[0].name }}</nuxt-link>
-                  <p>下单时间：2018-03-23 17:44:59</p>
-                  <p>订单金额：<span class="price">￥343.80</span></p>
-                  <p class="order-status-num"><span>订单状态：未付款</span><span>订单内共有（{{ item.skuList.length }}）种商品</span></p>
+                  <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" class="goods-name" target="_blank">{{ order.product_list[0].name }}</nuxt-link>
+                  <p>下单时间：{{ order.create_time | unixToDate }}</p>
+                  <p>订单金额：<span class="price">￥{{ order.order_amount | unitPrice }}</span></p>
+                  <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.product_list.length }}）种商品</span></p>
                 </div>
               <div class="order-oper">
-                  <nuxt-link :to="'/member/order/detail/' + item.order_sn">查看订单</nuxt-link>
+                  <nuxt-link :to="'/member/order/detail/' + order.sn" target="_blank">查看订单</nuxt-link>
                 </div>
             </div>
           </template>
@@ -65,11 +67,11 @@
           <empty-member v-if="cartSkuList.length === 0">暂无商品</empty-member>
           <template v-else>
             <div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">
-              <nuxt-link :to="'/goods-' + item.goods_id + '.html'" class="goods-image">
+              <nuxt-link :to="'/goods/' + item.goods_id" class="goods-image">
                 <img :src="item.goods_image" :alt="item.name">
               </nuxt-link>
               <div class="goods-name">
-                <nuxt-link :to="'/goods-' + item.goods_id + '.html'">{{ item.name }}</nuxt-link>
+                <nuxt-link :to="'/goods/' + item.goods_id">{{ item.name }}</nuxt-link>
                 <p><em>￥{{ item.purchase_price | unitPrice }}</em> <span>x {{ item.num }}</span></p>
               </div>
               <a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>
@@ -93,7 +95,7 @@
               :key="item.goods_id"
               class="goods-collection-item"
             >
-              <nuxt-link :to="'/goods-' + item.goods_id + '.html'">
+              <nuxt-link :to="'/goods/' + item.goods_id">
                 <img :src="item.goods_image" :alt="item.name" class="goods-image">
               </nuxt-link>
               <span class="goods-name">{{ item.name }}</span>
@@ -132,7 +134,7 @@
                   <nuxt-link
                     v-for="goods in item.goodsList"
                     :key="goods.goods_id"
-                    :to="'/goods-' + goods.goods_id + '.html'"
+                    :to="'/goods/' + goods.goods_id"
                     :title="goods.name"
                     class="swiper-slide"
                   >
