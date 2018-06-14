@@ -126,21 +126,11 @@
   Vue.use(Input)
   Vue.use(Button)
   import { mapGetters, mapActions } from 'vuex'
-  import CheckoutAddress from './-checkout-address'
-  import CheckoutPayment from './-checkout-payment'
-  import CheckoutInventory from './-checkout-inventory'
-  import CheckoutTime from './-checkout-time'
-  import CheckoutTotal from './-checkout-total'
+  import * as CheckoutComponents from './'
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-index',
-    components: {
-      CheckoutAddress,
-      CheckoutPayment,
-      CheckoutInventory,
-      CheckoutTime,
-      CheckoutTotal
-    },
+    components: CheckoutComponents,
     data() {
       return {
         // 结算参数
