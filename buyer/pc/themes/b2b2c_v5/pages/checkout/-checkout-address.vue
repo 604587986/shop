@@ -93,7 +93,7 @@
     watch: {
       address(newVal) {
         const initAddress = newVal.filter(item => item.addr_id === this.addressId)[0]
-        this.$emit('change', initAddress)
+        initAddress && this.$emit('change', initAddress)
       }
     },
     computed: {

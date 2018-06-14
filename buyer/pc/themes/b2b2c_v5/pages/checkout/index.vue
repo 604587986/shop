@@ -1,6 +1,6 @@
 <template>
   <div id="checkout">
-    <div v-if="inventoryList.length === 0" class="listing-empty">
+    <div v-if="inventoryList && inventoryList.length === 0" class="listing-empty">
       <img src="../../assets/images/icon-listing-empty.png" alt="购物清单为空！">
       <h2>
         您的购物清单为空，请
@@ -150,7 +150,7 @@
         // 当前已选的地址
         selectedAddress: '',
         // 购物清单
-        inventoryList: []
+        inventoryList: ''
       }
     },
     mounted() {
