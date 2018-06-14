@@ -7,11 +7,10 @@ import request, { Method } from '@/utils/request'
 /**
  * 获取订单列表
  * @param params
- * @returns {AxiosPromise}
  */
 export function getOrderList(params) {
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/list',
+    url: 'trade/orders',
     method: Method.GET,
     needToken: true,
     params
@@ -25,7 +24,7 @@ export function getOrderList(params) {
  */
 export function getOrderDetail(order_sn) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/${order_sn}`,
+    url: `trade/orders/{order_sn}`,
     method: Method.GET,
     needToken: true
   })

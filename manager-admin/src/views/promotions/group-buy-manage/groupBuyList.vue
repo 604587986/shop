@@ -18,7 +18,7 @@
         <el-table-column label="结束时间">
           <template slot-scope="scope">{{ scope.row.end_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column :formatter="groupStatus" label="活动状态"/>
+        <el-table-column prop="status_text" label="活动状态"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -191,16 +191,6 @@
         }).catch(() => {})
       },
 
-      /** 团购状态 */
-      groupStatus(row) {
-        // Andste_TODO 2018/6/5: 活动状态需要改为后端参数
-        const now_time = parseInt(new Date().getTime() / 1000)
-        const { start_time, end_time, join_end_time } = row
-        if (now_time < join_end_time) return '报名中'
-        if (now_time < start_time) return '报名结束'
-        if (now_time < end_time) return '进行中'
-        return '已结束'
-      },
       /** 添加团购 提交表单 */
       submitAddGroupBuyForm(formName) {
         const _time_range = this.groupBuyForm.time_range

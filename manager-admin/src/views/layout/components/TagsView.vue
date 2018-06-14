@@ -1,7 +1,7 @@
 <template>
   <div class="tags-view-container">
     <scroll-pane class='tags-view-wrapper' ref='scrollPane'>
-      <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)" :to="tag.path" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
+      <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)" :to="tag" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
         {{generateTitle(tag.title)}}
         <span v-if="tag.name !== 'dashboard'" class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
       </router-link>
@@ -15,119 +15,102 @@
 </template>
 
 <script>
-import ScrollPane from '@/components/ScrollPane'
-import { generateTitle } from '@/utils/i18n'
+  import ScrollPane from '@/components/ScrollPane'
+  import { generateTitle } from '@/utils/i18n'
 
-export default {
-  components: { ScrollPane },
-  data() {
-    return {
-      visible: false,
-      top: 0,
-      left: 0,
-      selectedTag: {}
-    }
-  },
-  computed: {
-    visitedViews() {
-      return this.$store.state.tagsView.visitedViews
-    }
-  },
-  watch: {
-    $route() {
-      this.addViewTags()
-      this.moveToCurrentTag()
-    },
-    visible(value) {
-      if (value) {
-        document.body.addEventListener('click', this.closeMenu)
-      } else {
-        document.body.removeEventListener('click', this.closeMenu)
+  export default {
+    components: { ScrollPane },
+    data() {
+      return {
+        visible: false,
+        top: 0,
+        left: 0,
+        selectedTag: {}
       }
-    }
-  },
-  mounted() {
-    this.addViewTags()
-  },
-  methods: {
-    generateTitle, // generateTitle by vue-i18n
-    generateRoute() {
-      if (this.$route.name) {
-        return this.$route
+    },
+    computed: {
+      visitedViews() {
+        return this.$store.state.tagsView.visitedViews
       }
-      // let matched = [...this.$route.matched]
-      // matched.splice(0, 1)
-      // matched = matched.filter(item => item.name)
-      // if (matched) {
-      //   return matched
-      // }
-      return false
     },
-    isActive(route) {
-      return route.path === this.$route.path// || route.name === this.$route.name
-    },
-    addViewTags() {
-      const route = this.generateRoute()
-      if (!route) {
-        return false
-      }
-      this.$store.dispatch('addVisitedViews', route)
-      // const routes = this.generateRoute()
-      // if (!routes) {
-      //   return false
-      // }
-      // const length = routes.length
-      // routes.forEach((item, index) => {
-      //   if (index === length - 1) {
-      //     item.showInVisitedViews = true
-      //   }
-      //   this.$store.dispatch('addVisitedViews', item)
-      // })
-    },
-    moveToCurrentTag() {
-      const tags = this.$refs.tag
-      this.$nextTick(() => {
-        for (const tag of tags) {
-          if (tag.to === this.$route.path) {
-            this.$refs.scrollPane.moveToTarget(tag.$el)
-            break
-          }
-        }
-      })
-    },
-    closeSelectedTag(view) {
-      this.$store.dispatch('delVisitedViews', view).then((views) => {
-        if (this.isActive(view)) {
-          const latestView = views.slice(-1)[0]
-          if (latestView) {
-            this.$router.push(latestView.path)
-          } else {
-            this.$router.push('/')
-          }
-        }
-      })
-    },
-    closeOthersTags() {
-      this.$router.push(this.selectedTag.path)
-      this.$store.dispatch('delOthersViews', this.selectedTag).then(() => {
+    watch: {
+      $route() {
+        this.addViewTags()
         this.moveToCurrentTag()
-      })
+      },
+      visible(value) {
+        if (value) {
+          document.body.addEventListener('click', this.closeMenu)
+        } else {
+          document.body.removeEventListener('click', this.closeMenu)
+        }
+      }
     },
-    closeAllTags() {
-      this.$store.dispatch('delAllViews')
-      this.$router.push('/')
+    mounted() {
+      this.addViewTags()
     },
-    openMenu(tag, e) {
-      this.visible = true
-      this.selectedTag = tag
-      this.left = e.clientX
-      this.top = e.clientY
-    },
-    closeMenu() {
-      this.visible = false
+    methods: {
+      generateTitle, // generateTitle by vue-i18n
+      generateRoute() {
+        if (this.$route.name) {
+          return this.$route
+        }
+        return false
+      },
+      isActive(route) {
+        return route.path === this.$route.path// || route.name === this.$route.name
+      },
+      addViewTags() {
+        const route = this.generateRoute()
+        if (!route) {
+          return false
+        }
+        this.$store.dispatch('addVisitedViews', route)
+      },
+      moveToCurrentTag() {
+        const tags = this.$refs.tag
+        this.$nextTick(() => {
+          for (const tag of tags) {
+            if (tag.to.path === this.$route.path) {
+              this.$refs.scrollPane.moveToTarget(tag.$el)
+              break
+            }
+          }
+        })
+      },
+      closeSelectedTag(view) {
+        this.$store.dispatch('delVisitedViews', view).then((views) => {
+          if (this.isActive(view)) {
+            const latestView = views.slice(-1)[0]
+            if (latestView) {
+              this.$router.push(latestView)
+            } else {
+              this.$router.push('/')
+            }
+          }
+        })
+      },
+      closeOthersTags() {
+        this.$router.push(this.selectedTag)
+        this.$store.dispatch('delOthersViews', this.selectedTag).then(() => {
+          this.moveToCurrentTag()
+        })
+      },
+      closeAllTags() {
+        this.$store.dispatch('delAllViews')
+        this.$router.push('/')
+      },
+      openMenu(tag, e) {
+        this.visible = true
+        this.selectedTag = tag
+        this.left = e.clientX
+        this.top = e.clientY
+      },
+      closeMenu() {
+        this.visible = false
+      }
     }
   }
-}
 </script>
 
 <style type="text/scss" lang="scss" scoped>
