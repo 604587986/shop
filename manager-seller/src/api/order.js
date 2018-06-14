@@ -14,7 +14,7 @@ import ProductModel from '@/models/ProductModel'
 export function getOrderList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/order/list',
+      url: '/trade/orders',
       method: 'get',
       loading: false,
       params
@@ -34,14 +34,13 @@ export function getOrderList(params) {
 export function getOrderDetail(sn) {
   return new Promise((resolve, reject) => {
     request({
-      url: `order-query/admin/order/${sn}.do`,
+      url: `/trade/orders/${sn}`,
       method: 'get',
       loading: false
     }).then(response => {
       const _response = new OrderModel().map(response)
-      _response.productList = new ProductModel().map(_response.productList)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 

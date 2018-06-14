@@ -22,7 +22,8 @@
           range-separator="-"
           value-format="timestamp"
           start-placeholder="开始日期"
-          end-placeholder="结束日期">
+          end-placeholder="结束日期"
+          :picker-options="pickoptions">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="发行量（个）：" prop="coupon_circulation">
@@ -120,6 +121,13 @@
       return {
         /** 是否显示优惠券弹框 */
         couponShow: false,
+
+        /** 日期选择器选项 */
+        pickoptions: {
+          disabledDate: (time) => {
+            return time.getTime() < Date.now() - 8.64e7
+          }
+        },
 
         /** 优惠券表单*/
         couponForm: {

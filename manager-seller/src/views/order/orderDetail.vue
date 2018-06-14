@@ -7,35 +7,35 @@
         <el-collapse-item title="订单信息" name="order">
           <div class="order-item">
             <span class="item-name">收货地址：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value" v-if="orderDetail.ship_addr">{{ orderDetail.ship_addr }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">收货人：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.ship_name }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">联系电话：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.ship_mobile }}</span>
           </div>
           <hr>
           <!--订单编号 付款方式 下单时间-->
           <div class="order-item">
             <span class="item-name">订单编号：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.order_sn }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">付款方式：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.payment_name }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">下单时间：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.create_time }}</span>
           </div>
           <hr>
           <!--相关费用-->
           <div class="order-item">
             <span class="item-name">商品总价：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.goods_price }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">运费：</span>
@@ -43,34 +43,34 @@
           </div>
           <div class="order-item">
             <span class="item-name">优惠金额：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.discount_price }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">订单总价：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.order_price }}</span>
           </div>
         </el-collapse-item>
         <!--其他信息（发票、备注）-->
         <el-collapse-item title="其他信息（发票、备注）" name="other">
           <div class="order-item">
             <span class="item-name">订单附言：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.remark }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">送货时间：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.ship_time }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">发票抬头：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.receipt_title }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">税号：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.duty_invoice }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">发票内容：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.receipt_content }}</span>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -79,23 +79,23 @@
         <!--订单状态-->
         <div v-if="logisticsStatus">
           <div class="order-status">
-            <i class="el-icon-check"></i>  订单状态：{{ }}
+            <i class="el-icon-check"></i>  订单状态：{{ orderDetail.order_status_text }}
           </div>
           <div class="order-item">
             <span class="item-name"> 1、订单附言：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.remark }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">2、送货时间：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.ship_time }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">3、发票抬头：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.receipt_title }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">4、发票内容：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.receipt_content }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">5、物流信息：</span>
@@ -135,7 +135,6 @@
               <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
                   <el-button
-                    size="mini"
                     plain type="primary"
                     @click="deliverGoods(scope.$index, scope.row)">发货
                   </el-button>
@@ -151,7 +150,7 @@
             plain
             type="info"
             @click="adjustConsignee" >修改收货人信息</el-button>
-          <el-button v-if="activestep === 2" size="mini" plain type="info" @click="adjustPrice" >调整价格</el-button>
+          <el-button v-if="activestep === 2" plain type="info" @click="adjustPrice" >调整价格</el-button>
         </div>
       </div>
     </div>
@@ -262,7 +261,7 @@
         orderInfo: [],
 
         /** 产品列表 */
-        productList: null,
+        productList: [],
 
         /** 订单状态/物流信息状态显示 */
         logisticsStatus: true,
@@ -326,8 +325,11 @@
         return val === 'online' ? '在线支付' : '货到付款'
       }
     },
-    mounted() {
-      // this.GET_OrderDetail()
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.GET_OrderDetail()
+        next()
+      })
     },
     methods: {
       GET_OrderDetail() {
@@ -335,11 +337,7 @@
         API_order.getOrderDetail(this.sn).then(response => {
           this.loading = false
           this.orderDetail = response
-          this.productList = response.productList
-          this.countShowData()
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
+          this.productList = response.sku_list
         })
       },
 
