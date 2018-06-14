@@ -48,6 +48,7 @@
   export default {
     name: 'goods-detail',
     asyncData({ params }, callback) {
+      console.log(params)
       const goods_id = params.id
       if (!goods_id) {
         callback(null, { goods: '' })
@@ -56,6 +57,7 @@
       API_Goods.getGoods(goods_id).then(response => {
         callback(null, { goods: response })
       }).catch(e => {
+        console.log(e)
         let _statusCode = 200
         if (e.code === 'ECONNREFUSED') {
           _statusCode = 502

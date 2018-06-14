@@ -91,16 +91,16 @@
     },
     data() {
       let _hash = this.$route.hash
-      _hash = _hash ? _hash.replace(/^#/,'') : 'all'
+      _hash = _hash ? _hash.replace(/^#/,'') : 'ALL'
       return {
         keyword: '',
         params: {
           page_no: 1,
           page_size: 5,
-          status: _hash
+          order_status: _hash
         },
         navList: [
-          { title: '所有订单', status: 'all' },
+          { title: '所有订单', status: 'ALL' },
           { title: '待付款', status: 'wait-pay' },
           { title: '待发货', status: 'wait-ship' },
           { title: '已发货', status: 'shipped' },
