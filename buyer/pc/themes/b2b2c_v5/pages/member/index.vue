@@ -43,17 +43,18 @@
             <!--// Andste_TODO 2018/6/14: product_list 需要更换为 sku_list-->
             <div v-for="(order, index) in orderList" v-if="index < 3" :key="order.sn" class="order-item" >
               <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" target="_blank" class="goods-image">
-                  <img :src="order.product_list[0].goods_image">
-                </nuxt-link>
+                <img :src="order.product_list[0].goods_image"/>
+              </nuxt-link>
               <div class="order-info">
-                  <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" class="goods-name" target="_blank">{{ order.product_list[0].name }}</nuxt-link>
-                  <p>下单时间：{{ order.create_time | unixToDate }}</p>
-                  <p>订单金额：<span class="price">￥{{ order.order_amount | unitPrice }}</span></p>
-                  <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.product_list.length }}）种商品</span></p>
-                </div>
+                <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" class="goods-name" target="_blank">{{ order.product_list[0].name }}</nuxt-link>
+                <p v-if="order.product_list[0].spec_list" class="sku-spec">{{ order.product_list[0] | formatterSkuSpec }}</p>
+                <p>下单时间：{{ order.create_time | unixToDate }}</p>
+                <p>订单金额：<span class="price">￥{{ order.order_amount | unitPrice }}</span></p>
+                <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.product_list.length }}）种商品</span></p>
+              </div>
               <div class="order-oper">
-                  <nuxt-link :to="'/member/order/detail/' + order.sn" target="_blank">查看订单</nuxt-link>
-                </div>
+                <nuxt-link :to="'/member/order/detail/' + order.sn" target="_blank">查看订单</nuxt-link>
+              </div>
             </div>
           </template>
         </div>
