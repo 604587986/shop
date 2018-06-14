@@ -90,12 +90,6 @@
         expanded: false
       }
     },
-    watch: {
-      address(newVal) {
-        const initAddress = newVal.filter(item => item.addr_id === this.addressId)[0]
-        initAddress && this.$emit('change', initAddress)
-      }
-    },
     computed: {
       /** 把选中的地址放到第一个 */
       addressList() {
@@ -119,7 +113,7 @@
         if (item.addr_id === this.addressId) return
         API_Trade.setAddressId(item.addr_id).then(response => {
           this.$message.success('设置成功！')
-          this.$emit('change', item)
+          this.$emit('change', item.addr_id)
         })
       }
     }

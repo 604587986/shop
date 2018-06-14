@@ -21,7 +21,7 @@
           <!--收货人信息 start-->
           <checkout-address
             :address-id="params.address_id"
-            @change="handleAddressSelect"
+            @change="(id) => { params.address_id = id }"
           />
           <!--收货人信息 end-->
 
@@ -44,62 +44,7 @@
           <!--送货时间 end-->
 
           <!--发票信息 start-->
-          <div class="ckt-item invoice">
-            <div class="top-ckt">
-              <div class="clearfix"></div>
-            </div>
-            <div class="content-ckt invoice">
-
-              <div class="receipt-title"></div>
-              <div class="receipt-content">无需发票</div>
-              <a href="javascript: void(0);" class="edit-invoice">修改</a>
-              <div style="display: none;" id="invoice_content"><div class="invoice-dialog" id="invoice_dialog">
-                <div class="invoice-head">
-                  <div class="title-invoice-head">发票抬头：</div>
-                  <div class="items-invoice-head" style="margin-bottom: 10px">
-                    <div class="ckt-checkbox head-invoice personal selected">
-                      <span>个人</span>
-                      <input class="company-invoice-input" value="个人" style="display: none;">
-                    </div>
-                    <div class="ckt-checkbox head-invoice __add_ele__" style="display: none">
-                      <input class="company-invoice-input" maxlength="60" style="border: none; outline: none;" placeholder="新增单位发票抬头">
-                      <div class="__btns__ show">
-                        <a href="javascript:;" class="__save__">保存</a>
-                      </div>
-                    </div>
-                    <a href="javascript:;" style="color: #005ea7" class="add-invoice">新增单位发票</a>
-                  </div>
-                </div>
-                <div class="invoice-head duty" style="display: none;">
-                  <div class="title-invoice-head" style="margin-top: 10px">纳税人识别号：</div>
-                  <input class="duty-invoice-input" placeholder="纳税人识别号" maxlength="50" value="">
-                  <span style="color: #ff3500">必填</span>
-                </div>
-                <div class="invoice-content">
-                  <div class="title-invoice-head">发票内容：</div>
-                  <div class="items-invoice-content" style="float: left; width: 360px;">
-                    <div class="ckt-checkbox content-invoice personal selected">
-                      <span>明细</span>
-                    </div>
-                    <div class="ckt-checkbox content-invoice">
-                      <span>办公用品</span>
-                    </div>
-                    <div class="ckt-checkbox content-invoice">
-                      <span>劳保用品</span>
-                    </div>
-                    <div class="ckt-checkbox content-invoice">
-                      <span>耗材</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="invoice-inputs" style="display: none;">
-                  <input type="hidden" name="receiptContent" value="明细">
-                  <input type="hidden" name="receiptTitle" value="个人">
-                  <input type="hidden" name="receiptDuty" value="">
-                </div>
-              </div></div>
-            </div>            </div>
+          <checkout-receipt/>
           <!--发票信息 end-->
         </div>
         <div class="ckt-total">
@@ -137,10 +82,15 @@
         params: '',
         // 订单总金额
         orderTotal: {},
-        // 当前已选的地址
-        selectedAddress: '',
         // 购物清单
         inventoryList: ''
+      }
+    },
+    computed: {
+      // 当前已选的地址
+      selectedAddress() {
+        const _sd = this.$store.getters.address.filter(item => item.addr_id === this.params.address_id)
+        return _sd ? _sd[0] : ''
       }
     },
     mounted() {
@@ -158,11 +108,6 @@
       /** 格式化地址信息 */
       formatterAddress(address) {
         return `${address.province} ${address.city} ${address.county} ${address.town} ${address.addr}`
-      },
-      /** 收货地址选择 */
-      handleAddressSelect(address) {
-        this.params.address_id = address.addr_id
-        this.selectedAddress = address
       },
       /** 提交订单 */
       handleCreateTrade() {
