@@ -15,7 +15,7 @@
           <en-cart-step :step="2"/>
         </div>
       </div>
-      <div class="ckt-control">
+      <div v-if="params" class="ckt-control">
         <div class="ckt-title">填写并核对订单信息</div>
         <div class="ckt-content">
           <!--收货人信息 start-->
@@ -44,7 +44,7 @@
           <!--送货时间 end-->
 
           <!--发票信息 start-->
-          <checkout-receipt/>
+          <checkout-receipt :receipt="params.receipt" @change="(receipt) => { params.receipt = receipt }"/>
           <!--发票信息 end-->
         </div>
         <div class="ckt-total">

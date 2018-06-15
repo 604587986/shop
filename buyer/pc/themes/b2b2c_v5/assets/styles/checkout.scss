@@ -681,10 +681,13 @@
     .content-ckt .item {
       float: left;
       margin-left: 20px;
-    }
-    .edit-btn {
-      margin-left: 20px;
-      color: #005ea7;
+      &.edit-btn {
+        margin-left: 20px;
+        color: #005ea7;
+      }
+      &.cancel-btn {
+        color: #f42424;
+      }
     }
   }
 
@@ -699,75 +702,6 @@
     width: 123px;
   }
 
-  .receipt-dialog {
-    width: 400px;
-    margin: 0 auto;
-  }
-
-  .receipt-content {
-    clear: both;
-  }
-
-  .ckt-checkbox.head-receipt {
-    width: 295px;
-    padding-left: 10px;
-    margin-bottom: 10px;
-    text-align: left;
-  }
-
-  .ckt-checkbox.head-receipt.selected {
-    width: 293px;
-    padding-left: 10px;
-  }
-
-  .ckt-checkbox.head-receipt:hover {
-    border: 1px solid #dddddd;
-    width: 295px;
-    height: 28px;
-    line-height: 28px;
-    padding-left: 10px;
-    margin-bottom: 10px;
-  }
-
-  .ckt-checkbox.head-receipt.selected:hover {
-    width: 293px;
-    border: 2px solid #ff3500;
-    height: 26px;
-    line-height: 26px;
-    padding-left: 10px;
-  }
-
-  .title-receipt-head,
-  .items-receipt-head {
-    float: left;
-  }
-
-  .title-receipt-head {
-    font-weight: bold;
-    margin-top: 15px;
-  }
-
-  .items-receipt-head {
-    margin-left: 20px;
-  }
-
-  .company-receipt-input {
-    display: none;
-    padding-left: 10px;
-    width: 230px;
-    border: none;
-    outline: none;
-  }
-
-  .company-receipt-input:focus {
-    border: none;
-    outline: none;
-  }
-
-  .company-receipt-input.shows {
-    display: inline-block;
-  }
-
   .ckt-checkbox.content-receipt {
     float: left;
     width: 70px;
@@ -779,39 +713,6 @@
   .ckt-checkbox.content-receipt:hover,
   .ckt-checkbox.content-receipt.selected {
     width: 68px;
-  }
-
-  /* 新增地址样式
-   ============================================================================ */
-
-  .dd-aliases{
-    position: relative;
-  }
-  .dd-aliases span {
-    float: left;
-  }
-  .all-aliases{
-    display: block;
-    width: 126px;
-    height: 22px;
-    position: absolute;
-    left: 72%;
-  }
-  .example-aliases {
-    float: left;
-    display: block;
-    width: 35px;
-    height: 20px;
-    margin-right: 5px;
-    line-height: 20px;
-    text-align: center;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-  }
-
-  .example-aliases:hover {
-    color: rgba(255, 51, 0, 0.8);
-    border: 1px solid rgba(255, 51, 0, 0.8);
   }
 
   /* 总结
@@ -902,24 +803,11 @@
     width: auto;
   }
 
-  .ckt-checkbox.head-receipt {
-    position: relative;
-  }
-
-  .company-receipt-input {
-    position: absolute;
-    top: 0;
-    left: 10px;
-    height: 28px;
-    line-height: 28px;
-    padding-left: 0;
-  }
-
   .ckt-checkbox.content-receipt {
     margin-top: 0;
     margin-bottom: 10px;
   }
-  
+
   .remark-confirm-btn {
     height: 12px;
     line-height: 12px;
