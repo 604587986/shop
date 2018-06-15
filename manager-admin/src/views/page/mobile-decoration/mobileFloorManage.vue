@@ -40,9 +40,10 @@
     />
     <en-goods-picker
       :api="goodsListApi"
+      :multipleApi="multipleGoodsApi"
       :show="dialogGoodsShow"
       :default-data="defaultGoodsData"
-      :limit="0"
+      :limit="1"
       @close="dialogGoodsShow = false"
       @confirm="handleGoodsPickerConfirm"
     />
@@ -61,6 +62,8 @@
       return {
         // 获取商品列表API
         goodsListApi: process.env.BASE_API + '/goods',
+        // 根据商品id，获取商品列表API
+        multipleGoodsApi: process.env.BASE_API + '/goods/@ids/details',
         templates,
         templateArray,
         /** 模板列表 */
@@ -91,12 +94,13 @@
           name: 'opt_type',
           type: 'select',
           options: [
-            { text: '无操作', value: 'none' },
-            { text: '连接地址', value: 'link' },
-            { text: '关键字', value: 'keyword' },
-            { text: '商品序号', value: 'goods-sn' },
-            { text: '店铺编号', value: 'shop-sn' },
-            { text: '商品分类', value: 'goods-cat' }
+            { text: '无操作', value: 'NONE' },
+            { text: '连接地址', value: 'URL' },
+            { text: '关键字', value: 'KEYWORD' },
+            { text: '商品序号', value: 'GOODS' },
+            { text: '店铺编号', value: 'SHOP' },
+            { text: '商品分类', value: 'CATEGORY' },
+            { text: '专题', value: 'TOPIC' }
           ],
           value: 'none'
         }, {
@@ -128,8 +132,7 @@
           this.dialogImageShow = true
         } else if (type === 'GOODS') {
           // 填充默认数据
-          console.log(blockData)
-          this.defaultGoodsData = blockData.block_value ? [blockData.block_value.sn] : []
+          this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
           this.dialogGoodsShow = true
         } else if (type === 'TEXT') {
           this.$prompt('请输入文本内容', '提示', {

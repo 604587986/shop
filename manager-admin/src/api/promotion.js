@@ -151,9 +151,14 @@ export function reviewGroupBuyGoods(id, params) {
   })
 }
 
+/**
+ * 获取团购商品列表
+ * @param params
+ */
 export function getGroupBuyGoodsList(params) {
   return request({
-    url: `promotion/group-buy-goods`
+    url: `promotion/group-buy-goods`,
+    method: 'get'
   })
 }
 
