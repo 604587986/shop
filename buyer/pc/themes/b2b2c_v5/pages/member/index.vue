@@ -10,6 +10,7 @@
           <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
         </div>
       </div>
+      <!--// Andste_TODO 2018/6/14: 缺少API-->
       <div class="other-item">
         <p>我的订单</p>
         <i class="iconfont ea-icon-my-order"></i>
@@ -31,27 +32,30 @@
         <div class="item-title">
           <h2>我的订单</h2>
           <div class="order-status">
-            <nuxt-link to="/member/my-order#all">所有订单(2)</nuxt-link>
-            <nuxt-link to="/member/my-order#wait-pay">等待付款(2)</nuxt-link>
-            <nuxt-link to="/member/my-order#complete">已完成(0)</nuxt-link>
+            <!--// Andste_TODO 2018/6/14: 缺少API-->
+            <nuxt-link to="/member/my-order#ALL">所有订单(2)</nuxt-link>
+            <nuxt-link to="/member/my-order#WAIT_PAY">等待付款(2)</nuxt-link>
+            <nuxt-link to="/member/my-order#COMPLETE">已完成(0)</nuxt-link>
           </div>
         </div>
         <div class="item-content">
-          <empty-member v-if="orderList.length === 0">暂无订单</empty-member>
+          <empty-member v-if="!orderData || orderData.data.length === 0">暂无订单</empty-member>
           <template v-else>
-            <div v-for="(item, index) in orderList" v-if="index < 3" :key="item.order_sn" class="order-item" >
-              <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-image">
-                  <img :src="item.skuList[0].goods_image">
-                </nuxt-link>
+            <!--// Andste_TODO 2018/6/14: product_list 需要更换为 sku_list-->
+            <div v-for="(order, index) in orderData.data" v-if="index < 3" :key="order.sn" class="order-item" >
+              <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" target="_blank" class="goods-image">
+                <img :src="order.product_list[0].goods_image"/>
+              </nuxt-link>
               <div class="order-info">
-                  <nuxt-link :to="'/goods-' + item.skuList[0].goods_id + '.html'" class="goods-name">{{ item.skuList[0].name }}</nuxt-link>
-                  <p>下单时间：2018-03-23 17:44:59</p>
-                  <p>订单金额：<span class="price">￥343.80</span></p>
-                  <p class="order-status-num"><span>订单状态：未付款</span><span>订单内共有（{{ item.skuList.length }}）种商品</span></p>
-                </div>
+                <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" class="goods-name" target="_blank">{{ order.product_list[0].name }}</nuxt-link>
+                <p v-if="order.product_list[0].spec_list" class="sku-spec">{{ order.product_list[0] | formatterSkuSpec }}</p>
+                <p>下单时间：{{ order.create_time | unixToDate }}</p>
+                <p>订单金额：<span class="price">￥{{ order.order_amount | unitPrice }}</span></p>
+                <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.product_list.length }}）种商品</span></p>
+              </div>
               <div class="order-oper">
-                  <nuxt-link :to="'/member/order/detail/' + item.order_sn">查看订单</nuxt-link>
-                </div>
+                <nuxt-link :to="'/member/order/detail/' + order.sn" target="_blank">查看订单</nuxt-link>
+              </div>
             </div>
           </template>
         </div>
@@ -65,11 +69,11 @@
           <empty-member v-if="cartSkuList.length === 0">暂无商品</empty-member>
           <template v-else>
             <div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">
-              <nuxt-link :to="'/goods-' + item.goods_id + '.html'" class="goods-image">
+              <nuxt-link :to="'/goods/' + item.goods_id" class="goods-image">
                 <img :src="item.goods_image" :alt="item.name">
               </nuxt-link>
               <div class="goods-name">
-                <nuxt-link :to="'/goods-' + item.goods_id + '.html'">{{ item.name }}</nuxt-link>
+                <nuxt-link :to="'/goods/' + item.goods_id">{{ item.name }}</nuxt-link>
                 <p><em>￥{{ item.purchase_price | unitPrice }}</em> <span>x {{ item.num }}</span></p>
               </div>
               <a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>
@@ -85,15 +89,15 @@
           <nuxt-link to="/member/my-collection#goods">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
-          <empty-member v-if="goodsCollectionList.length === 0">暂无收藏商品</empty-member>
+          <empty-member v-if="!goodsCollectionData || goodsCollectionData.data.length === 0">暂无收藏商品</empty-member>
           <template v-else>
             <div
-              v-for="(item, index) in goodsCollectionList"
+              v-for="(item, index) in goodsCollectionData.data"
               v-if="index < 8"
               :key="item.goods_id"
               class="goods-collection-item"
             >
-              <nuxt-link :to="'/goods-' + item.goods_id + '.html'">
+              <nuxt-link :to="'/goods/' + item.goods_id">
                 <img :src="item.goods_image" :alt="item.name" class="goods-image">
               </nuxt-link>
               <span class="goods-name">{{ item.name }}</span>
@@ -112,16 +116,16 @@
           <nuxt-link to="/member/my-collection#shop">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
-          <empty-member v-if="goodsCollectionList.length === 0">暂无收藏店铺</empty-member>
+          <empty-member v-if="!shopCollectionData || shopCollectionData.data.length === 0">暂无收藏店铺</empty-member>
           <template v-else>
             <div
-              v-for="(item, index) in shopCollectionList"
+              v-for="(item, index) in shopCollectionData.data"
               v-if="index < 4"
               :key="item.shop_id"
               class="shop-collection-item"
             >
               <div class="shop-info">
-                <img :src="item.shop_logo" :alt="item.shop_name" :title="item.shop_name">
+                <img :src="item.logo" :alt="item.shop_name" :title="item.shop_name">
                 <div class="shop-btns">
                   <a href="javascript:;">进入店铺</a>
                   <a href="javascript:;" @click="handleDeleteShopCollection(item)">取消关注</a>
@@ -132,7 +136,7 @@
                   <nuxt-link
                     v-for="goods in item.goodsList"
                     :key="goods.goods_id"
-                    :to="'/goods-' + goods.goods_id + '.html'"
+                    :to="'/goods/' + goods.goods_id"
                     :title="goods.name"
                     class="swiper-slide"
                   >
@@ -156,18 +160,21 @@
     name: 'member-index',
     mounted() {
       this.$nextTick(this.initShopSwiper)
+      !this.orderData && this.getOrderData()
+      !this.goodsCollectionData && this.getGoodsCollectionData()
+      !this.shopCollectionData && this.getShopCollectionData()
     },
     computed: {
       ...mapGetters({
         user: 'user',
         cartSkuList: 'cart/skuList',
-        orderList: 'order/orderList',
-        goodsCollectionList: 'collection/goodsCollectionList',
-        shopCollectionList: 'collection/shopCollectionList'
+        orderData: 'order/orderData',
+        goodsCollectionData: 'collection/goodsCollectionData',
+        shopCollectionData: 'collection/shopCollectionData'
       })
     },
     watch: {
-      shopCollectionList: 'initShopSwiper'
+      shopCollectionData: 'initShopSwiper'
     },
     methods: {
       /** 删除购物车货品 */
@@ -204,6 +211,12 @@
         // })
       },
       ...mapActions({
+        /** 获取订单列表 */
+        getOrderData: 'order/getOrderDataAction',
+        /** 获取商品收藏列表 */
+        getGoodsCollectionData: 'collection/getGoodsCollectionDataAction',
+        /** 获取店铺收藏列表 */
+        getShopCollectionData: 'collection/getShopCollectionDataAction',
         /** 删除购物车货品 */
         deleteSkuItem: 'cart/deleteSkuItemAction',
         /** 删除商品收藏 */
@@ -286,7 +299,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 400px;
+    height: 410px;
     z-index: 1;
     font-family: "Hiragino Sans GB", "Microsoft Yahei", arial, 宋体, "Helvetica Neue", Helvetica, STHeiTi, sans-serif;;
     .item {
@@ -296,6 +309,7 @@
       border: 1px solid #e7e7e7;
       transition: all .3s ease-out;
       z-index: 2;
+      overflow: hidden;
       .item-title {
         display: flex;
         align-content: center;

@@ -90,17 +90,11 @@
         expanded: false
       }
     },
-    watch: {
-      address(newVal) {
-        const initAddress = newVal.filter(item => item.addr_id === this.addressId)[0]
-        this.$emit('change', initAddress)
-      }
-    },
     computed: {
       /** 把选中的地址放到第一个 */
       addressList() {
         const address = JSON.parse(JSON.stringify(this.$store.getters.address))
-        if (address.length === 0) return address
+        if (!address || address.length === 0) return address
         const selIndex = address.findIndex(item => item.addr_id === this.addressId)
         if (selIndex === -1) return []
         const selAddress = JSON.parse(JSON.stringify(address[selIndex]))
@@ -119,12 +113,8 @@
         if (item.addr_id === this.addressId) return
         API_Trade.setAddressId(item.addr_id).then(response => {
           this.$message.success('设置成功！')
-          this.$emit('change', item)
+          this.$emit('change', item.addr_id)
         })
-      },
-      /** 设置默认地址 */
-      handleSetDefaultAddress(item) {
-        this.setDefaultAddress(item.addr_id).then(() => this.$message.success('设置成功！'))
       }
     }
   }

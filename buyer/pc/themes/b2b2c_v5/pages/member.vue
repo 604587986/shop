@@ -20,7 +20,6 @@
   Vue.use(Radio)
   Vue.use(Table)
   Vue.use(TableColumn)
-  import { mapActions, mapGetters } from 'vuex'
   import Breadcrumb from '@/pages/member/-breadcrumb'
   import Menu from '@/pages/member/-menu'
   import Empty from '@/pages/member/-empty'
@@ -33,30 +32,7 @@
       'en-menu': Menu
     },
     mounted() {
-      if (!this.user) this.getUserData()
-      if (!this.orderData) this.getOrderData()
-      if (!this.goodsCollectionData) this.getGoodsCollectionData()
-      if (!this.shopCollectionData) this.getShopCollectionData()
-    },
-    computed: {
-      ...mapGetters({
-        user: 'user',
-        orderData: 'order/orderData',
-        goodsCollectionData: 'collection/goodsCollectionData',
-        shopCollectionData: 'collection/shopCollectionData'
-      })
-    },
-    methods: {
-      ...mapActions({
-        /** 获取用户信息 */
-        getUserData: 'user/getUserDataAction',
-        /** 获取订单列表 */
-        getOrderData: 'order/getOrderDataAction',
-        /** 获取商品收藏列表 */
-        getGoodsCollectionData: 'collection/getGoodsCollectionDataAction',
-        /** 获取店铺收藏列表 */
-        getShopCollectionData: 'collection/getShopCollectionDataAction'
-      })
+      if (!this.$store.getters.user) this.$store.dispatch('user/getUserDataAction')
     }
   }
 </script>

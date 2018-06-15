@@ -158,11 +158,11 @@ input[type="number"]{
 
 /** others */
 .price {
-  color: #f42424;
+  color: #f42424 !important;
 }
 
 .sku-spec {
-  color: #ff9800;
+  color: #ff9800 !important;
 }
 
 .icon-custom-loading {

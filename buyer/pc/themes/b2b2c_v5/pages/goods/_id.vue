@@ -48,7 +48,6 @@
   export default {
     name: 'goods-detail',
     asyncData({ params }, callback) {
-      console.log(params)
       const goods_id = params.id
       if (!goods_id) {
         callback(null, { goods: '' })

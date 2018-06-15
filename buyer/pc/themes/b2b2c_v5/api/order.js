@@ -24,7 +24,7 @@ export function getOrderList(params) {
  */
 export function getOrderDetail(order_sn) {
   return request({
-    url: `trade/orders/{order_sn}`,
+    url: `trade/orders/${order_sn}`,
     method: Method.GET,
     needToken: true
   })

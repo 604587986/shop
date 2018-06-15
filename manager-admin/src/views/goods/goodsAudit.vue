@@ -1,8 +1,6 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
-      pagination
       :tableData="goodsData.data"
       :loading="loading"
     >

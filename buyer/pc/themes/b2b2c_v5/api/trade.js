@@ -3,7 +3,7 @@
  * 交♂易相关API
  */
 
-import request, { ContentType, Method } from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取购物车列表
@@ -161,13 +161,11 @@ export function setPaymentType(payment_type = 'ONLINE') {
  * @param params
  */
 export function setRecepit(params) {
+  params.duty_invoice = params.duty
   return request({
     url: 'trade/checkout-params/receipt',
     method: Method.POST,
     needToken: true,
-    headers: {
-      ...ContentType.JSON
-    },
     data: params
   })
 }
