@@ -68,6 +68,7 @@
    * 结算页
    * 发票组件
    */
+  // Andste_TODO 2018/6/15: 发票内容获取待优化
   import * as API_Members from '@/api/members'
   import * as API_Trade from '@/api/trade'
   import { RegExp } from '~/ui-utils'
