@@ -346,7 +346,7 @@
         /** 日期选择器选项 */
         pickoptions: {
           disabledDate: (time) => {
-            return time.getTime() < Date.now() - 8.64e7
+            return time.getTime() < Date.now()
           }
         },
 
