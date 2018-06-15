@@ -90,15 +90,16 @@ export default {
     submitAddressForm(type, index) {
       this.$refs['addressForm'].validate((valid) => {
         if (valid) {
-          this.$layer.close(index)
           const { addr_id } = this.addressForm
           if (!addr_id) {
             this.addAddress(this.addressForm).then(() => {
               this.$message.success('保存成功！')
+              this.$layer.close(index)
             })
           } else {
             this.editAddress(this.addressForm).then(() => {
               this.$message.success('保存成功！')
+              this.$layer.close(index)
             })
           }
         } else {
@@ -112,6 +113,7 @@ export default {
       this.$layer.open({
         type: 1,
         title: '编辑地址',
+        zIndex: 200,
         area: '500px',
         scrollbar: false,
         content: $('#addressForm'),
