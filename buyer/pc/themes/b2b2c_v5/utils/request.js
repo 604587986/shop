@@ -20,9 +20,14 @@ service.interceptors.request.use(config => {
   if (!/^http/.test(url)) {
     config.url = GetFullUrl(url)
   }
-  /** 如果是post或put请求，并且Content-Type不为application/json，用qs.stringify序列化参数 */
-  if ((config.method === 'post' || config.method === 'put') && config.headers[config.method]['Content-Type'] !== 'application/json') {
-    config.data = qs.stringify(config.data)
+  // 如果是put/post请求，用qs.stringify序列化参数
+  const is_put_post = config.method === 'put' || config.method === 'post'
+  const is_json = config.headers['Content-Type'] === 'application/json'
+  if (is_put_post && is_json) {
+    config.data = JSON.stringify(config.data)
+  }
+  if (is_put_post && !is_json) {
+    config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   /** 配置全屏加载 */
   if (loading !== false) {
@@ -90,12 +95,6 @@ const closeLoading = (target) => {
       resolve()
     }, 200)
   })
-}
-
-export const ContentType = {
-  JSON: {
-    'Content-Type': 'application/json'
-  }
 }
 
 export const Method = {
