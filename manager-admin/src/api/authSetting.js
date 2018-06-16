@@ -23,7 +23,7 @@ export function getAdmainistratorList(params) {
  */
 export function getRoleList(params) {
   return request({
-    url: 'http://www.andste.cc/mock/5aa72c250d9d060b4b99b466/admin/permission/role',
+    url: 'roles',
     method: 'get',
     loading: false,
     params

@@ -1,73 +1,64 @@
 <template>
-  <div>
-    <en-tabel-layout
-      toolbar
-      pagination
-      :tableData="tableData"
-      :loading="loading"
-    >
-      <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddRole">添加</el-button>
-        </div>
+  <en-tabel-layout
+    :tableData="tableData.data"
+    :loading="loading"
+  >
+    <div slot="toolbar" class="inner-toolbar">
+      <div class="toolbar-btns">
+        <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddRole">添加</el-button>
       </div>
+    </div>
 
-      <template slot="table-columns">
-        <el-table-column prop="role_name" label="角色名称"/>
-        <el-table-column prop="role_memo" label="角色描述"/>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleEditRole(scope.row)">编辑</el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDeleteRole(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </template>
+    <template slot="table-columns">
+      <el-table-column prop="role_name" label="角色名称"/>
+      <el-table-column prop="role_memo" label="角色描述"/>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="handleEditRole(scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDeleteRole(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </template>
 
-      <el-pagination
-        slot="pagination"
-        v-if="pageData.data_total"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
-      </el-pagination>
-    </en-tabel-layout>
-  </div>
+    <el-pagination
+      v-if="tableData"
+      slot="pagination"
+      @size-change="handlePageSizeChange"
+      @current-change="handlePageCurrentChange"
+      :current-page="params.page_no"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="params.page_size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.data_total">
+    </el-pagination>
+  </en-tabel-layout>
 </template>
 
 <script>
   import * as API_AuthSetting from '@/api/authSetting'
-
+  // Andste_TODO 2018/6/16: sql报错
   export default {
     name: 'roleManage',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
-        tableData: [],
-
-        /** 列表分页数据 */
-        pageData: {}
+        // 列表数据
+        tableData: ''
       }
     },
-    created() {
+    mounted() {
       this.GET_RoleList()
     },
     methods: {
@@ -108,14 +99,9 @@
         this.loading = true
         API_AuthSetting.getRoleList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData.data_total = response.data_total
-        }).catch(() => (this.loading = false))
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
