@@ -20,7 +20,6 @@ export function getOrderList(params) {
 /**
  * 获取订单详情
  * @param order_sn 订单编号
- * @returns {AxiosPromise}
  */
 export function getOrderDetail(order_sn) {
   return request({
@@ -33,29 +32,35 @@ export function getOrderDetail(order_sn) {
 /**
  * 取消订单
  * @param order_sn 订单编号
- * @param reason 取消订单原因
- * @returns {AxiosPromise}
+ * @param reason   取消原因
  */
 export function cancelOrder(order_sn, reason) {
-  const _formData = new FormData()
-  _formData.append('reason', reason)
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/cancel`,
+    url: `trade/orders/${order_sn}/cancel`,
     method: Method.POST,
     needToken: true,
-    data: _formData
+    data: { reason }
   })
 }
 
 /**
  * 确认收货
  * @param order_sn 订单编号
- * @returns {AxiosPromise}
  */
 export function confirmReceipt(order_sn) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/order/confirm-receipt/${order_sn}`,
+    url: `trade/orders/${order_sn}/rog`,
     method: Method.POST,
     needToken: true
+  })
+}
+
+/**
+ * 获取订单状态数量
+ */
+export function getOrderStatusNum() {
+  return request({
+    url: 'trade/orders/status-num',
+    method: Method.GET
   })
 }

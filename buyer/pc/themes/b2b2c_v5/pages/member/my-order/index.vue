@@ -37,7 +37,7 @@
           </div>
           <div class="order-tbody-item">
             <div class="order-item-sku">
-              <div class="sku-item" v-for="sku in order.product_list" :key="sku.sku_id">
+              <div class="sku-item" v-for="sku in order.sku_list" :key="sku.sku_id">
                 <div class="goods-image">
                   <nuxt-link :to="'/goods/' + sku.goods_id" target="_blank">
                     <img :src="sku.goods_image" :alt="sku.name">

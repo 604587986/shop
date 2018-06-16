@@ -3,20 +3,23 @@
   <el-table :data="skuList" style="width: 100%">
     <el-table-column label="商品名称" class-name="goods-name-img">
       <template slot-scope="scope">
-        <nuxt-link :to="'/goods-' + scope.row.goods_id + '.html'" target="_blank">
-          <img :src="image || scope.row.goods_image">
+        <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank">
+          <img :src="scope.row[image]">
         </nuxt-link>
-        <nuxt-link :to="'/goods-' + scope.row.goods_id + '.html'" target="_blank" class="goods-name">{{ name || scope.row.goods_name }}</nuxt-link>
+        <div style="display: inline-block">
+          <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row[name] }}</nuxt-link>
+          <p v-if="scope.row.spec_list" class="sku-spec">{{ scope.row | formatterSkuSpec }}</p>
+        </div>
       </template>
     </el-table-column>
     <el-table-column label="商品单价" width="120">
-      <template slot-scope="scope">{{ (price || scope.row.price) | unitPrice('￥') }}</template>
+      <template slot-scope="scope">{{ scope.row[price] | unitPrice('￥') }}</template>
     </el-table-column>
     <el-table-column label="数量" width="90">
-      <template slot-scope="scope">{{ num || scope.row.num }}</template>
+      <template slot-scope="scope">{{ scope.row[num] }}</template>
     </el-table-column>
     <el-table-column label="商品小计" width="120">
-      <template slot-scope="scope">{{ (total || (num || scope.row.num) * (price || scope.row.price)) | unitPrice('￥') }}</template>
+      <template slot-scope="scope">{{ (scope.row[total] || (scope.row[num] * scope.row[price])) | unitPrice('￥') }}</template>
     </el-table-column>
   </el-table>
 </template>
@@ -24,7 +27,26 @@
 <script>
   export default {
     name: 'member-sku-list',
-    props: ['skuList', 'image', 'name', 'price', 'num', 'total']
+    props: {
+      skuList: {
+        type: Array
+      },
+      image: {
+        default: 'goods_image'
+      },
+      name: {
+        default: 'goods_name'
+      },
+      price: {
+        default: 'price'
+      },
+      num: {
+        default: 'num'
+      },
+      total: {
+        default: 'total'
+      }
+    }
   }
 </script>
 

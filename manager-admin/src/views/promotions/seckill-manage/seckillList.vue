@@ -13,7 +13,7 @@
         <el-table-column prop="seckill_name" label="活动名称"/>
         <el-table-column prop="start_day" :formatter="MixinUnixToDate" label="活动开始时间"/>
         <el-table-column prop="apply_end_time" :formatter="MixinUnixToDate" label="报名截止时间"/>
-        <el-table-column prop="seckill_status" label="状态"/>
+        <el-table-column prop="seckill_status_text" label="状态"/>
         <el-table-column label="参与商品">
           <template slot-scope="scope">
             <el-button

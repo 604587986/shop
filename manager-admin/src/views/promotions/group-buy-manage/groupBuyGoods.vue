@@ -1,45 +1,41 @@
 <template>
-  <div>
-    <en-tabel-layout
-      :tableData="tableData.data"
-      :loading="loading"
-    >
-      <template slot="table-columns">
-        <el-table-column prop="group_buy_name" label="团购名称"/>
-        <el-table-column prop="name" label="活动名称"/>
-        <el-table-column prop="shop_name" label="店铺名称"/>
-        <el-table-column label="活动开始时间">
-          <template slot-scope="scope">{{ scope.row.start_time | unixToDate }}</template>
-        </el-table-column>
-        <el-table-column label="活动结束时间">
-          <template slot-scope="scope">{{ scope.row.end_time | unixToDate }}</template>
-        </el-table-column>
-        <el-table-column label="团购活动状态" width="120">
-          <template slot-scope="scope">{{ scope.row.group_buy_status }}</template>
-        </el-table-column>
-        <el-table-column label="操作" width="120">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleViewMember(scope.$index, scope.row)">查看</el-button>
-          </template>
-        </el-table-column>
-      </template>
+  <en-tabel-layout
+    :tableData="tableData.data"
+    :loading="loading"
+  >
+    <template slot="table-columns">
+      <el-table-column prop="gb_name" label="团购名称"/>
+      <el-table-column prop="gb_title" label="活动标题"/>
+      <el-table-column prop="goods_name" label="商品名称"/>
+      <el-table-column label="活动开始时间">
+        <template slot-scope="scope">{{ scope.row.start_time | unixToDate }}</template>
+      </el-table-column>
+      <el-table-column label="活动结束时间">
+        <template slot-scope="scope">{{ scope.row.end_time | unixToDate }}</template>
+      </el-table-column>
+      <el-table-column prop="gb_status_text" label="团购活动状态"/>
+      <el-table-column label="操作" width="120">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="handleViewMember(scope.$index, scope.row)">查看</el-button>
+        </template>
+      </el-table-column>
+    </template>
 
-      <el-pagination
-        v-if="tableData"
-        slot="pagination"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="tableData.data_total">
-      </el-pagination>
-    </en-tabel-layout>
-  </div>
+    <el-pagination
+      v-if="tableData"
+      slot="pagination"
+      @size-change="handlePageSizeChange"
+      @current-change="handlePageCurrentChange"
+      :current-page="params.page_no"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="params.page_size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.data_total">
+    </el-pagination>
+  </en-tabel-layout>
 </template>
 
 <script>
@@ -81,31 +77,18 @@
 
       /** 查看详情 */
       handleViewMember(index, row) {
-        // this.$router.push({ path: `/promotions/group-buy-manage/group-buy-goods-info/${row.id}` })
-        this.$router.push({ name: 'groupBuyGoodsInfo', params: row })
+        this.$router.push({ path: `/promotions/group-buy-manage/group-buy-goods-info/${row.gb_id}` })
+        // this.$router.push({ name: 'groupBuyGoodsInfo', params: row })
       },
 
       /** 获取团购活动详情商品列表 */
       GET_GroupBuyGoodsList() {
         this.loading = true
-        API_Promotion.getGroupBuyActivityDetail()
-        // API_GroupBuy.getGroupBuyGoodsList(this.params).then(response => {
-        //   this.loading = false
-        //   this.tableData = response.data
-        //   this.pageData = {
-        //     page_no: response.draw,
-        //     page_size: 10,
-        //     data_total: response.recordsTotal
-        //   }
-        // }).catch(error => {
-        //   this.loading = false
-        //   console.log(error)
-        // })
+        API_Promotion.getGroupBuyGoods(this.params).then(response => {
+          this.loading = false
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

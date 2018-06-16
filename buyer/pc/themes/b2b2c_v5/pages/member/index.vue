@@ -41,17 +41,16 @@
         <div class="item-content">
           <empty-member v-if="!orderData || orderData.data.length === 0">暂无订单</empty-member>
           <template v-else>
-            <!--// Andste_TODO 2018/6/14: product_list 需要更换为 sku_list-->
             <div v-for="(order, index) in orderData.data" v-if="index < 3" :key="order.sn" class="order-item" >
-              <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" target="_blank" class="goods-image">
-                <img :src="order.product_list[0].goods_image"/>
+              <nuxt-link :to="'/goods/' + order.sku_list[0].goods_id" target="_blank" class="goods-image">
+                <img :src="order.sku_list[0].goods_image"/>
               </nuxt-link>
               <div class="order-info">
-                <nuxt-link :to="'/goods/' + order.product_list[0].goods_id" class="goods-name" target="_blank">{{ order.product_list[0].name }}</nuxt-link>
-                <p v-if="order.product_list[0].spec_list" class="sku-spec">{{ order.product_list[0] | formatterSkuSpec }}</p>
+                <nuxt-link :to="'/goods/' + order.sku_list[0].goods_id" class="goods-name" target="_blank">{{ order.sku_list[0].name }}</nuxt-link>
+                <p v-if="order.sku_list[0].spec_list" class="sku-spec">{{ order.sku_list[0] | formatterSkuSpec }}</p>
                 <p>下单时间：{{ order.create_time | unixToDate }}</p>
                 <p>订单金额：<span class="price">￥{{ order.order_amount | unitPrice }}</span></p>
-                <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.product_list.length }}）种商品</span></p>
+                <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.sku_list.length }}）种商品</span></p>
               </div>
               <div class="order-oper">
                 <nuxt-link :to="'/member/order/detail/' + order.sn" target="_blank">查看订单</nuxt-link>
@@ -156,6 +155,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import * as API_Order from '@/api/order'
   export default {
     name: 'member-index',
     mounted() {
@@ -163,6 +163,7 @@
       !this.orderData && this.getOrderData()
       !this.goodsCollectionData && this.getGoodsCollectionData()
       !this.shopCollectionData && this.getShopCollectionData()
+      this.GET_OrderStatusNum()
     },
     computed: {
       ...mapGetters({
@@ -209,6 +210,13 @@
         //     }
         //   })
         // })
+      },
+      /** 获取订单状态数量 */
+      GET_OrderStatusNum() {
+        API_Order.getOrderStatusNum().then(response => {
+          // Andste_TODO 2018/6/17: 没有返回数据
+          console.log(response)
+        })
       },
       ...mapActions({
         /** 获取订单列表 */
