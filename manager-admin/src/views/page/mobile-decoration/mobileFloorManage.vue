@@ -47,6 +47,12 @@
       @close="dialogGoodsShow = false"
       @confirm="handleGoodsPickerConfirm"
     />
+    <en-text-picker
+      :show="dialogTextShow"
+      :default-data="defaultTextData"
+      @close="dialogTextShow = false"
+      @confirm="handleTextPickerConfirm"
+    />
   </div>
 </template>
 
@@ -84,18 +90,19 @@
         },
         dialogImageShow: false,
         dialogGoodsShow: false,
+        dialogTextShow: false,
         /** 图片默认数据 */
         defaultImageData: '',
         /** 商品默认数据 */
         defaultGoodsData: [],
         /** 自定义操作参数 */
         operation: [{
-          label: '链接类型',
+          label: '操作类型',
           name: 'opt_type',
           type: 'select',
           options: [
             { text: '无操作', value: 'NONE' },
-            { text: '连接地址', value: 'URL' },
+            { text: '链接地址', value: 'URL' },
             { text: '关键字', value: 'KEYWORD' },
             { text: '商品序号', value: 'GOODS' },
             { text: '店铺编号', value: 'SHOP' },
@@ -109,7 +116,9 @@
         }, {
           label: '图片描述',
           name: 'opt_detail'
-        }]
+        }],
+        /** 文本默认数据 */
+        defaultTextData: {}
       }
     },
     mounted() {
@@ -135,16 +144,13 @@
           this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
           this.dialogGoodsShow = true
         } else if (type === 'TEXT') {
-          this.$prompt('请输入文本内容', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            inputPattern: /.+/,
-            inputErrorMessage: '文本不能为空！'
-          }).then(({ value }) => {
-            console.log(value)
-            // this.data.blockList[0].block_value = value
-          }).catch(() => {})
-          console.log('文本模块')
+          const block = target.blockList[targetIndex]
+          this.defaultTextData = {
+            text: block.block_value,
+            opt_type: block.block_opt.opt_type,
+            opt_value: block.block_opt.opt_value
+          }
+          this.dialogTextShow = true
         } else if (type === 'BRAND') {
           console.log('品牌模块')
         }
@@ -154,7 +160,6 @@
         const file = fileList[0]
         let opt = file ? file.operation : {}
         let url = file ? file.response.url : ''
-        this.dialogImageShow = false
         const { index, target, targetIndex } = this.editOptions
         target.blockList[targetIndex].block_value = url
         target.blockList[targetIndex].block_opt = opt
@@ -165,7 +170,15 @@
         const { index, target, targetIndex } = this.editOptions
         target.blockList[targetIndex].block_value = this.MixinClone(list[0] || '')
         this.$set(this.floorList, index, target)
-        this.dialogGoodsShow = false
+      },
+      /** 文本选择器确认 */
+      handleTextPickerConfirm(data) {
+        const { index, target, targetIndex } = this.editOptions
+        const block = target.blockList[targetIndex]
+        block.block_value = data.text
+        block.block_opt.opt_type = data.opt_type
+        block.block_opt.opt_value = data.opt_value
+        this.$set(this.floorList, index, target)
       },
       /** 获取模板列表 */
       GET_FloorList() {
