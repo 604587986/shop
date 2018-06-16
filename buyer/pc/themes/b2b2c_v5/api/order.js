@@ -9,7 +9,6 @@ import request, { Method } from '@/utils/request'
  * @param params
  */
 export function getOrderList(params) {
-  if (params) params.order_status = ''
   return request({
     url: 'trade/orders',
     method: Method.GET,
