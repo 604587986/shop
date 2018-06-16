@@ -6,7 +6,10 @@
         <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank">
           <img :src="scope.row[image]">
         </nuxt-link>
-        <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row[name] }}</nuxt-link>
+        <div style="display: inline-block">
+          <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row[name] }}</nuxt-link>
+          <p v-if="scope.row.spec_list" class="sku-spec">{{ scope.row | formatterSkuSpec }}</p>
+        </div>
       </template>
     </el-table-column>
     <el-table-column label="商品单价" width="120">
