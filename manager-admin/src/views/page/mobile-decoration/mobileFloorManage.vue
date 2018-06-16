@@ -111,7 +111,7 @@
             { text: '商品分类', value: 'CATEGORY' },
             { text: '专题', value: 'TOPIC' }
           ],
-          value: 'none'
+          value: 'NONE'
         }, {
           label: '链接值',
           name: 'opt_value'
