@@ -155,6 +155,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import * as API_Order from '@/api/order'
   export default {
     name: 'member-index',
     mounted() {
@@ -162,6 +163,7 @@
       !this.orderData && this.getOrderData()
       !this.goodsCollectionData && this.getGoodsCollectionData()
       !this.shopCollectionData && this.getShopCollectionData()
+      this.GET_OrderStatusNum()
     },
     computed: {
       ...mapGetters({
@@ -208,6 +210,13 @@
         //     }
         //   })
         // })
+      },
+      /** 获取订单状态数量 */
+      GET_OrderStatusNum() {
+        API_Order.getOrderStatusNum().then(response => {
+          // Andste_TODO 2018/6/17: 没有返回数据
+          console.log(response)
+        })
       },
       ...mapActions({
         /** 获取订单列表 */
