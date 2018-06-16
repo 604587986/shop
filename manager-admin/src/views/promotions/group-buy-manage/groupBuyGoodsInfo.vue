@@ -58,17 +58,20 @@
 </template>
 
 <script>
+  import * as API_Promotion from '@/api/promotion'
+  // Andste_TODO 2018/6/16: 待适配
   export default {
     name: 'groupBuyGoodsInfo',
     data() {
       return {
-        form: this.$route.params,
+        gb_id: this.$route.params.id,
+        form: this.$route.params || {},
         rules: {},
         options: []
       }
     },
     mounted() {
-      this.GET_CategroyList()
+      this.GET_GroupBuyGoodsDetail()
     },
     methods: {
       /** 提交表单 */
@@ -85,16 +88,11 @@
           }
         })
       },
-
-      /** 获取团购分类列表 */
-      GET_CategroyList() {
-        // API_GroupBuy.getGroupBuyCategoryList().then(response => {
-        //   this.options = response.data.map(item => {
-        //     item.label = item.name
-        //     item.value = item.id
-        //     return item
-        //   })
-        // }).catch(error => console.log(error))
+      /** 获取团购商品详情 */
+      GET_GroupBuyGoodsDetail() {
+        API_Promotion.getGroupBuyGoodsDetail(this.gb_id).then(response => {
+          console.log(response)
+        })
       }
     }
   }
