@@ -102,25 +102,13 @@ export function getMemberAddress(member_id, params) {
   })
 }
 
-export function getMemberListAsk(member_id, params) {
-  return request({
-    url: ''
-  })
-}
-
-export function getMemberListComments(member_id, params) {
-  return request({
-    url: ''
-  })
-}
-
 /**
  * 获取会员咨询列表
  * @param params
  */
 export function getMemberAsks(params) {
   return request({
-    url: 'member/asks',
+    url: 'members/asks',
     method: 'get',
     loading: false,
     params
@@ -133,7 +121,7 @@ export function getMemberAsks(params) {
  */
 export function deleteMemberAsk(ask_id) {
   return request({
-    url: `member/asks/${ask_id}`,
+    url: `members/asks/${ask_id}`,
     method: 'delete'
   })
 }
@@ -144,7 +132,7 @@ export function deleteMemberAsk(ask_id) {
  */
 export function getMemberComments(params) {
   return request({
-    url: 'member/comments',
+    url: 'members/comments',
     method: 'get',
     loading: false,
     params
@@ -157,7 +145,7 @@ export function getMemberComments(params) {
  */
 export function deleteMemberComments(comment_id) {
   return request({
-    url: `member/comments/${comment_id}`,
+    url: `members/comments/${comment_id}`,
     method: 'delete'
   })
 }

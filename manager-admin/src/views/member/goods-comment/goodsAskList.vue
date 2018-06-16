@@ -37,6 +37,15 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogReviewVisible"
+      width="30%">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="dialogReviewVisible = false">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,7 +66,11 @@
         },
 
         /** 列表数据 */
-        tableData: ''
+        tableData: '',
+        /** 查看的详情 */
+        reviewAsk: {},
+        /** 查看详情 dialog */
+        dialogReviewVisible: false
       }
     },
     mounted() {
@@ -92,7 +105,9 @@
 
       /** 查看评论详情 */
       handleViewComment(index, row) {
-        // Andste_TODO 2018/6/5: 缺少查看咨询详情API
+        console.log(row)
+        this.reviewAsk = row
+        this.dialogReviewVisible = true
       },
 
       /** 删除评论 */

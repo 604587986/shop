@@ -1,7 +1,6 @@
 <template>
   <en-tabel-layout
     :toolbar="false"
-    pagination
     :tableData="tableData"
     :loading="loading"
   >
@@ -110,7 +109,7 @@
       /** 获取待审核商品列表 */
       GET_SeckillAuditGoodsList() {
         this.loading = true
-        // API_Seckill.getAuditGoodsList(this.$route.params.id).then(response => {
+        // API_Promotion.getAuditGoodsList(this.$route.params.id).then(response => {
         //   this.loading = false
         //   this.tableData = response.data
         //   this.pageData = {
@@ -118,10 +117,7 @@
         //     page_size: 10,
         //     data_total: response.recordsTotal
         //   }
-        // }).catch(error => {
-        //   this.loading = false
-        //   console.log(error)
-        // })
+        // }).catch(() => { this.loading = false })
       }
     }
   }

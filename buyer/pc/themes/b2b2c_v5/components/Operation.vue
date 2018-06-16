@@ -10,7 +10,7 @@
       toPage() {
         const { type, value } = this.opt
         switch (type) {
-          case 'goods-sn': return `/goods-${value}.html`
+          case 'goods-sn': return `/goods/${value}`
           case 'keyword': return `/goods-list?keyword=${value}`
           default: return ''
         }

@@ -1,11 +1,7 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
-      pagination
-      row-key="id"
-      :stripe="false"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -15,16 +11,8 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column prop="id" label="关键字ID"/>
-        <el-table-column prop="hot_search_word" label="关键字"/>
-        <el-table-column label="排序">
-          <template slot-scope="scope">
-            <el-input-number v-model="scope.row.order" controls-position="right" :min="1" :max="99999999"/>
-          </template>
-        </el-table-column>
-        <el-table-column label="添加时间">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
-        </el-table-column>
+        <el-table-column prop="hot_name" label="关键字"/>
+        <el-table-column prop="sort" label="排序"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -40,17 +28,31 @@
       </template>
 
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
+    <el-dialog :title="(hotKeywordsForm.id ? '编辑' : '添加') + '热门关键字'" :visible.sync="dialogVisible" width="500px">
+      <el-form :model="hotKeywordsForm" :rules="hotKeywordsRules" ref="hotKeywordsForm" label-width="110px">
+        <el-form-item label="热门关键字" prop="hot_name" clearable>
+          <el-input v-model="hotKeywordsForm.hot_name" :maxlength="6"></el-input>
+        </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input-number v-model="hotKeywordsForm.sort" controls-position="right" :min="1" :max="999999"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('hotKeywordsForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -61,20 +63,23 @@
     name: 'hotKeyword',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        // 列表数据
+        tableData: '',
+        dialogVisible: false,
+        // 热门关键字 表单
+        hotKeywordsForm: {},
+        // 热门关键字 表单规则
+        hotKeywordsRules: {
+          hot_name: [this.MixinRequired('请输入热门关键字！')],
+          sort: [this.MixinRequired('请输入热门关键字排序！')]
+        }
       }
     },
     mounted() {
@@ -94,29 +99,63 @@
       },
 
       /** 添加热门关键字 */
-      handleAddHotKeyword() {},
+      handleAddHotKeyword() {
+        const sorts = this.MixinClone(this.tableData.data).map(item => item.sort)
+        sorts.sort((x, y) => y - 0)
+        this.hotKeywordsForm = {
+          sort: (Number(sorts[0]) || -1) + 1
+        }
+        this.dialogVisible = true
+      },
 
       /** 编辑热门关键字 */
-      handleEditHotKeyword(index, row) {},
+      handleEditHotKeyword(index, row) {
+        this.hotKeywordsForm = JSON.parse(JSON.stringify(row))
+        this.dialogVisible = true
+      },
 
       /** 删除热门关键字 */
-      handleDeleteHotKeyword(index, row) {},
+      handleDeleteHotKeyword(index, row) {
+        this.$confirm('确定要删除这个热门关键字吗？', '提示', { type: 'warning' }).then(() => {
+          API_HotKeyword.deleteHotKeywords(row.id).then(() => {
+            this.$message.success('删除成功！')
+            this.GET_HotKeywordList()
+          })
+        }).catch(() => {})
+      },
 
-      /** 获取回收站会员列表 */
+      /** 提交表单 */
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            const { id } = this.hotKeywordsForm
+            if (id) {
+              API_HotKeyword.editHotKeywords(id, this.hotKeywordsForm).then(response => {
+                this.dialogVisible = false
+                this.$message.success('修改成功！')
+                this.MixinSetTableData(this.tableData, 'id', id, response)
+              })
+            } else {
+              API_HotKeyword.addHotKeywords(this.hotKeywordsForm).then(() => {
+                this.dialogVisible = false
+                this.$message.success('添加成功！')
+                this.GET_HotKeywordList()
+              })
+            }
+          } else {
+            this.$message.error('表单填写有误，请核对！')
+            return false
+          }
+        })
+      },
+
+      /** 获取热门关键词列表 */
       GET_HotKeywordList() {
         this.loading = true
         API_HotKeyword.getHotKeywords(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }

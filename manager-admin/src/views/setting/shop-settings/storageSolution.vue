@@ -98,7 +98,7 @@
 
       /** 开启储存方案 */
       handleOpenStorageSolution(index, row) {
-        API_StorageSolution.openStorageSolutionById(row.id).then(response => {
+        API_StorageSolution.openStorageSolutionById(row.bean).then(response => {
           this.$message.success('开启成功！')
           this.GET_StorageSolutiontList()
         })

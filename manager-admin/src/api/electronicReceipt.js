@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getElectronicReceiptList(params) {
   return request({
-    url: 'shop/admin/waybill/waybill-list-json.do',
+    url: 'system/waybills',
     method: 'get',
     loading: false,
     params
@@ -18,14 +18,37 @@ export function getElectronicReceiptList(params) {
 }
 
 /**
+ * 获取电子面单详情
+ * @param bean
+ */
+export function getElectronicReceiptDetail(bean) {
+  return request({
+    url: `system/waybills/${bean}`,
+    method: 'get'
+  })
+}
+
+/**
  * 编辑电子面单
- * @param id
+ * @param bean
  * @param params
  */
-export function editElectronicReceipt(id, params) {
+export function editElectronicReceipt(bean, params) {
   return request({
-    url: 'shop/admin/waybill/save-edit.do',
-    method: 'post',
+    url: `system/waybills/${bean}`,
+    method: 'put',
+    headers: { 'Content-Type': 'application/json' },
     data: params
+  })
+}
+
+/**
+ * 开启电子面单
+ * @param bean
+ */
+export function openElectronicReceipt(bean) {
+  return request({
+    url: `system/waybills/${bean}/open`,
+    method: 'put'
   })
 }

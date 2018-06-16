@@ -2,16 +2,15 @@
   <div>
     <en-tabel-layout
       :toolbar="false"
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <template slot="table-columns">
         <el-table-column prop="name" label="电子面单公司"/>
         <el-table-column label="启用状态">
           <template slot-scope="scope">
-            {{ scope.row.is_open === 1 ? '已开启' : '已关闭' }}
-            <el-button v-if="scope.row.is_open === 0" type="text" @click="handleOpenExpressPlatform(scope.$index, scope.row)">开启</el-button>
+            {{ scope.row.open === 1 ? '已开启' : '已关闭' }}
+            <el-button v-if="scope.row.open === 0" type="text" @click="handleOpenExpressPlatform(scope.$index, scope.row)">开启</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -24,31 +23,29 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="电子面单设置" :visible.sync="dialogElectronicReceiptVisible" width="500px">
-      <el-form :model="electronicReceiptForm" :rules="electronicReceiptRules" ref="electronicReceiptForm" label-width="100px">
-        <el-form-item label="电商ID" prop="eb_id">
-          <el-input v-model="electronicReceiptForm.eb_id"></el-input>
-        </el-form-item>
-        <el-form-item label="密匙" prop="app_key">
-          <el-input v-model="electronicReceiptForm.app_key"></el-input>
-        </el-form-item>
-        <el-form-item label="请求URL" prop="req_url">
-          <el-input v-model="electronicReceiptForm.req_url"></el-input>
+    <el-dialog title="电子面单设置" :visible.sync="dialogVisible" width="500px">
+      <el-form :model="electronicReceiptForm" label-width="100px">
+        <el-form-item
+          v-for="config in electronicReceiptForm.config_items"
+          :key="config.name"
+          :label="config.text"
+        >
+          <el-input v-model="config.value"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogElectronicReceiptVisible = false">取 消</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitElectronicReceiptForm">确 定</el-button>
       </div>
     </el-dialog>
@@ -62,28 +59,19 @@
     name: 'electronicReceipt',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
-        /** 电子面单设置 dialog */
-        dialogElectronicReceiptVisible: false,
-
-        /** 电子面单设置 表单 */
-        electronicReceiptForm: {},
-        /** 电子面单设置 表单规则 */
-        electronicReceiptRules: {}
+        // 列表数据
+        tableData: '',
+        // 电子面单设置 dialog
+        dialogVisible: false,
+        // 电子面单设置 表单
+        electronicReceiptForm: {}
       }
     },
     mounted() {
@@ -102,37 +90,21 @@
         this.GET_ElectronicReceiptList()
       },
 
-      /** 设置电子面单 */
+      /** 修改电子面单设置 */
       handleEditElectronicReceipt(index, row) {
-        const config = JSON.parse(row.config)
-        this.electronicReceiptForm = {
-          id: row.id,
-          eb_id: config['EBusinessID'],
-          app_key: config['AppKey'],
-          req_url: config['ReqURL']
-        }
-        this.dialogElectronicReceiptVisible = true
+        this.electronicReceiptForm = this.MixinClone(row)
+        this.dialogVisible = true
       },
 
       /** 设置电子面单 表单提交 */
       submitElectronicReceiptForm() {
-        this.$refs['electronicReceiptForm'].validate((valid) => {
-          if (valid) {
-            const { id, eb_id, app_key, req_url } = this.electronicReceiptForm
-            const params = {
-              EBusinessID: eb_id,
-              AppKey: app_key,
-              ReqURL: req_url
-            }
-            API_ElectronicReceipt.editElectronicReceipt(id, params).then(response => {
-              this.dialogElectronicReceiptVisible = false
-              this.$message.success('修改成功！')
-              this.GET_ElectronicReceiptList()
-            }).catch(error => console.log(error))
-          } else {
-            this.$message.error('表单填写有误，请检查！')
-            return false
-          }
+        const { bean } = this.electronicReceiptForm
+        API_ElectronicReceipt.editElectronicReceipt(bean, this.electronicReceiptForm).then(response => {
+          this.dialogVisible = false
+          this.$message.success('修改成功！')
+          this.GET_ElectronicReceiptList()
+          // Andste_TODO 2018/6/16: 返回参数有些问题
+          // this.MixinSetTableData(this.tableData, 'id', 'id', response)
         })
       },
 
@@ -141,21 +113,9 @@
         this.loading = true
         API_ElectronicReceipt.getElectronicReceiptList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
