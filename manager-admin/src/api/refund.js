@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getRefundList(params) {
   return request({
-    url: 'after-sale/admin/refund-all.do',
+    url: 'after-sales/refund',
     method: 'get',
     loading: false,
     params
@@ -23,8 +23,35 @@ export function getRefundList(params) {
  */
 export function getRefundDetail(sn) {
   return request({
-    url: `after-sale/admin/refund/${sn}.do`,
+    url: `after-sales/refund/${sn}`,
     method: 'get',
     loading: false
+  })
+}
+
+/**
+ * 平台退款
+ * @param sn
+ */
+export function refundMoney(sn) {
+  return request({
+    url: `after-sales/refunds/${sn}`,
+    method: 'post'
+  })
+}
+
+/**
+ * 导出Excel
+ * @param start_time
+ * @param end_time
+ */
+export function exportRefundExcel(start_time, end_time) {
+  return request({
+    url: 'after-sales/exports/excel',
+    method: 'get',
+    params: {
+      start_time,
+      end_time
+    }
   })
 }
