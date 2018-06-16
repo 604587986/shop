@@ -5,18 +5,19 @@
         <h2>订单信息</h2>
         <div class="info-list">
           <dl><dt>下单时间：</dt><dd>{{ order.create_time | unixToDate }}</dd></dl>
-          <dl><dt>收货地址：</dt><dd>{{order.ship_province}} {{ order.ship_city }} {{ order.ship_region }} {{ order.ship_town }} {{order.ship_address}}</dd></dl>
+          <dl><dt>收货地址：</dt><dd>{{order.ship_province}} {{ order.ship_city }} {{ order.ship_region }} {{ order.ship_town }} {{order.ship_address}} - {{ order.ship_addr }}</dd></dl>
           <dl><dt>收货人：</dt><dd>{{ order.ship_name }}</dd></dl>
           <dl><dt>发票信息:</dt><dd>无</dd></dl>
-          <dl><dt>送货时间:</dt><dd>任意时间</dd></dl>
-          <dl><dt>客户留言：</dt><dd>无</dd></dl>
-          <dl class="top_line"><dt>订单编号：</dt><dd>{{ order.order_sn }}</dd></dl>
-          <dl><dt>付款方式：</dt><dd>{{ order.payment_text }}</dd></dl>
-          <dl><dt>商品总价：</dt><dd>{{ order.order_amount | unitPrice('￥') }}</dd></dl>
-          <dl class="bottom_line"><dt>运费：</dt><dd>￥0.00</dd></dl>
-          <dl><dt>优惠金额:</dt><dd>￥0.00</dd></dl>
-          <dl><dt>订单总价：</dt><dd style="font-size: 16px; color: #49afcd">{{ order.order_amount | unitPrice('￥') }}</dd></dl>
-          <dl><dt>实付金额：</dt><dd style="font-size: 22px; color: #f42424">{{ order.order_amount | unitPrice('￥') }}</dd></dl>
+          <dl><dt>送货时间:</dt><dd>{{ order.receive_time }}</dd></dl>
+          <dl><dt>客户留言：</dt><dd>{{ order.remark || '无' }}</dd></dl>
+          <dl class="top_line"><dt>订单编号：</dt><dd>{{ order.sn }}</dd></dl>
+          <dl><dt>付款方式：</dt><dd>{{ order.payment_method_name }}</dd></dl>
+          <dl><dt>支付状态：</dt><dd>{{ order.pay_status_text }}</dd></dl>
+          <dl><dt>商品总价：</dt><dd>￥{{ (order.goods_price || 0) | unitPrice }}</dd></dl>
+          <dl class="bottom_line"><dt>运费：</dt><dd>￥{{ (order.shipping_price || 0) | unitPrice }}</dd></dl>
+          <dl><dt>优惠金额:</dt><dd>￥{{ (order.discount_price || 0) | unitPrice }}</dd></dl>
+          <dl><dt>订单总价：</dt><dd style="font-size: 16px; color: #49afcd">￥{{ (order.need_pay_money || 0) | unitPrice }}</dd></dl>
+          <dl><dt>实付金额：</dt><dd style="font-size: 22px; color: #f42424">￥{{ (order.pay_money || 0) | unitPrice }}</dd></dl>
         </div>
       </div>
       <div class="status-order">
@@ -30,7 +31,7 @@
           </li>
           <li>2. 如果您不想购买此订单的商品，请
             <strong>
-              <a href="javascript:;" class="cancelBtn order_delno" sn="20180412000001">取消订单</a>
+              <a href="javascript:;" @click="handleCancelOrder">取消订单</a>
             </strong>
             订单操作。
           </li>
@@ -41,8 +42,8 @@
         </ul>
       </div>
     </div>
-    <div v-if="order" class="goods-list">
-      <sku-list :skuList="order.skuList"></sku-list>
+    <div v-if="skuList" class="goods-list">
+      <sku-list :skuList="skuList" name="name" price="purchase_price" total="subtotal"></sku-list>
     </div>
   </div>
 </template>
@@ -60,17 +61,39 @@
     },
     data() {
       return {
+        order_sn: this.$route.query.order_sn,
         order: '',
-        order_sn: this.$route.query.order_sn
+        skuList: ''
       }
     },
     mounted() {
       this.GET_OrderDetail()
     },
     methods: {
+      /** 取消订单 */
+      handleCancelOrder() {
+        this.$layer.prompt({
+          formType: 2,
+          scrollbar: false,
+          title: '请输入取消原因'
+        }, (value, index) => {
+          const val = value.trim()
+          if (!val) {
+            this.$message.error('请填写取消原因！')
+          } else {
+            API_Order.cancelOrder(this.order_sn, val).then(() => {
+              this.$message.success('订单取消申请成功！')
+              layer.close(index)
+              this.GET_OrderDetail()
+            })
+          }
+        })
+      },
+      /** 获取订单详情 */
       GET_OrderDetail() {
         API_Order.getOrderDetail(this.order_sn).then(response => {
           this.order = response
+          this.skuList = JSON.parse(response.items_json)
         })
       }
     }

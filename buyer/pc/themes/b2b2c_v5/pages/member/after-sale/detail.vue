@@ -13,7 +13,7 @@
       </div>
     </div>
     <div v-if="sku" class="goods-list">
-      <sku-list :skuList="[sku]" :num="sku.return_num"></sku-list>
+      <sku-list :skuList="[sku]" num="return_num"></sku-list>
     </div>
   </div>
 </template>
