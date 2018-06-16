@@ -200,7 +200,7 @@ export const asyncRouterMap = [
           { path: 'group-buy-list', component: () => import('@/views/promotions/group-buy-manage/groupBuyList'), name: 'groupBuyList', meta: { title: 'groupBuyList' }},
           { path: 'group-buy-category', component: () => import('@/views/promotions/group-buy-manage/groupBuyCategory'), name: 'groupBuyCategory', meta: { title: 'groupBuyCategory' }},
           { path: 'group-buy-goods/:id', component: () => import('@/views/promotions/group-buy-manage/groupBuyGoods'), name: 'groupBuyGoods', hidden: true, meta: { title: 'groupBuyGoods' }},
-          { path: 'group-buy-goods-info', component: () => import('@/views/promotions/group-buy-manage/groupBuyGoodsInfo'), name: 'groupBuyGoodsInfo', hidden: true, meta: { title: 'groupBuyGoodsInfo' }}
+          { path: 'group-buy-goods-info/:id', component: () => import('@/views/promotions/group-buy-manage/groupBuyGoodsInfo'), name: 'groupBuyGoodsInfo', hidden: true, meta: { title: 'groupBuyGoodsInfo' }}
         ]
       },
       {
