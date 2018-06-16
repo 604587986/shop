@@ -2,6 +2,7 @@
   <div>
     <div class="floor-container">
       <div class="draggable-box floor">
+        <el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>
         <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
           <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
             <div class="img-tpl"></div>
@@ -50,6 +51,7 @@
     <en-text-picker
       :show="dialogTextShow"
       :default-data="defaultTextData"
+      :maxlength="15"
       @close="dialogTextShow = false"
       @confirm="handleTextPickerConfirm"
     />
@@ -180,10 +182,20 @@
         block.block_opt.opt_value = data.opt_value
         this.$set(this.floorList, index, target)
       },
-      /** 获取模板列表 */
+      /** 保存发布 */
+      handleSaveFloor() {
+        API_Floor.editFloor('WAP', 'INDEX', {
+          page_name: '',
+          page_data: JSON.stringify(this.floorList)
+        }).then(() => {
+          this.$message.success('保存发布成功！')
+        })
+      },
+      /** 获取楼层数据 */
       GET_FloorList() {
-        API_Floor.getFloorList('mobile').then(response => {
-          this.floorList = response
+        API_Floor.getFloor('WAP', 'Index').then(response => {
+          const { page_data } = response
+          this.floorList = page_data ? JSON.parse(page_data) : []
         })
       }
     }
@@ -200,10 +212,15 @@
     min-height: 500px;
   }
   .draggable-box {
+    position: relative;
     display: flex;
     justify-content: center;
     flex-direction: column;
     width: 50%;
+    .save-btn {
+      position: absolute;
+      top: 30px;
+    }
     &.floor { align-items: center }
   }
   .tpl-list {
@@ -264,18 +281,6 @@
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    &.item-23 { height: 130px }
-    &.item-24 { height: 130px }
-    &.item-25 { height: 130px }
-    &.item-26 { height: 130px }
-    &.item-27 { height: 64px }
-    &.item-28 { height: 150px }
-    &.item-29 { height: 105px }
-    &.item-30 { height: 40px }
-    &.item-31 { height: 80px }
-    &.item-32 { height: 125px }
-    &.item-37 { height: 220px }
-    &.item-42 { height: 40px }
     .panel-handle {
       display: none;
       position: absolute;
