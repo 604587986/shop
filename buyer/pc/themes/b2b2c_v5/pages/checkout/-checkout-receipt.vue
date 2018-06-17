@@ -231,7 +231,7 @@
       GET_ReceiptList() {
         API_Members.getReceipts().then(response => {
           const receipts = [{ id: 0, title: '个人', content: '明细', type: 0 }]
-          receipts.push(...response.data)
+          if (Array.isArray(response.data)) receipts.push(...response.data)
           this.receipts = receipts
         })
       }
