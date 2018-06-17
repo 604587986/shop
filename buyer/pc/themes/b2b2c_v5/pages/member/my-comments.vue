@@ -10,7 +10,7 @@
         <ul>
           <li v-for="comment in comments.data" :key="comment.comment_id" class="comment-item">
             <div class="comment-title">
-              <nuxt-link :to="'/goods-' + comment.goods_id + '.html'">{{ comment.goods_name }}</nuxt-link>
+              <nuxt-link :to="'/goods/' + comment.goods_id">{{ comment.goods_name }}</nuxt-link>
               <span>{{ comment.create_time | unixToDate }}</span>
             </div>
             <div class="comment-body">
