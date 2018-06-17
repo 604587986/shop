@@ -114,8 +114,9 @@ export function checkShop(shop_id, checked) {
  */
 export function getCartTotal() {
   return request({
-    url: 'trade/carts/total',
+    url: 'trade/orders/total',
     method: Method.GET,
+    needToken: true,
     loading: false
   })
 }
