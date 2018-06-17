@@ -185,11 +185,9 @@
       /** 保存发布 */
       handleSaveFloor() {
         API_Floor.editFloor('WAP', 'INDEX', {
-          page_name: '',
+          page_name: 'mobile_floor',
           page_data: JSON.stringify(this.floorList)
-        }).then(() => {
-          this.$message.success('保存发布成功！')
-        })
+        }).then(() => this.$message.success('保存发布成功！'))
       },
       /** 获取楼层数据 */
       GET_FloorList() {
