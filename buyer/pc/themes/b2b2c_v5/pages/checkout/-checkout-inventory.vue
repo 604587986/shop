@@ -51,12 +51,12 @@
                 <tbody>
                 <tr v-for="goods in shop.sku_list" :key="goods.sku_id">
                   <td class="img-gooods-inventory">
-                    <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" target="_blank">
+                    <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                       <img :src="goods.goods_image">
                     </nuxt-link>
                   </td>
                   <td class="name-gooods-inventory">
-                    <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" target="_blank">
+                    <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                       {{ goods.name }}
                     </nuxt-link>
                     <span class="sku-spec">{{ goods | formatterSkuSpec }}</span>
