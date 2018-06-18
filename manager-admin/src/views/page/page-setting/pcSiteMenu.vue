@@ -49,11 +49,11 @@
 
     <el-dialog :title="(siteMenuForm.id ? '编辑' : '添加') + '导航菜单'" :visible.sync="dialogSiteMenuVisible" width="500px">
       <el-form :model="siteMenuForm" :rules="siteMenuRules" ref="siteMenuForm" label-width="110px">
-        <el-form-item label="导航菜单名称" prop="name" clearable :maxlength="4">
-          <el-input v-model="siteMenuForm.name"></el-input>
+        <el-form-item label="导航菜单名称" prop="name">
+          <el-input v-model="siteMenuForm.name" clearable :maxlength="4"></el-input>
         </el-form-item>
-        <el-form-item label="导航菜单链接" prop="url" clearable :maxlength="225">
-          <el-input v-model="siteMenuForm.url"></el-input>
+        <el-form-item label="导航菜单链接" prop="url">
+          <el-input v-model="siteMenuForm.url" clearable :maxlength="225"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

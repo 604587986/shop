@@ -1,7 +1,7 @@
 <template>
   <en-tabel-layout
     :toolbar="false"
-    :tableData="tableData"
+    :tableData="tableData.data"
     :loading="loading"
   >
     <template slot="table-columns">
@@ -43,24 +43,23 @@
 </template>
 
 <script>
+  import * as API_Promotion from '@/api/promotion'
+
   export default {
     name: 'seckillAuditGoodsList',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          status: 'APPLY',
+          seckill_id: this.$route.params.id
         },
-
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        // 列表数据
+        tableData: ''
       }
     },
     mounted() {
@@ -109,20 +108,11 @@
       /** 获取待审核商品列表 */
       GET_SeckillAuditGoodsList() {
         this.loading = true
-        // API_Promotion.getAuditGoodsList(this.$route.params.id).then(response => {
-        //   this.loading = false
-        //   this.tableData = response.data
-        //   this.pageData = {
-        //     page_no: response.draw,
-        //     page_size: 10,
-        //     data_total: response.recordsTotal
-        //   }
-        // }).catch(() => { this.loading = false })
+        API_Promotion.getSeckillGoods(this.params).then(response => {
+          this.loading = false
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
