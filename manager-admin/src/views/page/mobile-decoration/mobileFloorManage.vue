@@ -33,7 +33,6 @@
     <en-image-picker
       :show="dialogImageShow"
       :default-data="defaultImageData"
-      :operation="operation"
       @close="dialogImageShow = false"
       @confirm="handleImagePickerConfirm"
       :limit="10"
@@ -97,28 +96,6 @@
         defaultImageData: '',
         /** 商品默认数据 */
         defaultGoodsData: [],
-        /** 自定义操作参数 */
-        operation: [{
-          label: '操作类型',
-          name: 'opt_type',
-          type: 'select',
-          options: [
-            { text: '无操作', value: 'NONE' },
-            { text: '链接地址', value: 'URL' },
-            { text: '关键字', value: 'KEYWORD' },
-            { text: '商品序号', value: 'GOODS' },
-            { text: '店铺编号', value: 'SHOP' },
-            { text: '商品分类', value: 'CATEGORY' },
-            { text: '专题', value: 'TOPIC' }
-          ],
-          value: 'NONE'
-        }, {
-          label: '链接值',
-          name: 'opt_value'
-        }, {
-          label: '图片描述',
-          name: 'opt_detail'
-        }],
         /** 文本默认数据 */
         defaultTextData: {}
       }
