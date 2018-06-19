@@ -18,11 +18,9 @@
         <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
             <div class="goods-info">
-              <!--<img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>-->
               <img v-if="scope.row.goods_image" :src="scope.row.goods_image" class="goods-image"/>
               <div class="goodsinfo-txt">
                 <span class="goods_name">{{scope.row.goods_name}}</span>
-                <!--<span class="goods_price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>-->
                 <span class="goods_price" v-if="scope.row.goods_price">{{ scope.row.goods_price | unitPrice('￥') }}</span>
               </div>
             </div>
@@ -180,6 +178,10 @@
         const _goods_ids = this.tableData.map(key => {
           return key.goods_id
         })
+        if (_goods_ids.length === 0) {
+          this.$message.error('请至少选择一种商品')
+          return
+        }
         API_goodsTag.saveTagGoodsList(_tag_id, _goods_ids, this.params).then(() => {
           this.loading = false
           this.$message.success('保存设置成功！')
