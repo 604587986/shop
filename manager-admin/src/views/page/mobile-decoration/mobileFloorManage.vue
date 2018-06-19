@@ -168,7 +168,7 @@
       },
       /** 获取楼层数据 */
       GET_FloorList() {
-        API_Floor.getFloor('WAP', 'Index').then(response => {
+        API_Floor.getFloor('WAP', 'INDEX').then(response => {
           const { page_data } = response
           this.floorList = page_data ? JSON.parse(page_data) : []
         })
