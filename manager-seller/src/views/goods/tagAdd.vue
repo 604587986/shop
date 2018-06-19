@@ -18,11 +18,11 @@
         <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
             <div class="goods-info">
-              <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
+              <!--<img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>-->
               <img v-if="scope.row.goods_image" :src="scope.row.goods_image" class="goods-image"/>
               <div class="goodsinfo-txt">
                 <span class="goods_name">{{scope.row.goods_name}}</span>
-                <span class="goods_price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>
+                <!--<span class="goods_price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>-->
                 <span class="goods_price" v-if="scope.row.goods_price">{{ scope.row.goods_price | unitPrice('￥') }}</span>
               </div>
             </div>
@@ -47,31 +47,33 @@
     <div style="text-align: center">
       <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
     </div>
-    <en-goods-selector
+    <en-goods-picker
+      type="seller"
       :show="showDialog"
       :api="goods_api"
-      :defaultInfo="tableData"
-      :maxLength="maxsize"
+      :categoryApi="categoryApi"
+      :headers="headers"
+      :defaultData="goodsIds"
+      :limit="maxsize"
       @confirm="refreshFunc"
-      @closed="showDialog = false"/>
+      @close="showDialog = false"/>
   </div>
 </template>
 
 <script>
   import * as API_goodsTag from '@/api/goodsTag'
-  import { CategoryPicker } from '@/components'
-  import { GoodsSelector } from '@/plugins/selector/vue'
 
   export default {
     name: 'tagAdd',
-    components: {
-      [CategoryPicker.name]: CategoryPicker,
-      [GoodsSelector.name]: GoodsSelector
-    },
     data() {
       return {
         /** 标签商品列表loading状态 */
         loading: false,
+
+        /** 请求头 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+        },
 
         /** 标签商品列表参数*/
         params: {
@@ -91,6 +93,9 @@
         /** 商品选择器列表api*/
         goods_api: process.env.BASE_API + '/goods',
 
+        /** 商城分类api */
+        categoryApi: process.env.BASE_API + '/goods/category/0/children',
+
         /** 显示/隐藏商品选择器 */
         showDialog: false,
 
@@ -98,12 +103,10 @@
         goodsIds: []
       }
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.params.tag_id = vm.$route.params.tag_id
-        vm.getTagGoodsList()
-        next()
-      })
+    beforeRouteUpdate(to, from, next) {
+      this.params.tag_id = to.params.tag_id
+      this.getTagGoodsList()
+      next()
     },
     mounted() {
       this.params.tag_id = this.$route.params.tag_id
@@ -117,11 +120,13 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        // this.tableData = this.tableData.concat(val)
         this.tableData = val
         /** 去重 转化 */
         const res = new Map()
         this.tableData = this.tableData.filter((key) => !res.has(key.goods_id) && res.set(key.goods_id, 1))
+        this.goodsIds = this.tableData.map(key => {
+          return key.goods_id
+        })
       },
 
       /** 获取标签下的商品列表**/
@@ -131,6 +136,9 @@
         API_goodsTag.getTagGoodsList(_tag_id, {}).then(response => {
           this.loading = false
           this.tableData = response.data
+          this.goodsIds = this.tableData.map(key => {
+            return key.goods_id
+          })
           this.maxsize = 0
         })
       },
@@ -142,6 +150,9 @@
             this.$message.success('取消成功！')
             this.tableData.splice(index, 1)
           }
+        })
+        this.goodsIds = this.tableData.map(key => {
+          return key.goods_id
         })
       },
 
@@ -159,6 +170,9 @@
           })
           this.$message.success('批量取消成功！')
         })
+        this.goodsIds = this.tableData.map(key => {
+          return key.goods_id
+        })
       },
       /** 保存设置 */
       savesetup() {
@@ -166,7 +180,7 @@
         const _goods_ids = this.tableData.map(key => {
           return key.goods_id
         })
-        API_goodsTag.saveTagGoodsList(_tag_id, _goods_ids, this.params).then(response => {
+        API_goodsTag.saveTagGoodsList(_tag_id, _goods_ids, this.params).then(() => {
           this.loading = false
           this.$message.success('保存设置成功！')
         })

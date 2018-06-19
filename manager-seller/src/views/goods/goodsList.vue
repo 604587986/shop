@@ -283,11 +283,10 @@
         this.$router.push({ path: '/goods/recycle-station' })
       },
 
-      /** 编辑商品 */
+      /** 编辑商品 isdraft 商品列表1*/
       handleEditGoods(row) {
         const _goods_id = row.goods_id || '0'
-        // isdraft 商品列表1
-        this.$router.push({ path: '/goods/good-publish', query: { goodsid: _goods_id, isdraft: 1 }})
+        this.$router.push({ path: `/goods/good-publish/${_goods_id}/1` })
       },
 
       /** 删除商品 */

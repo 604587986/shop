@@ -336,7 +336,7 @@
       [UE.name]: UE
     },
     data() {
-      var checkSn = (rule, value, callback) => {
+      const checkSn = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('商品编号不能为空'))
         }
@@ -349,7 +349,7 @@
         }, 1000)
       }
 
-      var checkMarket = (rule, value, callback) => {
+      const checkMarket = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('市场价格不能为空'))
         }
@@ -366,7 +366,7 @@
         }, 1000)
       }
 
-      var checkPrice = (rule, value, callback) => {
+      const checkPrice = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('商品价格不能为空'))
         }
@@ -379,7 +379,7 @@
         }, 1000)
       }
 
-      var checkCost = (rule, value, callback) => {
+      const checkCost = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('成本价格不能为空'))
         }
@@ -396,7 +396,7 @@
         }, 1000)
       }
 
-      var checkWeight = (rule, value, callback) => {
+      const checkWeight = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('重量不能为空'))
         }
@@ -409,7 +409,7 @@
         }, 1000)
       }
 
-      var checkTplId = (rule, value, callback) => {
+      const checkTplId = (rule, value, callback) => {
         if (this.baseInfoForm.goods_transfee_charge === 0 && !value) {
           return callback(new Error('请选择一种模板'))
         } else {
@@ -417,7 +417,7 @@
         }
       }
 
-      var checkExchangePoint = (rule, value, callback) => {
+      const checkExchangePoint = (rule, value, callback) => {
         if (this.baseInfoForm.exchange.enable_exchange && !this.baseInfoForm.exchange.exchange_point) {
           return callback(new Error('积分值不能为空'))
         }
@@ -657,24 +657,38 @@
         'shopInfo'
       ])
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        if (vm.$route.query && vm.$route.query.goodsid) {
-          vm.currentStatus = parseInt(vm.$route.query.isdraft) || 0
-          vm.activeGoodsId = vm.$route.query.goodsid
-          vm.activestep = vm.$route.query.isdraft ? 1 : 0
-          if (vm.currentStatus === 1 && vm.$route.query.goodsid) {
-            vm.GET_GoodData()
-          } else if (vm.currentStatus === 2 && vm.$route.query.goodsid) {
-            vm.GET_GoodDraftData()
-          }
-        } else {
-          vm.GET_NextLevelCategory()
+    beforeRouteUpdate(to, from, next) {
+      if (this.$route.params && this.$route.params.goodsid) {
+        this.currentStatus = parseInt(this.$route.params.isdraft) || 0
+        this.activeGoodsId = this.$route.params.goodsid
+        this.activestep = this.$route.params.isdraft ? 1 : 0
+        if (this.currentStatus === 1 && this.$route.params.goodsid) {
+          this.GET_GoodData()
+        } else if (this.currentStatus === 2 && this.$route.params.goodsid) {
+          this.GET_GoodDraftData()
         }
-        /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
-        vm.GET_GoodsParams()
-        next()
-      })
+      } else {
+        this.GET_NextLevelCategory()
+      }
+      /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
+      this.GET_GoodsParams()
+      next()
+    },
+    mounted() {
+      if (this.$route.params && this.$route.params.goodsid) {
+        this.currentStatus = parseInt(this.$route.params.isdraft) || 0
+        this.activeGoodsId = this.$route.params.goodsid
+        this.activestep = this.$route.params.isdraft ? 1 : 0
+        if (this.currentStatus === 1 && this.$route.params.goodsid) {
+          this.GET_GoodData()
+        } else if (this.currentStatus === 2 && this.$route.params.goodsid) {
+          this.GET_GoodDraftData()
+        }
+      } else {
+        this.GET_NextLevelCategory()
+      }
+      /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
+      this.GET_GoodsParams()
     },
     methods: {
       /** 上一步*/
