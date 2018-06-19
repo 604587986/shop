@@ -203,17 +203,22 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    width: 50%;
+    width: 70%;
     .save-btn {
       position: absolute;
       top: 30px;
     }
-    &.floor { align-items: center }
+    &.floor {
+      width: 30%;
+      align-items: center;
+    }
   }
   .tpl-list {
     display: flex;
     flex-wrap: wrap;
-    width: 600px;
+    overflow: hidden;
+    overflow-y: scroll;
+    width: 100%;
     background-color: #fff;
   }
   .tpl-item {
@@ -222,13 +227,18 @@
     flex-direction: column;
     justify-content: center;
     box-sizing: border-box;
-    border: 1px solid #D9E0E7;
+    border-bottom: 2px solid #D9E0E7;
+    margin-bottom: 10px;
     &.item-1 .img-tpl {
       background: url("../../../assets/pc-tpl-01.png") no-repeat;
       background-size: 100%;
     }
     &.item-2 .img-tpl {
       background: url("../../../assets/pc-tpl-02.png") no-repeat;
+      background-size: 100%;
+    }
+    &.item-3 .img-tpl {
+      background: url("../../../assets/pc-tpl-03.png") no-repeat;
       background-size: 100%;
     }
   }
@@ -243,12 +253,15 @@
     font-size: 12px;
   }
   .floor-body {
-    width: 625px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
     height: 667px;
+    text-align: center;
     overflow-y: scroll;
   }
   .floor-list {
-    width: 600px;
+    width: calc(100% - 50px);
     min-height: 667px;
     background-color: #fff;
   }
