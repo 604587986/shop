@@ -1,13 +1,13 @@
 <template>
   <div v-loading="loading" class="order-detail-container">
-    <div class="order-info">
+    <div class="order-info" v-if="orderDetail">
       <!--accordion-->
       <el-collapse  class="order-collapse" :value="['order','other']">
         <!--订单信息-->
         <el-collapse-item title="订单信息" name="order">
           <div class="order-item">
             <span class="item-name">收货地址：</span>
-            <span class="item-value" v-if="orderDetail.ship_addr">{{ orderDetail.ship_addr }}</span>
+            <span class="item-value">{{ orderDetail.ship_addr }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">收货人：</span>
@@ -25,17 +25,17 @@
           </div>
           <div class="order-item">
             <span class="item-name">付款方式：</span>
-            <span class="item-value">{{ orderDetail.payment_name }}</span>
+            <span class="item-value">{{ orderDetail.payment_type | paymentTypeFilter }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">下单时间：</span>
-            <span class="item-value">{{ orderDetail.create_time }}</span>
+            <span class="item-value">{{ orderDetail.order_time | unixToDate }}</span>
           </div>
           <hr>
           <!--相关费用-->
           <div class="order-item">
             <span class="item-name">商品总价：</span>
-            <span class="item-value">{{ orderDetail.goods_price }}</span>
+            <span class="item-value">{{ orderDetail.goods_price | unitPrice('¥') }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">运费：</span>
@@ -43,11 +43,11 @@
           </div>
           <div class="order-item">
             <span class="item-name">优惠金额：</span>
-            <span class="item-value">{{ orderDetail.discount_price }}</span>
+            <span class="item-value">{{ orderDetail.discount_price | unitPrice('¥') }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">订单总价：</span>
-            <span class="item-value">{{ orderDetail.order_price }}</span>
+            <span class="item-value">{{ orderDetail.order_price | unitPrice('¥') }}</span>
           </div>
         </el-collapse-item>
         <!--其他信息（发票、备注）-->
@@ -156,7 +156,7 @@
     </div>
     <!--订单状态 步骤条-->
     <el-steps :active="activestep" align-center style="margin-top: 20px;">
-      <el-step v-for="item in stepList" :title="item.label" :key="item.label" status="error" description=""></el-step>
+      <el-step v-for="item in stepList" :title="item.label" :key="item.label" status="error"></el-step>
     </el-steps>
     <!--商品列表-->
     <div>
@@ -267,7 +267,7 @@
         logisticsStatus: true,
 
         /** 物流信息 */
-        logisticsData: null,
+        logisticsData: [],
 
         /** 物流信息弹框是否显示 */
         logisticsShow: false,
@@ -322,7 +322,7 @@
     },
     filters: {
       paymentTypeFilter(val) {
-        return val === 'online' ? '在线支付' : '货到付款'
+        return val === 'ONLINE' ? '在线支付' : '货到付款'
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -438,13 +438,14 @@
         flex-wrap: nowrap;
         justify-content: flex-start;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
+        span {
+          display: inline-block;
+        }
         span:first-child {
-          flex-grow: 1;
-          width: 2%;
+          min-width: 75px;
         }
         span:last-child {
-          flex-grow: 4;
           text-align:left;
         }
       }
