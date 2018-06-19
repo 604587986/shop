@@ -31,6 +31,7 @@
 
   export default {
     name: 'apply',
+    middleware: 'auth-user',
     components: { applyHeader, applyMenu, applySteps },
     computed: {
       step() {

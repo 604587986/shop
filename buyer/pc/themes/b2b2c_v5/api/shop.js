@@ -35,7 +35,7 @@ export function getShopGoods(params) {
  */
 export function initApplyShop() {
   return request({
-    url: 'shops',
+    url: 'shops/apply',
     method: Method.POST
   })
 }
@@ -45,7 +45,7 @@ export function initApplyShop() {
  */
 export function getApplyShopInfo() {
   return request({
-    url: 'shops',
+    url: 'shops/apply',
     method: Method.GET
   })
 }
@@ -57,7 +57,7 @@ export function getApplyShopInfo() {
  */
 export function applyShopStep(step, params) {
   return request({
-    url: `shops/step${step}`,
+    url: `shops/apply/step${step}`,
     method: Method.PUT,
     data: params
   })

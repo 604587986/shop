@@ -155,7 +155,7 @@
             req_rule('请输入法定代表人身份证号！'),
             {
               validator: (rule, value, callback) => {
-                if (!RegExp.cardID.test(value)) {
+                if (!RegExp.IDCard.test(value)) {
                   callback(new Error('身份证号格式不正确'))
                 } else {
                   callback()

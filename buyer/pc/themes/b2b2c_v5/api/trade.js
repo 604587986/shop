@@ -13,7 +13,6 @@ export function getCarts(show_type = 'all') {
   return request({
     url: 'trade/carts',
     method: Method.GET,
-    needToken: true,
     loading: false,
     params: { show_type }
   })
@@ -114,7 +113,7 @@ export function checkShop(shop_id, checked) {
  */
 export function getCartTotal() {
   return request({
-    url: 'trade/carts/total',
+    url: 'trade/orders/total',
     method: Method.GET,
     loading: false
   })
