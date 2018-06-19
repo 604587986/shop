@@ -104,7 +104,7 @@
           { title: '所有订单', status: 'ALL' },
           { title: '待付款', status: 'WAIT_PAY' },
           { title: '待发货', status: 'WAIT_SHIP' },
-          { title: '已发货', status: 'SHIPPED' },
+          { title: '待收货', status: 'WAIT_ROG' },
           { title: '已取消', status: 'CANCELLED' },
           { title: '已完成', status: 'COMPLETE' },
           { title: '待评论', status: 'WAIT_COMMENT' }
