@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="floor-container">
-      <div class="draggable-box floor">
+      <div class="draggable-box tpl">
         <!--<el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>-->
         <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
           <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
@@ -10,7 +10,7 @@
           </div>
         </draggable>
       </div>
-      <div class="draggable-box">
+      <div class="draggable-box floor">
         <div class="floor-top"></div>
         <div class="floor-body">
           <draggable v-model="floorList" :options="floorOptions" class="floor-list">
@@ -46,13 +46,6 @@
       :limit="1"
       @close="dialogGoodsShow = false"
       @confirm="handleGoodsPickerConfirm"
-    />
-    <en-text-picker
-      :show="dialogTextShow"
-      :default-data="defaultTextData"
-      :maxlength="15"
-      @close="dialogTextShow = false"
-      @confirm="handleTextPickerConfirm"
     />
   </div>
 </template>
@@ -91,13 +84,10 @@
         },
         dialogImageShow: false,
         dialogGoodsShow: false,
-        dialogTextShow: false,
         /** 图片默认数据 */
         defaultImageData: '',
         /** 商品默认数据 */
-        defaultGoodsData: [],
-        /** 文本默认数据 */
-        defaultTextData: {}
+        defaultGoodsData: []
       }
     },
     mounted() {
@@ -139,12 +129,6 @@
           this.dialogGoodsShow = true
         } else if (type === 'TEXT') {
           const block = target.blockList[targetIndex]
-          this.defaultTextData = {
-            text: block.block_value,
-            opt_type: block.block_opt.opt_type,
-            opt_value: block.block_opt.opt_value
-          }
-          this.dialogTextShow = true
         } else if (type === 'BRAND') {
           console.log('品牌模块')
         }
@@ -191,6 +175,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/floor-pc";
   .floor-container {
     display: flex;
     justify-content: space-around;
@@ -203,13 +188,14 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    width: 70%;
+    width: 50%;
     .save-btn {
       position: absolute;
       top: 30px;
     }
     &.floor {
-      width: 30%;
+      width: 1210px + 50px;
+      flex-shrink: 0;
       align-items: center;
     }
   }
@@ -219,6 +205,7 @@
     overflow: hidden;
     overflow-y: scroll;
     width: 100%;
+    max-height: 667px;
     background-color: #fff;
   }
   .tpl-item {
@@ -244,7 +231,7 @@
   }
   .img-tpl {
     width: 100%;
-    height: 239px;
+    min-height: 150px;
   }
   .text-tpl {
     text-align: center;
@@ -291,5 +278,8 @@
   }
   .floor-item + .floor-item {
     margin-top: -1px;
+  }
+  .floor-layout:first-child {
+    margin-top: 0;
   }
 </style>

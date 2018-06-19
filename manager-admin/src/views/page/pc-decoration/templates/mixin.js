@@ -2,6 +2,9 @@
  * Created by andste.cc@gmail.com on 2018/5/18.
  */
 
+// import { swiper, swiperSlide } from 'vue-awesome-swiper'
+// import 'swiper/dist/css/swiper.css'
+
 /** mixin */
 export default {
   props: {
