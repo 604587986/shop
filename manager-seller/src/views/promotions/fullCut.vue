@@ -674,6 +674,11 @@
           this.freePostage = this.activityForm.freePostage === 1
           this.isCoupon = this.activityForm.isCoupon === 1
           this.isGift = this.activityForm.isGift === 1
+          this.changeDiscount(this.isDiscount)
+          this.changeReduceCash(this.isReduceCash)
+          this.changeIntegral(this.isIntegral)
+          this.isChangeCoupon(this.isCoupon)
+          this.isChangeGift(this.isGift)
         })
       },
 
@@ -686,7 +691,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteFullCutActivity(row.activity_id, row).then(response => {
+        API_activity.deleteFullCutActivity(row.activity_id).then(response => {
           this.$message.success('删除成功！')
           this.GET_FullCutActivityList()
         })
@@ -875,6 +880,16 @@
 
       /** 构造表单数据 */
       generateFormData(data) {
+        let _goodslist = []
+        if (data.activity_goods && Array.isArray(data.activity_goods)) {
+          _goodslist = data.activity_goods.map(key => {
+            return {
+              goods_id: key.goods_id,
+              name: key.goods_name,
+              thumbnail: key.thumbnail
+            }
+          })
+        }
         const _params = {
           /** 活动名称/标题 */
           title: data.activity_name,
@@ -922,16 +937,11 @@
           gift_id: data.giftId || '',
 
           /** 商品参与方式 */
-          range_type: data.is_all_joined,
-
+          range_type: data.is_all_joined
+        }
+        if (_goodslist.length > 0) {
           /** 参与商品列表 */
-          goods_list: data.activity_goods.map(key => {
-            return {
-              goods_id: key.goods_id,
-              name: key.goods_name,
-              thumbnail: key.thumbnail
-            }
-          })
+          _params.goods_list = _goodslist
         }
         return _params
       }

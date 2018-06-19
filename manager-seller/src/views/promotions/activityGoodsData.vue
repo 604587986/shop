@@ -62,10 +62,14 @@
         tableData: null,
 
         /** 列表分页数据 */
-        pageData: null
+        pageData: null,
+
+        /** 限时抢购活动ID */
+        activityID: ''
       }
     },
     mounted() {
+      this.activityID = this.$route.params.id
       this.GET_ActivityGoodsList()
     },
     methods: {
@@ -84,7 +88,10 @@
       /** 获取活动商品信息*/
       GET_ActivityGoodsList() {
         this.loading = true
-        API_LimitTime.getLimitTimeGoodsList(this.params).then(response => {
+        const _params = {
+          seckill_id: this.activityID
+        }
+        API_LimitTime.getLimitTimeGoodsList(_params).then(response => {
           this.loading = false
           this.pageData = {
             page_no: response.page_no,
