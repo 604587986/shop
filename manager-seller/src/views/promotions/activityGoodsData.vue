@@ -68,6 +68,11 @@
         activityID: ''
       }
     },
+    beforeRouteUpdate(to, from, next) {
+      this.activityID = this.$route.params.id
+      this.GET_ActivityGoodsList()
+      next()
+    },
     mounted() {
       this.activityID = this.$route.params.id
       this.GET_ActivityGoodsList()

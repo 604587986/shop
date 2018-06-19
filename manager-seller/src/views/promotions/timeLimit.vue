@@ -128,8 +128,7 @@
 
       /** 报名 */
       handleSignUpTimeLimt(row) {
-        const _activity_id = row.activity_id
-        this.$router.push({ path: 'add-time-limit', query: { _activity_id }})
+        this.$router.push({ path: `/promotions/add-time-limit/${row.activity_id}` })
       },
 
       /** 活动商品信息 已报名*/

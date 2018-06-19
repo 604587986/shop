@@ -193,7 +193,7 @@
         <div class="base-info-item" v-if="parseInt(shopInfo.self_operated) === 1">
           <h4>兑换许可</h4>
           <div>
-            <el-form-item label="积分兑换：" v-if="baseInfoForm.exchange && baseInfoForm.exchange.enable_exchange">
+            <el-form-item label="积分兑换：">
               <el-switch
                 v-model="baseInfoForm.exchange.enable_exchange"
                 active-color="#13ce66"
@@ -675,6 +675,7 @@
       next()
     },
     mounted() {
+      console.log(this.shopInfo)
       if (this.$route.params && this.$route.params.goodsid) {
         this.currentStatus = parseInt(this.$route.params.isdraft) || 0
         this.activeGoodsId = this.$route.params.goodsid

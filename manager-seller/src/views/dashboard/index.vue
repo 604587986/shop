@@ -211,7 +211,7 @@ export default {
 
     /** 跳转商品列表*/
     toGoodsManager(goodsStatus) {
-      this.$router.push({ path: '/goods/goods-list', query: { goodsStatus }})
+      this.$router.push({ path: `/goods/goods-list/${goodsStatus}` })
     },
 
     /** 跳转买家留言*/
@@ -221,7 +221,7 @@ export default {
 
     /** 跳转订单列表*/
     toOrderList(orderStatus) {
-      this.$router.push({ path: '/order/order-list', query: { orderStatus }})
+      this.$router.push({ path: `/order/order-list/${orderStatus}` })
     },
 
     /** 跳转维权订单*/

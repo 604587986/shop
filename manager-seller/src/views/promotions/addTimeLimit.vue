@@ -157,6 +157,11 @@
       this.activityID = this.$route.query._activity_id
       this.GET_limitTimeActivityDetails()
     },
+    beforeRouteUpdate(to, from, next) {
+      this.activityID = this.$route.query._activity_id
+      this.GET_limitTimeActivityDetails()
+      next()
+    },
     methods: {
       /** 获取限时活动详情 */
       GET_limitTimeActivityDetails() {
