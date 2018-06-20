@@ -95,9 +95,9 @@
     </en-tabel-layout>
     <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="35%" class="pop-sku">
       <div align="center">
-        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100">
+        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100" :rules="rules">
           <el-form-item label="库存" prop="quantity" >
-            <el-input  v-model="goodsStockData.quantity" auto-complete="off"  ></el-input>
+            <el-input  v-model="goodsStockData.quantity" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="待发货数" >
             <el-input v-model="goodsStockData.deliver_goods_quantity" auto-complete="off" disabled ></el-input>
@@ -133,6 +133,18 @@
       [CategoryPicker.name]: CategoryPicker
     },
     data() {
+      const checkQuantity = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('库存不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.integer.test(value) || parseInt(value) !== 0) {
+            callback(new Error('请输入大于等于0的整数'))
+          } else {
+            callback()
+          }
+        }, 500)
+      }
       return {
         /** 列表loading状态 */
         loading: false,
@@ -145,10 +157,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 商品状态列表 */
         goodsStatusList: [
@@ -176,7 +188,14 @@
         goodsStocknums: 1,
 
         /** 商品库存列表数据*/
-        goodsStockData: {}
+        goodsStockData: {},
+
+        /** 校验规则 */
+        rules: {
+          quantity: [
+            { validator: checkQuantity, trigger: 'change' }
+          ]
+        }
       }
     },
     computed: {
@@ -373,7 +392,12 @@
         border: 1px solid #e5e5e5;
       }
     }
+    .el-table__body-wrapper {
+      max-height: 400px;
+      overflow-y: scroll;
+    }
   }
+
 
   .toolbar-search {
     margin-right: 10px;
@@ -401,14 +425,6 @@
     width: 50px;
     height: 50px;
   }
-
-  .pop-sku {
-    /deep/ .el-table__body-wrapper {
-      max-height: 400px;
-      overflow-y: scroll;
-    }
-  }
-
 
   /deep/ div.cell {
     overflow:hidden;

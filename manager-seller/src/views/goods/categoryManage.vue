@@ -53,7 +53,7 @@
       </template>
     </en-tabel-layout>
     <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="25%">
-      <el-form :model="goodsCatData" label-position="right" label-width="80px">
+      <el-form :model="goodsCatData" label-position="right" label-width="80px" :rules="rules" status-icon>
         <el-form-item label="分组名称">
           <el-input v-model="goodsCatData.category_name" auto-complete="off" style="width: 100%;"></el-input>
         </el-form-item>
@@ -67,7 +67,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="排序">
+        <el-form-item label="排序" prop="sort">
           <el-input v-model.number="goodsCatData.sort" auto-complete="off" style="width: 100%;text-align: center;"></el-input>
         </el-form-item>
         <el-form-item label="显示状态">
@@ -87,9 +87,22 @@
 
 <script>
   import * as API_goodsCategory from '@/api/goodsCategory'
+  import { RegExp } from '～/ui-utils'
   export default {
     name: 'categoryManage',
     data() {
+      const checkSort = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('排序不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.integer.test(value)) {
+            callback(new Error('请输入正整数'))
+          } else {
+            callback()
+          }
+        }, 500)
+      }
       return {
         /** 列表loading状态 */
         loading: false,
@@ -121,7 +134,14 @@
         },
 
         /** 商品分组*/
-        categoryID: 0
+        categoryID: 0,
+
+        /** 校验规则 */
+        rules: {
+          sort: [
+            { validator: checkSort, trigger: 'blur' }
+          ]
+        }
       }
     },
     mounted() {

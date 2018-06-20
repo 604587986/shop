@@ -195,7 +195,7 @@
           <div>
             <el-form-item label="积分兑换：">
               <el-switch
-                v-model="baseInfoForm.exchange.enable_exchange"
+                v-model="isShowExchangeConfig"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
                 active-text="开启"
@@ -223,9 +223,9 @@
               >
                 <el-option
                   v-for="item in exchangeGoodsCatrgoryList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  :key="item.category_id"
+                  :label="item.category_name"
+                  :value="item.category_id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -357,7 +357,7 @@
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入正整数或者两位小数'))
           } else {
-            if (value < this.baseInfoForm.cost) {
+            if (parseFloat(value) < parseFloat(this.baseInfoForm.cost)) {
               callback(new Error('市场价格必须大于等于成本价格'))
             } else {
               callback()
@@ -387,7 +387,7 @@
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入数字值'))
           } else {
-            if (value > this.baseInfoForm.mktprice) {
+            if (parseFloat(value) > parseFloat(this.baseInfoForm.mktprice)) {
               callback(new Error('市场价格必须大于等于成本价格'))
             } else {
               callback()
@@ -675,7 +675,6 @@
       next()
     },
     mounted() {
-      console.log(this.shopInfo)
       if (this.$route.params && this.$route.params.goodsid) {
         this.currentStatus = parseInt(this.$route.params.isdraft) || 0
         this.activeGoodsId = this.$route.params.goodsid
@@ -690,6 +689,9 @@
       }
       /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
       this.GET_GoodsParams()
+      if (!this.shopInfo) {
+        this.shopInfo = JSON.parse(localStorage.getItem('shop'))
+      }
     },
     methods: {
       /** 上一步*/
@@ -868,11 +870,17 @@
               /** 积分兑换所属分类 */
               category_id: 0,
               /** 是否允许积分兑换  1是 0否*/
-              enable_exchange: 1,
+              enable_exchange: 0,
               /** 兑换所需金额 */
               exchange_money: 0,
               /** 积分兑换使用的积分 */
               exchange_point: 0
+            }
+          } else {
+            if (this.baseInfoForm.exchange.enable_exchange === 1) {
+              this.isShowExchangeConfig = true
+            } else {
+              this.isShowExchangeConfig = false
             }
           }
           /** 查询品牌列表 */
@@ -929,15 +937,23 @@
             ...response
           }
           /** 积分相关设置 如果没有积分相关则设置为空 */
-          this.baseInfoForm.exchange = {
-            /** 积分兑换所属分类 */
-            category_id: this.baseInfoForm.exchange_category_id || 0,
-            /** 是否允许积分兑换  1是 0否*/
-            enable_exchange: 1,
-            /** 兑换所需金额 */
-            exchange_money: this.baseInfoForm.exchange_money || 0,
-            /** 积分兑换使用的积分 */
-            exchange_point: this.baseInfoForm.exchange_point || 0
+          if (!this.baseInfoForm.exchange || !this.baseInfoForm.exchange.enable_exchange) {
+            this.baseInfoForm.exchange = {
+              /** 积分兑换所属分类 */
+              category_id: this.baseInfoForm.exchange_category_id || 0,
+              /** 是否允许积分兑换  1是 0否*/
+              enable_exchange: 0,
+              /** 兑换所需金额 */
+              exchange_money: this.baseInfoForm.exchange_money || 0,
+              /** 积分兑换使用的积分 */
+              exchange_point: this.baseInfoForm.exchange_point || 0
+            }
+          } else {
+            if (this.baseInfoForm.exchange.enable_exchange === 1) {
+              this.isShowExchangeConfig = true
+            } else {
+              this.isShowExchangeConfig = false
+            }
           }
           /** 商品相册校验属性 */
           this.baseInfoForm.goods_gallery_list = response.gallery_list.map(key => {
@@ -1031,16 +1047,19 @@
 
       /** 积分商品商城分类列表 */
       getGoodsCatrgory() {
-        API_goodsCategory.getGoodsCategoryLevelList(0, { }).then((response) => {
-          this.exchangeGoodsCatrgoryList = response.data
-          this.loading = false
+        API_goodsCategory.getGoodsCategoryLevelList(0, {}).then((response) => {
+          this.exchangeGoodsCatrgoryList = response
         })
       },
 
       /** 积分兑换开关值改变时触发 */
       handleSwitchexchange(val) {
         this.isShowExchangeConfig = val
-        this.baseInfoForm.exchange.enable_exchange = 1
+        if (val) {
+          this.baseInfoForm.exchange.enable_exchange = 1
+        } else {
+          this.baseInfoForm.exchange.enable_exchange = 0
+        }
       },
 
       /** 积分商品商城分类 改变时触发*/
@@ -1178,8 +1197,12 @@
             delete key.url
           })
         }
-        // 临时数据
-        _params.exchange.enable_exchange = 1
+        /** 积分商品数据 */
+        if (!this.isShowExchangeConfig) {
+          _params.exchange.enable_exchange = 0
+        } else {
+          _params.exchange.exchange_money = parseFloat(_params.exchange.exchange_money)
+        }
         /** 运费模板 */
         _params.template_id = _params.template_id || 0
         return _params
