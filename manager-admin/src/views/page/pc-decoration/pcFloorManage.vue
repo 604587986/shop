@@ -2,7 +2,7 @@
   <div>
     <div class="floor-container">
       <div class="draggable-box tpl">
-        <!--<el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>-->
+        <el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>
         <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
           <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
             <div class="img-tpl"></div>
@@ -19,7 +19,7 @@
                 :is="templates[item.tpl_id]"
                 :data="JSON.parse(JSON.stringify(item))"
                 is-edit
-                @handle-edit="(target, targetIndex) => handleEditFloor(index, target, targetIndex)"
+                @edit-block="handleEditBlock"
               ></component>
               <div class="panel-handle">
                 <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
@@ -109,29 +109,30 @@
           console.log(response)
         })
       },
-      handleEditFloor(index, target, targetIndex) {
-        const type = target.blockList[targetIndex].block_type
-        this.editOptions = {
-          index,
-          target,
-          targetIndex
-        }
-        const blockData = JSON.parse(JSON.stringify(target.blockList[targetIndex]))
-        if (type === 'IMAGE') {
-          this.defaultImageData = blockData.block_value ? [{
-            url: blockData.block_value,
-            opt: blockData.block_opt
-          }] : null
-          this.dialogImageShow = true
-        } else if (type === 'GOODS') {
-          // 填充默认数据
-          this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
-          this.dialogGoodsShow = true
-        } else if (type === 'TEXT') {
-          const block = target.blockList[targetIndex]
-        } else if (type === 'BRAND') {
-          console.log('品牌模块')
-        }
+      handleEditBlock(target, targetColumnIndex, targetBlockIndex) {
+        console.log(target, targetColumnIndex, targetBlockIndex)
+        // const type = target.blockList[targetIndex].block_type
+        // this.editOptions = {
+        //   index,
+        //   target,
+        //   targetIndex
+        // }
+        // const blockData = JSON.parse(JSON.stringify(target.blockList[targetIndex]))
+        // if (type === 'IMAGE') {
+        //   this.defaultImageData = blockData.block_value ? [{
+        //     url: blockData.block_value,
+        //     opt: blockData.block_opt
+        //   }] : null
+        //   this.dialogImageShow = true
+        // } else if (type === 'GOODS') {
+        //   // 填充默认数据
+        //   this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
+        //   this.dialogGoodsShow = true
+        // } else if (type === 'TEXT') {
+        //   const block = target.blockList[targetIndex]
+        // } else if (type === 'BRAND') {
+        //   console.log('品牌模块')
+        // }
       },
       /** 图片上传组件确认 */
       handleImagePickerConfirm(fileList) {
@@ -160,8 +161,8 @@
       },
       /** 保存发布 */
       handleSaveFloor() {
-        API_Floor.editFloor('WAP', 'INDEX', {
-          page_name: 'mobile_floor',
+        API_Floor.editFloor('PC', 'INDEX', {
+          page_name: 'pc_floor',
           page_data: JSON.stringify(this.floorList)
         }).then(() => this.$message.success('保存发布成功！'))
       },
@@ -175,7 +176,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  @import "../../../assets/floor-pc";
+  @import "./templates/floor-pc";
   .floor-container {
     display: flex;
     justify-content: space-around;
@@ -187,11 +188,12 @@
     position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
     width: 50%;
     .save-btn {
       position: absolute;
-      top: 30px;
+      top: 10px;
     }
     &.floor {
       width: 1210px + 50px;
@@ -250,7 +252,7 @@
   .floor-list {
     width: calc(100% - 50px);
     min-height: 667px;
-    background-color: #fff;
+    background-color: #E5E7EA;
   }
   .floor-item {
     position: relative;
@@ -276,10 +278,7 @@
       display: block;
     }
   }
-  .floor-item + .floor-item {
-    margin-top: -1px;
-  }
-  .floor-layout:first-child {
+  .floor-item:first-child .floor-layout {
     margin-top: 0;
   }
 </style>

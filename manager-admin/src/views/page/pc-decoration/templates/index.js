@@ -5,8 +5,6 @@
  * customs 按照开发文档自定义的模板
  */
 
-import './compoents'
-
 import common from './common'
 import customs from './customs'
 
