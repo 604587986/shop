@@ -16,7 +16,7 @@
               :class="['coll-g-item', goods.show_del_pop && 'del-pop-show']"
             >
               <div class="goods-image">
-                <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" target="_blank">
+                <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                   <img :src="goods.goods_image" :alt="goods.goods_name">
                 </nuxt-link>
                 <div class="goods-delete" @click="goods.show_del_pop = 1">
@@ -28,7 +28,7 @@
                 </div>
               </div>
               <div class="goods-name">
-                <nuxt-link :to="'/goods-' + goods.goods_id + '.html'" target="_blank">
+                <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                   {{ goods.goods_name }}
                 </nuxt-link>
               </div>
@@ -100,7 +100,7 @@
                   <ul v-for="tag in shop.tagList" :key="tag.tag_name" v-show="tag.active" class="goods-list">
                     <li v-for="goods in tag.goodsList" :key="goods.goods_id" class="goods-item">
                       <div class="goods-image">
-                        <nuxt-link :to="'/goods-' + goods.goods_id + '.html'">
+                        <nuxt-link :to="'/goods/' + goods.goods_id">
                           <img :src="goods.goods_image" :alt="goods.goods_name">
                         </nuxt-link>
                       </div>

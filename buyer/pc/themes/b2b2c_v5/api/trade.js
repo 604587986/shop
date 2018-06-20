@@ -3,7 +3,7 @@
  * 交♂易相关API
  */
 
-import request, { ContentType, Method } from '@/utils/request'
+import request, { Method } from '@/utils/request'
 
 /**
  * 获取购物车列表
@@ -13,7 +13,6 @@ export function getCarts(show_type = 'all') {
   return request({
     url: 'trade/carts',
     method: Method.GET,
-    needToken: true,
     loading: false,
     params: { show_type }
   })
@@ -114,7 +113,7 @@ export function checkShop(shop_id, checked) {
  */
 export function getCartTotal() {
   return request({
-    url: 'trade/carts/total',
+    url: 'trade/orders/total',
     method: Method.GET,
     loading: false
   })
@@ -161,13 +160,11 @@ export function setPaymentType(payment_type = 'ONLINE') {
  * @param params
  */
 export function setRecepit(params) {
+  params.duty_invoice = params.duty
   return request({
     url: 'trade/checkout-params/receipt',
     method: Method.POST,
     needToken: true,
-    headers: {
-      ...ContentType.JSON
-    },
     data: params
   })
 }

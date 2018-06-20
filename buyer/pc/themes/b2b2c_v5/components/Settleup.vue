@@ -18,12 +18,12 @@
           <ul v-if="skuList.length > 0" class="header-cart-list">
             <li v-for="sku in skuList" :key="sku.sku_id" class="item-header-cart">
               <div class="p-img">
-                <nuxt-link :to="'/goods-' + sku.goods_id + '.html'" target="_blank" :title="sku.name">
+                <nuxt-link :to="'/goods/' + sku.goods_id" target="_blank" :title="sku.name">
                   <img :src="sku.goods_image" :alt="sku.name">
                 </nuxt-link>
               </div>
               <div class="p-name">
-                <nuxt-link :to="'/goods-' + sku.goods_id + '.html'" target="_blank">
+                <nuxt-link :to="'/goods/' + sku.goods_id" target="_blank">
                   {{ sku.name }}
                 </nuxt-link>
               </div>

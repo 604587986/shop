@@ -222,3 +222,53 @@ export function logout() {
     needToken: true
   })
 }
+
+/**
+ * 获取发票列表
+ */
+export function getReceipts() {
+  return request({
+    url: 'members/receipts',
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 添加发票
+ * @param params
+ */
+export function addReceipt(params) {
+  return request({
+    url: 'members/receipt',
+    method: Method.POST,
+    needToken: true,
+    data: params
+  })
+}
+
+/**
+ * 修改发票
+ * @param id
+ * @param params
+ */
+export function editReceipt(id, params) {
+  return request({
+    url: `members/receipt/${id}`,
+    method: Method.PUT,
+    needToken: true,
+    data: params
+  })
+}
+
+/**
+ * 删除发票
+ * @param id
+ */
+export function deleteReceipt(id) {
+  return request({
+    url: `members/receipt/${id}`,
+    method: Method.DELETE,
+    needToken: true
+  })
+}

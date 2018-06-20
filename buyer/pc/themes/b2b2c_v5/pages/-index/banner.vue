@@ -43,5 +43,11 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  #index-banner .swiper-slide {
+    height: 500px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 </style>

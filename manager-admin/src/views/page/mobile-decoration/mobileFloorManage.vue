@@ -2,6 +2,7 @@
   <div>
     <div class="floor-container">
       <div class="draggable-box floor">
+        <el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>
         <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
           <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
             <div class="img-tpl"></div>
@@ -32,7 +33,6 @@
     <en-image-picker
       :show="dialogImageShow"
       :default-data="defaultImageData"
-      :operation="operation"
       @close="dialogImageShow = false"
       @confirm="handleImagePickerConfirm"
       :limit="10"
@@ -40,11 +40,19 @@
     />
     <en-goods-picker
       :api="goodsListApi"
+      :multipleApi="multipleGoodsApi"
       :show="dialogGoodsShow"
       :default-data="defaultGoodsData"
-      :limit="0"
+      :limit="1"
       @close="dialogGoodsShow = false"
       @confirm="handleGoodsPickerConfirm"
+    />
+    <en-text-picker
+      :show="dialogTextShow"
+      :default-data="defaultTextData"
+      :maxlength="15"
+      @close="dialogTextShow = false"
+      @confirm="handleTextPickerConfirm"
     />
   </div>
 </template>
@@ -61,6 +69,8 @@
       return {
         // 获取商品列表API
         goodsListApi: process.env.BASE_API + '/goods',
+        // 根据商品id，获取商品列表API
+        multipleGoodsApi: process.env.BASE_API + '/goods/@ids/details',
         templates,
         templateArray,
         /** 模板列表 */
@@ -81,31 +91,13 @@
         },
         dialogImageShow: false,
         dialogGoodsShow: false,
+        dialogTextShow: false,
         /** 图片默认数据 */
         defaultImageData: '',
         /** 商品默认数据 */
         defaultGoodsData: [],
-        /** 自定义操作参数 */
-        operation: [{
-          label: '链接类型',
-          name: 'opt_type',
-          type: 'select',
-          options: [
-            { text: '无操作', value: 'none' },
-            { text: '连接地址', value: 'link' },
-            { text: '关键字', value: 'keyword' },
-            { text: '商品序号', value: 'goods-sn' },
-            { text: '店铺编号', value: 'shop-sn' },
-            { text: '商品分类', value: 'goods-cat' }
-          ],
-          value: 'none'
-        }, {
-          label: '链接值',
-          name: 'opt_value'
-        }, {
-          label: '图片描述',
-          name: 'opt_detail'
-        }]
+        /** 文本默认数据 */
+        defaultTextData: {}
       }
     },
     mounted() {
@@ -128,20 +120,16 @@
           this.dialogImageShow = true
         } else if (type === 'GOODS') {
           // 填充默认数据
-          console.log(blockData)
-          this.defaultGoodsData = blockData.block_value ? [blockData.block_value.sn] : []
+          this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
           this.dialogGoodsShow = true
         } else if (type === 'TEXT') {
-          this.$prompt('请输入文本内容', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            inputPattern: /.+/,
-            inputErrorMessage: '文本不能为空！'
-          }).then(({ value }) => {
-            console.log(value)
-            // this.data.blockList[0].block_value = value
-          }).catch(() => {})
-          console.log('文本模块')
+          const block = target.blockList[targetIndex]
+          this.defaultTextData = {
+            text: block.block_value,
+            opt_type: block.block_opt.opt_type,
+            opt_value: block.block_opt.opt_value
+          }
+          this.dialogTextShow = true
         } else if (type === 'BRAND') {
           console.log('品牌模块')
         }
@@ -151,7 +139,6 @@
         const file = fileList[0]
         let opt = file ? file.operation : {}
         let url = file ? file.response.url : ''
-        this.dialogImageShow = false
         const { index, target, targetIndex } = this.editOptions
         target.blockList[targetIndex].block_value = url
         target.blockList[targetIndex].block_opt = opt
@@ -162,12 +149,28 @@
         const { index, target, targetIndex } = this.editOptions
         target.blockList[targetIndex].block_value = this.MixinClone(list[0] || '')
         this.$set(this.floorList, index, target)
-        this.dialogGoodsShow = false
       },
-      /** 获取模板列表 */
+      /** 文本选择器确认 */
+      handleTextPickerConfirm(data) {
+        const { index, target, targetIndex } = this.editOptions
+        const block = target.blockList[targetIndex]
+        block.block_value = data.text
+        block.block_opt.opt_type = data.opt_type
+        block.block_opt.opt_value = data.opt_value
+        this.$set(this.floorList, index, target)
+      },
+      /** 保存发布 */
+      handleSaveFloor() {
+        API_Floor.editFloor('WAP', 'INDEX', {
+          page_name: 'mobile_floor',
+          page_data: JSON.stringify(this.floorList)
+        }).then(() => this.$message.success('保存发布成功！'))
+      },
+      /** 获取楼层数据 */
       GET_FloorList() {
-        API_Floor.getFloorList('mobile').then(response => {
-          this.floorList = response
+        API_Floor.getFloor('WAP', 'INDEX').then(response => {
+          const { page_data } = response
+          this.floorList = page_data ? JSON.parse(page_data) : []
         })
       }
     }
@@ -184,10 +187,15 @@
     min-height: 500px;
   }
   .draggable-box {
+    position: relative;
     display: flex;
     justify-content: center;
     flex-direction: column;
     width: 50%;
+    .save-btn {
+      position: absolute;
+      top: 30px;
+    }
     &.floor { align-items: center }
   }
   .tpl-list {
@@ -248,18 +256,6 @@
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    &.item-23 { height: 130px }
-    &.item-24 { height: 130px }
-    &.item-25 { height: 130px }
-    &.item-26 { height: 130px }
-    &.item-27 { height: 64px }
-    &.item-28 { height: 150px }
-    &.item-29 { height: 105px }
-    &.item-30 { height: 40px }
-    &.item-31 { height: 80px }
-    &.item-32 { height: 125px }
-    &.item-37 { height: 220px }
-    &.item-42 { height: 40px }
     .panel-handle {
       display: none;
       position: absolute;

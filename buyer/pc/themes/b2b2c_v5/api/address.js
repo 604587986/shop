@@ -56,3 +56,15 @@ export function deleteAddress(id) {
     needToken: true
   })
 }
+
+/**
+ * 设置默认地址
+ * @param id
+ */
+export function setDefaultAddress(id) {
+  return request({
+    url: `members/address/${id}/default`,
+    method: Method.PUT,
+    needToken: true
+  })
+}

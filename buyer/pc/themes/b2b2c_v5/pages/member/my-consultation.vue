@@ -10,7 +10,7 @@
         <ul>
           <li v-for="consultation in consultation.data" :key="consultation.ask_id" class="comment-item">
             <div class="comment-title">
-              <nuxt-link :to="'/goods-' + consultation.goods_id + '.html'" target="_blank">{{ consultation.goods_name }}</nuxt-link>
+              <nuxt-link :to="'/goods/' + consultation.goods_id" target="_blank">{{ consultation.goods_name }}</nuxt-link>
               <span>{{ consultation.create_time | unixToDate }}</span>
             </div>
             <div class="comment-body">

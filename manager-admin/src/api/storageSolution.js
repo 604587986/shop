@@ -18,18 +18,6 @@ export function getStorageSolutionList(params) {
 }
 
 /**
- * 添加储存方案
- * @param params
- */
-export function addStorageSolution(params) {
-  return request({
-    url: 'system/uploaders',
-    method: 'post',
-    data: params
-  })
-}
-
-/**
  * 编辑储存方案
  * @param id
  * @param params
@@ -63,6 +51,6 @@ export function getStorageSolutionConfig(code) {
 export function openStorageSolutionById(id) {
   return request({
     url: `system/uploaders/${id}/open`,
-    method: 'post'
+    method: 'put'
   })
 }

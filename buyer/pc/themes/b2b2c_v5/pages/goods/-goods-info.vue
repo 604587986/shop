@@ -178,6 +178,7 @@
         const { num } = this
         const { sku_id } = this.selectedSku
         API_Trade.addToCart(sku_id, num).then(response => {
+          this.$store.dispatch('cart/getCartDataAction')
           this.$confirm('加入购物车成功！要去看看吗？', () => {
             this.$router.push({ path: '/cart' })
           })

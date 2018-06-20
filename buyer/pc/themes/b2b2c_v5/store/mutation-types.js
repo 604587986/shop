@@ -67,6 +67,8 @@ export const CHECK_ALL = 'CHECK_ALL'
 export const DELETE_SKU_ITEMS = 'DELETE_SKU_ITEMS'
 // 清空购物车
 export const CLEAN_CART = 'CLEAN_CART'
+// 获取购物车总价
+export const SET_CART_TOTAL = 'SET_CART_TOTAL'
 
 /** 站内消息相关 */
 // 设置消息数据【获取站内消息列表之后】

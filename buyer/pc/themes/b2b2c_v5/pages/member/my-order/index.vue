@@ -11,71 +11,75 @@
       </ul>
     </div>
     <div class="order-search">
-      <input type="text" v-model="keyword" placeholder="输入订单中商品关键词" @keyup.enter="handleSearch">
+      <input type="text" v-model="goods_name" placeholder="输入订单中商品关键词" @keyup.enter="handleSearch">
       <button type="button" @click="handleSearch">搜索</button>
       <span v-if="orderData">搜到：<em style="color: #f42424">{{ orderData.data_total }}</em> 笔订单</span>
       <span v-else>搜索中...</span>
     </div>
-    <div class="order-table">
-      <div class="order-table-thead">
-        <span style="width: 450px">商品名称</span>
-        <span style="width: 80px">单价</span>
-        <span style="width: 80px">数量</span>
-        <span style="width: 150px">订单金额</span>
-        <span style="width: 100px">订单状态</span>
-        <span style="width: 110px">订单操作</span>
-      </div>
-      <ul class="order-table-tbody">
-        <li v-if="orderData" v-for="order in orderData.data" :key="order.order_sn">
-          <div class="order-tbody-title">
-            <span class="pay-type">线上支付：</span>
-            <span class="price"><em>￥</em>{{ order.order_amount | unitPrice }}</span>
-          </div>
-          <div class="order-tbody-ordersn">
-            <span>订单编号：{{ order.order_sn }}</span>
-            <span>下单时间：{{ order.create_time | unixToDate }}</span>
-          </div>
-          <div class="order-tbody-item">
-            <div class="order-item-sku">
-              <div class="sku-item" v-for="sku in order.skuList" :key="sku.sku_id">
-                <div class="goods-image">
-                  <nuxt-link :to="'/goods-' + sku.goods_id + '.html'">
-                    <img :src="sku.goods_image" :alt="sku.goods_name">
-                  </nuxt-link>
-                </div>
-                <div class="goods-name">
-                  <nuxt-link :to="'/goods-' + sku.goods_id + '.html'">{{ sku.goods_name }}</nuxt-link>
-                </div>
-                <div class="sku-price">{{ sku.goods_price | unitPrice('￥') }}</div>
-                <div class="sku-num">x {{ sku.num }}</div>
-                <div class="after-sale-btn">
-                  <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.order_sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
+    <empty-member v-if="!orderData || orderData.data.length === 0">暂无订单</empty-member>
+    <template v-else>
+      <div class="order-table">
+        <div class="order-table-thead">
+          <span style="width: 450px">商品名称</span>
+          <span style="width: 80px">单价</span>
+          <span style="width: 80px">数量</span>
+          <span style="width: 150px">订单金额</span>
+          <span style="width: 100px">订单状态</span>
+          <span style="width: 110px">订单操作</span>
+        </div>
+        <ul class="order-table-tbody">
+          <li v-if="orderData" v-for="order in orderData.data" :key="order.order_sn">
+            <div class="order-tbody-title">
+              <span class="pay-type">{{ order.payment_type === 'ONLINE' ? '线上支付' : '货到付款' }}：</span>
+              <span class="price"><em>￥</em>{{ order.order_amount | unitPrice }}</span>
+            </div>
+            <div class="order-tbody-ordersn">
+              <span>订单编号：{{ order.order_sn }}</span>
+              <span>下单时间：{{ order.create_time | unixToDate }}</span>
+            </div>
+            <div class="order-tbody-item">
+              <div class="order-item-sku">
+                <div class="sku-item" v-for="sku in order.sku_list" :key="sku.sku_id">
+                  <div class="goods-image">
+                    <nuxt-link :to="'/goods/' + sku.goods_id" target="_blank">
+                      <img :src="sku.goods_image" :alt="sku.name">
+                    </nuxt-link>
+                  </div>
+                  <div class="goods-name-box">
+                    <nuxt-link :to="'/goods/' + sku.goods_id" class="goods-name" target="_blank">{{ sku.name }}</nuxt-link>
+                    <p v-if="sku.spec_list" class="sku-spec">{{ sku | formatterSkuSpec }}</p>
+                  </div>
+                  <div class="sku-price">{{ sku.purchase_price | unitPrice('￥') }}</div>
+                  <div class="sku-num">x {{ sku.num }}</div>
+                  <div class="after-sale-btn">
+                    <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
+                  </div>
                 </div>
               </div>
+              <div class="order-item-price">
+                <strong>{{ order.order_amount | unitPrice('￥') }}</strong>
+                <p>运费（{{ order.shipping_amount | unitPrice('￥') }}）</p>
+                <p>{{ order.payment_text }}</p>
+              </div>
+              <div class="order-item-status">{{ order.order_status_text }}</div>
+              <div class="order-item-operate">
+                <nuxt-link :to="'/pay/' + order.sn">订单付款</nuxt-link>
+                <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
+              </div>
             </div>
-            <div class="order-item-price">
-              <strong>{{ order.order_amount | unitPrice('￥') }}</strong>
-              <p>运费（{{ order.shipping_amount | unitPrice('￥') }}）</p>
-              <p>{{ order.payment_text }}</p>
-            </div>
-            <div class="order-item-status">{{ order.order_status_text }}</div>
-            <div class="order-item-operate">
-              <nuxt-link :to="'/pay/' + order.order_sn">订单付款</nuxt-link>
-              <nuxt-link :to="'./my-order/detail?order_sn=' + order.order_sn">查看详情</nuxt-link>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="member-pagination" v-if="orderData">
-      <el-pagination
-        @current-change="handleCurrentPageChange"
-        :current-page.sync="params.page_no"
-        :page-size="params.page_size"
-        layout="total, prev, pager, next"
-        :total="orderData.data_total">
-      </el-pagination>
-    </div>
+          </li>
+        </ul>
+      </div>
+      <div class="member-pagination">
+        <el-pagination
+          @current-change="handleCurrentPageChange"
+          :current-page.sync="params.page_no"
+          :page-size="params.page_size"
+          layout="total, prev, pager, next"
+          :total="orderData.data_total">
+        </el-pagination>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -93,7 +97,7 @@
       let _hash = this.$route.hash
       _hash = _hash ? _hash.replace(/^#/,'') : 'ALL'
       return {
-        keyword: '',
+        goods_name: '',
         params: {
           page_no: 1,
           page_size: 5,
@@ -101,12 +105,12 @@
         },
         navList: [
           { title: '所有订单', status: 'ALL' },
-          { title: '待付款', status: 'wait-pay' },
-          { title: '待发货', status: 'wait-ship' },
-          { title: '已发货', status: 'shipped' },
-          { title: '已取消', status: 'canceled' },
-          { title: '已完成', status: 'complete' },
-          { title: '待评论', status: 'wait-comments' }
+          { title: '待付款', status: 'WAIT_PAY' },
+          { title: '待发货', status: 'WAIT_SHIP' },
+          { title: '待收货', status: 'WAIT_ROG' },
+          { title: '已取消', status: 'CANCELLED' },
+          { title: '已完成', status: 'COMPLETE' },
+          { title: '待评论', status: 'WAIT_COMMENT' }
         ].map(item => {
           item.active = item.status === _hash
           return item
@@ -130,7 +134,7 @@
       },
       /** 订单搜索 */
       handleSearch() {
-        this.params.keyword = this.keyword
+        this.params.goods_name = this.goods_name
         this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
       /** hash发生改变 */
@@ -140,7 +144,7 @@
           item.active = item.status === _hash
           return item
         })
-        this.params.status = _hash
+        this.params.order_status = _hash
         this.getOrderData(this.params).then(() => this.MixinScrollToTop())
       },
       ...mapActions({
@@ -267,8 +271,8 @@
           height: 62px;
         }
       }
+      .goods-name-box { width: 450px - 86px }
       .goods-name {
-        width: 450px - 86px;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
@@ -338,6 +342,9 @@
           color: #666;
           cursor: pointer;
           margin-bottom: 5px;
+          &:first-child {
+            margin-top: 5px;
+          };
           &:hover {
             background: #eaeaea;
           }

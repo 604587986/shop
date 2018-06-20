@@ -78,17 +78,22 @@
   }
 
   /** tpl-23 单列单张大图模块 */
-  .tpl-23 .layout-item {}
+  .tpl-23 {
+    height: 130px;
+  }
   /** tpl-24 左一右二图片模块 */
   .tpl-24 {
+    height: 130px;
     .right .layout-item { height: 50% }
   }
   /** tpl-25 左二右一图片模块 */
   .tpl-25 {
+    height: 130px;
     .left .layout-item { height: 50% }
   }
   /** tpl-26 左二右一图片模块 */
   .tpl-26 {
+    height: 130px;
     .layout-item {
       float: left;
       width: percentage(1/3)
@@ -97,6 +102,7 @@
   }
   /** tpl-27 五列单行小图模块 */
   .tpl-27 {
+    height: 64px;
     .layout-item {
       float: left;
       width: percentage(1/5);
@@ -105,6 +111,7 @@
   }
   /** tpl-28 轮播图模块 */
   .tpl-28 {
+    height: 150px;
     .swiper-container {
       width: 100%;
       height: 100%;
@@ -113,19 +120,23 @@
   /** tpl-29 四列单行图片模块 */
   .tpl-29 {
     @extend .tpl-27;
+    height: 105px;
     .layout-item { width: percentage(1/4) }
     .no-image { background-size: 70% }
   }
   /** tpl-30 标题或间隔性模块 */
   .tpl-30 {
+    height: 40px;
     .no-image { background-size: 17.5% 75% }
   }
   /** tpl-31 四列单行小图片模块 */
   .tpl-31 {
-    @extend .tpl-29
+    @extend .tpl-29;
+    height: 80px;
   }
   /** tpl-32 左一右二竖排模板 */
   .tpl-32 {
+    height: 125px;
     .layout-item { width: 50%; float: left }
     .left .layout-item { width: 100% }
     .right .no-image {
@@ -134,6 +145,7 @@
   }
   /** tpl-37 商品模块 */
   .tpl-37 {
+    height: 220px;
     margin-top: 10px;
     .layout-main {
       display: flex;
@@ -175,6 +187,7 @@
   }
   /** tpl-42 文本模块 */
   .tpl-42 {
+    height: 40px;
     .layout-item {
       line-height: 40px;
       padding: 0 10px;

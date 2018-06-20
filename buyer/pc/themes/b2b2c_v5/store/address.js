@@ -122,8 +122,10 @@ export const actions = {
    */
   setDefaultAddressAction: ({ commit }, id) => {
     return new Promise((resolve, reject) => {
-      commit(types.SET_DEFAULT_ADDRESS, id)
-      // API_Address
+      API_Address.setDefaultAddress(id).then((response) => {
+        commit(types.SET_DEFAULT_ADDRESS, id)
+        resolve(response)
+      }).catch(error => reject(error))
     })
   }
 }

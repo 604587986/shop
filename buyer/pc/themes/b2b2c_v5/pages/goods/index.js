@@ -1,5 +1,6 @@
 /**
  * Created by andste.cc@gmail.com on 2018/4/26.
+ * 商品页组件导出
  */
 
 import BreadNav from './-bread-nav'

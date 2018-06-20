@@ -102,12 +102,24 @@ export function addGrouBuyActivity(params) {
 }
 
 /**
- * 获取团购活动详情
- * @param id
+ * 获取团购活动商品列表
+ * @param params
  */
-export function getGroupBuyActivityDetail(id) {
+export function getGroupBuyGoods(params) {
   return request({
-    url: `promotion/group-buy-actives/${id}`,
+    url: `promotion/group-buy-goods`,
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 获取团购商品详情
+ * @param gb_id
+ */
+export function getGroupBuyGoodsDetail(gb_id) {
+  return request({
+    url: `promotion/group-buy-goods/${gb_id}`,
     method: 'get'
   })
 }
@@ -151,9 +163,14 @@ export function reviewGroupBuyGoods(id, params) {
   })
 }
 
+/**
+ * 获取团购商品列表
+ * @param params
+ */
 export function getGroupBuyGoodsList(params) {
   return request({
-    url: `promotion/group-buy-goods`
+    url: `promotion/group-buy-goods`,
+    method: 'get'
   })
 }
 
@@ -294,13 +311,14 @@ export function releaseSeckill(id, params) {
 }
 
 /**
- * 审核商品
- * @param apply_id
+ * 查看限时抢购商品
  * @param params
  */
-export function reviewSeckill(apply_id, params) {
+export function getSeckillGoods(params) {
   return request({
-    url: `promotion/seckills/review/${apply_id}`,
-    method: 'post'
+    url: `promotion/seckill-applys`,
+    method: 'get',
+    loading: false,
+    params
   })
 }

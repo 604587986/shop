@@ -1,134 +1,285 @@
 <template>
   <div>
-    <en-tabel-layout
-      toolbar
-      pagination
-      :tableData="tableData"
-      :loading="loading"
-    >
-      <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddTpl">添加</el-button>
+    <div class="floor-container">
+      <div class="draggable-box tpl">
+        <!--<el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>-->
+        <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
+          <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
+            <div class="img-tpl"></div>
+            <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
+          </div>
+        </draggable>
+      </div>
+      <div class="draggable-box floor">
+        <div class="floor-top"></div>
+        <div class="floor-body">
+          <draggable v-model="floorList" :options="floorOptions" class="floor-list">
+            <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
+              <component
+                :is="templates[item.tpl_id]"
+                :data="JSON.parse(JSON.stringify(item))"
+                is-edit
+                @handle-edit="(target, targetIndex) => handleEditFloor(index, target, targetIndex)"
+              ></component>
+              <div class="panel-handle">
+                <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
+                <span class="icon-handle handle-delete" @click="floorList.splice(index, 1)"><svg-icon icon-class="delete"/></span>
+              </div>
+            </div>
+          </draggable>
         </div>
       </div>
-      <template slot="table-columns">
-        <el-table-column prop="floor_name" label="楼层名称"/>
-        <el-table-column prop="floor_sort" label="楼层排序"/>
-        <el-table-column label="显示">
-          <template slot-scope="scope">{{ scope.row.visible === 1 ? '是' : '否' }}</template>
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleEditFloor(scope.$index, scope.row)">修改</el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDeleteFloor(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </template>
-
-      <el-pagination
-        slot="pagination"
-        v-if="pageData"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
-      </el-pagination>
-    </en-tabel-layout>
+    </div>
+    <en-image-picker
+      :show="dialogImageShow"
+      :default-data="defaultImageData"
+      @close="dialogImageShow = false"
+      @confirm="handleImagePickerConfirm"
+      :limit="10"
+      multiple
+    />
+    <en-goods-picker
+      :api="goodsListApi"
+      :multipleApi="multipleGoodsApi"
+      :show="dialogGoodsShow"
+      :default-data="defaultGoodsData"
+      :limit="1"
+      @close="dialogGoodsShow = false"
+      @confirm="handleGoodsPickerConfirm"
+    />
   </div>
 </template>
 
 <script>
+  import draggable from 'vuedraggable'
+  import * as API_Floor from '@/api/floor'
+  import templates, { templateArray } from './templates'
+
   export default {
     name: 'pcFloorManage',
+    components: { draggable },
     data() {
       return {
-        /** 列表loading状态 */
-        loading: false,
-
-        /** 列表参数 */
-        params: {
-          page_no: 1,
-          page_size: 10
+        // 获取商品列表API
+        goodsListApi: process.env.BASE_API + '/goods',
+        // 根据商品id，获取商品列表API
+        multipleGoodsApi: process.env.BASE_API + '/goods/@ids/details',
+        templates,
+        templateArray,
+        /** 模板列表 */
+        tplList: [],
+        /** 模板配置 */
+        tplOptions: {
+          group: { name: 'tplGroup', pull: 'clone', put: false },
+          sort: false
         },
-
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        /** 楼层列表 */
+        floorList: [],
+        /** 楼层配置 */
+        floorOptions: {
+          animation: 150,
+          group: { name: 'tplGroup', put: true },
+          sort: true,
+          handle: '.handle-move'
+        },
+        dialogImageShow: false,
+        dialogGoodsShow: false,
+        /** 图片默认数据 */
+        defaultImageData: '',
+        /** 商品默认数据 */
+        defaultGoodsData: []
       }
     },
     mounted() {
       this.GET_FloorList()
     },
-    filters: {
-      typeFitler(val) {
-        switch (val) {
-          case 'main': return '主面板'
-          case 'normal': return '普通面板'
-        }
-      }
-    },
     methods: {
-      /** 分页大小发生改变 */
-      handlePageSizeChange(size) {
-        this.params.page_size = size
-        this.GET_FloorList()
+      handleAddTpl() {
+        API_Floor.editFloor('PC', 'INDEX', {
+          page_name: 'pc_floor',
+          page_data: JSON.stringify([
+            {
+              floor_name: '数码产品',
+              floor_sort: 1,
+              floor_data: []
+            }
+          ])
+        }).then(response => {
+          this.$message.success('发布成功！')
+          console.log(response)
+        })
       },
-
-      /** 分页页数发生改变 */
-      handlePageCurrentChange(page) {
-        this.params.page_no = page
-        this.GET_FloorList()
+      handleEditFloor(index, target, targetIndex) {
+        const type = target.blockList[targetIndex].block_type
+        this.editOptions = {
+          index,
+          target,
+          targetIndex
+        }
+        const blockData = JSON.parse(JSON.stringify(target.blockList[targetIndex]))
+        if (type === 'IMAGE') {
+          this.defaultImageData = blockData.block_value ? [{
+            url: blockData.block_value,
+            opt: blockData.block_opt
+          }] : null
+          this.dialogImageShow = true
+        } else if (type === 'GOODS') {
+          // 填充默认数据
+          this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
+          this.dialogGoodsShow = true
+        } else if (type === 'TEXT') {
+          const block = target.blockList[targetIndex]
+        } else if (type === 'BRAND') {
+          console.log('品牌模块')
+        }
       },
-
-      /** 添加模板 */
-      handleAddTpl() {},
-
-      /** 修改模板 */
-      handleEditFloor(index, row) {
-        console.log(row)
+      /** 图片上传组件确认 */
+      handleImagePickerConfirm(fileList) {
+        const file = fileList[0]
+        let opt = file ? file.operation : {}
+        let url = file ? file.response.url : ''
+        const { index, target, targetIndex } = this.editOptions
+        target.blockList[targetIndex].block_value = url
+        target.blockList[targetIndex].block_opt = opt
+        this.$set(this.floorList, index, target)
       },
-
-      /** 删除模板 */
-      handleDeleteFloor(index, row) {
-        this.$confirm('确定要删除这个模板吗？', '提示', { type: 'warning' }).then(() => {
-          // API_Decoration.deleteTpl(row.tpl_id).then(response => {
-          //   this.$message.success('删除成功！')
-          //   this.GET_FloorList()
-          // }).catch(error => console.log(error))
-        }).catch(() => {})
+      /** 商品选择器确认 */
+      handleGoodsPickerConfirm(list) {
+        const { index, target, targetIndex } = this.editOptions
+        target.blockList[targetIndex].block_value = this.MixinClone(list[0] || '')
+        this.$set(this.floorList, index, target)
       },
-
-      /** 获取模板列表 */
+      /** 文本选择器确认 */
+      handleTextPickerConfirm(data) {
+        const { index, target, targetIndex } = this.editOptions
+        const block = target.blockList[targetIndex]
+        block.block_value = data.text
+        block.block_opt.opt_type = data.opt_type
+        block.block_opt.opt_value = data.opt_value
+        this.$set(this.floorList, index, target)
+      },
+      /** 保存发布 */
+      handleSaveFloor() {
+        API_Floor.editFloor('WAP', 'INDEX', {
+          page_name: 'mobile_floor',
+          page_data: JSON.stringify(this.floorList)
+        }).then(() => this.$message.success('保存发布成功！'))
+      },
       GET_FloorList() {
-        this.loading = true
-        // API_Decoration.getFloorList('PC', this.params).then(response => {
-        //   this.loading = false
-        //   this.tableData = response.data
-        //   this.pageData = {
-        //     page_no: response.draw,
-        //     page_size: 10,
-        //     data_total: response.recordsTotal
-        //   }
-        // }).catch(error => {
-        //   this.loading = false
-        //   console.log(error)
-        // })
+        API_Floor.getFloor('PC', 'INDEX').then(response => {
+          this.floorList = JSON.parse(response.page_data || '[]')
+        })
       }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  @import "../../../assets/floor-pc";
+  .floor-container {
+    display: flex;
+    justify-content: space-around;
+    background-color: #E5E7EA;
+    padding: 10px;
+    min-height: 500px;
+  }
+  .draggable-box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 50%;
+    .save-btn {
+      position: absolute;
+      top: 30px;
+    }
+    &.floor {
+      width: 1210px + 50px;
+      flex-shrink: 0;
+      align-items: center;
+    }
+  }
+  .tpl-list {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    max-height: 667px;
+    background-color: #fff;
+  }
+  .tpl-item {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    border-bottom: 2px solid #D9E0E7;
+    margin-bottom: 10px;
+    &.item-1 .img-tpl {
+      background: url("../../../assets/pc-tpl-01.png") no-repeat;
+      background-size: 100%;
+    }
+    &.item-2 .img-tpl {
+      background: url("../../../assets/pc-tpl-02.png") no-repeat;
+      background-size: 100%;
+    }
+    &.item-3 .img-tpl {
+      background: url("../../../assets/pc-tpl-03.png") no-repeat;
+      background-size: 100%;
+    }
+  }
+  .img-tpl {
+    width: 100%;
+    min-height: 150px;
+  }
+  .text-tpl {
+    text-align: center;
+    margin: 5px 0;
+    color: #ACB0B9;
+    font-size: 12px;
+  }
+  .floor-body {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 667px;
+    text-align: center;
+    overflow-y: scroll;
+  }
+  .floor-list {
+    width: calc(100% - 50px);
+    min-height: 667px;
+    background-color: #fff;
+  }
+  .floor-item {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    .panel-handle {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: -25px;
+      .icon-handle {
+        display: block;
+        cursor: pointer;
+        text-align: center;
+      }
+      .svg-icon {
+        width: 25px;
+        height: 25px;
+        background-color: #fff;
+      }
+    }
+    &:hover .panel-handle {
+      display: block;
+    }
+  }
+  .floor-item + .floor-item {
+    margin-top: -1px;
+  }
+  .floor-layout:first-child {
+    margin-top: 0;
+  }
 </style>

@@ -200,7 +200,7 @@ export const asyncRouterMap = [
           { path: 'group-buy-list', component: () => import('@/views/promotions/group-buy-manage/groupBuyList'), name: 'groupBuyList', meta: { title: 'groupBuyList' }},
           { path: 'group-buy-category', component: () => import('@/views/promotions/group-buy-manage/groupBuyCategory'), name: 'groupBuyCategory', meta: { title: 'groupBuyCategory' }},
           { path: 'group-buy-goods/:id', component: () => import('@/views/promotions/group-buy-manage/groupBuyGoods'), name: 'groupBuyGoods', hidden: true, meta: { title: 'groupBuyGoods' }},
-          { path: 'group-buy-goods-info', component: () => import('@/views/promotions/group-buy-manage/groupBuyGoodsInfo'), name: 'groupBuyGoodsInfo', hidden: true, meta: { title: 'groupBuyGoodsInfo' }}
+          { path: 'group-buy-goods-info/:id', component: () => import('@/views/promotions/group-buy-manage/groupBuyGoodsInfo'), name: 'groupBuyGoodsInfo', hidden: true, meta: { title: 'groupBuyGoodsInfo' }}
         ]
       },
       {
@@ -239,13 +239,12 @@ export const asyncRouterMap = [
       {
         path: '/page/pc-decoration',
         component: () => import('@/views/page/pc-decoration/index'),
-        redirect: '/page/pc-decoration/pc-theme',
+        redirect: '/page/pc-decoration/floor',
         name: 'pcDecoration',
         meta: {
           title: 'pcDecoration'
         },
         children: [
-          { path: 'theme', component: () => import('@/views/page/pc-decoration/pcThemeManage'), name: 'pcThemeManage', meta: { title: 'pcThemeManage' }},
           { path: 'floor', component: () => import('@/views/page/pc-decoration/pcFloorManage'), name: 'pcFloorManage', meta: { title: 'pcFloorManage' }},
           { path: 'focus', component: () => import('@/views/page/pc-decoration/pcFocusManage'), name: 'pcFocusManage', meta: { title: 'pcFocusManage' }}
         ]
@@ -253,13 +252,12 @@ export const asyncRouterMap = [
       {
         path: '/page/mobile-decoration',
         component: () => import('@/views/page/mobile-decoration/index'),
-        redirect: '/page/mobile-decoration/mobile-theme',
+        redirect: '/page/mobile-decoration/floor',
         name: 'mobileDecoration',
         meta: {
           title: 'mobileDecoration'
         },
         children: [
-          { path: 'theme', component: () => import('@/views/page/mobile-decoration/mobileThemeManage'), name: 'mobileThemeManage', meta: { title: 'mobileThemeManage' }},
           { path: 'floor', component: () => import('@/views/page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' }},
           { path: 'focus', component: () => import('@/views/page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }}
         ]

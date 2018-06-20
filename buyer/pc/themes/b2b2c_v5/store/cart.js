@@ -2,7 +2,8 @@ import * as API_Trade from '@/api/trade'
 import * as types from './mutation-types'
 
 export const state = () => ({
-  shopList: []
+  shopList: [],
+  cartTotal: ''
 })
 
 /** mutations */
@@ -112,6 +113,14 @@ export const mutations = {
    */
   [types.CLEAN_CART](state) {
     state.shopList = []
+  },
+  /**
+   * 设置购物车总价
+   * @param state
+   * @param total
+   */
+  [types.SET_CART_TOTAL](state, total) {
+    state.cartTotal = total
   }
 }
 
@@ -122,10 +131,11 @@ export const actions = {
    * @param commit
    * @param params
    */
-  getCartDataAction: ({ commit }, params) => {
+  getCartDataAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
       API_Trade.getCarts(params).then(response => {
         commit(types.SET_CART_DATA, response)
+        dispatch('getCartTotalAction')
         resolve(response)
       }).catch(error => reject(error))
     })
@@ -219,6 +229,20 @@ export const actions = {
         resolve(response)
       }).catch(error => reject(error))
     })
+  },
+  /**
+   * 获取购物车总价
+   * @param commit
+   * @param dispatch
+   * @returns {Promise<any>}
+   */
+  getCartTotalAction: ({ commit, dispatch }) => {
+    return new Promise((resolve, reject) => {
+      API_Trade.getCartTotal().then(response => {
+        commit(types.SET_CART_TOTAL, response)
+        resolve(response)
+      }).catch(error => reject(error))
+    })
   }
 }
 
@@ -264,5 +288,11 @@ export const getters = {
       })
     })
     return _checkedCount
-  }
+  },
+  /**
+   * 购物车总价
+   * @param state
+   * @returns {*}
+   */
+  cartTotal: state => state.cartTotal
 }

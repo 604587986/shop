@@ -36,11 +36,11 @@
                     <a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
                       <i class="iconfont ea-icon-check"></i>
                     </a>
-                    <nuxt-link :to="'/goods-' + sku.sku_id + '.html'" class="sku-pic">
+                    <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-pic">
                       <img :src="sku.goods_image" :alt="sku.name">
                     </nuxt-link>
                     <div class="sku-name-box">
-                      <nuxt-link :to="'/goods-' + sku.sku_id + '.html'" class="sku-name">
+                      <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">
                         {{ sku.name }}
                       </nuxt-link>
                       <span v-if="sku.spec_list && sku.spec_list.length > 0" class="sku-spec">
@@ -62,7 +62,6 @@
                           @focus="handleSkuNumFocus(sku)"
                           @change="handleSkuNumChanged($event, sku)"
                         >
-                        <!--// Andste_TODO 2018/6/12: 缺少库存参数-->
                         <a :class="['oper', sku.num >= sku.enable_quantity && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
                       </div>
                     </div>
@@ -117,7 +116,7 @@
           <div class="check-bar-right">
             <span>已选商品<b style="color: #ff5e5e; margin: 0 2px">{{ checkedCount }}</b>件</span>
             <em>|</em>
-            <span>合计：<b class="price">￥<i>250.00</i></b></span>
+            <span>合计：<b class="price">￥<i>{{ (cartTotal.total_price || 0) | unitPrice }}</i></b></span>
             <a href="javascript:;" class="check-btn" @click="handleCheckout">去结算</a>
           </div>
         </div>
@@ -160,7 +159,8 @@
         shopList: 'cart/shopList',
         skuList: 'cart/skuList',
         checkedCount: 'cart/checkedCount',
-        allCount: 'cart/allCount'
+        allCount: 'cart/allCount',
+        cartTotal: 'cart/cartTotal'
       }),
       /** 是否全部选中 */
       all_checked() {
