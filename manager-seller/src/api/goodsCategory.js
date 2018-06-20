@@ -17,7 +17,7 @@ export function getGoodsCategoryList(params) {
       const _response = response
       _response.data = new GoodsCategoryModel.GoodsCategory().map(_response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -92,7 +92,7 @@ export function getGoodsCategoryLevelList(ids, params) {
       const _response = response
       _response.data = new GoodsCategoryModel.GoodsCategoryLevel().map(_response)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 

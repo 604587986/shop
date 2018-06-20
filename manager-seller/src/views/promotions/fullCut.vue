@@ -230,13 +230,16 @@
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
-    <en-goods-selector
+    <en-goods-picker
+      type="seller"
       :show="showDialog"
       :api="goods_api"
-      :defaultData="tableData"
-      :maxLength="maxsize"
+      :categoryApi="categoryApi"
+      :headers="headers"
+      :defaultData="goodsIds"
+      :limit="maxsize"
       @confirm="refreshFunc"
-      @closed="showDialog = false"/>
+      @close="showDialog = false"/>
     <!--赠品组件-->
     <add-gift
       :giftModelShow="giftModelShow"
@@ -255,7 +258,6 @@
   import * as API_Gift from '@/api/gift'
   import * as API_coupon from '@/api/coupon'
   import { CategoryPicker, UE } from '@/components'
-  import { GoodsSelector } from '@/plugins/selector/vue'
   import { AddGift, Coupon } from './components'
 
   export default {
@@ -263,7 +265,6 @@
     components: {
       [CategoryPicker.name]: CategoryPicker,
       [UE.name]: UE,
-      [GoodsSelector.name]: GoodsSelector,
       [AddGift.name]: AddGift,
       [Coupon.name]: Coupon
     },
@@ -273,7 +274,7 @@
       ])
     },
     data() {
-      var checkReduceCash = (rule, value, callback) => {
+      const checkReduceCash = (rule, value, callback) => {
         if (this.isReduceCash) {
           if (!value) {
             return callback(new Error('请输入要优惠的现金金额'))
@@ -289,7 +290,7 @@
           callback()
         }
       }
-      var checkDiscountVal = (rule, value, callback) => {
+      const checkDiscountVal = (rule, value, callback) => {
         if (this.isDiscount) {
           if (!value) {
             return callback(new Error('请输入要优惠的打折力度'))
@@ -307,7 +308,7 @@
           callback()
         }
       }
-      var checkIntegral = (rule, value, callback) => {
+      const checkIntegral = (rule, value, callback) => {
         if (this.isIntegral) {
           if (!value) {
             return callback(new Error('请输入积分值'))
@@ -323,7 +324,7 @@
           callback()
         }
       }
-      var checkRange = (rule, value, callback) => {
+      const checkRange = (rule, value, callback) => {
         if (!value && value !== 0) {
           return callback(new Error('请选择商品参与方式'))
         } else {
@@ -341,7 +342,18 @@
         params: {},
 
         /** 列表数据*/
-        tableData: null,
+        tableData: [],
+
+        /** 商品ids */
+        goodsIds: [],
+
+        /** 请求头令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+        },
+
+        /** 商城分类api */
+        categoryApi: `${process.env.BASE_API}/goods/category/0/children`,
 
         /** 日期选择器选项 */
         pickoptions: {
@@ -609,6 +621,9 @@
       refreshFunc(val) {
         if (val) {
           this.activityForm.activity_goods = val
+          this.goodsIds = this.activityForm.activity_goods.map(key => {
+            return key.goods_id
+          })
         }
       },
 
@@ -623,6 +638,9 @@
           if (index === _index) {
             this.activityForm.activity_goods.splice(_index, 1)
           }
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -640,6 +658,9 @@
             }
           })
           this.$message.success('批量取消成功！')
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -1030,7 +1051,8 @@
       flex-direction: column;
       flex-wrap: nowrap;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      margin-left: 20px;
     }
   }
 
