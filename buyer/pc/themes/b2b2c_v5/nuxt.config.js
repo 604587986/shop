@@ -35,6 +35,7 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+      config.resolve.alias['vue$'] = 'vue/dist/vue.esm.js'
     },
     extractCSS: {
       allChunks: true
