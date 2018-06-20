@@ -60,6 +60,7 @@
   @import "./-index/templates/floor-pc";
   .container {
     background-color: #F9F9F9;
+    padding-bottom: 20px;
   }
   .focus-container {
     height: 500px;
@@ -102,5 +103,10 @@
   .floor-container {
     width: 1210px;
     margin: 0 auto;
+  }
+  .floor-item:after {
+    content: ' ';
+    display: block;
+    clear: both;
   }
 </style>
