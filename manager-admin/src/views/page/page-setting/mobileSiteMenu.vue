@@ -41,13 +41,29 @@
       </el-pagination>
     </en-tabel-layout>
 
-    <el-dialog :title="(siteMenuForm.id ? '编辑' : '添加') + '导航菜单'" :visible.sync="dialogVisible" width="500px">
+    <el-dialog
+      :title="(siteMenuForm.id ? '编辑' : '添加') + '导航菜单'"
+      :visible.sync="dialogVisible" width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="siteMenuForm" :rules="siteMenuRules" ref="siteMenuForm" label-width="110px">
         <el-form-item label="导航菜单名称" prop="navigation_name">
           <el-input v-model="siteMenuForm.navigation_name" clearable :maxlength="4"></el-input>
         </el-form-item>
         <el-form-item label="导航菜单链接" prop="url">
           <el-input v-model="siteMenuForm.url" clearable :maxlength="225"></el-input>
+        </el-form-item>
+        <el-form-item label="导航菜单图片" prop="image">
+          <el-upload
+            :action="MixinUploadApi"
+            :on-remove="() => { siteMenuForm.image = '' }"
+            :on-success="(res) => { siteMenuForm.image = res.url }"
+            :file-list="siteMenuForm.image ? [{name: 'image', url: siteMenuForm.image}] : []"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -82,12 +98,17 @@
         dialogVisible: false,
 
         /** 添加、编辑导航菜单 表单 */
-        siteMenuForm: {},
+        siteMenuForm: {
+          navigation_name: '',
+          url: '',
+          image: ''
+        },
 
         /** 添加、编辑导航菜单 表单规则 */
         siteMenuRules: {
           navigation_name: [this.MixinRequired('请输入导航菜单名称！')],
-          url: [this.MixinRequired('请输入导航菜单链接！')]
+          url: [this.MixinRequired('请输入导航菜单链接！')],
+          image: [this.MixinRequired('请选择导航图片！')]
         }
       }
     },
