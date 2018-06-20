@@ -139,7 +139,7 @@
     background-color: #fff;
     min-height: 500px;
     .tags-container {
-      width: 1190px;
+      width: 1210px;
       margin: 20px auto;
     }
     .item {
@@ -173,7 +173,7 @@
       overflow: hidden;
     }
     .item.hot {
-      $g_width: (1190px - 80px) / 5;
+      $g_width: (1210px - 80px) / 5;
       .goods-item {
         float: left;
         width: $g_width;
@@ -212,7 +212,7 @@
       .item-header { border-bottom: 1px solid #FF5722 }
       ul { margin-top: 10px }
       .goods-item {
-        $g_width: ((1190px - 20px) / 2 - 10px) / 3;
+        $g_width: ((1210px - 20px) / 2 - 10px) / 3;
         position: relative;
         box-sizing: border-box;
         width: $g_width;
@@ -224,7 +224,7 @@
         padding: 5px;
         overflow: hidden;
         &:nth-child(1) {
-          width: (1190px - 20px) / 2;
+          width: (1210px - 20px) / 2;
           height: $g_width * 3 + 10px;
           margin-left: 0;
           margin-bottom: 0;
@@ -277,7 +277,7 @@
     .item.rec {
       .item-header { border-bottom: 1px solid #03a9f4 }
       ul { margin-top: 10px }
-      $g_width: (1190px - 30px) / 4;
+      $g_width: (1210px - 30px) / 4;
       .goods-item {
         float: left;
         box-sizing: border-box;

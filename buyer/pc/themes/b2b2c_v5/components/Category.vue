@@ -183,7 +183,7 @@
       position: absolute;
       top: 0;
       left: 240px;
-      width: 1190px - 240px;
+      width: 1210px - 240px;
       height: 498px;
       cursor: auto;
       border: 1px solid #fff;

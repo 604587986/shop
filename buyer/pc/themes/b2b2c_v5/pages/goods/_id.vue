@@ -119,7 +119,7 @@
       display: flex;
       justify-content: space-between;
     }
-    $dc_width: 1190px - 200px - 30px;
+    $dc_width: 1210px - 200px - 30px;
     .detail-container {
       width: $dc_width;
       min-height: 100px;

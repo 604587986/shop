@@ -291,7 +291,7 @@
   .gl-select-condition {
     box-shadow: rgb(204, 204, 204) 0 2px 5px;
     background-color: #fff;
-    width: 1190px;
+    width: 1210px;
     dl {
       border-bottom: 1px dashed #ededed;
       min-height: 46px;
@@ -371,7 +371,7 @@
     }
   }
   .gl-sku-box {
-    width: 1190px;
+    width: 1210px;
     margin: 35px auto;
     overflow: hidden;
     box-shadow: rgb(204, 204, 204) 0 2px 5px;

@@ -31,7 +31,7 @@
     height: 40px;
     .nav-list {
       overflow: hidden;
-      max-width: calc(1190px - 240px);
+      max-width: calc(1210px - 240px);
       li {
         vertical-align: top;
         letter-spacing: normal;
