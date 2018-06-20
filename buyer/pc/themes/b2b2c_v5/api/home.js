@@ -20,11 +20,12 @@ export function getFocusPictures(client_type = 'PC') {
 /**
  * 获取导航列表
  */
-export function getNav() {
+export function getSiteMenu(client_type = 'PC') {
   return request({
     url: 'pages/site-navigations',
     method: Method.GET,
-    loading: false
+    loading: false,
+    params: { client_type }
   })
 }
 
