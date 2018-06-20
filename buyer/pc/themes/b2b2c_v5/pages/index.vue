@@ -6,15 +6,38 @@
         <index-card/>
       </div>
     </div>
+    <div v-if="floorList" class="floor-container">
+      <div v-for="(item, index) in floorList" :key="index" :class="'item-' + item.tpl_id" class="floor-item">
+        <component
+          :is="templates[item.tpl_id]"
+          :data="item"
+        ></component>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
+  import { Tag } from 'element-ui'
+  Vue.use(Tag)
   import { IndexBanner, IndexCard } from '@/pages/-index'
-  import * as API_Common from '@/api/common'
+  import * as API_Home from '@/api/home'
+  import templates, { templateArray } from './-index/templates'
   export default {
     name: 'index',
+    asyncData({ params }, callback) {
+      API_Home.getFloorData().then(response => {
+        callback(null, { floorList: response.page_data ? global.JSON.parse(response.page_data) : [] })
+      }).catch(e => {
+        // Andste_TODO 2018/6/20: 错误处理需要优化
+        let _statusCode = e.data.status
+        if (e.code === 'ECONNREFUSED') {
+          _statusCode = 502
+        }
+        callback({ statusCode: _statusCode })
+      })
+    },
     components: {
       IndexBanner,
       IndexCard
@@ -22,16 +45,24 @@
     data() {
       return {
         /** 首页卡片tab x坐标 */
-        card_news_tab_x: 0
+        card_news_tab_x: 0,
+        floorList: '',
+        templates,
+        templateArray,
       }
+    },
+    mounted() {
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "./-index/templates/floor-pc";
+  .container {
+    background-color: #F9F9F9;
+  }
   .focus-container {
     height: 500px;
-    background-color: rgb(241, 241, 241);
     .w {
       position: relative;
     }
@@ -67,5 +98,9 @@
         }
       }
     }
+  }
+  .floor-container {
+    width: 1210px;
+    margin: 0 auto;
   }
 </style>
