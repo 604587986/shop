@@ -27,8 +27,8 @@
               placeholder="请选择商品类型"
               @change="changeGoodsType"
               clearable>
-              <el-option key="NORMAL" label="全部商品" :value="NORMAL"/>
-              <el-option key="POINT" label="积分商品" :value="POINT"/>
+              <el-option key="NORMAL" label="全部商品" value="NORMAL"/>
+              <el-option key="POINT" label="积分商品" value="POINT"/>
             </el-select>
           </div>
           <!--商品分组 获取分组列表-->
@@ -141,7 +141,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          goods_status: 0
+          market_enable: ''
         },
 
         /** 列表数据 */
@@ -185,16 +185,19 @@
       ])
     },
     mounted() {
+      if (this.$route.params && !Number.isNaN(parseInt(this.$route.params.id))) {
+        this.marketEnable = this.params.market_enable = parseInt(this.$route.params.id)
+      }
       this.GET_GoodsList()
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        if (vm.$route.query) {
-          vm.goods_status = vm.params.goods_status = vm.$route.query.goods_status
-        }
-        vm.GET_GoodsList()
-        next()
-      })
+    beforeRouteUpdate(to, from, next) {
+      if (!Number.isNaN(parseInt(to.params.id))) {
+        this.marketEnable = this.params.market_enable = parseInt(to.params.id)
+      } else {
+        this.marketEnable = -1
+      }
+      this.GET_GoodsList()
+      next()
     },
     methods: {
 
@@ -283,11 +286,10 @@
         this.$router.push({ path: '/goods/recycle-station' })
       },
 
-      /** 编辑商品 */
+      /** 编辑商品 isdraft 商品列表1*/
       handleEditGoods(row) {
         const _goods_id = row.goods_id || '0'
-        // isdraft 商品列表1
-        this.$router.push({ path: '/goods/good-publish', query: { goodsid: _goods_id, isdraft: 1 }})
+        this.$router.push({ path: `/goods/good-publish/${_goods_id}/1` })
       },
 
       /** 删除商品 */

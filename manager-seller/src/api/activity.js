@@ -32,13 +32,12 @@ export function getFullCutActivityList(params) {
  * @returns {Promise<any>}
  * @constructor
  */
-export function deleteFullCutActivity(ids, params) {
+export function deleteFullCutActivity(ids) {
   return new Promise((resolve, reject) => {
     request({
       url: `/promotion/full-discounts/${ids}`,
       method: 'delete',
-      loading: false,
-      data: params
+      loading: false
     }).then(response => {
       resolve(response)
     })

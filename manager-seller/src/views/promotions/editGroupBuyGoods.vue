@@ -366,6 +366,11 @@
         }
       }
     },
+    beforeRouteUpdate(to, from, next) {
+      to.params.goods_id && this.GET_GroupBuyGoodsDetails(to.params.goods_id)
+      this.GET_AllGroupBuyActivitys()
+      next()
+    },
     mounted() {
       this.$route.params.goods_id && this.GET_GroupBuyGoodsDetails(this.$route.params.goods_id)
       this.GET_AllGroupBuyActivitys()

@@ -39,7 +39,11 @@
                     <a href="" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
                   </template>
                 </el-table-column>
-                <el-table-column label="商品价格" width="100"/>
+                <el-table-column label="商品价格" width="100">
+                  <template slot-scope="scope">
+                    {{ scope.row.price | unitPrice('¥') }}
+                  </template>
+                </el-table-column>
                 <el-table-column label="活动价">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.act_price"></el-input>
@@ -153,6 +157,11 @@
       this.activityID = this.$route.query._activity_id
       this.GET_limitTimeActivityDetails()
     },
+    beforeRouteUpdate(to, from, next) {
+      this.activityID = this.$route.query._activity_id
+      this.GET_limitTimeActivityDetails()
+      next()
+    },
     methods: {
       /** 获取限时活动详情 */
       GET_limitTimeActivityDetails() {
@@ -179,7 +188,7 @@
               let _item = {
                 goods_id: key.goods_id,
                 goods_name: key.goods_name,
-                sold_quantity: key.sold_quantity,
+                sold_quantity: parseInt(key.sold_quantity),
                 price: Number(key.act_price),
                 seckill_id: parseInt(this.activityID),
                 time_line: item.time_line,
@@ -193,7 +202,7 @@
         })
         API_limitTime.signUpLimitTimeActivity(_params).then(() => {
           this.$message.success('报名成功')
-          this.$router.push({ path: '/promotions/activity-goods-data' })
+          this.$router.push({ path: `/promotions/activity-goods-data/${this.activityID}` })
         })
       },
 

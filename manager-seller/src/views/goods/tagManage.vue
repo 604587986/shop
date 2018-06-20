@@ -65,22 +65,23 @@
         this.GET_TagsList()
       },
 
+      /** 标签列表 */
       GET_TagsList() {
         this.loading = true
         API_goodsTag.getTagsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 标签商品设置 */
       addtag(row) {
-        this.$router.push({ name: 'tagAdd', params: { tag_id: row.tag_id }})
+        this.$router.push({ path: `/goods/tag-add/${row.tag_id}` })
       }
     }
   }
