@@ -5,7 +5,7 @@
     :stripe="false"
     :loading="loading">
     <template slot="table-columns">
-      <el-table-column prop="name" label="标签名称"/>
+      <el-table-column prop="tag_name" label="标签名称"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" @click="addtag(scope.row)">标签商品设置</el-button>

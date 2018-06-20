@@ -21,7 +21,7 @@ export function getMsgsList(params) {
       const _response = response
       _response.data = new MessagesModel.Messages().map(response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -42,7 +42,7 @@ export function deleteMsgs(ids, params) {
       data: _formData
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -63,6 +63,6 @@ export function signMsgs(ids, params) {
       data: _formData
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }

@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import ConsultationModel from '@/models/ConsultationModel'
 
 /**
  * 获取咨询列表
@@ -18,9 +17,7 @@ export function getConsultationList(params) {
       loading: false,
       params
     }).then(response => {
-      const _resposne = response
-      _resposne.data = new ConsultationModel().map(response.data)
-      resolve(_resposne)
+      resolve(response)
     })
   })
 }

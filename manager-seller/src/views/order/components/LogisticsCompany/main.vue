@@ -4,9 +4,9 @@
     :loading="loading"
   >
     <template slot="table-columns">
-      <!--模板名称-->
-      <el-table-column prop="logistics_name" label="物流公司"/>
-      <!--首重（kg）-->
+      <!--物流公司-->
+      <el-table-column prop="name" label="物流公司"/>
+      <!--公司状态-->
       <el-table-column label="公司状态">
         <template slot-scope="scope">
           <span v-if="!scope.row.shop_id">未选择</span>
@@ -57,7 +57,7 @@
         this.loading = true
         API_logistics.getExpressCompanyList({}).then(response => {
           this.loading = false
-          this.logisticsTableData = response.data
+          this.logisticsTableData = response
         })
       },
 
@@ -74,7 +74,7 @@
 
       /** 执行关闭  */
       closeLogistics(row) {
-        API_logistics.closeExpressPower(row.logistics_id, {}).then(response => {
+        API_logistics.closeExpressPower(row.id, {}).then(response => {
           this.$message.success('关闭成功')
           this.GET_logisticsList()
         })
@@ -82,7 +82,7 @@
 
       /** 执行开启 */
       openLogistics(row) {
-        API_logistics.openExpressPower(row.logistics_id, {}).then(response => {
+        API_logistics.openExpressPower(row.id, {}).then(response => {
           this.$message.success('开启成功')
           this.GET_logisticsList()
         })

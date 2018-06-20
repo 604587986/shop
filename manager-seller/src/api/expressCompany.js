@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import ExpressCompanyModel from '@/models/ExpressCompanyModel'
 
 /**
  * 获取物流公司列表
@@ -18,10 +17,8 @@ export function getExpressCompanyList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ExpressCompanyModel().map(response)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }
 
@@ -40,7 +37,7 @@ export function openExpressPower(ids, params) {
       data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -59,6 +56,6 @@ export function closeExpressPower(ids, params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
