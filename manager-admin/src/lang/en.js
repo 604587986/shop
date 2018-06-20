@@ -136,7 +136,7 @@ export default {
     dataOutput: 'Data Output',
     clearExampleData: 'Clear Example Data',
     articleManage: 'Article Manage',
-    articleModel: 'Article Model',
+    articleCategory: 'Article Category',
     articleList: 'Article List',
     componentManage: 'Component Manage',
     componentList: 'Component List'
