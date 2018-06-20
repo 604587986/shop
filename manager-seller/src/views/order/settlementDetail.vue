@@ -113,21 +113,20 @@
   export default {
     name: 'settlementDetail',
     mounted() {
+      this.billId = this.$route.params.sn
       this.GET_SettlementList()
       this.GET_orderList()
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.billId = vm.$route.params.sn
-        vm.GET_SettlementList()
-        vm.GET_orderList()
-        next()
-      })
+    beforeRouteUpdate(to, from, next) {
+      this.billId = to.params.sn
+      this.GET_SettlementList()
+      this.GET_orderList()
+      next()
     },
     data() {
       return {
         /** 账单id */
-        billId: this.$route.params.sn,
+        billId: '',
 
         /** 账单类型 */
         bill_type: '1',

@@ -255,7 +255,7 @@
         orderDetail: null,
 
         /** 订单sn */
-        sn: this.$route.params.sn,
+        sn: '',
 
         /** 各种信息 */
         orderInfo: [],
@@ -325,11 +325,14 @@
         return val === 'ONLINE' ? '在线支付' : '货到付款'
       }
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.GET_OrderDetail()
-        next()
-      })
+    beforeRouteUpdate(to, from, next) {
+      this.sn = to.params.sn
+      this.GET_OrderDetail()
+      next()
+    },
+    mounted() {
+      this.sn = this.$route.params.sn
+      this.GET_OrderDetail()
     },
     methods: {
       GET_OrderDetail() {

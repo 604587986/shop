@@ -145,7 +145,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          orderStatus: 0
+          order_status: ''
         },
 
         /** 列表数据 */
@@ -173,19 +173,20 @@
       }
     },
     mounted() {
-      if (this.$route.query) {
-        this.orderStatus = this.params.orderStatus = this.$route.query.orderStatus
+      if (this.$route.params && !Number.isNaN(parseInt(this.$route.params.id))) {
+        this.orderStatus = this.params.order_status = parseInt(this.$route.params.id)
       }
+      this.GET_OrderList()
       window.onresize = this.countTableHeight
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        if (vm.$route.query) {
-          vm.orderStatus = vm.params.orderStatus = vm.$route.query.orderStatus
-        }
-        vm.GET_OrderList()
-        next()
-      })
+    beforeRouteUpdate(to, from, next) {
+      if (!Number.isNaN(parseInt(to.params.id))) {
+        this.orderStatus = this.params.order_status = parseInt(to.params.id)
+      } else {
+        this.orderStatus = ''
+      }
+      this.GET_OrderList()
+      next()
     },
     methods: {
       /** 计算高度 */

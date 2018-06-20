@@ -154,11 +154,11 @@
       }
     },
     mounted() {
-      this.activityID = this.$route.query._activity_id
+      this.activityID = this.$route.params.id
       this.GET_limitTimeActivityDetails()
     },
     beforeRouteUpdate(to, from, next) {
-      this.activityID = this.$route.query._activity_id
+      this.activityID = to.params.id
       this.GET_limitTimeActivityDetails()
       next()
     },
