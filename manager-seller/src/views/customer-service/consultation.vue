@@ -18,13 +18,13 @@
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="会员名称">
-                  <el-input size="medium" v-model="advancedForm.member_name" clearable></el-input>
+                  <el-input v-model="advancedForm.member_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
+                  <el-input v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="咨询内容">
-                  <el-input size="medium" v-model="advancedForm.content" clearable></el-input>
+                  <el-input v-model="advancedForm.content" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="回复状态">
                   <el-select v-model="advancedForm.reply_status" placeholder="请选择" clearable>
