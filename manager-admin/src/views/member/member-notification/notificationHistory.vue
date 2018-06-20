@@ -46,7 +46,13 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="发布商城通知" :visible.sync="dialogNotificationVisible" width="500px">
+    <el-dialog
+      title="发布商城通知"
+      :visible.sync="dialogNotificationVisible"
+      width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="notificationForm" :rules="notificationRules" ref="notificationForm" label-width="100px">
         <el-form-item label="通知标题" prop="title">
           <el-input v-model="notificationForm.title" :maxlength="20" placeholder="标题在20字以内"></el-input>

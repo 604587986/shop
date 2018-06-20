@@ -42,7 +42,14 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog :title="articleModelForm.id ? '编辑文章模型' : '添加文章模型'" :visible.sync="dialogArticleModelVisible" width="550px" class="url-mapping-form">
+    <el-dialog
+      :title="articleModelForm.id ? '编辑文章模型' : '添加文章模型'"
+      :visible.sync="dialogArticleModelVisible"
+      width="550px"
+      class="url-mapping-form"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="articleModelForm" :rules="articleModelRules" ref="articleModelForm" label-width="100px">
         <el-form-item label="模型名称" prop="name">
           <el-input v-model="articleModelForm.name"></el-input>

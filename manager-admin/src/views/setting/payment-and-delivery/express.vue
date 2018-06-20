@@ -37,7 +37,10 @@
     <el-dialog
       title="物流公司"
       :visible.sync="dialogExpressVisible"
-      width="30%">
+      width="30%"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="expressForm" :rules="expressRules" ref="expressForm" label-width="120px">
         <el-form-item label="物流公司名称" prop="name">
           <el-input v-model="expressForm.name"></el-input>

@@ -36,7 +36,10 @@
     <el-dialog
       :title="menuForm.menu_name ? '编辑菜单' : '添加菜单'"
       :visible.sync="dialogMenuVisible"
-      width="500px">
+      width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="menuForm" :rules="menuRules" ref="menuForm" label-width="100px">
         <el-form-item label="菜单标题" prop="title">
           <el-input v-model="menuForm.title"></el-input>
@@ -58,6 +61,7 @@
 
 <script>
   import * as API_MenusManage from '@/api/menusManage'
+
   export default {
     name: 'menuManage',
     data() {

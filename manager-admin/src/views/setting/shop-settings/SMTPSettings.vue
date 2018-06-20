@@ -44,7 +44,10 @@
       :title="smtpForm.id ? '编辑SMTP' : '添加SMTP'"
       :visible.sync="dialogSmtpVisible"
       @close="handleDialogClosed"
-      width="500px">
+      width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="smtpForm" :rules="smtpRules" ref="smtpForm" size="small" label-width="120px">
         <el-form-item label="HOST" prop="host">
           <el-input v-model="smtpForm.host"/>

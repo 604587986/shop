@@ -44,7 +44,10 @@
     <el-dialog
       :title="(shopThemeForm.id ? '编辑' : '添加') + '店铺模板'"
       :visible.sync="dialogShopThemeVisible"
-      width="450px">
+      width="450px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="shopThemeForm" :rules="shopThemeRules" ref="shopThemeForm" label-width="100px">
         <!--模板名称-->
         <el-form-item label="模板名称" prop="name">

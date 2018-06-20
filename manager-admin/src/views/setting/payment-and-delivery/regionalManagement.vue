@@ -13,6 +13,8 @@
       :title="regionForm.id ? '编辑地区' : '添加地区'"
       width="500px"
       :visible.sync="dialogRegionVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
     >
       <el-form :model="regionForm" :rules="regionRules" ref="regionForm" label-width="130px">
         <el-form-item label="地区名称" prop="local_name">

@@ -34,7 +34,13 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="电子面单设置" :visible.sync="dialogVisible" width="500px">
+    <el-dialog
+      title="电子面单设置"
+      :visible.sync="dialogVisible"
+      width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="electronicReceiptForm" label-width="100px">
         <el-form-item
           v-for="config in electronicReceiptForm.config_items"

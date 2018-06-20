@@ -41,7 +41,12 @@
       </el-pagination>
     </en-tabel-layout>
 
-    <el-dialog :title="(siteMenuForm.id ? '编辑' : '添加') + '导航菜单'" :visible.sync="dialogVisible" width="500px">
+    <el-dialog
+      :title="(siteMenuForm.id ? '编辑' : '添加') + '导航菜单'"
+      :visible.sync="dialogVisible" width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="siteMenuForm" :rules="siteMenuRules" ref="siteMenuForm" label-width="110px">
         <el-form-item label="导航菜单名称" prop="navigation_name">
           <el-input v-model="siteMenuForm.navigation_name" clearable :maxlength="4"></el-input>

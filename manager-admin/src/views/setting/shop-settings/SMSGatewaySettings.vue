@@ -38,7 +38,10 @@
       title="编辑短信网关参数"
       :visible.sync="dialogSmsVisible"
       width="500px"
-      append-to-body>
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="smsForm" ref="smsForm" size="small" label-width="120px">
         <template v-for="(config, index) in smsForm.config_items">
           <el-form-item
