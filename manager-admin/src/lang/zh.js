@@ -135,7 +135,7 @@ export default {
     dataOutput: '数据导出',
     clearExampleData: '清除示例数据',
     articleManage: '文章管理',
-    articleModel: '文章模型',
+    articleCategory: '文章分类',
     articleList: '文章列表',
     componentManage: '组件管理',
     componentList: '组件列表'
