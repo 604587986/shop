@@ -160,7 +160,7 @@
         /** 地区选择器 */
         areaDialog: false,
 
-        areaApi: `${process.env.BASE_REGION}/regions/depth/3`,
+        areaApi: `${process.env.BASE_API}/regions/depth/3`,
 
         /** 地址选择器 映射属性 */
         props: {

@@ -143,10 +143,10 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: `${process.env.BASE_API}/goods`,
+        goods_api: `${process.env.SELLER_API}/goods`,
 
         /** 商城分类api */
-        categoryApi: `${process.env.BASE_API}/goods/category/0/children`,
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,

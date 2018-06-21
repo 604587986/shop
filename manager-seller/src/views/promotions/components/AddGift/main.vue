@@ -10,10 +10,10 @@
           label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="赠品价格：" prop="gift_price">
-        <el-input v-model.number="giftModelForm.gift_price"></el-input>
+        <el-input v-model="giftModelForm.gift_price"></el-input>
       </el-form-item>
-      <el-form-item label="赠品库存：" prop="gift_real_stock">
-        <el-input auto-complete="off"  v-model.number="giftModelForm.gift_real_stock"></el-input>
+      <el-form-item label="赠品库存：" prop="enable_store">
+        <el-input v-model="giftModelForm.enable_store"></el-input>
       </el-form-item>
       <el-form-item label="赠品图片：">
         <el-upload
@@ -22,7 +22,7 @@
           :file-list="fileList"
           :on-success="uploadSuccess"
           list-type="picture">
-          <el-button size="small" type="primary">点击上传</el-button>
+          <el-button type="primary">点击上传</el-button>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -35,6 +35,7 @@
 
 <script>
   import * as API_Gift from '@/api/gift'
+  import { RegExp } from '～/ui-utils'
   export default {
     name: 'AddGift',
     props: {
@@ -68,25 +69,49 @@
             gift_name: '',
 
             /** 赠品图片 */
-            gift_image: '',
+            gift_img: '',
 
             /** 赠品价格 */
             gift_price: 0,
 
             /** 实际库存 */
-            gift_real_stock: 0,
+            actual_store: 0,
 
             /** 可用库存 */
-            gift_usable_stock: 0,
+            enable_store: 0,
 
             /** 创建时间 */
-            gift_creat_time: ''
+            create_time: ''
           }
           this.fileList = []
         }
       }
     },
     data() {
+      const checkGiftPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入赠品价格'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(value)) {
+            callback(new Error('请输入正确的价格'))
+          } else {
+            callback()
+          }
+        }, 500)
+      }
+      const checkEnableStore = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入库存'))
+        }
+        setTimeout(() => {
+          if (!RegExp.integer.test(value)) {
+            callback(new Error('请输入正整数'))
+          } else {
+            callback()
+          }
+        }, 500)
+      }
       return {
         /** 图片服务器地址 */
         BASE_IMG_URL: process.env.BASE_IMG_URL,
@@ -100,19 +125,19 @@
           gift_name: '',
 
           /** 赠品图片 */
-          gift_image: '',
+          gift_img: '',
 
           /** 赠品价格 */
           gift_price: 1,
 
           /** 实际库存 */
-          gift_real_stock: 0,
+          actual_store: 0,
 
           /** 可用库存 */
-          gift_usable_stock: 0,
+          enable_store: 0,
 
           /** 创建时间 */
-          gift_creat_time: ''
+          create_time: ''
         },
 
         /** 存储上传的图片*/
@@ -124,12 +149,10 @@
             { required: true, message: '请输入赠品名称', trigger: 'blur' }
           ],
           gift_price: [
-            { required: true, message: '请输入赠品价格', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkGiftPrice, trigger: 'blur' }
           ],
-          gift_usable_stock: [
-            { required: true, message: '请输入赠品库存', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+          enable_store: [
+            { validator: checkEnableStore, trigger: 'blur' }
           ]
         }
       }
@@ -143,7 +166,7 @@
         this.$nextTick(() => {
           API_Gift.getGiftDetails(this.currentGiftId, {}).then((response) => {
             this.giftModelForm = { ...response }
-            this.fileList = [{ url: this.giftModelForm.gift_image }]
+            this.fileList = [{ url: this.giftModelForm.gift_img }]
           })
         })
       },
@@ -174,7 +197,7 @@
 
       /** 上传成功之后 */
       uploadSuccess(response, file, fileList) {
-        this.giftModelForm.gift_image = response.url
+        this.giftModelForm.gift_img = response.url
         this.fileList.shift()
         this.fileList.push(response)
       }

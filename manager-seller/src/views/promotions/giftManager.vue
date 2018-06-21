@@ -18,7 +18,7 @@
         <el-table-column prop="gift_name" label="赠品名称" />
         <el-table-column label="赠品图片" >
           <template slot-scope="scope">
-            <img :src="scope.row.gift_image" class="goods-image" alt="">
+            <img :src="scope.row.gift_img" class="goods-image" alt="">
           </template>
         </el-table-column>
         <el-table-column  label="赠品价格">
@@ -26,8 +26,8 @@
             {{ scope.row.gift_price | unitPrice('￥') }}
           </template>
         </el-table-column>
-        <el-table-column prop="gift_real_stock" label="实际库存" />
-        <el-table-column prop="gift_usable_stock" label="可用库存" />
+        <el-table-column prop="actual_store" label="实际库存" />
+        <el-table-column prop="enable_store" label="可用库存" />
         <el-table-column prop="coupon_used_num" label="创建时间">
           <template slot-scope="scope">
             {{ scope.row.gift_price | unixToDate }}
@@ -98,19 +98,19 @@
           gift_name: '',
 
           /** 赠品图片 */
-          gift_image: '',
+          gift_img: '',
 
           /** 赠品价格 */
           gift_price: 2,
 
           /** 实际库存 */
-          gift_real_stock: 8,
+          actual_store: 8,
 
           /** 可用库存 */
-          gift_usable_stock: 2,
+          enable_store: 2,
 
           /** 创建时间 */
-          gift_creat_time: ''
+          create_time: ''
         },
 
         /** 列表数据 */

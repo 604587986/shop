@@ -92,7 +92,7 @@
         /** 图片服务器地址 */
         BASE_IMG_URL: process.env.BASE_IMG_URL,
 
-        areasapi: `${process.env.BASE_REGION}/regions/@id/children`,
+        areasapi: `${process.env.BASE_API}/regions/@id/children`,
 
         /** 店铺信息*/
         shopDataForm: {
