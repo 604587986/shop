@@ -19,7 +19,8 @@
                 :is="templates[item.tpl_id]"
                 :data="JSON.parse(JSON.stringify(item))"
                 is-edit
-                @edit-block="handleEditBlock"
+                @edit-block="(...props) => { handleEditBlock(index, ...props) }"
+                @edit-title="(...props) => { handleEditTitle(index, ...props) }"
               ></component>
               <div class="panel-handle">
                 <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
@@ -33,6 +34,7 @@
     <en-image-picker
       :show="dialogImageShow"
       :default-data="defaultImageData"
+      :operation="imageOperation"
       @close="dialogImageShow = false"
       @confirm="handleImagePickerConfirm"
       :limit="10"
@@ -46,6 +48,12 @@
       :limit="1"
       @close="dialogGoodsShow = false"
       @confirm="handleGoodsPickerConfirm"
+    />
+    <en-floor-title-picker
+      :show="dialogTitleShow"
+      :default-data="defaultTitleData"
+      @close="dialogTitleShow = false"
+      @confirm="handleTitlePickerConfirm"
     />
   </div>
 </template>
@@ -84,64 +92,92 @@
         },
         dialogImageShow: false,
         dialogGoodsShow: false,
+        dialogTitleShow: false,
         /** 图片默认数据 */
         defaultImageData: '',
         /** 商品默认数据 */
-        defaultGoodsData: []
+        defaultGoodsData: [],
+        /** 楼层标题默认数据 */
+        defaultTitleData: {},
+        /** 图片选择器自定义参数 */
+        imageOperation: [
+          {
+            label: '操作类型',
+            name: 'opt_type',
+            type: 'select',
+            options: [
+              { text: '无操作', value: 'NONE' },
+              { text: '链接地址', value: 'URL' },
+              { text: '关键字', value: 'KEYWORD' },
+              { text: '商品序号', value: 'GOODS' },
+              { text: '店铺编号', value: 'SHOP' },
+              { text: '商品分类', value: 'CATEGORY' },
+              { text: '专题', value: 'TOPIC' }
+            ],
+            value: 'NONE'
+          },
+          {
+            label: '操作内容',
+            name: 'opt_value'
+          },
+          {
+            label: '附加标题',
+            name: 'opt_title'
+          },
+          {
+            label: '附加描述',
+            name: 'opt_desc'
+          }
+        ]
       }
     },
     mounted() {
       this.GET_FloorList()
     },
     methods: {
-      handleAddTpl() {
-        API_Floor.editFloor('PC', 'INDEX', {
-          page_name: 'pc_floor',
-          page_data: JSON.stringify([
-            {
-              floor_name: '数码产品',
-              floor_sort: 1,
-              floor_data: []
-            }
-          ])
-        }).then(response => {
-          this.$message.success('发布成功！')
-          console.log(response)
-        })
+      /** 编辑楼层区块 */
+      handleEditBlock(index, target, columnIndex, blockIndex) {
+        const block = target.columnList[columnIndex].blockList[blockIndex]
+        const type = block.block_type
+        this.editOptions = { index, target, columnIndex, blockIndex }
+        const blockData = JSON.parse(JSON.stringify(block))
+        if (type === 'IMAGE') {
+          this.defaultImageData = blockData.block_value ? [{
+            url: blockData.block_value,
+            opt: blockData.block_opt
+          }] : null
+          this.dialogImageShow = true
+        } else if (type === 'GOODS') {
+          // 填充默认数据
+          // this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
+          // this.dialogGoodsShow = true
+        } else if (type === 'TEXT') {
+          // const block = target.blockList[targetIndex]
+        } else if (type === 'BRAND') {
+          console.log('品牌模块')
+        }
       },
-      handleEditBlock(target, targetColumnIndex, targetBlockIndex) {
-        console.log(target, targetColumnIndex, targetBlockIndex)
-        // const type = target.blockList[targetIndex].block_type
-        // this.editOptions = {
-        //   index,
-        //   target,
-        //   targetIndex
-        // }
-        // const blockData = JSON.parse(JSON.stringify(target.blockList[targetIndex]))
-        // if (type === 'IMAGE') {
-        //   this.defaultImageData = blockData.block_value ? [{
-        //     url: blockData.block_value,
-        //     opt: blockData.block_opt
-        //   }] : null
-        //   this.dialogImageShow = true
-        // } else if (type === 'GOODS') {
-        //   // 填充默认数据
-        //   this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
-        //   this.dialogGoodsShow = true
-        // } else if (type === 'TEXT') {
-        //   const block = target.blockList[targetIndex]
-        // } else if (type === 'BRAND') {
-        //   console.log('品牌模块')
-        // }
+      /** 编辑楼层标题 */
+      handleEditTitle(index, target, columnIndex) {
+        this.editOptions = { index, target, columnIndex }
+        const column = target.columnList[columnIndex]
+        const columnData = JSON.parse(JSON.stringify(column))
+        this.defaultTitleData = {
+          text: column.title,
+          start_color: column.titleColors[0],
+          end_color: column.titleColors[1]
+        }
+        this.dialogTitleShow = true
       },
       /** 图片上传组件确认 */
       handleImagePickerConfirm(fileList) {
         const file = fileList[0]
         let opt = file ? file.operation : {}
         let url = file ? file.response.url : ''
-        const { index, target, targetIndex } = this.editOptions
-        target.blockList[targetIndex].block_value = url
-        target.blockList[targetIndex].block_opt = opt
+        const { index, target, columnIndex, blockIndex } = this.editOptions
+        const block = target.columnList[columnIndex].blockList[blockIndex]
+        block.block_value = url
+        block.block_opt = opt
         this.$set(this.floorList, index, target)
       },
       /** 商品选择器确认 */
@@ -152,11 +188,20 @@
       },
       /** 文本选择器确认 */
       handleTextPickerConfirm(data) {
-        const { index, target, targetIndex } = this.editOptions
-        const block = target.blockList[targetIndex]
-        block.block_value = data.text
-        block.block_opt.opt_type = data.opt_type
-        block.block_opt.opt_value = data.opt_value
+        // const { index, target, columnIndex, blockIndex } = this.editOptions
+        // const block = target.columnList[columnIndex].blockList[blockIndex]
+        // block.block_value = data.text
+        // block.block_opt.opt_type = data.opt_type
+        // block.block_opt.opt_value = data.opt_value
+        // this.$set(this.floorList, index, target)
+      },
+      /** 楼层标题编辑确认 */
+      handleTitlePickerConfirm(data) {
+        const { index, target, columnIndex } = this.editOptions
+        const column = target.columnList[columnIndex]
+        column.title = data.text
+        column.titleColors[0] = data.start_color
+        column.titleColors[1] = data.end_color
         this.$set(this.floorList, index, target)
       },
       /** 保存发布 */
@@ -246,7 +291,6 @@
     justify-content: center;
     width: 100%;
     height: 667px;
-    text-align: center;
     overflow-y: scroll;
   }
   .floor-list {
