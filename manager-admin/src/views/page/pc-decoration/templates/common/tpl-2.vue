@@ -36,7 +36,7 @@
               v-for="(_block, blockIndex) in column.blockList.slice(1,5)"
               :key="blockIndex"
               :block="_block"
-              @handle-edit="handleEditBlock(0, blockIndex + 1)"
+              @handle-edit="handleEditBlock(columnIndex, blockIndex + 1)"
               class="bz-mt-item">
               <template slot-scope="{ block }">
                 <p class="bz-mt-tit" :style="colors().color(0)">{{ block.block_opt.opt_title }}</p>
@@ -48,7 +48,7 @@
             <layout-item
               v-for="(_block, blockIndex) in column.blockList.slice(5,8)"
               :key="blockIndex"
-              :block="_block" @handle-edit="handleEditBlock(0, blockIndex + 5)" class="bz-bm-item"/>
+              :block="_block" @handle-edit="handleEditBlock(columnIndex, blockIndex + 5)" class="bz-bm-item"/>
           </div>
         </div>
       </div>
