@@ -7,7 +7,6 @@
     :clearable="clearable"
     :props="props"
     separator="/"
-    size="medium"
   ></el-cascader>
 </template>
 
@@ -62,8 +61,8 @@
         /** 此处为商品分组的调用接口 */
         API_goodsCategory.getGoodsCategoryList(this.params).then(response => {
           this.loading = false
-          if (!response || !response.data) return
-          this.options = response.data
+          if (!response) return
+          this.options = response
           // 为分组增加等级标识
           this.options.forEach(key => {
             const _level = key.shop_cat_pid === 0 ? 1 : 2
@@ -74,9 +73,6 @@
           if (this.defaultVal !== -1) {
             this.findItem()
           }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       },
 

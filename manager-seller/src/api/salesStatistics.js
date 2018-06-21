@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import SalesStatisticsModel from '@/models/SalesStatisticsModel'
 
 /**
  * 获取销售统计信息列表
@@ -18,9 +17,7 @@ export function getSalesStatisticsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new SalesStatisticsModel().map(response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }

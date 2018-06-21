@@ -13,7 +13,7 @@
             v-for="(item,index) in categoryListLevel1"
             :class="{'activeClass':index == activeCategoryIndex1}"
             @click="handleSelectCategory(item, index, 1)">
-            <span>{{ item.category_name }}</span> <span>》</span>
+            <span>{{ item.name }}</span> <span>》</span>
           </li>
         </ul>
         <ul v-if="categoryListLevel2 && categoryListLevel2.length > 0">
@@ -21,7 +21,7 @@
             v-for="(item,index) in categoryListLevel2"
             :class="{'activeClass':index == activeCategoryIndex2}"
             @click="handleSelectCategory(item,index, 2)">
-            <span>{{ item.category_name }}</span> <span>》</span>
+            <span>{{ item.name }}</span> <span>》</span>
           </li>
         </ul>
         <ul v-if="categoryListLevel3 && categoryListLevel3.length > 0">
@@ -29,7 +29,7 @@
             v-for="(item,index) in categoryListLevel3"
             :class="{'activeClass':index == activeCategoryIndex3}"
             @click="handleSelectCategory(item,index, 3)">
-            <span>{{ item.category_name }}</span> <span>》</span>
+            <span>{{ item.name }}</span> <span>》</span>
           </li>
         </ul>
       </div>
@@ -60,7 +60,7 @@
               <span>{{ activeCategoryName1 }}</span>
               <span v-show="activeCategoryName2"> > {{ activeCategoryName2 }}</span>
               <span v-show="activeCategoryName3"> > {{ activeCategoryName3 }}</span>
-              <span v-if="!activeCategoryName1">{{ baseInfoForm.category_name }}</span>
+              <span v-if="!activeCategoryName1">{{ baseInfoForm.name }}</span>
             </el-form-item>
             <el-form-item label="商品分组：" >
               <!--商品分类 获取分类列表 传入默认值-->
@@ -224,7 +224,7 @@
                 <el-option
                   v-for="item in exchangeGoodsCatrgoryList"
                   :key="item.category_id"
-                  :label="item.category_name"
+                  :label="item.name"
                   :value="item.category_id">
                 </el-option>
               </el-select>
@@ -487,7 +487,7 @@
           category_id: 0,
 
           /** 商城分类 名称 */
-          category_name: '',
+          name: '',
 
           /** 商品名称 */
           goods_name: '',
@@ -813,12 +813,12 @@
         API_goodsCategory.getGoodsCategoryLevelList(_id, { }).then((response) => {
           this.loading = false
           if (level === 1) {
-            this.categoryListLevel2 = response.data
+            this.categoryListLevel2 = response
             this.categoryListLevel3 = []
           } else if (level === 2) {
-            this.categoryListLevel3 = response.data
+            this.categoryListLevel3 = response
           } else if (!level) {
-            this.categoryListLevel1 = response.data
+            this.categoryListLevel1 = response
           }
         }).catch(() => { this.loading = false })
       },
@@ -826,18 +826,18 @@
       /** 选择商城商品分类 */
       handleSelectCategory(row, index, level) {
         if (level === 1) {
-          this.activeCategoryName1 = row.category_name
+          this.activeCategoryName1 = row.name
           this.activeCategoryName2 = this.activeCategoryName3 = ''
           this.activeCategoryIndex1 = index
           this.activeCategoryIndex2 = -1
           this.activeCategoryIndex3 = -1
         } else if (level === 2) {
-          this.activeCategoryName2 = row.category_name
+          this.activeCategoryName2 = row.name
           this.activeCategoryName3 = ''
           this.activeCategoryIndex2 = index
           this.activeCategoryIndex3 = -1
         } else {
-          this.activeCategoryName3 = row.category_name
+          this.activeCategoryName3 = row.name
           this.activeCategoryIndex3 = index
         }
         // 设置当前商城分类ID

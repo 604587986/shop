@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import GoodsDetailsStatisticsModel from '@/models/GoodsDetailsStatisticsModel'
 
 /**
  * 获取商品详情统计列表
@@ -14,9 +13,7 @@ export function getGoodsStatisticsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsDetailsStatisticsModel().map(_response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }

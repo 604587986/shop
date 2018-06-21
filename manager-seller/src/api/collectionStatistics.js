@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as CollectionStatisticsModel from '@/models/CollectionStatisticsModel'
 
 /**
  * 获取收藏列表数据
@@ -18,9 +17,7 @@ export function getCollectionStatistics(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new CollectionStatisticsModel.CollectionStatistics().map(response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }

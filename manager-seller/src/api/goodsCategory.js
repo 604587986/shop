@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import * as GoodsCategoryModel from '@/models/GoodsCategoryModel'
 
 /**
  * 获取商品分组列表
@@ -14,9 +13,7 @@ export function getGoodsCategoryList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsCategoryModel.GoodsCategory().map(_response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -89,9 +86,7 @@ export function getGoodsCategoryLevelList(ids, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsCategoryModel.GoodsCategoryLevel().map(_response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

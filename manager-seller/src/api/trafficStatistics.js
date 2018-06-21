@@ -19,7 +19,7 @@ export function getShopTraffic(params) {
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -39,7 +39,7 @@ export function getGoodsStatistics(params) {
       const _response = response
       _response.data = new TrafficStatisticsModel().map(_response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
