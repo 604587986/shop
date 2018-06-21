@@ -33,7 +33,6 @@
       }
     },
     mounted() {
-      debugger
       this.editor = window.UE.getEditor('editor', this.config)
       this.editor.addListener('ready', () => {
         this.editor.setContent(this.defaultMsg)
