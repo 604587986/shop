@@ -68,7 +68,7 @@
               @handle-edit="handleEditBlock(0, blockIndex + 10)"
               class="bz-mt-item">
               <template slot-scope="{ block }">
-                <p class="bz-mt-tit" :style="colors().color(0)">{{ block.block_opt.opt_title }}</p>
+                <p class="bz-mt-tit" :style="colors().color(1)">{{ block.block_opt.opt_title }}</p>
                 <p class="bz-mt-des">{{ block.block_opt.opt_desc }}</p>
               </template>
             </layout-item>
