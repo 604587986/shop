@@ -153,7 +153,7 @@
         // 编辑关联规格 表单规则
         specsRules: {},
         // API
-        categoryApi: process.env.BASE_API + '/goods/categories/@id/children'
+        categoryApi: process.env.ADMIN_API + '/goods/categories/@id/children'
       }
     },
     methods: {

@@ -7,7 +7,7 @@ const qs = require('qs')
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.BASE_API,
+  baseURL: process.env.ADMIN_API,
   timeout: 5000,
   paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
 })

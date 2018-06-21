@@ -12,7 +12,7 @@ const baseApi = envPro ? domain.pro.base : domain.dev.base
  * @returns {string}
  */
 export function getValidateCodeUrl(type) {
-  // return `${process.env.BASE_API}/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
+  // return `${process.env.ADMIN_API}/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
   return `http://localhost:9090/javashop/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
 }
 
