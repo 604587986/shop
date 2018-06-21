@@ -9,6 +9,7 @@
   import '../../../../static/UE/ueditor.all'
   import '../../../../static/UE/lang/zh-cn/zh-cn'
   import '../../../../static/UE/ueditor.parse'
+
   export default {
     name: 'UE',
     data() {
@@ -22,7 +23,11 @@
         default: ''
       },
       config: {
-        type: Object
+        type: Object,
+        default: () => ({
+          serverUrl: `${process.env.BASE_API}/ueditor`,
+          zIndex: 3000
+        })
       }
     },
     watch: {

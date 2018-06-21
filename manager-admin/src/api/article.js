@@ -75,3 +75,63 @@ export function getArticleFieldList(id) {
     params: { modelid: id }
   })
 }
+
+/**
+ * 获取文章列表
+ * @param params
+ */
+export function getArticleList(params) {
+  return request({
+    url: 'pages/articles',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 添加文章
+ * @param params
+ */
+export function addArticle(params) {
+  return request({
+    url: 'pages/articles',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 获取文章详情
+ * @param id
+ */
+export function getArticleDetail(id) {
+  return request({
+    url: `pages/articles/${id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 修改文章
+ * @param id
+ * @param params
+ */
+export function editArticle(id, params) {
+  return request({
+    url: `pages/articles/${id}`,
+    method: 'put',
+    data: params
+  })
+}
+
+/**
+ * 删除文章
+ * @param id
+ */
+export function deleteArticle(id) {
+  return request({
+    url: `pages/articles/{id}`,
+    method: 'delete'
+  })
+}

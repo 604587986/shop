@@ -14,7 +14,7 @@
     </div>
     <ul class="search-hot-keywords">
       <li v-for="item in hot_keywords" :key="item.id">
-        <nuxt-link :to="'/goods-list?keyword=' + item">{{ item.hot_name }}</nuxt-link>
+        <nuxt-link :to="'/goods?keyword=' + item">{{ item.hot_name }}</nuxt-link>
       </li>
     </ul>
     <div v-show="show_autocomplete && autoCompleteData.length > 0" class="search-autocomplete">
@@ -70,9 +70,9 @@
           : this.keyword
         this.keyword = keyword
         this.show_autocomplete = false
-        this.$route.path === '/goods-list'
-          ? this.$router.replace({ path: '/goods-list', query: { keyword }})
-          : this.$router.push({ path: '/goods-list', query: { keyword }})
+        this.$route.path === '/goods'
+          ? this.$router.replace({ path: '/goods', query: { keyword }})
+          : this.$router.push({ path: '/goods', query: { keyword }})
       },
       /** 搜索店铺 */
       handleSearchShop() {

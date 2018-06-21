@@ -68,9 +68,9 @@
     data() {
       return {
         // 获取商品列表API
-        goodsListApi: process.env.BASE_API + '/goods',
+        goodsListApi: process.env.ADMIN_API + '/goods',
         // 根据商品id，获取商品列表API
-        multipleGoodsApi: process.env.BASE_API + '/goods/@ids/details',
+        multipleGoodsApi: process.env.ADMIN_API + '/goods/@ids/details',
         templates,
         templateArray,
         /** 模板列表 */

@@ -2,18 +2,28 @@
   <div class="floor-layout tpl-2">
     <div v-for="(column, columnIndex) in data.columnList" :key="columnIndex" class="layout-main">
       <div class="layout-title" :style="colors(columnIndex).title">
+        <template v-if="isEdit">
+          <div class="edit-mask title" @click="handleEditTitle(columnIndex)">
+            <button type="button" class="mask-btn-floor">
+              <svg-icon icon-class="pen-leather"></svg-icon>编辑
+            </button>
+          </div>
+          <div class="edit-mask tag" @click="handleEditTags(columnIndex)">
+            <button type="button" class="mask-btn-floor">
+              <svg-icon icon-class="pen-leather"></svg-icon>编辑
+            </button>
+          </div>
+        </template>
         <h3 class="layout-item bz-tit">{{ column.title }}</h3>
         <div class="bz-tags">
-          <el-tag
+          <a
             v-for="(tag, index) in column.tagList"
             :key="index"
-            :closable="isEdit"
-            :disable-transitions="false"
-            class="bz-tag-item"
-            @close="() => {}">
-            {{ tag.text }}
-          </el-tag>
-          <el-button v-if="isEdit" class="button-new-tag" size="mini" @click="() => {}">+ 添加</el-button>
+            :href="blockHref(tag)"
+            target="_blank"
+          >
+            <el-tag class="bz-tag-item">{{ tag.block_value }}</el-tag>
+          </a>
         </div>
       </div>
       <div class="layout-body">
@@ -60,36 +70,14 @@
         {
           title: '全球购',
           titleColors: ['#0fab85', '#0a906f'],
-          tagList: [
-            { text: '净化器', opt_type: 'KEYWORD', opt_value: '净化器' }
-          ],
-          blockList: [...new Array(8)].map(() => {
-            return {
-              block_type: 'IMAGE',
-              block_value: '',
-              block_opt: {
-                opt_type: 'NONE',
-                opt_value: ''
-              }
-            }
-          })
+          tagList: mixin.methods.emptyBlock(3, 'TEXT'),
+          blockList: mixin.methods.emptyBlock(8, 'IMAGE')
         },
         {
           title: '全球购',
           titleColors: ['#ecd451', '#e3c20c'],
-          tagList: [
-            { text: '空气净化器', opt_type: 'KEYWORD', opt_value: '空气净化器' },
-            { text: '时尚名包', opt_type: 'KEYWORD', opt_value: '时尚名包' },
-            { text: '蓝牙耳机', opt_type: 'KEYWORD', opt_value: '蓝牙耳机' },
-            { text: '顶尖好货', opt_type: 'KEYWORD', opt_value: '顶尖好货' }
-          ],
-          blockList: [...new Array(8)].map(() => {
-            return {
-              image: '',
-              opt_type: 'NONE',
-              opt_value: ''
-            }
-          })
+          tagList: mixin.methods.emptyBlock(3, 'TEXT'),
+          blockList: mixin.methods.emptyBlock(8, 'IMAGE')
         }
       ]
     }
@@ -109,9 +97,8 @@
     height: 420px;
   }
   .layout-title {
-    .bz-tags {
-      max-width: 440px;
-    }
+    .edit-mask.tag { width: 420px }
+    .bz-tags { max-width: 420px }
   }
   .lo-bz {
     float: left;

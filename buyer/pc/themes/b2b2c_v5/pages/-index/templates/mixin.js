@@ -22,15 +22,6 @@ export default {
   components: {
     'layout-item': {
       props: ['block'],
-      methods: {
-        getBlockHref() {
-          const { opt_type, opt_value } = this.block.block_opt
-          switch (opt_type) {
-            case 'GOODS': return `/goods/${opt_value}`
-            default: return '/'
-          }
-        }
-      },
       template: `<div class="layout-item">
                    <template v-if="$parent.isEdit">
                      <div class="mask-floor" @click="$emit('handle-edit')">
@@ -44,7 +35,7 @@ export default {
                      <img v-if="block.block_value" :src="block.block_value">
                      <div v-else-if="$parent.isEdit" class="no-image"></div>
                    </template>
-                   <a v-else :href="getBlockHref()" target="_blank">
+                   <a v-else :href="$parent.blockHref(block)" target="_blank">
                      <slot :block="block"></slot>
                      <img :src="block.block_value">
                    </a>
@@ -60,14 +51,38 @@ export default {
         color: (colorIndex = 0) => `color: ${_colors[colorIndex]}`
       }
     },
-    /** 获取block数据 */
-    getBlock(columnIndex = 0, blockIndex = 0) {
-      return this.data.columnList[columnIndex].blockList[blockIndex]
+    /** 获取区块链接 */
+    blockHref(block) {
+      const { opt_type, opt_value } = block.block_opt
+      switch (opt_type) {
+        case 'GOODS': return `/goods/${opt_value}`
+        case 'KEYWORD': return `/goods?keyword=${opt_value}`
+        default: return '/'
+      }
     },
-    /** 点击遮罩编辑 */
+    /** 构建空的block */
+    emptyBlock(num = 3, type) {
+      return [...new Array(num)].map(() => ({
+        block_type: type,
+        block_value: '',
+        block_opt: {
+          opt_type: 'NONE',
+          opt_value: ''
+        }
+      }))
+    },
+    /** 编辑区块 */
     handleEditBlock(columnIndex, blockIndex) {
-      const data = JSON.parse(JSON.stringify(this.data))
-      this.$emit('edit-block', data, columnIndex, blockIndex)
+      this.$emit('edit-block', JSON.parse(JSON.stringify(this.data)), columnIndex, blockIndex)
+    },
+    /** 编辑标题 */
+    handleEditTitle(columnIndex) {
+      this.$emit('edit-title', JSON.parse(JSON.stringify(this.data)), columnIndex)
+    },
+    /** 编辑标签 */
+    handleEditTags(columnIndex) {
+      console.log(this.data, columnIndex)
+      this.$emit('edit-tags')
     }
   }
 }

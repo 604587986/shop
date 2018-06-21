@@ -7,10 +7,33 @@
 
 /deep/ {
   .layout-title {
+    position: relative;
     box-sizing: initial;
     height: 26px;
     padding: 16px 20px 16px 25px;
     background-color: #999;
+    .edit-mask {
+      position: absolute;
+      z-index: 20;
+      top: 0;
+      height: 100%;
+      box-sizing: border-box;
+      cursor: pointer;
+      .mask-btn-floor { display: none }
+      &:hover {
+        background: rgba(0,0,0,.5);
+        border: dotted 1px #FFF;
+        .mask-btn-floor { display: block }
+      }
+      &.title {
+        left: 0;
+        width: 170px;
+      }
+      &.tag {
+        right: 0;
+        width: 1000px;
+      }
+    }
     .bz-tit {
       overflow-wrap: break-word;
       float: left;
@@ -47,9 +70,10 @@
       border: 1px solid rgba(255,255,255,.35);
       background: rgba(255,255,255,0.2);
       line-height: 24px;
-      color: #FFF;
+      color: #fff;
       border-radius: 0;
       cursor: pointer;
+      a { color: #fff }
       &:hover {
         border-color: #fff
       }
@@ -58,24 +82,6 @@
         position: absolute;
         color: #fff;
         &:hover { background-color: #f42424 }
-      }
-    }
-    .button-new-tag {
-      @extend .bz-tag-item;
-    }
-    .input-new-tag {
-      display: inline-block;
-      width: 100px;
-      .el-input__inner {
-        background-color: transparent;
-        height: 25px;
-        line-height: 25px;
-        font-size: 12px;
-        color: #fff;
-        border-radius: 0;
-        &:focus {
-          border-color: #fff;
-        }
       }
     }
   }
