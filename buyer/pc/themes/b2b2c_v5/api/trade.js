@@ -113,7 +113,7 @@ export function checkShop(shop_id, checked) {
  */
 export function getCartTotal() {
   return request({
-    url: 'trade/orders/total',
+    url: 'trade/carts/price',
     method: Method.GET,
     loading: false
   })

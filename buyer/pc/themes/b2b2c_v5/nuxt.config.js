@@ -52,7 +52,7 @@ module.exports = {
       ]
     },
     plugins: [],
-    publicPath: ''
+    publicPath: '/'
   },
   css: [
     '~assets/styles/normalize.css',
