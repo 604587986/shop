@@ -6,6 +6,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
+          <el-button type="primary" size="mini" icon="el-icon-circle-plus-outline" @click="handleAddArticle">添加</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" placeholder="请输入文章名称"/>
@@ -120,6 +121,11 @@
       handlePageCurrentChange(page) {
         this.params.page_no = page
         this.GET_ArticleList()
+      },
+      /** 添加文章 */
+      handleAddArticle() {
+        this.articleForm = {}
+        this.dialogVisible = true
       },
       /** 修改文章 */
       handleEditArticle(index, row) {
