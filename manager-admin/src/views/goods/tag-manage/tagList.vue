@@ -62,7 +62,13 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog :title="dialogTagTitle" :visible.sync="dialogTagVisible" width="500px">
+    <el-dialog
+      :title="dialogTagTitle"
+      :visible.sync="dialogTagVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="500px"
+    >
       <el-form :model="tagForm" :rules="tagRules" ref="tagForm" label-width="100px">
         <!--标签名称-->
         <el-form-item label="标签名称" prop="name">

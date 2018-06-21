@@ -1,11 +1,8 @@
 <template>
   <div>
     <en-tabel-layout
-      toolbar
-      pagination
-      row-key="id"
       :stripe="false"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -15,13 +12,10 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column prop="name" label="名称"/>
-        <el-table-column prop="type" label="类型"/>
+        <el-table-column prop="navigation_name" label="名称"/>
+        <el-table-column prop="url" label="URL"/>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" class="drag-handle">
-              <svg-icon icon-class="item-drag" />
-            </el-button>
             <el-button
               size="mini"
               type="primary"
@@ -35,43 +29,45 @@
       </template>
 
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
 
-    <el-dialog :title="(siteMenuForm.id ? '编辑' : '添加') + '导航菜单'" :visible.sync="dialogSiteMenuVisible" width="500px">
+    <el-dialog
+      :title="(siteMenuForm.id ? '编辑' : '添加') + '导航菜单'"
+      :visible.sync="dialogVisible" width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="siteMenuForm" :rules="siteMenuRules" ref="siteMenuForm" label-width="110px">
-        <el-form-item label="导航菜单名称" prop="name">
-          <el-input v-model="siteMenuForm.name" clearable :maxlength="4"></el-input>
+        <el-form-item label="导航菜单名称" prop="navigation_name">
+          <el-input v-model="siteMenuForm.navigation_name" clearable :maxlength="4"></el-input>
         </el-form-item>
         <el-form-item label="导航菜单链接" prop="url">
           <el-input v-model="siteMenuForm.url" clearable :maxlength="225"></el-input>
         </el-form-item>
-
-        <el-form-item label="导航菜单图片">
+        <el-form-item label="导航菜单图片" prop="image">
           <el-upload
             :action="MixinUploadApi"
-            list-type="picture"
-            :on-success="onImgUploadSuccess"
-            :on-remove="onImgRemoved"
-            :file-list="siteMenuForm.image ? [{name: '导航菜单图片', url: siteMenuForm.image}]: []"
-            :multiple="false"
-            :limit="1">
+            :on-remove="() => { siteMenuForm.image = '' }"
+            :on-success="(res) => { siteMenuForm.image = res.url }"
+            :file-list="siteMenuForm.image ? [{name: 'image', url: siteMenuForm.image}] : []"
+            list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <span slot="tip" class="el-upload__tip">&nbsp;只能上传jpg/png文件，且不超过500kb</span>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogSiteMenuVisible = false">取 消</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitSiteMenuForm('siteMenuForm')">确 定</el-button>
       </div>
     </el-dialog>
@@ -80,7 +76,6 @@
 
 <script>
   import * as API_SiteMenu from '@/api/siteMenu'
-  import Sortable from 'sortablejs'
 
   export default {
     name: 'mobileSiteMenu',
@@ -92,44 +87,33 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          client_type: 'MOBILE'
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
+        tableData: '',
 
         /** 添加、编辑导航菜单 dialog */
-        dialogSiteMenuVisible: false,
+        dialogVisible: false,
 
         /** 添加、编辑导航菜单 表单 */
-        siteMenuForm: {},
+        siteMenuForm: {
+          navigation_name: '',
+          url: '',
+          image: ''
+        },
 
         /** 添加、编辑导航菜单 表单规则 */
         siteMenuRules: {
-          name: [
-            { required: true, message: '请输入导航菜单名称', trigger: 'blur' }
-          ],
-          url: [
-            { required: true, message: '请输入导航菜单链接', trigger: 'blur' }
-          ]
+          navigation_name: [this.MixinRequired('请输入导航菜单名称！')],
+          url: [this.MixinRequired('请输入导航菜单链接！')],
+          image: [this.MixinRequired('请选择导航图片！')]
         }
       }
     },
     mounted() {
       this.GET_SiteMenuList()
-      const table = document.querySelector('.el-table__body-wrapper tbody')
-      const _this = this
-      this.sortable = Sortable.create(table, {
-        animation: 150,
-        handle: '.drag-handle',
-        onEnd({ newIndex, oldIndex }) {
-          const targetRow = _this.tableData.splice(oldIndex, 1)[0]
-          _this.tableData.splice(newIndex, 0, targetRow)
-        }
-      })
     },
     methods: {
       /** 分页大小发生改变 */
@@ -147,57 +131,42 @@
       /** 添加导航菜单 */
       handleAddSiteMenu() {
         this.siteMenuForm = {}
-        this.siteMenuForm.form_type = 'add'
-        this.dialogSiteMenuVisible = true
+        this.dialogVisible = true
       },
 
       /** 编辑导航菜单 */
       handleEditSiteMenu(index, row) {
-        this.siteMenuForm = row
-        this.siteMenuForm.form_type = 'edit'
-        this.dialogSiteMenuVisible = true
+        this.siteMenuForm = this.MixinClone(row)
+        this.dialogVisible = true
       },
 
       /** 删除导航菜单 */
       handleDeleteSiteMenu(index, row) {
         this.$confirm('确定要删除这个导航菜单吗？', '提示', { type: 'warning' }).then(() => {
-          API_SiteMenu.deleteMobileSiteMenu(row.id).then(response => {
+          API_SiteMenu.deleteSiteMenu(row.navigation_id).then(response => {
             this.$message.success('删除成功！')
             this.GET_SiteMenuList()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
-      },
-
-      /** 图片上传成功 */
-      onImgUploadSuccess(response) {
-        this.siteMenuForm.image = response
-      },
-
-      /** 图片从已上传列表中移除 */
-      onImgRemoved() {
-        this.siteMenuForm.image = ''
       },
 
       /** 添加、编辑导航菜单 提交表单 */
       submitSiteMenuForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (!this.siteMenuForm.image) {
-              this.$message.error('请上传导航菜单图片！')
-              return false
-            }
-            if (this.siteMenuForm.form_type === 'add') {
-              API_SiteMenu.addMobileSiteMenu(this.siteMenuForm).then(response => {
-                this.dialogSiteMenuVisible = false
+            const { navigation_id } = this.siteMenuForm
+            if (navigation_id) {
+              API_SiteMenu.editSiteMenu(navigation_id, this.siteMenuForm).then(response => {
+                this.dialogVisible = false
+                this.$message.success('保存成功！')
+                this.MixinSetTableData(this.tableData, 'navigation_id', navigation_id, response)
+              })
+            } else {
+              API_SiteMenu.addSiteMenu(this.params.client_type, this.siteMenuForm).then(response => {
+                this.dialogVisible = false
                 this.$message.success('添加成功！')
                 this.GET_SiteMenuList()
-              }).catch(error => console.log(error))
-            } else {
-              API_SiteMenu.editMobileSiteMenu(this.siteMenuForm.id, this.siteMenuForm).then(response => {
-                this.dialogSiteMenuVisible = false
-                this.$message.success('保存成功！')
-                this.GET_SiteMenuList()
-              }).catch(error => console.log(error))
+              })
             }
           } else {
             this.$message.error('表单填写有误，请检查！')
@@ -209,34 +178,11 @@
       /** 获取导航菜单列表 */
       GET_SiteMenuList() {
         this.loading = true
-        API_SiteMenu.getSiteMenuByMobile(this.params).then(response => {
+        API_SiteMenu.getSiteMenuList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
-    },
-    destroyed() {
-      this.sortable && this.sortable.destroy()
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-  .drag-handle {
-    user-select: none;
-    width: 50px;
-    padding: 10px;
-  }
-  /deep/ .el-upload-list__item-thumbnail {
-    width: auto;
-    max-width: 180px;
-  }
-</style>

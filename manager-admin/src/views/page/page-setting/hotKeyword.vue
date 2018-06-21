@@ -39,7 +39,12 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog :title="(hotKeywordsForm.id ? '编辑' : '添加') + '热门关键字'" :visible.sync="dialogVisible" width="500px">
+    <el-dialog
+      :title="(hotKeywordsForm.id ? '编辑' : '添加') + '热门关键字'"
+      :visible.sync="dialogVisible" width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="hotKeywordsForm" :rules="hotKeywordsRules" ref="hotKeywordsForm" label-width="110px">
         <el-form-item label="热门关键字" prop="hot_name" clearable>
           <el-input v-model="hotKeywordsForm.hot_name" :maxlength="6"></el-input>

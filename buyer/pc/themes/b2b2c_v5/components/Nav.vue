@@ -2,8 +2,8 @@
   <div id="nav" class="w">
     <en-category/>
     <ul class="nav-list">
-      <li v-for="nav in navList" :key="nav.id">
-        <nuxt-link :to="nav.link">{{ nav.title }}</nuxt-link>
+      <li v-for="nav in navList" :key="nav.navigation_id">
+        <nuxt-link :to="nav.url">{{ nav.navigation_name }}</nuxt-link>
       </li>
     </ul>
   </div>
@@ -31,7 +31,7 @@
     height: 40px;
     .nav-list {
       overflow: hidden;
-      max-width: calc(1190px - 240px);
+      max-width: calc(1210px - 240px);
       li {
         vertical-align: top;
         letter-spacing: normal;

@@ -5,104 +5,64 @@
 import request from '@/utils/request'
 
 /**
- * 获取导航栏 - PC
+ * 获取导航菜单列表
  * @param params
  */
-export function getSiteMenuByPC(params) {
-  return getSiteMenu(params, 'PC')
-}
-
-/**
- * 获取导航栏 - Mobile
- * @param params
- */
-export function getSiteMenuByMobile(params) {
-  return getSiteMenu(params, 'MOBILE')
-}
-
-/**
- * 获取导航栏
- * @param params
- * @param type
- * @returns {Promise<any>}
- */
-function getSiteMenu(params, type) {
+export function getSiteMenuList(params) {
   return request({
-    url: 'core/admin/site-menu.do',
+    url: 'pages/site-navigations',
     method: 'get',
-    loading: false,
     params
   })
 }
 
 /**
- * 添加导航菜单 - PC
+ * 添加导航菜单
+ * @param client_type
  * @param params
  */
-export function addPCSiteMenu(params) {
+export function addSiteMenu(client_type = 'PC', params) {
   return request({
-    url: 'core/admin/site-menu.do',
+    url: 'pages/site-navigations',
     method: 'post',
-    data: params
+    data: {
+      ...params,
+      client_type
+    }
   })
 }
 
 /**
- * 编辑导航菜单 - PC
- * @param id
- * @param params
- */
-export function editPCSiteMenu(id, params) {
-  return request({
-    url: `core/admin/site-menu/${id}.do`,
-    method: 'post',
-    data: params
-  })
-}
-
-/**
- * 删除导航菜单 - PC
+ * 获取导航菜单详情
  * @param id
  */
-export function deletePCSiteMenu(id) {
+export function getSiteMenuDetail(id) {
   return request({
-    url: `core/admin/site-menu/${id}.do`,
-    method: 'delete'
+    url: `pages/site-navigations/${id}`,
+    method: 'get'
   })
 }
 
 /**
- * 添加导航菜单 - Mobile
- * @param params
- */
-export function addMobileSiteMenu(params) {
-  return request({
-    url: 'core/admin/site-menu.do',
-    method: 'post',
-    data: params
-  })
-}
-
-/**
- * 编辑导航菜单 - Mobile
+ * 修改导航菜单
  * @param id
- * @param params
+ * @param parmas
  */
-export function editMobileSiteMenu(id, params) {
+export function editSiteMenu(id, parmas) {
   return request({
-    url: `core/admin/site-menu/${id}.do`,
-    method: 'post',
-    data: params
+    url: `pages/site-navigations/${id}`,
+    method: 'put',
+    data: parmas
   })
 }
 
 /**
- * 删除导航菜单 - Mobile
+ * 删除导航菜单
  * @param id
  */
-export function deleteMobileSiteMenu(id) {
+export function deleteSiteMenu(id) {
   return request({
-    url: `core/admin/site-menu/${id}.do`,
+    url: `pages/site-navigations/${id}`,
     method: 'delete'
   })
 }

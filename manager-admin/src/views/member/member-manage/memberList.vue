@@ -89,7 +89,13 @@
       </el-pagination>
     </en-tabel-layout>
     <!--添加会员 dialog-->
-    <el-dialog title="添加会员" :visible.sync="dialogAddMemberVisible" width="650px">
+    <el-dialog
+      title="添加会员"
+      :visible.sync="dialogAddMemberVisible"
+      width="650px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="addMemberForm" :rules="addMemberRules" ref="addMemberForm" label-width="100px" inline>
         <!--用户名-->
         <el-form-item label="用户名" prop="uname">

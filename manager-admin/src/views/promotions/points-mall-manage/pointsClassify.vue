@@ -9,7 +9,13 @@
       :paramsNames="{id: 'category_id', text: 'name'}"
       @add-click="handleAddPoints"
     />
-    <el-dialog :title="pointsForm.id ? '编辑积分分类' : '添加积分分类'" :visible.sync="dialogPointsVisible" width="500px">
+    <el-dialog
+      :title="pointsForm.id ? '编辑积分分类' : '添加积分分类'"
+      :visible.sync="dialogPointsVisible"
+      width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="pointsForm" :rules="pointsRules" ref="pointsForm" label-width="120px">
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="pointsForm.name" :maxlength="20" clearable></el-input>

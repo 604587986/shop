@@ -57,7 +57,7 @@ export const actions = {
   },
   /** 获取导航栏数据 */
   getNavData: ({ commit }) => {
-    API_Home.getNav().then(response => {
+    API_Home.getSiteMenu().then(response => {
       commit(types.SET_NAV_DATA, response)
     })
   },

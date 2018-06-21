@@ -10,7 +10,13 @@
       @add-click="handleAddCat"
     />
     <!--添加、编辑分类dialog-->
-    <el-dialog :title="catForm.category_id ? '编辑分类' : '添加分类'" width="500px" :visible.sync="dialogCatVisible">
+    <el-dialog
+      :title="catForm.category_id ? '编辑分类' : '添加分类'"
+      width="500px"
+      :visible.sync="dialogCatVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="catForm" :rules="catRules" ref="catForm" label-width="100px">
         <!--分类名称-->
         <el-form-item label="分类名称" prop="category_name">
@@ -48,7 +54,13 @@
       </span>
     </el-dialog>
     <!--编辑关联品牌dialog-->
-    <el-dialog title="关联品牌" width="500px" :visible.sync="dialogBrandVisible">
+    <el-dialog
+      title="关联品牌"
+      width="500px"
+      :visible.sync="dialogBrandVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="brandForm" :rules="brandRules" ref="brandForm">
         <el-form-item label="选择品牌">
           <el-select v-model="brandForm.selectedBrandList" placeholder="请选择关联品牌" multiple filterable style="width: 350px">
@@ -67,7 +79,13 @@
       </span>
     </el-dialog>
     <!--编辑关联规格dialog-->
-    <el-dialog title="关联规格" width="500px" :visible.sync="dialogSpecsVisible">
+    <el-dialog
+      title="关联规格"
+      width="500px"
+      :visible.sync="dialogSpecsVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="specsForm" :rules="specsRules" ref="specsForm">
         <el-form-item label="选择规格">
           <el-select v-model="specsForm.selectedSpecsList" placeholder="请选择关联规格" multiple filterable style="width: 350px">

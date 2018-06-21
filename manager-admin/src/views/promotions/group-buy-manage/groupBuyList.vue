@@ -51,7 +51,13 @@
     </en-tabel-layout>
 
     <!--添加团购 dialog-->
-    <el-dialog title="添加团购" :visible.sync="dialogGroupBuyVisible" width="650px">
+    <el-dialog
+      title="添加团购"
+      :visible.sync="dialogGroupBuyVisible"
+      width="650px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="groupBuyForm" :rules="groupBuyRules" ref="groupBuyForm" label-width="120px">
         <!--团购活动名称-->
         <el-form-item label="活动名称" prop="act_name">

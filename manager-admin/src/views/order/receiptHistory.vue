@@ -42,7 +42,13 @@
       </el-pagination>
     </en-tabel-layout>
 
-    <el-dialog title="发票详情" center :visible.sync="dialogReceiptVisible" width="550px">
+    <el-dialog
+      title="发票详情"
+      center
+      :visible.sync="dialogReceiptVisible" width="550px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <div v-for="item in viewRectiptData" class="item-receipt">
         <span class="item-receipt-label">{{ item.label }}</span>
         <span v-if="item.key === 'goods_price'" class="item-receipt-value">{{ item.value | unitPrice('￥') }}</span>

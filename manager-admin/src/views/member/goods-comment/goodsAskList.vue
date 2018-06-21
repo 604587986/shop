@@ -40,7 +40,10 @@
     <el-dialog
       title="提示"
       :visible.sync="dialogReviewVisible"
-      width="30%">
+      width="30%"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <span>这是一段信息</span>
       <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="dialogReviewVisible = false">确 定</el-button>

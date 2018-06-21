@@ -60,7 +60,13 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-tabel-layout>
-    <el-dialog title="添加限时抢购" :visible.sync="dialogSeckillVisible" width="500px">
+    <el-dialog
+      title="添加限时抢购"
+      :visible.sync="dialogSeckillVisible"
+      width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="seckillForm" :rules="seckillRules" ref="seckillForm" label-width="120px">
         <el-form-item label="活动名称" prop="seckill_name">
           <el-input v-model="seckillForm.seckill_name" :maxlength="20" clearable></el-input>

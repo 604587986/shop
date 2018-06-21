@@ -224,7 +224,7 @@
     height: 50px;
   }
   $s_sep: 30px;
-  $g_width: (1190px - $s_sep * 5) / 4;
+  $g_width: (1210px - $s_sep * 5) / 4;
   .goods-list { padding: 10px $s_sep }
   .goods-item {
     float: left;

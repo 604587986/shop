@@ -41,7 +41,13 @@
     </en-tabel-layout>
 
     <!--添加团购分类 dialog-->
-    <el-dialog title="添加团购分类" :visible.sync="dialogGroupBuyVisible" width="500px">
+    <el-dialog
+      title="添加团购分类"
+      :visible.sync="dialogGroupBuyVisible"
+      width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="groupBuyForm" :rules="groupBuyRules" ref="groupBuyForm" label-width="120px">
         <!--分类名称-->
         <el-form-item label="分类名称" prop="cat_name">

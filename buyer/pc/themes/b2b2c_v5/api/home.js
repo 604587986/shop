@@ -20,11 +20,12 @@ export function getFocusPictures(client_type = 'PC') {
 /**
  * 获取导航列表
  */
-export function getNav() {
+export function getSiteMenu(client_type = 'PC') {
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/nav/list',
+    url: 'pages/site-navigations',
     method: Method.GET,
-    loading: false
+    loading: false,
+    params: { client_type }
   })
 }
 
@@ -50,5 +51,17 @@ export function getHotKeywords(num = 7) {
     method: Method.GET,
     loading: false,
     params: { num }
+  })
+}
+
+/**
+ * 获取楼层数据
+ * @param client_type
+ * @param page_type
+ */
+export function getFloorData(client_type = 'PC', page_type = 'INDEX') {
+  return request({
+    url: `pages/${client_type}/${page_type}`,
+    method: 'get'
   })
 }

@@ -5,42 +5,60 @@
 import request from '@/utils/request'
 
 /**
- * 获取文章模型列表
- * @param params
- * @returns {Promise<any>}
+ * 获取文章分类子项
+ * @param id
  */
-export function getArticleModelList(params) {
+export function getArticleCategoryChildren(id = 0) {
   return request({
-    url: 'cms/admin/model/list-json.do',
-    method: 'get',
-    loading: false,
-    params
+    url: `pages/article-categories/${id}/children`,
+    method: 'get'
   })
 }
 
 /**
- * 添加文章模型
+ * 添加文章分类
  * @param params
- * @returns {Promise<any>}
  */
-export function addArticleModel(params) {
+export function addArticleCategory(params) {
   return request({
-    url: 'cms/admin/model/save-add.do',
+    url: 'pages/article-categories',
     method: 'post',
     data: params
   })
 }
 
 /**
- * 删除文章模型
- * @param ids
- * @returns {Promise<any>}
+ * 获取文章分类详情
+ * @param id
  */
-export function deleteArticleModel(ids) {
+export function getArticleCategoryDetail(id) {
   return request({
-    url: 'cms/admin/model/check.do',
-    method: 'post',
-    params: { modelid: ids }
+    url: `pages/article-categories/${id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 编辑文章分类
+ * @param id
+ * @param params
+ */
+export function editArticleCategory(id, params) {
+  return request({
+    url: `pages/article-categories/${id}`,
+    method: 'put',
+    data: params
+  })
+}
+
+/**
+ * 删除文章分类列表
+ * @param id
+ */
+export function deleteAritcleCategory(id) {
+  return request({
+    url: `pages/article-categories/${id}`,
+    method: 'delete'
   })
 }
 

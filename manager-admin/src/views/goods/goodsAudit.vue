@@ -80,7 +80,10 @@
     <el-dialog
       :title="dialogGoodsAuditTitle"
       :visible.sync="dialogGoodsAuditVisible"
-      width="400px">
+      width="400px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form :model="goodsAuditForm" label-width="100px">
         <!--是否通过=-->
         <el-form-item label="是否通过" prop="pass">
