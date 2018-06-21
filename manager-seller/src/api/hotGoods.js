@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as HotGoodsModel from '@/models/HotGoodsModel'
 
 /**
  * 热卖商品分析信息
@@ -18,10 +17,8 @@ export function getHotGoodsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new HotGoodsModel.HotGoods().map(response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }
 

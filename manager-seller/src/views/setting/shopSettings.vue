@@ -21,7 +21,7 @@
       </el-form-item>
       <!--联系电话-->
       <el-form-item label="联系电话：" prop="link_phone">
-        <el-input v-model="shopDataForm.link_phone" style="width: 200px;" auto-complete="off"></el-input>
+        <el-input v-model="shopDataForm.link_phone" style="width: 200px;" maxLength="11"></el-input>
       </el-form-item>
       <!--QQ-->
       <el-form-item label="QQ：" prop="shop_qq">
@@ -79,7 +79,7 @@
       [UE.name]: UE
     },
     data() {
-      var validPhone = (rule, value, callback) => {
+      const validPhone = (rule, value, callback) => {
         if (!value) {
           callback(new Error('请输入联系人电话'))
         } else if (!RegExp.mobile.test(value)) {
@@ -92,7 +92,7 @@
         /** 图片服务器地址 */
         BASE_IMG_URL: process.env.BASE_IMG_URL,
 
-        areasapi: `${process.env.BASE_REGION}/regions/@id/children`,
+        areasapi: `${process.env.BASE_API}/regions/@id/children`,
 
         /** 店铺信息*/
         shopDataForm: {

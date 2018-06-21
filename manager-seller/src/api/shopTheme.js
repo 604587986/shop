@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import ShopThemeModel from '@/models/ShopThemeModel'
 
 /**
  * 获取店铺模板列表
@@ -18,8 +17,7 @@ export function getShopThemeList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = new ShopThemeModel().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

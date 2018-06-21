@@ -41,7 +41,7 @@
       /** 获取当前库存预警数*/
       GET_stockWarningNum() {
         API_shop.getShopData({}).then(response => {
-          this.stockWarningForm.goods_warning_count = response.data['goods_warning_count']
+          this.stockWarningForm.goods_warning_count = response.goods_warning_count
         })
       },
 

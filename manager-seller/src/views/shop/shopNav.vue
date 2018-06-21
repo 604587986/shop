@@ -12,12 +12,12 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column prop="shop_nav_sort" label="排序"/>
-        <el-table-column prop="shop_nav_name" label="导航名称"/>
+        <el-table-column prop="sort" label="排序"/>
+        <el-table-column prop="name" label="导航名称"/>
         <el-table-column label="是否显示">
           <template slot-scope="scope">
-            <span v-if="scope.row.shop_nav_show === 1">已显示</span>
-            <span v-if="scope.row.shop_nav_show === 0">未显示</span>
+            <span v-if="scope.row.disable === 1">已显示</span>
+            <span v-if="scope.row.disable === 0">未显示</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -47,25 +47,25 @@
     </en-tabel-layout>
     <el-dialog title="新增导航" :visible.sync="addShopNavshow"  width="30%">
       <el-form :model="navform" :rules="rules" ref="navform">
-        <el-form-item label="导航名称" prop="shop_nav_name">
-          <el-input v-model="navform.shop_nav_name" auto-complete="off" label-width="100"></el-input>
+        <el-form-item label="导航名称" prop="name">
+          <el-input v-model="navform.name" auto-complete="off" label-width="100"></el-input>
         </el-form-item>
-        <el-form-item label="是否显示" prop="shop_nav_show">
-          <el-radio-group v-model="navform.shop_nav_show">
+        <el-form-item label="是否显示" prop="disable">
+          <el-radio-group v-model="navform.disable">
             <el-radio :label="1">显示</el-radio>
             <el-radio :label="0">不显示</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="排序" prop="shop_nav_sort">
-          <el-input v-model="navform.shop_nav_sort" auto-complete="off" label-width="100"></el-input>
+        <el-form-item label="排序" prop="sort">
+          <el-input v-model="navform.sort" auto-complete="off" label-width="100"></el-input>
         </el-form-item>
-        <el-form-item label="URL" prop="shop_nav_url">
-          <el-input v-model="navform.shop_nav_url" auto-complete="off" label-width="100"></el-input>
+        <el-form-item label="URL" prop="nav_url">
+          <el-input v-model="navform.nav_url" auto-complete="off" label-width="100"></el-input>
           <span>请填写包含http://的完整URL地址，否则会跳转到外链</span>
           <span>例: http://www.baidu.com填写http://www.baidu.com</span>
         </el-form-item>
-        <el-form-item label="新窗口打开" prop="open_new_blank">
-          <el-radio-group v-model="navform.open_new_blank">
+        <el-form-item label="新窗口打开" prop="target">
+          <el-radio-group v-model="navform.target">
             <el-radio :label="1">是</el-radio>
             <el-radio :label="0">否</el-radio>
           </el-radio-group>
@@ -121,11 +121,11 @@
 
         /** 新增导航表单*/
         navform: {
-          shop_nav_name: '',
-          shop_nav_show: 1,
-          shop_nav_sort: '',
-          shop_nav_url: '',
-          open_new_blank: 1
+          name: '',
+          disable: 1,
+          sort: '',
+          nav_url: '',
+          target: 1
         },
 
         /** 是否显示导航表单*/
@@ -139,13 +139,13 @@
 
         /** 校验规则 */
         rules: {
-          shop_nav_name: [
+          name: [
             { required: true, message: '请填写导航名称', trigger: 'blur' }
           ],
-          shop_nav_sort: [
+          sort: [
             { validator: shopNavSort, trigger: 'blur' }
           ],
-          shop_nav_url: [
+          nav_url: [
             { validator: shopNavURL, trigger: 'blur' }
           ]
         }
@@ -184,7 +184,7 @@
       handleEditShopNav(row) {
         this.addShopNavshow = true
         this.isEdit = 1
-        this.navId = row.nav_id
+        this.navId = row.id
         this.navform = {
           ...row
         }
@@ -196,11 +196,11 @@
         this.isEdit = 2
         // 清空表单
         this.navform = {
-          shop_nav_name: '',
-          shop_nav_show: 1,
-          shop_nav_sort: '',
-          shop_nav_url: '',
-          open_new_blank: 1
+          name: '',
+          disable: 1,
+          sort: '',
+          nav_url: '',
+          target: 1
         }
       },
 
@@ -208,7 +208,7 @@
       handleDelShopNav(row) {
         this.$confirm('确认删除此导航, 是否继续?', '提示', { type: 'warning' }).then(() => {
           const _params = {}
-          API_ShopNav.delShopNav(row.nav_id, _params).then(response => {
+          API_ShopNav.delShopNav(row.id, _params).then(response => {
             this.$message.success('删除成功')
             this.addShopNavshow = false
             this.GET_ShopNavList()

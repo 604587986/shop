@@ -5,7 +5,6 @@
 import request from '@/utils/request'
 import GoodsModel from '@/models/GoodsModel'
 import GoodsBrandModel from '@/models/GoodsBrandModel'
-import ExpressMouldModel from '@/models/ExpressMouldModel'
 
 /**
  * 获取商品列表
@@ -215,9 +214,7 @@ export function getTplList(ids, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ExpressMouldModel().map(_response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

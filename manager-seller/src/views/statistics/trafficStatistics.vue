@@ -158,7 +158,6 @@
               trigger: 'axis',
               show: true,
               formatter: function(params, ticket, callback) {
-                // console.log(params, 5555)
                 let res = ''
                 if (params[0].data.name) {
                   res = params[0].data.name + '<br>' + params[0].seriesId.replace(/0/, '') + '：' + params[0].value
@@ -208,9 +207,6 @@
               }
             ]
           })
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       }
     }

@@ -11,7 +11,7 @@
     <!--轮播-->
     <el-carousel indicator-position="outside">
       <el-carousel-item v-for="(item,index) in tableData" :key="index">
-        <img :src="item.shop_banner_image" alt="">
+        <img :src="item.img" alt="">
       </el-carousel-item>
     </el-carousel>
     <!--上传 更新 删除 编辑幻灯片-->
@@ -19,25 +19,25 @@
       <ul>
         <li v-for="(item,index) in tableData">
           <div class="slide-item"
-            @mouseover="overSlideShow(item.shop_banner_id)"
-            @mouseout="outSlideHide(item.shop_banner_id)">
+            @mouseover="overSlideShow(item.silde_id)"
+            @mouseout="outSlideHide(item.silde_id)">
             <div class="del-btn-pos">
               <el-button class="del-btn"
-                v-show="currentShopBannerId === item.shop_banner_id"
+                v-show="currentShopBannerId === item.silde_id"
                 type="danger"
                 plain
                 size="mini"
                 @click="Del_Slide(item)">删除</el-button>
             </div>
             <div class="img-show">
-              <img :src="item.shop_banner_image" alt="">
+              <img :src="item.img" alt="">
             </div>
             <label>跳转URL...</label>
             <el-input
               class="slide-input-link"
               clearable size="mini"
               auto-complete="off"
-              v-model="item.shop_banner_link"></el-input>
+              v-model="item.silde_url"></el-input>
             <el-upload
               class="upload-demo"
               :action="BASE_IMG_URL"
@@ -128,16 +128,16 @@
 
       /** 上传成功钩子*/
       uploadSuccess(response, file, fileList) {
-        this.uploadShopBanner.shop_banner_image = response.url
-        this.uploadShopBanner.shop_banner_link = response.url
+        this.uploadShopBanner.img = response.url
+        this.uploadShopBanner.silde_url = response.url
         this.fileList = []
       },
 
       /** 新增幻灯片*/
       POST_AddSlide() {
         this.tableData.push({
-          shop_banner_link: '',
-          shop_banner_image: 'http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/AAC7404DD7144969AC913857B575C976.png'
+          silde_url: '',
+          img: 'http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/AAC7404DD7144969AC913857B575C976.png'
         })
       },
 
@@ -145,16 +145,23 @@
       Del_Slide(item) {
         this.$confirm('确定要删除此幻灯片么？', '确认信息')
           .then(() => {
-            API_ShopSlide.delShopSlide(item.shop_banner_id, {}).then(response => {
+            API_ShopSlide.delShopSlide(item.silde_id, {}).then(response => {
               this.$message.success('删除成功')
               this.GET_ShopSlideList()
             })
-          }).catch(() => {})
+          })
       },
 
       /** 保存幻灯片*/
       POST_SaveSlide() {
-        API_ShopSlide.saveShopSlide(this.tableData).then(() => {
+        const _params = this.tableData.map(key => {
+          return {
+            silde_id: key.silde_id || 0,
+            silde_url: key.silde_url,
+            img: key.img
+          }
+        })
+        API_ShopSlide.saveShopSlide(_params).then(() => {
           this.$message.success('保存成功')
           this.GET_ShopSlideList()
         })

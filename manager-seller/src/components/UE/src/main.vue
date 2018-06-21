@@ -23,11 +23,7 @@
       },
       config: {
         type: Object,
-        default: () => {
-          return {
-            serverUrl: `${process.env.BASE_REGION}/ueditor/`
-          }
-        }
+        default: () => ({ serverUrl: `${process.env.BASE_REGION}/ueditor/` })
       }
     },
     watch: {

@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as GiftModel from '@/models/GiftModel'
 
 /**
  * 获取赠品品列表
@@ -18,9 +17,7 @@ export function getGiftsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GiftModel.Gift().map(_response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -56,7 +53,7 @@ export function saveGifts(ids, params) {
       method: 'put',
       headers: { 'Content-Type': 'application/json' },
       loading: false,
-      data: new GiftModel.Gift().params(params)
+      data: params
     }).then(response => {
       resolve(response)
     })
@@ -75,7 +72,7 @@ export function addGifts(params) {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       loading: false,
-      data: new GiftModel.Gift().params(params)
+      data: params
     }).then(response => {
       resolve(response)
     })
@@ -96,8 +93,7 @@ export function getGiftDetails(id, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = new GiftModel.Gift().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

@@ -11,18 +11,17 @@
           <en-table-search
             @search="searchEvent"
             @advancedSearch="advancedSearchEvent"
-            advanced
-          >
+            advanced>
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="会员名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+                  <el-input v-model="advancedForm.goods_name"></el-input>
                 </el-form-item>
                 <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
+                  <el-input v-model="advancedForm.goods_name"></el-input>
                 </el-form-item>
                 <el-form-item label="评论内容">
-                  <el-input size="medium" v-model="advancedForm.goods_sn"></el-input>
+                  <el-input v-model="advancedForm.goods_sn"></el-input>
                 </el-form-item>
                 <el-form-item label="评价">
                   <el-select v-model="commentStatus" placeholder="请选择">

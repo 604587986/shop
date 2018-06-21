@@ -15,7 +15,7 @@
           </div>
           <template slot="table-columns">
             <!--模板名称-->
-            <el-table-column prop="tpl_name" label="模板名称"/>
+            <el-table-column prop="name" label="模板名称"/>
             <!--首重（kg）-->
             <el-table-column prop="first_company" label="首重（kg）"/>
             <!--运费（元）-->
@@ -33,7 +33,7 @@
               </template>
             </el-table-column>
             <!--模板类型-->
-            <el-table-column prop="tpl_type" label="模板类型" :formatter="typeStatus"/>
+            <el-table-column prop="type" label="模板类型" :formatter="typeStatus"/>
             <!--操作-->
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
@@ -57,23 +57,23 @@
           label-width="160px"
           class="demo-ruleForm"
           style="width: 30%;margin-left: 3%;">
-          <el-form-item label="模板名称:" prop="tpl_name">
-            <el-input type="text" v-model="mouldForm.tpl_name" auto-complete="off"></el-input>
+          <el-form-item label="模板名称:" prop="name">
+            <el-input type="text" v-model="mouldForm.name" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.tpl_type === 1 ? '首重（kg）:': '首件（个）:'" prop="first_company">
+          <el-form-item :label="mouldForm.type === 1 ? '首重（kg）:': '首件（个）:'" prop="first_company">
             <el-input type="text" v-model.number="mouldForm.first_company" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="运费（元）:" prop="first_price">
             <el-input v-model="mouldForm.first_price"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.tpl_type === 1 ? '续重（kg）:':'续件（个）:'" prop="continued_company">
+          <el-form-item :label="mouldForm.type === 1 ? '续重（kg）:':'续件（个）:'" prop="continued_company">
             <el-input v-model.number="mouldForm.continued_company"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.tpl_type === 1? '续重运费（元）:':'续件运费（元）:'" prop="continued_price">
+          <el-form-item :label="mouldForm.type === 1? '续重运费（元）:':'续件运费（元）:'" prop="continued_price">
             <el-input v-model="mouldForm.continued_price"></el-input>
           </el-form-item>
-          <el-form-item label="模板类型:" prop="tpl_type">
-            <el-select v-model.number="mouldForm.tpl_type" placeholder="请选择">
+          <el-form-item label="模板类型:" prop="type">
+            <el-select v-model.number="mouldForm.type" placeholder="请选择">
               <el-option
                 v-for="item in tplTypeList"
                 :label="item.label"
@@ -160,7 +160,7 @@
         /** 地区选择器 */
         areaDialog: false,
 
-        areaApi: `${process.env.BASE_REGION}/regions/depth/3`,
+        areaApi: `${process.env.BASE_API}/regions/depth/3`,
 
         /** 地址选择器 映射属性 */
         props: {
@@ -183,10 +183,10 @@
         /** 模板表单信息 */
         mouldForm: {
           /** 模板id */
-          tpl_id: '',
+          template_id: '',
 
           /** 模板名称 */
-          tpl_name: '',
+          name: '',
 
           /** 首重 */
           first_company: '',
@@ -201,10 +201,10 @@
           continued_price: '',
 
           /** 模板类型 */
-          tpl_type: '',
+          type: '',
 
           /** 模板地区*/
-          tpl_area: ''
+          area: ''
         },
 
         /** 模板类型列表 */
@@ -215,7 +215,7 @@
 
         /** 表单校验规则*/
         rules: {
-          tpl_name: [
+          name: [
             { required: true, message: '请输入模板名称', trigger: 'blur' }
           ],
           first_company: [
@@ -234,7 +234,7 @@
             { required: true, message: '请输入续重运费', trigger: 'blur' },
             { validator: checkContinuedPrice, trigger: 'blur' }
           ],
-          tpl_type: [
+          type: [
             { required: true, message: '请选择模板类型', trigger: 'blur' }
           ]
         }
@@ -252,13 +252,13 @@
           this.GET_ExpressMould()
         } else if (this.activeName === 'add') {
           this.mouldForm = {
-            tpl_id: '',
-            tpl_name: '',
+            template_id: '',
+            name: '',
             first_company: '',
             first_price: '',
             continued_company: '',
             continued_price: '',
-            tpl_type: '',
+            type: '',
             area: []
           }
         }
@@ -266,7 +266,7 @@
 
       /** 模板类型格式化 */
       typeStatus(row, column, cellValue) {
-        return row.tpl_type === 1 ? '重量算运费' : '计件算运费'
+        return row.type === 1 ? '重量算运费' : '计件算运费'
       },
 
       /** 选择配送地区 */
@@ -276,7 +276,7 @@
 
       /** 地区选择器确认回调 */
       confirmFunc(val) {
-        this.mouldForm.tpl_area = JSON.stringify(val)
+        this.mouldForm.area = JSON.stringify(val)
         this.areaDialog = false
       },
 
@@ -290,7 +290,7 @@
         this.loading = true
         API_express.getTplList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
+          this.tableData = response
         })
       },
 
@@ -298,15 +298,15 @@
       handleEditMould(row) {
         this.activeName = 'add'
         this.tplOperaName = '修改模版'
-        API_express.getSimpleTpl(row.tpl_id, {}).then((response) => {
+        API_express.getSimpleTpl(row.template_id, {}).then((response) => {
           this.mouldForm = { ...response }
-          this.mouldForm.tpl_area = response.tpl_area_json
+          this.mouldForm.area = response.area_json
         })
       },
 
       /** 删除模板*/
       handleDeleteMould(row) {
-        const _id = row.tpl_id
+        const _id = row.template_id
         this.$confirm(`确定要删除模板么?`, '确认信息', { type: 'warning' })
           .then(() => {
             API_express.deleteExpressMould(_id, {}).then(() => {
@@ -321,9 +321,9 @@
         this.activeName = 'add'
         this.tplOperaName = '新增模板'
         this.mouldForm = {
-          tpl_id: '',
+          template_id: '',
 
-          tpl_name: '',
+          name: '',
 
           first_company: '',
 
@@ -333,9 +333,9 @@
 
           continued_price: '',
 
-          tpl_type: '',
+          type: '',
 
-          tpl_area: ''
+          area: ''
         }
       },
 
@@ -344,17 +344,17 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let _params = {
-              name: this.mouldForm.tpl_name,
+              name: this.mouldForm.name,
               first_company: this.mouldForm.first_company,
               first_price: this.mouldForm.first_price,
               continued_company: this.mouldForm.continued_company,
               continued_price: this.mouldForm.continued_price,
-              type: parseInt(this.mouldForm.tpl_type),
+              type: parseInt(this.mouldForm.type),
               area_id: '54',
-              area: this.mouldForm.tpl_area
+              area: this.mouldForm.area
             }
-            if (this.mouldForm.tpl_id) {
-              API_express.saveExpressMould(this.mouldForm.tpl_id, _params).then(() => {
+            if (this.mouldForm.template_id) {
+              API_express.saveExpressMould(this.mouldForm.template_id, _params).then(() => {
                 this.$message.success('修改成功')
                 this.GET_ExpressMould()
                 this.activeName = 'express'

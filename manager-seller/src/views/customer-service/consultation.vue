@@ -32,8 +32,7 @@
                       v-for="item in replyStatusList"
                       :label="item.label"
                       :value="item.value"
-                      :key="item.value"
-                    />
+                      :key="item.value"/>
                   </el-select>
                 </el-form-item>
               </el-form>
@@ -56,22 +55,22 @@
               <!--商品名称-->
               <a href="#" class="goods-name">{{ item.goods_name }}</a>
               咨询用户：<span class="member-name">{{ item.member_name}} </span>
-              咨询时间：<span>{{ item.consultation_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+              咨询时间：<span>{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
             </td>
           </tr>
           <tr>
             <!--咨询-->
             <td>
               <h4>咨询问题：</h4>
-              <p>{{ item.consultation_content }}</p>
+              <p>{{ item.content }}</p>
             </td>
             <!--操作-->
-            <td class="opera-btn" v-if="item.is_reply === 1">
+            <td class="opera-btn" v-if="item.reply_status === 1">
               <h4>回复咨询：</h4>
-              <p>{{ item.reply_content }}</p>
+              <p>{{ item.reply }}</p>
             </td>
-            <td class="opera-btn" v-if="item.is_reply === 0">
-              <el-button size="mini" type="primary" @click="handleReply(item)">回复</el-button>
+            <td class="opera-btn" v-if="item.reply_status === 0">
+              <el-button type="primary" @click="handleReply(item)">回复</el-button>
             </td>
           </tr>
         </tbody>
@@ -99,9 +98,9 @@
           </el-form-item>
           <el-form-item
             label="回复内容:"
-            prop="reply_content"
+            prop="reply"
             :rules="{ required: true, message: '请填写回复内容' ,trigger: 'blur' }">
-            <el-input type="textarea" v-model="replyForm.reply_content"></el-input>
+            <el-input type="textarea" v-model="replyForm.reply"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -168,7 +167,7 @@
           content: '',
 
           /** 回复内容 */
-          reply_content: ''
+          reply: ''
         }
       }
     },
@@ -229,15 +228,15 @@
       },
 
       /** 回复操作 */
-      handleReply(row) {
+      handleReply(item) {
         this.isReplyShow = true
         this.replyForm = {
-          consultation_id: row.consultation_id,
+          ask_id: item.ask_id,
           /** 咨询问题 */
-          content: row.consultation_content,
+          content: item.content,
 
           /** 回复内容 */
-          reply_content: row.reply_content
+          reply: item.reply
         }
       },
 
@@ -246,9 +245,9 @@
         this.$refs['replyForm'].validate((valid) => {
           if (valid) {
             const _params = {
-              reply_content: this.replyForm.reply_content
+              reply_content: this.replyForm.reply
             }
-            API_consultation.replyConsultationList(this.replyForm.consultation_id, _params).then(() => {
+            API_consultation.replyConsultationList(this.replyForm.ask_id, _params).then(() => {
               this.$message.success('回复成功')
               this.isReplyShow = false
               this.GET_ConsultationList()

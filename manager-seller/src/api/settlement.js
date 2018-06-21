@@ -3,8 +3,6 @@
  */
 
 import request from '@/utils/request'
-import SettleMentModel from '@/models/SettleMentModel'
-import OrderModel from '@/models/OrderModel'
 
 /**
  * 获取结算账单列表
@@ -19,9 +17,7 @@ export function getSettleMentList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new SettleMentModel().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -60,9 +56,7 @@ export function getOrderList(id, type, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new OrderModel().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

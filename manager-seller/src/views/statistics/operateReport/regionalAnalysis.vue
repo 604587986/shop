@@ -82,7 +82,6 @@
 
       /** 改变焦点时触发 */
       changeHotType(target) {
-        console.log(target, 522)
         this.params = {
           ...this.params,
           hotType: target

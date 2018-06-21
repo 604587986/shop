@@ -167,30 +167,31 @@
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
-    <en-goods-selector
+    <en-goods-picker
+      type="seller"
       :show="showDialog"
       :api="goods_api"
-      :defaultData="tableData"
-      :maxLength="maxsize"
+      :categoryApi="categoryApi"
+      :headers="headers"
+      :defaultData="goodsIds"
+      :limit="maxsize"
       @confirm="refreshFunc"
-      @closed="showDialog = false"/>
+      @close="showDialog = false"/>
   </div>
 </template>
 
 <script>
   import * as API_activity from '@/api/activity'
   import { CategoryPicker, UE } from '@/components'
-  import { GoodsSelector } from '@/plugins/selector/vue'
 
   export default {
     name: 'singleCut',
     components: {
       [CategoryPicker.name]: CategoryPicker,
-      [UE.name]: UE,
-      [GoodsSelector.name]: GoodsSelector
+      [UE.name]: UE
     },
     data() {
-      var checkRange = (rule, value, callback) => {
+      const checkRange = (rule, value, callback) => {
         if (!value && value !== 0) {
           return callback(new Error('请选择商品参与方式'))
         } else {
@@ -207,8 +208,16 @@
         /** 列表参数 */
         params: {},
 
+        /** 请求头令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+        },
+
         /** 列表数据*/
-        tableData: null,
+        tableData: [],
+
+        /** 商品ids */
+        goodsIds: [],
 
         /** 日期选择器选项 */
         pickoptions: {
@@ -271,7 +280,10 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: `${process.env.BASE_API}/goods`,
+        goods_api: `${process.env.SELLER_API}/goods`,
+
+        /** 商城分类api */
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
@@ -322,6 +334,9 @@
       refreshFunc(val) {
         if (val) {
           this.activityForm.activity_goods = val
+          this.goodsIds = this.activityForm.activity_goods.map(key => {
+            return key.goods_id
+          })
         }
       },
 
@@ -336,6 +351,9 @@
           if (index === _index) {
             this.activityForm.activity_goods.splice(_index, 1)
           }
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -352,6 +370,9 @@
             }
           })
           this.$message.success('批量取消成功！')
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -565,7 +586,8 @@
       flex-direction: column;
       flex-wrap: nowrap;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      margin-left: 20px;
     }
   }
 

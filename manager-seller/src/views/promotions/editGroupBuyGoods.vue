@@ -131,12 +131,15 @@
       </el-form-item>
     </el-form>
     <!--商品选择器-->
-    <en-goods-selector
+    <en-goods-picker
+      type="seller"
       :show="showDialog"
       :api="goods_api"
-      :maxLength="maxsize"
+      :categoryApi="categoryApi"
+      :headers="headers"
+      :limit="maxsize"
       @confirm="refreshFunc"
-      @closed="showDialog = false"/>
+      @close="showDialog = false"/>
     <!--用户注册协议-->
     <el-dialog
       title="用户注册协议"
@@ -186,12 +189,10 @@
   import { unixToDate } from '@/utils/index'
   import { RegExp } from '～/ui-utils'
   import { UE } from '@/components'
-  import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
     name: 'editGroupBuyGoods',
     components: {
-      [UE.name]: UE,
-      [GoodsSelector.name]: GoodsSelector
+      [UE.name]: UE
     },
     data() {
       const checkGroupBuyPrice = (rule, value, callback) => {
@@ -257,8 +258,16 @@
         /** 团购图片 */
         fileList: [],
 
+        /** 请求头令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+        },
+
         /** 商品选择器列表api*/
-        goods_api: `${process.env.BASE_API}/goods`,
+        goods_api: `${process.env.SELLER_API}/goods`,
+
+        /** 商城分类api */
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
@@ -400,7 +409,18 @@
 
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
-        this.gruopBuyForm.goods_name = val.goods_name
+        let _val = null
+        if (Array.isArray(val)) {
+          _val = val[0]
+        } else {
+          _val = val
+        }
+        if (_val && _val.goods_name) {
+          this.gruopBuyForm.goods_id = _val.goods_id
+          this.gruopBuyForm.goods_name = _val.goods_name
+          this.gruopBuyForm.shop_price = _val.price
+          this.gruopBuyForm.goods_stock = _val.quantity
+        }
       },
 
       /** 图片上传成功时的钩子 上传成功校验*/

@@ -29,8 +29,8 @@
         <el-table-column prop="sort" label="排序"/>
         <el-table-column label="显示">
           <template slot-scope="scope">
-            <span class="showstatus showed" v-if="scope.row.is_show === 1"><i class="el-icon-success"></i>已显示</span>
-            <span class="showstatus notshow" v-if="scope.row.is_show === 0"><i class="el-icon-success"></i>未显示</span>
+            <span class="showstatus showed" v-if="scope.row.disable === 1"><i class="el-icon-success"></i>已显示</span>
+            <span class="showstatus notshow" v-if="scope.row.disable === 0"><i class="el-icon-success"></i>未显示</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="350">
@@ -53,7 +53,7 @@
       </template>
     </en-tabel-layout>
     <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="25%">
-      <el-form :model="goodsCatData" label-position="right" label-width="80px">
+      <el-form :model="goodsCatData" label-position="right" label-width="80px" :rules="rules" status-icon>
         <el-form-item label="分组名称">
           <el-input v-model="goodsCatData.category_name" auto-complete="off" style="width: 100%;"></el-input>
         </el-form-item>
@@ -67,11 +67,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="排序">
+        <el-form-item label="排序" prop="sort">
           <el-input v-model.number="goodsCatData.sort" auto-complete="off" style="width: 100%;text-align: center;"></el-input>
         </el-form-item>
         <el-form-item label="显示状态">
-          <el-radio-group v-model="goodsCatData.is_show" style="width: 70%;">
+          <el-radio-group v-model="goodsCatData.disable" style="width: 70%;">
             <el-radio :label="1">是</el-radio>
             <el-radio :label="0">否</el-radio>
           </el-radio-group>
@@ -87,9 +87,22 @@
 
 <script>
   import * as API_goodsCategory from '@/api/goodsCategory'
+  import { RegExp } from '～/ui-utils'
   export default {
     name: 'categoryManage',
     data() {
+      const checkSort = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('排序不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.integer.test(value)) {
+            callback(new Error('请输入正整数'))
+          } else {
+            callback()
+          }
+        }, 500)
+      }
       return {
         /** 列表loading状态 */
         loading: false,
@@ -117,11 +130,18 @@
           category_name: '',
           category_parent: '',
           sort: 1,
-          is_show: 0
+          disable: 0
         },
 
         /** 商品分组*/
-        categoryID: 0
+        categoryID: 0,
+
+        /** 校验规则 */
+        rules: {
+          sort: [
+            { validator: checkSort, trigger: 'blur' }
+          ]
+        }
       }
     },
     mounted() {
@@ -145,7 +165,7 @@
         this.loading = true
         API_goodsCategory.getGoodsCategoryList().then(response => {
           this.loading = false
-          this.tableData = response.data
+          this.tableData = response
           // 为分组增加等级标识
           this.tableData.forEach(key => {
             const _level = key.shop_cat_pid === 0 ? 1 : 2
@@ -155,7 +175,7 @@
           this.tableData = this.transData(this.tableData)
           // 为分组数据增加展开状态
           this.add_expanded(this.tableData)
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 删除分组 */
@@ -164,10 +184,8 @@
           const _id = row.shop_cat_id
           API_goodsCategory.deleteGoodsCategory(_id).then(() => {
             this.GET_GoodsCategoryList()
-            this.$message.success('删除商品成功！')
+            this.$message.success('删除分组成功！')
           })
-        }).catch(() => {
-          this.$message.info({ message: '已取消删除' })
         })
       },
 
@@ -179,7 +197,7 @@
         this.goodsCatData = {
           category_name: '',
           sort: '',
-          is_show: 1
+          disable: 1
         }
       },
 
@@ -194,7 +212,7 @@
           category_name: row.shop_cat_name,
           category_parent: _shop_cat_pid,
           sort: row.sort,
-          is_show: row.is_show
+          disable: row.disable
         }
       },
 
@@ -207,7 +225,7 @@
           category_name: '',
           category_parent: row.shop_cat_id,
           sort: '',
-          is_show: 1
+          disable: 1
         }
       },
 
@@ -218,13 +236,13 @@
           params = {
             shop_cat_pid: this.goodsCatData.category_parent,
             shop_cat_name: this.goodsCatData.category_name,
-            disable: this.goodsCatData.is_show,
+            disable: this.goodsCatData.disable,
             sort: this.goodsCatData.sort
           }
         } else {
           params = {
             shop_cat_name: this.goodsCatData.category_name,
-            disable: this.goodsCatData.is_show,
+            disable: this.goodsCatData.disable,
             sort: this.goodsCatData.sort
           }
         }

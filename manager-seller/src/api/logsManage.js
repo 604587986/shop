@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as LogsManageModel from '@/models/LogsManageModel'
 
 /**
  * 获取日志列表
@@ -18,9 +17,7 @@ export function getLogsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new LogsManageModel.Logs().map(response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }
