@@ -22,8 +22,7 @@
             @advancedSearch="advancedSearchEvent"
             advanced
             advancedWidth="465"
-            placeholder="请输入关键字"
-          >
+            placeholder="请输入关键字">
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="订单编号">
@@ -111,6 +110,9 @@
           </td>
         </tr>
         </tbody>
+        <div v-if="tableData.length === 0 " class="empty-block">
+          暂无数据
+        </div>
       </table>
     </div>
     <el-pagination
@@ -149,10 +151,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 高级搜索数据 */
         advancedForm: {},
@@ -280,6 +282,22 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
+  }
+
+  /*暂无数据时的样式*/
+  /deep/ .el-table__empty-block {
+    display: none;
+  }
+
+  .empty-block {
+    position: relative;
+    min-height: 60px;
+    line-height: 60px;
+    text-align: center;
+    width: 295%;
+    height: 100%;
+    font-size: 14px;
+    color: #606266;
   }
 
   /*表格信息*/

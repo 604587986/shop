@@ -5,7 +5,7 @@
       <div>
         <span>本期结算</span>
         <span>本期结算无误，我要
-          <el-button @click="handleConfirmSettlement" size="mini" type="success">确认</el-button>
+          <el-button @click="handleConfirmSettlement" type="primary">确认</el-button>
         </span>
       </div>
       <p>
@@ -52,7 +52,7 @@
             <!--操作-->
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="handleLookOrderDetails(scope.row)">查看</el-button>
+                <el-button type="primary" @click="handleLookOrderDetails(scope.row)">查看</el-button>
               </template>
             </el-table-column>
           </template>

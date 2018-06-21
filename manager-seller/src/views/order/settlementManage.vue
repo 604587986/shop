@@ -16,10 +16,10 @@
         </el-table-column>
         <!--本期应收-->
         <el-table-column label="本期应收">
-          <template slot-scope="scope">{{ scope.row.bill_price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--结算状态-->
-        <el-table-column prop="bill_status" label="结算状态"/>
+        <el-table-column prop="status" label="结算状态"/>
         <!--付款时间-->
         <el-table-column label="付款时间">
           <template slot-scope="scope">
