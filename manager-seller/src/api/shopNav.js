@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import ShopNavModel from '@/models/ShopNavModel'
 
 /**
  * 获取店铺导航列表
@@ -18,9 +17,7 @@ export function getShopNavList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ShopNavModel().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -35,7 +32,7 @@ export function addShopNav(params) {
     request({
       url: '/shops/navigations',
       method: 'post',
-      data: new ShopNavModel().params(params)
+      data: params
     }).then(response => resolve(response))
   })
 }
@@ -51,7 +48,7 @@ export function editShopNav(id, params) {
     request({
       url: `/shops/navigations/${id}`,
       method: 'put',
-      data: new ShopNavModel().params(params)
+      data: params
     }).then(response => resolve(response))
   })
 }

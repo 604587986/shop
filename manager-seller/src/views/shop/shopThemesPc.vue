@@ -5,10 +5,10 @@
     <!--当前模板-->
     <p style="padding: 0 50px;">当前模板:</p>
     <div class="tpl-current-theme">
-      <div class="themes-img choosed-image" v-if="tpl_current.theme_image">
-        <img :src="tpl_current.theme_image" alt="" class="shop-theme-image">
+      <div class="themes-img choosed-image" v-if="tpl_current.preview_base_path">
+        <img :src="tpl_current.preview_base_path" alt="" class="shop-theme-image">
       </div>
-      <span class="tpl-name">模板名称:{{tpl_current.theme_name}}</span>
+      <span class="tpl-name">模板名称:{{tpl_current.name}}</span>
     </div>
     <!--模板列表-->
     <hr/>
@@ -18,12 +18,12 @@
         <li v-for="item in tpl_list">
           <div class="tpl-theme">
             <div class="themes-img"
-                 :class='{"choosed-image":item.themes_id === tpl_choosed_id}'
+                 :class='{"choosed-image":item.id === tpl_choosed_id}'
                  @click="chooseTheme(item)">
-              <img v-if="item.theme_image" :src="item.theme_image" alt="" class="shop-theme-image">
+              <img v-if="item.preview_base_path" :src="item.preview_base_path" alt="" class="shop-theme-image">
             </div>
-            <span class="tpl-name">模板名称:{{item.theme_name}}</span>
-            <span class="tpl-preview" @click="previewImg(item.theme_image)">预览</span>
+            <span class="tpl-name">模板名称:{{item.name}}</span>
+            <span class="tpl-preview" @click="previewImg(item.preview_base_path)">预览</span>
           </div>
         </li>
       </ul>
@@ -43,7 +43,6 @@
 
 <script>
   import * as API_ShopTheme from '@/api/shopTheme'
-
   export default {
     name: 'shopThemesPc',
     data() {
@@ -87,7 +86,7 @@
 
       /** 选择模板主题*/
       chooseTheme(item) {
-        this.tpl_choosed_id = item.themes_id
+        this.tpl_choosed_id = item.id
       },
 
       /** 预览*/
