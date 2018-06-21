@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as MessagesModel from '@/models/MessagesModel'
 
 /**
  * 获取消息列表
@@ -18,9 +17,7 @@ export function getMsgsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new MessagesModel.Messages().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -32,14 +29,12 @@ export function getMsgsList(params) {
  * @returns {Promise<any>}
  */
 export function deleteMsgs(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/messages/${ids}`,
       method: 'delete',
       loading: false,
-      data: _formData
+      params
     }).then(response => {
       resolve(response)
     })
@@ -53,14 +48,12 @@ export function deleteMsgs(ids, params) {
  * @returns {Promise<any>}
  */
 export function signMsgs(ids, params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
   return new Promise((resolve, reject) => {
     request({
       url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/message/sign/${ids}`,
       method: 'post',
       loading: false,
-      data: _formData
+      data: params
     }).then(response => {
       resolve(response)
     })

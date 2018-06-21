@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import ShopModel from '@/models/ShopModel'
 
 /**
  * 获取店铺信息
@@ -19,7 +18,6 @@ export function getShopData(params) {
       params
     }).then(response => {
       const _response = response || {}
-      _response.data = new ShopModel().map(response)
       resolve(_response)
     })
   })

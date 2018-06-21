@@ -4,7 +4,6 @@
 
 import request from '@/utils/request'
 import OrderModel from '@/models/OrderModel'
-import ProductModel from '@/models/ProductModel'
 
 /**
  * 获取订单列表
