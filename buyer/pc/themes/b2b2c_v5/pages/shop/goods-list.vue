@@ -137,7 +137,7 @@
       /** 商品搜索【店内、全站】 */
       handleSearch(type) {
         if (type === 'all') {
-          this.$router.push({ path: '/goods-list', query: { keyword: this.params.keyword } })
+          this.$router.push({ path: '/goods', query: { keyword: this.params.keyword } })
         } else {
           this.handleQueryChanged()
           this.GET_GoodsList()
