@@ -87,17 +87,6 @@
         </el-select>
         <span class="activity-tip">请选择团购商品的所属类别</span>
       </el-form-item>
-      <!--所属区域-->
-      <el-form-item label="所属区域" v-if="gruopBuyForm.goods_name">
-        <el-select v-model="gruopBuyForm.area_id" placeholder="请选择">
-          <el-option
-            v-for="item in theAreas"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
       <!--虚拟数量-->
       <el-form-item label="虚拟数量">
         <el-input
@@ -279,14 +268,6 @@
           { value: 2, label: '年货采购' }
         ],
 
-        /** 所属区域 */
-        theAreas: [
-          { value: 0, label: '不限' },
-          { value: 1, label: '0' },
-          { value: 2, label: '15' },
-          { value: 3, label: 'sd ' }
-        ],
-
         /** 团购活动*/
         gruopBuyActivitys: [],
 
@@ -327,9 +308,6 @@
 
           /** 团购类别 */
           group_buy_category: '',
-
-          /** 所属区域 */
-          area_id: '',
 
           /** 虚拟数量 */
           goods_virtual: '',
