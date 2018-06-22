@@ -163,7 +163,7 @@
             block_type: 'TEXT',
             block_value: inputValue,
             block_opt: {
-              opt_type: 'NONE',
+              opt_type: 'KEYWORD',
               opt_value: inputValue
             }
           })
