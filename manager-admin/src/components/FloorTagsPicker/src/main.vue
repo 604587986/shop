@@ -164,7 +164,7 @@
             block_value: inputValue,
             block_opt: {
               opt_type: 'NONE',
-              opt_value: ''
+              opt_value: inputValue
             }
           })
           const _index = this.tagList.length - 1
