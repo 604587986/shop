@@ -11,7 +11,6 @@
         </draggable>
       </div>
       <div class="draggable-box floor">
-        <div class="floor-top"></div>
         <div class="floor-body">
           <draggable v-model="floorList" :options="floorOptions" class="floor-list">
             <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
@@ -252,7 +251,7 @@
     width: 50%;
     .save-btn {
       position: absolute;
-      top: 10px;
+      top: 5px;
     }
     &.floor {
       width: 1210px + 50px;
@@ -304,12 +303,11 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 667px;
+    height: calc(100vh - 40px - 84px);
     overflow-y: scroll;
   }
   .floor-list {
     width: calc(100% - 50px);
-    min-height: 667px;
     background-color: #E5E7EA;
   }
   .floor-item {

@@ -81,8 +81,7 @@ export default {
     },
     /** 编辑标签 */
     handleEditTags(columnIndex) {
-      console.log(this.data, columnIndex)
-      this.$emit('edit-tags')
+      this.$emit('edit-tags', JSON.parse(JSON.stringify(this.data)), columnIndex)
     }
   }
 }

@@ -37,7 +37,21 @@ export default {
     /** 格式化时间戳 */
     MixinUnixToDate(row, column, cellValue, index) {
       return Foundation.unixToDate(cellValue)
+    },
+    /**
+     * 导出数据
+     * @param data   要导出的数据
+     * @param name   要导出的文件名
+     * @param suffix 要导出的数据文件名后缀
+     * @param type   要导出的数据类型
+     * @constructor
+     */
+    MixinExportFile(data, name = 'data', suffix = 'xlsx', type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      let blob = new Blob([data], { type })
+      let link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = `${name}.${suffix}`
+      link.click()
     }
-  },
-  computed: {}
+  }
 }
