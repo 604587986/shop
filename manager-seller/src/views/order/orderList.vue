@@ -43,8 +43,7 @@
                     unlink-panels
                     range-separator="-"
                     start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    value-format="yyyy-MM-dd">
+                    end-placeholder="结束日期">
                   </el-date-picker>
                 </el-form-item>
               </el-form>
@@ -68,7 +67,7 @@
         <tbody v-for="item in tableData">
         <tr style="width: 100%;height: 10px;"></tr>
         <tr class="bg-order">
-          <td class="shoplist-content-out" colspan="5">订单编号：{{item.order_sn}}</td>
+          <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
           <td>
             <el-button
               type="text"
@@ -92,7 +91,7 @@
           <!--买家-->
           <td> {{ item.ship_name }}</td>
           <!--下单时间-->
-          <td>{{ item.order_time | unixToDate }}</td>
+          <td>{{ item.create_time | unixToDate }}</td>
           <!--订单状态-->
           <td>{{ item.order_status_text }}</td>
           <!--订单来源-->
@@ -164,10 +163,10 @@
 
         /** 订单状态 列表*/
         orderStatusList: [
-          { value: 0, label: '全部' },
-          { value: 1, label: '待付款' },
-          { value: 2, label: '待发货' },
-          { value: 3, label: '待收货' }
+          { value: 'ALL', label: '全部' },
+          { value: 'WAIT_PAY', label: '待付款' },
+          { value: 'WAIT_SHIP', label: '待发货' },
+          { value: 'WAIT_ROG', label: '待收货' }
         ],
 
         /** 表格最大高度 */
@@ -242,8 +241,8 @@
         delete this.params.start_time
         delete this.params.end_time
         if (this.advancedForm.order_time_range) {
-          this.params.start_time = this.advancedForm.order_time_range[0]
-          this.params.end_time = this.advancedForm.order_time_range[1]
+          this.params.start_time = this.advancedForm.order_time_range[0].getTime() / 1000
+          this.params.end_time = this.advancedForm.order_time_range[1].getTime() / 1000
         }
         delete this.params.keyword
         delete this.params.order_time_range
@@ -252,7 +251,7 @@
 
       /** 查看、操作订单 */
       handleOperateOrder(item) {
-        this.$router.push({ path: `/order/detail/${item.order_sn}` })
+        this.$router.push({ path: `/order/detail/${item.sn}` })
       },
 
       GET_OrderList() {
