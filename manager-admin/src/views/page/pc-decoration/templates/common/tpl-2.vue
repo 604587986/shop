@@ -93,9 +93,6 @@
       margin-right: 10px;
     }
   }
-  .layout-body {
-    height: 420px;
-  }
   .layout-title {
     .edit-mask.tag { width: 420px }
     .bz-tags { max-width: 420px }
