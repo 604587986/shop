@@ -272,3 +272,24 @@ export function deleteReceipt(id) {
     needToken: true
   })
 }
+
+/**
+ * 获取发票内容
+ */
+export function getReceiptContent() {
+  return request({
+    url: 'members/receipt-content',
+    method: Method.GET
+  })
+}
+
+/**
+ * 获取统计数量
+ * 包括但不限于【订单数量、收藏的商品数量、收藏的店铺数量】
+ */
+export function getStatisticsNum() {
+  return request({
+    url: 'members/statistics',
+    method: Method.GET
+  })
+}

@@ -1,44 +1,42 @@
 <template>
-  <div>
-    <en-tabel-layout
-      :tableData="tableData.data"
-      :loading="loading"
-    >
-      <template slot="table-columns">
-        <el-table-column prop="uname" label="用户名"/>
-        <el-table-column prop="mobile" label="手机号"/>
-        <el-table-column prop="email" label="电子邮箱"/>
-        <el-table-column label="注册时间">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
-        </el-table-column>
-        <el-table-column label="上次登录时间">
-          <template slot-scope="scope">{{ scope.row.last_login | unixToDate }}</template>
-        </el-table-column>
-        <el-table-column prop="login_count" label="登录次数"/>
-        <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleRecoverMember(scope.$index, scope.row)">恢复</el-button>
-          </template>
-        </el-table-column>
-      </template>
+  <en-tabel-layout
+    :tableData="tableData.data"
+    :loading="loading"
+  >
+    <template slot="table-columns">
+      <el-table-column prop="uname" label="用户名"/>
+      <el-table-column prop="mobile" label="手机号"/>
+      <el-table-column prop="email" label="电子邮箱"/>
+      <el-table-column label="注册时间">
+        <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
+      </el-table-column>
+      <el-table-column label="上次登录时间">
+        <template slot-scope="scope">{{ scope.row.last_login | unixToDate }}</template>
+      </el-table-column>
+      <el-table-column prop="login_count" label="登录次数"/>
+      <el-table-column prop="sex" label="性别" :formatter="formatterSex"/>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="handleRecoverMember(scope.$index, scope.row)">恢复</el-button>
+        </template>
+      </el-table-column>
+    </template>
 
-      <el-pagination
-        v-if="tableData"
-        slot="pagination"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="tableData.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="tableData.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="tableData.data_total">
-      </el-pagination>
-    </en-tabel-layout>
-  </div>
+    <el-pagination
+      v-if="tableData"
+      slot="pagination"
+      @size-change="handlePageSizeChange"
+      @current-change="handlePageCurrentChange"
+      :current-page="tableData.page_no"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="tableData.page_size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.data_total">
+    </el-pagination>
+  </en-tabel-layout>
 </template>
 
 <script>
@@ -54,7 +52,8 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          disabled: -1
         },
 
         /** 列表数据 */

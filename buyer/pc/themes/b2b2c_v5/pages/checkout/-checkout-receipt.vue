@@ -68,7 +68,6 @@
    * 结算页
    * 发票组件
    */
-  // Andste_TODO 2018/6/15: 发票内容获取待优化
   import * as API_Members from '@/api/members'
   import * as API_Trade from '@/api/trade'
   import { RegExp } from '~/ui-utils'
@@ -101,7 +100,7 @@
         // 会员发票列表
         receipts: [],
         // 发票内容数组
-        contents: ['明细', '劳保用品', '办公用品'],
+        contents: ['明细'],
         // 已选择发票
         selectedReceipt: {
           ...this.receipt,
@@ -114,6 +113,10 @@
     mounted() {
       // 获取会员发票列表
       this.GET_ReceiptList()
+      // 获取发票内容
+      API_Members.getReceiptContent().then(response => {
+        this.contents.push(...response.map(item => item.content))
+      })
     },
     methods: {
       /** 修改发票信息 */
@@ -231,7 +234,7 @@
       GET_ReceiptList() {
         API_Members.getReceipts().then(response => {
           const receipts = [{ id: 0, title: '个人', content: '明细', type: 0 }]
-          if (Array.isArray(response.data)) receipts.push(...response.data)
+          if (Array.isArray(response)) receipts.push(...response)
           this.receipts = receipts
         })
       }
@@ -307,9 +310,9 @@
       }
       .content-receipt {
         float: left;
-        margin: 0 10px 0 0;
         min-width: 50px;
         padding: 0 10px;
+        margin: 0 10px 10px 0;
       }
     }
     .el-form-item__label, .el-form-item__content {

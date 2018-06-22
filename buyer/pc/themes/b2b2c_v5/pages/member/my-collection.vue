@@ -64,13 +64,13 @@
         <empty-member v-else>暂无商品收藏</empty-member>
       </div>
       <div v-show="type === 'shop'" class="shop">
-        <template v-if="shopData && shopData.length > 0">
+        <template v-if="shopData && shopData.data.length > 0">
           <ul>
             <li v-for="shop in shopData.data" :key="shop.shop_id" :class="['coll-s-item', shop.show_del_pop && 'del-pop-show']">
               <div class="shop-card">
                 <div class="shop-card-side">
                   <nuxt-link :to="'/shop/' + shop.shop_id">
-                    <img :src="shop.seller_avatar" :alt="shop.shop_name">
+                    <img :src="shop.logo" :alt="shop.shop_name">
                   </nuxt-link>
                 </div>
                 <div class="shop-card-main">
@@ -231,7 +231,7 @@
             response.data.map(item => {
               // 初始化是否显示删除遮罩标识
               item.show_del_pop = 0
-              item.tagList.map((_item, index) => {
+              item.tagList && item.tagList.map((_item, index) => {
                 // 初始化标签显示状态【第一个默认显示】
                 _item.active = index === 0
                 _item.goodsList = _item.goodsList.slice(0, 5)

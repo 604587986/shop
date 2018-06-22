@@ -11,7 +11,6 @@
         </draggable>
       </div>
       <div class="draggable-box floor">
-        <div class="floor-top"></div>
         <div class="floor-body">
           <draggable v-model="floorList" :options="floorOptions" class="floor-list">
             <div v-for="(item, index) in floorList" :class="'item-' + item.tpl_id" class="floor-item">
@@ -21,6 +20,7 @@
                 is-edit
                 @edit-block="(...props) => { handleEditBlock(index, ...props) }"
                 @edit-title="(...props) => { handleEditTitle(index, ...props) }"
+                @edit-tags="(...props) => { handleEditTags(index, ...props) }"
               ></component>
               <div class="panel-handle">
                 <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
@@ -54,6 +54,12 @@
       :default-data="defaultTitleData"
       @close="dialogTitleShow = false"
       @confirm="handleTitlePickerConfirm"
+    />
+    <en-floor-tags-picker
+      :show="dialogTagsShow"
+      :default-data="defaultTagsData"
+      @close="dialogTagsShow = false"
+      @confirm="handleTagsPickerConfirm"
     />
   </div>
 </template>
@@ -93,12 +99,15 @@
         dialogImageShow: false,
         dialogGoodsShow: false,
         dialogTitleShow: false,
+        dialogTagsShow: false,
         /** 图片默认数据 */
         defaultImageData: '',
         /** 商品默认数据 */
         defaultGoodsData: [],
         /** 楼层标题默认数据 */
         defaultTitleData: {},
+        /** 楼层标签默认数据 */
+        defaultTagsData: [],
         /** 图片选择器自定义参数 */
         imageOperation: [
           {
@@ -151,8 +160,6 @@
           // 填充默认数据
           // this.defaultGoodsData = blockData.block_value ? [blockData.block_value.goods_id] : []
           // this.dialogGoodsShow = true
-        } else if (type === 'TEXT') {
-          // const block = target.blockList[targetIndex]
         } else if (type === 'BRAND') {
           console.log('品牌模块')
         }
@@ -168,6 +175,14 @@
           end_color: column.titleColors[1]
         }
         this.dialogTitleShow = true
+      },
+      /** 编辑楼层标签 */
+      handleEditTags(index, target, columnIndex) {
+        this.editOptions = { index, target, columnIndex }
+        const column = target.columnList[columnIndex]
+        const columnData = JSON.parse(JSON.stringify(column))
+        this.defaultTagsData = columnData.tagList
+        this.dialogTagsShow = true
       },
       /** 图片上传组件确认 */
       handleImagePickerConfirm(fileList) {
@@ -186,15 +201,6 @@
         target.blockList[targetIndex].block_value = this.MixinClone(list[0] || '')
         this.$set(this.floorList, index, target)
       },
-      /** 文本选择器确认 */
-      handleTextPickerConfirm(data) {
-        // const { index, target, columnIndex, blockIndex } = this.editOptions
-        // const block = target.columnList[columnIndex].blockList[blockIndex]
-        // block.block_value = data.text
-        // block.block_opt.opt_type = data.opt_type
-        // block.block_opt.opt_value = data.opt_value
-        // this.$set(this.floorList, index, target)
-      },
       /** 楼层标题编辑确认 */
       handleTitlePickerConfirm(data) {
         const { index, target, columnIndex } = this.editOptions
@@ -202,6 +208,13 @@
         column.title = data.text
         column.titleColors[0] = data.start_color
         column.titleColors[1] = data.end_color
+        this.$set(this.floorList, index, target)
+      },
+      /** 楼层标签编辑确认 */
+      handleTagsPickerConfirm(tagList) {
+        const { index, target, columnIndex } = this.editOptions
+        const column = target.columnList[columnIndex]
+        column.tagList = tagList
         this.$set(this.floorList, index, target)
       },
       /** 保存发布 */
@@ -238,7 +251,7 @@
     width: 50%;
     .save-btn {
       position: absolute;
-      top: 10px;
+      top: 5px;
     }
     &.floor {
       width: 1210px + 50px;
@@ -290,12 +303,11 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 667px;
+    height: calc(100vh - 40px - 84px);
     overflow-y: scroll;
   }
   .floor-list {
     width: calc(100% - 50px);
-    min-height: 667px;
     background-color: #E5E7EA;
   }
   .floor-item {

@@ -1,9 +1,11 @@
+import FloorTagsPicker from './FloorTagsPicker'
 import FloorTitlePicker from './FloorTitlePicker'
 import GradeEditor from './GradeEditor'
 import ShopPicker from './ShopPicker'
 import UE from './UE'
 
 const components = {
+  FloorTagsPicker,
   FloorTitlePicker,
   GradeEditor,
   ShopPicker
@@ -18,6 +20,7 @@ components.install = function(Vue) {
 export default components
 
 export {
+  FloorTagsPicker,
   FloorTitlePicker,
   GradeEditor,
   ShopPicker,

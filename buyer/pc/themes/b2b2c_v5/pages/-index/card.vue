@@ -4,7 +4,7 @@
       <div class="inner-card-user">
         <div class="card-user-avatar">
           <nuxt-link to="/member">
-            <img src="//storage.jd.com/i.imageUpload/6c616979756e636875616e31343834333537343637373532_mid.jpg">
+            <en-face :url="user.face"/>
           </nuxt-link>
         </div>
         <div v-if="user" class="card-user-show logined">
@@ -79,8 +79,10 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import EnFace from '@/components/Face'
   export default {
     name: 'index-card',
+    components: { EnFace },
     data() {
       return {
         card_news_tab_x: 0
