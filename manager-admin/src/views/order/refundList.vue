@@ -5,6 +5,18 @@
   >
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns">
+        <el-date-picker
+          v-model="exportDateRange"
+          type="daterange"
+          align="right"
+          unlink-panels
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="timestamp"
+          :picker-options="pickerOptions">
+        </el-date-picker>
+        <el-button size="mini" type="primary" icon="el-icon-download" @click="handleExportRefund" style="margin-left: 5px">导出Excel</el-button>
       </div>
       <div class="toolbar-search">
         <en-table-search
@@ -15,7 +27,7 @@
           placeholder="请输入订单编号"
         >
           <template slot="advanced-content">
-            <el-form ref="advancedForm" :model="advancedForm" label-width="100px">
+            <el-form ref="advancedForm" :model="advancedForm" label-width="110px">
               <el-form-item label="售后单号">
                 <el-input size="medium" v-model="advancedForm.sn" clearable></el-input>
               </el-form-item>
@@ -26,9 +38,15 @@
                 <el-input size="medium" v-model="advancedForm.seller_name" clearable></el-input>
               </el-form-item>
               <el-form-item label="申请售后类型">
+                <el-select v-model="advancedForm.refund_type" placeholder="请选择" clearable>
+                  <el-option label="取消订单" value="CANCEL_ORDER"/>
+                  <el-option label="申请售后" value="AFTER_SALE"/>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="退款（货）类型">
                 <el-select v-model="advancedForm.refuse_type" placeholder="请选择" clearable>
-                  <el-option label="退款" value="return_money"/>
-                  <el-option label="退货" value="return_goods"/>
+                  <el-option label="退款" value="RETURN_MONEY"/>
+                  <el-option label="退货" value="RETURN_GOODS"/>
                 </el-select>
               </el-form-item>
               <el-form-item label="申请时间">
@@ -41,7 +59,7 @@
                   range-separator="-"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
-                  value-format="yyyy-MM-dd"
+                  value-format="timestamp"
                   :picker-options="pickerOptions">
                 </el-date-picker>
               </el-form-item>
@@ -158,7 +176,9 @@
               picker.$emit('pick', [start, end])
             }
           }]
-        }
+        },
+        /** 导出Excel日期 */
+        exportDateRange: []
       }
     },
     methods: {
@@ -193,8 +213,8 @@
         delete this.params.start_time
         delete this.params.end_time
         if (this.advancedForm.refund_time_range) {
-          this.params.start_time = this.advancedForm.refund_time_range[0]
-          this.params.end_time = this.advancedForm.refund_time_range[1]
+          this.params.start_time = parseInt(this.advancedForm.refund_time_range[0] / 1000)
+          this.params.end_time = parseInt(this.advancedForm.refund_time_range[1] / 1000)
         }
         delete this.params.order_sn
         delete this.params.refund_time_range
@@ -204,6 +224,18 @@
       /** 操作订单 */
       handleOperateRefund(index, row) {
         this.$router.push({ path: `/order/refund/${row.sn}` })
+      },
+
+      /** 导出退款单 */
+      handleExportRefund() {
+        const range = this.MixinClone(this.exportDateRange)
+        if (range.length === 0) {
+          this.$message.error('请选择要导出的时间段！')
+          return false
+        }
+        const start_time = parseInt(range[0] / 1000)
+        const end_time = parseInt(range[1] / 1000)
+        API_refund.exportRefundExcel(start_time, end_time).then(response => this.MixinExportFile(response, '售后订单'))
       },
 
       /** 获取退款单列表数据 */
