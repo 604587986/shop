@@ -3,39 +3,37 @@
     <div class="user-title">
       <div class="user-item">
         <div class="user-avatar">
-          <img :src="user.face">
+          <en-face :url="user.face"/>
         </div>
         <div class="user-info">
           <p>Andste</p>
           <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
         </div>
       </div>
-      <!--// Andste_TODO 2018/6/14: 缺少API-->
-      <div class="other-item">
+      <nuxt-link to="/member/my-order" class="other-item">
         <p>我的订单</p>
         <i class="iconfont ea-icon-my-order"></i>
-        <p class="num">20</p>
-      </div>
-      <div class="other-item">
+        <p class="num">{{ statisticsNum.order_count || 0 }}</p>
+      </nuxt-link>
+      <nuxt-link to="/member/my-collection#goods" class="other-item">
         <p>收藏的商品</p>
         <i class="iconfont ea-icon-collection-of-goods"></i>
-        <p class="num">10</p>
-      </div>
-      <div class="other-item">
+        <p class="num">{{ statisticsNum.goods_collect_count || 0}}</p>
+      </nuxt-link>
+      <nuxt-link to="/member/my-collection#shop" class="other-item">
         <p>收藏的店铺</p>
         <i class="iconfont ea-icon-collection-of-shop" style="font-size: 42px"></i>
-        <p class="num">15</p>
-      </div>
+        <p class="num">{{ statisticsNum.shop_collect_count || 0}}</p>
+      </nuxt-link>
     </div>
     <div class="box-item">
       <div class="item left order">
         <div class="item-title">
           <h2>我的订单</h2>
           <div class="order-status">
-            <!--// Andste_TODO 2018/6/14: 缺少API-->
-            <nuxt-link to="/member/my-order#ALL">所有订单(2)</nuxt-link>
-            <nuxt-link to="/member/my-order#WAIT_PAY">等待付款(2)</nuxt-link>
-            <nuxt-link to="/member/my-order#COMPLETE">已完成(0)</nuxt-link>
+            <nuxt-link to="/member/my-order#ALL">所有订单({{ orderStatusNum.all_num || 0 }})</nuxt-link>
+            <nuxt-link to="/member/my-order#WAIT_PAY">等待付款({{ orderStatusNum.wait_pay_num || 0 }})</nuxt-link>
+            <nuxt-link to="/member/my-order#COMPLETE">已完成({{ orderStatusNum.complete_num || 0 }})</nuxt-link>
           </div>
         </div>
         <div class="item-content">
@@ -155,15 +153,27 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import EnFace from '@/components/Face'
   import * as API_Order from '@/api/order'
+  import * as API_Members from '@/api/members'
   export default {
     name: 'member-index',
+    components: { EnFace },
+    data() {
+      return {
+        // 统计数量
+        statisticsNum: {},
+        // 订单状态数量
+        orderStatusNum: {}
+      }
+    },
     mounted() {
       this.$nextTick(this.initShopSwiper)
-      !this.orderData && this.getOrderData()
+      !this.orderData && this.getOrderData({order_status: 'ALL'})
       !this.goodsCollectionData && this.getGoodsCollectionData()
       !this.shopCollectionData && this.getShopCollectionData()
       this.GET_OrderStatusNum()
+      this.GET_StatisticsNum()
     },
     computed: {
       ...mapGetters({
@@ -198,25 +208,17 @@
       },
       /** 初始化shopSwiper */
       initShopSwiper() {
-        // setTimeout(() => {
-        //   this.shopSwiper = new Swiper('.swiper-container-shop', {
-        //     loop: true,
-        //     slidesPerView: 3,
-        //     slidesPerGroup: 3,
-        //     spaceBetween: 10,
-        //     navigation: {
-        //       nextEl: '.swiper-button-next',
-        //       prevEl: '.swiper-button-prev'
-        //     }
-        //   })
-        // })
       },
       /** 获取订单状态数量 */
       GET_OrderStatusNum() {
         API_Order.getOrderStatusNum().then(response => {
-          // Andste_TODO 2018/6/17: 没有返回数据
-          console.log(response)
+          // Andste_TODO 2018/6/17: 部分数据为null
+          this.orderStatusNum = response
         })
+      },
+      /** 获取统计数量 包括但不限于【订单数量、收藏的商品数量、收藏的店铺数量】 */
+      GET_StatisticsNum() {
+        API_Members.getStatisticsNum().then(response => { this.statisticsNum = response })
       },
       ...mapActions({
         /** 获取订单列表 */

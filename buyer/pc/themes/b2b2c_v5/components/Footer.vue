@@ -69,10 +69,12 @@
     a:hover { color: #f42424 }
     .help-center-footer {
       border-bottom: solid 1px #eaeaea;
-      padding: 20px 0 20px 10%;
+      padding: 20px 0;
       dl {
+        box-sizing: border-box;
         width: 20%;
         float: left;
+        padding-left: 75px;
         line-height: 22px;
       }
       dt {
