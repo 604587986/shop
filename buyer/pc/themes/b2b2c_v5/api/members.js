@@ -272,3 +272,13 @@ export function deleteReceipt(id) {
     needToken: true
   })
 }
+
+/**
+ * 获取发票内容
+ */
+export function getReceiptContent() {
+  return request({
+    url: 'members/receipt-content',
+    method: Method.GET
+  })
+}
