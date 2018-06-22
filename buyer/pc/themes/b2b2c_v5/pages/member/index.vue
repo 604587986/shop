@@ -160,7 +160,7 @@
     name: 'member-index',
     mounted() {
       this.$nextTick(this.initShopSwiper)
-      !this.orderData && this.getOrderData()
+      !this.orderData && this.getOrderData({order_status: 'ALL'})
       !this.goodsCollectionData && this.getGoodsCollectionData()
       !this.shopCollectionData && this.getShopCollectionData()
       this.GET_OrderStatusNum()
