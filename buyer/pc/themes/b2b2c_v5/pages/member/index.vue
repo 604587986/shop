@@ -3,7 +3,7 @@
     <div class="user-title">
       <div class="user-item">
         <div class="user-avatar">
-          <img :src="user.face">
+          <en-face :url="user.face"/>
         </div>
         <div class="user-info">
           <p>Andste</p>
@@ -155,9 +155,11 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import EnFace from '@/components/Face'
   import * as API_Order from '@/api/order'
   export default {
     name: 'member-index',
+    components: { EnFace },
     mounted() {
       this.$nextTick(this.initShopSwiper)
       !this.orderData && this.getOrderData({order_status: 'ALL'})
@@ -198,18 +200,6 @@
       },
       /** 初始化shopSwiper */
       initShopSwiper() {
-        // setTimeout(() => {
-        //   this.shopSwiper = new Swiper('.swiper-container-shop', {
-        //     loop: true,
-        //     slidesPerView: 3,
-        //     slidesPerGroup: 3,
-        //     spaceBetween: 10,
-        //     navigation: {
-        //       nextEl: '.swiper-button-next',
-        //       prevEl: '.swiper-button-prev'
-        //     }
-        //   })
-        // })
       },
       /** 获取订单状态数量 */
       GET_OrderStatusNum() {
