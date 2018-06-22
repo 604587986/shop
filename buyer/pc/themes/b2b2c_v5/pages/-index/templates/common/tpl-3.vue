@@ -101,9 +101,6 @@
       margin-right: 0;
     }
   }
-  .layout-body {
-    height: 420px;
-  }
   .layout-title {
     .edit-mask.tag { width: 220px }
     .bz-tags { max-width: 220px }

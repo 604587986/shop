@@ -108,9 +108,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .layout-body {
-    height: 420px;
-  }
   .layout-title {
     .bz-tags { max-width: 970px }
   }
