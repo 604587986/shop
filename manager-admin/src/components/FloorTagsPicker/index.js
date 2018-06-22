@@ -10,4 +10,4 @@ FloorTagsPicker.install = () => {
   Vue.component(FloorTagsPicker.name, FloorTagsPicker)
 }
 
-export default FloorTitlePicker
+export default FloorTagsPicker
