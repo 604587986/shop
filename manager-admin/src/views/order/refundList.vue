@@ -123,7 +123,7 @@
 
 <script>
   import * as API_refund from '@/api/refund'
-  // Andste_TODO 2018/6/16: 搜索和导出待完善
+  // Andste_TODO 2018/6/16: 导出待完善
   export default {
     name: 'refundList',
     mounted() {
