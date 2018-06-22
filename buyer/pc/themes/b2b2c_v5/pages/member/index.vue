@@ -31,10 +31,9 @@
         <div class="item-title">
           <h2>我的订单</h2>
           <div class="order-status">
-            <!--// Andste_TODO 2018/6/14: 缺少API-->
-            <nuxt-link to="/member/my-order#ALL">所有订单(2)</nuxt-link>
-            <nuxt-link to="/member/my-order#WAIT_PAY">等待付款(2)</nuxt-link>
-            <nuxt-link to="/member/my-order#COMPLETE">已完成(0)</nuxt-link>
+            <nuxt-link to="/member/my-order#ALL">所有订单({{ orderStatusNum.all_num || 0 }})</nuxt-link>
+            <nuxt-link to="/member/my-order#WAIT_PAY">等待付款({{ orderStatusNum.wait_pay_num || 0 }})</nuxt-link>
+            <nuxt-link to="/member/my-order#COMPLETE">已完成({{ orderStatusNum.complete_num || 0 }})</nuxt-link>
           </div>
         </div>
         <div class="item-content">
