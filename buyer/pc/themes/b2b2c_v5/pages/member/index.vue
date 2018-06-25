@@ -332,7 +332,7 @@
       }
       .item-content { margin-top: 10px }
       &.left { width: 590px }
-      &.right { width: 970px - 590px; border-left: none }
+      &.right { width: 990px - 590px; border-left: none }
       &:hover {
         border-color: rgba(244, 36, 36, 0.5);
         box-shadow: 0 0 10px 0 #f42424;
