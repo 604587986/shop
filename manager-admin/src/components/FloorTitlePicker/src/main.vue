@@ -27,6 +27,9 @@
               <el-color-picker slot="append" v-model="textForm.end_color" size="mini"></el-color-picker>
             </el-input>
           </el-form-item>
+          <el-form-item label="过渡色预览">
+            <div class="color-preview" :style="colorPreviewStyle"></div>
+          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -64,6 +67,16 @@
           ]
         }
       }
+    },
+    computed: {
+      /** 计算预览样式 */
+      colorPreviewStyle() {
+        const { start_color, end_color } = this.textForm
+        return {
+          'background-color': start_color,
+          backgroundImage: `linear-gradient(90deg, ${start_color}, ${end_color})`
+        }
+      }
     }
   }
 </script>
@@ -79,5 +92,9 @@
     .el-color-picker__trigger {
       display: inline-table;
     }
+  }
+  .color-preview {
+    width: 100%;
+    height: 32px;
   }
 </style>

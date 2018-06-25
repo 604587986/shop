@@ -1,14 +1,98 @@
 <template>
   <div class="container">
-    <en-grade-editor
-      ref="gradeEditor"
-      :api="categoryApi"
-      :params-names="{id: 'id', text: 'name'}"
-      :max-level="2"
-      :btns="itemBtns"
-      @add-click="handleAddCategory"
-      typeText="分类"
-    />
+    <en-table-layout
+      ref="tableLayout"
+      :tableData="tableData.data"
+      :loading="loading"
+      row-key="id"
+      border
+    >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns">
+          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddCategory">添加</el-button>
+        </div>
+        <div class="toolbar-search">
+          <en-table-search @search="searchEvent"/>
+        </div>
+      </div>
+      <template slot="table-columns">
+        <el-table-column label="" type="expand" width="0">
+          <template slot-scope="scope">
+            <en-table-layout
+              v-if="scope.row.children && scope.row.children.length"
+              :tableData="scope.row.children"
+              :show-header="false"
+              :toolbar="false"
+              :pagination="false"
+              :stripe="false"
+              style="width: 100%"
+            >
+              <template slot="table-columns">
+                <el-table-column label="" width="79">
+                  <template slot-scope="scope"><div></div></template>
+                </el-table-column>
+                <el-table-column label="文章排序">
+                  <template slot-scope="scope">{{ scope.row.sort || 0 }}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="文章分类" width="300"/>
+                <el-table-column prop="type" label="显示位置" width="300"/>
+                <el-table-column prop="allow_delete" label="是否可删除"/>
+                <!--操作-->
+                <el-table-column label="操作" width="150">
+                  <template slot-scope="scope">
+                    <el-button
+                      size="mini"
+                      type="primary"
+                      @click="handleEditCategory(scope.$index, scope.row)">修改</el-button>
+                    <el-button
+                      size="mini"
+                      type="danger"
+                      @click="handleDeleteCategory(scope.$index, scope.row)">删除</el-button>
+                  </template>
+                </el-table-column>
+              </template>
+            </en-table-layout>
+          </template>
+        </el-table-column>
+        <el-table-column label="" width="75">
+          <template slot-scope="scope">
+            <div @click="() => { handleToggleExpand(scope.row) }" class="expand">
+              <i :class="['el-icon', scope.row.expanded ? 'el-icon-minus' : 'el-icon-plus']"></i>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="文章排序">
+          <template slot-scope="scope">{{ scope.row.sort || 0 }}</template>
+        </el-table-column>
+        <el-table-column prop="name" label="文章分类" width="300"/>
+        <el-table-column prop="type" label="显示位置" width="300"/>
+        <el-table-column prop="allow_delete" label="是否可删除"/>
+        <!--操作-->
+        <el-table-column label="操作" width="150">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleEditCategory(scope.$index, scope.row)">修改</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDeleteCategory(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </template>
+      <el-pagination
+        v-if="tableData"
+        slot="pagination"
+        @size-change="handlePageSizeChange"
+        @current-change="handlePageCurrentChange"
+        :current-page="params.page_no"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="params.page_size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="tableData.data_total">
+      </el-pagination>
+    </en-table-layout>
     <el-dialog
       :title="categoryForm.id ? '编辑分类' : '添加分类'"
       width="500px"
@@ -22,7 +106,7 @@
           <el-input v-model="categoryForm.name"></el-input>
         </el-form-item>
         <!--上级分类-->
-        <el-form-item v-if="parentOptions" label="上级分类" prop="parent_id">
+        <el-form-item v-if="parentOptions && categoryForm.parent_id !== 0" label="上级分类" prop="parent_id">
           <el-select v-model="categoryForm.parent_id" placeholder="请选择上级分类">
             <el-option v-for="item in parentOptions" :label="item.name" :value="item.id" :key="item.id"/>
           </el-select>
@@ -47,8 +131,14 @@
     name: 'articleCategory',
     data() {
       return {
-        /** 获取下级分类API */
-        categoryApi: process.env.ADMIN_API + '/pages/article-categories/@id/children',
+        params: {
+          page_no: 1,
+          page_size: 10,
+          name: ''
+        },
+        loading: false,
+        ch_loading: false,
+        tableData: '',
         /** 添加、修改分类 表单 */
         categoryForm: {},
         /** 添加、修改分类 表单规则 */
@@ -58,35 +148,62 @@
         /** 添加、修改分类 dialog */
         dialogVisible: false,
         /** 父分类 */
-        parentOptions: '',
-        itemBtns: [
-          { text: '编辑', onClick: this.handleEditCategory },
-          { text: '删除', onClick: this.handleDeleteCategory, color: 'red' }
-        ]
+        parentOptions: ''
       }
     },
+    mounted() {
+      this.GET_ArticleCategoryList()
+    },
     methods: {
+      /** 分页大小发生改变 */
+      handlePageSizeChange(page_size) {
+        this.params.page_size = page_size
+        this.GET_ArticleCategoryList()
+      },
+      /** 当前分页数发生改变 */
+      handlePageCurrentChange(page_no) {
+        this.params.page_no = page_no
+        this.GET_ArticleCategoryList()
+      },
+      /** 展开row */
+      handleToggleExpand(row) {
+        if (row.children) {
+          this.$refs['tableLayout'].$refs['table'].toggleRowExpansion(row)
+          row.expanded = !row.expanded
+          return
+        }
+        this.GET_ArticleCategoryChildren(row.id).then(response => {
+          const expanded = !!row.expanded
+          this.$set(row, 'children', response)
+          this.$refs['tableLayout'].$refs['table'].toggleRowExpansion(row, !expanded)
+          row.expanded = !expanded
+        })
+      },
+      /** 列表搜索 */
+      searchEvent(data) {
+        this.params.name = data
+        this.GET_ArticleCategoryList()
+      },
       /** 添加分类 */
-      handleAddCategory(level, parent, parentArray) {
+      handleAddCategory() {
         this.categoryForm = {
           parent_id: parent ? parent.id : 0,
           sort: 0
         }
-        this.parentOptions = parentArray
         this.dialogVisible = true
       },
       /** 编辑文章分类 */
-      handleEditCategory(category, parent, parentArray) {
-        this.categoryForm = this.MixinClone(category)
-        this.parentOptions = parentArray
+      handleEditCategory(index, row) {
+        this.categoryForm = this.MixinClone(row)
+        // this.parentOptions = parentArray
         this.dialogVisible = true
       },
       /** 删除文章分类 */
-      handleDeleteCategory(category) {
+      handleDeleteCategory(index, row) {
         this.$confirm('确定要删除这个文章分类吗？', '提示', { type: 'warning' }).then(() => {
-          API_Article.deleteAritcleCategory(category.id).then(() => {
+          API_Article.deleteAritcleCategory(row.id).then(() => {
             this.$message.success('删除成功！')
-            this.$refs['gradeEditor'].refresh('delete')
+            this.handleCountExpand(row)
           })
         }).catch(() => {})
       },
@@ -98,15 +215,48 @@
             API_Article.editArticleCategory(id, this.categoryForm).then(response => {
               this.dialogVisible = false
               this.$message.success('修改成功！')
-              this.$refs['gradeEditor'].refresh('edit')
+              this.handleCountExpand(this.categoryForm)
             })
           } else {
             API_Article.addArticleCategory(this.categoryForm).then(() => {
               this.dialogVisible = false
               this.$message.success('添加成功！')
-              this.$refs['gradeEditor'].refresh('add')
+              this.handleCountExpand(this.categoryForm)
             })
           }
+        })
+      },
+      /** 计算展开和加载数据 */
+      handleCountExpand(row) {
+        const { parent_id } = row
+        if (parent_id) {
+          const p_row = this.tableData.data.filter(item => item.id === parent_id)[0]
+          this.GET_ArticleCategoryChildren(p_row.id).then(response => {
+            response.expanded = p_row.expanded
+            this.$set(p_row, 'children', response)
+            this.$refs['tableLayout'].$refs['table'].toggleRowExpansion(p_row, !!p_row.expanded)
+          })
+        } else {
+          this.GET_ArticleCategoryList()
+        }
+      },
+      /** 获取文章分类列表 */
+      GET_ArticleCategoryList() {
+        this.loading = true
+        API_Article.getArticleCategory().then(response => {
+          this.tableData = response
+          this.parentOptions = response.data
+          this.loading = false
+        }).catch(() => { this.loading = false })
+      },
+      /** 获取文章子集 */
+      GET_ArticleCategoryChildren(id) {
+        this.loading = true
+        return new Promise((resolve, reject) => {
+          API_Article.getArticleCategoryChildren(id).then(response => {
+            this.loading = false
+            resolve(response)
+          }).catch(() => { this.loading = false })
         })
       }
     }
@@ -117,5 +267,26 @@
   .container {
     padding: 10px;
     background-color: #fff;
+  }
+  /deep/ {
+    .el-table__expanded-cell {
+      border-bottom: none;
+      padding: 0;
+      .container {
+        padding: 0;
+      }
+      .el-table::before {
+        display: none;
+      }
+    }
+    .el-table__expand-column {
+      border-right: none;
+    }
+    .el-table__expand-icon {
+      display: none;
+    }
+    .expand {
+      cursor: pointer;
+    }
   }
 </style>

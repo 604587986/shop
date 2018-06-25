@@ -118,10 +118,12 @@
       /** 单个商品上架、下架操作确认 */
       handleOperateGoods(index, row) {
         if (row.market_enable === 0) {
-          API_goods.upGoods(row.goods_id).then(response => {
-            row.market_enable = 1
-            this.$message.success('上架商品成功！')
-          })
+          this.$confirm('确定要上架这个商品吗？', '提示', { type: 'warning' }).then(() => {
+            API_goods.upGoods(row.goods_id).then(response => {
+              row.market_enable = 1
+              this.$message.success('上架商品成功！')
+            })
+          }).catch(() => {})
         } else {
           this.$prompt('请输入下架原因', '提示', {
             confirmButtonText: '确定',
