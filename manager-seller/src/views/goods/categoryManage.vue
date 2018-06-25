@@ -176,7 +176,7 @@
           // 为分组数据增加展开状态
           this.add_expanded(this.tableData)
           // 执行默认展开
-          this.toDefaultExpand()
+          // this.toDefaultExpand()
         })
       },
 

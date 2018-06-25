@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -40,7 +40,7 @@
           </en-table-search>
         </div>
       </div>
-    </en-tabel-layout>
+    </en-table-layout>
     <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
       <table class="my-table" v-loading="loading">
         <thead>
