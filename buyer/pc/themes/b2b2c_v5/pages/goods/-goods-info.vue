@@ -85,29 +85,34 @@
         response.forEach((sku, skuIndex) => {
           const { spec_list } = sku
           const spec_value_ids = []
-          spec_list.forEach((spec, specIndex) => {
-            const _specIndex = specList.findIndex(_spec => _spec['spec_id'] === spec.spec_id)
-            const _spec = {
-              spec_id: spec.spec_id,
-              spec_name: spec.spec_name,
-              spec_type: spec.spec_type
-            }
-            const _value = {
-              spec_value: spec.spec_value,
-              spec_value_id: spec.spec_value_id,
-              spec_value_img: {
-                original: spec.spec_image,
-                thumbnail: spec.thumbnail
+          if (spec_list) {
+            spec_list.forEach((spec, specIndex) => {
+              const _specIndex = specList.findIndex(_spec => _spec['spec_id'] === spec.spec_id)
+              const _spec = {
+                spec_id: spec.spec_id,
+                spec_name: spec.spec_name,
+                spec_type: spec.spec_type
               }
-            }
-            spec_value_ids.push(spec.spec_value_id)
-            if(_specIndex === -1){
-              specList.push({..._spec, valueList: [{..._value}]})
-            }else if(specList[_specIndex]['valueList'].findIndex(_value => _value['spec_value_id'] === spec['spec_value_id']) === -1) {
-              specList[_specIndex]['valueList'].push({ ..._value })
-            }
-          })
-          this.skuMap.set(spec_value_ids.join('-'), sku)
+              const _value = {
+                spec_value: spec.spec_value,
+                spec_value_id: spec.spec_value_id,
+                spec_value_img: {
+                  original: spec.spec_image,
+                  thumbnail: spec.thumbnail
+                }
+              }
+              spec_value_ids.push(spec.spec_value_id)
+              if(_specIndex === -1){
+                specList.push({..._spec, valueList: [{..._value}]})
+              }else if(specList[_specIndex]['valueList'].findIndex(_value => _value['spec_value_id'] === spec['spec_value_id']) === -1) {
+                specList[_specIndex]['valueList'].push({ ..._value })
+              }
+            })
+            this.skuMap.set(spec_value_ids.join('-'), sku)
+          } else {
+            specList.push(sku)
+            this.skuMap.set('no_spec', sku)
+          }
         })
         this.specList = specList
         // 初始化规格
@@ -119,13 +124,15 @@
       initSpec() {
         const _selectedSpecVals = []
         this.specList.forEach(spec => {
-          spec.valueList.forEach((val, index) => {
-            if (index === 0) {
-              val.selected = true
-              this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
-              _selectedSpecVals.push(val.spec_value_id)
-            }
-          })
+          if (Array.isArray(spec.valueList)) {
+            spec.valueList.forEach((val, index) => {
+              if (index === 0) {
+                val.selected = true
+                this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
+                _selectedSpecVals.push(val.spec_value_id)
+              }
+            })
+          }
         })
         this.handleSelectedSku()
       },
@@ -164,9 +171,14 @@
       },
       /** 根据已选规格选出对应的sku */
       handleSelectedSku() {
-        const spec_vals = []
-        this.selectedSpecMap.forEach((value, key, map) => spec_vals.push(value))
-        const sku = this.skuMap.get(spec_vals.join('-'))
+        let sku
+        if (this.selectedSpecMap.size !== 0) {
+          const spec_vals = []
+          this.selectedSpecMap.forEach((value, key, map) => spec_vals.push(value))
+          sku = this.skuMap.get(spec_vals.join('-'))
+        } else {
+          sku = this.skuMap.get('no_spec')
+        }
         this.selectedSku = sku
         this.goodsInfo = { ...this.goodsInfo, ...sku }
         this.buyNum = sku.quantity === 0 ? 0 : 1
