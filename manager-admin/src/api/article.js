@@ -10,7 +10,8 @@ import request from '@/utils/request'
 export function getArticleCategory() {
   return request({
     url: 'pages/article-categories',
-    method: 'get'
+    method: 'get',
+    loading: false
   })
 }
 
@@ -21,7 +22,8 @@ export function getArticleCategory() {
 export function getArticleCategoryChildren(id = 0) {
   return request({
     url: `pages/article-categories/${id}/children`,
-    method: 'get'
+    method: 'get',
+    loading: false
   })
 }
 
