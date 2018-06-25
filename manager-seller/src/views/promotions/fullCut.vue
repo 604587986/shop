@@ -282,6 +282,8 @@
         setTimeout(() => {
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入正确的金额'))
+          } else if (this.isReduceCash && parseFloat(value) < parseFloat(this.activityForm.reduce_cash)) {
+            callback(new Error('减少金额不能大于门槛金额'))
           } else {
             callback()
           }
@@ -295,6 +297,8 @@
           setTimeout(() => {
             if (!RegExp.money.test(value)) {
               callback(new Error('请输入正确的金额'))
+            } else if (this.isReduceCash && parseFloat(value) > parseFloat(this.activityForm.discount_threshold)) {
+              callback(new Error('减少金额不能大于门槛金额'))
             } else {
               callback()
             }

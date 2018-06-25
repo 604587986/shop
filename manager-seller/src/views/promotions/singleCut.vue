@@ -507,7 +507,7 @@
           description: data.activity_desc,
 
           /** 单品立减金额 */
-          single_reduction_value: data.price_reduction,
+          single_reduction_value: parseFloat(data.price_reduction),
 
           /** 商品参与方式 */
           range_type: data.is_all_joined
