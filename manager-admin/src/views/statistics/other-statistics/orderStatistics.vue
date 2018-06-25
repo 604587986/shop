@@ -23,7 +23,7 @@
           <order-statistics-order :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
       </el-tabs>
-      <en-tabel-layout
+      <en-table-layout
         :toolbar="false"
         :pagination="false"
         :tableData="tableData.data"
@@ -38,7 +38,7 @@
             <template slot-scope="scope">{{ scope.row.order_status | unixOrderStatus }}</template>
           </el-table-column>
         </template>
-      </en-tabel-layout>
+      </en-table-layout>
     </el-card>
   </div>
 </template>

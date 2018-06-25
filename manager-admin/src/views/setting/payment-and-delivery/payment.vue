@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       :toolbar="false"
       :tableData="tableData.data"
       :loading="loading"
@@ -30,7 +30,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog
       :title="'配置支付方式 - ' + paymentForm.method_name"
       :visible.sync="dialogPaymentVisible"

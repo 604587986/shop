@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading">
     <div id="order-chart" style="height: 300px"></div>
-    <en-tabel-layout
+    <en-table-layout
       :toolbar="false"
       :pagination="false"
       :tableData="tableData.data"
@@ -11,7 +11,7 @@
         <el-table-column prop="membername" label="会员昵称"/>
         <el-table-column prop="ordernum" label="下单量"/>
       </template>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       :tableData="tableData.data"
       :loading="loading"
       :selection-change="handleSelectionChange"
@@ -51,7 +51,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog
       :title="brandForm.brand_id ? '编辑品牌' : '添加品牌'"
       :visible.sync="dialogBrandVisible"

@@ -107,7 +107,7 @@
 </template>
 
 <script>
-  import * as API_category from '@/api/category'
+  import * as API_Category from '@/api/category'
 
   export default {
     name: 'categoryList',
@@ -185,14 +185,14 @@
           if (valid) {
             const { category_id } = this.catForm
             if (!category_id) {
-              API_category.addCategory(this.catForm).then(() => {
+              API_Category.addCategory(this.catForm).then(() => {
                 this.dialogCatVisible = false
                 this.$message.success('保存成功！')
                 this.$refs[formName].resetFields()
                 this.$refs['gradeEditor'].refresh('add')
               })
             } else {
-              API_category.editCategory(category_id, this.catForm).then(response => {
+              API_Category.editCategory(category_id, this.catForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
                 this.$refs[formName].resetFields()
@@ -216,7 +216,7 @@
       },
       /** 编辑关联品牌 */
       handleEditBrand(cat) {
-        API_category.getBrandByCategoryId(cat.category_id).then(response => {
+        API_Category.getBrandByCategoryId(cat.category_id).then(response => {
           this.brandForm = {
             ...this.brandForm,
             category_id: cat.category_id,
@@ -231,7 +231,7 @@
       submitBrandForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_category.editCategoryBrand(this.brandForm.category_id, this.brandForm.selectedBrandList)
+            API_Category.editCategoryBrand(this.brandForm.category_id, this.brandForm.selectedBrandList)
               .then(response => {
                 this.dialogBrandVisible = false
                 this.$message.success('保存成功！')
@@ -245,7 +245,7 @@
 
       /** 编辑关联规格 */
       handleEditSpecs(cat) {
-        API_category.getSpecsByCategoryId(cat.category_id).then(response => {
+        API_Category.getSpecsByCategoryId(cat.category_id).then(response => {
           this.specsForm = {
             ...this.specsForm,
             category_id: cat.category_id,
@@ -259,7 +259,7 @@
       submitSpecsForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_category.editCategorySpecs(this.specsForm.category_id, this.specsForm.selectedSpecsList)
+            API_Category.editCategorySpecs(this.specsForm.category_id, this.specsForm.selectedSpecsList)
               .then(response => {
                 this.dialogSpecsVisible = false
                 this.$message.success('保存成功！')
@@ -274,7 +274,7 @@
       /** 删除分类确认 */
       handleDeleteCat(cat) {
         this.$confirm('确定要删除这个分类吗？', '提示', { type: 'warning' }).then(() => {
-          API_category.deleteCategory(cat.category_id).then(() => {
+          API_Category.deleteCategory(cat.category_id).then(() => {
             this.$message.success('删除成功！')
             this.$refs['gradeEditor'].refresh('delete')
           })

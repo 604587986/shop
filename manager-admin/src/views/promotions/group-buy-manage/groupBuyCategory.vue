@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       :tableData="tableData.data"
       :loading="loading"
     >
@@ -38,7 +38,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
 
     <!--添加团购分类 dialog-->
     <el-dialog

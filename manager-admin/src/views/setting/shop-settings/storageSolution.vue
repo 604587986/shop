@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       :toolbar="false"
       :loading="loading"
       :tableData="tableData.data"
@@ -33,7 +33,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog
       :title="'修改储存方案 - ' + storageForm.name"
       :visible.sync="dialogStorageVisible"

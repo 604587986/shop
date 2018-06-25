@@ -8,7 +8,7 @@
         </div>
       </div>
       <div id="added-member-chart" style="height: 300px"></div>
-      <en-tabel-layout
+      <en-table-layout
         :toolbar="false"
         :pagination="false"
         :tableData="tableData"
@@ -22,7 +22,7 @@
             <template slot-scope="scope">{{ lastTableData[scope.$index] ? lastTableData[scope.$index]['membernum'] : 0 }}</template>
           </el-table-column>
         </template>
-      </en-tabel-layout>
+      </en-table-layout>
     </el-card>
   </div>
 </template>
