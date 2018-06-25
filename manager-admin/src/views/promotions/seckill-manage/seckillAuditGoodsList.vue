@@ -1,5 +1,5 @@
 <template>
-  <en-tabel-layout
+  <en-table-layout
     :toolbar="false"
     :tableData="tableData.data"
     :loading="loading"
@@ -39,7 +39,7 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="pageData.data_total">
     </el-pagination>
-  </en-tabel-layout>
+  </en-table-layout>
 </template>
 
 <script>

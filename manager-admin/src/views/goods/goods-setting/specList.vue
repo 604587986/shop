@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       :tableData="tableData.data"
       :loading="loading"
       :selection-change="handleSelectionChange"
@@ -52,7 +52,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog
       :title="specForm.spec_id ? '编辑规格' : '添加规格'"
       :visible.sync="dialogSpecVisible"

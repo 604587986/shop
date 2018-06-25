@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading" >
     <div id="hot-goods-price-chart" style="height: 300px"></div>
-    <en-tabel-layout
+    <en-table-layout
       :toolbar="false"
       :pagination="false"
       :tableData="tableData.data"
@@ -11,7 +11,7 @@
         <el-table-column prop="goods_name" label="商品名称"/>
         <el-table-column prop="price" :formatter="MixinFormatPrice" label="销售金额"/>
       </template>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 

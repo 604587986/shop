@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       :toolbar="false"
       :pagination="false"
       :tableData="tableData.data"
@@ -12,7 +12,7 @@
         <el-table-column prop="member_num" label="下单会员数量"/>
         <el-table-column prop="percent" label="人数占比"/>
       </template>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 

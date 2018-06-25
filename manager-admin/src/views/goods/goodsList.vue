@@ -1,5 +1,5 @@
 <template>
-  <en-tabel-layout
+  <en-table-layout
     :tableData="goodsData.data"
     :loading="loading"
   >
@@ -67,7 +67,7 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="goodsData.data_total">
     </el-pagination>
-  </en-tabel-layout>
+  </en-table-layout>
 </template>
 
 <script>

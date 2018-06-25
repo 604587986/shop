@@ -16,7 +16,7 @@
         </div>
       </div>
       <div id="goods-collect-top-chart" style="height: 300px"></div>
-      <en-tabel-layout
+      <en-table-layout
         :toolbar="false"
         :pagination="false"
         :tableData="tableData.data"
@@ -28,7 +28,7 @@
           <el-table-column prop="seller_name" label="店铺名称"/>
           <el-table-column prop="favorite_num" label="收藏数量"/>
         </template>
-      </en-tabel-layout>
+      </en-table-layout>
     </el-card>
   </div>
 </template>

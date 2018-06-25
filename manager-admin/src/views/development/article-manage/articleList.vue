@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       :tableData="tableData.data"
       :loading="loading"
     >
@@ -38,7 +38,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog
       :title="articleForm.article_id ? ('编辑文章 - ' + articleForm.article_name) : '添加文章'"
       :visible.sync="dialogVisible"
