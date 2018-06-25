@@ -2,7 +2,7 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
       <el-tab-pane label="快递模板" name="express">
-        <en-tabel-layout
+        <en-table-layout
           toolbar
           pagination
           :tableData="tableData"
@@ -48,7 +48,7 @@
               </template>
             </el-table-column>
           </template>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <el-tab-pane :label="tplOperaName" name="add">
         <el-form
@@ -98,7 +98,7 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="物流公司" name="logistics">
-        <logistics-company></logistics-company>
+        <en-logistics-company :logisticsShow="logisticsShow"></en-logistics-company>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -147,6 +147,9 @@
 
         /** 新增模版/修改模版 */
         tplOperaName: '新增模版',
+
+        /** 是否显示物流公司弹框 */
+        logisticsShow: false,
 
         /** 列表loading状态 */
         loading: false,
@@ -250,7 +253,9 @@
         this.tplOperaName = '新增模版'
         if (this.activeName === 'express') {
           this.GET_ExpressMould()
+          this.logisticsShow = false
         } else if (this.activeName === 'add') {
+          this.logisticsShow = false
           this.mouldForm = {
             template_id: '',
             name: '',
@@ -261,6 +266,8 @@
             type: '',
             area: []
           }
+        } else if (this.activeName === 'logistics') {
+          this.logisticsShow = true
         }
       },
 

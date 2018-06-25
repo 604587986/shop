@@ -2,7 +2,7 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
       <el-tab-pane label="第二件半价列表" name="seconedHalfList">
-        <en-tabel-layout
+        <en-table-layout
           toolbar
           pagination
           :tableData="tableData"
@@ -53,7 +53,7 @@
               </template>
             </el-table-column>
           </template>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="新增第二件半价活动" name="add">
         <div class="content-goods-publish">
@@ -114,7 +114,7 @@
                     </el-radio-group>
                     <!--商品表格-->
                     <div v-show="!goodsShow">
-                      <en-tabel-layout
+                      <en-table-layout
                         toolbar
                         :tableData="activityForm.activity_goods"
                         :loading="loading"
@@ -151,7 +151,7 @@
                             </template>
                           </el-table-column>
                         </template>
-                      </en-tabel-layout>
+                      </en-table-layout>
                     </div>
                   </el-form-item>
                 </div>

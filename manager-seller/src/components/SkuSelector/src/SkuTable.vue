@@ -26,7 +26,7 @@
             </el-input>
             <span
               class="input-error"
-              v-show="isValidate(index, scope)">{{ valadatxt }}
+              v-show="isValidate(index, scope)">{{ validatatxt }}
             </span>
           </div>
         </template>
@@ -134,7 +134,7 @@
         concactArray: [],
 
         /** 固定列校验提示内容 */
-        valadatxt: '请输入数字值',
+        validatatxt: '请输入数字值',
 
         /** 存储未通过校验的单元格位置  */
         validateError: []
@@ -220,7 +220,7 @@
       /** 保存批量设置值 */
       saveBatch() {
         const _desc = this.activeVal === 1 ? '价格' : '库存'
-        if (!this.batch || !Number.isInteger(this.batch)) {
+        if (!this.batch || !Number.isInteger(this.batch) || !parseInt(this.batch)) {
           this.batch = ''
           this.$message.error(`请输入一个有效的${_desc}数据`)
           return

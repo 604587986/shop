@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       pagination
       :tableData="tableData"
       :loading="loading"
@@ -41,7 +41,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
 
     <el-dialog title="发票详情" center :visible.sync="dialogReceiptVisible" width="550px">
       <div v-for="item in viewRectiptData" class="item-receipt">

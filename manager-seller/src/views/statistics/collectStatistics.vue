@@ -2,7 +2,7 @@
   <div class="bg-shop-summary">
     <p>本页面有关收藏统计TOP50,由高到底</p>
     <div id="collectionStatistics" :style="{height: tableHeight + 'px'}"></div>
-    <en-tabel-layout
+    <en-table-layout
       pagination
       :tableData="tableData"
       :loading="loading"
@@ -25,7 +25,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 

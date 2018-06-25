@@ -1,8 +1,8 @@
 <template>
-  <en-tabel-layout
+  <el-dialog :visible.sync="logisticsShow" :closeOnClickModal="closeOnClickModal" width="50%">
+    <en-table-layout
     :tableData="logisticsTableData"
-    :loading="loading"
-  >
+    :loading="loading">
     <template slot="table-columns">
       <!--物流公司-->
       <el-table-column prop="name" label="物流公司"/>
@@ -29,13 +29,20 @@
         </template>
       </el-table-column>
     </template>
-  </en-tabel-layout>
+  </en-table-layout>
+  </el-dialog>
 </template>
 
 <script>
   import * as API_logistics from '@/api/expressCompany'
   export default {
-    name: 'LogisticsCompany',
+    name: 'EnLogisticsCompany',
+    props: {
+      logisticsShow: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         /** 列表loading状态 */
@@ -45,7 +52,9 @@
         logisticsParams: {},
 
         /** 物流公司列表数据 */
-        logisticsTableData: null
+        logisticsTableData: [],
+
+        closeOnClickModal: false
       }
     },
     mounted() {
@@ -77,6 +86,7 @@
         API_logistics.closeExpressPower(row.id, {}).then(response => {
           this.$message.success('关闭成功')
           this.GET_logisticsList()
+          this.$emit('logisticsChanged')
         })
       },
 
@@ -85,6 +95,7 @@
         API_logistics.openExpressPower(row.id, {}).then(response => {
           this.$message.success('开启成功')
           this.GET_logisticsList()
+          this.$emit('logisticsChanged')
         })
       }
     }

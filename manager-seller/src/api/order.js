@@ -86,7 +86,7 @@ export function deliveryGoods(sn, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/trade/orders/${sn}/delivery`,
-      method: 'put',
+      method: 'post',
       loading: false,
       data: params
     }).then(response => {

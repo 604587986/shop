@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -44,7 +44,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog title="新增导航" :visible.sync="addShopNavshow"  width="30%">
       <el-form :model="navform" :rules="rules" ref="navform">
         <el-form-item label="导航名称" prop="name">

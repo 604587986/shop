@@ -106,27 +106,30 @@
         </div>
         <!--物流信息-->
         <div v-if="!logisticsStatus">
-          <en-tabel-layout
+          <en-table-layout
             :tableData="logisticsData"
             :loading="loading">
             <div slot="toolbar" class="inner-toolbar">
               <span style="line-height: 35px;">物流信息</span>
-              <el-button type="primary" size="mini" @click="addLogisticsInfo">添加物流信息</el-button>
+              <el-button type="primary" @click="addLogisticsInfo">添加物流信息</el-button>
             </div>
             <template slot="table-columns">
               <!--公司名称-->
-              <el-table-column prop="sn" label="公司名称"/>
+              <el-table-column prop="name" label="公司名称"/>
               <!--物流单号-->
               <el-table-column label="物流单号">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.sn"></el-input>
+                  <el-input v-model="scope.row.ship_no"></el-input>
                 </template>
               </el-table-column>
               <!--是否支持电子面单-->
               <el-table-column label="是否支持电子面单">
                 <template slot-scope="scope">
-                  <span>不支持电子面单</span>
-                  <el-button type="text" @click="produceElectronicSurface">生成电子面单</el-button>
+                  <span v-if="scope.row.is_waybill === 0">不支持电子面单</span>
+                  <el-button
+                    type="text"
+                    v-if="scope.row.is_waybill === 1"
+                    @click="produceElectronicSurface">生成电子面单</el-button>
                 </template>
               </el-table-column>
               <!--操作-->
@@ -134,25 +137,22 @@
                 <template slot-scope="scope">
                   <el-button
                     plain type="primary"
-                    @click="deliverGoods(scope.$index, scope.row)">发货
+                    @click="deliverGoods(scope.row)">发货
                   </el-button>
                 </template>
               </el-table-column>
             </template>
-          </en-tabel-layout>
+          </en-table-layout>
         </div>
         <div class="opera-btn">
-          <el-button
-            v-if="activestep === 2 || activestep === 3 || activestep === 4"
-            plain
-            type="info"
-            @click="adjustConsignee" >修改收货人信息</el-button>
-          <el-button v-if="activestep === 2" plain type="info" @click="adjustPrice" >调整价格</el-button>
+          <el-button v-if="isShowEditShipName" plain type="info" @click="adjustConsignee" >修改收货人信息</el-button>
+          <el-button v-if="isShowEditOrderPrice" plain type="info" @click="adjustPrice" >调整价格</el-button>
+          <el-button v-if="isShowConfirmReceive" plain type="info" @click="confirmReceive" >确认收款</el-button>
         </div>
       </div>
     </div>
     <!--订单状态 步骤条-->
-    <el-steps :active="activestep" align-center style="margin-top: 20px;" simple>
+    <el-steps  align-center style="margin-top: 20px;" simple>
       <el-step v-for="item in stepList" :title="item.label" :key="item.label" :status="item.setp_status"></el-step>
     </el-steps>
     <!--商品列表-->
@@ -226,15 +226,23 @@
       </div>
       <span class="desc">法师打发打发</span>
     </el-dialog>
+    <!--物流信息-->
+    <en-logistics-company
+      :logisticsShow="logisticsCompanyShow"
+      @logisticsChanged="logisticsChanged"
+    ></en-logistics-company>
   </div>
 </template>
 
 <script>
   import * as API_order from '@/api/order'
+  import * as API_logistics from '@/api/expressCompany'
   import { CategoryPicker } from '@/components'
+  import { LogisticsCompany } from './components'
   export default {
     name: 'orderDetail',
     components: {
+      [LogisticsCompany.name]: LogisticsCompany,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {
@@ -259,14 +267,22 @@
         /** 是否显示调整价格按钮  默认不显示*/
         isShowEditOrderPrice: false,
 
+        /** 是否显示确认收款按钮 默认不显示 */
+        isShowConfirmReceive: false,
+
         /** 订单状态/物流信息状态显示 */
-        logisticsStatus: true,
+        logisticsStatus: false,
 
         /** 物流信息 */
-        logisticsData: [],
+        logisticsData: [
+          { }
+        ],
 
         /** 物流信息弹框是否显示 */
         logisticsShow: false,
+
+        /** 是否显示物流信息弹框 */
+        logisticsCompanyShow: false,
 
         /** 弹框显示 */
         orderDetailShow: false,
@@ -304,10 +320,7 @@
         /** 地区信息*/
         areas: [],
 
-        /** 步骤状态 当前步骤*/
-        activestep: 2,
-
-        /** 步骤list 存在0已完成 1未完成 2未开始 3正在进行 四种状态*/
+        /** 步骤list*/
         stepList: []
       }
     },
@@ -334,7 +347,7 @@
           this.orderDetail = response
           // 商品信息
           this.productList = response.sku_list
-          // 地区信息
+          // 修改收货人信息地区选择器信息
           this.areas = [this.orderDetail.ship_province_id, this.orderDetail.ship_city_id,
             this.orderDetail.ship_county_id || -1, this.orderDetail.ship_town_id || -1]
           // 步骤条信息
@@ -367,14 +380,13 @@
               ]
             }
             // 为订单状态赋予标识状态
-            console.log(this.stepList, this.orderDetail.order_status, this.orderDetail.pay_status)
             for (let i = 0; i < this.stepList.length; i++) {
               if (this.stepList[i].order_status === this.orderDetail.order_status) {
-                this.stepList[i].setp_status = 'process'
+                this.stepList[i].setp_status = 'success'
                 break
               } else {
                 if (this.stepList[i].order_status === this.orderDetail.pay_status) {
-                  this.stepList[i].setp_status = 'process'
+                  this.stepList[i].setp_status = 'success'
                   break
                 } else {
                   this.stepList[i].setp_status = 'success'
@@ -382,11 +394,13 @@
               }
             }
           }
-          // 是否可发货 在线支付（已付款状态可发货） 货到付款（未付款状态可发货）
+
+          // 如果可发货 则获取物流公司信息列表 是否可发货 在线支付（已付款状态可发货） 货到付款（未付款状态可发货）
           if ((this.payment_type === 'ONLINE' && this.orderDetail.order_status === 'PAID_OFF') ||
             (this.payment_type === 'ONLINE' && this.orderDetail.order_status === 'PAY_NO')) {
-            this.logisticsStatus = false
+            this.getLogisticsCompanies()
           }
+
           // 是否可以修改收货人信息 未发货时皆可修改收货人信息（订单状态 新订单 已确认 未付款） 在线支付时已付款
           if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
             this.orderDetail.order_status === 'PAY_NO' || (this.orderDetail.order_status === 'PAID_OFF' && this.payment_type === 'ONLINE')) {
@@ -397,6 +411,25 @@
             this.orderDetail.order_status === 'PAY_NO') {
             this.isShowEditOrderPrice = true
           }
+
+          // 是否可以确认收款 货到付款时 已收货状态
+          if (this.payment_type === 'COD' && this.orderDetail.order_status === 'ROG') {
+            this.isShowEditOrderPrice = true
+          }
+        })
+      },
+
+      /** 获取物流公司信息列表 */
+      getLogisticsCompanies() {
+        API_logistics.getExpressCompanyList({}).then(response => {
+          this.logisticsData = response
+          this.logisticsData = this.logisticsData.filter(key => {
+            return key.shop_id
+          })
+          this.logisticsData.forEach(key => {
+            this.$set(key, 'ship_no', '')
+          })
+          this.logisticsStatus = false
         })
       },
 
@@ -419,13 +452,37 @@
       },
 
       /** 发货 */
-      deliverGoods() {
-
+      deliverGoods(row) {
+        if (!row.ship_no) {
+          this.$message.error('请填写快递单号')
+          return
+        }
+        const _params = {
+          /** 发货单号 */
+          ship_no: row.ship_no,
+          /** 物流公司id */
+          logi_id: row.logi_id,
+          /** 物流公司名称 */
+          logi_name: row.name
+        }
+        API_order.deliveryGoods(this.sn, _params).then(() => {
+          this.GET_OrderDetail()
+        })
       },
 
       /** 添加物流信息 */
       addLogisticsInfo() {
+        if (!this.logisticsCompanyShow) {
+          this.logisticsCompanyShow = true
+        } else {
+          this.logisticsCompanyShow = false
+          this.logisticsCompanyShow = true
+        }
+      },
 
+      /** 监听物流公司信息开启/关闭操作 */
+      logisticsChanged() {
+        this.getLogisticsCompanies()
       },
 
       /** 操作地区选择器改变时 触发*/
@@ -481,6 +538,11 @@
           })
         }
         this.triggerStatus = -1
+      },
+
+      /** 确认收款 */
+      confirmReceive() {
+
       }
     }
   }

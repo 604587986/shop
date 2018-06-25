@@ -14,7 +14,7 @@
         <div id="orderNum" :style="{height: tableHeight + 'px'}"></div>
       </el-tab-pane>
     </el-tabs>
-    <en-tabel-layout
+    <en-table-layout
       pagination
       :tableData="tableData"
       :loading="loading"
@@ -50,7 +50,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 

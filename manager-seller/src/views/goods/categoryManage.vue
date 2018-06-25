@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       pagination
       :tableData="tableData"
       :loading="loading">
@@ -51,7 +51,7 @@
           </template>
         </el-table-column>
       </template>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="25%">
       <el-form :model="goodsCatData" label-position="right" label-width="80px" :rules="rules" status-icon>
         <el-form-item label="分组名称">
@@ -175,7 +175,26 @@
           this.tableData = this.transData(this.tableData)
           // 为分组数据增加展开状态
           this.add_expanded(this.tableData)
+          // 执行默认展开
+          this.toDefaultExpand()
         })
+      },
+
+      /** 执行默认展开 */
+      toDefaultExpand() {
+        for (let i = 0; i < this.tableData.length; i++) {
+          if (!this.tableData[i]._expanded) {
+            this.toogleCategory(i, this.tableData[i])
+            break
+          }
+        }
+        const _exist = this.tableData.some(key => {
+          return !key._expanded
+        })
+        debugger
+        if (_exist) {
+          this.toDefaultExpand()
+        }
       },
 
       /** 删除分组 */
@@ -272,7 +291,7 @@
       /** 展开下级*/
       toogleCategory($index, rowData) {
         let childLen = rowData.children.length
-        if (rowData._expanded) { // 闭合
+        if (rowData._expanded) { // 去闭合
           let dataArr = []
           dataArr.push(rowData)
           let arr = this.getChildCategoryId(dataArr, [])
@@ -283,7 +302,7 @@
               }
             })
           }
-        } else { // 展开
+        } else { // 去展开
           let pre = this.tableData.slice(0, $index + 1)
           let concatChildren = pre.concat(rowData.children)
           let last = this.tableData.slice($index + 1)

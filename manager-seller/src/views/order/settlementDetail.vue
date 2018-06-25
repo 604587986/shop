@@ -33,7 +33,7 @@
     <!--表格-->
     <el-tabs type="border-card" @tab-click="handleToogle">
       <el-tab-pane label="订单列表">
-        <en-tabel-layout
+        <en-table-layout
           pagination
           :tableData="tableData"
           :loading="loading"
@@ -67,10 +67,10 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="pageData.data_total">
           </el-pagination>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="退款订单">
-        <en-tabel-layout
+        <en-table-layout
         pagination
         :tableData="tableData"
         :loading="loading"
@@ -102,7 +102,7 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="pageData.data_total">
         </el-pagination>
-      </en-tabel-layout>
+      </en-table-layout>
       </el-tab-pane>
     </el-tabs>
   </div>
