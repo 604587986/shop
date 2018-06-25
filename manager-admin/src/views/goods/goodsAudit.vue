@@ -196,7 +196,7 @@
       handleGoodsAudit(index, row) {
         this.dialogGoodsAuditTitle = '审核商品 - ' + row.sn
         this.goodsAuditForm = {
-          id: row.id,
+          id: row.goods_id,
           message: '',
           pass: 1
         }
@@ -205,6 +205,7 @@
 
       /** 审核商品 表单提交 */
       submitGoodsAuditForm() {
+        debugger
         API_goods.auditGoods(this.goodsAuditForm.id, this.goodsAuditForm).then(response => {
           this.dialogGoodsAuditVisible = false
           this.$message.success('审核完成！')
