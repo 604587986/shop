@@ -203,10 +203,10 @@ export default {
     },
 
     /** 上传成功后的钩子 更换图片 置空存储数组*/
-    uploaded(response, file, fileList) {
-      this.shop_info.shop_logo = file.url
+    uploaded(response) {
+      this.shop_info.shop_logo = response.url
       this.fileList = []
-      API_shop.updateShopLogo({ logo: file.url }).then(response => {
+      API_shop.updateShopLogo({ logo: response.url }).then(() => {
         this.$message.success('店铺LOGO修改成功')
       })
     },
