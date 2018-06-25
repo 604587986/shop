@@ -15,7 +15,7 @@
           <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
         </div>
       </div>
-      <en-tabel-layout
+      <en-table-layout
         :toolbar="false"
         :tableData="tableData.data"
         border
@@ -37,7 +37,7 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableData.data_total">
         </el-pagination>
-      </en-tabel-layout>
+      </en-table-layout>
     </el-card>
   </div>
 </template>

@@ -23,7 +23,7 @@
         <span>退款金额: {{ MixinFormatPrice('', '', totalData.refund_money || 0) }}</span>
         <span>实收金额: {{ MixinFormatPrice('', '', totalData.real_money || 0) }}</span>
       </div>
-      <en-tabel-layout
+      <en-table-layout
         :toolbar="false"
         :tableData="tableData.data"
         border
@@ -45,7 +45,7 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableData.data_total">
         </el-pagination>
-      </en-tabel-layout>
+      </en-table-layout>
     </el-card>
   </div>
 </template>

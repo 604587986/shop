@@ -78,6 +78,7 @@
 <script>
   import * as API_Category from '@/api/category'
   import * as API_Params from '@/api/params'
+
   export default {
     name: 'categoryParams',
     data() {
@@ -134,7 +135,7 @@
             this.addGroupForm.group_name = ''
             this.addGroupForm.show = false
             this.$message.success('保存成功！')
-            this.paramsGroup.push(response)
+            this.GET_CategoryParamsGroup()
           })
         }
       },
@@ -179,7 +180,7 @@
           const _id = group.group_id
           API_Params.deleteParamsGroup(_id).then(() => {
             this.$message.success('删除成功！')
-            this.paramsGroup.splice(this.paramsGroup.findIndex(item => item.group_id === _id), 1)
+            this.GET_CategoryParamsGroup()
           })
         }).catch(() => {})
       },
@@ -216,8 +217,8 @@
       handleDeleteParam(group, param) {
         this.$confirm('确定要删除这个参数吗？', '提示', { type: 'warning' }).then(() => {
           API_Params.deleteParams(param.param_id).then(() => {
-            group.params.splice(group.params.findIndex(item => item === param), 1)
             this.$message.success('删除成功！')
+            group.params.splice(group.params.findIndex(item => item === param), 1)
           })
         }).catch(() => {})
       },

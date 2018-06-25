@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       :table-data="tableData.data"
       :loading="loading"
     >
@@ -39,7 +39,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog
       :title="smtpForm.id ? '编辑SMTP' : '添加SMTP'"
       :visible.sync="dialogSmtpVisible"

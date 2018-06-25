@@ -5,6 +5,16 @@
 import request from '@/utils/request'
 
 /**
+ * 获取文章分类
+ */
+export function getArticleCategory() {
+  return request({
+    url: 'pages/article-categories',
+    method: 'get'
+  })
+}
+
+/**
  * 获取文章分类子项
  * @param id
  */

@@ -26,7 +26,7 @@
           <regional-analysis-price :params="params" :cur-tab="cur_tab"/>
         </el-tab-pane>
       </el-tabs>
-      <en-tabel-layout
+      <en-table-layout
         :toolbar="false"
         :pagination="false"
         :tableData="tableData.data"
@@ -39,7 +39,7 @@
           <el-table-column prop="sn_num" label="下单量"/>
           <el-table-column prop="order_price" label="下单金额"/>
         </template>
-      </en-tabel-layout>
+      </en-table-layout>
     </el-card>
   </div>
 </template>

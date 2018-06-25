@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       row-key="id"
@@ -50,7 +50,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 

@@ -35,7 +35,7 @@ service.interceptors.request.use(config => {
       fullscreen: true,
       background: 'rgba(255,255,255,.3)',
       spinner: 'icon-custom-loading',
-      lock: true
+      lock: false
     })
   }
 
