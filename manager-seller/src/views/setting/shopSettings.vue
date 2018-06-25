@@ -127,9 +127,6 @@
         /** 地区信息*/
         areas: [],
 
-        /** 已选中的地区信息*/
-        selectedArea: [],
-
         /** 店铺logo图片存*/
         fileList_logo: [],
 

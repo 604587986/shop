@@ -21,7 +21,7 @@
           <!--订单编号 付款方式 下单时间-->
           <div class="order-item">
             <span class="item-name">订单编号：</span>
-            <span class="item-value">{{ orderDetail.order_sn }}</span>
+            <span class="item-value">{{ orderDetail.sn }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">付款方式：</span>
@@ -29,7 +29,7 @@
           </div>
           <div class="order-item">
             <span class="item-name">下单时间：</span>
-            <span class="item-value">{{ orderDetail.order_time | unixToDate }}</span>
+            <span class="item-value">{{ orderDetail.create_time | unixToDate }}</span>
           </div>
           <hr>
           <!--相关费用-->
@@ -58,7 +58,7 @@
           </div>
           <div class="order-item">
             <span class="item-name">送货时间：</span>
-            <span class="item-value">{{ orderDetail.ship_time }}</span>
+            <span class="item-value">{{ orderDetail.receive_time }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">发票抬头：</span>
@@ -87,7 +87,7 @@
           </div>
           <div class="order-item">
             <span class="item-name">2、送货时间：</span>
-            <span class="item-value">{{ orderDetail.ship_time }}</span>
+            <span class="item-value">{{ orderDetail.receive_time }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">3、发票抬头：</span>
@@ -107,10 +107,8 @@
         <!--物流信息-->
         <div v-if="!logisticsStatus">
           <en-tabel-layout
-            toolbar
             :tableData="logisticsData"
-            :loading="loading"
-          >
+            :loading="loading">
             <div slot="toolbar" class="inner-toolbar">
               <span style="line-height: 35px;">物流信息</span>
               <el-button type="primary" size="mini" @click="addLogisticsInfo">添加物流信息</el-button>
@@ -146,7 +144,6 @@
         <div class="opera-btn">
           <el-button
             v-if="activestep === 2 || activestep === 3 || activestep === 4"
-            size="mini"
             plain
             type="info"
             @click="adjustConsignee" >修改收货人信息</el-button>
@@ -155,12 +152,12 @@
       </div>
     </div>
     <!--订单状态 步骤条-->
-    <el-steps :active="activestep" align-center style="margin-top: 20px;">
-      <el-step v-for="item in stepList" :title="item.label" :key="item.label" status="error"></el-step>
+    <el-steps :active="activestep" align-center style="margin-top: 20px;" simple>
+      <el-step v-for="item in stepList" :title="item.label" :key="item.label" :status="item.setp_status"></el-step>
     </el-steps>
     <!--商品列表-->
     <div>
-      <div class="d-header">商品列表</div>
+      <!--<div class="d-header">商品列表</div>-->
       <el-table :data="productList" :header-cell-style="{textAlign: 'center'}">
         <el-table-column label="商品图片" width="180">
           <template slot-scope="scope">
@@ -180,7 +177,7 @@
     <!--调整价格 / 修改收货人信息-->
     <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="30%">
       <div align="center">
-        <!--调整价格-->
+        <!--调整订单总价-->
         <el-input v-show="triggerStatus === 1" v-model="adjustedPrice"style="width: 75%;"></el-input>
         <!--修改收货人信息-->
         <el-form
@@ -189,33 +186,27 @@
           style="width: 75%;"
           label-position="right"
           label-width="90px">
-          <el-form-item label="收货人：" prop="consignee_person">
-            <el-input  v-model="ConsigneeForm.consignee_person" ></el-input>
+          <el-form-item label="收货人：" prop="ship_name">
+            <el-input  v-model="ConsigneeForm.ship_name" ></el-input>
           </el-form-item>
-          <el-form-item label="手机：" prop="phone" >
-            <el-input  v-model.number="ConsigneeForm.phone" ></el-input>
+          <el-form-item label="手机：" prop="ship_mobile" >
+            <el-input  v-model.number="ConsigneeForm.ship_mobile" ></el-input>
           </el-form-item>
-          <el-form-item label="配送地区：" prop="area" >
-            <el-input  v-model="ConsigneeForm.area" ></el-input>
+          <el-form-item label="配送地区：" prop="region" class="area-select">
+            <en-region-picker :api="areasapi" :default="areas" @changed="handleChangeArea"></en-region-picker>
           </el-form-item>
-          <el-form-item label="详细地址：" prop="address" >
-            <el-input  v-model="ConsigneeForm.address" ></el-input>
+          <el-form-item label="详细地址：" prop="ship_addr" >
+            <el-input  v-model="ConsigneeForm.ship_addr" ></el-input>
           </el-form-item>
-          <el-form-item label="送货时间：" prop="send_time" style="text-align: left;">
-            <el-select v-model="ConsigneeForm.send_time" placeholder="请选择">
-              <el-option label="任意时间" value="1"></el-option>
-              <el-option label="仅工作日" value="2"></el-option>
-              <el-option label="仅休息日" value="3"></el-option>
-              <!--<el-option-->
-                <!--v-for="item in options"-->
-                <!--:key="item.value"-->
-                <!--:label="item.label"-->
-                <!--:value="item.value">-->
-              <!--</el-option>-->
+          <el-form-item label="送货时间：" prop="receive_time" style="text-align: left;">
+            <el-select v-model="ConsigneeForm.receive_time" placeholder="请选择">
+              <el-option label="任意时间" value="任意时间"></el-option>
+              <el-option label="仅工作日" value="仅工作日"></el-option>
+              <el-option label="仅休息日" value="仅休息日"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="订单备注：" prop="mark">
-            <el-input  type="textarea" v-model="ConsigneeForm.mark" placeholder="限500字" maxlength="500"></el-input>
+          <el-form-item label="订单备注：" prop="remark">
+            <el-input  type="textarea" v-model="ConsigneeForm.remark" placeholder="限500字" maxlength="500"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -248,6 +239,8 @@
     },
     data() {
       return {
+        areasapi: `${process.env.BASE_API}/regions/@id/children`,
+
         /** 列表loading状态 */
         loading: false,
 
@@ -257,11 +250,14 @@
         /** 订单sn */
         sn: '',
 
-        /** 各种信息 */
-        orderInfo: [],
-
         /** 产品列表 */
         productList: [],
+
+        /** 是否显示修改收货人信息按钮 默认不显示*/
+        isShowEditShipName: false,
+
+        /** 是否显示调整价格按钮  默认不显示*/
+        isShowEditOrderPrice: false,
 
         /** 订单状态/物流信息状态显示 */
         logisticsStatus: true,
@@ -276,9 +272,9 @@
         orderDetailShow: false,
 
         /** 弹框标题 */
-        dialogTitle: '调整价格',
+        dialogTitle: '调整订单总价',
 
-        /** 触发状态 1调整价格 2修改收货人信息*/
+        /** 触发状态 1调整订单总价 2修改收货人信息*/
         triggerStatus: -1,
 
         /** 被调整的价格 */
@@ -287,37 +283,32 @@
         /** 收货人信息 */
         ConsigneeForm: {
           /** 收货人 */
-          consignee_person: '',
+          ship_name: '',
 
           /** 手机号码 */
-          phone: '',
+          ship_mobile: '',
 
           /** 地区 */
-          area: '',
+          region: '',
 
           /** 详细地址 */
-          address: '',
+          ship_addr: '',
 
           /** 送货时间 */
-          send_time: '',
+          receive_time: '',
 
           /** 备注 */
-          mark: ''
+          remark: ''
         },
+
+        /** 地区信息*/
+        areas: [],
 
         /** 步骤状态 当前步骤*/
         activestep: 2,
 
         /** 步骤list 存在0已完成 1未完成 2未开始 3正在进行 四种状态*/
-        stepList: [
-          { label: '新订单', setp_status: 0 },
-          { label: '已确认', setp_status: 1 },
-          { label: '未付款', setp_status: 2 },
-          { label: '已付款', setp_status: 3 },
-          { label: '已发货', setp_status: 2 },
-          { label: '已收货', setp_status: 0 },
-          { label: '已完成', setp_status: 0 }
-        ]
+        stepList: []
       }
     },
     filters: {
@@ -339,8 +330,73 @@
         this.loading = true
         API_order.getOrderDetail(this.sn).then(response => {
           this.loading = false
+          // 订单信息
           this.orderDetail = response
+          // 商品信息
           this.productList = response.sku_list
+          // 地区信息
+          this.areas = [this.orderDetail.ship_province_id, this.orderDetail.ship_city_id,
+            this.orderDetail.ship_county_id || -1, this.orderDetail.ship_town_id || -1]
+          // 步骤条信息
+          if (this.orderDetail.order_status === 'CANCELLED') { // 取消
+            this.stepList = [
+              { label: '新订单', order_status: 'NEW', setp_status: 'finish' },
+              { label: '已确认', order_status: 'CONFIRM', setp_status: 'finish' },
+              { label: '已取消', order_status: 'CANCELLED', setp_status: 'error' }
+            ]
+          } else {
+            if (this.payment_type === 'ONLINE') { // 在线支付
+              this.stepList = [
+                { label: '新订单', order_status: 'NEW', setp_status: 'wait' },
+                { label: '已确认', order_status: 'CONFIRM', setp_status: 'wait' },
+                { label: '未付款', order_status: 'PAY_NO', setp_status: 'wait' },
+                { label: '已付款', order_status: 'PAID_OFF', setp_status: 'wait' },
+                { label: '已发货', order_status: 'SHIPPED', setp_status: 'wait' },
+                { label: '已收货', order_status: 'ROG', setp_status: 'wait' },
+                { label: '已完成', order_status: 'COMPLETE', setp_status: 'wait' }
+              ]
+            } else { // 货到付款
+              this.stepList = [
+                { label: '新订单', order_status: 'NEW', setp_status: 'wait' },
+                { label: '已确认', order_status: 'CONFIRM', setp_status: 'wait' },
+                { label: '未付款', order_status: 'PAY_NO', setp_status: 'wait' },
+                { label: '已发货', order_status: 'SHIPPED', setp_status: 'wait' },
+                { label: '已收货', order_status: 'ROG', setp_status: 'wait' },
+                { label: '已付款', order_status: 'PAID_OFF', setp_status: 'wait' },
+                { label: '已完成', order_status: 'COMPLETE', setp_status: 'wait' }
+              ]
+            }
+            // 为订单状态赋予标识状态
+            console.log(this.stepList, this.orderDetail.order_status, this.orderDetail.pay_status)
+            for (let i = 0; i < this.stepList.length; i++) {
+              if (this.stepList[i].order_status === this.orderDetail.order_status) {
+                this.stepList[i].setp_status = 'process'
+                break
+              } else {
+                if (this.stepList[i].order_status === this.orderDetail.pay_status) {
+                  this.stepList[i].setp_status = 'process'
+                  break
+                } else {
+                  this.stepList[i].setp_status = 'success'
+                }
+              }
+            }
+          }
+          // 是否可发货 在线支付（已付款状态可发货） 货到付款（未付款状态可发货）
+          if ((this.payment_type === 'ONLINE' && this.orderDetail.order_status === 'PAID_OFF') ||
+            (this.payment_type === 'ONLINE' && this.orderDetail.order_status === 'PAY_NO')) {
+            this.logisticsStatus = false
+          }
+          // 是否可以修改收货人信息 未发货时皆可修改收货人信息（订单状态 新订单 已确认 未付款） 在线支付时已付款
+          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
+            this.orderDetail.order_status === 'PAY_NO' || (this.orderDetail.order_status === 'PAID_OFF' && this.payment_type === 'ONLINE')) {
+            this.isShowEditShipName = true
+          }
+          // 是否可以调整价格  未付款时皆可调整价格 （订单状态 新订单 已确认 未付款)
+          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
+            this.orderDetail.order_status === 'PAY_NO') {
+            this.isShowEditOrderPrice = true
+          }
         })
       },
 
@@ -351,9 +407,10 @@
 
       /** 调整价格 */
       adjustPrice() {
-        this.dialogTitle = '调整价格'
+        this.dialogTitle = '调整订单总价'
         this.orderDetailShow = true
         this.triggerStatus = 1
+        this.adjustedPrice = this.orderDetail.order_price
       },
 
       /** 生成电子面单 */
@@ -371,11 +428,33 @@
 
       },
 
+      /** 操作地区选择器改变时 触发*/
+      handleChangeArea(val) {
+        this.ConsigneeForm.region = val.last_id
+      },
+
       /** 修改收货人信息 */
       adjustConsignee() {
         this.dialogTitle = '修改收货人信息'
         this.orderDetailShow = true
         this.triggerStatus = 2
+        /** 为收货人信息赋予数据信息 */
+        this.ConsigneeForm = {
+          /** 收货人 */
+          ship_name: this.orderDetail.ship_name,
+
+          /** 手机号码 */
+          ship_mobile: this.orderDetail.ship_mobile,
+
+          /** 详细地址 */
+          ship_addr: this.orderDetail.ship_addr,
+
+          /** 送货时间 */
+          receive_time: this.orderDetail.receive_time,
+
+          /** 备注 */
+          remark: this.orderDetail.remark
+        }
       },
 
       /** 取消保存 */
@@ -387,7 +466,21 @@
       /** 保存按钮 */
       reserveOrderDetail() {
         this.orderDetailShow = false
-        this.triggerStatus = 1
+        if (this.triggerStatus === 2) { // 修改收货人信息
+          API_order.updateConsigneeInfo(this.sn, this.ConsigneeForm).then(() => {
+            this.$message.success('收货人信息修改成功')
+            this.GET_OrderDetail()
+          })
+        } else if (this.triggerStatus === 1) { // 调整价格
+          const _params = {
+            order_price: this.adjustedPrice
+          }
+          API_order.updateOrderPrice(this.sn, _params).then(() => {
+            this.$message.success('价格修改成功')
+            this.GET_OrderDetail()
+          })
+        }
+        this.triggerStatus = -1
       }
     }
   }
@@ -505,6 +598,16 @@
     &h2 {
       font-size: 14px;
       font-weight: 400;
+    }
+  }
+
+  /*地区选择器*/
+  /deep/.area-select {
+    .el-form-item__content {
+      text-align: left;
+      .app-address {
+        text-align: left;
+      }
     }
   }
 

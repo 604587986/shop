@@ -270,14 +270,6 @@
           { value: 2, label: '年货采购' }
         ],
 
-        /** 所属区域 */
-        theAreas: [
-          { value: 0, label: '不限' },
-          { value: 1, label: '0' },
-          { value: 2, label: '15' },
-          { value: 3, label: 'sd ' }
-        ],
-
         /** 团购活动*/
         gruopBuyActivitys: [],
 
@@ -318,9 +310,6 @@
 
           /** 团购类别 */
           group_buy_category: '',
-
-          /** 所属区域 */
-          area_id: '',
 
           /** 虚拟数量 */
           goods_virtual: 0,

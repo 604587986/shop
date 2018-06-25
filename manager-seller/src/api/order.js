@@ -44,10 +44,10 @@ export function getOrderDetail(sn) {
  * @param ids
  * @returns {Promise<any>}
  */
-export function updateGoodPrice(ids, params) {
+export function updateOrderPrice(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `877`,
+      url: `/trade/orders/${sn}/price`,
       method: 'put',
       loading: false,
       data: params
@@ -63,10 +63,10 @@ export function updateGoodPrice(ids, params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function updateConsigneeInfo(ids, params) {
+export function updateConsigneeInfo(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `877`,
+      url: `/trade/orders/${sn}/address`,
       method: 'put',
       loading: false,
       data: params
@@ -82,10 +82,10 @@ export function updateConsigneeInfo(ids, params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function deliveryGoods(ids, params) {
+export function deliveryGoods(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `877`,
+      url: `/trade/orders/${sn}/delivery`,
       method: 'put',
       loading: false,
       data: params

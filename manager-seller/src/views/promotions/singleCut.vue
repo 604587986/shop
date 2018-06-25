@@ -471,6 +471,16 @@
 
       /** 构造表单数据 */
       generateFormData(data) {
+        let _goodslist = []
+        if (data.activity_goods && Array.isArray(data.activity_goods)) {
+          _goodslist = data.activity_goods.map(key => {
+            return {
+              goods_id: key.goods_id,
+              name: key.goods_name,
+              thumbnail: key.thumbnail
+            }
+          })
+        }
         const _params = {
           /** 活动名称/标题 */
           title: data.activity_name,
@@ -488,17 +498,11 @@
           single_reduction_value: data.price_reduction,
 
           /** 商品参与方式 */
-          range_type: data.is_all_joined,
-
+          range_type: data.is_all_joined
+        }
+        if (_goodslist.length > 0) {
           /** 参与商品列表 */
-          goods_list: data.activity_goods.map(key => {
-            return {
-              goods_id: key.goods_id,
-              name: key.goods_name,
-              sku_id: key.sn,
-              thumbnail: key.thumbnail
-            }
-          })
+          _params.goods_list = _goodslist
         }
         return _params
       }
