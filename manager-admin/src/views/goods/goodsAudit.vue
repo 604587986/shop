@@ -205,7 +205,6 @@
 
       /** 审核商品 表单提交 */
       submitGoodsAuditForm() {
-        debugger
         API_goods.auditGoods(this.goodsAuditForm.id, this.goodsAuditForm).then(response => {
           this.dialogGoodsAuditVisible = false
           this.$message.success('审核完成！')
