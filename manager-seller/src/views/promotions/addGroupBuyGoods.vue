@@ -114,8 +114,11 @@
       </el-form-item>
       <!--查看用户注册协议-->
       <el-form-item prop="is_allow_agreement">
-        <el-checkbox :checked="gruopBuyForm.is_allow_agreement" v-model="gruopBuyForm.is_allow_agreement">
-          我已阅读<el-button type="text" @click="lookAgreement">团购服务协议</el-button>并同意
+        <el-checkbox
+          :checked="gruopBuyForm.is_allow_agreement"
+          v-model="gruopBuyForm.is_allow_agreement"
+          class="is-allow-agreement">
+          我已阅读<el-button type="text" @click="lookAgreement">《团购服务协议》</el-button>并同意
         </el-checkbox>
       </el-form-item>
       <!--操作-->
@@ -471,6 +474,13 @@
   /*团购图片上传组件*/
   .upload-demo {
      width: 30%;
+  }
+
+  /*协议*/
+  /deep/ .is-allow-agreement {
+    /deep/ .el-button--text{
+      font-size: 14px;
+    }
   }
 </style>
 

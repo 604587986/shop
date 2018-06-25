@@ -99,7 +99,7 @@
               <h4>优惠方式</h4>
               <div>
                 <el-form-item label="优惠方式：" prop="price_reduction">
-                  单品立减 <el-input v-model.number="activityForm.price_reduction" style="width: 150px;"></el-input> 元
+                  单品立减 <el-input v-model="activityForm.price_reduction" style="width: 150px;"></el-input> 元
                 </el-form-item>
               </div>
             </div>
@@ -183,6 +183,7 @@
 <script>
   import * as API_activity from '@/api/activity'
   import { CategoryPicker, UE } from '@/components'
+  import { RegExp } from '～/ui-utils'
 
   export default {
     name: 'singleCut',
@@ -197,6 +198,18 @@
         } else {
           callback()
         }
+      }
+      const checkPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入要优惠的现金金额'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(value)) {
+            callback(new Error('请输入正确的金额'))
+          } else {
+            callback()
+          }
+        }, 1000)
       }
       return {
         /** 当前面板的名字*/
@@ -260,8 +273,7 @@
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'blur' }
           ],
           price_reduction: [
-            { required: true, message: '请填写优惠金额', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkPrice, trigger: 'blur' }
           ],
 
           /** 商品参与方式 */

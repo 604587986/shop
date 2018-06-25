@@ -40,7 +40,7 @@
           <template slot-scope="scope">
             <div>{{ scope.row.activity_name }}</div>
             <div>{{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
-              —— {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
+              - {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
             </div>
           </template>
         </el-table-column>
