@@ -10,9 +10,9 @@
       <template slot="table-columns">
         <el-table-column prop="goods_name" label="商品名称" />
         <el-table-column label="商品价格" >
-          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column prop="collection_num" label="收藏量"></el-table-column>
+        <el-table-column prop="favorite_num" label="收藏量"></el-table-column>
       </template>
       <el-pagination
         slot="pagination"
@@ -76,36 +76,30 @@
 
       /** 收藏数据*/
       GET_CollectionData() {
-        API_collectionStatistics.getCollectionStatistics(this.params).then(response => {
-          this.loading = false
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
-          }
-          /** 收藏列表 */
-          this.tableData = response.data.sort((a, b) => { return b.collection_num - a.collection_num })
-          /** 商品名称列表 x轴信息 */
-          const goodsNameList = this.tableData.map((item) => { return item.goods_name })
-          /** 商品收藏数据列表 */
-          const goodsDataList = this.tableData.map((item) => { return item.collection_num })
-
+        /** 收藏统计 */
+        API_collectionStatistics.getCollectionStatistics().then(response => {
           this.sesalChart.setOption({
             title: { text: '收藏商品排行Top50', x: 'center' },
-            tooltip: { trigger: 'axis' },
+            tooltip: {
+              trigger: 'axis',
+              show: true,
+              formatter: function(params, ticket, callback) {
+                const res = response.series.localName[params[0].dataIndex] + '<br>' + params[0].seriesId.replace(/0/, '') + '：' + params[0].value
+                return res
+              }
+            },
             color: ['#7CB5EC'],
             toolbox: {
               show: true,
               feature: {
-                magicType: { type: ['line', 'bar'] },
+                magicType: { type: ['bar', 'line'] },
                 restore: {},
                 saveAsImage: {}
               }
             },
             xAxis: {
               type: 'category',
-              boundaryGap: false,
-              data: goodsNameList
+              data: response.xAxis
             },
             yAxis: {
               type: 'value',
@@ -116,8 +110,9 @@
             series: [
               {
                 name: '收藏商品',
-                type: 'line',
-                data: goodsDataList,
+                type: 'bar',
+                label: { show: true },
+                data: response.series.data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -132,9 +127,16 @@
               }
             ]
           })
-        }).catch(error => {
+        })
+
+        API_collectionStatistics.getCollectionGoods(this.params).then(response => {
           this.loading = false
-          console.log(error)
+          this.pageData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
+          this.tableData = response.data
         })
       },
 

@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import TrafficStatisticsModel from '@/models/TrafficStatisticsModel'
 
 /**
  * 店铺总流量
