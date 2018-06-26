@@ -11,7 +11,7 @@
 
     <template slot="table-columns">
       <el-table-column prop="role_name" label="角色名称"/>
-      <el-table-column prop="role_memo" label="角色描述"/>
+      <el-table-column prop="role_describe" label="角色描述"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
