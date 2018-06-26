@@ -1,30 +1,36 @@
 <template>
   <div class="bg-shop-summary">
-    <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
-    <el-button type="primary" @click="handleSearchSales">开始搜索</el-button>
-    <span style="display: inline-block;margin-left: 10px;">订单金额：{{order_total}}</span>
-    <span>订单量：{{total_quantity_order}}</span>
+    <div class="tools-bar">
+      <div class="conditions">
+        <span>日期设置: </span>
+        <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
+        <el-button type="primary" class="search-btn" @click="handleSearchSales">开始搜索</el-button>
+      </div>
+      <div class="conditions">
+        <span >订单金额：{{order_total}}</span>
+        <span>订单量：{{total_quantity_order}}</span>
+      </div>
+    </div>
     <br>
     <br>
     <el-tabs type="border-card" @tab-click="changeHotType">
-      <el-tab-pane label="下单金额">
-        <div id="orderAmount" :style="{height: tableHeight + 'px'}"></div>
-      </el-tab-pane>
       <el-tab-pane label="下单量">
         <div id="orderNum" :style="{height: tableHeight + 'px'}"></div>
+      </el-tab-pane>
+      <el-tab-pane label="下单金额">
+        <div id="orderAmount" :style="{height: tableHeight + 'px'}"></div>
       </el-tab-pane>
     </el-tabs>
     <en-table-layout
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <template slot="table-columns">
-        <el-table-column prop="order_sn" label="订单编号" />
-        <el-table-column prop="buyer" label="买家" />
+        <el-table-column prop="sn" label="订单编号" />
+        <el-table-column prop="buyer_name" label="买家" />
         <el-table-column label="下单时间">
           <template slot-scope="scope">
-            {{ scope.row.order_time }}
+            {{ scope.row.create_time | unixToDate }}
           </template>
         </el-table-column>
         <el-table-column label="订单状态">
@@ -34,7 +40,7 @@
         </el-table-column>
         <el-table-column label="订单总额">
           <template slot-scope="scope">
-            {{ scope.row.order_amount }}
+            {{ scope.row.order_price | unitPrice('¥') }}
           </template>
         </el-table-column>
       </template>
@@ -70,17 +76,24 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+
+          page_size: 10,
+
+          cycle_type: 'MONTH',
+
+          year: '2018',
+
+          month: '6'
         },
 
         /** 热卖商品*/
         hotType: 0,
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 订单总金额*/
         order_total: '',
@@ -93,6 +106,7 @@
     },
     created() {
       this.GET_OrderTotaltChart()
+      this.GET_OrderGoodsData()
     },
     mounted() {
       window.onresize = this.countTableHeight
@@ -102,22 +116,19 @@
       })
     },
     methods: {
-      /** 窗口缩放时计算table高度 */
-      countTableHeight() {
-        this.tableHeight = document.body.clientHeight / 2
-        /** 图表刷新 */
-        setTimeout(this.orderAmountChart.resize)
-        setTimeout(this.orderGoodsNumChart.resize)
-      },
-
       /** 改变日期的回调*/
       changeYearMonth(obj) {
         this.params = {
-          ...obj
+
+          cycle_type: obj.type,
+
+          year: obj.year,
+
+          month: obj.month
         }
       },
 
-      /** 改变热卖焦点时触发 */
+      /** 切换面板时触发 */
       changeHotType(target) {
         this.hotType = parseInt(target.paneName)
         if (parseInt(target.paneName) === 0) {
@@ -134,37 +145,20 @@
         } else {
           this.GET_OrderGoodsNumData()
         }
+        this.GET_OrderGoodsData()
       },
 
-      /** 图表数据*/
+      /** 下单量图表数据*/
       GET_OrderTotaltChart() {
-        API_salesStatistics.getSalesStatisticsList(this.params).then(response => {
+        this.loading = true
+        API_salesStatistics.getSalesStatisticsNum(this.params).then(response => {
           this.loading = false
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
-          }
-          /** 列表信息 */
-          this.tableData = response.data
-          /** 订单总金额*/
-          this.order_total = response.order_total
-          /** 下单量*/
-          this.total_quantity_order = response.total_quantity_order
-          /** x轴信息 */
-          const xData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
-
-          /** 数据信息 当月下单金额 */
-          const seriesCurrentData = response.order_amount.current_month
-          /** 数据信息 上月下单金额 */
-          const seriesLastData = response.order_amount.last_month
-
-          this.orderAmountChart.setOption({
-            title: { text: '下单金额统计', x: 'center' },
+          this.orderGoodsNumChart.setOption({
+            title: { text: '下单量统计', x: 'center' },
             tooltip: { trigger: 'axis' },
             legend: { data: [
-              { name: '本月' },
-              { name: '上月' }
+              { name: response.series[0].name },
+              { name: response.series[1].name }
             ], bottom: '10px' },
             color: ['#7CB5EC', '#526471'],
             toolbox: {
@@ -177,8 +171,7 @@
             },
             xAxis: {
               type: 'category',
-              boundaryGap: false,
-              data: xData
+              data: response.xAxis
             },
             yAxis: {
               name: '下单金额（元）',
@@ -189,9 +182,9 @@
             },
             series: [
               {
-                name: '本月',
+                name: response.series[0].name,
                 type: 'line',
-                data: seriesCurrentData,
+                data: response.series[0].data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -206,9 +199,9 @@
                 barGap: '0'
               },
               {
-                name: '上月',
+                name: response.series[1].name,
                 type: 'line',
-                data: seriesLastData,
+                data: response.series[1].data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -224,38 +217,22 @@
               }
             ]
           })
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
-        this.countTableHeight()
+        this.tableHeight = document.body.clientHeight / 2
+        setTimeout(this.orderGoodsNumChart.resize)
       },
 
-      /** 图表数据*/
+      /** 下单金额图表数据*/
       GET_OrderGoodsNumData() {
-        API_salesStatistics.getSalesStatisticsList(this.params).then(response => {
+        this.loading = true
+        API_salesStatistics.getSalesStatisticsMoney(this.params).then(response => {
           this.loading = false
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
-          }
-          /** 列表信息 */
-          this.tableData = response.data
-          /** x轴信息 */
-          const xData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
-
-          /** 数据信息 当月数据 */
-          const seriesCurrentData = response.order_amount.current_month
-          /** 数据信息 上月数据 */
-          const seriesLastData = response.order_amount.last_month
-
-          this.orderGoodsNumChart.setOption({
-            title: { text: '下单量统计', x: 'center' },
+          this.orderAmountChart.setOption({
+            title: { text: '下单金额统计', x: 'center' },
             tooltip: { trigger: 'axis' },
             legend: { data: [
-              { name: '本月' },
-              { name: '上月' }
+              { name: response.series[0].name },
+              { name: response.series[1].name }
             ], bottom: '10px' },
             color: ['#7CB5EC', '#526471'],
             toolbox: {
@@ -269,7 +246,7 @@
             xAxis: {
               type: 'category',
               boundaryGap: false,
-              data: xData
+              data: response.xAxis
             },
             yAxis: {
               name: '下单量',
@@ -281,7 +258,7 @@
             series: [
               {
                 type: 'line',
-                data: seriesCurrentData,
+                data: response.series[0].data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -297,7 +274,7 @@
               },
               {
                 type: 'line',
-                data: seriesLastData,
+                data: response.series[1].data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -313,9 +290,23 @@
               }
             ]
           })
-        }).catch(error => {
+        })
+        this.tableHeight = document.body.clientHeight / 2
+        setTimeout(this.orderAmountChart.resize)
+      },
+
+      /** 表格数据*/
+      GET_OrderGoodsData() {
+        this.loading = true
+        API_salesStatistics.getSalesStatisticsGoodsList(this.params).then(response => {
           this.loading = false
-          console.log(error)
+          this.pageData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
+          /** 列表信息 */
+          this.tableData = response.data
         })
         this.countTableHeight()
       },
@@ -356,6 +347,27 @@
   }
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
+  }
+
+  div.tools-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    div {
+      span {
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+      }
+    }
+    .conditions {
+      margin-right: 30px;
+    }
+    .search-btn {
+      margin-left: 10px;
+    }
   }
 
 </style>
