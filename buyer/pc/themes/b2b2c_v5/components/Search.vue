@@ -2,6 +2,7 @@
   <div id="search">
     <div class="search-form">
       <input
+        ref="searchInput"
         v-model="keyword"
         @input="handleKeywordChnaged"
         @focus="show_autocomplete = true"
@@ -19,13 +20,13 @@
     </ul>
     <div v-show="show_autocomplete && autoCompleteData.length > 0" class="search-autocomplete">
       <ul>
-        <li style="height:1px; overflow:hidden; border-bottom:1px #eee solid; margin-top:-1px;"></li>
-        <li v-for="(item, index) in autoCompleteData" :key="index" @click="handleSearchGoods(item.text)">
+        <li v-for="(item, index) in autoCompleteData" :key="index" @click="handleSearchGoods(item.words)">
           <div class="left-span">
-            &nbsp;<span style="font-weight: bold">{{ autoCompleteStr }}</span>
-            <span>{{ item.text.substr(autoCompleteStr.length, item.text.length) }}</span>
+            <!--&nbsp;<span style="font-weight: bold">{{ autoCompleteStr }}</span>-->
+            <!--<span>{{ item.words.substr(autoCompleteStr.length, item.words.length) }}</span>-->
+            <span>{{ item.words }}</span>
           </div>
-          <div class="autocomplete-span">约{{ item.num }}个商品</div>
+          <div class="autocomplete-span">约{{ item.goods_num }}个商品</div>
         </li>
       </ul>
     </div>
@@ -34,6 +35,7 @@
 
 <script>
   import * as API_Home from '@/api/home'
+  import * as API_Goods from '@/api/goods'
   export default {
     name: 'EnSearch',
     props: {},
@@ -47,32 +49,34 @@
       }
     },
     mounted() {
+      const { keyword } = this.$route.query
+      if (keyword) {
+        this.keyword = keyword
+        this.GET_AutoCompleteWords(keyword)
+      }
        /** 获取热门关键词 */
       API_Home.getHotKeywords().then(response => this.hot_keywords = response)
     },
     methods: {
       /** 关键字发生改变 */
       handleKeywordChnaged(event) {
-        let _str = event.data || ''
+        let _str = event.target.value || ''
         _str = _str.replace('\'', '')
-        this.GET_AutoCompleteWords(this.keyword + _str)
+        this.GET_AutoCompleteWords(_str)
       },
       /** 搜索框失去焦点 */
       handleSearchInputBlur() {
         setTimeout(() => {
           this.show_autocomplete = false
-        }, 150)
+        }, 200)
       },
       /** 搜索商品 */
       handleSearchGoods(keyword) {
-        keyword = typeof (keyword) === 'string'
-          ? keyword
-          : this.keyword
+        keyword = typeof (keyword) === 'string' ? keyword : this.keyword
         this.keyword = keyword
         this.show_autocomplete = false
-        this.$route.path === '/goods'
-          ? this.$router.replace({ path: '/goods', query: { keyword }})
-          : this.$router.push({ path: '/goods', query: { keyword }})
+        this.$refs['searchInput'].blur()
+        window.location.href = `/goods?keyword=${keyword}`
       },
       /** 搜索店铺 */
       handleSearchShop() {
@@ -86,8 +90,9 @@
         if (_str === this.autoCompleteStr) return
         this.autoCompleteStr = _str
         _str = _str.trim()
-        this.show_autocomplete = !!_str
-        API_Common.getAutoCompleteKeyword(_str).then(response => this.autoCompleteData = response)
+        API_Goods.getKeywordNum(_str).then(response => {
+          this.autoCompleteData = response
+        })
       }
     }
   }
