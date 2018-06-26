@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as GroupBuyModel from '../models/GroupBuyModel'
 
 /**
  * 获取团购商品列表
@@ -18,9 +17,7 @@ export function getGroupBuyGoodsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GroupBuyModel.GroupBuyGoods().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -57,7 +54,7 @@ export function saveGroupBuyGoods(ids, params) {
       method: 'put',
       loading: false,
       headers: { 'Content-Type': 'application/json' },
-      data: new GroupBuyModel.GroupBuyDetails().params(params)
+      data: params
     }).then(response => {
       resolve(response)
     })
@@ -76,7 +73,7 @@ export function addGroupBuyGoods(params) {
       method: 'post',
       loading: false,
       headers: { 'Content-Type': 'application/json' },
-      data: new GroupBuyModel.GroupBuyDetails().params(params)
+      data: params
     }).then(response => {
       resolve(response)
     })
@@ -97,8 +94,7 @@ export function getGroupBuyGoodsDetails(ids, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = new GroupBuyModel.GroupBuyDetails().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -116,8 +112,7 @@ export function getGroupBuyActivityList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = new GroupBuyModel.GroupBuyActivitys().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

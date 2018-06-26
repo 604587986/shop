@@ -191,7 +191,6 @@
         const _exist = this.tableData.some(key => {
           return !key._expanded
         })
-        debugger
         if (_exist) {
           this.toDefaultExpand()
         }

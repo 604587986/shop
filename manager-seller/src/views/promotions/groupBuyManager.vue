@@ -27,26 +27,26 @@
       <template slot="table-columns">
         <el-table-column label="商品图片" >
           <template slot-scope="scope">
-            <img :src="scope.row.group_buy_image" class="goods-image"/>
+            <img :src="scope.row.img_url" class="goods-image"/>
           </template>
         </el-table-column>
         <el-table-column label="团购名称" >
           <template slot-scope="scope">
-            <div><a href="" style="color: #00a2d4;">{{ scope.row.activity_name }}</a></div>
-            <div>{{ scope.row.activity_subname }}</div>
+            <div><a href="" style="color: #00a2d4;">{{ scope.row.gb_name }}</a></div>
+            <div>{{ scope.row.gb_title }}</div>
           </template>
         </el-table-column>
         <el-table-column  label="活动信息" >
           <template slot-scope="scope">
-            <div>{{ scope.row.activity_name }}</div>
-            <div>{{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
-              - {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
+            <div>{{ scope.row.gb_name }}</div>
+            <div>{{ scope.row.add_time | unixToDate('yyyy-MM-dd') }}
+              - {{ scope.row.end_time | unixToDate('yyyy-MM-dd') }}
             </div>
           </template>
         </el-table-column>
         <!--已团购数量-->
         <el-table-column prop="buy_num" label="已团购" />
-        <el-table-column prop="activity_status_text" label="活动状态" />
+        <el-table-column prop="gb_status_text" label="活动状态" />
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -141,15 +141,17 @@
 
       /** 搜索事件触发 */
       searchEvent(data) {
+        delete this.params.gb_name
         this.params = {
           ...this.params,
-          activity_name: data
+          gb_name: data
         }
         this.GET_GroupGoodsList()
       },
 
       /** 团购状态发生改变*/
       groupBuyStatusChange(val) {
+        delete this.params.gb_status
         this.params = {
           ...this.params,
           gb_status: val
@@ -188,8 +190,6 @@
             this.GET_GroupGoodsList()
             this.$message.success('删除团购商品成功！')
           })
-        }).catch(() => {
-          this.$message.info({ message: '已取消删除' })
         })
       }
     }

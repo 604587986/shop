@@ -4,16 +4,14 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns"></div>
         <div class="toolbar-search">
           <en-table-search
             @search="searchEvent"
             @advancedSearch="advancedSearchEvent"
-            advanced
-          >
+            advanced>
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="操作者">
