@@ -105,9 +105,10 @@
 
       /** 搜索事件触发 */
       searchEvent(data) {
+        delete this.params.keywords
         this.params = {
           ...this.params,
-          keyword: data
+          keywords: data
         }
         this.GET_LimitActivityList()
       },

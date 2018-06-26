@@ -9,7 +9,7 @@
         <div class="toolbar-btns">
           <div class="conditions">
             <span>活动状态:</span>
-            <el-select v-model="currentGroupBuyStatus" placeholder="请选择" @change="groupBuyStatusChange">
+            <el-select v-model="currentGroupBuyStatus" placeholder="请选择" @change="groupBuyStatusChange" clearable>
             <el-option
                 v-for="item in groupBuyStatus"
                 :key="item.group_buy_status_id"
@@ -107,13 +107,13 @@
 
         /** 团购状态*/
         groupBuyStatus: [
-          { group_buy_status_id: 0, group_buy_status_name: '全部团购' },
+          { group_buy_status_id: -1, group_buy_status_name: '请选择' },
 
-          { group_buy_status_id: 1, group_buy_status_name: '未审核' },
+          { group_buy_status_id: 0, group_buy_status_name: '未审核' },
 
-          { group_buy_status_id: 2, group_buy_status_name: '审核失败' },
+          { group_buy_status_id: 1, group_buy_status_name: '审核失败' },
 
-          { group_buy_status_id: 3, group_buy_status_name: '已通过' },
+          { group_buy_status_id: 2, group_buy_status_name: '已通过' },
 
           { group_buy_status_id: 4, group_buy_status_name: '已结束' }
         ]
@@ -141,20 +141,22 @@
 
       /** 搜索事件触发 */
       searchEvent(data) {
-        delete this.params.gb_name
+        delete this.params.keywords
         this.params = {
           ...this.params,
-          gb_name: data
+          keywords: data
         }
         this.GET_GroupGoodsList()
       },
 
       /** 团购状态发生改变*/
       groupBuyStatusChange(val) {
-        delete this.params.gb_status
-        this.params = {
-          ...this.params,
-          gb_status: val
+        delete this.params.status
+        if (val >= 0) {
+          this.params = {
+            ...this.params,
+            status: val
+          }
         }
         this.GET_GroupGoodsList()
       },
