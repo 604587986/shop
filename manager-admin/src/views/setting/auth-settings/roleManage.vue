@@ -42,7 +42,7 @@
 
 <script>
   import * as API_AuthSetting from '@/api/authSetting'
-  // Andste_TODO 2018/6/16: sql报错
+
   export default {
     name: 'roleManage',
     data() {
@@ -94,7 +94,7 @@
         }).catch(() => {})
       },
 
-      /** 获取管理员列表 */
+      /** 获取角色列表 */
       GET_RoleList() {
         this.loading = true
         API_AuthSetting.getRoleList(this.params).then(response => {
