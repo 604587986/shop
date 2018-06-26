@@ -129,22 +129,26 @@
           </div>
         </div>
         <div class="gl-sku-list">
-          <ul class="clearfix">
-            <li v-for="goods in goodsData.data" :key="goods.goods_id">
+          <div class="empty-goods" v-if="!goodsListData || goodsListData.data.length === 0">
+            暂无数据...
+          </div>
+          <ul v-else class="list-ul clearfix">
+            <li v-for="goods in goodsListData.data" :key="goods.goods_id">
               <div class="gl-item">
                 <div class="gl-img">
-                  <nuxt-link :to="'/goods/' + goods.goods_id">
-                    <img src="https://img13.360buyimg.com/n7/jfs/t16096/72/2361833392/251194/4945bb65/5aa3a872Naeb5f0ce.jpg" alt="">
+                  <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
+                    <img :src="goods.small" :alt="goods.name">
                   </nuxt-link>
                 </div>
                 <div class="gl-price">
-                  <strong><em>¥</em><i>99.00</i></strong>
+                  <strong><em>¥</em><i>{{ goods.price | unitPrice }}</i></strong>
                 </div>
                 <div class="gl-name">
-                  <nuxt-link :to="'/goods/' + goods.goods_id" title="京东自营 闪电发货 支持货到付款【儿童日买3免1】店内部分春季爆品、夏季新品参与促销，查看详情猛戳我>>">
-                    <em>京东自营 闪电发货 支持货到付款【儿童日买3免1】店内部分春季爆品、夏季新品参与促销，查看详情猛戳我>></em>
+                  <nuxt-link :to="'/goods/' + goods.goods_id" :title="goods.name" target="_blank">
+                    <em>{{ goods.name }}</em>
                   </nuxt-link>
-                  <span class="gl-attribute">
+                  <!--// Andste_TODO 2018/6/26: 商品对应关键字，做为体验优化处理-->
+                  <!--<span class="gl-attribute">
                     <a title="吊带裙/背心裙" href="#" target="_blank" class="attr">
                       <b>吊带裙/背心裙</b>
                     </a>
@@ -154,10 +158,10 @@
                     <a title="纯棉" href="#" target="_blank" class="attr">
                       <b>纯棉</b>
                     </a>
-                  </span>
+                  </span>-->
                 </div>
                 <div class="gl-commit">
-                  <strong>已有<a class="comment" target="_blank" href="#">1000+</a>人评价</strong>
+                  <strong>已有<a class="comment">{{ goods.comment_num }}</a>人评价</strong>
                 </div>
                 <div class="gl-shop">
                   <span>
@@ -168,12 +172,12 @@
             </li>
           </ul>
           <el-pagination
-            v-if="goodsData"
+            v-if="goodsListData"
             @current-change="handleCurrentPageChange"
             :current-page.sync="params.page_no"
             :page-size="params.page_size"
             layout="total, prev, pager, next"
-            :total="goodsData.data_total">
+            :total="goodsListData.data_total">
           </el-pagination>
         </div>
       </div>
@@ -185,41 +189,41 @@
   import Vue from 'vue'
   import { Pagination } from 'element-ui'
   Vue.use(Pagination)
-  import * as API_GoodsList from '@/api/goods'
+  import { mapActions, mapGetters } from 'vuex'
+  import * as API_Goods from '@/api/goods'
   export default {
     name: 'goods-list',
     data() {
       return {
+        goodsListData: '',
         params: {
-          keyword: this.$route.query.keyword || '',
           page_no: 1,
-          page_size: 20
-        },
-        goodsData: ''
+          page_size: 20,
+          keyword: this.$route.query.keyword
+        }
       }
     },
     mounted() {
-      this.GET_GoodsList(true)
-    },
-    watch: {
-      $route() {
-        this.params = {
-          ...this.params,
-          ...this.$route.query
-        }
-        this.GET_GoodsList()
-      }
+      this.GET_GoodsSelector()
+      this.GET_GoodsList()
     },
     methods: {
       /** 当前页数发生改变 */
-      handleCurrentPageChange(page) {
-        this.params.page_no = page
+      handleCurrentPageChange(page_no) {
+        this.params.page_no = page_no
         this.GET_GoodsList()
       },
-      GET_GoodsList(is_first) {
-        API_GoodsList.getGoodsList(this.params).then(response => {
-          this.goodsData = response
-          this.MixinScrollToTop(is_first ? 0 : 171)
+      /** 获取商品选择器 */
+      GET_GoodsSelector() {
+        API_Goods.getGoodsSelector(this.params).then(response => {
+          console.log(response)
+        })
+      },
+      /** 获取商品列表 */
+      GET_GoodsList() {
+        API_Goods.getGoodsList(this.params).then(response => {
+          this.goodsListData = response
+          this.MixinScrollToTop(171)
         })
       }
     }
@@ -309,7 +313,7 @@
     }
     dd {
       padding-left: 10px;
-      width: 1070px;
+      width: 1090px;
       min-height: 46px;
       background: #fff;
       float: left;
@@ -476,7 +480,14 @@
     .gl-sku-list {
       position: relative;
       background-color: #fff;
-      min-height: 200px;
+      .list-ul {
+        min-height: 200px;
+      }
+      .empty-goods {
+        height: 150px;
+        line-height: 150px;
+        text-align: center;
+      }
     }
   }
   .gl-sku-list {
@@ -497,7 +508,7 @@
       z-index: 2;
     }
     /deep/ .el-pagination {
-      padding: 10px 0 50px 0;
+      padding: 10px 0 30px 0;
       text-align: right;
       margin-right: 10px;
     }
@@ -514,8 +525,10 @@
       .gl-img {
         margin-bottom: 5px;
         img {
+          display: block;
           width: 220px;
           height: 220px;
+          background-color: #fafafa;
         }
       }
     }
