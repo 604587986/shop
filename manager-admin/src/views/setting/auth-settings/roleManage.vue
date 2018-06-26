@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import * as API_AuthSetting from '@/api/authSetting'
+  import * as API_Auth from '@/api/auth'
 
   export default {
     name: 'roleManage',
@@ -87,7 +87,7 @@
       /** 删除角色 */
       handleDeleteRole(row) {
         this.$confirm('确定要删除这个角色吗？', '提示', { type: 'warning' }).then(() => {
-          API_AuthSetting.deleteRole(row.role_id).then(() => {
+          API_Auth.deleteRole(row.role_id).then(() => {
             this.$message.success('删除成功！')
             this.GET_RoleList()
           })
@@ -97,7 +97,7 @@
       /** 获取角色列表 */
       GET_RoleList() {
         this.loading = true
-        API_AuthSetting.getRoleList(this.params).then(response => {
+        API_Auth.getRoleList(this.params).then(response => {
           this.loading = false
           this.tableData = response
         }).catch(() => { this.loading = false })
