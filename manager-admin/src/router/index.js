@@ -325,12 +325,12 @@ export const asyncRouterMap = [
       {
         path: '/statistics/traffic-analysis',
         component: () => import('@/views/statistics/traffic-analysis/index'),
-        redirect: '/statistics/traffic-analysis/index',
+        redirect: '/statistics/traffic-analysis/shop',
         name: 'trafficAnalysis',
         meta: { title: 'trafficAnalysis' },
         children: [
-          { path: 'index', component: () => import('@/views/statistics/traffic-analysis/trafficAnalysisIndex'), name: 'indexTrafficAnalysis', meta: { title: 'trafficAnalysisIndex' }},
-          { path: 'goods', component: () => import('@/views/statistics/traffic-analysis/trafficAnalysisGoods'), name: 'goodsTrafficAnalysis', meta: { title: 'trafficAnalysisGoods' }}
+          { path: 'shop', component: () => import('@/views/statistics/traffic-analysis/trafficAnalysisShop'), name: 'trafficAnalysisShop', meta: { title: 'trafficAnalysisShop' }},
+          { path: 'goods', component: () => import('@/views/statistics/traffic-analysis/trafficAnalysisGoods'), name: 'trafficAnalysisGoods', meta: { title: 'trafficAnalysisGoods' }}
         ]
       },
       {

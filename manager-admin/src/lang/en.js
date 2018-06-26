@@ -89,7 +89,7 @@ export default {
     industryScale: 'Industry Scale',
     generalityOverview: 'Generality Overview',
     trafficAnalysis: 'Traffic Analysis',
-    trafficAnalysisIndex: 'Traffic Analysis',
+    trafficAnalysisShop: 'Shop Traffic Analysis',
     trafficAnalysisGoods: 'Goods Traffic Analysis',
     otherStatistics: 'Other Statistics',
     orderStatistics: 'Order Statistics',

@@ -88,7 +88,7 @@ export default {
     industryScale: '行业规模',
     generalityOverview: '概括总览',
     trafficAnalysis: '流量分析',
-    trafficAnalysisIndex: '流量分析',
+    trafficAnalysisShop: '店铺流量分析',
     trafficAnalysisGoods: '商品流量分析',
     otherStatistics: '其它统计',
     orderStatistics: '订单统计',

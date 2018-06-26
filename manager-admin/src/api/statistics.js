@@ -249,52 +249,28 @@ export function getGeneralityOverviewData(params) {
 
 /** 流量分析 */
 /**
- * 获取流量分析数据
+ * 获取店铺流量数据
  * @param params
- * @returns {Promise<any>}
  */
-export function getTrafficAnalysisData(params) {
-  params.statistics_type = params.type
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/flowStatistics/get-flow-statistics.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      const _response = response
-      _response.data = response.data.map(item => {
-        item.date = item.day_num
-        return item
-      })
-      resolve(_response)
-    }).catch(error => reject(error))
+export function getTrafficAnalysisShop(params) {
+  return request({
+    url: 'statistics/page_view/shop',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
 /**
  * 获取商品流量数据
  * @param params
- * @returns {Promise<any>}
  */
-export function getTrafficAnalysisGoodsData(params) {
-  params.top_num = 10
-  params.store_id = params.shop_id
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/flowStatistics/get-goods-flow-statistics.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      const _response = response
-      _response.data = response.data.map(item => {
-        item.name = item.goods_name
-        return item
-      })
-      resolve(_response)
-    }).catch(error => reject(error))
+export function getTrafficAnalysisGoods(params) {
+  return request({
+    url: 'statistics/page_view/goods',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
