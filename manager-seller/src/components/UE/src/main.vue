@@ -23,7 +23,10 @@
       },
       config: {
         type: Object,
-        default: () => ({ serverUrl: `${process.env.BASE_REGION}/ueditor/` })
+        default: () => ({
+          serverUrl: `${process.env.BASE_API}/ueditor/`,
+          zIndex: 3000
+        })
       }
     },
     watch: {
