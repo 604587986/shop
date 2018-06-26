@@ -118,3 +118,25 @@ export function editImageSetting(params) {
     data: params
   })
 }
+
+/**
+ * 获取积分设置
+ */
+export function getPointSetting() {
+  return request({
+    url: 'settings/point',
+    method: 'get'
+  })
+}
+
+/**
+ * 修改积分设置
+ * @param params
+ */
+export function editPointSetting(params) {
+  return request({
+    url: 'settings/point',
+    method: 'put',
+    data: params
+  })
+}

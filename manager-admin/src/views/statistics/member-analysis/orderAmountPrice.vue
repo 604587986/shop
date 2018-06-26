@@ -8,8 +8,8 @@
     >
       <template slot="table-columns">
         <el-table-column type="index" width="150" label="排名"/>
-        <el-table-column prop="membername" label="会员昵称"/>
-        <el-table-column prop="totalmoney" :formatter="MixinFormatPrice" label="下单金额"/>
+        <el-table-column prop="member_name" label="会员昵称"/>
+        <el-table-column prop="total_money" :formatter="MixinFormatPrice" label="下单金额"/>
       </template>
     </en-table-layout>
   </div>
@@ -55,7 +55,7 @@
           const { data, name, localName } = responses[0].series
           const { xAxis } = responses[0]
           this.echarts.setOption(echartsOptions({
-            titleText: '会员下单金额',
+            titleText: '会员下单金额TOP' + xAxis.length,
             tooltipFormatter: function(params) {
               params = params[0]
               return `会员名称：${localName[params.dataIndex]}<br/>${params.marker}${params.seriesName}：${params.value}`

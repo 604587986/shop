@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-loading="loading" class="container">
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
@@ -11,7 +11,7 @@
           <en-shop-picker @changed="(shop) => { params.seller_id = shop.shop_id }"/>
         </div>
       </div>
-      <div id="traffic-analysis-goods-chart" style="height: 300px"></div>
+      <div id="traffic-analysis-shop-chart" style="height: 300px"></div>
     </el-card>
   </div>
 </template>
@@ -21,7 +21,7 @@
   import echartsOptions from '../echartsOptions'
 
   export default {
-    name: 'trafficAnalysisGoods',
+    name: 'trafficAnalysisShop',
     data() {
       return {
         loading: false,
@@ -35,7 +35,7 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.echarts = this.$echarts.init(document.getElementById('traffic-analysis-goods-chart'))
+        this.echarts = this.$echarts.init(document.getElementById('traffic-analysis-shop-chart'))
       })
     },
     watch: {
@@ -54,12 +54,12 @@
       GET_TrafficAnalysis() {
         if (this.loading) return
         this.loading = true
-        API_Statistics.getTrafficAnalysisGoods(this.params).then(response => {
+        API_Statistics.getTrafficAnalysisShop(this.params).then(response => {
           this.loading = false
           const { data, localName, name } = response.series
           const { xAxis } = response
           this.echarts.setOption(echartsOptions({
-            titleText: '商品访问量TOP' + xAxis.length,
+            titleText: '店铺访问量',
             tooltipFormatter: (params) => {
               params = params[0]
               return `日期：${localName[params.dataIndex]}${this.params.cycle_type === 'MONTH' ? '日' : '月'}<br/>访问量：${params.value}`
@@ -87,4 +87,3 @@
     margin-right: 30px;
   }
 </style>
-

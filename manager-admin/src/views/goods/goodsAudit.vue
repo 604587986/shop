@@ -36,13 +36,13 @@
         <!--商品图片-->
         <el-table-column label="商品图片" width="120">
           <template slot-scope="scope">
-            <img :src="scope.row.image" class="goods-image"/>
+            <img :src="scope.row.thumbnail" class="goods-image"/>
           </template>
         </el-table-column>
         <!--商品编号-->
         <el-table-column prop="sn" label="商品SN" width="200"/>
         <!--商品名称-->
-        <el-table-column prop="name" label="商品名称" align="left"/>
+        <el-table-column prop="goods_name" label="商品名称" align="left"/>
         <!--店铺名称-->
         <el-table-column prop="seller_name" label="店铺名称" width="150"/>
         <!--商品分类-->
