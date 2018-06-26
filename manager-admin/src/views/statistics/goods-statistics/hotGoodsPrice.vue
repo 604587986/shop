@@ -56,7 +56,7 @@
           const { data: _data, localName: _name } = responses[0].series
           const { xAxis } = responses[0]
           this.echarts.setOption(echartsOptions({
-            titleText: '热卖商品销量TOP',
+            titleText: '热卖商品销量TOP' + xAxis.length,
             tooltipFormatter: function(params) {
               params = params[0]
               const member_name = _name[params.dataIndex]

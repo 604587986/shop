@@ -23,9 +23,34 @@ export function getGoods(goods_id) {
  */
 export function getGoodsList(params) {
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/goods/list',
+    url: 'goods/search',
     method: Method.GET,
     params
+  })
+}
+
+/**
+ * 获取商品选择器
+ * @param params
+ */
+export function getGoodsSelector(params) {
+  return request({
+    url: 'goods/search/selector',
+    method: Method.GET,
+    params
+  })
+}
+
+/**
+ * 获取商品关键字对应商品数量
+ * @param keyword
+ */
+export function getKeywordNum(keyword) {
+  return request({
+    url: 'goods/search/words',
+    method: Method.GET,
+    loading: false,
+    params: { keyword }
   })
 }
 

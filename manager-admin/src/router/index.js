@@ -325,12 +325,12 @@ export const asyncRouterMap = [
       {
         path: '/statistics/traffic-analysis',
         component: () => import('@/views/statistics/traffic-analysis/index'),
-        redirect: '/statistics/traffic-analysis/index',
+        redirect: '/statistics/traffic-analysis/shop',
         name: 'trafficAnalysis',
         meta: { title: 'trafficAnalysis' },
         children: [
-          { path: 'index', component: () => import('@/views/statistics/traffic-analysis/trafficAnalysisIndex'), name: 'indexTrafficAnalysis', meta: { title: 'trafficAnalysisIndex' }},
-          { path: 'goods', component: () => import('@/views/statistics/traffic-analysis/trafficAnalysisGoods'), name: 'goodsTrafficAnalysis', meta: { title: 'trafficAnalysisGoods' }}
+          { path: 'shop', component: () => import('@/views/statistics/traffic-analysis/trafficAnalysisShop'), name: 'trafficAnalysisShop', meta: { title: 'trafficAnalysisShop' }},
+          { path: 'goods', component: () => import('@/views/statistics/traffic-analysis/trafficAnalysisGoods'), name: 'trafficAnalysisGoods', meta: { title: 'trafficAnalysisGoods' }}
         ]
       },
       {
@@ -451,16 +451,6 @@ export const asyncRouterMap = [
         children: [
           { path: 'article-category', component: () => import('@/views/development/article-manage/articleCategory'), name: 'articleCategory', meta: { title: 'articleCategory' }},
           { path: 'article-list', component: () => import('@/views/development/article-manage/articleList'), name: 'articleList', meta: { title: 'articleList' }}
-        ]
-      },
-      {
-        path: '/development/component-manage',
-        component: () => import('@/views/development/component-manage/index'),
-        redirect: '/development/component-manage/component-list',
-        name: 'componentManage',
-        meta: { title: 'componentManage' },
-        children: [
-          { path: 'component-list', component: () => import('@/views/development/component-manage/componentList'), name: 'componentList', meta: { title: 'componentList' }}
         ]
       }
     ]

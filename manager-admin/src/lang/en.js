@@ -89,7 +89,7 @@ export default {
     industryScale: 'Industry Scale',
     generalityOverview: 'Generality Overview',
     trafficAnalysis: 'Traffic Analysis',
-    trafficAnalysisIndex: 'Traffic Analysis',
+    trafficAnalysisShop: 'Shop Traffic Analysis',
     trafficAnalysisGoods: 'Goods Traffic Analysis',
     otherStatistics: 'Other Statistics',
     orderStatistics: 'Order Statistics',
@@ -137,9 +137,7 @@ export default {
     clearExampleData: 'Clear Example Data',
     articleManage: 'Article Manage',
     articleCategory: 'Article Category',
-    articleList: 'Article List',
-    componentManage: 'Component Manage',
-    componentList: 'Component List'
+    articleList: 'Article List'
   },
   login: {
     logIn: 'Log in',
