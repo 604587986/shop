@@ -114,3 +114,21 @@ export function generateElectronicSurface(ids, params) {
   })
 }
 
+/**
+ * 获取订单流程图数据
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getStepList(ids) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/trade/orders/${ids}/flow`,
+      method: 'get',
+      loading: false
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
