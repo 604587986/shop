@@ -59,7 +59,7 @@
           const { data, localName, name } = response.series
           const { xAxis } = response
           this.echarts.setOption(echartsOptions({
-            titleText: '商品访问量',
+            titleText: '商品访问量TOP' + xAxis.length,
             tooltipFormatter: (params) => {
               params = params[0]
               return `日期：${localName[params.dataIndex]}${this.params.cycle_type === 'MONTH' ? '日' : '月'}<br/>访问量：${params.value}`
