@@ -452,16 +452,6 @@ export const asyncRouterMap = [
           { path: 'article-category', component: () => import('@/views/development/article-manage/articleCategory'), name: 'articleCategory', meta: { title: 'articleCategory' }},
           { path: 'article-list', component: () => import('@/views/development/article-manage/articleList'), name: 'articleList', meta: { title: 'articleList' }}
         ]
-      },
-      {
-        path: '/development/component-manage',
-        component: () => import('@/views/development/component-manage/index'),
-        redirect: '/development/component-manage/component-list',
-        name: 'componentManage',
-        meta: { title: 'componentManage' },
-        children: [
-          { path: 'component-list', component: () => import('@/views/development/component-manage/componentList'), name: 'componentList', meta: { title: 'componentList' }}
-        ]
       }
     ]
   },

@@ -136,9 +136,7 @@ export default {
     clearExampleData: '清除示例数据',
     articleManage: '文章管理',
     articleCategory: '文章分类',
-    articleList: '文章列表',
-    componentManage: '组件管理',
-    componentList: '组件列表'
+    articleList: '文章列表'
   },
   login: {
     logIn: '登录',

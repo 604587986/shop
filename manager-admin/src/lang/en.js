@@ -137,9 +137,7 @@ export default {
     clearExampleData: 'Clear Example Data',
     articleManage: 'Article Manage',
     articleCategory: 'Article Category',
-    articleList: 'Article List',
-    componentManage: 'Component Manage',
-    componentList: 'Component List'
+    articleList: 'Article List'
   },
   login: {
     logIn: 'Log in',
