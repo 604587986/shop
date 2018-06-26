@@ -467,13 +467,13 @@
             if (this.activityForm.activity_minus_id) {
               API_activity.saveSingleCutActivity(this.activityForm.activity_minus_id, _params).then(response => {
                 this.$message.success('修改成功！')
-                this.activeName === 'singleCutList'
+                this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
               })
             } else {
               API_activity.addSingleCutActivity(_params).then(response => {
                 this.$message.success('添加成功！')
-                this.activeName === 'singleCutList'
+                this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
               })
             }

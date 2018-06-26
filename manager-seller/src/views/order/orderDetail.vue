@@ -388,7 +388,7 @@
                 break
               case 2: key.show_status = 'error'
                 break
-              case 3: key.show_status = 'finish'
+              case 3: key.show_status = 'success'
                 break
             }
             return key

@@ -219,8 +219,7 @@
                 v-model="baseInfoForm.exchange.category_id"
                 placeholder="请选择积分商品分类"
                 @visible-change="getGoodsCatrgory"
-                @change="changeExangeCategory"
-              >
+                @change="changeExangeCategory">
                 <el-option
                   v-for="item in exchangeGoodsCatrgoryList"
                   :key="item.category_id"

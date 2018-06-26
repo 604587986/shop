@@ -901,13 +901,13 @@
             if (this.activityForm.activity_id) {
               API_activity.saveFullCutActivity(this.activityForm.activity_id, _params).then(() => {
                 this.$message.success('保存成功！')
-                this.activeName === 'fullList'
+                this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
               })
             } else {
               API_activity.addFullCutActivity(_params).then(() => {
                 this.$message.success('添加成功！')
-                this.activeName === 'fullList'
+                this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
               })
             }

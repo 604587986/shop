@@ -38,10 +38,12 @@
         </el-table-column>
         <el-table-column  label="活动信息" >
           <template slot-scope="scope">
-            <div>{{ scope.row.gb_name }}</div>
-            <div>{{ scope.row.add_time | unixToDate('yyyy-MM-dd') }}
-              - {{ scope.row.end_time | unixToDate('yyyy-MM-dd') }}
-            </div>
+            <!--活动名称-->
+            <!--<div>{{ scope.row.gb_name }}</div>-->
+            <!--活动开始时间----活动结束时间-->
+            <!--<div>{{ | unixToDate('yyyy-MM-dd') }}-->
+              <!-- - {{ | unixToDate('yyyy-MM-dd') }}-->
+            <!--</div>-->
           </template>
         </el-table-column>
         <!--已团购数量-->
@@ -111,11 +113,11 @@
 
           { group_buy_status_id: 0, group_buy_status_name: '未审核' },
 
-          { group_buy_status_id: 1, group_buy_status_name: '审核失败' },
+          { group_buy_status_id: 1, group_buy_status_name: '已通过' },
 
-          { group_buy_status_id: 2, group_buy_status_name: '已通过' },
+          { group_buy_status_id: 2, group_buy_status_name: '审核失败' }
 
-          { group_buy_status_id: 4, group_buy_status_name: '已结束' }
+          // { group_buy_status_id: 3, group_buy_status_name: '已结束' }
         ]
       }
     },

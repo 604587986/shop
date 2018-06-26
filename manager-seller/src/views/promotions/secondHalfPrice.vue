@@ -6,8 +6,7 @@
           toolbar
           pagination
           :tableData="tableData"
-          :loading="loading"
-        >
+          :loading="loading">
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
               <el-button type="primary" @click="handleAddSeconedHalf">新增</el-button>
@@ -306,7 +305,7 @@
       /** 切换面板*/
       handleToggleClick(tab, event) {
         this.activeName = tab.name
-        if (this.activeName === 'express') {
+        if (this.activeName === 'seconedHalfList') {
           this.GET_SecondHalfActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
@@ -436,16 +435,14 @@
             if (this.activityForm.activity_hp_id) {
               API_activity.saveSeconedHalfActivity(this.activityForm.activity_hp_id, _params).then(() => {
                 this.$message.success('保存设置成功！')
-                this.activeName === 'seconedHalfList'
+                this.activeName = 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
-                this.activeName === 'express'
               })
             } else {
               API_activity.addSeconedHalfActivity(_params).then(() => {
                 this.$message.success('添加成功！')
-                this.activeName === 'seconedHalfList'
+                this.activeName = 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
-                this.activeName === 'express'
               })
             }
           }
