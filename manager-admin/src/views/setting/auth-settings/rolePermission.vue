@@ -1,12 +1,15 @@
 <template>
   <div class="permission-container">
     <el-form :model="permissionForm" :rules="permissionRules" ref="permissionForm" label-width="200px" class="demo-ruleForm">
-      <el-form-item label="角色名称" prop="name">
-        <el-input v-model="permissionForm.name"></el-input>
+      <el-form-item label="角色名称" prop="role_name">
+        <el-input v-model="permissionForm.role_name"></el-input>
+      </el-form-item>
+      <el-form-item label="角色描述" prop="role_describe">
+        <el-input v-model="permissionForm.role_describe"></el-input>
       </el-form-item>
       <el-form-item label="角色权限" prop="permission">
         <el-checkbox :indeterminate="allIndeterminate" v-model="allCheck" @change="handleCheckAll">全部选择</el-checkbox>
-        <div v-for="item in permissions" :key="item.name" class="level_1">
+        <div v-for="item in permissions" :key="item.identifier" class="level_1">
           <el-row :gutter="20">
             <el-col :span="4">
               <el-checkbox v-model="item.checked" :indeterminate="checkIndeterminate(item.children)" @change="handleCheckItem(item)">
@@ -14,14 +17,14 @@
               </el-checkbox>
             </el-col>
             <el-col :span="20">
-              <div v-for="_item in item.children" :key="_item.name" class="checkbox-dropdown">
+              <div v-for="_item in item.children" :key="_item.identifier" class="checkbox-dropdown">
                 <el-checkbox v-model="_item.checked" :indeterminate="checkIndeterminate(_item.children)" @change="handleCheckItem(_item, item)">
                   {{ _item.title }}
                 </el-checkbox>
-                <template v-if="_item.children">
+                <template v-if="_item.children && _item.children.length">
                   <el-dropdown trigger="click" split-button :hide-on-click="false">
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item v-for="__item in _item.children" :key="__item.name">
+                      <el-dropdown-item v-for="__item in _item.children" :key="__item.identifier">
                         <el-checkbox v-model="__item.checked" @change="handleCheckItem(__item, _item)">
                           {{ __item.title }}
                         </el-checkbox>
@@ -42,28 +45,36 @@
 </template>
 
 <script>
-  import * as API_AuthSetting from '@/api/authSetting'
+  // Andste_TODO 2018/6/26: 返回后刷新表格待优化
+  import * as API_Auth from '@/api/auth'
+  import * as API_Menus from '@/api/menus'
+
   export default {
     name: 'rolePermission',
     data() {
       return {
         /** 权限 表单 */
         permissionForm: {
-          name: ''
+          role_name: ''
         },
         /** 权限 表单规则 */
         permissionRules: {
-          name: [
-            { required: true, message: '请输入角色名称', trigger: 'blur' },
+          role_name: [
+            this.MixinRequired('请输入角色名称！'),
             { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
           ]
         },
         permissions: []
       }
     },
-    created() {
-      const role_id = this.$route.params.id
-      this.GET_RolePermission(role_id || 0)
+    mounted() {
+      this.role_id = Number(this.$route.params.id)
+      this.GET_RolePermission()
+    },
+    beforeRouteUpdate(to, from, next) {
+      this.role_id = to.params.id
+      this.GET_RolePermission()
+      next()
     },
     computed: {
       /** 全部选择 选择状态 */
@@ -105,7 +116,8 @@
       /** 设置权限状态 */
       setPermissionsCheck(permissions, checked) {
         permissions.map(item => {
-          item.checked = checked
+          this.$set(item, 'checked', checked)
+          // item.checked = checked
           if (item.children && item.children.length > 0) {
             item.children = this.setPermissionsCheck(item.children, checked)
           }
@@ -137,15 +149,20 @@
       saveRolePermission() {
         this.$refs['permissionForm'].validate(valid => {
           if (valid) {
-            this.role_id
-              ? API_AuthSetting.addRolePermission(this.permissionForm).then(() => {
-                this.$message.success('保存成功！')
-                this.$router.go(-1)
+            const params = {
+              ...this.permissionForm,
+              menus: this.permissions
+            }
+            this.role_id === 0
+              ? API_Auth.addRole(params).then(() => saveSuccess())
+              : API_Auth.editRole(this.role_id, params).then(() => saveSuccess())
+            const saveSuccess = () => {
+              this.$message.success('保存成功！')
+              this.$store.dispatch('delCurrentViews', {
+                view: this.$route,
+                $router: this.$router
               })
-              : API_AuthSetting.editRolePermission(this.role_id, this.permissionForm).then(() => {
-                this.$message.success('保存成功！')
-                this.$router.go(-1)
-              })
+            }
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -153,12 +170,19 @@
         })
       },
       /** 获取权限菜单树 */
-      GET_RolePermission(role_id) {
-        API_AuthSetting.getRolePermission(role_id).then(response => {
-          this.role_id = response.role_id
-          this.permissionForm.name = response.role_name
-          this.permissions = response.permissions
-        })
+      GET_RolePermission() {
+        if (this.role_id !== 0) {
+          API_Auth.getRolePermission(this.role_id).then(response => {
+            this.role_id = response.role_id
+            this.permissionForm.role_name = response.role_name
+            this.permissionForm.role_describe = response.role_describe
+            this.permissions = response.menus
+          })
+        } else {
+          API_Menus.getMenusChildren().then(response => {
+            this.permissions = response
+          })
+        }
       }
     }
   }
@@ -177,6 +201,9 @@
   /deep/ .el-form-item__content {
     border-left: 1px solid #e7e7e7;
     padding-left: 20px;
+    .el-form-item__error {
+      padding-left: 20px;
+    }
   }
   /deep/ .el-form-item:not(:first-child) {
     border-top: 1px solid #e7e7e7;

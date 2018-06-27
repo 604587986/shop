@@ -15,7 +15,7 @@ const tagsView = {
     },
     DEL_VISITED_VIEWS: (state, view) => {
       for (const [i, v] of state.visitedViews.entries()) {
-        if (v.name === view.name) {
+        if (v.path === view.path) {
           state.visitedViews.splice(i, 1)
           break
         }
@@ -69,6 +69,21 @@ const tagsView = {
         commit('DEL_ALL_VIEWS')
         resolve([...state.visitedViews])
       })
+    },
+    /**
+     * 关闭当前页
+     * @param commit
+     * @param state
+     * @param params
+     */
+    delCurrentViews({ commit, state }, params) {
+      commit('DEL_VISITED_VIEWS', params.view)
+      const latestView = [...state.visitedViews].slice(-1)[0]
+      if (latestView) {
+        params.$router.push(latestView)
+      } else {
+        params.$router.push('/')
+      }
     }
   }
 }

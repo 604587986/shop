@@ -125,7 +125,6 @@ export default {
     authSettings: '权限管理',
     administratorManage: '管理员管理',
     roleManage: '角色管理',
-    authManage: '权限点管理',
     rolePermission: '角色权限',
 
     development: '开发管理',

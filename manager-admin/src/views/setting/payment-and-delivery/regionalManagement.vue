@@ -20,7 +20,7 @@
         <el-form-item label="地区名称" prop="local_name">
           <el-input v-model="regionForm.local_name"></el-input>
         </el-form-item>
-        <el-form-item label="邮政编号" prop="zipcode">
+        <el-form-item label="邮政编号">
           <el-input v-model="regionForm.zipcode" :maxlength="6"></el-input>
         </el-form-item>
         <el-form-item label="是否支持货到付款" prop="cod">
@@ -55,12 +55,7 @@
         regionForm: {},
         /** 地区 表单规则 */
         regionRules: {
-          local_name: [
-            { required: true, message: '请输入地区名称', trigger: 'blur' }
-          ],
-          zipcode: [
-            { required: true, message: '请输入邮政编码', trigger: 'blur' }
-          ]
+          local_name: [this.MixinRequired('请输入地区名称！')]
         },
         /** 地区表单 dialog */
         dialogRegionVisible: false
@@ -69,7 +64,7 @@
     methods: {
       /** 编辑地区 */
       handleEdit(region) {
-        this.regionForm = JSON.parse(JSON.stringify(region))
+        this.regionForm = this.MixinClone(region)
         this.dialogRegionVisible = true
       },
       /** 删除地区 */

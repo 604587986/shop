@@ -11,7 +11,7 @@
 
     <template slot="table-columns">
       <el-table-column prop="role_name" label="角色名称"/>
-      <el-table-column prop="role_memo" label="角色描述"/>
+      <el-table-column prop="role_describe" label="角色描述"/>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
@@ -41,8 +41,8 @@
 </template>
 
 <script>
-  import * as API_AuthSetting from '@/api/authSetting'
-  // Andste_TODO 2018/6/16: sql报错
+  import * as API_Auth from '@/api/auth'
+
   export default {
     name: 'roleManage',
     data() {
@@ -87,17 +87,17 @@
       /** 删除角色 */
       handleDeleteRole(row) {
         this.$confirm('确定要删除这个角色吗？', '提示', { type: 'warning' }).then(() => {
-          API_AuthSetting.deleteRole(row.role_id).then(() => {
+          API_Auth.deleteRole(row.role_id).then(() => {
             this.$message.success('删除成功！')
             this.GET_RoleList()
           })
         }).catch(() => {})
       },
 
-      /** 获取管理员列表 */
+      /** 获取角色列表 */
       GET_RoleList() {
         this.loading = true
-        API_AuthSetting.getRoleList(this.params).then(response => {
+        API_Auth.getRoleList(this.params).then(response => {
           this.loading = false
           this.tableData = response
         }).catch(() => { this.loading = false })

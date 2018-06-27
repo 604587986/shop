@@ -287,7 +287,7 @@
         label-width="120px"
         class="demo-ruleForm">
         <el-form-item label="商品描述：">
-          <UE v-model="baseInfoForm.intro" :defaultMsg="baseInfoForm.intro"></UE>
+          <UE ref="ue" :defaultMsg="baseInfoForm.intro"></UE>
         </el-form-item>
       </el-form>
     </div>
@@ -773,6 +773,7 @@
           return
         }
         let _params = this.generateFormData(this.baseInfoForm)
+        _params.intro = this.$refs['ue'].getUEContent()
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
