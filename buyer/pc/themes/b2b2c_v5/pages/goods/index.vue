@@ -207,6 +207,12 @@
       this.GET_GoodsSelector()
       this.GET_GoodsList()
     },
+    beforeRouteUpdate (to, from, next) {
+      const { ...props } = to.query
+      this.params = { ...this.params, ...props }
+      this.GET_GoodsList()
+      next()
+    },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentPageChange(page_no) {
