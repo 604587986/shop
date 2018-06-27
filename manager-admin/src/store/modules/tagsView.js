@@ -15,7 +15,7 @@ const tagsView = {
     },
     DEL_VISITED_VIEWS: (state, view) => {
       for (const [i, v] of state.visitedViews.entries()) {
-        if (v.name === view.name) {
+        if (v.path === view.path) {
           state.visitedViews.splice(i, 1)
           break
         }
