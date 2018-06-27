@@ -69,7 +69,12 @@
     },
     mounted() {
       this.role_id = Number(this.$route.params.id)
-      this.role_id === 0 ? this.GET_Menus() : this.GET_RolePermission(this.role_id)
+      this.GET_RolePermission()
+    },
+    beforeRouteUpdate(to, from, next) {
+      this.role_id = to.params.id
+      this.GET_RolePermission()
+      next()
     },
     computed: {
       /** 全部选择 选择状态 */
@@ -149,14 +154,15 @@
               menus: this.permissions
             }
             this.role_id === 0
-              ? API_Auth.addRolePermission(params).then(() => {
-                this.$message.success('保存成功！')
-                this.$router.go(-1)
+              ? API_Auth.addRole(params).then(() => saveSuccess())
+              : API_Auth.editRole(this.role_id, params).then(() => saveSuccess())
+            const saveSuccess = () => {
+              this.$message.success('保存成功！')
+              this.$store.dispatch('delCurrentViews', {
+                view: this.$route,
+                $router: this.$router
               })
-              : API_Auth.editRolePermission(this.role_id, params).then(() => {
-                this.$message.success('保存成功！')
-                this.$router.go(-1)
-              })
+            }
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -164,19 +170,19 @@
         })
       },
       /** 获取权限菜单树 */
-      GET_RolePermission(role_id) {
-        API_Auth.getRolePermission(role_id).then(response => {
-          this.role_id = response.role_id
-          this.permissionForm.role_name = response.role_name
-          this.permissionForm.role_describe = response.role_describe
-          this.permissions = response.menus
-        })
-      },
-      /** 获取菜单 */
-      GET_Menus() {
-        API_Menus.getMenusChildren().then(response => {
-          this.permissions = response
-        })
+      GET_RolePermission() {
+        if (this.role_id !== 0) {
+          API_Auth.getRolePermission(this.role_id).then(response => {
+            this.role_id = response.role_id
+            this.permissionForm.role_name = response.role_name
+            this.permissionForm.role_describe = response.role_describe
+            this.permissions = response.menus
+          })
+        } else {
+          API_Menus.getMenusChildren().then(response => {
+            this.permissions = response
+          })
+        }
       }
     }
   }
