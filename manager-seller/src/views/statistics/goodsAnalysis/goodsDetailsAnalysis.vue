@@ -9,13 +9,19 @@
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <div class="conditions">
-            <span>店铺分组:</span>
-            <en-category-picker size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
+            <span>平台商品分类:</span>
+            <en-category-picker
+              size="mini"
+              :api="api"
+              :headers="headers"
+              @changed="changeGoodsCateGory"
+              :clearable='true'/>
           </div>
           <div class="conditions">
             <span>商品名称:</span>
-            <el-input size="mini" v-model="advancedForm.goods_name"></el-input>
+            <el-input size="mini" v-model="params.goods_name" clearable />
           </div>
+          <el-button @click="handleSearchGoods" type="primary" size="mini">搜索</el-button>
         </div>
         <div class="toolbar-search"></div>
       </div>
@@ -25,13 +31,17 @@
         <!--价格-->
         <el-table-column label="价格">
           <template slot-scope="scope">
-            <span>{{ scope.row.goods_price }}</span>
+            <span>{{ scope.row.price | unitPrice('¥') }}</span>
           </template>
         </el-table-column>
         <!--近30天下单商品数-->
-        <el-table-column prop="order_goods_num" sortable label="近30天下单商品数"/>
+        <el-table-column prop="numbers" sortable label="近30天下单商品数"/>
         <!--近30天下单金额-->
-        <el-table-column prop="order_amount" sortable label="近30天下单金额"/>
+        <el-table-column prop="total_price" sortable label="近30天下单金额">
+          <template slot-scope="scope">
+            <span>{{ scope.row.total_price | unitPrice('¥') }}</span>
+          </template>
+        </el-table-column>
       </template>
       <el-pagination
         slot="pagination"
@@ -50,13 +60,8 @@
 
 <script>
   import * as API_goodsDetailsStatistics from '@/api/goodsDetailsStatistics'
-  import { CategoryPicker } from '@/components'
-
   export default {
     name: 'goodsDetails',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
     data() {
       return {
         /** 列表loading状态 */
@@ -65,22 +70,26 @@
         /** 列表参数 */
         params: {
           page_no: 1,
+
           page_size: 10,
-          category_id: 0
+
+          category_id: 1,
+
+          goods_name: ''
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
-        /** 高级搜索数据 */
-        advancedForm: {
-          goods_name: '',
-          goods_sn: '',
-          shop_name: '',
-          category_id: ''
+        /** 分类请求api */
+        api: `${process.env.SELLER_API}/goods/category/@id/children`,
+
+        /** 请求令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
         }
       }
     },
@@ -102,18 +111,13 @@
       },
 
       /** 搜索事件触发 */
-      searchEvent(data) {
-        this.params = {
-          ...this.params,
-          goods_status: data
-        }
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+      handleSearchGoods(data) {
         this.GET_GoodsStatistics()
       },
 
       /**  分类选择组件值发生改变 */
-      categoryChanged(data) {
-        this.advancedForm.category_id = data.category_id
+      changeGoodsCateGory(data) {
+        this.params.category_id = data.category_id
       },
 
       GET_GoodsStatistics() {

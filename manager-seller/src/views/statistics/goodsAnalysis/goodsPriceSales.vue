@@ -1,10 +1,26 @@
 <template>
   <div class="bg-shop-summary">
-    <div>
-      <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
-      <span>商品分类：</span><en-category-picker :clearable='true' @changed="categoryChanged"/>
-      <en-price-range @changed="changePriceRange"></en-price-range>
-      <el-button type="primary" @click="handleSearch">开始搜索</el-button>
+    <div class="toolbar-btns">
+      <div class="conditions">
+        <span>日期设置:</span>
+        <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
+      </div>
+      <div class="conditions">
+        <span>平台商品分类：</span>
+        <en-category-picker
+          size="mini"
+          :api="api"
+          :headers="headers"
+          @changed="changeGoodsCateGory"
+          :clearable='true'/>
+      </div>
+      <div class="conditions">
+        <span>价格设置:</span>
+        <en-price-range @changed="changePriceRange"></en-price-range>
+      </div>
+      <div class="conditions">
+        <el-button type="primary" @click="handleSearch" size="mini">开始搜索</el-button>
+      </div>
     </div>
     <div id="trafficStatistics" :style="{height: tableHeight + 'px'}"></div>
   </div>
@@ -12,12 +28,8 @@
 
 <script>
   import * as API_goodsPriceStatistics from '@/api/goodsPriceStatistics'
-  import { CategoryPicker } from '@/components'
   export default {
     name: 'goodsPriceSales',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
     data() {
       return {
         /** 列表loading状态 */
@@ -26,19 +38,27 @@
         /** 图表参数*/
         params: {
           /** 当前选择的日期类型 */
-          date_type: '',
+          cycle_type: 'MONTH',
 
           /** 年份 */
-          year: '',
+          year: '2018',
 
           /** 月份*/
-          month: '',
+          month: '6',
 
           /** 商品分类ID */
           category_id: '',
 
           /** 价格区间 默认区间*/
-          price_range: [[0, 500], [500, 1000], [1000, 1500], [1500, 2000]]
+          sections: []
+        },
+
+        /** 分类请求api */
+        api: `${process.env.SELLER_API}/goods/category/@id/children`,
+
+        /** 请求令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
         },
 
         tableHeight: document.body.clientHeight / 2
@@ -61,17 +81,22 @@
         setTimeout(this.sesalChart.resize)
       },
 
-      /** 高级搜索中 分类选择组件值发生改变 */
-      categoryChanged(data) {
-        this.params = {
-          ...data
-        }
+      /**  分类选择组件值发生改变 */
+      changeGoodsCateGory(data) {
+        this.params.category_id = data.category_id
       },
 
       /** 改变日期的回调*/
       changeYearMonth(obj) {
         this.params = {
-          ...obj
+          /** 当前选择的日期类型 */
+          cycle_type: obj.type,
+
+          /** 年份 */
+          year: obj.year,
+
+          /** 月份*/
+          month: obj.month
         }
       },
 
@@ -79,7 +104,7 @@
       changePriceRange(obj) {
         this.params = {
           ...this.params,
-          price_range: obj
+          sections: obj
         }
       },
 
@@ -89,22 +114,12 @@
       },
 
       GET_PriceStatistics() {
-        if (this.params.price_range && this.params.price_range.length > 0) {
-          this.params.price_range = this.params.price_range.map((elem) => {
-            return elem.join('~')
-          })
-          this.params.price_range = this.params.price_range.toString()
-        }
         API_goodsPriceStatistics.getPriceStatisticsList(this.params).then(response => {
           this.loading = false
-          /** 商品名称列表 x轴信息 */
-          const xData = response.xsize
-          const seriesData = response.seriesdata
-
           this.sesalChart.setOption({
             title: { text: '价格销量分析', x: 'center' },
             tooltip: { trigger: 'axis' },
-            legend: { show: true, orient: 'vertical', data: [{ name: '下单量', textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
+            legend: { show: true, orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
             color: ['#7CB5EC'],
             toolbox: {
               show: true,
@@ -118,7 +133,7 @@
               name: '价格',
               type: 'category',
               boundaryGap: false,
-              data: xData
+              data: response.xAxis
             },
             yAxis: {
               name: '下单量（次）',
@@ -131,7 +146,7 @@
               {
                 name: '下单量',
                 type: 'line',
-                data: seriesData,
+                data: response.series.data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -146,9 +161,6 @@
               }
             ]
           })
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       }
     }
@@ -168,6 +180,24 @@
   }
   /deep/ .el-table td:not(.is-left) {
     text-align: center;
+  }
+
+  div.toolbar-btns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    div {
+      span {
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+      }
+    }
+    .conditions {
+      margin-right: 30px;
+    }
   }
 
 </style>

@@ -60,10 +60,10 @@
               <span>{{ activeCategoryName1 }}</span>
               <span v-show="activeCategoryName2"> > {{ activeCategoryName2 }}</span>
               <span v-show="activeCategoryName3"> > {{ activeCategoryName3 }}</span>
-              <span v-if="!activeCategoryName1">{{ baseInfoForm.name }}</span>
+              <span v-if="!activeCategoryName1">{{ baseInfoForm.category_name }}</span>
             </el-form-item>
             <el-form-item label="商品分组：" >
-              <!--商品分类 获取分类列表 传入默认值-->
+              <!--商品分组 获取分类列表 传入默认值-->
               <en-category-picker
                 @changed="changeGoodsCateGory"
                 :clearable='true'
@@ -486,7 +486,7 @@
           category_id: 0,
 
           /** 商城分类 名称 */
-          name: '',
+          category_name: '',
 
           /** 商品名称 */
           goods_name: '',
