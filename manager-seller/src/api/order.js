@@ -3,8 +3,6 @@
  */
 
 import request from '@/utils/request'
-import OrderModel from '@/models/OrderModel'
-import ProductModel from '@/models/ProductModel'
 
 /**
  * 获取订单列表
@@ -19,10 +17,8 @@ export function getOrderList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new OrderModel().map(response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }
 
@@ -38,8 +34,7 @@ export function getOrderDetail(sn) {
       method: 'get',
       loading: false
     }).then(response => {
-      const _response = new OrderModel().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -49,16 +44,16 @@ export function getOrderDetail(sn) {
  * @param ids
  * @returns {Promise<any>}
  */
-export function updateGoodPrice(ids, params) {
+export function updateOrderPrice(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `877`,
+      url: `/trade/orders/${sn}/price`,
       method: 'put',
       loading: false,
       data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -68,16 +63,16 @@ export function updateGoodPrice(ids, params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function updateConsigneeInfo(ids, params) {
+export function updateConsigneeInfo(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `877`,
+      url: `/trade/orders/${sn}/address`,
       method: 'put',
       loading: false,
       data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -87,16 +82,16 @@ export function updateConsigneeInfo(ids, params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function deliveryGoods(ids, params) {
+export function deliveryGoods(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `877`,
-      method: 'put',
+      url: `/trade/orders/${sn}/delivery`,
+      method: 'post',
       loading: false,
       data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
   })
 }
 
@@ -115,7 +110,25 @@ export function generateElectronicSurface(ids, params) {
       data: params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
+  })
+}
+
+/**
+ * 获取订单流程图数据
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getStepList(ids) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/trade/orders/${ids}/flow`,
+      method: 'get',
+      loading: false
+    }).then(response => {
+      resolve(response)
+    })
   })
 }
 

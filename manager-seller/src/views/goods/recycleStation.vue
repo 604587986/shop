@@ -1,5 +1,5 @@
 <template>
-  <en-tabel-layout
+  <en-table-layout
     toolbar
     pagination
     :tableData="tableData"
@@ -69,7 +69,7 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="pageData.data_total">
     </el-pagination>
-  </en-tabel-layout>
+  </en-table-layout>
 </template>
 
 <script>
@@ -133,7 +133,9 @@
 
       /** 批量删除 */
       handleDeleteRecycles() {
-        this.selectionids.length !== 0 && this.DELETE_Recycles(this.selectionids)
+        this.$confirm('确认彻底删除这些商品吗？', '提示', { type: 'warning' })
+          .then(() => this.selectionids.length !== 0 && this.DELETE_Recycles(this.selectionids))
+          .catch(() => { })
       },
 
       /**  回收站单个商品还原 */
@@ -145,7 +147,9 @@
 
       /** 批量还原 */
       handlReductionRecycles() {
-        this.selectionids.length !== 0 && this.ReductionGoods(this.selectionids)
+        this.$confirm('确认彻底还原这些商品吗？', '提示', { type: 'warning' })
+          .then(() => this.selectionids.length !== 0 && this.ReductionGoods(this.selectionids))
+          .catch(() => { })
       },
 
       /** 搜索事件触发 */

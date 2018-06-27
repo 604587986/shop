@@ -6,6 +6,7 @@
         <el-button :type="currentStatistics == 2 ? 'primary' : ''" @click="handleGoodsStatistics">商品流量排行</el-button>
       </el-button-group>
       <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
+      <el-button @click="handleSearchStatistics" type="primary" >开始搜索</el-button>
     </div>
     <div id="trafficStatistics" :style="{height: tableHeight + 'px'}"></div>
   </div>
@@ -23,7 +24,7 @@
         /** 图表参数*/
         params: {
           /** 当前选择的日期类型 */
-          dateType: '',
+          cycle_type: 'MONTH',
 
           /** 年份 */
           year: '',
@@ -33,7 +34,7 @@
         },
 
         /** 当前访问的流量统计图 1店铺总流量 2商品流量排行*/
-        currentStatistics: '',
+        currentStatistics: 1,
 
         /** 店铺总流量 */
         shopSummaryStatistics: null,
@@ -61,11 +62,17 @@
         setTimeout(this.sesalChart.resize)
       },
 
-      /** 改变日期的回调*/
+      /** 改变日期的回调 更改参数*/
       changeYearMonth(obj) {
         this.params = {
-          ...obj
+          cycle_type: obj.type,
+          year: obj.year,
+          month: obj.month
         }
+      },
+
+      /** 搜索 */
+      handleSearchStatistics() {
         if (this.currentStatistics === 1) {
           this.handleShopSumaryStatistics()
         } else {
@@ -78,20 +85,10 @@
         this.currentStatistics = 1
         API_trafficStatistics.getShopTraffic(this.params).then(response => {
           this.loading = false
-          /** 店铺总流量 */
-          this.shopSummaryStatistics = response.data
-          /** 商品名称列表 x轴信息 */
-          let xData = []
-          if (this.shopSummaryStatistics.length > 12) {
-            xData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-          } else {
-            xData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-          }
-
           this.sesalChart.setOption({
             title: { text: '访问量统计', x: 'center' },
             tooltip: { trigger: 'axis' },
-            legend: { show: true, orient: 'vertical', data: [{ name: '访问量', textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
+            legend: { show: true, orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
             color: ['#7CB5EC'],
             toolbox: {
               show: true,
@@ -104,8 +101,7 @@
             xAxis: {
               name: '日期',
               type: 'category',
-              boundaryGap: false,
-              data: xData
+              data: response.xAxis
             },
             yAxis: {
               name: '访问量（次）',
@@ -118,7 +114,7 @@
               {
                 name: '访问量',
                 type: 'line',
-                data: this.shopSummaryStatistics,
+                data: response.series.data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -133,9 +129,6 @@
               }
             ]
           })
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       },
 
@@ -145,26 +138,14 @@
         API_trafficStatistics.getGoodsStatistics(this.params).then(response => {
           this.loading = false
           /** 商品访问量Top30 */
-          this.goodsStatistics = response.data
-          this.goodsStatistics.forEach((key) => {
-            this.$set(key, 'label', { show: true })
-          })
-          /** 商品访问量Top30列表 x轴信息 */
-          const xData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-
+          this.goodsStatistics = response
           this.sesalChart.setOption({
             title: { text: '商品访问量Top30', x: 'center' },
             tooltip: {
               trigger: 'axis',
               show: true,
               formatter: function(params, ticket, callback) {
-                // console.log(params, 5555)
-                let res = ''
-                if (params[0].data.name) {
-                  res = params[0].data.name + '<br>' + params[0].seriesId.replace(/0/, '') + '：' + params[0].value
-                } else {
-                  res = params[0].name + '<br>' + params[0].seriesId.replace(/0/, '') + '：' + params[0].value
-                }
+                const res = response.series.localName[params[0].dataIndex] + '<br>' + params[0].seriesId.replace(/0/, '') + '：' + params[0].value
                 return res
               }
             },
@@ -179,8 +160,7 @@
             },
             xAxis: {
               type: 'category',
-              boundaryGap: false,
-              data: xData
+              data: response.xAxis
             },
             yAxis: {
               name: '访问量（次）',
@@ -192,7 +172,7 @@
             series: [
               {
                 type: 'bar',
-                data: this.goodsStatistics,
+                data: response.series.data,
                 label: { show: true },
                 markPoint: {
                   data: [
@@ -208,9 +188,6 @@
               }
             ]
           })
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       }
     }

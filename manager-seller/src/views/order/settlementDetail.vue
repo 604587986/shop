@@ -5,7 +5,7 @@
       <div>
         <span>本期结算</span>
         <span>本期结算无误，我要
-          <el-button @click="handleConfirmSettlement" size="mini" type="success">确认</el-button>
+          <el-button @click="handleConfirmSettlement" type="primary">确认</el-button>
         </span>
       </div>
       <p>
@@ -33,7 +33,7 @@
     <!--表格-->
     <el-tabs type="border-card" @tab-click="handleToogle">
       <el-tab-pane label="订单列表">
-        <en-tabel-layout
+        <en-table-layout
           pagination
           :tableData="tableData"
           :loading="loading"
@@ -52,7 +52,7 @@
             <!--操作-->
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="handleLookOrderDetails(scope.row)">查看</el-button>
+                <el-button type="primary" @click="handleLookOrderDetails(scope.row)">查看</el-button>
               </template>
             </el-table-column>
           </template>
@@ -67,10 +67,10 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="pageData.data_total">
           </el-pagination>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="退款订单">
-        <en-tabel-layout
+        <en-table-layout
         pagination
         :tableData="tableData"
         :loading="loading"
@@ -102,7 +102,7 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="pageData.data_total">
         </el-pagination>
-      </en-tabel-layout>
+      </en-table-layout>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -113,21 +113,20 @@
   export default {
     name: 'settlementDetail',
     mounted() {
+      this.billId = this.$route.params.sn
       this.GET_SettlementList()
       this.GET_orderList()
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.billId = vm.$route.params.sn
-        vm.GET_SettlementList()
-        vm.GET_orderList()
-        next()
-      })
+    beforeRouteUpdate(to, from, next) {
+      this.billId = to.params.sn
+      this.GET_SettlementList()
+      this.GET_orderList()
+      next()
     },
     data() {
       return {
         /** 账单id */
-        billId: this.$route.params.sn,
+        billId: '',
 
         /** 账单类型 */
         bill_type: '1',

@@ -21,7 +21,7 @@
           <!--订单编号 付款方式 下单时间-->
           <div class="order-item">
             <span class="item-name">订单编号：</span>
-            <span class="item-value">{{ orderDetail.order_sn }}</span>
+            <span class="item-value">{{ orderDetail.sn }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">付款方式：</span>
@@ -29,7 +29,7 @@
           </div>
           <div class="order-item">
             <span class="item-name">下单时间：</span>
-            <span class="item-value">{{ orderDetail.order_time | unixToDate }}</span>
+            <span class="item-value">{{ orderDetail.create_time | unixToDate }}</span>
           </div>
           <hr>
           <!--相关费用-->
@@ -39,7 +39,7 @@
           </div>
           <div class="order-item">
             <span class="item-name">运费：</span>
-            <span class="item-value">{{ }}</span>
+            <span class="item-value">{{ orderDetail.shipping_price | unitPrice('¥') }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">优惠金额：</span>
@@ -58,7 +58,7 @@
           </div>
           <div class="order-item">
             <span class="item-name">送货时间：</span>
-            <span class="item-value">{{ orderDetail.ship_time }}</span>
+            <span class="item-value">{{ orderDetail.receive_time }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">发票抬头：</span>
@@ -87,7 +87,7 @@
           </div>
           <div class="order-item">
             <span class="item-name">2、送货时间：</span>
-            <span class="item-value">{{ orderDetail.ship_time }}</span>
+            <span class="item-value">{{ orderDetail.receive_time }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">3、发票抬头：</span>
@@ -106,29 +106,30 @@
         </div>
         <!--物流信息-->
         <div v-if="!logisticsStatus">
-          <en-tabel-layout
-            toolbar
+          <en-table-layout
             :tableData="logisticsData"
-            :loading="loading"
-          >
+            :loading="loading">
             <div slot="toolbar" class="inner-toolbar">
               <span style="line-height: 35px;">物流信息</span>
-              <el-button type="primary" size="mini" @click="addLogisticsInfo">添加物流信息</el-button>
+              <el-button type="primary" @click="addLogisticsInfo">添加物流信息</el-button>
             </div>
             <template slot="table-columns">
               <!--公司名称-->
-              <el-table-column prop="sn" label="公司名称"/>
+              <el-table-column prop="name" label="公司名称"/>
               <!--物流单号-->
               <el-table-column label="物流单号">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.sn"></el-input>
+                  <el-input v-model="scope.row.ship_no"></el-input>
                 </template>
               </el-table-column>
               <!--是否支持电子面单-->
               <el-table-column label="是否支持电子面单">
                 <template slot-scope="scope">
-                  <span>不支持电子面单</span>
-                  <el-button type="text" @click="produceElectronicSurface">生成电子面单</el-button>
+                  <span v-if="scope.row.is_waybill === 0">不支持电子面单</span>
+                  <el-button
+                    type="text"
+                    v-if="scope.row.is_waybill === 1"
+                    @click="produceElectronicSurface">生成电子面单</el-button>
                 </template>
               </el-table-column>
               <!--操作-->
@@ -136,40 +137,36 @@
                 <template slot-scope="scope">
                   <el-button
                     plain type="primary"
-                    @click="deliverGoods(scope.$index, scope.row)">发货
+                    @click="deliverGoods(scope.row)">发货
                   </el-button>
                 </template>
               </el-table-column>
             </template>
-          </en-tabel-layout>
+          </en-table-layout>
         </div>
         <div class="opera-btn">
-          <el-button
-            v-if="activestep === 2 || activestep === 3 || activestep === 4"
-            size="mini"
-            plain
-            type="info"
-            @click="adjustConsignee" >修改收货人信息</el-button>
-          <el-button v-if="activestep === 2" plain type="info" @click="adjustPrice" >调整价格</el-button>
+          <el-button v-if="isShowEditShipName" plain type="info" @click="adjustConsignee" >修改收货人信息</el-button>
+          <el-button v-if="isShowEditOrderPrice" plain type="info" @click="adjustPrice" >调整价格</el-button>
+          <el-button v-if="isShowConfirmReceive" plain type="info" @click="confirmReceive" >确认收款</el-button>
         </div>
       </div>
     </div>
     <!--订单状态 步骤条-->
-    <el-steps :active="activestep" align-center style="margin-top: 20px;">
-      <el-step v-for="item in stepList" :title="item.label" :key="item.label" status="error"></el-step>
+    <el-steps  align-center style="margin-top: 20px;" simple>
+      <el-step v-for="item in stepList" :title="item.text" :key="item.text" :status="item.show_status"></el-step>
     </el-steps>
     <!--商品列表-->
     <div>
-      <div class="d-header">商品列表</div>
+      <!--<div class="d-header">商品列表</div>-->
       <el-table :data="productList" :header-cell-style="{textAlign: 'center'}">
         <el-table-column label="商品图片" width="180">
           <template slot-scope="scope">
             <img :src="scope.row.goods_image" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column prop="goods_name" label="商品名称" align="left"/>
+        <el-table-column prop="name" label="商品名称" />
         <el-table-column label="单价（元）" width="150">
-          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.original_price | unitPrice('￥') }}</template>
         </el-table-column>
         <el-table-column prop="num" label="数量" width="120"/>
         <el-table-column label="小计" width="120">
@@ -180,7 +177,7 @@
     <!--调整价格 / 修改收货人信息-->
     <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="30%">
       <div align="center">
-        <!--调整价格-->
+        <!--调整订单总价-->
         <el-input v-show="triggerStatus === 1" v-model="adjustedPrice"style="width: 75%;"></el-input>
         <!--修改收货人信息-->
         <el-form
@@ -189,33 +186,27 @@
           style="width: 75%;"
           label-position="right"
           label-width="90px">
-          <el-form-item label="收货人：" prop="consignee_person">
-            <el-input  v-model="ConsigneeForm.consignee_person" ></el-input>
+          <el-form-item label="收货人：" prop="ship_name">
+            <el-input  v-model="ConsigneeForm.ship_name" ></el-input>
           </el-form-item>
-          <el-form-item label="手机：" prop="phone" >
-            <el-input  v-model.number="ConsigneeForm.phone" ></el-input>
+          <el-form-item label="手机：" prop="ship_mobile" >
+            <el-input  v-model.number="ConsigneeForm.ship_mobile" ></el-input>
           </el-form-item>
-          <el-form-item label="配送地区：" prop="area" >
-            <el-input  v-model="ConsigneeForm.area" ></el-input>
+          <el-form-item label="配送地区：" prop="region" class="area-select">
+            <en-region-picker :api="areasapi" :default="areas" @changed="handleChangeArea"></en-region-picker>
           </el-form-item>
-          <el-form-item label="详细地址：" prop="address" >
-            <el-input  v-model="ConsigneeForm.address" ></el-input>
+          <el-form-item label="详细地址：" prop="ship_addr" >
+            <el-input  v-model="ConsigneeForm.ship_addr" ></el-input>
           </el-form-item>
-          <el-form-item label="送货时间：" prop="send_time" style="text-align: left;">
-            <el-select v-model="ConsigneeForm.send_time" placeholder="请选择">
-              <el-option label="任意时间" value="1"></el-option>
-              <el-option label="仅工作日" value="2"></el-option>
-              <el-option label="仅休息日" value="3"></el-option>
-              <!--<el-option-->
-                <!--v-for="item in options"-->
-                <!--:key="item.value"-->
-                <!--:label="item.label"-->
-                <!--:value="item.value">-->
-              <!--</el-option>-->
+          <el-form-item label="送货时间：" prop="receive_time" style="text-align: left;">
+            <el-select v-model="ConsigneeForm.receive_time" placeholder="请选择">
+              <el-option label="任意时间" value="任意时间"></el-option>
+              <el-option label="仅工作日" value="仅工作日"></el-option>
+              <el-option label="仅休息日" value="仅休息日"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="订单备注：" prop="mark">
-            <el-input  type="textarea" v-model="ConsigneeForm.mark" placeholder="限500字" maxlength="500"></el-input>
+          <el-form-item label="订单备注：" prop="remark">
+            <el-input  type="textarea" v-model="ConsigneeForm.remark" placeholder="限500字" maxlength="500"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -235,19 +226,29 @@
       </div>
       <span class="desc">法师打发打发</span>
     </el-dialog>
+    <!--物流信息-->
+    <en-logistics-company
+      :logisticsShow="logisticsCompanyShow"
+      @logisticsChanged="logisticsChanged"
+    ></en-logistics-company>
   </div>
 </template>
 
 <script>
   import * as API_order from '@/api/order'
+  import * as API_logistics from '@/api/expressCompany'
   import { CategoryPicker } from '@/components'
+  import { LogisticsCompany } from './components'
   export default {
     name: 'orderDetail',
     components: {
+      [LogisticsCompany.name]: LogisticsCompany,
       [CategoryPicker.name]: CategoryPicker
     },
     data() {
       return {
+        areasapi: `${process.env.BASE_API}/regions/@id/children`,
+
         /** 列表loading状态 */
         loading: false,
 
@@ -255,13 +256,19 @@
         orderDetail: null,
 
         /** 订单sn */
-        sn: this.$route.params.sn,
-
-        /** 各种信息 */
-        orderInfo: [],
+        sn: '',
 
         /** 产品列表 */
         productList: [],
+
+        /** 是否显示修改收货人信息按钮 默认不显示*/
+        isShowEditShipName: false,
+
+        /** 是否显示调整价格按钮  默认不显示*/
+        isShowEditOrderPrice: false,
+
+        /** 是否显示确认收款按钮 默认不显示 */
+        isShowConfirmReceive: false,
 
         /** 订单状态/物流信息状态显示 */
         logisticsStatus: true,
@@ -272,13 +279,16 @@
         /** 物流信息弹框是否显示 */
         logisticsShow: false,
 
+        /** 是否显示物流信息弹框 */
+        logisticsCompanyShow: false,
+
         /** 弹框显示 */
         orderDetailShow: false,
 
         /** 弹框标题 */
-        dialogTitle: '调整价格',
+        dialogTitle: '调整订单总价',
 
-        /** 触发状态 1调整价格 2修改收货人信息*/
+        /** 触发状态 1调整订单总价 2修改收货人信息*/
         triggerStatus: -1,
 
         /** 被调整的价格 */
@@ -287,37 +297,29 @@
         /** 收货人信息 */
         ConsigneeForm: {
           /** 收货人 */
-          consignee_person: '',
+          ship_name: '',
 
           /** 手机号码 */
-          phone: '',
+          ship_mobile: '',
 
           /** 地区 */
-          area: '',
+          region: '',
 
           /** 详细地址 */
-          address: '',
+          ship_addr: '',
 
           /** 送货时间 */
-          send_time: '',
+          receive_time: '',
 
           /** 备注 */
-          mark: ''
+          remark: ''
         },
 
-        /** 步骤状态 当前步骤*/
-        activestep: 2,
+        /** 地区信息*/
+        areas: [],
 
-        /** 步骤list 存在0已完成 1未完成 2未开始 3正在进行 四种状态*/
-        stepList: [
-          { label: '新订单', setp_status: 0 },
-          { label: '已确认', setp_status: 1 },
-          { label: '未付款', setp_status: 2 },
-          { label: '已付款', setp_status: 3 },
-          { label: '已发货', setp_status: 2 },
-          { label: '已收货', setp_status: 0 },
-          { label: '已完成', setp_status: 0 }
-        ]
+        /** 步骤list*/
+        stepList: []
       }
     },
     filters: {
@@ -325,19 +327,98 @@
         return val === 'ONLINE' ? '在线支付' : '货到付款'
       }
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.GET_OrderDetail()
-        next()
-      })
+    beforeRouteUpdate(to, from, next) {
+      this.sn = to.params.sn
+      this.GET_OrderDetail()
+      next()
+    },
+    mounted() {
+      this.sn = this.$route.params.sn
+      this.GET_OrderDetail()
     },
     methods: {
       GET_OrderDetail() {
         this.loading = true
         API_order.getOrderDetail(this.sn).then(response => {
           this.loading = false
+          // 订单信息
           this.orderDetail = response
-          this.productList = response.sku_list
+          // 商品信息 因此处后台并未进行传输数据 因此自己请求接口进行获取对应订单商品列表数据
+          this.getReactiveOrderskuList()
+          // 修改收货人信息地区选择器信息
+          this.areas = [this.orderDetail.ship_province_id, this.orderDetail.ship_city_id,
+            this.orderDetail.ship_county_id || -1, this.orderDetail.ship_town_id || -1]
+          // 步骤条信息
+          this.getStepList()
+          // 是否可发货 如果可发货则获取物流公司信息列表 是否可发货 在线支付（已付款状态可发货） 货到付款（已确认状态可发货）
+          if ((this.orderDetail.payment_type === 'ONLINE' && this.orderDetail.order_status === 'PAID_OFF') ||
+            (this.orderDetail.payment_type === 'COD' && this.orderDetail.order_status === 'CONFIRM')) {
+            this.getLogisticsCompanies()
+          } else {
+            this.logisticsStatus = true
+          }
+
+          // 是否可以修改收货人信息 未发货时皆可修改收货人信息（订单状态 新订单 已确认 未付款） 在线支付时已付款
+          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
+            this.orderDetail.order_status === 'PAY_NO' || (this.orderDetail.order_status === 'PAID_OFF' && this.orderDetail.payment_type === 'ONLINE')) {
+            this.isShowEditShipName = true
+          }
+
+          // 是否可以调整价格  （在线支付）未付款时皆可调整价格 （订单状态 新订单 已确认 未付款)
+          if (this.orderDetail.pay_status === 'PAY_NO') {
+            this.isShowEditOrderPrice = true
+          }
+
+          // 是否可以确认收款 货到付款时 已收货状态
+          if (this.orderDetail.payment_type === 'COD' && this.orderDetail.order_status === 'ROG') {
+            this.isShowEditOrderPrice = true
+          }
+        })
+      },
+
+      /** 获取订单步骤条信息 */
+      getStepList() {
+        API_order.getStepList(this.sn).then(response => {
+          this.stepList = response
+          this.stepList = this.stepList.map(key => {
+            switch (key.show_status) {
+              case 0: key.show_status = 'wait'
+                break
+              case 1: key.show_status = 'success'
+                break
+              case 2: key.show_status = 'error'
+                break
+              case 3: key.show_status = 'success'
+                break
+            }
+            return key
+          })
+        })
+      },
+
+      /** 获取对应订单商品列表数据 */
+      getReactiveOrderskuList() {
+        this.loading = true
+        const _params = {
+          order_sn: this.sn
+        }
+        API_order.getOrderList(_params).then(response => {
+          this.loading = false
+          this.productList = response.data[0].sku_list
+        })
+      },
+
+      /** 获取物流公司信息列表 */
+      getLogisticsCompanies() {
+        API_logistics.getExpressCompanyList({}).then(response => {
+          this.logisticsData = response
+          this.logisticsData = this.logisticsData.filter(key => {
+            return key.shop_id
+          })
+          this.logisticsData.forEach(key => {
+            this.$set(key, 'ship_no', '')
+          })
+          this.logisticsStatus = false
         })
       },
 
@@ -348,9 +429,10 @@
 
       /** 调整价格 */
       adjustPrice() {
-        this.dialogTitle = '调整价格'
+        this.dialogTitle = '调整订单总价'
         this.orderDetailShow = true
         this.triggerStatus = 1
+        this.adjustedPrice = this.orderDetail.order_price
       },
 
       /** 生成电子面单 */
@@ -359,13 +441,42 @@
       },
 
       /** 发货 */
-      deliverGoods() {
-
+      deliverGoods(row) {
+        if (!row.ship_no) {
+          this.$message.error('请填写快递单号')
+          return
+        }
+        const _params = {
+          /** 发货单号 */
+          ship_no: row.ship_no,
+          /** 物流公司id */
+          logi_id: row.logi_id,
+          /** 物流公司名称 */
+          logi_name: row.name
+        }
+        API_order.deliveryGoods(this.sn, _params).then(() => {
+          this.GET_OrderDetail()
+        })
       },
 
       /** 添加物流信息 */
       addLogisticsInfo() {
+        if (!this.logisticsCompanyShow) {
+          this.logisticsCompanyShow = true
+        } else {
+          this.logisticsCompanyShow = false
+          this.logisticsCompanyShow = true
+        }
+      },
 
+      /** 监听物流公司信息开启/关闭操作 */
+      logisticsChanged() {
+        this.getLogisticsCompanies()
+      },
+
+      /** 操作地区选择器改变时 触发*/
+      handleChangeArea(val) {
+        this.ConsigneeForm.region = val.last_id
       },
 
       /** 修改收货人信息 */
@@ -373,6 +484,23 @@
         this.dialogTitle = '修改收货人信息'
         this.orderDetailShow = true
         this.triggerStatus = 2
+        /** 为收货人信息赋予数据信息 */
+        this.ConsigneeForm = {
+          /** 收货人 */
+          ship_name: this.orderDetail.ship_name,
+
+          /** 手机号码 */
+          ship_mobile: this.orderDetail.ship_mobile,
+
+          /** 详细地址 */
+          ship_addr: this.orderDetail.ship_addr,
+
+          /** 送货时间 */
+          receive_time: this.orderDetail.receive_time,
+
+          /** 备注 */
+          remark: this.orderDetail.remark
+        }
       },
 
       /** 取消保存 */
@@ -384,7 +512,26 @@
       /** 保存按钮 */
       reserveOrderDetail() {
         this.orderDetailShow = false
-        this.triggerStatus = 1
+        if (this.triggerStatus === 2) { // 修改收货人信息
+          API_order.updateConsigneeInfo(this.sn, this.ConsigneeForm).then(() => {
+            this.$message.success('收货人信息修改成功')
+            this.GET_OrderDetail()
+          })
+        } else if (this.triggerStatus === 1) { // 调整价格
+          const _params = {
+            order_price: this.adjustedPrice
+          }
+          API_order.updateOrderPrice(this.sn, _params).then(() => {
+            this.$message.success('价格修改成功')
+            this.GET_OrderDetail()
+          })
+        }
+        this.triggerStatus = -1
+      },
+
+      /** 确认收款 */
+      confirmReceive() {
+
       }
     }
   }
@@ -502,6 +649,16 @@
     &h2 {
       font-size: 14px;
       font-weight: 400;
+    }
+  }
+
+  /*地区选择器*/
+  /deep/.area-select {
+    .el-form-item__content {
+      text-align: left;
+      .app-address {
+        text-align: left;
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       pagination
       :tableData="tableData"
       :loading="loading">
@@ -34,7 +34,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 
@@ -69,7 +69,7 @@
       }
     },
     beforeRouteUpdate(to, from, next) {
-      this.activityID = this.$route.params.id
+      this.activityID = to.params.id
       this.GET_ActivityGoodsList()
       next()
     },

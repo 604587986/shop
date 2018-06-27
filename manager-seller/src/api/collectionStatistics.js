@@ -3,24 +3,38 @@
  */
 
 import request from '@/utils/request'
-import * as CollectionStatisticsModel from '@/models/CollectionStatisticsModel'
 
 /**
- * 获取收藏列表数据
+ * 获取收藏图表数据
  * @param params
  * @returns {Promise<any>}
  */
-export function getCollectionStatistics(params) {
+export function getCollectionStatistics() {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/collection/statistics/list',
+      url: '/statistics/collect/chart',
+      method: 'get',
+      loading: false
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 获取商品列表信息
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getCollectionGoods(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/statistics/collect/page',
       method: 'get',
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new CollectionStatisticsModel.CollectionStatistics().map(response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }

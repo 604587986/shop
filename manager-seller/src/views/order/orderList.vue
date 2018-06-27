@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -22,8 +22,7 @@
             @advancedSearch="advancedSearchEvent"
             advanced
             advancedWidth="465"
-            placeholder="请输入关键字"
-          >
+            placeholder="请输入关键字">
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="订单编号">
@@ -44,8 +43,7 @@
                     unlink-panels
                     range-separator="-"
                     start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    value-format="yyyy-MM-dd">
+                    end-placeholder="结束日期">
                   </el-date-picker>
                 </el-form-item>
               </el-form>
@@ -53,7 +51,7 @@
           </en-table-search>
         </div>
       </div>
-    </en-tabel-layout>
+    </en-table-layout>
     <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
       <table class="my-table">
         <thead>
@@ -69,7 +67,7 @@
         <tbody v-for="item in tableData">
         <tr style="width: 100%;height: 10px;"></tr>
         <tr class="bg-order">
-          <td class="shoplist-content-out" colspan="5">订单编号：{{item.order_sn}}</td>
+          <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
           <td>
             <el-button
               type="text"
@@ -93,7 +91,7 @@
           <!--买家-->
           <td> {{ item.ship_name }}</td>
           <!--下单时间-->
-          <td>{{ item.order_time | unixToDate }}</td>
+          <td>{{ item.create_time | unixToDate }}</td>
           <!--订单状态-->
           <td>{{ item.order_status_text }}</td>
           <!--订单来源-->
@@ -111,6 +109,9 @@
           </td>
         </tr>
         </tbody>
+        <div v-if="tableData.length === 0 " class="empty-block">
+          暂无数据
+        </div>
       </table>
     </div>
     <el-pagination
@@ -145,14 +146,14 @@
         params: {
           page_no: 1,
           page_size: 10,
-          orderStatus: 0
+          order_status: ''
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 高级搜索数据 */
         advancedForm: {},
@@ -162,10 +163,10 @@
 
         /** 订单状态 列表*/
         orderStatusList: [
-          { value: 0, label: '全部' },
-          { value: 1, label: '待付款' },
-          { value: 2, label: '待发货' },
-          { value: 3, label: '待收货' }
+          { value: 'ALL', label: '全部' },
+          { value: 'WAIT_PAY', label: '待付款' },
+          { value: 'WAIT_SHIP', label: '待发货' },
+          { value: 'WAIT_ROG', label: '待收货' }
         ],
 
         /** 表格最大高度 */
@@ -173,19 +174,20 @@
       }
     },
     mounted() {
-      if (this.$route.query) {
-        this.orderStatus = this.params.orderStatus = this.$route.query.orderStatus
+      if (this.$route.params && !Number.isNaN(parseInt(this.$route.params.id))) {
+        this.orderStatus = this.params.order_status = parseInt(this.$route.params.id)
       }
+      this.GET_OrderList()
       window.onresize = this.countTableHeight
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        if (vm.$route.query) {
-          vm.orderStatus = vm.params.orderStatus = vm.$route.query.orderStatus
-        }
-        vm.GET_OrderList()
-        next()
-      })
+    beforeRouteUpdate(to, from, next) {
+      if (!Number.isNaN(parseInt(to.params.id))) {
+        this.orderStatus = this.params.order_status = parseInt(to.params.id)
+      } else {
+        this.orderStatus = ''
+      }
+      this.GET_OrderList()
+      next()
     },
     methods: {
       /** 计算高度 */
@@ -239,8 +241,8 @@
         delete this.params.start_time
         delete this.params.end_time
         if (this.advancedForm.order_time_range) {
-          this.params.start_time = this.advancedForm.order_time_range[0]
-          this.params.end_time = this.advancedForm.order_time_range[1]
+          this.params.start_time = this.advancedForm.order_time_range[0].getTime() / 1000
+          this.params.end_time = this.advancedForm.order_time_range[1].getTime() / 1000
         }
         delete this.params.keyword
         delete this.params.order_time_range
@@ -249,7 +251,7 @@
 
       /** 查看、操作订单 */
       handleOperateOrder(item) {
-        this.$router.push({ path: `/order/detail/${item.order_sn}` })
+        this.$router.push({ path: `/order/detail/${item.sn}` })
       },
 
       GET_OrderList() {
@@ -279,6 +281,22 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
+  }
+
+  /*暂无数据时的样式*/
+  /deep/ .el-table__empty-block {
+    display: none;
+  }
+
+  .empty-block {
+    position: relative;
+    min-height: 60px;
+    line-height: 60px;
+    text-align: center;
+    width: 295%;
+    height: 100%;
+    font-size: 14px;
+    color: #606266;
   }
 
   /*表格信息*/

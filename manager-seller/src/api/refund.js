@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as RefundModel from '@/models/RefundModel'
 
 /**
  * 获取退款/货单列表
@@ -18,9 +17,7 @@ export function getRefundList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new RefundModel.Refund().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -37,10 +34,7 @@ export function getRefundDetails(sn) {
       method: 'get',
       loading: false
     }).then(response => {
-      const _response = response
-      _response.refund = new RefundModel.Refund().map(response.refund)
-      _response.refund_goods_do = new RefundModel.RefundGoods().map(response.refund_goods_do)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

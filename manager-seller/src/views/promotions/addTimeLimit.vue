@@ -29,7 +29,7 @@
             <el-button type="primary" @click="selectgoodslist($index)">选择商品</el-button>
           </div>
           <div :key="$index">
-            <en-tabel-layout
+            <en-table-layout
               v-if="item.tableData && item.tableData.length >= 1"
               :tableData="item.tableData"
               :loading="loading">
@@ -60,7 +60,7 @@
                   </template>
                 </el-table-column>
               </template>
-            </en-tabel-layout>
+            </en-table-layout>
           </div>
         </div>
       </el-form-item>
@@ -68,13 +68,15 @@
     <div style="text-align: center;">
       <el-button type="primary" @click="handleSignUp">确定报名</el-button>
     </div>
-    <en-goods-selector
+    <en-goods-picker
+      type="seller"
       :show="showDialog"
       :api="goods_api"
-      :defaultData="tableData"
-      :maxLength="maxsize"
+      :categoryApi="categoryApi"
+      :headers="headers"
+      :limit="maxsize"
       @confirm="refreshFunc"
-      @closed="showDialog = false"/>
+      @close="showDialog = false"/>
   </div>
 </template>
 
@@ -82,12 +84,10 @@
   import * as API_limitTime from '@/api/limitTime'
   import { CategoryPicker } from '@/components'
   import { RegExp } from '～/ui-utils'
-  import { GoodsSelector } from '@/plugins/selector/vue'
   export default {
     name: 'addTimeLimit',
     components: {
-      [CategoryPicker.name]: CategoryPicker,
-      [GoodsSelector.name]: GoodsSelector
+      [CategoryPicker.name]: CategoryPicker
     },
     data() {
       const checkPrice = (rule, value, callback) => {
@@ -125,8 +125,16 @@
         /** 活动ID*/
         seckillID: '',
 
+        /** 请求头令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+        },
+
         /** 表格信息*/
         tableData: [],
+
+        /** 商品ids */
+        goodsIds: [],
 
         /** 当前操作的表格序列*/
         _order: 0,
@@ -135,7 +143,10 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: process.env.BASE_API + '/goods',
+        goods_api: `${process.env.SELLER_API}/goods`,
+
+        /** 商城分类api */
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
@@ -154,11 +165,11 @@
       }
     },
     mounted() {
-      this.activityID = this.$route.query._activity_id
+      this.activityID = this.$route.params.id
       this.GET_limitTimeActivityDetails()
     },
     beforeRouteUpdate(to, from, next) {
-      this.activityID = this.$route.query._activity_id
+      this.activityID = to.params.id
       this.GET_limitTimeActivityDetails()
       next()
     },

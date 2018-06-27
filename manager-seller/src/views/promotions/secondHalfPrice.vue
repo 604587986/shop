@@ -2,12 +2,11 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
       <el-tab-pane label="第二件半价列表" name="seconedHalfList">
-        <en-tabel-layout
+        <en-table-layout
           toolbar
           pagination
           :tableData="tableData"
-          :loading="loading"
-        >
+          :loading="loading">
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
               <el-button type="primary" @click="handleAddSeconedHalf">新增</el-button>
@@ -53,7 +52,7 @@
               </template>
             </el-table-column>
           </template>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="新增第二件半价活动" name="add">
         <div class="content-goods-publish">
@@ -114,7 +113,7 @@
                     </el-radio-group>
                     <!--商品表格-->
                     <div v-show="!goodsShow">
-                      <en-tabel-layout
+                      <en-table-layout
                         toolbar
                         :tableData="activityForm.activity_goods"
                         :loading="loading"
@@ -151,7 +150,7 @@
                             </template>
                           </el-table-column>
                         </template>
-                      </en-tabel-layout>
+                      </en-table-layout>
                     </div>
                   </el-form-item>
                 </div>
@@ -168,30 +167,31 @@
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
-    <en-goods-selector
+    <en-goods-picker
+      type="seller"
       :show="showDialog"
       :api="goods_api"
-      :defaultData="tableData"
-      :maxLength="maxsize"
+      :categoryApi="categoryApi"
+      :headers="headers"
+      :defaultData="goodsIds"
+      :limit="maxsize"
       @confirm="refreshFunc"
-      @closed="showDialog = false"/>
+      @close="showDialog = false"/>
   </div>
 </template>
 
 <script>
   import * as API_activity from '@/api/activity'
   import { CategoryPicker, UE } from '@/components'
-  import { GoodsSelector } from '@/plugins/selector/vue'
 
   export default {
     name: 'secondHalfPrice',
     components: {
       [CategoryPicker.name]: CategoryPicker,
-      [UE.name]: UE,
-      [GoodsSelector.name]: GoodsSelector
+      [UE.name]: UE
     },
     data() {
-      var checkRange = (rule, value, callback) => {
+      const checkRange = (rule, value, callback) => {
         if (!value && value !== 0) {
           return callback(new Error('请选择商品参与方式'))
         } else {
@@ -208,8 +208,16 @@
         /** 列表参数 */
         params: {},
 
+        /** 请求头令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+        },
+
         /** 列表数据*/
-        tableData: null,
+        tableData: [],
+
+        /** 商品ids */
+        goodsIds: [],
 
         /** 日期选择器选项 */
         pickoptions: {
@@ -267,7 +275,10 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: `${process.env.BASE_API}/goods`,
+        goods_api: `${process.env.SELLER_API}/goods`,
+
+        /** 商城分类api */
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
@@ -294,7 +305,7 @@
       /** 切换面板*/
       handleToggleClick(tab, event) {
         this.activeName = tab.name
-        if (this.activeName === 'express') {
+        if (this.activeName === 'seconedHalfList') {
           this.GET_SecondHalfActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
@@ -318,6 +329,9 @@
       refreshFunc(val) {
         if (val) {
           this.activityForm.activity_goods = val
+          this.goodsIds = this.activityForm.activity_goods.map(key => {
+            return key.goods_id
+          })
         }
       },
 
@@ -333,6 +347,9 @@
             this.activityForm.activity_goods.splice(_index, 1)
           }
         })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
+        })
       },
 
       selectionChange(val) {
@@ -347,6 +364,9 @@
             }
           })
           this.$message.success('批量取消成功！')
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -415,13 +435,13 @@
             if (this.activityForm.activity_hp_id) {
               API_activity.saveSeconedHalfActivity(this.activityForm.activity_hp_id, _params).then(() => {
                 this.$message.success('保存设置成功！')
-                this.activeName === 'seconedHalfList'
+                this.activeName = 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
               })
             } else {
               API_activity.addSeconedHalfActivity(_params).then(() => {
                 this.$message.success('添加成功！')
-                this.activeName === 'seconedHalfList'
+                this.activeName = 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
               })
             }
@@ -431,6 +451,16 @@
 
       /** 构造表单数据 */
       generateFormData(data) {
+        let _goodslist = []
+        if (data.activity_goods && Array.isArray(data.activity_goods)) {
+          _goodslist = data.activity_goods.map(key => {
+            return {
+              goods_id: key.goods_id,
+              name: key.goods_name,
+              thumbnail: key.thumbnail
+            }
+          })
+        }
         const _params = {
           /** 活动名称/标题 */
           title: data.activity_name,
@@ -445,17 +475,11 @@
           description: data.activity_desc,
 
           /** 商品参与方式 */
-          range_type: data.is_all_joined,
-
+          range_type: data.is_all_joined
+        }
+        if (_goodslist.length > 0) {
           /** 参与商品列表 */
-          goods_list: data.activity_goods.map(key => {
-            return {
-              goods_id: key.goods_id,
-              name: key.goods_name,
-              sku_id: key.sn,
-              thumbnail: key.thumbnail
-            }
-          })
+          _params.goods_list = _goodslist
         }
         return _params
       }
@@ -543,7 +567,8 @@
       flex-direction: column;
       flex-wrap: nowrap;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      margin-left: 20px;
     }
   }
 

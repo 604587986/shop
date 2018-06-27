@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -41,7 +41,7 @@
           </template>
         </el-table-column>
       </template>
-    </en-tabel-layout>
+    </en-table-layout>
     <div style="text-align: center">
       <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
     </div>
@@ -49,6 +49,7 @@
       type="seller"
       :show="showDialog"
       :api="goods_api"
+      :multipleApi="multipleApi"
       :categoryApi="categoryApi"
       :headers="headers"
       :defaultData="goodsIds"
@@ -60,7 +61,6 @@
 
 <script>
   import * as API_goodsTag from '@/api/goodsTag'
-
   export default {
     name: 'tagAdd',
     data() {
@@ -68,7 +68,7 @@
         /** 标签商品列表loading状态 */
         loading: false,
 
-        /** 请求头 */
+        /** 请求头令牌 */
         headers: {
           Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
         },
@@ -89,10 +89,12 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: process.env.BASE_API + '/goods',
+        goods_api: `${process.env.SELLER_API}/goods`,
+
+        multipleApi: `${process.env.SELLER_API}//goods/@ids/details`,
 
         /** 商城分类api */
-        categoryApi: process.env.BASE_API + '/goods/category/0/children',
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,

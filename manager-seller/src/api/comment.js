@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import CommentModel from '@/models/CommentModel'
 
 /**
  * 获取评论列表
@@ -18,9 +17,7 @@ export function getCommentList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new CommentModel().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

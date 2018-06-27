@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as CouponModel from '@/models/CouponModel'
 
 /**
  * 获取优惠券模型列表
@@ -18,9 +17,7 @@ export function getCouponsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new CouponModel.Coupon().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -38,7 +35,7 @@ export function deleteCoupons(ids, params) {
       url: `/promotion/coupons/${ids}`,
       method: 'delete',
       loading: false,
-      data: params
+      params
     }).then(response => {
       resolve(response)
     })
@@ -59,7 +56,7 @@ export function modifyCoupons(ids, params) {
       method: 'put',
       loading: false,
       headers: { 'Content-Type': 'application/json' },
-      data: new CouponModel.Coupon().params(params)
+      data: params
     }).then(response => {
       resolve(response)
     })
@@ -79,7 +76,7 @@ export function addCoupons(params) {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       loading: false,
-      data: new CouponModel.Coupon().params(params)
+      data: params
     }).then(response => {
       resolve(response)
     })
@@ -100,8 +97,7 @@ export function getCouponDetails(id, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = new CouponModel.Coupon().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

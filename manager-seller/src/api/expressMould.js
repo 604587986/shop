@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import ExpressMouldModel from '@/models/ExpressMouldModel'
 
 /**
  * 运费模版列表
@@ -19,9 +18,7 @@ export function getTplList(ids, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ExpressMouldModel().map(_response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -40,8 +37,7 @@ export function getSimpleTpl(id, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = new ExpressMouldModel().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

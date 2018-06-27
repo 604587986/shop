@@ -7,7 +7,7 @@
     <el-tabs type="border-card" @tab-click="changeHotType">
       <el-tab-pane label="下单金额">
         <div id="orderAmount" :style="{height: tableHeight + 'px'}"></div>
-        <en-tabel-layout
+        <en-table-layout
           pagination
           :tableData="tableData"
           :loading="loading"
@@ -30,11 +30,11 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="pageData.data_total">
           </el-pagination>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="下单商品数">
         <div id="orderGoodsNum" :style="{height: tableHeight + 'px'}"></div>
-        <en-tabel-layout
+        <en-table-layout
           pagination
           :tableData="tableData"
           :loading="loading"
@@ -55,7 +55,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="pageData.data_total">
           </el-pagination>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
     </el-tabs>
   </div>

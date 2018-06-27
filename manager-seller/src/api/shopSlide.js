@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import ShopSlideModel from '@/models/ShopSlideModel'
 
 /**
  * 获取店铺幻灯片列表
@@ -18,8 +17,7 @@ export function getShopSlideList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = new ShopSlideModel().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -30,19 +28,12 @@ export function getShopSlideList(params) {
  * @returns {Promise<any>}
  */
 export function saveShopSlide(params) {
-  const _params = params.map(key => {
-    return {
-      silde_id: key.shop_banner_id || 0,
-      silde_url: key.shop_banner_link,
-      img: key.shop_banner_image
-    }
-  })
   return new Promise((resolve, reject) => {
     request({
       url: '/shops/sildes',
       method: 'put',
       headers: { 'Content-Type': 'application/json' },
-      data: _params
+      data: params
     }).then(response => resolve(response))
   })
 }

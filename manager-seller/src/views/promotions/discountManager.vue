@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -33,17 +33,17 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column prop="coupon_name" label="优惠券名称" />
-        <el-table-column prop="coupon_denomination" label="优惠券面额（元）" />
-        <el-table-column prop="coupon_use_limit" label="使用限制"  />
+        <el-table-column prop="title" label="优惠券名称" />
+        <el-table-column prop="coupon_price" label="优惠券面额（元）" />
+        <el-table-column prop="coupon_threshold_price" label="使用限制"  />
         <el-table-column label="使用期限" >
           <template slot-scope="scope">
-            {{ scope.row.coupon_time_start | unixToDate('yyyy-MM-dd') }}~
-            {{ scope.row.coupon_time_end | unixToDate('yyyy-MM-dd') }}
+            {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}~
+            {{ scope.row.end_time | unixToDate('yyyy-MM-dd') }}
           </template>
         </el-table-column>
-        <el-table-column prop="coupon_circulation" label="发行量（个）" width="120" />
-        <el-table-column prop="coupon_used_num" label="已使用量（个）" />
+        <el-table-column prop="create_num" label="发行量（个）" width="120" />
+        <el-table-column prop="used_num" label="已使用量（个）" />
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
             <el-button
@@ -69,7 +69,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <!--优惠券组件-->
     <Coupon
       :couponModelShow="couponModelShow"
@@ -122,22 +122,22 @@
         couponModelForm: {
 
           /** 优惠券名称*/
-          coupon_name: '',
+          title: '',
 
           /** 优惠券面额（元）*/
-          coupon_denomination: 2,
+          coupon_price: 2,
 
           /** 使用限制（元）*/
-          coupon_use_limit: 2,
+          coupon_threshold_price: 2,
 
           /** 使用时限 */
           coupon_time_limit: '2017-02-25',
 
           /** 发行量（个） */
-          coupon_circulation: 2,
+          create_num: 2,
 
           /** 已使用量（个） */
-          coupon_used_num: 2
+          used_num: 2
         }
       }
     },
@@ -172,8 +172,8 @@
       advancedSearchEvent() {
         this.params = {
           ...this.params,
-          coupon_time_start: this.advancedForm.coupon_time_limit[0],
-          coupon_time_end: this.advancedForm.coupon_time_limit[1]
+          start_time: this.advancedForm.coupon_time_limit[0],
+          end_time: this.advancedForm.coupon_time_limit[1]
         }
         delete this.params.keyword
         this.GET_CouponsList()
@@ -191,7 +191,7 @@
           this.tableData = response.data
           /** 已经使用量 */
           this.tableData.forEach(key => {
-            key.coupon_used_num = key.coupon_used_num || 0
+            key.used_num = key.used_num || 0
           })
         })
       },

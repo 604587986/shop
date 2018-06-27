@@ -63,12 +63,12 @@ export const asyncRouterMap = [
     meta: { title: 'order', icon: 'order-manage' },
     children: [
       { path: 'order-list/:id?', component: () => import('@/views/order/orderList'), name: 'orderList', meta: { title: 'orderList', noCache: true }},
-      { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
+      { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail', noCache: true }},
       { path: 'refund-list', component: () => import('@/views/order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
       { path: 'logistics-manage', component: () => import('@/views/order/logisticsManage'), name: 'logisticsManage', meta: { title: 'logisticsManage' }},
       { path: 'comments-manage', component: () => import('@/views/order/commentsManage'), name: 'commentsManage', meta: { title: 'commentsManage' }},
       { path: 'settlement-manage', component: () => import('@/views/order/settlementManage'), name: 'settlementManage', meta: { title: 'settlementManage' }},
-      { path: 'settlement-detail/:sn', component: () => import('@/views/order/settlementDetail'), name: 'settlementDetail', meta: { title: 'settlementDetail' }, hidden: true },
+      { path: 'settlement-detail/:sn', component: () => import('@/views/order/settlementDetail'), name: 'settlementDetail', meta: { title: 'settlementDetail', noCache: true }, hidden: true },
       { path: 'receipt-history', component: () => import('@/views/order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }}
     ]
   },
@@ -142,7 +142,7 @@ export const asyncRouterMap = [
       },
       { path: 'traffic-statistics', component: () => import('@/views/statistics/trafficStatistics'), name: 'trafficStatistics', meta: { title: 'trafficStatistics' }},
       { path: 'collect-statistics', component: () => import('@/views/statistics/collectStatistics'), name: 'collectStatistics', meta: { title: 'collectStatistics' }},
-      { path: 'log-manage', component: () => import('@/views/statistics/logManage'), name: 'logManage', meta: { title: 'logManage' }}
+      { path: 'log-manage', component: () => import('@/views/statistics/logManage'), name: 'logManage', meta: { title: 'logManage' }, hidden: true }
     ]
   },
   // 客服管理

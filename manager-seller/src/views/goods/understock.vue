@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -56,16 +56,16 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog title="库存信息" center :visible.sync="goodsWarningStockshow" width="40%" class="popinfo">
-      <en-tabel-layout :tableData="goodsWarningStockDate" :loading="loading">
+      <en-table-layout :tableData="goodsWarningStockDate" :loading="loading">
         <template slot="table-columns">
           <el-table-column prop="sn" label="货号"/>
           <el-table-column prop="goods_name" label="商品名称"/>
           <el-table-column prop="quantity" label="库存"/>
           <el-table-column prop="enable_quantity" label="可用库存"/>
         </template>
-      </en-tabel-layout>
+      </en-table-layout>
     </el-dialog>
   </div>
 </template>

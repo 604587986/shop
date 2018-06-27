@@ -3,7 +3,7 @@
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
       <!--满优惠列表-->
       <el-tab-pane label="满优惠列表" name="fullList">
-        <en-tabel-layout
+        <en-table-layout
           toolbar
           pagination
           :tableData="tableData"
@@ -54,7 +54,7 @@
               </template>
             </el-table-column>
           </template>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <!--新增满优惠-->
       <el-tab-pane label="新增满优惠" name="add">
@@ -106,7 +106,7 @@
                 <!--优惠门槛-->
                 <el-form-item label="优惠门槛：" prop="discount_threshold">
                   <div>
-                    满 <el-input v-model.number="activityForm.discount_threshold" style="width: 100px;"></el-input>
+                    满 <el-input v-model="activityForm.discount_threshold" style="width: 100px;"></el-input>
                     元  <span class="discount-tip">消费达到此金额即可参与优惠</span>
                   </div>
                 </el-form-item>
@@ -114,21 +114,21 @@
                 <el-form-item label="优惠方式：" prop="reduce_cash" class="discount-model">
                   <el-checkbox :label="reduceCashTxt" v-model="isReduceCash" @change="changeReduceCash"></el-checkbox>
                   <span class="integral-show" v-show="isReduceCash">
-                    <el-input  size="mini" v-model.number="activityForm.reduce_cash"></el-input> 元
+                    <el-input  size="mini" v-model="activityForm.reduce_cash"></el-input> 元
                   </span>
                 </el-form-item>
                 <!--打折-->
                 <el-form-item prop="discount_val" class="discount-model">
                   <el-checkbox :label="discountTxt" v-model="isDiscount" @change="changeDiscount"></el-checkbox>
                   <span class="integral-show" v-show="isDiscount">
-                    <el-input  size="mini" v-model.number="activityForm.discount_val"></el-input> 折
+                    <el-input  size="mini" v-model="activityForm.discount_val"></el-input> 折
                   </span>
                 </el-form-item>
                 <!--自营店--送积分-->
                 <el-form-item prop="integral" class="discount-model" v-if="parseInt(shopInfo.self_operated) === 1">
                   <el-checkbox :label="integralTxt" v-model="isIntegral" @change="changeIntegral"></el-checkbox>
                   <span class="integral-show" v-show="isIntegral">
-                    <el-input  size="mini" v-model.number="activityForm.integral"></el-input> 分
+                    <el-input  size="mini" v-model="activityForm.integral"></el-input> 分
                   </span>
                 </el-form-item>
                 <!--免邮费-->
@@ -175,7 +175,7 @@
                     </el-radio-group>
                     <!--商品表格-->
                     <div v-show="!goodsShow">
-                      <en-tabel-layout
+                      <en-table-layout
                         toolbar
                         :tableData="activityForm.activity_goods"
                         :loading="loading"
@@ -213,7 +213,7 @@
                             </template>
                           </el-table-column>
                         </template>
-                      </en-tabel-layout>
+                      </en-table-layout>
                     </div>
                   </el-form-item>
                 </div>
@@ -230,13 +230,16 @@
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
-    <en-goods-selector
+    <en-goods-picker
+      type="seller"
       :show="showDialog"
       :api="goods_api"
-      :defaultData="tableData"
-      :maxLength="maxsize"
+      :categoryApi="categoryApi"
+      :headers="headers"
+      :defaultData="goodsIds"
+      :limit="maxsize"
       @confirm="refreshFunc"
-      @closed="showDialog = false"/>
+      @close="showDialog = false"/>
     <!--赠品组件-->
     <add-gift
       :giftModelShow="giftModelShow"
@@ -254,8 +257,8 @@
   import * as API_activity from '@/api/activity'
   import * as API_Gift from '@/api/gift'
   import * as API_coupon from '@/api/coupon'
+  import { RegExp } from '～/ui-utils'
   import { CategoryPicker, UE } from '@/components'
-  import { GoodsSelector } from '@/plugins/selector/vue'
   import { AddGift, Coupon } from './components'
 
   export default {
@@ -263,7 +266,6 @@
     components: {
       [CategoryPicker.name]: CategoryPicker,
       [UE.name]: UE,
-      [GoodsSelector.name]: GoodsSelector,
       [AddGift.name]: AddGift,
       [Coupon.name]: Coupon
     },
@@ -273,14 +275,30 @@
       ])
     },
     data() {
-      var checkReduceCash = (rule, value, callback) => {
+      const checkDiscountThreshold = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入要优惠的现金金额'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(value)) {
+            callback(new Error('请输入正确的金额'))
+          } else if (this.isReduceCash && parseFloat(value) < parseFloat(this.activityForm.reduce_cash)) {
+            callback(new Error('减少金额不能大于门槛金额'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+      const checkReduceCash = (rule, value, callback) => {
         if (this.isReduceCash) {
           if (!value) {
             return callback(new Error('请输入要优惠的现金金额'))
           }
           setTimeout(() => {
-            if (!Number.isInteger(value)) {
-              callback(new Error('请输入数字值'))
+            if (!RegExp.money.test(value)) {
+              callback(new Error('请输入正确的金额'))
+            } else if (this.isReduceCash && parseFloat(value) > parseFloat(this.activityForm.discount_threshold)) {
+              callback(new Error('减少金额不能大于门槛金额'))
             } else {
               callback()
             }
@@ -289,41 +307,41 @@
           callback()
         }
       }
-      var checkDiscountVal = (rule, value, callback) => {
+      const checkDiscountVal = (rule, value, callback) => {
         if (this.isDiscount) {
           if (!value) {
             return callback(new Error('请输入要优惠的打折力度'))
           }
           setTimeout(() => {
-            if (!Number.isInteger(value)) {
-              callback(new Error('请输入数字值'))
+            if (!RegExp.integer.test(value)) {
+              callback(new Error('请输入正整数'))
             } else if (value <= 0 || value >= 10) {
               callback(new Error('打折数字只能在1-9之间'))
             } else {
               callback()
             }
-          }, 1000)
+          }, 500)
         } else {
           callback()
         }
       }
-      var checkIntegral = (rule, value, callback) => {
+      const checkIntegral = (rule, value, callback) => {
         if (this.isIntegral) {
           if (!value) {
             return callback(new Error('请输入积分值'))
           }
           setTimeout(() => {
-            if (!Number.isInteger(value)) {
+            if (!RegExp.integer.test(value)) {
               callback(new Error('请输入数字值'))
             } else {
               callback()
             }
-          }, 1000)
+          }, 500)
         } else {
           callback()
         }
       }
-      var checkRange = (rule, value, callback) => {
+      const checkRange = (rule, value, callback) => {
         if (!value && value !== 0) {
           return callback(new Error('请选择商品参与方式'))
         } else {
@@ -341,7 +359,18 @@
         params: {},
 
         /** 列表数据*/
-        tableData: null,
+        tableData: [],
+
+        /** 商品ids */
+        goodsIds: [],
+
+        /** 请求头令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+        },
+
+        /** 商城分类api */
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 日期选择器选项 */
         pickoptions: {
@@ -462,7 +491,7 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: `${process.env.BASE_API}/goods`,
+        goods_api: `${process.env.SELLER_API}/goods`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
@@ -482,8 +511,7 @@
 
           /** 优惠门槛 */
           discount_threshold: [
-            { required: true, message: '请输入优惠门槛', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkDiscountThreshold, trigger: 'blur' }
           ],
 
           /** 减现金 */
@@ -534,7 +562,7 @@
       handleToggleClick(tab, event) {
         this.activeName = tab.name
         switch (this.activeName) {
-          case 'express':
+          case 'fullList':
             this.GET_FullCutActivityList()
             break
           case 'add':
@@ -609,6 +637,9 @@
       refreshFunc(val) {
         if (val) {
           this.activityForm.activity_goods = val
+          this.goodsIds = this.activityForm.activity_goods.map(key => {
+            return key.goods_id
+          })
         }
       },
 
@@ -623,6 +654,9 @@
           if (index === _index) {
             this.activityForm.activity_goods.splice(_index, 1)
           }
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -640,6 +674,9 @@
             }
           })
           this.$message.success('批量取消成功！')
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -864,13 +901,13 @@
             if (this.activityForm.activity_id) {
               API_activity.saveFullCutActivity(this.activityForm.activity_id, _params).then(() => {
                 this.$message.success('保存成功！')
-                this.activeName === 'express'
+                this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
               })
             } else {
               API_activity.addFullCutActivity(_params).then(() => {
                 this.$message.success('添加成功！')
-                this.activeName === 'express'
+                this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
               })
             }
@@ -1030,7 +1067,8 @@
       flex-direction: column;
       flex-wrap: nowrap;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      margin-left: 20px;
     }
   }
 

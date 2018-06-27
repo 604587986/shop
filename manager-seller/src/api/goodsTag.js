@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import GoodsTagModel from '@/models/GoodsTagModel'
 import GoodsModel from '@/models/GoodsModel'
 
 /**
@@ -15,10 +14,8 @@ export function getTagsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsTagModel().map(_response.data)
-      resolve(_response)
-    }).catch(error => reject(error))
+      resolve(response)
+    })
   })
 }
 
@@ -38,7 +35,7 @@ export function getTagGoodsList(id, params) {
       const _response = response
       _response.data = new GoodsModel().map(_response.data)
       resolve(_response)
-    }).catch(error => reject(error))
+    })
   })
 }
 

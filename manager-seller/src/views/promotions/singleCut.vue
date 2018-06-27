@@ -2,7 +2,7 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
       <el-tab-pane label="单品立减列表" name="singleCutList">
-        <en-tabel-layout
+        <en-table-layout
           toolbar
           pagination
           :tableData="tableData"
@@ -53,7 +53,7 @@
               </template>
             </el-table-column>
           </template>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="新增单品立减" name="add">
         <div class="content-goods-publish">
@@ -99,7 +99,7 @@
               <h4>优惠方式</h4>
               <div>
                 <el-form-item label="优惠方式：" prop="price_reduction">
-                  单品立减 <el-input v-model.number="activityForm.price_reduction" style="width: 150px;"></el-input> 元
+                  单品立减 <el-input v-model="activityForm.price_reduction" style="width: 150px;"></el-input> 元
                 </el-form-item>
               </div>
             </div>
@@ -114,7 +114,7 @@
                   </el-radio-group>
                   <!--商品表格-->
                   <div v-show="!goodsShow">
-                    <en-tabel-layout
+                    <en-table-layout
                       toolbar
                       :tableData="activityForm.activity_goods"
                       :loading="loading"
@@ -151,7 +151,7 @@
                           </template>
                         </el-table-column>
                       </template>
-                    </en-tabel-layout>
+                    </en-table-layout>
                   </div>
                 </el-form-item>
               </div>
@@ -167,35 +167,49 @@
       </el-tab-pane>
     </el-tabs>
     <!--商品选择器-->
-    <en-goods-selector
+    <en-goods-picker
+      type="seller"
       :show="showDialog"
       :api="goods_api"
-      :defaultData="tableData"
-      :maxLength="maxsize"
+      :categoryApi="categoryApi"
+      :headers="headers"
+      :defaultData="goodsIds"
+      :limit="maxsize"
       @confirm="refreshFunc"
-      @closed="showDialog = false"/>
+      @close="showDialog = false"/>
   </div>
 </template>
 
 <script>
   import * as API_activity from '@/api/activity'
   import { CategoryPicker, UE } from '@/components'
-  import { GoodsSelector } from '@/plugins/selector/vue'
+  import { RegExp } from '～/ui-utils'
 
   export default {
     name: 'singleCut',
     components: {
       [CategoryPicker.name]: CategoryPicker,
-      [UE.name]: UE,
-      [GoodsSelector.name]: GoodsSelector
+      [UE.name]: UE
     },
     data() {
-      var checkRange = (rule, value, callback) => {
+      const checkRange = (rule, value, callback) => {
         if (!value && value !== 0) {
           return callback(new Error('请选择商品参与方式'))
         } else {
           callback()
         }
+      }
+      const checkPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入要优惠的现金金额'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(value)) {
+            callback(new Error('请输入正确的金额'))
+          } else {
+            callback()
+          }
+        }, 1000)
       }
       return {
         /** 当前面板的名字*/
@@ -207,8 +221,16 @@
         /** 列表参数 */
         params: {},
 
+        /** 请求头令牌 */
+        headers: {
+          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+        },
+
         /** 列表数据*/
-        tableData: null,
+        tableData: [],
+
+        /** 商品ids */
+        goodsIds: [],
 
         /** 日期选择器选项 */
         pickoptions: {
@@ -251,8 +273,7 @@
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'blur' }
           ],
           price_reduction: [
-            { required: true, message: '请填写优惠金额', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkPrice, trigger: 'blur' }
           ],
 
           /** 商品参与方式 */
@@ -271,7 +292,10 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goods_api: `${process.env.BASE_API}/goods`,
+        goods_api: `${process.env.SELLER_API}/goods`,
+
+        /** 商城分类api */
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false
@@ -322,6 +346,9 @@
       refreshFunc(val) {
         if (val) {
           this.activityForm.activity_goods = val
+          this.goodsIds = this.activityForm.activity_goods.map(key => {
+            return key.goods_id
+          })
         }
       },
 
@@ -336,6 +363,9 @@
           if (index === _index) {
             this.activityForm.activity_goods.splice(_index, 1)
           }
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -352,6 +382,9 @@
             }
           })
           this.$message.success('批量取消成功！')
+        })
+        this.goodsIds = this.activityForm.activity_goods.map(key => {
+          return key.goods_id
         })
       },
 
@@ -434,13 +467,13 @@
             if (this.activityForm.activity_minus_id) {
               API_activity.saveSingleCutActivity(this.activityForm.activity_minus_id, _params).then(response => {
                 this.$message.success('修改成功！')
-                this.activeName === 'singleCutList'
+                this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
               })
             } else {
               API_activity.addSingleCutActivity(_params).then(response => {
                 this.$message.success('添加成功！')
-                this.activeName === 'singleCutList'
+                this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
               })
             }
@@ -450,6 +483,16 @@
 
       /** 构造表单数据 */
       generateFormData(data) {
+        let _goodslist = []
+        if (data.activity_goods && Array.isArray(data.activity_goods)) {
+          _goodslist = data.activity_goods.map(key => {
+            return {
+              goods_id: key.goods_id,
+              name: key.goods_name,
+              thumbnail: key.thumbnail
+            }
+          })
+        }
         const _params = {
           /** 活动名称/标题 */
           title: data.activity_name,
@@ -464,20 +507,14 @@
           description: data.activity_desc,
 
           /** 单品立减金额 */
-          single_reduction_value: data.price_reduction,
+          single_reduction_value: parseFloat(data.price_reduction),
 
           /** 商品参与方式 */
-          range_type: data.is_all_joined,
-
+          range_type: data.is_all_joined
+        }
+        if (_goodslist.length > 0) {
           /** 参与商品列表 */
-          goods_list: data.activity_goods.map(key => {
-            return {
-              goods_id: key.goods_id,
-              name: key.goods_name,
-              sku_id: key.sn,
-              thumbnail: key.thumbnail
-            }
-          })
+          _params.goods_list = _goodslist
         }
         return _params
       }
@@ -565,7 +602,8 @@
       flex-direction: column;
       flex-wrap: nowrap;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      margin-left: 20px;
     }
   }
 
