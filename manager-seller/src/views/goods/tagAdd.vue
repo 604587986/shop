@@ -18,10 +18,10 @@
         <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
             <div class="goods-info">
-              <img v-if="scope.row.goods_image" :src="scope.row.goods_image" class="goods-image"/>
+              <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
               <div class="goodsinfo-txt">
-                <span class="goods_name">{{scope.row.goods_name}}</span>
-                <span class="goods_price" v-if="scope.row.goods_price">{{ scope.row.goods_price | unitPrice('￥') }}</span>
+                <span class="goods-name">{{scope.row.goods_name}}</span>
+                <span class="goods-price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
             </div>
           </template>
@@ -147,7 +147,6 @@
       canceljoin(scope) {
         this.tableData.forEach((elem, index) => {
           if (elem.goods_id === scope.row.goods_id) {
-            this.$message.success('取消成功！')
             this.tableData.splice(index, 1)
           }
         })
@@ -168,7 +167,6 @@
               this.tableData.splice(index, 1)
             }
           })
-          this.$message.success('批量取消成功！')
         })
         this.goodsIds = this.tableData.map(key => {
           return key.goods_id
@@ -223,10 +221,10 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: flex-start;
-    .goods_name {
+    .goods-name {
       color: #6289ff;
     }
-    .goods_price {
+    .goods-price {
       color: #f60;
     }
   }

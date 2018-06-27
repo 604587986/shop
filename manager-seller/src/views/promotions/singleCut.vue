@@ -18,7 +18,7 @@
           </div>
           <template slot="table-columns">
             <!--活动名称-->
-            <el-table-column prop="activity_name" label="活动名称"/>
+            <el-table-column prop="title" label="活动名称"/>
             <!--开始时间-->
             <el-table-column label="开始时间">
               <template slot-scope="scope">
@@ -36,7 +36,7 @@
             <!--活动状态-->
             <el-table-column label="活动状态">
               <template slot-scope="scope">
-                <span>{{ scope.row.activity_status || 0 }}</span>
+                <span>{{ scope.row.disabled || 0 }}</span>
               </template>
             </el-table-column>
             <!--操作-->
@@ -69,9 +69,9 @@
             <div class="base-info-item">
               <h4>活动信息</h4>
               <div>
-                <el-form-item  label="活动名称：" prop="activity_name">
+                <el-form-item  label="活动名称：" prop="title">
                   <el-input
-                    v-model="activityForm.activity_name"
+                    v-model="activityForm.title"
                     style="width: 300px"
                     placeholder="不超过60个字符"
                     maxLength="60"
@@ -90,7 +90,7 @@
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="活动描述：">
-                  <UE v-model="activityForm.activity_desc" :defaultMsg="activityForm.activity_desc"></UE>
+                  <UE v-model="activityForm.description" :defaultMsg="activityForm.description"></UE>
                 </el-form-item>
               </div>
             </div>
@@ -98,8 +98,8 @@
             <div class="base-info-item">
               <h4>优惠方式</h4>
               <div>
-                <el-form-item label="优惠方式：" prop="price_reduction">
-                  单品立减 <el-input v-model="activityForm.price_reduction" style="width: 150px;"></el-input> 元
+                <el-form-item label="优惠方式：" prop="single_reduction_value">
+                  单品立减 <el-input v-model="activityForm.single_reduction_value" style="width: 150px;"></el-input> 元
                 </el-form-item>
               </div>
             </div>
@@ -107,8 +107,8 @@
             <div class="base-info-item">
               <h4>活动商品</h4>
               <div>
-                <el-form-item label="活动商品：" prop="is_all_joined">
-                  <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
+                <el-form-item label="活动商品：" prop="range_type">
+                  <el-radio-group v-model="activityForm.range_type" @change="changeJoinGoods">
                     <el-radio :label="1">全部商品参与</el-radio>
                     <el-radio :label="0">部分商品参与</el-radio>
                   </el-radio-group>
@@ -242,22 +242,22 @@
         /** 新增满减表单信息*/
         activityForm: {
           /** 活动ID*/
-          activity_minus_id: '',
+          minus_id: '',
 
           /** 活动名称*/
-          activity_name: '',
+          title: '',
 
           /** 生效时间*/
           take_effect_time: [],
 
           /** 活动描述*/
-          activity_desc: '',
+          description: '',
 
           /** 优惠方式 减价金额*/
-          price_reduction: 0,
+          single_reduction_value: 0,
 
           /** 是否全部商品参与*/
-          is_all_joined: '',
+          range_type: '',
 
           /** 活动商品*/
           activity_goods: []
@@ -265,19 +265,19 @@
 
         /** 表单校验规则*/
         rules: {
-          activity_name: [
+          title: [
             { required: true, message: '请输入活动名称', trigger: 'blur' },
             { min: 0, max: 60, message: '长度在60个字符之内', trigger: 'blur' }
           ],
           take_effect_time: [
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'blur' }
           ],
-          price_reduction: [
+          single_reduction_value: [
             { validator: checkPrice, trigger: 'blur' }
           ],
 
           /** 商品参与方式 */
-          is_all_joined: [
+          range_type: [
             { validator: checkRange, trigger: 'change' }
           ]
         },
@@ -314,7 +314,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          goods_status: data
+          keywords: data
         }
         this.GET_SingleCutActivityList()
       },
@@ -326,12 +326,12 @@
           this.GET_SingleCutActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
-            activity_minus_id: '',
-            activity_name: '',
+            minus_id: '',
+            title: '',
             take_effect_time: [],
-            activity_desc: '',
-            discount_threshold: '',
-            price_reduction: '',
+            description: '',
+            full_money: '',
+            single_reduction_value: '',
             activity_goods: []
           }
         }
@@ -400,7 +400,7 @@
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
-        this.GET_SingleCutActivityDetails(row.activity_minus_id)
+        this.GET_SingleCutActivityDetails(row.minus_id)
       },
 
       /** 查询一个单品立减活动信息 */
@@ -411,7 +411,7 @@
               ...response,
               take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
             }
-            this.goodsShow = this.activityForm.is_all_joined === 1
+            this.goodsShow = this.activityForm.range_type === 1
           })
         }
       },
@@ -425,7 +425,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteSingleCutActivity(row.activity_minus_id, {}).then(response => {
+        API_activity.deleteSingleCutActivity(row.minus_id, {}).then(response => {
           this.$message.success('删除成功！')
           this.GET_SingleCutActivityList()
         })
@@ -436,22 +436,22 @@
         this.activeName = 'add'
         this.activityForm = {
           /** 活动ID*/
-          activity_minus_id: '',
+          minus_id: '',
 
           /** 活动名称*/
-          activity_name: '',
+          title: '',
 
           /** 生效时间*/
           take_effect_time: [],
 
           /** 活动描述*/
-          activity_desc: '',
+          description: '',
 
           /** 优惠方式 减价金额*/
-          price_reduction: 0,
+          single_reduction_value: 0,
 
           /** 是否全部商品参与*/
-          is_all_joined: '',
+          range_type: '',
 
           /** 活动商品*/
           activity_goods: []
@@ -464,8 +464,8 @@
           if (valid) {
             const _params = this.generateFormData(this.activityForm)
             delete _params.take_effect_time
-            if (this.activityForm.activity_minus_id) {
-              API_activity.saveSingleCutActivity(this.activityForm.activity_minus_id, _params).then(response => {
+            if (this.activityForm.minus_id) {
+              API_activity.saveSingleCutActivity(this.activityForm.minus_id, _params).then(response => {
                 this.$message.success('修改成功！')
                 this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
@@ -495,7 +495,7 @@
         }
         const _params = {
           /** 活动名称/标题 */
-          title: data.activity_name,
+          title: data.title,
 
           /** 活动开始时间 */
           start_time: data.take_effect_time[0] / 1000,
@@ -504,13 +504,13 @@
           end_time: data.take_effect_time[1] / 1000,
 
           /** 活动描述 */
-          description: data.activity_desc,
+          description: data.description,
 
           /** 单品立减金额 */
-          single_reduction_value: parseFloat(data.price_reduction),
+          single_reduction_value: parseFloat(data.single_reduction_value),
 
           /** 商品参与方式 */
-          range_type: data.is_all_joined
+          range_type: data.range_type
         }
         if (_goodslist.length > 0) {
           /** 参与商品列表 */

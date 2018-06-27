@@ -18,12 +18,12 @@
       <template slot="table-columns">
         <el-table-column label="图片" width="120">
           <template slot-scope="scope">
-            <img :src="scope.row.goods_image" class="goods-image"/>
+            <img :src="scope.row.thumbnail" class="goods-image"/>
           </template>
         </el-table-column>
         <el-table-column prop="goods_name" label="名称"/>
         <el-table-column label="价格" width="120">
-          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <el-table-column label="库存" width="180">
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
@@ -156,14 +156,14 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 查看库存信息 */
       handleWithdraw(row) {
         this.goodsWarningStockshow = true
         API_goods.getWarningGoodsStockList(row.goods_id).then((response) => {
-          this.goodsWarningStockDate = response.data
+          this.goodsWarningStockDate = response
         })
       }
     }

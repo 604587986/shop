@@ -81,7 +81,7 @@
                 <el-option
                   v-for="item in brandList"
                   :key="item.brand_id"
-                  :label="item.brand_name"
+                  :label="item.name"
                   :value="item.brand_id">
                 </el-option>
               </el-select>
@@ -896,7 +896,7 @@
                   return { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name }
                 })
                 let { cost, quantity, sn, weight } = key
-                const price = key.goods_price
+                const price = key.price
                 return { cost, price, quantity, sn, weight, spec_list }
               }
             })
@@ -985,7 +985,7 @@
                   return { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name }
                 })
                 let { cost, quantity, sn, weight } = key
-                const price = key.goods_price
+                const price = key.price
                 return { cost, price, quantity, sn, weight, spec_list }
               }
             })

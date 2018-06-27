@@ -13,35 +13,35 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column prop="activity_name" label="活动名称"/>
+        <el-table-column prop="seckill_name" label="活动名称"/>
         <el-table-column label="活动时间">
           <template slot-scope="scope">
-            <span>{{ scope.row.start_time | unixToDate}}</span>
+            <span>{{ scope.row.start_day | unixToDate}}</span>
           </template>
         </el-table-column>
         <el-table-column label="报名截止时间">
           <template slot-scope="scope">
-            <span>{{ scope.row.sign_end_time | unixToDate }}</span>
+            <span>{{ scope.row.apply_end_time | unixToDate }}</span>
           </template>
         </el-table-column>
         <el-table-column label="报名条件">
           <template slot-scope="scope">
-            <span>{{ scope.row.sign_condition }}</span>
+            <span>{{ scope.row.seckill_rule }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
               type="primary"
-              v-if="scope.row.is_signed === 0"
+              v-if="scope.row.is_apply === 0"
               @click="handleSignUpTimeLimt(scope.row)">报名
             </el-button>
             <el-button
               type="primary"
-              v-if="scope.row.is_signed === 1"
+              v-if="scope.row.is_apply === 1"
               @click="activityGoodsInfo(scope.row)">已报名
             </el-button>
-            <span v-if="scope.row.is_signed === 2">已截止</span>
+            <span v-if="scope.row.is_apply === 2">已截止</span>
           </template>
         </el-table-column>
       </template>
@@ -81,10 +81,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null
+        pageData: []
       }
     },
     mounted() {
@@ -129,12 +129,12 @@
 
       /** 报名 */
       handleSignUpTimeLimt(row) {
-        this.$router.push({ path: `/promotions/add-time-limit/${row.activity_id}` })
+        this.$router.push({ path: `/promotions/add-time-limit/${row.seckill_id}` })
       },
 
       /** 活动商品信息 已报名*/
       activityGoodsInfo(row) {
-        this.$router.push({ path: `/promotions/activity-goods-data/${row.activity_id}` })
+        this.$router.push({ path: `/promotions/activity-goods-data/${row.seckill_id}` })
       }
     }
   }
