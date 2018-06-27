@@ -198,34 +198,37 @@
     border-bottom: 1px dashed #e7e7e7;
     &:last-child{ border-bottom: none }
   }
-  /deep/ .el-form-item__content {
-    border-left: 1px solid #e7e7e7;
-    padding-left: 20px;
-    .el-form-item__error {
+  /deep/ {
+    .el-form-item__label {
+      padding-top: 15px;
+    }
+    .el-form-item__content {
+      border-left: 1px solid #e7e7e7;
       padding-left: 20px;
+      padding-top: 15px;
+      .el-form-item__error {
+        padding-left: 20px;
+      }
     }
-  }
-  /deep/ .el-form-item:not(:first-child) {
-    border-top: 1px solid #e7e7e7;
-    position: relative;
-    &::after {
-      content: ' ';
-      width: 1px;
-      height: 22px;
-      background-color: #e7e7e7;
-      position: absolute;
-      top: -22px;
-      left: 200px;
+    .el-form-item:last-child {
+      .el-form-item__content {
+        padding-top: 0;
+      }
     }
-  }
-  .checkbox-dropdown {
-    display: inline-block;
-    min-width: 130px;
-    cursor: pointer;
-    .checked {
-      color: #409EFF
+    .el-form-item:not(:first-child) {
+      border-top: 1px solid #e7e7e7;
+      position: relative;
+      &::after {
+        content: ' ';
+        width: 1px;
+        height: 22px;
+        background-color: #e7e7e7;
+        position: absolute;
+        top: -22px;
+        left: 200px;
+      }
     }
-    /deep/ .el-button-group {
+    .el-button-group {
       display: inline-block;
       .el-button {
         display: inline-block;
@@ -237,6 +240,14 @@
           background-color: #fff;
         }
       }
+    }
+  }
+  .checkbox-dropdown {
+    display: inline-block;
+    min-width: 130px;
+    cursor: pointer;
+    .checked {
+      color: #409EFF
     }
   }
 </style>
