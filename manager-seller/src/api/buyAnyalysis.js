@@ -1,19 +1,37 @@
 import request from '@/utils/request'
 
 /**
- * 获取购买分析列表
+ * 获取购买分析购买时段分布列表
  * @param params
  * @returns {Promise<any>}
  */
-export function getbuyAnyalysisList(params) {
+export function getbuyAnyalysisPeriodList(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/buy/Anyalysis/list',
+      url: '/statistics/reports/purchase/period',
       method: 'get',
       loading: false,
       params
     }).then(response => {
       resolve(response)
-    }).catch(error => reject(error))
+    })
+  })
+}
+
+/**
+ * 获取购买分析客价单分布列表
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getbuyAnyalysisRangesList(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/statistics/reports/purchase/ranges',
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    })
   })
 }

@@ -2,7 +2,7 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
       <el-tab-pane label="单品立减列表" name="singleCutList">
-        <en-tabel-layout
+        <en-table-layout
           toolbar
           pagination
           :tableData="tableData"
@@ -53,7 +53,7 @@
               </template>
             </el-table-column>
           </template>
-        </en-tabel-layout>
+        </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="新增单品立减" name="add">
         <div class="content-goods-publish">
@@ -99,7 +99,7 @@
               <h4>优惠方式</h4>
               <div>
                 <el-form-item label="优惠方式：" prop="price_reduction">
-                  单品立减 <el-input v-model.number="activityForm.price_reduction" style="width: 150px;"></el-input> 元
+                  单品立减 <el-input v-model="activityForm.price_reduction" style="width: 150px;"></el-input> 元
                 </el-form-item>
               </div>
             </div>
@@ -114,7 +114,7 @@
                   </el-radio-group>
                   <!--商品表格-->
                   <div v-show="!goodsShow">
-                    <en-tabel-layout
+                    <en-table-layout
                       toolbar
                       :tableData="activityForm.activity_goods"
                       :loading="loading"
@@ -151,7 +151,7 @@
                           </template>
                         </el-table-column>
                       </template>
-                    </en-tabel-layout>
+                    </en-table-layout>
                   </div>
                 </el-form-item>
               </div>
@@ -183,6 +183,7 @@
 <script>
   import * as API_activity from '@/api/activity'
   import { CategoryPicker, UE } from '@/components'
+  import { RegExp } from '～/ui-utils'
 
   export default {
     name: 'singleCut',
@@ -197,6 +198,18 @@
         } else {
           callback()
         }
+      }
+      const checkPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入要优惠的现金金额'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(value)) {
+            callback(new Error('请输入正确的金额'))
+          } else {
+            callback()
+          }
+        }, 1000)
       }
       return {
         /** 当前面板的名字*/
@@ -260,8 +273,7 @@
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'blur' }
           ],
           price_reduction: [
-            { required: true, message: '请填写优惠金额', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
+            { validator: checkPrice, trigger: 'blur' }
           ],
 
           /** 商品参与方式 */
@@ -455,13 +467,13 @@
             if (this.activityForm.activity_minus_id) {
               API_activity.saveSingleCutActivity(this.activityForm.activity_minus_id, _params).then(response => {
                 this.$message.success('修改成功！')
-                this.activeName === 'singleCutList'
+                this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
               })
             } else {
               API_activity.addSingleCutActivity(_params).then(response => {
                 this.$message.success('添加成功！')
-                this.activeName === 'singleCutList'
+                this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
               })
             }
@@ -495,7 +507,7 @@
           description: data.activity_desc,
 
           /** 单品立减金额 */
-          single_reduction_value: data.price_reduction,
+          single_reduction_value: parseFloat(data.price_reduction),
 
           /** 商品参与方式 */
           range_type: data.is_all_joined

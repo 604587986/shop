@@ -86,7 +86,7 @@ export function deliveryGoods(sn, params) {
   return new Promise((resolve, reject) => {
     request({
       url: `/trade/orders/${sn}/delivery`,
-      method: 'put',
+      method: 'post',
       loading: false,
       data: params
     }).then(response => {
@@ -108,6 +108,24 @@ export function generateElectronicSurface(ids, params) {
       method: 'put',
       loading: false,
       data: params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 获取订单流程图数据
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getStepList(ids) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/trade/orders/${ids}/flow`,
+      method: 'get',
+      loading: false
     }).then(response => {
       resolve(response)
     })

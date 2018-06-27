@@ -29,7 +29,7 @@
             <el-button type="primary" @click="selectgoodslist($index)">选择商品</el-button>
           </div>
           <div :key="$index">
-            <en-tabel-layout
+            <en-table-layout
               v-if="item.tableData && item.tableData.length >= 1"
               :tableData="item.tableData"
               :loading="loading">
@@ -60,7 +60,7 @@
                   </template>
                 </el-table-column>
               </template>
-            </en-tabel-layout>
+            </en-table-layout>
           </div>
         </div>
       </el-form-item>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -41,7 +41,7 @@
           </template>
         </el-table-column>
       </template>
-    </en-tabel-layout>
+    </en-table-layout>
     <div style="text-align: center">
       <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
     </div>
@@ -49,6 +49,7 @@
       type="seller"
       :show="showDialog"
       :api="goods_api"
+      :multipleApi="multipleApi"
       :categoryApi="categoryApi"
       :headers="headers"
       :defaultData="goodsIds"
@@ -89,6 +90,8 @@
 
         /** 商品选择器列表api*/
         goods_api: `${process.env.SELLER_API}/goods`,
+
+        multipleApi: `${process.env.SELLER_API}//goods/@ids/details`,
 
         /** 商城分类api */
         categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,

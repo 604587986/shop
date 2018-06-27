@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import TrafficStatisticsModel from '@/models/TrafficStatisticsModel'
 
 /**
  * 店铺总流量
@@ -13,7 +12,7 @@ import TrafficStatisticsModel from '@/models/TrafficStatisticsModel'
 export function getShopTraffic(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/traffic/summary/statistics',
+      url: '/statistics/page_view/shop',
       method: 'get',
       loading: false,
       params
@@ -31,14 +30,12 @@ export function getShopTraffic(params) {
 export function getGoodsStatistics(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/traffic/goods/statistics',
+      url: '/statistics/page_view/goods',
       method: 'get',
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new TrafficStatisticsModel().map(_response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

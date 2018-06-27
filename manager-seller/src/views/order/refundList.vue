@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -97,7 +97,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog title="退款、退货审核" :visible.sync="goodsRefundshow" width="50%" align="center">
       <div align="center">
         <div class="refund-info">
@@ -165,7 +165,7 @@
           </div>
         </div>
         <!--退货商品信息-->
-        <en-tabel-layout :tableData="refundGoodsData" class="pop-table">
+        <en-table-layout :tableData="refundGoodsData" class="pop-table">
           <template slot="table-columns">
             <el-table-column label="商品图片">
               <template slot-scope="scope">
@@ -181,7 +181,7 @@
             <el-table-column  prop="ship_num" label="购买数量"/>
             <el-table-column  prop="return_num" label="退货数量"/>
           </template>
-        </en-tabel-layout>
+        </en-table-layout>
       </div>
     </el-dialog>
   </div>

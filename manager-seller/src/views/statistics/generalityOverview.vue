@@ -2,17 +2,17 @@
   <div class="bg-shop-summary">
     <p>本页面所有有关近30天的展示数据,均为从昨日起最近30天的销售情况</p>
     <ul>
-      <li><span>近30天下单金额 </span>:<span>{{ shopSurvey.order_amount }}</span></li>
-      <li><span>近30天下单会员数</span>:<span>{{ shopSurvey.order_member_num }}</span></li>
+      <li><span>近30天下单金额 </span>:<span>{{ shopSurvey.order_money }}</span></li>
+      <li><span>近30天下单会员数</span>:<span>{{ shopSurvey.order_member }}</span></li>
       <li><span>近30天下单量</span>:<span>{{ shopSurvey.order_num }}</span></li>
-      <li><span>近30天下单商品数</span>:<span>{{ shopSurvey.order_goods_num }}</span></li>
-      <li><span>平均客单价</span>:<span>{{ shopSurvey.average_order_price }}</span></li>
+      <li><span>近30天下单商品数</span>:<span>{{ shopSurvey.order_goods }}</span></li>
+      <li><span>平均客单价</span>:<span>{{ shopSurvey.average_member_money }}</span></li>
     </ul>
     <ul>
-      <li><span>平均价格</span>:<span>{{ shopSurvey.average_price }}</span></li>
-      <li><span>商品收藏量</span>:<span>{{ shopSurvey.goods_colletion_num }}</span></li>
-      <li><span>商品总数</span>:<span>{{ shopSurvey.goods_summary }}</span></li>
-      <li><span>店铺收藏量</span>:<span>{{ shopSurvey.shop_collection_num }}</span></li>
+      <li><span>平均价格</span>:<span>{{ shopSurvey.average_goods_money }}</span></li>
+      <li><span>商品收藏量</span>:<span>{{ shopSurvey.goods_collect }}</span></li>
+      <li><span>商品总数</span>:<span>{{ shopSurvey.total_goods }}</span></li>
+      <li><span>店铺收藏量</span>:<span>{{ shopSurvey.shop_collect }}</span></li>
       <li><span>下单高峰期</span>:<span>{{ shopSurvey.order_fastigium }}</span></li>
     </ul>
     <div>
@@ -37,20 +37,19 @@
       }
     },
     created() {
+      // 获取店铺概况信息
       API_shopStatistics.getShopSurvey().then(response => {
         this.loading = false
         /** 店铺概况信息 */
-        this.shopSurvey = response.shop_survey
-        /** 最近30天销售统计 */
-        const xData = []
-        for (let i = 1; i <= 30; i++) {
-          xData.push(this.GetDateStr(i))
-        }
-
+        this.shopSurvey = response
+      })
+      // 获取图表信息
+      API_shopStatistics.getShopSurveyCharts().then(response => {
+        this.loading = false
         this.sesalChart.setOption({
           title: { text: '最近30天销售统计', x: 'center' },
           tooltip: { trigger: 'axis' },
-          legend: { orient: 'vertical', data: [{ name: '下单金额', textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
+          legend: { orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
           color: ['#7CB5EC'],
           toolbox: {
             show: true,
@@ -63,7 +62,7 @@
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: xData.reverse()
+            data: response.xAxis.reverse()
           },
           yAxis: {
             type: 'value',
@@ -75,7 +74,7 @@
             {
               name: '下单金额',
               type: 'line',
-              data: response.sale_statistics,
+              data: response.series.data,
               markPoint: {
                 data: [
                   { type: 'max', name: '最大值' },
@@ -90,9 +89,6 @@
             }
           ]
         })
-      }).catch(error => {
-        this.loading = false
-        console.log(error)
       })
     },
     mounted() {

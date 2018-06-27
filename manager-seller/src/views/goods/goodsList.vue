@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -92,7 +92,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
     <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="35%" class="pop-sku">
       <div align="center">
         <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100" :rules="rules">
@@ -103,7 +103,7 @@
             <el-input v-model="goodsStockData.deliver_goods_quantity" auto-complete="off" disabled ></el-input>
           </el-form-item>
         </el-form>
-        <en-tabel-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
+        <en-table-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
           <template slot="table-columns">
             <el-table-column prop="goods_name" label="商品名称"/>
             <el-table-column label="库存">
@@ -113,7 +113,7 @@
             </el-table-column>
             <el-table-column  prop="deliver_goods_quantity" label="待发货数" />
           </template>
-        </en-tabel-layout>
+        </en-table-layout>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="goodsStockshow = false">取 消</el-button>

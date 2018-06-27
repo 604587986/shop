@@ -1,31 +1,23 @@
 <template>
   <div class="bg-shop-summary">
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns"></div>
-        <div class="toolbar-search">
-          <en-table-search
-            @search="searchEvent"
-            @advancedSearch="advancedSearchEvent"
-            advanced
-          >
-            <template slot="advanced-content">
-              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="商品分类">
-                  <en-category-picker @changed="categoryChanged"/>
-                </el-form-item>
-                <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name"></el-input>
-                </el-form-item>
-              </el-form>
-            </template>
-          </en-table-search>
+        <div class="toolbar-btns">
+          <div class="conditions">
+            <span>店铺分组:</span>
+            <en-category-picker size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
+          </div>
+          <div class="conditions">
+            <span>商品名称:</span>
+            <el-input size="mini" v-model="advancedForm.goods_name"></el-input>
+          </div>
         </div>
+        <div class="toolbar-search"></div>
       </div>
       <template slot="table-columns">
         <!--商品名称-->
@@ -52,7 +44,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 
@@ -73,7 +65,8 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          category_id: 0
         },
 
         /** 列表数据 */
@@ -118,17 +111,7 @@
         this.GET_GoodsStatistics()
       },
 
-      /** 高级搜索事件触发 */
-      advancedSearchEvent() {
-        this.params = {
-          ...this.params,
-          ...this.advancedForm
-        }
-        delete this.params.keyword
-        this.GET_GoodsStatistics()
-      },
-
-      /** 高级搜索中 分类选择组件值发生改变 */
+      /**  分类选择组件值发生改变 */
       categoryChanged(data) {
         this.advancedForm.category_id = data.category_id
       },
@@ -138,14 +121,11 @@
         API_goodsDetailsStatistics.getGoodsStatisticsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       }
     }
@@ -165,6 +145,33 @@
 
   .toolbar-search {
     margin-right: 10px;
+  }
+
+  div.toolbar-btns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    div {
+      span {
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+      }
+    }
+    .conditions {
+      margin-right: 30px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      span {
+        display: block;
+        width: 90px;
+      }
+    }
   }
 
 </style>

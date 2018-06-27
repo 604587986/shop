@@ -1,6 +1,6 @@
 <template>
   <div>
-    <en-tabel-layout
+    <en-table-layout
       toolbar
       pagination
       :tableData="tableData"
@@ -9,7 +9,7 @@
         <div class="toolbar-btns">
           <div class="conditions">
             <span>活动状态:</span>
-            <el-select v-model="currentGroupBuyStatus" placeholder="请选择" @change="groupBuyStatusChange">
+            <el-select v-model="currentGroupBuyStatus" placeholder="请选择" @change="groupBuyStatusChange" clearable>
             <el-option
                 v-for="item in groupBuyStatus"
                 :key="item.group_buy_status_id"
@@ -27,26 +27,28 @@
       <template slot="table-columns">
         <el-table-column label="商品图片" >
           <template slot-scope="scope">
-            <img :src="scope.row.group_buy_image" class="goods-image"/>
+            <img :src="scope.row.img_url" class="goods-image"/>
           </template>
         </el-table-column>
         <el-table-column label="团购名称" >
           <template slot-scope="scope">
-            <div><a href="" style="color: #00a2d4;">{{ scope.row.activity_name }}</a></div>
-            <div>{{ scope.row.activity_subname }}</div>
+            <div><a href="" style="color: #00a2d4;">{{ scope.row.gb_name }}</a></div>
+            <div>{{ scope.row.gb_title }}</div>
           </template>
         </el-table-column>
         <el-table-column  label="活动信息" >
           <template slot-scope="scope">
-            <div>{{ scope.row.activity_name }}</div>
-            <div>{{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
-              —— {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}
-            </div>
+            <!--活动名称-->
+            <!--<div>{{ scope.row.gb_name }}</div>-->
+            <!--活动开始时间----活动结束时间-->
+            <!--<div>{{ | unixToDate('yyyy-MM-dd') }}-->
+              <!-- - {{ | unixToDate('yyyy-MM-dd') }}-->
+            <!--</div>-->
           </template>
         </el-table-column>
         <!--已团购数量-->
         <el-table-column prop="buy_num" label="已团购" />
-        <el-table-column prop="activity_status_text" label="活动状态" />
+        <el-table-column prop="gb_status_text" label="活动状态" />
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -73,7 +75,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.data_total">
       </el-pagination>
-    </en-tabel-layout>
+    </en-table-layout>
   </div>
 </template>
 
@@ -107,15 +109,15 @@
 
         /** 团购状态*/
         groupBuyStatus: [
-          { group_buy_status_id: 0, group_buy_status_name: '全部团购' },
+          { group_buy_status_id: -1, group_buy_status_name: '请选择' },
 
-          { group_buy_status_id: 1, group_buy_status_name: '未审核' },
+          { group_buy_status_id: 0, group_buy_status_name: '未审核' },
 
-          { group_buy_status_id: 2, group_buy_status_name: '审核失败' },
+          { group_buy_status_id: 1, group_buy_status_name: '已通过' },
 
-          { group_buy_status_id: 3, group_buy_status_name: '已通过' },
+          { group_buy_status_id: 2, group_buy_status_name: '审核失败' }
 
-          { group_buy_status_id: 4, group_buy_status_name: '已结束' }
+          // { group_buy_status_id: 3, group_buy_status_name: '已结束' }
         ]
       }
     },
@@ -141,18 +143,22 @@
 
       /** 搜索事件触发 */
       searchEvent(data) {
+        delete this.params.keywords
         this.params = {
           ...this.params,
-          activity_name: data
+          keywords: data
         }
         this.GET_GroupGoodsList()
       },
 
       /** 团购状态发生改变*/
       groupBuyStatusChange(val) {
-        this.params = {
-          ...this.params,
-          gb_status: val
+        delete this.params.status
+        if (val >= 0) {
+          this.params = {
+            ...this.params,
+            status: val
+          }
         }
         this.GET_GroupGoodsList()
       },
@@ -188,8 +194,6 @@
             this.GET_GroupGoodsList()
             this.$message.success('删除团购商品成功！')
           })
-        }).catch(() => {
-          this.$message.info({ message: '已取消删除' })
         })
       }
     }
