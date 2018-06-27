@@ -169,7 +169,7 @@
                   <el-form-item label="活动商品" prop="range_type">
                     <el-radio-group v-model="activityForm.range_type" @change="changeJoinGoods">
                       <el-radio :label="1">全部商品参与</el-radio>
-                      <el-radio :label="0">部分商品参与</el-radio>
+                      <el-radio :label="2">部分商品参与</el-radio>
                     </el-radio-group>
                     <!--商品表格-->
                     <div v-show="!goodsShow">
@@ -231,6 +231,7 @@
       type="seller"
       :show="showDialog"
       :api="goods_api"
+      :multipleApi="multipleApi"
       :categoryApi="categoryApi"
       :headers="headers"
       :defaultData="goodsIds"
@@ -358,17 +359,6 @@
         /** 列表数据*/
         tableData: [],
 
-        /** 商品ids */
-        goodsIds: [],
-
-        /** 请求头令牌 */
-        headers: {
-          Authorization: this.$store.getters.token
-        },
-
-        /** 商城分类api */
-        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
-
         /** 日期选择器选项 */
         pickoptions: {
           disabledDate: (time) => {
@@ -487,8 +477,22 @@
         /** 商品选择器最大长度*/
         maxsize: 0,
 
+        /** 商品ids */
+        goodsIds: [],
+
+        /** 请求头令牌 */
+        headers: {
+          Authorization: this.$store.getters.token
+        },
+
         /** 商品选择器列表api*/
         goods_api: `${process.env.SELLER_API}/goods`,
+
+        /** 商城分类api */
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
+
+        /** 回显数据使用 */
+        multipleApi: `${process.env.SELLER_API}/goods/@ids/details`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,

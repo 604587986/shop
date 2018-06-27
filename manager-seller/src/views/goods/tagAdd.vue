@@ -91,7 +91,7 @@
         /** 商品选择器列表api*/
         goods_api: `${process.env.SELLER_API}/goods`,
 
-        multipleApi: `${process.env.SELLER_API}//goods/@ids/details`,
+        multipleApi: `${process.env.SELLER_API}/goods/@ids/details`,
 
         /** 商城分类api */
         categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
