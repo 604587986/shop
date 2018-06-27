@@ -174,8 +174,8 @@
           <el-pagination
             v-if="goodsListData"
             @current-change="handleCurrentPageChange"
-            :current-page.sync="params.page_no"
-            :page-size="params.page_size"
+            :current-page.sync="page.page_no"
+            :page-size="page.page_size"
             layout="total, prev, pager, next"
             :total="goodsListData.data_total">
           </el-pagination>
@@ -196,11 +196,11 @@
     data() {
       return {
         goodsListData: '',
-        params: {
+        page: {
           page_no: 1,
-          page_size: 20,
-          keyword: this.$route.query.keyword
-        }
+          page_size: 20
+        },
+        params: { ...this.$route.query }
       }
     },
     mounted() {
@@ -209,25 +209,27 @@
     },
     beforeRouteUpdate (to, from, next) {
       const { ...props } = to.query
-      this.params = { ...this.params, ...props }
+      this.params = props
       this.GET_GoodsList()
       next()
     },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentPageChange(page_no) {
-        this.params.page_no = page_no
+        this.page.page_no = page_no
         this.GET_GoodsList()
       },
       /** 获取商品选择器 */
       GET_GoodsSelector() {
-        API_Goods.getGoodsSelector(this.params).then(response => {
+        const params = { ...this.page, ...this.params }
+        API_Goods.getGoodsSelector(params).then(response => {
           console.log(response)
         })
       },
       /** 获取商品列表 */
       GET_GoodsList() {
-        API_Goods.getGoodsList(this.params).then(response => {
+        const params = { ...this.page, ...this.params }
+        API_Goods.getGoodsList(params).then(response => {
           this.goodsListData = response
           this.MixinScrollToTop(171)
         })
