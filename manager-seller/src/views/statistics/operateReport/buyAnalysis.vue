@@ -97,7 +97,7 @@
       GET_PriceStatistics() {
         API_buyAnyalysis.getbuyAnyalysisPeriodList(this.params).then(response => {
           this.purchaseTimeChart.setOption({
-            title: { text: '购买时段分布', x: 'center' },
+            title: { text: '购买时段分布', x: 'center', subtext: '当前时间段24小时购买总量分布' },
             tooltip: { trigger: 'axis' },
             legend: { show: true, orient: 'vertical', data: [{ name: '下单量' }], bottom: '10px' },
             color: ['#7CB5EC'],

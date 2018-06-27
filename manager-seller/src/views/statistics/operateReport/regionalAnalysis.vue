@@ -204,9 +204,6 @@
               }
             ]
           })
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
         this.countTableHeight()
       }
