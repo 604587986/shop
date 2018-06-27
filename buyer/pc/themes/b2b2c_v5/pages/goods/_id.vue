@@ -23,7 +23,7 @@
             >{{ tab.title }}</div>
           </div>
           <div class="detail-content">
-            <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.goods_intro"></div>
+            <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.intro"></div>
             <!--商品参数-->
             <goods-params v-show="curTab === '规格参数'" :goods-params="goods.goods_params"/>
             <!--商品评论-->
