@@ -10,15 +10,15 @@
           </nuxt-link>
           <div class="gl-bar-content">
             <ul class="clearfix">
-              <li><a class="int" href="/goods?cat_id=491">数码家电</a></li>
-              <li><a href="/goods?cat_id=1">食品饮料</a></li>
-              <li><a href="/goods?cat_id=4">进口食品</a></li>
-              <li><a href="/goods?cat_id=38">美容化妆</a></li>
-              <li><a href="/goods?cat_id=56">母婴玩具</a></li>
-              <li><a href="/goods?cat_id=79">厨房用品</a></li>
-              <li><a href="/goods?cat_id=35">钟表箱包</a></li>
-              <li><a href="/goods?cat_id=85">营养保健</a></li>
-              <li><a href="/goods?cat_id=86">服装鞋靴</a></li>
+              <li><a class="int" href="/goods?category=491">数码家电</a></li>
+              <li><a href="/goods?category=1">食品饮料</a></li>
+              <li><a href="/goods?category=4">进口食品</a></li>
+              <li><a href="/goods?category=38">美容化妆</a></li>
+              <li><a href="/goods?category=56">母婴玩具</a></li>
+              <li><a href="/goods?category=79">厨房用品</a></li>
+              <li><a href="/goods?category=35">钟表箱包</a></li>
+              <li><a href="/goods?category=85">营养保健</a></li>
+              <li><a href="/goods?category=86">服装鞋靴</a></li>
             </ul>
           </div>
         </div>
@@ -30,15 +30,15 @@
           </nuxt-link>
           <div class="gl-bar-content">
             <ul class="clearfix">
-              <li><a class="int" href="/goods?cat_id=491">母婴玩具</a></li>
-              <li><a href="/goods?cat_id=1">母婴玩具</a></li>
-              <li><a href="/goods?cat_id=4">食品饮料</a></li>
-              <li><a href="/goods?cat_id=38">美容化妆</a></li>
-              <li><a href="/goods?cat_id=56">母婴玩具</a></li>
-              <li><a href="/goods?cat_id=79">厨房用品</a></li>
-              <li><a href="/goods?cat_id=35">钟表箱包</a></li>
-              <li><a href="/goods?cat_id=85">营养保健</a></li>
-              <li><a href="/goods?cat_id=86">服装鞋靴</a></li>
+              <li><a class="int" href="/goods?category=491">母婴玩具</a></li>
+              <li><a href="/goods?category=1">母婴玩具</a></li>
+              <li><a href="/goods?category=4">食品饮料</a></li>
+              <li><a href="/goods?category=38">美容化妆</a></li>
+              <li><a href="/goods?category=56">母婴玩具</a></li>
+              <li><a href="/goods?category=79">厨房用品</a></li>
+              <li><a href="/goods?category=35">钟表箱包</a></li>
+              <li><a href="/goods?category=85">营养保健</a></li>
+              <li><a href="/goods?category=86">服装鞋靴</a></li>
             </ul>
           </div>
         </div>
@@ -50,22 +50,22 @@
             <div class="small-list brand-list">
               <ul class="show-logo">
                 <li class="">
-                  <a href="/goods?cat_id=1&amp;brand=2" title="新农哥">
+                  <a href="/goods?category=1&amp;brand=2" title="新农哥">
                     <img class="lazy" src="http://static.v4.javamall.com.cn/attachment/brand/201202211143461491.jpg" data-original="http://static.v4.javamall.com.cn/attachment/brand/201202211143461491.jpg" alt="新农哥" style="display: block;">新农哥
                   </a>
                 </li>
                 <li class="">
-                  <a href="/goods?cat_id=1&amp;brand=11" title="德芙">
+                  <a href="/goods?category=1&amp;brand=11" title="德芙">
                     <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/C13CB8F002EF4BEE82F4A9BA875FCB45.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/C13CB8F002EF4BEE82F4A9BA875FCB45.jpg" alt="德芙" style="display: block;">德芙
                   </a>
                 </li>
                 <li class="">
-                  <a href="/goods?cat_id=1&amp;brand=13" title="百事">
+                  <a href="/goods?category=1&amp;brand=13" title="百事">
                     <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/5D971CEA5BBC4892863D9BC707239661.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/5D971CEA5BBC4892863D9BC707239661.jpg" alt="百事" style="display: block;">百事
                   </a>
                 </li>
                 <li class="">
-                  <a href="/goods?cat_id=1&amp;brand=3" title="洽洽">
+                  <a href="/goods?category=1&amp;brand=3" title="洽洽">
                     <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/46315F247154475CACA0A3287AF94B16.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/46315F247154475CACA0A3287AF94B16.jpg" alt="洽洽" style="display: block;">洽洽
                   </a>
                 </li>
@@ -93,19 +93,19 @@
           <dt>分类:</dt>
           <dd>
             <div class="small-list">
-              <a href="/goods?cat_id=1_2_7">蜜饯</a>
-              <a href="/goods?cat_id=1_2">休闲零食 </a>
-              <a href="/goods?cat_id=1_13_14">碳酸饮料</a>
-              <a href="/goods?cat_id=1_3_10">巧克力</a>
-              <a href="/goods?cat_id=1_18_19">白酒</a>
-              <a href="/goods?cat_id=1_377">牛奶乳品</a>
-              <a href="/goods?cat_id=1_288_290">普洱</a>
-              <a href="/goods?cat_id=1_288_289">铁观音</a>
-              <a href="/goods?cat_id=1_2_306">牛肉干</a>
-              <a href="/goods?cat_id=1_2_6">坚果</a>
-              <a href="/goods?cat_id=1_18_21">洋酒</a>
-              <a href="/goods?cat_id=1_18_168">葡萄酒</a>
-              <a href="/goods?cat_id=1_377_380">儿童奶</a>
+              <a href="/goods?category=1_2_7">蜜饯</a>
+              <a href="/goods?category=1_2">休闲零食 </a>
+              <a href="/goods?category=1_13_14">碳酸饮料</a>
+              <a href="/goods?category=1_3_10">巧克力</a>
+              <a href="/goods?category=1_18_19">白酒</a>
+              <a href="/goods?category=1_377">牛奶乳品</a>
+              <a href="/goods?category=1_288_290">普洱</a>
+              <a href="/goods?category=1_288_289">铁观音</a>
+              <a href="/goods?category=1_2_306">牛肉干</a>
+              <a href="/goods?category=1_2_6">坚果</a>
+              <a href="/goods?category=1_18_21">洋酒</a>
+              <a href="/goods?category=1_18_168">葡萄酒</a>
+              <a href="/goods?category=1_377_380">儿童奶</a>
             </div>
           </dd>
         </dl>
