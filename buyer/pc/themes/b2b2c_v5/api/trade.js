@@ -28,7 +28,7 @@ export function addToCart(sku_id, num = 1, activity_id) {
   return request({
     url: 'trade/carts',
     method: Method.POST,
-    params: {
+    data: {
       sku_id,
       num,
       activity_id

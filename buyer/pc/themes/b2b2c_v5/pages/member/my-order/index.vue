@@ -243,7 +243,7 @@
       border: 1px solid #f9dbcc;
       border-top: none;
       .order-item-sku {
-        width: 450px + 80px + 80px;
+        width: 470px + 80px + 80px;
       }
       .sku-item {
         display: flex;
