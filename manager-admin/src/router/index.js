@@ -416,7 +416,6 @@ export const asyncRouterMap = [
         children: [
           { path: 'administrator-manage', component: () => import('@/views/setting/auth-settings/administratorManage'), name: 'administratorManage', meta: { title: 'administratorManage' }},
           { path: 'role-manage', component: () => import('@/views/setting/auth-settings/roleManage'), name: 'roleManage', meta: { title: 'roleManage' }},
-          { path: 'auth-manage', component: () => import('@/views/setting/auth-settings/authManage'), name: 'authManage', meta: { title: 'authManage' }},
           { path: 'role-permission/:id', component: () => import('@/views/setting/auth-settings/rolePermission'), name: 'rolePermission', hidden: true, meta: { title: 'rolePermission' }}
         ]
       }
