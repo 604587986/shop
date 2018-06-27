@@ -7,8 +7,7 @@
           toolbar
           pagination
           :tableData="tableData"
-          :loading="loading"
-        >
+          :loading="loading">
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
               <el-button type="primary" @click="handleAddFullCut">新增</el-button>
@@ -89,13 +88,12 @@
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="pickoptions"
-                  >
+                    :picker-options="pickoptions">
                   </el-date-picker>
                 </el-form-item>
                 <!--活动描述-->
                 <el-form-item label="活动描述：">
-                  <UE v-model="activityForm.description" :defaultMsg="activityForm.description"></UE>
+                  <UE ref="UE" :defaultMsg="activityForm.description"></UE>
                 </el-form-item>
               </div>
             </div>
@@ -179,8 +177,7 @@
                         toolbar
                         :tableData="activityForm.activity_goods"
                         :loading="loading"
-                        :selectionChange="selectionChange"
-                      >
+                        :selectionChange="selectionChange">
                         <div slot="toolbar" class="inner-toolbar">
                           <div class="toolbar-btns">
                             <el-button type="primary" @click="showGoodsSelector">选择商品</el-button>
@@ -366,7 +363,7 @@
 
         /** 请求头令牌 */
         headers: {
-          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+          Authorization: this.$store.getters.token
         },
 
         /** 商城分类api */
@@ -897,15 +894,33 @@
       handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const _params = this.generateFormData(this.activityForm)
+            /** 处理表单数据 */
+            this.activityForm.start_time = this.activityForm.take_effect_time[0] / 1000
+            this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000
+            this.activityForm.description = this.$refs['UE'].getUEContent()
+            let _goodslist = []
+            if (this.activityForm.activity_goods && Array.isArray(this.activityForm.activity_goods)) {
+              _goodslist = this.activityForm.activity_goods.map(key => {
+                return {
+                  goods_id: key.goods_id,
+                  name: key.goods_name,
+                  thumbnail: key.thumbnail
+                }
+              })
+            }
+            if (_goodslist.length > 0) {
+              /** 参与商品列表 */
+              this.activityForm.goods_list = _goodslist
+            }
+
             if (this.activityForm.fd_id) {
-              API_activity.saveFullCutActivity(this.activityForm.fd_id, _params).then(() => {
+              API_activity.saveFullCutActivity(this.activityForm.fd_id, this.activityForm).then(() => {
                 this.$message.success('保存成功！')
                 this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
               })
             } else {
-              API_activity.addFullCutActivity(_params).then(() => {
+              API_activity.addFullCutActivity(this.activityForm).then(() => {
                 this.$message.success('添加成功！')
                 this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
@@ -913,74 +928,6 @@
             }
           }
         })
-      },
-
-      /** 构造表单数据 */
-      generateFormData(data) {
-        let _goodslist = []
-        if (data.activity_goods && Array.isArray(data.activity_goods)) {
-          _goodslist = data.activity_goods.map(key => {
-            return {
-              goods_id: key.goods_id,
-              name: key.goods_name,
-              thumbnail: key.thumbnail
-            }
-          })
-        }
-        const _params = {
-          /** 活动名称/标题 */
-          title: data.title,
-
-          /** 活动开始时间 */
-          start_time: data.take_effect_time[0] / 1000,
-
-          /** 活动结束时间 */
-          end_time: data.take_effect_time[1] / 1000,
-
-          /** 活动描述 */
-          description: data.description,
-
-          /** 活动状态 */
-          disabled: data.disabled,
-
-          /** 活动优惠门槛金额 */
-          full_money: parseInt(data.full_money),
-
-          /** 是否减金额 */
-          is_full_minus: data.is_full_minus,
-
-          /** 减多少钱 */
-          minus_value: data.minus_value,
-
-          /** 是否打折 */
-          is_discount: data.is_discount,
-
-          /** 打几折 */
-          discount_value: data.discount_value,
-
-          /** 是否免邮费 */
-          is_free_ship: data.is_free_ship,
-
-          /** 是否有优惠券 */
-          is_send_bonus: data.is_send_bonus,
-
-          /** 优惠券id */
-          bonus_id: data.bonus_id || '',
-
-          /** 是否有赠品 */
-          is_send_gift: data.is_send_gift,
-
-          /** 赠品id */
-          gift_id: data.gift_id || '',
-
-          /** 商品参与方式 */
-          range_type: data.range_type
-        }
-        if (_goodslist.length > 0) {
-          /** 参与商品列表 */
-          _params.goods_list = _goodslist
-        }
-        return _params
       }
     }
   }

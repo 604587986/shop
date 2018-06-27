@@ -89,7 +89,7 @@
 
         /** 请求令牌 */
         headers: {
-          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+          Authorization: this.$store.getters.token
         }
       }
     },
@@ -117,7 +117,11 @@
 
       /**  分类选择组件值发生改变 */
       changeGoodsCateGory(data) {
-        this.params.category_id = data.category_id
+        if (data.category_id) {
+          this.params.category_id = data.category_id
+        } else {
+          this.params.category_id = 0
+        }
       },
 
       GET_GoodsStatistics() {
