@@ -10,7 +10,6 @@ Vue.use(Router)
 * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
 * name:'router-name'             the name is used by <keep-alive> (must set!!!)
 * meta : {
-    role: ['admin','editor']     will control the page role (you can set multiple roles)
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
     noCache: true                if fasle ,the page will no be cached(default is false)
@@ -416,7 +415,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'administrator-manage', component: () => import('@/views/setting/auth-settings/administratorManage'), name: 'administratorManage', meta: { title: 'administratorManage' }},
           { path: 'role-manage', component: () => import('@/views/setting/auth-settings/roleManage'), name: 'roleManage', meta: { title: 'roleManage' }},
-          { path: 'role-permission/:id', component: () => import('@/views/setting/auth-settings/rolePermission'), name: 'rolePermission', hidden: true, meta: { title: 'rolePermission' }}
+          { path: 'role-permission/:id(\\d+)', component: () => import('@/views/setting/auth-settings/rolePermission'), name: 'rolePermission', hidden: true, meta: { title: 'rolePermission', noCache: true }}
         ]
       }
     ]
