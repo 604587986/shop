@@ -60,7 +60,7 @@
 </template>
 
 <script>
-  import * as API_MenusManage from '@/api/menusManage'
+  import * as API_Menus from '@/api/menus'
 
   export default {
     name: 'menuManage',
@@ -103,7 +103,7 @@
       /** 删除菜单 */
       handleDeleteMenu(node, menu) {
         this.$confirm('确定要删除这个菜单吗？如果有子菜单，子菜单也会被一并删除！', '提示', { type: 'warning' }).then(() => {
-          API_MenusManage.deleteMenu(menu.id).then(() => {
+          API_Menus.deleteMenu(menu.id).then(() => {
             const parent = node.parent
             const children = parent.data.children || parent.data
             const index = children.findIndex(d => d.name === menu.name)
@@ -123,7 +123,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.menuForm.id) {
-              API_MenusManage.editMenu(this.menuForm.id, this.menuForm).then(response => {
+              API_Menus.editMenu(this.menuForm.id, this.menuForm).then(response => {
                 this.currentMenu = {
                   ...this.currentMenu,
                   ...this.menuForm
@@ -132,7 +132,7 @@
                 this.$message.success('保存成功！')
               })
             } else {
-              API_MenusManage.addMenu(this.menuForm).then(response => {
+              API_Menus.addMenu(this.menuForm).then(response => {
                 const data = this.currentMenu
                 if (!data.children) this.$set(data, 'children', [])
                 data.children.push(this.menuForm)
@@ -148,7 +148,7 @@
       },
       /** 获取菜单 */
       GET_Memus() {
-        API_MenusManage.getMenus().then(response => {
+        API_Menus.getMenusChildren().then(response => {
           this.meuns = response
         })
       }
