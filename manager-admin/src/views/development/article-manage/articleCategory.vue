@@ -29,7 +29,7 @@
             >
               <template slot="table-columns">
                 <el-table-column label="" width="79">
-                  <template slot-scope="scope"><div></div></template>
+                  <template slot-scope="scope"><svg-icon icon-class="right-angle" class="right-angle"/></template>
                 </el-table-column>
                 <el-table-column label="文章排序">
                   <template slot-scope="scope">{{ scope.row.sort || 0 }}</template>
@@ -269,6 +269,9 @@
     background-color: #fff;
   }
   /deep/ {
+    .right-angle {
+      transform: rotate(135deg);
+    }
     .el-table__expanded-cell {
       border-bottom: none;
       padding: 0;
