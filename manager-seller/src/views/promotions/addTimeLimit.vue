@@ -3,9 +3,7 @@
     <el-form
       :model="activityData"
       v-if="activityData"
-      status-icon
       label-position="right"
-      :rules="rules"
       ref="activityData"
       label-width="120px"
       class="demo-ruleForm">
@@ -46,12 +44,12 @@
                 </el-table-column>
                 <el-table-column label="活动价">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.act_price"></el-input>
+                    <el-input type="number" v-model.number="scope.row.act_price"></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column label="售空数量">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.sold_quantity"></el-input>
+                    <el-input type="number"  v-model.number="scope.row.sold_quantity"></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作" width="70">
@@ -90,31 +88,6 @@
       [CategoryPicker.name]: CategoryPicker
     },
     data() {
-      const checkPrice = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('价格不能为空'))
-        }
-        setTimeout(() => {
-          if (!RegExp.money.test(value)) {
-            callback(new Error('请输入正确的价格'))
-          } else {
-            callback()
-          }
-        }, 1000)
-      }
-      const checkQuantity = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('售空数量不能为空'))
-        }
-        setTimeout(() => {
-          if (!RegExp.integer.test(value)) {
-            callback(new Error('请输入一个正整数'))
-          } else {
-            callback()
-          }
-        }, 1000)
-      }
-
       return {
         /** loading状态*/
         loading: false,
@@ -149,19 +122,7 @@
         categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
         /** 显示/隐藏商品选择器 */
-        showDialog: false,
-
-        /** 校验规则 */
-        rules: {
-          /** 价格 */
-          price: [
-            { validator: checkPrice, trigger: 'blur' }
-          ],
-          /** 售空数量 */
-          sold_quantity: [
-            { validator: checkQuantity, trigger: 'blur' }
-          ]
-        }
+        showDialog: false
       }
     },
     mounted() {
@@ -211,6 +172,23 @@
             _params = _params.concat(_arr)
           }
         })
+        /** 参数格式校验 */
+        let _result = true
+        _params.forEach(key => {
+          if (!RegExp.money.test(key.price) || key.price <= 0) {
+            this.$message.error('请填写正确的抢购价格')
+            _result = false
+            return
+          }
+          if (!RegExp.integer.test(key.sold_quantity)) {
+            this.$message.error('售空数量须为正整数')
+            _result = false
+            return
+          }
+        })
+        if (!_result) {
+          return
+        }
         API_limitTime.signUpLimitTimeActivity(_params).then(() => {
           this.$message.success('报名成功')
           this.$router.push({ path: `/promotions/activity-goods-data/${this.activityID}` })
@@ -248,8 +226,8 @@
 <style type="text/scss" lang="scss" scoped>
   /*背景颜色*/
   .sign-up-bg {
-    background: #f5f5f5;
-    border: 1px solid #F8F8F8;
+    background: #fff;
+    border: 1px solid #ddd;
     padding: 15px;
   }
   .demo-ruleForm {
@@ -262,6 +240,9 @@
   .has-gutter th {
     height: 50px;
     line-height: 50px;
+  }
+  /deep/ .el-input__inner {
+    width: 50%;
   }
 
   /*平铺*/
@@ -286,12 +267,13 @@
    /*抢购时间段*/
   .time_pancy {
     display: inline-block;
-    margin: 8px 0;
+    margin: 8px 11px 8px 0;
     text-align: center;
     width: 200px;
     padding: 6px 10px;
     background: #fff;
     border:1px dotted #dddddd;
+    border-radius: 3px;
     font-size: 15px;
   }
 </style>

@@ -608,6 +608,7 @@
             { required: true, message: '请输入商品名称', trigger: 'blur' }
           ],
           sn: [
+            { required: true, message: '请输入商品编号', trigger: 'blur' },
             { validator: checkSn, trigger: 'blur' }
           ],
           mktprice: [
@@ -1084,17 +1085,17 @@
       },
 
       /** 文件列表上传成功时的钩子  上传成功校验 */
-      handleSuccess(file, fileList) {
+      handleSuccess(response, file, fileList) {
         this.baseInfoForm.goods_gallery_list.push({
           img_id: -1,
 
-          original: file.url,
+          original: response.url,
 
-          url: file.url,
+          url: response.url,
 
           sort: 0,
 
-          name: file.name
+          name: response.name
         })
         this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
         this.$refs['baseInfoForm'].validateField('goods_gallery')
@@ -1209,7 +1210,7 @@
         _params.template_id = _params.template_id || 0
         /** 处理UE的信息 */
         if (this.activestep === 2) {
-          this.baseInfoForm.intro = this.$refs['ue'].getUEContent()
+          _params.intro = this.$refs['ue'].getUEContent()
         }
         return _params
       },
@@ -1228,8 +1229,6 @@
         if (_sn) {
           this.$confirm('确认自动生成货号, 是否继续?', '提示').then(() => {
             this.productSn = true
-          }).catch(() => {
-            this.$message.info({ message: '已取消自动生成' })
           })
           return false
         }
@@ -1355,7 +1354,7 @@
       text-align: left;
     }
     p.goods-group-manager {
-      padding-left: 12.3%;
+      padding-left: 7.5%;
       text-align: left;
       color: #999;
       font-size: 13px;
