@@ -230,15 +230,7 @@
             </el-form-item>
           </div>
         </div>
-      </el-form>
-      <!--商品参数-->
-      <el-form
-        :model="baseInfoForm"
-        status-icon
-        label-position="right"
-        ref="goods_params_list"
-        label-width="120px"
-        class="demo-ruleForm">
+        <!--商品参数-->
         <el-collapse :value="collapseVal">
           <el-collapse-item
             v-for="paramsgroup in  goodsParams"
@@ -252,7 +244,7 @@
               :key="goods_params_list.param_id"
               :label="`${goods_params_list.param_name}：`"
               :prop="'goods_params_list.' + index + '.param_value'"
-              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'blur' }">
+              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' }">
               <el-input
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
@@ -260,9 +252,6 @@
               <el-select
                 v-if="goods_params_list.param_type === 2"
                 v-model="goods_params_list.param_value"
-                filterable
-                @visible-change="getGoodsBrandList"
-                @change="changeGoodsBrand"
                 placeholder="请选择">
                 <el-option
                   v-for="option in goods_params_list.option_list"
@@ -280,10 +269,8 @@
     <div class="content-goods-publish" v-if="activestep === 2">
       <el-form
         :model="baseInfoForm"
-        status-icon
-        :rules="baseInfoFormRule"
         label-position="right"
-        ref="baseInfoForm"
+        ref="baseInfoFormIntro"
         label-width="120px"
         class="demo-ruleForm">
         <el-form-item label="商品描述：">
@@ -667,8 +654,6 @@
       } else {
         this.GET_NextLevelCategory()
       }
-      /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
-      this.GET_GoodsParams()
       next()
     },
     mounted() {
@@ -684,8 +669,6 @@
       } else {
         this.GET_NextLevelCategory()
       }
-      /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
-      this.GET_GoodsParams()
       if (!this.shopInfo) {
         this.shopInfo = JSON.parse(localStorage.getItem('shop'))
       }
@@ -693,24 +676,31 @@
     methods: {
       /** 上一步*/
       pre() {
+        this.loading = true
         if (this.activestep === 1) {
-          this.$confirm('返回上一步会丢失本页数据?', '提示').then(() => {
-            this.GET_NextLevelCategory()
-            if (this.activestep-- < 0) this.activestep = 0
-          }).catch(() => {})
+          this.GET_NextLevelCategory()
+          if (this.activestep-- < 0) this.activestep = 0
+          this.loading = false
+          // this.$confirm('返回上一步会丢失本页数据?', '提示').then(() => {
+          //   this.GET_NextLevelCategory()
+          //   if (this.activestep-- < 0) this.activestep = 0
+          // }).catch(() => {})
         } else {
           this.activestep--
+          this.loading = false
         }
       },
 
       /** 下一步*/
       next() {
         /** 1级校验 */
+        this.loading = true
         if (this.activestep === 0 && !this.activeCategoryName1) {
           this.$message.error('请选择商品分类')
+          this.loading = false
           return
-        } else {
-          /** 获取改商城分类下 商品参数信息 */
+        } else if (this.activestep === 0 && this.activeCategoryName1) {
+          /** 获取该商城分类下 商品参数信息 */
           this.GET_GoodsParams()
           /** 查询品牌列表 */
           this.getGoodsBrandList()
@@ -720,20 +710,24 @@
 
         /** 2级校验 */
         if (this.activestep === 1) {
-          this.$refs.baseInfoForm.validate((valid) => {
+          this.$refs['baseInfoForm'].validate((valid) => {
             if (valid) {
               /** 规格校验 */
               if (!this.skuFormVali()) {
+                this.loading = false
                 return
               }
+              this.loading = false
               if (this.activestep++ > 2) return
             } else {
+              this.loading = false
               this.$message.error('表单中存在未填写的值')
             }
           })
           return
         }
-        // 下一步
+        /** 下一步 */
+        this.loading = false
         if (this.activestep++ > 2) return
       },
 
@@ -817,7 +811,7 @@
           } else if (!level) {
             this.categoryListLevel1 = response
           }
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 选择商城商品分类 */
@@ -882,8 +876,13 @@
           }
           /** 查询品牌列表 */
           this.getGoodsBrandList()
+
           /** 运费模板列表 */
           this.getTplList()
+
+          /** 查询商品参数 */
+          this.GET_GoodsParams()
+
           /** 查询商品sku信息 */
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
@@ -916,13 +915,14 @@
           if (!response || response.length <= 0) {
             return
           }
-          let _paramsList = []
+          this.baseInfoForm.goods_params_list = []
           this.goodsParams.forEach(key => {
             if (key && key.params) {
-              _paramsList = _paramsList.concat(key.params)
+              key.params.forEach(elem => {
+                this.baseInfoForm.goods_params_list.push(elem)
+              })
             }
           })
-          this.baseInfoForm.goods_params_list = _paramsList
         })
       },
 
@@ -971,8 +971,13 @@
           }
           /** 查询品牌列表 */
           this.getGoodsBrandList()
+
           /** 运费模板列表 */
           this.getTplList()
+
+          /** 查询草稿箱商品参数信息 */
+          this.GET_GoodsDtagtParams()
+
           /** 查询草稿箱sku信息 */
           API_goods.draftSku(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
@@ -989,8 +994,6 @@
             })
           })
         })
-        /** 查询草稿箱商品参数信息 */
-        this.GET_GoodsDtagtParams()
       },
 
       /** 查询草稿箱商品参数信息 */
@@ -1003,13 +1006,14 @@
           if (!response || response.length <= 0) {
             return
           }
-          let _paramsList = []
+          this.baseInfoForm.goods_params_list = []
           this.goodsParams.forEach(key => {
             if (key && key.params) {
-              _paramsList = _paramsList.concat(key.params)
+              key.params.forEach(elem => {
+                this.baseInfoForm.goods_params_list.push(elem)
+              })
             }
           })
-          this.baseInfoForm.goods_params_list = _paramsList
         })
       },
 
