@@ -49,9 +49,10 @@
             <el-input v-model="editMemberForm.tel"></el-input>
           </el-form-item>
         </el-form>
-        <el-button type="primary" @click="submitEditMemberForm('editMemberForm')">保存修改</el-button>
+        <el-button type="primary" @click="submitEditMemberForm('editMemberForm')" class="save">保存修改</el-button>
       </el-tab-pane>
       <el-tab-pane label="TA的订单">
+        <!--// Andste_TODO 2018/6/28: 订单相关未适配-->
         <el-table
           :data="orderList"
           style="width: 100%">
@@ -67,10 +68,11 @@
             {{ editPointForm.currentPoint }}
           </el-form-item>
           <el-form-item label="调整积分">
-            <el-input-number v-model="editPointForm.changedPoint" :min="1" :max="99999999" label="描述文字"></el-input-number>
+            <!--// Andste_TODO 2018/6/28: 积分修改未适配-->
+            <el-input-number v-model="editPointForm.changedPoint" :min="1" :max="99999999"></el-input-number>
           </el-form-item>
         </el-form>
-        <el-button type="primary" @click="submitEditMemberForm('editMemberForm')">保存修改</el-button>
+        <el-button type="primary" @click="handleSavePoint" class="save">保存修改</el-button>
       </el-tab-pane>
       <el-tab-pane label="等级积分">
         <el-table
@@ -93,24 +95,10 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="TA的咨询">
-        <el-table
-          :data="askList"
-          style="width: 100%">
-          <el-table-column prop="sn" label="发表时间"/>
-          <el-table-column prop="name" label="显示状态"></el-table-column>
-          <el-table-column prop="address" label="咨询内容"></el-table-column>
-          <el-table-column prop="address" label="商家回复"></el-table-column>
-        </el-table>
+        <member-list-ask :member-id="member_id"/>
       </el-tab-pane>
       <el-tab-pane label="TA的评论">
-        <el-table
-          :data="commentList"
-          style="width: 100%">
-          <el-table-column prop="sn" label="发表时间"/>
-          <el-table-column prop="name" label="显示状态"></el-table-column>
-          <el-table-column prop="address" label="咨询内容"></el-table-column>
-          <el-table-column prop="address" label="商家回复"></el-table-column>
-        </el-table>
+        <member-list-comments :member-id="member_id"/>
       </el-tab-pane>
       <el-tab-pane label="TA的收货地址">
         <member-list-address :member-id="member_id"/>
@@ -123,11 +111,15 @@
   import * as API_Member from '@/api/member'
   import { RegExp } from '~/ui-utils'
   import MemberListAddress from './memberListAddress'
+  import MemberListAsk from './memberListAsk'
+  import MemberListComments from './memberListComments'
 
   export default {
     name: 'memberEdit',
     components: {
-      MemberListAddress
+      MemberListAddress,
+      MemberListAsk,
+      MemberListComments
     },
     data() {
       return {
@@ -208,6 +200,8 @@
           }
         })
       },
+      /** 保存积分 */
+      handleSavePoint() {},
       /** 获取会员详情 */
       GET_MemberDetail() {
         API_Member.getMemberDetail(this.member_id).then(response => {
@@ -235,7 +229,7 @@
   /deep/ .el-tabs__content {
     overflow: initial;
   }
-  /deep/ .el-tab-pane .el-button {
+  /deep/ .el-tab-pane .el-button.save {
     margin-left: 100px;
   }
 </style>
