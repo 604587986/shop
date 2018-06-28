@@ -230,6 +230,7 @@
     <en-logistics-company
       :logisticsShow="logisticsCompanyShow"
       @logisticsChanged="logisticsChanged"
+      @logstictisClosed="logstictisClosed"
     ></en-logistics-company>
   </div>
 </template>
@@ -461,17 +462,16 @@
 
       /** 添加物流信息 */
       addLogisticsInfo() {
-        if (!this.logisticsCompanyShow) {
-          this.logisticsCompanyShow = true
-        } else {
-          this.logisticsCompanyShow = false
-          this.logisticsCompanyShow = true
-        }
+        this.logisticsCompanyShow = true
       },
 
       /** 监听物流公司信息开启/关闭操作 */
       logisticsChanged() {
         this.getLogisticsCompanies()
+      },
+
+      logstictisClosed(target) {
+        this.logisticsCompanyShow = target
       },
 
       /** 操作地区选择器改变时 触发*/

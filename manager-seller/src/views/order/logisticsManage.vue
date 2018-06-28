@@ -6,8 +6,7 @@
           toolbar
           pagination
           :tableData="tableData"
-          :loading="loading"
-        >
+          :loading="loading">
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
               <el-button type="primary" @click="handleAddMould">新增模板</el-button>
@@ -98,7 +97,7 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="物流公司" name="logistics">
-        <en-logistics-company :logisticsShow="logisticsShow"></en-logistics-company>
+        <en-logistics-company :logisticsShow="logisticsShow"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -158,7 +157,7 @@
         params: {},
 
         /** 快递模板列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 地区选择器 */
         areaDialog: false,
