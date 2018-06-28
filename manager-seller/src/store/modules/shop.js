@@ -1,6 +1,7 @@
+import { getToken, setToken, removeToken } from '@/utils/auth'
 const shop = {
   state: {
-    shopInfo: {}
+    shopInfo: JSON.parse(localStorage.getItem('shopInfo'))
   },
 
   mutations: {
@@ -12,6 +13,7 @@ const shop = {
     // 存储店铺信息
     SetShop({ commit }, shopInfo) {
       commit('SetShop', shopInfo)
+      localStorage.setItem('shopInfo', JSON.stringify(shopInfo))
     }
   }
 }

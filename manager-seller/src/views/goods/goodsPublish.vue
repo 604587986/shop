@@ -6,7 +6,7 @@
       <el-step title="3.编辑商品详情" ></el-step>
     </el-steps>
     <!--步骤1-->
-    <div class="content-goods-publish" v-if="activestep === 0">
+    <div class="content-goods-publish" v-show="activestep === 0">
       <div class="goods-category">
         <ul v-if="categoryListLevel1 && categoryListLevel1.length > 0">
           <li
@@ -41,7 +41,7 @@
       </p>
     </div>
     <!--步骤2-->
-    <div class="content-goods-publish" v-if="activestep === 1">
+    <div class="content-goods-publish" v-show="activestep === 1">
       <!--商品详情-->
       <el-form
         :model="baseInfoForm"
@@ -437,6 +437,9 @@
         /** 图片服务器地址 */
         BASE_IMG_URL: process.env.BASE_IMG_URL,
 
+        /** 店铺信息 */
+        shopInfo: this.$store.getters.shopInfo,
+
         /** 加载中。。。 */
         loading: false,
 
@@ -651,11 +654,6 @@
         }
       }
     },
-    computed: {
-      ...mapGetters([
-        'shopInfo'
-      ])
-    },
     beforeRouteUpdate(to, from, next) {
       if (this.$route.params && this.$route.params.goodsid) {
         this.currentStatus = parseInt(this.$route.params.isdraft) || 0
@@ -773,7 +771,6 @@
           return
         }
         let _params = this.generateFormData(this.baseInfoForm)
-        _params.intro = this.$refs['ue'].getUEContent()
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
@@ -1205,6 +1202,10 @@
         }
         /** 运费模板 */
         _params.template_id = _params.template_id || 0
+        /** 处理UE的信息 */
+        if (this.activestep === 2) {
+          this.baseInfoForm.intro = this.$refs['ue'].getUEContent()
+        }
         return _params
       },
 

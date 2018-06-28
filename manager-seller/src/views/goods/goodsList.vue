@@ -4,8 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <!--商品状态 上架 下架-->
@@ -195,13 +194,11 @@
           quantity: [
             { validator: checkQuantity, trigger: 'change' }
           ]
-        }
+        },
+
+        /** 店铺信息 */
+        shopInfo: this.$store.getters.shopInfo
       }
-    },
-    computed: {
-      ...mapGetters([
-        'shopInfo'
-      ])
     },
     mounted() {
       if (this.$route.params && !Number.isNaN(parseInt(this.$route.params.id))) {
