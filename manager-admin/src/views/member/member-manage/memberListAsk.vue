@@ -38,11 +38,11 @@
       </el-pagination>
     </en-table-layout>
     <el-dialog
-      title="提示"
+      title="查看咨询详情"
       :visible.sync="dialogReviewVisible"
       width="50%"
     >
-      <el-form ref="reviewAskForm" :model="reviewAsk">
+      <el-form :model="reviewAsk">
         <el-form-item label="咨询内容：">
           <br>
           <span style="color: #409EFF">{{ reviewAsk.content }}</span>
@@ -119,7 +119,7 @@
 
       /** 删除咨询 */
       handleDeleteAsk(index, row) {
-        this.$confirm('确定要删除这个导航菜单吗？', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确定要删除这个咨询吗？', '提示', { type: 'warning' }).then(() => {
           API_Member.deleteMemberAsk(row.ask_id).then(() => {
             this.$message.success('删除成功！')
             this.GET_MemberListAsk()
