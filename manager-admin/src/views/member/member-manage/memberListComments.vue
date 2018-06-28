@@ -54,7 +54,7 @@
         <template v-if="reviewComments.reply_status === 1">
           <el-form-item label="商家回复：">
             <br>
-            <span style="color: #FF5722">{{ reviewComments.reply || '暂无回复' }}</span>
+            <span style="color: #FF5722">{{ reviewComments.reply.content || '暂无回复' }}</span>
           </el-form-item>
         </template>
       </el-form>
