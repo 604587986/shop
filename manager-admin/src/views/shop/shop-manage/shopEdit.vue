@@ -1,8 +1,8 @@
 <template>
   <div v-loading="loading">
     <el-form :model="shopForm" :rules="shopRules" ref="shopForm" inline label-width="130px">
-      <el-tabs type="border-card">
-        <el-tab-pane label="基本信息">
+      <el-tabs type="border-card" :value="tableName" ref="tabs">
+        <el-tab-pane label="基本信息" name="base">
           <el-form-item label="公司名称" prop="company_name">
             <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
           </el-form-item>
@@ -30,7 +30,7 @@
             <el-input v-model="shopForm.company_email" :maxlength="50"></el-input>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="营业执照信息">
+        <el-tab-pane label="营业执照信息" name="legal">
           <el-form-item label="法人姓名" prop="legal_name">
             <el-input v-model="shopForm.legal_name" :maxlength="50"></el-input>
           </el-form-item>
@@ -78,7 +78,7 @@
             </el-upload>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="组织机构信息">
+        <el-tab-pane label="组织机构信息" name="organization">
           <el-form-item label="组织机构代码" prop="organization_code">
             <el-input v-model="shopForm.organization_code" :maxlength="50"></el-input>
           </el-form-item>
@@ -94,7 +94,7 @@
             </el-upload>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="一般纳税人证明">
+        <el-tab-pane label="一般纳税人证明" name="taxes">
           <el-form-item label="一般纳税人证明" prop="taxes_img">
             <el-upload
               class="avatar-uploader"
@@ -106,7 +106,7 @@
             </el-upload>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="开户行银行许可证">
+        <el-tab-pane label="开户行银行许可证" name="bank">
           <el-form-item label="银行开户名" prop="bank_account_name">
             <el-input v-model="shopForm.bank_account_name" :maxlength="50"></el-input>
           </el-form-item>
@@ -131,7 +131,7 @@
             </el-upload>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="税务登记证">
+        <el-tab-pane label="税务登记证" name="taxes">
           <el-form-item label="税务登记证号" prop="taxes_certificate_num">
             <el-input v-model="shopForm.taxes_certificate_num" :maxlength="50"></el-input>
           </el-form-item>
@@ -150,7 +150,7 @@
             </el-upload>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="店铺信息">
+        <el-tab-pane label="店铺信息" name="shop">
           <el-form-item label="店铺名称" prop="shop_name">
             <el-input v-model="shopForm.shop_name" :maxlength="50"></el-input>
           </el-form-item>
@@ -163,7 +163,7 @@
             </el-input>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="经营类目">
+        <el-tab-pane label="经营类目" name="category">
           <el-form-item label="经营类目" prop="goods_management_category" class="form-item-cat">
             <el-checkbox :indeterminate="isIndeterminateCat" v-model="checkAllCat" @change="handleCheckAllCatChange">全选</el-checkbox>
             <div style="margin: 15px 0;"></div>
@@ -174,7 +174,7 @@
         </el-tab-pane>
       </el-tabs>
       <div class="save-btn-box">
-        <el-button type="primary">保存修改</el-button>
+        <el-button type="primary" @click="handleSaveEdit">保存修改</el-button>
       </div>
     </el-form>
   </div>
@@ -198,6 +198,7 @@
     name: 'shopEdit',
     data() {
       return {
+        tableName: 'base',
         shop_id: this.$route.params.shop_id,
         loading: false,
         shopForm: {},
@@ -262,6 +263,37 @@
         this.checkAllCat = checkedCount === this.cats.length
         this.isIndeterminateCat = checkedCount > 0 && checkedCount < this.cats.length
       },
+      /** 保存修改 */
+      handleSaveEdit() {
+        this.$refs['shopForm'].validate((valid, error) => {
+          if (valid) {
+            const { shop_id } = this.shopForm
+            API_Shop.editAuthShop(shop_id, this.shopForm).then(response => {
+              this.$message.success('修改成功！')
+            })
+          } else {
+            this.$message.error('表单填写有误，请核对！')
+            // 找到出错的第一个tab
+            // 再将tab切换过去
+            const firstError = Object.keys(error)[0]
+            let tabChildren = this.$refs['tabs'].$children
+            tabChildren.shift()
+            for (let i = 0; i < tabChildren.length; i++) {
+              const item = tabChildren[i]
+              let finded = false
+              for (let j = 0; j < item.$children.length; j++) {
+                if (item.$children[j].prop === firstError) {
+                  this.tableName = item.name
+                  finded = true
+                  break
+                }
+              }
+              if (finded) break
+            }
+            return false
+          }
+        })
+      },
       /** 获取店铺详情 */
       GET_ShopDetail() {
         this.loading = true
@@ -276,7 +308,6 @@
           this.defaultRegionLicense = [license_province_id, license_city_id, license_county_id, license_town_id]
           this.defaultRegionBank = [bank_province_id, bank_city_id, bank_county_id, bank_town_id]
           this.defaultRegionShop = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
-          console.log(response)
         })
       }
     }
