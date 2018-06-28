@@ -110,7 +110,7 @@
       </el-form-item>
       <!--团购介绍-->
       <el-form-item label="团购介绍">
-        <UE :defaultMsg ="gruopBuyForm.remark"></UE>
+        <UE ref="UE" :defaultMsg ="gruopBuyForm.remark"></UE>
       </el-form-item>
       <!--查看用户注册协议-->
       <el-form-item prop="is_allow_agreement">
@@ -433,6 +433,7 @@
           if (valid) {
             this.gruopBuyForm.area_id = 0
             this.gruopBuyForm.img_url = this.gruopBuyForm.img_url[0]
+            this.gruopBuyForm.remark = this.$refs.UE.getUEContent()
             API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(() => {
               this.$message.success('添加成功')
               this.$router.push({ path: '/promotions/group-buy-manager' })
