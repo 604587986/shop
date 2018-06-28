@@ -280,7 +280,7 @@ export const asyncRouterMap = [
         meta: { title: 'memberAnalysis' },
         children: [
           { path: 'order-amount', component: () => import('@/views/statistics/member-analysis/orderAmount'), name: 'orderAmount', meta: { title: 'orderAmount' }},
-          { path: 'added-member', component: () => import('@/views/statistics/member-analysis/addedMember'), name: 'addedMmeber', meta: { title: 'addedMember' }}
+          { path: 'added-member', component: () => import('@/views/statistics/member-analysis/addedMember'), name: 'addedMember', meta: { title: 'addedMember' }}
         ]
       },
       {
