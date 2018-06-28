@@ -17,11 +17,11 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleViewComment(scope.$index, scope.row)">查看</el-button>
+              @click="handleViewAsk(scope.$index, scope.row)">查看</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDeleteComment(scope.$index, scope.row)">删除</el-button>
+              @click="handleDeleteAsk(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </template>
@@ -110,13 +110,13 @@
       },
 
       /** 查看咨询详情 */
-      handleViewComment(index, row) {
+      handleViewAsk(index, row) {
         this.reviewAsk = row
         this.dialogReviewVisible = true
       },
 
       /** 删除咨询 */
-      handleDeleteComment(index, row) {
+      handleDeleteAsk(index, row) {
         this.$confirm('确定要删除这条咨询吗？', '提示', { type: 'warning' }).then(() => {
           API_Member.deleteMemberAsk(row.ask_id).then(() => {
             this.$message.success('删除成功！')
