@@ -40,8 +40,6 @@ export default {
     shopThemeManage: 'Shop Theme',
     themeList: 'Theme List',
     themeListWap: 'Wap Theme List',
-    shopLevelManage: 'Shop Level',
-    levelApplyList: 'Level Apply',
     shopEdit: 'Shop Edit',
 
     promotions: 'promotions',
@@ -72,9 +70,6 @@ export default {
     pcSiteMenu: 'PC Site Menu',
     mobileSiteMenu: 'Mobile Site Menu',
     hotKeyword: 'Hot Keyword',
-    helpCenter: 'Help Center',
-    mallAnnouncement: 'Mall Announcement',
-    contactMall: 'Contact Mall',
 
     statistics: 'Statistics Manage',
     memberAnalysis: 'Member Analysis',
@@ -97,7 +92,6 @@ export default {
     regionalAnalysis: 'Regional Analysis',
     customerPriceDistribution: 'Customer Price Distribution',
     refundStatistics: 'Traffic AnalysisGoods',
-    logManage: 'Log Manage',
 
     setting: 'Setting Mange',
     shopSettings: 'Shop Setting',
@@ -118,6 +112,10 @@ export default {
     memberMessage: 'Member Message',
     otherMessage: 'Other Message',
 
+    pushSettings: 'Push Settings',
+    goodsPush: 'Goods Push',
+    appPush: 'APP Push',
+
     paymentAndDelivery: 'Payment And Delivery',
     payment: 'payment',
     express: 'Express',
@@ -132,8 +130,6 @@ export default {
     toolManage: 'Tool',
     URLMapping: 'URL Mapping',
     menuManage: 'Menu Manage',
-    dataOutput: 'Data Output',
-    clearExampleData: 'Clear Example Data',
     articleManage: 'Article Manage',
     articleCategory: 'Article Category',
     articleList: 'Article List'

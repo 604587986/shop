@@ -11,15 +11,16 @@
       <en-table-layout
         :toolbar="false"
         :pagination="false"
-        :tableData="tableData"
+        :tableData="tableData.data"
       >
         <template slot="table-columns">
           <el-table-column prop="membertime" label="日期/月份">
-            <template slot-scope="scope">{{ scope.row.membertime + (params.type === 1 ? '日' : '月') }}</template>
+            <template slot-scope="scope">{{ scope.row.time + (params.circle === 'MONTH' ? '日' : '月') }}</template>
           </el-table-column>
-          <el-table-column prop="membernum" label="本月/本年（个）"/>
-          <el-table-column label="上月/上年（个）">
-            <template slot-scope="scope">{{ lastTableData[scope.$index] ? lastTableData[scope.$index]['membernum'] : 0 }}</template>
+          <el-table-column prop="num" label="本月/本年（个）"/>
+          <el-table-column prop="last_num" label="上月/上年（个）"/>
+          <el-table-column label="同比">
+            <template slot-scope="scope">{{ scope.row.growth.toFixed(2) + '%' }}</template>
           </el-table-column>
         </template>
       </en-table-layout>
@@ -36,14 +37,11 @@
     data() {
       return {
         loading: false,
-        tableData: null,
-        lastTableData: null,
+        tableData: '',
         params: {
-          start_date: '',
-          lastStart_date: '',
-          end_date: '',
-          lastEnd_date: '',
-          type: 1
+          year: '',
+          month: '',
+          circle: 'MONTH'
         }
       }
     },
@@ -55,40 +53,33 @@
     methods: {
       /** 年月份发生变化 */
       handleYearMonthChanged(object) {
-        this.params.circle = object.type === 'month' ? 1 : 2
-        this.params.start_date = object.start_time
-        this.params.lastStart_date = object.last_start_time
-        this.params.end_date = object.end_time
-        this.params.lastEnd_date = object.last_end_time
+        this.params.year = object.year
+        this.params.month = object.month
+        this.params.circle = object.type
         this.GET_AddedMemberData()
       },
       GET_AddedMemberData() {
         this.loading = true
-        API_Statistics.addMemberStatistics(this.params).then(response => {
+        Promise.all([
+          API_Statistics.addedMember(this.params),
+          API_Statistics.addedMemberPage(this.params)
+        ]).then(responses => {
           this.loading = false
-          const data = response.data.list
-          const lastData = response.data.lastList
-          this.tableData = data
-          this.lastTableData = lastData
-
-          const _data = data.map(item => item.membernum)
-          const _time = data.map(item => item.membertime)
-
+          this.tableData = responses[1]
+          const { data, name, localName } = responses[0].series
+          const { xAxis } = responses[0]
           this.echarts.setOption(echartsOptions({
-            titleText: '新增会员数量',
+            titleText: `新增会员数量（${this.params.circle === 'MONTH' ? '月' : '年'}）`,
             tooltipFormatter: (params) => {
               params = params[0]
-              const time = _time[params.dataIndex]
-              return `日期：${time}${this.params.type === 1 ? '日' : '月'}<br/>${params.seriesName}：${params.value}`
+              return `日期：${xAxis[params.dataIndex]}${this.params.circle === 'MONTH' ? '日' : '月'}<br/>${params.marker}${params.seriesName}：${params.value}`
             },
-            xAxisData: _time,
-            seriesName: '新增会员数',
-            seriesData: _data
+            seriesName: name,
+            seriesData: data,
+            xAxisData: xAxis
           }))
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.echarts.resize()
+        }).catch(() => { this.loading = false })
       }
     }
   }

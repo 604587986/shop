@@ -73,29 +73,22 @@
     name: 'groupBuyCategory',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
+        // 列表数据
         tableData: '',
-
-        /** 添加团购分类 表单 */
+        // 添加团购分类 表单
         groupBuyForm: {},
-
-        /** 添加团购分类 表单规则 */
+        // 添加团购分类 表单规则
         groupBuyRules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
-          ]
+          cat_name: [this.MixinRequired('请输入团购分类名称！')]
         },
-
-        /** 添加团购分类 dialog */
+        // 添加团购分类
         dialogGroupBuyVisible: false
       }
     },
@@ -180,7 +173,3 @@
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

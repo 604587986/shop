@@ -17,11 +17,11 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleViewComment(scope.$index, scope.row)">查看</el-button>
+              @click="handleViewComments(scope.$index, scope.row)">查看</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDeleteComment(scope.$index, scope.row)">删除</el-button>
+              @click="handleDeleteComments(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </template>
@@ -38,6 +38,31 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-table-layout>
+    <el-dialog
+      title="查看评论详情"
+      :visible.sync="dialogReviewVisible"
+      width="50%"
+    >
+      <el-form :model="reviewComments">
+        <el-form-item label="咨询内容：">
+          <br>
+          <span style="color: #409EFF">{{ reviewComments.content }}</span>
+          <div v-if="reviewComments.images && reviewComments.images.length">
+            <!--// Andste_TODO 2018/6/28: 图片地址未适配-->
+            <img v-for="image in reviewComments.images" :src="image.url" class="comments-image">
+          </div>
+        </el-form-item>
+        <template v-if="reviewComments.reply_status === 1">
+          <el-form-item label="商家回复：">
+            <br>
+            <span style="color: #FF5722">{{ reviewComments.reply.content || '暂无回复' }}</span>
+          </el-form-item>
+        </template>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogReviewVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -48,17 +73,19 @@
     name: 'goodsCommentList',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
-        tableData: ''
+        // 列表数据
+        tableData: '',
+        // 查看评论 dialog
+        dialogReviewVisible: false,
+        // 查看评论
+        reviewComments: {}
       }
     },
     mounted() {
@@ -87,12 +114,13 @@
       },
 
       /** 查看评论详情 */
-      handleViewComment(index, row) {
-        // Andste_TODO 2018/6/5: 缺少查看评论详情API
+      handleViewComments(index, row) {
+        this.reviewComments = row
+        this.dialogReviewVisible = true
       },
 
       /** 删除评论 */
-      handleDeleteComment(index, row) {
+      handleDeleteComments(index, row) {
         this.$confirm('确定要删除这条评论吗？', '提示', { type: 'warning' }).then(() => {
           API_Member.deleteMemberComments(row.comments_id).then(() => {
             this.$message.success('删除成功！')

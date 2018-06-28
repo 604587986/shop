@@ -167,16 +167,6 @@ export const asyncRouterMap = [
           { path: 'pc', component: () => import('@/views/shop/shop-theme-manage/themeList'), name: 'themeList', meta: { title: 'themeList' }},
           { path: 'wap', component: () => import('@/views/shop/shop-theme-manage/themeListWap'), name: 'themeListWap', meta: { title: 'themeListWap' }}
         ]
-      },
-      {
-        path: '/shop/shop-level-manage',
-        component: () => import('@/views/shop/shop-level-manage/index'),
-        redirect: '/shop/shop-level-manage/level-apply-list',
-        name: 'shopLevelAudit',
-        meta: { title: 'shopLevelManage' },
-        children: [
-          { path: 'level-apply-list', component: () => import('@/views/shop/shop-level-manage/levelApplyList'), name: 'levelApplyList', meta: { title: 'levelApplyList' }}
-        ]
       }
     ]
   },
@@ -269,10 +259,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'pc-site-menu', component: () => import('@/views/page/page-setting/pcSiteMenu'), name: 'pcSiteMenu', meta: { title: 'pcSiteMenu' }},
           { path: 'mobile-site-menu', component: () => import('@/views/page/page-setting/mobileSiteMenu'), name: 'mobileSiteMenu', meta: { title: 'mobileSiteMenu' }},
-          { path: 'hot-keyword', component: () => import('@/views/page/page-setting/hotKeyword'), name: 'hotKeyword', meta: { title: 'hotKeyword' }},
-          { path: 'help-center', component: () => import('@/views/page/page-setting/helpCenter'), name: 'helpCenter', meta: { title: 'helpCenter' }},
-          { path: 'mall-announcement', component: () => import('@/views/page/page-setting/mallAnnouncement'), name: 'mallAnnouncement', meta: { title: 'mallAnnouncement' }},
-          { path: 'contact-mall', component: () => import('@/views/page/page-setting/contactMall'), name: 'contactMall', meta: { title: 'contactMall' }}
+          { path: 'hot-keyword', component: () => import('@/views/page/page-setting/hotKeyword'), name: 'hotKeyword', meta: { title: 'hotKeyword' }}
         ]
       }
     ]
@@ -293,7 +280,7 @@ export const asyncRouterMap = [
         meta: { title: 'memberAnalysis' },
         children: [
           { path: 'order-amount', component: () => import('@/views/statistics/member-analysis/orderAmount'), name: 'orderAmount', meta: { title: 'orderAmount' }},
-          { path: 'added-member', component: () => import('@/views/statistics/member-analysis/addedMember'), name: 'addedMmeber', meta: { title: 'addedMember' }}
+          { path: 'added-member', component: () => import('@/views/statistics/member-analysis/addedMember'), name: 'addedMember', meta: { title: 'addedMember' }}
         ]
       },
       {
@@ -344,12 +331,6 @@ export const asyncRouterMap = [
           { path: 'customerPriceDistribution', component: () => import('@/views/statistics/other-statistics/customerPriceDistribution'), name: 'customerPriceDistribution', meta: { title: 'customerPriceDistribution' }},
           { path: 'refund', component: () => import('@/views/statistics/other-statistics/refundStatistics'), name: 'refundStatistics', meta: { title: 'refundStatistics' }}
         ]
-      },
-      {
-        path: 'statistics/log-manage',
-        component: () => import('@/views/statistics/log-manage/index'),
-        name: 'logManage',
-        meta: { title: 'logManage' }
       }
     ]
   },
@@ -394,6 +375,17 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/setting/push-settings',
+        component: () => import('@/views/setting/push-settings/index'),
+        redirect: '/setting/push-settings/goods',
+        name: 'pushSettings',
+        meta: { title: 'pushSettings' },
+        children: [
+          { path: 'goods', component: () => import('@/views/setting/push-settings/goodsPush'), name: 'goodsPush', meta: { title: 'goodsPush' }},
+          { path: 'app', component: () => import('@/views/setting/push-settings/appPush'), name: 'appPush', meta: { title: 'appPush' }}
+        ]
+      },
+      {
         path: '/setting/payment-and-delivery',
         component: () => import('@/views/setting/payment-and-delivery/index'),
         redirect: '/setting/payment-and-delivery/payment',
@@ -434,9 +426,7 @@ export const asyncRouterMap = [
         name: 'toolManage',
         meta: { title: 'toolManage' },
         children: [
-          { path: 'menu-manage', component: () => import('@/views/development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }},
-          { path: 'data-output', component: () => import('@/views/development/tool-manage/dataOutput'), name: 'dataOutput', meta: { title: 'dataOutput' }},
-          { path: 'clear-example-data', component: () => import('@/views/development/tool-manage/clearExampleData'), name: 'clearExampleData', meta: { title: 'clearExampleData' }}
+          { path: 'menu-manage', component: () => import('@/views/development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }}
         ]
       },
       {

@@ -15,9 +15,7 @@
           <template slot-scope="scope"><img :src="scope.row.face" class="face-image"></template>
         </el-table-column>
         <el-table-column prop="username" label="管理员名称"/>
-        <el-table-column label="所属角色">
-          <template slot-scope="scope">{{ scope.row.founder === 1 ? '超级管理员' : scope.row.role_name }}</template>
-        </el-table-column>
+        <el-table-column prop="role_name" label="所属角色"/>
         <el-table-column prop="department" label="所属部门"/>
         <el-table-column prop="real_name" label="管理员真实姓名"/>
         <el-table-column label="操作">
@@ -82,6 +80,9 @@
         <el-form-item label="管理员真实姓名" prop="real_name">
           <el-input v-model="adminForm.real_name" :maxlength="20" clearable></el-input>
         </el-form-item>
+        <el-form-item label="备注信息" prop="remark">
+          <el-input v-model="adminForm.remark" :maxlength="20" clearable></el-input>
+        </el-form-item>
         <el-form-item label="管理员头像" prop="face">
           <el-upload
             :action="MixinUploadApi"
@@ -109,6 +110,7 @@
 <script>
   import * as API_Auth from '@/api/auth'
   import md5 from 'js-md5'
+  import { RegExp } from '~/ui-utils'
 
   export default {
     name: 'administratorManage',
@@ -128,7 +130,18 @@
         // 管理员表单 规则
         adminRules: {
           username: [this.MixinRequired('请输入管理员名称！')],
-          password: [{ required: true, message: '请输入管理员密码！', trigger: 'bulr' }],
+          password: [
+            { required: true, message: '请输入管理员密码！', trigger: 'bulr' },
+            {
+              validator: (rule, value, callback) => {
+                if (this.adminForm.id && !RegExp.password.test(value)) {
+                  callback(new Error('密码格式错误！'))
+                } else {
+                  callback()
+                }
+              }
+            }
+          ],
           department: [this.MixinRequired('请输入所属部门！')],
           role_id: [{ required: true, message: '请选择所属角色！', trigger: 'change' }],
           face: [this.MixinRequired('请上传管理员头像！')]
@@ -202,7 +215,7 @@
           if (valid) {
             const { id } = this.adminForm
             const params = this.MixinClone(this.adminForm)
-            params.password = md5(params.password)
+            if (params.password) params.password = md5(params.password)
             if (id) {
               API_Auth.editAdministrator(id, params).then(response => {
                 this.dialogVisible = false
@@ -241,5 +254,8 @@
     width: 50px;
     height: 50px;
     margin: 0 auto;
+  }
+  /deep/ .el-dialog__body {
+    padding: 10px 20px;
   }
 </style>

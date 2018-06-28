@@ -107,7 +107,6 @@
                 this.dialogPointsVisible = false
                 this.$message.success('添加成功！')
                 this.$refs['gradeEditor'].refresh('add')
-                console.log(response)
               })
             }
           } else {

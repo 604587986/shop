@@ -12,6 +12,7 @@ export function getSiteMenuList(params) {
   return request({
     url: 'pages/site-navigations',
     method: 'get',
+    loading: false,
     params
   })
 }
