@@ -113,6 +113,10 @@ export default {
     memberMessage: 'Member Message',
     otherMessage: 'Other Message',
 
+    pushSettings: 'Push Settings',
+    goodsPush: 'Goods Push',
+    appPush: 'APP Push',
+
     paymentAndDelivery: 'Payment And Delivery',
     payment: 'payment',
     express: 'Express',
@@ -127,8 +131,6 @@ export default {
     toolManage: 'Tool',
     URLMapping: 'URL Mapping',
     menuManage: 'Menu Manage',
-    dataOutput: 'Data Output',
-    clearExampleData: 'Clear Example Data',
     articleManage: 'Article Manage',
     articleCategory: 'Article Category',
     articleList: 'Article List'

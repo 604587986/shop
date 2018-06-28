@@ -381,6 +381,17 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/setting/push-settings',
+        component: () => import('@/views/setting/push-settings/index'),
+        redirect: '/setting/push-settings/goods',
+        name: 'pushSettings',
+        meta: { title: 'pushSettings' },
+        children: [
+          { path: 'goods', component: () => import('@/views/setting/push-settings/goodsPush'), name: 'goodsPush', meta: { title: 'goodsPush' }},
+          { path: 'app', component: () => import('@/views/setting/push-settings/appPush'), name: 'appPush', meta: { title: 'appPush' }}
+        ]
+      },
+      {
         path: '/setting/payment-and-delivery',
         component: () => import('@/views/setting/payment-and-delivery/index'),
         redirect: '/setting/payment-and-delivery/payment',
@@ -421,9 +432,7 @@ export const asyncRouterMap = [
         name: 'toolManage',
         meta: { title: 'toolManage' },
         children: [
-          { path: 'menu-manage', component: () => import('@/views/development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }},
-          { path: 'data-output', component: () => import('@/views/development/tool-manage/dataOutput'), name: 'dataOutput', meta: { title: 'dataOutput' }},
-          { path: 'clear-example-data', component: () => import('@/views/development/tool-manage/clearExampleData'), name: 'clearExampleData', meta: { title: 'clearExampleData' }}
+          { path: 'menu-manage', component: () => import('@/views/development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }}
         ]
       },
       {

@@ -112,6 +112,10 @@ export default {
     memberMessage: '会员消息',
     otherMessage: '其它消息',
 
+    pushSettings: '推送设置',
+    goodsPush: '商品推送',
+    appPush: 'APP推送',
+
     paymentAndDelivery: '支付和配送',
     payment: '支付方式',
     express: '物流公司',
@@ -126,8 +130,6 @@ export default {
     toolManage: '工具',
     URLMapping: 'URL映射',
     menuManage: '菜单管理',
-    dataOutput: '数据导出',
-    clearExampleData: '清除示例数据',
     articleManage: '文章管理',
     articleCategory: '文章分类',
     articleList: '文章列表'
