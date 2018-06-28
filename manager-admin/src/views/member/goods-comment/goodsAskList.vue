@@ -40,39 +40,47 @@
     <el-dialog
       title="提示"
       :visible.sync="dialogReviewVisible"
-      width="30%"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
+      width="50%"
     >
-      <span>这是一段信息</span>
+      <el-form ref="reviewAskForm" :model="reviewAsk">
+        <el-form-item label="咨询内容：">
+          <br>
+          <span style="color: #409EFF">{{ reviewAsk.content }}</span>
+        </el-form-item>
+        <template v-if="reviewAsk.reply_status === 1">
+          <el-form-item :label="replyLabel()">
+            <br>
+            <span style="color: #FF5722">{{ reviewAsk.reply }}</span>
+          </el-form-item>
+        </template>
+      </el-form>
       <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="dialogReviewVisible = false">确 定</el-button>
-  </span>
+        <el-button type="primary" @click="dialogReviewVisible = false">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
   import * as API_Member from '@/api/member'
+  import { Foundation } from '~/ui-utils'
 
   export default {
     name: 'goodsAskList',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
+        // 列表数据
         tableData: '',
-        /** 查看的详情 */
+        // 查看的详情
         reviewAsk: {},
-        /** 查看详情 dialog */
+        // 查看详情 dialog
         dialogReviewVisible: false
       }
     },
@@ -101,21 +109,15 @@
         this.GET_AskList()
       },
 
-      /** 当选择项发生变化 */
-      handleSelectionChange(val) {
-        this.selectedData = val.map(item => item.id)
-      },
-
-      /** 查看评论详情 */
+      /** 查看咨询详情 */
       handleViewComment(index, row) {
-        console.log(row)
         this.reviewAsk = row
         this.dialogReviewVisible = true
       },
 
-      /** 删除评论 */
+      /** 删除咨询 */
       handleDeleteComment(index, row) {
-        this.$confirm('确定要删除这条评论吗？', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确定要删除这条咨询吗？', '提示', { type: 'warning' }).then(() => {
           API_Member.deleteMemberAsk(row.ask_id).then(() => {
             this.$message.success('删除成功！')
             this.GET_AskList()
@@ -123,7 +125,13 @@
         }).catch(() => {})
       },
 
-      /** 获取评论列表 */
+      /** 回复时间 */
+      replyLabel() {
+        const ask = this.reviewAsk
+        return `商家于[${Foundation.unixToDate(ask.reply_time)}]${ask.reply_status === 1 ? '审核通过' : '审核未通过'}并回复：`
+      },
+
+      /** 获取咨询列表 */
       GET_AskList() {
         this.loading = true
         API_Member.getMemberAsks(this.params).then(response => {
