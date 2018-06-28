@@ -40,8 +40,6 @@ export default {
     shopThemeManage: 'Shop Theme',
     themeList: 'Theme List',
     themeListWap: 'Wap Theme List',
-    shopLevelManage: 'Shop Level',
-    levelApplyList: 'Level Apply',
     shopEdit: 'Shop Edit',
 
     promotions: 'promotions',
@@ -72,9 +70,6 @@ export default {
     pcSiteMenu: 'PC Site Menu',
     mobileSiteMenu: 'Mobile Site Menu',
     hotKeyword: 'Hot Keyword',
-    helpCenter: 'Help Center',
-    mallAnnouncement: 'Mall Announcement',
-    contactMall: 'Contact Mall',
 
     statistics: 'Statistics Manage',
     memberAnalysis: 'Member Analysis',

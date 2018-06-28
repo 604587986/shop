@@ -40,8 +40,6 @@ export default {
     shopThemeManage: '店铺模板管理',
     themeList: '模板列表',
     themeListWap: 'WAP模板列表',
-    shopLevelManage: '店铺等级管理',
-    levelApplyList: '等级申请',
     shopEdit: '编辑店铺',
 
     promotions: '促销管理',
@@ -71,9 +69,6 @@ export default {
     pcSiteMenu: 'PC导航菜单',
     mobileSiteMenu: '移动端导航菜单',
     hotKeyword: '热门关键字',
-    helpCenter: '帮助中心',
-    mallAnnouncement: '商城公告',
-    contactMall: '联系商城',
 
     statistics: '统计分析',
     memberAnalysis: '会员分析',
