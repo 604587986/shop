@@ -331,12 +331,6 @@ export const asyncRouterMap = [
           { path: 'customerPriceDistribution', component: () => import('@/views/statistics/other-statistics/customerPriceDistribution'), name: 'customerPriceDistribution', meta: { title: 'customerPriceDistribution' }},
           { path: 'refund', component: () => import('@/views/statistics/other-statistics/refundStatistics'), name: 'refundStatistics', meta: { title: 'refundStatistics' }}
         ]
-      },
-      {
-        path: 'statistics/log-manage',
-        component: () => import('@/views/statistics/log-manage/index'),
-        name: 'logManage',
-        meta: { title: 'logManage' }
       }
     ]
   },

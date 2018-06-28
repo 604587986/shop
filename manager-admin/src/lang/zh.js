@@ -91,7 +91,6 @@ export default {
     regionalAnalysis: '区域分析',
     customerPriceDistribution: '客单价分布图',
     refundStatistics: '退款统计',
-    logManage: '日志管理',
 
     setting: '设置管理',
     shopSettings: '网店设置',

@@ -92,7 +92,6 @@ export default {
     regionalAnalysis: 'Regional Analysis',
     customerPriceDistribution: 'Customer Price Distribution',
     refundStatistics: 'Traffic AnalysisGoods',
-    logManage: 'Log Manage',
 
     setting: 'Setting Mange',
     shopSettings: 'Shop Setting',
