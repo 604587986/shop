@@ -3,8 +3,6 @@
  */
 
 import request from '@/utils/request'
-import GoodsModel from '@/models/GoodsModel'
-import GoodsBrandModel from '@/models/GoodsBrandModel'
 
 /**
  * 获取商品列表
@@ -19,10 +17,8 @@ export function getGoodsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsModel().map(_response.data)
-      resolve(_response)
-    }).catch(() => resolve())
+      resolve(response)
+    })
   })
 }
 
@@ -59,8 +55,7 @@ export function getGoodsStockList(ids, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = new GoodsModel().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -193,9 +188,7 @@ export function getGoodsBrandList(ids, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsBrandModel().map(_response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -337,8 +330,7 @@ export function draftSku(id, params) {
       method: 'get',
       data: params
     }).then(response => {
-      const _response = new GoodsModel().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -356,10 +348,8 @@ export function getDraftGoodsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsModel().map(_response.data)
-      resolve(_response)
-    }).catch(() => resolve())
+      resolve(response)
+    })
   })
 }
 
@@ -395,10 +385,8 @@ export function getRecycleGoodsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsModel().map(_response.data)
-      resolve(_response)
-    }).catch(() => resolve())
+      resolve(response)
+    })
   })
 }
 
@@ -453,10 +441,8 @@ export function getWarningGoodsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsModel().map(_response.data)
-      resolve(_response)
-    }).catch(() => resolve())
+      resolve(response)
+    })
   })
 }
 
@@ -474,9 +460,7 @@ export function getWarningGoodsStockList(ids, params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new GoodsModel().map(_response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

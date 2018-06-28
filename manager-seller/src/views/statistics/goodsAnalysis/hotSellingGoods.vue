@@ -10,12 +10,11 @@
         <en-table-layout
           pagination
           :tableData="tableData"
-          :loading="loading"
-        >
+          :loading="loading">
           <template slot="table-columns">
             <el-table-column prop="goods_name" label="商品名称" />
             <el-table-column label="下单总金额" >
-              <template slot-scope="scope">{{ scope.row.order_amount | unitPrice('￥') }}</template>
+              <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
             </el-table-column>
           </template>
           <el-pagination
@@ -37,11 +36,10 @@
         <en-table-layout
           pagination
           :tableData="tableData"
-          :loading="loading"
-        >
+          :loading="loading">
           <template slot="table-columns">
             <el-table-column prop="goods_name" label="商品名称" />
-            <el-table-column prop="order_goods_num" label="下单商品数量" />
+            <el-table-column prop="all_num" label="下单商品数量" />
           </template>
           <el-pagination
             slot="pagination"
@@ -77,17 +75,24 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+
+          page_size: 10,
+
+          cycle_type: 'MONTH',
+
+          year: '2018',
+
+          month: '6'
         },
 
         /** 热卖商品*/
         hotType: 0,
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         tableHeight: document.body.clientHeight / 2
       }
@@ -114,7 +119,11 @@
       /** 改变日期的回调*/
       changeYearMonth(obj) {
         this.params = {
-          ...obj
+          cycle_type: obj.type,
+
+          year: obj.year,
+
+          month: obj.month
         }
       },
 
@@ -137,27 +146,15 @@
         }
       },
 
-      /** 图表数据*/
+      /** 下单金额数量 */
       GET_OrderAmountData() {
-        API_HotGoods.getHotGoodsList(this.params).then(response => {
+        /** 下单金额Top30charts */
+        API_HotGoods.getHotGoodsPrice(this.params).then(response => {
           this.loading = false
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
-          }
-          /** 列表信息 */
-          this.tableData = response.data.sort((a, b) => { return b.order_amount - a.order_amount })
-          /** x轴信息 */
-          const xData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-
-          /** 数据信息 */
-          const seriesData = this.tableData.map((item) => { return item.order_amount })
-
           this.orderAmountChart.setOption({
             title: { text: '热卖商品Top30', x: 'center' },
             tooltip: { trigger: 'axis' },
-            legend: { orient: 'vertical', data: [{ name: '总金额', textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
+            legend: { orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
             color: ['#7CB5EC'],
             toolbox: {
               show: true,
@@ -170,7 +167,7 @@
             xAxis: {
               type: 'category',
               boundaryGap: false,
-              data: xData
+              data: response.xAxis
             },
             yAxis: {
               name: '下单金额（元）',
@@ -183,7 +180,7 @@
               {
                 name: '总金额',
                 type: 'line',
-                data: seriesData,
+                data: response.series.data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -198,33 +195,30 @@
               }
             ]
           })
-        }).catch(error => {
+        })
+        /** 下单金额Top30table */
+        API_HotGoods.getHotGoodsPricePage(this.params).then(response => {
           this.loading = false
-          console.log(error)
+          this.pageData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
+          /** 列表信息 */
+          this.tableData = response.data
         })
         this.countTableHeight()
       },
 
-      /** 图表数据*/
+      /** 下单商品数量 */
       GET_OrderGoodsNumData() {
-        API_HotGoods.getHotGoodsList(this.params).then(response => {
+        /** 下单商品数量排行前30图表数据 */
+        API_HotGoods.getHotGoodsNum(this.params).then(response => {
           this.loading = false
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
-          }
-          /** 列表信息 */
-          this.tableData = response.data.sort((a, b) => { return b.order_goods_num - a.order_goods_num })
-          /** x轴信息 */
-          const xData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-          /** 数据信息 */
-          const seriesData = this.tableData.map((item) => { return item.order_goods_num })
-
           this.orderGoodsNumChart.setOption({
             title: { text: '热卖商品Top30', x: 'center' },
             tooltip: { trigger: 'axis' },
-            legend: { orient: 'vertical', data: [{ name: '下单商品数', textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
+            legend: { orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
             color: ['#7CB5EC'],
             toolbox: {
               show: true,
@@ -237,7 +231,7 @@
             xAxis: {
               type: 'category',
               boundaryGap: false,
-              data: xData
+              data: response.xAxis
             },
             yAxis: {
               name: '下单商品数量（个）',
@@ -248,9 +242,9 @@
             },
             series: [
               {
-                name: '下单商品数',
+                name: '总金额',
                 type: 'line',
-                data: seriesData,
+                data: response.series.data,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -265,9 +259,17 @@
               }
             ]
           })
-        }).catch(error => {
+        })
+        /** 下单商品数量排行前30表格数据 */
+        API_HotGoods.getHotGoodsNumPage(this.params).then(response => {
           this.loading = false
-          console.log(error)
+          this.pageData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
+          /** 列表信息 */
+          this.tableData = response.data
         })
         this.countTableHeight()
       },

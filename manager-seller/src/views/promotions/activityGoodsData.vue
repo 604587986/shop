@@ -8,16 +8,16 @@
         <el-table-column prop="goods_name" label="商品名称"/>
         <el-table-column label="活动时间">
           <template slot-scope="scope">
-            <span>{{ scope.row.start_time | unixToDate}}</span>
+            <span>{{ scope.row.start_day | unixToDate}}</span>
           </template>
         </el-table-column>
         <el-table-column label="审核状态">
           <template slot-scope="scope">
-            <span v-if="scope.row.examine_status === 1">审核中</span>
-            <span v-if="scope.row.examine_status === 2">通过</span>
-            <span v-if="scope.row.examine_status === 0">驳回</span> <br>
+            <span v-if="scope.row.status === 1">审核中</span>
+            <span v-if="scope.row.status === 2">通过</span>
+            <span v-if="scope.row.status === 0">驳回</span> <br>
             <el-button
-              v-if="scope.row.examine_status === 0"
+              v-if="scope.row.status === 0"
               type="text"
               @click="lookReason(scope.row)">（查看原因）</el-button>
           </template>
@@ -109,7 +109,7 @@
 
       /** 查看原因 */
       lookReason(row) {
-        this.$alert(row.reject_reason, '驳回原因')
+        this.$alert(row.fail_reason, '驳回原因')
       }
     }
   }

@@ -46,12 +46,12 @@
       <template slot="table-columns">
         <el-table-column label="图片" min-width="160">
           <template slot-scope="scope">
-            <img :src="scope.row.goods_image" class="goods-image" />
+            <img :src="scope.row.thumbnail" class="goods-image" />
           </template>
         </el-table-column>
         <el-table-column prop="goods_name" label="名称" min-width="160"/>
         <el-table-column label="价格" >
-          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <el-table-column label="库存" >
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>

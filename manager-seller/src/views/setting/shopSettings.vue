@@ -30,7 +30,7 @@
       </el-form-item>
       <!--店铺简介-->
       <el-form-item label="店铺简介：" prop="shop_desc">
-        <UE v-model="shopDataForm.shop_desc" ref="UE" :defaultMsg="shopDataForm.shop_desc" style="width: 80%;"></UE>
+        <UE ref="UE" :defaultMsg="shopDataForm.shop_desc" style="width: 80%;"></UE>
       </el-form-item>
       <!--店铺logo-->
       <el-form-item label="店铺logo：" prop="shop_logo">

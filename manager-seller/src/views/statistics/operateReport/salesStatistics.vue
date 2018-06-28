@@ -257,6 +257,7 @@
             },
             series: [
               {
+                name: response.series[0].name,
                 type: 'line',
                 data: response.series[0].data,
                 markPoint: {
@@ -273,6 +274,7 @@
                 barGap: '0'
               },
               {
+                name: response.series[1].name,
                 type: 'line',
                 data: response.series[1].data,
                 markPoint: {

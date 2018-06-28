@@ -17,7 +17,7 @@
           </div>
           <template slot="table-columns">
             <!--活动名称-->
-            <el-table-column prop="activity_name" label="活动名称"/>
+            <el-table-column prop="title" label="活动名称"/>
             <!--开始时间-->
             <el-table-column label="开始时间">
               <template slot-scope="scope">
@@ -35,7 +35,7 @@
             <!--活动状态-->
             <el-table-column label="活动状态">
               <template slot-scope="scope">
-                <span>{{ scope.row.activity_status || 0 }}</span>
+                <span>{{ scope.row.disabled || 0 }}</span>
               </template>
             </el-table-column>
             <!--操作-->
@@ -68,9 +68,9 @@
             <div class="base-info-item">
               <h4>活动信息</h4>
               <div>
-                <el-form-item  label="活动名称：" prop="activity_name">
+                <el-form-item  label="活动名称：" prop="title">
                   <el-input
-                    v-model="activityForm.activity_name"
+                    v-model="activityForm.title"
                     style="width: 300px"
                     placeholder="不超过60个字符"
                     maxLength="60"
@@ -88,7 +88,7 @@
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="活动描述：">
-                  <UE v-model="activityForm.activity_desc" :defaultMsg="activityForm.activity_desc"></UE>
+                  <UE v-model="activityForm.description" :defaultMsg="activityForm.description"></UE>
                 </el-form-item>
               </div>
             </div>
@@ -106,10 +106,10 @@
               <h4>活动商品</h4>
               <div>
                 <div class="activity-goods">
-                  <el-form-item label="活动商品：" prop="is_all_joined">
-                    <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
+                  <el-form-item label="活动商品：" prop="range_type">
+                    <el-radio-group v-model="activityForm.range_type" @change="changeJoinGoods">
                       <el-radio :label="1">全部商品参与</el-radio>
-                      <el-radio :label="0">部分商品参与</el-radio>
+                      <el-radio :label="2">部分商品参与</el-radio>
                     </el-radio-group>
                     <!--商品表格-->
                     <div v-show="!goodsShow">
@@ -171,6 +171,7 @@
       type="seller"
       :show="showDialog"
       :api="goods_api"
+      :multipleApi="multipleApi"
       :categoryApi="categoryApi"
       :headers="headers"
       :defaultData="goodsIds"
@@ -210,7 +211,7 @@
 
         /** 请求头令牌 */
         headers: {
-          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
+          Authorization: this.$store.getters.token
         },
 
         /** 列表数据*/
@@ -229,22 +230,22 @@
         /** 新增满减表单信息*/
         activityForm: {
           /** 活动ID*/
-          activity_hp_id: '',
+          hp_id: '',
 
           /** 活动名称*/
-          activity_name: '',
+          title: '',
 
           /** 生效时间*/
           take_effect_time: [],
 
           /** 活动描述*/
-          activity_desc: '',
+          description: '',
 
           /** 优惠方式*/
           discount_mode: '',
 
           /** 是否全部商品参与*/
-          is_all_joined: '',
+          range_type: '',
 
           /** 活动商品*/
           activity_goods: []
@@ -252,7 +253,7 @@
 
         /** 表单校验规则*/
         rules: {
-          activity_name: [
+          title: [
             { required: true, message: '请输入活动名称', trigger: 'blur' },
             { min: 0, max: 60, message: '长度在60个字符之内', trigger: 'blur' }
           ],
@@ -260,7 +261,7 @@
             { type: 'array', required: true, message: '请选择生效时间', trigger: 'change' }
           ],
           /** 商品参与方式 */
-          is_all_joined: [
+          range_type: [
             { validator: checkRange, trigger: 'change' }
           ]
         },
@@ -280,6 +281,9 @@
         /** 商城分类api */
         categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
 
+        /** 回显数据使用 */
+        multipleApi: `${process.env.SELLER_API}/goods/@ids/details`,
+
         /** 显示/隐藏商品选择器 */
         showDialog: false
       }
@@ -297,7 +301,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          goods_status: data
+          keywords: data
         }
         this.GET_SecondHalfActivityList()
       },
@@ -309,11 +313,11 @@
           this.GET_SecondHalfActivityList()
         } else if (this.activeName === 'add') {
           this.activityForm = {
-            activity_hp_id: '',
-            activity_name: '',
+            hp_id: '',
+            title: '',
             take_effect_time: [],
-            activity_desc: '',
-            discount_threshold: '',
+            description: '',
+            full_money: '',
             discount_mode: '',
             activity_goods: []
           }
@@ -382,7 +386,7 @@
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
-        this.GET_SingleCutActivityDetails(row.activity_hp_id)
+        this.GET_SingleCutActivityDetails(row.hp_id)
       },
 
       /** 查询一个第二件半价活动信息 */
@@ -393,7 +397,7 @@
               ...response,
               take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
             }
-            this.goodsShow = this.activityForm.is_all_joined === 1
+            this.goodsShow = this.activityForm.range_type === 1
           })
         }
       },
@@ -408,7 +412,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteSeconedHalfActivity(row.activity_hp_id, {}).then(response => {
+        API_activity.deleteSeconedHalfActivity(row.hp_id, {}).then(response => {
           this.$message.success('删除成功！')
           this.GET_SecondHalfActivityList()
         })
@@ -418,9 +422,9 @@
       handleAddSeconedHalf() {
         this.activeName = 'add'
         this.activityForm = {
-          activity_name: '',
+          title: '',
           take_effect_time: [],
-          activity_desc: '',
+          description: '',
           discount_mode: '',
           activity_goods: []
         }
@@ -432,8 +436,8 @@
           if (valid) {
             const _params = this.generateFormData(this.activityForm)
             delete _params.take_effect_time
-            if (this.activityForm.activity_hp_id) {
-              API_activity.saveSeconedHalfActivity(this.activityForm.activity_hp_id, _params).then(() => {
+            if (this.activityForm.hp_id) {
+              API_activity.saveSeconedHalfActivity(this.activityForm.hp_id, _params).then(() => {
                 this.$message.success('保存设置成功！')
                 this.activeName = 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
@@ -463,7 +467,7 @@
         }
         const _params = {
           /** 活动名称/标题 */
-          title: data.activity_name,
+          title: data.title,
 
           /** 活动开始时间 */
           start_time: data.take_effect_time[0] / 1000,
@@ -472,10 +476,10 @@
           end_time: data.take_effect_time[1] / 1000,
 
           /** 活动描述 */
-          description: data.activity_desc,
+          description: data.description,
 
           /** 商品参与方式 */
-          range_type: data.is_all_joined
+          range_type: data.range_type
         }
         if (_goodslist.length > 0) {
           /** 参与商品列表 */

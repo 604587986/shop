@@ -60,10 +60,10 @@
               <span>{{ activeCategoryName1 }}</span>
               <span v-show="activeCategoryName2"> > {{ activeCategoryName2 }}</span>
               <span v-show="activeCategoryName3"> > {{ activeCategoryName3 }}</span>
-              <span v-if="!activeCategoryName1">{{ baseInfoForm.name }}</span>
+              <span v-if="!activeCategoryName1">{{ baseInfoForm.category_name }}</span>
             </el-form-item>
             <el-form-item label="商品分组：" >
-              <!--商品分类 获取分类列表 传入默认值-->
+              <!--商品分组 获取分类列表 传入默认值-->
               <en-category-picker
                 @changed="changeGoodsCateGory"
                 :clearable='true'
@@ -81,7 +81,7 @@
                 <el-option
                   v-for="item in brandList"
                   :key="item.brand_id"
-                  :label="item.brand_name"
+                  :label="item.name"
                   :value="item.brand_id">
                 </el-option>
               </el-select>
@@ -486,7 +486,7 @@
           category_id: 0,
 
           /** 商城分类 名称 */
-          name: '',
+          category_name: '',
 
           /** 商品名称 */
           goods_name: '',
@@ -897,7 +897,7 @@
                   return { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name }
                 })
                 let { cost, quantity, sn, weight } = key
-                const price = key.goods_price
+                const price = key.price
                 return { cost, price, quantity, sn, weight, spec_list }
               }
             })
@@ -986,7 +986,7 @@
                   return { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name }
                 })
                 let { cost, quantity, sn, weight } = key
-                const price = key.goods_price
+                const price = key.price
                 return { cost, price, quantity, sn, weight, spec_list }
               }
             })
