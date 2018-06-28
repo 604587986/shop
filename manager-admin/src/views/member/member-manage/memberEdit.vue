@@ -201,7 +201,6 @@
             params.birthday /= 1000
             API_Member.editMember(params.member_id, params).then(response => {
               this.$message.success('修改成功！')
-              console.log(response)
             })
           } else {
             this.$message.error('表单填写有误，请检查！')
