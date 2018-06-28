@@ -681,10 +681,6 @@
           this.GET_NextLevelCategory()
           if (this.activestep-- < 0) this.activestep = 0
           this.loading = false
-          // this.$confirm('返回上一步会丢失本页数据?', '提示').then(() => {
-          //   this.GET_NextLevelCategory()
-          //   if (this.activestep-- < 0) this.activestep = 0
-          // }).catch(() => {})
         } else {
           this.activestep--
           this.loading = false
@@ -1002,10 +998,15 @@
         const goods_id = this.activeGoodsId || 1
         API_goods.getGoodsDraftParams(goods_id).then((response) => {
           this.loading = false
-          this.goodsParams = response
           if (!response || response.length <= 0) {
             return
           }
+          this.goodsParams = response
+          this.collapseVal = this.goodsParams.map(key => {
+            if (key.group_id) {
+              return key.group_id
+            }
+          })
           this.baseInfoForm.goods_params_list = []
           this.goodsParams.forEach(key => {
             if (key && key.params) {
@@ -1362,10 +1363,12 @@
 
     /*!*积分提示*!*/
     p.exchange-tip {
-      margin:0;
-      padding: 10px;
-      padding-left: 15%;
+      width: 40%;
+      margin:0 0 10px 38px;
+      padding: 5px;
+      padding-left: 5%;
       text-align: left;
+      font-size: 13px;
       color: #8a6d3b;
       background: #fcf8e3;
       border: 1px solid #faebcc;
