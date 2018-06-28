@@ -273,7 +273,7 @@
         ref="baseInfoFormIntro"
         label-width="120px"
         class="demo-ruleForm">
-        <el-form-item label="商品描述：">
+        <el-form-item label="商品描述：" class="goods-intro">
           <UE ref="ue" :defaultMsg="baseInfoForm.intro"></UE>
         </el-form-item>
       </el-form>
@@ -1262,7 +1262,7 @@
     margin: 0 auto;
     text-align: center;
     border: 1px solid #ddd;
-    background: none repeat scroll 0 0 #fff;
+    background: none repeat  0 0 #fff;
 
     /*商品品类*/
     .goods-category {
@@ -1274,7 +1274,7 @@
         padding: 8px 4px 8px 8px;
         list-style: none;
         width: 300px;
-        background: none repeat scroll 0 0 #fff;
+        background: none repeat  0 0 #fff;
         border: 1px solid #e6e6e6;
         display: inline-block;
         letter-spacing: normal;
@@ -1303,7 +1303,7 @@
       color: #3a87ad;
     }
 
-    /*当前选择的商品品类文字*/
+    /*!*当前选择的商品品类文字*!*/
     .current-goods-category {
       text-align: left;
       padding: 10px;
@@ -1329,6 +1329,9 @@
   }
 
   /*平铺*/
+  div.base-info-item>div {
+    margin-left: 5%
+  }
   div.base-info-item {
     h4 {
       margin-bottom: 10px;
@@ -1341,8 +1344,8 @@
       line-height: 40px;
       text-align: left;
     }
+
     .el-form-item {
-      margin-left: 5%;
       width: 22%;
       min-width: 300px;
     }
@@ -1357,7 +1360,7 @@
       font-size: 13px;
     }
 
-    /*积分提示*/
+    /*!*积分提示*!*/
     p.exchange-tip {
       margin:0;
       padding: 10px;
@@ -1417,8 +1420,8 @@
   }
 
   /*商品描述*/
-  #editor {
-    min-height: 500px;
+  .goods-intro {
+    line-height: 40;
   }
 
   /** 底部步骤 */
@@ -1433,7 +1436,7 @@
   }
 
   /*图片上传组件第一张图设置封面*/
-  /deep/ .goods-images {
+  .goods-images {
     /deep/ li.el-upload-list__item:first-child {
       position: relative;
     }
