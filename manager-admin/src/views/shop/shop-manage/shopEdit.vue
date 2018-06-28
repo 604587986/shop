@@ -94,18 +94,6 @@
             </el-upload>
           </el-form-item>
         </el-tab-pane>
-        <el-tab-pane label="一般纳税人证明" name="taxes">
-          <el-form-item label="一般纳税人证明" prop="taxes_img">
-            <el-upload
-              class="avatar-uploader"
-              :action="MixinRegionApi"
-              :show-file-list="false"
-              :on-success="(res) => { shopForm.taxes_img = res.url }">
-              <img v-if="shopForm.taxes_img" :src="shopForm.taxes_img" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </el-form-item>
-        </el-tab-pane>
         <el-tab-pane label="开户行银行许可证" name="bank">
           <el-form-item label="银行开户名" prop="bank_account_name">
             <el-input v-model="shopForm.bank_account_name" :maxlength="50"></el-input>
@@ -137,6 +125,17 @@
           </el-form-item>
           <el-form-item label="纳税人识别号" prop="taxes_distinguish_num">
             <el-input v-model="shopForm.taxes_distinguish_num" :maxlength="50"></el-input>
+          </el-form-item>
+          <br>
+          <el-form-item label="一般纳税人证明" prop="taxes_img">
+            <el-upload
+              class="avatar-uploader"
+              :action="MixinRegionApi"
+              :show-file-list="false"
+              :on-success="(res) => { shopForm.taxes_img = res.url }">
+              <img v-if="shopForm.taxes_img" :src="shopForm.taxes_img" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
           </el-form-item>
           <br>
           <el-form-item label="税务登记证" prop="taxes_certificate_img">
