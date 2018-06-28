@@ -1,4 +1,3 @@
-import { getToken, setToken, removeToken } from '@/utils/auth'
 const shop = {
   state: {
     shopInfo: JSON.parse(localStorage.getItem('shopInfo'))

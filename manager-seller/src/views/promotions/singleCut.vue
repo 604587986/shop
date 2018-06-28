@@ -191,7 +191,7 @@
     },
     data() {
       const checkRange = (rule, value, callback) => {
-        if (!value && value !== 0) {
+        if (!value) {
           return callback(new Error('请选择商品参与方式'))
         } else {
           callback()
