@@ -3,6 +3,7 @@
  */
 
 import request from '@/utils/request'
+import md5 from 'js-md5'
 
 /**
  * 获取会员列表
@@ -22,6 +23,8 @@ export function getMemberList(params) {
  * @param params
  */
 export function addMember(params) {
+  params = JSON.parse(JSON.stringify(params))
+  params.password = md5(params.password)
   return request({
     url: 'members',
     method: 'post',
