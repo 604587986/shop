@@ -140,7 +140,7 @@
         <div class="score-pic">
           <dl class="score-pic-content">
             <dt>
-              <em :class="socre(shopInfo.shop_desccredit)">{{ shopInfo.shop_description_credit | socre }}</em>
+              <em :class="socre(shopInfo.shop_description_credit)">{{ shopInfo.shop_description_credit | socre }}</em>
             </dt>
             <dd>非常不满</dd>
             <dd>不满意</dd>
@@ -155,7 +155,7 @@
         <div class="score-pic">
           <dl class="score-pic-content">
             <dt>
-              <em :class="socre(shopInfo.shop_servicecredit)">{{ shopInfo.shop_service_credit | socre }}</em>
+              <em :class="socre(shopInfo.shop_service_credit)">{{ shopInfo.shop_service_credit | socre }}</em>
             </dt>
             <dd>非常不满</dd>
             <dd>不满意</dd>
@@ -170,7 +170,7 @@
         <div class="score-pic">
           <dl class="score-pic-content">
             <dt>
-              <em :class="socre(shopInfo.shop_deliverycredit)">{{ shopInfo.shop_delivery_credit | socre  }}</em>
+              <em :class="socre(shopInfo.shop_delivery_credit)">{{ shopInfo.shop_delivery_credit | socre  }}</em>
             </dt>
             <dd>非常不满</dd>
             <dd>不满意</dd>
