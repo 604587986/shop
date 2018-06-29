@@ -1,6 +1,6 @@
 <template>
   <div class="bg-shop-summary">
-    <el-select v-model="hotType" placeholder="请选择" @change="changeHotType">
+    <el-select v-model="type" placeholder="请选择" @change="changeHotType">
       <el-option
         v-for="item in orderOptions"
         :key="item.value"
@@ -13,7 +13,7 @@
     <br>
     <div class="charts-info">
       <div id="regionalAnalysisMap" :style="{height: tableHeight + 'px'}"></div>
-      <div id="regionalAnalysisChart" :style="{height: tableHeight + 'px'}"></div>
+      <div id="regionalAnalysisChart" :style="{height: tableHeight + 'px' }"></div>
     </div>
   </div>
 </template>
@@ -30,26 +30,28 @@
         /** 列表参数 */
         params: {
           /** 当前选择的日期类型 */
-          date_type: '',
+          cycle_type: 'MONTH',
 
           /** 年份 */
-          year: '',
+          year: '2018',
 
           /** 月份*/
-          month: ''
+          month: '6',
+
+          /** 数据类型 */
+          type: 'ORDER_MEMBER_NUM'
         },
+
+        type: 'ORDER_MEMBER_NUM',
 
         /** 选择的数据项*/
         orderOptions: [
-          { label: '下单会员数', value: 0 },
-          { label: '下单金额', value: 1 },
-          { label: '下单量', value: 2 }
+          { label: '下单会员数', value: 'ORDER_MEMBER_NUM' },
+          { label: '下单金额', value: 'ORDER_PRICE' },
+          { label: '下单量', value: 'ORDER_NUM' }
         ],
 
-        /** 热卖商品*/
-        hotType: 0,
-
-        tableHeight: document.body.clientHeight / 3 * 2
+        tableHeight: document.body.clientHeight * 0.82
       }
     },
     created() {
@@ -65,7 +67,7 @@
     methods: {
       /** 窗口缩放时计算table高度 */
       countTableHeight() {
-        this.tableHeight = document.body.clientHeight / 3 * 2
+        this.tableHeight = document.body.clientHeight * 0.82
         /** 图表刷新 */
         setTimeout(this.regionalAnalysisMap.resize)
         setTimeout(this.regionalAnalysisChart.resize)
@@ -74,8 +76,10 @@
       /** 改变日期的回调*/
       changeYearMonth(obj) {
         this.params = {
-          date_type: obj.type,
+          cycle_type: obj.type,
+
           year: obj.year,
+
           month: obj.month
         }
       },
@@ -84,8 +88,9 @@
       changeHotType(target) {
         this.params = {
           ...this.params,
-          hotType: target
+          type: target
         }
+        this.type = target
       },
 
       /** 搜索触发*/
@@ -98,13 +103,19 @@
         API_regionalAnalysis.getRegionalAnalysisList(this.params).then(response => {
           this.loading = false
           /** x轴信息  此处应当为中国34个行政区划的名称*/
-          const xData = response.data.map((item) => { return item.name })
+          const xData = response.map((item) => { return item.name })
 
           /** 数据信息 图=》对象数组 表=》number数组 */
-          const seriesAreaData = response.data.map((item) => { return item.value })
+          const seriesAreaData = response.map((item) => { return item.value })
 
           /** tooltip提示信息 */
-          const seriesName = this.orderOptions[this.hotType].label
+          let seriesName = ''
+          this.orderOptions.forEach(key => {
+            if (key.value === this.type) {
+              seriesName = key.label
+            }
+          })
+          /** 地图 */
           this.regionalAnalysisMap.setOption({
             title: { text: '区域分析统计', x: 'center' },
             tooltip: {
@@ -148,10 +159,11 @@
                     show: true
                   }
                 },
-                data: response.data
+                data: response
               }
             ]
           })
+          /** 折线图 */
           this.regionalAnalysisChart.setOption({
             title: { text: '地区排行', x: 'center' },
             tooltip: {
@@ -173,23 +185,25 @@
               }
             },
             xAxis: {
-              name: '地区',
-              type: 'category',
-              boundaryGap: false,
-              data: xData
+              name: '下单会员数',
+              type: 'value'
             },
             yAxis: {
-              name: '下单会员数（人）',
-              type: 'value',
-              axisLabel: {
-                formatter: '{value} 人'
-              }
+              name: '省级行政区划',
+              type: 'category',
+              axisTick: { show: false },
+              data: xData
             },
             series: [
               {
                 name: seriesName,
-                type: 'line',
-                data: seriesAreaData,
+                type: 'bar',
+                data: response,
+                label: {
+                  normal: {
+                    show: true
+                  }
+                },
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },

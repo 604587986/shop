@@ -4,12 +4,9 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <en-category-picker @changed="categoryChanged" :clearable="true"/>
-        </div>
+        <div class="toolbar-btns"></div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
         </div>
@@ -130,18 +127,6 @@
         this.params = {
           ...this.params,
           keyword: data
-        }
-        this.GET_WarningGoodsList()
-      },
-
-      /**  分类选择组件值发生改变 */
-      categoryChanged(data) {
-        delete this.params.shop_cat_path
-        if (data !== '') {
-          this.params = {
-            ...this.params,
-            shop_cat_path: '0|' + data.join('|') + '|'
-          }
         }
         this.GET_WarningGoodsList()
       },

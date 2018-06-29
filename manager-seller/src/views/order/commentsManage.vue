@@ -15,16 +15,16 @@
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="会员名称">
-                  <el-input v-model="advancedForm.goods_name"></el-input>
+                  <el-input v-model="advancedForm.member_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品名称">
-                  <el-input v-model="advancedForm.goods_name"></el-input>
+                  <el-input v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="评论内容">
-                  <el-input v-model="advancedForm.goods_sn"></el-input>
+                  <el-input v-model="advancedForm.content" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="评价">
-                  <el-select v-model="commentStatus" placeholder="请选择">
+                  <el-select v-model="advancedForm.grade" placeholder="请选择" clearable>
                     <el-option label="全部" :value="0"/>
                     <el-option label="好评" :value="1"/>
                     <el-option label="中评" :value="2"/>
@@ -32,7 +32,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="回复状态">
-                  <el-select v-model="replyStatus" placeholder="请选择">
+                  <el-select v-model="advancedForm.reply_status" placeholder="请选择" clearable>
                     <el-option label="全部" :value="0"/>
                     <el-option label="已回复" :value="1"/>
                     <el-option label="未回复" :value="2"/>
@@ -58,23 +58,23 @@
         <tr style="width: 100%;height: 10px;"></tr>
         <tr class="bg-order">
           <!--商品名称-->
-          <td colspan="4"><a href="" class="shop-name">{{ item.shop_name }}</a></td>
+          <td colspan="4"><a href="" class="shop-name">{{ item.goods_name }}</a></td>
         </tr>
         <tr>
           <!--评论-->
           <td>
             <div class="comment-content">
               <!--评论内容-->
-              <p v-if="item.comment_content" class="comment-info">
-                <i class="comment-content-name">评论内容 :</i> {{ item.comment_content }}
+              <p v-if="item.content" class="comment-info">
+                <i class="comment-content-name">评论内容 :</i> {{ item.content }}
               </p>
               <!--评论图片信息-->
-              <p v-if="item.comment_images && item.comment_images.length > 0">
-                <img v-for="imgsrc in item.comment_images" :src="imgsrc" class="goods-image"/>
+              <p v-if="item.have_image === 1">
+                <img v-for="imgsrc in item.images" :src="imgsrc" class="goods-image"/>
               </p>
               <!--回复评论-->
-              <p v-if="item.seller_reply " class="reply-comment">
-                <i class="seller-reply">回复评论 :</i> {{ item.seller_reply }}
+              <p v-if="item.reply.content" class="reply-comment">
+                <i class="seller-reply">回复评论 :</i> {{ item.reply.content }}
               </p>
             </div>
           </td>
@@ -85,15 +85,14 @@
           <!--操作-->
           <td>
             <el-button
-              size="mini"
               type="primary"
-              v-if="item.seller_replied==0"
+              v-if="item.reply_status == 0"
               @click="handleReplyComment(item)">回复
             </el-button>
           </td>
         </tr>
         </tbody>
-        <div v-if="tableData.length === 0 " class="empty-block">
+        <div v-if="tableData.length === 0" class="empty-block">
           暂无数据
         </div>
       </table>
@@ -120,8 +119,8 @@
         <el-form-item label="评论内容" :label-width="formLabelWidth">
           <span>{{commentForm.comment_content}}</span>
         </el-form-item>
-        <el-form-item label="评论图片" :label-width="formLabelWidth">
-          <img v-for="imgsrc in commentForm.comment_imgs" :src="imgsrc" alt=""
+        <el-form-item label="评论图片" :label-width="formLabelWidth" v-if="commentForm.have_image === 1">
+          <img v-for="imgsrc in commentForm.comment_imgs" :src="imgsrc"
                style="margin-right:3px;width:50px;height:50px;">
         </el-form-item>
         <el-form-item label="回复内容" :label-width="formLabelWidth">
@@ -164,35 +163,38 @@
 
         /** 高级搜索数据 */
         advancedForm: {
+          /** 商品名称 */
           goods_name: '',
-          goods_sn: '',
-          shop_name: '',
-          category_id: ''
+
+          /** 会员名称 */
+          member_name: '',
+
+          /** 评论内容 */
+          content: '',
+
+          /** 评价 */
+          grade: '',
+
+          /** 回复状态 */
+          reply_status: ''
         },
-
-        /** 商品库存显示*/
-        goodsStockshow: false,
-
-        /** 库存商品数量*/
-        goodsStocknums: 1,
-
-        /** 商品库存列表数据*/
-        goodsStockData: null,
-
-        /** 评论状态*/
-        commentStatus: 0,
-
-        /** 回复状态 */
-        replyStatus: 0,
 
         /** 是否显示回复（审核）框*/
         replyCommentShow: false,
 
+        /** 表单项的marginLeft */
         formLabelWidth: '120px',
+
         /** 弹框 表单*/
         commentForm: {
+          /** 评论id */
+          comment_id: '',
+
           /** 是否通过 */
           isPass: 1,
+
+          /** 是否有图 */
+          have_image: '',
 
           /** 评论内容 */
           comment_content: '',
@@ -234,7 +236,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          keyword: data
+          keywords: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_CommmentsList()
@@ -255,9 +257,9 @@
         API_comment.getCommentList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
         })
@@ -267,16 +269,18 @@
       handleReplyComment(item) {
         this.replyCommentShow = true
         this.commentForm = {
+          comment_id: item.comment_id,
           isPass: 1,
-          comment_content: item.comment_content,
-          comment_imgs: item.comment_images,
+          have_image: item.have_image,
+          comment_content: item.content,
+          comment_imgs: item.images,
           reply_content: ''
         }
       },
 
       /** 保存评论回复*/
       saveCommentReply() {
-        API_comment.replyComment(this.commentForm).then(response => {
+        API_comment.replyComment(this.commentForm.comment_id, { reply: this.commentForm.reply_content }).then(() => {
           this.replyCommentShow = false
           this.$message.success('保存成功')
         })

@@ -73,8 +73,7 @@
                     v-model="activityForm.title"
                     style="width: 300px"
                     placeholder="不超过60个字符"
-                    maxLength="60"
-                  ></el-input>
+                    maxLength="60"></el-input>
                 </el-form-item>
                 <el-form-item label="生效时间：" prop="take_effect_time">
                   <el-date-picker
@@ -84,12 +83,11 @@
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="pickoptions"
-                  >
+                    :picker-options="pickoptions">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="活动描述：">
-                  <UE v-model="activityForm.description" :defaultMsg="activityForm.description"></UE>
+                  <UE ref="UE" :defaultMsg="activityForm.description"></UE>
                 </el-form-item>
               </div>
             </div>
@@ -193,7 +191,7 @@
     },
     data() {
       const checkRange = (rule, value, callback) => {
-        if (!value && value !== 0) {
+        if (!value) {
           return callback(new Error('请选择商品参与方式'))
         } else {
           callback()
@@ -410,11 +408,13 @@
       GET_SingleCutActivityDetails(id) {
         if (id) {
           API_activity.getSingleCutActivityDetails(id, {}).then(response => {
-            this.activityForm = {
-              ...response,
-              take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
-            }
-            this.goodsShow = this.activityForm.range_type === 1
+            this.$nextTick(() => {
+              this.activityForm = {
+                ...response,
+                take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
+              }
+              this.goodsShow = this.activityForm.range_type === 1
+            })
           })
         }
       },
@@ -506,15 +506,14 @@
           /** 活动结束时间 */
           end_time: data.take_effect_time[1] / 1000,
 
-          /** 活动描述 */
-          description: data.description,
-
           /** 单品立减金额 */
           single_reduction_value: parseFloat(data.single_reduction_value),
 
           /** 商品参与方式 */
           range_type: data.range_type
         }
+        /** 活动描述 */
+        _params.description = this.$refs.UE.getUEContent()
         if (_goodslist.length > 0) {
           /** 参与商品列表 */
           _params.goods_list = _goodslist
