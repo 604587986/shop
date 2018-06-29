@@ -87,16 +87,26 @@ export function getMemberPricePage(params) {
 /**
  * 新增会员统计
  * @param params
- * @returns {Promise<any>}
  */
-export function addMemberStatistics(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'b2b2c/admin/memberStatistics/get-add-member-num.do',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function addedMember(params) {
+  return request({
+    url: 'statistics/member/increase/member',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 新增会员统计表格
+ * @param params
+ */
+export function addedMemberPage(params) {
+  return request({
+    url: 'statistics/member/increase/member/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

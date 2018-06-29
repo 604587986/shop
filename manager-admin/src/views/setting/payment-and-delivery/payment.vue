@@ -121,7 +121,6 @@
       /** 配置支付方式 */
       handleEditPayment(index, row) {
         API_Payment.getPaymentDetail(row.plugin_id).then(response => {
-          console.log(response)
           response.enable_client && response.enable_client.map(item => {
             if (item.is_open === null) item.is_open = 0
             return item

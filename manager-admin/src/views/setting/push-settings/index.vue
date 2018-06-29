@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'shopLevelManage',
+    name: 'pushSettings',
     computed: {
       cachedViews() {
         return this.$store.state.tagsView.cachedViews
@@ -14,7 +14,3 @@
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

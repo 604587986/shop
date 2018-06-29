@@ -1,5 +1,6 @@
 <template>
   <en-table-layout
+    :toolbar="false"
     :tableData="tableData.data"
     :loading="loading"
   >

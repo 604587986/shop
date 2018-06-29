@@ -109,6 +109,7 @@ export function getGroupBuyGoods(params) {
   return request({
     url: `promotion/group-buy-goods`,
     method: 'get',
+    loading: false,
     params
   })
 }

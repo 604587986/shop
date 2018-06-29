@@ -40,8 +40,6 @@ export default {
     shopThemeManage: '店铺模板管理',
     themeList: '模板列表',
     themeListWap: 'WAP模板列表',
-    shopLevelManage: '店铺等级管理',
-    levelApplyList: '等级申请',
     shopEdit: '编辑店铺',
 
     promotions: '促销管理',
@@ -71,9 +69,6 @@ export default {
     pcSiteMenu: 'PC导航菜单',
     mobileSiteMenu: '移动端导航菜单',
     hotKeyword: '热门关键字',
-    helpCenter: '帮助中心',
-    mallAnnouncement: '商城公告',
-    contactMall: '联系商城',
 
     statistics: '统计分析',
     memberAnalysis: '会员分析',
@@ -96,7 +91,6 @@ export default {
     regionalAnalysis: '区域分析',
     customerPriceDistribution: '客单价分布图',
     refundStatistics: '退款统计',
-    logManage: '日志管理',
 
     setting: '设置管理',
     shopSettings: '网店设置',
@@ -117,6 +111,10 @@ export default {
     memberMessage: '会员消息',
     otherMessage: '其它消息',
 
+    pushSettings: '推送设置',
+    goodsPush: '商品推送',
+    appPush: 'APP推送',
+
     paymentAndDelivery: '支付和配送',
     payment: '支付方式',
     express: '物流公司',
@@ -131,8 +129,6 @@ export default {
     toolManage: '工具',
     URLMapping: 'URL映射',
     menuManage: '菜单管理',
-    dataOutput: '数据导出',
-    clearExampleData: '清除示例数据',
     articleManage: '文章管理',
     articleCategory: '文章分类',
     articleList: '文章列表'

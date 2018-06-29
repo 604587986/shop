@@ -35,6 +35,9 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+      if (isClient) {
+        config.entry['polyfill'] = ['babel-polyfill']
+      }
       config.resolve.alias['vue$'] = 'vue/dist/vue.esm.js'
     },
     extractCSS: {

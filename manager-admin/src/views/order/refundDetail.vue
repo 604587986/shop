@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading" class="refund-detail-container">
-    <el-card>
+    <el-card v-if="refund">
       <div slot="header" class="clearfix">
         <span>{{ refund.refuse_type_text }}单</span>
       </div>
@@ -23,11 +23,12 @@
         <el-col :span="4">退款账户</el-col><el-col :span="20">{{ refund.return_account }}</el-col>
       </el-row>
       <el-row :gutter="0">
-        <el-col :span="4">审核</el-col>
+        <el-col :span="4">审核操作</el-col>
         <el-col :span="20">
           <el-input placeholder="请输入内容" size="small" v-model="refundPrice" style="width: 150px;">
             <template slot="prepend">￥</template>
           </el-input>
+          <el-button v-if="refund.after_sale_operate_allowable.allow_admin_refund" @click="handleRefundMoney" class="refund-btn">退款</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -36,7 +37,7 @@
 
 <script>
   import * as API_Refund from '@/api/refund'
-  // Andste_TODO 2018/6/16: 缺少审核操作和商品详情
+
   export default {
     name: 'refundDetail',
     data() {
@@ -57,6 +58,24 @@
       this.GET_RefundDetail()
     },
     methods: {
+      /** 退款操作 */
+      handleRefundMoney() {
+        this.$prompt('请输入退款备注！', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /.+/,
+          inputErrorMessage: '请填写退款备注！'
+        }).then(({ value }) => {
+          API_Refund.refundMoney(this.sn, {
+            refund_price: this.refundPrice,
+            remark: value
+          }).then(response => {
+            this.$message.success('操作成功！')
+            this.GET_RefundDetail()
+          })
+        }).catch(() => {})
+      },
+      /** 获取售后订单详情 */
       GET_RefundDetail() {
         this.loading = true
         API_Refund.getRefundDetail(this.sn).then(response => {
@@ -99,6 +118,11 @@
     padding: 0;
     border: 1px solid #ebeef5;
     border-bottom: 0;
+  }
+  .refund-btn {
+    position: relative;
+    top: -1px;
+    margin-left: 5px;
   }
 </style>
 
