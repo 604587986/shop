@@ -175,15 +175,23 @@
       </el-table>
     </div>
     <!--调整价格 / 修改收货人信息-->
-    <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="30%">
+    <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="25%">
       <div align="center">
         <!--调整订单总价-->
-        <el-input v-show="triggerStatus === 1" v-model="adjustedPrice"style="width: 75%;"></el-input>
+        <el-form
+          v-show="triggerStatus === 1"
+          label-position="right"
+          label-width="90px">
+          <el-form-item label="订单总价：">
+            <el-input placeholder="请输入订单总价" v-model="adjustedPrice">
+              <template slot="prepend">¥</template>
+            </el-input>
+          </el-form-item>
+        </el-form>
         <!--修改收货人信息-->
         <el-form
           :model="ConsigneeForm"
           v-show="triggerStatus === 2"
-          style="width: 75%;"
           label-position="right"
           label-width="90px">
           <el-form-item label="收货人：" prop="ship_name">

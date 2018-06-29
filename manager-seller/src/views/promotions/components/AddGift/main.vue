@@ -10,12 +10,16 @@
           label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="赠品价格：" prop="gift_price">
-        <el-input v-model="giftModelForm.gift_price"></el-input>
+        <el-input placeholder="请输入赠品价格" v-model="giftModelForm.gift_price">
+          <template slot="prepend">¥</template>
+        </el-input>
       </el-form-item>
       <el-form-item label="赠品库存：" prop="enable_store">
-        <el-input v-model="giftModelForm.enable_store"></el-input>
+        <el-input placeholder="请输入赠品库存" v-model="giftModelForm.enable_store">
+          <template slot="prepend">¥</template>
+        </el-input>
       </el-form-item>
-      <el-form-item label="赠品图片：">
+      <el-form-item label="赠品图片：" prop="enable_img">
         <el-upload
           class="upload-demo"
           :action="BASE_IMG_URL"
@@ -128,13 +132,13 @@
           gift_img: '',
 
           /** 赠品价格 */
-          gift_price: 1,
+          gift_price: '',
 
           /** 实际库存 */
-          actual_store: 0,
+          actual_store: '',
 
           /** 可用库存 */
-          enable_store: 0,
+          enable_store: '',
 
           /** 创建时间 */
           create_time: ''
@@ -149,9 +153,11 @@
             { required: true, message: '请输入赠品名称', trigger: 'blur' }
           ],
           gift_price: [
+            { required: true, message: '请输入赠品价格', trigger: 'blur' },
             { validator: checkGiftPrice, trigger: 'blur' }
           ],
           enable_store: [
+            { required: true, message: '请输入赠品库存', trigger: 'blur' },
             { validator: checkEnableStore, trigger: 'blur' }
           ]
         }

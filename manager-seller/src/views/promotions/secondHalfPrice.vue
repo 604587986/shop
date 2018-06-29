@@ -35,7 +35,7 @@
             <!--活动状态-->
             <el-table-column label="活动状态">
               <template slot-scope="scope">
-                <span>{{ scope.row.disabled || 0 }}</span>
+                <span>{{ scope.row.disabled }}</span>
               </template>
             </el-table-column>
             <!--操作-->
@@ -115,7 +115,7 @@
                     <div v-show="!goodsShow">
                       <en-table-layout
                         toolbar
-                        :tableData="activityForm.activity_goods"
+                        :tableData="activityForm.goods_list"
                         :loading="loading"
                         :selectionChange="selectionChange">
                         <div slot="toolbar" class="inner-toolbar">
@@ -248,7 +248,7 @@
           range_type: '',
 
           /** 活动商品*/
-          activity_goods: []
+          goods_list: []
         },
 
         /** 表单校验规则*/
@@ -319,7 +319,7 @@
             description: '',
             full_money: '',
             discount_mode: '',
-            activity_goods: []
+            goods_list: []
           }
         }
       },
@@ -332,26 +332,26 @@
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
         if (val) {
-          this.activityForm.activity_goods = val
-          this.goodsIds = this.activityForm.activity_goods.map(key => {
-            return key.goods_id
-          })
+          this.activityForm.goods_list = val
         }
       },
 
       /** 显示商品选择器*/
       showGoodsSelector() {
         this.showDialog = true
+        this.goodsIds = this.activityForm.goods_list.map(key => {
+          return key.goods_id
+        })
       },
 
       /** 取消参加*/
       handleCancleJoin(index, row) {
-        this.activityForm.activity_goods.forEach((elem, _index) => {
+        this.activityForm.goods_list.forEach((elem, _index) => {
           if (index === _index) {
-            this.activityForm.activity_goods.splice(_index, 1)
+            this.activityForm.goods_list.splice(_index, 1)
           }
         })
-        this.goodsIds = this.activityForm.activity_goods.map(key => {
+        this.goodsIds = this.activityForm.goods_list.map(key => {
           return key.goods_id
         })
       },
@@ -362,14 +362,14 @@
       /** 批量取消 */
       cancelall() {
         this.selectionids.forEach(key => {
-          this.activityForm.activity_goods.forEach((elem, index) => {
+          this.activityForm.goods_list.forEach((elem, index) => {
             if (elem.goods_id === key) {
-              this.activityForm.activity_goods.splice(index, 1)
+              this.activityForm.goods_list.splice(index, 1)
             }
           })
           this.$message.success('批量取消成功！')
         })
-        this.goodsIds = this.activityForm.activity_goods.map(key => {
+        this.goodsIds = this.activityForm.goods_list.map(key => {
           return key.goods_id
         })
       },
@@ -398,6 +398,15 @@
               take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
             }
             this.goodsShow = this.activityForm.range_type === 1
+            this.activityForm.goods_list = response.goods_list.map(key => {
+              return {
+                goods_id: key.goods_id,
+                goods_name: key.name,
+                thumbnail: key.thumbnail,
+                price: key.price,
+                quantity: key.quantity
+              }
+            })
           })
         }
       },
@@ -426,7 +435,7 @@
           take_effect_time: [],
           description: '',
           discount_mode: '',
-          activity_goods: []
+          goods_list: []
         }
       },
 
@@ -456,8 +465,8 @@
       /** 构造表单数据 */
       generateFormData(data) {
         let _goodslist = []
-        if (data.activity_goods && Array.isArray(data.activity_goods)) {
-          _goodslist = data.activity_goods.map(key => {
+        if (data.goods_list && Array.isArray(data.goods_list)) {
+          _goodslist = data.goods_list.map(key => {
             return {
               goods_id: key.goods_id,
               name: key.goods_name,

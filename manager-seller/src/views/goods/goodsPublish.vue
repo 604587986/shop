@@ -99,16 +99,24 @@
               <el-input v-model="baseInfoForm.sn"></el-input>
             </el-form-item>
             <el-form-item label="市场价格：" prop="mktprice">
-              <el-input v-model="baseInfoForm.mktprice"></el-input>
+              <el-input placeholder="请输入市场价格" v-model="baseInfoForm.mktprice">
+                <template slot="prepend">¥</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="商品价格：" prop="price">
-              <el-input v-model="baseInfoForm.price"></el-input>
+              <el-input placeholder="请输入商品价格" v-model="baseInfoForm.price">
+                <template slot="prepend">¥</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="成本价格：" prop="cost" >
-              <el-input v-model="baseInfoForm.cost"></el-input>
+              <el-input placeholder="请输入成本价格" v-model="baseInfoForm.cost">
+                <template slot="prepend">¥</template>
+              </el-input>
             </el-form-item>
-            <el-form-item label="商品重量(kg)：" prop="weight">
-              <el-input v-model="baseInfoForm.weight"></el-input>
+            <el-form-item label="商品重量：" prop="weight">
+              <el-input placeholder="请输入商品重量" v-model="baseInfoForm.weight">
+                <template slot="prepend">kg</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload

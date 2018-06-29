@@ -55,21 +55,33 @@
           :rules="rules" ref="mouldForm"
           label-width="160px"
           class="demo-ruleForm"
-          style="width: 30%;margin-left: 3%;">
+          style="width: 26%;margin-left: 3%;">
           <el-form-item label="模板名称:" prop="name">
-            <el-input type="text" v-model="mouldForm.name" auto-complete="off"></el-input>
+            <el-input v-model="mouldForm.name"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.type === 1 ? '首重（kg）:': '首件（个）:'" prop="first_company">
-            <el-input type="text" v-model.number="mouldForm.first_company" auto-complete="off"></el-input>
+          <el-form-item :label="mouldForm.type === 1 ? '首重:': '首件:'" prop="first_company">
+            <el-input placeholder="请输入首重" v-model="mouldForm.first_company">
+              <template slot="prepend">
+                {{ mouldForm.type === 1 ? 'kg': '个' }}
+              </template>
+            </el-input>
           </el-form-item>
-          <el-form-item label="运费（元）:" prop="first_price">
-            <el-input v-model="mouldForm.first_price"></el-input>
+          <el-form-item label="运费:" prop="first_price">
+            <el-input placeholder="请输入运费" v-model="mouldForm.first_price">
+              <template slot="prepend">¥</template>
+            </el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.type === 1 ? '续重（kg）:':'续件（个）:'" prop="continued_company">
-            <el-input v-model.number="mouldForm.continued_company"></el-input>
+          <el-form-item :label="mouldForm.type === 1 ? '续重:':'续件:'" prop="continued_company">
+            <el-input placeholder="请输入续重" v-model="mouldForm.continued_company">
+              <template slot="prepend">
+                {{ mouldForm.type === 1 ? 'kg': '个' }}
+              </template>
+            </el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.type === 1? '续重运费（元）:':'续件运费（元）:'" prop="continued_price">
-            <el-input v-model="mouldForm.continued_price"></el-input>
+          <el-form-item :label="mouldForm.type === 1? '续重运费:':'续件运费:'" prop="continued_price">
+            <el-input placeholder="请输入续重运费" v-model="mouldForm.continued_price">
+              <template slot="prepend">¥</template>
+            </el-input>
           </el-form-item>
           <el-form-item label="模板类型:" prop="type">
             <el-select v-model.number="mouldForm.type" placeholder="请选择">

@@ -175,7 +175,7 @@
                     <div v-show="!goodsShow">
                       <en-table-layout
                         toolbar
-                        :tableData="activityForm.activity_goods"
+                        :tableData="activityForm.goods_list"
                         :loading="loading"
                         :selectionChange="selectionChange">
                         <div slot="toolbar" class="inner-toolbar">
@@ -420,7 +420,7 @@
           range_type: '',
 
           /** 活动商品*/
-          activity_goods: []
+          goods_list: []
         },
 
         /** 是否减现金  */
@@ -617,7 +617,7 @@
               range_type: '',
 
               /** 活动商品*/
-              activity_goods: []
+              goods_list: []
             }
             /** 处理优惠数据 */
             this.is_discount = false
@@ -637,26 +637,26 @@
       /** 保存商品选择器选择的商品 */
       refreshFunc(val) {
         if (val) {
-          this.activityForm.activity_goods = val
-          this.goodsIds = this.activityForm.activity_goods.map(key => {
-            return key.goods_id
-          })
+          this.activityForm.goods_list = val
         }
       },
 
       /** 显示商品选择器*/
       showGoodsSelector() {
         this.showDialog = true
+        this.goodsIds = this.activityForm.goods_list.map(key => {
+          return key.goods_id
+        })
       },
 
       /** 取消参加*/
       handleCancleJoin(index, row) {
-        this.activityForm.activity_goods.forEach((elem, _index) => {
+        this.activityForm.goods_list.forEach((elem, _index) => {
           if (index === _index) {
-            this.activityForm.activity_goods.splice(_index, 1)
+            this.activityForm.goods_list.splice(_index, 1)
           }
         })
-        this.goodsIds = this.activityForm.activity_goods.map(key => {
+        this.goodsIds = this.activityForm.goods_list.map(key => {
           return key.goods_id
         })
       },
@@ -669,14 +669,14 @@
       /** 批量取消 */
       cancelall() {
         this.selectionids.forEach(key => {
-          this.activityForm.activity_goods.forEach((elem, index) => {
+          this.activityForm.goods_list.forEach((elem, index) => {
             if (elem.goods_id === key) {
-              this.activityForm.activity_goods.splice(index, 1)
+              this.activityForm.goods_list.splice(index, 1)
             }
           })
           this.$message.success('批量取消成功！')
         })
-        this.goodsIds = this.activityForm.activity_goods.map(key => {
+        this.goodsIds = this.activityForm.goods_list.map(key => {
           return key.goods_id
         })
       },
@@ -704,7 +704,17 @@
             fd_id: id,
             take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
           }
+          /** 处理商品信息 */
           this.goodsShow = this.activityForm.range_type === 1
+          this.activityForm.goods_list = response.goods_list.map(key => {
+            return {
+              goods_id: key.goods_id,
+              goods_name: key.name,
+              thumbnail: key.thumbnail,
+              price: key.price,
+              quantity: key.quantity
+            }
+          })
           /** 处理优惠数据 */
           this.is_discount = this.activityForm.is_discount === 1
           this.is_full_minus = this.activityForm.is_full_minus === 1
@@ -788,7 +798,7 @@
           range_type: '',
 
           /** 活动商品*/
-          activity_goods: []
+          goods_list: []
         }
         this.is_discount = false
         this.is_full_minus = false
@@ -903,8 +913,8 @@
             this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000
             this.activityForm.description = this.$refs['UE'].getUEContent()
             let _goodslist = []
-            if (this.activityForm.activity_goods && Array.isArray(this.activityForm.activity_goods)) {
-              _goodslist = this.activityForm.activity_goods.map(key => {
+            if (this.activityForm.goods_list && Array.isArray(this.activityForm.goods_list)) {
+              _goodslist = this.activityForm.goods_list.map(key => {
                 return {
                   goods_id: key.goods_id,
                   name: key.goods_name,

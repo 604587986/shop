@@ -39,11 +39,11 @@
         <el-table-column  label="活动信息" >
           <template slot-scope="scope">
             <!--活动名称-->
-            <!--<div>{{ scope.row.gb_name }}</div>-->
+            <div>{{ scope.row.title }}</div>
             <!--活动开始时间----活动结束时间-->
-            <!--<div>{{ | unixToDate('yyyy-MM-dd') }}-->
-              <!-- - {{ | unixToDate('yyyy-MM-dd') }}-->
-            <!--</div>-->
+            <div>{{ scope.row.start_time| unixToDate('yyyy-MM-dd') }}
+               - {{ scope.row.end_time| unixToDate('yyyy-MM-dd') }}
+            </div>
           </template>
         </el-table-column>
         <!--已团购数量-->

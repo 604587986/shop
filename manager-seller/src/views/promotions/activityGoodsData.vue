@@ -13,11 +13,10 @@
         </el-table-column>
         <el-table-column label="审核状态">
           <template slot-scope="scope">
-            <span v-if="scope.row.status === 1">审核中</span>
-            <span v-if="scope.row.status === 2">通过</span>
-            <span v-if="scope.row.status === 0">驳回</span> <br>
+            <span>{{ scope.row.status_text }}</span>
+            <br>
             <el-button
-              v-if="scope.row.status === 0"
+              v-if="scope.row.status === 'FAIL'"
               type="text"
               @click="lookReason(scope.row)">（查看原因）</el-button>
           </template>

@@ -8,12 +8,7 @@
           { required: true, message: '数量不能为空', trigger: 'blur' },
           { type: 'number', message: '库存预警数必须为数字值', trigger: 'blur' }
         ]">
-        <el-input
-          type="number"
-          v-model.number="stockWarningForm.goods_warning_count"
-          style="width: 200px;"
-          auto-complete="off">
-        </el-input>
+        <el-input-number v-model="stockWarningForm.goods_warning_count" controls-position="right" :min="0" :max="99999"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSaveStockWarning('stockWarningForm')">保存修改</el-button>

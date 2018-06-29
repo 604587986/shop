@@ -140,7 +140,7 @@
         <div class="score-pic">
           <dl class="score-pic-content">
             <dt>
-              <em :class="socre(shopInfo.shop_description_credit)">{{ shopInfo.shop_description_credit | socre }}</em>
+              <em :style="socreDescription">{{ shopInfo.shop_description_credit | socre }}</em>
             </dt>
             <dd>非常不满</dd>
             <dd>不满意</dd>
@@ -155,7 +155,7 @@
         <div class="score-pic">
           <dl class="score-pic-content">
             <dt>
-              <em :class="socre(shopInfo.shop_service_credit)">{{ shopInfo.shop_service_credit | socre }}</em>
+              <em :style="socreService">{{ shopInfo.shop_service_credit | socre }}</em>
             </dt>
             <dd>非常不满</dd>
             <dd>不满意</dd>
@@ -170,7 +170,7 @@
         <div class="score-pic">
           <dl class="score-pic-content">
             <dt>
-              <em :class="socre(shopInfo.shop_delivery_credit)">{{ shopInfo.shop_delivery_credit | socre  }}</em>
+              <em :style="socreDelivery">{{ shopInfo.shop_delivery_credit | socre  }}</em>
             </dt>
             <dd>非常不满</dd>
             <dd>不满意</dd>
@@ -263,6 +263,26 @@
 
         /** 表格最大高度 */
         tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
+      }
+    },
+    computed: {
+      socreDescription() {
+        return {
+          'left': Number.isInteger(this.shopInfo.shop_description_credit)
+            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2)) * 100 + '%' : 0
+        }
+      },
+      socreService() {
+        return {
+          'left': Number.isInteger(this.shopInfo.shop_description_credit)
+            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2)) * 100 + '%' : 0
+        }
+      },
+      socreDelivery() {
+        return {
+          'left': Number.isInteger(this.shopInfo.shop_description_credit)
+            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2)) * 100 + '%' : 0
+        }
       }
     },
     filters: {
@@ -517,9 +537,10 @@
         margin: 0 auto;
         padding: 0;
         width: 410px;
-        position: relative;
+        height: 20px;
         dt {
           height: 20px;
+          position: relative;
         }
         em {
           position: absolute;
