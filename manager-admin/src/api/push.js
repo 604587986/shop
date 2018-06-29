@@ -32,9 +32,10 @@ export function editPushSettings(params) {
  * @param title
  * @param goods_ids
  */
-export function goodsPush(title, goods_ids) {
+export function pushGoods(title, goods_ids) {
   return request({
     url: `system/push/${goods_ids}`,
-    method: 'get'
+    method: 'get',
+    params: { title }
   })
 }
