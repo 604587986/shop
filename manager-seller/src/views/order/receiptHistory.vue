@@ -3,8 +3,7 @@
     <en-table-layout
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <template slot="table-columns">
         <!--日期-->
         <el-table-column label="日期">
@@ -13,13 +12,13 @@
         <!--会员名称-->
         <el-table-column prop="member_name" label="会员名称"/>
         <!--订单编号-->
-        <el-table-column prop="order_sn" label="订单编号"/>
+        <el-table-column prop="sn" label="订单编号"/>
         <!--发票金额-->
         <el-table-column label="发票金额">
-          <template slot-scope="scope">{{ scope.row.receipt_amount | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.need_pay_money | unitPrice('￥') }}</template>
         </el-table-column>
         <!--发票类别-->
-        <el-table-column prop="receipt_title" label="发票类别"/>
+        <el-table-column prop="receipt_type" label="发票类别"/>
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -69,10 +68,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 当前查看的发票数据 */
         viewRectiptData: [],
@@ -100,11 +99,11 @@
       /** 查看发票 */
       handleOperateReceipt(index, row) {
         const keys = [
-          { label: '订单编号', key: 'order_sn' },
+          { label: '订单编号', key: 'sn' },
           { label: '发票抬头', key: 'receipt_title' },
-          { label: '发票类型', key: 'receipt_type_code' },
+          { label: '发票类型', key: 'receipt_type' },
           { label: '发票内容', key: 'receipt_content' },
-          { label: '发票税号', key: 'ITIN' }
+          { label: '发票税号', key: 'duty_invoice' }
         ]
         this.viewRectiptData = keys.map(item => {
           item.value = row[item.key]
@@ -120,13 +119,10 @@
           this.loading = false
           this.tableData = response.data
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
         })
       }
     }
