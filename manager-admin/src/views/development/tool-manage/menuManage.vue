@@ -2,7 +2,7 @@
   <div class="menus-container">
     <el-tree
       :data="meuns"
-      node-key="name"
+      node-key="identifier"
       :expand-on-click-node="true"
     >
       <span class="custom-tree-node" slot-scope="{node, data}">
@@ -42,13 +42,13 @@
     >
       <el-form :model="menuForm" :rules="menuRules" ref="menuForm" label-width="100px">
         <el-form-item label="菜单标题" prop="title">
-          <el-input v-model="menuForm.title"></el-input>
+          <el-input v-model="menuForm.title" :maxlength="6"></el-input>
         </el-form-item>
-        <el-form-item label="菜单标识" prop="name">
-          <el-input v-model="menuForm.name"></el-input>
+        <el-form-item label="菜单标识" prop="identifier">
+          <el-input v-model="menuForm.identifier" :maxlength="50"></el-input>
         </el-form-item>
-        <el-form-item label="菜单权限" prop="permission">
-          <el-input v-model="menuForm.permission"></el-input>
+        <el-form-item label="菜单权限" prop="auth_regular">
+          <el-input v-model="menuForm.auth_regular" :maxlength="50"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -72,16 +72,16 @@
         /** 添加、编辑菜单 表单规则 */
         menuRules: {
           title: [
-            { required: true, message: '请输入菜单标题', trigger: 'blur' },
+            this.MixinRequired('请输入菜单标题！'),
             { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
           ],
-          name: [
-            { required: true, message: '请输入菜单标识', trigger: 'blur' },
-            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          identifier: [
+            this.MixinRequired('请输入菜单标识！'),
+            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
           ],
-          permission: [
-            { required: true, message: '请输入菜单权限', trigger: 'blur' },
-            { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
+          auth_regular: [
+            this.MixinRequired('请输入菜单权限！'),
+            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
           ]
         },
         /** 添加、编辑菜单 dialog */
@@ -96,7 +96,7 @@
     methods: {
       /** 添加菜单 */
       handleAddMenu(menu) {
-        this.menuForm = {}
+        this.menuForm = { parent_id: menu.id }
         this.currentMenu = menu
         this.dialogMenuVisible = true
       },
@@ -106,7 +106,7 @@
           API_Menus.deleteMenu(menu.id).then(() => {
             const parent = node.parent
             const children = parent.data.children || parent.data
-            const index = children.findIndex(d => d.name === menu.name)
+            const index = children.findIndex(d => d.id === menu.id)
             children.splice(index, 1)
           })
         }).catch(() => {})
@@ -114,7 +114,6 @@
       /** 编辑菜单 */
       handleEditMenu(menu) {
         this.menuForm = JSON.parse(JSON.stringify(menu))
-        this.menuForm.id = 123
         this.currentMenu = menu
         this.dialogMenuVisible = true
       },
@@ -135,7 +134,7 @@
               API_Menus.addMenu(this.menuForm).then(response => {
                 const data = this.currentMenu
                 if (!data.children) this.$set(data, 'children', [])
-                data.children.push(this.menuForm)
+                data.children.push(response)
                 this.dialogMenuVisible = false
                 this.$message.success('保存成功！')
               })
@@ -147,8 +146,8 @@
         })
       },
       /** 获取菜单 */
-      GET_Memus() {
-        API_Menus.getMenusChildren().then(response => {
+      GET_Memus(parent_id) {
+        API_Menus.getMenusChildren(parent_id).then(response => {
           this.meuns = response
         })
       }
