@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Loading } from 'element-ui'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
-import MD5 from 'md5'
+import md5 from 'js-md5'
 import GetFullUrl from '@/utils/urls'
 import checkToken from '@/utils/checkToken'
 const qs = require('qs')
@@ -46,7 +46,7 @@ service.interceptors.request.use(config => {
     //   const { member_id } = JSON.parse(Storage.getItem('user') || "{}")
     //   const nonce = Foundation.randomString(6)
     //   const timestamp = parseInt(new Date().getTime() / 1000)
-    //   accessToken = MD5(member_id + nonce + timestamp + accessToken)
+    //   accessToken = md5(member_id + nonce + timestamp + accessToken)
     // }
     config.headers['Authorization'] = accessToken
   }
