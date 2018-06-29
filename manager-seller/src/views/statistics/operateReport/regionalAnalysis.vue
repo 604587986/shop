@@ -115,7 +115,6 @@
               seriesName = key.label
             }
           })
-          console.log(seriesName)
           /** 地图 */
           this.regionalAnalysisMap.setOption({
             title: { text: '区域分析统计', x: 'center' },
