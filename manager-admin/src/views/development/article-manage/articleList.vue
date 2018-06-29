@@ -55,7 +55,7 @@
           <el-input v-model="articleForm.category_id"></el-input>
         </el-form-item>
         <el-form-item label="文章排序" prop="sort">
-          <el-input-number v-model="articleForm.sort" controls-position="right" :min="1" :max="99999"></el-input-number>
+          <el-input-number v-model="articleForm.sort" controls-position="right" :min="0" :max="99999"></el-input-number>
         </el-form-item>
         <el-form-item label="文章外链" prop="outside_url">
           <el-input v-model="articleForm.outside_url"></el-input>
@@ -124,7 +124,7 @@
       },
       /** 添加文章 */
       handleAddArticle() {
-        this.articleForm = {}
+        this.articleForm = { sort: 0 }
         this.dialogVisible = true
       },
       /** 修改文章 */
