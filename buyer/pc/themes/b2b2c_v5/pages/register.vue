@@ -5,7 +5,7 @@
       <div class="index-register w">
         <div class="welcome">
           <a href="/">
-            <img src="~/assets/images/logo-javashop.png" alt="logo">
+            <img src="../assets/images/logo-javashop.png" alt="logo">
           </a>
           <span>欢迎注册</span>
         </div>
@@ -193,7 +193,7 @@
         this.$refs['registerForm'].validate(valide => {
           if (valide) {
             this.registerByMobile(this.registerForm).then(() => {
-              this.$router.push({ path: '/' })
+              this.$router.push({ path: '/member' })
             })
           } else {
             this.$message.error('表单填写有误，请检查！')

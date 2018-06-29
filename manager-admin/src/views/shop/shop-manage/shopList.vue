@@ -76,7 +76,7 @@
               v-if="scope.row.shop_disable === 'APPLY'"
               size="mini"
               type="primary"
-              @click="$router.push({ path: `/shop/shop-manage/edit/${scope.row.shop_id}` })">审核</el-button>
+              @click="$router.push({ path: `/shop/shop-manage/edit/${scope.row.shop_id}?audit=1` })">审核</el-button>
             <el-button
               v-if="scope.row.shop_disable === 'OPEN'"
               size="mini"

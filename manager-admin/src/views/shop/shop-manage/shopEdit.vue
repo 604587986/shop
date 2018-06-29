@@ -166,14 +166,15 @@
           <el-form-item label="经营类目" prop="goods_management_category" class="form-item-cat">
             <el-checkbox :indeterminate="isIndeterminateCat" v-model="checkAllCat" @change="handleCheckAllCatChange">全选</el-checkbox>
             <div style="margin: 15px 0;"></div>
-            <el-checkbox-group v-model="checkedCats" @change="handleCheckedCatsChange">
-              <el-checkbox v-for="cat in cats" :label="cat.id" :key="cat.id">{{ cat.label }}</el-checkbox>
+            <el-checkbox-group v-model="shopForm.goods_management_category" @change="handleCheckedCatsChange">
+              <el-checkbox v-for="cat in categorys" :label="cat.id" :key="cat.id">{{ cat.name }}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-tab-pane>
       </el-tabs>
       <div class="save-btn-box">
-        <el-button type="primary" @click="handleSaveEdit">保存修改</el-button>
+        <el-button type="primary" @click="handleSaveEdit">{{ isAudit ? '通过并保存' : '保存修改'}}</el-button>
+        <el-button v-if="isAudit" type="danger" @click="handleRefusePass">拒绝通过</el-button>
       </div>
     </el-form>
   </div>
@@ -181,25 +182,17 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
-  // Andste_TODO 2018/6/5: 经营类目暂未适配
-  const categroy = [
-    { label: '数码家电', id: 1 },
-    { label: '食品饮料', id: 2 },
-    { label: '进口食品', id: 3 },
-    { label: '美容化妆', id: 4 },
-    { label: '母婴玩具', id: 5 },
-    { label: '厨房用品', id: 6 },
-    { label: '钟表箱包', id: 7 },
-    { label: '营养保健', id: 8 },
-    { label: '服装鞋靴', id: 9 }
-  ]
+  import * as API_Category from '@/api/category'
+
   export default {
     name: 'shopEdit',
     data() {
       return {
         tableName: 'base',
         shop_id: this.$route.params.shop_id,
+        isAudit: !!this.$route.query.audit,
         loading: false,
+        backShopInfo: '',
         shopForm: {},
         shopRules: {
           company_name: [this.MixinRequired('公司名称不能为空！')],
@@ -237,37 +230,71 @@
           shop_commission: [this.MixinRequired('店铺佣金比例不能为空！')],
           goods_management_category: [this.MixinRequired('请选择店铺经营类目！')]
         },
-        isIndeterminateCat: true,
+        isIndeterminateCat: false,
         checkAllCat: false,
-        checkedCats: [1, 2],
-        cats: categroy,
+        categorys: [],
         defaultRegionLicense: null,
         defaultRegionBank: null,
         defaultRegionShop: null
       }
     },
     mounted() {
-      this.GET_ShopDetail()
+      Promise.all([
+        API_Shop.getShopDetail(this.shop_id),
+        API_Category.getCategoryChildren()
+      ]).then(responses => {
+        const shopInfo = responses[0]
+        const categorys = responses[1]
+        // 设置店铺信息备份
+        this.backShopInfo = shopInfo
+        // 设置店铺信息
+        this.shopForm = this.MixinClone(shopInfo)
+        const {
+          license_province_id, license_city_id, license_county_id, license_town_id,
+          bank_province_id, bank_city_id, bank_county_id, bank_town_id,
+          shop_province_id, shop_city_id, shop_county_id, shop_town_id
+        } = shopInfo
+        this.defaultRegionLicense = [license_province_id, license_city_id, license_county_id, license_town_id]
+        this.defaultRegionBank = [bank_province_id, bank_city_id, bank_county_id, bank_town_id]
+        this.defaultRegionShop = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
+        this.shopForm.goods_management_category = []
+
+        if (shopInfo.goods_management_category) {
+          const _categorys = shopInfo.goods_management_category.split(',')
+          this.shopForm.goods_management_category = _categorys
+          if (_categorys.length !== 0) {
+            if (_categorys.length < categorys.length) {
+              this.isIndeterminateCat = true
+            } else if (_categorys.length === categorys.length) {
+              this.checkAllCat = true
+            }
+          }
+        }
+        // 设置经营类目
+        this.categorys = categorys.map(item => ({
+          id: String(item.category_id),
+          name: item.name
+        }))
+      })
     },
     methods: {
       /** 经营类目全选 */
       handleCheckAllCatChange(val) {
-        this.checkedCats = val ? categroy.map(item => item.id) : []
+        this.shopForm.goods_management_category = val ? this.categorys.map(item => item.id) : []
         this.isIndeterminateCat = false
       },
 
       /** 经营类目选择 */
       handleCheckedCatsChange(value) {
         let checkedCount = value.length
-        this.checkAllCat = checkedCount === this.cats.length
-        this.isIndeterminateCat = checkedCount > 0 && checkedCount < this.cats.length
+        this.checkAllCat = checkedCount === this.categorys.length
+        this.isIndeterminateCat = checkedCount > 0 && checkedCount < this.categorys.length
       },
       /** 保存修改 */
       handleSaveEdit() {
         this.$refs['shopForm'].validate((valid, error) => {
           if (valid) {
-            const { shop_id } = this.shopForm
-            API_Shop.editAuthShop(shop_id, this.shopForm).then(response => {
+            API_Shop.editAuthShop(this.shop_id, this.shopForm).then(response => {
               this.$message.success('修改成功！')
             })
           } else {
@@ -293,21 +320,15 @@
           }
         })
       },
-      /** 获取店铺详情 */
-      GET_ShopDetail() {
-        this.loading = true
-        API_Shop.getShopDetail(this.shop_id).then(response => {
-          this.loading = false
-          this.shopForm = response
-          const {
-            license_province_id, license_city_id, license_county_id, license_town_id,
-            bank_province_id, bank_city_id, bank_county_id, bank_town_id,
-            shop_province_id, shop_city_id, shop_county_id, shop_town_id
-          } = response
-          this.defaultRegionLicense = [license_province_id, license_city_id, license_county_id, license_town_id]
-          this.defaultRegionBank = [bank_province_id, bank_city_id, bank_county_id, bank_town_id]
-          this.defaultRegionShop = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
-        })
+      /** 拒绝通过 */
+      handleRefusePass() {
+        this.$confirm('确定该店铺拒绝通过吗？', '提示', { type: 'warning' }).then(() => {
+          const params = this.MixinClone(this.backShopInfo)
+          params.pass = 0
+          API_Shop.editAuthShop(this.shop_id, params).then(response => {
+            this.$message.success('拒绝通过成功！')
+          })
+        }).catch(() => {})
       }
     }
   }
@@ -341,6 +362,10 @@
     height: 178px;
     line-height: 178px;
     text-align: center;
+  }
+
+  /deep/ .el-tabs__content {
+    overflow: inherit;
   }
 
   .save-btn-box {

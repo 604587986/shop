@@ -93,7 +93,7 @@
 
       /** 审核店铺 */
       handleAuditShop(index, row) {
-        this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}` })
+        this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}?audit=1` })
       },
 
       /** 获取店铺审核列表 */

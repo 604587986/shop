@@ -25,7 +25,7 @@
       config: {
         type: Object,
         default: () => ({
-          serverUrl: `${process.env.BASE_API}/ueditor`,
+          serverUrl: `${process.env.BASE_API}/ueditor/`,
           zIndex: 3000
         })
       }

@@ -1,5 +1,6 @@
 import * as types from './mutation-types'
 import * as API_Home from '@/api/home'
+import * as API_Goods from '@/api/goods'
 import uuidv1 from 'uuid/v1'
 import Cookie from 'cookie'
 import Storage from '@/utils/storage'
@@ -63,7 +64,7 @@ export const actions = {
   },
   /** 获取分类数据 */
   getCategoryData: ({ commit }) => {
-    API_Home.getCategory().then(response => {
+    API_Goods.getCategory().then(response => {
       commit(types.SET_CATEGORY_DATA, response)
     })
   }
