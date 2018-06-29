@@ -5,12 +5,16 @@
 
 import request, { Method } from '@/utils/request'
 import Storage from '@/utils/storage'
+import md5 from 'js-md5'
 
 /**
  * 普通登录
  * @param params
  */
 export function login(params) {
+  // Andste_TODO 2018/6/29: 待修复
+  // params = JSON.parse(JSON.stringify(params))
+  // params.password = md5(params.password)
   return request({
     url: 'passport/login',
     method: Method.GET,
@@ -92,6 +96,10 @@ export function checkMobileRepeat(mobile) {
  * @param params
  */
 export function registerByMobile(params) {
+  // Andste_TODO 2018/6/28: 后台应该校验是否为MD5格式，而并非密码格式
+  // Andste_TODO 2018/6/28: 校验用户名的正则有问题
+  // params = JSON.parse(JSON.stringify(params))
+  // params.password = md5(params.password)
   return request({
     url: 'passport/register/pc',
     method: Method.POST,
