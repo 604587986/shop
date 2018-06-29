@@ -6,7 +6,7 @@
           <en-face :url="user.face"/>
         </div>
         <div class="user-info">
-          <p>Andste</p>
+          <p>{{ user.uname }}</p>
           <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
         </div>
       </div>
