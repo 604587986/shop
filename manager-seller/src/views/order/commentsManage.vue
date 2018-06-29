@@ -1,138 +1,187 @@
 <template>
-  <div>
-    <en-table-layout
-      toolbar
-      pagination
-      :tableData="tableData">
-      <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
+  <el-tabs v-model="activeName" @tab-click="handleScoreClick">
+    <el-tab-pane label="评价列表" name="commentlist">
+      <en-table-layout
+        toolbar
+        pagination
+        :tableData="tableData">
+        <div slot="toolbar" class="inner-toolbar">
+          <div class="toolbar-btns">
+          </div>
+          <div class="toolbar-search">
+            <en-table-search
+              @search="searchEvent"
+              @advancedSearch="advancedSearchEvent"
+              advanced>
+              <template slot="advanced-content">
+                <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+                  <el-form-item label="会员名称">
+                    <el-input v-model="advancedForm.member_name" clearable></el-input>
+                  </el-form-item>
+                  <el-form-item label="商品名称">
+                    <el-input v-model="advancedForm.goods_name" clearable></el-input>
+                  </el-form-item>
+                  <el-form-item label="评论内容">
+                    <el-input v-model="advancedForm.content" clearable></el-input>
+                  </el-form-item>
+                  <el-form-item label="评价">
+                    <el-select v-model="advancedForm.grade" placeholder="请选择" clearable>
+                      <el-option label="全部" :value="0"/>
+                      <el-option label="好评" :value="1"/>
+                      <el-option label="中评" :value="2"/>
+                      <el-option label="差评" :value="3"/>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="回复状态">
+                    <el-select v-model="advancedForm.reply_status" placeholder="请选择" clearable>
+                      <el-option label="全部" :value="0"/>
+                      <el-option label="已回复" :value="1"/>
+                      <el-option label="未回复" :value="2"/>
+                    </el-select>
+                  </el-form-item>
+                </el-form>
+              </template>
+            </en-table-search>
+          </div>
         </div>
-        <div class="toolbar-search">
-          <en-table-search
-            @search="searchEvent"
-            @advancedSearch="advancedSearchEvent"
-            advanced>
-            <template slot="advanced-content">
-              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="会员名称">
-                  <el-input v-model="advancedForm.member_name" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="商品名称">
-                  <el-input v-model="advancedForm.goods_name" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="评论内容">
-                  <el-input v-model="advancedForm.content" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="评价">
-                  <el-select v-model="advancedForm.grade" placeholder="请选择" clearable>
-                    <el-option label="全部" :value="0"/>
-                    <el-option label="好评" :value="1"/>
-                    <el-option label="中评" :value="2"/>
-                    <el-option label="差评" :value="3"/>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="回复状态">
-                  <el-select v-model="advancedForm.reply_status" placeholder="请选择" clearable>
-                    <el-option label="全部" :value="0"/>
-                    <el-option label="已回复" :value="1"/>
-                    <el-option label="未回复" :value="2"/>
-                  </el-select>
-                </el-form-item>
-              </el-form>
-            </template>
-          </en-table-search>
+      </en-table-layout>
+      <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
+        <table class="my-table" v-loading="loading">
+          <thead>
+          <tr class="bg-order">
+            <th class="shoplist-header">评论</th>
+            <th style="width: 120px;">用户</th>
+            <th style="width: 240px;">时间</th>
+            <th style="width: 120px;">操作</th>
+          </tr>
+          </thead>
+          <tbody v-for="item in tableData">
+          <tr style="width: 100%;height: 10px;"></tr>
+          <tr class="bg-order">
+            <!--商品名称-->
+            <td colspan="4"><a href="" class="shop-name">{{ item.goods_name }}</a></td>
+          </tr>
+          <tr>
+            <!--评论-->
+            <td>
+              <div class="comment-content">
+                <!--评论内容-->
+                <p v-if="item.content" class="comment-info">
+                  <i class="comment-content-name">评论内容 :</i> {{ item.content }}
+                </p>
+                <!--评论图片信息-->
+                <p v-if="item.have_image === 1">
+                  <img v-for="imgsrc in item.images" :src="imgsrc" class="goods-image"/>
+                </p>
+                <!--回复评论-->
+                <p v-if="item.reply.content" class="reply-comment">
+                  <i class="seller-reply">回复评论 :</i> {{ item.reply.content }}
+                </p>
+              </div>
+            </td>
+            <!--用户-->
+            <td>{{ item.member_name }}</td>
+            <!--时间-->
+            <td>{{item.create_time | unixToDate }}</td>
+            <!--操作-->
+            <td>
+              <el-button
+                type="primary"
+                v-if="item.reply_status == 0"
+                @click="handleReplyComment(item)">回复
+              </el-button>
+            </td>
+          </tr>
+          </tbody>
+          <div v-if="tableData.length === 0" class="empty-block">
+            暂无数据
+          </div>
+        </table>
+      </div>
+      <el-pagination
+        slot="pagination"
+        v-if="pageData"
+        @size-change="handlePageSizeChange"
+        @current-change="handlePageCurrentChange"
+        :current-page="pageData.page_no"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="pageData.page_size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pageData.data_total">
+      </el-pagination>
+      <el-dialog title="回复评论" :visible.sync="replyCommentShow" width="30%">
+        <el-form :model="commentForm">
+          <el-form-item label="审核" :label-width="formLabelWidth">
+            <el-radio-group v-model="commentForm.isPass">
+              <el-radio :label="1">通过</el-radio>
+              <el-radio :label="0">拒绝</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="评论内容" :label-width="formLabelWidth">
+            <span>{{commentForm.comment_content}}</span>
+          </el-form-item>
+          <el-form-item label="评论图片" :label-width="formLabelWidth" v-if="commentForm.have_image === 1">
+            <img v-for="imgsrc in commentForm.comment_imgs" :src="imgsrc"
+                 style="margin-right:3px;width:50px;height:50px;">
+          </el-form-item>
+          <el-form-item label="回复内容" :label-width="formLabelWidth">
+            <el-input type="textarea" v-model="commentForm.reply_content" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="replyCommentShow = false">取 消</el-button>
+          <el-button type="primary" @click="saveCommentReply">确 定</el-button>
+        </div>
+      </el-dialog>
+    </el-tab-pane>
+    <el-tab-pane label="店铺评分" name="score" class="shop-score-container">
+      <div class="shop-score">
+        <div class="score-title">宝贝与描述相符</div>
+        <div class="score-pic">
+          <dl class="score-pic-content">
+            <dt>
+              <em :class="socre(shopInfo.shop_desccredit)">{{ shopInfo.shop_description_credit | socre }}</em>
+            </dt>
+            <dd>非常不满</dd>
+            <dd>不满意</dd>
+            <dd>一般</dd>
+            <dd>满意</dd>
+            <dd>非常满意</dd>
+          </dl>
         </div>
       </div>
-    </en-table-layout>
-    <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
-      <table class="my-table" v-loading="loading">
-        <thead>
-        <tr class="bg-order">
-          <th class="shoplist-header">评论</th>
-          <th style="width: 120px;">用户</th>
-          <th style="width: 240px;">时间</th>
-          <th style="width: 120px;">操作</th>
-        </tr>
-        </thead>
-        <tbody v-for="item in tableData">
-        <tr style="width: 100%;height: 10px;"></tr>
-        <tr class="bg-order">
-          <!--商品名称-->
-          <td colspan="4"><a href="" class="shop-name">{{ item.goods_name }}</a></td>
-        </tr>
-        <tr>
-          <!--评论-->
-          <td>
-            <div class="comment-content">
-              <!--评论内容-->
-              <p v-if="item.content" class="comment-info">
-                <i class="comment-content-name">评论内容 :</i> {{ item.content }}
-              </p>
-              <!--评论图片信息-->
-              <p v-if="item.have_image === 1">
-                <img v-for="imgsrc in item.images" :src="imgsrc" class="goods-image"/>
-              </p>
-              <!--回复评论-->
-              <p v-if="item.reply.content" class="reply-comment">
-                <i class="seller-reply">回复评论 :</i> {{ item.reply.content }}
-              </p>
-            </div>
-          </td>
-          <!--用户-->
-          <td>{{ item.member_name }}</td>
-          <!--时间-->
-          <td>{{item.create_time | unixToDate }}</td>
-          <!--操作-->
-          <td>
-            <el-button
-              type="primary"
-              v-if="item.reply_status == 0"
-              @click="handleReplyComment(item)">回复
-            </el-button>
-          </td>
-        </tr>
-        </tbody>
-        <div v-if="tableData.length === 0" class="empty-block">
-          暂无数据
+      <div class="shop-score">
+        <div class="score-title">卖家的服务态度</div>
+        <div class="score-pic">
+          <dl class="score-pic-content">
+            <dt>
+              <em :class="socre(shopInfo.shop_servicecredit)">{{ shopInfo.shop_service_credit | socre }}</em>
+            </dt>
+            <dd>非常不满</dd>
+            <dd>不满意</dd>
+            <dd>一般</dd>
+            <dd>满意</dd>
+            <dd>非常满意</dd>
+          </dl>
         </div>
-      </table>
-    </div>
-    <el-pagination
-      slot="pagination"
-      v-if="pageData"
-      @size-change="handlePageSizeChange"
-      @current-change="handlePageCurrentChange"
-      :current-page="pageData.page_no"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageData.page_size"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pageData.data_total">
-    </el-pagination>
-    <el-dialog title="回复评论" :visible.sync="replyCommentShow" width="30%">
-      <el-form :model="commentForm">
-        <el-form-item label="审核" :label-width="formLabelWidth">
-          <el-radio-group v-model="commentForm.isPass">
-            <el-radio :label="1">通过</el-radio>
-            <el-radio :label="0">拒绝</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="评论内容" :label-width="formLabelWidth">
-          <span>{{commentForm.comment_content}}</span>
-        </el-form-item>
-        <el-form-item label="评论图片" :label-width="formLabelWidth" v-if="commentForm.have_image === 1">
-          <img v-for="imgsrc in commentForm.comment_imgs" :src="imgsrc"
-               style="margin-right:3px;width:50px;height:50px;">
-        </el-form-item>
-        <el-form-item label="回复内容" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="commentForm.reply_content" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="replyCommentShow = false">取 消</el-button>
-        <el-button type="primary" @click="saveCommentReply">确 定</el-button>
       </div>
-    </el-dialog>
-  </div>
+      <div class="shop-score">
+        <div class="score-title">卖家的发货速度</div>
+        <div class="score-pic">
+          <dl class="score-pic-content">
+            <dt>
+              <em :class="socre(shopInfo.shop_deliverycredit)">{{ shopInfo.shop_delivery_credit | socre  }}</em>
+            </dt>
+            <dd>非常不满</dd>
+            <dd>不满意</dd>
+            <dd>一般</dd>
+            <dd>满意</dd>
+            <dd>非常满意</dd>
+          </dl>
+        </div>
+      </div>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
@@ -146,6 +195,12 @@
     },
     data() {
       return {
+        /** 当前面板 */
+        activeName: 'commentlist',
+
+        /** 店铺信息 */
+        shopInfo: this.$store.getters.shopInfo,
+
         /** 列表loading状态 */
         loading: false,
 
@@ -210,14 +265,39 @@
         tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
       }
     },
+    filters: {
+      socre(val) {
+        return val.toFixed(2)
+      }
+    },
     mounted() {
       this.GET_CommmentsList()
       window.onresize = this.countTableHeight
     },
     methods: {
+      socre(val) {
+        if (Number.isInteger(val)) {
+          return {
+            left: (val / 5).toFixed(2) + '%'
+          }
+        } else {
+          return {
+            left: 0
+          }
+        }
+      },
+
       /** 计算高度 */
       countTableHeight() {
         this.tableHeight = (document.body.clientHeight - 54 - 35 - 50)
+      },
+
+      /** 切换面板 */
+      handleScoreClick(tab) {
+        this.activeName = tab.name
+        if (this.activeName === 'commentlist') {
+          this.GET_CommmentsList()
+        }
       },
 
       /** 分页大小发生改变 */
@@ -411,6 +491,58 @@
     border-top: 1px solid #e5e5e5;
     padding: 5px 20px;
   }
+  /** 店铺评分 */
+  .shop-score-container {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  .shop-score {
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+    margin: 50px 0;
+    padding: 15px;
+    div.score-title {
 
+    }
+    /** 评分图标标识 */
+    div.score-pic {
+      .score-pic-content {
+        background: url(./images/rate_column.gif) no-repeat 28px -88px;
+        display: block;
+        margin: 0 auto;
+        padding: 0;
+        width: 410px;
+        position: relative;
+        dt {
+          height: 20px;
+        }
+        em {
+          position: absolute;
+          background: url(./images/rate_column.gif) no-repeat 0 0;
+          top: -26px;
+          color: #fff;
+          display: block;
+          font-weight: 600;
+          height: 30px;
+          line-height: 16px;
+          padding: 0 0 7px;
+          text-align: center;
+          width: 37px;
+          font-size: 14px;
+        }
+      }
+      dd {
+        width: 75px;
+        display: inline-block;
+        margin-left: 0px;
+        font-size: 14px;
+      }
+    }
+  }
 </style>
 

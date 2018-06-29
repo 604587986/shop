@@ -26,7 +26,7 @@
               placeholder="请选择商品类型"
               @change="changeGoodsType"
               clearable>
-              <el-option key="NORMAL" label="全部商品" value="NORMAL"/>
+              <el-option key="NORMAL" label="正常商品" value="NORMAL"/>
               <el-option key="POINT" label="积分商品" value="POINT"/>
             </el-select>
           </div>
