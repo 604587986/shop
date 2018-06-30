@@ -33,7 +33,7 @@
   import 'swiper/dist/css/swiper.css'
 
   export default {
-    name: 'mobileFocusManage',
+    name: 'pcFocusManage',
     components: { swiper, swiperSlide },
     data() {
       return {
