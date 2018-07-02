@@ -65,7 +65,7 @@
           </el-form-item>
           <template v-if="client.is_open" v-for="(config, index) in client.config_list">
             <el-form-item :label="config.text" prop="desc">
-              <el-input type="textarea" v-model="config.value" autosize></el-input>
+              <el-input type="textarea" v-model="config.value" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
           </template>
         </template>
