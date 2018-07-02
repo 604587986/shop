@@ -240,10 +240,6 @@
         this.loading = true
         API_Shop.getShopList(this.params).then(response => {
           this.loading = false
-          response.data.map(item => {
-            item.shop_createtime *= 1000
-            return item
-          })
           this.tableData = response
         }).catch(() => { this.loading = false })
       }
