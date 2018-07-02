@@ -1,7 +1,8 @@
-const domain = require('../ui-domain')
+import { api_pro } from '~/ui-domain'
+
 module.exports = {
 	NODE_ENV: '"production"',
 	ENV_CONFIG: '"prod"',
-  BASE_API: `"${domain.pro.base}"`,
-  ADMIN_API: `"${domain.pro.admin}"`,
+  BASE_API: `"${api_pro.base}"`,
+  ADMIN_API: `"${api_pro.manager}"`,
 }
