@@ -4,12 +4,9 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <en-category-picker @changed="categoryChanged" :clearable="true"/>
-        </div>
+        <div class="toolbar-btns"></div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
         </div>
@@ -18,12 +15,12 @@
       <template slot="table-columns">
         <el-table-column label="图片" width="120">
           <template slot-scope="scope">
-            <img :src="scope.row.goods_image" class="goods-image"/>
+            <img :src="scope.row.thumbnail" class="goods-image"/>
           </template>
         </el-table-column>
         <el-table-column prop="goods_name" label="名称"/>
         <el-table-column label="价格" width="120">
-          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <el-table-column label="库存" width="180">
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
@@ -134,18 +131,6 @@
         this.GET_WarningGoodsList()
       },
 
-      /**  分类选择组件值发生改变 */
-      categoryChanged(data) {
-        delete this.params.shop_cat_path
-        if (data !== '') {
-          this.params = {
-            ...this.params,
-            shop_cat_path: '0|' + data.join('|') + '|'
-          }
-        }
-        this.GET_WarningGoodsList()
-      },
-
       GET_WarningGoodsList() {
         this.loading = true
         API_goods.getWarningGoodsList(this.params).then(response => {
@@ -156,14 +141,14 @@
             data_total: response.recordsFiltered
           }
           this.tableData = response.data
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 查看库存信息 */
       handleWithdraw(row) {
         this.goodsWarningStockshow = true
         API_goods.getWarningGoodsStockList(row.goods_id).then((response) => {
-          this.goodsWarningStockDate = response.data
+          this.goodsWarningStockDate = response
         })
       }
     }

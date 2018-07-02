@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="logisticsShow" :closeOnClickModal="closeOnClickModal" width="50%">
+  <el-dialog :visible.sync="logisticsModelShow" :closeOnClickModal="closeOnClickModal" @close="closed" width="50%">
     <en-table-layout
     :tableData="logisticsTableData"
     :loading="loading">
@@ -54,7 +54,15 @@
         /** 物流公司列表数据 */
         logisticsTableData: [],
 
-        closeOnClickModal: false
+        closeOnClickModal: false,
+
+        /** 物流公司弹框显示 */
+        logisticsModelShow: false
+      }
+    },
+    watch: {
+      logisticsShow() {
+        this.logisticsModelShow = this.logisticsShow
       }
     },
     mounted() {
@@ -68,6 +76,11 @@
           this.loading = false
           this.logisticsTableData = response
         })
+      },
+
+      /** 监听弹框关闭 */
+      closed() {
+        this.$emit('logstictisClosed', false)
       },
 
       /** 物流公司信息开启 /关闭 */

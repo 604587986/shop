@@ -174,8 +174,6 @@ export default {
       this.shop_info = response
       /** 使用vuex进行存储店铺信息 */
       this.$store.dispatch('SetShop', response)
-      /** 使用localstorage存储店铺信息 */
-      localStorage.setItem('shop', JSON.stringify(response))
     })
   },
   methods: {

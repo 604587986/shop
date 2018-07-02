@@ -28,12 +28,12 @@
       <el-table-column type="selection"/>
       <el-table-column label="图片" >
         <template slot-scope="scope">
-          <img :src="scope.row.goods_image" class="goods-image"/>
+          <img :src="scope.row.thumbnail" class="goods-image"/>
         </template>
       </el-table-column>
       <el-table-column prop="goods_name" label="名称" />
       <el-table-column label="价格">
-        <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
+        <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
       </el-table-column>
       <el-table-column label="库存">
         <template slot-scope="scope">{{ scope.row.quantity }}件</template>
@@ -166,14 +166,11 @@
         API_goods.getRecycleGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
-        }).catch(error => {
-          this.loading = false
-          this.$message.error(error)
         })
       },
 

@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as ActivityModel from '@/models/ActivityModel'
 
 /**
  * 获取满减活动列表
@@ -18,9 +17,7 @@ export function getFullCutActivityList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ActivityModel.Activity().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -100,8 +97,7 @@ export function getFullCutActivityDetails(ids, params) {
       loading: false,
       data: params
     }).then(response => {
-      const _response = new ActivityModel.Activity().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -119,9 +115,7 @@ export function getSingleCutActivityList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ActivityModel.Activity().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -198,8 +192,7 @@ export function getSingleCutActivityDetails(ids, params) {
       loading: false,
       data: params
     }).then(response => {
-      const _response = new ActivityModel.Activity().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -217,9 +210,7 @@ export function getSecondHalfActivityList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new ActivityModel.Activity().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -296,8 +287,7 @@ export function getSeconedHalfActivityDetails(ids, params) {
       loading: false,
       data: params
     }).then(response => {
-      const _response = new ActivityModel.Activity().map(response)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

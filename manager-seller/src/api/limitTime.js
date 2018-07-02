@@ -3,7 +3,6 @@
  */
 
 import request from '@/utils/request'
-import * as LimitTimeModel from '@/models/LimitTimeModel'
 
 /**
  * 获取限时活动列表
@@ -18,9 +17,7 @@ export function getLimitTimeActivityList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new LimitTimeModel.LimitTimeActivitys().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }
@@ -38,9 +35,7 @@ export function getLimitTimeGoodsList(params) {
       loading: false,
       params
     }).then(response => {
-      const _response = response
-      _response.data = new LimitTimeModel.LimitTimeActivitys().map(response.data)
-      resolve(_response)
+      resolve(response)
     })
   })
 }

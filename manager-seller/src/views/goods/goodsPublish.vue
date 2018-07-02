@@ -6,7 +6,7 @@
       <el-step title="3.编辑商品详情" ></el-step>
     </el-steps>
     <!--步骤1-->
-    <div class="content-goods-publish" v-if="activestep === 0">
+    <div class="content-goods-publish" v-show="activestep === 0">
       <div class="goods-category">
         <ul v-if="categoryListLevel1 && categoryListLevel1.length > 0">
           <li
@@ -41,7 +41,7 @@
       </p>
     </div>
     <!--步骤2-->
-    <div class="content-goods-publish" v-if="activestep === 1">
+    <div class="content-goods-publish" v-show="activestep === 1">
       <!--商品详情-->
       <el-form
         :model="baseInfoForm"
@@ -60,10 +60,10 @@
               <span>{{ activeCategoryName1 }}</span>
               <span v-show="activeCategoryName2"> > {{ activeCategoryName2 }}</span>
               <span v-show="activeCategoryName3"> > {{ activeCategoryName3 }}</span>
-              <span v-if="!activeCategoryName1">{{ baseInfoForm.name }}</span>
+              <span v-if="!activeCategoryName1">{{ baseInfoForm.category_name }}</span>
             </el-form-item>
             <el-form-item label="商品分组：" >
-              <!--商品分类 获取分类列表 传入默认值-->
+              <!--商品分组 获取分类列表 传入默认值-->
               <en-category-picker
                 @changed="changeGoodsCateGory"
                 :clearable='true'
@@ -81,7 +81,7 @@
                 <el-option
                   v-for="item in brandList"
                   :key="item.brand_id"
-                  :label="item.brand_name"
+                  :label="item.name"
                   :value="item.brand_id">
                 </el-option>
               </el-select>
@@ -230,15 +230,7 @@
             </el-form-item>
           </div>
         </div>
-      </el-form>
-      <!--商品参数-->
-      <el-form
-        :model="baseInfoForm"
-        status-icon
-        label-position="right"
-        ref="goods_params_list"
-        label-width="120px"
-        class="demo-ruleForm">
+        <!--商品参数-->
         <el-collapse :value="collapseVal">
           <el-collapse-item
             v-for="paramsgroup in  goodsParams"
@@ -252,7 +244,7 @@
               :key="goods_params_list.param_id"
               :label="`${goods_params_list.param_name}：`"
               :prop="'goods_params_list.' + index + '.param_value'"
-              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'blur' }">
+              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' }">
               <el-input
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
@@ -260,9 +252,6 @@
               <el-select
                 v-if="goods_params_list.param_type === 2"
                 v-model="goods_params_list.param_value"
-                filterable
-                @visible-change="getGoodsBrandList"
-                @change="changeGoodsBrand"
                 placeholder="请选择">
                 <el-option
                   v-for="option in goods_params_list.option_list"
@@ -280,13 +269,11 @@
     <div class="content-goods-publish" v-if="activestep === 2">
       <el-form
         :model="baseInfoForm"
-        status-icon
-        :rules="baseInfoFormRule"
         label-position="right"
-        ref="baseInfoForm"
+        ref="baseInfoFormIntro"
         label-width="120px"
         class="demo-ruleForm">
-        <el-form-item label="商品描述：">
+        <el-form-item label="商品描述：" class="goods-intro">
           <UE ref="ue" :defaultMsg="baseInfoForm.intro"></UE>
         </el-form-item>
       </el-form>
@@ -437,6 +424,9 @@
         /** 图片服务器地址 */
         BASE_IMG_URL: process.env.BASE_IMG_URL,
 
+        /** 店铺信息 */
+        shopInfo: this.$store.getters.shopInfo,
+
         /** 加载中。。。 */
         loading: false,
 
@@ -486,7 +476,7 @@
           category_id: 0,
 
           /** 商城分类 名称 */
-          name: '',
+          category_name: '',
 
           /** 商品名称 */
           goods_name: '',
@@ -618,6 +608,7 @@
             { required: true, message: '请输入商品名称', trigger: 'blur' }
           ],
           sn: [
+            { required: true, message: '请输入商品编号', trigger: 'blur' },
             { validator: checkSn, trigger: 'blur' }
           ],
           mktprice: [
@@ -651,11 +642,6 @@
         }
       }
     },
-    computed: {
-      ...mapGetters([
-        'shopInfo'
-      ])
-    },
     beforeRouteUpdate(to, from, next) {
       if (this.$route.params && this.$route.params.goodsid) {
         this.currentStatus = parseInt(this.$route.params.isdraft) || 0
@@ -669,8 +655,6 @@
       } else {
         this.GET_NextLevelCategory()
       }
-      /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
-      this.GET_GoodsParams()
       next()
     },
     mounted() {
@@ -686,8 +670,6 @@
       } else {
         this.GET_NextLevelCategory()
       }
-      /** 查询发布商品时商品的参数信息 根据商城商品分类而来 */
-      this.GET_GoodsParams()
       if (!this.shopInfo) {
         this.shopInfo = JSON.parse(localStorage.getItem('shop'))
       }
@@ -695,24 +677,27 @@
     methods: {
       /** 上一步*/
       pre() {
+        this.loading = true
         if (this.activestep === 1) {
-          this.$confirm('返回上一步会丢失本页数据?', '提示').then(() => {
-            this.GET_NextLevelCategory()
-            if (this.activestep-- < 0) this.activestep = 0
-          }).catch(() => {})
+          this.GET_NextLevelCategory()
+          if (this.activestep-- < 0) this.activestep = 0
+          this.loading = false
         } else {
           this.activestep--
+          this.loading = false
         }
       },
 
       /** 下一步*/
       next() {
         /** 1级校验 */
+        this.loading = true
         if (this.activestep === 0 && !this.activeCategoryName1) {
           this.$message.error('请选择商品分类')
+          this.loading = false
           return
-        } else {
-          /** 获取改商城分类下 商品参数信息 */
+        } else if (this.activestep === 0 && this.activeCategoryName1) {
+          /** 获取该商城分类下 商品参数信息 */
           this.GET_GoodsParams()
           /** 查询品牌列表 */
           this.getGoodsBrandList()
@@ -722,20 +707,24 @@
 
         /** 2级校验 */
         if (this.activestep === 1) {
-          this.$refs.baseInfoForm.validate((valid) => {
+          this.$refs['baseInfoForm'].validate((valid) => {
             if (valid) {
               /** 规格校验 */
               if (!this.skuFormVali()) {
+                this.loading = false
                 return
               }
+              this.loading = false
               if (this.activestep++ > 2) return
             } else {
+              this.loading = false
               this.$message.error('表单中存在未填写的值')
             }
           })
           return
         }
-        // 下一步
+        /** 下一步 */
+        this.loading = false
         if (this.activestep++ > 2) return
       },
 
@@ -773,7 +762,6 @@
           return
         }
         let _params = this.generateFormData(this.baseInfoForm)
-        _params.intro = this.$refs['ue'].getUEContent()
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
@@ -820,7 +808,7 @@
           } else if (!level) {
             this.categoryListLevel1 = response
           }
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 选择商城商品分类 */
@@ -885,8 +873,13 @@
           }
           /** 查询品牌列表 */
           this.getGoodsBrandList()
+
           /** 运费模板列表 */
           this.getTplList()
+
+          /** 查询商品参数 */
+          this.GET_GoodsParams()
+
           /** 查询商品sku信息 */
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
@@ -897,7 +890,7 @@
                   return { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name }
                 })
                 let { cost, quantity, sn, weight } = key
-                const price = key.goods_price
+                const price = key.price
                 return { cost, price, quantity, sn, weight, spec_list }
               }
             })
@@ -919,13 +912,14 @@
           if (!response || response.length <= 0) {
             return
           }
-          let _paramsList = []
+          this.baseInfoForm.goods_params_list = []
           this.goodsParams.forEach(key => {
             if (key && key.params) {
-              _paramsList = _paramsList.concat(key.params)
+              key.params.forEach(elem => {
+                this.baseInfoForm.goods_params_list.push(elem)
+              })
             }
           })
-          this.baseInfoForm.goods_params_list = _paramsList
         })
       },
 
@@ -974,8 +968,13 @@
           }
           /** 查询品牌列表 */
           this.getGoodsBrandList()
+
           /** 运费模板列表 */
           this.getTplList()
+
+          /** 查询草稿箱商品参数信息 */
+          this.GET_GoodsDtagtParams()
+
           /** 查询草稿箱sku信息 */
           API_goods.draftSku(this.activeGoodsId, {}).then((response) => {
             /** 构造临时规格数据 */
@@ -986,14 +985,12 @@
                   return { spec_id, spec_image, spec_type, spec_value, spec_value_id, spec_name }
                 })
                 let { cost, quantity, sn, weight } = key
-                const price = key.goods_price
+                const price = key.price
                 return { cost, price, quantity, sn, weight, spec_list }
               }
             })
           })
         })
-        /** 查询草稿箱商品参数信息 */
-        this.GET_GoodsDtagtParams()
       },
 
       /** 查询草稿箱商品参数信息 */
@@ -1002,17 +999,23 @@
         const goods_id = this.activeGoodsId || 1
         API_goods.getGoodsDraftParams(goods_id).then((response) => {
           this.loading = false
-          this.goodsParams = response
           if (!response || response.length <= 0) {
             return
           }
-          let _paramsList = []
-          this.goodsParams.forEach(key => {
-            if (key && key.params) {
-              _paramsList = _paramsList.concat(key.params)
+          this.goodsParams = response
+          this.collapseVal = this.goodsParams.map(key => {
+            if (key.group_id) {
+              return key.group_id
             }
           })
-          this.baseInfoForm.goods_params_list = _paramsList
+          this.baseInfoForm.goods_params_list = []
+          this.goodsParams.forEach(key => {
+            if (key && key.params) {
+              key.params.forEach(elem => {
+                this.baseInfoForm.goods_params_list.push(elem)
+              })
+            }
+          })
         })
       },
 
@@ -1082,17 +1085,17 @@
       },
 
       /** 文件列表上传成功时的钩子  上传成功校验 */
-      handleSuccess(file, fileList) {
+      handleSuccess(response, file, fileList) {
         this.baseInfoForm.goods_gallery_list.push({
           img_id: -1,
 
-          original: file.url,
+          original: response.url,
 
-          url: file.url,
+          url: response.url,
 
           sort: 0,
 
-          name: file.name
+          name: response.name
         })
         this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
         this.$refs['baseInfoForm'].validateField('goods_gallery')
@@ -1205,6 +1208,10 @@
         }
         /** 运费模板 */
         _params.template_id = _params.template_id || 0
+        /** 处理UE的信息 */
+        if (this.activestep === 2) {
+          _params.intro = this.$refs['ue'].getUEContent()
+        }
         return _params
       },
 
@@ -1222,8 +1229,6 @@
         if (_sn) {
           this.$confirm('确认自动生成货号, 是否继续?', '提示').then(() => {
             this.productSn = true
-          }).catch(() => {
-            this.$message.info({ message: '已取消自动生成' })
           })
           return false
         }
@@ -1257,7 +1262,7 @@
     margin: 0 auto;
     text-align: center;
     border: 1px solid #ddd;
-    background: none repeat scroll 0 0 #fff;
+    background: none repeat  0 0 #fff;
 
     /*商品品类*/
     .goods-category {
@@ -1269,7 +1274,7 @@
         padding: 8px 4px 8px 8px;
         list-style: none;
         width: 300px;
-        background: none repeat scroll 0 0 #fff;
+        background: none repeat  0 0 #fff;
         border: 1px solid #e6e6e6;
         display: inline-block;
         letter-spacing: normal;
@@ -1298,7 +1303,7 @@
       color: #3a87ad;
     }
 
-    /*当前选择的商品品类文字*/
+    /*!*当前选择的商品品类文字*!*/
     .current-goods-category {
       text-align: left;
       padding: 10px;
@@ -1324,6 +1329,9 @@
   }
 
   /*平铺*/
+  div.base-info-item>div {
+    margin-left: 5%
+  }
   div.base-info-item {
     h4 {
       margin-bottom: 10px;
@@ -1336,8 +1344,8 @@
       line-height: 40px;
       text-align: left;
     }
+
     .el-form-item {
-      margin-left: 5%;
       width: 22%;
       min-width: 300px;
     }
@@ -1346,18 +1354,20 @@
       text-align: left;
     }
     p.goods-group-manager {
-      padding-left: 12.3%;
+      padding-left: 7.5%;
       text-align: left;
       color: #999;
       font-size: 13px;
     }
 
-    /*积分提示*/
+    /*!*积分提示*!*/
     p.exchange-tip {
-      margin:0;
-      padding: 10px;
-      padding-left: 15%;
+      width: 40%;
+      margin:0 0 10px 38px;
+      padding: 5px;
+      padding-left: 5%;
       text-align: left;
+      font-size: 13px;
       color: #8a6d3b;
       background: #fcf8e3;
       border: 1px solid #faebcc;
@@ -1412,8 +1422,8 @@
   }
 
   /*商品描述*/
-  #editor {
-    min-height: 500px;
+  .goods-intro {
+    line-height: 40;
   }
 
   /** 底部步骤 */
@@ -1428,7 +1438,7 @@
   }
 
   /*图片上传组件第一张图设置封面*/
-  /deep/ .goods-images {
+  .goods-images {
     /deep/ li.el-upload-list__item:first-child {
       position: relative;
     }

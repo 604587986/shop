@@ -7,8 +7,7 @@
           toolbar
           pagination
           :tableData="tableData"
-          :loading="loading"
-        >
+          :loading="loading">
           <div slot="toolbar" class="inner-toolbar">
             <div class="toolbar-btns">
               <el-button type="primary" @click="handleAddFullCut">新增</el-button>
@@ -19,7 +18,7 @@
           </div>
           <template slot="table-columns">
             <!--活动名称-->
-            <el-table-column prop="activity_name" label="活动名称"/>
+            <el-table-column prop="title" label="活动名称"/>
             <!--开始时间-->
             <el-table-column label="开始时间">
               <template slot-scope="scope">
@@ -37,7 +36,7 @@
             <!--活动状态-->
             <el-table-column label="活动状态">
               <template slot-scope="scope">
-                <span>{{ scope.row.activity_status }}</span>
+                <span>{{ scope.row.disabled }}</span>
               </template>
             </el-table-column>
             <!--操作-->
@@ -72,9 +71,9 @@
               <h4>活动信息</h4>
               <div>
                 <!--活动名称-->
-                <el-form-item  label="活动名称：" prop="activity_name">
+                <el-form-item  label="活动名称：" prop="title">
                   <el-input
-                    v-model="activityForm.activity_name"
+                    v-model="activityForm.title"
                     style="width: 300px"
                     placeholder="不超过60个字符"
                     maxLength="60">
@@ -89,13 +88,12 @@
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="pickoptions"
-                  >
+                    :picker-options="pickoptions">
                   </el-date-picker>
                 </el-form-item>
                 <!--活动描述-->
                 <el-form-item label="活动描述：">
-                  <UE v-model="activityForm.activity_desc" :defaultMsg="activityForm.activity_desc"></UE>
+                  <UE ref="UE" :defaultMsg="activityForm.description"></UE>
                 </el-form-item>
               </div>
             </div>
@@ -104,24 +102,24 @@
               <h4>优惠设置</h4>
               <div>
                 <!--优惠门槛-->
-                <el-form-item label="优惠门槛：" prop="discount_threshold">
+                <el-form-item label="优惠门槛：" prop="full_money">
                   <div>
-                    满 <el-input v-model="activityForm.discount_threshold" style="width: 100px;"></el-input>
+                    满 <el-input v-model="activityForm.full_money" style="width: 100px;"></el-input>
                     元  <span class="discount-tip">消费达到此金额即可参与优惠</span>
                   </div>
                 </el-form-item>
                 <!--减现金-->
-                <el-form-item label="优惠方式：" prop="reduce_cash" class="discount-model">
-                  <el-checkbox :label="reduceCashTxt" v-model="isReduceCash" @change="changeReduceCash"></el-checkbox>
-                  <span class="integral-show" v-show="isReduceCash">
-                    <el-input  size="mini" v-model="activityForm.reduce_cash"></el-input> 元
+                <el-form-item label="优惠方式：" prop="minus_value" class="discount-model">
+                  <el-checkbox :label="reduceCashTxt" v-model="is_full_minus" @change="changeReduceCash"></el-checkbox>
+                  <span class="integral-show" v-show="is_full_minus">
+                    <el-input  size="mini" v-model="activityForm.minus_value"></el-input> 元
                   </span>
                 </el-form-item>
                 <!--打折-->
-                <el-form-item prop="discount_val" class="discount-model">
-                  <el-checkbox :label="discountTxt" v-model="isDiscount" @change="changeDiscount"></el-checkbox>
-                  <span class="integral-show" v-show="isDiscount">
-                    <el-input  size="mini" v-model="activityForm.discount_val"></el-input> 折
+                <el-form-item prop="discount_value" class="discount-model">
+                  <el-checkbox :label="discountTxt" v-model="is_discount" @change="changeDiscount"></el-checkbox>
+                  <span class="integral-show" v-show="is_discount">
+                    <el-input  size="mini" v-model="activityForm.discount_value"></el-input> 折
                   </span>
                 </el-form-item>
                 <!--自营店--送积分-->
@@ -132,13 +130,13 @@
                   </span>
                 </el-form-item>
                 <!--免邮费-->
-                <el-form-item prop="freePostage" class="discount-model">
-                  <el-checkbox label="免邮费" v-model="freePostage" @change="changeFreePostage"></el-checkbox>
+                <el-form-item prop="is_free_ship" class="discount-model">
+                  <el-checkbox label="免邮费" v-model="is_free_ship" @change="changeis_free_ship"></el-checkbox>
                 </el-form-item>
                 <!--送优惠券-->
-                <el-form-item prop="couponId" class="discount-model">
-                  <el-checkbox :label="couponTxt" v-model="isCoupon" @change="isChangeCoupon"></el-checkbox>
-                  <el-select v-show="isCoupon" v-model="activityForm.couponId" placeholder="请选择" @change="changeCoupon">
+                <el-form-item prop="bonus_id" class="discount-model">
+                  <el-checkbox :label="couponTxt" v-model="is_send_bonus" @change="isChangeCoupon"></el-checkbox>
+                  <el-select v-show="is_send_bonus" v-model="activityForm.bonus_id" placeholder="请选择" @change="changeCoupon">
                     <el-option
                       v-for="item in couponList"
                       :key="item.coupon_id"
@@ -146,12 +144,12 @@
                       :value="item.coupon_id">
                     </el-option>
                   </el-select>
-                  <el-button type="text" v-show="isCoupon" @click="addCoupon">新增</el-button>
+                  <el-button type="text" v-show="is_send_bonus" @click="addCoupon">新增</el-button>
                 </el-form-item>
                 <!--送赠品-->
-                <el-form-item prop="giftId" class="discount-model">
-                  <el-checkbox :label="giftTxt" v-model="isGift" @change="isChangeGift"></el-checkbox>
-                  <el-select v-show="isGift" v-model="activityForm.giftId" placeholder="请选择" @change="changeGift">
+                <el-form-item prop="gift_id" class="discount-model">
+                  <el-checkbox :label="giftTxt" v-model="is_send_gift" @change="isChangeGift"></el-checkbox>
+                  <el-select v-show="is_send_gift" v-model="activityForm.gift_id" placeholder="请选择" @change="changeGift">
                     <el-option
                       v-for="item in giftList"
                       :key="item.gift_id"
@@ -159,7 +157,7 @@
                       :value="item.gift_id">
                     </el-option>
                   </el-select>
-                  <el-button type="text" v-show="isGift" @click="addGift">新增</el-button>
+                  <el-button type="text" v-show="is_send_gift" @click="addGift">新增</el-button>
                 </el-form-item>
               </div>
             </div>
@@ -168,10 +166,10 @@
               <h4>活动商品</h4>
               <div>
                 <div class="activity-goods">
-                  <el-form-item label="活动商品" prop="is_all_joined">
-                    <el-radio-group v-model="activityForm.is_all_joined" @change="changeJoinGoods">
+                  <el-form-item label="活动商品" prop="range_type">
+                    <el-radio-group v-model="activityForm.range_type" @change="changeJoinGoods">
                       <el-radio :label="1">全部商品参与</el-radio>
-                      <el-radio :label="0">部分商品参与</el-radio>
+                      <el-radio :label="2">部分商品参与</el-radio>
                     </el-radio-group>
                     <!--商品表格-->
                     <div v-show="!goodsShow">
@@ -179,8 +177,7 @@
                         toolbar
                         :tableData="activityForm.activity_goods"
                         :loading="loading"
-                        :selectionChange="selectionChange"
-                      >
+                        :selectionChange="selectionChange">
                         <div slot="toolbar" class="inner-toolbar">
                           <div class="toolbar-btns">
                             <el-button type="primary" @click="showGoodsSelector">选择商品</el-button>
@@ -234,6 +231,7 @@
       type="seller"
       :show="showDialog"
       :api="goods_api"
+      :multipleApi="multipleApi"
       :categoryApi="categoryApi"
       :headers="headers"
       :defaultData="goodsIds"
@@ -282,7 +280,7 @@
         setTimeout(() => {
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入正确的金额'))
-          } else if (this.isReduceCash && parseFloat(value) < parseFloat(this.activityForm.reduce_cash)) {
+          } else if (this.is_full_minus && parseFloat(value) < parseFloat(this.activityForm.minus_value)) {
             callback(new Error('减少金额不能大于门槛金额'))
           } else {
             callback()
@@ -290,14 +288,14 @@
         }, 1000)
       }
       const checkReduceCash = (rule, value, callback) => {
-        if (this.isReduceCash) {
+        if (this.is_full_minus) {
           if (!value) {
             return callback(new Error('请输入要优惠的现金金额'))
           }
           setTimeout(() => {
             if (!RegExp.money.test(value)) {
               callback(new Error('请输入正确的金额'))
-            } else if (this.isReduceCash && parseFloat(value) > parseFloat(this.activityForm.discount_threshold)) {
+            } else if (this.is_full_minus && parseFloat(value) > parseFloat(this.activityForm.full_money)) {
               callback(new Error('减少金额不能大于门槛金额'))
             } else {
               callback()
@@ -308,7 +306,7 @@
         }
       }
       const checkDiscountVal = (rule, value, callback) => {
-        if (this.isDiscount) {
+        if (this.is_discount) {
           if (!value) {
             return callback(new Error('请输入要优惠的打折力度'))
           }
@@ -361,17 +359,6 @@
         /** 列表数据*/
         tableData: [],
 
-        /** 商品ids */
-        goodsIds: [],
-
-        /** 请求头令牌 */
-        headers: {
-          Authorization: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjAsInVpZCI6MTAwLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6Iua1i-ivleW6l-mTuiIsInVzZXJuYW1lIjoid29zaGljZXNoaSJ9.cLVAOdWk3hiltbYcN3hTs7az2y6U7FQdjYwLEPcMgeES50O4ahgG4joT_rOAB2XvjS4ZR2R-_AgEMeScpXNW3g'
-        },
-
-        /** 商城分类api */
-        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
-
         /** 日期选择器选项 */
         pickoptions: {
           disabledDate: (time) => {
@@ -382,31 +369,31 @@
         /** 新增满减表单信息*/
         activityForm: {
           /** 当前活动ID*/
-          activity_id: '',
+          fd_id: '',
 
           /** 活动名称/标题*/
-          activity_name: '',
+          title: '',
 
           /** 生效时间*/
           take_effect_time: [],
 
           /** 活动描述*/
-          activity_desc: '',
+          description: '',
 
           /** 优惠门槛*/
-          discount_threshold: '',
+          full_money: '',
 
           /** 是否打折 */
-          isDiscount: 1,
+          is_discount: 1,
 
           /** 打几折 */
-          discount_val: 0,
+          discount_value: 0,
 
           /** 是否减现金 */
-          isReduceCash: 1,
+          is_full_minus: 1,
 
           /** 减多少钱*/
-          reduce_cash: 0,
+          minus_value: 0,
 
           /** 是否送积分 */
           isIntegral: 1,
@@ -415,35 +402,35 @@
           integral: 0,
 
           /** 是否免邮费*/
-          freePostage: 1,
+          is_free_ship: 1,
 
           /** 是否有赠品  */
-          isGift: 1,
+          is_send_gift: 1,
 
           /** 赠品id */
-          giftId: '',
+          gift_id: '',
 
           /** 是否送优惠券 */
-          isCoupon: 1,
+          is_send_bonus: 1,
 
           /** 优惠券Id */
-          couponId: '',
+          bonus_id: '',
 
           /** 是否全部商品参与*/
-          is_all_joined: '',
+          range_type: '',
 
           /** 活动商品*/
           activity_goods: []
         },
 
         /** 是否减现金  */
-        isReduceCash: false,
+        is_full_minus: false,
 
         /** 减现金文本 */
         reduceCashTxt: '减现金(与打折活动只能选择一种)',
 
         /** 是否打折 */
-        isDiscount: false,
+        is_discount: false,
 
         /** 打折文本 */
         discountTxt: '打折(与减现金活动只能选择一种)',
@@ -455,10 +442,10 @@
         integralTxt: '送积分',
 
         /** 是否免邮费 1免邮费*/
-        freePostage: false,
+        is_free_ship: false,
 
         /** 是否送优惠券 */
-        isCoupon: false,
+        is_send_bonus: false,
 
         /** 优惠券显示文本 */
         couponTxt: '送优惠券',
@@ -470,7 +457,7 @@
         couponModelShow: false,
 
         /** 是否有赠品  */
-        isGift: false,
+        is_send_gift: false,
 
         /** 赠品显示文本 */
         giftTxt: '送赠品',
@@ -490,8 +477,22 @@
         /** 商品选择器最大长度*/
         maxsize: 0,
 
+        /** 商品ids */
+        goodsIds: [],
+
+        /** 请求头令牌 */
+        headers: {
+          Authorization: this.$store.getters.token
+        },
+
         /** 商品选择器列表api*/
         goods_api: `${process.env.SELLER_API}/goods`,
+
+        /** 商城分类api */
+        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
+
+        /** 回显数据使用 */
+        multipleApi: `${process.env.SELLER_API}/goods/@ids/details`,
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
@@ -499,7 +500,7 @@
         /** 表单校验规则*/
         rules: {
           /** 活动名称 */
-          activity_name: [
+          title: [
             { required: true, message: '请输入活动名称', trigger: 'blur' },
             { min: 0, max: 60, message: '长度在60个字符之内', trigger: 'blur' }
           ],
@@ -510,17 +511,17 @@
           ],
 
           /** 优惠门槛 */
-          discount_threshold: [
+          full_money: [
             { validator: checkDiscountThreshold, trigger: 'blur' }
           ],
 
           /** 减现金 */
-          reduce_cash: [
+          minus_value: [
             { validator: checkReduceCash, trigger: 'blur' }
           ],
 
           /** 打几折 */
-          discount_val: [
+          discount_value: [
             { validator: checkDiscountVal, trigger: 'blur' }
           ],
 
@@ -530,7 +531,7 @@
           ],
 
           /** 商品参与方式 */
-          is_all_joined: [
+          range_type: [
             { validator: checkRange, trigger: 'change' }
           ]
         }
@@ -553,7 +554,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          keyword: data
+          keywords: data
         }
         this.GET_FullCutActivityList()
       },
@@ -568,28 +569,28 @@
           case 'add':
             this.activityForm = {
               /** 活动名称/标题*/
-              activity_name: '',
+              title: '',
 
               /** 生效时间*/
               take_effect_time: [],
 
               /** 活动描述*/
-              activity_desc: '',
+              description: '',
 
               /** 优惠门槛*/
-              discount_threshold: '',
+              full_money: '',
 
               /** 是否打折 */
-              isDiscount: 0,
+              is_discount: 0,
 
               /** 打几折 */
-              discount_val: '',
+              discount_value: '',
 
               /** 是否减现金 */
-              isReduceCash: 0,
+              is_full_minus: 0,
 
               /** 减多少钱*/
-              reduce_cash: '',
+              minus_value: '',
 
               /** 是否送积分 */
               isIntegral: 0,
@@ -598,33 +599,33 @@
               integral: 0,
 
               /** 是否免邮费*/
-              freePostage: 0,
+              is_free_ship: 0,
 
               /** 是否有赠品  */
-              isGift: 0,
+              is_send_gift: 0,
 
               /** 赠品id */
-              giftId: '',
+              gift_id: '',
 
               /** 是否送优惠券 */
-              isCoupon: 0,
+              is_send_bonus: 0,
 
               /** 优惠券Id */
-              couponId: '',
+              bonus_id: '',
 
               /** 是否全部商品参与*/
-              is_all_joined: '',
+              range_type: '',
 
               /** 活动商品*/
               activity_goods: []
             }
             /** 处理优惠数据 */
-            this.isDiscount = false
-            this.isReduceCash = false
+            this.is_discount = false
+            this.is_full_minus = false
             this.isIntegral = false
-            this.freePostage = false
-            this.isCoupon = false
-            this.isGift = false
+            this.is_free_ship = false
+            this.is_send_bonus = false
+            this.is_send_gift = false
         }
       },
 
@@ -692,7 +693,7 @@
       /** 编辑满减优惠 */
       handleEditMould(row) {
         this.activeName = 'add'
-        this.GET_FullCutActivityDetails(row.activity_id)
+        this.GET_FullCutActivityDetails(row.fd_id)
       },
 
       /** 获取单个商品详情 */
@@ -700,22 +701,22 @@
         API_activity.getFullCutActivityDetails(id, {}).then((response) => {
           this.activityForm = {
             ...response,
-            activity_id: id,
+            fd_id: id,
             take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
           }
-          this.goodsShow = this.activityForm.is_all_joined === 1
+          this.goodsShow = this.activityForm.range_type === 1
           /** 处理优惠数据 */
-          this.isDiscount = this.activityForm.isDiscount === 1
-          this.isReduceCash = this.activityForm.isReduceCash === 1
+          this.is_discount = this.activityForm.is_discount === 1
+          this.is_full_minus = this.activityForm.is_full_minus === 1
           this.isIntegral = this.activityForm.isIntegral === 1
-          this.freePostage = this.activityForm.freePostage === 1
-          this.isCoupon = this.activityForm.isCoupon === 1
-          this.isGift = this.activityForm.isGift === 1
-          this.changeDiscount(this.isDiscount)
-          this.changeReduceCash(this.isReduceCash)
+          this.is_free_ship = this.activityForm.is_free_ship === 1
+          this.is_send_bonus = this.activityForm.is_send_bonus === 1
+          this.is_send_gift = this.activityForm.is_send_gift === 1
+          this.changeDiscount(this.is_discount)
+          this.changeReduceCash(this.is_full_minus)
           this.changeIntegral(this.isIntegral)
-          this.isChangeCoupon(this.isCoupon)
-          this.isChangeGift(this.isGift)
+          this.isChangeCoupon(this.is_send_bonus)
+          this.isChangeGift(this.is_send_gift)
         })
       },
 
@@ -728,7 +729,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteFullCutActivity(row.activity_id).then(response => {
+        API_activity.deleteFullCutActivity(row.fd_id).then(response => {
           this.$message.success('删除成功！')
           this.GET_FullCutActivityList()
         })
@@ -739,28 +740,28 @@
         this.activeName = 'add'
         this.activityForm = {
           /** 活动名称/标题*/
-          activity_name: '',
+          title: '',
 
           /** 生效时间*/
           take_effect_time: [],
 
           /** 活动描述*/
-          activity_desc: '',
+          description: '',
 
           /** 优惠门槛*/
-          discount_threshold: '',
+          full_money: '',
 
           /** 是否打折 */
-          isDiscount: 0,
+          is_discount: 0,
 
           /** 打几折 */
-          discount_val: '',
+          discount_value: '',
 
           /** 是否减现金 */
-          isReduceCash: 0,
+          is_full_minus: 0,
 
           /** 减多少钱*/
-          reduce_cash: '',
+          minus_value: '',
 
           /** 是否送积分 */
           isIntegral: 0,
@@ -769,56 +770,56 @@
           integral: 0,
 
           /** 是否免邮费*/
-          freePostage: 0,
+          is_free_ship: 0,
 
           /** 是否有赠品  */
-          isGift: 0,
+          is_send_gift: 0,
 
           /** 赠品id */
-          giftId: '',
+          gift_id: '',
 
           /** 是否送优惠券 */
-          isCoupon: 0,
+          is_send_bonus: 0,
 
           /** 优惠券Id */
-          couponId: '',
+          bonus_id: '',
 
           /** 是否全部商品参与*/
-          is_all_joined: '',
+          range_type: '',
 
           /** 活动商品*/
           activity_goods: []
         }
-        this.isDiscount = false
-        this.isReduceCash = false
+        this.is_discount = false
+        this.is_full_minus = false
         this.isIntegral = false
-        this.freePostage = false
-        this.isCoupon = false
-        this.isGift = false
+        this.is_free_ship = false
+        this.is_send_bonus = false
+        this.is_send_gift = false
       },
 
       /** 是否打折 */
       changeDiscount(val) {
-        this.isDiscount = val
-        this.activityForm.isDiscount = val ? 1 : 0
-        this.activityForm.isReduceCash = val ? 0 : 1
+        this.is_discount = val
+        this.activityForm.is_discount = val ? 1 : 0
+        this.activityForm.is_full_minus = val ? 0 : 1
         if (val) {
-          this.isReduceCash = !this.isDiscount
-          this.reduceCashTxt = this.isReduceCash ? '减' : '减现金(与打折活动只能选择一种)'
+          this.is_full_minus = !this.is_discount
+          this.reduceCashTxt = this.is_full_minus ? '减' : '减现金(与打折活动只能选择一种)'
         }
-        this.discountTxt = this.isDiscount ? '打' : '打折(与减现金活动只能选择一种)'
+        this.discountTxt = this.is_discount ? '打' : '打折(与减现金活动只能选择一种)'
       },
 
       /** 是否减现金 */
       changeReduceCash(val) {
-        this.isReduceCash = val
-        this.activityForm.isReduceCash = val ? 1 : 0
-        this.activityForm.isDiscount = val ? 0 : 1
+        this.is_full_minus = val
+        this.activityForm.is_full_minus = val ? 1 : 0
+        this.activityForm.is_discount = val ? 0 : 1
         if (val) {
-          this.isDiscount = !this.isReduceCash
-          this.discountTxt = this.isDiscount ? '打' : '打折(与减现金活动只能选择一种)'
+          this.is_discount = !this.is_full_minus
+          this.discountTxt = this.is_discount ? '打' : '打折(与减现金活动只能选择一种)'
         }
-        this.reduceCashTxt = this.isReduceCash ? '减' : '减现金(与打折活动只能选择一种)'
+        this.reduceCashTxt = this.is_full_minus ? '减' : '减现金(与打折活动只能选择一种)'
       },
 
       /** 是否送积分 */
@@ -828,16 +829,16 @@
       },
 
       /** 是否免邮费改变 */
-      changeFreePostage(val) {
-        this.freePostage = val
-        this.activityForm.freePostage = this.freePostage ? 1 : 0
+      changeis_free_ship(val) {
+        this.is_free_ship = val
+        this.activityForm.is_free_ship = this.is_free_ship ? 1 : 0
       },
 
       /** 是否送优惠券 */
       isChangeCoupon(val) {
-        this.isCoupon = val
-        this.activityForm.isCoupon = this.isCoupon ? 1 : 0
-        this.couponTxt = this.isCoupon ? '送' : '送优惠券'
+        this.is_send_bonus = val
+        this.activityForm.is_send_bonus = this.is_send_bonus ? 1 : 0
+        this.couponTxt = this.is_send_bonus ? '送' : '送优惠券'
       },
 
       /** 获取优惠券列表 */
@@ -849,7 +850,7 @@
 
       /** 所选优惠券变化时 */
       changeCoupon(val) {
-        this.activityForm.couponId = val
+        this.activityForm.bonus_id = val
       },
 
       /** 新增优惠券 */
@@ -865,9 +866,9 @@
 
       /** 是否送赠品 */
       isChangeGift(val) {
-        this.isGift = val
-        this.activityForm.isGift = this.isGift ? 1 : 0
-        this.giftTxt = this.isGift ? '送' : '送赠品'
+        this.is_send_gift = val
+        this.activityForm.is_send_gift = this.is_send_gift ? 1 : 0
+        this.giftTxt = this.is_send_gift ? '送' : '送赠品'
       },
 
       /** 获取赠品列表 */
@@ -879,7 +880,7 @@
 
       /** 所选赠品变化时 */
       changeGift(val) {
-        this.activityForm.giftId = val
+        this.activityForm.gift_id = val
       },
 
       /** 新增赠品 */
@@ -897,15 +898,33 @@
       handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const _params = this.generateFormData(this.activityForm)
-            if (this.activityForm.activity_id) {
-              API_activity.saveFullCutActivity(this.activityForm.activity_id, _params).then(() => {
+            /** 处理表单数据 */
+            this.activityForm.start_time = this.activityForm.take_effect_time[0] / 1000
+            this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000
+            this.activityForm.description = this.$refs['UE'].getUEContent()
+            let _goodslist = []
+            if (this.activityForm.activity_goods && Array.isArray(this.activityForm.activity_goods)) {
+              _goodslist = this.activityForm.activity_goods.map(key => {
+                return {
+                  goods_id: key.goods_id,
+                  name: key.goods_name,
+                  thumbnail: key.thumbnail
+                }
+              })
+            }
+            if (_goodslist.length > 0) {
+              /** 参与商品列表 */
+              this.activityForm.goods_list = _goodslist
+            }
+
+            if (this.activityForm.fd_id) {
+              API_activity.saveFullCutActivity(this.activityForm.fd_id, this.activityForm).then(() => {
                 this.$message.success('保存成功！')
                 this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
               })
             } else {
-              API_activity.addFullCutActivity(_params).then(() => {
+              API_activity.addFullCutActivity(this.activityForm).then(() => {
                 this.$message.success('添加成功！')
                 this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
@@ -913,74 +932,6 @@
             }
           }
         })
-      },
-
-      /** 构造表单数据 */
-      generateFormData(data) {
-        let _goodslist = []
-        if (data.activity_goods && Array.isArray(data.activity_goods)) {
-          _goodslist = data.activity_goods.map(key => {
-            return {
-              goods_id: key.goods_id,
-              name: key.goods_name,
-              thumbnail: key.thumbnail
-            }
-          })
-        }
-        const _params = {
-          /** 活动名称/标题 */
-          title: data.activity_name,
-
-          /** 活动开始时间 */
-          start_time: data.take_effect_time[0] / 1000,
-
-          /** 活动结束时间 */
-          end_time: data.take_effect_time[1] / 1000,
-
-          /** 活动描述 */
-          description: data.activity_desc,
-
-          /** 活动状态 */
-          disabled: data.activity_status,
-
-          /** 活动优惠门槛金额 */
-          full_money: parseInt(data.discount_threshold),
-
-          /** 是否减金额 */
-          is_full_minus: data.isReduceCash,
-
-          /** 减多少钱 */
-          minus_value: data.reduce_cash,
-
-          /** 是否打折 */
-          is_discount: data.isDiscount,
-
-          /** 打几折 */
-          discount_value: data.discount_val,
-
-          /** 是否免邮费 */
-          is_free_ship: data.freePostage,
-
-          /** 是否有优惠券 */
-          is_send_bonus: data.isCoupon,
-
-          /** 优惠券id */
-          bonus_id: data.couponId || '',
-
-          /** 是否有赠品 */
-          is_send_gift: data.isGift,
-
-          /** 赠品id */
-          gift_id: data.giftId || '',
-
-          /** 商品参与方式 */
-          range_type: data.is_all_joined
-        }
-        if (_goodslist.length > 0) {
-          /** 参与商品列表 */
-          _params.goods_list = _goodslist
-        }
-        return _params
       }
     }
   }

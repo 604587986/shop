@@ -4,8 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <!--商品状态 上架 下架-->
@@ -46,12 +45,12 @@
       <template slot="table-columns">
         <el-table-column label="图片" min-width="160">
           <template slot-scope="scope">
-            <img :src="scope.row.goods_image" class="goods-image" />
+            <img :src="scope.row.thumbnail" class="goods-image" />
           </template>
         </el-table-column>
         <el-table-column prop="goods_name" label="名称" min-width="160"/>
         <el-table-column label="价格" >
-          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <el-table-column label="库存" >
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
@@ -195,13 +194,11 @@
           quantity: [
             { validator: checkQuantity, trigger: 'change' }
           ]
-        }
+        },
+
+        /** 店铺信息 */
+        shopInfo: this.$store.getters.shopInfo
       }
-    },
-    computed: {
-      ...mapGetters([
-        'shopInfo'
-      ])
     },
     mounted() {
       if (this.$route.params && !Number.isNaN(parseInt(this.$route.params.id))) {

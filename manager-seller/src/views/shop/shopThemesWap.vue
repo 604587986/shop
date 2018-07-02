@@ -4,8 +4,8 @@
     <hr/>
     <p style="padding: 0 50px;">当前模板:</p>
     <div class="tpl-current-theme">
-      <div class="themes-img choosed-image" v-if="tpl_current && tpl_current.preview_base_path">
-        <img :src="tpl_current.preview_base_path" alt="" class="shop-theme-image">
+      <div class="themes-img choosed-image" v-if="tpl_current && tpl_current.image_path">
+        <img :src="tpl_current.image_path" alt="" class="shop-theme-image">
       </div>
       <span class="tpl-name">模板名称:{{tpl_current.name}}</span>
     </div>
@@ -19,10 +19,10 @@
             <div class="themes-img"
               :class='{"choosed-image":item.id === tpl_choosed_id}'
               @click="chooseTheme(item)">
-              <img v-if="item.preview_base_path" :src="item.preview_base_path" alt="" class="shop-theme-image">
+              <img v-if="item.image_path" :src="item.image_path" alt="" class="shop-theme-image">
             </div>
             <span class="tpl-name" >模板名称:{{item.name}}</span>
-            <span class="tpl-preview" @click="previewImg(item.preview_base_path)">预览</span>
+            <span class="tpl-preview" @click="previewImg(item.image_path)">预览</span>
           </div>
         </li>
       </ul>
