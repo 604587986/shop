@@ -15,7 +15,7 @@ export default {
       // 地区API
       MixinRegionApi: API_Common.regionApi,
       // 买家端域名
-      MixinBuyerDomain: domain.buyer
+      MixinBuyerDomain: domain.buyer_pc
     }
   },
   methods: {
