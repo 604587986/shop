@@ -66,3 +66,8 @@
      }
    }
  }
+
+ .el-upload-list--picture .el-upload-list__item-thumbnail {
+   width: auto;
+   max-width: 250px;
+ }
