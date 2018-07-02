@@ -291,8 +291,17 @@
       handleSaveEdit() {
         this.$refs['shopForm'].validate((valid, error) => {
           if (valid) {
-            API_Shop.editAuthShop(this.shop_id, this.shopForm).then(response => {
-              this.$message.success('修改成功！')
+            const params = this.MixinClone(this.shopForm)
+            if (this.isAudit) {
+              params.pass = 1
+            }
+            API_Shop.editAuthShop(this.shop_id, params).then(response => {
+              if (this.isAudit) {
+                this.$message.success('审核通过！')
+                this.isAudit = false
+              } else {
+                this.$message.success('修改成功！')
+              }
             })
           } else {
             this.$message.error('表单填写有误，请核对！')
