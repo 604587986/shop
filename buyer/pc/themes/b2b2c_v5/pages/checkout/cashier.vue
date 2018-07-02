@@ -47,6 +47,7 @@
   export default {
     name: 'cashier',
     layout: 'full',
+    middleware: 'auth-user',
     data() {
       return {
         online: true, // true: 在线支付; false: 货到付款
