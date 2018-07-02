@@ -4,7 +4,7 @@
  */
 
 import request from '@/utils/request'
-import { dev } from '~/ui-domain'
+import { api } from '~/ui-domain'
 
 /**
  * 获取第三方登录url
@@ -13,5 +13,5 @@ import { dev } from '~/ui-domain'
  * @returns {string}
  */
 export function getConnectUrl(client_type, login_type) {
-  return `${dev.passport}/connect/${client_type}/${login_type}`
+  return `${api.passport}/connect/${client_type}/${login_type}`
 }
