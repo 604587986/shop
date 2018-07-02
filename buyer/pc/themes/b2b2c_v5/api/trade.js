@@ -211,7 +211,7 @@ export function getOrderTotal() {
  */
 export function createTrade() {
   return request({
-    url: 'trade/orders/create',
+    url: 'trade/create',
     method: Method.POST,
     needToken: true
   })
