@@ -5,14 +5,17 @@
 import Vue from 'vue'
 import * as API_Common from '@/api/common'
 import { Foundation } from '~/ui-utils'
+import { domain } from '~/ui-domain'
 
 export default {
   data() {
     return {
-      /** 图片上传API */
+      // 图片上传API
       MixinUploadApi: API_Common.uploadApi,
-      /** 地区API */
-      MixinRegionApi: API_Common.regionApi
+      // 地区API
+      MixinRegionApi: API_Common.regionApi,
+      // 买家端域名
+      MixinBuyerDomain: domain.buyer
     }
   },
   methods: {
