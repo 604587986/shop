@@ -35,7 +35,7 @@ export default {
                      <img v-if="block.block_value" :src="block.block_value">
                      <div v-else-if="$parent.isEdit" class="no-image"></div>
                    </template>
-                   <a v-else :href="$parent.blockHref(block)" target="_blank">
+                   <a v-else :href="$parent.blockHref(block)">
                      <slot :block="block"></slot>
                      <img :src="block.block_value">
                    </a>

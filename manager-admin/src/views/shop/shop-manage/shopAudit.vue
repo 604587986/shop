@@ -16,7 +16,7 @@
         </el-table-column>
         <!--店铺状态-->
         <el-table-column label="店铺状态">
-          <template slot-scope="scope">{{ scope.row.shop_status | statusFilter }}</template>
+          <template slot-scope="scope">{{ scope.row.shop_disable | statusFilter }}</template>
         </el-table-column>
         <!--操作-->
         <el-table-column label="操作" width="150">

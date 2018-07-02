@@ -11,7 +11,7 @@
       </div>
       <template slot="table-columns">
         <el-table-column prop="name" label="模板名称"/>
-        <el-table-column prop="path" label="模板路径"/>
+        <el-table-column prop="mark" label="模板标识"/>
         <el-table-column label="是否为默认">
           <template slot-scope="scope">{{ scope.row.is_default ? '是' : '否' }}</template>
         </el-table-column>
@@ -49,15 +49,24 @@
       :close-on-press-escape="false"
     >
       <el-form :model="shopThemeForm" :rules="shopThemeRules" ref="shopThemeForm" label-width="100px">
-        <!--模板名称-->
         <el-form-item label="模板名称" prop="name">
           <el-input v-model="shopThemeForm.name" :maxlength="20" placeholder="请输入模板名称"></el-input>
         </el-form-item>
-        <!--文件夹-->
-        <el-form-item label="文件夹" prop="path">
-          <el-input v-model="shopThemeForm.path" :maxlength="200" placeholder="请输入文件夹名称"></el-input>
+        <el-form-item label="模板标识" prop="mark">
+          <el-input v-model="shopThemeForm.mark" :maxlength="50" placeholder="确保唯一性，且不可与WAP模板重复"></el-input>
         </el-form-item>
-        <!--是否默认-->
+        <el-form-item label="模板图片" prop="image_path">
+          <el-upload
+            :action="MixinUploadApi"
+            :on-success="(res) => { shopThemeForm.image_path = res.url }"
+            :on-remove="() => { shopThemeForm.image_path = '' }"
+            :file-list="shopThemeForm.image_path ? [{ name: 'image', url: shopThemeForm.image_path }] : []"
+            list-type="picture"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="是否默认">
           <el-radio-group v-model="shopThemeForm.is_default">
             <el-radio :label="1">是</el-radio>
@@ -96,12 +105,9 @@
         shopThemeForm: {},
         /** 添加、编辑店铺模板 规则 */
         shopThemeRules: {
-          name: [
-            { required: true, message: '请输入模板名称', trigger: 'blur' }
-          ],
-          path: [
-            { required: true, message: '请输入文件夹名称', trigger: 'blur' }
-          ]
+          name: [this.MixinRequired('请输入模板名称！')],
+          mark: [this.MixinRequired('请输入模板标识！')],
+          image_path: [this.MixinRequired('请上传模板图片！')]
         }
       }
     },
@@ -161,9 +167,7 @@
               API_Shop.editShopTheme(id, this.shopThemeForm).then(resposne => {
                 this.dialogShopThemeVisible = false
                 this.$message.success('保存成功！')
-                const { data } = this.tableData
-                const index = data.findIndex(item => item.id === id)
-                this.$set(data, index, resposne)
+                this.MixinSetTableData(this.tableData, 'id', id, resposne)
               })
             }
           } else {
@@ -179,9 +183,7 @@
         API_Shop.getShopThemeList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(() => {
-          this.loading = false
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }

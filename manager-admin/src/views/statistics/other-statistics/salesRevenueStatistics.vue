@@ -102,7 +102,6 @@
           this.loading = false
           this.tableData = responses[0]
           this.totalData = responses[1]
-          // Andste_TODO 2018/5/31: 返回参数不规范
         }).catch(() => { this.loading = false })
       }
     }

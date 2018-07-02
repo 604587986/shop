@@ -67,9 +67,8 @@
 
 <script>
   import Vue from 'vue'
-  import { Input,Button } from 'element-ui'
+  import { Input } from 'element-ui'
   Vue.use(Input)
-  Vue.use(Button)
   import { mapGetters, mapActions } from 'vuex'
   import * as CheckoutComponents from './'
   import * as API_Trade from '@/api/trade'

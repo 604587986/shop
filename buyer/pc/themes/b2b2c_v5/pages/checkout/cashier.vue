@@ -3,7 +3,7 @@
     <div class="index-cashier w">
       <div class="welcome">
         <a target="_blank" href="/">
-          <img src="~/assets/images/logo-javashop.png" alt="logo">
+          <img src="../../assets/images/logo-javashop.png" alt="logo">
         </a>
         <span>收银台</span>
       </div>
@@ -27,11 +27,8 @@
               <h3>支付平台</h3>
             </div>
             <ul class="cashier-pay-list">
-              <li class="alipay">
-                <img src="~/assets/images/icon-alipay.png">
-              </li>
-              <li class="wechat">
-                <img src="~/assets/images/icon-wechat.png">
+              <li v-for="payment in paymentList" :key="payment.plugin_id">
+                <img :src="payment.image">
               </li>
             </ul>
           </div>
@@ -46,14 +43,24 @@
 </template>
 
 <script>
+  import * as API_Trade from '@/api/trade'
   export default {
     name: 'cashier',
     layout: 'full',
+    middleware: 'auth-user',
     data() {
       return {
         online: true, // true: 在线支付; false: 货到付款
-        order_sn: '2333'
+        order_sn: '2333',
+        // 支付方式列表
+        paymentList: []
       }
+    },
+    mounted() {
+      // 获取支付方式列表
+      API_Trade.getPaymentList().then(response => {
+        this.paymentList = response
+      })
     }
   }
 </script>
@@ -176,7 +183,7 @@
           width: 21px;
           height: 21px;
           display: block;
-          background: url(~/assets/images/icons-cashier.png) no-repeat -70px 0;
+          background: url(../../assets/images/icons-cashier.png) no-repeat -70px 0;
           float: left;
           margin: 15px 10px 0 20px;
         }

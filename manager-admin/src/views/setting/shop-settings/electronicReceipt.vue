@@ -109,8 +109,6 @@
           this.dialogVisible = false
           this.$message.success('修改成功！')
           this.GET_ElectronicReceiptList()
-          // Andste_TODO 2018/6/16: 返回参数有些问题
-          // this.MixinSetTableData(this.tableData, 'id', 'id', response)
         })
       },
 

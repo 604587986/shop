@@ -35,7 +35,7 @@
                 </div>
               </div>
               <div class="p-oper">
-                <div class="price"><em>¥</em><span class="item-total">699.00</span></div>
+                <div class="price"><em>¥</em><span class="item-total">{{ sku.subtotal | unitPrice }}</span></div>
                 <a @click="handleRemoveSkuItem(sku)" href="javascript:void(0);" class="remove">删除</a>
               </div>
             </li>
@@ -43,7 +43,7 @@
           <p v-else class="no-sku"> 暂无商品... </p>
         </div>
         <div class="mb">
-          <div class="p-total">共<span class="cart-num">{{ allCount }}</span>件商品&nbsp;&nbsp;共计：<span class="cart-total">0.00</span></div>
+          <div class="p-total">共<span class="cart-num">{{ allCount }}</span>件商品&nbsp;&nbsp;共计：<span class="cart-total">{{(cartTotal.goods_price || 0) | unitPrice }}</span></div>
           <nuxt-link to="/cart" class="btn-cart">去购物车</nuxt-link>
         </div>
       </div>
@@ -61,12 +61,15 @@
       }
     },
     mounted() {
-      this.$store.dispatch('cart/getCartDataAction')
+      if (!this.cartTotal) {
+        this.$store.dispatch('cart/getCartDataAction')
+      }
     },
     computed: {
       ...mapGetters({
         skuList: 'cart/skuList',
-        allCount: 'cart/allCount'
+        allCount: 'cart/allCount',
+        cartTotal: 'cart/cartTotal'
       })
     },
     methods: {

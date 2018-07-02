@@ -200,7 +200,7 @@ export function setRemark(remark) {
  */
 export function getOrderTotal() {
   return request({
-    url: 'trade/orders/total',
+    url: 'trade/price',
     method: Method.GET,
     needToken: true
   })
@@ -211,8 +211,20 @@ export function getOrderTotal() {
  */
 export function createTrade() {
   return request({
-    url: 'trade/orders/create',
+    url: 'trade/create',
     method: Method.POST,
+    needToken: true
+  })
+}
+
+/**
+ * 获取支付方式列表
+ * @param client_type
+ */
+export function getPaymentList(client_type = 'PC') {
+  return request({
+    url: `order/pay/${client_type}`,
+    method: Method.GET,
     needToken: true
   })
 }
