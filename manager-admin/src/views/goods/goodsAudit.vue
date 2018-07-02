@@ -36,13 +36,21 @@
         <!--商品图片-->
         <el-table-column label="商品图片" width="120">
           <template slot-scope="scope">
-            <img :src="scope.row.thumbnail" class="goods-image"/>
+            <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" target="_blank">
+              <img :src="scope.row.thumbnail" class="goods-image"/>
+            </a>
           </template>
         </el-table-column>
         <!--商品编号-->
         <el-table-column prop="sn" label="商品SN" width="200"/>
         <!--商品名称-->
-        <el-table-column prop="goods_name" label="商品名称" align="left"/>
+        <el-table-column label="商品名称" align="left">
+          <template slot-scope="scope">
+            <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" class="goods_name" target="_blank">
+              {{ scope.row.goods_name }}
+            </a>
+          </template>
+        </el-table-column>
         <!--店铺名称-->
         <el-table-column prop="seller_name" label="店铺名称" width="150"/>
         <!--商品分类-->
@@ -239,5 +247,11 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+  .goods_name {
+    color: #4183c4;
+    &:hover {
+      color: #f42424;
+    }
   }
 </style>
