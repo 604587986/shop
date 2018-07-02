@@ -200,7 +200,7 @@ export function setRemark(remark) {
  */
 export function getOrderTotal() {
   return request({
-    url: 'trade/orders/total',
+    url: 'trade/price',
     method: Method.GET,
     needToken: true
   })
