@@ -16,7 +16,7 @@
 
  .cell {
    .el-tag {
-     margin-right: 0px;
+     margin-right: 0;
    }
  }
 
@@ -32,7 +32,7 @@
      padding: 0 10px;
      text-align: center;
      .el-tag {
-       margin-right: 0px;
+       margin-right: 0;
      }
    }
  }
@@ -51,7 +51,7 @@
      padding-right: 40px;
      resize: none;
      border: none;
-     border-radius: 0px;
+     border-radius: 0;
      border-bottom: 1px solid #bfcbd9;
    }
  }
