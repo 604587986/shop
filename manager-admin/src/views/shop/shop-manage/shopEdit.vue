@@ -326,7 +326,11 @@
           const params = this.MixinClone(this.backShopInfo)
           params.pass = 0
           API_Shop.editAuthShop(this.shop_id, params).then(response => {
-            this.$message.success('拒绝通过成功！')
+            this.$message.success('已拒绝该店铺！')
+            this.$store.dispatch('delCurrentViews', {
+              view: this.$route,
+              $router: this.$router
+            })
           })
         }).catch(() => {})
       }
