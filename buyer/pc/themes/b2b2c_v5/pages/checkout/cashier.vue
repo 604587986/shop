@@ -3,7 +3,7 @@
     <div class="index-cashier w">
       <div class="welcome">
         <a target="_blank" href="/">
-          <img src="~/assets/images/logo-javashop.png" alt="logo">
+          <img src="../../assets/images/logo-javashop.png" alt="logo">
         </a>
         <span>收银台</span>
       </div>
@@ -182,7 +182,7 @@
           width: 21px;
           height: 21px;
           display: block;
-          background: url(~/assets/images/icons-cashier.png) no-repeat -70px 0;
+          background: url(../../assets/images/icons-cashier.png) no-repeat -70px 0;
           float: left;
           margin: 15px 10px 0 20px;
         }
