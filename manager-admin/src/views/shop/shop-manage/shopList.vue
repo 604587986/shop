@@ -118,7 +118,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          shop_disable: 'ALL'
+          shop_disable: 'OPEN'
         },
         /** 列表数据 */
         tableData: '',
