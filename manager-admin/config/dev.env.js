@@ -1,4 +1,4 @@
-import { api_dev } from '~/ui-domain'
+const { api_dev } = require('../ui-domain')
 
 module.exports = {
 	NODE_ENV: '"development"',

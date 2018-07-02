@@ -1,4 +1,4 @@
-import { api_pro } from '~/ui-domain'
+const { api_pro } = require('../ui-domain')
 
 module.exports = {
 	NODE_ENV: '"production"',
