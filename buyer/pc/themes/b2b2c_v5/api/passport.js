@@ -4,6 +4,7 @@
  */
 
 import request, { Method } from '@/utils/request'
+import { api } from '~/ui-domain'
 import Storage from '@/utils/storage'
 import md5 from 'js-md5'
 
@@ -16,7 +17,7 @@ export function login(params) {
   // params = JSON.parse(JSON.stringify(params))
   // params.password = md5(params.password)
   return request({
-    url: 'passport/login',
+    url: `${api.passport}/passport/login`,
     method: Method.GET,
     params
   })
@@ -29,7 +30,7 @@ export function login(params) {
  */
 export function loginByMobile(mobile, sms_code) {
   return request({
-    url: `passport/login/${mobile}`,
+    url: `${api.passport}/passport/login/${mobile}`,
     method: Method.GET,
     params: { sms_code }
   })
@@ -42,7 +43,7 @@ export function loginByMobile(mobile, sms_code) {
  */
 export function sendRegisterSms(mobile, captcha) {
   return request({
-    url: `passport/register/smscode/${mobile}`,
+    url: `${api.passport}/passport/register/smscode/${mobile}`,
     method: Method.POST,
     data: {
       captcha,
@@ -58,7 +59,7 @@ export function sendRegisterSms(mobile, captcha) {
  */
 export function sendLoginSms(mobile, captcha) {
   return request({
-    url: `passport/login/smscode/${mobile}`,
+    url: `${api.passport}/passport/login/smscode/${mobile}`,
     method: Method.POST,
     data: {
       captcha,
@@ -73,7 +74,7 @@ export function sendLoginSms(mobile, captcha) {
  */
 export function checkUsernameRepeat(username) {
   return request({
-    url: `passport/username/${username}`,
+    url: `${api.passport}/passport/username/${username}`,
     method: Method.GET,
     loading: false
   })
@@ -85,7 +86,7 @@ export function checkUsernameRepeat(username) {
  */
 export function checkMobileRepeat(mobile) {
   return request({
-    url: `passport/mobile/${mobile}`,
+    url: `${api.passport}/passport/mobile/${mobile}`,
     method: Method.GET,
     loading: false
   })
@@ -101,7 +102,7 @@ export function registerByMobile(params) {
   // params = JSON.parse(JSON.stringify(params))
   // params.password = md5(params.password)
   return request({
-    url: 'passport/register/pc',
+    url: `${api.passport}/passport/register/pc`,
     method: Method.POST,
     data: params
   })
@@ -115,7 +116,7 @@ export function registerByMobile(params) {
  */
 export function validMobileSms(mobile, scene, sms_code) {
   return request({
-    url: `passport/smscode/${mobile}`,
+    url: `${api.passport}/passport/smscode/${mobile}`,
     method: Method.GET,
     params: {
       scene,
@@ -132,7 +133,7 @@ export function validMobileSms(mobile, scene, sms_code) {
  */
 export function validAccount(uuid, captcha, account) {
   return request({
-    url: 'passport/find-pwd',
+    url: `${api.passport}/passport/find-pwd`,
     method: Method.GET,
     params: {
       uuid,
@@ -149,7 +150,7 @@ export function validAccount(uuid, captcha, account) {
  */
 export function sendFindPasswordSms(uuid, captcha) {
   return request({
-    url: 'passport/find-pwd/send',
+    url: `${api.passport}/passport/find-pwd/send`,
     method: Method.POST,
     data: {
       uuid,
@@ -165,7 +166,7 @@ export function sendFindPasswordSms(uuid, captcha) {
  */
 export function validFindPasswordSms(uuid, sms_code) {
   return request({
-    url: 'passport/find-pwd/valid',
+    url: `${api.passport}/passport/find-pwd/valid`,
     method: Method.GET,
     params: {
       uuid,
@@ -181,7 +182,7 @@ export function validFindPasswordSms(uuid, sms_code) {
  */
 export function changePassword(uuid, password) {
   return request({
-    url: 'passport/find-pwd/update-password',
+    url: `${api.passport}/passport/find-pwd/update-password`,
     method: Method.PUT,
     data: {
       uuid,
