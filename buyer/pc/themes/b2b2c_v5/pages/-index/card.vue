@@ -17,7 +17,7 @@
           <p>Hi,<a href="#">&ensp;欢迎来到Javashop！</a></p>
           <p class="btns">
             <nuxt-link :to="'/login' + MixinForward" class="please-login">请登录</nuxt-link>
-            <a href="#" class="apply-shop">申请开店</a>
+            <nuxt-link :to="'/register' + MixinForward" class="to-register">去注册</nuxt-link>
           </p>
         </div>
       </div>
@@ -156,7 +156,7 @@
             border: 1px solid #333;
             text-align: center;
           }
-          .apply-shop {
+          .please-login {
             border-color: #f42424;
             color: #f42424;
           }
