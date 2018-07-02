@@ -50,8 +50,14 @@
 </template>
 
 <script>
+  import * as API_Members from '@/api/members'
   export default {
-    name: 'account-binding'
+    name: 'account-binding',
+    mounted() {
+      API_Members.getAccountBinder().then(response => {
+        console.log(response)
+      })
+    }
   }
 </script>
 
