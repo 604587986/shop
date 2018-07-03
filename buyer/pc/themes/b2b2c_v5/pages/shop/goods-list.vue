@@ -1,9 +1,9 @@
 <template>
   <div id="shop-goods-list" class="container">
     <template v-if="shop">
-      <theme1-header v-if="shop.shop_theme === 1" :shop="shop"/>
-      <theme2-header v-if="shop.shop_theme === 2" :shop="shop"/>
-      <theme3-header v-if="shop.shop_theme === 3" :shop="shop"/>
+      <theme1-header v-if="shop.shop_theme_path === 'pc_1'" :shop="shop"/>
+      <theme2-header v-if="shop.shop_theme_path === 'pc_2'" :shop="shop"/>
+      <theme3-header v-if="shop.shop_theme_path === 'pc_3'" :shop="shop"/>
     </template>
     <div class="sort-nav">
       <div class="inner w">
@@ -68,9 +68,9 @@
   import Vue from 'vue'
   import * as API_Shop from '@/api/shop'
   import { Foundation } from '~/ui-utils'
-  const theme1Header = () => import('@/pages/-shop-theme/-theme1-header')
-  const theme2Header = () => import('@/pages/-shop-theme/-theme2-header')
-  const theme3Header = () => import('@/pages/-shop-theme/-theme3-header')
+  const theme1Header = () => import('@/pages/shop/-themes/-theme1-header')
+  const theme2Header = () => import('@/pages/shop/-themes/-theme2-header')
+  const theme3Header = () => import('@/pages/shop/-themes/-theme3-header')
   import { Pagination, Input, InputNumber } from 'element-ui'
   Vue.use(Pagination)
   Vue.use(Input)

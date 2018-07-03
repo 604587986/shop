@@ -31,11 +31,11 @@ export function getOrderDetail(order_sn) {
 
 /**
  * 根据订单sn获取订单日志
- * @param sn
+ * @param order_sn
  */
-export function getOrderLog(sn) {
+export function getOrderLog(order_sn) {
   return request({
-    url: `order-query/admin/order/${sn}/log.do`,
+    url: `trade/orders/${order_sn}/log`,
     method: 'get',
     loading: false
   })
@@ -43,14 +43,14 @@ export function getOrderLog(sn) {
 
 /**
  * 确认收款
- * @param sn
- * @param params
+ * @param order_sn
+ * @param pay_price
  */
-export function confirmPay(sn, params) {
+export function confirmPay(order_sn, pay_price) {
   return request({
-    url: 'order-opration/admin/order/pay.do',
+    url: `trade/orders/${order_sn}/pay`,
     method: 'post',
-    data: params
+    data: { pay_price }
   })
 }
 

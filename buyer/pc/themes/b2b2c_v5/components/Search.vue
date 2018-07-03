@@ -15,7 +15,7 @@
     </div>
     <ul class="search-hot-keywords">
       <li v-for="item in hot_keywords" :key="item.id">
-        <nuxt-link :to="'/goods?keyword=' + item">{{ item.hot_name }}</nuxt-link>
+        <nuxt-link :to="'/goods?keyword=' + item.hot_name">{{ item.hot_name }}</nuxt-link>
       </li>
     </ul>
     <div v-show="show_autocomplete && autoCompleteData.length > 0" class="search-autocomplete">
@@ -49,13 +49,12 @@
       }
     },
     mounted() {
-      const { keyword } = this.$route.query
-      if (keyword) {
-        this.keyword = keyword
-        this.GET_AutoCompleteWords(keyword)
-      }
+      this.handleQueryKeywordChange()
        /** 获取热门关键词 */
       API_Home.getHotKeywords().then(response => this.hot_keywords = response)
+    },
+    watch: {
+      $route: 'handleQueryKeywordChange'
     },
     methods: {
       /** 关键字发生改变 */
@@ -83,6 +82,14 @@
         this.$route.name === 'shop'
           ? this.$router.replace({path: '/shop', query: { keyword: this.keyword }})
           : this.$router.push({path: '/shop', query: { keyword: this.keyword }})
+      },
+      /** URL中keyword发生改变 */
+      handleQueryKeywordChange() {
+        const { keyword } = this.$route.query
+        if (keyword) {
+          this.keyword = keyword
+          this.GET_AutoCompleteWords(keyword)
+        }
       },
       /** 获取自动补全数据 */
       GET_AutoCompleteWords(keyword) {

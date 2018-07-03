@@ -27,11 +27,11 @@
             <!--商品参数-->
             <goods-params v-show="curTab === '规格参数'" :goods-params="goods.goods_params"/>
             <!--商品评论-->
-            <goods-comments v-show="curTab === '商品评论'"/>
+            <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id"/>
             <!--商品咨询-->
             <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
             <!--销售记录-->
-            <sales-record v-show="curTab === '销售记录'" />
+            <sales-record v-show="curTab === '销售记录'" :goods-id="goods.goods_id"/>
           </div>
         </div>
       </div>
@@ -41,7 +41,9 @@
 
 <script>
   import Vue from 'vue'
+  import { mapGetters } from 'vuex'
   import * as API_Goods from '@/api/goods'
+  import * as API_Members from '@/api/members'
   import * as GoodsComponents from './'
   import { Pagination } from 'element-ui'
   Vue.use(Pagination)
@@ -82,12 +84,22 @@
         /** 规格图片 */
         specImage: '',
         tabs: ['商品详情', '规格参数', '商品评论', '商品咨询', '销售记录'].map((item, index) => ({ title: item, active: index === 0 })),
-        curTab: '商品详情'
+        curTab: '商品详情',
+        // 商品是否已被收藏
+        collected: false
       }
     },
     mounted() {
+      const { goods_id, seller_id } = this.goods
       // 用于服务端记录浏览次数，每次+1【服务端去重】
-      API_Goods.visitGoods(this.goods.goods_id)
+      API_Goods.visitGoods(goods_id)
+      // 如果用户已登录，查询是否已收藏商品、店铺
+      this.user && API_Members.getGoodsIsCollect(goods_id).then(response => {
+        this.collected = response.message
+      })
+    },
+    computed: {
+      ...mapGetters(['user'])
     },
     methods: {
       /** 商品详情tab点击事件 */
@@ -147,5 +159,9 @@
       overflow: hidden;
     }
     .intro-detail { text-align: center }
+  }
+  /deep/ .el-pagination {
+    margin-top: 20px;
+    text-align: right;
   }
 </style>

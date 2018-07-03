@@ -1,11 +1,11 @@
 <template>
   <el-carousel height="500px" class="banner-container">
     <el-carousel-item
-      v-for="banner in banners"
-      :key="banner.id"
+      v-for="silde in sildes"
+      :key="silde.silde_id"
     >
-      <nuxt-link :to="banner.link">
-        <img :src="banner.image" class="banner-img">
+      <nuxt-link :to="silde.silde_url">
+        <img :src="silde.img" class="banner-img">
       </nuxt-link>
     </el-carousel-item>
   </el-carousel>
@@ -16,9 +16,18 @@
   import { Carousel, CarouselItem } from 'element-ui'
   Vue.use(Carousel)
   Vue.use(CarouselItem)
+  import * as API_Shop from '@/api/shop'
   export default {
-    name: 'shop-banner',
-    props: ['banners']
+    name: 'shop-sildes',
+    props: ['shopId'],
+    data() {
+      return {
+        sildes: []
+      }
+    },
+    mounted() {
+      API_Shop.getShopSildes(this.shopId).then(response => { this.sildes = response })
+    }
   }
 </script>
 
