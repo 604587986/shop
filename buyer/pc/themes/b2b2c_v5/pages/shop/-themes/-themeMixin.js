@@ -7,7 +7,8 @@ import ShopStar from './-shop-star'
 export default {
   data() {
     return {
-      shop_id: this.$route.query.shop_id
+      shop_id: this.$route.params.id,
+      categorys: []
     }
   },
   props: {
@@ -19,6 +20,13 @@ export default {
   components: {
     'en-shop-sildes': ShopSildes,
     'en-shop-star': ShopStar
+  },
+  mounted() {
+    /** 获取店铺分类【分组】 */
+    console.log(this)
+    API_Shop.getShopCategorys(this.shop_id).then(response => {
+      console.log(response)
+    })
   },
   methods: {
     collectionShop() {

@@ -4,7 +4,7 @@
       <div class="w">
         <div class="shop-name">{{ shop.shop_name }}</div>
         <div class="shop-more">
-          <div class="item" @click="collectionShop">
+          <div class="item">
             <i class="iconfont ea-icon-star"></i>
             <p>收藏</p>
           </div>
@@ -35,10 +35,9 @@
 </template>
 
 <script>
-  import mixin from './-themeMixin'
   export default {
     name: 'shop-theme-2-header',
-    mixins: [mixin]
+    props: ['shop']
   }
 </script>
 
