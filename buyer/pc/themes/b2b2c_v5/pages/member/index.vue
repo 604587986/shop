@@ -51,7 +51,7 @@
                 <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.sku_list.length }}）种商品</span></p>
               </div>
               <div class="order-oper">
-                <nuxt-link :to="'/member/order/detail/' + order.sn" target="_blank">查看订单</nuxt-link>
+                <nuxt-link :to="'/member/my-order/detail?order_sn=' + order.sn">查看订单</nuxt-link>
               </div>
             </div>
           </template>
