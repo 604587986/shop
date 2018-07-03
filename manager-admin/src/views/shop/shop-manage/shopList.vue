@@ -118,7 +118,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          shop_disable: 'ALL'
+          shop_disable: 'OPEN'
         },
         /** 列表数据 */
         tableData: '',
@@ -240,10 +240,6 @@
         this.loading = true
         API_Shop.getShopList(this.params).then(response => {
           this.loading = false
-          response.data.map(item => {
-            item.shop_createtime *= 1000
-            return item
-          })
           this.tableData = response
         }).catch(() => { this.loading = false })
       }

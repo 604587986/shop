@@ -7,6 +7,7 @@ import CountDownBtn from './CountDownBtn'
 import Face from './Face'
 import Footer from './Footer'
 import Header from './Header'
+import HeaderOther from './HeaderOther'
 import Nav from './Nav'
 import Operation from './Operation'
 import PicZoom from './PicZoom'
@@ -23,6 +24,7 @@ export {
   Footer,
   Face,
   Header,
+  HeaderOther,
   Nav,
   Operation,
   PicZoom,

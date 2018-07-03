@@ -112,7 +112,7 @@
       handleCreateTrade() {
         /** 先调用创建订单接口，再跳转到收银台 */
         API_Trade.createTrade().then(response => {
-          this.$router.push({ path: '/checkout/cashier' })
+          this.$router.push({ path: '/checkout/cashier?trande_sn=' + response.trade_sn })
         })
       }
     }

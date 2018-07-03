@@ -1,20 +1,11 @@
 <template>
   <div id="register">
-    <div class="register">
-      <!-- logo -->
-      <div class="index-register w">
-        <div class="welcome">
-          <a href="/">
-            <img src="../assets/images/logo-javashop.png" alt="logo">
-          </a>
-          <span>欢迎注册</span>
-        </div>
-        <div class="have-account">
-          <span>已有账号？</span>
-          <nuxt-link :to="'/login' + MixinForward">请登录></nuxt-link>
-        </div>
+    <en-header-other title="欢迎注册">
+      <div class="have-account">
+        <span>已有账号？</span>
+        <nuxt-link :to="'/login' + MixinForward">请登录></nuxt-link>
       </div>
-    </div>
+    </en-header-other>
     <div class="register-content">
       <el-form
         :model="registerForm"
@@ -64,8 +55,10 @@
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import { RegExp } from '~/ui-utils'
+  import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'register',
+    components: {EnHeaderOther},
     layout: 'full',
     head() {
       return {
@@ -209,35 +202,12 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .register .index-register{
-    position: relative;
-    width: 1000px;
-    margin: 20px auto;
-    height: 80px;
-    .welcome {
-      a {
-        float: left;
-        width: 245px;
-        height: 60px;
-      }
-      img {
-        width: 240px;
-        height: 60px;
-      }
-      span {
-        font-size: 23px;
-        float: left;
-        display: block;
-        margin: 25px 5px;
-      }
-    }
-    .have-account {
-      font-size: 16px;
-      float: right;
-      margin-top: 24px;
-      color: #999;
-      a { color: #f42424 }
-    }
+  .have-account {
+    font-size: 16px;
+    float: right;
+    margin-top: 24px;
+    color: #999;
+    a { color: #f42424 }
   }
   .register-content {
     border-top: 2px solid #f42424;

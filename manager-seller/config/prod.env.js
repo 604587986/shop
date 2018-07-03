@@ -1,8 +1,8 @@
-const domain = require('../ui-domain')
+const { api_pro } = require('../ui-domain')
 module.exports = {
 	NODE_ENV: '"production"',
 	ENV_CONFIG: '"prod"',
-  SELLER_API: `"${domain.dev.seller}"`, // api接口地址
-  BASE_API: `"${domain.dev.base}"`, // baseapi接口地址
-  BASE_IMG_URL: `"${domain.dev.base}/uploaders"` // 图片服务器地址
+  SELLER_API: `"${api_pro.seller}"`, // api接口地址
+  BASE_API: `"${api_pro.base}"`, // baseapi接口地址
+  BASE_IMG_URL: `"${api_pro.base}/uploaders"` // 图片服务器地址
 }

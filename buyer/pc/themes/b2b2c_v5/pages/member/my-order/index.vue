@@ -51,7 +51,7 @@
                   </div>
                   <div class="sku-price">{{ sku.purchase_price | unitPrice('￥') }}</div>
                   <div class="sku-num">x {{ sku.num }}</div>
-                  <div class="after-sale-btn">
+                  <div v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" class="after-sale-btn">
                     <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
                   </div>
                 </div>
@@ -63,7 +63,10 @@
               </div>
               <div class="order-item-status">{{ order.order_status_text }}</div>
               <div class="order-item-operate">
-                <nuxt-link :to="'/pay/' + order.sn">订单付款</nuxt-link>
+                <a v-if="order.order_operate_allowable_vo.allow_cancel" href="javascript:;" @click="handleCancelOrder(order.sn)">取消订单</a>
+                <a v-if="order.order_operate_allowable_vo.allow_rog" href="javascript:;" @click="handleRogOrder(order.sn)">确认收货</a>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/pay/' + order.sn">订单付款</nuxt-link>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/pay/' + order.sn">去评论</nuxt-link>
                 <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
               </div>
             </div>
@@ -146,6 +149,33 @@
         })
         this.params.order_status = _hash
         this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+      },
+      /** 取消订单 */
+      handleCancelOrder(order_sn) {
+        this.$layer.prompt({
+          formType: 2,
+          title: '请输入取消原因'
+        }, (value, index) => {
+          const val = value.trim()
+          if (!val) {
+            this.$message.error('请填写取消原因！')
+          } else {
+            API_Order.cancelOrder(order_sn, val).then(() => {
+              this.$message.success('订单取消申请成功！')
+              layer.close(index)
+              this.getOrderData()
+            })
+          }
+        })
+      },
+      /** 确认收货 */
+      handleRogOrder(order_sn) {
+        this.$confirm('请确认是否收到货物，否则可能会钱财两空！', () => {
+          API_Order.confirmReceipt(order_sn).then(() => {
+            this.$message.success('确认收货成功！')
+            this.getOrderData()
+          })
+        })
       },
       ...mapActions({
         getOrderData: 'order/getOrderDataAction'
