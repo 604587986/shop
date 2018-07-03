@@ -33,7 +33,8 @@
   .header-other {
     .inner-header-other {
       position: relative;
-      margin: 20px auto;
+      margin: 0 auto;
+      padding: 20px 0;
       height: 80px;
       .logo {
         float: left;
