@@ -532,7 +532,6 @@
     /** 评分图标标识 */
     div.score-pic {
       .score-pic-content {
-        background: url(./images/rate_column.gif) no-repeat 28px -88px;
         display: block;
         margin: 0 auto;
         padding: 0;
@@ -541,6 +540,8 @@
         dt {
           height: 20px;
           position: relative;
+          background: url(./images/rate_column.gif) no-repeat 28px -88px;
+          width: 410px;
         }
         em {
           position: absolute;
