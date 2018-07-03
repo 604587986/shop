@@ -26,17 +26,15 @@
                   </el-form-item>
                   <el-form-item label="评价">
                     <el-select v-model="advancedForm.grade" placeholder="请选择" clearable>
-                      <el-option label="全部" :value="0"/>
-                      <el-option label="好评" :value="1"/>
-                      <el-option label="中评" :value="2"/>
-                      <el-option label="差评" :value="3"/>
+                      <el-option label="好评" value="good"/>
+                      <el-option label="中评" value="neutral"/>
+                      <el-option label="差评" value="bad"/>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="回复状态">
                     <el-select v-model="advancedForm.reply_status" placeholder="请选择" clearable>
-                      <el-option label="全部" :value="0"/>
-                      <el-option label="已回复" :value="1"/>
-                      <el-option label="未回复" :value="2"/>
+                      <el-option label="已回复" value="1"/>
+                      <el-option label="未回复" value="0"/>
                     </el-select>
                   </el-form-item>
                 </el-form>
@@ -59,7 +57,9 @@
           <tr style="width: 100%;height: 10px;"></tr>
           <tr class="bg-order">
             <!--商品名称-->
-            <td colspan="4"><a href="" class="shop-name">{{ item.goods_name }}</a></td>
+            <td colspan="4">
+              <a class="shop-name" :href="`${HTTP_URL}/${item.goods_id}`" style="color: #00a2d4;">{{ item.goods_name }}</a>
+            </td>
           </tr>
           <tr>
             <!--评论-->
@@ -195,6 +195,9 @@
     },
     data() {
       return {
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
+
         /** 当前面板 */
         activeName: 'commentlist',
 
@@ -336,7 +339,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          keywords: data
+          keyword: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_CommmentsList()

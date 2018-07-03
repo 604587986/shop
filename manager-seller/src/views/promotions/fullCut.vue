@@ -913,7 +913,7 @@
             this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000
             this.activityForm.description = this.$refs['UE'].getUEContent()
             let _goodslist = []
-            if (this.activityForm.goods_list && Array.isArray(this.activityForm.goods_list)) {
+            if (this.activityForm.goods_list && Array.isArray(this.activityForm.goods_list) && this.activityForm.range_type === 2) {
               _goodslist = this.activityForm.goods_list.map(key => {
                 return {
                   goods_id: key.goods_id,
@@ -922,11 +922,13 @@
                 }
               })
             }
-            if (_goodslist.length > 0) {
+            if (_goodslist.length > 0 && this.activityForm.range_type === 2) {
               /** 参与商品列表 */
               this.activityForm.goods_list = _goodslist
+            } else {
+              delete this.activityForm.goods_list
             }
-
+            delete this.activityForm.take_effect_time
             if (this.activityForm.fd_id) {
               API_activity.saveFullCutActivity(this.activityForm.fd_id, this.activityForm).then(() => {
                 this.$message.success('保存成功！')

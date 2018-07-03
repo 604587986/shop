@@ -47,6 +47,15 @@
       API_shopStatistics.getShopSurveyCharts().then(response => {
         this.loading = false
         this.sesalChart.setOption({
+          noDataLoadingOption: {
+            text: '无数据',
+            effect: 'bubble',
+            effectOption: {
+              effect: {
+                n: 0
+              }
+            }
+          },
           title: { text: '最近30天销售统计', x: 'center' },
           tooltip: { trigger: 'axis' },
           legend: { orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },

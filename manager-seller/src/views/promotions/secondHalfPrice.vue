@@ -465,7 +465,7 @@
       /** 构造表单数据 */
       generateFormData(data) {
         let _goodslist = []
-        if (data.goods_list && Array.isArray(data.goods_list)) {
+        if (data.goods_list && Array.isArray(data.goods_list) && this.activityForm.range_type === 2) {
           _goodslist = data.goods_list.map(key => {
             return {
               goods_id: key.goods_id,
@@ -489,9 +489,11 @@
         }
         /** 活动描述 */
         _params.description = this.$refs.UE.getUEContent()
-        if (_goodslist.length > 0) {
+        if (_goodslist.length > 0 && this.activityForm.range_type === 2) {
           /** 参与商品列表 */
           _params.goods_list = _goodslist
+        } else {
+          delete _params.goods_list
         }
         return _params
       }
