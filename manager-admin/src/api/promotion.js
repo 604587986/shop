@@ -327,3 +327,20 @@ export function getSeckillGoods(params) {
     params
   })
 }
+
+/**
+ * 审核限时抢购商品
+ * @param apply_id
+ * @param status
+ * @param fail_reason
+ */
+export function reviewSckillGoods(apply_id, status = 'yes', fail_reason) {
+  return request({
+    url: `promotion/seckills/review/${apply_id}`,
+    method: 'post',
+    data: {
+      status,
+      fail_reason
+    }
+  })
+}
