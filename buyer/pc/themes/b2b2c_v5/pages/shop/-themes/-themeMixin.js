@@ -22,11 +22,6 @@ export default {
     'en-shop-star': ShopStar
   },
   mounted() {
-    /** 获取店铺分类【分组】 */
-    console.log(this)
-    API_Shop.getShopCategorys(this.shop_id).then(response => {
-      console.log(response)
-    })
   },
   methods: {
     collectionShop() {
