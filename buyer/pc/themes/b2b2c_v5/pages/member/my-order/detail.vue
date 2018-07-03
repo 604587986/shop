@@ -11,7 +11,7 @@
           <dl><dt>送货时间:</dt><dd>{{ order.receive_time }}</dd></dl>
           <dl><dt>客户留言：</dt><dd>{{ order.remark || '无' }}</dd></dl>
           <dl class="top_line"><dt>订单编号：</dt><dd>{{ order.sn }}</dd></dl>
-          <dl><dt>付款方式：</dt><dd>{{ order.payment_method_name }}</dd></dl>
+          <dl><dt>付款方式：</dt><dd>{{ order.payment_type === "ONLINE" ? order.payment_method_name : '货到付款' }}</dd></dl>
           <dl><dt>支付状态：</dt><dd>{{ order.pay_status_text }}</dd></dl>
           <dl><dt>商品总价：</dt><dd>￥{{ (order.goods_price || 0) | unitPrice }}</dd></dl>
           <dl class="bottom_line"><dt>运费：</dt><dd>￥{{ (order.shipping_price || 0) | unitPrice }}</dd></dl>
@@ -23,20 +23,19 @@
       <div class="status-order">
         <h2>订单状态：未付款</h2>
         <ul>
-          <li>1. 您尚未对该订单进行支付，请
-            <strong>
-              <a target="_blank" href="/javashop/order_pay_desk.html?ordersn=20180412000001" class="green_btn">按此为订单付款</a>
-            </strong>
+          <li v-if="order && order.order_operate_allowable_vo.allow_pay">
+            - 如果您尚未对该订单进行支付，请
+            <strong><a href="#">按此为订单付款</a></strong>
             以确保商家及时发货。
           </li>
-          <li>2. 如果您不想购买此订单的商品，请
-            <strong>
-              <a href="javascript:;" @click="handleCancelOrder">取消订单</a>
-            </strong>
+          <li v-if="order && order.order_operate_allowable_vo.allow_cancel">
+            - 如果您不想购买此订单的商品，请
+            <strong><a href="javascript:;" @click="handleCancelOrder">取消订单</a></strong>
             订单操作。
           </li>
-          <li>3. 如果您已经收到商品，请
-            <a href="javascript:;" class="cancelBtn order_delno" sn="20180412000001">确认收货</a>
+          <li v-if="order && order.order_operate_allowable_vo.allow_rog">
+            - 如果您已经收到商品，请
+            <strong><a href="javascript:;" @click="handleRogOrder">确认收货</a></strong>
             订单操作。
           </li>
         </ul>
@@ -74,7 +73,6 @@
       handleCancelOrder() {
         this.$layer.prompt({
           formType: 2,
-          scrollbar: false,
           title: '请输入取消原因'
         }, (value, index) => {
           const val = value.trim()
@@ -87,6 +85,15 @@
               this.GET_OrderDetail()
             })
           }
+        })
+      },
+      /** 确认收货 */
+      handleRogOrder() {
+        this.$confirm('请确认是否收到货物，否则可能会钱财两空！', () => {
+          API_Order.confirmReceipt(this.order_sn).then(() => {
+            this.$message.success('确认收货成功！')
+            this.GET_OrderDetail()
+          })
         })
       },
       /** 获取订单详情 */
