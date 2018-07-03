@@ -1,7 +1,7 @@
 <template>
   <div id="shop-theme-1">
     <theme1-header :shop="shop"/>
-    <en-shop-sildes :sildes="shop.shop_sildes"/>
+    <en-shop-sildes :shop-id="shop.shop_id"/>
     <div class="shop-tags">
       <div class="tags-container">
         <div class="item hot">

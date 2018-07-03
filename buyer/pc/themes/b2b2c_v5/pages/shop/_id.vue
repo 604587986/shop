@@ -18,9 +18,6 @@
     },
     async asyncData({ params }) {
       const shop = await API_Shop.getShopBaseInfo(params.id)
-      const sildes = await API_Shop.getShopSildes(params.id)
-      shop.shop_sildes = sildes || []
-      console.log(shop)
       return { shop }
     },
     components: { theme1, theme2, theme3 },

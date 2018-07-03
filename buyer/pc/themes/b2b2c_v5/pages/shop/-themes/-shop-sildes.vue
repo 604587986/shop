@@ -16,9 +16,18 @@
   import { Carousel, CarouselItem } from 'element-ui'
   Vue.use(Carousel)
   Vue.use(CarouselItem)
+  import * as API_Shop from '@/api/shop'
   export default {
     name: 'shop-sildes',
-    props: ['sildes']
+    props: ['shopId'],
+    data() {
+      return {
+        sildes: []
+      }
+    },
+    mounted() {
+      API_Shop.getShopSildes(this.shopId).then(response => { this.sildes = response })
+    }
   }
 </script>
 
