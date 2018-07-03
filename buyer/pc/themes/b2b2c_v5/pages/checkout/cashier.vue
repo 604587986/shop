@@ -1,13 +1,6 @@
 <template>
   <div id="cashier">
-    <div class="index-cashier w">
-      <div class="welcome">
-        <a target="_blank" href="/">
-          <img src="../../assets/images/logo-javashop.png" alt="logo">
-        </a>
-        <span>收银台</span>
-      </div>
-    </div>
+    <en-header-other title="收银台"/>
     <div class="cashier-box">
       <div class="cashier-change">
         <h2>交易号：
@@ -45,8 +38,10 @@
 <script>
   import * as API_Trade from '@/api/trade'
   import * as API_Order from '@/api/order'
+  import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'cashier',
+    components: {EnHeaderOther},
     layout: 'full',
     middleware: 'auth-user',
     data() {
