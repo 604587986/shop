@@ -5,7 +5,7 @@
         <h2>订单信息</h2>
         <div class="info-list">
           <dl><dt>下单时间：</dt><dd>{{ order.create_time | unixToDate }}</dd></dl>
-          <dl><dt>收货地址：</dt><dd>{{order.ship_province}} {{ order.ship_city }} {{ order.ship_region }} {{ order.ship_town }} {{order.ship_address}} - {{ order.ship_addr }}</dd></dl>
+          <dl><dt>收货地址：</dt><dd>{{order.ship_province}} {{ order.ship_city }} {{ order.ship_county }} {{ order.ship_town }} {{order.ship_address}} - {{ order.ship_addr }}</dd></dl>
           <dl><dt>收货人：</dt><dd>{{ order.ship_name }}</dd></dl>
           <dl><dt>发票信息:</dt><dd>无</dd></dl>
           <dl><dt>送货时间:</dt><dd>{{ order.receive_time }}</dd></dl>
