@@ -43,14 +43,14 @@ export function getOrderLog(order_sn) {
 
 /**
  * 确认收款
- * @param sn
- * @param params
+ * @param order_sn
+ * @param pay_price
  */
-export function confirmPay(sn, params) {
+export function confirmPay(order_sn, pay_price) {
   return request({
-    url: 'order-opration/admin/order/pay.do',
+    url: `trade/orders/${order_sn}/pay`,
     method: 'post',
-    data: params
+    data: { pay_price }
   })
 }
 
