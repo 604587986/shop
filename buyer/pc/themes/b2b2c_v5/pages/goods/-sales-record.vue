@@ -1,12 +1,65 @@
 <template>
   <div id="sales-record" class="sales-record">
-
+    <el-table :data="salesList.data" style="width: 100%">
+      <!--// Andste_TODO 2018/7/3: 大小写适配-->
+      <el-table-column prop="buyerName" label="买家" align="center"/>
+      <el-table-column label="购买价格" align="center">
+        <template slot-scope="scope">
+          <span class="price">￥{{ scope.row.price | unitPrice }}</span>
+        </template>
+      </el-table-column>
+      <!--// Andste_TODO 2018/7/3: 大小写适配-->
+      <el-table-column prop="num" label="购买数量" align="center"/>
+      <el-table-column label="付款时间" align="center">
+        <template slot-scope="scope">{{ scope.row.payTime | unixToDate }}</template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      v-if="salesList"
+      @current-change="handleCurrentChange"
+      :current-page.sync="params.page_no"
+      :page-size="params.page_size"
+      layout="total, prev, pager, next"
+      :total="salesList.data_total">
+    </el-pagination>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Table, TableColumn, Pagination } from 'element-ui'
+  Vue.use(Table)
+  Vue.use(TableColumn)
+  Vue.use(Pagination)
+  import * as API_Goods from '@/api/goods'
   export default {
-    name: "sales-record"
+    name: "sales-record",
+    props: ['goodsId'],
+    data() {
+      return {
+        salesList: '',
+        params: {
+          page_no: 1,
+          page_size: 10
+        }
+      }
+    },
+    mounted() {
+      this.GET_SalesList()
+    },
+    methods: {
+      /** 当页数发生改变 */
+      handleCurrentChange(page_no) {
+        this.params.page_no = page_no
+        this.GET_SalesList()
+      },
+      /** 获取销售记录 */
+      GET_SalesList() {
+        API_Goods.getGoodsSales(this.goodsId).then(response => {
+          this.salesList = response
+        })
+      }
+    }
   }
 </script>
 

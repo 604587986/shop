@@ -27,11 +27,11 @@
             <!--商品参数-->
             <goods-params v-show="curTab === '规格参数'" :goods-params="goods.goods_params"/>
             <!--商品评论-->
-            <goods-comments v-show="curTab === '商品评论'"/>
+            <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id"/>
             <!--商品咨询-->
             <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
             <!--销售记录-->
-            <sales-record v-show="curTab === '销售记录'" />
+            <sales-record v-show="curTab === '销售记录'" :goods-id="goods.goods_id"/>
           </div>
         </div>
       </div>
@@ -147,5 +147,9 @@
       overflow: hidden;
     }
     .intro-detail { text-align: center }
+  }
+  /deep/ .el-pagination {
+    margin-top: 20px;
+    text-align: right;
   }
 </style>
