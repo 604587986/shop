@@ -44,6 +44,7 @@
 
 <script>
   import * as API_Trade from '@/api/trade'
+  import * as API_Order from '@/api/order'
   export default {
     name: 'cashier',
     layout: 'full',
@@ -51,15 +52,21 @@
     data() {
       return {
         online: true, // true: 在线支付; false: 货到付款
-        order_sn: '2333',
+        trade_sn: this.$route.query.trade_sn,
+        order_sn: this.$route.query.order_sn,
         // 支付方式列表
-        paymentList: []
+        paymentList: [],
+        // 订单详情
+        order: ''
       }
     },
     mounted() {
-      // 获取支付方式列表
-      API_Trade.getPaymentList().then(response => {
-        this.paymentList = response
+      Promise.all([
+        API_Order.getOrderDetail(this.order_sn),
+        API_Trade.getPaymentList()
+      ]).then(responses => {
+        this.order = responses[0]
+        this.paymentList = responses[1]
       })
     }
   }
