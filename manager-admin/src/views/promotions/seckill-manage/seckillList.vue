@@ -197,7 +197,7 @@
 
       /** 查看限时抢购商品 */
       handleViewSeckillGoods(index, row) {
-        this.$router.push({ path: `/promotions/seckill-manage/seckill-list/pass/${row.id}` })
+        this.$router.push({ path: `/promotions/seckill-manage/seckill-list/pass/${row.seckill_id}` })
       },
 
       // 显示时间段Tag输入框
