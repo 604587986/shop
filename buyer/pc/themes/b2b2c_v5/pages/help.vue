@@ -1,9 +1,13 @@
 <template>
-  <div class="help-container w">
-    <div class="help-menus">
-      menus
+  <div id="help">
+    <en-header-other title="帮助中心"/>
+    <div class="help-container w">
+      <div class="help-menus">
+        <h3 class="h3-title">常见问题分类</h3>
+        <dl></dl>
+      </div>
+      <nuxt-child class="help-content"/>
     </div>
-    <nuxt-child class="help-content"/>
   </div>
 </template>
 
@@ -22,6 +26,15 @@
   }
   .help-menus {
     width: 208px;
+    .h3-title {
+      color: #fff;
+      text-align: center;
+      font-size: 18px;
+      line-height: 40px;
+      height: 40px;
+      background-color: #f42424;
+      font-weight: normal;
+    }
   }
   .help-content {
     width: 980px;
