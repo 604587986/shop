@@ -135,3 +135,17 @@ export function getCategory(parent_id = 0) {
     loading: false
   })
 }
+
+/**
+ * 获取商品销售记录
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsSales(goods_id, params) {
+  return request({
+    url: `goods/${goods_id}/sales`,
+    method: Method.GET,
+    loading: false,
+    params
+  })
+}
