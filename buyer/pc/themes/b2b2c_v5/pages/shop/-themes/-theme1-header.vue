@@ -50,7 +50,7 @@
   .shop-header {
     width: 100%;
     height: 120px;
-    background: url(~/assets/images/background-brown-paper.jpg) repeat-x left top;
+    background: url(../../../assets/images/background-brown-paper.jpg) repeat-x left top;
     .w {
       display: flex;
       align-items: center;
@@ -62,7 +62,7 @@
       line-height: 125px;
       font-size: 30px;
       color: #fff;
-      background: url(~/assets/images/icon-welcome.png) no-repeat left center;
+      background: url(../../../assets/images/icon-welcome.png) no-repeat left center;
     }
     .shop-more {
       display: flex;

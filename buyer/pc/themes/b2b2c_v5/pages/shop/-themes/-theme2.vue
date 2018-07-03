@@ -1,7 +1,7 @@
 <template>
   <div id="shop-theme-2">
     <theme2-header :shop="shop"/>
-    <en-shop-banner :banners="shop.shop_banner"/>
+    <en-shop-sildes :sildes="shop.shop_sildes"/>
     <div class="shop-tags">
       <div class="tags-container">
         <div class="item hot">
@@ -156,7 +156,7 @@
       width: $t_width;
       height: $t_height;
       margin-bottom: 10px;
-      background: url(~/assets/images/background-brown-paper-little.jpg) repeat left top;
+      background: url(../../../assets/images/background-brown-paper-little.jpg) repeat left top;
       h2 {
         margin-left: 20px;
         font-size: 22px;
@@ -177,7 +177,7 @@
         top: 50%;
         width: 20px;
         height: 20px;
-        background: url(~/assets/images/icon-shop-more.png);
+        background: url(../../../assets/images/icon-shop-more.png);
         background-size: 100%;
       }
     }
@@ -349,7 +349,7 @@
           top: -60px;
           width: 60px;
           height: 60px;
-          background: url(../../assets/images/icons-shop-tag.png) no-repeat left -212px;
+          background: url(../../../assets/images/icons-shop-tag.png) no-repeat left -212px;
           transition: all .3s ease;
         }
         &:hover .icon-tag-rec { top: 0 }
@@ -509,7 +509,7 @@
         &.collection {
           cursor: pointer;
           margin: 0 1px 0 0;
-          background: url(~/assets/images/icon-shop-collection.png) no-repeat center center #c39b82;
+          background: url(../../../assets/images/icon-shop-collection.png) no-repeat center center #c39b82;
         }
         h3 { color: #fff; font-size: 16px }
         p {
