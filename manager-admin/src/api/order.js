@@ -31,11 +31,11 @@ export function getOrderDetail(order_sn) {
 
 /**
  * 根据订单sn获取订单日志
- * @param sn
+ * @param order_sn
  */
-export function getOrderLog(sn) {
+export function getOrderLog(order_sn) {
   return request({
-    url: `order-query/admin/order/${sn}/log.do`,
+    url: `trade/orders/${order_sn}/log`,
     method: 'get',
     loading: false
   })

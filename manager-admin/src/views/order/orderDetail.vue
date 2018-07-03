@@ -110,10 +110,7 @@
           this.orderDetail = response
           this.productList = response.productList
           this.countShowData()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /** 获取订单日志 */
@@ -122,10 +119,7 @@
         API_order.getOrderLog(this.sn).then(response => {
           this.loading_log = false
           this.orderLog = response
-        }).catch(error => {
-          this.loading_log = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading_log = false })
       },
 
       /** 确认收款 */
@@ -134,7 +128,7 @@
           API_order.confirmPay(this.sn, { payprice: this.orderDetail.order_price }).then(response => {
             this.$message.success('订单确认收款成功！')
             this.GET_OrderDetail()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -144,7 +138,7 @@
           API_order.cancleOrder(this.sn).then(() => {
             this.$message.success('订单取消成功！')
             this.GET_OrderDetail()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
