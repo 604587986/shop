@@ -11,7 +11,7 @@
       <!--// Andste_TODO 2018/7/3: 大小写适配-->
       <el-table-column prop="num" label="购买数量" align="center"/>
       <el-table-column label="付款时间" align="center">
-        <template slot-scope="scope">{{ scope.row.payTime | unixToDate }}</template>
+        <template slot-scope="scope">{{ scope.row.payTime ? (scope.row.payTime | unixToDate) : '未付款' }}</template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -27,10 +27,9 @@
 
 <script>
   import Vue from 'vue'
-  import { Table, TableColumn, Pagination } from 'element-ui'
+  import { Table, TableColumn } from 'element-ui'
   Vue.use(Table)
   Vue.use(TableColumn)
-  Vue.use(Pagination)
   import * as API_Goods from '@/api/goods'
   export default {
     name: "sales-record",
@@ -55,7 +54,7 @@
       },
       /** 获取销售记录 */
       GET_SalesList() {
-        API_Goods.getGoodsSales(this.goodsId).then(response => {
+        API_Goods.getGoodsSales(this.goodsId, this.params).then(response => {
           this.salesList = response
         })
       }
