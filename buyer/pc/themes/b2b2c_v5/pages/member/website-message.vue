@@ -64,7 +64,7 @@
       },
       /** 删除消息 */
       handleDeleteMessage(message) {
-        this.$confirm('确认要删除这条消息吗？', () => {
+        this.$confirm('确定要删除这条消息吗？', () => {
           this.deleteMessage(message.message_id).then(() => {
             this.$message.success('删除成功！')
           })
