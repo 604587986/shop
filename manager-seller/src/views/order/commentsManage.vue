@@ -269,19 +269,19 @@
       socreDescription() {
         return {
           'left': Number.isInteger(this.shopInfo.shop_description_credit)
-            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2)) * 100 + '%' : 0
+            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 5) + '%' : 0
         }
       },
       socreService() {
         return {
           'left': Number.isInteger(this.shopInfo.shop_description_credit)
-            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2)) * 100 + '%' : 0
+            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 5) + '%' : 0
         }
       },
       socreDelivery() {
         return {
           'left': Number.isInteger(this.shopInfo.shop_description_credit)
-            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2)) * 100 + '%' : 0
+            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 5) + '%' : 0
         }
       }
     },
@@ -535,13 +535,12 @@
         display: block;
         margin: 0 auto;
         padding: 0;
-        width: 410px;
+        width: 352px;
         height: 20px;
         dt {
           height: 20px;
           position: relative;
-          background: url(./images/rate_column.gif) no-repeat 28px -88px;
-          width: 410px;
+          background: url(./images/rate_column.gif) no-repeat 0px -88px;
         }
         em {
           position: absolute;
@@ -559,7 +558,7 @@
         }
       }
       dd {
-        width: 75px;
+        width: 65px;
         display: inline-block;
         margin-left: 0px;
         font-size: 14px;

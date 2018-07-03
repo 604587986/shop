@@ -401,6 +401,7 @@
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
+        this.activityForm.minus_id = row.minus_id
         this.GET_SingleCutActivityDetails(row.minus_id)
       },
 
@@ -413,6 +414,7 @@
                 ...response,
                 take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
               }
+              this.activityForm.minus_id = response.minus_id || id
               /** 处理商品列表数据 */
               this.goodsShow = this.activityForm.range_type === 1
               this.activityForm.goods_list = response.goods_list.map(key => {
