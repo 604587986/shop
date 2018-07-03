@@ -1,6 +1,6 @@
 <template>
   <div class="header-other">
-    <div class="inner-header-other">
+    <div class="inner-header-other" :style="{width: width + 'px'}">
       <div class="left-heander-other">
         <a href="/" class="logo">
           <img src="~/assets/images/logo-javashop.png" alt="logo" class="logo-img">
@@ -21,6 +21,9 @@
       title: {
         type: String,
         required: true
+      },
+      width: {
+        default: 1000
       }
     }
   }
@@ -30,7 +33,6 @@
   .header-other {
     .inner-header-other {
       position: relative;
-      width: 1000px;
       margin: 20px auto;
       height: 80px;
       .logo {
