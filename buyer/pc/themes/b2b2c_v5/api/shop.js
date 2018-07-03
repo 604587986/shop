@@ -5,14 +5,14 @@
 import request, { Method } from '@/utils/request'
 
 /**
- * 获取店铺数据
- * @param shop_id 店铺ID
- * @returns {AxiosPromise}
+ * 获取店铺列表
+ * @param params
  */
-export function getShopData(shop_id) {
+export function getShopList(params) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/shop/${shop_id}`,
-    method: Method.GET
+    url: 'shops/list',
+    method: Method.GET,
+    params
   })
 }
 
