@@ -3,7 +3,7 @@
     <el-alert type="info" title="" :closable="false">
       <h2>绑定第三方登录有什么好处？</h2>
       <p>1. 您可以快速地从第三方登录我们的站点。 </p>
-      <p>2. 避免了记不住密码的尴尬菊面。</p>
+      <p>2. 避免了记不住密码的尴尬局面。</p>
     </el-alert>
     <div class="">
       <div class="bind-item">
@@ -50,8 +50,14 @@
 </template>
 
 <script>
+  import * as API_Members from '@/api/members'
   export default {
-    name: 'account-binding'
+    name: 'account-binding',
+    mounted() {
+      API_Members.getAccountBinder().then(response => {
+        console.log(response)
+      })
+    }
   }
 </script>
 

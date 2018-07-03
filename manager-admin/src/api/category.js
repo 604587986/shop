@@ -115,3 +115,15 @@ export function getCategoryParams(category_id) {
     method: 'get'
   })
 }
+
+/**
+ * 获取分类子集
+ * @param parent_id
+ */
+export function getCategoryChildren(parent_id = 0) {
+  return request({
+    url: `goods/categories/${parent_id}/children`,
+    method: 'get',
+    loading: false
+  })
+}

@@ -301,13 +301,17 @@ export function deleteSeckill(id) {
 
 /**
  * 发布限时抢购
- * @param id
+ * @param seckill_id
  * @param params
  */
-export function releaseSeckill(id, params) {
+export function releaseSeckill(seckill_id, params) {
   return request({
-    url: `promotion/seckills/${id}/release`,
-    method: 'post'
+    url: `promotion/seckills/${seckill_id}/release`,
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    data: {
+      seckill: params
+    }
   })
 }
 

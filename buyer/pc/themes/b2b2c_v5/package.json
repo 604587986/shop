@@ -4,6 +4,12 @@
   "description": "Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。",
   "author": "Andste <andste.cc@gmail.com>",
   "private": true,
+  "config": {
+    "nuxt": {
+      "host": "127.0.0.1",
+      "port": "3000"
+    }
+  },
   "scripts": {
     "analyze": "nuxt build --analyze",
     "dev": "nuxt",
@@ -18,7 +24,7 @@
     "element-ui": "2.4.0",
     "js-base64": "2.4.3",
     "js-cookie": "2.2.0",
-    "md5": "2.2.1",
+    "js-md5": "^0.7.3",
     "normalize.css": "8.0.0",
     "nuxt": "1.4.0",
     "uuid": "3.2.1",

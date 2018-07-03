@@ -20,7 +20,6 @@
             v-for="(tag, index) in column.tagList"
             :key="index"
             :href="blockHref(tag)"
-            target="_blank"
           >
             <el-tag class="bz-tag-item">{{ tag.block_value }}</el-tag>
           </a>

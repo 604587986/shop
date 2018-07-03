@@ -127,6 +127,7 @@ export function collectionGoods(goods_id) {
   return request({
     url: 'members/collection/goods',
     method: Method.POST,
+    needToken: true,
     data: { goods_id }
   })
 }
@@ -279,7 +280,8 @@ export function deleteReceipt(id) {
 export function getReceiptContent() {
   return request({
     url: 'members/receipt-content',
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
 
@@ -290,6 +292,62 @@ export function getReceiptContent() {
 export function getStatisticsNum() {
   return request({
     url: 'members/statistics',
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 获取第三方绑定列表
+ */
+export function getAccountBinder() {
+  return request({
+    url: 'members/account-binder',
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 发起账号绑定
+ * @param type
+ */
+export function bindAccount(type) {
+  return request({
+    url: `members/account-binder/pc/${type}`,
     method: Method.GET
+  })
+}
+
+/**
+ * 发起账号解绑
+ * @param type
+ */
+export function unbundAccount(type) {
+  return request({
+    url: `members/account-binder/pc/${type}`,
+    method: Method.POST
+  })
+}
+
+/**
+ * 登录绑定
+ * @param uuid
+ */
+export function loginBindAccount(uuid) {
+  return request({
+    url: `members/account-binder/login/${uuid}`,
+    method: Method.POST
+  })
+}
+
+/**
+ * 注册绑定
+ * @param uuid
+ */
+export function registerBindAccount(uuid) {
+  return request({
+    url: `members/account-binder/register/{uuid}`,
+    method: Method.POST
   })
 }

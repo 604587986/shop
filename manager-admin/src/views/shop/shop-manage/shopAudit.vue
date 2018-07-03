@@ -16,7 +16,7 @@
         </el-table-column>
         <!--店铺状态-->
         <el-table-column label="店铺状态">
-          <template slot-scope="scope">{{ scope.row.shop_status | statusFilter }}</template>
+          <template slot-scope="scope">{{ scope.row.shop_disable | statusFilter }}</template>
         </el-table-column>
         <!--操作-->
         <el-table-column label="操作" width="150">
@@ -93,7 +93,7 @@
 
       /** 审核店铺 */
       handleAuditShop(index, row) {
-        this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}` })
+        this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}?audit=1` })
       },
 
       /** 获取店铺审核列表 */

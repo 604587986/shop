@@ -62,7 +62,7 @@
           month: '',
           start_time: '',
           end_time: '',
-          circle: 'MONTH',
+          cycle_type: 'MONTH',
           order_status: 99,
           categroy: 0,
           seller_id: 0
@@ -81,7 +81,7 @@
         this.params.month = object.month
         this.params.start_time = object.start_time
         this.params.end_time = object.end_time
-        this.params.circle = object.type
+        this.params.cycle_type = object.type
       },
       /** 获取订单统计表格数据 */
       GET_OrderStatisticsPage() {

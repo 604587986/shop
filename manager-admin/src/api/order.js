@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getOrderList(params) {
   return request({
-    url: 'order-query/admin/order.do',
+    url: 'trade/orders',
     method: 'get',
     loading: false,
     params
@@ -19,11 +19,11 @@ export function getOrderList(params) {
 
 /**
  * 根据订单sn获取订单详情
- * @param sn
+ * @param order_sn
  */
-export function getOrderDetail(sn) {
+export function getOrderDetail(order_sn) {
   return request({
-    url: `order-query/admin/order/${sn}.do`,
+    url: `trade/orders/${order_sn}`,
     method: 'get',
     loading: false
   })

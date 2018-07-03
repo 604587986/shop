@@ -1,10 +1,12 @@
 <template>
-  <div>logManage</div>
+  <div id="binder" class="w">
+    绑定页面
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'logManage'
+    name: 'binder'
   }
 </script>
 

@@ -14,14 +14,14 @@
         <el-table-column prop="start_day" :formatter="MixinUnixToDate" label="活动开始时间"/>
         <el-table-column prop="apply_end_time" :formatter="MixinUnixToDate" label="报名截止时间"/>
         <el-table-column prop="seckill_status_text" label="状态"/>
-        <el-table-column label="参与商品">
+        <el-table-column label="参与商品" width="200">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status !== 'RELEASE'"
               size="mini"
               type="primary"
               @click="handleAuditSeckill(scope.$index, scope.row)"
-            >审核</el-button>
+            >审核商品</el-button>
             <el-button
               v-if="scope.row.status !== 'RELEASE'"
               size="mini"
@@ -30,14 +30,8 @@
             >查看商品</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="100">
           <template slot-scope="scope">
-            <el-button
-              v-if="scope.row.status !== 'EDITING'"
-              size="mini"
-              type="primary"
-              @click="handleReleaseSeckill(scope.$index, scope.row)"
-            >发布活动</el-button>
             <el-button
               v-if="scope.row.status !== 'EDITING'"
               size="mini"
@@ -125,7 +119,8 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSeckillVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitSeckillForm">确 定</el-button>
+        <el-button type="primary" @click="submitSeckillForm('release')">立即发布</el-button>
+        <el-button type="primary" @click="submitSeckillForm('save')">保 存</el-button>
       </span>
     </el-dialog>
   </div>
@@ -138,18 +133,15 @@
     name: 'seckillList',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
         /** 列表参数 */
         params: {
           page_no: 1,
           page_size: 10
         },
-
         /** 列表数据 */
         tableData: '',
-
         /** 添加、编辑限时抢购 dialog */
         dialogSeckillVisible: false,
 
@@ -238,23 +230,32 @@
       },
 
       /** 提交限时抢购表单 */
-      submitSeckillForm() {
+      submitSeckillForm(type) {
         this.$refs['seckillForm'].validate((valid) => {
           if (valid) {
-            const { id } = this.seckillForm
+            let { id } = this.seckillForm
             const params = this.MixinClone(this.seckillForm)
             params.apply_end_time /= 1000
             params.start_day /= 1000
-            if (!id) {
-              API_Promotion.addSeckill(params).then(response => {
-                this.dialogSeckillVisible = false
-                this.$message.success('添加成功！')
-                this.GET_SeckillList()
-              })
+            if (type === 'save') {
+              if (!id) {
+                API_Promotion.addSeckill(params).then(response => {
+                  this.dialogSeckillVisible = false
+                  this.$message.success('添加成功！')
+                  this.GET_SeckillList()
+                })
+              } else {
+                API_Promotion.editSeckill(id, params).then(response => {
+                  this.dialogSeckillVisible = false
+                  this.$message.success('编辑成功！')
+                  this.GET_SeckillList()
+                })
+              }
             } else {
-              API_Promotion.editSeckill(id, params).then(response => {
+              if (!id) id = 0
+              API_Promotion.releaseSeckill(id, params).then(() => {
                 this.dialogSeckillVisible = false
-                this.$message.success('编辑成功！')
+                this.$message.success('发布成功！')
                 this.GET_SeckillList()
               })
             }
@@ -262,14 +263,6 @@
             this.$message.error('表单填写有误，请检查！')
             return false
           }
-        })
-      },
-
-      /** 发布限时抢购 */
-      handleReleaseSeckill(index, row) {
-        this.$confirm('确定要发布这个限时抢购活动吗？', '提示', { type: 'warning' }).then(() => {
-          // API_Promotion.releaseSeckill()
-          console.log(row)
         })
       },
 

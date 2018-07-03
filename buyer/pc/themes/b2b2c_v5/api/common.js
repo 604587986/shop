@@ -4,7 +4,7 @@
 
 import request, { Method } from '@/utils/request'
 import Storage from '@/utils/storage'
-import GetFullUrl from '@/utils/urls'
+import { api } from '~/ui-domain'
 
 /**
  * 获取图片验证码URL
@@ -13,52 +13,17 @@ import GetFullUrl from '@/utils/urls'
  * @returns {string}
  */
 export function getValidateCodeUrl(uuid, type) {
-  return GetFullUrl(`captchas/${uuid}/${type}?r=${new Date().getTime()}`)
+  return `${api.base}/captchas/${uuid}/${type}?r=${new Date().getTime()}`
 }
 
 /**
  * 图片上传API
  * @type {string}
  */
-export const uploadApi = GetFullUrl('uploaders')
+export const uploadApi = `${api.base}/uploaders`
 
 /**
  * 地区API
  * @type {string}
  */
-export const regionApi = GetFullUrl('regions/@id/children')
-
-/**
- * 搜索关键字自动完成
- * @param keyword 关键词
- * @returns {Promise<any>}
- */
-export function getAutoCompleteKeyword(keyword) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/auto-complete-keyword',
-      method: Method.GET,
-      loading: false,
-      message: false,
-      params: {
-        keyword
-      }
-    }).then(response => resolve(response.slice(0, 10))).catch(error => reject(error))
-  })
-}
-
-/**
- * 获取导航栏列表
- * @returns {Promise<any>}
- */
-export function getNavList() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/nav/list',
-      method: Method.GET,
-      loading: false,
-      message: false
-    }).then(response => resolve(response.slice(0, 8))).catch(error => reject(error))
-  })
-}
-
+export const regionApi = `${api.base}/regions/@id/children`

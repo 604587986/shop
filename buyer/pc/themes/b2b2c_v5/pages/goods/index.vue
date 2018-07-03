@@ -129,7 +129,7 @@
           </div>
         </div>
         <div class="gl-sku-list">
-          <div class="empty-goods" v-if="!goodsListData || goodsListData.data.length === 0">
+          <div class="empty-goods" v-if="!goodsListData || !goodsListData.data || goodsListData.data.length === 0">
             暂无数据...
           </div>
           <ul v-else class="list-ul clearfix">
@@ -172,7 +172,7 @@
             </li>
           </ul>
           <el-pagination
-            v-if="goodsListData"
+            v-if="goodsListData && goodsListData.data"
             @current-change="handleCurrentPageChange"
             :current-page.sync="page.page_no"
             :page-size="page.page_size"
@@ -223,12 +223,15 @@
       GET_GoodsSelector() {
         const params = { ...this.page, ...this.params }
         API_Goods.getGoodsSelector(params).then(response => {
-          console.log(response)
+          // console.log(response)
         })
       },
       /** 获取商品列表 */
       GET_GoodsList() {
         const params = { ...this.page, ...this.params }
+        Object.keys(params).forEach(key => {
+          if (!params[key]) delete params[key]
+        })
         API_Goods.getGoodsList(params).then(response => {
           this.goodsListData = response
           this.MixinScrollToTop(171)

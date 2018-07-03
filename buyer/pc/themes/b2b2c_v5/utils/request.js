@@ -1,25 +1,22 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Loading } from 'element-ui'
+import { api } from '~/ui-domain'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
-import MD5 from 'md5'
-import GetFullUrl from '@/utils/urls'
+import md5 from 'js-md5'
 import checkToken from '@/utils/checkToken'
 const qs = require('qs')
 
 // 创建axios实例
 const service = axios.create({
-  timeout: 8000 // 请求超时时间
+  timeout: 8000,     // 请求超时时间
+  baseURL: api.buyer // 买家端API
 })
 
 // request拦截器
 service.interceptors.request.use(config => {
-  /** url处理 */
-  const { url, loading } = config
-  if (!/^http/.test(url)) {
-    config.url = GetFullUrl(url)
-  }
+  const { loading } = config
   // 如果是put/post请求，用qs.stringify序列化参数
   const is_put_post = config.method === 'put' || config.method === 'post'
   const is_json = config.headers['Content-Type'] === 'application/json'
@@ -46,7 +43,7 @@ service.interceptors.request.use(config => {
     //   const { member_id } = JSON.parse(Storage.getItem('user') || "{}")
     //   const nonce = Foundation.randomString(6)
     //   const timestamp = parseInt(new Date().getTime() / 1000)
-    //   accessToken = MD5(member_id + nonce + timestamp + accessToken)
+    //   accessToken = md5(member_id + nonce + timestamp + accessToken)
     // }
     config.headers['Authorization'] = accessToken
   }
@@ -71,8 +68,8 @@ service.interceptors.response.use(
     // 109 --> 没有登录、登录状态失效
     if (error_data.code === '109') {
       Vue.prototype.$message.error('您已被登出！')
-      const { $route, $router } = Vue.prototype.$nuxt
-      $router.push({ path: `/login?forward=${$route.fullPath}` })
+      const { $store } = Vue.prototype.$nuxt
+      $store.dispatch('user/removeUserAction')
       return Promise.reject(error)
     }
     let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'

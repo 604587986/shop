@@ -18,7 +18,7 @@
         <el-form-item label="经营类目：" prop="goods_management_category">
           <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChanged">全选</el-checkbox>
           <el-checkbox-group v-model="shopInfoForm.goods_management_category" @change="handleCheckedCategorysChange">
-            <el-checkbox v-for="cate in categorys" :label="cate" :key="cate.id">{{cate.label}}</el-checkbox>
+            <el-checkbox v-for="cate in categorys" :label="cate.id" :key="cate.id">{{cate.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
@@ -33,6 +33,7 @@
 <script>
   import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
+  import * as API_Goods from '@/api/goods'
   import EnRegionPicker from "@/components/RegionPicker";
   export default {
     name: "shop-info",
@@ -43,18 +44,7 @@
       return {
         defaultRegions: null,
         /** 分类 */
-        // Andste_TODO 2018/6/5: 经营类目暂未适配
-        categorys: [
-          { id: 1, label: '数码家电' },
-          { id: 2, label: '食品饮料' },
-          { id: 3, label: '进口食品' },
-          { id: 4, label: '美容化妆' },
-          { id: 5, label: '母婴玩具' },
-          { id: 6, label: '厨房用品' },
-          { id: 7, label: '钟表箱包' },
-          { id: 8, label: '营养保健' },
-          { id: 9, label: '服装鞋靴' }
-        ],
+        categorys: [],
         isIndeterminate: false,
         checkAll: false,
         /** 基础信息 表单 */
@@ -65,8 +55,8 @@
         },
         /** 基础信息 表单规则 */
         shopInfoRules: {
-          shop_name: [ req_rule('请输入店铺名称'), len_rule(1, 10) ],
-          shop_region: [ req_rule('请选择店铺地址') ],
+          shop_name: [ req_rule('请输入店铺名称！'), len_rule(1, 10) ],
+          shop_region: [ req_rule('请选择店铺地址！') ],
           goods_management_category: [
             { type: 'array', required: true, message: '请至少选择一个经营类目', trigger: 'change' }
           ]
@@ -74,10 +64,33 @@
       }
     },
     mounted() {
-      API_Shop.getApplyShopInfo().then(response => {
-        Object.keys(this.shopInfoForm).forEach(key => this.shopInfoForm[key] = response[key])
-        const { shop_province_id, shop_city_id, shop_county_id, shop_town_id } = response
+      Promise.all([
+        API_Shop.getApplyShopInfo(),
+        API_Goods.getCategory()
+      ]).then(responses => {
+        const shopInfo = responses[0]
+        const categorys = responses[1]
+        // 设置店铺信息
+        Object.keys(this.shopInfoForm).forEach(key => this.shopInfoForm[key] = shopInfo[key])
+        const { shop_province_id, shop_city_id, shop_county_id, shop_town_id } = shopInfo
         this.defaultRegions = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
+        this.shopInfoForm.goods_management_category = []
+        if (shopInfo.goods_management_category) {
+          const _categorys = shopInfo.goods_management_category.split(',')
+          this.shopInfoForm.goods_management_category = _categorys
+          if (_categorys.length !== 0) {
+            if (_categorys.length < categorys.length) {
+              this.isIndeterminate = true
+            } else if (_categorys.length === categorys.length) {
+              this.checkAll = true
+            }
+          }
+        }
+        // 设置分类信息
+        this.categorys = categorys.map(item => ({
+          id: String(item.category_id),
+          name: item.name
+        }))
       })
     },
     methods: {
@@ -86,7 +99,7 @@
         this.$refs['shopInfoForm'].validate((valid) => {
           if (valid) {
             const params = JSON.parse(JSON.stringify(this.shopInfoForm))
-            params.goods_management_category = params.goods_management_category.map(item => item.id).join(',')
+            params.goods_management_category = params.goods_management_category.join(',')
             API_Shop.applyShopStep(4, params).then(response => {
               this.$router.push({ name: 'shop-apply-success' })
             })
@@ -98,7 +111,7 @@
       },
       /** 经营类目全选框发生改变 */
       handleCheckAllChanged(checked) {
-        this.shopInfoForm.goods_management_category = checked ? this.categorys : []
+        this.shopInfoForm.goods_management_category = checked ? this.categorys.map(item => item.id) : []
         this.isIndeterminate = false
       },
       /** 选中的经营类目发生改变 */

@@ -60,6 +60,8 @@
 </template>
 
 <script>
+  import * as API_Connect from '@/api/connect'
+
   export default {
     name: 'trustLogin',
     data() {
@@ -75,7 +77,11 @@
         weiboRules: {}
       }
     },
-    mounted() {},
+    mounted() {
+      API_Connect.getConnect().then(response => {
+        console.log(response)
+      })
+    },
     methods: {}
   }
 </script>

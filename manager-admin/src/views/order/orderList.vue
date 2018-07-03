@@ -1,9 +1,7 @@
 <template>
   <div>
     <en-table-layout
-      toolbar
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -19,9 +17,6 @@
           >
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="订单号">
-                  <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
-                </el-form-item>
                 <el-form-item label="收货人">
                   <el-input size="medium" v-model="advancedForm.ship_name" clearable></el-input>
                 </el-form-item>
@@ -41,7 +36,7 @@
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    value-format="yyyy-MM-dd"
+                    value-format="timestamp"
                     :picker-options="pickerOptions">
                   </el-date-picker>
                 </el-form-item>
@@ -64,9 +59,9 @@
       </div>
       <template slot="table-columns">
         <!--订单编号-->
-        <el-table-column prop="sn" label="订单编号" width="175"/>
+        <el-table-column prop="sn" label="订单编号"/>
         <!--下单时间-->
-        <el-table-column prop="order_time" label="下单时间" width="200"/>
+        <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="下单时间"/>
         <!--订单总额-->
         <el-table-column label="订单总额">
           <template slot-scope="scope">{{ scope.row.order_amount | unitPrice('￥') }}</template>
@@ -101,15 +96,15 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-table-layout>
   </div>
@@ -122,22 +117,16 @@
     name: 'orderList',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
-        /** 高级搜索数据 */
+        // 列表数据
+        tableData: '',
+        // 高级搜索数据
         advancedForm: {},
         pickerOptions: {
           disabledDate(time) {
@@ -173,7 +162,7 @@
     },
     filters: {
       paymentTypeFilter(val) {
-        return val === 'online' ? '在线支付' : '货到付款'
+        return val === 'ONLINE' ? '在线支付' : '货到付款'
       }
     },
     mounted() {
@@ -196,7 +185,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          keyword: data
+          order_sn: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_OrderList()
@@ -214,7 +203,7 @@
           this.params.start_time = this.advancedForm.order_time_range[0]
           this.params.end_time = this.advancedForm.order_time_range[1]
         }
-        delete this.params.keyword
+        delete this.params.order_sn
         delete this.params.order_time_range
         this.GET_OrderList()
       },
@@ -224,20 +213,18 @@
         this.$router.push({ path: `/order/detail/${row.sn}` })
       },
 
+      /** 获取订单列表 */
       GET_OrderList() {
         this.loading = true
-        API_order.getOrderList(this.params).then(response => {
+        const params = this.MixinClone(this.params)
+        if (params.start_time && params.end_time) {
+          params.start_time /= 1000
+          params.end_time /= 1000
+        }
+        API_order.getOrderList(params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }

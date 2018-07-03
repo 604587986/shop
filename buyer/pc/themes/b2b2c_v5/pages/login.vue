@@ -4,7 +4,7 @@
       <!-- logo -->
       <div class="index-login">
         <a href="/">
-          <img src="~/assets/images/logo-javashop.png" alt="logo">
+          <img src="../assets/images/logo-javashop.png" alt="logo">
         </a>
         <span>欢迎登录</span>
       </div>
@@ -96,21 +96,13 @@
                   </form>
                 </div>
               </div>
-              <!-- 立即注册 -->
+              <!-- 第三方登录、立即注册 -->
               <div class="other-login">
                 <ul>
-                  <li class="other-one">
-                    <a href="#">
-                      <b></b>
-                      <span>QQ</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <b></b>
-                      <span>微信</span>
-                    </a>
-                  </li>
+                  <li class="other-one"><a :href="getConnectUrl('pc', 'QQ')"><span>QQ</span></a></li>
+                  <li class="other-one"><a :href="getConnectUrl('pc', 'WECHAT')"><span>微信</span></a></li>
+                  <li class="other-one"><a :href="getConnectUrl('pc', 'WEIBO')"><span>微博</span></a></li>
+                  <li><a :href="getConnectUrl('pc', 'ALIPAY')"><span>支付宝</span></a></li>
                   <li class="other-right">
                     <nuxt-link :to="'/register' + MixinForward" class="registered">
                       <b></b>立即注册
@@ -131,6 +123,7 @@
   import { RegExp } from '~/ui-utils'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
+  import * as API_Connect from '@/api/connect'
   export default {
     name: 'login',
     layout: 'full',
@@ -198,6 +191,7 @@
           this.$router.push({ path: forward || '/' })
         })
       },
+      getConnectUrl: API_Connect.getConnectUrl,
       ...mapActions({
         login: 'user/loginAction'
       })

@@ -2,11 +2,11 @@
   <div id="member-index">
     <div class="user-title">
       <div class="user-item">
-        <div class="user-avatar">
+        <nuxt-link to="/member/my-profile" class="user-avatar">
           <en-face :url="user.face"/>
-        </div>
+        </nuxt-link>
         <div class="user-info">
-          <p>Andste</p>
+          <p>{{ user.uname }}</p>
           <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
         </div>
       </div>

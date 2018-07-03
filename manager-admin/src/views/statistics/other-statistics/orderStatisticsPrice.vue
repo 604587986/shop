@@ -32,8 +32,8 @@
       GET_OrderStatisticsPrice() {
         if (this.curTab !== 'price' || this.loading) return
         this.loading = true
-        const { circle } = this.params
-        const type_str = this.params.circle === 'MONTH' ? '日' : '月'
+        const { cycle_type } = this.params
+        const type_str = this.params.cycle_type === 'MONTH' ? '日' : '月'
         API_Statistics.getOrderStatisticsPrice(this.params).then(response => {
           this.loading = false
           const { xAxis } = response
@@ -41,7 +41,7 @@
           const series1 = response.series[1]
           this.echarts.setOption(echartsOptions({
             color: ['#c23531', '#2f4554'],
-            titleText: `订单销售金额统计（${circle === 'MONTH' ? '月' : '年'}）`,
+            titleText: `订单销售金额统计（${cycle_type === 'MONTH' ? '月' : '年'}）`,
             tooltipFormatter: (params) => {
               return `日期：${params[0].dataIndex + 1}${type_str}<br/>
                       ${params[0].marker}${params[0].seriesName}下单金额：￥${Foundation.formatPrice(params[0].value)}<br/>

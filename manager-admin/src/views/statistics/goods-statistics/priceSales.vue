@@ -39,7 +39,7 @@
           seller_id: 0,
           year: '',
           month: '',
-          circle: 'MONTH'
+          cycle_type: 'MONTH'
         },
         priceRange: [[0, 100], [100, 1000], [1000, 10000], [10000, 50000]]
       }
@@ -60,7 +60,7 @@
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.circle = object.type
+        this.params.cycle_type = object.type
       },
       /** 价格区间发生改变 */
       handleRriceRangeChanged(range) {

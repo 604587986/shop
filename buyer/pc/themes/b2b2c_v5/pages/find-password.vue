@@ -21,7 +21,7 @@
         <div v-show="step === 2" class="find-item RegExp">
           <el-form :model="validMobileForm" :rules="validMobileRules" ref="validMobileForm" label-width="120px" style="width: 370px">
             <el-form-item label="手机号码：">
-              <span>{{ validMobileForm.RegExp }}</span>
+              <span>{{ validMobileForm.mobile }}</span>
             </el-form-item>
             <el-form-item label="图片验证码：" prop="img_code" class="vali-img">
               <el-input v-model="validMobileForm.img_code" :maxlength="4">
@@ -145,7 +145,7 @@
             const { uuid } = this
             const { account, img_code } = this.validAccountForm
             API_Passport.validAccount(uuid, img_code, account).then((response) => {
-              this.validMobileForm.RegExp = response.RegExp
+              this.validMobileForm.mobile = response.mobile
               this.validMobileForm.uname = response.uname
               this.validMobileForm.uuid = response.uuid
               this.step = 2
