@@ -14,26 +14,21 @@
         <el-table-column prop="start_day" :formatter="MixinUnixToDate" label="活动开始时间"/>
         <el-table-column prop="apply_end_time" :formatter="MixinUnixToDate" label="报名截止时间"/>
         <el-table-column prop="seckill_status_text" label="状态"/>
-        <el-table-column label="参与商品" width="200">
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.status !== 'RELEASE'"
+              v-if="scope.row.seckill_status !== 'RELEASE'"
               size="mini"
               type="primary"
               @click="handleAuditSeckill(scope.$index, scope.row)"
             >审核商品</el-button>
             <el-button
-              v-if="scope.row.status !== 'RELEASE'"
               size="mini"
               type="primary"
               @click="handleViewSeckillGoods(scope.$index, scope.row)"
             >查看商品</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="100">
-          <template slot-scope="scope">
             <el-button
-              v-if="scope.row.status !== 'EDITING'"
+              v-if="scope.row.seckill_status === 'EDITING'"
               size="mini"
               type="primary"
               @click="handleEditSeckill(scope.$index, scope.row)"
