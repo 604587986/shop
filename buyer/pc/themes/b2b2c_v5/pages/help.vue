@@ -35,10 +35,16 @@
     name: 'help',
     layout: 'full',
     async asyncData({ params }) {
+      let { id } = params
+      if (id) id = Number(id)
       const data = await API_Article.getArticleCategory('HELP')
       let categorys = data.children || []
       categorys = categorys.map(item => {
         item.on = false
+        if (!item.articles || !id) return item
+        if (item.articles && item.articles.findIndex(_item => _item.article_id === id) !== -1) {
+          item.on = true
+        }
         return item
       })
       return { categorys }
