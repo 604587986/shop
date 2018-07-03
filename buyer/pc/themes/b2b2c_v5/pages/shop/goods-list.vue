@@ -82,7 +82,7 @@
     },
     asyncData({ query }, callback) {
       Promise.all([
-        API_Shop.getShopData(query.shop_id),
+        API_Shop.getShopBaseInfo(query.shop_id),
         API_Shop.getShopGoods(query)
       ]).then(values => {
         callback(null, { shop: values[0], goods: values[1] })
