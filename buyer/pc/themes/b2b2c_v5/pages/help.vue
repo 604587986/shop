@@ -1,40 +1,27 @@
 <template>
   <div style="background-color: #f9f9f9">
     <en-header-other title="帮助中心"/>
-    <div class="help-container">
+    <div v-if="categorys" class="help-container">
       <div class="help-menus">
-        <h3 class="h3-title">常见问题分类</h3>
-        <dl class="subside-mod on">
-          <dt class="title">
-            购物指南 <b class="icon-triangle"></b>
+        <nuxt-link to="./" class="h3-title">帮助中心</nuxt-link>
+        <dl
+          v-for="cate in categorys"
+          :key="cate.id"
+          :class="['subside-mod', cate.on ? 'on' : 'off']"
+        >
+          <dt class="title" @click="cate.on = !cate.on">
+            {{ cate.name }} <b class="icon-triangle"></b>
           </dt>
-          <dd class="subside-cnt">
+          <dd v-if="cate.articles" class="subside-cnt" :style="{height: cate.articles.length * 31 + 'px'}">
             <ul class="subside-list">
-              <li class="list-item">
-                <a href="#">交易条款</a>
-              </li>
-              <li class="list-item">
-                <a href="#">购物流程</a>
-              </li>
-              <li class="list-item">
-                <a href="#">促销咨询</a>
-              </li>
-              <li class="list-item">
-                <a href="#">商品咨询</a>
-              </li>
-              <li class="list-item">
-                <a href="#">生活旅行</a>
+              <li v-for="article in cate.articles" :key="article.article_id" class="list-item">
+                <nuxt-link :to="'/help/' + article.article_id">{{ article.article_name }}</nuxt-link>
               </li>
             </ul>
           </dd>
         </dl>
       </div>
       <div class="help-content">
-        <div class="breadcrumb">
-          <span>订单百事通</span>
-          &gt;
-          <a href="#"><span id="sLevel2">第三方交易纠纷</span></a>
-        </div>
         <nuxt-child class="content"/>
       </div>
     </div>
@@ -43,9 +30,19 @@
 </template>
 
 <script>
+  import * as API_Article from '@/api/article'
   export default {
     name: 'help',
-    layout: 'full'
+    layout: 'full',
+    async asyncData({ params }) {
+      const data = await API_Article.getArticleCategory('HELP')
+      let categorys = data.children || []
+      categorys = categorys.map(item => {
+        item.on = false
+        return item
+      })
+      return { categorys }
+    }
   }
 </script>
 
@@ -59,6 +56,7 @@
     width: 210px;
     float: left;
     .h3-title {
+      display: block;
       color: #fff;
       text-align: center;
       font-size: 18px;
@@ -95,24 +93,25 @@
         line-height: 0;
         height: 0;
         overflow: hidden;
+        transition: all ease .3s;
       }
     }
-    .subside-mod.on .subside-cnt {
-      height: auto;
+    .subside-mod.off .subside-cnt {
+      height: 0 !important;
     }
     .subside-cnt {
       height: 0;
       transition: all ease .3s;
       background-color: #fff;
+      overflow: hidden;
       .list-item {
         height: 30px;
         line-height: 30px;
         border-bottom: 1px solid #faf8f9;
         a {
-          display: block;
           padding-left: 45px;
           color: #333;
-          &:hover {
+          &:hover, &.nuxt-link-active {
             color: #f42424;
           }
         }
@@ -125,15 +124,5 @@
     min-height: 800px;
     margin-left: 10px;
     background-color: #fff;
-    .breadcrumb {
-      height: 39px;
-      line-height: 39px;
-      font-size: 14px;
-      background: #eaeaea;
-      padding-left: 13px;
-    }
-    .content {
-      padding: 20px;
-    }
   }
 </style>
