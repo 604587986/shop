@@ -91,7 +91,8 @@
       ...mapGetters(['user'])
     },
     mounted() {
-      this.getUserData()
+      // 如果已登录，重新获取用户信息【只有当用户刷新页面，才会触发】
+      this.user && this.getUserData()
     },
     methods: {
       ...mapActions({
