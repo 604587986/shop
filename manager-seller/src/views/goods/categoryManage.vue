@@ -68,7 +68,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model.number="goodsCatData.sort" auto-complete="off" style="width: 100%;text-align: center;"></el-input>
+          <el-input-number v-model="goodsCatData.sort" controls-position="right" :min="0" :max="99999"/>
         </el-form-item>
         <el-form-item label="显示状态">
           <el-radio-group v-model="goodsCatData.disable" style="width: 70%;">

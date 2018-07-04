@@ -18,10 +18,10 @@
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="100px">
                 <el-form-item label="订单编号">
-                  <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
+                  <el-input v-model="advancedForm.order_sn" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="退货(款)单号">
-                  <el-input size="medium" v-model="advancedForm.sn" clearable></el-input>
+                  <el-input v-model="advancedForm.sn" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="类型">
                   <el-select v-model="advancedForm.refuse_type" placeholder="请选择" clearable>
@@ -103,7 +103,7 @@
         <div class="refund-info">
           <!--订单信息-->
           <div class="order-info">
-            <h4>订单信息</h4>
+            <h4 style="margin: 0;">订单信息</h4>
             <div class="order-info-item">
               <span>{{currentType}}单号: </span><span>{{ refundInfo.sn }}</span>
             </div>

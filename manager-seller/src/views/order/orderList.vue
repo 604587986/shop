@@ -26,13 +26,13 @@
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="订单编号">
-                  <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
+                  <el-input v-model="advancedForm.order_sn" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="商品名称">
-                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
+                  <el-input v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="买家姓名">
-                  <el-input size="medium" v-model="advancedForm.buyer_name" clearable></el-input>
+                  <el-input v-model="advancedForm.buyer_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="下单日期">
                   <el-date-picker
@@ -81,7 +81,7 @@
             <p v-for="shop in item.sku_list" class="shoplist-content">
               <span class="goods-info">
                 <img :src="shop.goods_image" alt="" class="goods-image"/>
-                <a :href="'/goods/' + shop.goods_id">{{ shop.name }}</a>
+                <a :href="`${HTTP_URL}/${shop.goods_id}`" style="color: #00a2d4;">{{ shop.name }}</a>
               </span>
               <span>
                 <span>{{shop.original_price | unitPrice('￥')}}</span> × <span>{{ shop.num }}</span>
@@ -139,6 +139,9 @@
     },
     data() {
       return {
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
+
         /** 列表loading状态 */
         loading: false,
 

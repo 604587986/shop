@@ -18,7 +18,7 @@
               </el-option>
             </el-select>
           </div>
-          <el-button type="primary" class="" @click="handleAddGroupBuyGoods">新增团购商品</el-button>
+          <el-button type="primary" @click="handleAddGroupBuyGoods">新增团购商品</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent"/>
@@ -32,18 +32,20 @@
         </el-table-column>
         <el-table-column label="团购名称" >
           <template slot-scope="scope">
-            <div><a href="" style="color: #00a2d4;">{{ scope.row.gb_name }}</a></div>
+            <div>
+              <a :href="`${HTTP_URL}/${scope.row.goods_id}`" style="color: #00a2d4;">{{ scope.row.gb_name }}</a>
+            </div>
             <div>{{ scope.row.gb_title }}</div>
           </template>
         </el-table-column>
         <el-table-column  label="活动信息" >
           <template slot-scope="scope">
             <!--活动名称-->
-            <!--<div>{{ scope.row.gb_name }}</div>-->
+            <div>{{ scope.row.title }}</div>
             <!--活动开始时间----活动结束时间-->
-            <!--<div>{{ | unixToDate('yyyy-MM-dd') }}-->
-              <!-- - {{ | unixToDate('yyyy-MM-dd') }}-->
-            <!--</div>-->
+            <div>{{ scope.row.start_time| unixToDate('yyyy-MM-dd') }}
+               - {{ scope.row.end_time| unixToDate('yyyy-MM-dd') }}
+            </div>
           </template>
         </el-table-column>
         <!--已团购数量-->
@@ -92,6 +94,9 @@
         /** 列表loading状态 */
         loading: false,
 
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
+
         /** 列表参数 */
         params: {
           page_no: 1,
@@ -105,7 +110,7 @@
         pageData: [],
 
         /** 当前团购状态*/
-        currentGroupBuyStatus: 0,
+        currentGroupBuyStatus: '',
 
         /** 团购状态*/
         groupBuyStatus: [

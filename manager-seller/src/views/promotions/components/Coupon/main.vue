@@ -9,13 +9,17 @@
           maxLength="10"
           label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="优惠券面额（元）：" prop="coupon_price">
-        <el-input v-model="couponForm.coupon_price" label-width="100"></el-input>
+      <el-form-item label="优惠券面额：" prop="coupon_price">
+        <el-input placeholder="请输入优惠券面额" v-model="couponForm.coupon_price">
+          <template slot="prepend">¥</template>
+        </el-input>
       </el-form-item>
-      <el-form-item label="买家需消费（元）：" prop="coupon_threshold_price">
-        <el-input v-model="couponForm.coupon_threshold_price" label-width="100"></el-input>
+      <el-form-item label="买家需消费：" prop="coupon_threshold_price">
+        <el-input placeholder="请输入内容" v-model="couponForm.coupon_threshold_price">
+          <template slot="prepend">¥</template>
+        </el-input>
       </el-form-item>
-      <el-form-item label="使用期限：" style="text-align: left">
+      <el-form-item label="使用期限：" style="text-align: left" prop="coupon_time_limit">
         <el-date-picker
           v-model="couponForm.coupon_time_limit"
           type="daterange"
@@ -210,21 +214,31 @@
 
           /** 优惠券面额 */
           coupon_price: [
+            { required: true, message: '请输入优惠券面额', trigger: 'blur' },
             { validator: checkCouponPrice, trigger: 'blur' }
           ],
 
           /** 消费门槛 */
           coupon_threshold_price: [
+            { required: true, message: '请输入消费门槛', trigger: 'blur' },
             { validator: checkCouponThresholdPrice, trigger: 'blur' }
+          ],
+
+          /** 使用期限 */
+          coupon_time_limit: [
+            { required: true, message: '请输入使用期限', trigger: 'blur' },
+            { type: 'array', trigger: 'blur' }
           ],
 
           /** 发行量 */
           create_num: [
+            { required: true, message: '请输入优惠券名称', trigger: 'blur' },
             { validator: checkCreateNum, trigger: 'blur' }
           ],
 
           /** 每人限领 */
           limit_num: [
+            { required: true, message: '请输入优惠券名称', trigger: 'blur' },
             { validator: checkLimitNum, trigger: 'blur' }
           ]
         }

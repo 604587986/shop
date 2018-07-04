@@ -4,8 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-button @click="showaddShopNav" type="primary">新增</el-button>
@@ -46,25 +45,27 @@
       </el-pagination>
     </en-table-layout>
     <el-dialog title="新增导航" :visible.sync="addShopNavshow"  width="30%">
-      <el-form :model="navform" :rules="rules" ref="navform">
-        <el-form-item label="导航名称" prop="name">
-          <el-input v-model="navform.name" auto-complete="off" label-width="100"></el-input>
+      <el-form :model="navform" :rules="rules" ref="navform" label-position="right" label-width="120px">
+        <el-form-item label="导航名称:" prop="name">
+          <el-input v-model="navform.name" />
         </el-form-item>
-        <el-form-item label="是否显示" prop="disable">
+        <el-form-item label="是否显示:" prop="disable">
           <el-radio-group v-model="navform.disable">
             <el-radio :label="1">显示</el-radio>
             <el-radio :label="0">不显示</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="navform.sort" auto-complete="off" label-width="100"></el-input>
+        <el-form-item label="排序:" prop="sort">
+          <el-input-number v-model="navform.sort" controls-position="right"  :min="0" :max="99999"/>
         </el-form-item>
-        <el-form-item label="URL" prop="nav_url">
-          <el-input v-model="navform.nav_url" auto-complete="off" label-width="100"></el-input>
-          <span>请填写包含http://的完整URL地址，否则会跳转到外链</span>
-          <span>例: http://www.baidu.com填写http://www.baidu.com</span>
+        <el-form-item label="URL:" prop="nav_url">
+          <el-input placeholder="请输入URL" v-model="navform.nav_url">
+            <template slot="prepend">Http://</template>
+          </el-input>
+          <span class="URLtip">请填写包含http://的完整URL地址，否则会跳转到外链</span>
+          <span class="URLtip">例: http://www.baidu.com填写http://www.baidu.com</span>
         </el-form-item>
-        <el-form-item label="新窗口打开" prop="target">
+        <el-form-item label="新窗口打开:" prop="target">
           <el-radio-group v-model="navform.target">
             <el-radio :label="1">是</el-radio>
             <el-radio :label="0">否</el-radio>
@@ -114,10 +115,10 @@
         },
 
         /** 列表数据*/
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 新增导航表单*/
         navform: {
@@ -259,10 +260,6 @@
     justify-content: space-between;
   }
 
-  .toolbar-btns {
-
-  }
-
   .toolbar-search {
     margin-right: 10px;
   }
@@ -270,6 +267,13 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+
+  /deep/.el-input__inner{
+    width: 60%;
+  }
+  span.URLtip {
+    font-size: 13px;
   }
 
 </style>

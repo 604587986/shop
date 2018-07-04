@@ -26,7 +26,7 @@
               placeholder="请选择商品类型"
               @change="changeGoodsType"
               clearable>
-              <el-option key="NORMAL" label="全部商品" value="NORMAL"/>
+              <el-option key="NORMAL" label="正常商品" value="NORMAL"/>
               <el-option key="POINT" label="积分商品" value="POINT"/>
             </el-select>
           </div>
@@ -48,7 +48,11 @@
             <img :src="scope.row.thumbnail" class="goods-image" />
           </template>
         </el-table-column>
-        <el-table-column prop="goods_name" label="名称" min-width="160"/>
+        <el-table-column label="名称" min-width="160">
+          <template slot-scope="scope">
+            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+          </template>
+        </el-table-column>
         <el-table-column label="价格" >
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
@@ -147,6 +151,9 @@
       return {
         /** 列表loading状态 */
         loading: false,
+
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
 
         /** 列表参数 */
         params: {
@@ -316,8 +323,6 @@
             this.GET_GoodsList()
             this.$message.success('删除商品成功！')
           })
-        }).catch(() => {
-          this.$message.info({ message: '已取消删除' })
         })
       },
 

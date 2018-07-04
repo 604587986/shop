@@ -5,8 +5,7 @@
       pagination
       :tableData="tableData"
       :loading="loading"
-      :selectionChange="selectionChange"
-    >
+      :selectionChange="selectionChange">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-button type="primary" @click="selectgoodslist" >选择商品</el-button>
@@ -20,7 +19,10 @@
             <div class="goods-info">
               <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
               <div class="goodsinfo-txt">
-                <span class="goods-name">{{scope.row.goods_name}}</span>
+                <a class="goods-name"
+                  :href="`${HTTP_URL}/${scope.row.goods_id}`"
+                  style="color: #00a2d4;">
+                  {{ scope.row.goods_name }}</a>
                 <span class="goods-price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
             </div>
@@ -65,6 +67,9 @@
     name: 'tagAdd',
     data() {
       return {
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
+
         /** 标签商品列表loading状态 */
         loading: false,
 

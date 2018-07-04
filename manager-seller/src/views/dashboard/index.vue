@@ -45,15 +45,15 @@
             <div class="active-score">
               <div>
                 <span>描述</span>
-                <span>{{shop_info.shop_desccredit}}分</span>
+                <span>{{shop_info.shop_description_credit}}分</span>
               </div>
               <div>
                 <span>服务</span>
-                <span>{{shop_info.shop_servicecredit}}分</span>
+                <span>{{shop_info.shop_service_credit}}分</span>
               </div>
               <div>
                 <span>发货</span>
-                <span>{{shop_info.shop_deliverycredit}}分</span>
+                <span>{{shop_info.shop_delivery_credit}}分</span>
               </div>
             </div>
           </div>

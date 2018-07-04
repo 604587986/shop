@@ -36,8 +36,7 @@
         <en-table-layout
           pagination
           :tableData="tableData"
-          :loading="loading"
-        >
+          :loading="loading">
           <template slot="table-columns">
             <!--订单编号-->
             <el-table-column prop="sn" label="订单编号"/>
@@ -73,8 +72,7 @@
         <en-table-layout
         pagination
         :tableData="tableData"
-        :loading="loading"
-      >
+        :loading="loading">
         <template slot="table-columns">
           <!--退款金额-->
           <el-table-column label="退款金额">
