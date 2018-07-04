@@ -1,106 +1,55 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { logout, getUserInfo } from '@/api/login'
+import Storage from '@/utils/storage'
 
 const user = {
   state: {
-    user: '',
-    status: '',
-    code: '',
-    name: '',
     avatar: '',
-    roles: [],
-    setting: {
-      articlePlatform: []
-    }
+    name: ''
   },
 
   mutations: {
-    SET_CODE: (state, code) => {
-      state.code = code
+    /**
+     * 设置用户信息
+     * @param state
+     * @param user
+     * @constructor
+     */
+    SET_USER_INFO: (state, user) => {
+      state.avatar = user.face
+      state.name = user.uname
+      Storage.setItem('user', JSON.stringify(user))
     },
-    SET_TOKEN: (state, token) => {
-      state.token = token
-    },
-    SET_SETTING: (state, setting) => {
-      state.setting = setting
-    },
-    SET_STATUS: (state, status) => {
-      state.status = status
-    },
-    SET_NAME: (state, name) => {
-      state.name = name
-    },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    /**
+     * 登出
+     * @param state
+     * @constructor
+     */
+    LOG_OUT: (state) => {
+      state.avatar = ''
+      state.name = ''
+      Storage.removeItem('user')
+      Storage.removeItem('accessToken')
+      Storage.removeItem('refreshToken')
     }
   },
 
   actions: {
     // 用户名登录
-    LoginByUsername({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+    getUserInfoAction({ commit }) {
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password, userInfo.validcode).then(response => {
-          // 后台暂时没有返回数据，模拟一个
-          response = { data: { token: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjEsInVpZCI6NDYyLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6IkFuZHN0ZeeahOWwj-W6lyIsInVzZXJuYW1lIjoiYW5kc3RlIn0.YH75GbDEMeGcDL0M1F7WJ3wKMY-O58rncikC4o8HPpvvTv4m2dr--PODq3gKgJriJXJQi_frL3DTzQp7Vzu0oQ' }}
-          const data = response.data
-          commit('SET_TOKEN', response.data.token)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 获取用户信息
-    GetUserInfo({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(response => {
-          // 后台暂时没有返回数据，模拟一个
-          response = {
-            data: {
-              role: ['admin'],
-              username: 'javashop',
-              mobile: 18888888888,
-              sex: 1,
-              email: null,
-              avatar: 'http://data.andste.cc/developers/web/temp/images/logo-javashop-app.png'
-            }
-          }
-          if (!response.data) {
-            reject('error')
-          }
-          const data = response.data
-          commit('SET_ROLES', data.role)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
+        getUserInfo().then(response => {
+          commit('SET_USER_INFO', response)
           resolve(response)
-        }).catch(error => {
-          reject(error)
         })
       })
     },
-
     // 登出
-    LogOut({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 前端 登出
-    FedLogOut({ commit }) {
+    logOutAction({ commit }) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
-        resolve()
+        logout().then(() => {
+          commit('LOG_OUT')
+          resolve()
+        })
       })
     }
   }
