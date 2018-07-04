@@ -14,7 +14,7 @@
       <ul class="links">
         <li>
           <div class="dt">
-            <a :href="(user && user.have_shop) ? domain_seller : '/shop/apply'" target="_blank">商家中心</a>
+            <a :href="(user && user.have_shop) ? MixinDomain.seller : '/shop/apply'">商家中心</a>
           </div>
         </li>
         <li class="spacer"></li>
@@ -67,7 +67,7 @@
           <div class="dd dorpdown-layer">
             <dl>
               <dd><nuxt-link to="/">商城首页</nuxt-link></dd>
-              <dd><a :href="(user && user.have_shop) ? domain_seller : '/shop/apply'">商家中心</a></dd>
+              <dd><a :href="(user && user.have_shop) ? MixinDomain.seller : '/shop/apply'">商家中心</a></dd>
               <dd><nuxt-link to="/member">个人中心</nuxt-link></dd>
             </dl>
           </div>
@@ -85,14 +85,8 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import { domain } from '~/ui-domain'
   export default {
     name: 'EnShortcut',
-    data() {
-      return {
-        domain_seller: domain.seller
-      }
-    },
     computed: {
       ...mapGetters(['user'])
     },

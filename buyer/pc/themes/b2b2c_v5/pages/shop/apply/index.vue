@@ -13,7 +13,8 @@
 
 <script>
   export default {
-    name: 'apply-index'
+    name: 'apply-index',
+    middleware: 'auth-seller'
   }
 </script>
 
