@@ -1,7 +1,7 @@
 <template>
   <div id="success" class="success-container">
     <div class="w inner">
-      <img src="~/assets/images/icon-apply-shop-success.png">
+      <img src="../../../assets/images/icon-apply-shop-success.png">
       <span class="tip">申请开店成功，等待审核......</span>
     </div>
     <nuxt-link to="/" class="back-index">返回首页</nuxt-link>
@@ -10,7 +10,8 @@
 
 <script>
   export default {
-    name: "success"
+    name: "success",
+    middleware: 'auth-seller'
   }
 </script>
 
