@@ -43,6 +43,7 @@
               :action="BASE_IMG_URL"
               :key="index"
               :limit="1"
+              :show-file-list="false"
               :on-success="uploadSuccess"
               :file-list="fileList"
               list-type="picture">
