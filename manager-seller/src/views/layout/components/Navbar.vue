@@ -5,8 +5,6 @@
     <breadcrumb class="breadcrumb-container"></breadcrumb>
 
     <div class="right-menu">
-      <error-log class="errLog-container right-menu-item"></error-log>
-
       <el-tooltip effect="dark" content="全屏" placement="bottom">
         <screenfull class="screenfull right-menu-item"></screenfull>
       </el-tooltip>
@@ -19,7 +17,7 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
+          <img class="user-avatar" :src="avatar">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -39,7 +37,6 @@
           <span @click="logout">
             <el-dropdown-item divided>退出登录</el-dropdown-item>
           </span>
-
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -48,9 +45,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { domain } from '~/ui-domain'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
@@ -59,7 +56,6 @@ export default {
   components: {
     Breadcrumb,
     Hamburger,
-    ErrorLog,
     Screenfull,
     LangSelect,
     ThemePicker
@@ -87,13 +83,11 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-        .then(() => {
-          this.$store.dispatch('LogOut').then(() => {
-            location.reload()// 为了重新实例化vue-router对象 避免bug
-          })
+      }).then(() => {
+        this.$store.dispatch('logOutAction').then(() => {
+          window.location.href = domain.buyer_pc
         })
-        .catch(() => {})
+      }).catch(() => {})
     }
   }
 }
@@ -103,7 +97,7 @@ export default {
 .navbar {
   height: 50px;
   line-height: 50px;
-  border-radius: 0px !important;
+  border-radius: 0 !important;
   .hamburger-container {
     line-height: 58px;
     height: 50px;

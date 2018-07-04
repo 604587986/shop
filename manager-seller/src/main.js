@@ -29,10 +29,8 @@ Vue.use(EnComponents)
 import echarts from 'echarts'
 import china from 'echarts/map/js/china'
 import axios from 'axios'
-import jsonp from 'vue-jsonp'
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
-Vue.use(jsonp)
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {
