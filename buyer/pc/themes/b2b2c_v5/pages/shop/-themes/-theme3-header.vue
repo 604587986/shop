@@ -17,19 +17,19 @@
             <a :href="nav.nav_url" class="item" :key="nav.id" :target="nav.target ? '_blank' : '_self'">{{ nav.name }}</a>
           </template>
         </div>
-        <div class="shop-more">
+        <div class="shop-more" @click="collectionShop">
           <div class="item">
             <i class="iconfont ea-icon-star"></i>
             <p>收藏</p>
           </div>
-          <div class="item">
+          <a :href="'http://wpa.qq.com/msgrd?v=3&uin='+ shop.shop_qq +'&site=qq&menu=yes'" target="_blank" class="item">
             <i class="iconfont ea-icon-service"></i>
             <p>客服</p>
-          </div>
-          <div class="item">
+          </a>
+          <nuxt-link :to="'./goods-list?shop_id=' + shop.shop_id" class="item">
             <i class="iconfont ea-icon-more"></i>
             <p>更多</p>
-          </div>
+          </nuxt-link>
         </div>
       </div>
     </div>
