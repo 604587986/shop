@@ -5,6 +5,7 @@ import Storage from '@/utils/storage'
 import { Base64 } from 'js-base64'
 import { Foundation } from '~/ui-utils'
 import * as API_Address from "@/api/address";
+import { domain_dev, domain_pro } from '~/ui-domain'
 
 export const state = () => ({
   user: '',
@@ -41,6 +42,7 @@ export const mutations = {
   [types.SET_ACCESS_TOKEN](state, token) {
     state.accessToken = token
     if (process.client) {
+      // Andste_TODO 2018/7/4: 需要设置path
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
       Storage.setItem('accessToken', token, { expires })
@@ -62,6 +64,7 @@ export const mutations = {
   [types.SET_REFRESH_TOKEN](state, token) {
     state.refreshToken = token
     if (process.client) {
+      // Andste_TODO 2018/7/4: 需要设置path
       const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(refresh_token_time)
       Storage.setItem('refreshToken', token, { expires })
