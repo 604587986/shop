@@ -6,7 +6,8 @@
 
 <script>
   export default {
-    name: 'binder'
+    name: 'binder',
+    layout: 'full'
   }
 </script>
 

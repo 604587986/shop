@@ -77,15 +77,15 @@
           <dt>价格:</dt>
           <dd>
             <div class="small-list">
-              <a href="/goods-list.html?price=_5&amp;cat=1">5元以下</a>
-              <a href="/goods-list.html?price=5_10&amp;cat=1">5-10元</a>
-              <a href="/goods-list.html?price=10_20&amp;cat=1">10-20元</a>
-              <a href="/goods-list.html?price=20_50&amp;cat=1">20-50元</a>
-              <a href="/goods-list.html?price=50_100&amp;cat=1">50-100元</a>
-              <a href="/goods-list.html?price=100_200&amp;cat=1">100-200元</a>
-              <a href="/goods-list.html?price=200_500&amp;cat=1">200-500元</a>
-              <a href="/goods-list.html?price=500_1000&amp;cat=1">500-1000元</a>
-              <a href="/goods-list.html?price=1000_&amp;cat=1">1000元以上</a>
+              <a href="/goods.html?price=_5&amp;cat=1">5元以下</a>
+              <a href="/goods.html?price=5_10&amp;cat=1">5-10元</a>
+              <a href="/goods.html?price=10_20&amp;cat=1">10-20元</a>
+              <a href="/goods.html?price=20_50&amp;cat=1">20-50元</a>
+              <a href="/goods.html?price=50_100&amp;cat=1">50-100元</a>
+              <a href="/goods.html?price=100_200&amp;cat=1">100-200元</a>
+              <a href="/goods.html?price=200_500&amp;cat=1">200-500元</a>
+              <a href="/goods.html?price=500_1000&amp;cat=1">500-1000元</a>
+              <a href="/goods.html?price=1000_&amp;cat=1">1000元以上</a>
             </div>
           </dd>
         </dl>

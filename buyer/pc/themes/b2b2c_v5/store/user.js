@@ -40,10 +40,6 @@ export const mutations = {
    */
   [types.SET_ACCESS_TOKEN](state, token) {
     state.accessToken = token
-    if (process.server) {
-      // 如果cookie携带了token，将它配置给axios【仅服务端用，客户端依然从客户端的cookie获取】
-     global.ACCESS_TOKEN = token
-    }
     if (process.client) {
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
@@ -66,10 +62,9 @@ export const mutations = {
   [types.SET_REFRESH_TOKEN](state, token) {
     state.refreshToken = token
     if (process.client) {
-      // const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
-      // const expires = new Date(refresh_token_time)
-      // 不设置失效时间，由后端检测是否失效
-      Storage.setItem('refreshToken', token)
+      const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(refresh_token_time)
+      Storage.setItem('refreshToken', token, { expires })
     }
   },
   /**

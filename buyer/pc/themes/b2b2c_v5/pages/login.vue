@@ -182,7 +182,11 @@
           }
         }
         this.login({ login_type, form }).then(() => {
-          this.$router.push({ path: forward || '/' })
+          if (forward && /^http/.test(forward)) {
+            window.location.href = forward
+          } else {
+            this.$router.push({ path: forward || '/' })
+          }
         })
       },
       getConnectUrl: API_Connect.getConnectUrl,
