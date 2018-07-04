@@ -320,7 +320,7 @@
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
   import { CategoryPicker, SkuSelector, UE } from '@/components'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   import Sortable from 'sortablejs'
   export default {
     name: 'goodsPublish',

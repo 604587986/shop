@@ -46,7 +46,7 @@
 
 <script>
   import * as API_coupon from '@/api/coupon'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'Coupon',
     props: {

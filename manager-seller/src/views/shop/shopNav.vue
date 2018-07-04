@@ -82,7 +82,7 @@
 
 <script>
   import * as API_ShopNav from '@/api/shopNav'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'shopNav',
     data() {

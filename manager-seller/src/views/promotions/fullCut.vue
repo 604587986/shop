@@ -255,7 +255,7 @@
   import * as API_activity from '@/api/activity'
   import * as API_Gift from '@/api/gift'
   import * as API_coupon from '@/api/coupon'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   import { CategoryPicker, UE } from '@/components'
   import { AddGift, Coupon } from './components'
 

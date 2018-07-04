@@ -181,7 +181,7 @@
 <script>
   import * as API_activity from '@/api/activity'
   import { CategoryPicker, UE } from '@/components'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
 
   export default {
     name: 'singleCut',

@@ -81,7 +81,7 @@
 <script>
   import * as API_limitTime from '@/api/limitTime'
   import { CategoryPicker } from '@/components'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'addTimeLimit',
     components: {
