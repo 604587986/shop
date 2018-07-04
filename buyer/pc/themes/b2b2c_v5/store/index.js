@@ -115,5 +115,5 @@ export const getters = {
    * @param state
    * @returns {*}
    */
-  address: state => state.address.address
+  address: state => state.user.address
 }
