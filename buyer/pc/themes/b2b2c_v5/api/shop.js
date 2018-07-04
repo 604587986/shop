@@ -77,3 +77,39 @@ export function getShopBaseInfo(shop_id) {
     loading: false
   })
 }
+
+/**
+ * 获取店铺幻灯片
+ * @param shop_id
+ */
+export function getShopSildes(shop_id) {
+  return request({
+    url: `shops/sildes/${shop_id}`,
+    method: Method.GET,
+    loading: false
+  })
+}
+
+/**
+ * 获取店铺导航
+ * @param shop_id
+ */
+export function getShopNav(shop_id) {
+  return request({
+    url: `shops/navigations/${shop_id}`,
+    method: Method.GET,
+    loading: false
+  })
+}
+
+/**
+ * 获取店铺分类【分组】
+ * @param shop_id
+ */
+export function getShopCategorys(shop_id) {
+  return request({
+    url: `shops/cats/${shop_id}`,
+    method: Method.GET,
+    loading: false
+  })
+}
