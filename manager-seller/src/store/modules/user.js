@@ -1,5 +1,7 @@
 import { logout, getUserInfo } from '@/api/login'
 import Storage from '@/utils/storage'
+import { Base64 } from 'js-base64'
+import { domain } from '~/ui-domain'
 
 const user = {
   state: {
@@ -30,6 +32,28 @@ const user = {
       Storage.removeItem('user')
       Storage.removeItem('accessToken')
       Storage.removeItem('refreshToken')
+    },
+    /**
+     * 设置访问令牌
+     * @param state
+     * @param token
+     * @constructor
+     */
+    SET_ACCESS_TOKEN: (state, token) => {
+      const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(access_token_time)
+      Storage.setItem('accessToken', token, { expires })
+    },
+    /**
+     * 设置刷新令牌
+     * @param state
+     * @param token
+     * @constructor
+     */
+    SET_REFRESH_TOKEN: (state, token) => {
+      const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(refresh_token_time)
+      Storage.setItem('refreshToken', token, { expires })
     }
   },
 
@@ -51,6 +75,18 @@ const user = {
           resolve()
         })
       })
+    },
+    // 移除用户信息、以及Token
+    removeUserAction({ commit }) {
+      commit('LOG_OUT')
+    },
+    // 设置访问令牌
+    setAccessTokenAction({ commit }, token) {
+      commit('SET_ACCESS_TOKEN', token)
+    },
+    // 设置刷新令牌
+    setRefreshTokenAction({ commit }, token) {
+      commit('SET_REFRESH_TOKEN', token)
     }
   }
 }
