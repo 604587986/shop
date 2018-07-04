@@ -121,7 +121,7 @@
 </template>
 
 <script>
-  import mixin from './-themeMixin'
+  import mixin from './themeMixin'
   import theme2Header from './-theme2-header'
   export default {
     name: 'shop-theme-2',

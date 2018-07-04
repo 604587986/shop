@@ -24,20 +24,26 @@
         <div class="shop-category">
           <h1>全部分类</h1>
         </div>
-        <nuxt-link to="#" class="item">店铺首页</nuxt-link>
+        <a href="#" class="item">店铺首页</a>
         <span>|</span>
-        <nuxt-link to="#" class="item">店铺简介</nuxt-link>
+        <a href="#shop-intro" class="item">店铺简介</a>
         <span>|</span>
-        <nuxt-link to="#" class="item">信用评价</nuxt-link>
+        <a href="#shop-info" class="item">店铺评价</a>
+        <template v-for="nav in navs">
+          <span :key="'span-' + nav.id">|</span>
+          <a :href="nav.nav_url" class="item" :key="nav.id" :target="nav.target ? '_blank' : '_self'">{{ nav.name }}</a>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import mixin from './themeHeaderMixin'
   export default {
     name: 'shop-theme-2-header',
-    props: ['shop']
+    props: ['shop'],
+    mixins: [mixin]
   }
 </script>
 

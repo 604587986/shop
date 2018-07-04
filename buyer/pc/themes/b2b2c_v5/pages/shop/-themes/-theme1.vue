@@ -76,13 +76,13 @@
         </div>
       </div>
     </div>
-    <div class="shop-intro">
+    <div class="shop-intro" id="shop-intro">
       <div class="w">
         <div class="intro-title">店铺简介</div>
         <div class="intro-body" v-html="shop.shop_intro"></div>
       </div>
     </div>
-    <div class="shop-info">
+    <div class="shop-info" id="shop-info">
       <div class="info-title">关于本店</div>
       <div class="info-information">
         <div class="item">
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-  import mixin from './-themeMixin'
+  import mixin from './themeMixin'
   import theme1Header from './-theme1-header'
   export default {
     name: 'shop-theme-1',
