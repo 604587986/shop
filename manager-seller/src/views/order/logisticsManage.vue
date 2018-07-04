@@ -117,7 +117,7 @@
 
 <script>
   import * as API_express from '@/api/expressMould'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   import { LogisticsCompany } from './components'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
 

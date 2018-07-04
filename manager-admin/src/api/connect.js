@@ -17,11 +17,12 @@ export function getConnect() {
 
 /**
  * 修改信任登录参数
+ * @param type
  * @param params
  */
-export function editConnect(params) {
+export function editConnect(type, params) {
   return request({
-    url: 'members/connect',
+    url: `members/connect/${type}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params

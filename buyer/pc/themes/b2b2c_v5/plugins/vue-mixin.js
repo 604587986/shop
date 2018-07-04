@@ -1,13 +1,16 @@
 import Vue from 'vue'
 import * as API_Common from '@/api/common'
+import { domain } from '~/ui-domain'
 
 Vue.mixin({
   data() {
     return {
-      /** 图片上传API */
+      // 图片上传API
       MixinUploadApi: API_Common.uploadApi,
-      /** 地区上传API */
-      MixinRegionApi: API_Common.regionApi
+      // 地区上传API
+      MixinRegionApi: API_Common.regionApi,
+      // 域名
+      MixinDomain: domain
     }
   },
   computed: {

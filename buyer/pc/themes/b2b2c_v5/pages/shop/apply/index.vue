@@ -12,8 +12,10 @@
 </template>
 
 <script>
+  // Andste_TODO 2018/7/4: 申请被拒绝待适配
   export default {
-    name: 'apply-index'
+    name: 'apply-index',
+    middleware: 'auth-seller'
   }
 </script>
 

@@ -43,6 +43,7 @@
   import * as API_Shop from '@/api/shop'
   export default {
     name: "user-agreement",
+    middleware: 'auth-seller',
     data() {
       return { agreed: false }
     },

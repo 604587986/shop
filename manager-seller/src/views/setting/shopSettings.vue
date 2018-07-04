@@ -72,7 +72,7 @@
 <script>
   import * as API_Shop from '@/api/shop'
   import { UE } from '@/components'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'shopSetting',
     components: {

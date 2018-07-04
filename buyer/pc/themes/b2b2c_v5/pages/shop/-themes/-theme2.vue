@@ -11,14 +11,15 @@
               <span>HOT-GOODS</span>
               <nuxt-link to="#" title="查看更多"></nuxt-link>
             </li>
-            <template v-for="(goods, index) in shop.hotGoods">
+            <template v-for="(goods, index) in hotGoods">
               <li v-if="index < 7" :key="goods.goods_id" class="goods-item">
-                <nuxt-link to="#"><img :src="goods.goods_image"></nuxt-link>
+                <nuxt-link :to="'/goods/' + goods.goods_id"><img :src="goods.thumbnail"></nuxt-link>
                 <div class="goods-info">
-                  <div class="goods-name"><nuxt-link to="#">{{ goods.goods_name }}</nuxt-link></div>
+                  <div class="goods-name"><nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.goods_name }}</nuxt-link></div>
                   <div class="goods-price">
                     <span>RMB：</span>
-                    <span class="price">{{ goods.goods_price | unitPrice('￥') }}</span>
+                    <span class="price">{{ goods.price | unitPrice('￥') }}</span>
+                    <!--// Andste_TODO 2018/7/4: 待适配-->
                     <span class="buy-count">已售：{{ goods.buy_count }}件</span>
                   </div>
                 </div>
@@ -33,17 +34,20 @@
             <nuxt-link to="#" title="查看更多"></nuxt-link>
           </div>
           <ul>
-            <template v-for="(goods, index) in shop.newGoods">
+            <template v-for="(goods, index) in newGoods">
               <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
                 <div class="new-img">
-                  <a href="/javashop/goods-30.html">
-                    <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
-                  </a>
+                  <nuxt-link :to="'/goods/' + goods.goods_id">
+                    <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                  </nuxt-link>
                 </div>
                 <div class="new-intro">
-                  <h2><a href="/javashop/goods-30.html">{{ goods.goods_name }}</a></h2>
+                  <h2>
+                    <nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.goods_name }}</nuxt-link>
+                  </h2>
                   <p>
-                    <span>RMB：<i>{{ goods.goods_price | unitPrice('￥') }}</i></span>
+                    <span>RMB：<i>{{ goods.price | unitPrice('￥') }}</i></span>
+                    <!--// Andste_TODO 2018/7/4: 待适配-->
                     <span class="hot-sale">已销售：{{ goods.buy_count }}件</span>
                   </p>
                 </div>
@@ -59,17 +63,18 @@
             <nuxt-link to="#" title="查看更多"></nuxt-link>
           </div>
           <ul>
-            <template v-for="(goods, index) in shop.recGoods">
+            <template v-for="(goods, index) in recGoods">
               <li v-if="index < 6" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
-                  <img :src="goods.goods_image" :alt="goods.goods_image">
+                  <img :src="goods.thumbnail" :alt="goods.goods_name">
                 </div>
                 <div class="goods-info">
-                  <nuxt-link to="#" class="goods-name">{{ goods.goods_name }}</nuxt-link>
-                  <p>原价：<span class="goods-original-price">{{ goods.goods_original_price | unitPrice('￥') }}</span></p>
-                  <p>价格：<span class="goods-price">{{ goods.goods_price | unitPrice('￥') }}</span></p>
+                  <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>
+                  <p v-if="goods.goods_original_price">原价：<span class="goods-original-price">{{ goods.goods_original_price | unitPrice('￥') }}</span></p>
+                  <p>价格：<span class="goods-price">{{ goods.price | unitPrice('￥') }}</span></p>
+                  <!--// Andste_TODO 2018/7/4: 待适配-->
                   <p>已销售：<span>{{ goods.buy_count }}</span>件</p>
-                  <nuxt-link to="#" class="goods-btn">查看详情</nuxt-link>
+                  <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-btn">查看详情</nuxt-link>
                 </div>
                 <i class="icon-tag-rec"></i>
               </li>
@@ -97,21 +102,22 @@
         <div class="infomation-box">
           <div class="item info">
             <h3>{{ shop.shop_name }}</h3>
+            <!--// Andste_TODO 2018/7/4: 待适配-->
             <p>身份认证：身份已认证</p>
             <p>店铺认证：店铺已认证</p>
-            <p>创店时间：2018-05-20</p>
+            <p>创店时间：{{ shop.shop_createtime | unixToDate('yyyy-MM-dd') }}</p>
           </div>
           <div class="item contact">
             <h3>联系方式</h3>
-            <p>所在地址：河北-廊坊市-三河市-燕郊镇</p>
-            <p>详细地址：维多利亚D座24层23A07</p>
-            <p>联系方式：1858888888</p>
+            <p>所在地址：{{ formatAddress() }}</p>
+            <p>详细地址：{{ shop.shop_add }}</p>
+            <p>联系方式：{{ shop.link_phone || '无' }}</p>
           </div>
           <div class="item evaluation">
             <h3>店铺评价</h3>
-            <div>描述相符：<en-shop-star :star="5"/></div>
-            <div>服务态度：<en-shop-star :star="4"/></div>
-            <div>发货速度：<en-shop-star :star="3"/></div>
+            <div>描述相符：<en-shop-star :star="shop.shop_description_credit"/></div>
+            <div>服务态度：<en-shop-star :star="shop.shop_service_credit"/></div>
+            <div>发货速度：<en-shop-star :star="shop.shop_delivery_credit"/></div>
           </div>
           <div class="item collection" @click="collectionShop"></div>
         </div>
@@ -121,7 +127,7 @@
 </template>
 
 <script>
-  import mixin from './-themeMixin'
+  import mixin from './themeMixin'
   import theme2Header from './-theme2-header'
   export default {
     name: 'shop-theme-2',

@@ -49,30 +49,30 @@
       </div>
     </div>
     <div class="card-service">
-      <a href="" class="service-item">
+      <nuxt-link to="/member/my-point" class="service-item">
         <i class="iconfont ea-icon-point"></i>
         <span>我的积分</span>
-      </a>
-      <a href="" class="service-item">
+      </nuxt-link>
+      <nuxt-link to="/member/my-comments" class="service-item">
         <i class="iconfont ea-icon-score"></i>
         <span>我的评价</span>
-      </a>
-      <a href="" class="service-item">
+      </nuxt-link>
+      <nuxt-link to="/member/my-order" class="service-item">
         <i class="iconfont ea-icon-order"></i>
         <span>我的订单</span>
-      </a>
-      <a href="" class="service-item">
+      </nuxt-link>
+      <nuxt-link to="/member/my-collection" class="service-item">
         <i class="iconfont ea-icon-star"></i>
         <span>我的收藏</span>
-      </a>
-      <a href="" class="service-item">
+      </nuxt-link>
+      <nuxt-link to="/member/account-safe" class="service-item">
         <i class="iconfont ea-icon-security"></i>
         <span>账号安全</span>
-      </a>
-      <a href="" class="service-item">
+      </nuxt-link>
+      <nuxt-link :to="(user && user.have_shop) ? MixinDomain.seller : '/shop/apply'" class="service-item">
         <i class="iconfont ea-icon-shop"></i>
-        <span>商家入驻</span>
-      </a>
+        <span>{{ (user && user.have_shop) ? '商家中心' : '商家入驻' }}</span>
+      </nuxt-link>
     </div>
   </div>
 </template>

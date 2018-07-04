@@ -87,7 +87,7 @@
 
 <script>
   import * as API_goodsCategory from '@/api/goodsCategory'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'categoryManage',
     data() {

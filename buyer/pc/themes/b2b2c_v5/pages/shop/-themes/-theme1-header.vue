@@ -4,18 +4,18 @@
       <div class="w">
         <div class="shop-name">{{ shop.shop_name }}</div>
         <div class="shop-more">
-          <div class="item">
+          <div class="item" @click="collectionShop">
             <i class="iconfont ea-icon-star"></i>
             <p>收藏</p>
           </div>
-          <div class="item">
+          <a :href="'http://wpa.qq.com/msgrd?v=3&uin='+ shop.shop_qq +'&site=qq&menu=yes'" target="_blank" class="item">
             <i class="iconfont ea-icon-service"></i>
             <p>客服</p>
-          </div>
-          <div class="item">
+          </a>
+          <nuxt-link :to="'./goods-list?shop_id=' + shop.shop_id" class="item">
             <i class="iconfont ea-icon-more"></i>
             <p>更多</p>
-          </div>
+          </nuxt-link>
         </div>
       </div>
     </div>
@@ -24,20 +24,26 @@
         <div class="item category">
           <h1>全部分类</h1>
         </div>
-        <nuxt-link to="#" class="item">店铺首页</nuxt-link>
+        <a href="#" class="item">店铺首页</a>
         <span>|</span>
-        <nuxt-link to="#" class="item">店铺简介</nuxt-link>
+        <a href="#shop-intro" class="item">店铺简介</a>
         <span>|</span>
-        <nuxt-link to="#" class="item">店铺评价</nuxt-link>
+        <a href="#shop-info" class="item">店铺评价</a>
+        <template v-for="nav in navs">
+          <span :key="'span-' + nav.id">|</span>
+          <a :href="nav.nav_url" class="item" :key="nav.id" :target="nav.target ? '_blank' : '_self'">{{ nav.name }}</a>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import mixin from './themeHeaderMixin'
   export default {
     name: 'shop-theme-1-header',
-    props: ['shop']
+    props: ['shop'],
+    mixins: [mixin]
   }
 </script>
 

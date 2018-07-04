@@ -14,27 +14,27 @@
       <ul class="links">
         <li>
           <div class="dt">
-            <a :href="user.have_shop ? domain_seller : '/shop/apply'" target="_blank">商家中心</a>
+            <a :href="(user && user.have_shop) ? MixinDomain.seller : '/shop/apply'">商家中心</a>
           </div>
         </li>
         <li class="spacer"></li>
         <li class="dorpdown">
           <div class="dt hs-icon">
-            <a href="/member/my-order#ALL">我的订单</a>
+            <nuxt-link to="/member/my-order#ALL">我的订单</nuxt-link>
             <i class="iconfont ea-icon-arrow-down"></i>
           </div>
           <div class="dd dorpdown-layer">
             <dl>
-              <dd><a href="/member/my-order#WAIT_PAY">待付款订单</a></dd>
-              <dd><a href="/member/my-order#WAIT_ROG">已发货订单</a></dd>
-              <dd><a href="/member/my-order#WAIT_COMMENT">待评价订单</a></dd>
+              <dd><nuxt-link to="/member/my-order#WAIT_PAY">待付款订单</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-order#WAIT_ROG">已发货订单</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-order#WAIT_COMMENT">待评价订单</nuxt-link></dd>
             </dl>
           </div>
         </li>
         <li class="spacer"></li>
         <li class="dorpdown">
           <div class="dt hs-icon">
-            <a target="_blank" href="/">我的收藏</a>
+            <nuxt-link to="/member/my-collection">我的收藏</nuxt-link>
             <i class="iconfont ea-icon-arrow-down"></i>
           </div>
           <div class="dd dorpdown-layer">
@@ -53,21 +53,21 @@
           <div class="dd dorpdown-layer">
             <dl>
               <dd><nuxt-link to="/help">帮助中心</nuxt-link></dd>
-              <dd><a href="/">售后中心</a></dd>
-              <dd><a href="/">客服中心</a></dd>
+              <dd><nuxt-link to="/">售后中心</nuxt-link></dd>
+              <dd><nuxt-link to="/">客服中心</nuxt-link></dd>
             </dl>
           </div>
         </li>
         <li class="spacer"></li>
         <li class="dorpdown">
           <div class="dt hs-icon">
-            <a target="_blank" href="/">站点导航</a>
+            <a href="#">站点导航</a>
             <i class="iconfont ea-icon-arrow-down"></i>
           </div>
           <div class="dd dorpdown-layer">
             <dl>
               <dd><nuxt-link to="/">商城首页</nuxt-link></dd>
-              <dd><nuxt-link to="/store">商家中心</nuxt-link></dd>
+              <dd><a :href="(user && user.have_shop) ? MixinDomain.seller : '/shop/apply'">商家中心</a></dd>
               <dd><nuxt-link to="/member">个人中心</nuxt-link></dd>
             </dl>
           </div>
@@ -75,7 +75,7 @@
         <li class="spacer"></li>
         <li>
           <div class="dt">
-            <a target="_blank" href="/">站内消息[0]</a>
+            <nuxt-link to="/member/website-message">站内消息[0]</nuxt-link>
           </div>
         </li>
       </ul>
@@ -85,20 +85,19 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import { domain } from '~/ui-domain'
   export default {
     name: 'EnShortcut',
-    data() {
-      return {
-        domain_seller: domain.seller
-      }
-    },
     computed: {
       ...mapGetters(['user'])
     },
+    mounted() {
+      // 如果已登录，重新获取用户信息【只有当用户刷新页面，才会触发】
+      this.user && this.getUserData()
+    },
     methods: {
       ...mapActions({
-        logout: 'user/logoutAction'
+        logout: 'user/logoutAction',
+        getUserData: 'user/getUserDataAction'
       }),
       /** 账户登出 */
       handleLogout() {

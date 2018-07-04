@@ -122,11 +122,11 @@ export default {
       })
     },
     ...mapActions({
-      getAddress: 'address/getAddressAction',
-      deleteAddress: 'address/deleteAddressAction',
-      addAddress: 'address/addAddressAction',
-      editAddress: 'address/editAddressAction',
-      setDefaultAddress: 'address/setDefaultAddressAction'
+      getAddress: 'user/getAddressAction',
+      deleteAddress: 'user/deleteAddressAction',
+      addAddress: 'user/addAddressAction',
+      editAddress: 'user/editAddressAction',
+      setDefaultAddress: 'user/setDefaultAddressAction'
     })
   }
 }

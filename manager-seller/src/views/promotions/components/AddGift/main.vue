@@ -39,7 +39,7 @@
 
 <script>
   import * as API_Gift from '@/api/gift'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'AddGift',
     props: {

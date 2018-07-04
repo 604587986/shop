@@ -176,7 +176,7 @@
 <script>
   import * as API_groupBuy from '@/api/groupBuy'
   import { unixToDate } from '@/utils/index'
-  import { RegExp } from '～/ui-utils'
+  import { RegExp } from '~/ui-utils'
   import { UE } from '@/components'
   export default {
     name: 'editGroupBuyGoods',

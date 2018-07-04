@@ -37,6 +37,7 @@
   import EnRegionPicker from "@/components/RegionPicker";
   export default {
     name: "shop-info",
+    middleware: 'auth-seller',
     components: {EnRegionPicker},
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
