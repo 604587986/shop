@@ -112,8 +112,12 @@
       countTableHeight() {
         this.tableHeight = document.body.clientHeight / 2
         /** 图表刷新 */
-        setTimeout(this.orderAmountChart.resize)
-        setTimeout(this.orderGoodsNumChart.resize)
+        if (this.orderAmountChart) {
+          setTimeout(this.orderAmountChart.resize)
+        }
+        if (this.orderGoodsNumChart) {
+          setTimeout(this.orderGoodsNumChart.resize)
+        }
       },
 
       /** 改变日期的回调*/

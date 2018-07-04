@@ -97,7 +97,7 @@
             <span class="item-name">4、发票内容：</span>
             <span class="item-value">{{ orderDetail.receipt_content }}</span>
           </div>
-          <div class="order-item">
+          <div class="order-item" v-if="!isShowEditShipName">
             <span class="item-name">5、物流信息：</span>
             <span class="item-value">
             <el-button type="text" @click="looklogistics">点击查看</el-button>
@@ -157,7 +157,6 @@
     </el-steps>
     <!--商品列表-->
     <div>
-      <!--<div class="d-header">商品列表</div>-->
       <el-table :data="productList" :header-cell-style="{textAlign: 'center'}">
         <el-table-column label="商品图片" width="180">
           <template slot-scope="scope">
@@ -175,14 +174,13 @@
       </el-table>
     </div>
     <!--调整价格 / 修改收货人信息-->
-    <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" width="25%">
+    <el-dialog :title="dialogTitle" :visible.sync="orderDetailShow" :width="dialogWidth">
       <div align="center">
         <!--调整订单总价-->
         <el-form
           v-show="triggerStatus === 1"
-          label-position="right"
-          label-width="90px">
-          <el-form-item label="订单总价：">
+          label-position="right">
+          <el-form-item>
             <el-input placeholder="请输入订单总价" v-model="adjustedPrice">
               <template slot="prepend">¥</template>
             </el-input>
@@ -224,15 +222,29 @@
       </div>
     </el-dialog>
     <!--查看物流信息-->
-    <el-dialog title="物流信息" :visible.sync="logisticsShow" width="30%">
-      <a href="">快递查询</a>
-      <div>
-        <span>时间：</span>
-        <span>备注：</span>
-        <span>物流公司：</span>
-        <span>快递单号：</span>
+    <el-dialog title="物流信息" :visible.sync="logisticsShow" width="20%" align="center">
+      <div class="logistics-info">
+        <div>
+          <span>时间：</span>
+          <span>2018-06-05</span>
+        </div>
+        <div>
+          <span>备注：</span>
+          <span>撒大大说到发送</span>
+        </div>
+        <div>
+          <span>物流公司：</span>
+          <span>撒的发生地发送</span>
+        </div>
+        <div>
+          <span>快递单号：</span>
+          <span>15645616161</span>
+        </div>
+        <div>
+          <span>提示：</span>
+          <span>法师打发打发</span>
+        </div>
       </div>
-      <span class="desc">法师打发打发</span>
     </el-dialog>
     <!--物流信息-->
     <en-logistics-company
@@ -296,6 +308,9 @@
 
         /** 弹框标题 */
         dialogTitle: '调整订单总价',
+
+        /** 弹框宽度 */
+        dialogWidth: '25%',
 
         /** 触发状态 1调整订单总价 2修改收货人信息*/
         triggerStatus: -1,
@@ -439,6 +454,7 @@
       /** 调整价格 */
       adjustPrice() {
         this.dialogTitle = '调整订单总价'
+        this.dialogWidth = '15%'
         this.orderDetailShow = true
         this.triggerStatus = 1
         this.adjustedPrice = this.orderDetail.order_price
@@ -463,8 +479,10 @@
           /** 物流公司名称 */
           logi_name: row.name
         }
-        API_order.deliveryGoods(this.sn, _params).then(() => {
-          this.GET_OrderDetail()
+        this.$confirm('确认发货?', '提示', { type: 'warning' }).then(() => {
+          API_order.deliveryGoods(this.sn, _params).then(() => {
+            this.GET_OrderDetail()
+          })
         })
       },
 
@@ -490,6 +508,7 @@
       /** 修改收货人信息 */
       adjustConsignee() {
         this.dialogTitle = '修改收货人信息'
+        this.dialogWidth = '25%'
         this.orderDetailShow = true
         this.triggerStatus = 2
         /** 为收货人信息赋予数据信息 */
@@ -679,6 +698,36 @@
     height: 50px;
   }
 
+  /deep/ .el-dialog__footer {
+    padding-top: 0;
+  }
+  /*物流信息*/
+  /deep/ .el-dialog__body {
+    padding: 20px 25px;
+  }
+  .logistics-info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    div {
+      margin: 10px 0;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+      span {
+        display: inline-block;
+      }
+      span:first-child {
+        width: 44%;
+        text-align: right;
+      }
+    }
+  }
 
 </style>
 

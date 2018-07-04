@@ -13,8 +13,7 @@
             @advancedSearch="advancedSearchEvent"
             advanced
             advancedWidth="465"
-            placeholder="请输入关键字"
-          >
+            placeholder="请输入关键字">
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="会员名称">
@@ -53,7 +52,7 @@
           <tr class="bg-order">
             <td colspan="2" class="base-info">
               <!--商品名称-->
-              <a href="#" class="goods-name">{{ item.goods_name }}</a>
+              <a :href="`${HTTP_URL}/${item.goods_id}`" class="goods-name">{{ item.goods_name }}</a>
               咨询用户：<span class="member-name">{{ item.member_name}} </span>
               咨询时间：<span>{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
             </td>
@@ -123,6 +122,9 @@
     },
     data() {
       return {
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
+
         /** 列表loading状态 */
         loading: false,
 
