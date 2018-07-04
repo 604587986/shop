@@ -90,9 +90,13 @@
     computed: {
       ...mapGetters(['user'])
     },
+    mounted() {
+      this.getUserData()
+    },
     methods: {
       ...mapActions({
-        logout: 'user/logoutAction'
+        logout: 'user/logoutAction',
+        getUserData: 'user/getUserDataAction'
       }),
       /** 账户登出 */
       handleLogout() {
