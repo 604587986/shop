@@ -1,17 +1,17 @@
 <template>
   <div v-loading="loading" class="order-detail-container">
-    <el-row v-if="orderDetail && orderDetail.operateAllowable" :gutter="0">
+    <el-row v-if="orderDetail && orderDetail.order_operate_allowable_vo" :gutter="0">
       <el-col :span="24" style="padding: 10px 20px">
         <el-button
           type="primary"
           size="mini"
-          :disabled="!orderDetail.operateAllowable.allowPay"
+          :disabled="!orderDetail.order_operate_allowable_vo.allow_pay"
           @click="confirmPay"
         >确认收款</el-button>
         <el-button
           type="danger"
           size="mini"
-          :disabled="!orderDetail.operateAllowable.allowCancel"
+          :disabled="!orderDetail.order_operate_allowable_vo.allow_cancel"
           @click="cancelOrder"
         >取消订单</el-button>
       </el-col>
@@ -110,10 +110,7 @@
           this.orderDetail = response
           this.productList = response.productList
           this.countShowData()
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading = false })
       },
 
       /** 获取订单日志 */
@@ -122,19 +119,16 @@
         API_order.getOrderLog(this.sn).then(response => {
           this.loading_log = false
           this.orderLog = response
-        }).catch(error => {
-          this.loading_log = false
-          console.log(error)
-        })
+        }).catch(() => { this.loading_log = false })
       },
 
       /** 确认收款 */
       confirmPay() {
         this.$confirm('确定要确认收款吗？', '提示', { type: 'warning' }).then(() => {
-          API_order.confirmPay(this.sn, { payprice: this.orderDetail.order_price }).then(response => {
+          API_order.confirmPay(this.sn, this.orderDetail.order_price).then(response => {
             this.$message.success('订单确认收款成功！')
             this.GET_OrderDetail()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -144,7 +138,7 @@
           API_order.cancleOrder(this.sn).then(() => {
             this.$message.success('订单取消成功！')
             this.GET_OrderDetail()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
       },
 
@@ -160,7 +154,7 @@
               items: [
                 { label: '订单编号', value: o.sn },
                 { label: '订单金额', value: '￥' + f.formatPrice(o.need_pay_money) },
-                { label: '支付方式', value: o.payment_type_text },
+                { label: '支付方式', value: (o.payment_type === 'ONLINE' ? '在线支付' : '货到付款') + '-' + (o.payment_method_name || '未支付') },
                 { label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '') },
                 { label: '下单时间', value: f.unixToDate(o.create_time) }
               ]
@@ -192,9 +186,9 @@
               key: 'seller',
               items: [
                 { label: '卖家账号', value: o.seller_name },
-                { label: '发货时间', value: f.unixToDate(o.ship_time) },
-                { label: '物流公司', value: o.logi_name },
-                { label: '快递单号', value: o.ship_no }
+                { label: '发货时间', value: o.ship_time ? f.unixToDate(o.ship_time) : '未发货' },
+                { label: '物流公司', value: o.logi_name || '未发货' },
+                { label: '快递单号', value: o.ship_no || '未发货' }
               ]
             }
           ]

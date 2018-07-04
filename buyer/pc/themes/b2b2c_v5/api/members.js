@@ -147,6 +147,19 @@ export function deleteGoodsCollection(ids) {
 }
 
 /**
+ * 获取商品是否被收藏
+ * @param good_id
+ */
+export function getGoodsIsCollect(good_id) {
+  return request({
+    url: `members/collection/goods/${good_id}`,
+    method: Method.GET,
+    needToken: true,
+    loading: false
+  })
+}
+
+/**
  * 获取店铺收藏
  * @param params
  * @returns {AxiosPromise}
@@ -183,6 +196,17 @@ export function deleteShopCollection(id) {
     url: `members/collection/shop/${id}`,
     method: Method.DELETE,
     needToken: true
+  })
+}
+
+/**
+ * 获取店铺是否已被收藏
+ * @param shop_id
+ */
+export function getShopIsCollect(shop_id) {
+  return request({
+    url: `members/collection/shop/${shop_id}`,
+    method: Method.GET
   })
 }
 

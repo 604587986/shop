@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import * as API_Shop from '@/api/shop'
 import * as API_Members from '@/api/members'
-import ShopBanner from './-shop-banner'
+import ShopSildes from './-shop-sildes'
 import ShopStar from './-shop-star'
 
 export default {
   data() {
     return {
-      shop_id: this.$route.query.shop_id
+      shop_id: this.$route.params.id,
+      categorys: []
     }
   },
   props: {
@@ -17,11 +18,10 @@ export default {
     }
   },
   components: {
-    'en-shop-banner': ShopBanner,
+    'en-shop-sildes': ShopSildes,
     'en-shop-star': ShopStar
   },
   mounted() {
-
   },
   methods: {
     collectionShop() {

@@ -14,7 +14,7 @@
           <nuxt-link to="#" class="item">信用评分</nuxt-link>
         </div>
         <div class="shop-more">
-          <div class="item" @click="collectionShop">
+          <div class="item">
             <i class="iconfont ea-icon-star"></i>
             <p>收藏</p>
           </div>
@@ -33,10 +33,9 @@
 </template>
 
 <script>
-  import mixin from './-themeMixin'
   export default {
     name: 'shop-theme-3',
-    mixins: [mixin]
+    props: ['shop']
   }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div id="shop-theme-1">
     <theme1-header :shop="shop"/>
-    <en-shop-banner :banners="shop.shop_banner"/>
+    <en-shop-sildes :shop-id="shop.shop_id"/>
     <div class="shop-tags">
       <div class="tags-container">
         <div class="item hot">
@@ -313,7 +313,7 @@
         text-align: center;
         margin: 0 auto;
         font-size: 30px;
-        background: url(~/assets/images/background-shop-waves.png) no-repeat center -7px;
+        background: url(../../../assets/images/background-shop-waves.png) no-repeat center -7px;
       }
       ul {
         width: 950px;

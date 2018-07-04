@@ -19,7 +19,7 @@
     <div class="shop-btns">
       <nuxt-link :to="'/shop?shop_id=' + shopId" class="shop-btn into">进入商家店铺</nuxt-link>
       <a href="javascript:;" @click="collectionShop" class="shop-btn collection">
-        {{ false ? '已收藏' : '收藏店铺' }}({{ shopBaseInfo.shop_collect }})
+        {{ collected ? '已收藏' : '收藏店铺' }}({{ shopBaseInfo.shop_collect }})
       </a>
     </div>
     <div class="shop-contact">
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import * as API_Shop from '@/api/shop'
   import * as API_Members from '@/api/members'
   export default {
@@ -37,12 +38,19 @@
     props: ['shopId'],
     data() {
       return {
-        shopBaseInfo: ''
+        // 店铺基本信息
+        shopBaseInfo: '',
+        // 是否已收藏此店铺
+        collected: false
       }
     },
     mounted() {
       API_Shop.getShopBaseInfo(this.shopId).then(response => {
         this.shopBaseInfo = response
+      })
+      // 如果用户已登录，获取是否已收藏此店铺
+      this.user && API_Members.getShopIsCollect(this.shopId).then(response => {
+        this.collected = response.message
       })
     },
     computed: {
@@ -50,18 +58,19 @@
         if (!this.shopBaseInfo) return ''
         const d = this.shopBaseInfo
         return `${d.shop_province}-${d.shop_city}-${d.shop_county}${d.shop_town ? ('-' + d.shop_town) : ''}`
-      }
+      },
+      ...mapGetters(['user'])
     },
     methods: {
+      /** 收藏店铺 */
       collectionShop() {
-        // const { shop_collected, shop_id } = this.goods
-        // if (shop_collected) {
-        //   this.$message.error('您已经收藏过这个店铺啦！')
-        //   return false
-        // }
+        if (this.collected) {
+          this.$message.error('您已经收藏过这个店铺啦！')
+          return false
+        }
         API_Members.collectionShop(this.shopId).then(() => {
-          // this.$message.success('收藏店铺成功！')
-          // this.goods.shop_collected = true
+          this.$message.success('收藏店铺成功！')
+          this.collected = true
           this.shopBaseInfo.shop_collect += 1
         })
       }
