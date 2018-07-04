@@ -51,7 +51,7 @@
                 <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.sku_list.length }}）种商品</span></p>
               </div>
               <div class="order-oper">
-                <nuxt-link :to="'/member/order/detail/' + order.sn" target="_blank">查看订单</nuxt-link>
+                <nuxt-link :to="'/member/my-order/detail?order_sn=' + order.sn">查看订单</nuxt-link>
               </div>
             </div>
           </template>
@@ -190,19 +190,19 @@
     methods: {
       /** 删除购物车货品 */
       handleDeleteSkuItem(sku) {
-        this.$confirm('确认要删除这个货品吗？', () => {
+        this.$confirm('确定要删除这个货品吗？', () => {
           this.deleteSkuItem(sku.sku_id).then(() => this.$message.success('删除成功！'))
         })
       },
       /** 删除商品收藏 */
       handleDeleteGoodsCollection(goods) {
-        this.$confirm('确认要删除这个商品收藏吗？', () => {
+        this.$confirm('确定要删除这个商品收藏吗？', () => {
           this.deleteGoodsCollection(goods.goods_id).then(() => this.$message.success('删除成功！'))
         })
       },
       /** 删除店铺收藏 */
       handleDeleteShopCollection(shop) {
-        this.$confirm('确认要取消关注这个店铺吗？', () => {
+        this.$confirm('确定要取消关注这个店铺吗？', () => {
           this.deleteShopCollection(shop.shop_id).then(() => this.$message.success('删除成功！'))
         })
       },

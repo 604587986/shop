@@ -1,7 +1,8 @@
-const domain = require('../ui-domain')
+const { api_dev } = require('../ui-domain')
+
 module.exports = {
 	NODE_ENV: '"development"',
 	ENV_CONFIG: '"dev"',
-  BASE_API: `"${domain.dev.base}"`,
-  ADMIN_API: `"${domain.dev.admin}"`
+  BASE_API: `"${api_dev.base}"`,
+  ADMIN_API: `"${api_dev.manager}"`
 }

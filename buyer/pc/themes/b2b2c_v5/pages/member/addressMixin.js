@@ -73,7 +73,7 @@ export default {
     },
     /** 删除地址 */
     handleDeleteAddress(row) {
-      this.$confirm('确认要删除这个地址吗？', () => {
+      this.$confirm('确定要删除这个地址吗？', () => {
         this.deleteAddress(row.addr_id).then(() => {
           this.$message.success('删除成功！')
           this.getAddress()

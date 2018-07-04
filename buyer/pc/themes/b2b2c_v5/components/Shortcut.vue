@@ -13,19 +13,21 @@
       </div>
       <ul class="links">
         <li>
-          <div class="dt"><nuxt-link to="/shop/apply">商家中心</nuxt-link></div>
+          <div class="dt">
+            <a :href="user.have_shop ? domain_seller : '/shop/apply'" target="_blank">商家中心</a>
+          </div>
         </li>
         <li class="spacer"></li>
         <li class="dorpdown">
           <div class="dt hs-icon">
-            <a href="/member/my-order#all">我的订单</a>
+            <a href="/member/my-order#ALL">我的订单</a>
             <i class="iconfont ea-icon-arrow-down"></i>
           </div>
           <div class="dd dorpdown-layer">
             <dl>
-              <dd><a href="/member/my-order#wait-pay">待付款订单</a></dd>
-              <dd><a href="/member/my-order#shipped">已发货订单</a></dd>
-              <dd><a href="/member/my-order#wait-comments">待评价订单</a></dd>
+              <dd><a href="/member/my-order#WAIT_PAY">待付款订单</a></dd>
+              <dd><a href="/member/my-order#WAIT_ROG">已发货订单</a></dd>
+              <dd><a href="/member/my-order#WAIT_COMMENT">待评价订单</a></dd>
             </dl>
           </div>
         </li>
@@ -83,8 +85,14 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import { domain } from '~/ui-domain'
   export default {
     name: 'EnShortcut',
+    data() {
+      return {
+        domain_seller: domain.seller
+      }
+    },
     computed: {
       ...mapGetters(['user'])
     },

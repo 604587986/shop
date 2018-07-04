@@ -30,6 +30,18 @@ export function getSiteMenu(client_type = 'PC') {
 }
 
 /**
+ * 获取首页商品分类
+ * @param parent_id
+ */
+export function getCategory(parent_id = 0) {
+  return request({
+    url: `goods/categories/${parent_id}/children`,
+    method: Method.GET,
+    loading: false
+  })
+}
+
+/**
  * 获取热门关键词
  * @param num
  */

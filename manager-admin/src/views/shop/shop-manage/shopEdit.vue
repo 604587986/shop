@@ -192,7 +192,6 @@
         shop_id: this.$route.params.shop_id,
         isAudit: !!this.$route.query.audit,
         loading: false,
-        backShopInfo: '',
         shopForm: {},
         shopRules: {
           company_name: [this.MixinRequired('公司名称不能为空！')],
@@ -245,8 +244,6 @@
       ]).then(responses => {
         const shopInfo = responses[0]
         const categorys = responses[1]
-        // 设置店铺信息备份
-        this.backShopInfo = shopInfo
         // 设置店铺信息
         this.shopForm = this.MixinClone(shopInfo)
         const {
@@ -294,8 +291,17 @@
       handleSaveEdit() {
         this.$refs['shopForm'].validate((valid, error) => {
           if (valid) {
-            API_Shop.editAuthShop(this.shop_id, this.shopForm).then(response => {
-              this.$message.success('修改成功！')
+            const params = this.MixinClone(this.shopForm)
+            if (this.isAudit) {
+              params.pass = 1
+            }
+            API_Shop.editAuthShop(this.shop_id, params).then(response => {
+              if (this.isAudit) {
+                this.$message.success('审核通过！')
+                this.isAudit = false
+              } else {
+                this.$message.success('修改成功！')
+              }
             })
           } else {
             this.$message.error('表单填写有误，请核对！')
@@ -323,7 +329,7 @@
       /** 拒绝通过 */
       handleRefusePass() {
         this.$confirm('确定该店铺拒绝通过吗？', '提示', { type: 'warning' }).then(() => {
-          const params = this.MixinClone(this.backShopInfo)
+          const params = this.MixinClone(this.shopForm)
           params.pass = 0
           API_Shop.editAuthShop(this.shop_id, params).then(response => {
             this.$message.success('已拒绝该店铺！')

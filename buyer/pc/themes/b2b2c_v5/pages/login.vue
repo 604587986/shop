@@ -1,14 +1,6 @@
 <template>
   <div id="login">
-    <div class="login w">
-      <!-- logo -->
-      <div class="index-login">
-        <a href="/">
-          <img src="../assets/images/logo-javashop.png" alt="logo">
-        </a>
-        <span>欢迎登录</span>
-      </div>
-    </div>
+    <en-header-other title="欢迎登录"/>
     <!-- 大图 -->
     <div class="login-content">
       <div class="prompt">
@@ -124,8 +116,10 @@
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
+  import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'login',
+    components: {EnHeaderOther},
     layout: 'full',
     head() {
       return {
@@ -200,26 +194,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .login .index-login {
-    width: 1000px;
-    margin: 20px auto;
-    height: 60px;
-    a {
-      float: left;
-      width: 245px;
-      height: 60px;
-    }
-    img {
-      width: 240px;
-      height: 60px;
-    }
-    span {
-      font-size: 23px;
-      float: left;
-      display: block;
-      margin: 25px 5px;
-    }
-  }
   .login-content .prompt {
     width: 100%;
     text-align: center;
