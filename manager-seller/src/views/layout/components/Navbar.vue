@@ -5,8 +5,6 @@
     <breadcrumb class="breadcrumb-container"></breadcrumb>
 
     <div class="right-menu">
-      <error-log class="errLog-container right-menu-item"></error-log>
-
       <el-tooltip effect="dark" content="全屏" placement="bottom">
         <screenfull class="screenfull right-menu-item"></screenfull>
       </el-tooltip>
@@ -39,7 +37,6 @@
           <span @click="logout">
             <el-dropdown-item divided>退出登录</el-dropdown-item>
           </span>
-
         </el-dropdown-menu>
       </el-dropdown>
     </div>
