@@ -69,8 +69,12 @@
       countTableHeight() {
         this.tableHeight = document.body.clientHeight * 0.82
         /** 图表刷新 */
-        setTimeout(this.regionalAnalysisMap.resize)
-        setTimeout(this.regionalAnalysisChart.resize)
+        if (this.regionalAnalysisMap) {
+          setTimeout(this.regionalAnalysisMap.resize)
+        }
+        if (this.regionalAnalysisChart) {
+          setTimeout(this.regionalAnalysisChart.resize)
+        }
       },
 
       /** 改变日期的回调*/

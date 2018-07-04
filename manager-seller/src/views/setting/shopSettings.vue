@@ -26,7 +26,7 @@
       <!--QQ-->
       <el-form-item label="QQ：" prop="shop_qq">
         <el-input v-model="shopDataForm.shop_qq" style="width: 200px;" placeholder="请设置店铺的客服QQ"></el-input>
-        <span> 设置店铺的客服QQ</span>
+        <span class="QQ-tip">（设置店铺的客服QQ）</span>
       </el-form-item>
       <!--店铺简介-->
       <el-form-item label="店铺简介：" prop="shop_desc">
@@ -196,14 +196,14 @@
       },
 
       /** 上传logo成功以后*/
-      uploadSuccessLogo(response, file, fileList) {
+      uploadSuccessLogo(response) {
         this.fileList_logo.shift()
         this.fileList_logo.push(response)
         this.shopDataForm.shop_logo = response.url
       },
 
       /** 上传banner成功之后*/
-      uploadSuccessBanner(response, file, fileList) {
+      uploadSuccessBanner(response) {
         this.fileList_banner.shift()
         this.fileList_banner.push(response)
         this.shopDataForm.shop_banner = response.url
@@ -224,5 +224,9 @@
   }
   /deep/ .upload-demo {
     width: 80%;
+  }
+  .QQ-tip {
+    font-size: 13px;
+    color: #796a6a;
   }
 </style>

@@ -128,6 +128,17 @@
         }
       },
 
+      /** 窗口缩放时计算table高度 */
+      countTableHeight() {
+        this.tableHeight = document.body.clientHeight / 2
+        if (this.orderGoodsNumChart) {
+          setTimeout(this.orderGoodsNumChart.resize)
+        }
+        if (this.orderAmountChart) {
+          setTimeout(this.orderAmountChart.resize)
+        }
+      },
+
       /** 切换面板时触发 */
       changeHotType(target) {
         this.hotType = parseInt(target.paneName)
@@ -218,8 +229,7 @@
             ]
           })
         })
-        this.tableHeight = document.body.clientHeight / 2
-        setTimeout(this.orderGoodsNumChart.resize)
+        this.countTableHeight()
       },
 
       /** 下单金额图表数据*/
@@ -293,8 +303,7 @@
             ]
           })
         })
-        this.tableHeight = document.body.clientHeight / 2
-        setTimeout(this.orderAmountChart.resize)
+        this.countTableHeight()
       },
 
       /** 表格数据*/
