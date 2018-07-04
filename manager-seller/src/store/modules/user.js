@@ -1,12 +1,10 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
   state: {
     user: '',
     status: '',
     code: '',
-    token: getToken(),
     name: '',
     avatar: '',
     roles: [],
@@ -49,7 +47,6 @@ const user = {
           response = { data: { token: 'eyJhbGciOiJIUzUxMiJ9.eyJzZWxmT3BlcmF0ZWQiOjEsInVpZCI6NDYyLCJzdWIiOiJTRUxMRVIiLCJzZWxsZXJJZCI6MTczMiwicm9sZXMiOlsiQlVZRVIiLCJTRUxMRVIiXSwic2VsbGVyTmFtZSI6IkFuZHN0ZeeahOWwj-W6lyIsInVzZXJuYW1lIjoiYW5kc3RlIn0.YH75GbDEMeGcDL0M1F7WJ3wKMY-O58rncikC4o8HPpvvTv4m2dr--PODq3gKgJriJXJQi_frL3DTzQp7Vzu0oQ' }}
           const data = response.data
           commit('SET_TOKEN', response.data.token)
-          setToken(response.data.token)
           resolve()
         }).catch(error => {
           reject(error)
@@ -92,7 +89,6 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
-          removeToken()
           resolve()
         }).catch(error => {
           reject(error)
@@ -104,7 +100,6 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
-        removeToken()
         resolve()
       })
     }

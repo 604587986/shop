@@ -25,12 +25,6 @@ export const constantRouterMap = [
   }
 ]
 
-export default new Router({
-  mode: 'history',
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
-})
-
 export const asyncRouterMap = [
   // 商品管理
   {
@@ -172,3 +166,9 @@ export const asyncRouterMap = [
   },
   { path: '*', redirect: '/404', hidden: true }
 ]
+
+export default new Router({
+  mode: 'history',
+  scrollBehavior: () => ({ y: 0 }),
+  routes: [...constantRouterMap, ...asyncRouterMap]
+})
