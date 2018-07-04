@@ -79,9 +79,7 @@
       },
       /** 搜索店铺 */
       handleSearchShop() {
-        this.$route.name === 'shop'
-          ? this.$router.replace({path: '/shop', query: { keyword: this.keyword }})
-          : this.$router.push({path: '/shop', query: { keyword: this.keyword }})
+        window.location.href = `/shop${this.keyword ? '?keyword=' + this.keyword : ''}`
       },
       /** URL中keyword发生改变 */
       handleQueryKeywordChange() {
