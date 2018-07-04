@@ -27,7 +27,7 @@
                 type="danger"
                 plain
                 size="mini"
-                @click="Del_Slide(item)">删除</el-button>
+                @click="Del_Slide(item, index)">删除</el-button>
             </div>
             <div class="img-show">
               <img :src="item.img" alt="">
@@ -127,9 +127,9 @@
       },
 
       /** 上传成功钩子*/
-      uploadSuccess(response, file, fileList) {
+      uploadSuccess(response) {
         this.uploadShopBanner.img = response.url
-        this.uploadShopBanner.silde_url = response.url
+        this.uploadShopBanner.silde_url = ''
         this.fileList = []
       },
 
@@ -142,13 +142,17 @@
       },
 
       /** 删除幻灯片*/
-      Del_Slide(item) {
+      Del_Slide(item, index) {
         this.$confirm('确定要删除此幻灯片么？', '确认信息')
           .then(() => {
-            API_ShopSlide.delShopSlide(item.silde_id, {}).then(response => {
-              this.$message.success('删除成功')
-              this.GET_ShopSlideList()
-            })
+            if (item.silde_id) {
+              API_ShopSlide.delShopSlide(item.silde_id, {}).then(() => {
+                this.$message.success('删除成功')
+                this.GET_ShopSlideList()
+              })
+            } else {
+              this.tableData.splice(index, 1)
+            }
           })
       },
 
