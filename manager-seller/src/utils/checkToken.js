@@ -42,7 +42,7 @@ export default function checkToken(options) {
      */
     if (!refreshToken || !user) {
       store.dispatch('removeUserAction')
-      MessageBox.alert('您的登录状态已失效，点击确认去重新登录！', '权限错误', {
+      MessageBox.alert('您的登录状态已失效，请重新登录！', '权限错误', {
         type: 'error',
         callback: () => {
           window.location.href = `${domain.buyer_pc}/login?forward=${window.location.href}`
