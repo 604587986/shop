@@ -45,14 +45,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import Screenfull from '@/components/Screenfull'
-import LangSelect from '@/components/LangSelect'
-import ThemePicker from '@/components/ThemePicker'
+  import { mapGetters } from 'vuex'
+  import Breadcrumb from '@/components/Breadcrumb'
+  import Hamburger from '@/components/Hamburger'
+  import Screenfull from '@/components/Screenfull'
+  import LangSelect from '@/components/LangSelect'
+  import ThemePicker from '@/components/ThemePicker'
 
-export default {
+  export default {
   components: {
     Breadcrumb,
     Hamburger,
@@ -85,7 +85,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.$store.dispatch('LogOut').then(() => {
+          this.$store.dispatch('logOutAction').then(() => {
             location.reload()// 为了重新实例化vue-router对象 避免bug
           })
         })

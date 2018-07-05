@@ -33,13 +33,15 @@
 </template>
 
 <script>
-// eslint-disable-next-line
-import * as API_common from '@/api/common'
-import particles from 'particles.js'
-import particlesjsConfig from '@/assets/particlesjs-config.json'
-import LangSelect from '@/components/LangSelect'
+  // eslint-disable-next-line
+  import * as API_common from '@/api/common'
+  import particlesjsConfig from '@/assets/particlesjs-config.json'
+  import LangSelect from '@/components/LangSelect'
+  import Storage from '@/utils/storage'
+  import uuidv1 from 'uuid/v1'
+  import { domain } from '~/ui-domain'
 
-export default {
+  export default {
   components: { LangSelect },
   name: 'login',
   data() {
@@ -61,10 +63,20 @@ export default {
           { required: true, message: this.translateKey('val_validcode'), trigger: 'blur' }
         ]
       },
-      validcodeImg: API_common.getValidateCodeUrl('admin')
+      validcodeImg: '',
+      uuid: Storage.getItem('uuid')
     }
   },
   mounted() {
+    const uuid = Storage.getItem('uuid')
+    if (uuid) {
+      this.uuid = uuid
+    } else {
+      const _uuid = uuidv1()
+      this.uuid = _uuid
+      Storage.setItem('uuid', _uuid, { domain: domain.cookie })
+    }
+    this.changeValidcode()
     this.loadParticles()
   },
   methods: {
@@ -78,17 +90,20 @@ export default {
     },
     /** 更换图片验证码 */
     changeValidcode() {
-      this.validcodeImg = API_common.getValidateCodeUrl('admin')
+      this.validcodeImg = API_common.getValidateCodeUrl('LOGIN', this.uuid)
     },
     /** 表单提交 */
     submitLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
+          const params = this.MixinClone(this.loginForm)
+          params.uuid = this.uuid
+          params.captcha = params.validcode
+          delete params.validcode
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+          this.$store.dispatch('loginAction', params).then(() => {
             this.loading = false
             this.$router.push({ path: '/' })
-            // this.showDialog = true
           }).catch(() => {
             this.loading = false
             this.changeValidcode()
