@@ -9,8 +9,8 @@
         <div class="toolbar-btns">
           <!--商品状态 上架 下架-->
           <div class="conditions">
-            <span>商品状态:</span>
-            <el-select v-model="params.market_enable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
+            <span>商品状态：</span>
+            <el-select class="choose-machine" v-model="params.market_enable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
               <el-option
                 v-for="item in goodsStatusList"
                 :key="item.value"
@@ -20,8 +20,9 @@
           </div>
           <!--商品类型-->
           <div v-if="parseInt(shopInfo.self_operated) === 1" class="conditions">
-            <span>商品类型:</span>
+            <span>商品类型：</span>
             <el-select
+              class="choose-machine"
               v-model="goods_type"
               placeholder="请选择商品类型"
               @change="changeGoodsType"
@@ -32,11 +33,11 @@
           </div>
           <!--商品分组 获取分组列表-->
           <div class="conditions">
-            <span>店铺分组:</span>
-            <en-category-picker size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
+            <span>店铺分组：</span>
+            <en-category-picker class="choose-machine" size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
           </div>
-          <el-button @click="publishGoods" type="primary"  class="conditions">发布商品</el-button>
-          <el-button @click="gotoRecycle"  type="primary" class="conditions">回收站</el-button>
+          <el-button @click="publishGoods" type="primary" >发布商品</el-button>
+          <el-button @click="gotoRecycle"  type="primary">回收站</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
@@ -370,8 +371,11 @@
 
   .inner-toolbar {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
   }
 
   /deep/ .pop-sku {
@@ -392,6 +396,7 @@
 
   .toolbar-search {
     margin-right: 10px;
+    width: 20%;
   }
 
   div.toolbar-btns {
@@ -408,7 +413,15 @@
       }
     }
     .conditions {
-      margin-right: 30px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      min-width: 24.5%;
+      .choose-machine {
+        width: 50%;
+      }
     }
   }
 

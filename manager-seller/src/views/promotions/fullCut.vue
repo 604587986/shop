@@ -965,10 +965,7 @@
   }
 
   /deep/ .el-form-item__content {
-    width: 80%;
-    .el-input .el-input--medium {
-      max-width: 80%;
-    }
+    width: 65%;
   }
 
   /*百度UE*/

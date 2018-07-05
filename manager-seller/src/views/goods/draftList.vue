@@ -7,7 +7,7 @@
   >
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns">
-        <span>店铺分组:</span>
+        <span>店铺分组：</span>
         <en-category-picker @changed="categoryChanged" :clearable='true'/>
       </div>
       <div class="toolbar-search">
