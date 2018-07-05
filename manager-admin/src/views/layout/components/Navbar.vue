@@ -53,46 +53,44 @@
   import ThemePicker from '@/components/ThemePicker'
 
   export default {
-  components: {
-    Breadcrumb,
-    Hamburger,
-    Screenfull,
-    LangSelect,
-    ThemePicker
-  },
-  computed: {
-    ...mapGetters([
-      'sidebar',
-      'name',
-      'avatar'
-    ])
-  },
-  methods: {
-    toggleSideBar() {
-      this.$store.dispatch('toggleSideBar')
+    components: {
+      Breadcrumb,
+      Hamburger,
+      Screenfull,
+      LangSelect,
+      ThemePicker
     },
-    changePassword() {
-      this.$notify({
-        title: '提示',
-        message: '修改密码成功',
-        type: 'success'
-      })
+    computed: {
+      ...mapGetters([
+        'sidebar',
+        'name',
+        'avatar'
+      ])
     },
-    logout() {
-      this.$confirm('确定退出吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
+    methods: {
+      toggleSideBar() {
+        this.$store.dispatch('toggleSideBar')
+      },
+      changePassword() {
+        this.$notify({
+          title: '提示',
+          message: '修改密码成功',
+          type: 'success'
+        })
+      },
+      logout() {
+        this.$confirm('确定退出吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
           this.$store.dispatch('logOutAction').then(() => {
             location.reload()// 为了重新实例化vue-router对象 避免bug
           })
-        })
-        .catch(() => {})
+        }).catch(() => {})
+      }
     }
   }
-}
 </script>
 
 <style type="text/scss" lang="scss" scoped>

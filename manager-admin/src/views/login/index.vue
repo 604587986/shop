@@ -33,7 +33,6 @@
 </template>
 
 <script>
-  // eslint-disable-next-line
   import * as API_common from '@/api/common'
   import particlesjsConfig from '@/assets/particlesjs-config.json'
   import LangSelect from '@/components/LangSelect'
@@ -42,80 +41,80 @@
   import { domain } from '~/ui-domain'
 
   export default {
-  components: { LangSelect },
-  name: 'login',
-  data() {
-    return {
-      loading: false,
-      loginForm: {
-        username: 'admin',
-        password: 'admin',
-        validcode: ''
+    components: { LangSelect },
+    name: 'login',
+    data() {
+      return {
+        loading: false,
+        loginForm: {
+          username: 'admin',
+          password: 'admin',
+          validcode: ''
+        },
+        loginRules: {
+          username: [
+            { required: true, message: this.translateKey('val_username'), trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: this.translateKey('val_password'), trigger: 'blur' }
+          ],
+          validcode: [
+            { required: true, message: this.translateKey('val_validcode'), trigger: 'blur' }
+          ]
+        },
+        validcodeImg: '',
+        uuid: Storage.getItem('uuid')
+      }
+    },
+    mounted() {
+      const uuid = Storage.getItem('uuid')
+      if (uuid) {
+        this.uuid = uuid
+      } else {
+        const _uuid = uuidv1()
+        this.uuid = _uuid
+        Storage.setItem('uuid', _uuid, { domain: domain.cookie })
+      }
+      this.changeValidcode()
+      this.loadParticles()
+    },
+    methods: {
+      /** 翻译 */
+      translateKey(key) {
+        return this.$t('login.' + key)
       },
-      loginRules: {
-        username: [
-          { required: true, message: this.translateKey('val_username'), trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: this.translateKey('val_password'), trigger: 'blur' }
-        ],
-        validcode: [
-          { required: true, message: this.translateKey('val_validcode'), trigger: 'blur' }
-        ]
+      /** 加载背景插件 */
+      loadParticles() {
+        window.particlesJS('login-bg', particlesjsConfig)
       },
-      validcodeImg: '',
-      uuid: Storage.getItem('uuid')
-    }
-  },
-  mounted() {
-    const uuid = Storage.getItem('uuid')
-    if (uuid) {
-      this.uuid = uuid
-    } else {
-      const _uuid = uuidv1()
-      this.uuid = _uuid
-      Storage.setItem('uuid', _uuid, { domain: domain.cookie })
-    }
-    this.changeValidcode()
-    this.loadParticles()
-  },
-  methods: {
-    /** 翻译 */
-    translateKey(key) {
-      return this.$t('login.' + key)
-    },
-    /** 加载背景插件 */
-    loadParticles() {
-      window.particlesJS('login-bg', particlesjsConfig)
-    },
-    /** 更换图片验证码 */
-    changeValidcode() {
-      this.validcodeImg = API_common.getValidateCodeUrl('LOGIN', this.uuid)
-    },
-    /** 表单提交 */
-    submitLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          const params = this.MixinClone(this.loginForm)
-          params.uuid = this.uuid
-          params.captcha = params.validcode
-          delete params.validcode
-          this.loading = true
-          this.$store.dispatch('loginAction', params).then(() => {
-            this.loading = false
-            this.$router.push({ path: '/' })
-          }).catch(() => {
-            this.loading = false
-            this.changeValidcode()
-          })
-        } else {
-          this.$message.error(this.translateKey('val_form'))
-          return false
-        }
-      })
+      /** 更换图片验证码 */
+      changeValidcode() {
+        this.validcodeImg = API_common.getValidateCodeUrl('LOGIN', this.uuid)
+      },
+      /** 表单提交 */
+      submitLogin() {
+        this.$refs.loginForm.validate((valid) => {
+          if (valid) {
+            const params = this.MixinClone(this.loginForm)
+            params.uuid = this.uuid
+            params.captcha = params.validcode
+            delete params.validcode
+            this.loading = true
+            this.$store.dispatch('loginAction', params).then(() => {
+              this.loading = false
+              this.$router.push({ path: '/' })
+            }).catch(() => {
+              this.loading = false
+              this.changeValidcode()
+            })
+          } else {
+            this.$message.error(this.translateKey('val_form'))
+            return false
+          }
+        })
+      }
     }
   }
-}
 </script>
 
 <style type="text/scss" lang="scss" scoped>
