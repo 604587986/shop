@@ -34,6 +34,7 @@
 
 <script>
   import * as API_common from '@/api/common'
+  import 'particles.js'
   import particlesjsConfig from '@/assets/particlesjs-config.json'
   import LangSelect from '@/components/LangSelect'
   import Storage from '@/utils/storage'
