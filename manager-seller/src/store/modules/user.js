@@ -19,7 +19,7 @@ const user = {
     SET_USER_INFO: (state, user) => {
       state.avatar = user.face
       state.name = user.uname
-      Storage.setItem('user', JSON.stringify(user))
+      Storage.setItem('user', JSON.stringify(user), { domain: domain.cookie })
     },
     /**
      * 登出
@@ -42,7 +42,7 @@ const user = {
     SET_ACCESS_TOKEN: (state, token) => {
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
-      Storage.setItem('accessToken', token, { expires })
+      Storage.setItem('accessToken', token, { expires, domain: domain.cookie })
     },
     /**
      * 设置刷新令牌
@@ -53,7 +53,7 @@ const user = {
     SET_REFRESH_TOKEN: (state, token) => {
       const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(refresh_token_time)
-      Storage.setItem('refreshToken', token, { expires })
+      Storage.setItem('refreshToken', token, { expires, domain: domain.cookie })
     }
   },
 
