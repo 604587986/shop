@@ -9,7 +9,7 @@
   export default{
     name: 'APP',
     mounted() {
-      Storage.getItem('refreshToken') && this.$store.dispatch('getUserInfoAction')
+      Storage.getItem('accessToken') && this.$store.dispatch('getUserInfoAction')
     }
   }
 </script>
