@@ -3,6 +3,7 @@
  */
 
 import { api } from '~/ui-domain'
+import request from '@/utils/request'
 
 /**
  * 获取图片验证码URL
@@ -25,3 +26,14 @@ export const uploadApi = api.base + '/uploaders'
  * @type {string}
  */
 export const regionApi = api.base + '/regions/@id/children'
+
+/**
+ * 获取首页数据
+ */
+export function getIndexData() {
+  return request({
+    url: 'index/page',
+    method: 'get',
+    loading: false
+  })
+}
