@@ -1,18 +1,16 @@
 <template>
   <div id="sales-record" class="sales-record">
     <el-table :data="salesList.data" style="width: 100%">
-      <!--// Andste_TODO 2018/7/3: 大小写适配-->
-      <el-table-column prop="buyerName" label="买家" align="center"/>
+      <el-table-column prop="buyer_name" label="买家" align="center"/>
       <el-table-column label="购买价格" align="center">
         <template slot-scope="scope">
           <span class="price">￥{{ scope.row.price | unitPrice }}</span>
         </template>
       </el-table-column>
-      <!--// Andste_TODO 2018/7/3: 大小写适配-->
       <el-table-column prop="num" label="购买数量" align="center"/>
       <el-table-column label="付款时间" align="center">
         <template slot-scope="scope">
-          <span v-if="scope.row.payTime">{{ scope.row.payTime | unixToDate }}</span>
+          <span v-if="scope.row.pay_time">{{ scope.row.pay_time | unixToDate }}</span>
           <span v-else>未付款</span>
         </template>
       </el-table-column>
