@@ -1,36 +1,6 @@
 import { asyncRouterMap, constantRouterMap } from '@/router'
-import * as API_User from '@/api/login'
-
-/**
- * 通过meta.role判断是否与当前用户权限匹配
- * @param roles
- * @param route
- */
-function hasPermission(roles, route) {
-  if (route.meta && route.meta.rolse) {
-    return roles.some(role => route.meta.role.indexOf(role) >= 0)
-  } else {
-    return true
-  }
-}
-
-/**
- * 递归过滤异步路由表，返回符合用户角色权限的路由表
- * @param asyncRouterMap
- * @param roles
- */
-function filterAsyncRouter(asyncRouterMap, roles) {
-  const accessedRouters = asyncRouterMap.filter(route => {
-    if (hasPermission(roles, route)) {
-      if (route.children && route.children.length) {
-        route.children = filterAsyncRouter(route.children, roles)
-      }
-      return true
-    }
-    return false
-  })
-  return accessedRouters
-}
+import { getUserRolesPermissions } from '@/api/login'
+import Storage from '@/utils/storage'
 
 const permission = {
   state: {
@@ -44,13 +14,21 @@ const permission = {
     }
   },
   actions: {
-    GenerateRoutes({ commit }, data) {
-      return new Promise(resolve => {
-        API_User.getUserRolesPermissions().then(response => {
-          let accessedRouters = filterRoleRouter(asyncRouterMap, response)
-          commit('SET_ROUTERS', accessedRouters)
+    GenerateRoutes({ commit }) {
+      const user = JSON.parse(Storage.getItem('adminUser'))
+      let role_id = user.role_id
+      if (user.founder === 1) role_id = 0
+      return new Promise((resolve, reject) => {
+        if (role_id === 0) {
+          commit('SET_ROUTERS', asyncRouterMap)
           resolve()
-        })
+        } else {
+          getUserRolesPermissions(role_id).then(response => {
+            let accessedRouters = filterRoleRouter(asyncRouterMap, response)
+            commit('SET_ROUTERS', accessedRouters)
+            resolve()
+          }).catch(reject)
+        }
       })
     }
   }

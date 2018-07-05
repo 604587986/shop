@@ -1,102 +1,98 @@
-import { getUserInfo, logout } from '@/api/login'
-import { getToken, removeToken, setToken } from '@/utils/auth'
+import { login, logout } from '@/api/login'
+import Storage from '@/utils/storage'
+import { Base64 } from 'js-base64'
 
 const user = {
   state: {
     user: '',
-    status: '',
-    code: '',
-    token: getToken(),
-    name: '',
-    avatar: '',
-    roles: [],
-    setting: {
-      articlePlatform: []
-    }
+    accessToken: '',
+    refreshToken: ''
   },
 
   mutations: {
-    SET_CODE: (state, code) => {
-      state.code = code
+    /**
+     * 设置用户信息
+     * @param state
+     * @param user
+     * @constructor
+     */
+    SET_USER: (state, user) => {
+      state.user = user
+      Storage.setItem('adminUser', JSON.stringify(user))
     },
-    SET_TOKEN: (state, token) => {
-      state.token = token
+    /**
+     * 设置访问令牌
+     * @param state
+     * @param token
+     * @constructor
+     */
+    SET_ACCESS_TOKEN: (state, token) => {
+      state.accessToken = token
+      const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(access_token_time)
+      Storage.setItem('adminAccessToken', token, { expires })
     },
-    SET_SETTING: (state, setting) => {
-      state.setting = setting
+    /**
+     * 设置刷新令牌
+     * @param state
+     * @param token
+     * @constructor
+     */
+    SET_REFRESH_TOKEN: (state, token) => {
+      state.refreshToken = token
+      const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(access_token_time)
+      Storage.setItem('adminRefreshToken', token, { expires })
     },
-    SET_STATUS: (state, status) => {
-      state.status = status
+    /**
+     * 移除用户信息
+     * @param state
+     * @constructor
+     */
+    REMOVE_USER: (state) => {
+      state.user = ''
+      Storage.removeItem('adminUser')
     },
-    SET_NAME: (state, name) => {
-      state.name = name
+    /**
+     * 移除访问令牌
+     * @param state
+     * @constructor
+     */
+    REMOVE_ACCESS_TOKEN: (state) => {
+      state.accessToken = ''
+      Storage.removeItem('adminAccessToken')
     },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    /**
+     * 移除刷新令牌
+     * @param state
+     * @constructor
+     */
+    REMOVE_REFRESH_TOKEN: (state) => {
+      state.refreshToken = ''
+      Storage.removeItem('adminRefreshToken')
     }
   },
 
   actions: {
     // 用户名登录
-    LoginByUsername({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+    loginAction({ commit }, params) {
       return new Promise((resolve, reject) => {
-        const token = '123'
-        commit('SET_TOKEN', token)
-        setToken(token)
-        resolve()
-        // loginByUsername(username, userInfo.password, userInfo.validcode).then(response => {
-        //   // 后台暂时没有返回数据，模拟一个
-        //   response = { data: { token: 'Admin-Token=admin' }}
-        //   const data = response.data
-        //   commit('SET_TOKEN', data.token)
-        //   setToken(response.data.token)
-        //   resolve()
-        // }).catch(error => {
-        //   reject(error)
-        // })
-      })
-    },
-
-    // 获取用户信息
-    GetUserInfo({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(response => {
-          // 后台暂时没有返回数据，模拟一个
-          response = {
-            data: {
-              roles: ['admin'],
-              username: 'javashop',
-              mobile: 18888888888,
-              sex: 1,
-              email: null,
-              avatar: 'http://data.andste.cc/developers/web/temp/images/logo-javashop-app.png'
-            }
-          }
-          if (!response.data) {
-            reject('error')
-          }
-          const data = response.data
-          commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        login(params).then(response => {
+          commit('SET_USER', response)
+          commit('SET_ACCESS_TOKEN', response.access_token)
+          commit('SET_REFRESH_TOKEN', response.refresh_token)
+          resolve()
+        }).catch(reject)
       })
     },
 
     // 登出
-    LogOut({ commit, state }) {
+    logOutAction({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
+        logout().then(() => {
+          commit('REMOVE_USER')
+          commit('REMOVE_ACCESS_TOKEN')
+          commit('REMOVE_REFRESH_TOKEN')
           resolve()
         }).catch(error => {
           reject(error)
@@ -104,13 +100,29 @@ const user = {
       })
     },
 
+    /**
+     * 设置accessToken
+     * @param commit
+     * @param accessToken
+     */
+    setAccessTokenAction: ({ commit }, accessToken) => {
+      commit('SET_ACCESS_TOKEN', accessToken)
+    },
+
+    /**
+     * 设置refreshToken
+     * @param commit
+     * @param refreshToken
+     */
+    setRefreshTokenAction: ({ commit }, refreshToken) => {
+      commit('SET_REFRESH_TOKEN', refreshToken)
+    },
+
     // 前端 登出
-    FedLogOut({ commit }) {
-      return new Promise(resolve => {
-        commit('SET_TOKEN', '')
-        removeToken()
-        resolve()
-      })
+    fedLogOut({ commit }) {
+      commit('REMOVE_USER')
+      commit('REMOVE_ACCESS_TOKEN')
+      commit('REMOVE_REFRESH_TOKEN')
     }
   }
 }

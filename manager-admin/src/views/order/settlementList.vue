@@ -6,9 +6,9 @@
       :loading="loading"
     >
       <template slot="table-columns">
-        <el-table-column prop="username" label="账号单"/>
-        <el-table-column prop="mobile" label="开始日期"/>
-        <el-table-column prop="email" label="结束日期"/>
+        <el-table-column prop="bill_sn" label="结算单号"/>
+        <el-table-column prop="start_time" :formatter="MixinUnixToDate" label="开始日期"/>
+        <el-table-column prop="end_time" :formatter="MixinUnixToDate" label="结束日期"/>
         <el-table-column label="订单金额">
           <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
         </el-table-column>

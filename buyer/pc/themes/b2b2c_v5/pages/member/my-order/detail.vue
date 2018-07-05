@@ -5,7 +5,7 @@
         <h2>订单信息</h2>
         <div class="info-list">
           <dl><dt>下单时间：</dt><dd>{{ order.create_time | unixToDate }}</dd></dl>
-          <dl><dt>收货地址：</dt><dd>{{order.ship_province}} {{ order.ship_city }} {{ order.ship_county }} {{ order.ship_town }} {{order.ship_address}} - {{ order.ship_addr }}</dd></dl>
+          <dl><dt>收货地址：</dt><dd>{{ order.ship_province }} {{ order.ship_city }} {{ order.ship_county }} {{ order.ship_town }} {{order.ship_address}} - {{ order.ship_addr }}</dd></dl>
           <dl><dt>收货人：</dt><dd>{{ order.ship_name }}</dd></dl>
           <dl><dt>发票信息:</dt><dd>无</dd></dl>
           <dl><dt>送货时间:</dt><dd>{{ order.receive_time }}</dd></dl>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="status-order">
-        <h2>订单状态：未付款</h2>
+        <h2>订单状态：{{ order.order_status_text }}</h2>
         <ul>
           <li v-if="order && order.order_operate_allowable_vo.allow_pay">
             - 如果您尚未对该订单进行支付，请
@@ -41,6 +41,7 @@
         </ul>
       </div>
     </div>
+    <!--// Andste_TODO 2018/7/5: 缺少一个订单流程图-->
     <div v-if="skuList" class="goods-list">
       <sku-list :skuList="skuList" name="name" price="purchase_price" total="subtotal"></sku-list>
     </div>

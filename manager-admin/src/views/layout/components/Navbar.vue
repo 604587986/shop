@@ -17,7 +17,7 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatar">
+          <img class="user-avatar" :src="user.face">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -45,54 +45,48 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import Screenfull from '@/components/Screenfull'
-import LangSelect from '@/components/LangSelect'
-import ThemePicker from '@/components/ThemePicker'
+  import { mapGetters } from 'vuex'
+  import Breadcrumb from '@/components/Breadcrumb'
+  import Hamburger from '@/components/Hamburger'
+  import Screenfull from '@/components/Screenfull'
+  import LangSelect from '@/components/LangSelect'
+  import ThemePicker from '@/components/ThemePicker'
 
-export default {
-  components: {
-    Breadcrumb,
-    Hamburger,
-    Screenfull,
-    LangSelect,
-    ThemePicker
-  },
-  computed: {
-    ...mapGetters([
-      'sidebar',
-      'name',
-      'avatar'
-    ])
-  },
-  methods: {
-    toggleSideBar() {
-      this.$store.dispatch('toggleSideBar')
+  export default {
+    components: {
+      Breadcrumb,
+      Hamburger,
+      Screenfull,
+      LangSelect,
+      ThemePicker
     },
-    changePassword() {
-      this.$notify({
-        title: '提示',
-        message: '修改密码成功',
-        type: 'success'
-      })
+    computed: {
+      ...mapGetters(['sidebar', 'user'])
     },
-    logout() {
-      this.$confirm('确定退出吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$store.dispatch('LogOut').then(() => {
+    methods: {
+      toggleSideBar() {
+        this.$store.dispatch('toggleSideBar')
+      },
+      changePassword() {
+        this.$notify({
+          title: '提示',
+          message: '修改密码成功',
+          type: 'success'
+        })
+      },
+      logout() {
+        this.$confirm('确定退出吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('logOutAction').then(() => {
             location.reload()// 为了重新实例化vue-router对象 避免bug
           })
-        })
-        .catch(() => {})
+        }).catch(() => {})
+      }
     }
   }
-}
 </script>
 
 <style type="text/scss" lang="scss" scoped>

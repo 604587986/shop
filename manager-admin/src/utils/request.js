@@ -2,6 +2,8 @@ import Vue from 'vue'
 import { Loading, MessageBox } from 'element-ui'
 import axios from 'axios'
 import store from '@/store'
+import Storage from '@/utils/storage'
+import checkToken from '@/utils/checkToken'
 
 const qs = require('qs')
 
@@ -33,6 +35,15 @@ service.interceptors.request.use(config => {
       text: '请稍候...'
     })
   }
+  /** 设置令牌 */
+  let accessToken = Storage.getItem('adminAccessToken')
+  // if (process.env.NODE_ENV === 'production') {
+  //   const { member_id } = JSON.parse(Storage.getItem('user'))
+  //   const nonce = Foundation.randomString(6)
+  //   const timestamp = parseInt(new Date().getTime() / 1000)
+  //   accessToken = md5(member_id + nonce + timestamp + accessToken)
+  // }
+  config.headers['Authorization'] = accessToken
   return config
 }, error => {
   Promise.reject(error)
@@ -77,10 +88,21 @@ function fedLogOut() {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    store.dispatch('FedLogOut').then(() => {
+    store.dispatch('fedLogOut').then(() => {
       location.reload()
     })
   }).catch(() => {})
 }
 
-export default service
+export default function request(options) {
+  // 如果是刷新token或者登录，不需要检查token直接请求。
+  if (options.url.indexOf('systems/admin-user/login') + options.url.indexOf('systems/admin-user/token') > -2) {
+    console.log(options.url + ' | 请求的刷新token或是登录，不需要检查token直接请求。')
+    return service(options)
+  }
+  return new Promise((resolve, reject) => {
+    checkToken(options).then(() => {
+      service(options).then(resolve).catch(reject)
+    })
+  })
+}

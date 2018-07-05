@@ -326,7 +326,7 @@ export const asyncRouterMap = [
         meta: { title: 'otherStatistics' },
         children: [
           { path: 'order', component: () => import('@/views/statistics/other-statistics/orderStatistics'), name: 'orderStatistics', meta: { title: 'orderStatistics' }},
-          { path: 'salesRevenue', component: () => import('@/views/statistics/other-statistics/salesRevenueStatistics'), name: 'salesRevenueStatistics', meta: { title: 'salesRevenueStatistics' }},
+          { path: 'sales-revenue', component: () => import('@/views/statistics/other-statistics/salesRevenueStatistics'), name: 'salesRevenueStatistics', meta: { title: 'salesRevenueStatistics' }},
           { path: 'regionalAnalysis', component: () => import('@/views/statistics/other-statistics/regionalAnalysis'), name: 'regionalAnalysis', meta: { title: 'regionalAnalysis' }},
           { path: 'customerPriceDistribution', component: () => import('@/views/statistics/other-statistics/customerPriceDistribution'), name: 'customerPriceDistribution', meta: { title: 'customerPriceDistribution' }},
           { path: 'refund', component: () => import('@/views/statistics/other-statistics/refundStatistics'), name: 'refundStatistics', meta: { title: 'refundStatistics' }}

@@ -37,13 +37,17 @@
               <img :src="scope.row.goods_image" class="goods-image"/>
             </template>
           </el-table-column>
-          <el-table-column prop="goods_name" label="商品名称" align="left"/>
+          <el-table-column label="商品名称" align="left">
+            <template slot-scope="scope">
+              <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" class="goods-name" target="_blank">{{ scope.row.name }}</a>
+            </template>
+          </el-table-column>
           <el-table-column label="商品价格" width="150">
-            <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+            <template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>
           </el-table-column>
           <el-table-column prop="num" label="购买数量" width="120"/>
           <el-table-column label="小计" width="120">
-            <template slot-scope="scope">{{ scope.row.subtotal | unitPrice('￥') }}</template>
+            <template slot-scope="scope">￥{{ scope.row.subtotal | unitPrice }}</template>
           </el-table-column>
         </el-table>
       </el-col>
@@ -53,12 +57,10 @@
       <el-col :span="24">
         <div class="d-header">订单日志</div>
         <el-table :data="orderLog" :header-cell-style="{textAlign: 'center'}">
-          <el-table-column prop="id" label="操作ID" width="100"/>
-          <el-table-column prop="name" label="操作人员" width="200"/>
-          <el-table-column label="操作时间" width="250">
-            <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
-          </el-table-column>
-          <el-table-column prop="content" label="操作详情" width="400"/>
+          <el-table-column prop="log_id" label="操作ID" width="100"/>
+          <el-table-column prop="op_name" label="操作人员" width="200"/>
+          <el-table-column prop="op_time" :formatter="MixinUnixToDate" label="操作时间" width="250"/>
+          <el-table-column prop="message" label="操作详情" width="400"/>
           <el-table-column/>
         </el-table>
       </el-col>
@@ -100,15 +102,15 @@
     },
     mounted() {
       this.GET_OrderDetail()
-      this.GET_OrderLog()
     },
     methods: {
       GET_OrderDetail() {
         this.loading = true
+        this.GET_OrderLog()
         API_order.getOrderDetail(this.sn).then(response => {
           this.loading = false
           this.orderDetail = response
-          this.productList = response.productList
+          this.productList = response.order_sku_list
           this.countShowData()
         }).catch(() => { this.loading = false })
       },
@@ -248,6 +250,10 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+  .goods-name {
+    color: #4183c4;
+    &:hover { color: #f42424 }
   }
 </style>
 

@@ -3,14 +3,16 @@
  */
 
 import { api } from '~/ui-domain'
+import request from '@/utils/request'
 
 /**
  * 获取图片验证码URL
- * @param type
+ * @param scene
+ * @param uuid
  * @returns {string}
  */
-export function getValidateCodeUrl(type) {
-  return `${api.base}/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
+export function getValidateCodeUrl(scene, uuid) {
+  return `${api.base}/captchas/${uuid}/${scene}?rmd=${new Date().getTime()}`
 }
 
 /**
@@ -24,3 +26,14 @@ export const uploadApi = api.base + '/uploaders'
  * @type {string}
  */
 export const regionApi = api.base + '/regions/@id/children'
+
+/**
+ * 获取首页数据
+ */
+export function getIndexData() {
+  return request({
+    url: 'index/page',
+    method: 'get',
+    loading: false
+  })
+}
