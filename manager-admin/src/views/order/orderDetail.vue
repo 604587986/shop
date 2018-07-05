@@ -53,12 +53,10 @@
       <el-col :span="24">
         <div class="d-header">订单日志</div>
         <el-table :data="orderLog" :header-cell-style="{textAlign: 'center'}">
-          <el-table-column prop="id" label="操作ID" width="100"/>
-          <el-table-column prop="name" label="操作人员" width="200"/>
-          <el-table-column label="操作时间" width="250">
-            <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
-          </el-table-column>
-          <el-table-column prop="content" label="操作详情" width="400"/>
+          <el-table-column prop="log_id" label="操作ID" width="100"/>
+          <el-table-column prop="op_name" label="操作人员" width="200"/>
+          <el-table-column prop="op_time" :formatter="MixinUnixToDate" label="操作时间" width="250"/>
+          <el-table-column prop="message" label="操作详情" width="400"/>
           <el-table-column/>
         </el-table>
       </el-col>
