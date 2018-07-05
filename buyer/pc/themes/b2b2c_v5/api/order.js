@@ -64,3 +64,14 @@ export function getOrderStatusNum() {
     method: Method.GET
   })
 }
+
+/**
+ * 根据交易单号查询订单列表
+ * @param trade_sn
+ */
+export function getOrderListByTradeSn(trade_sn) {
+  return request({
+    url: `trade/orders/${trade_sn}/list`,
+    method: Method.GET
+  })
+}
