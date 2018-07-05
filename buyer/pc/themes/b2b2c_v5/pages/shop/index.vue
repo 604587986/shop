@@ -43,12 +43,11 @@
             </div>
           </div>
           <div :class="['shop-goods', shop.goods_on && 'on']">
-            <!--// Andste_TODO 2018/7/4: list -> goods_list-->
-            <template v-if="!shop.list || !shop.list.length">
+            <template v-if="!shop.goods_list || !shop.goods_list.length">
               <p class="no-goods">哎呀！店铺还没商品呢，去<nuxt-link :to="'/shop/' + shop.shop_id">店铺首页</nuxt-link>看看试试吧！</p>
             </template>
             <ul v-else>
-              <li v-for="(goods, index) in shop.list" v-if="index < 5" :key="goods.goods_id" class="goods-item">
+              <li v-for="(goods, index) in shop.goods_list" v-if="index < 5" :key="goods.goods_id" class="goods-item">
                 <nuxt-link :to="'/goods/' + goods.goods_id">
                   <img :src="goods.thumbnail" class="goods-image">
                   <p class="goods-price price">￥{{ goods.price | unitPrice }}</p>
