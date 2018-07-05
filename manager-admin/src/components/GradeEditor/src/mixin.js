@@ -3,7 +3,7 @@
  * mixin
  */
 
-import axios from 'axios'
+import request from '@/utils/request'
 
 export default {
   props: {
@@ -112,12 +112,12 @@ export default {
      */
     GET_ChildrenById(id) {
       this.loading = true
-      axios({
+      request({
         url: this.api.replace(/@id/, id),
-        method: 'get'
-      }).then(response => {
+        method: 'get',
+        loading: false
+      }).then(data => {
         this.loading = false
-        const { data } = response
         // 如果有返回数据，且不为数组，抛出错误。
         if (data && !Array.isArray(data)) {
           throw Error('The response is not an array!')
@@ -136,7 +136,7 @@ export default {
           item.$text = item[names.text]
           return item
         })
-        this.dataProcessing(response.data)
+        this.dataProcessing(data)
       }).catch(() => { this.loading = false })
     },
     /**
