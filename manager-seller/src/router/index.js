@@ -37,7 +37,7 @@ export const asyncRouterMap = [
       icon: 'goods-manage'
     },
     children: [
-      { path: 'goods-list/:id?', component: () => import('@/views/goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList', noCache: true }},
+      { path: 'goods-list', component: () => import('@/views/goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList', noCache: true }},
       { path: 'draft-list', component: () => import('@/views/goods/draftList'), name: 'draftList', meta: { title: 'draftList' }},
       { path: 'category-manage', component: () => import('@/views/goods/categoryManage'), name: 'categoryManage', meta: { title: 'categoryManage' }},
       { path: 'tag-manage', component: () => import('@/views/goods/tagManage'), name: 'tagManage', meta: { title: 'tagManage' }},
@@ -56,7 +56,7 @@ export const asyncRouterMap = [
     redirect: '/order/order-list',
     meta: { title: 'order', icon: 'order-manage' },
     children: [
-      { path: 'order-list/:id?', component: () => import('@/views/order/orderList'), name: 'orderList', meta: { title: 'orderList', noCache: true }},
+      { path: 'order-list', component: () => import('@/views/order/orderList'), name: 'orderList', meta: { title: 'orderList', noCache: true }},
       { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail', noCache: true }},
       { path: 'refund-list', component: () => import('@/views/order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
       { path: 'logistics-manage', component: () => import('@/views/order/logisticsManage'), name: 'logisticsManage', meta: { title: 'logisticsManage' }},

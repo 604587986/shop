@@ -103,11 +103,11 @@
             <h2>您需要立即处理的交易订单</h2>
           </div>
           <div class="store-index-content">
-            <p class="store-rompt" @click="toOrderList(0)">所有的订单：<span style="color: red;">{{trading_prompt.all_order_num}}</span></p>
+            <p class="store-rompt" @click="toOrderList('ALL')">所有的订单：<span style="color: red;">{{trading_prompt.all_order_num}}</span></p>
             <div>
-              <el-tag type="success" @click.native="toOrderList(1)">待付款  {{trading_prompt.wait_pay}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList(2)">待发货  {{trading_prompt.wait_ship}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList(3)">待收货  {{trading_prompt.wait_rog}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_PAY')">待付款  {{trading_prompt.wait_pay}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_SHIP')">待发货  {{trading_prompt.wait_ship}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_ROG')">待收货  {{trading_prompt.wait_rog}}</el-tag>
               <el-tag type="success" @click.native="toRefundOrderList()">申请售后  {{trading_prompt.after_sales}}</el-tag>
             </div>
           </div>
@@ -211,7 +211,7 @@ export default {
 
     /** 跳转商品列表*/
     toGoodsManager(goodsStatus) {
-      this.$router.push({ path: `/goods/goods-list/${goodsStatus}` })
+      this.$router.push({ path: '/goods/goods-list', query: { market_enable: goodsStatus }})
     },
 
     /** 跳转买家留言*/
@@ -221,7 +221,7 @@ export default {
 
     /** 跳转订单列表*/
     toOrderList(orderStatus) {
-      this.$router.push({ path: `/order/order-list/${orderStatus}` })
+      this.$router.push({ path: '/order/order-list', query: { order_status: orderStatus }})
     },
 
     /** 跳转维权订单*/

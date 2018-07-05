@@ -10,7 +10,7 @@
           <!--商品状态 上架 下架-->
           <div class="conditions">
             <span>商品状态:</span>
-            <el-select v-model="marketEnable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
+            <el-select v-model="params.market_enable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
               <el-option
                 v-for="item in goodsStatusList"
                 :key="item.value"
@@ -159,7 +159,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          market_enable: ''
+          ...this.$route.query
         },
 
         /** 列表数据 */
@@ -174,9 +174,6 @@
           { value: 0, label: '未出售（已下架）' },
           { value: 1, label: '出售中（已上架）' }
         ],
-
-        /** 商品状态 是否上架 0代表已下架，1代表已上架 */
-        marketEnable: -1,
 
         /** 商品类型 NORMAL 正常商品 POINT 积分商品 */
         goods_type: 'NORMAL',
@@ -208,17 +205,9 @@
       }
     },
     mounted() {
-      if (this.$route.params && !Number.isNaN(parseInt(this.$route.params.id))) {
-        this.marketEnable = this.params.market_enable = parseInt(this.$route.params.id)
-      }
       this.GET_GoodsList()
     },
     beforeRouteUpdate(to, from, next) {
-      if (!Number.isNaN(parseInt(to.params.id))) {
-        this.marketEnable = this.params.market_enable = parseInt(to.params.id)
-      } else {
-        this.marketEnable = -1
-      }
       this.GET_GoodsList()
       next()
     },
