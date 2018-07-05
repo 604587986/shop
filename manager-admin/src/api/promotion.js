@@ -309,9 +309,7 @@ export function releaseSeckill(seckill_id, params) {
     url: `promotion/seckills/${seckill_id}/release`,
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
-    data: {
-      seckill: params
-    }
+    data: params
   })
 }
 
