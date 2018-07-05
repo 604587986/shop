@@ -70,7 +70,7 @@ export const asyncRouterMap = [
   {
     path: '/shop',
     component: Layout,
-    redirect: '/shop/shop-manage/shop-list',
+    redirect: '/shop/shop-themes-pc',
     name: 'shop',
     meta: { title: 'shop', icon: 'shop-manage' },
     children: [
@@ -125,7 +125,7 @@ export const asyncRouterMap = [
       {
         path: '/statistics/operate-report',
         component: () => import('@/views/statistics/operateReport/index'),
-        redirect: '/statistics/goods-analysis/goods-details',
+        redirect: '/statistics/operate-report/regional-analysis',
         name: 'operateReport',
         meta: { title: 'operateReport' },
         children: [
@@ -155,7 +155,7 @@ export const asyncRouterMap = [
   {
     path: '/setting',
     component: Layout,
-    redirect: '/setting/shop',
+    redirect: '/setting/shop-setting',
     name: 'setting',
     meta: { title: 'setting', icon: 'setting-manage' },
     children: [
