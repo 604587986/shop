@@ -37,13 +37,17 @@
               <img :src="scope.row.goods_image" class="goods-image"/>
             </template>
           </el-table-column>
-          <el-table-column prop="goods_name" label="商品名称" align="left"/>
+          <el-table-column label="商品名称" align="left">
+            <template slot-scope="scope">
+              <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" class="goods-name" target="_blank">{{ scope.row.name }}</a>
+            </template>
+          </el-table-column>
           <el-table-column label="商品价格" width="150">
-            <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+            <template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>
           </el-table-column>
           <el-table-column prop="num" label="购买数量" width="120"/>
           <el-table-column label="小计" width="120">
-            <template slot-scope="scope">{{ scope.row.subtotal | unitPrice('￥') }}</template>
+            <template slot-scope="scope">￥{{ scope.row.subtotal | unitPrice }}</template>
           </el-table-column>
         </el-table>
       </el-col>
@@ -106,7 +110,7 @@
         API_order.getOrderDetail(this.sn).then(response => {
           this.loading = false
           this.orderDetail = response
-          this.productList = response.productList
+          this.productList = response.order_sku_list
           this.countShowData()
         }).catch(() => { this.loading = false })
       },
@@ -246,6 +250,10 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+  .goods-name {
+    color: #4183c4;
+    &:hover { color: #f42424 }
   }
 </style>
 
