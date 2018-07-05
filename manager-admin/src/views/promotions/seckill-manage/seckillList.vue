@@ -17,7 +17,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.seckill_status !== 'RELEASE'"
+              v-if="scope.row.seckill_status === 'RELEASE'"
               size="mini"
               type="primary"
               @click="handleAuditSeckill(scope.$index, scope.row)"
@@ -228,27 +228,27 @@
       submitSeckillForm(type) {
         this.$refs['seckillForm'].validate((valid) => {
           if (valid) {
-            let { id } = this.seckillForm
+            let { seckill_id } = this.seckillForm
             const params = this.MixinClone(this.seckillForm)
             params.apply_end_time /= 1000
             params.start_day /= 1000
             if (type === 'save') {
-              if (!id) {
+              if (!seckill_id) {
                 API_Promotion.addSeckill(params).then(response => {
                   this.dialogSeckillVisible = false
                   this.$message.success('添加成功！')
                   this.GET_SeckillList()
                 })
               } else {
-                API_Promotion.editSeckill(id, params).then(response => {
+                API_Promotion.editSeckill(seckill_id, params).then(response => {
                   this.dialogSeckillVisible = false
                   this.$message.success('编辑成功！')
                   this.GET_SeckillList()
                 })
               }
             } else {
-              if (!id) id = 0
-              API_Promotion.releaseSeckill(id, params).then(() => {
+              if (!seckill_id) seckill_id = 0
+              API_Promotion.releaseSeckill(seckill_id, params).then(() => {
                 this.dialogSeckillVisible = false
                 this.$message.success('发布成功！')
                 this.GET_SeckillList()
