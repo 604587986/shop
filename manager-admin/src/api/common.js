@@ -6,11 +6,12 @@ import { api } from '~/ui-domain'
 
 /**
  * 获取图片验证码URL
- * @param type
+ * @param scene
+ * @param uuid
  * @returns {string}
  */
-export function getValidateCodeUrl(type) {
-  return `${api.base}/validcode.do?vtype=${type}&rmd=${new Date().getTime()}`
+export function getValidateCodeUrl(scene, uuid) {
+  return `${api.base}/captchas/${uuid}/${scene}?rmd=${new Date().getTime()}`
 }
 
 /**
