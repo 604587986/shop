@@ -152,14 +152,13 @@ export function deleteGroupBuyActivity(id) {
 
 /**
  * 审核团购商品
- * @param id
+ * @param act_id
  * @param params
  */
-export function reviewGroupBuyGoods(id, params) {
+export function reviewGroupBuyGoods(act_id, params) {
   return request({
-    url: `promotion/group-buy-actives/review/${id}`,
+    url: `/promotion/group-buy-actives/review/${act_id}`,
     method: 'post',
-    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }

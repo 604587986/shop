@@ -14,8 +14,18 @@
         <template slot-scope="scope">{{ scope.row.end_time | unixToDate }}</template>
       </el-table-column>
       <el-table-column prop="gb_status_text" label="团购活动状态"/>
-      <el-table-column label="操作" width="120">
+      <el-table-column label="操作" width="230">
         <template slot-scope="scope">
+          <el-button
+            v-if="scope.row.gb_status === 0"
+            size="mini"
+            type="primary"
+            @click="handlePassGoods(scope.$index, scope.row)">通过</el-button>
+          <el-button
+            v-if="scope.row.gb_status === 0"
+            size="mini"
+            type="warning"
+            @click="handleRejectGoods(scope.$index, scope.row)">拒绝</el-button>
           <el-button
             size="mini"
             type="primary"
@@ -75,10 +85,31 @@
         this.GET_GroupBuyGoodsList()
       },
 
+      /** 通过 */
+      handlePassGoods(index, row) {
+        this.$confirm('确定要通过这个活动吗？', '提示', { type: 'warning' }).then(() => {
+          const { act_id, gb_id } = row
+          API_Promotion.reviewGroupBuyGoods(act_id, { status: 1, gb_id }).then(() => {
+            this.$message.success('已审核通过！')
+            this.GET_GroupBuyGoodsList()
+          })
+        }).catch(() => {})
+      },
+
+      /** 拒绝 */
+      handleRejectGoods(index, row) {
+        this.$confirm('确定要拒绝这个活动吗？', '提示', { type: 'warning' }).then(() => {
+          const { act_id, gb_id } = row
+          API_Promotion.reviewGroupBuyGoods(act_id, { status: 0, gb_id }).then(() => {
+            this.$message.success('已拒绝通过！')
+            this.GET_GroupBuyGoodsList()
+          })
+        }).catch(() => {})
+      },
+
       /** 查看详情 */
       handleViewMember(index, row) {
         this.$router.push({ path: `/promotions/group-buy-manage/group-buy-goods-info/${row.gb_id}` })
-        // this.$router.push({ name: 'groupBuyGoodsInfo', params: row })
       },
 
       /** 获取团购活动详情商品列表 */
