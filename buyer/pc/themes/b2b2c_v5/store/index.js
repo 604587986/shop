@@ -53,7 +53,7 @@ export const actions = {
      */
     if (!_uuid) {
       _uuid = uuidv1()
-      res.setHeader('Set-Cookie', [`uuid=${_uuid};domain=${domain.cookie}`])
+      res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie}`])
     }
     commit('SET_UUID', _uuid)
   },
