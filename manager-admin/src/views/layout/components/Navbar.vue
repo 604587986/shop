@@ -17,7 +17,7 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatar">
+          <img class="user-avatar" :src="user.face">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -61,11 +61,7 @@
       ThemePicker
     },
     computed: {
-      ...mapGetters([
-        'sidebar',
-        'name',
-        'avatar'
-      ])
+      ...mapGetters(['sidebar', 'user'])
     },
     methods: {
       toggleSideBar() {
