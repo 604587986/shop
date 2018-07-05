@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getMenusChildren(parent_id = 0) {
   return request({
-    url: `systems/menu`,
+    url: `systems/menu/${parent_id}/children`,
     method: 'get',
     params: { parent_id }
   })
@@ -21,7 +21,6 @@ export function getMenusChildren(parent_id = 0) {
  * @param params
  */
 export function addMenu(params) {
-  params.url = 'xxx'
   return request({
     url: 'systems/menu',
     method: 'post',
@@ -35,7 +34,6 @@ export function addMenu(params) {
  * @param params
  */
 export function editMenu(id, params) {
-  params.url = 'xxx'
   return request({
     url: `systems/menu/${id}`,
     method: 'put',
