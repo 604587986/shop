@@ -1,23 +1,23 @@
 <template>
-  <div class="container">
+  <div v-if="form" class="container">
     <el-form :model="form" :rules="rules" ref="form" label-width="100px">
       <el-form-item label="团购活动">
-        <span>{{ form.name }}</span>
+        <span>{{ form.gb_name }}</span>
       </el-form-item>
       <el-form-item label="活动时间">
         <span>{{ form.start_time | unixToDate }} - {{ form.end_time | unixToDate }}</span>
       </el-form-item>
       <el-form-item label="团购名称">
-        <el-input v-model="form.group_buy_name" clearable placeholder="请输入团购名称"/>
+        <el-input v-model="form.gb_name" clearable placeholder="请输入团购名称"/>
       </el-form-item>
       <el-form-item label="团购标题">
-        <el-input v-model="form.group_buy_title" clearable placeholder="请输入团购标题"/>
+        <el-input v-model="form.gb_title" clearable placeholder="请输入团购标题"/>
       </el-form-item>
       <el-form-item label="商品名称">
         <span>{{ form.goods_name }}</span>
       </el-form-item>
       <el-form-item label="商品价格">
-        <span>{{ form.original_price | unitPrice("￥") }}</span>
+        <span>{{ form.price | unitPrice("￥") }}</span>
       </el-form-item>
       <el-form-item label="商品库存">
         <span>{{ form.goods_num }}</span>
@@ -26,29 +26,30 @@
         <el-input v-model="form.goods_price" placeholder="请输入团购价格"/>
       </el-form-item>
       <el-form-item label="团购数量">
-        <el-input-number v-model="form.goods_num" :min="1" :max="form.goods_num"/>
+        <el-input-number v-model="form.goods_num" :min="0" :max="form.goods_num"/>
       </el-form-item>
       <el-form-item label="商品图片">
         <img :src="form.goods_image" :alt="form.goods_name" class="goods-image">
       </el-form-item>
       <el-form-item label="虚拟数量">
-        <el-input-number v-model="form.visual_num" :min="1" :max="form.goods_num"/>
+        <el-input-number v-model="form.visual_num" :min="0" :max="form.goods_num"/>
       </el-form-item>
       <el-form-item label="限购数量">
-        <el-input-number v-model="form.limit_num" :min="1" :max="form.goods_num"/>
+        <el-input-number v-model="form.limit_num" :min="0" :max="form.goods_num"/>
       </el-form-item>
       <el-form-item label="团购分类">
         <el-select v-model="form.cat_id" placeholder="请选择">
           <el-option label="不限" :value="0"/>
           <el-option
             v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            :key="item.cat_id"
+            :label="item.cat_name"
+            :value="item.cat_id">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="团购介绍">
+        <UE :default-msg="form.remark"></UE>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存编辑</el-button>
@@ -59,19 +60,24 @@
 
 <script>
   import * as API_Promotion from '@/api/promotion'
+  import { UE } from '@/components'
   // Andste_TODO 2018/6/16: 待适配
   export default {
     name: 'groupBuyGoodsInfo',
+    components: { UE },
     data() {
       return {
         gb_id: this.$route.params.id,
-        form: this.$route.params || {},
+        form: '',
         rules: {},
         options: []
       }
     },
     mounted() {
       this.GET_GroupBuyGoodsDetail()
+      API_Promotion.getGroupBuyCategory({ page_size: 9999 }).then(response => {
+        this.options = response.data
+      })
     },
     methods: {
       /** 提交表单 */
@@ -91,7 +97,7 @@
       /** 获取团购商品详情 */
       GET_GroupBuyGoodsDetail() {
         API_Promotion.getGroupBuyGoodsDetail(this.gb_id).then(response => {
-          console.log(response)
+          this.form = response
         })
       }
     }
