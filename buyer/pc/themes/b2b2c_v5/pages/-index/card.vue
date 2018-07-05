@@ -69,10 +69,10 @@
         <i class="iconfont ea-icon-security"></i>
         <span>账号安全</span>
       </nuxt-link>
-      <nuxt-link :to="(user && user.have_shop) ? MixinDomain.seller : '/shop/apply'" class="service-item">
+      <a :href="MixinDomain.seller" class="service-item">
         <i class="iconfont ea-icon-shop"></i>
-        <span>{{ (user && user.have_shop) ? '商家中心' : '商家入驻' }}</span>
-      </nuxt-link>
+        <span>商家中心</span>
+      </a>
     </div>
   </div>
 </template>
