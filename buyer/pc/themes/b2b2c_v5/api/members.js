@@ -7,14 +7,24 @@ import request, { Method } from '@/utils/request'
 /**
  * 获取优惠券列表
  * @param params
- * @returns {AxiosPromise}
  */
 export function getCoupons(params) {
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/coupons',
+    url: 'members/coupon',
     method: Method.GET,
     needToken: true,
     params
+  })
+}
+
+/**
+ * 领取优惠券
+ * @param coupon_id
+ */
+export function receiveCoupons(coupon_id) {
+  return request({
+    url: `members/coupon/${coupon_id}/receive`,
+    method: Method.GET
   })
 }
 

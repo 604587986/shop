@@ -212,7 +212,6 @@
       /** 获取订单状态数量 */
       GET_OrderStatusNum() {
         API_Order.getOrderStatusNum().then(response => {
-          // Andste_TODO 2018/6/17: 部分数据为null
           this.orderStatusNum = response
         })
       },

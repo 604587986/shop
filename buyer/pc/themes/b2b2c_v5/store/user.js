@@ -32,6 +32,7 @@ export const mutations = {
    */
   [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
+    state.address = []
     process.client && Storage.removeItem('user')
   },
   /**

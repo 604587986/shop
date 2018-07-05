@@ -3,15 +3,23 @@
     <en-header-other title="收银台"/>
     <div class="cashier-box">
       <div class="cashier-change">
+        <!--// Andste_TODO 2018/7/5: 在拆单上有些问题-->
         <h2>交易号：
-          <nuxt-link :to="'/member/my-order/' + order_sn" target="_blank">
-            <b>{{ order_sn }}</b>
+          <nuxt-link :to="'/member/my-order/detail/' + order_sn" target="_blank">
+            <b>{{ trade_sn || order_sn }}</b>
           </nuxt-link>
         </h2>
         <h2>{{ online ? '在线支付' : '货到付款' }}：<span>￥4,498.00</span><i>元</i></h2>
         <div class="cashier-order-detail">
           <div class="cashier-order-inside">
-            <h3><i></i>送货至：<span></span><span>山西省</span><span>太原市</span><span>阳曲县<span><span><span>12312313</span><span>13333333333</span></span></span></span></h3>
+            <h3><i></i>送货至：
+              <span>{{ order.ship_province }}</span>
+              <span>{{ order.ship_city }}</span>
+              <span>{{ order.ship_county }}</span>
+              <span>{{ order.ship_town || '' }}</span>
+              <span>{{ order.ship_addr }}</span>
+              <span>{{ order.ship_mobile }}</span>
+            </h3>
           </div>
         </div>
         <div v-if="online" class="cashier-tools">
@@ -57,10 +65,12 @@
     },
     mounted() {
       Promise.all([
-        API_Order.getOrderDetail(this.order_sn),
+        this.trade_sn ?
+          API_Order.getOrderListByTradeSn(this.trade_sn)
+          : API_Order.getOrderDetail(this.order_sn),
         API_Trade.getPaymentList()
       ]).then(responses => {
-        this.order = responses[0]
+        this.order = this.trade_sn ? responses[0][0] : responses[0]
         this.paymentList = responses[1]
       })
     }

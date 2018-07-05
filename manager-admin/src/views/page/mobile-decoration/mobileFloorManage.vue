@@ -178,7 +178,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  @import "../../../assets/floor-mobile";
+  @import "./templates/floor-mobile";
   .floor-container {
     display: flex;
     justify-content: space-around;
