@@ -4,6 +4,7 @@ import * as API_Goods from '@/api/goods'
 import uuidv1 from 'uuid/v1'
 import Cookie from 'cookie'
 import Storage from '@/utils/storage'
+import { domain } from "@/ui-domain";
 
 /** state */
 export const state = () => ({
@@ -28,7 +29,7 @@ export const mutations = {
   /** 设置UUID */
   [types.SET_UUID](state, uuid) {
     state.uuid = uuid
-    process.client && Storage.setItem('uuid', uuid)
+    process.client && Storage.setItem('uuid', uuid, { domain: domain.cookie })
   }
 }
 
@@ -52,7 +53,7 @@ export const actions = {
      */
     if (!_uuid) {
       _uuid = uuidv1()
-      res.setHeader('Set-Cookie', [`uuid=${_uuid}`])
+      res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie}`])
     }
     commit('SET_UUID', _uuid)
   },

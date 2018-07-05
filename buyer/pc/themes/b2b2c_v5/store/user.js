@@ -5,6 +5,7 @@ import Storage from '@/utils/storage'
 import { Base64 } from 'js-base64'
 import { Foundation } from '~/ui-utils'
 import * as API_Address from "@/api/address";
+import { domain } from '~/ui-domain'
 
 export const state = () => ({
   user: '',
@@ -22,7 +23,7 @@ export const mutations = {
    */
   [types.SET_USER_INFO](state, data) {
     state.user = data
-    process.client && Storage.setItem('user', JSON.stringify(data))
+    process.client && Storage.setItem('user', JSON.stringify(data), { domain: domain.cookie })
   },
   /**
    * 移除用户信息
@@ -43,7 +44,7 @@ export const mutations = {
     if (process.client) {
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
-      Storage.setItem('accessToken', token, { expires })
+      Storage.setItem('accessToken', token, { expires, domain: domain.cookie })
     }
   },
   /**
@@ -64,7 +65,7 @@ export const mutations = {
     if (process.client) {
       const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(refresh_token_time)
-      Storage.setItem('refreshToken', token, { expires })
+      Storage.setItem('refreshToken', token, { expires, domain: domain.cookie })
     }
   },
   /**
