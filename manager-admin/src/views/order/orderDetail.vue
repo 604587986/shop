@@ -98,11 +98,11 @@
     },
     mounted() {
       this.GET_OrderDetail()
-      this.GET_OrderLog()
     },
     methods: {
       GET_OrderDetail() {
         this.loading = true
+        this.GET_OrderLog()
         API_order.getOrderDetail(this.sn).then(response => {
           this.loading = false
           this.orderDetail = response
