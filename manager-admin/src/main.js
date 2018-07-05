@@ -18,7 +18,6 @@ import './permission' // permission control
 // 全局注册echarts、jsonp
 import echarts from 'echarts'
 import axios from 'axios'
-import jsonp from 'vue-jsonp'
 // register global utility filters.
 import * as filters from './filters' // global filter
 // register global utility mixins.
@@ -34,7 +33,6 @@ Vue.use(EnComponents)
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
-Vue.use(jsonp)
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

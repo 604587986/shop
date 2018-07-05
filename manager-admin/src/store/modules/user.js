@@ -51,6 +51,7 @@ const user = {
      */
     REMOVE_USER: (state) => {
       state.user = ''
+      Storage.removeItem('adminUser')
     },
     /**
      * 移除访问令牌

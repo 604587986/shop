@@ -56,11 +56,11 @@ export function confirmPay(order_sn, pay_price) {
 
 /**
  * 取消订单
- * @param sn
+ * @param order_sn
  */
-export function cancleOrder(sn) {
+export function cancleOrder(order_sn) {
   return request({
-    url: `order-opration/admin/order/cancel/${sn}.do`,
+    url: `trade/orders/${order_sn}/cancelled`,
     method: 'post'
   })
 }

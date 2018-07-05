@@ -158,7 +158,7 @@
       },
       'adminForm.founder': function(newValue) {
         this.adminRules.role_id[0].required = newValue === 0
-        if (newValue === 1) this.adminForm.role_id = ''
+        if (newValue === 1) this.adminForm.role_id = 0
       }
     },
     mounted() {
