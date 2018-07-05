@@ -11,6 +11,9 @@
       <p>
         <span>结算单号：</span>
         <span>{{ settlementData.bill_sn }}</span>
+      </p>
+      <p>
+        <span>起止时间：</span>
         <span>{{ settlementData.start_time | unixToDate }}  至 {{ settlementData.end_time | unixToDate }}</span>
       </p>
       <p>
