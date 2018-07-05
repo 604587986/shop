@@ -19,11 +19,11 @@
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--结算状态-->
-        <el-table-column prop="status" label="结算状态"/>
+        <el-table-column prop="status_text" label="结算状态"/>
         <!--付款时间-->
         <el-table-column label="付款时间">
           <template slot-scope="scope">
-            {{ scope.row.pay_time | unixToDate }}
+            {{ scope.row.create_time | unixToDate }}
           </template>
         </el-table-column>
         <!--操作-->
@@ -96,7 +96,7 @@
 
       /** 查看详情 传递结算单号*/
       handleQueryDetail(index, row) {
-        this.$router.push({ path: `/order/settlement-detail/${row.sn}` })
+        this.$router.push({ path: `/order/settlement-detail/${row.bill_id}` })
       },
 
       /** 获取结算单列表 */
