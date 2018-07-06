@@ -96,9 +96,9 @@
       tpl_type: 'ADV',
       columnList: [
         {
-          title: '全球购',
+          title: '标题',
           titleColors: ['#333377', '#488bad'],
-          tagList: mixin.methods.emptyBlock(8, 'TEXT'),
+          tagList: mixin.methods.emptyBlock(0, 'TEXT'),
           blockList: mixin.methods.emptyBlock(15, 'IMAGE')
         }
       ]
