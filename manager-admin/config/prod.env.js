@@ -1,4 +1,4 @@
-const { api_pro } = require('../ui-domain')
+const { api_pro } = require('../ui-config')
 
 module.exports = {
 	NODE_ENV: '"production"',

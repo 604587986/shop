@@ -39,7 +39,7 @@
   import LangSelect from '@/components/LangSelect'
   import Storage from '@/utils/storage'
   import uuidv1 from 'uuid/v1'
-  import { domain } from '~/ui-domain'
+  import { domain } from '~/ui-config'
 
   export default {
     components: { LangSelect },
