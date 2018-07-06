@@ -13,7 +13,7 @@
           <el-table :data="goodsList" border :height="tableHeight" style="width: 100%;">
             <el-table-column label="商品图片" width="120">
               <template slot-scope="scope">
-                <img :src="scope.row.image" class="goods-image"/>
+                <img :src="scope.row.thumbnail" class="goods-image"/>
               </template>
             </el-table-column>
             <el-table-column prop="sn" label="商品编号" width="180"></el-table-column>
@@ -53,11 +53,11 @@
             </router-link>
           </div>
           <el-table :data="memberList" border :height="tableHeight" style="width: 100%;">
-            <el-table-column prop="username" label="会员名称"/>
+            <el-table-column prop="nickname" label="会员名称"/>
             <el-table-column prop="mobile" label="手机号"/>
             <el-table-column prop="email" label="电子邮箱"/>
             <el-table-column label="注册时间">
-              <template slot-scope="scope">{{ scope.row.register_time | unixToDate }}</template>
+              <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
             </el-table-column>
           </el-table>
         </el-card>
