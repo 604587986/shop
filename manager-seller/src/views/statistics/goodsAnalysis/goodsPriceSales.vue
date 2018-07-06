@@ -10,12 +10,13 @@
         <en-category-picker
           size="mini"
           :api="api"
+          :props="props"
           @changed="changeGoodsCateGory"
           :clearable='true'/>
       </div>
       <div class="conditions">
         <span>价格设置:</span>
-        <en-price-range @changed="changePriceRange"></en-price-range>
+        <en-price-range @changed="changePriceRange"/>
       </div>
       <div class="conditions">
         <el-button type="primary" @click="handleSearch" size="mini">开始搜索</el-button>
@@ -27,8 +28,12 @@
 
 <script>
   import * as API_goodsPriceStatistics from '@/api/goodsPriceStatistics'
+  import { CategoryPicker } from '@/components'
   export default {
     name: 'goodsPriceSales',
+    components: {
+      [CategoryPicker.name]: CategoryPicker
+    },
     data() {
       return {
         /** 列表loading状态 */
@@ -53,7 +58,15 @@
         },
 
         /** 分类请求api */
-        api: `${process.env.SELLER_API}/goods/category/@id/children`,
+        api: `${process.env.SELLER_API}/goods/category/seller/children`,
+
+        /** 映射属性 */
+        props: {
+          value: 'category_id',
+          label: 'name',
+          children: 'children',
+          disabled: 'disabled'
+        },
 
         tableHeight: document.body.clientHeight / 2
       }
@@ -77,7 +90,11 @@
 
       /**  分类选择组件值发生改变 */
       changeGoodsCateGory(data) {
-        this.params.category_id = data.category_id
+        if (data[data.length - 1]) {
+          this.params.category_id = parseInt(data[data.length - 1])
+        } else {
+          this.params.category_id = 0
+        }
       },
 
       /** 改变日期的回调*/

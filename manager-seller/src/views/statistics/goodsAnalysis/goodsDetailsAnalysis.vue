@@ -4,8 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <div class="conditions">
@@ -13,6 +12,7 @@
             <en-category-picker
               size="mini"
               :api="api"
+              :props="props"
               @changed="changeGoodsCateGory"
               :clearable='true'/>
           </div>
@@ -59,8 +59,12 @@
 
 <script>
   import * as API_goodsDetailsStatistics from '@/api/goodsDetailsStatistics'
+  import { CategoryPicker } from '@/components'
   export default {
     name: 'goodsDetails',
+    components: {
+      [CategoryPicker.name]: CategoryPicker
+    },
     data() {
       return {
         /** 列表loading状态 */
@@ -84,7 +88,15 @@
         pageData: [],
 
         /** 分类请求api */
-        api: `${process.env.SELLER_API}/goods/category/@id/children`
+        api: `${process.env.SELLER_API}/goods/category/seller/children`,
+
+        /** 映射属性 */
+        props: {
+          value: 'category_id',
+          label: 'name',
+          children: 'children',
+          disabled: 'disabled'
+        }
       }
     },
     mounted() {
@@ -105,14 +117,14 @@
       },
 
       /** 搜索事件触发 */
-      handleSearchGoods(data) {
+      handleSearchGoods() {
         this.GET_GoodsStatistics()
       },
 
-      /**  分类选择组件值发生改变 */
+      /**  平台商品分类选择组件值发生改变 */
       changeGoodsCateGory(data) {
-        if (data.category_id) {
-          this.params.category_id = data.category_id
+        if (data[data.length - 1]) {
+          this.params.category_id = parseInt(data[data.length - 1])
         } else {
           this.params.category_id = 0
         }
