@@ -2,7 +2,7 @@
  * 公共API
  */
 
-import { api } from '~/ui-config'
+import { api } from '~/ui-domain'
 import request from '@/utils/request'
 
 /**
