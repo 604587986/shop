@@ -11,7 +11,7 @@ const {
   domain
 } = require('../../ui-config')
 
-export {
+module.exports = {
   api_dev,
   api_pro,
   domain_dev,
