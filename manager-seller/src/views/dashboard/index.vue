@@ -134,10 +134,6 @@ export default {
   name: 'dashboard',
   created() {
     this.GET_DashBoard()
-    API_shop.getShopData({}).then(response => {
-      this.shop_info = response
-      this.$store.dispatch('SetShop', response)
-    })
   },
   mounted() {
     window.onresize = this.countTableHeight
@@ -154,7 +150,7 @@ export default {
       dashBoardData: [],
 
       /** 商家信息*/
-      shop_info: null,
+      shop_info: this.$store.getters.shopInfo,
 
       /** 店铺 商品提示*/
       shop_prompt: null,
@@ -232,17 +228,16 @@ export default {
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+
   .dashboard-container {
     height: 100%;
-    background-color: #ffffff;
+    background-color: #fff;
     /deep/ .el-card__body {
       min-height: 300px;
       padding: 10px;
     }
   }
-  .el-tag {
-    cursor: pointer;
-  }
+
   /deep/ .el-row {
     position: relative;
     margin: 0 3px 20px 3px !important;
@@ -267,6 +262,9 @@ export default {
       box-sizing: content-box;
       div.shop-img-icon {
         width: 200px;
+        &:hover span.to-change-shop-icon {
+          display: block;
+        }
         span.to-change-shop-icon {
           display: none;
           position: absolute;
@@ -289,9 +287,6 @@ export default {
           cursor: pointer;
           border: 1px solid #999;
         }
-      }
-      div.shop-img-icon:hover span.to-change-shop-icon {
-        display: block ;
       }
     }
 
@@ -395,8 +390,8 @@ export default {
       }
     }
   }
-  /*商城信息*/
-  /*标题*/
+
+  /* 店铺商品提示/交易订单提示*/
   h1 {
     border-left: 3px solid #28b779;
     font: 16px/18px "microsoft yahei";
@@ -404,15 +399,13 @@ export default {
     margin-bottom: 4px;
     padding-left: 6px;
   }
-
   /*副标题*/
   h2 {
     color: #aaa;
     font: 12px/16px "microsoft yahei";
     margin-left: 8px;
   }
-
-  /*内容*/
+  /* 店铺/交易提示内容 */
   .store-index-content {
     margin: 20px 0;
     overflow: hidden;
@@ -426,14 +419,18 @@ export default {
       border: 1px solid #fbeed5;
       cursor: pointer;
     }
+    /** 标签 */
+    .el-tag {
+      cursor: pointer;
+    }
   }
   /*商城公告*/
   .store-bulletin {
     color: #aaa;
     cursor: pointer;
     font: 12px/16px "microsoft yahei";
-  }
-  .store-bulletin:hover a {
-    color: #337ab7;
+    &:hover a {
+      color: #337ab7;
+    }
   }
 </style>
