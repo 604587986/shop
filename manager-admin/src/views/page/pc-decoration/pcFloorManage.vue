@@ -14,6 +14,7 @@
             <i v-if="tplBoxShow" class="el-icon-d-arrow-left"></i>
             <i v-else class="el-icon-d-arrow-right"></i>
           </div>
+          <div style="border-top: 1px dashed #ccc;margin: 2px 0"></div>
           <el-tooltip class="item" effect="dark" content="快捷保存" placement="right">
             <div class="btn-item" @click="handleSaveFloor">
               <i class="el-icon-upload"></i>
@@ -377,9 +378,9 @@
       position: absolute;
       top: 50%;
       right: -25px;
-      margin-top: -34px;
+      margin-top: -35px;
       width: 25px;
-      height: 73px;
+      height: 70px;
       background-color: #fff;
       text-align: center;
       padding: 5px 0;
