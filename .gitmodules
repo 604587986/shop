@@ -16,3 +16,6 @@
 [submodule "buyer/pc/themes/b2b2c_v5/ui-utils"]
 	path = buyer/pc/themes/b2b2c_v5/ui-utils
 	url = git@code.aliyun.com:javashop/ui-utils.git
+[submodule "buyer/pc/themes/b2b2c_v5/ui-domain"]
+	path = buyer/pc/themes/b2b2c_v5/ui-domain
+	url = git@code.aliyun.com:javashop/ui-domain.git
