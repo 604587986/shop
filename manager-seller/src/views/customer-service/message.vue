@@ -5,8 +5,7 @@
       pagination
       :tableData="tableData"
       :loading="loading"
-      :selectionChange="handleSelectionChange"
-    >
+      :selectionChange="handleSelectionChange">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <div class="conditions">

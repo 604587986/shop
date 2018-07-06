@@ -462,7 +462,11 @@
 
       /** 生成电子面单 */
       produceElectronicSurface() {
+        this.$confirm('确认生成电子面单?', '提示', { type: 'warning' }).then(() => {
+          API_order.generateElectronicSurface(this.sn, {}).then(() => {
 
+          })
+        })
       },
 
       /** 发货 */
@@ -558,7 +562,11 @@
 
       /** 确认收款 */
       confirmReceive() {
+        this.$confirm('确认执行此操作?', '提示', { type: 'warning' }).then(() => {
+          API_order.confirmGetAmount(this.sn, {}).then(() => {
 
+          })
+        })
       }
     }
   }

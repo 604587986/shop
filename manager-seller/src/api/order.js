@@ -40,8 +40,8 @@ export function getOrderDetail(sn) {
 }
 
 /**
- * 更新价格  调整价格
- * @param ids
+ * 调整价格
+ * @param sn
  * @returns {Promise<any>}
  */
 export function updateOrderPrice(sn, params) {
@@ -59,7 +59,7 @@ export function updateOrderPrice(sn, params) {
 
 /**
  * 修改收货人信息
- * @param ids
+ * @param sn
  * @param params
  * @returns {Promise<any>}
  */
@@ -68,6 +68,25 @@ export function updateConsigneeInfo(sn, params) {
     request({
       url: `/trade/orders/${sn}/address`,
       method: 'put',
+      loading: false,
+      data: params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 确认收款
+ * @param sn
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function confirmGetAmount(sn, params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/trade/orders/${sn}/address`,
+      method: 'post',
       loading: false,
       data: params
     }).then(response => {

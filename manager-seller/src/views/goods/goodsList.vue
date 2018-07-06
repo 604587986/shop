@@ -106,10 +106,10 @@
       <div align="center">
         <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100" :rules="rules">
           <el-form-item label="库存" prop="quantity" >
-            <el-input  v-model="goodsStockData.quantity" auto-complete="off"></el-input>
+            <el-input  v-model="goodsStockData.quantity" />
           </el-form-item>
           <el-form-item label="待发货数" >
-            <el-input v-model="goodsStockData.deliver_goods_quantity" auto-complete="off" disabled ></el-input>
+            <el-input v-model="goodsStockData.deliver_goods_quantity"  disabled />
           </el-form-item>
         </el-form>
         <en-table-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
@@ -117,7 +117,7 @@
             <el-table-column prop="goods_name" label="商品名称"/>
             <el-table-column label="库存">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.quantity" auto-complete="off" ></el-input>
+                <el-input v-model="scope.row.quantity" />
               </template>
             </el-table-column>
             <el-table-column  prop="deliver_goods_quantity" label="待发货数" />
@@ -134,7 +134,6 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { mapGetters } from 'vuex'
   import { CategoryPicker } from '@/components'
   export default {
     name: 'goodsList',

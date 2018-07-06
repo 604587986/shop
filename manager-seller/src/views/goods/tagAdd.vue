@@ -204,32 +204,35 @@
     }
   }
 
+  /*商品信息*/
   .goods-info {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
+    .goods-image {
+      width: 50px;
+      height: 50px;
+    }
+    .goodsinfo-txt {
+      margin-left: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      .goods-name {
+        color: #6289ff;
+      }
+      .goods-price {
+        color: #f60;
+      }
+    }
   }
 
-  .goodsinfo-txt {
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    .goods-name {
-      color: #6289ff;
-    }
-    .goods-price {
-      color: #f60;
-    }
-  }
-  .goods-image {
-    width: 50px;
-    height: 50px;
-  }
+
+
   /*保存标签商品*/
   .save-tag {
     text-align: center;

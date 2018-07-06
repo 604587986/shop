@@ -316,7 +316,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
   import * as API_goods from '@/api/goods'
   import * as API_goodsCategory from '@/api/goodsCategory'
   import { CategoryPicker, SkuSelector, UE } from '@/components'
@@ -911,8 +910,15 @@
 
       /** 查询商品参数 */
       GET_GoodsParams() {
-        const goods_id = this.activeGoodsId || 0
-        API_goods.getGoodsParams(this.baseInfoForm.category_id, { goods_id }).then((response) => {
+        let _params = { }
+        if (this.activeGoodsId) {
+          _params = {
+            goods_id: this.activeGoodsId
+          }
+        } else {
+          _params = { }
+        }
+        API_goods.getGoodsParams(this.baseInfoForm.category_id, _params).then((response) => {
           this.loading = false
           this.goodsParams = response
           this.collapseVal = this.goodsParams.map(key => {

@@ -221,14 +221,9 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-  }
-
-  .toolbar-btns {
-
-  }
-
-  .toolbar-search {
-    margin-right: 10px;
+    .toolbar-search {
+      margin-right: 10px;
+    }
   }
 
   .goods-image {

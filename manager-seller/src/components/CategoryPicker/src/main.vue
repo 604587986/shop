@@ -40,11 +40,13 @@
       /** 映射属性 */
       props: {
         type: Object,
-        default: {
-          value: 'shop_cat_id',
-          label: 'shop_cat_name',
-          children: 'children',
-          disabled: 'disabled'
+        default: () => {
+          return {
+            value: 'shop_cat_id',
+            label: 'shop_cat_name',
+            children: 'children',
+            disabled: 'disabled'
+          }
         }
       }
     },
