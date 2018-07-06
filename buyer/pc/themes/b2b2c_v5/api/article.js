@@ -41,6 +41,17 @@ export function getArticlesByPosition(position) {
 }
 
 /**
+ * 获取某个位置的文章
+ * @param position
+ */
+export function getArticleByPosition(position) {
+  return request({
+    url: `${api.base}/pages/${position}/articles`,
+    method: Method.GET
+  })
+}
+
+/**
  * 获取某个分类下的文章列表
  * @param category_type
  */

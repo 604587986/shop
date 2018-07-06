@@ -54,11 +54,12 @@
   Vue.use(Input)
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
+  import * as API_Article from '@/api/article'
   import { RegExp } from '~/ui-utils'
   import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'register',
-    components: {EnHeaderOther},
+    components: { EnHeaderOther },
     layout: 'full',
     head() {
       return {
@@ -67,7 +68,7 @@
     },
     data() {
       return {
-        /** 会员注册 表单 */
+        // 会员注册 表单
         registerForm: {
           username: '',
           password: '',
@@ -76,7 +77,7 @@
           vali_code: '',
           sms_code: ''
         },
-        /** 会员注册 表单规则 */
+        // 会员注册 表单规则
         registerRules: {
           username: [
             this.MixinRequired('请输入账户名！'),
@@ -152,11 +153,18 @@
         },
         requiredMobile: '',
         requiredValCode: '',
-        /** 是否显示图片验证码 */
+        // 是否显示图片验证码
         showValidCode: false,
-        /** 图片验证码URL */
-        valid_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER')
+        // 图片验证码URL
+        valid_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER'),
+        // 同意注册协议
+        agreed: false
       }
+    },
+    mounted() {
+      API_Article.getArticleByPosition('REGISTRATION_AGREEMENT').then(response => {
+        console.log(response)
+      })
     },
     methods: {
       /** 获取图片验证码 */
