@@ -10,3 +10,6 @@
 [submodule "manager-admin/ui-components"]
 	path = manager-admin/ui-components
 	url = git@code.aliyun.com:javashop/ui-components.git
+[submodule "manager-admin/ui-utils"]
+	path = manager-admin/ui-utils
+	url = git@code.aliyun.com:javashop/ui-utils.git
