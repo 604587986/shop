@@ -18,7 +18,7 @@ module.exports = {
       { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_iopkwi8gkd6xbt9.css' }
     ],
     script: [
-      { type: 'text/javascript', src: 'https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js' },
+      { type: 'text/javascript', src: '/jquery.min.js' },
       { type: 'text/javascript', src: '/layer/layer.js' }
     ],
     __dangerouslyDisableSanitizers: ['script']
