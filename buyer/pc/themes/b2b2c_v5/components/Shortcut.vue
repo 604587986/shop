@@ -88,11 +88,11 @@
   export default {
     name: 'EnShortcut',
     computed: {
-      ...mapGetters(['user'])
+      ...mapGetters(['user', 'refreshToken'])
     },
     mounted() {
-      // 如果已登录，重新获取用户信息【只有当用户刷新页面，才会触发】
-      this.user && this.getUserData()
+      // 如果有刷新Token，重新获取用户信息【只有当用户刷新页面，才会触发】
+      this.refreshToken && this.getUserData()
     },
     methods: {
       ...mapActions({
