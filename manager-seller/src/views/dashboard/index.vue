@@ -132,6 +132,13 @@ import * as API_Dashboard from '@/api/dashboard'
 import * as API_shop from '@/api/shop'
 export default {
   name: 'dashboard',
+  created() {
+    this.GET_DashBoard()
+    API_shop.getShopData({}).then(response => {
+      this.shop_info = response
+      this.$store.dispatch('SetShop', response)
+    })
+  },
   mounted() {
     window.onresize = this.countTableHeight
   },
@@ -168,14 +175,6 @@ export default {
       tableHeight: (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
     }
   },
-  created() {
-    this.GET_DashBoard()
-    API_shop.getShopData({}).then(response => {
-      this.shop_info = response
-      /** 使用vuex进行存储店铺信息 */
-      this.$store.dispatch('SetShop', response)
-    })
-  },
   methods: {
     /** 窗口缩放时计算table高度 */
     countTableHeight() {
@@ -195,7 +194,7 @@ export default {
       })
     },
 
-    /** 去上传*/
+    /** 店铺LOGO上传 */
     toChangeShopIcon() {
       this.$refs.uploadBtn.click()
     },

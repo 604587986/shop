@@ -10,7 +10,12 @@
           <!--商品状态 上架 下架-->
           <div class="conditions">
             <span>商品状态：</span>
-            <el-select class="choose-machine" v-model="params.market_enable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
+            <el-select
+              class="choose-machine"
+              v-model="params.market_enable"
+              placeholder="请选择商品状态"
+              @change="changeGoodsStatus"
+              clearable>
               <el-option
                 v-for="item in goodsStatusList"
                 :key="item.value"
@@ -54,13 +59,13 @@
             <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
           </template>
         </el-table-column>
-        <el-table-column label="价格" >
+        <el-table-column label="价格">
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column label="库存" >
+        <el-table-column label="库存">
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
         </el-table-column>
-        <el-table-column label="可用库存" >
+        <el-table-column label="可用库存">
           <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
         </el-table-column>
         <el-table-column label="创建时间" >
@@ -138,11 +143,11 @@
     },
     data() {
       const checkQuantity = (rule, value, callback) => {
-        if (!value) {
+        if (!value && value !== 0) {
           return callback(new Error('库存不能为空'))
         }
         setTimeout(() => {
-          if (!RegExp.integer.test(value) || parseInt(value) !== 0) {
+          if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
             callback(new Error('请输入大于等于0的整数'))
           } else {
             callback()
@@ -286,7 +291,7 @@
             data_total: response.data_total
           }
           this.tableData = response.data
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 发布商品*/
@@ -301,7 +306,7 @@
 
       /** 编辑商品 isdraft 商品列表1*/
       handleEditGoods(row) {
-        const _goods_id = row.goods_id || '0'
+        const _goods_id = row.goods_id
         this.$router.push({ path: `/goods/good-publish/${_goods_id}/1` })
       },
 

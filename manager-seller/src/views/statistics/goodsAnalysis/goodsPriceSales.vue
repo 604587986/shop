@@ -10,7 +10,6 @@
         <en-category-picker
           size="mini"
           :api="api"
-          :headers="headers"
           @changed="changeGoodsCateGory"
           :clearable='true'/>
       </div>
@@ -55,11 +54,6 @@
 
         /** 分类请求api */
         api: `${process.env.SELLER_API}/goods/category/@id/children`,
-
-        /** 请求令牌 */
-        headers: {
-          Authorization: this.$store.getters.token
-        },
 
         tableHeight: document.body.clientHeight / 2
       }

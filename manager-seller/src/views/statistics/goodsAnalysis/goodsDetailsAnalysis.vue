@@ -13,7 +13,6 @@
             <en-category-picker
               size="mini"
               :api="api"
-              :headers="headers"
               @changed="changeGoodsCateGory"
               :clearable='true'/>
           </div>
@@ -85,12 +84,7 @@
         pageData: [],
 
         /** 分类请求api */
-        api: `${process.env.SELLER_API}/goods/category/@id/children`,
-
-        /** 请求令牌 */
-        headers: {
-          Authorization: this.$store.getters.token
-        }
+        api: `${process.env.SELLER_API}/goods/category/@id/children`
       }
     },
     mounted() {

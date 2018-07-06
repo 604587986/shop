@@ -125,7 +125,6 @@
       :show="showDialog"
       :api="goods_api"
       :categoryApi="categoryApi"
-      :headers="headers"
       :limit="maxsize"
       @confirm="refreshFunc"
       @close="showDialog = false"/>
@@ -246,11 +245,6 @@
 
         /** 团购图片 */
         fileList: [],
-
-        /** 请求头令牌 */
-        headers: {
-          Authorization: this.$store.getters.token
-        },
 
         /** 商品选择器列表api*/
         goods_api: `${process.env.SELLER_API}/goods`,

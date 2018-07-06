@@ -22,7 +22,7 @@
                 <a class="goods-name"
                   :href="`${HTTP_URL}/${scope.row.goods_id}`">
                   {{ scope.row.goods_name }}</a>
-                <span class="goods-price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>
+                <span class="goods-price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
             </div>
           </template>
@@ -43,8 +43,8 @@
         </el-table-column>
       </template>
     </en-table-layout>
-    <div style="text-align: center">
-      <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
+    <div class="save-tag">
+      <el-button type="primary" @click="savesetup">保存设置</el-button>
     </div>
     <en-goods-picker
       type="seller"
@@ -229,6 +229,13 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+  /*保存标签商品*/
+  .save-tag {
+    text-align: center;
+    button {
+      margin-top: 15px;
+    }
   }
 
 </style>

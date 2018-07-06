@@ -71,7 +71,6 @@
       :show="showDialog"
       :api="goods_api"
       :categoryApi="categoryApi"
-      :headers="headers"
       :limit="maxsize"
       @confirm="refreshFunc"
       @close="showDialog = false"/>
@@ -97,11 +96,6 @@
 
         /** 活动ID*/
         seckillID: '',
-
-        /** 请求头令牌 */
-        headers: {
-          Authorization: this.$store.getters.token
-        },
 
         /** 表格信息*/
         tableData: [],
