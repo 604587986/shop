@@ -393,9 +393,9 @@
             this.isShowEditOrderPrice = true
           }
 
-          // 是否可以确认收款 货到付款时 已收货状态
+          // 是否可以确认收款 （货到付款）已收货状态
           if (this.orderDetail.payment_type === 'COD' && this.orderDetail.order_status === 'ROG') {
-            this.isShowEditOrderPrice = true
+            this.isShowConfirmReceive = true
           }
         })
       },
@@ -410,9 +410,9 @@
                 break
               case 1: key.show_status = 'success'
                 break
-              case 2: key.show_status = 'error'
+              case 2: key.show_status = 'success'
                 break
-              case 3: key.show_status = 'success'
+              case 3: key.show_status = 'error'
                 break
             }
             return key
