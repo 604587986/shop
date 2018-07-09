@@ -44,9 +44,13 @@ export default {
   methods: {
     /** 获取区块链接 */
     blockHref(block) {
+      if (block.block_type === 'GOODS') {
+        if (!block.block_value) return '#'
+        return `/goods/${block.block_value.goods_id}`
+      }
+      if (!block || !block.block_opt) return '#'
       const { opt_type, opt_value } = block.block_opt
       switch (opt_type) {
-        case 'GOODS': return `/goods/${opt_value}`
         case 'KEYWORD': return `/goods?keyword=${opt_value}`
         default: return '/'
       }
@@ -54,11 +58,6 @@ export default {
     /** 编辑区块 */
     handleEditBlock(blockIndex) {
       this.$emit('edit-block', JSON.parse(JSON.stringify(this.data)), blockIndex)
-    },
-    /** 点击遮罩 */
-    onClickMask(index) {
-      const data = JSON.parse(JSON.stringify(this.data))
-      this.$emit('handle-edit', data, index)
     }
   }
 }
