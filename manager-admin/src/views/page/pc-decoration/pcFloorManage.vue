@@ -1,14 +1,26 @@
 <template>
-  <div>
+  <div class="container">
     <div class="floor-container">
-      <div class="draggable-box tpl">
-        <el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>
+      <div class="tpl-box" :style="tplBoxStyle">
         <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
           <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
             <div class="img-tpl"></div>
             <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
           </div>
         </draggable>
+        <el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>
+        <div class="tpl-btns">
+          <div class="btn-item" @click="tplBoxShow = !tplBoxShow">
+            <i v-if="tplBoxShow" class="el-icon-d-arrow-left"></i>
+            <i v-else class="el-icon-d-arrow-right"></i>
+          </div>
+          <div style="border-top: 1px dashed #ccc;margin: 2px 0"></div>
+          <el-tooltip class="item" effect="dark" content="快捷保存" placement="right">
+            <div class="btn-item" @click="handleSaveFloor">
+              <i class="el-icon-upload"></i>
+            </div>
+          </el-tooltip>
+        </div>
       </div>
       <div class="draggable-box floor">
         <div class="floor-body">
@@ -74,6 +86,8 @@
     components: { draggable },
     data() {
       return {
+        // 楼层模板展开
+        tplBoxShow: true,
         // 获取商品列表API
         goodsListApi: process.env.ADMIN_API + '/goods',
         // 根据商品id，获取商品列表API
@@ -142,6 +156,17 @@
     },
     mounted() {
       this.GET_FloorList()
+    },
+    computed: {
+      // 楼层模板盒子样式
+      tplBoxStyle() {
+        const { sidebar } = this.$store.getters
+        let left = (sidebar.opened ? 180 : 36)
+        left = this.tplBoxShow ? left : left - 300
+        return {
+          left: left + 'px'
+        }
+      }
     },
     methods: {
       /** 编辑楼层区块 */
@@ -235,12 +260,14 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "./templates/floor-pc";
+  .container {
+    min-width: 1366px;
+  }
   .floor-container {
     display: flex;
     justify-content: space-around;
     background-color: #E5E7EA;
     padding: 10px;
-    min-height: 500px;
   }
   .draggable-box {
     position: relative;
@@ -249,10 +276,6 @@
     align-items: center;
     flex-direction: column;
     width: 50%;
-    .save-btn {
-      position: absolute;
-      top: 5px;
-    }
     &.floor {
       width: 1210px + 50px;
       flex-shrink: 0;
@@ -263,9 +286,7 @@
     display: flex;
     flex-wrap: wrap;
     overflow: hidden;
-    overflow-y: scroll;
     width: 100%;
-    max-height: 667px;
     background-color: #fff;
   }
   .tpl-item {
@@ -303,7 +324,6 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    height: calc(100vh - 40px - 84px);
     overflow-y: scroll;
   }
   .floor-list {
@@ -336,5 +356,45 @@
   }
   .floor-item:first-child .floor-layout {
     margin-top: 0;
+  }
+  .tpl-box {
+    position: fixed;
+    top: 50%;
+    left: 180px;
+    z-index: 99;
+    width: 300px;
+    margin-top: (-500px - 32px + 84px) / 2;
+    border-top: 10px solid #fff;
+    box-shadow: 4px 5px 20px 0 rgba(0,0,0,.6);
+    transition: all ease .3s;
+    .tpl-list {
+      height: 500px;
+      overflow-y: scroll;
+    }
+    .save-btn {
+      width: 100%;
+    }
+    .tpl-btns {
+      position: absolute;
+      top: 50%;
+      right: -25px;
+      margin-top: -35px;
+      width: 25px;
+      height: 70px;
+      background-color: #fff;
+      text-align: center;
+      padding: 5px 0;
+      .btn-item {
+        cursor: pointer;
+        padding: 5px 0;
+        & + .btn-item {
+          margin-top: 8px;
+        }
+        &:hover {
+          background-color: #46A0FC;
+          color: #fff
+        }
+      }
+    }
   }
 </style>

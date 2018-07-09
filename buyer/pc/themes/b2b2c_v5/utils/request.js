@@ -70,6 +70,8 @@ service.interceptors.response.use(
       Vue.prototype.$message.error('您已被登出！')
       const { $store } = Vue.prototype.$nuxt
       $store.dispatch('user/removeUserAction')
+      $store.dispatch('user/removeAccessTokenAction')
+      $store.dispatch('user/removeRefreshTokenAction')
       return Promise.reject(error)
     }
     let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
@@ -103,7 +105,7 @@ export const Method = {
 
 export default function request(options) {
   // 如果是服务端或者是请求的刷新token，不需要检查token直接请求。
-  if (process.server || options.url === 'passport/token') {
+  if (process.server || options.url.indexOf('passport/token') !== -1) {
     console.log(options.url + ' | 服务端或者是请求的刷新token，不需要检查token直接请求。')
     return service(options)
   }

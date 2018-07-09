@@ -5,6 +5,7 @@
 import Vue from 'vue'
 import Storage from './storage'
 import request from '@/utils/request'
+import { api } from '~/ui-domain'
 
 /**
  * 检查token：
@@ -72,7 +73,7 @@ export default function checkToken(options) {
         if (!options.needToken) resolve()
         // 开始请求新的Token，并加锁。
         window.__refreshTokenLock__ = request({
-          url: 'passport/token',
+          url: `${api.passport}/passport/token`,
           method: 'post',
           data: { refersh_token: refreshToken }
         }).then(response => {

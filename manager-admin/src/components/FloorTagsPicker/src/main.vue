@@ -132,7 +132,15 @@
       },
       defaultData(newVal) {
         if (!newVal) return
-        this.tagList = JSON.parse(JSON.stringify(newVal))
+        const tagList = JSON.parse(JSON.stringify(newVal))
+        this.editIndex = 0
+        this.inputValue = ''
+        this.tagList = tagList
+        if (tagList[0]) {
+          this.tagsForm = tagList[0]
+        } else {
+          this.$nextTick(() => { this.$refs['tagsForm'].resetFields() })
+        }
       },
       'tagsForm.block_opt.opt_type': function(newVal) {
         this.$set(this.tagsRules['block_opt.opt_value'][0], 'required', (newVal !== 'NONE' && newVal !== undefined))
@@ -142,6 +150,12 @@
       handleClose(index) {
         this.$confirm('确定要删除这个标签？', '提示', { type: 'warning' }).then(() => {
           this.tagList.splice(index, 1)
+          if (!this.tagList.length) {
+            this.$nextTick(() => {
+              this.$set(this.tagsRules['block_opt.opt_value'][0], 'required', false)
+              this.$refs['tagsForm'].resetFields()
+            })
+          }
         }).catch(() => {})
       },
       showInput() {
@@ -193,7 +207,7 @@
       /** 校验表单 */
       validTagsForm() {
         return new Promise((resolve, reject) => {
-          if (this.editIndex === '') {
+          if (this.editIndex === '' || !this.tagList.length) {
             resolve()
             return
           }

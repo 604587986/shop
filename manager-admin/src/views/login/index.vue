@@ -64,17 +64,17 @@
           ]
         },
         validcodeImg: '',
-        uuid: Storage.getItem('uuid')
+        uuid: Storage.getItem('adminUuid')
       }
     },
     mounted() {
-      const uuid = Storage.getItem('uuid')
+      const uuid = Storage.getItem('adminUuid')
       if (uuid) {
         this.uuid = uuid
       } else {
         const _uuid = uuidv1()
         this.uuid = _uuid
-        Storage.setItem('uuid', _uuid, { domain: domain.cookie })
+        Storage.setItem('adminUuid', _uuid, { domain: domain.cookie })
       }
       this.changeValidcode()
       this.loadParticles()
