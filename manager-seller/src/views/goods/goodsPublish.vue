@@ -429,7 +429,7 @@
 
       return {
         /** 图片服务器地址 */
-        BASE_IMG_URL: process.env.BASE_IMG_URL,
+        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=goods`,
 
         /** 店铺信息 */
         shopInfo: this.$store.getters.shopInfo,
@@ -769,17 +769,19 @@
           return
         }
         let _params = this.generateFormData(this.baseInfoForm)
+        /** 如果规格无变化 则传0 有变化传1 */
+        if (!_params.has_changed) {
+          _params.has_changed = 0
+        }
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
-            _params.category_name = '随便'
             API_goods.editGoods(this.activeGoodsId, _params).then(() => {
               this.$message.success('修改商品成功')
               this.$router.push({ path: '/goods/goods-list' })
             })
           } else {
             /** 正常商品上架 */
-            _params.category_name = '随便'
             API_goods.aboveGoods(_params).then(() => {
               this.$message.success('上架商品成功')
               this.$router.push({ path: '/goods/goods-list' })
@@ -788,8 +790,6 @@
         } else {
           /**  草稿箱商品上架 构造是否上架字段 1上架0下架*/
           _params.market_enable = 1
-          _params.has_changed = _params.have_spec
-          _params.category_name = '随便'
           API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(() => {
             this.$message.success('上架草稿箱商品成功')
             this.$router.push({ path: '/goods/goods-list' })
