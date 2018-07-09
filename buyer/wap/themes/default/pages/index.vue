@@ -1,8 +1,7 @@
 <template>
   <div class="container">
-    <div class="focus-container">
-      <index-banner/>
-    </div>
+    <index-banner :data="banner"/>
+    <index-menu :data="menus"/>
     <div v-if="floorList" class="floor-container">
       <div v-for="(item, index) in floorList" :key="index" :class="'item-' + item.tpl_id" class="floor-item">
         <component
@@ -21,17 +20,15 @@
   import templates, { templateArray } from './-index/templates'
   export default {
     name: 'index',
-    asyncData({ params }, callback) {
-      API_Home.getFloorData('WAP').then(response => {
-        callback(null, { floorList: response.page_data ? global.JSON.parse(response.page_data) : [] })
-      }).catch(e => {
-        // Andste_TODO 2018/6/20: 错误处理需要优化
-        let _statusCode = e.data.status
-        if (e.code === 'ECONNREFUSED') {
-          _statusCode = 502
-        }
-        callback({ statusCode: _statusCode })
-      })
+    async asyncData() {
+      const floor = await API_Home.getFloorData('WAP')
+      const menus = await API_Home.getSiteMenu('MOBILE') // Andste_TODO 2018/7/9: 这里为什么又是MOBILE
+      const banner = await API_Home.getFocusPictures('WAP')
+      return {
+        floorList: floor.page_data ? global.JSON.parse(floor.page_data) : [],
+        menus,
+        banner
+      }
     },
     components: IndexComponents,
     data() {
@@ -41,6 +38,8 @@
         floorList: '',
         templates,
         templateArray,
+        menus: [],
+        banner: []
       }
     },
     mounted() {
@@ -53,41 +52,6 @@
   .container {
     background-color: #F9F9F9;
     padding-bottom: 20px;
-  }
-  .focus-container {
-    position: relative;
-    .swiper-container {
-      height: 100%;
-    }
-    /deep/ .swiper-pagination-index {
-      position: relative;
-      .custom-pagination-inner {
-        display: block;
-        position: absolute;
-        z-index: 1;
-        left: 50%;
-        bottom: 20px;
-        font-size: 0;
-        padding: 4px 8px;
-        border-radius: 12px;
-        background-color: hsla(0, 0%, 100%, 0.4);
-        .custom-pagination-btn {
-          display: inline-block;
-          margin-right: 10px;
-          width: 12px;
-          height: 12px;
-          border-radius: 100%;
-          background-color: #fff;
-          cursor: pointer;
-        }
-        .custom-pagination-btn.__active__ {
-          background-color: #f42424;
-        }
-        .custom-pagination-btn.__last__ {
-          margin-right: 0;
-        }
-      }
-    }
   }
   .floor-container {
     width: 100%;

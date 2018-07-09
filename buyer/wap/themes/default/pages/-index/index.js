@@ -3,7 +3,9 @@
  */
 
 import IndexBanner from './banner'
+import IndexMenu from './menu'
 
 export {
-  IndexBanner
+  IndexBanner,
+  IndexMenu
 }
