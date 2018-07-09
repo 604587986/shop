@@ -1,6 +1,6 @@
-# b2b2c_v5
+# default
 
-> Javashop 买家PC端
+> Javashop 买家WAP端
 
 ## Build Setup
 
@@ -8,7 +8,7 @@
 # 安装依赖
 $ npm install
 
-# 在localhost:3000上启动热加载服务器
+# 在localhost:3001上启动热加载服务器
 $ npm run dev
 
 # 构建生产项目并启动服务
