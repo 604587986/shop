@@ -4,8 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
             <el-button type="primary" @click="handleAddCoupon">新增</el-button>

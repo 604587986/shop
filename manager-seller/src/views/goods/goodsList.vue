@@ -424,7 +424,7 @@
       align-items: center;
       min-width: 24.5%;
       .choose-machine {
-        width: 50%;
+        width: 60%;
       }
     }
   }
