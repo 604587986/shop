@@ -50,6 +50,7 @@ export default {
       }
       if (!block || !block.block_opt) return '#'
       const { opt_type, opt_value } = block.block_opt
+      // Andste_TODO 2018/7/9: 未适配完成
       switch (opt_type) {
         case 'KEYWORD': return `/goods?keyword=${opt_value}`
         default: return '/'
