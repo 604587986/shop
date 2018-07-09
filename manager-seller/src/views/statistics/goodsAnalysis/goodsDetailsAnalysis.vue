@@ -169,6 +169,10 @@
     margin-right: 10px;
   }
 
+  /deep/ .el-input__inner {
+    border-color: rgb(220, 223, 230);
+  }
+
   div.toolbar-btns {
     display: flex;
     flex-direction: row;
@@ -195,6 +199,5 @@
       }
     }
   }
-
 </style>
 
