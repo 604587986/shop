@@ -33,6 +33,7 @@
   import { mapGetters } from 'vuex'
   import * as API_Shop from '@/api/shop'
   import * as API_Members from '@/api/members'
+  import Storage from '@/utils/storage'
   export default {
     name: "shop-card",
     props: ['shopId'],
@@ -49,7 +50,7 @@
         this.shopBaseInfo = response
       })
       // 如果用户已登录，获取是否已收藏此店铺
-      this.user && API_Members.getShopIsCollect(this.shopId).then(response => {
+      Storage.getItem('refreshToken') && API_Members.getShopIsCollect(this.shopId).then(response => {
         this.collected = response.message
       })
     },
