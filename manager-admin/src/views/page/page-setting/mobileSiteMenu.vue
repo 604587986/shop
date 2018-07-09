@@ -12,6 +12,11 @@
       </div>
 
       <template slot="table-columns">
+        <el-table-column label="导航图片">
+          <template slot-scope="scope">
+            <img :src="scope.row.image" style="width: 50px;height: 50px">
+          </template>
+        </el-table-column>
         <el-table-column prop="navigation_name" label="名称"/>
         <el-table-column prop="url" label="URL"/>
         <el-table-column label="操作">
