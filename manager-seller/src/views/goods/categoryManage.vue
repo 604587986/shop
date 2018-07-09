@@ -175,25 +175,7 @@
           this.tableData = this.transData(this.tableData)
           // 为分组数据增加展开状态
           this.add_expanded(this.tableData)
-          // 执行默认展开
-          // this.toDefaultExpand()
         })
-      },
-
-      /** 执行默认展开 */
-      toDefaultExpand() {
-        for (let i = 0; i < this.tableData.length; i++) {
-          if (!this.tableData[i]._expanded) {
-            this.toogleCategory(i, this.tableData[i])
-            break
-          }
-        }
-        const _exist = this.tableData.some(key => {
-          return !key._expanded
-        })
-        if (_exist) {
-          this.toDefaultExpand()
-        }
       },
 
       /** 删除分组 */

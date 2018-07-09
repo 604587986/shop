@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="新增优惠券" :visible.sync="couponShow" width="30%">
-    <el-form :model="couponForm" label-position="right" :rules="rules"  label-width="160px">
+    <el-form :model="couponForm" label-position="right" :rules="rules"  label-width="120px">
       <el-form-item label="优惠券名称：" prop="title">
         <el-input
           auto-complete="off"
@@ -30,10 +30,10 @@
           :picker-options="pickoptions">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="发行量（个）：" prop="create_num">
+      <el-form-item label="发行量：" prop="create_num">
         <el-input v-model="couponForm.create_num" label-width="100"></el-input>
       </el-form-item>
-      <el-form-item label="每人限领（个）：" prop="limit_num">
+      <el-form-item label="每人限领：" prop="limit_num">
         <el-input v-model="couponForm.limit_num"  label-width="100"></el-input>
       </el-form-item>
     </el-form>

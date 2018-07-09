@@ -3,11 +3,10 @@
     toolbar
     pagination
     :tableData="tableData"
-    :loading="loading"
-  >
+    :loading="loading">
     <div slot="toolbar" class="inner-toolbar">
       <div class="toolbar-btns">
-        <span>店铺分组:</span>
+        <span>店铺分组：</span>
         <en-category-picker @changed="categoryChanged" :clearable='true'/>
       </div>
       <div class="toolbar-search">
@@ -132,9 +131,9 @@
         API_goods.getDraftGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
           this.tableData.forEach(key => {
@@ -171,29 +170,28 @@
     text-align: center;
   }
 
+  /** 工具条 */
   /deep/ div.toolbar {
     height: 70px;
     padding: 20px 0;
   }
-
   .inner-toolbar {
     display: flex;
     width: 100%;
     justify-content: space-between;
-  }
-
-  .toolbar-btns {
-    span {
-      display: inline-block;
-      font-size: 14px;
-      color: #606266;
+    .toolbar-btns {
+      span {
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+      }
+    }
+    .toolbar-search {
+      margin-right: 10px;
     }
   }
 
-  .toolbar-search {
-    margin-right: 10px;
-  }
-
+  /*商品图片*/
   .goods-image {
     width: 50px;
     height: 50px;

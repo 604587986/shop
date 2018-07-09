@@ -103,11 +103,11 @@
             <h2>您需要立即处理的交易订单</h2>
           </div>
           <div class="store-index-content">
-            <p class="store-rompt" @click="toOrderList(0)">所有的订单：<span style="color: red;">{{trading_prompt.all_order_num}}</span></p>
+            <p class="store-rompt" @click="toOrderList('ALL')">所有的订单：<span style="color: red;">{{trading_prompt.all_order_num}}</span></p>
             <div>
-              <el-tag type="success" @click.native="toOrderList(1)">待付款  {{trading_prompt.wait_pay}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList(2)">待发货  {{trading_prompt.wait_ship}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList(3)">待收货  {{trading_prompt.wait_rog}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_PAY')">待付款  {{trading_prompt.wait_pay}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_SHIP')">待发货  {{trading_prompt.wait_ship}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_ROG')">待收货  {{trading_prompt.wait_rog}}</el-tag>
               <el-tag type="success" @click.native="toRefundOrderList()">申请售后  {{trading_prompt.after_sales}}</el-tag>
             </div>
           </div>
@@ -132,6 +132,9 @@ import * as API_Dashboard from '@/api/dashboard'
 import * as API_shop from '@/api/shop'
 export default {
   name: 'dashboard',
+  created() {
+    this.GET_DashBoard()
+  },
   mounted() {
     window.onresize = this.countTableHeight
   },
@@ -147,7 +150,7 @@ export default {
       dashBoardData: [],
 
       /** 商家信息*/
-      shop_info: null,
+      shop_info: this.$store.getters.shopInfo,
 
       /** 店铺 商品提示*/
       shop_prompt: null,
@@ -168,14 +171,6 @@ export default {
       tableHeight: (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
     }
   },
-  created() {
-    this.GET_DashBoard()
-    API_shop.getShopData({}).then(response => {
-      this.shop_info = response
-      /** 使用vuex进行存储店铺信息 */
-      this.$store.dispatch('SetShop', response)
-    })
-  },
   methods: {
     /** 窗口缩放时计算table高度 */
     countTableHeight() {
@@ -195,7 +190,7 @@ export default {
       })
     },
 
-    /** 去上传*/
+    /** 店铺LOGO上传 */
     toChangeShopIcon() {
       this.$refs.uploadBtn.click()
     },
@@ -211,7 +206,7 @@ export default {
 
     /** 跳转商品列表*/
     toGoodsManager(goodsStatus) {
-      this.$router.push({ path: `/goods/goods-list/${goodsStatus}` })
+      this.$router.push({ path: '/goods/goods-list', query: { market_enable: goodsStatus }})
     },
 
     /** 跳转买家留言*/
@@ -221,7 +216,7 @@ export default {
 
     /** 跳转订单列表*/
     toOrderList(orderStatus) {
-      this.$router.push({ path: `/order/order-list/${orderStatus}` })
+      this.$router.push({ path: '/order/order-list', query: { order_status: orderStatus }})
     },
 
     /** 跳转维权订单*/
@@ -233,17 +228,16 @@ export default {
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+
   .dashboard-container {
     height: 100%;
-    background-color: #ffffff;
+    background-color: #fff;
     /deep/ .el-card__body {
       min-height: 300px;
       padding: 10px;
     }
   }
-  .el-tag {
-    cursor: pointer;
-  }
+
   /deep/ .el-row {
     position: relative;
     margin: 0 3px 20px 3px !important;
@@ -268,6 +262,9 @@ export default {
       box-sizing: content-box;
       div.shop-img-icon {
         width: 200px;
+        &:hover span.to-change-shop-icon {
+          display: block;
+        }
         span.to-change-shop-icon {
           display: none;
           position: absolute;
@@ -290,9 +287,6 @@ export default {
           cursor: pointer;
           border: 1px solid #999;
         }
-      }
-      div.shop-img-icon:hover span.to-change-shop-icon {
-        display: block ;
       }
     }
 
@@ -396,8 +390,8 @@ export default {
       }
     }
   }
-  /*商城信息*/
-  /*标题*/
+
+  /* 店铺商品提示/交易订单提示*/
   h1 {
     border-left: 3px solid #28b779;
     font: 16px/18px "microsoft yahei";
@@ -405,15 +399,13 @@ export default {
     margin-bottom: 4px;
     padding-left: 6px;
   }
-
   /*副标题*/
   h2 {
     color: #aaa;
     font: 12px/16px "microsoft yahei";
     margin-left: 8px;
   }
-
-  /*内容*/
+  /* 店铺/交易提示内容 */
   .store-index-content {
     margin: 20px 0;
     overflow: hidden;
@@ -427,14 +419,18 @@ export default {
       border: 1px solid #fbeed5;
       cursor: pointer;
     }
+    /** 标签 */
+    .el-tag {
+      cursor: pointer;
+    }
   }
   /*商城公告*/
   .store-bulletin {
     color: #aaa;
     cursor: pointer;
     font: 12px/16px "microsoft yahei";
-  }
-  .store-bulletin:hover a {
-    color: #337ab7;
+    &:hover a {
+      color: #337ab7;
+    }
   }
 </style>

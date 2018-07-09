@@ -173,7 +173,6 @@
       :api="goods_api"
       :multipleApi="multipleApi"
       :categoryApi="categoryApi"
-      :headers="headers"
       :defaultData="goodsIds"
       :limit="maxsize"
       @confirm="refreshFunc"
@@ -208,11 +207,6 @@
 
         /** 列表参数 */
         params: {},
-
-        /** 请求头令牌 */
-        headers: {
-          Authorization: this.$store.getters.token
-        },
 
         /** 列表数据*/
         tableData: [],

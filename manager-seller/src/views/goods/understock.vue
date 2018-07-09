@@ -20,7 +20,7 @@
         </el-table-column>
         <el-table-column label="名称">
           <template slot-scope="scope">
-            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
           </template>
         </el-table-column>
         <el-table-column label="价格" width="120">
@@ -95,10 +95,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 预警商品库存信息显示*/
         goodsWarningStockshow: false,
@@ -143,9 +143,9 @@
         API_goods.getWarningGoodsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
         })

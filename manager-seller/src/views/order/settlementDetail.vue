@@ -4,13 +4,16 @@
     <div class="sum-settlement">
       <div>
         <span>本期结算</span>
-        <span>本期结算无误，我要
+        <span v-if="settlementData.operate_allowable && settlementData.operate_allowable.allow_recon">本期结算无误，我要
           <el-button @click="handleConfirmSettlement" type="primary">确认</el-button>
         </span>
       </div>
       <p>
         <span>结算单号：</span>
         <span>{{ settlementData.bill_sn }}</span>
+      </p>
+      <p>
+        <span>起止时间：</span>
         <span>{{ settlementData.start_time | unixToDate }}  至 {{ settlementData.end_time | unixToDate }}</span>
       </p>
       <p>
@@ -127,7 +130,7 @@
         billId: '',
 
         /** 账单类型 */
-        bill_type: '1',
+        bill_type: 'REFUND',
 
         /** 结算单数据 */
         settlementData: {},
@@ -152,19 +155,14 @@
       /** 获取结算单数据 */
       GET_SettlementList() {
         this.loading = true
-        API_Settlement.getBillDetails({ bill_id: this.billId }).then(response => {
+        API_Settlement.getBillDetails(this.billId, { }).then(response => {
           this.loading = false
-          this.settlementData = response.data
+          this.settlementData = response
         })
       },
 
       /** 确认下一步操作 */
       handleConfirmSettlement() {
-      //   for(let value in this.settlementData.operate_allowable){
-      //     if (this.settlementData.operate_allowable[value]) {
-      //
-      //     }
-      //   }
         API_Settlement.confirmSettle(this.billId, {}).then(response => {
           this.settlementData = { ...response }
         })
@@ -203,7 +201,8 @@
 
       /** 切换状态 */
       handleToogle(tab) {
-        this.bill_type = parseInt(tab.index) === 1
+        this.bill_type = parseInt(tab.index) === 1 ? 'REFUND' : 'PAYMENT'
+        this.GET_orderList()
       }
     }
   }

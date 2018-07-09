@@ -20,10 +20,9 @@
               <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
               <div class="goodsinfo-txt">
                 <a class="goods-name"
-                  :href="`${HTTP_URL}/${scope.row.goods_id}`"
-                  style="color: #00a2d4;">
+                  :href="`${HTTP_URL}/${scope.row.goods_id}`">
                   {{ scope.row.goods_name }}</a>
-                <span class="goods-price" v-if="scope.row.price">{{ scope.row.price | unitPrice('￥') }}</span>
+                <span class="goods-price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
             </div>
           </template>
@@ -44,8 +43,8 @@
         </el-table-column>
       </template>
     </en-table-layout>
-    <div style="text-align: center">
-      <el-button type="primary" @click="savesetup" style="margin-top: 15px;">保存设置</el-button>
+    <div class="save-tag">
+      <el-button type="primary" @click="savesetup">保存设置</el-button>
     </div>
     <en-goods-picker
       type="seller"
@@ -53,7 +52,6 @@
       :api="goods_api"
       :multipleApi="multipleApi"
       :categoryApi="categoryApi"
-      :headers="headers"
       :defaultData="goodsIds"
       :limit="maxsize"
       @confirm="refreshFunc"
@@ -72,11 +70,6 @@
 
         /** 标签商品列表loading状态 */
         loading: false,
-
-        /** 请求头令牌 */
-        headers: {
-          Authorization: this.$store.getters.token
-        },
 
         /** 标签商品列表参数*/
         params: {
@@ -211,31 +204,41 @@
     }
   }
 
+  /*商品信息*/
   .goods-info {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
+    .goods-image {
+      width: 50px;
+      height: 50px;
+    }
+    .goodsinfo-txt {
+      margin-left: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      .goods-name {
+        color: #6289ff;
+      }
+      .goods-price {
+        color: #f60;
+      }
+    }
   }
 
-  .goodsinfo-txt {
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    .goods-name {
-      color: #6289ff;
+
+
+  /*保存标签商品*/
+  .save-tag {
+    text-align: center;
+    button {
+      margin-top: 15px;
     }
-    .goods-price {
-      color: #f60;
-    }
-  }
-  .goods-image {
-    width: 50px;
-    height: 50px;
   }
 
 </style>

@@ -138,7 +138,7 @@
         tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 高级搜索数据 */
         advancedForm: {
@@ -222,9 +222,9 @@
           this.loading = false
           this.tableData = response.data
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
         })
       },
