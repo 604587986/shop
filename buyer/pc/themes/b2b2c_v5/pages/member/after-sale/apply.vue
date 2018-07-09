@@ -8,7 +8,7 @@
     </div>
     <div class="apply-container">
       <div v-show="type === 'money'">
-        <el-form :model="returnMoneyForm" :rules="returnMoneyRules" ref="returnMoneyForm" label-width="100px">
+        <el-form :model="returnMoneyForm" :rules="returnMoneyRules" ref="returnMoneyForm" label-width="120px">
           <el-form-item label="退款方式：" prop="name">
             <el-select v-model="returnMoneyForm.return_way" size="small" placeholder="请选择退款方式">
               <el-option label="支付宝" value="alpay"></el-option>
@@ -16,6 +16,20 @@
               <el-option label="银行转账" value="bank"></el-option>
             </el-select>
           </el-form-item>
+          <div v-if="returnMoneyForm.return_way === 'bank'">
+            <el-form-item label="银行名称：" prop="bank_name">
+              <el-input v-model="returnMoneyForm.bank_name" size="small" :maxlength="180" placeholder="请输入银行名称"/>
+            </el-form-item>
+            <el-form-item label="银行开户行：" prop="bank_deposit_name">
+              <el-input v-model="returnMoneyForm.bank_deposit_name" size="small" :maxlength="180" placeholder="请输入银行开户行"/>
+            </el-form-item>
+            <el-form-item label="银行开户名：" prop="bank_account_name">
+              <el-input v-model="returnMoneyForm.bank_deposit_name" size="small" :maxlength="180" placeholder="请输入银行开户名"/>
+            </el-form-item>
+            <el-form-item label="银行账号：" prop="bank_account_number">
+              <el-input v-model="returnMoneyForm.bank_account_number" size="small" :maxlength="180" placeholder="请输入银行账号"/>
+            </el-form-item>
+          </div>
           <el-form-item label="退款原因：" prop="name">
             <el-select v-model="returnMoneyForm.return_reason" size="small" placeholder="请选择退款原因">
               <el-option label="商品质量有问题" value="商品质量有问题"></el-option>
@@ -40,12 +54,15 @@
           <el-form-item label="问题描述：" prop="name">
             <el-input
               type="textarea"
-              :autosize="{ minRows: 3, maxRows: 6}"
+              :autosize="{ minRows: 2, maxRows: 4 }"
               placeholder="请输入问题描述(180字以内)"
               :maxlength="180"
               style="width: 300px"
               v-model="returnMoneyForm.describe">
             </el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-button type="danger" size="small" @click="handleSubmitRturnMoney">提交申请</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -93,12 +110,15 @@
             <el-form-item label="问题描述：" prop="name">
               <el-input
                 type="textarea"
-                :autosize="{ minRows: 3, maxRows: 6}"
+                :autosize="{ minRows: 2, maxRows: 4 }"
                 placeholder="请输入问题描述(180字以内)"
                 :maxlength="180"
                 style="width: 300px"
                 v-model="returnGoodsForm.describe">
               </el-input>
+            </el-form-item>
+            <el-form-item label="">
+              <el-button type="danger" size="small" @click="handleSubmitRturnGoods">提交申请</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -123,8 +143,8 @@
     components: { SkuList },
     data() {
       return {
-        order_sn: '',
         order: '',
+        skuList: [],
         type: 'goods',
         /** 申请退款 表单 */
         returnMoneyForm: {},
@@ -133,14 +153,36 @@
         /** 申请退货 表单 */
         returnGoodsForm: {},
         /** 申请退货 表单规则 */
-        returnGoodsRules: {}
+        returnGoodsRules: {},
+        ...this.$route.query
+      }
+    },
+    mounted() {
+      // 获取售后数据
+      API_AfterSale.getAfterSaleData(this.order_sn, this.sku_id).then(response => {
+        this.order = response.order
+        this.skuList = response.product_list
+        this.returnMoneyForm.return_money = response.return_money
+        this.returnGoodsForm.return_money = response.return_money
+      })
+    },
+    watch: {
+      'returnMoneyForm.return_way': function (newVal) {
+        console.log(newVal)
+      },
+      'returnGoodsForm.return_way': function (newVal) {
+        console.log(newVal)
       }
     },
     methods: {
       /** 申请售后类型发生变化 */
       handleChangeType(type) {
         this.type = type
-      }
+      },
+      /** 申请退款 */
+      handleSubmitRturnMoney() {},
+      /** 申请退货 */
+      handleSubmitRturnGoods() {}
     }
   }
 </script>
@@ -205,5 +247,8 @@
         display: inline;
       }
     }
+  }
+  /deep/ .el-input {
+    width: 212px;
   }
 </style>

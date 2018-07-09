@@ -35,6 +35,20 @@ export function applyAfterSale(params) {
 }
 
 /**
+ * 获取售后申请数据
+ * @param order_sn
+ * @param sku_id
+ */
+export function getAfterSaleData(order_sn, sku_id) {
+  return request({
+    url: `after-sales/refunds/apply/${order_sn}`,
+    method: Method.GET,
+    needToken: true,
+    params: { sku_id }
+  })
+}
+
+/**
  * 获取售后详情
  * @param sn 订单编号
  * @returns {AxiosPromise}

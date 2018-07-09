@@ -13,8 +13,9 @@ export function getMessages(params) {
   params = params || {}
   params.page_size = params.page_size || 5
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message',
+    url: 'members/member-nocice-logs',
     method: Method.GET,
+    needToken: true,
     params
   })
 }
@@ -36,24 +37,23 @@ export function getMesssagesAsUnread(params) {
 
 /**
  * 标记消息为已读
- * @param ids 消息ID【集合或单个ID】
- * @returns {AxiosPromise}
+ * @param ids
  */
 export function messageMarkAsRead(ids) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message/${ids}`,
-    method: Method.POST
+    url: `members/member-nocice-logs/${ids}/read`,
+    method: Method.PUT,
+    needToken: true
   })
 }
 
 /**
  * 删除消息
- * @param ids 消息ID【集合或单个ID】
- * @returns {AxiosPromise}
+ * @param ids
  */
 export function deleteMessage(ids) {
   return request({
-    url: `http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message/${ids}`,
+    url: `members/member-nocice-logs/${ids}}`,
     method: Method.DELETE
   })
 }
