@@ -59,8 +59,14 @@
           <el-input v-model="articleForm.article_name"></el-input>
         </el-form-item>
         <el-form-item label="文章分类" prop="category_id">
-          <!--// Andste_TODO 2018/6/21: 文章分类未适配好-->
-          <el-input v-model="articleForm.category_id"></el-input>
+          <el-cascader
+            :options="articleCategoryTree"
+            :props="{children: 'children',label: 'name',value: 'id'}"
+            :show-all-levels="false"
+            :value="defaultCascaderValue"
+            @change="handleCascaderChange"
+            change-on-select
+          ></el-cascader>
         </el-form-item>
         <el-form-item label="文章排序" prop="sort">
           <el-input-number v-model="articleForm.sort" controls-position="right" :min="0" :max="99999"></el-input-number>
@@ -103,7 +109,8 @@
         // 添加、修改文章 表单
         articleForm: {
           article_name: '',
-          content: ''
+          content: '',
+          category_id: 0
         },
         // 添加、修改文章 表单规则
         articleRules: {
@@ -118,13 +125,29 @@
         // 文章分类树
         articleCategoryTree: [],
         // 被选分类名称
-        articleCategoryName: ''
+        articleCategoryName: '',
+        // 级联选择器默认值
+        defaultCascaderValue: []
       }
     },
     mounted() {
       this.GET_ArticleList()
       API_Article.getAritcleCategoryTree().then(response => {
-        this.articleCategoryTree = response
+        const rmEmptyChildren = (item) => {
+          if (Array.isArray(item.children) && !item.children.length) {
+            delete item.children
+          }
+        }
+        this.articleCategoryTree = response.map(item => {
+          rmEmptyChildren(item)
+          if (item.children) {
+            item.children.map(_item => {
+              rmEmptyChildren(_item)
+              return _item
+            })
+          }
+          return item
+        })
       })
     },
     methods: {
@@ -148,6 +171,20 @@
         API_Article.getArticleDetail(row.article_id).then(response => {
           this.articleForm = response
           this.dialogVisible = true
+          let d = []
+          const { category_id } = response
+          this.articleCategoryTree.forEach(item => {
+            if (item.id === category_id) {
+              d = [item.id]
+            } else {
+              item.children && item.children.forEach(_item => {
+                if (_item.id === category_id) {
+                  d = [item.id, _item.id]
+                }
+              })
+            }
+          })
+          this.defaultCascaderValue = d
         })
       },
       /** 删除文章 */
@@ -169,6 +206,10 @@
         this.params.category_id = data.id
         this.GET_ArticleList()
         this.articleCategoryName = data.name
+      },
+      /** 当分类改变时 */
+      handleCascaderChange(data) {
+        this.articleForm.category_id = data[data.length - 1]
       },
       /** 添加、编辑文章 表单提交 */
       submitArticleForm() {
