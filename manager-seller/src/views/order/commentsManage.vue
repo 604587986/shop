@@ -58,7 +58,7 @@
           <tr class="bg-order">
             <!--商品名称-->
             <td colspan="4">
-              <a class="shop-name" :href="`${HTTP_URL}/${item.goods_id}`" style="color: #00a2d4;">{{ item.goods_name }}</a>
+              <a class="shop-name" target="_blank" :href="`${HTTP_URL}/${item.goods_id}`" style="color: #00a2d4;">{{ item.goods_name }}</a>
             </td>
           </tr>
           <tr>
@@ -272,19 +272,19 @@
       socreDescription() {
         return {
           'left': Number.isInteger(this.shopInfo.shop_description_credit)
-            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 5) + '%' : 0
+            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       },
       socreService() {
         return {
-          'left': Number.isInteger(this.shopInfo.shop_description_credit)
-            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 5) + '%' : 0
+          'left': Number.isInteger(this.shopInfo.shop_service_credit)
+            ? parseFloat((this.shopInfo.shop_service_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       },
       socreDelivery() {
         return {
-          'left': Number.isInteger(this.shopInfo.shop_description_credit)
-            ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 5) + '%' : 0
+          'left': Number.isInteger(this.shopInfo.shop_delivery_credit)
+            ? parseFloat((this.shopInfo.shop_delivery_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       }
     },

@@ -7,7 +7,7 @@
       <template slot="table-columns">
         <el-table-column label="商品名称">
           <template slot-scope="scope">
-            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
           </template>
         </el-table-column>
         <el-table-column label="活动时间">

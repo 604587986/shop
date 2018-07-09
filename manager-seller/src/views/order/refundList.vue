@@ -172,7 +172,11 @@
                 <img :src="scope.row.goods_image" alt="">
               </template>
             </el-table-column>
-            <el-table-column prop="goods_name" label="商品名称"/>
+            <el-table-column label="商品名称">
+              <template slot-scope="scope">
+                <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+              </template>
+            </el-table-column>
             <el-table-column  prop="price" label="单价">
               <template slot-scope="scope">
                 {{ scope.row.price | unitPrice('￥') }}
@@ -201,6 +205,9 @@
     },
     data() {
       return {
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
+
         /** 列表loading状态 */
         loading: false,
 
@@ -320,9 +327,10 @@
         API_refund.getRefundDetails(row.sn).then(response => {
           this.goodsRefundshow = true
           this.refundInfo = response.refund
-          this.refundGoodsData = []
-          this.refundGoodsData.push(response.refund_goods_do)
-          this.refundInfo.price = response.refund_goods_do.price
+          if (Array.isArray(response.refund_goods)) {
+            this.refundGoodsData = response.refund_goods
+          }
+          this.refundInfo.price = response.refund_goods[0].price
         })
       },
 

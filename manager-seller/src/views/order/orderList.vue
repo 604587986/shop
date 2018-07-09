@@ -81,7 +81,7 @@
             <p v-for="shop in item.sku_list" class="shoplist-content">
               <span class="goods-info">
                 <img :src="shop.goods_image" alt="" class="goods-image"/>
-                <a :href="`${HTTP_URL}/${shop.goods_id}`" style="color: #00a2d4;">{{ shop.name }}</a>
+                <a :href="`${HTTP_URL}/${shop.goods_id}`" target="_blank" style="color: #00a2d4;">{{ shop.name }}</a>
               </span>
               <span>
                 <span>{{shop.original_price | unitPrice('￥')}}</span> × <span>{{ shop.num }}</span>
