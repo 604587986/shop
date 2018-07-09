@@ -1,0 +1,220 @@
+<template>
+  <div id="cashier">
+    <en-header-other title="收银台"/>
+    <div class="cashier-box">
+      <div class="cashier-change">
+        <!--// Andste_TODO 2018/7/5: 在拆单上有些问题-->
+        <h2>交易号：
+          <nuxt-link :to="'/member/my-order/detail/' + order_sn" target="_blank">
+            <b>{{ trade_sn || order_sn }}</b>
+          </nuxt-link>
+        </h2>
+        <h2>{{ online ? '在线支付' : '货到付款' }}：<span>￥4,498.00</span><i>元</i></h2>
+        <div class="cashier-order-detail">
+          <div class="cashier-order-inside">
+            <h3><i></i>送货至：
+              <span>{{ order.ship_province }}</span>
+              <span>{{ order.ship_city }}</span>
+              <span>{{ order.ship_county }}</span>
+              <span>{{ order.ship_town || '' }}</span>
+              <span>{{ order.ship_addr }}</span>
+              <span>{{ order.ship_mobile }}</span>
+            </h3>
+          </div>
+        </div>
+        <div v-if="online" class="cashier-tools">
+          <div class="cashier-tools-inside">
+            <div class="cashier-tools-title">
+              <h3>支付平台</h3>
+            </div>
+            <ul class="cashier-pay-list">
+              <li v-for="payment in paymentList" :key="payment.plugin_id">
+                <img :src="payment.image">
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="same-pay-way bank-pay paybtn">
+          <nuxt-link v-if="online" to="#">立即支付</nuxt-link>
+          <nuxt-link v-else :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import * as API_Trade from '@/api/trade'
+  import * as API_Order from '@/api/order'
+  import EnHeaderOther from "@/components/HeaderOther";
+  export default {
+    name: 'cashier',
+    components: {EnHeaderOther},
+    layout: 'full',
+    middleware: 'auth-user',
+    data() {
+      return {
+        online: true, // true: 在线支付; false: 货到付款
+        trade_sn: this.$route.query.trade_sn,
+        order_sn: this.$route.query.order_sn,
+        // 支付方式列表
+        paymentList: [],
+        // 订单详情
+        order: ''
+      }
+    },
+    mounted() {
+      Promise.all([
+        this.trade_sn ?
+          API_Order.getOrderListByTradeSn(this.trade_sn)
+          : API_Order.getOrderDetail(this.order_sn),
+        API_Trade.getPaymentList()
+      ]).then(responses => {
+        this.order = this.trade_sn ? responses[0][0] : responses[0]
+        this.paymentList = responses[1]
+      })
+    }
+  }
+</script>
+
+<style type="text/scss" lang="scss" scoped>
+  .index-cashier {
+    position: relative;
+    width: 1000px;
+    margin: 20px auto;
+    height: 60px;
+    .welcome {
+      a {
+        float: left;
+        width: 245px;
+        height: 60px;
+      }
+      img {
+        width: 240px;
+        height: 60px;
+      }
+      span {
+        font-size: 23px;
+        float: left;
+        display: block;
+        margin: 25px 5px;
+      }
+    }
+  }
+  .cashier-box {
+    width: 100%;
+    background: #f5f5f5;
+    padding: 20px 0;
+  }
+  .cashier-change {
+    width: 950px;
+    margin: 0 auto;
+    padding: 30px 50px;
+    position: relative;
+    box-shadow: 0 2px 5px #ccc;
+    background: #fff;
+    h2 {
+      width: 950px;
+      height: 30px;
+      line-height: 30px;
+      font-size: 12px;
+      font-weight: 200;
+      b {
+        font-weight: 200;
+        font-size: 14px;
+        color: #ff6700;
+      }
+      span {
+        font-size: 20px;
+        color: #f42424;
+        margin: 0 5px 0 0;
+      }
+    }
+    .cashier-order-detail {
+      width: 950px;
+      border: 1px solid #e1e1e1;
+      background: #f4f4f4;
+      margin: 20px 0 0 0;
+    }
+    .cashier-tools {
+      width: 950px;
+      border: 1px solid #e1e1e1;
+      background: #f4f4f4;
+      margin: 20px 0 20px 0;
+      .cashier-tools-inside {
+        margin: 3px;
+        background: #fff;
+      }
+      .cashier-tools-title {
+        height: 52px;
+        line-height: 52px;
+        h3 {
+          width: 924px;
+          height: 52px;
+          line-height: 52px;
+          font-weight: 200;
+          font-size: 12px;
+          background: #fcfcfc;
+          padding-left: 20px;
+        }
+      }
+      .cashier-pay-list {
+        width: 844px;
+        overflow: hidden;
+        margin: 0 10px;
+        padding: 10px 40px;
+        li {
+          float: left;
+          height: 35px;
+          line-height: 30px;
+          margin: 0 8px 10px 0;
+          padding: 5px 5px;
+          position: relative;
+          border: 1px solid #e0e0e0;
+          cursor: pointer;
+          img {
+            width: 150px;
+            height: 35px
+          }
+        }
+      }
+    }
+    .cashier-order-inside {
+      margin: 3px;
+      background: #fff;
+      height: 52px;
+      overflow: hidden;
+      h3 {
+        width: 944px;
+        height: 52px;
+        line-height: 52px;
+        font-weight: 200;
+        font-size: 12px;
+        background: #fcfcfc;
+        i {
+          width: 21px;
+          height: 21px;
+          display: block;
+          background: url(../../assets/images/icons-cashier.png) no-repeat -70px 0;
+          float: left;
+          margin: 15px 10px 0 20px;
+        }
+        span { margin: 0 5px }
+      }
+    }
+    .paybtn {
+      a {
+        font-family: Microsoft YaHei;
+        width: 180px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: #fff;
+        font-size: 14px;
+        background: #f42424;
+        display: block;
+        margin: 30px auto 0 auto;
+      }
+    }
+  }
+</style>

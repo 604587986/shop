@@ -75,6 +75,16 @@ export function deleteAritcleCategory(id) {
 }
 
 /**
+ * 获取文章分类树
+ */
+export function getAritcleCategoryTree() {
+  return request({
+    url: 'pages/article-categories/childrens',
+    method: 'get'
+  })
+}
+
+/**
  * 获取模型字段列表
  * @param id
  * @returns {Promise<any>}

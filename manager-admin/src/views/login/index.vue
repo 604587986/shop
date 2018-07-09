@@ -2,9 +2,9 @@
   <div class="login-container">
     <div class="login-bg" id="login-bg"></div>
     <div class="login-form">
-      <div class="login-logo">
+      <a :href="MixinBuyerDomain" class="login-logo" target="_blank">
         <img class="login-logo-img" src="../../assets/logo_images/logo-javashop-rectangle-light.png" alt="javashop">
-      </div>
+      </a>
       <el-form :model="loginForm" :rules="loginRules" ref="loginForm" class="login-input">
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" :placeholder="translateKey('username')" autofocus clearable>
@@ -170,7 +170,7 @@
     }
     .login-validcode-img {
       width: 90px;
-      height: 36px;
+      height: 32px;
       display: block;
       cursor: pointer;
     }

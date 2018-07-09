@@ -22,3 +22,9 @@
 [submodule "manager-admin/ui-domain"]
 	path = manager-admin/ui-domain
 	url = git@code.aliyun.com:javashop/ui-domain.git
+[submodule "buyer/wap/themes/default/ui-domain"]
+	path = buyer/wap/themes/default/ui-domain
+	url = git@code.aliyun.com:javashop/ui-domain.git
+[submodule "buyer/wap/themes/default/ui-utils"]
+	path = buyer/wap/themes/default/ui-utils
+	url = git@code.aliyun.com:javashop/ui-utils.git

@@ -1,15 +1,23 @@
 <template>
-  <div>
+  <div class="article-container">
+    <el-tree
+      :data="articleCategoryTree"
+      :props="{children: 'children',label: 'name'}"
+      @node-click="handleNodeClick"
+      class="article-tree"
+    />
     <en-table-layout
       :tableData="tableData.data"
       :loading="loading"
+      border
     >
       <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <el-button type="primary" size="mini" icon="el-icon-circle-plus-outline" @click="handleAddArticle">添加</el-button>
+        <div class="toolbar-btns" style="line-height: 32px;font-size: 14px">
+          <span>{{ articleCategoryName || '全部'}}</span>-文章列表
         </div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent" placeholder="请输入文章名称"/>
+          <el-button type="primary" size="mini" icon="el-icon-circle-plus-outline" @click="handleAddArticle">添加</el-button>
+          <en-table-search @search="searchEvent" placeholder="请输入文章名称" style="display: inline-block;margin-left: 10px"/>
         </div>
       </div>
       <template slot="table-columns">
@@ -51,8 +59,14 @@
           <el-input v-model="articleForm.article_name"></el-input>
         </el-form-item>
         <el-form-item label="文章分类" prop="category_id">
-          <!--// Andste_TODO 2018/6/21: 文章分类未适配好-->
-          <el-input v-model="articleForm.category_id"></el-input>
+          <el-cascader
+            :options="articleCategoryTree"
+            :props="{children: 'children',label: 'name',value: 'id'}"
+            :show-all-levels="false"
+            :value="defaultCascaderValue"
+            @change="handleCascaderChange"
+            change-on-select
+          ></el-cascader>
         </el-form-item>
         <el-form-item label="文章排序" prop="sort">
           <el-input-number v-model="articleForm.sort" controls-position="right" :min="0" :max="99999"></el-input-number>
@@ -87,14 +101,16 @@
         params: {
           page_no: 1,
           page_size: 10,
-          name: ''
+          name: '',
+          category_id: ''
         },
         // 表格数据
         tableData: '',
         // 添加、修改文章 表单
         articleForm: {
           article_name: '',
-          content: ''
+          content: '',
+          category_id: 0
         },
         // 添加、修改文章 表单规则
         articleRules: {
@@ -105,11 +121,34 @@
         // 添加、修改文章 dialog
         dialogVisible: false,
         // 文章分类API
-        articleCategoryApi: `${process.env.ADMIN_API}/pages/article-categories/@id/children`
+        articleCategoryApi: `${process.env.ADMIN_API}/pages/article-categories/@id/children`,
+        // 文章分类树
+        articleCategoryTree: [],
+        // 被选分类名称
+        articleCategoryName: '',
+        // 级联选择器默认值
+        defaultCascaderValue: []
       }
     },
     mounted() {
       this.GET_ArticleList()
+      API_Article.getAritcleCategoryTree().then(response => {
+        const rmEmptyChildren = (item) => {
+          if (Array.isArray(item.children) && !item.children.length) {
+            delete item.children
+          }
+        }
+        this.articleCategoryTree = response.map(item => {
+          rmEmptyChildren(item)
+          if (item.children) {
+            item.children.map(_item => {
+              rmEmptyChildren(_item)
+              return _item
+            })
+          }
+          return item
+        })
+      })
     },
     methods: {
       /** 分页大小发生改变 */
@@ -132,6 +171,20 @@
         API_Article.getArticleDetail(row.article_id).then(response => {
           this.articleForm = response
           this.dialogVisible = true
+          let d = []
+          const { category_id } = response
+          this.articleCategoryTree.forEach(item => {
+            if (item.id === category_id) {
+              d = [item.id]
+            } else {
+              item.children && item.children.forEach(_item => {
+                if (_item.id === category_id) {
+                  d = [item.id, _item.id]
+                }
+              })
+            }
+          })
+          this.defaultCascaderValue = d
         })
       },
       /** 删除文章 */
@@ -147,6 +200,16 @@
       searchEvent(data) {
         this.params.name = data
         this.GET_ArticleList()
+      },
+      /** 选择分类 */
+      handleNodeClick(data) {
+        this.params.category_id = data.id
+        this.GET_ArticleList()
+        this.articleCategoryName = data.name
+      },
+      /** 当分类改变时 */
+      handleCascaderChange(data) {
+        this.articleForm.category_id = data[data.length - 1]
       },
       /** 添加、编辑文章 表单提交 */
       submitArticleForm() {
@@ -186,6 +249,19 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  .article-container {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+  }
+  .article-tree {
+    padding: 10px;
+    width: 300px;
+    margin-right: 45px;
+    margin-top: 44px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px 0 #ccc;
+  }
   /deep/ .el-form-item__content > .el-input {
     width: 220px;
   }

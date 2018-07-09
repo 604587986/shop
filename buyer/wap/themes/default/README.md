@@ -1,21 +1,22 @@
-# javashop-wap
+# default
 
-> javashop-wap
+> Javashop 买家WAP端
 
 ## Build Setup
 
 ``` bash
-# install dependencies
-npm install
+# 安装依赖
+$ npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+# 在localhost:3001上启动热加载服务器
+$ npm run dev
 
-# build for production with minification
-npm run build
+# 构建生产项目并启动服务
+$ npm run build
+$ npm start
 
-# build for production and view the bundle analyzer report
-npm run build --report
+# 生成静态项目
+$ npm run generate
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+有关nuxt的详细文档, 请查阅 [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
