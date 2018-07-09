@@ -1,10 +1,7 @@
 <template>
   <div class="container">
     <div class="focus-container">
-      <div class="w">
-        <index-banner/>
-        <index-card/>
-      </div>
+      <index-banner/>
     </div>
     <div v-if="floorList" class="floor-container">
       <div v-for="(item, index) in floorList" :key="index" :class="'item-' + item.tpl_id" class="floor-item">
@@ -19,15 +16,13 @@
 
 <script>
   import Vue from 'vue'
-  import { Tag } from 'element-ui'
-  Vue.use(Tag)
-  import { IndexBanner, IndexCard } from '@/pages/-index'
+  import * as IndexComponents from '@/pages/-index'
   import * as API_Home from '@/api/home'
   import templates, { templateArray } from './-index/templates'
   export default {
     name: 'index',
     asyncData({ params }, callback) {
-      API_Home.getFloorData().then(response => {
+      API_Home.getFloorData('WAP').then(response => {
         callback(null, { floorList: response.page_data ? global.JSON.parse(response.page_data) : [] })
       }).catch(e => {
         // Andste_TODO 2018/6/20: 错误处理需要优化
@@ -38,10 +33,7 @@
         callback({ statusCode: _statusCode })
       })
     },
-    components: {
-      IndexBanner,
-      IndexCard
-    },
+    components: IndexComponents,
     data() {
       return {
         /** 首页卡片tab x坐标 */
@@ -57,16 +49,13 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  @import "./-index/templates/floor-pc";
+  @import "./-index/templates/floor-mobile";
   .container {
     background-color: #F9F9F9;
     padding-bottom: 20px;
   }
   .focus-container {
-    height: 500px;
-    .w {
-      position: relative;
-    }
+    position: relative;
     .swiper-container {
       height: 100%;
     }
@@ -101,7 +90,7 @@
     }
   }
   .floor-container {
-    width: 1210px;
+    width: 100%;
     margin: 0 auto;
   }
   .floor-item:after {

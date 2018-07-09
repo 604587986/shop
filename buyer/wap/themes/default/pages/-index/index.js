@@ -3,9 +3,7 @@
  */
 
 import IndexBanner from './banner'
-import IndexCard from './card'
 
 export {
-  IndexBanner,
-  IndexCard
+  IndexBanner
 }

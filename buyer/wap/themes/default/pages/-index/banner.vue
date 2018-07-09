@@ -24,7 +24,7 @@
         focusList: [],
         swiperOption: {
           autoplay: true,
-          // loop: true,
+          loop: true,
           effect: 'fade',
           pagination: {
             el: '.swiper-pagination',
@@ -35,7 +35,7 @@
       }
     },
     mounted() {
-      API_Home.getFocusPictures().then(response => {
+      API_Home.getFocusPictures('WAP').then(response => {
         this.focusList = response
       })
     }
@@ -44,7 +44,7 @@
 
 <style type="text/scss" lang="scss" scoped>
   #index-banner .swiper-slide {
-    height: 500px;
+    height: 180px;
     img {
       width: 100%;
       height: 100%;
