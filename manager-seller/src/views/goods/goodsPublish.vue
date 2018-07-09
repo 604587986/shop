@@ -190,7 +190,7 @@
                 <el-option
                   v-for="item in tplList"
                   :key="item.template_id"
-                  :label="item.tpl_name"
+                  :label="item.name"
                   :value="item.template_id">
                 </el-option>
               </el-select>
@@ -527,7 +527,7 @@
           /** 积分兑换 */
           exchange: {
             /** 积分兑换所属分类 */
-            category_id: 0,
+            category_id: '',
 
             /** 是否允许积分兑换  1是 0否*/
             enable_exchange: 1,
@@ -1044,7 +1044,7 @@
       /** 查询商品品牌列表 */
       getGoodsBrandList() {
         API_goods.getGoodsBrandList(this.baseInfoForm.category_id, { }).then((response) => {
-          this.brandList = response.data
+          this.brandList = response
         })
       },
 
@@ -1056,7 +1056,7 @@
       /** 运费模板列表 */
       getTplList() {
         API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
-          this.tplList = response.data
+          this.tplList = response
         })
       },
 
