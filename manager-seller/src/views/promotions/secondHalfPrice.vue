@@ -52,6 +52,17 @@
               </template>
             </el-table-column>
           </template>
+          <el-pagination
+            slot="pagination"
+            v-if="pageData"
+            @size-change="handlePageSizeChange"
+            @current-change="handlePageCurrentChange"
+            :current-page="pageData.page_no"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageData.page_size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageData.data_total">
+          </el-pagination>
         </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="新增第二件半价活动" name="add">
@@ -206,10 +217,16 @@
         loading: false,
 
         /** 列表参数 */
-        params: {},
+        params: {
+          page_no: 1,
+          page_size: 10
+        },
 
         /** 列表数据*/
         tableData: [],
+
+        /** 列表分页数据 */
+        pageData: null,
 
         /** 商品ids */
         goodsIds: [],
@@ -318,6 +335,18 @@
         }
       },
 
+      /** 分页大小发生改变 */
+      handlePageSizeChange(size) {
+        this.params.page_size = size
+        this.GET_SecondHalfActivityList()
+      },
+
+      /** 分页页数发生改变 */
+      handlePageCurrentChange(page) {
+        this.params.page_no = page
+        this.GET_SecondHalfActivityList()
+      },
+
       /** 是否全选商品*/
       changeJoinGoods(val) {
         this.goodsShow = val === 1
@@ -374,6 +403,11 @@
         API_activity.getSecondHalfActivityList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
+          this.pageData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
         })
       },
 

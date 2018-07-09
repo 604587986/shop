@@ -3,8 +3,7 @@
     <en-table-layout
       toolbar
       pagination
-      :tableData="tableData"
-    >
+      :tableData="tableData">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus" clearable>
