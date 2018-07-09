@@ -216,7 +216,8 @@ export function deleteShopCollection(id) {
 export function getShopIsCollect(shop_id) {
   return request({
     url: `members/collection/shop/${shop_id}`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
 

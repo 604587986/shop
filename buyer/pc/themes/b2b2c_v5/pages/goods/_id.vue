@@ -45,6 +45,7 @@
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
   import * as GoodsComponents from './'
+  import Storage from '@/utils/storage'
   import { Pagination } from 'element-ui'
   Vue.use(Pagination)
   export default {
@@ -94,7 +95,7 @@
       // 用于服务端记录浏览次数，每次+1【服务端去重】
       API_Goods.visitGoods(goods_id)
       // 如果用户已登录，查询是否已收藏商品、店铺
-      this.user && API_Members.getGoodsIsCollect(goods_id).then(response => {
+      Storage.getItem('refreshToken') && API_Members.getGoodsIsCollect(goods_id).then(response => {
         this.collected = response.message
       })
     },
