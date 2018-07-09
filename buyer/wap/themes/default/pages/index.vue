@@ -10,6 +10,7 @@
         ></component>
       </div>
     </div>
+    <tab-bar/>
   </div>
 </template>
 
@@ -52,6 +53,7 @@
   .container {
     background-color: #F9F9F9;
     padding-bottom: 20px;
+    margin-bottom: 50px;
   }
   .floor-container {
     width: 100%;
