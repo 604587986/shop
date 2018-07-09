@@ -3,10 +3,12 @@
     <div class="layout-main">
       <swiper :options="swiperOption">
         <swiper-slide v-for="(block, index) in data.blockList" :key="index">
-          <div class="layout-item">
-            <floor-image :url="block.block_value"/>
-            <floor-mask :is-edit="isEdit" @click="onClickMask(index)"/>
-          </div>
+          <layout-item
+            :block="data"
+            :isEdit="isEdit"
+            :blockHref="blockHref"
+            @handle-edit="handleEditBlock(index)"
+          />
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
@@ -16,7 +18,6 @@
 
 <script>
   import mixin from '../mixin'
-  import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
   export default {
     name: 'tpl_28',
@@ -39,11 +40,12 @@
           }
         }
       }
-    },
-    components: { swiper, swiperSlide }
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  .swiper-container, /deep/ .swiper-wrapper, .swiper-slide {
+    height: 100%;
+  }
 </style>

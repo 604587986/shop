@@ -3,6 +3,7 @@
     <div class="layout-main">
       <layout-item
         v-for="(block, index) in data.blockList"
+        :key="index"
         :block="data"
         @handle-edit="handleEditBlock(index)"
       />
