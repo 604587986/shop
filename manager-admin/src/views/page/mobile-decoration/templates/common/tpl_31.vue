@@ -1,22 +1,12 @@
 <template>
   <div class="floor-layout tpl-31">
     <div class="layout-main">
-      <div class="layout-item">
-        <floor-image :url="data.blockList[0].block_value"/>
-        <floor-mask @click="onClickMask(0)"/>
-      </div>
-      <div class="layout-item">
-        <floor-image :url="data.blockList[1].block_value"/>
-        <floor-mask @click="onClickMask(1)"/>
-      </div>
-      <div class="layout-item">
-        <floor-image :url="data.blockList[2].block_value"/>
-        <floor-mask @click="onClickMask(2)"/>
-      </div>
-      <div class="layout-item">
-        <floor-image :url="data.blockList[3].block_value"/>
-        <floor-mask @click="onClickMask(3)"/>
-      </div>
+      <layout-item
+        v-for="(block, index) in data.blockList"
+        :key="index"
+        :block="block"
+        @handle-edit="handleEditBlock(index)"
+      />
     </div>
   </div>
 </template>

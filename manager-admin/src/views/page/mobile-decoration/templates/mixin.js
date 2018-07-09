@@ -29,12 +29,14 @@ export default {
                        </div>
                      </div>
                      <slot :block="block"></slot>
-                     <img v-if="block.block_value" :src="block.block_value">
-                     <div v-else-if="isEdit || $parent.isEdit" class="no-image"></div>
+                     <template v-if="block.block_type === 'IMAGE'">
+                       <img v-if="block.block_value" :src="block.block_value">
+                       <div v-else-if="isEdit || $parent.isEdit" class="no-image"></div>
+                     </template>
                    </template>
                    <a v-else :href="blockHref || $parent.blockHref(block)">
                      <slot :block="block"></slot>
-                     <img :src="block.block_value">
+                     <img v-if="block.block_type === 'IMAGE'" :src="block.block_value">
                    </a>
                  </div>`
     }

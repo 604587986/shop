@@ -1,10 +1,7 @@
 <template>
   <div class="floor-layout tpl-30">
     <div class="layout-main">
-      <div class="layout-item">
-        <floor-image :url="data.blockList[0].block_value"/>
-        <floor-mask @click="onClickMask(0)"/>
-      </div>
+      <layout-item :block="data.blockList[0]" @handle-edit="handleEditBlock(0)"/>
     </div>
   </div>
 </template>

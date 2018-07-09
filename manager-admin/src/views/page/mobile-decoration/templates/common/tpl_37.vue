@@ -1,26 +1,22 @@
 <template>
   <div class="floor-layout tpl-37">
     <div class="layout-main">
-      <div class="layout-item">
-        <div class="goods-item">
-          <div class="image-goods">
-            <img :src="data.blockList[0].block_value.goods_image">
+      <layout-item
+        v-for="(block, index) in data.blockList"
+        :key="index"
+        :block="block"
+        @handle-edit="handleEditBlock(index)"
+      >
+        <template slot-scope="{ block }">
+          <div class="goods-item">
+            <div class="image-goods">
+              <img :src="block.block_value.goods_image">
+            </div>
+            <div class="name-goods">{{ block.block_value.goods_name }}</div>
+            <div class="price-goods">{{ block.block_value.goods_price | formatPrice }}</div>
           </div>
-          <div class="name-goods">{{ data.blockList[0].block_value.goods_name }}</div>
-          <div class="price-goods">{{ data.blockList[0].block_value.goods_price | formatPrice }}</div>
-        </div>
-        <floor-mask @click="onClickMask(0)"/>
-      </div>
-      <div class="layout-item">
-        <div class="goods-item">
-          <div class="image-goods">
-            <img :src="data.blockList[1].block_value.goods_image">
-          </div>
-          <div class="name-goods">{{ data.blockList[1].block_value.goods_name }}</div>
-          <div class="price-goods">{{ data.blockList[1].block_value.goods_price | formatPrice }}</div>
-        </div>
-        <floor-mask @click="onClickMask(1)"/>
-      </div>
+        </template>
+      </layout-item>
     </div>
   </div>
 </template>

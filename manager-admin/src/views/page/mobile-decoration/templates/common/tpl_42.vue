@@ -1,10 +1,9 @@
 <template>
   <div class="floor-layout tpl-42">
     <div class="layout-main">
-      <div class="layout-item">
-        <div>{{ data.blockList[0].block_value }}</div>
-        <floor-mask @click="onClickMask(0)"/>
-      </div>
+      <layout-item :block="data.blockList[0]" @handle-edit="handleEditBlock(0)">
+        <template slot-scope="{ block }">{{ block.block_value }}</template>
+      </layout-item>
     </div>
   </div>
 </template>
