@@ -29,12 +29,9 @@
 
 <script>
   import * as API_Floor from '@/api/floor'
-  import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import 'swiper/dist/css/swiper.css'
 
   export default {
     name: 'mobileFocusManage',
-    components: { swiper, swiperSlide },
     data() {
       return {
         client_type: 'WAP',
