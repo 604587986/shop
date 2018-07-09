@@ -69,6 +69,10 @@
           this.$message.error('您已经收藏过这个店铺啦！')
           return false
         }
+        if (!this.user) {
+          this.$message.error('请先登录！')
+          return false
+        }
         API_Members.collectionShop(this.shopId).then(() => {
           this.$message.success('收藏店铺成功！')
           this.collected = true
