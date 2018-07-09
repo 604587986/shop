@@ -62,7 +62,7 @@
     </el-row>
     <el-row :gutter="20" type="flex" justify="space-around">
       <!--店铺 商品提示-->
-      <el-col  :span="12" v-if="shop_prompt">
+      <el-col  :span="12">
         <el-card class="box-card">
           <div>
             <h1>店铺及商品提示</h1>
@@ -70,17 +70,17 @@
           </div>
           <div class="store-index-content">
             <p class="store-rompt" @click="toGoodsManager(0)">出售中的商品：
-              <span style="color: red;">{{shop_prompt.selling_num}}</span>
+              <span style="color: red;">{{dashBoardData.market_goods}}</span>
             </p>
             <div>
-              <el-tag type="success" @click.native="toGoodsManager(1)">仓库待上架货品  {{shop_prompt.wait_shelves}}</el-tag>
-              <el-tag type="success" @click.native="toConsumerMsg">买家留言  {{shop_prompt.buyer_consulting}}</el-tag>
+              <el-tag type="success" @click.native="toGoodsManager(1)">仓库待上架货品  {{dashBoardData.pending_goods}}</el-tag>
+              <el-tag type="success" @click.native="toConsumerMsg">买家留言  {{dashBoardData.pending_member_ask}}</el-tag>
             </div>
           </div>
         </el-card>
       </el-col>
       <!--商城公告-->
-      <el-col :span="12"  v-if="shop_announcement">
+      <el-col :span="12">
         <el-card class="box-card">
           <div>
             <h1>商城公告</h1>
@@ -96,19 +96,19 @@
     </el-row>
     <el-row :gutter="20" type="flex" justify="space-around">
       <!--交易提示-->
-      <el-col  :span="12" v-if="trading_prompt">
+      <el-col  :span="12">
         <el-card class="box-card">
           <div>
             <h1>交易提示</h1>
             <h2>您需要立即处理的交易订单</h2>
           </div>
           <div class="store-index-content">
-            <p class="store-rompt" @click="toOrderList('ALL')">所有的订单：<span style="color: red;">{{trading_prompt.all_order_num}}</span></p>
+            <p class="store-rompt" @click="toOrderList('ALL')">所有的订单：<span style="color: red;">{{dashBoardData.all_orders_num}}</span></p>
             <div>
-              <el-tag type="success" @click.native="toOrderList('WAIT_PAY')">待付款  {{trading_prompt.wait_pay}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList('WAIT_SHIP')">待发货  {{trading_prompt.wait_ship}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList('WAIT_ROG')">待收货  {{trading_prompt.wait_rog}}</el-tag>
-              <el-tag type="success" @click.native="toRefundOrderList()">申请售后  {{trading_prompt.after_sales}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_PAY')">待付款  {{dashBoardData.wait_pay_order_num}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_SHIP')">待发货  {{dashBoardData.wait_ship_order_num}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_ROG')">待收货  {{dashBoardData.wait_delivery_order_num}}</el-tag>
+              <el-tag type="success" @click.native="toRefundOrderList()">申请售后  {{dashBoardData.after_sale_order_num}}</el-tag>
             </div>
           </div>
         </el-card>
@@ -147,7 +147,7 @@ export default {
       loading: false,
 
       /** 首页数据*/
-      dashBoardData: [],
+      dashBoardData: {},
 
       /** 商家信息*/
       shop_info: this.$store.getters.shopInfo,
