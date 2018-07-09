@@ -1,15 +1,23 @@
 <template>
-  <div>
+  <div class="article-container">
+    <el-tree
+      :data="articleCategoryTree"
+      :props="{children: 'children',label: 'name'}"
+      @node-click="handleNodeClick"
+      class="article-tree"
+    />
     <en-table-layout
       :tableData="tableData.data"
       :loading="loading"
+      border
     >
       <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <el-button type="primary" size="mini" icon="el-icon-circle-plus-outline" @click="handleAddArticle">添加</el-button>
+        <div class="toolbar-btns" style="line-height: 32px;font-size: 14px">
+          <span>{{ articleCategoryName || '全部'}}</span>-文章列表
         </div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent" placeholder="请输入文章名称"/>
+          <el-button type="primary" size="mini" icon="el-icon-circle-plus-outline" @click="handleAddArticle">添加</el-button>
+          <en-table-search @search="searchEvent" placeholder="请输入文章名称" style="display: inline-block;margin-left: 10px"/>
         </div>
       </div>
       <template slot="table-columns">
@@ -87,7 +95,8 @@
         params: {
           page_no: 1,
           page_size: 10,
-          name: ''
+          name: '',
+          category_id: ''
         },
         // 表格数据
         tableData: '',
@@ -105,11 +114,18 @@
         // 添加、修改文章 dialog
         dialogVisible: false,
         // 文章分类API
-        articleCategoryApi: `${process.env.ADMIN_API}/pages/article-categories/@id/children`
+        articleCategoryApi: `${process.env.ADMIN_API}/pages/article-categories/@id/children`,
+        // 文章分类树
+        articleCategoryTree: [],
+        // 被选分类名称
+        articleCategoryName: ''
       }
     },
     mounted() {
       this.GET_ArticleList()
+      API_Article.getAritcleCategoryTree().then(response => {
+        this.articleCategoryTree = response
+      })
     },
     methods: {
       /** 分页大小发生改变 */
@@ -147,6 +163,12 @@
       searchEvent(data) {
         this.params.name = data
         this.GET_ArticleList()
+      },
+      /** 选择分类 */
+      handleNodeClick(data) {
+        this.params.category_id = data.id
+        this.GET_ArticleList()
+        this.articleCategoryName = data.name
       },
       /** 添加、编辑文章 表单提交 */
       submitArticleForm() {
@@ -186,6 +208,19 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  .article-container {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+  }
+  .article-tree {
+    padding: 10px;
+    width: 300px;
+    margin-right: 45px;
+    margin-top: 44px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px 0 #ccc;
+  }
   /deep/ .el-form-item__content > .el-input {
     width: 220px;
   }
