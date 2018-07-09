@@ -2,20 +2,11 @@
   <div class="floor-layout tpl-24">
     <div class="layout-main">
       <div class="left">
-        <div class="layout-item">
-          <floor-image :url="data.blockList[0].block_value"/>
-          <floor-mask @click="onClickMask(0)"/>
-        </div>
+        <layout-item :block="data.blockList[0]" @handle-edit="handleEditBlock(0)"/>
       </div>
       <div class="right">
-        <div class="layout-item top">
-          <floor-image :url="data.blockList[1].block_value"/>
-          <floor-mask @click="onClickMask(1)"/>
-        </div>
-        <div class="layout-item">
-          <floor-image :url="data.blockList[2].block_value"/>
-          <floor-mask @click="onClickMask(2)"/>
-        </div>
+        <layout-item :block="data.blockList[1]" @handle-edit="handleEditBlock(1)"/>
+        <layout-item :block="data.blockList[2]" @handle-edit="handleEditBlock(2)"/>
       </div>
     </div>
   </div>
