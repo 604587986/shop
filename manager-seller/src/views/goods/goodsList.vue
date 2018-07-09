@@ -9,8 +9,13 @@
         <div class="toolbar-btns">
           <!--商品状态 上架 下架-->
           <div class="conditions">
-            <span>商品状态:</span>
-            <el-select v-model="marketEnable" placeholder="请选择商品状态" @change="changeGoodsStatus" clearable>
+            <span>商品状态：</span>
+            <el-select
+              class="choose-machine"
+              v-model="params.market_enable"
+              placeholder="请选择商品状态"
+              @change="changeGoodsStatus"
+              clearable>
               <el-option
                 v-for="item in goodsStatusList"
                 :key="item.value"
@@ -20,8 +25,9 @@
           </div>
           <!--商品类型-->
           <div v-if="parseInt(shopInfo.self_operated) === 1" class="conditions">
-            <span>商品类型:</span>
+            <span>商品类型：</span>
             <el-select
+              class="choose-machine"
               v-model="goods_type"
               placeholder="请选择商品类型"
               @change="changeGoodsType"
@@ -32,11 +38,11 @@
           </div>
           <!--商品分组 获取分组列表-->
           <div class="conditions">
-            <span>店铺分组:</span>
-            <en-category-picker size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
+            <span>店铺分组：</span>
+            <en-category-picker class="choose-machine" size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
           </div>
-          <el-button @click="publishGoods" type="primary"  class="conditions">发布商品</el-button>
-          <el-button @click="gotoRecycle"  type="primary" class="conditions">回收站</el-button>
+          <el-button @click="publishGoods" type="primary" >发布商品</el-button>
+          <el-button @click="gotoRecycle"  type="primary">回收站</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search @search="searchEvent" />
@@ -50,16 +56,16 @@
         </el-table-column>
         <el-table-column label="名称" min-width="160">
           <template slot-scope="scope">
-            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
           </template>
         </el-table-column>
-        <el-table-column label="价格" >
+        <el-table-column label="价格">
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column label="库存" >
+        <el-table-column label="库存">
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
         </el-table-column>
-        <el-table-column label="可用库存" >
+        <el-table-column label="可用库存">
           <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
         </el-table-column>
         <el-table-column label="创建时间" >
@@ -100,10 +106,10 @@
       <div align="center">
         <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100" :rules="rules">
           <el-form-item label="库存" prop="quantity" >
-            <el-input  v-model="goodsStockData.quantity" auto-complete="off"></el-input>
+            <el-input  v-model="goodsStockData.quantity" />
           </el-form-item>
           <el-form-item label="待发货数" >
-            <el-input v-model="goodsStockData.deliver_goods_quantity" auto-complete="off" disabled ></el-input>
+            <el-input v-model="goodsStockData.deliver_goods_quantity"  disabled />
           </el-form-item>
         </el-form>
         <en-table-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
@@ -111,7 +117,7 @@
             <el-table-column prop="goods_name" label="商品名称"/>
             <el-table-column label="库存">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.quantity" auto-complete="off" ></el-input>
+                <el-input v-model="scope.row.quantity" />
               </template>
             </el-table-column>
             <el-table-column  prop="deliver_goods_quantity" label="待发货数" />
@@ -128,7 +134,6 @@
 
 <script>
   import * as API_goods from '@/api/goods'
-  import { mapGetters } from 'vuex'
   import { CategoryPicker } from '@/components'
   export default {
     name: 'goodsList',
@@ -137,11 +142,11 @@
     },
     data() {
       const checkQuantity = (rule, value, callback) => {
-        if (!value) {
+        if (!value && value !== 0) {
           return callback(new Error('库存不能为空'))
         }
         setTimeout(() => {
-          if (!RegExp.integer.test(value) || parseInt(value) !== 0) {
+          if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
             callback(new Error('请输入大于等于0的整数'))
           } else {
             callback()
@@ -159,7 +164,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          market_enable: ''
+          ...this.$route.query
         },
 
         /** 列表数据 */
@@ -174,9 +179,6 @@
           { value: 0, label: '未出售（已下架）' },
           { value: 1, label: '出售中（已上架）' }
         ],
-
-        /** 商品状态 是否上架 0代表已下架，1代表已上架 */
-        marketEnable: -1,
 
         /** 商品类型 NORMAL 正常商品 POINT 积分商品 */
         goods_type: 'NORMAL',
@@ -208,17 +210,9 @@
       }
     },
     mounted() {
-      if (this.$route.params && !Number.isNaN(parseInt(this.$route.params.id))) {
-        this.marketEnable = this.params.market_enable = parseInt(this.$route.params.id)
-      }
       this.GET_GoodsList()
     },
     beforeRouteUpdate(to, from, next) {
-      if (!Number.isNaN(parseInt(to.params.id))) {
-        this.marketEnable = this.params.market_enable = parseInt(to.params.id)
-      } else {
-        this.marketEnable = -1
-      }
       this.GET_GoodsList()
       next()
     },
@@ -296,7 +290,7 @@
             data_total: response.data_total
           }
           this.tableData = response.data
-        }).catch(() => { this.loading = false })
+        })
       },
 
       /** 发布商品*/
@@ -311,7 +305,7 @@
 
       /** 编辑商品 isdraft 商品列表1*/
       handleEditGoods(row) {
-        const _goods_id = row.goods_id || '0'
+        const _goods_id = row.goods_id
         this.$router.push({ path: `/goods/good-publish/${_goods_id}/1` })
       },
 
@@ -381,8 +375,11 @@
 
   .inner-toolbar {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
   }
 
   /deep/ .pop-sku {
@@ -403,6 +400,7 @@
 
   .toolbar-search {
     margin-right: 10px;
+    width: 20%;
   }
 
   div.toolbar-btns {
@@ -419,7 +417,15 @@
       }
     }
     .conditions {
-      margin-right: 30px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      min-width: 24.5%;
+      .choose-machine {
+        width: 60%;
+      }
     }
   }
 

@@ -233,7 +233,6 @@
       :api="goods_api"
       :multipleApi="multipleApi"
       :categoryApi="categoryApi"
-      :headers="headers"
       :defaultData="goodsIds"
       :limit="maxsize"
       @confirm="refreshFunc"
@@ -479,11 +478,6 @@
 
         /** 商品ids */
         goodsIds: [],
-
-        /** 请求头令牌 */
-        headers: {
-          Authorization: this.$store.getters.token
-        },
 
         /** 商品选择器列表api*/
         goods_api: `${process.env.SELLER_API}/goods`,
@@ -965,10 +959,7 @@
   }
 
   /deep/ .el-form-item__content {
-    width: 80%;
-    .el-input .el-input--medium {
-      max-width: 80%;
-    }
+    width: 65%;
   }
 
   /*百度UE*/

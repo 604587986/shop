@@ -11,10 +11,15 @@
 </template>
 
 <script>
-  import * as API_goodsCategory from '@/api/goodsCategory'
+  import request from '@/utils/request'
   export default {
     name: 'EnCategoryPicker',
     props: {
+      /** api */
+      api: {
+        type: String,
+        default: `${process.env.SELLER_API}/shops/cats`
+      },
       /** 最大级数 */
       maxLevel: {
         type: Number,
@@ -30,18 +35,25 @@
       defaultVal: {
         type: Number,
         default: -1
+      },
+
+      /** 映射属性 */
+      props: {
+        type: Object,
+        default: () => {
+          return {
+            value: 'shop_cat_id',
+            label: 'shop_cat_name',
+            children: 'children',
+            disabled: 'disabled'
+          }
+        }
       }
     },
     data() {
       return {
         options: [],
         datafirst: [],
-        props: {
-          value: 'shop_cat_id',
-          label: 'shop_cat_name',
-          children: 'children',
-          disabled: 'disabled'
-        },
         /** 默认值映射的 数组 */
         defaultArr: []
       }
@@ -57,19 +69,14 @@
       this.GET_RegionData()
     },
     methods: {
-      GET_RegionData(category_ids = []) {
-        /** 此处为商品分组的调用接口 */
-        API_goodsCategory.getGoodsCategoryList(this.params).then(response => {
-          this.loading = false
-          if (!response) return
+      GET_RegionData() {
+        request({
+          url: this.api,
+          method: 'get',
+          loading: false
+        }).then(response => {
+          if (!response || !response[0]) return
           this.options = response
-          // 为分组增加等级标识
-          this.options.forEach(key => {
-            const _level = key.shop_cat_pid === 0 ? 1 : 2
-            this.$set(key, 'level', _level)
-          })
-          // 平行结构数据转换树形结构数据
-          this.options = this.transData(this.options)
           if (this.defaultVal !== -1) {
             this.findItem()
           }
@@ -98,21 +105,6 @@
             }
           })
         })
-      },
-
-      /** 平行结构转树形结构数据 */
-      transData(data) {
-        const _datafirst = this.datafirst = data.filter(key => { return key.level === 1 })
-        const _dataseconed = data.filter(key => { return key.level === 2 })
-        _datafirst.forEach(key => {
-          this.$set(key, 'children', [])
-          _dataseconed.forEach(item => {
-            if (item.shop_cat_pid === key.shop_cat_id) {
-              key.children.push(item)
-            }
-          })
-        })
-        return _datafirst
       }
     }
   }

@@ -14,8 +14,8 @@
           <template slot="prepend">¥</template>
         </el-input>
       </el-form-item>
-      <el-form-item label="赠品库存：" prop="enable_store">
-        <el-input placeholder="请输入赠品库存" v-model="giftModelForm.enable_store">
+      <el-form-item label="赠品库存：" prop="actual_store">
+        <el-input placeholder="请输入赠品库存" v-model="giftModelForm.actual_store">
           <template slot="prepend">¥</template>
         </el-input>
       </el-form-item>
@@ -81,9 +81,6 @@
             /** 实际库存 */
             actual_store: 0,
 
-            /** 可用库存 */
-            enable_store: 0,
-
             /** 创建时间 */
             create_time: ''
           }
@@ -137,9 +134,6 @@
           /** 实际库存 */
           actual_store: '',
 
-          /** 可用库存 */
-          enable_store: '',
-
           /** 创建时间 */
           create_time: ''
         },
@@ -156,7 +150,7 @@
             { required: true, message: '请输入赠品价格', trigger: 'blur' },
             { validator: checkGiftPrice, trigger: 'blur' }
           ],
-          enable_store: [
+          actual_store: [
             { required: true, message: '请输入赠品库存', trigger: 'blur' },
             { validator: checkEnableStore, trigger: 'blur' }
           ]
@@ -202,7 +196,7 @@
       },
 
       /** 上传成功之后 */
-      uploadSuccess(response, file, fileList) {
+      uploadSuccess(response) {
         this.giftModelForm.gift_img = response.url
         this.fileList.shift()
         this.fileList.push(response)

@@ -1,5 +1,6 @@
 import router from './router'
 import store from './store'
+import * as API_shop from '@/api/shop'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { MessageBox } from 'element-ui'
@@ -13,7 +14,15 @@ router.beforeEach((to, from, next) => {
     window.location.href = `${domain.buyer_pc}/login?forward=${window.location.href}`
   } else {
     if (JSON.parse(user).have_shop) {
-      next()
+      /** 检测是否存在店铺信息 不存在则请求并且存储 */
+      if (!store.getters.shopInfo) {
+        API_shop.getShopData({}).then(response => {
+          store.dispatch('SetShop', response)
+          next()
+        })
+      } else {
+        next()
+      }
     } else {
       MessageBox.alert('您还没有店铺，快去申请开店吧！', '权限错误', {
         type: 'error',

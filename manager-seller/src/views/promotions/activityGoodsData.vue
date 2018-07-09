@@ -65,10 +65,10 @@
         },
 
         /** 列表数据 */
-        tableData: null,
+        tableData: [],
 
         /** 列表分页数据 */
-        pageData: null,
+        pageData: [],
 
         /** 限时抢购活动ID */
         activityID: ''

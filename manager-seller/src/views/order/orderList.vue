@@ -7,7 +7,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-select v-model="orderStatus" placeholder="请选择订单状态" @change="changeOrderStatus" clearable>
+          <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus" clearable>
             <el-option
               v-for="item in orderStatusList"
               :key="item.value"
@@ -149,7 +149,7 @@
         params: {
           page_no: 1,
           page_size: 10,
-          order_status: ''
+          ...this.$route.query
         },
 
         /** 列表数据 */
@@ -160,9 +160,6 @@
 
         /** 高级搜索数据 */
         advancedForm: {},
-
-        /** 订单状态 */
-        orderStatus: '',
 
         /** 订单状态 列表*/
         orderStatusList: [
@@ -177,18 +174,10 @@
       }
     },
     mounted() {
-      if (this.$route.params && !Number.isNaN(parseInt(this.$route.params.id))) {
-        this.orderStatus = this.params.order_status = parseInt(this.$route.params.id)
-      }
       this.GET_OrderList()
       window.onresize = this.countTableHeight
     },
     beforeRouteUpdate(to, from, next) {
-      if (!Number.isNaN(parseInt(to.params.id))) {
-        this.orderStatus = this.params.order_status = parseInt(to.params.id)
-      } else {
-        this.orderStatus = ''
-      }
       this.GET_OrderList()
       next()
     },

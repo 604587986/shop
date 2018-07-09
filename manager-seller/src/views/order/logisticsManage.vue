@@ -55,7 +55,7 @@
           :rules="rules" ref="mouldForm"
           label-width="160px"
           class="demo-ruleForm"
-          style="width: 26%;margin-left: 3%;">
+          style="width: 33%;margin-left: 3%;">
           <el-form-item label="模板名称:" prop="name">
             <el-input v-model="mouldForm.name"></el-input>
           </el-form-item>

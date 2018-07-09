@@ -8,7 +8,7 @@
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <div class="conditions">
-            <span>活动状态:</span>
+            <span>活动状态：</span>
             <el-select v-model="currentGroupBuyStatus" placeholder="请选择" @change="groupBuyStatusChange" clearable>
             <el-option
                 v-for="item in groupBuyStatus"

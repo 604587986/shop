@@ -1,17 +1,16 @@
 import request from '@/utils/request'
 
 /**
- * 获取商品分组列表
+ * 获取店铺分组列表
  * @param params
  * @returns {Promise<any>}
  */
-export function getGoodsCategoryList(params) {
+export function getGoodsCategoryList() {
   return new Promise((resolve, reject) => {
     request({
       url: '/shops/cats',
       method: 'get',
-      loading: false,
-      params
+      loading: false
     }).then(response => {
       resolve(response)
     })
