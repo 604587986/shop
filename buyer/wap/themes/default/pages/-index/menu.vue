@@ -23,6 +23,7 @@
     position: relative;
     height: 160px;
     margin-top: -10px;
+    margin-bottom: 10px;
     z-index: 99;
     padding: 5px 10px;
     border-top-left-radius: 10px;
