@@ -12,7 +12,6 @@
       <div class="checkout-header">
         <div class="w">
           <div class="logo"><en-logo/></div>
-          <en-cart-step :step="2"/>
         </div>
       </div>
       <div v-if="params" class="ckt-control">

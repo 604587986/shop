@@ -102,7 +102,6 @@ export default {
     staticPage: 'Static Page',
     goodsIndex: 'Goods Index',
     trustLogin: 'Trust Login',
-    cacheManage: 'Cache Manage',
 
     messageSettings: 'Message Settings',
     shopMessage: 'Shop Message',

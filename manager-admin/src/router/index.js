@@ -347,8 +347,7 @@ export const asyncRouterMap = [
           { path: 'storage-solution', component: () => import('@/views/setting/shop-settings/storageSolution'), name: 'storageSolutionSettings', meta: { title: 'storageSolution' }},
           { path: 'static-page', component: () => import('@/views/setting/shop-settings/staticPage'), name: 'staticPageSettings', meta: { title: 'staticPage' }},
           { path: 'goods-index', component: () => import('@/views/setting/shop-settings/goodsIndex'), name: 'goodsIndexSettings', meta: { title: 'goodsIndex' }},
-          { path: 'trust-login', component: () => import('@/views/setting/shop-settings/trustLogin'), name: 'trustLoginSettings', meta: { title: 'trustLogin' }},
-          { path: 'cache-manage', component: () => import('@/views/setting/shop-settings/cacheManage'), name: 'cacheManageSettings', meta: { title: 'cacheManage' }}
+          { path: 'trust-login', component: () => import('@/views/setting/shop-settings/trustLogin'), name: 'trustLoginSettings', meta: { title: 'trustLogin' }}
         ]
       },
       {

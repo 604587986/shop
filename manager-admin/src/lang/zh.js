@@ -101,7 +101,6 @@ export default {
     staticPage: '静态页',
     goodsIndex: '商品索引',
     trustLogin: '信任登录',
-    cacheManage: '缓存管理',
 
     messageSettings: '消息设置',
     shopMessage: '店铺消息',

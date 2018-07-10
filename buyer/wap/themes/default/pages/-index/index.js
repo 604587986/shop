@@ -4,8 +4,10 @@
 
 import IndexBanner from './banner'
 import IndexMenu from './menu'
+import IndexSearchBar from './SearchBar'
 
 export {
   IndexBanner,
-  IndexMenu
+  IndexMenu,
+  IndexSearchBar
 }

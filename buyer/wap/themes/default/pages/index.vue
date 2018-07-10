@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <index-search-bar/>
     <index-banner :data="banner"/>
     <index-menu :data="menus"/>
     <div v-if="floorList" class="floor-container">
