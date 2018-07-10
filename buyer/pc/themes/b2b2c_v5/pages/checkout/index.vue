@@ -21,7 +21,7 @@
           <!--收货人信息 start-->
           <checkout-address
             :address-id="params.address_id"
-            @change="(id) => { params.address_id = id }"
+            @change="handleAddressChanged"
           />
           <!--收货人信息 end-->
 
@@ -82,14 +82,9 @@
         // 订单总金额
         orderTotal: {},
         // 购物清单
-        inventoryList: ''
-      }
-    },
-    computed: {
-      // 当前已选的地址
-      selectedAddress() {
-        const _sd = this.$store.getters.address.filter(item => item.addr_id === this.params.address_id)
-        return _sd ? _sd[0] : ''
+        inventoryList: '',
+        // 已选地址
+        selectedAddress: ''
       }
     },
     mounted() {
@@ -104,6 +99,11 @@
       })
     },
     methods: {
+      /** 收货地址发生改变 */
+      handleAddressChanged(address) {
+        this.selectedAddress = address
+        this.params.address_id = address.addr_id
+      },
       /** 格式化地址信息 */
       formatterAddress(address) {
         return `${address.province} ${address.city} ${address.county} ${address.town} ${address.addr}`

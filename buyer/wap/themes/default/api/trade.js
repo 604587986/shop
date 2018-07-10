@@ -13,6 +13,7 @@ export function getCarts(show_type = 'all') {
   return request({
     url: 'trade/carts',
     method: Method.GET,
+    needToken: true,
     loading: false,
     params: { show_type }
   })
@@ -28,6 +29,7 @@ export function addToCart(sku_id, num = 1, activity_id) {
   return request({
     url: 'trade/carts',
     method: Method.POST,
+    needToken: true,
     data: {
       sku_id,
       num,
@@ -45,6 +47,7 @@ export function updateSkuNum(sku_id, num = 1) {
   return request({
     url: `trade/carts/sku/${sku_id}`,
     method: Method.POST,
+    needToken: true,
     data: { num }
   })
 }
@@ -58,6 +61,7 @@ export function updateSkuChecked(sku_id, checked = true) {
   return request({
     url: `trade/carts/sku/${sku_id}`,
     method: Method.POST,
+    needToken: true,
     data: { checked }
   })
 }
@@ -69,7 +73,8 @@ export function updateSkuChecked(sku_id, checked = true) {
 export function deleteSkuItem(sku_ids) {
   return request({
     url: `trade/carts/${sku_ids}/sku`,
-    method: Method.DELETE
+    method: Method.DELETE,
+    needToken: true
   })
 }
 
@@ -79,7 +84,8 @@ export function deleteSkuItem(sku_ids) {
 export function cleanCarts() {
   return request({
     url: 'trade/carts',
-    method: Method.DELETE
+    method: Method.DELETE,
+    needToken: true
   })
 }
 
@@ -91,6 +97,7 @@ export function checkAll(checked) {
   return request({
     url: 'trade/carts/checked',
     method: Method.POST,
+    needToken: true,
     params: { checked }
   })
 }
@@ -104,6 +111,7 @@ export function checkShop(shop_id, checked) {
   return request({
     url: `trade/carts/seller/${shop_id}`,
     method: Method.POST,
+    needToken: true,
     params: { checked }
   })
 }
@@ -115,6 +123,7 @@ export function getCartTotal() {
   return request({
     url: 'trade/carts/price',
     method: Method.GET,
+    needToken: true,
     loading: false
   })
 }

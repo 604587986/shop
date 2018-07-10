@@ -9,9 +9,6 @@ export default {
     categoryParams: 'Category Params',
     brandList: 'Brand List',
     specList: 'Spec List',
-    tagManage: 'Manage Tag',
-    tagList: 'Tag List',
-    tagGoodsSet: 'Set Tag Goods',
     goodsAudit: 'Goods Audit',
 
     order: 'Manage Order',
@@ -105,7 +102,6 @@ export default {
     staticPage: 'Static Page',
     goodsIndex: 'Goods Index',
     trustLogin: 'Trust Login',
-    cacheManage: 'Cache Manage',
 
     messageSettings: 'Message Settings',
     shopMessage: 'Shop Message',

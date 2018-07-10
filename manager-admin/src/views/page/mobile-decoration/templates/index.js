@@ -2,8 +2,6 @@
  * Created by andste.cc@gmail.com on 2018/5/18.
  */
 
-import './compoents'
-
 import common from './common'
 import customs from './customs'
 

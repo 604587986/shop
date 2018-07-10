@@ -6,7 +6,7 @@ module.exports = {
     title: 'Javashop多店铺示例商城',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no' },
       { hid: 'keywords', name: 'keywords', content: '最好的Java网店系统,Java多用户商城,Java商城定制开发' },
       { hid: 'description', name: 'description', content: 'Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。' },
       { name: 'renderer', content: 'webkit' },
@@ -50,8 +50,13 @@ module.exports = {
           {
             "libraryName": "element-ui",
             "styleLibraryName": "theme-chalk"
-          }
-        ]
+          },
+        "import",
+          {
+            "libraryName": "vant",
+            "libraryDirectory": "es",
+            "style": true
+          }]
       ]
     },
     plugins: [],
@@ -61,7 +66,9 @@ module.exports = {
     '~assets/styles/normalize.css',
     '~assets/styles/base.css',
     '~assets/styles/page-transletion.scss',
-    'swiper/dist/css/swiper.css'
+    'swiper/dist/css/swiper.css',
+    'vant/lib/vant-css/index.css',
+    'vant/lib/vant-css/icon-local.css'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
@@ -70,7 +77,7 @@ module.exports = {
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
-    { src: '~plugins/address-selecter', ssr: false },
+    { src: '~plugins/vue-vant', ssr: true },
     { src: '~plugins/vue-swiper', ssr: false }
   ],
   router: {

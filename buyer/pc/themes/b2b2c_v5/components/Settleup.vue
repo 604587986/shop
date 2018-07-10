@@ -61,7 +61,7 @@
       }
     },
     mounted() {
-      if (!this.cartTotal) {
+      if (!this.cartTotal && this.refreshToken) {
         this.$store.dispatch('cart/getCartDataAction')
       }
     },
@@ -69,7 +69,8 @@
       ...mapGetters({
         skuList: 'cart/skuList',
         allCount: 'cart/allCount',
-        cartTotal: 'cart/cartTotal'
+        cartTotal: 'cart/cartTotal',
+        refreshToken: 'refreshToken'
       })
     },
     methods: {

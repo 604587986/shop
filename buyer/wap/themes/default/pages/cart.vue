@@ -3,7 +3,6 @@
     <div class="cart-header">
       <div class="w">
         <div class="logo"><en-logo/></div>
-        <en-cart-step :step="1"/>
       </div>
     </div>
     <div class="cart-content" id="cart-content">
@@ -132,6 +131,7 @@
   export default {
     name: 'cart',
     layout: 'full',
+    middleware: 'auth-user',
     data() {
       return {
         /** 结算栏相对顶部高度 */

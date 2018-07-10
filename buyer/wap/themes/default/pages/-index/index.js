@@ -3,9 +3,11 @@
  */
 
 import IndexBanner from './banner'
-import IndexCard from './card'
+import IndexMenu from './menu'
+import IndexSearchBar from './SearchBar'
 
 export {
   IndexBanner,
-  IndexCard
+  IndexMenu,
+  IndexSearchBar
 }

@@ -9,9 +9,6 @@ export default {
     categoryParams: '分类参数',
     brandList: '品牌列表',
     specList: '规格列表',
-    tagManage: '标签管理',
-    tagList: '标签列表',
-    tagGoodsSet: '标签商品设置',
     goodsAudit: '商品审核',
 
     order: '订单管理',
@@ -104,7 +101,6 @@ export default {
     staticPage: '静态页',
     goodsIndex: '商品索引',
     trustLogin: '信任登录',
-    cacheManage: '缓存管理',
 
     messageSettings: '消息设置',
     shopMessage: '店铺消息',

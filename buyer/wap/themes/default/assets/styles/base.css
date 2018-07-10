@@ -8,10 +8,6 @@ body {
   display: block;
 }
 
-body {
-  font-family: "Microsoft YaHei","Microsoft JhengHei",SimSun,verdana,Tahoma,arial;
-}
-
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
 blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn,
 em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup,
@@ -62,10 +58,6 @@ li {
   list-style: none;
 }
 
-a, p, span, div, th, td {
-  word-break: break-all;
-}
-
 img {
   border: 0;
   vertical-align:bottom
@@ -75,13 +67,27 @@ img {
   outline: 0;
 }
 
-/* 公共样式
-   ========================================================================== */
-.w {
-  margin: auto;
-  width: 1210px;
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select:focus,
+textarea {
+  font-size: 16px;
 }
 
+/* 公共样式
+   ========================================================================== */
 .clear, .clr {
   display: block;
   overflow: hidden;
@@ -122,29 +128,6 @@ html[xmlns] .clearfix {
 
 .fr {
   float: right;
-}
-
-
-/** layer skin */
-.layer-skin-custom-msg {
-  border: 0 !important;
-  -webkit-box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
-  -moz-box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
-  box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
-}
-
-.layui-layer-page .layui-layer-content {
-  overflow: visible;
-}
-
-/** dorpdown-layer */
-.dorpdown-layer {
-  display: none;
-  position: absolute;
-  border: 1px solid #d2d2d2;
-  background-color: #fff;
-  top: 30px;
-  right: 0;
 }
 
 /** input */

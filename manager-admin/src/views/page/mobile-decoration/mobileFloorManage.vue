@@ -19,7 +19,7 @@
                 :is="templates[item.tpl_id]"
                 :data="JSON.parse(JSON.stringify(item))"
                 is-edit
-                @handle-edit="(target, targetIndex) => handleEditFloor(index, target, targetIndex)"
+                @edit-block="(target, targetIndex) => handleEditFloor(index, target, targetIndex)"
               ></component>
               <div class="panel-handle">
                 <span class="icon-handle handle-move"><svg-icon icon-class="list-move"/></span>
