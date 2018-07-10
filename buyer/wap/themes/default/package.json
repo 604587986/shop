@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "axios": "0.18.0",
+    "better-scroll": "^1.12.4",
     "element-ui": "2.4.0",
     "js-base64": "2.4.3",
     "js-cookie": "2.2.0",
