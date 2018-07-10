@@ -32,6 +32,7 @@ const user = {
       Storage.removeItem('user')
       Storage.removeItem('accessToken')
       Storage.removeItem('refreshToken')
+      Storage.removeItem('shopInfo')
     },
     /**
      * 设置访问令牌
