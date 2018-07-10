@@ -92,7 +92,7 @@
         <div class="base-info-item">
           <h4>商品信息</h4>
           <div>
-            <el-form-item label="商品名称：" prop="goods_name">
+            <el-form-item label="商品名称：" prop="goods_name" class="goods-name-width">
               <el-input v-model="baseInfoForm.goods_name" maxlength="60" minlength="3" placeholder="3-60个字符"></el-input>
             </el-form-item>
             <el-form-item label="商品编号：" prop="sn">
@@ -1363,7 +1363,11 @@
     }
 
     .el-form-item {
-      width: 22%;
+      width: 30%;
+      min-width: 300px;
+    }
+    .goods-name-width {
+      width: 50%;
       min-width: 300px;
     }
     .el-form-item__content {
@@ -1452,6 +1456,7 @@
     bottom: 0px;
     left: 10%;
     text-align: center;
+    z-index: 9999;
   }
 
   /*图片上传组件第一张图设置封面*/

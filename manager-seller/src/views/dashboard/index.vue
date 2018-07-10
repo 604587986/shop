@@ -88,8 +88,8 @@
           </div>
           <p class="store-bulletin" v-for="item in shop_announcement">》
             <a target="_blank"
-               :href="`/javashop/help-${item.article_id}.html`"
-               :title="item.content">{{item.title}}</a>
+               :href="`${HTTP_URL}/${item.article_id}`"
+               :title="item.content">{{item.article_name}}</a>
           </p>
         </el-card>
       </el-col>
@@ -120,7 +120,9 @@
             <h1>平台联系方式</h1>
             <h2>可以致电平台联系电话或将建议、问题提交到平台邮箱中</h2>
           </div>
-          <div> </div>
+          <ul class="platform-concate">
+            <li v-for="item in concat" v-if="concat && item">{{ item.name }}: {{ item.context }}</li>
+          </ul>
         </el-card>
       </el-col>
     </el-row>
@@ -133,7 +135,14 @@ import * as API_shop from '@/api/shop'
 export default {
   name: 'dashboard',
   created() {
+    /** 获取首页统计信息 */
     this.GET_DashBoard()
+
+    /** 获取首页商城公告 */
+    this.GET_Notice()
+
+    /** 获取首页联系方式 */
+    this.GET_Concate()
   },
   mounted() {
     window.onresize = this.countTableHeight
@@ -143,23 +152,20 @@ export default {
       /** 图片服务器地址 */
       BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=shop`,
 
+      /** 域名配置 */
+      HTTP_URL: `${process.env.HTTP_URL}/help`,
+
       /** 加载中*/
       loading: false,
 
-      /** 首页数据*/
-      dashBoardData: {},
-
-      /** 商家信息*/
+      /** 商家基本信息 */
       shop_info: this.$store.getters.shopInfo,
 
-      /** 店铺 商品提示*/
-      shop_prompt: null,
+      /** 首页统计数据*/
+      dashBoardData: {},
 
       /** 商城公告*/
       shop_announcement: [],
-
-      /** 交易订单提示*/
-      trading_prompt: null,
 
       /** 平台联系方式*/
       concat: null,
@@ -177,16 +183,31 @@ export default {
       this.tableHeight = (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
     },
 
-    /** 获得首页信息*/
+    /** 获得首页统计信息*/
     GET_DashBoard() {
       this.loading = true
       API_Dashboard.getDashboardData().then(response => {
         this.loading = false
         this.dashBoardData = response
-        this.shop_prompt = response.shop_prompt
-        this.shop_announcement = response.shop_announcement
-        this.trading_prompt = response.trading_prompt
-        this.concat = response.concat
+      })
+    },
+
+    /** 获取首页 商城公告 */
+    GET_Notice() {
+      this.loading = true
+      const category_type = 'NOTICE'
+      API_Dashboard.getNotice(category_type, {}).then((response) => {
+        this.loading = false
+        this.shop_announcement = response
+      })
+    },
+
+    /** 获取首页 平台联系方式 */
+    GET_Concate() {
+      this.loading = true
+      API_Dashboard.getConcate({ position: 'CONTACT_INFORMATION' }).then((response) => {
+        this.loading = false
+        this.concat = response
       })
     },
 
@@ -431,6 +452,17 @@ export default {
     font: 12px/16px "microsoft yahei";
     &:hover a {
       color: #337ab7;
+    }
+  }
+
+  /*平台联系方式*/
+  .platform-concate {
+    padding: 0;
+    li {
+      list-style: none;
+      margin: auto 8px;
+      color: #aaa;
+      font: 12px/16px "microsoft yahei";
     }
   }
 </style>
