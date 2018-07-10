@@ -386,16 +386,24 @@
           if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
             this.orderDetail.order_status === 'PAY_NO' || (this.orderDetail.order_status === 'PAID_OFF' && this.orderDetail.payment_type === 'ONLINE')) {
             this.isShowEditShipName = true
+          } else {
+            this.isShowEditShipName = false
           }
 
-          // 是否可以调整价格  （在线支付）未付款时皆可调整价格 （订单状态 新订单 已确认 未付款)
-          if (this.orderDetail.pay_status === 'PAY_NO') {
+          // 是否可以调整价格  （在线支付）未付款时皆可调整价格 （订单状态 新订单 已确认 未付款)  货到付款（新订单 已确认 未付款）
+          if ((this.orderDetail.payment_type === 'ONLINE' && this.orderDetail.pay_status === 'PAY_NO') ||
+            (this.orderDetail.payment_type === 'COD' && (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
+              this.orderDetail.order_status === 'PAY_NO'))) {
             this.isShowEditOrderPrice = true
+          } else {
+            this.isShowEditOrderPrice = false
           }
 
           // 是否可以确认收款 （货到付款）已收货状态
           if (this.orderDetail.payment_type === 'COD' && this.orderDetail.order_status === 'ROG') {
             this.isShowConfirmReceive = true
+          } else {
+            this.isShowConfirmReceive = false
           }
         })
       },
