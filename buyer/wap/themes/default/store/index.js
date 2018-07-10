@@ -110,11 +110,5 @@ export const getters = {
    * @param state
    * @returns {*}
    */
-  user: state => state.user.user,
-  /**
-   * 获取收货地址列表
-   * @param state
-   * @returns {*}
-   */
-  address: state => state.user.address
+  user: state => state.user.user
 }

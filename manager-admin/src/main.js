@@ -6,6 +6,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import UIComponents from '~/ui-components'
 import EnComponents from '@/components'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 
 import '@/styles/index.scss' // global css
 import App from './App'
@@ -30,6 +32,7 @@ Vue.use(Element, {
 
 Vue.use(UIComponents)
 Vue.use(EnComponents)
+Vue.use(VueAwesomeSwiper)
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios

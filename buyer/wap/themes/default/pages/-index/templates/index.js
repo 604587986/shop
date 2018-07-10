@@ -1,8 +1,5 @@
 /**
  * Created by andste.cc@gmail.com on 2018/5/18.
- * PC端首页楼层导出
- * common  已有的模板
- * customs 按照开发文档自定义的模板
  */
 
 import common from './common'

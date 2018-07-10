@@ -51,6 +51,7 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'goods-list', component: () => import('@/views/goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
+      { path: 'goods-audit', component: () => import('@/views/goods/goodsAudit'), name: 'goodsAudit', meta: { title: 'goodsAudit' }},
       {
         path: '/goods/goods-setting',
         component: () => import('@/views/goods/goods-setting/index'),
@@ -62,18 +63,6 @@ export const asyncRouterMap = [
           { path: 'category-params/:id', component: () => import('@/views/goods/goods-setting/categoryParams'), name: 'categoryParams', hidden: true, meta: { title: 'categoryParams', noCache: true }},
           { path: 'brand-list', component: () => import('@/views/goods/goods-setting/brandList'), name: 'brandList', meta: { title: 'brandList' }},
           { path: 'spec-list', component: () => import('@/views/goods/goods-setting/specList'), name: 'specList', meta: { title: 'specList' }}
-        ]
-      },
-      { path: 'goods-audit', component: () => import('@/views/goods/goodsAudit'), name: 'goodsAudit', meta: { title: 'goodsAudit' }},
-      {
-        path: '/goods/tag-manage',
-        component: () => import('@/views/goods/tag-manage/index'),
-        redirect: '/goods/tag-manage/tag-list',
-        name: 'tagManage',
-        meta: { title: 'tagManage' },
-        children: [
-          { path: 'tag-list', component: () => import('@/views/goods/tag-manage/tagList'), name: 'taglist', meta: { title: 'tagList' }},
-          { path: 'tag-goods-set', component: () => import('@/views/goods/tag-manage/tagGoodsSet'), name: 'tagGoodsSet', meta: { title: 'tagGoodsSet' }}
         ]
       }
     ]

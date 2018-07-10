@@ -182,6 +182,7 @@
           }
         }
         this.login({ login_type, form }).then(() => {
+          this.getCartData()
           if (forward && /^http/.test(forward)) {
             window.location.href = forward
           } else {
@@ -191,7 +192,8 @@
       },
       getConnectUrl: API_Connect.getConnectUrl,
       ...mapActions({
-        login: 'user/loginAction'
+        login: 'user/loginAction',
+        getCartData: 'cart/getCartDataAction'
       })
     }
   }

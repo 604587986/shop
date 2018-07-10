@@ -15,7 +15,7 @@
         show-icon>
       </el-alert>
       <el-table
-        :data="address"
+        :data="addressList"
         :header-cell-style="{textAlign: 'center'}"
         cell-class-name="address-cell"
         style="width: 100%"

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import RegionPicker from './RegionPicker'
 import Logo from './Logo'
 import CartStep from './CartStep'
-import Category from './Category'
 import CountDownBtn from './CountDownBtn'
 import Face from './Face'
 import Footer from './Footer'
@@ -14,12 +13,13 @@ import PicZoom from './PicZoom'
 import Search from './Search'
 import Settleup from './Settleup'
 import Shortcut from './Shortcut'
+import TabBar from './TabBar'
+import NavBar from './NavBar'
 
 export {
   RegionPicker,
   Logo,
   CartStep,
-  Category,
   CountDownBtn,
   Footer,
   Face,
@@ -30,5 +30,7 @@ export {
   PicZoom,
   Search,
   Settleup,
-  Shortcut
+  Shortcut,
+  TabBar,
+  NavBar
 }

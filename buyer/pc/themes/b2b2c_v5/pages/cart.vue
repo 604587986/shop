@@ -132,6 +132,7 @@
   export default {
     name: 'cart',
     layout: 'full',
+    middleware: 'auth-user',
     data() {
       return {
         /** 结算栏相对顶部高度 */

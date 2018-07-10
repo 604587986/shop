@@ -50,8 +50,13 @@ module.exports = {
           {
             "libraryName": "element-ui",
             "styleLibraryName": "theme-chalk"
-          }
-        ]
+          },
+        "import",
+          {
+            "libraryName": "vant",
+            "libraryDirectory": "es",
+            "style": true
+          }]
       ]
     },
     plugins: [],
@@ -61,7 +66,8 @@ module.exports = {
     '~assets/styles/normalize.css',
     '~assets/styles/base.css',
     '~assets/styles/page-transletion.scss',
-    'swiper/dist/css/swiper.css'
+    'swiper/dist/css/swiper.css',
+    'vant/lib/vant-css/index.css'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
@@ -70,6 +76,7 @@ module.exports = {
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
+    { src: '~plugins/vue-vant', ssr: true },
     { src: '~plugins/address-selecter', ssr: false },
     { src: '~plugins/vue-swiper', ssr: false }
   ],

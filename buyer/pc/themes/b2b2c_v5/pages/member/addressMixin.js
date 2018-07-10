@@ -4,14 +4,16 @@
  * 个人中心和结算页复用
  */
 
-import { mapGetters, mapActions } from 'vuex'
+import * as API_Address from '@/api/address'
 import { RegExp } from '~/ui-utils'
 export default {
   data() {
     return {
-      /** 添加、编辑地址 表单 */
+      // 地址列表
+      addressList: [],
+      // 添加、编辑地址 表单
       addressForm: {},
-      /** 添加、编辑地址 表单规则 */
+      // 添加、编辑地址 表单规则
       addressRules: {
         name: [
           this.MixinRequired('请输入收货人姓名！'),
@@ -33,15 +35,12 @@ export default {
           { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
         ]
       },
-      /** 编辑地址时，暂存操作的地址 */
+      // 编辑地址时，暂存操作的地址
       regions: ''
     }
   },
-  computed: {
-    ...mapGetters(['address'])
-  },
   mounted() {
-    this.address.length === 0 && this.getAddress()
+    this.GET_AddressList()
   },
   methods: {
     areaFormatter(row) {
@@ -74,16 +73,17 @@ export default {
     /** 删除地址 */
     handleDeleteAddress(row) {
       this.$confirm('确定要删除这个地址吗？', () => {
-        this.deleteAddress(row.addr_id).then(() => {
+        API_Address.deleteAddress(row.addr_id).then(() => {
           this.$message.success('删除成功！')
-          this.getAddress()
+          this.GET_AddressList()
         })
       })
     },
     /** 设置默认地址 */
     handleSetDefaultAddress(item) {
-      this.setDefaultAddress(item.addr_id).then(() => {
+      API_Address.setDefaultAddress(item.addr_id).then(() => {
         this.$message.success('设置成功！')
+        this.GET_AddressList()
       })
     },
     /** 提交地址表单 */
@@ -92,14 +92,16 @@ export default {
         if (valid) {
           const { addr_id } = this.addressForm
           if (!addr_id) {
-            this.addAddress(this.addressForm).then(() => {
+            API_Address.addAddress(this.addressForm).then(() => {
               this.$message.success('保存成功！')
               this.$layer.close(index)
+              this.GET_AddressList()
             })
           } else {
-            this.editAddress(this.addressForm).then(() => {
+            API_Address.editAddress(addr_id, this.addressForm).then(response => {
               this.$message.success('保存成功！')
               this.$layer.close(index)
+              this.GET_AddressList()
             })
           }
         } else {
@@ -121,12 +123,11 @@ export default {
         ...params
       })
     },
-    ...mapActions({
-      getAddress: 'user/getAddressAction',
-      deleteAddress: 'user/deleteAddressAction',
-      addAddress: 'user/addAddressAction',
-      editAddress: 'user/editAddressAction',
-      setDefaultAddress: 'user/setDefaultAddressAction'
-    })
+    /** 获取地址列表 */
+    GET_AddressList() {
+      API_Address.getAddressList().then(response => {
+        this.addressList = response
+      })
+    }
   }
 }

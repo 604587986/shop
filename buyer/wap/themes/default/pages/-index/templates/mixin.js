@@ -2,9 +2,6 @@
  * Created by andste.cc@gmail.com on 2018/5/18.
  */
 
-// import { swiper, swiperSlide } from 'vue-awesome-swiper'
-// import 'swiper/dist/css/swiper.css'
-
 /** mixin */
 export default {
   props: {
@@ -21,9 +18,9 @@ export default {
   },
   components: {
     'layout-item': {
-      props: ['block'],
+      props: ['block', 'isEdit', 'blockHref'],
       template: `<div class="layout-item">
-                   <template v-if="$parent.isEdit">
+                   <template v-if="isEdit || $parent.isEdit">
                      <div class="mask-floor" @click="$emit('handle-edit')">
                        <div class="mask-bg-floor">
                          <button type="button" class="mask-btn-floor">
@@ -32,56 +29,36 @@ export default {
                        </div>
                      </div>
                      <slot :block="block"></slot>
-                     <img v-if="block.block_value" :src="block.block_value">
-                     <div v-else-if="$parent.isEdit" class="no-image"></div>
+                     <template v-if="block.block_type === 'IMAGE'">
+                       <img v-if="block.block_value" :src="block.block_value">
+                       <div v-else-if="isEdit || $parent.isEdit" class="no-image"></div>
+                     </template>
                    </template>
-                   <a v-else :href="$parent.blockHref(block)">
+                   <a v-else :href="blockHref || $parent.blockHref(block)">
                      <slot :block="block"></slot>
-                     <img :src="block.block_value">
+                     <img v-if="block.block_type === 'IMAGE'" :src="block.block_value">
                    </a>
                  </div>`
     }
   },
   methods: {
-    /** 获取颜色相关信息 */
-    colors(columnIndex = 0) {
-      const _colors = this.data.columnList[columnIndex].titleColors
-      return {
-        title: `background-color: ${_colors[0]}; background-image: linear-gradient(90deg, ${_colors.join(',')});`,
-        color: (colorIndex = 0) => `color: ${_colors[colorIndex]}`
-      }
-    },
     /** 获取区块链接 */
     blockHref(block) {
+      if (block.block_type === 'GOODS') {
+        if (!block.block_value) return '#'
+        return `/goods/${block.block_value.goods_id}`
+      }
+      if (!block || !block.block_opt) return '#'
       const { opt_type, opt_value } = block.block_opt
+      // Andste_TODO 2018/7/9: 未适配完成
       switch (opt_type) {
-        case 'GOODS': return `/goods/${opt_value}`
         case 'KEYWORD': return `/goods?keyword=${opt_value}`
         default: return '/'
       }
     },
-    /** 构建空的block */
-    emptyBlock(num = 3, type) {
-      return [...new Array(num)].map(() => ({
-        block_type: type,
-        block_value: '',
-        block_opt: {
-          opt_type: 'NONE',
-          opt_value: ''
-        }
-      }))
-    },
     /** 编辑区块 */
-    handleEditBlock(columnIndex, blockIndex) {
-      this.$emit('edit-block', JSON.parse(JSON.stringify(this.data)), columnIndex, blockIndex)
-    },
-    /** 编辑标题 */
-    handleEditTitle(columnIndex) {
-      this.$emit('edit-title', JSON.parse(JSON.stringify(this.data)), columnIndex)
-    },
-    /** 编辑标签 */
-    handleEditTags(columnIndex) {
-      this.$emit('edit-tags', JSON.parse(JSON.stringify(this.data)), columnIndex)
+    handleEditBlock(blockIndex) {
+      this.$emit('edit-block', JSON.parse(JSON.stringify(this.data)), blockIndex)
     }
   }
 }
