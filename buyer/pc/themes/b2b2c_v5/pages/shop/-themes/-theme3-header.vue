@@ -5,7 +5,7 @@
       <div class="shop-header-right">
         <div class="shop-nav">
           <div class="item category">
-            // Andste_TODO 2018/7/10: 分类未适配
+            <!--// Andste_TODO 2018/7/10: 分类未适配-->
             <h3>全部分类</h3>
           </div>
           <a href="#" class="item">店铺首页</a>

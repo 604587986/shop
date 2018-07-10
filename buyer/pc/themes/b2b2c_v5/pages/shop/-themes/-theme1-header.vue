@@ -22,7 +22,7 @@
     <div class="shop-nav">
       <div class="w">
         <div class="item category">
-          // Andste_TODO 2018/7/10: 分类未适配
+          <!--// Andste_TODO 2018/7/10: 分类未适配-->
           <h1>全部分类</h1>
         </div>
         <a href="#" class="item">店铺首页</a>
