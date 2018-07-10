@@ -67,7 +67,8 @@ module.exports = {
     '~assets/styles/base.css',
     '~assets/styles/page-transletion.scss',
     'swiper/dist/css/swiper.css',
-    'vant/lib/vant-css/index.css'
+    'vant/lib/vant-css/index.css',
+    'vant/lib/vant-css/icon-local.css'
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
