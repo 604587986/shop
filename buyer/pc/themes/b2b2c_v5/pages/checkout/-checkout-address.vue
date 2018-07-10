@@ -7,12 +7,10 @@
     </div>
 
     <!--地址列表-->
-    <div class="center-ckt-info"
-         :style="{height: (expanded ? address.length * 42 : 114) + 'px'}"
-    >
+    <div class="center-ckt-info" :style="{height: (expanded ? addressList.length * 42 : 114) + 'px'}">
       <ul id="address_list">
         <li
-          v-for="item in addressList"
+          v-for="item in ckAddressList"
           :key="item.addr_id"
           :class="['li-ckt-info', addressId === item.addr_id && 'selected']"
         >
@@ -34,7 +32,7 @@
     </div>
     <!--地址列表 end-->
     <div
-      v-if="address.length > 3"
+      v-if="addressList.length > 3"
       :class="['collapse-ckt-info', expanded && 'more']"
       @click="() => { expanded = !expanded }"
     >
@@ -74,10 +72,7 @@
    */
   import Vue from 'vue'
   import { Checkbox, Form, FormItem } from 'element-ui'
-  Vue.use(Checkbox)
-  Vue.use(Form)
-  Vue.use(FormItem)
-  import { mapGetters, mapActions } from 'vuex'
+  Vue.use(Checkbox).use(Form).use(FormItem)
   import addressMixin from '@/pages/member/addressMixin'
   import * as API_Trade from '@/api/trade'
   export default {
@@ -92,15 +87,23 @@
     },
     computed: {
       /** 把选中的地址放到第一个 */
-      addressList() {
-        const address = JSON.parse(JSON.stringify(this.$store.getters.address))
+      ckAddressList() {
+        const address = this.addressList
         if (!address || address.length === 0) return address
         const selIndex = address.findIndex(item => item.addr_id === this.addressId)
-        if (selIndex === -1) return []
+        if (selIndex === -1) return address
         const selAddress = JSON.parse(JSON.stringify(address[selIndex]))
         address.splice(selIndex, 1)
         address.splice(0, 0, selAddress)
         return address
+      }
+    },
+    watch: {
+      // 如果没有地址，设置第一个为选中地址
+      addressList: function (newVal) {
+        if (!this.addressId) {
+          this.handleSelectAddress(newVal[0], false)
+        }
       }
     },
     methods: {
@@ -109,11 +112,11 @@
         return `${address.province} ${address.city} ${address.county} ${address.town} ${address.addr}`
       },
       /** 选择收货地址 */
-      handleSelectAddress(item) {
+      handleSelectAddress(item, showMsg) {
         if (item.addr_id === this.addressId) return
         API_Trade.setAddressId(item.addr_id).then(response => {
-          this.$message.success('设置成功！')
-          this.$emit('change', item.addr_id)
+          showMsg !== false && this.$message.success('设置成功！')
+          this.$emit('change', item)
         })
       }
     }
