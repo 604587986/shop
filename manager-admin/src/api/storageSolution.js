@@ -19,12 +19,12 @@ export function getStorageSolutionList(params) {
 
 /**
  * 编辑储存方案
- * @param id
+ * @param bean
  * @param params
  */
-export function editStorageSolution(id, params) {
+export function editStorageSolution(bean, params) {
   return request({
-    url: `system/uploaders/${id}`,
+    url: `system/uploaders/${bean}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -45,12 +45,12 @@ export function getStorageSolutionConfig(code) {
 
 /**
  * 开启储存方案
- * @param id
+ * @param bean
  * @returns {*}
  */
-export function openStorageSolutionById(id) {
+export function openStorageSolutionById(bean) {
   return request({
-    url: `system/uploaders/${id}/open`,
+    url: `system/uploaders/${bean}/open`,
     method: 'put'
   })
 }
