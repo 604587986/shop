@@ -3,7 +3,6 @@
     <div class="cart-header">
       <div class="w">
         <div class="logo"><en-logo/></div>
-        <en-cart-step :step="1"/>
       </div>
     </div>
     <div class="cart-content" id="cart-content">
