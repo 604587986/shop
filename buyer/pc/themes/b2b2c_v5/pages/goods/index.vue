@@ -165,7 +165,7 @@
                 </div>
                 <div class="gl-shop">
                   <span>
-                    <a href="#" target="_blank" title="馨颂童装京东自营旗舰店">馨颂童装京东自营旗舰店<i class="iconfont ea-icon-shop" title="进入店铺"></i></a>
+                    <a :href="'/shop/' + goods.seller_id" :title="goods.seller_name">{{ goods.seller_name }}<i class="iconfont ea-icon-shop" title="进入店铺"></i></a>
                   </span>
                 </div>
               </div>
