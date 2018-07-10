@@ -1,17 +1,37 @@
 <template>
-  <div id="category" class="classify">
+  <div id="category">
     <nav-bar title="分类"/>
     <div class="category-container">
-      <div class="cat-wrapper" id="cat-wrapper">
+      <div class="cat-wrapper" ref="catWrapper">
         <ul>
           <li
             v-for="(cat, index) in category"
-            :class="['item', index === 0 && 'focus']"
+            :class="['item', cat.selected && 'focus']"
             :key="index"
+            @click="handleClickCategory(cat, $event)"
           >
             <a href="javascript:;">{{ cat.name }}</a>
           </li>
         </ul>
+      </div>
+      <div class="con-wrapper" ref="conWrapper">
+        <div class="content">
+          <div class="inner-content show">
+            <div class="cont item-${cat_index}">
+              <div v-for="cat in currentCat.children" :key="cat.category_id" class="item">
+                <div class="title-item">{{ cat.name }}</div>
+                <div class="content-item">
+                  <nuxt-link v-for="cc in cat.children" :to="'/goods?category=' + cc.category_id" :key="cc.category_id" class="cat-item">
+                    <div class="img-cat-item">
+                      <img :src="cc.image" alt=""/>
+                    </div>
+                    <div class="name-cat-item">{{ cc.name }}</div>
+                  </nuxt-link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <tab-bar :active="1"/>
@@ -19,29 +39,58 @@
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
   import * as API_Goods from '@/api/goods'
+
   export default {
     name: 'category',
     data() {
       return {
         // 分类数据
         category: '',
+        // 当前内容区显示的数据
+        currentCat: [],
         // 加载状态
         loading: true
       }
     },
     mounted() {
       API_Goods.getCategory().then(response => {
-        this.category = response
+        let _response = JSON.parse(JSON.stringify(response))
+        this.category = [...response, ..._response].map((item, index) => {
+          item.selected = index === 0
+          return item
+        })
+        this.$nextTick(() => {
+          this.catScroll = new BScroll(this.$refs.catWrapper, { click: true })
+          this.conScroll = new BScroll(this.$refs.conWrapper, { click: true })
+        })
+        this.currentCat = response[0]
         console.log(response)
       })
     },
     methods: {
+      /** 点击左侧切换内容 */
+      handleClickCategory(cat, $event) {
+        const catEle = $event.target.parentElement
+        this.$set(this, 'currentCat', cat)
+        this.$set(this, 'category', this.category.map(item => {
+          item.selected = item.category_id === cat.category_id
+          return item
+        }))
+        this.$nextTick(() => {
+          this.catScroll.refresh()
+          this.catScroll.scrollToElement(catEle, 200)
+          this.conScroll.refresh()
+          this.conScroll.scrollTo(0, 0, 200)
+        })
+      }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ .van-nav-bar .van-nav-bar__left { display: none }
   .category-container {
     position: fixed;
     top: 46px;
@@ -59,24 +108,16 @@
     font-size: 14px;
     background-color: #f8f8f8;
   }
-
   .cat-wrapper ul {
     position: absolute;
+    width: 100%;
     z-index: 1;
   }
-
-  .cat-wrapper ul {
-    width: 100%;
-    background-color: #fff;
-  }
-
-  .cat-wrapper li {
-    background: #fff;
+  .cat-wrapper .item {
     text-align: center;
     position: relative;
   }
-
-  .cat-wrapper li::before {
+  .cat-wrapper .item::before {
     content: '';
     height: 92px;
     width: 1px;
@@ -100,8 +141,7 @@
     -ms-transform-origin: top left;
     -o-transform-origin: top left;
   }
-
-  .cat-wrapper ul li::after {
+  .cat-wrapper .item::after {
     content: '';
     height: 1px;
     width: 200%;
@@ -125,8 +165,7 @@
     -ms-transform-origin: top left;
     -o-transform-origin: top left;
   }
-
-  .cat-wrapper li a {
+  .cat-wrapper .item a {
     display: block;
     width: 100%;
     padding: 15px 0;
@@ -135,47 +174,43 @@
     color: #232326;
     overflow: hidden;
   }
-
-  .cat-wrapper .item.focus a {
-    color: #ff002d;
+  .cat-wrapper .item.focus {
+    &::before { content: none }
+    background-color: #fff;
+    a {
+      color: #ff002d;
+    }
   }
-
   .con-wrapper {
     position: absolute;
     right: 0;
     z-index: 1;
-    width: auto;
+    width: calc(100% - 80px);
     height: 100%;
     overflow: hidden;
   }
-
   .con-wrapper .content {
     position: absolute;
     z-index: 1;
     width: 100%;
   }
-
   .con-wrapper .inner-content {
     opacity: 0;
     padding: 0 10px;
     transition: opacity .2s linear;
-    -webkit-transition: opacity .2s linear ;
+    -webkit-transition: opacity .2s linear;
   }
-
   .con-wrapper .inner-content.show {
     opacity: 1;
   }
-
   .inner-content .cont .item {
     margin-bottom: 15px;
   }
-
   .inner-content .title-item {
     line-height: 30px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
   .inner-content .content-item {
     display: flex;
     flex-wrap: wrap;
@@ -185,20 +220,17 @@
     background-color: #ffffff;
     box-shadow: 0 7px 10px #ccc;
   }
-
   .content-item .cat-item {
     position: relative;
     width: 33.3%;
     height: 90px;
     text-align: center;
   }
-
   .content-item .cat-item img {
     height: 50px;
     max-width: 80%;
     margin-top: 10px;
   }
-
   .content-item .name-cat-item {
     text-overflow: ellipsis;
     white-space: nowrap;
