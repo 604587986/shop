@@ -1,9 +1,6 @@
 <template>
   <div class="container">
     <el-tabs type="border-card">
-      <el-tab-pane label="系统设置">
-        <system-settings-system/>
-      </el-tab-pane>
       <el-tab-pane label="站点设置">
         <system-settings-site/>
       </el-tab-pane>
@@ -24,7 +21,6 @@
 </template>
 
 <script>
-  import SystemSettingsSystem from './systemSettingsSystem'
   import SystemSettingsSite from './systemSettingsSite'
   import SystemSettingsShop from './systemSettingsShop'
   import SystemSettingsOrder from './systemSettingsOrder'
@@ -34,7 +30,6 @@
   export default {
     name: 'systemSettings',
     components: {
-      SystemSettingsSystem,
       SystemSettingsSite,
       SystemSettingsShop,
       SystemSettingsOrder,
