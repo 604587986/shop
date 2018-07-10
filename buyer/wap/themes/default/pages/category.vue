@@ -56,8 +56,7 @@
     },
     mounted() {
       API_Goods.getCategory().then(response => {
-        let _response = JSON.parse(JSON.stringify(response))
-        this.category = [...response, ..._response].map((item, index) => {
+        this.category = response.map((item, index) => {
           item.selected = index === 0
           return item
         })
@@ -66,7 +65,6 @@
           this.conScroll = new BScroll(this.$refs.conWrapper, { click: true })
         })
         this.currentCat = response[0]
-        console.log(response)
       })
     },
     methods: {
