@@ -19,22 +19,6 @@ export function getAfterSale(params) {
 }
 
 /**
- * 申请售后
- * @param params
- * @returns {AxiosPromise}
- */
-export function applyAfterSale(params) {
-  const _formData = new FormData()
-  Object.keys(params).forEach(key => _formData.append(key, params[key]))
-  return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/after-sale',
-    method: Method.GET,
-    needToken: true,
-    data: _formData
-  })
-}
-
-/**
  * 获取售后申请数据
  * @param order_sn
  * @param sku_id
@@ -58,5 +42,41 @@ export function getAfterSaleDetail(sn) {
     url: `after-sales/refund/${sn}`,
     method: Method.GET,
     needToken: true
+  })
+}
+
+/**
+ * 申请退款
+ * @param params
+ */
+export function applyAfterSaleMoney(params) {
+  return request({
+    url: 'after-sales/refunds/apply',
+    method: Method.POST,
+    data: params
+  })
+}
+
+/**
+ * 申请退货
+ * @param params
+ */
+export function applyAfterSaleGoods(params) {
+  return request({
+    url: 'after-sales/return-goods/apply',
+    method: Method.POST,
+    data: params
+  })
+}
+
+/**
+ * 申请取消订单
+ * @param params
+ */
+export function applyAfterSaleCancel(params) {
+  return request({
+    url: 'after-sales/refunds/cancel-order',
+    method: Method.POST,
+    data: params
   })
 }

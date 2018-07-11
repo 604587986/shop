@@ -33,6 +33,8 @@
         </span>
       </span>
     </el-tree>
+    <!--// Andste_TODO 2018/7/11: 添加顶级菜单待适配-->
+    <el-button type="primary" size="mini" style="margin-top: 10px">添加顶级菜单</el-button>
     <el-dialog
       :title="menuForm.menu_name ? '编辑菜单' : '添加菜单'"
       :visible.sync="dialogMenuVisible"
