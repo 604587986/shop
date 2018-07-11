@@ -34,7 +34,7 @@
               <span class="price"><em>￥</em>{{ order.order_amount | unitPrice }}</span>
             </div>
             <div class="order-tbody-ordersn">
-              <span>订单编号：{{ order.order_sn }}</span>
+              <span>订单编号：{{ order.sn }}</span>
               <span>下单时间：{{ order.create_time | unixToDate }}</span>
             </div>
             <div class="order-tbody-item">
