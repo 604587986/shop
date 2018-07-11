@@ -1,13 +1,15 @@
 <template>
-  <div v-if="show" id="ShortcutBox">
-    <div class="shortcut-mask" @click.stop="$emit('close')"></div>
-    <ul class="shortcut-box" :style="{top: (top || 0) + 'px', right: (right || 0) + 'px'}">
-      <li><nuxt-link to="/"><span class="home"></span><strong>首页</strong></nuxt-link></li>
-      <li><nuxt-link to="/category"><span class="category"></span><strong>商品分类</strong></nuxt-link></li>
-      <li><nuxt-link to="/cart"><span class="cart"></span><strong>购物车</strong></nuxt-link></li>
-      <li><nuxt-link to="/member"><span class="mine"></span><strong>我的</strong></nuxt-link></li>
-    </ul>
-  </div>
+  <transition name="shortcut">
+    <div v-if="show" id="ShortcutBox">
+      <div class="shortcut-mask" @click.stop="$emit('close')"></div>
+      <ul class="shortcut-box" :style="{top: (top || 0) + 'px', right: (right || 0) + 'px'}">
+        <li><nuxt-link to="/"><span class="home"></span><strong>首页</strong></nuxt-link></li>
+        <li><nuxt-link to="/category"><span class="category"></span><strong>商品分类</strong></nuxt-link></li>
+        <li><nuxt-link to="/cart"><span class="cart"></span><strong>购物车</strong></nuxt-link></li>
+        <li><nuxt-link to="/member"><span class="mine"></span><strong>我的</strong></nuxt-link></li>
+      </ul>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -94,5 +96,15 @@
       font-size: 14px;
       margin-left: 40px;
     }
+  }
+  .shortcut-enter-active {
+    transition: all .2s ease;
+  }
+  .shortcut-leave-active {
+    transition: all .2s ease;
+  }
+  .shortcut-enter, .shortcut-leave-to {
+    transform: translateY(10px);
+    opacity: 0;
   }
 </style>
