@@ -273,7 +273,7 @@
           ],
           /** 商品参与方式 */
           range_type: [
-            { validator: checkRange, trigger: 'change' }
+            { validator: checkRange, trigger: 'blur' }
           ]
         },
 

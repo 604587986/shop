@@ -30,7 +30,7 @@
       </p>
       <p>
         <span>结算状态：</span>
-        <span>{{ settlementData.status_text}}</span>
+        <span>{{ settlementData.status_text }}</span>
       </p>
     </div>
     <!--表格-->
@@ -243,7 +243,7 @@
           font-family: "Microsoft YaHei", "Microsoft JhengHei", SimSun, verdana, Tahoma, arial;
         }
         span:last-child {
-          font-size: 12px;
+          font-size: 20px;
         }
       }
     }
