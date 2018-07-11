@@ -86,10 +86,8 @@
             <h1>商城公告</h1>
             <h2>您可以关注商城公告，以便能更快的了解商城的信息</h2>
           </div>
-          <p class="store-bulletin" v-for="item in shop_announcement">》
-            <a target="_blank"
-               :href="`${HTTP_URL}/${item.article_id}`"
-               :title="item.content">{{item.article_name}}</a>
+          <p class="store-bulletin" v-for="row in shop_announcement">》
+            <a @click="showArticleContext(row)" :title="row.content">{{row.article_name}}</a>
           </p>
         </el-card>
       </el-col>
@@ -126,6 +124,9 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-dialog :title="currentName" :visible.sync="isShowArticle" width="30%" align="center">
+      <span>{{ currentContent }}</span>
+    </el-dialog>
   </div>
 </template>
 
@@ -152,9 +153,6 @@ export default {
       /** 图片服务器地址 */
       BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=shop`,
 
-      /** 域名配置 */
-      HTTP_URL: `${process.env.HTTP_URL}/help`,
-
       /** 加载中*/
       loading: false,
 
@@ -174,7 +172,16 @@ export default {
       fileList: [],
 
       /** 视图高度*/
-      tableHeight: (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
+      tableHeight: (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2,
+
+      /** 当前商城公告名称 */
+      currentName: '',
+
+      /** 当前商城公告内容 */
+      currentContent: '',
+
+      /** 是否显示商城公告 默认不显示 */
+      isShowArticle: false
     }
   },
   methods: {
@@ -243,6 +250,13 @@ export default {
     /** 跳转维权订单*/
     toRefundOrderList() {
       this.$router.push({ path: '/order/refund-list' })
+    },
+
+    /** 显示商城公告 */
+    showArticleContext(row) {
+      this.currentName = row.article_name
+      this.currentContent = row.content
+      this.isShowArticle = true
     }
   }
 }
