@@ -31,8 +31,7 @@ export const mutations = {
    */
   [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
-    state.address = []
-    process.client && Storage.removeItem('user')
+    Storage.removeItem('user', { domain: domain.cookie })
   },
   /**
    * 设置访问令牌
@@ -53,7 +52,7 @@ export const mutations = {
    */
   [types.REMOVE_ACCESS_TOKEN](state) {
     state.accessToken = ''
-    process.client && Storage.removeItem('accessToken')
+    Storage.removeItem('accessToken', { domain: domain.cookie })
   },
   /**
    * 设置刷新令牌
@@ -74,7 +73,7 @@ export const mutations = {
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
     state.refreshToken = ''
-    process.client && Storage.removeItem('refreshToken')
+    Storage.removeItem('refreshToken', { domain: domain.cookie })
   }
 }
 
