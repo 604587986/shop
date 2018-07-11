@@ -13,6 +13,7 @@ import Search from './Search'
 import Shortcut from './Shortcut'
 import TabBar from './TabBar'
 import NavBar from './NavBar'
+import ShortcutBox from './ShortcutBox'
 
 export {
   RegionPicker,
@@ -28,5 +29,6 @@ export {
   Search,
   Shortcut,
   TabBar,
-  NavBar
+  NavBar,
+  ShortcutBox
 }
