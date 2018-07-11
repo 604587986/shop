@@ -23,7 +23,7 @@
                     </ul>
                   </div>
                 </transition>
-                <input type="search" v-model="keyword" class="search-input" placeholder="搜索商品/店铺">
+                <input type="search" v-model="keyword" class="search-input" placeholder="搜索商品/店铺" autofocus="autofocus">
                 <i class="search-icon"></i>
                 <input type="submit" class="search-submit">
               </div>
@@ -72,7 +72,7 @@
     props: ['show'],
     data() {
       return {
-        keyword: '',
+        keyword: this.$route.query.keyword || '',
         hot_keywords: [],
         // 显示搜索类型
         showSearchType: false,
