@@ -11,7 +11,6 @@
     <template v-else>
       <div class="checkout-header">
         <div class="w">
-          <div class="logo"><en-logo/></div>
         </div>
       </div>
       <div v-if="params" class="ckt-control">

@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <en-shortcut/>
     <nuxt id="wrapper"/>
-    <en-footer/>
   </div>
 </template>
 <script>

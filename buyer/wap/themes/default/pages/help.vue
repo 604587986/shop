@@ -1,6 +1,5 @@
 <template>
   <div style="background-color: #f9f9f9">
-    <en-header-other title="帮助中心"/>
     <div v-if="categorys" class="help-container">
       <div class="help-menus">
         <nuxt-link to="./" class="h3-title">帮助中心</nuxt-link>
