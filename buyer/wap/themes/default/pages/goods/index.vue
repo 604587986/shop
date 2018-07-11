@@ -1,6 +1,18 @@
 <template>
   <div>
-    <nav-bar title="商品列表"/>
+    <van-nav-bar left-arrow @click-left="$router.go(-1)">
+      <div slot="title">
+        <div class="search-box" @click="showSearch = true">
+          <van-icon name="search"/>
+          <span>{{ params.keyword || '搜索商品' }}</span>
+        </div>
+      </div>
+      <i class="icon-more" slot="right" @click="showShortcutBox = true">
+        <shortcut-box :show="showShortcutBox" :top="30" @close="showShortcutBox = false"/>
+      </i>
+    </van-nav-bar>
+    <search :show="showSearch" @close="showSearch = false"/>
+    <!--// Andste_TODO 2018/7/11: 筛选功能未做-->
     <van-list v-model="loading" :finished="finished" @load="onLoad">
       <nuxt-link :to="'/goods/' + goods.goods_id" v-for="(goods, index) in goodsList" :key="index" class="goods-item">
         <div class="goods-image">
@@ -29,10 +41,17 @@
   import { List } from 'vant'
   Vue.use(List)
   import * as API_Goods from '@/api/goods'
+  import Search from "@/components/Search"
+  import ShortcutBox from "@/components/ShortcutBox"
   export default {
     name: 'goods-list',
+    components: {ShortcutBox, Search},
     data() {
       return {
+        // 显示搜索盒子
+        showSearch: false,
+        // 显示快捷导航盒子
+        showShortcutBox: false,
         // 加载中
         loading: false,
         // 是否加载完成
@@ -86,6 +105,38 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ {
+    .van-nav-bar__left .van-nav-bar__arrow { color: #666 }
+    .van-nav-bar__title { max-width: 75% }
+    .search-box {
+      display: -webkit-box;
+      width: 100%;
+      border: none;
+      border-radius: 15px;
+      height: 30px;
+      overflow: hidden;
+      background: #f7f7f7;
+      font-size: 12px;
+      -webkit-box-align: center;
+      line-height: 30px;
+      position: relative;
+      margin-top: 8px;
+      .van-icon-search {
+        color: #B7B7B7;
+        margin: 0 10px;
+        font-size: 16px;
+      }
+    }
+    .icon-more {
+      display: inline-block;
+      position: relative;
+      top: 5px;
+      width: 20px;
+      height: 20px;
+      background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAAMBAMAAAAzCuYOAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAPUExURUdwTF1fal1fal1famZmcA0W5H0AAAAFdFJOUwD+w2UZS9p4HgAAAEpJREFUGNNjYGBWFDJgQACsXBZFQUEhB7ggdi6TIBAowEWxcw1BlDBcFDtXEUQJwUWxcwXBAC6KnUuUIqKsI8rhRAUBUYFJTLQAAIISEL00zytiAAAAAElFTkSuQmCC") no-repeat center;
+      background-size: 100%;
+    }
+  }
   .goods-item {
     display: flex;
     position: relative;
