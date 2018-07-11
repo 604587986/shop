@@ -16,7 +16,7 @@
             <el-input-number v-model="shopForm.employee_num" :min="1" :max="99999999"/>
           </el-form-item>
           <el-form-item label="注册资金" prop="reg_money">
-            <el-input v-model="shopForm.reg_money" :max="9999999">
+            <el-input v-model="shopForm.reg_money">
               <template slot="append">万</template>
             </el-input>
           </el-form-item>
@@ -183,6 +183,7 @@
 <script>
   import * as API_Shop from '@/api/shop'
   import * as API_Category from '@/api/category'
+  import { RegExp } from '~/ui-utils'
 
   export default {
     name: 'shopEdit',
@@ -198,7 +199,16 @@
           company_address: [this.MixinRequired('公司地址不能为空！')],
           company_phone: [this.MixinRequired('公司电话不能为空！')],
           employee_num: [this.MixinRequired('公司员工数不能为空！')],
-          reg_money: [this.MixinRequired('公注册资金不能为空！')],
+          reg_money: [
+            this.MixinRequired('注册资金不能为空！'),
+            { validator: (rule, value, callback) => {
+              if (!RegExp.money.test(value)) {
+                callback(new Error('注册资金格式有误！'))
+              } else {
+                callback()
+              }
+            } }
+          ],
           link_name: [this.MixinRequired('联系姓名不能为空！')],
           link_phone: [this.MixinRequired('联系电话不能为空！')],
           company_email: [this.MixinRequired('公司电子邮箱不能为空！')],

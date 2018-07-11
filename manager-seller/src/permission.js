@@ -17,8 +17,23 @@ router.beforeEach((to, from, next) => {
       /** 检测是否存在店铺信息 不存在则请求并且存储 */
       if (!store.getters.shopInfo) {
         API_shop.getShopData({}).then(response => {
-          store.dispatch('SetShop', response)
-          next()
+          const { shop_disable } = response
+          switch (shop_disable) {
+            case 'OPEN':
+              store.dispatch('SetShop', response)
+              next()
+              break
+            case 'CLOSED':
+              MessageBox.alert('您的店铺已被关闭，请联系管理员！', '权限错误', {
+                type: 'error',
+                callback: () => {
+                  window.location.href = `${domain.buyer_pc}`
+                }
+              })
+              break
+            default:
+              next()
+          }
         })
       } else {
         next()
