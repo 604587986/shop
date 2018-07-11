@@ -3,20 +3,20 @@
     <div class="member-nav">
       <ul class="member-nav-list">
         <li :class="[type === 'money' && 'active']" @click="handleChangeType('money')">申请退款</li>
-        <li :class="[type === 'goods' && 'active']" @click="handleChangeType('goods')">申请退货</li>
+        <li v-if="$route.query.sku_id" :class="[type === 'goods' && 'active']" @click="handleChangeType('goods')">申请退货</li>
       </ul>
     </div>
     <div class="apply-container">
       <div v-show="type === 'money'">
         <el-form :model="returnMoneyForm" :rules="returnMoneyRules" ref="returnMoneyForm" label-width="120px">
-          <el-form-item label="退款方式：" prop="name">
-            <el-select v-model="returnMoneyForm.return_way" size="small" placeholder="请选择退款方式">
-              <el-option label="支付宝" value="alpay"></el-option>
-              <el-option label="微信" value="weixin"></el-option>
-              <el-option label="银行转账" value="bank"></el-option>
+          <el-form-item label="退款方式：" prop="account_type">
+            <el-select v-model="returnMoneyForm.account_type" size="small" placeholder="请选择退款方式">
+              <el-option label="支付宝" value="ALIPAY"></el-option>
+              <el-option label="微信" value="WEIXINPAY"></el-option>
+              <el-option label="银行转账" value="BANKTRANSFER"></el-option>
             </el-select>
           </el-form-item>
-          <div v-if="returnMoneyForm.return_way === 'bank'">
+          <div v-if="returnMoneyForm.account_type === 'BANKTRANSFER'">
             <el-form-item label="银行名称：" prop="bank_name">
               <el-input v-model="returnMoneyForm.bank_name" size="small" :maxlength="180" placeholder="请输入银行名称"/>
             </el-form-item>
@@ -24,14 +24,17 @@
               <el-input v-model="returnMoneyForm.bank_deposit_name" size="small" :maxlength="180" placeholder="请输入银行开户行"/>
             </el-form-item>
             <el-form-item label="银行开户名：" prop="bank_account_name">
-              <el-input v-model="returnMoneyForm.bank_deposit_name" size="small" :maxlength="180" placeholder="请输入银行开户名"/>
+              <el-input v-model="returnMoneyForm.bank_account_name" size="small" :maxlength="180" placeholder="请输入银行开户名"/>
             </el-form-item>
             <el-form-item label="银行账号：" prop="bank_account_number">
               <el-input v-model="returnMoneyForm.bank_account_number" size="small" :maxlength="180" placeholder="请输入银行账号"/>
             </el-form-item>
           </div>
-          <el-form-item label="退款原因：" prop="name">
-            <el-select v-model="returnMoneyForm.return_reason" size="small" placeholder="请选择退款原因">
+          <el-form-item v-else label="退款账号：" prop="return_account">
+            <el-input v-model="returnMoneyForm.return_account" size="small" :maxlength="180" placeholder="请输入退款账号"/>
+          </el-form-item>
+          <el-form-item label="退款原因：" prop="refund_reason">
+            <el-select v-model="returnMoneyForm.refund_reason" size="small" placeholder="请选择退款原因">
               <el-option label="商品质量有问题" value="商品质量有问题"></el-option>
               <el-option label="收到商品与描述不符" value="收到商品与描述不符"></el-option>
               <el-option label="不喜欢/不想要" value="不喜欢/不想要"></el-option>
@@ -44,21 +47,18 @@
               <el-option label="其他" value="其他"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="退款金额：" prop="name">
+          <el-form-item label="退款金额：">
             <span style="color: #f42424;">￥</span>
-            <span style="font-size: 16px;font-weight: 600;color: #f42424;">{{ 2333.33 | unitPrice }}</span>
+            <span style="font-size: 16px;font-weight: 600;color: #f42424;">{{ (returnMoneyForm.return_money || 0) | unitPrice }}</span>
           </el-form-item>
-          <el-form-item label="退还积分：" prop="name">
-            <span>0</span>
-          </el-form-item>
-          <el-form-item label="问题描述：" prop="name">
+          <el-form-item label="问题描述：">
             <el-input
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 4 }"
               placeholder="请输入问题描述(180字以内)"
               :maxlength="180"
               style="width: 300px"
-              v-model="returnMoneyForm.describe">
+              v-model="returnMoneyForm.customer_remark">
             </el-input>
           </el-form-item>
           <el-form-item label="">
@@ -72,22 +72,39 @@
             <h1>订单信息</h1>
             <div class="detail-list">
               <dl><dt>收货地址：</dt><dd>北京海淀区三环以内-asdfasdf-adsf</dd></dl>
-              <dl class="top-line"><dt>订单编号：</dt><dd>20180412000002</dd></dl>
-              <dl><dt>付款方式：</dt><dd>在线支付</dd></dl>
-              <dl><dt>已付款金额：</dt><dd>380</dd><input type="hidden" value="380"></dl>
-              <dl><dt>下单时间：</dt><dd>2018-04-12 18:34</dd></dl>
+              <dl class="top-line"><dt>订单编号：</dt><dd>{{ this.order_sn }}</dd></dl>
+              <dl><dt>付款方式：</dt><dd>{{ this.order.payment_type === 'ONLINE' ? `在线支付 ${this.order.payment_method_name || ''}` : '货到付款' }}</dd></dl>
+              <dl><dt>已付款金额：</dt><dd><span class="price">￥{{ this.order.order_price | unitPrice }}</span>（整单）</dd></dl>
+              <dl><dt>下单时间：</dt><dd>{{ this.order.create_time | unixToDate }}</dd></dl>
             </div>
           </div>
-          <el-form :model="returnGoodsForm" :rules="returnGoodsRules" ref="returnGoodsForm" label-width="100px" style="margin-top: 10px">
-            <el-form-item label="退款方式：" prop="name">
-              <el-select v-model="returnGoodsForm.return_way" size="small" placeholder="请选择退款方式">
-                <el-option label="支付宝" value="alpay"></el-option>
-                <el-option label="微信" value="weixin"></el-option>
-                <el-option label="银行转账" value="bank"></el-option>
+          <el-form :model="returnGoodsForm" :rules="returnGoodsRules" ref="returnGoodsForm" label-width="120px" style="margin-top: 10px;margin-left: 10px">
+            <el-form-item label="退款方式：" prop="account_type">
+              <el-select v-model="returnGoodsForm.account_type" size="small" placeholder="请选择退款方式">
+                <el-option label="支付宝" value="ALIPAY"></el-option>
+                <el-option label="微信" value="WEIXINPAY"></el-option>
+                <el-option label="银行转账" value="BANKTRANSFER"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="退货原因：" prop="name">
-              <el-select v-model="returnGoodsForm.return_reason" size="small" placeholder="请选择退款原因">
+            <div v-if="returnGoodsForm.account_type === 'BANKTRANSFER'">
+              <el-form-item label="银行名称：" prop="bank_name">
+                <el-input v-model="returnGoodsForm.bank_name" size="small" :maxlength="180" placeholder="请输入银行名称"/>
+              </el-form-item>
+              <el-form-item label="银行开户行：" prop="bank_deposit_name">
+                <el-input v-model="returnGoodsForm.bank_deposit_name" size="small" :maxlength="180" placeholder="请输入银行开户行"/>
+              </el-form-item>
+              <el-form-item label="银行开户名：" prop="bank_account_name">
+                <el-input v-model="returnGoodsForm.bank_deposit_name" size="small" :maxlength="180" placeholder="请输入银行开户名"/>
+              </el-form-item>
+              <el-form-item label="银行账号：" prop="bank_account_number">
+                <el-input v-model="returnGoodsForm.bank_account_number" size="small" :maxlength="180" placeholder="请输入银行账号"/>
+              </el-form-item>
+            </div>
+            <el-form-item v-else label="退款账号：" prop="return_account">
+              <el-input v-model="returnGoodsForm.return_account" size="small" :maxlength="180" placeholder="请输入退款账号"/>
+            </el-form-item>
+            <el-form-item label="退货原因：" prop="refund_reason">
+              <el-select v-model="returnGoodsForm.refund_reason" size="small" placeholder="请选择退款原因">
                 <el-option label="商品质量有问题" value="商品质量有问题"></el-option>
                 <el-option label="收到商品与描述不符" value="收到商品与描述不符"></el-option>
                 <el-option label="不喜欢/不想要" value="不喜欢/不想要"></el-option>
@@ -100,21 +117,21 @@
                 <el-option label="其他" value="其他"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="退款金额：" prop="name">
+            <el-form-item label="退款金额：">
               <span style="color: #f42424;">￥</span>
-              <span style="font-size: 16px;font-weight: 600;color: #f42424;">{{ 2333.33 | unitPrice }}</span>
+              <span style="font-size: 16px;font-weight: 600;color: #f42424;">{{ returnGoodsForm.return_money | unitPrice }}</span>
             </el-form-item>
-            <el-form-item label="退货数量：" prop="name">
-              <el-input-number size="mini" v-model="returnGoodsForm.return_num"></el-input-number>
+            <el-form-item label="退货数量：" prop="return_num">
+              <el-input-number size="mini" v-model="returnGoodsForm.return_num" :min="1" :max="maxReturnNum"></el-input-number>
             </el-form-item>
-            <el-form-item label="问题描述：" prop="name">
+            <el-form-item label="问题描述：" prop="customer_remark">
               <el-input
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 4 }"
                 placeholder="请输入问题描述(180字以内)"
                 :maxlength="180"
                 style="width: 300px"
-                v-model="returnGoodsForm.describe">
+                v-model="returnGoodsForm.customer_remark">
               </el-input>
             </el-form-item>
             <el-form-item label="">
@@ -125,7 +142,7 @@
       </div>
     </div>
     <div v-if="order" class="goods-list">
-      <sku-list :skuList="order.skuList"/>
+      <sku-list :skuList="skuList" name="name" price="purchase_price" total="subtotal"/>
     </div>
   </div>
 </template>
@@ -143,17 +160,61 @@
     components: { SkuList },
     data() {
       return {
+        // 订单详情
         order: '',
+        // 货品列表
         skuList: [],
-        type: 'goods',
-        /** 申请退款 表单 */
-        returnMoneyForm: {},
-        /** 申请退款 表单规则 */
-        returnMoneyRules: {},
-        /** 申请退货 表单 */
-        returnGoodsForm: {},
-        /** 申请退货 表单规则 */
-        returnGoodsRules: {},
+        // 申请售后类型
+        type: this.$route.query.sku_id ? 'money' : 'money',
+        // 申请退款 表单
+        returnMoneyForm: {
+          order_sn: this.$route.query.order_sn
+        },
+        // 申请退款 表单规则
+        returnMoneyRules: {
+          // 退款方式
+          account_type: [this.MixinRequired('请选择退款方式！', 'change')],
+          // 退款账号
+          return_account: [{ required: true, message: '请输入退款账号', trigger: 'blur' }],
+          // 银行名称
+          bank_name: [{ required: false, message: '请输入银行名称', trigger: 'blur' }],
+          // 银行开户行
+          bank_deposit_name: [{ required: false, message: '请输入银行开户行', trigger: 'blur' }],
+          // 银行开户名
+          bank_account_name: [{ required: false, message: '请输入银行开户名', trigger: 'blur' }],
+          // 银行账号
+          bank_account_number: [{ required: false, message: '请输入银行账号', trigger: 'blur' }],
+          // 退款原因
+          refund_reason: [this.MixinRequired('请选择退款原因！')]
+        },
+        // 申请退货 表单
+        returnGoodsForm: {
+          order_sn: this.$route.query.order_sn,
+          return_num: 1
+        },
+        // 申请退货 表单规则
+        returnGoodsRules: {
+          // 退款方式
+          account_type: [this.MixinRequired('请选择退款方式！', 'change')],
+          // 退款账号
+          return_account: [{ required: true, message: '请输入退款账号', trigger: 'blur' }],
+          // 银行名称
+          bank_name: [{ required: false, message: '请输入银行名称', trigger: 'blur' }],
+          // 银行开户行
+          bank_deposit_name: [{ required: false, message: '请输入银行开户行', trigger: 'blur' }],
+          // 银行开户名
+          bank_account_name: [{ required: false, message: '请输入银行开户名', trigger: 'blur' }],
+          // 银行账号
+          bank_account_number: [{ required: false, message: '请输入银行账号', trigger: 'blur' }],
+          // 退款原因
+          refund_reason: [this.MixinRequired('请选择退款原因！')],
+          // 退货数量
+          return_num: [this.MixinRequired('请输入退货数量！')]
+        },
+        // 最大可退货数量
+        maxReturnNum: 1,
+        // 是否为取消订单模式
+        isCancel: !(!!this.$route.query.sku_id),
         ...this.$route.query
       }
     },
@@ -161,17 +222,29 @@
       // 获取售后数据
       API_AfterSale.getAfterSaleData(this.order_sn, this.sku_id).then(response => {
         this.order = response.order
-        this.skuList = response.product_list
+        this.skuList = response.sku_list
         this.returnMoneyForm.return_money = response.return_money
         this.returnGoodsForm.return_money = response.return_money
+        if (response.sku_list && response.sku_list.length) {
+          this.returnGoodsForm.return_num = response.sku_list[0].num
+          this.maxReturnNum = response.sku_list[0].num
+        }
       })
     },
     watch: {
-      'returnMoneyForm.return_way': function (newVal) {
-        console.log(newVal)
+      'returnMoneyForm.account_type': function (newVal) {
+        this.returnMoneyRules.return_account[0].required = newVal !== 'BANKTRANSFER'
+        this.returnMoneyRules.bank_name[0].required = newVal === 'BANKTRANSFER'
+        this.returnMoneyRules.bank_deposit_name[0].required = newVal === 'BANKTRANSFER'
+        this.returnMoneyRules.bank_account_name[0].required = newVal === 'BANKTRANSFER'
+        this.returnMoneyRules.bank_account_number[0].required = newVal === 'BANKTRANSFER'
       },
-      'returnGoodsForm.return_way': function (newVal) {
-        console.log(newVal)
+      'returnGoodsForm.account_type': function (newVal) {
+        this.returnGoodsRules.return_account[0].required = newVal !== 'BANKTRANSFER'
+        this.returnGoodsRules.bank_name[0].required = newVal === 'BANKTRANSFER'
+        this.returnGoodsRules.bank_deposit_name[0].required = newVal === 'BANKTRANSFER'
+        this.returnGoodsRules.bank_account_name[0].required = newVal === 'BANKTRANSFER'
+        this.returnGoodsRules.bank_account_number[0].required = newVal === 'BANKTRANSFER'
       }
     },
     methods: {
@@ -180,9 +253,40 @@
         this.type = type
       },
       /** 申请退款 */
-      handleSubmitRturnMoney() {},
+      handleSubmitRturnMoney() {
+        this.$refs['returnMoneyForm'].validate((valid) => {
+          if (valid) {
+            const params = JSON.parse(JSON.stringify(this.returnMoneyForm))
+            if (this.isCancel) {
+              API_AfterSale.applyAfterSaleCancel(params).then(this.handleApplySuccess)
+            } else {
+              params.sku_id = this.sku_id
+              API_AfterSale.applyAfterSaleMoney(params).then(this.handleApplySuccess)
+            }
+          } else {
+            this.$message.error('表单填写有误，请核对！')
+            return false
+          }
+        })
+      },
       /** 申请退货 */
-      handleSubmitRturnGoods() {}
+      handleSubmitRturnGoods() {
+        this.$refs['returnGoodsForm'].validate((valid) => {
+          if (valid) {
+            const params = JSON.parse(JSON.stringify(this.returnGoodsForm))
+            params.sku_id = this.sku_id
+            API_AfterSale.applyAfterSaleGoods(params).then(this.handleApplySuccess)
+          } else {
+            this.$message.error('表单填写有误，请核对！')
+            return false
+          }
+        })
+      },
+      /** 申请售后成功 */
+      handleApplySuccess() {
+        this.$message.success('申请成功！')
+        this.$router.go(-1)
+      }
     }
   }
 </script>
@@ -248,7 +352,7 @@
       }
     }
   }
-  /deep/ .el-input {
+  /deep/ .el-input:not(.el-input--mini) {
     width: 212px;
   }
 </style>
