@@ -92,7 +92,7 @@
         <div class="base-info-item">
           <h4>商品信息</h4>
           <div>
-            <el-form-item label="商品名称：" prop="goods_name">
+            <el-form-item label="商品名称：" prop="goods_name" class="goods-name-width">
               <el-input v-model="baseInfoForm.goods_name" maxlength="60" minlength="3" placeholder="3-60个字符"></el-input>
             </el-form-item>
             <el-form-item label="商品编号：" prop="sn">
@@ -190,7 +190,7 @@
                 <el-option
                   v-for="item in tplList"
                   :key="item.template_id"
-                  :label="item.tpl_name"
+                  :label="item.name"
                   :value="item.template_id">
                 </el-option>
               </el-select>
@@ -429,7 +429,7 @@
 
       return {
         /** 图片服务器地址 */
-        BASE_IMG_URL: process.env.BASE_IMG_URL,
+        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=goods`,
 
         /** 店铺信息 */
         shopInfo: this.$store.getters.shopInfo,
@@ -527,7 +527,7 @@
           /** 积分兑换 */
           exchange: {
             /** 积分兑换所属分类 */
-            category_id: 0,
+            category_id: '',
 
             /** 是否允许积分兑换  1是 0否*/
             enable_exchange: 1,
@@ -769,17 +769,19 @@
           return
         }
         let _params = this.generateFormData(this.baseInfoForm)
+        /** 如果规格无变化 则传0 有变化传1 */
+        if (!_params.has_changed) {
+          _params.has_changed = 0
+        }
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
-            _params.category_name = '随便'
             API_goods.editGoods(this.activeGoodsId, _params).then(() => {
               this.$message.success('修改商品成功')
               this.$router.push({ path: '/goods/goods-list' })
             })
           } else {
             /** 正常商品上架 */
-            _params.category_name = '随便'
             API_goods.aboveGoods(_params).then(() => {
               this.$message.success('上架商品成功')
               this.$router.push({ path: '/goods/goods-list' })
@@ -788,8 +790,6 @@
         } else {
           /**  草稿箱商品上架 构造是否上架字段 1上架0下架*/
           _params.market_enable = 1
-          _params.has_changed = _params.have_spec
-          _params.category_name = '随便'
           API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(() => {
             this.$message.success('上架草稿箱商品成功')
             this.$router.push({ path: '/goods/goods-list' })
@@ -1044,7 +1044,7 @@
       /** 查询商品品牌列表 */
       getGoodsBrandList() {
         API_goods.getGoodsBrandList(this.baseInfoForm.category_id, { }).then((response) => {
-          this.brandList = response.data
+          this.brandList = response
         })
       },
 
@@ -1056,7 +1056,7 @@
       /** 运费模板列表 */
       getTplList() {
         API_goods.getTplList(this.activeGoodsId, { }).then((response) => {
-          this.tplList = response.data
+          this.tplList = response
         })
       },
 
@@ -1363,7 +1363,11 @@
     }
 
     .el-form-item {
-      width: 22%;
+      width: 30%;
+      min-width: 300px;
+    }
+    .goods-name-width {
+      width: 50%;
       min-width: 300px;
     }
     .el-form-item__content {
@@ -1452,6 +1456,7 @@
     bottom: 0px;
     left: 10%;
     text-align: center;
+    z-index: 9999;
   }
 
   /*图片上传组件第一张图设置封面*/

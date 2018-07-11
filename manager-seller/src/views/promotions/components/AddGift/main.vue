@@ -115,7 +115,7 @@
       }
       return {
         /** 图片服务器地址 */
-        BASE_IMG_URL: process.env.BASE_IMG_URL,
+        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=other`,
 
         giftShow: false,
 

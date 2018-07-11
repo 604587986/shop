@@ -5,10 +5,13 @@
     <en-table-layout
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <template slot="table-columns">
-        <el-table-column prop="goods_name" label="商品名称" />
+        <el-table-column label="商品名称">
+          <template slot-scope="scope">
+            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+          </template>
+        </el-table-column>
         <el-table-column label="商品价格" >
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
@@ -39,6 +42,9 @@
     },
     data() {
       return {
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
+
         /** 列表loading状态 */
         loading: false,
 

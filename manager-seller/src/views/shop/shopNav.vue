@@ -98,7 +98,7 @@
       const shopNavSort = (rule, value, callback) => {
         if (!value) {
           callback(new Error('请输入排序'))
-        } else if (!RegExp.integer.test(value)) {
+        } else if (!RegExp.integer.test(value) && value === 0) {
           callback(new Error('请输入正整数'))
         } else {
           callback()

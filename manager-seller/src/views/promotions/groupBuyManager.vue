@@ -33,7 +33,7 @@
         <el-table-column label="团购名称" >
           <template slot-scope="scope">
             <div>
-              <a :href="`${HTTP_URL}/${scope.row.goods_id}`" style="color: #00a2d4;">{{ scope.row.gb_name }}</a>
+              <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #266fd4;">{{ scope.row.gb_name }}</a>
             </div>
             <div>{{ scope.row.gb_title }}</div>
           </template>

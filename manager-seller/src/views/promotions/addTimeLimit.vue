@@ -30,6 +30,7 @@
             <en-table-layout
               v-if="item.tableData && item.tableData.length >= 1"
               :tableData="item.tableData"
+              class="buy-info"
               :loading="loading">
               <template slot="table-columns">
                 <el-table-column label="商品名称">
@@ -238,8 +239,10 @@
     height: 50px;
     line-height: 50px;
   }
-  /deep/ .el-input__inner {
-    width: 50%;
+  .buy-info {
+    /deep/ .el-input__inner {
+      width: 50%;
+    }
   }
 
   /*平铺*/

@@ -4,8 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
-      :loading="loading"
-    >
+      :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-button type="primary" @click="handelAddGifts">新增</el-button>
@@ -155,9 +154,9 @@
         API_Gift.getGiftsList(this.params).then(response => {
           this.loading = false
           this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsFiltered
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
           }
           this.tableData = response.data
         })

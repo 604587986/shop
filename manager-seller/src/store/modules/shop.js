@@ -1,6 +1,8 @@
+import Storage from '@/utils/storage'
+import { domain } from '~/ui-domain'
 const shop = {
   state: {
-    shopInfo: JSON.parse(localStorage.getItem('shopInfo'))
+    shopInfo: null
   },
 
   mutations: {
@@ -12,7 +14,7 @@ const shop = {
     // 存储店铺信息
     SetShop({ commit }, shopInfo) {
       commit('SetShop', shopInfo)
-      localStorage.setItem('shopInfo', JSON.stringify(shopInfo))
+      Storage.setItem('shopInfo', JSON.stringify(shopInfo), { domain: domain.cookie })
     }
   }
 }

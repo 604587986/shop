@@ -60,7 +60,10 @@
         zoom_img_show: true,
 
         /** 被放大的图片*/
-        zoom_imgsrc: ''
+        zoom_imgsrc: '',
+
+        /** 店铺信息 */
+        shopInfo: this.$store.getters.shopInfo
       }
     },
     mounted() {
@@ -69,7 +72,7 @@
     methods: {
       /** 查看店铺 */
       lookshop() {
-        window.open('https://www.baidu.com/')
+        window.open(`${process.env.HTTP_URL}/shop/${this.shopInfo.shop_id}`)
       },
 
       /** 获取PC店铺主题列表*/

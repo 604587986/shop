@@ -3,8 +3,7 @@
     <en-table-layout
       toolbar
       pagination
-      :tableData="tableData"
-    >
+      :tableData="tableData">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus" clearable>
@@ -81,7 +80,7 @@
             <p v-for="shop in item.sku_list" class="shoplist-content">
               <span class="goods-info">
                 <img :src="shop.goods_image" alt="" class="goods-image"/>
-                <a :href="`${HTTP_URL}/${shop.goods_id}`" style="color: #00a2d4;">{{ shop.name }}</a>
+                <a :href="`${HTTP_URL}/${shop.goods_id}`" target="_blank" style="color: #00a2d4;">{{ shop.name }}</a>
               </span>
               <span>
                 <span>{{shop.original_price | unitPrice('￥')}}</span> × <span>{{ shop.num }}</span>

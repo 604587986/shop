@@ -60,7 +60,7 @@
             <el-input v-model="mouldForm.name"></el-input>
           </el-form-item>
           <el-form-item :label="mouldForm.type === 1 ? '首重:': '首件:'" prop="first_company">
-            <el-input placeholder="请输入首重" v-model="mouldForm.first_company">
+            <el-input placeholder="请输入首重" v-model.number="mouldForm.first_company">
               <template slot="prepend">
                 {{ mouldForm.type === 1 ? 'kg': '个' }}
               </template>
@@ -72,7 +72,7 @@
             </el-input>
           </el-form-item>
           <el-form-item :label="mouldForm.type === 1 ? '续重:':'续件:'" prop="continued_company">
-            <el-input placeholder="请输入续重" v-model="mouldForm.continued_company">
+            <el-input placeholder="请输入续重" v-model.number="mouldForm.continued_company">
               <template slot="prepend">
                 {{ mouldForm.type === 1 ? 'kg': '个' }}
               </template>
