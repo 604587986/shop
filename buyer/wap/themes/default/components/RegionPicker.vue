@@ -27,13 +27,6 @@
         this.$emit('changed', object)
       },
       initAddressSelect() {
-        this.$nextTick(() => {
-          $(this.$el).addressSelect({
-            api: this.api,
-            callback: this.callback,
-            deData: this.default
-          })
-        })
       }
     }
   }
