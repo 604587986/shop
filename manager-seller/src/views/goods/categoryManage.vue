@@ -3,6 +3,7 @@
     <en-table-layout
       pagination
       :tableData="tableData"
+      default-expand-all="true"
       :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
@@ -10,22 +11,48 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column label="分组名称" width="320" align="left">
+        <el-table-column type="expand">
           <template slot-scope="scope">
-            <span v-if="toggleIconShow(scope.row)" @click="toogleCategory(scope.$index, scope.row)">
-              <i v-if="scope.row._expanded && scope.row.level===1" class=" el-icon-minus icon_expanded_level1"></i>
-              <i v-if="!scope.row._expanded && scope.row.level===1" class="el-icon-plus icon_expanded_level1"></i>
-            </span>
-            <span v-else>
-              <svg-icon
-                v-if="scope.row.level===2" iconClass="leftbotcorner"
-                className="leftbotcorner-icon icon_expanded_level2">
-              </svg-icon>
-              <i v-if="scope.row.level===1" class="el-icon-minus icon_expanded_level1"></i>
-            </span>
-            <span>{{ scope.row.shop_cat_name }}</span>
+            <en-table-layout
+              v-if="scope.row.children && scope.row.children.length"
+              :tableData="scope.row.children"
+              :show-header="false"
+              :toolbar="false"
+              :pagination="false"
+              :stripe="false"
+              style="width: 100%">
+              <template slot="table-columns">
+                <el-table-column width="50">
+                  <template slot-scope="scope"><i class="el-icon-minus"/></template>
+                </el-table-column>
+                <el-table-column prop="shop_cat_name" width="320"/>
+                <el-table-column label="排序">
+                  <template slot-scope="scope">{{ scope.row.sort || 0 }}</template>
+                </el-table-column>
+                <el-table-column>
+                  <template slot-scope="scope">
+                    <span class="showstatus showed" v-if="scope.row.disable === 1"><i class="el-icon-success"></i>已显示</span>
+                    <span class="showstatus notshow" v-if="scope.row.disable === 0"><i class="el-icon-success"></i>未显示</span>
+                  </template>
+                </el-table-column>
+                <!--操作-->
+                <el-table-column width="350">
+                  <template slot-scope="scope">
+                    <el-button
+                      type="success"
+                      @click="handleEditGoodsCategory(scope.$index, scope.row)">编辑
+                    </el-button>
+                    <el-button
+                      type="danger"
+                      @click="handleDeleteGoodsCategory(scope.row)">删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </template>
+            </en-table-layout>
           </template>
         </el-table-column>
+        <el-table-column prop="shop_cat_name" label="分组名称" width="320"/>
         <el-table-column prop="sort" label="排序"/>
         <el-table-column label="显示">
           <template slot-scope="scope">
@@ -55,7 +82,7 @@
     <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="25%">
       <el-form :model="goodsCatData" label-position="right" label-width="80px" :rules="rules" status-icon>
         <el-form-item label="分组名称">
-          <el-input v-model="goodsCatData.category_name" auto-complete="off" style="width: 100%;"></el-input>
+          <el-input v-model="goodsCatData.category_name" style="width: 100%;"></el-input>
         </el-form-item>
         <el-form-item label="上级分组">
           <el-select v-model="goodsCatData.category_parent" placeholder="请选择" style="width: 100%;">
@@ -174,7 +201,7 @@
           // 平行结构数据转换树形结构数据
           this.tableData = this.transData(this.tableData)
           // 为分组数据增加展开状态
-          this.add_expanded(this.tableData)
+          // this.add_expanded(this.tableData)
         })
       },
 
@@ -355,6 +382,11 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+
+  /*扩展样式修正*/
+  /deep/ .el-table__expanded-cell {
+     padding: 0;
   }
 
   .showstatus {
