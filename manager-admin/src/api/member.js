@@ -49,6 +49,7 @@ export function getMemberDetail(id) {
  * @param params
  */
 export function editMember(id, params) {
+  params.password = md5(params.password)
   return request({
     url: `members/${id}`,
     method: 'put',
