@@ -71,8 +71,8 @@
           </div>
         </div>
         <div class="same-pay-way bank-pay paybtn">
-          <nuxt-link v-if="online && !showPayBox" to="#">立即支付</nuxt-link>
-          <nuxt-link v-else :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
+          <nuxt-link v-if="!showPayBox" to="#">立即支付</nuxt-link>
+          <nuxt-link v-if="!online && showPayBox" :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
         </div>
       </div>
     </div>
