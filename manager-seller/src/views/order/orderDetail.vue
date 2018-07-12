@@ -129,7 +129,7 @@
                   <el-button
                     type="text"
                     v-if="scope.row.is_waybill === 1"
-                    @click="produceElectronicSurface">生成电子面单</el-button>
+                    @click="produceElectronicSurface(scope.row)">生成电子面单</el-button>
                 </template>
               </el-table-column>
               <!--操作-->
@@ -222,28 +222,41 @@
       </div>
     </el-dialog>
     <!--查看物流信息-->
-    <el-dialog title="物流信息" :visible.sync="logisticsShow" width="20%" align="center">
+    <el-dialog :visible.sync="logisticsShow" width="20%" align="center">
+      <div slot="title">
+        <h3>物流信息</h3>
+        <div class="logistics-base">
+          <span>物流公司：中通快递</span>
+          <span>快递单号：15645616161</span>
+        </div>
+      </div>
       <div class="logistics-info">
         <div>
-          <span>时间：</span>
-          <span>2018-06-05</span>
+          <el-steps direction="vertical" :active="1" align-center space="100px">
+            <el-step
+              v-for="(row, index) in logisticsInfoList"
+              :title="row.time"
+              :key="index"
+              :status="index === 0 ? 'success' : 'wait'"
+              :description="row.context"/>
+          </el-steps>
         </div>
+      </div>
+    </el-dialog>
+    <!--电子面单-->
+    <el-dialog title="电子面单" :visible.sync="electronicSurfaceShow" width="20%" align="center">
+      <!--主体-->
+      <div class="electronic-surface">
+        <!--条码-->
+        <div></div>
+        <!--收件方-->
         <div>
-          <span>备注：</span>
-          <span>撒大大说到发送</span>
+          <h4>收件方：</h4>
+          <h4>汪峰手 1865456464</h4>
+          <p class="electronic-address">阿斯顿个发生大事的发生地发大水大发的阿斯顿发</p>
         </div>
-        <div>
-          <span>物流公司：</span>
-          <span>撒的发生地发送</span>
-        </div>
-        <div>
-          <span>快递单号：</span>
-          <span>15645616161</span>
-        </div>
-        <div>
-          <span>提示：</span>
-          <span>法师打发打发</span>
-        </div>
+        <!--物品信息-->
+        <div></div>
       </div>
     </el-dialog>
     <!--物流信息-->
@@ -303,8 +316,44 @@
         /** 是否显示物流信息弹框 */
         logisticsCompanyShow: false,
 
-        /** 弹框显示 */
+        /** 是否显示查询物流信息显示 */
         orderDetailShow: false,
+
+        /** 发货物流信息 */
+        logisticsInfoList: [
+          {
+            time: '2018-07-10 07:43:21',
+            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
+          },
+          {
+            time: '2018-07-10 07:43:21',
+            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
+          },
+          {
+            time: '2018-07-10 07:43:21',
+            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
+          },
+          {
+            time: '2018-07-10 07:43:21',
+            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
+          },
+          {
+            time: '2018-07-10 07:43:21',
+            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
+          },
+          {
+            time: '2018-07-10 07:43:21',
+            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
+          },
+          {
+            time: '2018-07-10 07:43:21',
+            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
+          },
+          {
+            time: '2018-07-10 07:43:21',
+            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
+          }
+        ],
 
         /** 弹框标题 */
         dialogTitle: '调整订单总价',
@@ -343,7 +392,10 @@
         areas: [],
 
         /** 步骤list*/
-        stepList: []
+        stepList: [],
+
+        /** 是否显示电子面单 */
+        electronicSurfaceShow: false
       }
     },
     filters: {
@@ -472,12 +524,18 @@
       },
 
       /** 生成电子面单 */
-      produceElectronicSurface() {
-        this.$confirm('确认生成电子面单?', '提示', { type: 'warning' }).then(() => {
-          API_order.generateElectronicSurface(this.sn, {}).then(() => {
-
-          })
-        })
+      produceElectronicSurface(row) {
+        this.electronicSurfaceShow = true
+        // const _params = {
+        //   order_sn: this.sn,
+        //   logistics_id: row.logi_id
+        // }
+        // this.$confirm('确认生成电子面单?', '提示', { type: 'warning' }).then(() => {
+        //   API_order.generateElectronicSurface(_params).then(() => {
+        //     this.electronicSurfaceShow = true
+        //     this.$message.success('生成成功')
+        //   })
+        // })
       },
 
       /** 发货 */
@@ -713,6 +771,7 @@
     text-align: center;
   }
 
+  /*商品图片大小*/
   .goods-image {
     width: 50px;
     height: 50px;
@@ -722,32 +781,40 @@
     padding-top: 0;
   }
   /*物流信息*/
+  .logistics-base {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      font-size: 14px;
+      color: #4c4646;
+    }
+  }
   /deep/ .el-dialog__body {
     padding: 20px 25px;
-  }
-  .logistics-info {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    div {
-      margin: 10px 0;
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      span {
-        display: inline-block;
-      }
-      span:first-child {
-        width: 44%;
-        text-align: right;
-      }
+    .logistics-info {
+      max-height: 500px;
+      overflow-y: scroll;
     }
   }
 
+  /*电子面单*/
+  /deep/ .electronic-surface {
+    border: 1px solid #ddd;
+    padding: 5px;
+    & > div {
+      border-bottom: 1px dotted #ddd;
+      h4 {
+        text-align: left;
+      }
+      p {
+        text-align: left;
+        font-size: 12px;
+      }
+    }
+  }
 </style>
 

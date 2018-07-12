@@ -116,17 +116,16 @@ export function deliveryGoods(sn, params) {
 
 /**
  * 生成电子面单
- * @param ids
  * @param params
  * @returns {Promise<any>}
  */
-export function generateElectronicSurface(ids, params) {
+export function generateElectronicSurface(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `877`,
-      method: 'put',
+      url: `/seller/waybill`,
+      method: 'get',
       loading: false,
-      data: params
+      params
     }).then(response => {
       resolve(response)
     })
