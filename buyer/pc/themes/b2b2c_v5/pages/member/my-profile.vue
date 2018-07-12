@@ -14,7 +14,7 @@
           :on-success="(res) => { profileForm.face = res.url }"
         >
           <img v-if="profileForm.face" :src="profileForm.face" class="avatar">
-          <img v-else src="~/assets/images/icon-noface.jpg" title="求真相" class="avatar">
+          <img v-else src="../../assets/images/icon-noface.jpg" title="求真相" class="avatar">
           <div class="eidt-mask">
             <i class="el-icon-edit-outline"></i>
             <p>修改头像</p>
@@ -23,18 +23,12 @@
         <p>头像修改在保存后生效</p>
       </div>
       <el-form :model="profileForm" :rules="profileRules" ref="profileForm" label-width="100px" style="width:350px">
-        <!--<el-form-item label="账户名称" prop="uname">-->
-          <!--<el-input v-model="profileForm.uname" size="small" clearable></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="真实姓名" prop="truename">-->
-          <!--<el-input v-model="profileForm.truename" size="small" clearable></el-input>-->
-        <!--</el-form-item>-->
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="profileForm.nickname" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="性别" required>
           <el-radio v-model="profileForm.sex" :label="1">男</el-radio>
-          <el-radio v-model="profileForm.sex" :label="2">女</el-radio>
+          <el-radio v-model="profileForm.sex" :label="0">女</el-radio>
         </el-form-item>
         <el-form-item label="生日" prop="birthday">
           <el-date-picker
@@ -93,10 +87,6 @@
             this.MixinRequired('请输入真实姓名！'),
             { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
-          // truename: [
-          //   this.MixinRequired('请输入真实姓名！'),
-          //   { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
-          // ],
           nickname: [
             this.MixinRequired('请输入昵称！'),
             { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }

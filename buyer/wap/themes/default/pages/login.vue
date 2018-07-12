@@ -1,6 +1,5 @@
 <template>
   <div id="login">
-    <en-header-other title="欢迎登录"/>
     <!-- 大图 -->
     <div class="login-content">
       <div class="prompt">
@@ -116,10 +115,8 @@
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
-  import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'login',
-    components: {EnHeaderOther},
     layout: 'full',
     head() {
       return {

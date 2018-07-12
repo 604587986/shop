@@ -21,10 +21,10 @@
             :on-success="(res) => { authInfoForm.legal_img = res.url }"
             :on-remove="() => { authInfoForm.legal_img = '' }"
             :limit="1"
-            :file-list="authInfoForm.legal_img ? [{name: 'legal_img', url: authInfoForm.legal_img}] : []"
+            :file-list="authInfoForm.legal_img ? [{name: '法人身份证', url: authInfoForm.legal_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="营业执照编号：" prop="license_num">
@@ -75,10 +75,10 @@
             :on-success="(res) => { authInfoForm.licence_img = res.url }"
             :on-remove="() => { authInfoForm.licence_img = '' }"
             :limit="1"
-            :file-list="authInfoForm.licence_img ? [{name: 'licence_img', url: authInfoForm.licence_img}] : []"
+            :file-list="authInfoForm.licence_img ? [{name: '营业执照', url: authInfoForm.licence_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-form-item>
         <h5 class="item-title">组织机构代码证</h5>
@@ -91,10 +91,10 @@
             :on-success="(res) => { authInfoForm.code_img = res.url }"
             :on-remove="() => { authInfoForm.code_img = '' }"
             :limit="1"
-            :file-list="authInfoForm.code_img ? [{name: 'code_img', url: authInfoForm.code_img}] : []"
+            :file-list="authInfoForm.code_img ? [{name: '组织机构代码证', url: authInfoForm.code_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-form-item>
         <h5 class="item-title">一般纳税人证明</h5>
@@ -104,10 +104,10 @@
             :on-success="(res) => { authInfoForm.taxes_img = res.url }"
             :on-remove="() => { authInfoForm.taxes_img = '' }"
             :limit="1"
-            :file-list="authInfoForm.taxes_img ? [{name: 'taxes_img', url: authInfoForm.taxes_img}] : []"
+            :file-list="authInfoForm.taxes_img ? [{name: '一般纳税人证明', url: authInfoForm.taxes_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -122,7 +122,7 @@
 <script>
   import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
-  import EnRegionPicker from "@/components/RegionPicker";
+  import EnRegionPicker from "@/components/RegionPicker"
   export default {
     name: "auth-info",
     middleware: 'auth-seller',
@@ -206,6 +206,10 @@
     },
     mounted() {
       API_Shop.getApplyShopInfo().then(response => {
+        if (!response || response.company_name === null) {
+          this.$router.replace({ name: 'shop-apply' })
+          return false
+        }
         const { establish_date, licence_start, licence_end } = response
         establish_date && (response.establish_date *= 1000)
         licence_start && (response.licence_start *= 1000)

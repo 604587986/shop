@@ -8,13 +8,14 @@
     </div>
     <div class="collection-container">
       <div v-show="type === 'goods'" class="goods">
-        <template v-if="goodsData && goodsData.length > 0">
+        <template v-if="goodsData && goodsData.data.length">
           <ul>
             <li
               v-for="goods in goodsData.data"
               :key="goods.goods_id"
               :class="['coll-g-item', goods.show_del_pop && 'del-pop-show']"
             >
+              <!--// Andste_TODO 2018/7/12: 待适配-->
               <div class="goods-image">
                 <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                   <img :src="goods.goods_image" :alt="goods.goods_name">

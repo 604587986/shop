@@ -31,6 +31,7 @@ export function getMesssagesAsUnread(params) {
   return request({
     url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message',
     method: Method.GET,
+    needToken: true,
     params
   })
 }
@@ -53,7 +54,8 @@ export function messageMarkAsRead(ids) {
  */
 export function deleteMessage(ids) {
   return request({
-    url: `members/member-nocice-logs/${ids}}`,
-    method: Method.DELETE
+    url: `members/member-nocice-logs/${ids}`,
+    method: Method.DELETE,
+    needToken: true
   })
 }

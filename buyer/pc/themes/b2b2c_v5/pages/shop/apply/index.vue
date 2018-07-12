@@ -2,20 +2,53 @@
   <div id="apply-index">
     <div class="entry-container">
       <h1>欢迎来到Javashop多店铺示例商城，商家中心</h1>
-      <h3>您现在还没有店铺，无法对商家中心功能进行操作，您可以：</h3>
-      <div class="apply-btn">
-        <nuxt-link to="/shop/apply/user-agreement">马上开店</nuxt-link>
-        <h4>进入马上开店并填写相关信息，即可开设您的店铺。</h4>
-      </div>
+      <!--店铺申请流程未完成-->
+      <template v-if="shop_status === 'APPLYING'">
+        <h3>您的店铺申请流程尚未完成，无法对商家中心功能进行操作，您可以：</h3>
+        <div class="apply-btn">
+          <nuxt-link to="/shop/apply/user-agreement">继续开店</nuxt-link>
+          <h4>继续并填写相关信息，即可开设您的店铺。</h4>
+        </div>
+      </template>
+      <!--店铺申请被拒绝-->
+      <template v-else-if="shop_status === 'REFUSED'">
+        <h3>抱歉您的申请开店被拒绝，无法对商家中心功能进行操作，您可以：</h3>
+        <div class="apply-btn">
+          <nuxt-link to="/shop/apply/user-agreement">再次申请</nuxt-link>
+          <h4>再次申请开店并填写相关信息，即可开设您的店铺。</h4>
+        </div>
+      </template>
+      <!--正常开店-->
+      <template v-else>
+        <h3>您现在还没有店铺，无法对商家中心功能进行操作，您可以：</h3>
+        <div class="apply-btn">
+          <nuxt-link to="/shop/apply/user-agreement">马上开店</nuxt-link>
+          <h4>进入马上开店并填写相关信息，即可开设您的店铺。</h4>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-  // Andste_TODO 2018/7/4: 申请被拒绝待适配
+  import * as API_Shop from '@/api/shop'
+  import Storage from '@/utils/storage'
   export default {
     name: 'apply-index',
-    middleware: 'auth-seller'
+    middleware: 'auth-seller',
+    data() {
+      return {
+        shop_status: ''
+      }
+    },
+    mounted() {
+      API_Shop.getApplyShopInfo().then(response => {
+        if (response) {
+          Storage.setItem('applyShopStep', JSON.stringify(0))
+          this.shop_status = response.shop_disable
+        }
+      })
+    }
   }
 </script>
 

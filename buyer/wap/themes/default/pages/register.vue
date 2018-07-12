@@ -1,11 +1,5 @@
 <template>
   <div id="register">
-    <en-header-other title="欢迎注册">
-      <div class="have-account">
-        <span>已有账号？</span>
-        <nuxt-link :to="'/login' + MixinForward">请登录></nuxt-link>
-      </div>
-    </en-header-other>
     <div class="register-content">
       <el-form
         :model="registerForm"
@@ -56,10 +50,8 @@
   import * as API_Passport from '@/api/passport'
   import * as API_Article from '@/api/article'
   import { RegExp } from '~/ui-utils'
-  import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'register',
-    components: { EnHeaderOther },
     layout: 'full',
     head() {
       return {

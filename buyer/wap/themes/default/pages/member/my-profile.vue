@@ -50,7 +50,6 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="地区" prop="region">
-          <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="address">
           <el-input v-model="profileForm.address" size="small" clearable></el-input>

@@ -7,9 +7,7 @@
           <span>{{ params.keyword || '搜索商品' }}</span>
         </div>
       </div>
-      <i class="icon-more" slot="right" @click="showShortcutBox = true">
-        <shortcut-box :show="showShortcutBox" :top="30" @close="showShortcutBox = false"/>
-      </i>
+      <header-shortcut slot="right"/>
     </van-nav-bar>
     <search :show="showSearch" @close="showSearch = false"/>
     <!--// Andste_TODO 2018/7/11: 筛选功能未做-->
@@ -41,11 +39,8 @@
   import { List } from 'vant'
   Vue.use(List)
   import * as API_Goods from '@/api/goods'
-  import Search from "@/components/Search"
-  import ShortcutBox from "@/components/ShortcutBox"
   export default {
     name: 'goods-list',
-    components: {ShortcutBox, Search},
     data() {
       return {
         // 显示搜索盒子
@@ -126,15 +121,6 @@
         margin: 0 10px;
         font-size: 16px;
       }
-    }
-    .icon-more {
-      display: inline-block;
-      position: relative;
-      top: 5px;
-      width: 20px;
-      height: 20px;
-      background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAAMBAMAAAAzCuYOAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAPUExURUdwTF1fal1fal1famZmcA0W5H0AAAAFdFJOUwD+w2UZS9p4HgAAAEpJREFUGNNjYGBWFDJgQACsXBZFQUEhB7ggdi6TIBAowEWxcw1BlDBcFDtXEUQJwUWxcwXBAC6KnUuUIqKsI8rhRAUBUYFJTLQAAIISEL00zytiAAAAAElFTkSuQmCC") no-repeat center;
-      background-size: 100%;
     }
   }
   .goods-item {

@@ -45,7 +45,6 @@
           <el-input v-model="addressForm.mobile" size="small" :maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="收货地区" prop="region">
-          <en-region-picker :api="MixinRegionApi" :default="regions" @changed="(object) => { this.addressForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="addr">
           <el-input v-model="addressForm.addr" size="small"></el-input>

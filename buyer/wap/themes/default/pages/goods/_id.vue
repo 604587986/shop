@@ -1,71 +1,61 @@
 <template>
-  <div id="goods">
-    <bread-nav :goods="goods"/>
-    <div class="content">
-      <!--商品相册-->
-      <goods-zoom :images="goods.gallery_list" :spec-img="specImage"/>
-      <!--商品信息【包括规格、优惠券、促销等】-->
-      <goods-info :goods="goods" @spec-img-change="(img) => { this.specImage = img }"/>
-      <!--店铺卡片-->
-      <shop-card :shop-id="goods.seller_id"/>
-    </div>
-    <div class="details">
-      <div class="inner w">
-        <!--店铺标签商品推荐-->
-        <goods-tags :shop-id="goods.seller_id"/>
-        <div class="detail-container">
-          <div class="detail-tabs">
-            <div
-              v-for="tab in tabs"
-              :key="tab.title"
-              :class="['item-tab', tab.active && 'active']"
-              @click="handleClickTabItem(tab)"
-            >{{ tab.title }}</div>
-          </div>
-          <div class="detail-content">
-            <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.intro"></div>
-            <!--商品参数-->
-            <goods-params v-show="curTab === '规格参数'" :goods-params="goods.goods_params"/>
-            <!--商品评论-->
-            <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id"/>
-            <!--商品咨询-->
-            <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
-            <!--销售记录-->
-            <sales-record v-show="curTab === '销售记录'" :goods-id="goods.goods_id"/>
+  <div>
+    <van-nav-bar left-arrow @click-left="$router.go(-1)">
+      <van-tabs v-model="tabActive" slot="title">
+        <van-tab title="商品"/>
+        <van-tab title="评价"/>
+        <van-tab title="详情"/>
+      </van-tabs>
+      <header-shortcut slot="right"/>
+    </van-nav-bar>
+    <div class="goods-container">
+      <van-swipe :autoplay="3000" class="goods-swipe">
+        <van-swipe-item v-for="(gallery, index) in galleryList" :key="index">
+          <img :src="gallery.original" @click="handlePreviewImage(index)">
+        </van-swipe-item>
+      </van-swipe>
+      <div class="goods-buy">
+        <div class="goods-name">
+          <h1>{{ goods.goods_name }}</h1>
+          <div class="collection-goods" @click="handleCollectGoods">
+            <van-icon v-if="collected" name="like" color="#f42424"/>
+            <van-icon v-else name="like-o"/>
+            关注
           </div>
         </div>
+        <van-cell-group :border="false">
+          <van-cell class="goods-price">
+            <div slot="title" class="price">
+              ￥<em>{{ goods.price | unitPrice('', 'before') }}</em>.{{ goods.price | unitPrice('', 'after') }}
+            </div>
+          </van-cell>
+        </van-cell-group>
       </div>
+      <span class="separated"></span>
     </div>
+    <div style="height: 50px"></div>
+    <van-goods-action>
+      <van-goods-action-mini-btn icon="chat" text="客服"/>
+      <van-goods-action-mini-btn icon="cart" info="5" text="购物车"/>
+      <van-goods-action-mini-btn icon="shop" text="店铺"/>
+      <van-goods-action-big-btn text="加入购物车"/>
+      <van-goods-action-big-btn text="立即购买" primary/>
+    </van-goods-action>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
-  import { mapGetters } from 'vuex'
+  import { Tabs, Tab, Swipe, SwipeItem, ImagePreview, Cell, CellGroup, GoodsAction, GoodsActionBigBtn, GoodsActionMiniBtn } from 'vant'
+  Vue.use(Tabs).use(Tab).use(Swipe).use(SwipeItem).use(Cell).use(CellGroup).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn)
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
-  import * as GoodsComponents from './'
   import Storage from '@/utils/storage'
-  import { Pagination } from 'element-ui'
-  Vue.use(Pagination)
   export default {
     name: 'goods-detail',
-    asyncData({ params }, callback) {
-      const goods_id = params.id
-      if (!goods_id) {
-        callback(null, { goods: '' })
-        return
-      }
-      API_Goods.getGoods(goods_id).then(response => {
-        callback(null, { goods: response })
-      }).catch(e => {
-        console.log(e)
-        let _statusCode = 200
-        if (e.code === 'ECONNREFUSED') {
-          _statusCode = 502
-        }
-        callback({ statusCode: _statusCode })
-      })
+    async asyncData({ params }) {
+      let goods = await API_Goods.getGoods(params.id)
+      return { goods, galleryList: goods.gallery_list || [] }
     },
     head() {
       return {
@@ -73,19 +63,19 @@
         meta: [
           { hid: 'keywords', name: 'keywords', content: this.goods.meta_keywords },
           { hid: 'description', name: 'description', content: `${this.goods.meta_description}-Javashop多店铺示例商城` },
-          { 'http-equiv': 'mobile-agent', content: `format=xhtml; url=/goods?goods_id=${this.goods.goods_id}` },
-          { 'http-equiv': 'mobile-agent', content: `format=html5; url=/goods?goods_id=${this.goods.goods_id}` }
+          { 'http-equiv': 'mobile-agent', content: `format=xhtml; url=/goods/${this.goods.goods_id}` },
+          { 'http-equiv': 'mobile-agent', content: `format=html5; url=/goods/${this.goods.goods_id}` }
         ]
       }
     },
-    components: GoodsComponents,
     data() {
       return {
+        // 商品id
+        goods_id: this.$route.params.id,
+        // 商品信息
         goods: '',
-        /** 规格图片 */
-        specImage: '',
-        tabs: ['商品详情', '规格参数', '商品评论', '商品咨询', '销售记录'].map((item, index) => ({ title: item, active: index === 0 })),
-        curTab: '商品详情',
+        // 当前tab
+        tabActive: 0,
         // 商品是否已被收藏
         collected: false
       }
@@ -94,75 +84,107 @@
       const { goods_id, seller_id } = this.goods
       // 用于服务端记录浏览次数，每次+1【服务端去重】
       API_Goods.visitGoods(goods_id)
-      // 如果用户已登录，查询是否已收藏商品、店铺
-      Storage.getItem('refreshToken') && API_Members.getGoodsIsCollect(goods_id).then(response => {
+      // 如果用户已登录，查询是否已收藏商品
+      Storage.getItem('user') && API_Members.getGoodsIsCollect(goods_id).then(response => {
         this.collected = response.message
       })
     },
-    computed: {
-      ...mapGetters(['user'])
-    },
     methods: {
-      /** 商品详情tab点击事件 */
-      handleClickTabItem(tab) {
-        this.curTab = tab.title
-        this.tabs.map(item => {
-          item.active = tab === item
-          return item
-        })
+      /** 收藏商品 */
+      handleCollectGoods() {
+        if (!Storage.getItem('user')) {
+          this.$message.error('请先登录！')
+          return
+        }
+        API_Members.collectionGoods(this.goods_id).then(() => { this.collected = true })
+      },
+      /** 商品图预览 */
+      handlePreviewImage(index) {
+        ImagePreview(this.galleryList.map(item => item.original), index)
       }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .content {
-    display: flex;
-    justify-content: space-between;
-    width: 1110px;
-    min-height: 500px;
-    margin: 0 auto;
-    background-color: #fff;
-    box-shadow: 0 2px 5px #ccc;
-    padding: 40px 40px 12px 40px;
+  .separated {
+    display: block;
+    width: 100%;
+    height: 10px;
+    background-color: #e8e8ed;
   }
-  .details {
-    margin: 50px 0;
-    .inner {
-      display: flex;
-      justify-content: space-between;
-    }
-    $dc_width: 1210px - 200px - 30px;
-    .detail-container {
-      width: $dc_width;
-      min-height: 100px;
-    }
-    .detail-tabs {
-      display: flex;
+  /deep/ {
+    .van-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 36px;
-      .item-tab {
-        width: ($dc_width - 4px) / 5;
-        height: 36px;
-        background-color: #333;
-        border-right: 1px solid #fff;
-        line-height: 36px;
-        color: #fff;
-        text-align: center;
-        cursor: pointer;
-        transition: all .2s ease;
-        &:hover, &.active { background-color: #7f69b3 }
-        &:nth-child(5) { border-right: 0 }
+      z-index: 99;
+    }
+    .van-nav-bar__left .van-nav-bar__arrow { color: #666 }
+    .van-tabs__wrap::after {
+      border-width: 0;
+    }
+  }
+  .goods-container {
+    margin-top: 46px;
+    .goods-swipe {
+      width: 100%;
+      height: 375px;
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
-    .detail-content {
-      padding-top: 10px;
-      overflow: hidden;
+    .goods-buy {
+      position: relative;
+      .goods-name {
+        padding: 10px;
+        &::before {
+          content: "";
+          height: 0;
+          display: block;
+          border-top: 1px solid #ddd;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+        }
+        h1 {
+          font-size: 16px;
+          color: #333;
+          line-height: 18px;
+          padding-right: 50px;
+          min-height: 36px;
+          font-weight: 400;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
+        .collection-goods {
+          position: absolute;
+          width: 50px;
+          height: 36px;
+          right: 0;
+          top: 10px;
+          text-align: center;
+          border-left: 1px solid #ddd;
+          .van-icon {
+            display: block;
+            font-size: 20px;
+          }
+        }
+      }
+      .goods-price {
+        font-size: 12px;
+        line-height: 1.8;
+        padding: 0 10px;
+        em {
+          font-size: 18px;
+          font-weight: 700;
+        }
+      }
     }
-    .intro-detail { text-align: center }
-  }
-  /deep/ .el-pagination {
-    margin-top: 20px;
-    text-align: right;
   }
 </style>

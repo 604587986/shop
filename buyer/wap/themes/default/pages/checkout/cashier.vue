@@ -1,6 +1,5 @@
 <template>
   <div id="cashier">
-    <en-header-other title="收银台"/>
     <div class="cashier-box">
       <div class="cashier-change">
         <!--// Andste_TODO 2018/7/5: 在拆单上有些问题-->
@@ -46,10 +45,8 @@
 <script>
   import * as API_Trade from '@/api/trade'
   import * as API_Order from '@/api/order'
-  import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'cashier',
-    components: {EnHeaderOther},
     layout: 'full',
     middleware: 'auth-user',
     data() {

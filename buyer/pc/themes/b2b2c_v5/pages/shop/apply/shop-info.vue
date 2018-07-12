@@ -34,11 +34,11 @@
   import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
   import * as API_Goods from '@/api/goods'
-  import EnRegionPicker from "@/components/RegionPicker";
+  import EnRegionPicker from "@/components/RegionPicker"
   export default {
     name: "shop-info",
     middleware: 'auth-seller',
-    components: {EnRegionPicker},
+    components: { EnRegionPicker },
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
@@ -71,6 +71,10 @@
       ]).then(responses => {
         const shopInfo = responses[0]
         const categorys = responses[1]
+        if (!shopInfo || shopInfo.bank_account_name === null) {
+          this.$router.replace({ name: 'shop-apply' })
+          return false
+        }
         // 设置店铺信息
         Object.keys(this.shopInfoForm).forEach(key => this.shopInfoForm[key] = shopInfo[key])
         const { shop_province_id, shop_city_id, shop_county_id, shop_town_id } = shopInfo
