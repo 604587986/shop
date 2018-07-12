@@ -56,6 +56,8 @@ export default {
       const { opt_type, opt_value } = block.block_opt
       // Andste_TODO 2018/7/9: 未适配完
       switch (opt_type) {
+        // 链接地址
+        case 'URL': return opt_value
         // 商品
         case 'GOODS': return `/goods/${opt_value}`
         // 关键字
