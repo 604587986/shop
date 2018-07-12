@@ -85,7 +85,7 @@ export function updateConsigneeInfo(sn, params) {
 export function confirmGetAmount(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/trade/orders/${sn}/address`,
+      url: `/trade/orders/${sn}/pay`,
       method: 'post',
       loading: false,
       data: params

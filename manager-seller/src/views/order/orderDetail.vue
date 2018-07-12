@@ -574,8 +574,9 @@
       /** 确认收款 */
       confirmReceive() {
         this.$confirm('确认执行此操作?', '提示', { type: 'warning' }).then(() => {
-          API_order.confirmGetAmount(this.sn, {}).then(() => {
-
+          API_order.confirmGetAmount(this.sn, { pay_price: this.orderDetail.order_price }).then(() => {
+            this.$message.success('收款成功！')
+            this.GET_OrderDetail()
           })
         })
       }
