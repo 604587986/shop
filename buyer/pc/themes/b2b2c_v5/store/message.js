@@ -36,19 +36,7 @@ export const mutations = {
       item.have_read = (ids.includes(item.message_id))
       return item
     })
-  },
-  // /**
-  //  * 删除站内消息
-  //  * @param state
-  //  * @param ids
-  //  */
-  // [types.DELETE_MESSAGE](state, ids) {
-  //   const _list = []
-  //   state.messageData.data.forEach(item => {
-  //     if (!ids.includes(item.message_id)) _list.push(item)
-  //   })
-  //   state.messageData.data = _list
-  // }
+  }
 }
 
 /** actions */

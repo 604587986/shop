@@ -7,16 +7,16 @@
     </div>
     <div class="message-container">
       <ul>
-        <li v-for="message in messageData.data" :key="message.message_id" class="message-item">
-          <div class="msg-time">{{ message.message_time | unixToDate }}</div>
+        <li v-for="message in messageData.data" :key="message.id" class="message-item">
+          <div class="msg-time">{{ message.send_time | unixToDate }}</div>
           <div class="msg-box">
             <div class="msg-title">
-              <h4>{{ message.message_title }}</h4>
+              <h4>{{ message.message_title || '站内消息' }}</h4>
               <i class="el-icon-close" @click="handleDeleteMessage(message)"></i>
             </div>
             <div class="msg-content clearfix">
-              <div>{{ message.message_content }}</div>
-              <nuxt-link to="#">查看详情 > </nuxt-link>
+              <div>{{ message.content }}</div>
+              <!--<nuxt-link to="#">查看详情 > </nuxt-link>-->
             </div>
           </div>
         </li>
@@ -65,7 +65,7 @@
       /** 删除消息 */
       handleDeleteMessage(message) {
         this.$confirm('确定要删除这条消息吗？', () => {
-          this.deleteMessage(message.message_id).then(() => {
+          this.deleteMessage(message.id).then(() => {
             this.$message.success('删除成功！')
           })
         })
