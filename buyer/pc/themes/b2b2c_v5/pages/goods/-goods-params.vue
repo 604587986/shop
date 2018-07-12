@@ -20,7 +20,7 @@
    */
   export default {
     name: "goods-params",
-    props: ['goodsParams']
+    props: ['goods-params']
   }
 </script>
 

@@ -31,7 +31,7 @@
           <div class="detail-content">
             <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.intro"></div>
             <!--商品参数-->
-            <goods-params v-show="curTab === '规格参数'" :goods-params="goods.goods_params"/>
+            <goods-params v-show="curTab === '规格参数'" :goods-params="goods.param_list"/>
             <!--商品评论-->
             <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id"/>
             <!--商品咨询-->
