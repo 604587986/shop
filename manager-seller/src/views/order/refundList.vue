@@ -50,7 +50,7 @@
         <!--退款、货单号-->
         <el-table-column prop="sn" label="退款、货单号"/>
         <!--订单号-->
-        <el-table-column prop="sn" label="订单号"/>
+        <el-table-column prop="order_sn" label="订单号"/>
         <!--会员名称-->
         <el-table-column prop="seller_name" label="会员名称"/>
         <!--创建时间-->
@@ -132,34 +132,36 @@
               <span>{{currentType}}原因: </span><span>{{ refundInfo.refund_reason }}</span>
             </div>
             <div class="order-info-item">
-              <span>详细描述:  </span><span>{{ refundInfo.customer_remark }}</span>
+              <span>详细描述:  </span><span>{{ refundInfo.customer_remark || '无'}}</span>
             </div>
             <div class="order-info-item">
               <span>退款金额:  </span>
-              <el-input v-if="authOpera.allow_seller_approval" v-model="refundMoney"></el-input>
+              <el-input v-if="authOpera.allow_seller_approval" v-model="refundMoney">
+                <template slot="prepend">¥</template>
+              </el-input>
               <span v-if="!authOpera.allow_seller_approval">
                 {{ refundInfo.refund_price | unitPrice('¥') }}
               </span>
             </div>
             <div class="order-info-item order-info-remark">
               <span>审核备注:  </span>
-              <el-input v-if="authOpera.allow_seller_approval" type="textarea" v-model="remark"></el-input>
-              <span v-if="!authOpera.allow_seller_approval">{{ remark }}</span>
+              <el-input v-if="authOpera.allow_seller_approval" type="textarea" v-model="refundInfo.seller_remark"></el-input>
+              <span v-if="!authOpera.allow_seller_approval">{{ refundInfo.seller_remark || '无' }}</span>
             </div>
             <!--审核-->
             <div class="order-info-item" v-if="authOpera.allow_seller_approval">
-              <span>审核:  </span>
-              <el-button type="success" size="mini"  @click="handleRefundAuth(1)">通过</el-button>
+              <span>审 核:  </span>
+              <el-button type="primary" size="mini"  @click="handleRefundAuth(1)">通过</el-button>
               <el-button type="danger" size="mini"  @click="handleRefundAuth(0)">不通过</el-button>
             </div>
             <!--退款-->
             <div class="order-info-item" v-if="authOpera.allow_seller_refund">
-              <span>退款:  </span>
+              <span>退 款:  </span>
               <el-button type="primary" size="mini"  @click="handleRefund">退款完成</el-button>
             </div>
             <!--入库-->
             <div class="order-info-item" v-if="authOpera.allow_stock_in">
-              <span>入库: </span>
+              <span>入 库: </span>
               <el-button type="primary" size="mini"  @click="handleWareHousing">确认入库</el-button>
             </div>
           </div>
@@ -250,9 +252,6 @@
         /** 退款金额 */
         refundMoney: '',
 
-        /** 备注 */
-        remark: '',
-
         /** 退款商品列表数据 */
         refundGoodsData: [],
 
@@ -291,7 +290,7 @@
         }
         delete this.params.start_time
         delete this.params.end_time
-        if (this.advancedForm.refund_time_range) {
+        if (this.advancedForm.refund_time_range && this.advancedForm.refund_time_range.length > 0) {
           this.params.start_time = this.advancedForm.refund_time_range[0].getTime() / 1000
           this.params.end_time = this.advancedForm.refund_time_range[1].getTime() / 1000
         }
@@ -324,6 +323,7 @@
         this.currentType = row.refuse_type_text
         this.currentSn = row.sn
         this.authOpera = row.after_sale_operate_allowable
+        this.refundMoney = row.refund_price
         API_refund.getRefundDetails(row.sn).then(response => {
           this.goodsRefundshow = true
           this.refundInfo = response.refund
@@ -348,7 +348,7 @@
               this.goodsRefundshow = false
               this.GET_RefundOrder()
             })
-          }).catch(() => {})
+          })
       },
 
       /** 卖家执行退款 */
@@ -360,7 +360,7 @@
               this.goodsRefundshow = false
               this.GET_RefundOrder()
             })
-          }).catch(() => { })
+          })
       },
 
       /** 卖家执行入库操作 */
@@ -374,7 +374,7 @@
               this.goodsRefundshow = false
               this.GET_RefundOrder()
             })
-          }).catch(() => { })
+          })
       }
     }
   }
@@ -465,6 +465,12 @@
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
+    }
+
+    /*textarea*/
+    /deep/ .el-textarea__inner {
+      width: 80%;
+      margin-left: 2px;
     }
   }
 </style>

@@ -59,9 +59,7 @@
           <el-input-number v-model="navform.sort" controls-position="right"  :min="0" :max="99999"/>
         </el-form-item>
         <el-form-item label="URL:" prop="nav_url">
-          <el-input placeholder="请输入URL" v-model="navform.nav_url">
-            <template slot="prepend">Http://</template>
-          </el-input>
+          <el-input placeholder="请输入URL" v-model="navform.nav_url"></el-input>
           <span class="URLtip">请填写包含http://的完整URL地址，否则会跳转到外链</span>
           <span class="URLtip">例: http://www.baidu.com填写http://www.baidu.com</span>
         </el-form-item>
