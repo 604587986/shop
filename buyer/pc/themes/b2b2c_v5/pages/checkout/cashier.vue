@@ -34,14 +34,14 @@
               <h3>支付平台</h3>
             </div>
             <ul class="cashier-pay-list">
-              <li v-for="payment in paymentList" :key="payment.plugin_id">
+              <li v-for="payment in paymentList" :key="payment.plugin_id" :class="['payment-item', payment.selected && 'selected']">
                 <img :src="payment.image" @click="initiatePay(payment)">
               </li>
             </ul>
           </div>
         </div>
         <div v-if="showPayBox" class="cashier-pay-box">
-          <div class="pay-item alipay">
+          <div v-if="payment_plugin_id === 'alipayDirectPlugin'" class="pay-item alipay">
             <div class="alipay-left">
               <p>使用电脑支付</p>
               <div class="pc-pay-img">
@@ -53,6 +53,19 @@
               <p>使用支付宝钱包扫一扫即可付款</p>
               <div class="pay-qrcode">
                 <iframe id="alipay-qrcode" type="text/html" class="alipay-qrcode" src="" frameborder="no"></iframe>
+              </div>
+            </div>
+          </div>
+          <div v-if="payment_plugin_id === 'weixinPayPlugin'" class="pay-item wechat">
+            <div class="wechat-left">
+              <div class="pc-pay-img">
+                <img src="../../assets/images/background-wechat.jpg">
+              </div>
+            </div>
+            <div class="wechat-right">
+              <p>使用微信扫一扫即可付款</p>
+              <div class="pay-erweima">
+                <iframe src="" id="wechat-qrcode" class="wechat-qrcode" frameborder="no"></iframe>
               </div>
             </div>
           </div>
@@ -84,7 +97,9 @@
         // 显示支付窗口
         showPayBox: false,
         // 发起电脑支付url
-        payUrl: 'javascript:;'
+        payUrl: 'javascript:;',
+        // 支付方式代码
+        payment_plugin_id: ''
       }
     },
     mounted() {
@@ -95,13 +110,21 @@
         API_Trade.getPaymentList()
       ]).then(responses => {
         this.order = responses[0]
-        this.paymentList = responses[1]
+        this.paymentList = responses[1].map(item => {
+          item.selected = false
+          return item
+        })
       })
     },
     methods: {
       /** 发起支付 */
       initiatePay(payment) {
         this.showPayBox = true
+        this.$set(this, 'paymentList', this.paymentList.map(item => {
+          item.selected = item.plugin_id === payment.plugin_id
+          return item
+        }))
+        this.payment_plugin_id = payment.plugin_id
         const trade_type = this.trade_sn ? 'trade' : 'order'
         const sn = this.trade_sn || this.order_sn
         const client_type = 'PC'
@@ -119,29 +142,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .index-cashier {
-    position: relative;
-    width: 1000px;
-    margin: 20px auto;
-    height: 60px;
-    .welcome {
-      a {
-        float: left;
-        width: 245px;
-        height: 60px;
-      }
-      img {
-        width: 240px;
-        height: 60px;
-      }
-      span {
-        font-size: 23px;
-        float: left;
-        display: block;
-        margin: 25px 5px;
-      }
-    }
-  }
   .cashier-box {
     width: 100%;
     background: #f5f5f5;
@@ -204,7 +204,7 @@
         overflow: hidden;
         margin: 0 10px;
         padding: 10px 40px;
-        li {
+        .payment-item {
           float: left;
           line-height: 30px;
           margin: 0 8px 10px 0;
@@ -214,7 +214,11 @@
           cursor: pointer;
           img {
             width: 150px;
-            height: 45px;
+            height: 35px;
+          }
+          &.selected {
+            border: 2px solid #f56a3e;
+            padding: 4px;
           }
         }
       }
@@ -331,6 +335,45 @@
           margin: 20px auto;
           height: 200px;
           width: 200px;
+        }
+      }
+    }
+    .pay-item.wechat {
+      margin: 0 3px 0 3px;
+      background: #fff;
+      overflow: hidden;
+      height: 335px;
+      .wechat-left {
+        width: 400px;
+        float: left;
+        margin: 0 0 0 100px;
+      }
+      .pc-pay-img {
+        width: 400px;
+        text-align: center;
+        padding: 25px 0;
+        z-index: 999;
+      }
+      .wechat-right {
+        width: 400px;
+        float: left;
+        p {
+          width: 340px;
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          margin: 25px 0 0 0;
+          font-size: 16px;
+        }
+        .pay-erweima {
+          width: 350px;
+          height: 255px;
+          text-align: center;
+        }
+        .wechat-qrcode {
+          width: 200px;
+          height: 200px;
+          margin: 0 auto;
         }
       }
     }
