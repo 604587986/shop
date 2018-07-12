@@ -22,7 +22,7 @@ export const mutations = {
    */
   [types.SET_USER_INFO](state, data) {
     state.user = data
-    process.client && Storage.setItem('user', JSON.stringify(data), { domain: domain.cookie })
+    Storage.setItem('user', JSON.stringify(data), { domain: domain.cookie })
   },
   /**
    * 移除用户信息
