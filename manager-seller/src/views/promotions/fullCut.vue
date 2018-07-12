@@ -34,11 +34,7 @@
             <!--活动类型-->
             <el-table-column prop="activity_type" label="活动类型" :formatter="activityType" />
             <!--活动状态-->
-            <el-table-column label="活动状态">
-              <template slot-scope="scope">
-                <span>{{ scope.row.disabled }}</span>
-              </template>
-            </el-table-column>
+            <el-table-column label="活动状态" prop="disabled"/>
             <!--操作-->
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
