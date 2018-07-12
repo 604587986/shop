@@ -61,6 +61,7 @@
    */
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
+  import Storage from '@/utils/storage'
   export default {
     name: 'goods-info',
     props: ['goods'],
@@ -122,11 +123,28 @@
     methods: {
       /** 初始化规格 */
       initSpec() {
+        let { sku_id } = this.$route.query
+        let selectedSpecs = ''
+        if (sku_id) {
+          sku_id = Number(sku_id)
+          this.skuMap.forEach((value, key) => {
+            if (value.sku_id === sku_id) {
+              selectedSpecs = key.split('-')
+            }
+          })
+        }
         const _selectedSpecVals = []
         this.specList.forEach(spec => {
           if (Array.isArray(spec.valueList)) {
             spec.valueList.forEach((val, index) => {
-              if (index === 0) {
+              if (selectedSpecs) {
+                const spec_value_id = val.spec_value_id
+                if (selectedSpecs.includes(String(spec_value_id))) {
+                  val.selected = true
+                  this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
+                  _selectedSpecVals.push(val.spec_value_id)
+                }
+              } else if (index === 0) {
                 val.selected = true
                 this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
                 _selectedSpecVals.push(val.spec_value_id)
@@ -187,6 +205,12 @@
       handleBuyNow() {},
       /** 加入购物车 */
       handleAddToCart() {
+        if (!Storage.getItem('user')) {
+          this.$confirm('您还未登录，要现在去登录吗？', () => {
+            this.$router.push({ path: '/login', query: { forward: `${this.$route.path}?sku_id=${this.selectedSku.sku_id}`} })
+          })
+          return false
+        }
         const { num } = this
         const { sku_id } = this.selectedSku
         API_Trade.addToCart(sku_id, num).then(response => {

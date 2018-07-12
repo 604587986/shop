@@ -2,7 +2,6 @@
   <div id="cart" style="background: #f5f5f5;padding-bottom: 20px">
     <div class="cart-header">
       <div class="w">
-        <div class="logo"><en-logo/></div>
       </div>
     </div>
     <div class="cart-content" id="cart-content">

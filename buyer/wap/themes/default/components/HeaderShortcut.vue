@@ -1,25 +1,40 @@
 <template>
-  <transition name="shortcut">
-    <div v-if="show" id="ShortcutBox">
-      <div class="shortcut-mask" @click.stop="$emit('close')"></div>
-      <ul class="shortcut-box" :style="{top: (top || 0) + 'px', right: (right || 0) + 'px'}">
-        <li><nuxt-link to="/"><span class="home"></span><strong>首页</strong></nuxt-link></li>
-        <li><nuxt-link to="/category"><span class="category"></span><strong>商品分类</strong></nuxt-link></li>
-        <li><nuxt-link to="/cart"><span class="cart"></span><strong>购物车</strong></nuxt-link></li>
-        <li><nuxt-link to="/member"><span class="mine"></span><strong>我的</strong></nuxt-link></li>
-      </ul>
-    </div>
-  </transition>
+  <i class="icon-more" @click="show = true">
+    <transition name="shortcut">
+      <div v-if="show" id="ShortcutBox">
+        <div class="shortcut-mask" @click.stop="show = false"></div>
+        <ul class="shortcut-box">
+          <li><nuxt-link to="/"><span class="home"></span><strong>首页</strong></nuxt-link></li>
+          <li><nuxt-link to="/category"><span class="category"></span><strong>商品分类</strong></nuxt-link></li>
+          <li><nuxt-link to="/cart"><span class="cart"></span><strong>购物车</strong></nuxt-link></li>
+          <li><nuxt-link to="/member"><span class="mine"></span><strong>我的</strong></nuxt-link></li>
+        </ul>
+      </div>
+    </transition>
+  </i>
 </template>
 
 <script>
   export default {
-    name: 'ShortcutBox',
-    props: ['show', 'top', 'right']
+    name: 'HeaderShortcut',
+    data() {
+      return {
+        show: false
+      }
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  .icon-more {
+    display: inline-block;
+    position: relative;
+    top: 5px;
+    width: 20px;
+    height: 20px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAAMBAMAAAAzCuYOAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAPUExURUdwTF1fal1fal1famZmcA0W5H0AAAAFdFJOUwD+w2UZS9p4HgAAAEpJREFUGNNjYGBWFDJgQACsXBZFQUEhB7ggdi6TIBAowEWxcw1BlDBcFDtXEUQJwUWxcwXBAC6KnUuUIqKsI8rhRAUBUYFJTLQAAIISEL00zytiAAAAAElFTkSuQmCC") no-repeat center;
+    background-size: 100%;
+  }
   .shortcut-mask {
     position: fixed;
     top: 0;
@@ -31,7 +46,7 @@
   .shortcut-box {
     display: block;
     position: absolute;
-    top: 0;
+    top: 30px;
     right: 0;
     z-index: 1000;
     border-radius: 4px;
