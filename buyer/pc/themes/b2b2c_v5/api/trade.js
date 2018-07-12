@@ -4,6 +4,7 @@
  */
 
 import request, { Method } from '@/utils/request'
+import { api } from '@/ui-domain'
 
 /**
  * 获取购物车列表
@@ -235,5 +236,61 @@ export function getPaymentList(client_type = 'PC') {
     url: `order/pay/${client_type}`,
     method: Method.GET,
     needToken: true
+  })
+}
+
+/**
+ * 根据交易编号或订单编号查询收银台数据
+ * @param params
+ */
+export function getCashierData(params) {
+  return request({
+    url: 'trade/orders/cashier',
+    method: Method.GET,
+    needToken: true,
+    params
+  })
+}
+
+/**
+ * 主动查询支付结果
+ * @param trade_type
+ * @param sn
+ * @param params
+ */
+export function getPayStatus(trade_type, sn, params) {
+  return request({
+    url: `order/pay/query/${trade_type}/${sn}`,
+    method: Method.GET,
+    needToken: true,
+    params
+  })
+}
+
+/**
+ * 获取微信扫描支付的状态
+ * @param sn
+ */
+export function getWeChatQrStatus(sn) {
+  return request({
+    url: `order/pay/weixin/status/${sn}`,
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 对一个交易发起支付
+ * @param trade_type
+ * @param sn
+ * @param params
+ */
+export function initiatePay(trade_type, sn, params) {
+  return `${api.buyer}/order/pay/${trade_type}/${sn}`
+  return request({
+    url: `order/pay/${trade_type}/${sn}`,
+    method: Method.GET,
+    needToken: true,
+    params
   })
 }
