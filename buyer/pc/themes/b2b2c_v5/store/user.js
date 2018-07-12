@@ -10,8 +10,7 @@ import { domain } from '~/ui-domain'
 export const state = () => ({
   user: '',
   accessToken: '',
-  refreshToken: '',
-  expires: ''
+  refreshToken: ''
 })
 
 /** mutations */
@@ -23,7 +22,12 @@ export const mutations = {
    */
   [types.SET_USER_INFO](state, data) {
     state.user = data
-    Storage.setItem('user', JSON.stringify(data), { expires: state.expires, domain: domain.cookie })
+    if (process.client) {
+      const refreshToken = Storage.getItem('refreshToken')
+      const refresh_token_time = Base64.decode(refreshToken).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(refresh_token_time)
+      Storage.setItem('user', JSON.stringify(data), { expires, domain: domain.cookie })
+    }
   },
   /**
    * 移除用户信息
@@ -66,7 +70,6 @@ export const mutations = {
       const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(refresh_token_time)
       Storage.setItem('refreshToken', token, { expires, domain: domain.cookie })
-      state.expires = expires
     }
   },
   /**
