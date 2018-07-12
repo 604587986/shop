@@ -151,7 +151,7 @@
                     <el-option
                       v-for="item in couponList"
                       :key="item.coupon_id"
-                      :label="item.coupon_name"
+                      :label="item.title"
                       :value="item.coupon_id">
                     </el-option>
                   </el-select>
