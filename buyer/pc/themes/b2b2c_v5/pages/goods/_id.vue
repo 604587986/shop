@@ -2,12 +2,18 @@
   <div id="goods">
     <bread-nav :goods="goods"/>
     <div class="content">
-      <!--商品相册-->
-      <goods-zoom :images="goods.gallery_list" :spec-img="specImage"/>
-      <!--商品信息【包括规格、优惠券、促销等】-->
-      <goods-info :goods="goods" @spec-img-change="(img) => { this.specImage = img }"/>
-      <!--店铺卡片-->
-      <shop-card :shop-id="goods.seller_id"/>
+      <div class="inner-content">
+        <!--商品相册-->
+        <goods-zoom :images="goods.gallery_list" :spec-img="specImage"/>
+        <!--商品信息【包括规格、优惠券、促销等】-->
+        <goods-info :goods="goods" @spec-img-change="(img) => { this.specImage = img }"/>
+        <!--店铺卡片-->
+        <shop-card :shop-id="goods.seller_id"/>
+      </div>
+      <div v-show="showShare" class="bdsharebuttonbox bdshare-button-style1-16" style="margin-top: 10px">
+        <a href="javascript:;" class="bds_more" data-cmd="more">分享到：</a><a href="javascript:;" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="javascript:;" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="javascript:;" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a><a href="javascript:;" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a><a href="javascript:;" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+        <a href="javascript:;" :class="['collect-goods-btn', collected && 'collected']" @click="handleCollectionGoods">{{ collected ? '已收藏' : '收藏商品' }}</a>
+      </div>
     </div>
     <div class="details">
       <div class="inner w">
@@ -87,7 +93,9 @@
         tabs: ['商品详情', '规格参数', '商品评论', '商品咨询', '销售记录'].map((item, index) => ({ title: item, active: index === 0 })),
         curTab: '商品详情',
         // 商品是否已被收藏
-        collected: false
+        collected: false,
+        // 显示分享按钮
+        showShare: false
       }
     },
     mounted() {
@@ -98,17 +106,56 @@
       Storage.getItem('refreshToken') && API_Members.getGoodsIsCollect(goods_id).then(response => {
         this.collected = response.message
       })
+      this.loadBdShareScript()
     },
     computed: {
       ...mapGetters(['user'])
     },
     methods: {
+      /** 收藏商品 */
+      handleCollectionGoods() {
+        if (!Storage.getItem('user')) {
+          this.$message.error('您还未登录，不能收藏商品！')
+          return false
+        }
+        API_Members.collectionGoods(this.goods.goods_id).then(() => {
+          this.$message.success('收藏成功！')
+          this.collected = true
+        })
+      },
       /** 商品详情tab点击事件 */
       handleClickTabItem(tab) {
         this.curTab = tab.title
         this.tabs.map(item => {
           item.active = tab === item
           return item
+        })
+      },
+      /** 加载百度分享 */
+      loadBdShareScript() {
+        this.$nextTick(() => {
+          const { goods } = this
+          window._bd_share_config = {
+            common:
+              {
+                bdSnsKey:{},
+                bdText: goods.goods_name,
+                bdMini: "2",
+                bdMiniList: false,
+                bdPic: goods.thumbnail,
+                bdStyle: "1",
+                bdSize: "16"
+              },
+            share:{bdSize: 16}
+          }
+          const bdss = document.getElementById('BdShareScript')
+          if (bdss) bdss.remove()
+          const s = document.createElement('script')
+          s.type = 'text/javascript'
+          s.id = 'BdShareScript'
+          s.src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)
+          document.body.appendChild(s)
+          this.showShare = true
         })
       }
     }
@@ -117,14 +164,24 @@
 
 <style type="text/scss" lang="scss" scoped>
   .content {
-    display: flex;
-    justify-content: space-between;
-    width: 1110px;
+    width: 1210px;
     min-height: 500px;
     margin: 0 auto;
     background-color: #fff;
     box-shadow: 0 2px 5px #ccc;
     padding: 40px 40px 12px 40px;
+    box-sizing: border-box;
+    .inner-content {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .collect-goods-btn {
+    margin-left: 20px;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABrElEQVQ4T62TP0hcQRCHf7P7zk64BITEPliJtQQMCJaJpLjCRu723u6BMYgpgmArmkaCkCI7U5xw5StsgoJaXGMn6ZLiSJr8wSbkVeHgMLfhyT05L4cIuuWPmW/Yb2cJtzx0y35cARhjJrTWNQAPlVKJ934vG2CtLQF4DiAAOBCRRj74EuCcyxrjEAIT0ZcQwisAPwFERPSIiHa73W4EYJ2I9pl5KYNcAJxzkwAkTdPHSZL8zenW2n0iOmfmZ3lmjBnXWn9USs167z/ngOUQwqiIbPU7qdVqU51O53e9Xv/en8dxvEFEP0TkfQ54EUK4JyIbN5Fqrd0G8E1Edi4A1Wr1vtb6JE3TqSRJOtdBSqXSSLFY/EREM8x81i9xNbPPzK+vAzjn3gL4yszvLiX2Gsg5dxRC2BaRg2EQa60BsCAic/89YxYYY0a11odKqZfe+9MBcYtKqZV2uz3TaDT+DAVkYblcflAoFD4AWBOR4yyL43heKbUJ4Akz/+oHD13lSqUyFkVRBjnpFU8T0dPB5kEHV67ds/2GiLqtVmut2WyeD/Nyt5/pJks0WPMPjeaXEW5C95kAAAAASUVORK5CYII=");
+    &.collected {
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABd0lEQVQ4T6WSPUvDcBDGn2uVxjRpQVqngqXJomBnaUEcHBXBTfFbuCouOjn7CURw081BN18KgksHoZg/aSeHikvTSrXJSVMT+pJKgzfey4977h7CP4P651nXYy1gkZjlGSEeCWCvzpnMbEuS5mXghQyj7eV9gKVpeyA6BhBzi8xlcpz9KebX72j0FMAqiCJg/gRwqAhx0m1zAVYut4NI5DxATRvMNojk4Rozb6tCXLiAhq6XCFgOcw5mLqlCFDxAnYBUKADwrhpGuidB025AtBYKwHynCrHSA+j6LoCzMABiPogLceR/oaFpV0S0OQmEmSuKEHkCvnwAp9NKM5F4AFH+LwgDH9O2XZBMs+K/sd8sliTdE7AQBGHAItsuKqZZHjGSl2ho2hwBtyBaGnApUI/a9rpsmk/9+QEr+5ukUqqVTF4TUfHXlc/U6WzEa7W34c0CAa6TdT3WZL4E4MSF2OoeLEjWWIALyWYlVKvOuOGRI07ywuGeH8P8iBFSzfHsAAAAAElFTkSuQmCC");
+    }
   }
   .details {
     margin: 50px 0;
