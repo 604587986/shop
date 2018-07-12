@@ -27,10 +27,10 @@
             :on-success="(res) => { finlQuafForm.bank_img = res.url }"
             :on-remove="() => { finlQuafForm.bank_img = '' }"
             :limit="1"
-            :file-list="finlQuafForm.bank_img ? [{name: 'bank_img', url: finlQuafForm.bank_img}] : []"
+            :file-list="finlQuafForm.bank_img ? [{name: '开户银行许可证', url: finlQuafForm.bank_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-form-item>
         <h5 class="item-title">税务登记证</h5>
@@ -46,10 +46,10 @@
             :on-success="(res) => { finlQuafForm.taxes_certificate_img = res.url }"
             :on-remove="() => { finlQuafForm.taxes_certificate_img = '' }"
             :limit="1"
-            :file-list="finlQuafForm.taxes_certificate_img ? [{name: 'taxes_certificate_img', url: finlQuafForm.taxes_certificate_img}] : []"
+            :file-list="finlQuafForm.taxes_certificate_img ? [{name: '税务登记证', url: finlQuafForm.taxes_certificate_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-form-item>
       </el-form>
