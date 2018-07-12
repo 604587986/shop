@@ -27,9 +27,9 @@
                   <el-select v-model="advancedForm.shop_disable" placeholder="请选择" clearable>
                     <el-option label="全部" value="ALL"/>
                     <el-option label="已开启" value="OPEN"/>
-                    <el-option label="已关闭" value="CLOSE"/>
+                    <el-option label="已关闭" value="CLOSED"/>
                     <el-option label="待审核" value="APPLY"/>
-                    <el-option label="审核未通过" value="refused"/>
+                    <el-option label="审核未通过" value="REFUSED"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="注册日期">
