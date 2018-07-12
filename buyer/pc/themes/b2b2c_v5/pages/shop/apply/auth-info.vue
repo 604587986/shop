@@ -122,7 +122,7 @@
 <script>
   import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
-  import EnRegionPicker from "@/components/RegionPicker";
+  import EnRegionPicker from "@/components/RegionPicker"
   export default {
     name: "auth-info",
     middleware: 'auth-seller',
@@ -206,6 +206,10 @@
     },
     mounted() {
       API_Shop.getApplyShopInfo().then(response => {
+        if (!response || response.company_name === null) {
+          this.$router.replace({ name: 'shop-apply' })
+          return false
+        }
         const { establish_date, licence_start, licence_end } = response
         establish_date && (response.establish_date *= 1000)
         licence_start && (response.licence_start *= 1000)

@@ -15,14 +15,7 @@
 <script>
   import Vue from 'vue'
   import { Checkbox, CheckboxGroup, DatePicker, Form, FormItem, Input, InputNumber, Upload } from 'element-ui'
-  Vue.use(Checkbox)
-  Vue.use(CheckboxGroup)
-  Vue.use(DatePicker)
-  Vue.use(Form)
-  Vue.use(FormItem)
-  Vue.use(Input)
-  Vue.use(InputNumber)
-  Vue.use(Upload)
+  Vue.use(Checkbox).use(CheckboxGroup).use(DatePicker).use(Form).use(FormItem).use(Input).use(InputNumber).use(Upload)
   import applyHeader from './apply/-apply-header'
   import applyMenu from './apply/-apply-menu'
   import applySteps from './apply/-apply-steps'
