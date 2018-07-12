@@ -12,16 +12,16 @@
         class="basic-info-form"
       >
         <el-form-item label="公司名称：" prop="company_name">
-          <el-input v-model="basicInfoForm.company_name" clearable></el-input>
+          <el-input v-model="basicInfoForm.company_name" clearable :maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="公司地址：" prop="company_address">
-          <el-input v-model="basicInfoForm.company_address" clearable></el-input>
+          <el-input v-model="basicInfoForm.company_address" clearable :maxlength="100"></el-input>
         </el-form-item>
         <el-form-item label="公司电话：" prop="company_phone">
-          <el-input v-model="basicInfoForm.company_phone" clearable :maxlength="11"></el-input>
+          <el-input v-model="basicInfoForm.company_phone" clearable :maxlength="13"></el-input>
         </el-form-item>
         <el-form-item label="公司邮箱：" prop="company_email">
-          <el-input v-model="basicInfoForm.company_email" clearable></el-input>
+          <el-input v-model="basicInfoForm.company_email" clearable :maxlength="80"></el-input>
         </el-form-item>
         <el-form-item label="员工总数：" prop="employee_num">
           <el-input v-model="basicInfoForm.employee_num" clearable>
@@ -34,7 +34,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="联系人姓名：" prop="link_name">
-          <el-input v-model="basicInfoForm.link_name" clearable></el-input>
+          <el-input v-model="basicInfoForm.link_name" clearable :maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="联系人电话：" prop="link_phone">
           <el-input v-model="basicInfoForm.link_phone" :maxlength="11" clearable></el-input>
@@ -71,9 +71,20 @@
         },
         /** 基础信息 表单规则 */
         basicInfoRules: {
-          company_name: [ req_rule('请输入公司名称'), len_rule(1, 20) ],
-          company_address: [ req_rule('请输入公司地址'), len_rule(1, 100) ],
-          company_phone: [ req_rule('请输入公司电话'), len_rule(6, 11)],
+          company_name: [req_rule('请输入公司名称')],
+          company_address: [req_rule('请输入公司地址')],
+          company_phone: [
+            req_rule('请输入公司电话'),
+            { validator: (rule, value, callback) => {
+                if (!RegExp.TEL.test(value)) {
+                  callback(new Error('请输入固定电话，例如：010-8888888'))
+                } else {
+                  callback()
+                }
+              },
+              trigger: 'blur'
+            }
+          ],
           company_email: [
             req_rule('请输入公司邮箱'),
             { validator: (rule, value, callback) => {
@@ -110,10 +121,7 @@
               trigger: 'blur'
             }
           ],
-          link_name: [
-            req_rule('请输入联系人姓名'),
-            len_rule(1, 20)
-          ],
+          link_name: [req_rule('请输入联系人姓名')],
           link_phone: [
             req_rule('请输入联系人电话'),
             { validator: (rule, value, callback) => {
@@ -141,9 +149,8 @@
           if (valid) {
             this.basicInfoForm.reg_monety = this.basicInfoForm.reg_money
             API_Shop.applyShopStep(1, this.basicInfoForm).then(response => {
-              console.log(response)
+              this.$router.push({ name: 'shop-apply-auth-info' })
             })
-            this.$router.push({ name: 'shop-apply-auth-info' })
           } else {
             this.$message.error('表单填写有误，请核对！')
             return false

@@ -27,10 +27,10 @@
             :on-success="(res) => { finlQuafForm.bank_img = res.url }"
             :on-remove="() => { finlQuafForm.bank_img = '' }"
             :limit="1"
-            :file-list="finlQuafForm.bank_img ? [{name: 'bank_img', url: finlQuafForm.bank_img}] : []"
+            :file-list="finlQuafForm.bank_img ? [{name: '开户银行许可证', url: finlQuafForm.bank_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-form-item>
         <h5 class="item-title">税务登记证</h5>
@@ -46,10 +46,10 @@
             :on-success="(res) => { finlQuafForm.taxes_certificate_img = res.url }"
             :on-remove="() => { finlQuafForm.taxes_certificate_img = '' }"
             :limit="1"
-            :file-list="finlQuafForm.taxes_certificate_img ? [{name: 'taxes_certificate_img', url: finlQuafForm.taxes_certificate_img}] : []"
+            :file-list="finlQuafForm.taxes_certificate_img ? [{name: '税务登记证', url: finlQuafForm.taxes_certificate_img}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -64,11 +64,11 @@
 <script>
   import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
-  import EnRegionPicker from "@/components/RegionPicker";
+  import EnRegionPicker from "@/components/RegionPicker"
   export default {
     name: "financial-qualification",
     middleware: 'auth-seller',
-    components: {EnRegionPicker},
+    components: { EnRegionPicker },
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
       const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
@@ -112,6 +112,10 @@
     },
     mounted() {
       API_Shop.getApplyShopInfo().then(response => {
+        if (!response || response.legal_name === null) {
+          this.$router.replace({ name: 'shop-apply' })
+          return false
+        }
         Object.keys(this.finlQuafForm).forEach(key => this.finlQuafForm[key] = response[key])
         const { bank_province_id, bank_city_id, bank_county_id, bank_town_id } = response
         this.defaultRegions = [bank_province_id, bank_city_id, bank_county_id, bank_town_id]
