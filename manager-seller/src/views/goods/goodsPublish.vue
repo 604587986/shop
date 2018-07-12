@@ -1090,8 +1090,14 @@
       /** 文件列表移除文件时的钩子  图片删除校验*/
       handleRemove(file, fileList) {
         this.baseInfoForm.goods_gallery_list.forEach((key, index) => {
-          if (key.name === file.name) {
-            this.baseInfoForm.goods_gallery_list.splice(index, 1)
+          if (key.img_id !== -1) {
+            if (key.img_id === file.img_id) {
+              this.baseInfoForm.goods_gallery_list.splice(index, 1)
+            }
+          } else {
+            if (key.name === file.name) {
+              this.baseInfoForm.goods_gallery_list.splice(index, 1)
+            }
           }
         })
         if (fileList.length <= 0) {
