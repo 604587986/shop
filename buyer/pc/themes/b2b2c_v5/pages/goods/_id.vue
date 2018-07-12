@@ -148,8 +148,6 @@
               },
             share:{bdSize: 16}
           }
-          const bdss = document.getElementById('BdShareScript')
-          if (bdss) bdss.remove()
           const s = document.createElement('script')
           s.type = 'text/javascript'
           s.id = 'BdShareScript'
@@ -158,6 +156,11 @@
           this.showShare = true
         })
       }
+    },
+    destroyed() {
+      // 当组件销毁时，移除百度分享创建的script标签
+      const bdss = document.getElementById('BdShareScript')
+      if (bdss) bdss.remove()
     }
   }
 </script>

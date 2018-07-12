@@ -35,11 +35,9 @@
    * 缩略图啥的
    */
   import Swiper from 'swiper'
-  import { PicZoom } from '@/components'
   export default {
     name: "goods-zoom",
     props: ['images', 'specImg'],
-    components: { PicZoom },
     data() {
       const _current = this.images[0]
       _current.active = true
@@ -58,7 +56,7 @@
       }
     },
     methods: {
-      /** 初始化图片放大镜 */
+      /** 初始化图片相册 */
       initZoomSwiper() {
         this.zoomSwiper = new Swiper('.swiper-container-zoom', {
           direction : 'vertical',
@@ -84,6 +82,11 @@
           this.current = image
         }
       }
+    },
+    destroyed() {
+      // 当组件销毁时，移除放大镜的canvas节点
+      const mcc = document.querySelector('.mouse-cover-canvas')
+      mcc && mcc.remove()
     }
   }
 </script>
