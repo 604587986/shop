@@ -80,11 +80,22 @@
       /** 改变日期的回调*/
       changeYearMonth(obj) {
         this.params = {
+          ...this.params,
+
           cycle_type: obj.type,
 
-          year: obj.year,
+          year: obj.year
+        }
+        if (obj.type === 'MONTH') {
+          this.params = {
+            ...this.params,
 
-          month: obj.month
+            cycle_type: obj.type,
+
+            year: obj.year,
+
+            month: parseInt(obj.month)
+          }
         }
       },
 
@@ -108,9 +119,6 @@
           this.loading = false
           /** x轴信息  此处应当为中国34个行政区划的名称*/
           const xData = response.map((item) => { return item.name })
-
-          /** 数据信息 图=》对象数组 表=》number数组 */
-          const seriesAreaData = response.map((item) => { return item.value })
 
           /** tooltip提示信息 */
           let seriesName = ''

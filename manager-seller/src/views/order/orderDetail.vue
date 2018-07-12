@@ -390,11 +390,14 @@
             this.isShowEditShipName = false
           }
 
-          // 是否可以调整价格  （在线支付）未付款时皆可调整价格 （订单状态 新订单 已确认 未付款)  货到付款（新订单 已确认 未付款）
+          // 是否可以调整价格  （在线支付）未付款时皆可调整价格 （新订单 已确认 未付款)  货到付款（新订单 已确认 未付款）
           if ((this.orderDetail.payment_type === 'ONLINE' && this.orderDetail.pay_status === 'PAY_NO') ||
             (this.orderDetail.payment_type === 'COD' && (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
               this.orderDetail.order_status === 'PAY_NO'))) {
             this.isShowEditOrderPrice = true
+            if (this.orderDetail.order_status === 'CANCELLED') {
+              this.isShowEditOrderPrice = false
+            }
           } else {
             this.isShowEditOrderPrice = false
           }

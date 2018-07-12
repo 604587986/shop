@@ -249,7 +249,7 @@
             <el-form-item
               v-for="(goods_params_list, index) in baseInfoForm.goods_params_list"
               v-if="goods_params_list && goods_params_list.group_id && paramsgroup.group_id === goods_params_list.group_id"
-              :key="goods_params_list.param_id"
+              :key="index"
               :label="`${goods_params_list.param_name}：`"
               :prop="'goods_params_list.' + index + '.param_value'"
               :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' }">
@@ -262,7 +262,7 @@
                 v-model="goods_params_list.param_value"
                 placeholder="请选择">
                 <el-option
-                  v-for="option in goods_params_list.option_list"
+                  v-for="(option, index) in goods_params_list.option_list"
                   :key="option"
                   :label="option"
                   :value="option">

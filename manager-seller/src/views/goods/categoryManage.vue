@@ -2,7 +2,9 @@
   <div>
     <en-table-layout
       pagination
+      ref="tableLayout"
       :tableData="tableData"
+      :default-expand-all="true"
       :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
@@ -10,22 +12,59 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column label="分组名称" width="320" align="left">
+        <el-table-column type="expand" width="0">
           <template slot-scope="scope">
-            <span v-if="toggleIconShow(scope.row)" @click="toogleCategory(scope.$index, scope.row)">
-              <i v-if="scope.row._expanded && scope.row.level===1" class=" el-icon-minus icon_expanded_level1"></i>
-              <i v-if="!scope.row._expanded && scope.row.level===1" class="el-icon-plus icon_expanded_level1"></i>
-            </span>
-            <span v-else>
-              <svg-icon
-                v-if="scope.row.level===2" iconClass="leftbotcorner"
-                className="leftbotcorner-icon icon_expanded_level2">
-              </svg-icon>
-              <i v-if="scope.row.level===1" class="el-icon-minus icon_expanded_level1"></i>
-            </span>
-            <span>{{ scope.row.shop_cat_name }}</span>
+            <en-table-layout
+              v-if="scope.row.children && scope.row.children.length"
+              :tableData="scope.row.children"
+              :show-header="false"
+              :toolbar="false"
+              :pagination="false"
+              :stripe="false"
+              style="width: 100%">
+              <template slot="table-columns">
+                <el-table-column width="50">
+                  <template slot-scope="scope">
+                    <div class="expand">
+                      <svg-icon iconClass="leftbotcorner" className="leftbotcorner-icon"/>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="shop_cat_name"/>
+                <el-table-column label="排序">
+                  <template slot-scope="scope">{{ scope.row.sort || 0 }}</template>
+                </el-table-column>
+                <el-table-column>
+                  <template slot-scope="scope">
+                    <span class="showstatus showed" v-if="scope.row.disable === 1"><i class="el-icon-success"></i>已显示</span>
+                    <span class="showstatus notshow" v-if="scope.row.disable === 0"><i class="el-icon-success"></i>未显示</span>
+                  </template>
+                </el-table-column>
+                <!--操作-->
+                <el-table-column>
+                  <template slot-scope="scope">
+                    <el-button
+                      type="success"
+                      @click="handleEditGoodsCategory(scope.$index, scope.row)">编辑
+                    </el-button>
+                    <el-button
+                      type="danger"
+                      @click="handleDeleteGoodsCategory(scope.row)">删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </template>
+            </en-table-layout>
           </template>
         </el-table-column>
+        <el-table-column width="48">
+          <template slot-scope="scope">
+            <div @click="() => { handleToggleExpand(scope.row) }" class="expand">
+              <i :class="['el-icon', scope.row.expanded ? 'el-icon-plus' : 'el-icon-minus']"></i>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="shop_cat_name" label="分组名称"/>
         <el-table-column prop="sort" label="排序"/>
         <el-table-column label="显示">
           <template slot-scope="scope">
@@ -33,7 +72,7 @@
             <span class="showstatus notshow" v-if="scope.row.disable === 0"><i class="el-icon-success"></i>未显示</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="350">
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
               type="success"
@@ -44,7 +83,6 @@
               @click="handleDeleteGoodsCategory(scope.row)">删除
             </el-button>
             <el-button
-              v-if=" scope.row.level === 1 "
               type="primary"
               @click="handleAddSonCategory(scope.$index, scope.row)">新增下级
             </el-button>
@@ -55,7 +93,7 @@
     <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="25%">
       <el-form :model="goodsCatData" label-position="right" label-width="80px" :rules="rules" status-icon>
         <el-form-item label="分组名称">
-          <el-input v-model="goodsCatData.category_name" auto-complete="off" style="width: 100%;"></el-input>
+          <el-input v-model="goodsCatData.category_name" style="width: 100%;"></el-input>
         </el-form-item>
         <el-form-item label="上级分组">
           <el-select v-model="goodsCatData.category_parent" placeholder="请选择" style="width: 100%;">
@@ -152,7 +190,7 @@
       add_expanded(data) {
         if (Array.isArray(data) && data.length > 0) {
           data.forEach(elem => {
-            this.$set(elem, '_expanded', false)
+            this.$set(elem, 'expanded', false)
             if (elem.children && elem.children.length > 0) {
               this.add_expanded(elem.children)
             }
@@ -166,13 +204,6 @@
         API_goodsCategory.getGoodsCategoryList().then(response => {
           this.loading = false
           this.tableData = response
-          // 为分组增加等级标识
-          this.tableData.forEach(key => {
-            const _level = key.shop_cat_pid === 0 ? 1 : 2
-            this.$set(key, 'level', _level)
-          })
-          // 平行结构数据转换树形结构数据
-          this.tableData = this.transData(this.tableData)
           // 为分组数据增加展开状态
           this.add_expanded(this.tableData)
         })
@@ -261,72 +292,13 @@
         }
       },
 
-      /** 点击展开和关闭的时候，图标的切换*/
-      toggleIconShow(record) {
-        if (record.children && record.children.length > 0) {
-          return true
+      /** 展开/关闭 */
+      handleToggleExpand(row) {
+        if (row.children) {
+          this.$refs['tableLayout'].$refs['table'].toggleRowExpansion(row)
+          row.expanded = !row.expanded
+          return
         }
-        return false
-      },
-
-      /** 展开下级*/
-      toogleCategory($index, rowData) {
-        let childLen = rowData.children.length
-        if (rowData._expanded) { // 去闭合
-          let dataArr = []
-          dataArr.push(rowData)
-          let arr = this.getChildCategoryId(dataArr, [])
-          for (let i = 0; i < childLen; i++) {
-            this.tableData.map((value) => {
-              if (arr.indexOf(value.shop_cat_id) > -1) {
-                this.removeByValue(this.tableData, value.shop_cat_id)
-              }
-            })
-          }
-        } else { // 去展开
-          let pre = this.tableData.slice(0, $index + 1)
-          let concatChildren = pre.concat(rowData.children)
-          let last = this.tableData.slice($index + 1)
-          this.tableData = concatChildren.concat(last)
-        }
-        rowData._expanded = !rowData._expanded
-      },
-
-      /** 获取子级分组id */
-      getChildCategoryId(data, emptyArr) {
-        Array.from(data).forEach((record) => {
-          record.level !== 1 && emptyArr.push(record.shop_cat_id)
-          if (record.children && record.children.length > 0) {
-            let childCategoryIdArr = this.getChildCategoryId(record.children, emptyArr)
-            emptyArr.concat(childCategoryIdArr)
-          }
-        })
-        return emptyArr
-      },
-
-      /** 对数组原型添加删除指定项的方法 */
-      removeByValue(arr, val) {
-        for (var i = 0; i < arr.length; i++) {
-          if (arr[i].shop_cat_id === val) {
-            arr.splice(i, 1)
-            break
-          }
-        }
-      },
-
-      /** 平行结构转树形结构数据 */
-      transData(data) {
-        const _datafirst = this.datafirst = data.filter(key => { return key.level === 1 })
-        const _dataseconed = data.filter(key => { return key.level === 2 })
-        _datafirst.forEach(key => {
-          this.$set(key, 'children', [])
-          _dataseconed.forEach(item => {
-            if (item.shop_cat_pid === key.shop_cat_id) {
-              key.children.push(item)
-            }
-          })
-        })
-        return _datafirst
       }
     }
   }
@@ -357,29 +329,67 @@
     height: 50px;
   }
 
+  /*扩展样式修正*/
+  /deep/ .el-table__expanded-cell {
+     padding: 0;
+  }
+
+  /* 控制状态是否已显示 */
   .showstatus {
     margin: 2px;
     padding: 2px;
     border-radius: 5px;
   }
-
   .showed {
     color: #5CB85C;
     border: 1px solid #5cb85c;
   }
-
   .notshow {
-    color: #888888;
-    border: 1px solid #888888;
+    color: #888;
+    border: 1px solid #888;
   }
 
-  .icon_expanded_level1 {
-    margin-left: 100px;
-    cursor: pointer;
-    border: 1px solid #ddd;
+
+  /*展开样式控制*/
+  .expand {
+    width: 50px;
+    i {
+      cursor: pointer;
+      padding: 2px;
+      border: 1px solid #ddd;
+    }
+  }
+  .expand_out {
+    width: 48px;
+    i {
+      cursor: pointer;
+      padding: 2px;
+      border: 1px solid #ddd;
+    }
+  }
+  .leftbotcorner-icon {
+    margin-left: 20px;
   }
 
-  .icon_expanded_level2 {
-    margin-left: 125px;
+  /deep/ {
+    .el-table__expanded-cell {
+      border-bottom: none;
+      padding: 0;
+      .container {
+        padding: 0;
+      }
+      .el-table::before {
+        display: none;
+      }
+    }
+    .el-table__expand-column {
+      border-right: none;
+    }
+    .el-table__expand-icon {
+      display: none;
+    }
+    .expand {
+      cursor: pointer;
+    }
   }
 </style>
