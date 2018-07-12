@@ -114,7 +114,7 @@
       submitStorageForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_StorageSolution.editStorageSolution(this.storageForm.id, this.storageForm).then(response => {
+            API_StorageSolution.editStorageSolution(this.storageForm.bean, this.storageForm).then(response => {
               this.dialogStorageVisible = false
               this.GET_StorageSolutiontList()
               this.$message.success('修改成功！')
