@@ -118,10 +118,18 @@
           this.$message.error('您还未登录，不能收藏商品！')
           return false
         }
-        API_Members.collectionGoods(this.goods.goods_id).then(() => {
-          this.$message.success('收藏成功！')
-          this.collected = true
-        })
+        const { goods_id } = this.goods
+        if (this.collected) {
+          API_Members.deleteGoodsCollection(goods_id).then(() => {
+            this.$message.success('取消收藏成功！')
+            this.collected = false
+          })
+        } else {
+          API_Members.collectionGoods(goods_id).then(() => {
+            this.$message.success('收藏成功！')
+            this.collected = true
+          })
+        }
       },
       /** 商品详情tab点击事件 */
       handleClickTabItem(tab) {
