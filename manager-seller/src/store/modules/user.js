@@ -19,7 +19,10 @@ const user = {
     SET_USER_INFO: (state, user) => {
       state.avatar = user.face
       state.name = user.uname
-      Storage.setItem('user', JSON.stringify(user), { domain: domain.cookie })
+      const refreshToken = Storage.getItem('refreshToken')
+      const refresh_token_time = Base64.decode(refreshToken).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(refresh_token_time)
+      Storage.setItem('user', JSON.stringify(user), { expires, domain: domain.cookie })
     },
     /**
      * 登出
