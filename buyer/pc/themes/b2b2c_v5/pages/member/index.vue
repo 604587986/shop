@@ -153,14 +153,14 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import EnFace from '@/components/Face'
   import * as API_Order from '@/api/order'
   import * as API_Members from '@/api/members'
   export default {
     name: 'member-index',
-    components: { EnFace },
     data() {
       return {
+        // 订单数据
+        orderData: '',
         // 统计数量
         statisticsNum: {},
         // 订单状态数量
@@ -169,17 +169,16 @@
     },
     mounted() {
       this.$nextTick(this.initShopSwiper)
-      !this.orderData && this.getOrderData({order_status: 'ALL'})
       !this.goodsCollectionData && this.getGoodsCollectionData()
       !this.shopCollectionData && this.getShopCollectionData()
       this.GET_OrderStatusNum()
       this.GET_StatisticsNum()
+      API_Order.getOrderList().then(response => { this.orderData = response })
     },
     computed: {
       ...mapGetters({
         user: 'user',
         cartSkuList: 'cart/skuList',
-        orderData: 'order/orderData',
         goodsCollectionData: 'collection/goodsCollectionData',
         shopCollectionData: 'collection/shopCollectionData'
       })

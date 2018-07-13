@@ -11,12 +11,12 @@
       </ul>
     </div>
     <div class="order-search">
-      <input type="text" v-model="goods_name" placeholder="输入订单中商品关键词" @keyup.enter="handleSearch">
-      <button type="button" @click="handleSearch">搜索</button>
+      <input type="text" v-model="params.goods_name" placeholder="输入订单中商品关键词" @keyup.enter="GET_OrderList">
+      <button type="button" @click="GET_OrderList">搜索</button>
       <span v-if="orderData">搜到：<em style="color: #f42424">{{ orderData.data_total }}</em> 笔订单</span>
       <span v-else>搜索中...</span>
     </div>
-    <empty-member v-if="!orderData || orderData.data.length === 0">暂无订单</empty-member>
+    <empty-member v-if="!orderData || !orderData.data.length">暂无订单</empty-member>
     <template v-else>
       <div class="order-table">
         <div class="order-table-thead">
@@ -89,24 +89,24 @@
 
 <script>
   import * as API_Order from '@/api/order'
-  import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'my-order-index',
     mounted() {
       /** 如果有hash值，或者没有订单数据。需要重新请求数据 */
-      if (!this.orderData || this.$route.hash) this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+      if (!this.orderData || this.$route.hash) this.GET_OrderList()
       window.addEventListener('hashchange', this.handleHashChanged)
     },
     data() {
       let _hash = this.$route.hash
       _hash = _hash ? _hash.replace(/^#/,'') : 'ALL'
       return {
-        goods_name: '',
         params: {
           page_no: 1,
           page_size: 5,
-          order_status: _hash
+          order_status: _hash,
+          goods_name: ''
         },
+        orderData: '',
         navList: [
           { title: '所有订单', status: 'ALL' },
           { title: '待付款', status: 'WAIT_PAY' },
@@ -121,11 +121,6 @@
         })
       }
     },
-    computed: {
-      ...mapGetters({
-        orderData: 'order/orderData'
-      })
-    },
     methods: {
       /** 订单筛选栏点击 */
       handleClickNav(nav) {
@@ -134,12 +129,7 @@
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
-        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
-      },
-      /** 订单搜索 */
-      handleSearch() {
-        this.params.goods_name = this.goods_name
-        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+        this.GET_OrderList()
       },
       /** hash发生改变 */
       handleHashChanged() {
@@ -149,7 +139,7 @@
           return item
         })
         this.params.order_status = _hash
-        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+        this.GET_OrderList()
       },
       /** 取消订单 */
       handleCancelOrder(order_sn) {
@@ -178,9 +168,13 @@
           })
         })
       },
-      ...mapActions({
-        getOrderData: 'order/getOrderDataAction'
-      })
+      /** 获取订单数据 */
+      GET_OrderList() {
+        API_Order.getOrderList(this.params).then(response => {
+          this.orderData = response
+          this.MixinScrollToTop()
+        })
+      }
     },
     destroyed() {
       window.removeEventListener('hashchange', this.handleHashChanged)

@@ -26,22 +26,6 @@ export const SET_REFRESH_TOKEN = 'SET_REFRESH_TOKEN'
 // 移除刷新令牌
 export const REMOVE_REFRESH_TOKEN = 'REMOVE_REFRESH_TOKEN'
 
-/** 收货地址相关 */
-// 设置地址数据
-export const SET_ADDRESS = 'SET_ADDRESS'
-// 添加地址
-export const ADD_ADDRESS = 'ADD_ADDRESS'
-// 编辑地址
-export const EDIT_ADDRESS = 'EDIT_ADDRESS'
-// 谁知为默认地址
-export const SET_DEFAULT_ADDRESS = 'SET_DEFAULT_ADDRESS'
-// 删除地址
-export const DELETE_ADDRESS = 'DELETE_ADDRESS'
-
-/** 订单相关 */
-// 设置订单数据
-export const SET_ORDER_DATA = 'SET_ORDER_DATA'
-
 /** 收藏相关 */
 // 设置商品收藏
 export const SET_COLLECTION_GOODS = 'SET_COLLECTION_GOODS'
