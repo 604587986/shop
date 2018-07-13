@@ -28,8 +28,8 @@
       <el-form-item label="团购数量">
         <span>{{ form.goods_num }}</span>
       </el-form-item>
-      <el-form-item label="商品图片">
-        <img :src="form.goods_image" :alt="form.goods_name" class="goods-image">
+      <el-form-item label="团购图片">
+        <img :src="form.img_url" :alt="form.goods_name" class="goods-image">
       </el-form-item>
       <el-form-item label="虚拟数量">
         <span>{{ form.visual_num }}</span>

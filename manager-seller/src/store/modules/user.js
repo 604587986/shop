@@ -32,9 +32,9 @@ const user = {
     LOG_OUT: (state) => {
       state.avatar = ''
       state.name = ''
-      Storage.removeItem('user')
-      Storage.removeItem('accessToken')
-      Storage.removeItem('refreshToken')
+      Storage.removeItem('user', { domain: domain.cookie })
+      Storage.removeItem('accessToken', { domain: domain.cookie })
+      Storage.removeItem('refreshToken', { domain: domain.cookie })
       Storage.removeItem('shopInfo')
     },
     /**

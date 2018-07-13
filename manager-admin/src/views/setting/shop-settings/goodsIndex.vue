@@ -15,7 +15,8 @@
 
 <script>
   import * as API_GoodsIndex from '@/api/goodsIndex'
-  import * as API_Progress from '@/api/progress'
+  import * as API_Task from '@/api/task'
+
   export default {
     name: 'goodsIndex',
     data() {
@@ -28,7 +29,7 @@
     created() {
       /** 开局一个API，界面全靠编。 */
       /** 检查是否有商品索引生成任务 */
-      API_Progress.hasSameTask('index_create').then(response => {
+      API_Task.hasTask('index_create').then(response => {
         if (response.data.has_task === 1) {
           this.status = 'doing'
           this.GET_Progress()
@@ -46,7 +47,7 @@
       },
       /** 获取生成进度 */
       GET_Progress() {
-        API_Progress.getProgressById('index_create').then(response => {
+        API_Task.getProgressById('index_create').then(response => {
           const { percentage, status, status_text } = response.data
           this.percentage = percentage
           this.status = status
