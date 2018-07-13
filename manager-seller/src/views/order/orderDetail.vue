@@ -226,8 +226,8 @@
       <div slot="title">
         <h3>物流信息</h3>
         <div class="logistics-base">
-          <span>物流公司：中通快递</span>
-          <span>快递单号：15645616161</span>
+          <span>物流公司：{{ logisticsName }}</span>
+          <span>快递单号：{{ logisticsNo }}</span>
         </div>
       </div>
       <div class="logistics-info">
@@ -320,40 +320,13 @@
         orderDetailShow: false,
 
         /** 发货物流信息 */
-        logisticsInfoList: [
-          {
-            time: '2018-07-10 07:43:21',
-            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
-          },
-          {
-            time: '2018-07-10 07:43:21',
-            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
-          },
-          {
-            time: '2018-07-10 07:43:21',
-            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
-          },
-          {
-            time: '2018-07-10 07:43:21',
-            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
-          },
-          {
-            time: '2018-07-10 07:43:21',
-            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
-          },
-          {
-            time: '2018-07-10 07:43:21',
-            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
-          },
-          {
-            time: '2018-07-10 07:43:21',
-            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
-          },
-          {
-            time: '2018-07-10 07:43:21',
-            context: '河北省三河市燕郊开发区公司】 派件人: 窦永威 派件中 派件员电话15713121232'
-          }
-        ],
+        logisticsInfoList: [],
+
+        /** 物流快递名称 */
+        logisticsName: '',
+
+        /** 物流快递单号 */
+        logisticsNo: '',
 
         /** 弹框标题 */
         dialogTitle: '调整订单总价',
@@ -413,6 +386,7 @@
       this.GET_OrderDetail()
     },
     methods: {
+      /** 获取订单详情信息 */
       GET_OrderDetail() {
         this.loading = true
         API_order.getOrderDetail(this.sn).then(response => {
@@ -512,6 +486,16 @@
       /** 查看物流信息*/
       looklogistics() {
         this.logisticsShow = true
+        const _params = {
+          com: '', // 此处为物流公司简称
+          num: this.orderDetail.ship_no
+        }
+        API_order.getLogisticsInfo(_params).then(response => {
+          this.logisticsInfoList = response.data
+          this.logisticsNo = response.courier_num
+          this.logisticsName = response.name
+          this.logisticsShow = true
+        })
       },
 
       /** 调整价格 */
@@ -526,16 +510,16 @@
       /** 生成电子面单 */
       produceElectronicSurface(row) {
         this.electronicSurfaceShow = true
-        // const _params = {
-        //   order_sn: this.sn,
-        //   logistics_id: row.logi_id
-        // }
-        // this.$confirm('确认生成电子面单?', '提示', { type: 'warning' }).then(() => {
-        //   API_order.generateElectronicSurface(_params).then(() => {
-        //     this.electronicSurfaceShow = true
-        //     this.$message.success('生成成功')
-        //   })
-        // })
+        const _params = {
+          order_sn: this.sn,
+          logistics_id: row.logi_id
+        }
+        this.$confirm('确认生成电子面单?', '提示', { type: 'warning' }).then(() => {
+          API_order.generateElectronicSurface(_params).then(() => {
+            this.electronicSurfaceShow = true
+            this.$message.success('生成成功')
+          })
+        })
       },
 
       /** 发货 */

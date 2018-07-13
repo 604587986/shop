@@ -115,6 +115,24 @@ export function deliveryGoods(sn, params) {
 }
 
 /**
+ * 查询快递物流信息
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getLogisticsInfo(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/seller/express`,
+      method: 'get',
+      loading: false,
+      params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
  * 生成电子面单
  * @param params
  * @returns {Promise<any>}
