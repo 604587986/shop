@@ -51,7 +51,6 @@ export function saveGifts(ids, params) {
     request({
       url: `/promotion/full-discount-gifts/${ids}`,
       method: 'put',
-      headers: { 'Content-Type': 'application/json' },
       loading: false,
       data: params
     }).then(response => {
@@ -70,7 +69,6 @@ export function addGifts(params) {
     request({
       url: '/promotion/full-discount-gifts',
       method: 'post',
-      headers: { 'Content-Type': 'application/json' },
       loading: false,
       data: params
     }).then(response => {

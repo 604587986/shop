@@ -55,7 +55,6 @@ export function modifyCoupons(ids, params) {
       url: `/promotion/coupons/${ids}`,
       method: 'put',
       loading: false,
-      headers: { 'Content-Type': 'application/json' },
       data: params
     }).then(response => {
       resolve(response)
@@ -74,7 +73,6 @@ export function addCoupons(params) {
     request({
       url: '/promotion/coupons',
       method: 'post',
-      headers: { 'Content-Type': 'application/json' },
       loading: false,
       data: params
     }).then(response => {

@@ -80,8 +80,8 @@
         <el-input :style="{ width:inputLength +'px' }"  v-model="gruopBuyForm.goods_num"></el-input>
         <span class="activity-tip">团购商品总数应等于或小于该商品库存数量，请提前确认要参与活动的商品库存数量足够充足</span>
       </el-form-item>
-      <!--团购类别-->
-      <el-form-item label="团购类别">
+      <!--团购分类-->
+      <el-form-item label="团购分类">
         <el-select v-model="gruopBuyForm.cat_id" placeholder="请选择">
           <el-option
             v-for="item in groupBuyCategorys"
@@ -425,8 +425,6 @@
       handleSaveGroupBuyGoods() {
         this.$refs['gruopBuyForm'].validate((valid) => {
           if (valid) {
-            this.gruopBuyForm.area_id = 0
-            this.gruopBuyForm.img_url = this.gruopBuyForm.img_url[0]
             this.gruopBuyForm.remark = this.$refs.UE.getUEContent()
             API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(() => {
               this.$message.success('添加成功')

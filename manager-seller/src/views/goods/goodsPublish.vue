@@ -910,34 +910,49 @@
 
       /** 查询商品参数 */
       GET_GoodsParams() {
-        let _params = { }
         if (this.activeGoodsId) {
-          _params = {
-            goods_id: this.activeGoodsId
-          }
+          API_goods.getEditGoodsParams(this.baseInfoForm.category_id, this.activeGoodsId).then((response) => {
+            this.loading = false
+            this.goodsParams = response
+            this.collapseVal = this.goodsParams.map(key => {
+              if (key.group_id) {
+                return key.group_id
+              }
+            })
+            if (!response || response.length <= 0) {
+              return
+            }
+            this.baseInfoForm.goods_params_list = []
+            this.goodsParams.forEach(key => {
+              if (key && key.params) {
+                key.params.forEach(elem => {
+                  this.baseInfoForm.goods_params_list.push(elem)
+                })
+              }
+            })
+          })
         } else {
-          _params = { }
+          API_goods.getGoodsParams(this.baseInfoForm.category_id).then((response) => {
+            this.loading = false
+            this.goodsParams = response
+            this.collapseVal = this.goodsParams.map(key => {
+              if (key.group_id) {
+                return key.group_id
+              }
+            })
+            if (!response || response.length <= 0) {
+              return
+            }
+            this.baseInfoForm.goods_params_list = []
+            this.goodsParams.forEach(key => {
+              if (key && key.params) {
+                key.params.forEach(elem => {
+                  this.baseInfoForm.goods_params_list.push(elem)
+                })
+              }
+            })
+          })
         }
-        API_goods.getGoodsParams(this.baseInfoForm.category_id, _params).then((response) => {
-          this.loading = false
-          this.goodsParams = response
-          this.collapseVal = this.goodsParams.map(key => {
-            if (key.group_id) {
-              return key.group_id
-            }
-          })
-          if (!response || response.length <= 0) {
-            return
-          }
-          this.baseInfoForm.goods_params_list = []
-          this.goodsParams.forEach(key => {
-            if (key && key.params) {
-              key.params.forEach(elem => {
-                this.baseInfoForm.goods_params_list.push(elem)
-              })
-            }
-          })
-        })
       },
 
       /** 查询单个草稿箱商品信息 */
@@ -1090,8 +1105,14 @@
       /** 文件列表移除文件时的钩子  图片删除校验*/
       handleRemove(file, fileList) {
         this.baseInfoForm.goods_gallery_list.forEach((key, index) => {
-          if (key.name === file.name) {
-            this.baseInfoForm.goods_gallery_list.splice(index, 1)
+          if (key.img_id !== -1) {
+            if (key.img_id === file.img_id) {
+              this.baseInfoForm.goods_gallery_list.splice(index, 1)
+            }
+          } else {
+            if (key.name === file.name) {
+              this.baseInfoForm.goods_gallery_list.splice(index, 1)
+            }
           }
         })
         if (fileList.length <= 0) {

@@ -85,7 +85,7 @@ export function updateConsigneeInfo(sn, params) {
 export function confirmGetAmount(sn, params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/trade/orders/${sn}/address`,
+      url: `/trade/orders/${sn}/pay`,
       method: 'post',
       loading: false,
       data: params
@@ -115,18 +115,35 @@ export function deliveryGoods(sn, params) {
 }
 
 /**
- * 生成电子面单
- * @param ids
+ * 查询快递物流信息
  * @param params
  * @returns {Promise<any>}
  */
-export function generateElectronicSurface(ids, params) {
+export function getLogisticsInfo(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `877`,
-      method: 'put',
+      url: `/seller/express`,
+      method: 'get',
       loading: false,
-      data: params
+      params
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 生成电子面单
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function generateElectronicSurface(params) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/seller/waybill`,
+      method: 'get',
+      loading: false,
+      params
     }).then(response => {
       resolve(response)
     })

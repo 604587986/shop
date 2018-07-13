@@ -68,10 +68,7 @@
         <tr class="bg-order">
           <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
           <td>
-            <el-button
-              type="text"
-              @click="handleOperateOrder(item)">查看详情
-            </el-button>
+            <el-button type="text" @click="handleOperateOrder(item)">查看详情</el-button>
           </td>
         </tr>
         <tr>

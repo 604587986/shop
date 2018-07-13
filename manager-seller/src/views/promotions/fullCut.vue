@@ -34,11 +34,7 @@
             <!--活动类型-->
             <el-table-column prop="activity_type" label="活动类型" :formatter="activityType" />
             <!--活动状态-->
-            <el-table-column label="活动状态">
-              <template slot-scope="scope">
-                <span>{{ scope.row.disabled }}</span>
-              </template>
-            </el-table-column>
+            <el-table-column label="活动状态" prop="disabled"/>
             <!--操作-->
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
@@ -151,7 +147,7 @@
                     <el-option
                       v-for="item in couponList"
                       :key="item.coupon_id"
-                      :label="item.coupon_name"
+                      :label="item.title"
                       :value="item.coupon_id">
                     </el-option>
                   </el-select>
@@ -203,7 +199,10 @@
                               <div class="goods-info">
                                 <img :src="scope.row.thumbnail" alt="" class="goods-image">
                                 <div>
-                                  <a>{{ scope.row.goods_name }}</a>
+                                  <a
+                                    :href="`${HTTP_URL}/${scope.row.goods_id}`"
+                                    target="_blank"
+                                    style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
                                   <span>{{ scope.row.price | unitPrice('￥') }}</span>
                                 </div>
                               </div>
@@ -359,6 +358,9 @@
       return {
         /** 当前面板的名字*/
         activeName: 'fullList',
+
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
 
         /** 列表loading状态 */
         loading: false,

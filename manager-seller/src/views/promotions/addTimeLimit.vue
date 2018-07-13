@@ -45,12 +45,14 @@
                 </el-table-column>
                 <el-table-column label="活动价">
                   <template slot-scope="scope">
-                    <el-input type="number" v-model.number="scope.row.act_price"></el-input>
+                    <el-input placeholder="请输入活动价" v-model.number="scope.row.act_price" style="width: 50%;">
+                      <template slot="prepend">¥</template>
+                    </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column label="售空数量">
                   <template slot-scope="scope">
-                    <el-input type="number"  v-model.number="scope.row.sold_quantity"></el-input>
+                    <el-input-number v-model="scope.row.sold_quantity" controls-position="right"  :min="0"/>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作" width="70">
@@ -238,11 +240,6 @@
   .has-gutter th {
     height: 50px;
     line-height: 50px;
-  }
-  .buy-info {
-    /deep/ .el-input__inner {
-      width: 50%;
-    }
   }
 
   /*平铺*/

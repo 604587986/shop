@@ -103,10 +103,10 @@
           <div class="store-index-content">
             <p class="store-rompt" @click="toOrderList('ALL')">所有的订单：<span style="color: red;">{{dashBoardData.all_orders_num}}</span></p>
             <div>
-              <el-tag type="success" @click.native="toOrderList('WAIT_PAY')">待付款  {{dashBoardData.wait_pay_order_num}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_PAY')"> 待付款  {{dashBoardData.wait_pay_order_num}}</el-tag>
               <el-tag type="success" @click.native="toOrderList('WAIT_SHIP')">待发货  {{dashBoardData.wait_ship_order_num}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList('WAIT_ROG')">待收货  {{dashBoardData.wait_delivery_order_num}}</el-tag>
-              <el-tag type="success" @click.native="toRefundOrderList()">申请售后  {{dashBoardData.after_sale_order_num}}</el-tag>
+              <el-tag type="success" @click.native="toOrderList('WAIT_ROG')"> 待收货  {{dashBoardData.wait_delivery_order_num}}</el-tag>
+              <el-tag type="success" @click.native="toRefundOrderList()">     申请售后 {{dashBoardData.after_sale_order_num}}</el-tag>
             </div>
           </div>
         </el-card>
