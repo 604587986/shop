@@ -23,8 +23,8 @@
                   <i class="iconfont ea-icon-delete"></i>
                 </div>
                 <div class="goods-image-btns">
-                  <nuxt-link :to="'/shop/' + goods.shop_id">进入店铺</nuxt-link>
-                  <a :href="'/goods/' + goods.goods_id">查看商品</a>
+                  <nuxt-link :to="'/shop/' + goods.shop_id" target="_blank">进入店铺</nuxt-link>
+                  <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">查看商品</nuxt-link>
                 </div>
               </div>
               <div class="goods-name">
