@@ -677,6 +677,7 @@
               font-weight: bold;
               color: #888;
               font-size: 14px;
+              text-align: right;
             }
           }
           hr {

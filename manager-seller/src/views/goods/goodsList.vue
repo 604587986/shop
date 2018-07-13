@@ -20,7 +20,7 @@
                 v-for="item in goodsStatusList"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value"/>
+                :value="item.value"></el-option>
             </el-select>
           </div>
           <!--商品类型-->

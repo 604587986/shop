@@ -171,7 +171,7 @@
           <template slot="table-columns">
             <el-table-column label="商品图片">
               <template slot-scope="scope">
-                <img :src="scope.row.goods_image" alt="">
+                <img :src="scope.row.goods_image" class="goods-image">
               </template>
             </el-table-column>
             <el-table-column label="商品名称">
@@ -397,11 +397,6 @@
     padding: 0 20px;
   }
 
-  .goods-image {
-    width: 50px;
-    height: 50px;
-  }
-
   /** 退款/货信息 */
   .refund-info {
     display: flex;
@@ -444,6 +439,11 @@
     border: 1px solid #f2f2f2;
     .toolbar {
       display: none;
+    }
+    /*商品图片*/
+    .goods-image {
+      width: 50px;
+      height: 50px;
     }
   }
 
