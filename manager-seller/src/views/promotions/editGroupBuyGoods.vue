@@ -430,7 +430,6 @@
       handleSaveGroupBuyGoods() {
         this.$refs['gruopBuyForm'].validate((valid) => {
           if (valid) {
-            this.gruopBuyForm.area_id = 0
             this.gruopBuyForm.remark = this.$refs.UE.getUEContent()
             if (this.$route.params.goods_id) {
               API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(() => {

@@ -425,8 +425,6 @@
       handleSaveGroupBuyGoods() {
         this.$refs['gruopBuyForm'].validate((valid) => {
           if (valid) {
-            this.gruopBuyForm.area_id = 0
-            this.gruopBuyForm.img_url = this.gruopBuyForm.img_url[0]
             this.gruopBuyForm.remark = this.$refs.UE.getUEContent()
             API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(() => {
               this.$message.success('添加成功')
