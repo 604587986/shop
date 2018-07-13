@@ -92,7 +92,7 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
-      <el-form :model="goodsAuditForm" label-width="100px">
+      <el-form :model="goodsAuditForm" :rules="goodsAuditRules" ref="goodsAuditForm" label-width="100px">
         <!--是否通过=-->
         <el-form-item label="是否通过" prop="pass">
           <el-radio-group v-model="goodsAuditForm.pass">
@@ -126,31 +126,29 @@
     name: 'goodsAudit',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 商品数据 */
+        // 商品数据
         goodsData: '',
-
-        /** 审核商品 表单 */
+        // 审核商品 表单
         goodsAuditForm: {
           message: '',
           pass: 1
         },
-
-        /** 审核商品 dialog */
+        // 审核商品 表单校验
+        goodsAuditRules: {
+          message: [{ required: false, message: '请输入审核备注！', trigger: 'blur' }]
+        },
+        // 审核商品 dialog
         dialogGoodsAuditVisible: false,
-
-        /** 审核商品 dialogTitle */
+        // 审核商品 dialogTitle
         dialogGoodsAuditTitle: '审核商品',
-
-        /** 高级搜索数据 */
+        // 高级搜索数据
         advancedForm: {
           goods_name: '',
           goods_sn: '',
@@ -161,6 +159,11 @@
     },
     mounted() {
       this.GET_GoodsAuditList()
+    },
+    watch: {
+      'goodsAuditForm.pass': function(newVal) {
+        this.goodsAuditRules.message[0].required = newVal === 0
+      }
     },
     methods: {
       /** 分页大小发生改变 */
@@ -213,10 +216,17 @@
 
       /** 审核商品 表单提交 */
       submitGoodsAuditForm() {
-        API_goods.auditGoods(this.goodsAuditForm.id, this.goodsAuditForm).then(response => {
-          this.dialogGoodsAuditVisible = false
-          this.$message.success('审核完成！')
-          this.GET_GoodsAuditList()
+        this.$refs['goodsAuditForm'].validate((valid) => {
+          if (valid) {
+            API_goods.auditGoods(this.goodsAuditForm.id, this.goodsAuditForm).then(response => {
+              this.dialogGoodsAuditVisible = false
+              this.$message.success('审核完成！')
+              this.GET_GoodsAuditList()
+            })
+          } else {
+            this.$message.error('表单填写有误，请核对！')
+            return false
+          }
         })
       },
 

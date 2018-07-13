@@ -4,9 +4,9 @@
       v-for="silde in sildes"
       :key="silde.silde_id"
     >
-      <nuxt-link :to="silde.silde_url">
+      <a :href="silde.silde_url">
         <img :src="silde.img" class="banner-img">
-      </nuxt-link>
+      </a>
     </el-carousel-item>
   </el-carousel>
 </template>

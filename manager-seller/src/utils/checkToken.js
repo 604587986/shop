@@ -87,7 +87,12 @@ export default function checkToken(options) {
             console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
             if (__RTK__ === undefined) {
               console.log('登录已失效了，不用再等待了...')
-              store.dispatch('removeUserAction')
+              Storage.removeItem('user', { domain: domain.cookie })
+              Storage.removeItem('accessToken', { domain: domain.cookie })
+              Storage.removeItem('refreshToken', { domain: domain.cookie })
+              setTimeout(() => {
+                window.location.href = `${domain.buyer_pc}/login?forward=${window.location.href}`
+              }, 100)
               return
             }
             __RTK__ === null

@@ -40,6 +40,7 @@
           <el-table-column label="商品名称" align="left">
             <template slot-scope="scope">
               <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" class="goods-name" target="_blank">{{ scope.row.name }}</a>
+              <p class="sku-spec">{{ scope.row | formatterSkuSpec }}</p>
             </template>
           </el-table-column>
           <el-table-column label="商品价格" width="150">
@@ -254,6 +255,10 @@
   .goods-name {
     color: #4183c4;
     &:hover { color: #f42424 }
+  }
+  .sku-spec {
+    color: #ff9800;
+    margin: 0;
   }
 </style>
 
