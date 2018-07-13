@@ -197,7 +197,18 @@
         shopRules: {
           company_name: [this.MixinRequired('公司名称不能为空！')],
           company_address: [this.MixinRequired('公司地址不能为空！')],
-          company_phone: [this.MixinRequired('公司电话不能为空！')],
+          company_phone: [
+            this.MixinRequired('公司电话不能为空！'),
+            { validator: (rule, value, callback) => {
+              if (!RegExp.TEL.test(value)) {
+                callback(new Error('请输入固定电话，例如：010-8888888'))
+              } else {
+                callback()
+              }
+            },
+            trigger: 'blur'
+            }
+          ],
           employee_num: [this.MixinRequired('公司员工数不能为空！')],
           reg_money: [
             this.MixinRequired('注册资金不能为空！'),
