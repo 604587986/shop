@@ -74,7 +74,7 @@
                   <img v-for="imgsrc in item.images" :src="imgsrc" class="goods-image"/>
                 </p>
                 <!--回复评论-->
-                <p v-if="item.reply.content" class="reply-comment">
+                <p v-if="item.reply && item.reply.content" class="reply-comment">
                   <i class="seller-reply">回复评论 :</i> {{ item.reply.content }}
                 </p>
               </div>
@@ -258,7 +258,7 @@
           comment_content: '',
 
           /** 评论图片数组 */
-          comment_imgs: '',
+          comment_imgs: [],
 
           /** 回复内容 */
           reply_content: ''
@@ -370,6 +370,7 @@
 
       /** 商家回复*/
       handleReplyComment(item) {
+        debugger
         this.replyCommentShow = true
         this.commentForm = {
           comment_id: item.comment_id,
@@ -385,6 +386,7 @@
       saveCommentReply() {
         API_comment.replyComment(this.commentForm.comment_id, { reply: this.commentForm.reply_content }).then(() => {
           this.replyCommentShow = false
+          this.GET_CommmentsList()
           this.$message.success('保存成功')
         })
       }
