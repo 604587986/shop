@@ -246,7 +246,7 @@
     <!--电子面单-->
     <el-dialog title="电子面单" :visible.sync="electronicSurfaceShow" width="30%" align="center">
       <!--主体-->
-      <div class="electronic-surface" ref="electronicSurface"></div>
+      <div class="electronic-surface" ref="electronicSurface" id="electronicSurface"></div>
       <div slot="footer" align="right">
         <el-button type="primary" @click="handlePrint">打印</el-button>
       </div>
@@ -265,6 +265,7 @@
   import * as API_logistics from '@/api/expressCompany'
   import { CategoryPicker } from '@/components'
   import { LogisticsCompany } from './components'
+  import Print from 'print-js'
   export default {
     name: 'orderDetail',
     components: {
@@ -509,6 +510,11 @@
           this.loading = true
           API_order.generateElectronicSurface(_params).then((response) => {
             this.electronicSurfaceShow = true
+            this.logisticsData.forEach(key => {
+              if (row.logi_id === key.logi_id) {
+                key.ship_no = response.code
+              }
+            })
             setTimeout(() => {
               this.loading = false
               this.$refs['electronicSurface'].innerHTML = response.template
@@ -519,13 +525,12 @@
 
       /** 打印电子面单 */
       handlePrint() {
-        // 1.设置要打印的区域  复制给body，并执行window.print打印功能
-        document.body.innerHTML = this.$refs['electronicSurface'].innerHTML
-        // 3. 还原：将旧的页面储存起来，当打印完成后返给给页面。
-        let oldstr = document.body.innerHTML
-        window.print()
-        document.body.innerHTML = oldstr
-        return false
+        Print({
+          printable: 'electronicSurface',
+          type: 'html',
+          // 继承原来的所有样式
+          targetStyles: ['*']
+        })
       },
 
       /** 发货 */
