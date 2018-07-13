@@ -28,7 +28,7 @@
 
 <script>
   import * as API_StaticPage from '@/api/staticPage'
-  import * as API_Progress from '@/api/progress'
+  import * as API_Task from '@/api/task'
 
   const pageOptions = [
     { text: '首页', value: 'INDEX' },
@@ -51,7 +51,7 @@
     },
     created() {
       /** 检查是否有静态页生成任务 */
-      API_Progress.hasSameTask('page_create').then(response => {
+      API_Task.hasTask('page_create').then(response => {
         if (response.message === true) {
           this.status = 'doing'
           this.GET_Progress()
@@ -94,7 +94,7 @@
       },
       /** 获取生成进度 */
       GET_Progress() {
-        API_Progress.getProgressById('page_create').then(response => {
+        API_Task.getProgressById('page_create').then(response => {
           const { text, status, percentage } = response
           this.percentage = percentage
           this.status = status
