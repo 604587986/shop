@@ -199,7 +199,10 @@
                               <div class="goods-info">
                                 <img :src="scope.row.thumbnail" alt="" class="goods-image">
                                 <div>
-                                  <a>{{ scope.row.goods_name }}</a>
+                                  <a
+                                    :href="`${HTTP_URL}/${scope.row.goods_id}`"
+                                    target="_blank"
+                                    style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
                                   <span>{{ scope.row.price | unitPrice('￥') }}</span>
                                 </div>
                               </div>
@@ -355,6 +358,9 @@
       return {
         /** 当前面板的名字*/
         activeName: 'fullList',
+
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
 
         /** 列表loading状态 */
         loading: false,
