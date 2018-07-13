@@ -97,18 +97,18 @@
             暂无数据
           </div>
         </table>
+        <el-pagination
+          slot="pagination"
+          v-if="pageData"
+          @size-change="handlePageSizeChange"
+          @current-change="handlePageCurrentChange"
+          :current-page="pageData.page_no"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="pageData.page_size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageData.data_total">
+        </el-pagination>
       </div>
-      <el-pagination
-        slot="pagination"
-        v-if="pageData"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
-      </el-pagination>
       <el-dialog title="回复评论" :visible.sync="replyCommentShow" width="30%">
         <el-form :model="commentForm">
           <el-form-item label="审核" :label-width="formLabelWidth">
