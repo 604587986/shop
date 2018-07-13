@@ -2,7 +2,7 @@
   <div id="member">
     <en-breadcrumb/>
     <div class="member-layout w">
-      <en-menu/>
+      <en-menu v-if="$route.name !== 'member-comments'"/>
       <nuxt-child style="width: calc(1210px - 220px); margin-bottom: 20px"/>
     </div>
   </div>
@@ -11,15 +11,7 @@
 <script>
   import Vue from 'vue'
   import { Alert, Checkbox, Form, FormItem, Input, Pagination, Radio, Table, TableColumn } from 'element-ui'
-  Vue.use(Alert)
-  Vue.use(Checkbox)
-  Vue.use(Form)
-  Vue.use(FormItem)
-  Vue.use(Input)
-  Vue.use(Pagination)
-  Vue.use(Radio)
-  Vue.use(Table)
-  Vue.use(TableColumn)
+  Vue.use(Alert).use(Checkbox).use(Form).use(FormItem).use(Input).use(Pagination).use(Radio).use(Table).use(TableColumn)
   import Breadcrumb from '@/pages/member/-breadcrumb'
   import Menu from '@/pages/member/-menu'
   import Empty from '@/pages/member/-empty'
@@ -30,9 +22,6 @@
     components: {
       'en-breadcrumb': Breadcrumb,
       'en-menu': Menu
-    },
-    mounted() {
-      if (!this.$store.getters.user) this.$store.dispatch('user/getUserDataAction')
     }
   }
 </script>

@@ -71,7 +71,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDeleteMember(scope.$index, scope.row)">删除</el-button>
+              @click="handleDeleteMember(scope.$index, scope.row)">禁用</el-button>
           </template>
         </el-table-column>
       </template>

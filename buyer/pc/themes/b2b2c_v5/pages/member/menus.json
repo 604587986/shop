@@ -14,6 +14,7 @@
     "children": [
       { "title": "我的收藏", "name": "my-collection" },
       { "title": "我的评论", "name": "my-comments" },
+      { "title": "发表评论", "name": "comments", "hidden": true },
       { "title": "我的咨询", "name": "my-consultation" },
       { "title": "我的积分", "name": "my-points" },
       { "title": "我的优惠券", "name": "my-coupons" },

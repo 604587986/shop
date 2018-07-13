@@ -78,6 +78,7 @@ export function commentsOrder(params) {
     url: 'members/comments',
     method: Method.POST,
     needToken: true,
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
