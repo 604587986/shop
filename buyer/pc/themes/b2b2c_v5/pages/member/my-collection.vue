@@ -15,7 +15,6 @@
               :key="goods.goods_id"
               :class="['coll-g-item', goods.show_del_pop && 'del-pop-show']"
             >
-              <!--// Andste_TODO 2018/7/12: 待适配-->
               <div class="goods-image">
                 <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                   <img :src="goods.goods_image" :alt="goods.goods_name">
@@ -25,7 +24,7 @@
                 </div>
                 <div class="goods-image-btns">
                   <nuxt-link :to="'/shop/' + goods.shop_id">进入店铺</nuxt-link>
-                  <a href="javascript:;" @click="handleAddToCart(goods)">加入购物车</a>
+                  <a :href="'/goods/' + goods.goods_id">查看商品</a>
                 </div>
               </div>
               <div class="goods-name">
@@ -181,10 +180,6 @@
         if (!this.goodsData) this.GET_Collection('goods')
         // 如果没有店铺收藏数据，则获取
         if (!this.shopData) this.GET_Collection('shop')
-      },
-      /** 加入到购物车 */
-      handleAddToCart(goods) {
-        console.log(goods)
       },
       /** 删除商品收藏 */
       handleDeleteGoodsColl(goods) {
