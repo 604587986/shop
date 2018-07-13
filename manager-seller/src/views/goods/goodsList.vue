@@ -135,6 +135,7 @@
 <script>
   import * as API_goods from '@/api/goods'
   import { CategoryPicker } from '@/components'
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'goodsList',
     components: {
@@ -146,7 +147,7 @@
           return callback(new Error('库存不能为空'))
         }
         setTimeout(() => {
-          if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
+          if (!RegExp.integer.test(value)) {
             callback(new Error('请输入大于等于0的整数'))
           } else {
             callback()
@@ -343,7 +344,7 @@
         if (Array.isArray(this.goodsStockData)) {
           _params = this.goodsStockData.map((elem) => {
             return {
-              quantity_count: parseInt(elem.quantity),
+              quantity_count: elem.quantity,
               sku_id: elem.sku_id
             }
           })
@@ -352,6 +353,13 @@
             quantity_count: this.goodsStockData.quantity,
             sku_id: this.goodsStockData.sku_id
           })
+        }
+        const _res = _params.some(key => {
+          return !RegExp.integer.test(key.quantity_count)
+        })
+        if (_res) {
+          this.$message.error('库存必须为大于0的正整数')
+          return
         }
         API_goods.reserveStockGoods(this.goodsId, _params).then((response) => {
           this.goodsStockshow = false
