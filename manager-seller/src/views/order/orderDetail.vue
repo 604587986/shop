@@ -244,19 +244,11 @@
       </div>
     </el-dialog>
     <!--电子面单-->
-    <el-dialog title="电子面单" :visible.sync="electronicSurfaceShow" width="20%" align="center">
+    <el-dialog title="电子面单" :visible.sync="electronicSurfaceShow" width="30%" align="center">
       <!--主体-->
-      <div class="electronic-surface">
-        <!--条码-->
-        <div></div>
-        <!--收件方-->
-        <div>
-          <h4>收件方：</h4>
-          <h4>汪峰手 1865456464</h4>
-          <p class="electronic-address">阿斯顿个发生大事的发生地发大水大发的阿斯顿发</p>
-        </div>
-        <!--物品信息-->
-        <div></div>
+      <div class="electronic-surface" ref="electronicSurface"></div>
+      <div slot="footer" align="right">
+        <el-button type="primary" @click="handlePrint">打印</el-button>
       </div>
     </el-dialog>
     <!--物流信息-->
@@ -509,17 +501,31 @@
 
       /** 生成电子面单 */
       produceElectronicSurface(row) {
-        this.electronicSurfaceShow = true
         const _params = {
           order_sn: this.sn,
           logistics_id: row.logi_id
         }
         this.$confirm('确认生成电子面单?', '提示', { type: 'warning' }).then(() => {
-          API_order.generateElectronicSurface(_params).then(() => {
+          this.loading = true
+          API_order.generateElectronicSurface(_params).then((response) => {
             this.electronicSurfaceShow = true
-            this.$message.success('生成成功')
+            setTimeout(() => {
+              this.loading = false
+              this.$refs['electronicSurface'].innerHTML = response.template
+            }, 200)
           })
         })
+      },
+
+      /** 打印电子面单 */
+      handlePrint() {
+        // 1.设置要打印的区域  复制给body，并执行window.print打印功能
+        document.body.innerHTML = this.$refs['electronicSurface'].innerHTML
+        // 3. 还原：将旧的页面储存起来，当打印完成后返给给页面。
+        let oldstr = document.body.innerHTML
+        window.print()
+        document.body.innerHTML = oldstr
+        return false
       },
 
       /** 发货 */
@@ -790,16 +796,6 @@
   /deep/ .electronic-surface {
     border: 1px solid #ddd;
     padding: 5px;
-    & > div {
-      border-bottom: 1px dotted #ddd;
-      h4 {
-        text-align: left;
-      }
-      p {
-        text-align: left;
-        font-size: 12px;
-      }
-    }
   }
 </style>
 
