@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="card-service">
-      <nuxt-link to="/member/my-point" class="service-item">
+      <nuxt-link to="/member/my-points" class="service-item">
         <i class="iconfont ea-icon-point"></i>
         <span>我的积分</span>
       </nuxt-link>

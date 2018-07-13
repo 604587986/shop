@@ -80,5 +80,6 @@ export function secrecyMobile(mobile) {
  * @returns {*}
  */
 export function formatterSkuSpec(sku) {
+  if (!sku.spec_list || !sku.spec_list.length) return ''
   return sku.spec_list.map(spec => spec.spec_value).join(' - ')
 }

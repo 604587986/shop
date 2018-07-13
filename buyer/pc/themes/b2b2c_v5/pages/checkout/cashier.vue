@@ -3,22 +3,28 @@
     <en-header-other title="收银台"/>
     <div class="cashier-box">
       <div class="cashier-change">
-        <!--// Andste_TODO 2018/7/5: 在拆单上有些问题-->
-        <h2>交易号：
+        <h2>{{ this.trade_sn ? '交易号：' : '订单编号：' }}
           <nuxt-link :to="'/member/my-order/detail/' + order_sn" target="_blank">
             <b>{{ trade_sn || order_sn }}</b>
           </nuxt-link>
         </h2>
-        <h2>{{ online ? '在线支付' : '货到付款' }}：<span>￥4,498.00</span><i>元</i></h2>
+        <h2>{{ online ? '在线支付' : '货到付款' }}
+          <span v-if="order">￥{{ order.need_pay_price | unitPrice }}</span>
+          <span v-else>加载中...</span>
+          <i>元</i>
+        </h2>
         <div class="cashier-order-detail">
           <div class="cashier-order-inside">
             <h3><i></i>送货至：
-              <span>{{ order.ship_province }}</span>
-              <span>{{ order.ship_city }}</span>
-              <span>{{ order.ship_county }}</span>
-              <span>{{ order.ship_town || '' }}</span>
-              <span>{{ order.ship_addr }}</span>
-              <span>{{ order.ship_mobile }}</span>
+              <template v-if="order">
+                <span>{{ order.ship_province }}</span>
+                <span>{{ order.ship_city }}</span>
+                <span>{{ order.ship_county }}</span>
+                <span>{{ order.ship_town || '' }}</span>
+                <span>{{ order.ship_addr }}</span>
+                <span>{{ order.ship_mobile }}</span>
+              </template>
+              <span v-else>加载中...</span>
             </h3>
           </div>
         </div>
@@ -28,15 +34,45 @@
               <h3>支付平台</h3>
             </div>
             <ul class="cashier-pay-list">
-              <li v-for="payment in paymentList" :key="payment.plugin_id">
-                <img :src="payment.image">
+              <li v-for="payment in paymentList" :key="payment.plugin_id" :class="['payment-item', payment.selected && 'selected']">
+                <img :src="payment.image" @click="initiatePay(payment)">
               </li>
             </ul>
           </div>
         </div>
+        <div v-if="showPayBox" class="cashier-pay-box">
+          <div v-if="payment_plugin_id === 'alipayDirectPlugin'" class="pay-item alipay">
+            <div class="alipay-left">
+              <p>使用电脑支付</p>
+              <div class="pc-pay-img">
+              </div>
+              <a class="pay-btn" :href="payUrl">立即支付</a>
+              <i class="icon-or"></i>
+            </div>
+            <div class="alipay-right">
+              <p>使用支付宝钱包扫一扫即可付款</p>
+              <div class="pay-qrcode">
+                <iframe id="alipay-qrcode" type="text/html" class="alipay-qrcode" src="" frameborder="no"></iframe>
+              </div>
+            </div>
+          </div>
+          <div v-if="payment_plugin_id === 'weixinPayPlugin'" class="pay-item wechat">
+            <div class="wechat-left">
+              <div class="pc-pay-img">
+                <img src="../../assets/images/background-wechat.jpg">
+              </div>
+            </div>
+            <div class="wechat-right">
+              <p>使用微信扫一扫即可付款</p>
+              <div class="pay-erweima">
+                <iframe src="" id="wechat-qrcode" class="wechat-qrcode" frameborder="no"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="same-pay-way bank-pay paybtn">
-          <nuxt-link v-if="online" to="#">立即支付</nuxt-link>
-          <nuxt-link v-else :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
+          <nuxt-link v-if="!showPayBox" to="#">立即支付</nuxt-link>
+          <nuxt-link v-if="!online && showPayBox" :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
         </div>
       </div>
     </div>
@@ -45,11 +81,8 @@
 
 <script>
   import * as API_Trade from '@/api/trade'
-  import * as API_Order from '@/api/order'
-  import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'cashier',
-    components: {EnHeaderOther},
     layout: 'full',
     middleware: 'auth-user',
     data() {
@@ -60,47 +93,55 @@
         // 支付方式列表
         paymentList: [],
         // 订单详情
-        order: ''
+        order: '',
+        // 显示支付窗口
+        showPayBox: false,
+        // 发起电脑支付url
+        payUrl: 'javascript:;',
+        // 支付方式代码
+        payment_plugin_id: ''
       }
     },
     mounted() {
       Promise.all([
-        this.trade_sn ?
-          API_Order.getOrderListByTradeSn(this.trade_sn)
-          : API_Order.getOrderDetail(this.order_sn),
+        this.trade_sn
+          ? API_Trade.getCashierData({ trade_sn: this.trade_sn })
+          : API_Trade.getCashierData({ order_sn: this.order_sn }),
         API_Trade.getPaymentList()
       ]).then(responses => {
-        this.order = this.trade_sn ? responses[0][0] : responses[0]
-        this.paymentList = responses[1]
+        this.order = responses[0]
+        this.paymentList = responses[1].map(item => {
+          item.selected = false
+          return item
+        })
       })
+    },
+    methods: {
+      /** 发起支付 */
+      initiatePay(payment) {
+        this.showPayBox = true
+        this.$set(this, 'paymentList', this.paymentList.map(item => {
+          item.selected = item.plugin_id === payment.plugin_id
+          return item
+        }))
+        this.payment_plugin_id = payment.plugin_id
+        const trade_type = this.trade_sn ? 'trade' : 'order'
+        const sn = this.trade_sn || this.order_sn
+        const client_type = 'PC'
+        const payment_plugin_id = payment.plugin_id
+        const url = API_Trade.initiatePay(trade_type, sn, { client_type, pay_mode: 'normal', payment_plugin_id })
+        this.payUrl = url
+        // if (payment_plugin_id === 'alipayDirectPlugin') {
+        //   document.getElementById('alipay-qrcode').src = url
+        // }
+      },
+      /** 发起电脑支付 */
+      iniyiatePayByPc() {}
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .index-cashier {
-    position: relative;
-    width: 1000px;
-    margin: 20px auto;
-    height: 60px;
-    .welcome {
-      a {
-        float: left;
-        width: 245px;
-        height: 60px;
-      }
-      img {
-        width: 240px;
-        height: 60px;
-      }
-      span {
-        font-size: 23px;
-        float: left;
-        display: block;
-        margin: 25px 5px;
-      }
-    }
-  }
   .cashier-box {
     width: 100%;
     background: #f5f5f5;
@@ -163,9 +204,8 @@
         overflow: hidden;
         margin: 0 10px;
         padding: 10px 40px;
-        li {
+        .payment-item {
           float: left;
-          height: 35px;
           line-height: 30px;
           margin: 0 8px 10px 0;
           padding: 5px 5px;
@@ -174,7 +214,11 @@
           cursor: pointer;
           img {
             width: 150px;
-            height: 35px
+            height: 35px;
+          }
+          &.selected {
+            border: 2px solid #f56a3e;
+            padding: 4px;
           }
         }
       }
@@ -214,6 +258,123 @@
         background: #f42424;
         display: block;
         margin: 30px auto 0 auto;
+      }
+    }
+  }
+  .cashier-pay-box {
+    width: 950px;
+    border: 1px solid #e1e1e1;
+    background: #f4f4f4;
+    margin: 0 0 40px 0;
+    padding-top: 3px;
+    .pay-item.alipay {
+      margin: 0 3px 0 3px;
+      background: #fff;
+      overflow: hidden;
+      height: 335px;
+      .alipay-left {
+        width: 471px;
+        float: left;
+        border-right: 1px solid #f4f4f4;
+        height: 310px;
+        position: relative;
+        p {
+          width: 450px;
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          margin: 25px 0 0 0;
+          font-size: 16px;
+        }
+        .pc-pay-img {
+          background: url(../../assets/images/icons-cashier.png) no-repeat 0 -1417px;
+          height: 92px;
+          margin-left: 150px;
+          margin-top: 48px;
+          width: 165px;
+        }
+        .pay-btn {
+          width: 180px;
+          height: 40px;
+          line-height: 40px;
+          text-align: center;
+          color: #fff;
+          font-size: 14px;
+          background: #f42424;
+          display: block;
+          margin: 30px auto 0 auto;
+        }
+        .icon-or {
+          display: block;
+          background: url(../../assets/images/icons-cashier.png) no-repeat -212px -1417px;
+          height: 41px;
+          left: 464px;
+          position: absolute;
+          top: 130px;
+          width: 31px;
+        }
+      }
+      .alipay-right {
+        width: 272px;
+        float: left;
+        p {
+          width: 472px;
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          margin: 25px 0 0 0;
+          font-size: 16px;
+        }
+        .pay-qrcode {
+          width: 472px;
+          height: 255px;
+          text-align: center;
+          position: relative;
+        }
+        .alipay-qrcode {
+          margin: 20px auto;
+          height: 200px;
+          width: 200px;
+        }
+      }
+    }
+    .pay-item.wechat {
+      margin: 0 3px 0 3px;
+      background: #fff;
+      overflow: hidden;
+      height: 335px;
+      .wechat-left {
+        width: 400px;
+        float: left;
+        margin: 0 0 0 100px;
+      }
+      .pc-pay-img {
+        width: 400px;
+        text-align: center;
+        padding: 25px 0;
+        z-index: 999;
+      }
+      .wechat-right {
+        width: 400px;
+        float: left;
+        p {
+          width: 340px;
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          margin: 25px 0 0 0;
+          font-size: 16px;
+        }
+        .pay-erweima {
+          width: 350px;
+          height: 255px;
+          text-align: center;
+        }
+        .wechat-qrcode {
+          width: 200px;
+          height: 200px;
+          margin: 0 auto;
+        }
       }
     }
   }
