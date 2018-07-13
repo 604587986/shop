@@ -80,18 +80,16 @@ export function reserveStockGoods(goods_id, params) {
 }
 
 /**
- * 商品发布   查询商品参数，获取所选分类关联的参数信息
- * @param ids
- * @param params
+ * 发布商品   查询商品参数，获取所选分类关联的参数信息
+ * @param category_id
  * @returns {Promise<any>}
  */
-export function getGoodsParams(ids, params) {
+export function getGoodsParams(category_id) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/goods/category/${ids}/params`,
+      url: `/goods/category/${category_id}/params`,
       method: 'get',
-      loading: false,
-      params
+      loading: false
     }).then(response => {
       resolve(response)
     })
@@ -99,7 +97,25 @@ export function getGoodsParams(ids, params) {
 }
 
 /**
- * 查询草稿箱商品参数
+ * 编辑商品   查询商品参数，获取所选分类关联的参数信息
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getEditGoodsParams(category_id, goods_id) {
+  return new Promise((resolve, reject) => {
+    request({
+      url: `/goods/category/${category_id}/${goods_id}/params`,
+      method: 'get',
+      loading: false
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 草稿箱编辑 查询草稿箱商品参数
  * @param ids
  * @param params
  * @returns {Promise<any>}
