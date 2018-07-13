@@ -86,12 +86,6 @@
 
   export default {
     name: 'dashboard',
-    mounted() {
-      window.onresize = this.countTableHeight
-      this.$nextTick(() => {
-        this.sesalChart = this.$echarts.init(document.getElementById('salesStatistics'))
-      })
-    },
     data() {
       return {
         loading: true,
@@ -100,15 +94,13 @@
         tableHeight: (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
       }
     },
-    methods: {
-      /** 窗口缩放时计算table高度 */
-      countTableHeight() {
-        this.tableHeight = (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
-        /** 图表刷新 */
-        setTimeout(this.sesalChart.resize)
-      }
+    activated() {
+      window.onresize = this.countTableHeight
     },
-    created() {
+    mounted() {
+      this.$nextTick(() => {
+        this.sesalChart = this.$echarts.init(document.getElementById('salesStatistics'))
+      })
       API_Common.getIndexData().then(response => {
         this.loading = false
         this.goodsList = response.goods_vos
@@ -138,6 +130,14 @@
           ]
         })
       })
+    },
+    methods: {
+      /** 窗口缩放时计算table高度 */
+      countTableHeight() {
+        this.tableHeight = (document.body.clientHeight - 84 - 80 - 80 - 20 - 20 - 4) / 2
+        /** 图表刷新 */
+        setTimeout(this.sesalChart.resize)
+      }
     }
   }
 </script>
