@@ -87,6 +87,7 @@ export default function checkToken(options) {
             console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
             if (__RTK__ === undefined) {
               console.log('登录已失效了，不用再等待了...')
+              store.dispatch('removeUserAction')
               return
             }
             __RTK__ === null

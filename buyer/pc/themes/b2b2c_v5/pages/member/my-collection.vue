@@ -15,7 +15,6 @@
               :key="goods.goods_id"
               :class="['coll-g-item', goods.show_del_pop && 'del-pop-show']"
             >
-              <!--// Andste_TODO 2018/7/12: 待适配-->
               <div class="goods-image">
                 <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                   <img :src="goods.goods_image" :alt="goods.goods_name">
@@ -24,8 +23,8 @@
                   <i class="iconfont ea-icon-delete"></i>
                 </div>
                 <div class="goods-image-btns">
-                  <nuxt-link :to="'/shop/' + goods.shop_id">进入店铺</nuxt-link>
-                  <a href="javascript:;" @click="handleAddToCart(goods)">加入购物车</a>
+                  <nuxt-link :to="'/shop/' + goods.shop_id" target="_blank">进入店铺</nuxt-link>
+                  <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">查看商品</nuxt-link>
                 </div>
               </div>
               <div class="goods-name">
@@ -182,10 +181,6 @@
         // 如果没有店铺收藏数据，则获取
         if (!this.shopData) this.GET_Collection('shop')
       },
-      /** 加入到购物车 */
-      handleAddToCart(goods) {
-        console.log(goods)
-      },
       /** 删除商品收藏 */
       handleDeleteGoodsColl(goods) {
         API_Members.deleteGoodsCollection(goods.goods_id).then(() => {
@@ -332,7 +327,6 @@
         strong {
           color: #f40;
           font-weight: 700;
-          font-family: verdana,arial;
         }
       }
       .original-price {
@@ -479,7 +473,6 @@
           strong {
             color: #f40;
             font-weight: 700;
-            font-family: verdana,arial;
           }
         }
         .original-price {
