@@ -327,7 +327,6 @@
         strong {
           color: #f40;
           font-weight: 700;
-          font-family: verdana,arial;
         }
       }
       .original-price {
@@ -474,7 +473,6 @@
           strong {
             color: #f40;
             font-weight: 700;
-            font-family: verdana,arial;
           }
         }
         .original-price {
