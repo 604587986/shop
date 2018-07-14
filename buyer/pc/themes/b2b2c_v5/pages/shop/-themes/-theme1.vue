@@ -64,13 +64,12 @@
               <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
-                    <img :src="goods.thumbnail" alt="goods.goods_name" :title="goods.goods_name">
+                    <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
                   </nuxt-link>
                 </div>
                 <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>
                 <div class="goods-price">
                   <span>RMB：<strong>￥{{ goods.price | unitPrice }}</strong></span>
-                  <!--// Andste_TODO 2018/7/4: 缺少参数-->
                   <span>已销售：{{ goods.buy_count }}件</span>
                 </div>
               </li>

@@ -13,13 +13,14 @@
             </li>
             <template v-for="(goods, index) in hotGoods">
               <li v-if="index < 7" :key="goods.goods_id" class="goods-item">
-                <nuxt-link :to="'/goods/' + goods.goods_id"><img :src="goods.thumbnail"></nuxt-link>
+                <nuxt-link :to="'/goods/' + goods.goods_id">
+                  <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                </nuxt-link>
                 <div class="goods-info">
                   <div class="goods-name"><nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.goods_name }}</nuxt-link></div>
                   <div class="goods-price">
                     <span>RMB：</span>
                     <span class="price">{{ goods.price | unitPrice('￥') }}</span>
-                    <!--// Andste_TODO 2018/7/4: 待适配-->
                     <span class="buy-count">已售：{{ goods.buy_count }}件</span>
                   </div>
                 </div>
@@ -47,7 +48,6 @@
                   </h2>
                   <p>
                     <span>RMB：<i>{{ goods.price | unitPrice('￥') }}</i></span>
-                    <!--// Andste_TODO 2018/7/4: 待适配-->
                     <span class="hot-sale">已销售：{{ goods.buy_count }}件</span>
                   </p>
                 </div>
@@ -66,13 +66,12 @@
             <template v-for="(goods, index) in recGoods">
               <li v-if="index < 6" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
-                  <img :src="goods.thumbnail" :alt="goods.goods_name">
+                  <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
                 </div>
                 <div class="goods-info">
                   <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>
                   <p v-if="goods.goods_original_price">原价：<span class="goods-original-price">{{ goods.goods_original_price | unitPrice('￥') }}</span></p>
                   <p>价格：<span class="goods-price">{{ goods.price | unitPrice('￥') }}</span></p>
-                  <!--// Andste_TODO 2018/7/4: 待适配-->
                   <p>已销售：<span>{{ goods.buy_count }}</span>件</p>
                   <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-btn">查看详情</nuxt-link>
                 </div>
