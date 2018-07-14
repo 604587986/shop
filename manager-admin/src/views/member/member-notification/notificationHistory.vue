@@ -58,14 +58,18 @@
             <el-radio :label="1">指定会员</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-if="notificationForm.send_type === 1" label="已选会员">
-          <el-tag
-            v-for="member in notificationForm.member_ids"
-            :key="member.member_id"
-            closable
-            type="info">
-            {{ member.uname }}
-          </el-tag>
+        <el-form-item v-show="notificationForm.send_type === 1" label="已选会员" prop="member_ids">
+          <template v-if="notificationForm.member_ids && notificationForm.member_ids.length">
+            <el-tag
+              v-for="(member, index) in notificationForm.member_ids"
+              :key="member.member_id"
+              closable
+              @close="handleRemoveMember(index)"
+              type="info">
+              {{ member.uname }}
+            </el-tag>
+          </template>
+          <el-button v-else size="mini" @click="memberPickerShow = true">选择会员</el-button>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -99,11 +103,15 @@
         // 发布消息 dialog
         dialogVisible: false,
         // 发布消息 表单
-        notificationForm: { send_type: 0 },
+        notificationForm: {
+          send_type: 0,
+          member_ids: []
+        },
         // 发布消息 表单规则
         notificationRules: {
           title: [this.MixinRequired('请输入消息标题！')],
-          content: [this.MixinRequired('请输入消息内容！')]
+          content: [this.MixinRequired('请输入消息内容！')],
+          member_ids: [{ type: 'array', required: false, message: '请至少选择一个会员！' }]
         },
         // 会员选择器显示
         memberPickerShow: false
@@ -115,8 +123,9 @@
     watch: {
       'notificationForm.send_type': function(newVal) {
         this.memberPickerShow = !!newVal
+        this.notificationRules.member_ids[0].required = !!newVal
         if (newVal === 0) {
-          this.notificationForm.member_ids = ''
+          this.notificationForm.member_ids = []
         }
       }
     },
@@ -135,7 +144,10 @@
 
       /** 发布消息 */
       handleReleaseNotification() {
-        this.notificationForm = { send_type: 0 }
+        this.notificationForm = {
+          send_type: 0,
+          member_ids: []
+        }
         this.dialogVisible = true
       },
 
@@ -144,13 +156,23 @@
         this.notificationForm.member_ids = memberList
         console.log(memberList)
       },
+      /** 移除会员 */
+      handleRemoveMember(index) {
+        const { member_ids } = this.notificationForm
+        member_ids.splice(index, 1)
+        this.$set(this.notificationForm, 'member_ids', member_ids)
+      },
 
       /** 发布消息 表单提交 */
       submitNotificationForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const params = this.MixinClone(this.notificationForm)
-            params.member_ids = params.member_ids.map(item => item.member_id)
+            if (params.send_type === 1) {
+              params.member_ids = params.member_ids.map(item => item.member_id)
+            } else {
+              delete params.member_ids
+            }
             API_Notification.releaseNotification(params).then(response => {
               this.dialogVisible = false
               this.$message.success('发布成功！')
