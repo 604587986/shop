@@ -11,28 +11,15 @@
         </div>
       </div>
       <template slot="table-columns">
-        <!--<el-table-column type="selection" width="100"/>-->
-        <el-table-column prop="title" label="标题"/>
-        <el-table-column label="通知类型">
-          <template slot-scope="scope">{{ scope.row.type | typeFilter }}</template>
+        <el-table-column prop="title" label="消息标题"/>
+        <el-table-column label="发送类型">
+          <template slot-scope="scope">{{ scope.row.type ? '指定会员' : '全站' }}</template>
         </el-table-column>
         <el-table-column label="发送时间">
           <template slot-scope="scope">{{ scope.row.send_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="content" label="通知内容" width="500"/>
-        <!--<el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleRecoverMember(scope.$index, scope.row)">恢复</el-button>
-          </template>
-        </el-table-column>-->
+        <el-table-column prop="content" label="消息内容" width="500"/>
       </template>
-
-      <!--<template slot="pagination-toolbar">
-        <el-button type="primary" size="mini" @click="recoverMembers">恢复选中</el-button>
-      </template>-->
       <el-pagination
         v-if="tableData"
         slot="pagination"
@@ -60,16 +47,25 @@
           <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入通知内容"
+            placeholder="请输入消息内容"
             v-model="notificationForm.content"
             :maxlength="2000">
           </el-input>
         </el-form-item>
-        <el-form-item label="通知标题">
+        <el-form-item label="发送类型">
           <el-radio-group v-model="notificationForm.send_type">
             <el-radio :label="0">全站</el-radio>
             <el-radio :label="1">指定会员</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="notificationForm.send_type === 1" label="已选会员">
+          <el-tag
+            v-for="member in notificationForm.member_ids"
+            :key="member.member_id"
+            closable
+            type="info">
+            {{ member.uname }}
+          </el-tag>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -77,6 +73,10 @@
         <el-button type="primary" @click="submitNotificationForm('notificationForm')">确 定</el-button>
       </span>
     </el-dialog>
+    <en-member-picker
+      :show="memberPickerShow"
+      @close="memberPickerShow = false"
+      @confirm="handleMemberPickerConfirm"/>
   </div>
 </template>
 
@@ -87,38 +87,37 @@
     name: 'notificationHistory',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
+        // 列表数据
         tableData: '',
-        /** 发布消息 dialog */
+        // 发布消息 dialog
         dialogVisible: false,
-        /** 发布消息 表单 */
-        notificationForm: { type: 0 },
-        /** 发布消息 表单规则 */
+        // 发布消息 表单
+        notificationForm: { send_type: 0 },
+        // 发布消息 表单规则
         notificationRules: {
-          title: [
-            { required: true, message: '请输入通知标题', trigger: 'blur' }
-          ],
-          content: [
-            { required: true, message: '请输入通知内容', trigger: 'blur' }
-          ]
-        }
+          title: [this.MixinRequired('请输入消息标题！')],
+          content: [this.MixinRequired('请输入消息内容！')]
+        },
+        // 会员选择器显示
+        memberPickerShow: false
       }
     },
     mounted() {
       this.GET_NotificationList()
     },
-    filters: {
-      typeFilter(val) {
-        return val === 1 ? '指定会员' : '全站'
+    watch: {
+      'notificationForm.send_type': function(newVal) {
+        this.memberPickerShow = !!newVal
+        if (newVal === 0) {
+          this.notificationForm.member_ids = ''
+        }
       }
     },
     methods: {
@@ -134,17 +133,25 @@
         this.GET_NotificationList()
       },
 
-      /** 发布通知 */
+      /** 发布消息 */
       handleReleaseNotification() {
         this.notificationForm = { send_type: 0 }
         this.dialogVisible = true
       },
 
-      /** 发布通知 表单提交 */
+      /** 选择会员回调 */
+      handleMemberPickerConfirm(memberList) {
+        this.notificationForm.member_ids = memberList
+        console.log(memberList)
+      },
+
+      /** 发布消息 表单提交 */
       submitNotificationForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_Notification.releaseNotification(this.notificationForm).then(response => {
+            const params = this.MixinClone(this.notificationForm)
+            params.member_ids = params.member_ids.map(item => item.member_id)
+            API_Notification.releaseNotification(params).then(response => {
               this.dialogVisible = false
               this.$message.success('发布成功！')
               this.GET_NotificationList()
@@ -169,5 +176,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  /deep/ .el-tag + .el-tag {
+    margin-left: 5px;
+  }
 </style>
