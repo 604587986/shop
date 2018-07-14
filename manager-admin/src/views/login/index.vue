@@ -45,12 +45,13 @@
     components: { LangSelect },
     name: 'login',
     data() {
+      const is_dev = process.env.NODE_ENV !== 'production'
       return {
         loading: false,
         loginForm: {
-          username: 'admin',
-          password: 'admin',
-          validcode: ''
+          username: is_dev ? 'admin' : '',
+          password: is_dev ? '111111' : '',
+          validcode: is_dev ? '1111' : ''
         },
         loginRules: {
           username: [

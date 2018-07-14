@@ -32,12 +32,24 @@
           <el-table-column label="日期" align="center">
             <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
           </el-table-column>
-          <el-table-column prop="point_detail" label="明细" align="center"/>
+          <el-table-column prop="reason" label="明细" align="center"/>
           <el-table-column label="等级积分" align="center" width="120">
-            <template slot-scope="scope">{{ scope.row.level_point | filterType }}</template>
+            <template slot-scope="{ row }">
+              <span v-if="row.grade_point === 0">{{ row.grade_point }}</span>
+              <span v-else-if="row.grade_point_type === 0">
+                -{{ row.grade_point }}
+              </span>
+              <span v-else>+{{ row.grade_point }}</span>
+            </template>
           </el-table-column>
           <el-table-column label="消费积分" align="center" width="120">
-            <template slot-scope="scope">{{ scope.row.consumption_point | filterType }}</template>
+            <template slot-scope="{ row }">
+              <span v-if="row.consum_point === 0">{{ row.consum_point }}</span>
+              <span v-else-if="row.consum_point_type === 0">
+                -{{ row.consum_point }}
+              </span>
+              <span v-else>+{{ row.consum_point }}</span>
+            </template>
           </el-table-column>
         </el-table>
         <el-pagination
@@ -72,11 +84,6 @@
     mounted() {
       this.GET_Points()
       this.GET_PointsData()
-    },
-    filters: {
-      filterType(val) {
-        return (val > 0 ? '+' : '-') + val
-      }
     },
     methods: {
       /** 当前分页发生变化 */
