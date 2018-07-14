@@ -197,10 +197,7 @@
             }
           ],
           scope: [ req_rule('请输入法定经营范围！') ],
-          licence_img: [ req_rule('请上传营业执照电子版！') ],
-          organization_code: [ req_rule('请输入组织机构代码！') ],
-          code_img: [ req_rule('请上传组织机构代码证电子版！') ],
-          taxes_img: [ req_rule('请上传一般纳税人证明！') ],
+          licence_img: [ req_rule('请上传营业执照电子版！') ]
         }
       }
     },
