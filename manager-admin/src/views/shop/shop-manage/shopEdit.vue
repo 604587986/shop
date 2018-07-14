@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading">
     <el-form :model="shopForm" :rules="shopRules" ref="shopForm" inline label-width="130px">
-      <el-tabs type="border-card" :value="tableName" ref="tabs">
+      <el-tabs type="border-card" v-model="tableName" ref="tabs">
         <el-tab-pane label="基本信息" name="base">
           <el-form-item label="公司名称" prop="company_name">
             <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
@@ -327,7 +327,6 @@
             // 再将tab切换过去
             const firstError = Object.keys(error)[0]
             let tabChildren = this.$refs['tabs'].$children
-            tabChildren.shift()
             for (let i = 0; i < tabChildren.length; i++) {
               const item = tabChildren[i]
               let finded = false
