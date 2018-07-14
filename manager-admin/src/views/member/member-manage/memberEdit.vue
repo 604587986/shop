@@ -2,7 +2,7 @@
   <div class="">
     <el-tabs type="border-card">
       <el-tab-pane label="编辑会员">
-        <el-form :model="editMemberForm" :rules="editMemberRules" ref="editMemberForm" inline label-width="100px">
+        <el-form :model="editMemberForm" :rules="editMemberRules" ref="editForm" inline label-width="100px">
           <!--<el-form-item label="用户名" prop="username">
             <el-input v-model="editMemberForm.username" :maxlength="20"></el-input>
           </el-form-item>-->
@@ -12,12 +12,11 @@
           <el-form-item label="密码" prop="password">
             <el-input v-model="editMemberForm.password" placeholder="不填则不更改" :maxlength="20"></el-input>
           </el-form-item>
-          <el-form-item label="地区" prop="region" class="form-item-region">
+          <el-form-item label="地区" class="form-item-region">
             <en-region-picker :api="MixinRegionApi" :default="defaultRegion" @changed="(object) => { editMemberForm.region = object.last_id }"/>
           </el-form-item>
           <el-form-item label="会员备注">
-            <el-input placeholder="请输入会员备注" v-model="editMemberForm.remark" clearable>
-            </el-input>
+            <el-input placeholder="请输入会员备注" v-model="editMemberForm.remark" clearable></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="editMemberForm.email" :maxlength="50"></el-input>
@@ -25,7 +24,7 @@
           <el-form-item label="手机" prop="mobile">
             <el-input v-model="editMemberForm.mobile" :maxlength="11"></el-input>
           </el-form-item>
-          <el-form-item label="生日" prop="birthday">
+          <el-form-item label="生日">
             <el-date-picker
               v-model="editMemberForm.birthday"
               type="date"
@@ -35,11 +34,11 @@
               :picker-options="{disabledDate(time) { return time.getTime() > Date.now() }}">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="性别" prop="sex" class="form-item-sex">
+          <el-form-item label="性别" class="form-item-sex">
             <el-radio v-model="editMemberForm.sex" :label="1">男</el-radio>
             <el-radio v-model="editMemberForm.sex" :label="0">女</el-radio>
           </el-form-item>
-          <el-form-item label="详细地址" prop="address">
+          <el-form-item label="详细地址">
             <el-input v-model="editMemberForm.address" :maxlength="50"></el-input>
           </el-form-item>
           <el-form-item label="邮编">
@@ -49,7 +48,7 @@
             <el-input v-model="editMemberForm.tel"></el-input>
           </el-form-item>
         </el-form>
-        <el-button type="primary" @click="submitEditMemberForm('editMemberForm')" class="save">保存修改</el-button>
+        <el-button type="primary" @click="submitEditMemberForm('editForm')" class="save">保存修改</el-button>
       </el-tab-pane>
       <el-tab-pane label="TA的订单">
         <!--// Andste_TODO 2018/6/28: 订单相关未适配-->
@@ -128,37 +127,49 @@
         editMemberForm: {},
         // 编辑会员 表单规则
         editMemberRules: {
-          // username: [
-          //   this.MixinRequired('请输入会员名称！'),
-          //   { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
-          // ],
-          email: [
-            this.MixinRequired('请输入邮箱！'),
+          nickname: [
+            this.MixinRequired('请输入昵称！'),
+            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
             { validator: (rule, value, callback) => {
-              if (!RegExp.email.test(value)) {
+              if (!RegExp.userName.test(value)) {
+                callback(new Error('只支持汉字、字母、数字、“-”、“_”的组合！'))
+              } else {
+                callback()
+              }
+            } }
+          ],
+          mobile: [
+            this.MixinRequired('请输入手机号！'),
+            { validator: (rule, value, callback) => {
+              if (!RegExp.mobile.test(value)) {
+                callback(new Error('手机格式有误！'))
+              } else {
+                callback()
+              }
+            } }
+          ],
+          email: [
+            { validator: (rule, value, callback) => {
+              if (value !== 0 && !value) {
+                callback()
+              } else if (!RegExp.email.test(value)) {
                 callback(new Error('邮箱格式有误！'))
               } else {
                 callback()
               }
             } }
           ],
-          nickname: [
-            this.MixinRequired('请输入昵称！'),
-            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
-          ],
-          region: [this.MixinClone('请选择地区！')],
-          mobile: [
-            this.MixinRequired('请输入手机号！'),
+          password: [
             { validator: (rule, value, callback) => {
-              if (!RegExp.mobile.test(value)) {
-                callback(new Error('手机格式格式有误！'))
+              if (value !== 0 && !value) {
+                callback()
+              } else if (!RegExp.password.test(value)) {
+                callback(new Error('密码应为6-20位英文或数字！'))
               } else {
                 callback()
               }
             } }
-          ],
-          birthday: [this.MixinRequired('请选择生日！')],
-          address: [this.MixinRequired('请输入详细地址！')]
+          ]
         },
         /** 地区id数组 */
         defaultRegion: null,
@@ -206,6 +217,7 @@
       GET_MemberDetail() {
         API_Member.getMemberDetail(this.member_id).then(response => {
           response.birthday *= 1000
+          response.region = response.town_id || response.county_id
           this.editMemberForm = response
           if (response.province_id) {
             this.defaultRegion = [response.province_id, response.city_id, response.county_id || -1, response.town_id || -1]
