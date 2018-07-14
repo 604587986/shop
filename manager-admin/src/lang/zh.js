@@ -27,7 +27,7 @@ export default {
     goodsCommentList: '商品评论列表',
     goodsAskList: '商品咨询列表',
     memberNotification: '会员通知',
-    notificationHistory: '通知历史',
+    notificationHistory: '站内消息',
     memberEdit: '编辑会员',
 
     shop: '店铺管理',

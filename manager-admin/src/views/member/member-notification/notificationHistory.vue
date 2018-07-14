@@ -2,13 +2,12 @@
   <div>
     <en-table-layout
       :pagination="true"
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
-      :selection-change="handleSelectionChange"
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleReleaseNotification">发布</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleReleaseNotification">发送</el-button>
         </div>
       </div>
       <template slot="table-columns">
@@ -35,29 +34,29 @@
         <el-button type="primary" size="mini" @click="recoverMembers">恢复选中</el-button>
       </template>-->
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-table-layout>
     <el-dialog
-      title="发布商城通知"
-      :visible.sync="dialogNotificationVisible"
+      title="发送站内消息"
+      :visible.sync="dialogVisible"
       width="500px"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
       <el-form :model="notificationForm" :rules="notificationRules" ref="notificationForm" label-width="100px">
-        <el-form-item label="通知标题" prop="title">
+        <el-form-item label="消息标题" prop="title">
           <el-input v-model="notificationForm.title" :maxlength="20" placeholder="标题在20字以内"></el-input>
         </el-form-item>
-        <el-form-item label="通知内容" prop="content">
+        <el-form-item label="消息内容" prop="content">
           <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"
@@ -67,14 +66,14 @@
           </el-input>
         </el-form-item>
         <el-form-item label="通知标题">
-          <el-radio-group v-model="notificationForm.type">
+          <el-radio-group v-model="notificationForm.send_type">
             <el-radio :label="0">全站</el-radio>
             <el-radio :label="1">指定会员</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogNotificationVisible = false">取 消</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitNotificationForm('notificationForm')">确 定</el-button>
       </span>
     </el-dialog>
@@ -98,21 +97,12 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
-
-        /** 被选数据 */
-        selectedData: [],
-
-        /** 发布商城通知 dialog */
-        dialogNotificationVisible: false,
-
-        /** 发布商城通知 表单 */
+        tableData: '',
+        /** 发布消息 dialog */
+        dialogVisible: false,
+        /** 发布消息 表单 */
         notificationForm: { type: 0 },
-
-        /** 发布商城通知 表单规则 */
+        /** 发布消息 表单规则 */
         notificationRules: {
           title: [
             { required: true, message: '请输入通知标题', trigger: 'blur' }
@@ -144,15 +134,10 @@
         this.GET_NotificationList()
       },
 
-      /** 当选择项发生变化 */
-      handleSelectionChange(val) {
-        this.selectedData = val.map(item => item.id)
-      },
-
       /** 发布通知 */
       handleReleaseNotification() {
-        this.notificationForm = { type: 0 }
-        this.dialogNotificationVisible = true
+        this.notificationForm = { send_type: 0 }
+        this.dialogVisible = true
       },
 
       /** 发布通知 表单提交 */
@@ -160,7 +145,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             API_Notification.releaseNotification(this.notificationForm).then(response => {
-              this.dialogNotificationVisible = false
+              this.dialogVisible = false
               this.$message.success('发布成功！')
               this.GET_NotificationList()
             }).catch(error => console.log(error))
@@ -176,16 +161,8 @@
         this.loading = true
         API_Notification.getNotificationList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }

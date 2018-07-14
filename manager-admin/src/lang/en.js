@@ -27,7 +27,7 @@ export default {
     goodsCommentList: 'Goods Comment List',
     goodsAskList: 'Goods Ask List',
     memberNotification: 'Member Notification',
-    notificationHistory: 'Notification History',
+    notificationHistory: 'Site Notification',
     memberEdit: 'editMember',
 
     shop: 'Manage Shop',
