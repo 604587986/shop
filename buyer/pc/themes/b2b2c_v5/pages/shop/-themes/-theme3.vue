@@ -23,7 +23,6 @@
                 </div>
                 <div class="goods-price">
                   <span>RMB：<i class="price">￥{{ goods.price | unitPrice }}</i></span>
-                  <!--// Andste_TODO 2018/7/4: 待适配-->
                   <span>已售：{{ goods.buy_count }}件</span>
                 </div>
               </li>
@@ -48,7 +47,6 @@
                   </div>
                   <div v-if="index === 0" class="goods-price">
                     <p>RMB: <strong class="price">￥{{ goods.price | unitPrice }}</strong></p>
-                    <!--// Andste_TODO 2018/7/4: 待适配-->
                     <p>已销售：{{ goods.buy_count }}件</p>
                   </div>
                 </div>
@@ -75,7 +73,6 @@
                 </div>
                 <div class="goods-price">
                   <p>RMB：<strong>￥{{ goods.price | unitPrice }}</strong></p>
-                  <!--// Andste_TODO 2018/7/4: 待适配-->
                   <p>已销售：{{ goods.buy_count }}件</p>
                 </div>
               </li>
