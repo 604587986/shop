@@ -59,7 +59,7 @@
           <el-form-item label="法人身份证" prop="legal_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.legal_img = res.url }">
               <img v-if="shopForm.legal_img" :src="shopForm.legal_img" class="avatar">
@@ -86,7 +86,7 @@
           <el-form-item label="组织机构代码证件" prop="code_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.code_img = res.url }">
               <img v-if="shopForm.code_img" :src="shopForm.code_img" class="avatar">
@@ -111,7 +111,7 @@
           <el-form-item label="开户行许可证" prop="bank_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.bank_img = res.url }">
               <img v-if="shopForm.bank_img" :src="shopForm.bank_img" class="avatar">
@@ -130,7 +130,7 @@
           <el-form-item label="一般纳税人证明" prop="taxes_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.taxes_img = res.url }">
               <img v-if="shopForm.taxes_img" :src="shopForm.taxes_img" class="avatar">
@@ -141,7 +141,7 @@
           <el-form-item label="税务登记证" prop="taxes_certificate_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.taxes_certificate_img = res.url }">
               <img v-if="shopForm.taxes_certificate_img" :src="shopForm.taxes_certificate_img" class="avatar">
