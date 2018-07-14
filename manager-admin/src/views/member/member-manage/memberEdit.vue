@@ -51,15 +51,7 @@
         <el-button type="primary" @click="submitEditMemberForm('editForm')" class="save">保存修改</el-button>
       </el-tab-pane>
       <el-tab-pane label="TA的订单">
-        <!--// Andste_TODO 2018/6/28: 订单相关未适配-->
-        <el-table
-          :data="orderList"
-          style="width: 100%">
-          <el-table-column prop="sn" label="订单号"/>
-          <el-table-column prop="name" label="订单状态"></el-table-column>
-          <el-table-column prop="address" label="支付状态"></el-table-column>
-          <el-table-column prop="address" label="下单日期"></el-table-column>
-        </el-table>
+        <member-list-order :member-id="member_id"/>
       </el-tab-pane>
       <el-tab-pane label="TA的积分">
         <el-form :model="editPointForm" ref="editPointForm" label-width="100px">
@@ -112,13 +104,15 @@
   import MemberListAddress from './memberListAddress'
   import MemberListAsk from './memberListAsk'
   import MemberListComments from './memberListComments'
+  import memberListOrder from './memberListOrder'
 
   export default {
     name: 'memberEdit',
     components: {
       MemberListAddress,
       MemberListAsk,
-      MemberListComments
+      MemberListComments,
+      memberListOrder
     },
     data() {
       return {
