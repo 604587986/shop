@@ -107,10 +107,6 @@
       Storage.getItem('refreshToken') && API_Members.getGoodsIsCollect(goods_id).then(response => {
         this.collected = response.message
       })
-      // 获取促销列表
-      API_Promotions.getGoodsPromotions(goods_id).then(response => {
-        console.log('promotions', response)
-      })
       this.loadBdShareScript()
     },
     computed: {

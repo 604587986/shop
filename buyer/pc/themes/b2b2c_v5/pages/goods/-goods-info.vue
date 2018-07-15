@@ -15,6 +15,7 @@
         <div class="pro-title">温馨提示</div>
         <div class="pro-content">本商品无质量问题不支持退换货</div>
       </div>
+      <goods-promotions :goods-id="goods.goods_id"/>
       <goods-coupons :goods-id="goods.goods_id"/>
     </div>
     <div class="pro-spec">
@@ -63,9 +64,12 @@
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
   import Storage from '@/utils/storage'
+  import GoodsCoupons from './-goods-coupons'
+  import GoodsPromotions from './-goods-promotions'
   export default {
     name: 'goods-info',
     props: ['goods'],
+    components: { GoodsCoupons, GoodsPromotions },
     data() {
       return {
         goodsInfo: JSON.parse(JSON.stringify(this.goods)),

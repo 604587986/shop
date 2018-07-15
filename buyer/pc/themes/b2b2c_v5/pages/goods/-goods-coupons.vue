@@ -56,6 +56,7 @@
 <script>
   /**
    * 商品优惠券模块
+   * 查看店铺优惠券列表、领取优惠券
    */
   export default {
     name: 'goods-coupons',
