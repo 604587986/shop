@@ -50,6 +50,7 @@
   import { mapGetters } from 'vuex'
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
+  import * as API_Promotions from '@/api/promotions'
   import * as GoodsComponents from './'
   import Storage from '@/utils/storage'
   import { Pagination } from 'element-ui'
@@ -105,6 +106,10 @@
       // 如果用户已登录，查询是否已收藏商品、店铺
       Storage.getItem('refreshToken') && API_Members.getGoodsIsCollect(goods_id).then(response => {
         this.collected = response.message
+      })
+      // 获取促销列表
+      API_Promotions.getGoodsPromotions(goods_id).then(response => {
+        console.log('promotions', response)
       })
       this.loadBdShareScript()
     },

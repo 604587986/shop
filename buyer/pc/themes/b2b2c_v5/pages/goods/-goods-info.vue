@@ -15,6 +15,7 @@
         <div class="pro-title">温馨提示</div>
         <div class="pro-content">本商品无质量问题不支持退换货</div>
       </div>
+      <goods-coupons :goods-id="goods.goods_id"/>
     </div>
     <div class="pro-spec">
       <div v-for="(spec, specIndex) in specList" :key="spec.spec_id" class="pro-list">
@@ -62,8 +63,10 @@
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
   import Storage from '@/utils/storage'
+  import GoodsCoupons from "@/pages/goods/-goods-coupons"
   export default {
     name: 'goods-info',
+    components: {GoodsCoupons},
     props: ['goods'],
     data() {
       return {
@@ -313,17 +316,17 @@
       }
     }
   }
-  .pro-list {
+  /deep/ .pro-list {
     display: flex;
     margin-bottom: 5px;
   }
-  .pro-title {
+  /deep/ .pro-title {
     width: 60px;
     padding-right: 17px;
     height: 33px;
     line-height: 33px;
   }
-  .pro-content {
+  /deep/ .pro-content {
     width: 307px;
     min-height: 33px;
     line-height: 33px;

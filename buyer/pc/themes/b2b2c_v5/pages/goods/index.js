@@ -12,6 +12,7 @@ import GoodsTags from './-goods-tags'
 import GoodsZoom from './-goods-zoom'
 import SalesRecord from './-sales-record'
 import ShopCard from './-shop-card'
+import Coupons from './-goods-coupons'
 
 export {
   BreadNav,
@@ -22,5 +23,6 @@ export {
   GoodsTags,
   GoodsZoom,
   SalesRecord,
-  ShopCard
+  ShopCard,
+  Coupons
 }
