@@ -50,6 +50,7 @@
   import { mapGetters } from 'vuex'
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
+  import * as API_Promotions from '@/api/promotions'
   import * as GoodsComponents from './'
   import Storage from '@/utils/storage'
   import { Pagination } from 'element-ui'
