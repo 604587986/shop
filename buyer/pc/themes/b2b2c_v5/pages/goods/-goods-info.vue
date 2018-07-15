@@ -63,10 +63,8 @@
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
   import Storage from '@/utils/storage'
-  import GoodsCoupons from "@/pages/goods/-goods-coupons"
   export default {
     name: 'goods-info',
-    components: {GoodsCoupons},
     props: ['goods'],
     data() {
       return {
