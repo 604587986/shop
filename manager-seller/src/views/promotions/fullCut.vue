@@ -34,7 +34,7 @@
             <!--活动类型-->
             <el-table-column prop="activity_type" label="活动类型" :formatter="activityType" />
             <!--活动状态-->
-            <el-table-column label="活动状态" prop="disabled"/>
+            <el-table-column label="活动状态" prop="status_text"/>
             <!--操作-->
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
@@ -200,9 +200,7 @@
                               <div class="goods-info">
                                 <img :src="scope.row.thumbnail" alt="" class="goods-image">
                                 <div>
-                                  <a
-                                    :href="`${HTTP_URL}/${scope.row.goods_id}`"
-                                    target="_blank"
+                                  <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank"
                                     style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
                                   <span>{{ scope.row.price | unitPrice('￥') }}</span>
                                 </div>
@@ -754,15 +752,7 @@
           }
           /** 处理商品信息 */
           this.goodsShow = this.activityForm.range_type === 1
-          this.activityForm.goods_list = response.goods_list.map(key => {
-            return {
-              goods_id: key.goods_id,
-              goods_name: key.name,
-              thumbnail: key.thumbnail,
-              price: key.price,
-              quantity: key.quantity
-            }
-          })
+          this.activityForm.goods_list = response.goods_list
           /** 处理优惠数据 */
           this.is_discount = this.activityForm.is_discount === 1
           this.is_full_minus = this.activityForm.is_full_minus === 1

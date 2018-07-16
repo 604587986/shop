@@ -33,11 +33,7 @@
             <!--活动类型-->
             <el-table-column prop="activity_type" label="活动类型" :formatter="activityType"/>
             <!--活动状态-->
-            <el-table-column label="活动状态">
-              <template slot-scope="scope">
-                <span>{{ scope.row.disabled }}</span>
-              </template>
-            </el-table-column>
+            <el-table-column label="活动状态" prop="status_text"/>
             <!--操作-->
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
@@ -452,15 +448,7 @@
               take_effect_time: [parseInt(response.start_time) * 1000, parseInt(response.end_time) * 1000]
             }
             this.goodsShow = this.activityForm.range_type === 1
-            this.activityForm.goods_list = response.goods_list.map(key => {
-              return {
-                goods_id: key.goods_id,
-                goods_name: key.name,
-                thumbnail: key.thumbnail,
-                price: key.price,
-                quantity: key.quantity
-              }
-            })
+            this.activityForm.goods_list = response.goods_list
           })
         }
       },
