@@ -43,7 +43,12 @@
       <el-form :model="storageForm" :rules="storageRules" ref="storageForm" label-width="140px">
         <template v-for="(config, index) in storageForm.config_items">
           <el-form-item :label="config.text">
-            <el-input placeholder="请输入内容" v-model="config.value" clearable/>
+            <el-radio-group v-if="config.type === 'radio'" v-model="config.value">
+              <!--此处应该为动态生成，非写死-->
+              <el-radio label="1">支持</el-radio>
+              <el-radio label="0">不支持</el-radio>
+            </el-radio-group>
+            <el-input v-else placeholder="请输入内容" v-model="config.value" clearable/>
           </el-form-item>
         </template>
       </el-form>
