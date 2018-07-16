@@ -83,7 +83,7 @@
     <div class="bottom-ckt-inventory">
       订单备注：
       <el-input v-model="iRemark" size="small" :maxlength="120" clearable>
-        <el-button slot="append" icon="el-icon-check" @click="handleSetRemark"></el-button>
+        <el-button slot="append" @click="handleSetRemark">保存</el-button>
       </el-input>
       <span class="remark-tip">*请勿填写有关支付、收货、发票方面的信息，如有特殊需要请联系客服人员。</span>
     </div>
@@ -111,7 +111,7 @@
     methods: {
       handleSetRemark() {
         API_Trade.setRemark(this.iRemark).then(() => {
-          this.$message.success('设置成功！')
+          this.$message.success('保存成功！')
         })
       }
     }

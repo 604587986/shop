@@ -6,7 +6,7 @@
       </ul>
     </div>
     <div class="message-container">
-      <ul>
+      <ul v-if="messageData && messageData.data_total">
         <li v-for="message in messageData.data" :key="message.id" class="message-item">
           <div class="msg-time">{{ message.send_time | unixToDate }}</div>
           <div class="msg-box">
@@ -21,9 +21,11 @@
           </div>
         </li>
       </ul>
+      <empty-member v-else>暂无站内消息</empty-member>
     </div>
     <div class="member-pagination" v-if="messageData">
       <el-pagination
+        v-if="messageData.data_total"
         @current-change="handleCurrentPageChange"
         :current-page.sync="params.page_no"
         :page-size="params.page_size"

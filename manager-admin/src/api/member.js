@@ -155,3 +155,29 @@ export function deleteMemberComments(comment_id) {
     method: 'delete'
   })
 }
+
+/**
+ * 修改会员消费积分
+ * @param member_id
+ * @param point
+ */
+export function editMemberConsumPoint(member_id, point) {
+  return request({
+    url: `members/point/${member_id}`,
+    method: 'put',
+    data: { point }
+  })
+}
+
+/**
+ * 获取会员积分列表
+ * @param params
+ */
+export function getMemberPointList(params) {
+  return request({
+    url: `members/point/${params.member_id}`,
+    method: 'get',
+    loading: false,
+    params
+  })
+}

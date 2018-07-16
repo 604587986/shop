@@ -7,11 +7,10 @@ import request from '@/utils/request'
 /**
  * 获取快递平台列表
  * @param params
- * @returns {Promise<any>}
  */
 export function getExpressPlatformList(params) {
   return request({
-    url: 'shop/admin/express/list-json.do',
+    url: 'system/express-platform',
     method: 'get',
     loading: false,
     params
@@ -19,15 +18,37 @@ export function getExpressPlatformList(params) {
 }
 
 /**
- * 开启快递平台
- * @param id
- * @returns {Promise<any>}
+ * 修改快递平台
+ * @param bean
+ * @param params
  */
-export function openExpressPlatformById(id) {
-  const _params = { id }
+export function editExpressPlatform(bean, params) {
   return request({
-    url: 'shop/admin/express/set-open.do',
-    method: 'get',
-    params: _params
+    url: `system/express-platform/${bean}`,
+    method: 'put',
+    headers: { 'Content-Type': 'application/json' },
+    data: params
+  })
+}
+
+/**
+ * 获取快递平台详细配置
+ * @param bean
+ */
+export function getExpressPlatformDetail(bean) {
+  return request({
+    url: `system/express-platform/${bean}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 开启快递平台
+ * @param bean
+ */
+export function openExpressPlatformById(bean) {
+  return request({
+    url: `system/express-platform/${bean}/open`,
+    method: 'put'
   })
 }

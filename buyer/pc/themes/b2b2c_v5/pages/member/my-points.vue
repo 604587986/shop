@@ -18,9 +18,9 @@
         </el-alert>
         <el-alert type="info" title="" :closable="false">
           <h2>消费积分</h2>
-          <p>可用积分：{{ points.consum_point }}</p>
+          <p>可用积分：{{ points.consum_point || 0 }}</p>
           <h2>等级积分</h2>
-          <p>可用积分：{{ points.gade_point }}</p>
+          <p>可用积分：{{ points.grade_point || 0 }}</p>
         </el-alert>
       </div>
       <div v-show="type === 2" class="points-detail">
@@ -77,7 +77,7 @@
         pointsData: '',
         points: {
           consum_point: '获取中...',
-          gade_point: '获取中...'
+          grade_point: '获取中...'
         }
       }
     },

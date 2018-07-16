@@ -53,37 +53,21 @@
       <el-tab-pane label="TA的订单">
         <member-list-order :member-id="member_id"/>
       </el-tab-pane>
-      <el-tab-pane label="TA的积分">
+      <el-tab-pane label="消费积分">
+        <!--// Andste_TODO 2018/7/16: 缺少获取消费积分接口，且如果填负数后台会报错-->
         <el-form :model="editPointForm" ref="editPointForm" label-width="100px">
-          <el-form-item label="当前积分">
+          <el-form-item label="当前消费积分">
             {{ editPointForm.currentPoint }}
           </el-form-item>
-          <el-form-item label="调整积分">
-            <!--// Andste_TODO 2018/6/28: 积分修改未适配-->
-            <el-input-number v-model="editPointForm.changedPoint" :min="1" :max="99999999"></el-input-number>
+          <el-form-item label="调整消费积分">
+            <el-input-number v-model="editPointForm.changedPoint" :max="99999999"></el-input-number>
+            <p style="color: #d93700">默认为增加积分，减少积分请填负值。</p>
           </el-form-item>
         </el-form>
         <el-button type="primary" @click="handleSavePoint" class="save">保存修改</el-button>
       </el-tab-pane>
-      <el-tab-pane label="等级积分">
-        <el-table
-          :data="levelPointList"
-          style="width: 100%">
-          <el-table-column prop="sn" label="日期"/>
-          <el-table-column prop="name" label="类型"></el-table-column>
-          <el-table-column prop="address" label="摘要"></el-table-column>
-          <el-table-column prop="address" label="积分"></el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="消费积分">
-        <el-table
-          :data="consPointList"
-          style="width: 100%">
-          <el-table-column prop="sn" label="日期"/>
-          <el-table-column prop="name" label="类型"></el-table-column>
-          <el-table-column prop="address" label="摘要"></el-table-column>
-          <el-table-column prop="address" label="积分"></el-table-column>
-        </el-table>
+      <el-tab-pane label="TA的积分">
+        <member-list-points :member-id="member_id"/>
       </el-tab-pane>
       <el-tab-pane label="TA的咨询">
         <member-list-ask :member-id="member_id"/>
@@ -102,6 +86,7 @@
   import * as API_Member from '@/api/member'
   import { RegExp } from '~/ui-utils'
   import MemberListAddress from './memberListAddress'
+  import memberListPoints from './memberListPoints'
   import MemberListAsk from './memberListAsk'
   import MemberListComments from './memberListComments'
   import memberListOrder from './memberListOrder'
@@ -110,6 +95,7 @@
     name: 'memberEdit',
     components: {
       MemberListAddress,
+      memberListPoints,
       MemberListAsk,
       MemberListComments,
       memberListOrder
@@ -165,25 +151,13 @@
             } }
           ]
         },
-        /** 地区id数组 */
+        // 地区id数组
         defaultRegion: null,
-        // 会员订单列表
-        orderList: [],
         // 编辑积分 表单
         editPointForm: {
           currentPoint: 4399,
           changedPoint: 4399
-        },
-        // 等级积分列表
-        levelPointList: [],
-        // 消费积分列表
-        consPointList: [],
-        // 咨询列表
-        askList: [],
-        // 评论列表
-        commentList: [],
-        // 收货地址列表
-        shipList: []
+        }
       }
     },
     mounted() {
@@ -206,7 +180,11 @@
         })
       },
       /** 保存积分 */
-      handleSavePoint() {},
+      handleSavePoint() {
+        API_Member.editMemberConsumPoint(this.member_id, this.editPointForm.changedPoint).then(() => {
+          this.$message.success('修改成功！')
+        })
+      },
       /** 获取会员详情 */
       GET_MemberDetail() {
         API_Member.getMemberDetail(this.member_id).then(response => {

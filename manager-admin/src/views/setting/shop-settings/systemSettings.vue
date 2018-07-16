@@ -4,14 +4,11 @@
       <el-tab-pane label="站点设置">
         <system-settings-site/>
       </el-tab-pane>
-      <el-tab-pane label="店铺设置">
-        <system-settings-shop/>
+      <el-tab-pane label="商品设置">
+        <system-settings-goods/>
       </el-tab-pane>
       <el-tab-pane label="订单设置">
         <system-settings-order/>
-      </el-tab-pane>
-      <el-tab-pane label="图片设置" class="image-pane">
-        <system-settings-image/>
       </el-tab-pane>
       <el-tab-pane label="积分设置" class="point-pane">
         <system-settings-point/>
@@ -22,18 +19,16 @@
 
 <script>
   import SystemSettingsSite from './systemSettingsSite'
-  import SystemSettingsShop from './systemSettingsShop'
+  import systemSettingsGoods from './systemSettingsGoods'
   import SystemSettingsOrder from './systemSettingsOrder'
-  import SystemSettingsImage from './systemSettingsImage'
   import SystemSettingsPoint from './systemSettingsPoint'
 
   export default {
     name: 'systemSettings',
     components: {
       SystemSettingsSite,
-      SystemSettingsShop,
+      systemSettingsGoods,
       SystemSettingsOrder,
-      SystemSettingsImage,
       SystemSettingsPoint
     }
   }

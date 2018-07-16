@@ -47,3 +47,15 @@ export function getGroupBuyDetail(gb_id) {
     method: Method.GET
   })
 }
+
+/**
+ * 获取店铺优惠券
+ * @param seller_id
+ */
+export function getShopCoupons(seller_id) {
+  return request({
+    url: 'promotions/coupons',
+    method: Method.GET,
+    params: { seller_id }
+  })
+}

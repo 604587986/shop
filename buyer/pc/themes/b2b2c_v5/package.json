@@ -39,7 +39,7 @@
     "eslint-friendly-formatter": "3.0.0",
     "eslint-loader": "1.9.0",
     "eslint-plugin-vue": "4.3.0",
-    "node-sass": "4.7.2",
+    "node-sass": "4.9.2",
     "sass-loader": "6.0.7",
     "vue-lazyload": "1.2.3",
     "vue-style-loader": "4.0.2"
