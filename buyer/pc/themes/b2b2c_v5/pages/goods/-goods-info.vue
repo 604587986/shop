@@ -352,9 +352,10 @@
       img { width: 100%; height: 100% }
       .spec-text {
         position: absolute;
+        width: 100%;
         bottom: -20px;
         left: 50%;
-        margin-left: -12px;
+        margin-left: -23px;
       }
     }
     .icon-spec-selected {
