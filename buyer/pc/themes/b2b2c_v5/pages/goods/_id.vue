@@ -105,13 +105,14 @@
     },
     mounted() {
       const { goods_id, seller_id } = this.goods
-      // 用于服务端记录浏览次数，每次+1【服务端去重】
-      API_Goods.visitGoods(goods_id)
       // 如果用户已登录，查询是否已收藏商品、店铺
       if (this.canView && Storage.getItem('refreshToken')) {
         API_Members.getGoodsIsCollect(goods_id).then(response => {
           this.collected = response.message
         })
+        // 浏览量+1【服务端去重】
+        API_Goods.visitGoods(goods_id)
+        // 加载百度分享代码
         this.loadBdShareScript()
       }
     },
