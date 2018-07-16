@@ -23,7 +23,7 @@
         <div class="pro-content">本商品无质量问题不支持退换货</div>
       </div>
       <goods-promotions :goods-id="goods.goods_id"/>
-      <goods-coupons :goods-id="goods.goods_id"/>
+      <goods-coupons :shop-id="goods.seller_id"/>
     </div>
     <div v-if="specList && specList.length" :class="['pro-spec', unselectedSku && 'error']">
       <div v-for="(spec, specIndex) in specList" :key="spec.spec_id" class="pro-list">

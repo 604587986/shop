@@ -1,19 +1,20 @@
 <template>
-  <div id="goods-coupons">
+  <div v-if="coupons && coupons.length" id="goods-coupons">
     <div class="pro-list">
       <div class="pro-title">优惠券</div>
       <div class="pro-content">
         <div
-          v-for="_ in 5"
-          :key="_"
+          v-for="(coupon, index) in coupons"
+          v-if="index < 2"
+          :key="coupon.coupon_id"
           class="coupons-item"
-          title="有效期2018-07-15 至 2018-07-31"
-          @click.stop="sidebarOpen = !sidebarOpen"
+          @click.stop="handleReceiveCoupon(coupon)"
         >
           <i class="coupons-border-l"></i>
           <i class="coupons-border-r"></i>
-          <span class="tj">满100减10</span>
+          <span class="tj">满{{ coupon.coupon_threshold_price }}减{{ coupon.coupon_price }}</span>
         </div>
+        <a v-if="coupons.length > 2" href="javascript:;" @click.stop="sidebarOpen = true">查看更多>></a>
       </div>
     </div>
     <div :class="['coupons-sidebar', sidebarOpen && 'open']">
@@ -22,7 +23,7 @@
         <span class="title-title-sidebar">优惠券</span>
         <i class="icon-title-sidebar icon-close" @click.stop="sidebarOpen = false"></i>
       </div>
-      <div class="content-didebar">
+      <div class="content-sidebar" @click.stop="() => {}">
         <!--可领优惠券-->
         <div class="items-coupons">
           <div class="title-items-coupons">
@@ -31,17 +32,19 @@
             <i class="line line-r"></i>
           </div>
           <div class="content-items-coupons">
-            <div class="item-b">
+            <div v-for="coupon in coupons" :key="coupon.coupon_id" class="item-b">
               <div class="detail-b">
                 <div class="money-b">
                   <i class="arrow sysicon">￥</i>
-                  <span class="money">10</span>
-                  <i class="arrow">.00</i>
+                  <span class="money">{{ coupon.coupon_price | unitPrice('', 'before') }}</span>
+                  <i class="arrow">.{{ coupon.coupon_price | unitPrice('', 'after') }}</i>
                 </div>
                 <div class="other-b">
-                  <p>优惠券1</p>
-                  <p class="color-gary">满100减10</p>
-                  <p class="color-gary">有效期2018-07-15 至 2018-07-31</p>
+                  <p>{{ coupon.title }}</p>
+                  <p class="color-gary">满{{ coupon.coupon_threshold_price }}减{{ coupon.coupon_price }}</p>
+                  <p class="color-gary">
+                    有效期{{ coupon.start_time | unixToDate('yyyy-MM-dd') }} 至 {{ coupon.end_time | unixToDate('yyyy-MM-dd') }}
+                  </p>
                 </div>
               </div>
               <div class="btn-b"><a href="javascript:;" class="get-b is-get">立即领取</a><i class="is-get-b"></i></div>
@@ -58,16 +61,39 @@
    * 商品优惠券模块
    * 查看店铺优惠券列表、领取优惠券
    */
+  import * as API_Members from '@/api/members'
+  import * as API_Promotions from '@/api/promotions'
   export default {
     name: 'goods-coupons',
-    props: ['goods-id'],
+    props: ['shop-id'],
     data() {
       return {
-        sidebarOpen: false
+        sidebarOpen: false,
+        coupons: []
       }
     },
     mounted() {
-      console.log(this)
+      API_Promotions.getShopCoupons(this.shopId).then(response => {
+        this.coupons = response
+      })
+      this.$nextTick(() => {
+        window.addEventListener('click', this.handleClsoeSide)
+      })
+    },
+    methods: {
+      /** 关闭优惠券侧边栏 */
+      handleClsoeSide() {
+        this.sidebarOpen = false
+      },
+      /** 领取优惠券 */
+      handleReceiveCoupon(coupon) {
+        API_Members.receiveCoupons(coupon.coupon_id).then(response => {
+          this.$message.success('领取成功！')
+        })
+      }
+    },
+    destroyed() {
+      window.removeEventListener('click', this.handleClsoeSide)
     }
   }
 </script>
@@ -161,6 +187,7 @@
 
   .title-sidebar {
     position: fixed;
+    z-index: 10;
     top: 0;
     right: -300px;
     width: 265px;
@@ -205,7 +232,7 @@
     transform: rotate(180deg);
   }
 
-  .content-didebar {
+  .content-sidebar {
     padding: 0 10px 50px 10px;
   }
 
@@ -303,7 +330,7 @@
     font-family: Arial;
     font-size: 38px;
     font-weight: 700;
-    line-height: 38px;
+    line-height: 24px;
     padding-top: 10px;
     color: #ff002d;
   }
