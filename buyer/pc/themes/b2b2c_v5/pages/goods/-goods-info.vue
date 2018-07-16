@@ -207,15 +207,18 @@
         this.buyNum = sku.quantity === 0 ? 0 : 1
       },
       /** 立即购买 */
-      handleBuyNow() {},
+      handleBuyNow() {
+        if (!this.isLogin()) return
+        const { num } = this
+        const { sku_id } = this.selectedSku
+        API_Trade.buyNow(sku_id, num).then(response => {
+          this.$store.dispatch('cart/getCartDataAction')
+          this.$router.push('/checkout')
+        })
+      },
       /** 加入购物车 */
       handleAddToCart() {
-        if (!Storage.getItem('user')) {
-          this.$confirm('您还未登录，要现在去登录吗？', () => {
-            this.$router.push({ path: '/login', query: { forward: `${this.$route.path}?sku_id=${this.selectedSku.sku_id}`} })
-          })
-          return false
-        }
+        if (!this.isLogin()) return
         const { num } = this
         const { sku_id } = this.selectedSku
         API_Trade.addToCart(sku_id, num).then(response => {
@@ -224,6 +227,17 @@
             this.$router.push({ path: '/cart' })
           })
         })
+      },
+      /** 是否已登录 */
+      isLogin() {
+        if (!Storage.getItem('user')) {
+          this.$confirm('您还未登录，要现在去登录吗？', () => {
+            this.$router.push({ path: '/login', query: { forward: `${this.$route.path}?sku_id=${this.selectedSku.sku_id}`} })
+          })
+          return false
+        } else {
+          return true
+        }
       }
     }
   }
@@ -352,9 +366,10 @@
       img { width: 100%; height: 100% }
       .spec-text {
         position: absolute;
+        width: 100%;
         bottom: -20px;
         left: 50%;
-        margin-left: -12px;
+        margin-left: -23px;
       }
     }
     .icon-spec-selected {
