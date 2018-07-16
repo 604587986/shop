@@ -168,3 +168,16 @@ export function editMemberConsumPoint(member_id, point) {
     data: { point }
   })
 }
+
+/**
+ * 获取会员积分列表
+ * @param params
+ */
+export function getMemberPointList(params) {
+  return request({
+    url: `members/point/${params.member_id}`,
+    method: 'get',
+    loading: false,
+    params
+  })
+}
