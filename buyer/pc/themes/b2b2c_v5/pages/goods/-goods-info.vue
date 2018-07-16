@@ -9,9 +9,7 @@
         <!--如果有大于1个的sku，则显示价格区间-->
         <div v-if="priceRange" class="pro-content price">
           <span>￥</span>
-          <strong>{{ priceRange[0] | unitPrice }}</strong>~
-          <span>￥</span>
-          <strong>{{ priceRange[1] | unitPrice }}</strong>
+          <strong>{{ priceRange[0] | unitPrice }}</strong>~<strong>{{ priceRange[1] | unitPrice }}</strong>
         </div>
         <div v-else class="pro-content price">
           <span>￥</span>
