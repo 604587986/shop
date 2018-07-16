@@ -2,10 +2,14 @@
   <div class="goods-index-container">
     <el-button
       type="primary"
-      :disabled="status === 'doing'"
-      :loading="status === 'doing'"
+      :disabled="status === 'DOING'"
+      :loading="status === 'DOING'"
       @click="handleCreateGoodsIndex"
     >{{ status === 'doing' ? '生成中' : '生成' }}</el-button>
+    <el-button
+      type="danger"
+      @click="handleStopGoodsIndex"
+    >停止</el-button>
     <div class="progress-box">
       <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
       <p>{{ status_text }}</p>
@@ -14,7 +18,7 @@
 </template>
 
 <script>
-  import * as API_GoodsIndex from '@/api/goodsIndex'
+  import * as API_Goods from '@/api/goods'
   import * as API_Task from '@/api/task'
 
   export default {
@@ -22,40 +26,50 @@
     data() {
       return {
         percentage: 0,
+        // DOING("进行中"), SUCCESS("成功"), EXCEPTION("异常")
         status: '',
-        status_text: ''
+        status_text: '',
+        // 任务Id
+        task_id: 'GOODS_INDEX_INIT'
       }
     },
     created() {
-      /** 开局一个API，界面全靠编。 */
       /** 检查是否有商品索引生成任务 */
-      API_Task.hasTask('index_create').then(response => {
-        if (response.data.has_task === 1) {
-          this.status = 'doing'
-          this.GET_Progress()
-        }
-      }).catch(error => console.log(error))
+      API_Task.hasTask(this.task_id).then(this.GET_Progress)
     },
     methods: {
       /** 生成商品索引 */
       handleCreateGoodsIndex() {
+        this.percentage = 0
         this.$confirm('确定要生成商品索引吗？', '提示', { type: 'warning' }).then(() => {
-          API_GoodsIndex.createGoodsIndex().then(response => {
+          API_Goods.initSearchIndex().then(response => {
             this.GET_Progress()
-          }).catch(error => console.log(error))
+          })
         }).catch(() => {})
+      },
+      /** 停止生成 */
+      handleStopGoodsIndex() {
+        if (this.status !== 'DOING' || this.status !== 'EXCEPTION') {
+          this.$message.error('当前没有任务正在进行！')
+        } else {
+          API_Task.clearTask(this.task_id).then(() => {
+            this.percentage = 0
+            this.status = 'SCUESS'
+            this.status_text = ''
+          })
+        }
       },
       /** 获取生成进度 */
       GET_Progress() {
-        API_Task.getProgressById('index_create').then(response => {
-          const { percentage, status, status_text } = response.data
+        API_Task.getProgressById(this.task_id).then(response => {
+          const { percentage, status, text } = response
           this.percentage = percentage
           this.status = status
-          this.status_text = status_text
-          if (response.data.status !== 'success') {
-            setTimeout(this.GET_Progress, 1000)
+          this.status_text = text
+          if (status === 'DOING') {
+            setTimeout(() => { this.GET_Progress() }, 1000)
           }
-        }).catch(error => console.log(error))
+        })
       }
     }
   }
