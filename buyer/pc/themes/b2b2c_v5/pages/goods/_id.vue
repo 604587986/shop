@@ -1,47 +1,57 @@
 <template>
   <div id="goods">
-    <bread-nav :goods="goods"/>
-    <div class="content">
-      <div class="inner-content">
-        <!--商品相册-->
-        <goods-zoom :images="goods.gallery_list" :spec-img="specImage"/>
-        <!--商品信息【包括规格、优惠券、促销等】-->
-        <goods-info :goods="goods" @spec-img-change="(img) => { this.specImage = img }"/>
-        <!--店铺卡片-->
-        <shop-card :shop-id="goods.seller_id"/>
-      </div>
-      <div v-show="showShare" class="bdsharebuttonbox bdshare-button-style1-16" style="margin-top: 10px">
-        <a href="javascript:;" class="bds_more" data-cmd="more">分享到：</a><a href="javascript:;" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="javascript:;" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="javascript:;" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a><a href="javascript:;" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a><a href="javascript:;" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-        <a href="javascript:;" :class="['collect-goods-btn', collected && 'collected']" @click="handleCollectionGoods">{{ collected ? '已收藏' : '收藏商品' }}</a>
+    <div v-if="goods.is_auth === 0 || goods.goods_off === 1" class="goods-auth w">
+      <img v-if="goods.is_auth === 0" src="../../assets/images/background-goods-auth.jpg" alt="商品待审核">
+      <img v-else src="../../assets/images/background-goods-off.jpg" alt="商品已下架">
+      <div class="goods-auth-btns">
+        <nuxt-link to="/">去首页</nuxt-link>
+        <a href="javascript:;" @click="handleCloseWindow">关闭窗口</a>
       </div>
     </div>
-    <div class="details">
-      <div class="inner w">
-        <!--店铺标签商品推荐-->
-        <goods-tags :shop-id="goods.seller_id"/>
-        <div class="detail-container">
-          <div class="detail-tabs">
-            <div
-              v-for="tab in tabs"
-              :key="tab.title"
-              :class="['item-tab', tab.active && 'active']"
-              @click="handleClickTabItem(tab)"
-            >{{ tab.title }}</div>
-          </div>
-          <div class="detail-content">
-            <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.intro"></div>
-            <!--商品参数-->
-            <goods-params v-show="curTab === '规格参数'" :goods-params="goods.param_list"/>
-            <!--商品评论-->
-            <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id"/>
-            <!--商品咨询-->
-            <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
-            <!--销售记录-->
-            <sales-record v-show="curTab === '销售记录'" :goods-id="goods.goods_id"/>
+    <template v-else>
+      <bread-nav :goods="goods"/>
+      <div class="content">
+        <div class="inner-content">
+          <!--商品相册-->
+          <goods-zoom :images="goods.gallery_list" :spec-img="specImage"/>
+          <!--商品信息【包括规格、优惠券、促销等】-->
+          <goods-info :goods="goods" @spec-img-change="(img) => { this.specImage = img }"/>
+          <!--店铺卡片-->
+          <shop-card :shop-id="goods.seller_id"/>
+        </div>
+        <div v-show="showShare" class="bdsharebuttonbox bdshare-button-style1-16" style="margin-top: 10px">
+          <a href="javascript:;" class="bds_more" data-cmd="more">分享到：</a><a href="javascript:;" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="javascript:;" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="javascript:;" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a><a href="javascript:;" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a><a href="javascript:;" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+          <a href="javascript:;" :class="['collect-goods-btn', collected && 'collected']" @click="handleCollectionGoods">{{ collected ? '已收藏' : '收藏商品' }}</a>
+        </div>
+      </div>
+      <div class="details">
+        <div class="inner w">
+          <!--店铺标签商品推荐-->
+          <goods-tags :shop-id="goods.seller_id"/>
+          <div class="detail-container">
+            <div class="detail-tabs">
+              <div
+                v-for="tab in tabs"
+                :key="tab.title"
+                :class="['item-tab', tab.active && 'active']"
+                @click="handleClickTabItem(tab)"
+              >{{ tab.title }}</div>
+            </div>
+            <div class="detail-content">
+              <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.intro"></div>
+              <!--商品参数-->
+              <goods-params v-show="curTab === '规格参数'" :goods-params="goods.param_list"/>
+              <!--商品评论-->
+              <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id"/>
+              <!--商品咨询-->
+              <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
+              <!--销售记录-->
+              <sales-record v-show="curTab === '销售记录'" :goods-id="goods.goods_id"/>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -57,22 +67,16 @@
   Vue.use(Pagination)
   export default {
     name: 'goods-detail',
-    asyncData({ params }, callback) {
-      const goods_id = params.id
-      if (!goods_id) {
-        callback(null, { goods: '' })
-        return
+    validate({ params }) {
+      return /^\d+$/.test(params.id)
+    },
+    async asyncData({ params }) {
+      const goods = await API_Goods.getGoods(params.id)
+      return {
+        goods,
+        // 当前商品是否可以浏览
+        canView: goods.is_auth !== 0 && goods.goods_off !== 1
       }
-      API_Goods.getGoods(goods_id).then(response => {
-        callback(null, { goods: response })
-      }).catch(e => {
-        console.log(e)
-        let _statusCode = 200
-        if (e.code === 'ECONNREFUSED') {
-          _statusCode = 502
-        }
-        callback({ statusCode: _statusCode })
-      })
     },
     head() {
       return {
@@ -104,10 +108,12 @@
       // 用于服务端记录浏览次数，每次+1【服务端去重】
       API_Goods.visitGoods(goods_id)
       // 如果用户已登录，查询是否已收藏商品、店铺
-      Storage.getItem('refreshToken') && API_Members.getGoodsIsCollect(goods_id).then(response => {
-        this.collected = response.message
-      })
-      this.loadBdShareScript()
+      if (this.canView && Storage.getItem('refreshToken')) {
+        API_Members.getGoodsIsCollect(goods_id).then(response => {
+          this.collected = response.message
+        })
+        this.loadBdShareScript()
+      }
     },
     computed: {
       ...mapGetters(['user'])
@@ -139,6 +145,10 @@
           item.active = tab === item
           return item
         })
+      },
+      /** 关闭当前窗口 */
+      handleCloseWindow() {
+        window.close()
       },
       /** 加载百度分享 */
       loadBdShareScript() {
@@ -233,5 +243,28 @@
   /deep/ .el-pagination {
     margin-top: 20px;
     text-align: right;
+  }
+  .goods-auth {
+    text-align: center;
+    padding: 50px 0;
+    .goods-auth-btns {
+      margin-top: 20px;
+    }
+    a {
+      display: inline-block;
+      min-width: 100px;
+      height: 20px;
+      background-color: #f42424;
+      color: #fff;
+      padding: 10px 20px;
+      margin-right: 20px;
+      border-radius: 2px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background-color ease .2s;
+      &:hover {
+        background-color: #d12323;
+      }
+    }
   }
 </style>
