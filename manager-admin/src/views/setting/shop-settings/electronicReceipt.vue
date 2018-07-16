@@ -107,8 +107,8 @@
         const { bean } = this.electronicReceiptForm
         API_ElectronicReceipt.editElectronicReceipt(bean, this.electronicReceiptForm).then(response => {
           this.dialogVisible = false
+          this.MixinSetTableData(this.tableData, 'bean', bean, response)
           this.$message.success('修改成功！')
-          this.GET_ElectronicReceiptList()
         })
       },
 

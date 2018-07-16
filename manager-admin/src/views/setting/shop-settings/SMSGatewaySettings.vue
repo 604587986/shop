@@ -108,7 +108,7 @@
 
       /** 开启短信网关 */
       handleOpenSmsGateway(index, row) {
-        API_SmsGateway.openSmsGatewayById(row.id).then(response => {
+        API_SmsGateway.openSmsGatewayById(row.bean).then(response => {
           this.$message.success('开启成功！')
           this.GET_SmsGatewayList()
         })
@@ -118,10 +118,11 @@
       submitSmsForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_SmsGateway.editSmsGateway(this.smsForm.id, this.smsForm).then(response => {
+            const { bean } = this.smsForm
+            API_SmsGateway.editSmsGateway(bean, this.smsForm).then(response => {
               this.dialogSmsVisible = false
               this.$message.success('修改成功！')
-              this.MixinSetTableData(this.tableData, 'id', this.id, response)
+              this.MixinSetTableData(this.tableData, 'bean', bean, response)
             })
           } else {
             this.$message.error('表单填写有误，请检查！')

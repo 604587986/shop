@@ -114,9 +114,10 @@
       submitStorageForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            API_StorageSolution.editStorageSolution(this.storageForm.bean, this.storageForm).then(response => {
+            const { bean } = this.storageForm
+            API_StorageSolution.editStorageSolution(bean, this.storageForm).then(response => {
               this.dialogStorageVisible = false
-              this.GET_StorageSolutiontList()
+              this.MixinSetTableData(this.tableData, 'bean', 'bean', response)
               this.$message.success('修改成功！')
             })
           } else {
