@@ -40,6 +40,24 @@ export function addToCart(sku_id, num = 1, activity_id) {
 }
 
 /**
+ * 立即购买
+ * @param sku_id
+ * @param num
+ * @param activity_id
+ */
+export function buyNow(sku_id, num = 1, activity_id) {
+  return request({
+    url: 'trade/carts/buy',
+    method: Method.POST,
+    params: {
+      sku_id,
+      num,
+      activity_id
+    }
+  })
+}
+
+/**
  * 更新购物车商品数量
  * @param sku_id
  * @param num
