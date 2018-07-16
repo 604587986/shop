@@ -34,12 +34,12 @@ export function editSmsGateway(id, params) {
 
 /**
  * 开启短信网关
- * @param id
+ * @param bean
  * @returns {*}
  */
-export function openSmsGatewayById(id) {
+export function openSmsGatewayById(bean) {
   return request({
-    url: `/system/platforms/${id}/open`,
+    url: `/system/platforms/${bean}/open`,
     method: 'post'
   })
 }
