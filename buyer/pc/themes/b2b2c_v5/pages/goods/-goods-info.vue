@@ -18,7 +18,7 @@
       <goods-promotions :goods-id="goods.goods_id"/>
       <goods-coupons :goods-id="goods.goods_id"/>
     </div>
-    <div class="pro-spec">
+    <div v-if="specList && specList.length" :class="['pro-spec', unselectedSku && 'error']">
       <div v-for="(spec, specIndex) in specList" :key="spec.spec_id" class="pro-list">
         <div class="pro-title">{{ spec.spec_name }}</div>
         <div class="pro-content">
@@ -34,6 +34,10 @@
             <i class="icon-spec-selected"></i>
           </button>
         </div>
+      </div>
+      <div v-if="unselectedSku" class="pro-list error-msg">
+        <div class="pro-title"></div>
+        <div class="pro-content">请选择商品规格！</div>
       </div>
     </div>
     <div class="pro-list buy-num">
@@ -82,7 +86,9 @@
         // 被选中规格Map
         selectedSpecMap: new Map(),
         // 被选中sku
-        selectedSku: ''
+        selectedSku: '',
+        // 没有选中sku，初始化为false
+        unselectedSku: false
       }
     },
     mounted() {
@@ -116,13 +122,18 @@
             })
             this.skuMap.set(spec_value_ids.join('-'), sku)
           } else {
-            specList.push(sku)
             this.skuMap.set('no_spec', sku)
           }
         })
         this.specList = specList
-        // 初始化规格
-        this.initSpec()
+        // 如果有sku信息，初始化已选规格
+        if (this.$route.query.sku_id) {
+          this.initSpec()
+        }
+        // 如果没有规格，把商品第一个sku给已选择sku
+        if (!specList.length) {
+          this.selectedSku = this.skuMap.get('no_spec')
+        }
       })
     },
     methods: {
@@ -202,9 +213,12 @@
         } else {
           sku = this.skuMap.get('no_spec')
         }
-        this.selectedSku = sku
-        this.goodsInfo = { ...this.goodsInfo, ...sku }
-        this.buyNum = sku.quantity === 0 ? 0 : 1
+        if (sku) {
+          this.selectedSku = sku
+          this.unselectedSku = false
+          this.goodsInfo = { ...this.goodsInfo, ...sku }
+          this.buyNum = sku.quantity === 0 ? 0 : 1
+        }
       },
       /** 立即购买 */
       handleBuyNow() {
@@ -230,6 +244,11 @@
       },
       /** 是否已登录 */
       isLogin() {
+        if (!this.selectedSku) {
+          this.$message.error('请选择商品规格！')
+          this.unselectedSku = true
+          return false
+        }
         if (!Storage.getItem('user')) {
           this.$confirm('您还未登录，要现在去登录吗？', () => {
             this.$router.push({ path: '/login', query: { forward: `${this.$route.path}?sku_id=${this.selectedSku.sku_id}`} })
@@ -347,7 +366,24 @@
     min-height: 33px;
     line-height: 33px;
   }
-  .pro-spec { margin-top: 10px }
+  .pro-spec {
+    position: relative;
+    margin-top: 10px;
+    &.error {
+      &:before {
+        position: absolute;
+        content: '';
+        width: 104%;
+        height: 104%;
+        border: 2px solid red;
+        margin-left: -2%;
+        margin-top: -2%;
+      }
+      .error-msg {
+        color: red
+      }
+    }
+  }
   .spec-val-btn {
     position: relative;
     border: 2px solid #e2e1e3;
