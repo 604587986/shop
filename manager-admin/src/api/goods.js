@@ -70,3 +70,13 @@ export function auditGoods(goods_id, params) {
     data: params
   })
 }
+
+/**
+ * 商品索引生成
+ */
+export function initSearchIndex() {
+  return request({
+    url: 'goods/search',
+    method: 'get'
+  })
+}

@@ -12,6 +12,7 @@ export function hasTask(task_id) {
   return request({
     url: `task/${task_id}`,
     method: 'get',
+    message: false,
     loading: false
   })
 }
