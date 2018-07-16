@@ -570,10 +570,14 @@
       }
       em {
         display: block;
-        height: 20px;
+        height: 40px;
         line-height: 20px;
         overflow: hidden;
         transition: height .08s ease;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
       .gl-attribute {
         display: block;
