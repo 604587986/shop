@@ -6,7 +6,14 @@
     <div class="pro-details">
       <div class="pro-list">
         <div class="pro-title">价格</div>
-        <div class="pro-content price">
+        <!--如果有大于1个的sku，则显示价格区间-->
+        <div v-if="priceRange" class="pro-content price">
+          <span>￥</span>
+          <strong>{{ priceRange[0] | unitPrice }}</strong>~
+          <span>￥</span>
+          <strong>{{ priceRange[1] | unitPrice }}</strong>
+        </div>
+        <div v-else class="pro-content price">
           <span>￥</span>
           <strong>{{ goodsInfo.price | unitPrice }}</strong>
         </div>
@@ -88,14 +95,18 @@
         // 被选中sku
         selectedSku: '',
         // 没有选中sku，初始化为false
-        unselectedSku: false
+        unselectedSku: false,
+        // 有规格的商品价格区间
+        priceRange: ''
       }
     },
     mounted() {
       API_Goods.getGoodsSkus(this.goods.goods_id).then(response => {
         const specList = []
+        const priceList = []
         response.forEach((sku, skuIndex) => {
-          const { spec_list } = sku
+          const { spec_list, price } = sku
+          priceList.push(price)
           const spec_value_ids = []
           if (spec_list) {
             spec_list.forEach((spec, specIndex) => {
@@ -125,6 +136,10 @@
             this.skuMap.set('no_spec', sku)
           }
         })
+        // 如果规格大于1个，显示价格区间
+        if (response.length > 1) {
+          this.priceRange = [Math.min(...priceList), Math.max(...priceList)]
+        }
         this.specList = specList
         // 如果有sku信息，初始化已选规格
         if (this.$route.query.sku_id) {
@@ -216,6 +231,7 @@
         if (sku) {
           this.selectedSku = sku
           this.unselectedSku = false
+          this.priceRange = ''
           this.goodsInfo = { ...this.goodsInfo, ...sku }
           this.buyNum = sku.quantity === 0 ? 0 : 1
         }
