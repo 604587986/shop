@@ -80,3 +80,25 @@ export function initSearchIndex() {
     method: 'get'
   })
 }
+
+/**
+ * 获取商品设置
+ */
+export function getGoodsSettings() {
+  return request({
+    url: 'goods/settings',
+    method: 'get'
+  })
+}
+
+/**
+ * 修改商品设置
+ * @param params
+ */
+export function editGoodsSettings(params) {
+  return request({
+    url: 'goods/settings',
+    method: 'post',
+    data: params
+  })
+}
