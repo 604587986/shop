@@ -94,6 +94,7 @@
                     range-separator="-"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
+                    :default-time="defaultTime"
                     :picker-options="pickoptions">
                   </el-date-picker>
                 </el-form-item>
@@ -202,6 +203,25 @@
       [CategoryPicker.name]: CategoryPicker,
       [UE.name]: UE
     },
+    computed: {
+      defaultTime() {
+        const today = new Date()
+        let hours = today.getHours()
+        let minutes = today.getMinutes() + 5
+        let seconds = today.getSeconds()
+        if (hours < 10) {
+          hours = '0' + hours
+        }
+        if (minutes < 10) {
+          minutes = '0' + minutes
+        }
+        if (seconds < 10) {
+          seconds = '0' + seconds
+        }
+        const timeLimit = hours + ':' + minutes + ':' + seconds
+        return [timeLimit]
+      }
+    },
     data() {
       const checkRange = (rule, value, callback) => {
         if (!value) {
@@ -250,7 +270,7 @@
         /** 日期选择器选项 */
         pickoptions: {
           disabledDate: (time) => {
-            return time.getTime() < Date.now()
+            return time.getTime() < Date.now() - 8.64E7
           }
         },
 
