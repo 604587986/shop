@@ -75,7 +75,7 @@
         <li class="spacer"></li>
         <li>
           <div class="dt">
-            <nuxt-link to="/member/website-message">站内消息[0]</nuxt-link>
+            <nuxt-link to="/member/website-message">站内消息[{{ message_total }}]</nuxt-link>
           </div>
         </li>
       </ul>
@@ -84,15 +84,25 @@
 </template>
 
 <script>
+  import Storage from '@/utils/storage'
+  import * as API_Message from '@/api/message'
   import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'EnShortcut',
+    data() {
+      return {
+        message_total: 0
+      }
+    },
     computed: {
-      ...mapGetters(['user', 'refreshToken'])
+      ...mapGetters(['user'])
     },
     mounted() {
-      // 如果有刷新Token，重新获取用户信息【只有当用户刷新页面，才会触发】
-      this.refreshToken && this.getUserData()
+      // 如果有刷新Token，重新获取用户信息【第一次访问和用户刷新页面，会触发】
+      if (Storage.getItem('user')) {
+        this.getUserData()
+        this.GET_UnreadMessage()
+      }
     },
     methods: {
       ...mapActions({
@@ -103,6 +113,17 @@
       handleLogout() {
         this.logout().then(() => {
           this.$router.push({ path: '/' })
+        })
+      },
+      /** 获取未读消息 */
+      GET_UnreadMessage() {
+        API_Message.getMesssagesAsUnread().then(response => {
+          const { data_total } = response
+          this.message_total = data_total > 99 ? '99+' : data_total
+          // 消息轮询，5分钟查一次
+          setTimeout(() => {
+            this.GET_UnreadMessage()
+          }, 50000)
         })
       }
     }
