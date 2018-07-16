@@ -32,6 +32,7 @@ export function getMesssagesAsUnread(params) {
     url: 'members/member-nocice-logs',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
