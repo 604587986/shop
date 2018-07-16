@@ -52,7 +52,7 @@
                       <label for="sms-code">
                         <i class="iconfont ea-icon-sms"></i>
                       </label>
-                      <input id="sms-code" v-model="quickForm.sms_code" placeholder="短信验证码" maxlength="6">
+                      <input id="sms-code" v-model="quickForm.sms_code" placeholder="短信验证码" maxlength="6"  @keyup.enter="handleLogin">
                     </div>
                     <div class="forget">
                       <span><nuxt-link :to="'/find-password' + MixinForward">忘记密码</nuxt-link></span>
@@ -66,19 +66,19 @@
                       <label for="username">
                         <i class="iconfont ea-icon-persion"></i>
                       </label>
-                      <input id="username" v-model="accountForm.username" placeholder="邮箱/用户名/已验证手机" maxlength="20">
+                      <input id="username" v-model="accountForm.username" placeholder="邮箱/用户名/已验证手机">
                     </div>
                     <div class="item">
                       <label for="password">
                         <i class="iconfont ea-icon-password"></i>
                       </label>
-                      <input id="password" v-model="accountForm.password" type="password" placeholder="请输入密码" maxlength="20">
+                      <input id="password" v-model="accountForm.password" type="password" placeholder="请输入密码">
                     </div>
                     <div class="item">
                       <label for="validcode">
                         <i class="iconfont ea-icon-safe"></i>
                       </label>
-                      <input id="validcode" v-model="accountForm.captcha" placeholder="图片验证码" maxlength="4">
+                      <input id="validcode" v-model="accountForm.captcha" placeholder="图片验证码" maxlength="4" @keyup.enter="handleLogin">
                       <img class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="forget">

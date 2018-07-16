@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading">
     <el-form :model="shopForm" :rules="shopRules" ref="shopForm" inline label-width="130px">
-      <el-tabs type="border-card" :value="tableName" ref="tabs">
+      <el-tabs type="border-card" v-model="tableName" ref="tabs">
         <el-tab-pane label="基本信息" name="base">
           <el-form-item label="公司名称" prop="company_name">
             <el-input v-model="shopForm.company_name" :maxlength="50"></el-input>
@@ -59,7 +59,7 @@
           <el-form-item label="法人身份证" prop="legal_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.legal_img = res.url }">
               <img v-if="shopForm.legal_img" :src="shopForm.legal_img" class="avatar">
@@ -86,7 +86,7 @@
           <el-form-item label="组织机构代码证件" prop="code_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.code_img = res.url }">
               <img v-if="shopForm.code_img" :src="shopForm.code_img" class="avatar">
@@ -111,7 +111,7 @@
           <el-form-item label="开户行许可证" prop="bank_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.bank_img = res.url }">
               <img v-if="shopForm.bank_img" :src="shopForm.bank_img" class="avatar">
@@ -130,7 +130,7 @@
           <el-form-item label="一般纳税人证明" prop="taxes_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.taxes_img = res.url }">
               <img v-if="shopForm.taxes_img" :src="shopForm.taxes_img" class="avatar">
@@ -141,7 +141,7 @@
           <el-form-item label="税务登记证" prop="taxes_certificate_img">
             <el-upload
               class="avatar-uploader"
-              :action="MixinRegionApi"
+              :action="MixinUploadApi"
               :show-file-list="false"
               :on-success="(res) => { shopForm.taxes_certificate_img = res.url }">
               <img v-if="shopForm.taxes_certificate_img" :src="shopForm.taxes_certificate_img" class="avatar">
@@ -234,9 +234,6 @@
           licence_end: [this.MixinRequired('请选择营业执照有效期结束时间！')],
           legal_img: [this.MixinRequired('请上传法人身份证！')],
           licence_img: [this.MixinRequired('请上传营业执照！')],
-          organization_code: [this.MixinRequired('组织机构代码不能为空！')],
-          code_img: [this.MixinRequired('请上传组织机构拯证件！')],
-          taxes_img: [this.MixinRequired('请上传一般纳税人证明！')],
           bank_account_name: [this.MixinRequired('银行开户名不能为空！')],
           bank_number: [this.MixinRequired('公司银行账号不能为空！')],
           bank_name: [this.MixinRequired('开户银行支行名称不能为空！')],
@@ -330,7 +327,6 @@
             // 再将tab切换过去
             const firstError = Object.keys(error)[0]
             let tabChildren = this.$refs['tabs'].$children
-            tabChildren.shift()
             for (let i = 0; i < tabChildren.length; i++) {
               const item = tabChildren[i]
               let finded = false

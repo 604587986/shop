@@ -24,7 +24,8 @@ export function getCoupons(params) {
 export function receiveCoupons(coupon_id) {
   return request({
     url: `members/coupon/${coupon_id}/receive`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
 
