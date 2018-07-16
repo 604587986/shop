@@ -2,16 +2,15 @@
   <div>
     <en-table-layout
       :toolbar="false"
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <template slot="table-columns">
         <el-table-column prop="name" label="平台名称"/>
         <el-table-column label="启用状态">
           <template slot-scope="scope">
-            {{ scope.row.is_open === 1 ? '已开启' : '已关闭' }}
-            <el-button v-if="scope.row.is_open === 0" type="text" @click="handleOpenExpressPlatform(scope.$index, scope.row)">开启</el-button>
+            {{ scope.row.open === 1 ? '已开启' : '已关闭' }}
+            <el-button v-if="scope.row.open === 0" type="text" @click="handleOpenExpressPlatform(scope.$index, scope.row)">开启</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -24,17 +23,35 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-table-layout>
+    <el-dialog
+      :title="'修改快递平台 - ' + expressForm.name"
+      :visible.sync="dialogVisible"
+      width="35%"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false">
+      <el-form :model="expressForm" label-width="140px" style="width: 500px">
+        <template v-for="(config, index) in expressForm.config_items">
+          <el-form-item :label="config.text" prop="desc">
+            <el-input type="textarea" v-model="config.value" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+          </el-form-item>
+        </template>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitExpressForm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -45,20 +62,19 @@
     name: 'expressPlatformSettings',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null
+        // 列表数据
+        tableData: '',
+        // 快递平台表单
+        expressForm: {},
+        // 修改快递平台 dialog
+        dialogVisible: false
       }
     },
     mounted() {
@@ -79,30 +95,35 @@
 
       /** 开启快递平台 */
       handleOpenExpressPlatform(index, row) {
-        API_ExpressPlatform.openExpressPlatformById(row.id).then(response => {
+        API_ExpressPlatform.openExpressPlatformById(row.bean).then(response => {
           this.$message.success('开启成功！')
           this.GET_ExpressPlatformList()
-        }).catch(error => console.log(error))
+        })
       },
 
       /** 编辑快递平台 */
-      handleEditExpressPlatform(index, row) {},
+      handleEditExpressPlatform(index, row) {
+        this.expressForm = this.MixinClone(row)
+        this.dialogVisible = true
+      },
+
+      /** 提交快递平台表单 */
+      submitExpressForm() {
+        const { bean } = this.expressForm
+        API_ExpressPlatform.editExpressPlatform(bean, this.expressForm).then(response => {
+          this.dialogVisible = false
+          this.$message.success('修改成功！')
+          this.MixinSetTableData(this.tableData, 'bean', bean, response)
+        })
+      },
 
       /** 获取快递平台列表 */
       GET_ExpressPlatformList() {
         this.loading = true
         API_ExpressPlatform.getExpressPlatformList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }
