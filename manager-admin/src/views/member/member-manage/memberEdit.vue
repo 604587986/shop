@@ -54,13 +54,14 @@
         <member-list-order :member-id="member_id"/>
       </el-tab-pane>
       <el-tab-pane label="TA的积分">
+        <!--// Andste_TODO 2018/7/16: 缺少获取消费积分接口，且如果填负数后台会报错-->
         <el-form :model="editPointForm" ref="editPointForm" label-width="100px">
-          <el-form-item label="当前积分">
+          <el-form-item label="当前消费积分">
             {{ editPointForm.currentPoint }}
           </el-form-item>
-          <el-form-item label="调整积分">
-            <!--// Andste_TODO 2018/6/28: 积分修改未适配-->
-            <el-input-number v-model="editPointForm.changedPoint" :min="1" :max="99999999"></el-input-number>
+          <el-form-item label="调整消费积分">
+            <el-input-number v-model="editPointForm.changedPoint" :max="99999999"></el-input-number>
+            <p style="color: #d93700">默认为增加积分，减少积分请填负值。</p>
           </el-form-item>
         </el-form>
         <el-button type="primary" @click="handleSavePoint" class="save">保存修改</el-button>
@@ -206,7 +207,11 @@
         })
       },
       /** 保存积分 */
-      handleSavePoint() {},
+      handleSavePoint() {
+        API_Member.editMemberConsumPoint(this.member_id, this.editPointForm.changedPoint).then(() => {
+          this.$message.success('修改成功！')
+        })
+      },
       /** 获取会员详情 */
       GET_MemberDetail() {
         API_Member.getMemberDetail(this.member_id).then(response => {
