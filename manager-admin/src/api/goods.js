@@ -70,3 +70,35 @@ export function auditGoods(goods_id, params) {
     data: params
   })
 }
+
+/**
+ * 商品索引生成
+ */
+export function initSearchIndex() {
+  return request({
+    url: 'goods/search',
+    method: 'get'
+  })
+}
+
+/**
+ * 获取商品设置
+ */
+export function getGoodsSettings() {
+  return request({
+    url: 'goods/settings',
+    method: 'get'
+  })
+}
+
+/**
+ * 修改商品设置
+ * @param params
+ */
+export function editGoodsSettings(params) {
+  return request({
+    url: 'goods/settings',
+    method: 'post',
+    data: params
+  })
+}

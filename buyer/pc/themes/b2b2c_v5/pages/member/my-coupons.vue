@@ -6,7 +6,7 @@
       </ul>
     </div>
     <div class="coupons-container">
-      <ul class="coupon-list">
+      <ul v-if="coupons && coupons.data_total" class="coupon-list">
         <li v-for="coupon in coupons.data" :key="coupon.coupon_id" class="coupon-item">
           <div class="c-type">
             <div class="c-money">
@@ -25,9 +25,11 @@
           </div>
         </li>
       </ul>
+      <empty-member v-else>暂无优惠券</empty-member>
       <span class="clr"></span>
       <div class="member-pagination" v-if="coupons">
         <el-pagination
+          v-if="coupons.data_total"
           @current-change="handleCurrentPageChange"
           :current-page.sync="params.page_no"
           :page-size="params.page_size"
