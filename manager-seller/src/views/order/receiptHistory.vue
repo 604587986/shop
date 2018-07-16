@@ -99,11 +99,10 @@
       /** 查看发票 */
       handleOperateReceipt(index, row) {
         const keys = [
-          { label: '订单编号', key: 'sn' },
           { label: '发票抬头', key: 'receipt_title' },
-          { label: '发票类型', key: 'receipt_type' },
-          { label: '发票内容', key: 'receipt_content' },
-          { label: '发票税号', key: 'duty_invoice' }
+          { label: '发票税号', key: 'duty_invoice' },
+          { label: '收件地址', key: 'receipt_content' },
+          { label: '发票明细', key: 'receipt_content' }
         ]
         this.viewRectiptData = keys.map(item => {
           item.value = row[item.key]

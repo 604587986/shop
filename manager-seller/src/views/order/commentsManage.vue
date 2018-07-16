@@ -370,7 +370,6 @@
 
       /** 商家回复*/
       handleReplyComment(item) {
-        debugger
         this.replyCommentShow = true
         this.commentForm = {
           comment_id: item.comment_id,
