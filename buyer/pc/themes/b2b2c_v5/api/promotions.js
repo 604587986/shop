@@ -1,5 +1,5 @@
 /**
- * Created by andste.cc@gmail.com on 2018/7/15.
+ * Created by Andste on 2018/7/15.
  * 促销相关API
  */
 
