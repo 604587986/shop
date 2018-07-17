@@ -47,7 +47,10 @@
                   </p>
                 </div>
               </div>
-              <div class="btn-b"><a href="javascript:;" class="get-b is-get">立即领取</a><i class="is-get-b"></i></div>
+              <div class="btn-b">
+                <a href="javascript:;" @click.stop="handleReceiveCoupon(coupon)" class="get-b is-get">立即领取</a>
+                <i class="is-get-b"></i>
+              </div>
             </div>
           </div>
         </div>
