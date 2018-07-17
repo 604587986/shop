@@ -126,3 +126,25 @@ export function getSettlementStatistics(id) {
     method: 'get'
   })
 }
+
+/**
+ * 获取订单设置
+ */
+export function getOrderSettings() {
+  return request({
+    url: 'trade/orders/setting',
+    method: 'get'
+  })
+}
+
+/**
+ * 修改订单设置
+ * @param params
+ */
+export function editOrderSettings(params) {
+  return request({
+    url: 'trade/orders/setting',
+    method: 'post',
+    data: params
+  })
+}
