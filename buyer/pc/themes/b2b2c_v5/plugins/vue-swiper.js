@@ -1,5 +1,5 @@
 /**
- * Created by andste.cc@gmail.com on 2018/6/6.
+ * Created by Andste on 2018/6/6.
  */
 
 import Vue from 'vue'
