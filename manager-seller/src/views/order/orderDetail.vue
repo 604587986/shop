@@ -386,8 +386,8 @@
           this.loading = false
           // 订单信息
           this.orderDetail = response
-          // 商品信息 因此处后台并未进行传输数据 因此自己请求接口进行获取对应订单商品列表数据
-          this.getReactiveOrderskuList()
+          // 商品信息
+          this.productList = this.orderDetail.order_sku_list
           // 修改收货人信息地区选择器信息
           this.areas = [this.orderDetail.ship_province_id, this.orderDetail.ship_city_id,
             this.orderDetail.ship_county_id || -1, this.orderDetail.ship_town_id || -1]
@@ -450,18 +450,6 @@
         })
       },
 
-      /** 获取对应订单商品列表数据 */
-      getReactiveOrderskuList() {
-        this.loading = true
-        const _params = {
-          order_sn: this.sn
-        }
-        API_order.getOrderList(_params).then(response => {
-          this.loading = false
-          this.productList = response.data[0].sku_list
-        })
-      },
-
       /** 获取物流公司信息列表 */
       getLogisticsCompanies() {
         API_logistics.getExpressCompanyList({}).then(response => {
@@ -480,7 +468,7 @@
       looklogistics() {
         this.logisticsShow = true
         const _params = {
-          com: '', // 此处为物流公司简称
+          com: this.orderDetail.logi_id,
           num: this.orderDetail.ship_no
         }
         API_order.getLogisticsInfo(_params).then(response => {
