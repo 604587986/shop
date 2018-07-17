@@ -3,7 +3,8 @@
     <div class="nav-bar">
       <div class="w">
         <div
-          v-for="cate in categorys"
+          v-for="(cate, index) in categorys"
+          v-if="index < 10"
           :key="cate.cat_id"
           :class="['cate-item', cate.active && 'active']"
           @click="handleClickCate(cate)"
