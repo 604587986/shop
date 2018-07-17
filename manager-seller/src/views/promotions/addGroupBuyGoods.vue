@@ -428,6 +428,10 @@
             this.gruopBuyForm.remark = this.$refs.UE.getUEContent()
             API_groupBuy.addGroupBuyGoods(this.gruopBuyForm).then(() => {
               this.$message.success('添加成功')
+              this.$store.dispatch('delCurrentViews', {
+                view: this.$route,
+                $router: this.$router
+              })
               this.$router.push({ path: '/promotions/group-buy-manager' })
             })
           }

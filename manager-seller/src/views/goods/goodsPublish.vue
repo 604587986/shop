@@ -778,12 +778,20 @@
             /** 修改正常商品 */
             API_goods.editGoods(this.activeGoodsId, _params).then(() => {
               this.$message.success('修改商品成功')
+              this.$store.dispatch('delCurrentViews', {
+                view: this.$route,
+                $router: this.$router
+              })
               this.$router.push({ path: '/goods/goods-list' })
             })
           } else {
             /** 正常商品上架 */
             API_goods.aboveGoods(_params).then(() => {
               this.$message.success('上架商品成功')
+              this.$store.dispatch('delCurrentViews', {
+                view: this.$route,
+                $router: this.$router
+              })
               this.$router.push({ path: '/goods/goods-list' })
             })
           }
@@ -792,6 +800,10 @@
           _params.market_enable = 1
           API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(() => {
             this.$message.success('上架草稿箱商品成功')
+            this.$store.dispatch('delCurrentViews', {
+              view: this.$route,
+              $router: this.$router
+            })
             this.$router.push({ path: '/goods/goods-list' })
           })
         }
@@ -801,6 +813,11 @@
       handleUnderGoods() {
         API_goods.underGoods(this.activeGoodsId, { }).then(() => {
           this.$message.success('下架成功')
+          this.$store.dispatch('delCurrentViews', {
+            view: this.$route,
+            $router: this.$router
+          })
+          this.$router.push({ path: '/goods/goods-list' })
         })
       },
 

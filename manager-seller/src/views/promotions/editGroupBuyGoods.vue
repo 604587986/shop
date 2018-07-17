@@ -434,6 +434,10 @@
             if (this.$route.params.goods_id) {
               API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(() => {
                 this.$message.success('修改成功')
+                this.$store.dispatch('delCurrentViews', {
+                  view: this.$route,
+                  $router: this.$router
+                })
                 this.$router.push({ path: '/promotions/group-buy-manager' })
               })
             }
