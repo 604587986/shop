@@ -298,7 +298,7 @@
   .my-table {
     width: 100%;
     margin-bottom: 40px;
-    background: #ffffff;
+    background: #fff;
     border-collapse: collapse;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
     font-size: 14px;
@@ -308,13 +308,13 @@
     }
     thead {
       th {
-        padding: 20px 0;
+        padding: 10px 0;
         border: 1px solid #ebeef5;
         border-collapse: collapse;
         color: #909399;
       }
-      .shoplist-header {
-        padding: 20px;
+      th.shoplist-header {
+        padding: 10px 20px;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -327,17 +327,17 @@
       td {
         border: 1px solid #ebeef5;
         border-collapse: collapse;
-        vertical-align: middle;
         text-align: center;
+        padding: 0;
       }
       td:first-child {
         text-align: left;
       }
       td:not(:first-child) {
-        padding: 20px;
+        padding: 3px;
       }
       td.shoplist-content-out {
-        padding: 20px;
+        padding-left: 20px;
       }
 
       /*商品信息*/
@@ -347,7 +347,7 @@
       }
       p.shoplist-content {
         margin: 0;
-        padding: 20px;
+        padding: 0 20px;
         box-sizing: padding-box;
         display: flex;
         flex-direction: row;
