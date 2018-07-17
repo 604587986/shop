@@ -57,8 +57,7 @@
         <li v-if="tableData.length < 5 ">
           <div class="slide-item" >
             <div class="img-show">
-              <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/AAC7404DD7144969AC913857B575C976.png"
-                   alt="">
+              <img src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/AAC7404DD7144969AC913857B575C976.png"/>
             </div>
             <el-button type="primary" size="mini" plain @click="POST_AddSlide">+新增</el-button>
           </div>

@@ -23,6 +23,23 @@ export function getGroupBuyGoodsList(params) {
 }
 
 /**
+ * 获取团购分类列表
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function getGroupCateGoriesList() {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/promotion/group-buy-cats',
+      method: 'get',
+      loading: false
+    }).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
  * 删除团购商品
  * @param ids
  * @param params

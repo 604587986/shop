@@ -80,9 +80,9 @@
         <el-select v-model="gruopBuyForm.cat_id" placeholder="请选择">
           <el-option
             v-for="item in groupBuyCategorys"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            :key="item.cat_id"
+            :label="item.cat_name"
+            :value="item.cat_id">
           </el-option>
         </el-select>
         <span class="activity-tip">请选择团购商品的所属类别</span>
@@ -256,11 +256,7 @@
         showDialog: false,
 
         /** 团购类别*/
-        groupBuyCategorys: [
-          { value: 0, label: '不限' },
-          { value: 1, label: '商家活动' },
-          { value: 2, label: '年货采购' }
-        ],
+        groupBuyCategorys: [],
 
         /** 团购活动*/
         gruopBuyActivitys: [],
@@ -350,11 +346,13 @@
     beforeRouteUpdate(to, from, next) {
       to.params.goods_id && this.GET_GroupBuyGoodsDetails(to.params.goods_id)
       this.GET_AllGroupBuyActivitys()
+      this.GET_GroupCateGories()
       next()
     },
     mounted() {
       this.$route.params.goods_id && this.GET_GroupBuyGoodsDetails(this.$route.params.goods_id)
       this.GET_AllGroupBuyActivitys()
+      this.GET_GroupCateGories()
     },
     methods: {
       /** 获取团购活动列表*/
@@ -364,6 +362,13 @@
           this.gruopBuyActivitys.forEach(key => {
             this.$set(key, 'activity_desc', `${key.act_name}  ${unixToDate(key.start_time, 'yyyy-MM-dd')}~${unixToDate(key.end_time, 'yyyy-MM-dd')}`)
           })
+        })
+      },
+
+      /** 获取团购分类 */
+      GET_GroupCateGories() {
+        API_groupBuy.getGroupCateGoriesList().then(response => {
+          this.groupBuyCategorys = response
         })
       },
 
@@ -434,6 +439,10 @@
             if (this.$route.params.goods_id) {
               API_groupBuy.saveGroupBuyGoods(this.$route.params.goods_id, this.gruopBuyForm).then(() => {
                 this.$message.success('修改成功')
+                this.$store.dispatch('delCurrentViews', {
+                  view: this.$route,
+                  $router: this.$router
+                })
                 this.$router.push({ path: '/promotions/group-buy-manager' })
               })
             }

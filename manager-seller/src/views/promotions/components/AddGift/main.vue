@@ -153,6 +153,9 @@
           actual_store: [
             { required: true, message: '请输入赠品库存', trigger: 'blur' },
             { validator: checkEnableStore, trigger: 'blur' }
+          ],
+          enable_img: [
+            { required: true, message: '请输入赠品图片', trigger: 'blur' }
           ]
         }
       }
