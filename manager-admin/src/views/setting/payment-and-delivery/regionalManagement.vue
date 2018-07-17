@@ -3,7 +3,7 @@
     <en-grade-editor
       ref="regionEditor"
       type-text="地区"
-      :api="regionApi"
+      :api="MixinRegionApi"
       :btns="btns"
       :maxLevel="4"
       :params-names="{id: 'id', text: 'local_name'}"
@@ -45,8 +45,6 @@
     name: 'regionalManagement',
     data() {
       return {
-        // api
-        regionApi: process.env.ADMIN_API + '/regions/@id/children',
         btns: [
           { text: '编辑', onClick: this.handleEdit },
           { text: '删除', onClick: this.handleDelete, color: 'red' }
