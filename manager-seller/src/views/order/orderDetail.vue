@@ -244,19 +244,11 @@
       </div>
     </el-dialog>
     <!--电子面单-->
-    <el-dialog title="电子面单" :visible.sync="electronicSurfaceShow" width="20%" align="center">
+    <el-dialog title="电子面单" :visible.sync="electronicSurfaceShow" width="30%" align="center">
       <!--主体-->
-      <div class="electronic-surface">
-        <!--条码-->
-        <div></div>
-        <!--收件方-->
-        <div>
-          <h4>收件方：</h4>
-          <h4>汪峰手 1865456464</h4>
-          <p class="electronic-address">阿斯顿个发生大事的发生地发大水大发的阿斯顿发</p>
-        </div>
-        <!--物品信息-->
-        <div></div>
+      <div class="electronic-surface" ref="electronicSurface" id="electronicSurface"></div>
+      <div slot="footer" align="right">
+        <el-button type="primary" @click="handlePrint">打印</el-button>
       </div>
     </el-dialog>
     <!--物流信息-->
@@ -273,6 +265,7 @@
   import * as API_logistics from '@/api/expressCompany'
   import { CategoryPicker } from '@/components'
   import { LogisticsCompany } from './components'
+  import Print from 'print-js'
   export default {
     name: 'orderDetail',
     components: {
@@ -393,8 +386,8 @@
           this.loading = false
           // 订单信息
           this.orderDetail = response
-          // 商品信息 因此处后台并未进行传输数据 因此自己请求接口进行获取对应订单商品列表数据
-          this.getReactiveOrderskuList()
+          // 商品信息
+          this.productList = this.orderDetail.order_sku_list
           // 修改收货人信息地区选择器信息
           this.areas = [this.orderDetail.ship_province_id, this.orderDetail.ship_city_id,
             this.orderDetail.ship_county_id || -1, this.orderDetail.ship_town_id || -1]
@@ -457,18 +450,6 @@
         })
       },
 
-      /** 获取对应订单商品列表数据 */
-      getReactiveOrderskuList() {
-        this.loading = true
-        const _params = {
-          order_sn: this.sn
-        }
-        API_order.getOrderList(_params).then(response => {
-          this.loading = false
-          this.productList = response.data[0].sku_list
-        })
-      },
-
       /** 获取物流公司信息列表 */
       getLogisticsCompanies() {
         API_logistics.getExpressCompanyList({}).then(response => {
@@ -487,7 +468,7 @@
       looklogistics() {
         this.logisticsShow = true
         const _params = {
-          com: '', // 此处为物流公司简称
+          com: this.orderDetail.logi_id,
           num: this.orderDetail.ship_no
         }
         API_order.getLogisticsInfo(_params).then(response => {
@@ -509,16 +490,34 @@
 
       /** 生成电子面单 */
       produceElectronicSurface(row) {
-        this.electronicSurfaceShow = true
         const _params = {
           order_sn: this.sn,
           logistics_id: row.logi_id
         }
         this.$confirm('确认生成电子面单?', '提示', { type: 'warning' }).then(() => {
-          API_order.generateElectronicSurface(_params).then(() => {
+          this.loading = true
+          API_order.generateElectronicSurface(_params).then((response) => {
             this.electronicSurfaceShow = true
-            this.$message.success('生成成功')
+            this.logisticsData.forEach(key => {
+              if (row.logi_id === key.logi_id) {
+                key.ship_no = response.code
+              }
+            })
+            setTimeout(() => {
+              this.loading = false
+              this.$refs['electronicSurface'].innerHTML = response.template
+            }, 200)
           })
+        })
+      },
+
+      /** 打印电子面单 */
+      handlePrint() {
+        Print({
+          printable: 'electronicSurface',
+          type: 'html',
+          // 继承原来的所有样式
+          targetStyles: ['*']
         })
       },
 
@@ -790,16 +789,6 @@
   /deep/ .electronic-surface {
     border: 1px solid #ddd;
     padding: 5px;
-    & > div {
-      border-bottom: 1px dotted #ddd;
-      h4 {
-        text-align: left;
-      }
-      p {
-        text-align: left;
-        font-size: 12px;
-      }
-    }
   }
 </style>
 

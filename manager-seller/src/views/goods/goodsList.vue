@@ -147,8 +147,8 @@
           return callback(new Error('库存不能为空'))
         }
         setTimeout(() => {
-          if (!RegExp.integer.test(value)) {
-            callback(new Error('请输入大于等于0的整数'))
+          if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
+            callback(new Error('请输入整数'))
           } else {
             callback()
           }
@@ -355,7 +355,7 @@
           })
         }
         const _res = _params.some(key => {
-          return !RegExp.integer.test(key.quantity_count)
+          return !RegExp.integer.test(key.quantity_count) && parseInt(key.quantity_count) !== 0
         })
         if (_res) {
           this.$message.error('库存必须为大于0的正整数')

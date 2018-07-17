@@ -122,7 +122,7 @@ export function deliveryGoods(sn, params) {
 export function getLogisticsInfo(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/seller/express`,
+      url: `/express`,
       method: 'get',
       loading: false,
       params
@@ -140,7 +140,7 @@ export function getLogisticsInfo(params) {
 export function generateElectronicSurface(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: `/seller/waybill`,
+      url: `/waybill`,
       method: 'get',
       loading: false,
       params

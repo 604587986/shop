@@ -188,7 +188,7 @@
 
       /** 还原回收站商品*/
       ReductionGoods(ids) {
-        API_goods.RecycleReductionGoods(ids, {}).then(response => {
+        API_goods.RecycleReductionGoods(ids, {}).then(() => {
           this.$message.success('还原成功')
           this.GET_RecycleGoodsList()
         })
