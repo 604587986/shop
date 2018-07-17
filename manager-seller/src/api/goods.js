@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getGoodsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/goods',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/goods',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -30,14 +26,10 @@ export function getGoodsList(params) {
  */
 export function deleteGoods(ids, params) {
   const _params = {}
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${ids}/recycle`,
-      method: 'put',
-      data: _params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${ids}/recycle`,
+    method: 'put',
+    data: _params
   })
 }
 
@@ -48,15 +40,11 @@ export function deleteGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function getGoodsStockList(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${ids}/skus`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${ids}/skus`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -67,15 +55,11 @@ export function getGoodsStockList(ids, params) {
  * @returns {Promise<any>}
  */
 export function reserveStockGoods(goods_id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${goods_id}/quantity`,
-      method: 'put',
-      data: params,
-      headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${goods_id}/quantity`,
+    method: 'put',
+    data: params,
+    headers: { 'Content-Type': 'application/json' }
   })
 }
 
@@ -85,14 +69,10 @@ export function reserveStockGoods(goods_id, params) {
  * @returns {Promise<any>}
  */
 export function getGoodsParams(category_id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/category/${category_id}/params`,
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/category/${category_id}/params`,
+    method: 'get',
+    loading: false
   })
 }
 
@@ -103,14 +83,10 @@ export function getGoodsParams(category_id) {
  * @returns {Promise<any>}
  */
 export function getEditGoodsParams(category_id, goods_id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/category/${category_id}/${goods_id}/params`,
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/category/${category_id}/${goods_id}/params`,
+    method: 'get',
+    loading: false
   })
 }
 
@@ -121,15 +97,11 @@ export function getEditGoodsParams(category_id, goods_id) {
  * @returns {Promise<any>}
  */
 export function getGoodsDraftParams(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/draft-goods/${ids}/params`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/draft-goods/${ids}/params`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -140,15 +112,11 @@ export function getGoodsDraftParams(ids, params) {
  * @returns {Promise<any>}
  */
 export function getGoodsCatrgory(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${ids}/skus`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${ids}/skus`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -159,15 +127,11 @@ export function getGoodsCatrgory(ids, params) {
  * @returns {Promise<any>}
  */
 export function getGoodData(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${ids}`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${ids}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -178,15 +142,11 @@ export function getGoodData(ids, params) {
  * @returns {Promise<any>}
  */
 export function getGoodDraftData(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/draft-goods/${ids}`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/draft-goods/${ids}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -197,15 +157,11 @@ export function getGoodDraftData(ids, params) {
  * @returns {Promise<any>}
  */
 export function getGoodsBrandList(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/category/${ids}/brands`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/category/${ids}/brands`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -216,15 +172,11 @@ export function getGoodsBrandList(ids, params) {
  * @returns {Promise<any>}
  */
 export function getTplList(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/ship-templates`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/ship-templates`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -235,14 +187,10 @@ export function getTplList(ids, params) {
  * @returns {Promise<any>}
  */
 export function underGoods(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${ids}/under`,
-      method: 'put',
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${ids}/under`,
+    method: 'put',
+    data: params
   })
 }
 
@@ -252,15 +200,11 @@ export function underGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function aboveGoods(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/goods',
-      method: 'post',
-      data: params,
-      headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/goods',
+    method: 'post',
+    data: params,
+    headers: { 'Content-Type': 'application/json' }
   })
 }
 
@@ -271,15 +215,11 @@ export function aboveGoods(params) {
  * @returns {Promise<any>}
  */
 export function editGoods(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${id}`,
-      method: 'put',
-      data: params,
-      headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${id}`,
+    method: 'put',
+    data: params,
+    headers: { 'Content-Type': 'application/json' }
   })
 }
 
@@ -289,15 +229,11 @@ export function editGoods(id, params) {
  * @returns {Promise<any>}
  */
 export function saveDraft(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/draft-goods`,
-      method: 'post',
-      data: params,
-      headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/draft-goods`,
+    method: 'post',
+    data: params,
+    headers: { 'Content-Type': 'application/json' }
   })
 }
 
@@ -307,29 +243,21 @@ export function saveDraft(params) {
  * @returns {Promise<any>}
  */
 export function aboveDraftGoods(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/draft-goods/${ids}/market`,
-      method: 'put',
-      data: params,
-      headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/draft-goods/${ids}/market`,
+    method: 'put',
+    data: params,
+    headers: { 'Content-Type': 'application/json' }
   })
 }
 
 /** 草稿箱商品 保存草稿 即 修改草稿箱商品 */
 export function editDraftGoods(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/draft-goods/${id}`,
-      method: 'put',
-      data: params,
-      headers: { 'Content-Type': 'application/json' }
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/draft-goods/${id}`,
+    method: 'put',
+    data: params,
+    headers: { 'Content-Type': 'application/json' }
   })
 }
 
@@ -340,14 +268,10 @@ export function editDraftGoods(id, params) {
  * @returns {Promise<any>}
  */
 export function draftSku(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/draft-goods/${id}/skus`,
-      method: 'get',
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/draft-goods/${id}/skus`,
+    method: 'get',
+    data: params
   })
 }
 
@@ -357,15 +281,11 @@ export function draftSku(id, params) {
  * @returns {Promise<any>}
  */
 export function getDraftGoodsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/goods/draft-goods',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/goods/draft-goods',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -377,14 +297,10 @@ export function getDraftGoodsList(params) {
  */
 export function deleteDraftGoods(ids, params) {
   const _params = {}
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/draft-goods/${ids}`,
-      method: 'delete',
-      data: _params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/draft-goods/${ids}`,
+    method: 'delete',
+    data: _params
   })
 }
 
@@ -394,15 +310,11 @@ export function deleteDraftGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function getRecycleGoodsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/goods',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/goods',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -414,14 +326,10 @@ export function getRecycleGoodsList(params) {
  * @constructor
  */
 export function RecycleReductionGoods(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${ids}/revert`,
-      method: 'put',
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${ids}/revert`,
+    method: 'put',
+    data: params
   })
 }
 
@@ -433,14 +341,10 @@ export function RecycleReductionGoods(ids, params) {
  * @constructor
  */
 export function RecycleDeleteGoods(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${ids}`,
-      method: 'delete',
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${ids}`,
+    method: 'delete',
+    data: params
   })
 }
 
@@ -450,15 +354,11 @@ export function RecycleDeleteGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function getWarningGoodsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/goods/warning',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/goods/warning',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -469,14 +369,10 @@ export function getWarningGoodsList(params) {
  * @returns {Promise<any>}
  */
 export function getWarningGoodsStockList(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/${ids}/skus`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/${ids}/skus`,
+    method: 'get',
+    loading: false,
+    params
   })
 }

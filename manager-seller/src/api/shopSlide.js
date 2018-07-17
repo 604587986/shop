@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getShopSlideList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/sildes',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/shops/sildes',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,13 +24,11 @@ export function getShopSlideList(params) {
  * @returns {Promise<any>}
  */
 export function saveShopSlide(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/sildes',
-      method: 'put',
-      headers: { 'Content-Type': 'application/json' },
-      data: params
-    }).then(response => resolve(response))
+  return request({
+    url: '/shops/sildes',
+    method: 'put',
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 
@@ -45,11 +39,9 @@ export function saveShopSlide(params) {
  * @returns {Promise<any>}
  */
 export function delShopSlide(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/sildes/${ids}`,
-      method: 'delete',
-      params
-    }).then(response => resolve(response))
+  return request({
+    url: `/shops/sildes/${ids}`,
+    method: 'delete',
+    params
   })
 }

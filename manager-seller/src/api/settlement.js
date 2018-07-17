@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getSettleMentList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/order/bills',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/order/bills',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -29,15 +25,11 @@ export function getSettleMentList(params) {
  * @returns {Promise<any>}
  */
 export function getBillDetails(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/order/bills/${ids}`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/order/bills/${ids}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -49,15 +41,11 @@ export function getBillDetails(ids, params) {
  * @returns {Promise<any>}
  */
 export function getOrderList(id, type, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/order/bills/${id}/${type}`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/order/bills/${id}/${type}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -68,14 +56,10 @@ export function getOrderList(id, type, params) {
  * @returns {Promise<any>}
  */
 export function confirmSettle(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/order/bills/${id}/next`,
-      method: 'put',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/order/bills/${id}/next`,
+    method: 'put',
+    loading: false,
+    params
   })
 }

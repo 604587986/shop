@@ -6,15 +6,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getbuyAnyalysisPeriodList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/reports/purchase/period',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/reports/purchase/period',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -24,14 +20,10 @@ export function getbuyAnyalysisPeriodList(params) {
  * @returns {Promise<any>}
  */
 export function getbuyAnyalysisRangesList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/reports/purchase/ranges',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/reports/purchase/ranges',
+    method: 'get',
+    loading: false,
+    params
   })
 }

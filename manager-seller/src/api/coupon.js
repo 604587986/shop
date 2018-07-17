@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getCouponsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/coupons',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/coupons',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -30,15 +26,11 @@ export function getCouponsList(params) {
  * @constructor
  */
 export function deleteCoupons(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/coupons/${ids}`,
-      method: 'delete',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/coupons/${ids}`,
+    method: 'delete',
+    loading: false,
+    params
   })
 }
 
@@ -50,15 +42,11 @@ export function deleteCoupons(ids, params) {
  * @constructor
  */
 export function modifyCoupons(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/coupons/${ids}`,
-      method: 'put',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/coupons/${ids}`,
+    method: 'put',
+    loading: false,
+    data: params
   })
 }
 
@@ -69,15 +57,11 @@ export function modifyCoupons(ids, params) {
  * @constructor
  */
 export function addCoupons(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/coupons',
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/coupons',
+    method: 'post',
+    loading: false,
+    data: params
   })
 }
 
@@ -88,14 +72,10 @@ export function addCoupons(params) {
  * @returns {Promise<any>}
  */
 export function getCouponDetails(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/coupons/${id}`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/coupons/${id}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }

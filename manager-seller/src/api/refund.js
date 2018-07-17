@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getRefundList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/after-sales/refunds',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/after-sales/refunds',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,14 +24,10 @@ export function getRefundList(params) {
  * @returns {Promise<any>}
  */
 export function getRefundDetails(sn) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/after-sales/refunds/${sn}`,
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/after-sales/refunds/${sn}`,
+    method: 'get',
+    loading: false
   })
 }
 
@@ -46,15 +38,11 @@ export function getRefundDetails(sn) {
  * @returns {Promise<any>}
  */
 export function refundAuth(sn, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/after-sales/audits/${sn}`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/after-sales/audits/${sn}`,
+    method: 'post',
+    loading: false,
+    data: params
   })
 }
 
@@ -65,15 +53,11 @@ export function refundAuth(sn, params) {
  * @returns {Promise<any>}
  */
 export function toRefund(sn, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/after-sales/refunds/${sn}`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/after-sales/refunds/${sn}`,
+    method: 'post',
+    loading: false,
+    data: params
   })
 }
 
@@ -85,14 +69,10 @@ export function toRefund(sn, params) {
  * @constructor
  */
 export function wareHousing(sn, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/after-sales/stock-ins/${sn}`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/after-sales/stock-ins/${sn}`,
+    method: 'post',
+    loading: false,
+    data: params
   })
 }

@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getSalesStatisticsNum(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/reports/sales_num',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/reports/sales_num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,15 +24,11 @@ export function getSalesStatisticsNum(params) {
  * @returns {Promise<any>}
  */
 export function getSalesStatisticsMoney(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/reports/sales_money',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/reports/sales_money',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -46,15 +38,11 @@ export function getSalesStatisticsMoney(params) {
  * @returns {Promise<any>}
  */
 export function getSalesStatisticsGoodsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/reports/sales_page',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/reports/sales_page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

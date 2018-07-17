@@ -10,16 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getShopData(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      const _response = response || {}
-      resolve(_response)
-    })
+  return request({
+    url: '/shops',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -30,13 +25,11 @@ export function getShopData(params) {
  * @returns {Promise<any>}
  */
 export function saveShopSettings(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops',
-      method: 'put',
-      loading: false,
-      data: params
-    }).then(response => resolve(response))
+  return request({
+    url: '/shops',
+    method: 'put',
+    loading: false,
+    data: params
   })
 }
 
@@ -46,13 +39,11 @@ export function saveShopSettings(params) {
  * @returns {Promise<any>}
  */
 export function saveStockWarningNum(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/warning-counts',
-      method: 'put',
-      loading: false,
-      data: params
-    }).then(response => resolve(response))
+  return request({
+    url: '/shops/warning-counts',
+    method: 'put',
+    loading: false,
+    data: params
   })
 }
 
@@ -63,12 +54,10 @@ export function saveStockWarningNum(params) {
  * @returns {Promise<any>}
  */
 export function promoteShopGrade(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/settings/shop/grade/${ids}`,
-      method: 'post',
-      data: params
-    }).then(response => resolve(response))
+  return request({
+    url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/settings/shop/grade/${ids}`,
+    method: 'post',
+    data: params
   })
 }
 
@@ -78,12 +67,10 @@ export function promoteShopGrade(ids, params) {
  * @returns {Promise<any>}
  */
 export function updateShopLogo(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/logos',
-      method: 'put',
-      data: params
-    }).then(response => resolve(response))
+  return request({
+    url: '/shops/logos',
+    method: 'put',
+    data: params
   })
 }
 

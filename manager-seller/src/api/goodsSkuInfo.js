@@ -7,15 +7,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getCategorySkuList(category_id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/categories/${category_id}/specs`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: `/goods/categories/${category_id}/specs`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -26,15 +22,11 @@ export function getCategorySkuList(category_id, params) {
  * @returns {Promise<any>}
  */
 export function saveCustomSkuItem(category_id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/categories/${category_id}/specs`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: `/goods/categories/${category_id}/specs`,
+    method: 'post',
+    loading: false,
+    data: params
   })
 }
 
@@ -45,14 +37,10 @@ export function saveCustomSkuItem(category_id, params) {
  * @returns {Promise<any>}
  */
 export function saveCustomSkuValue(spec_id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/specs/${spec_id}/values`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    }).catch(error => reject(error))
+  return request({
+    url: `/goods/specs/${spec_id}/values`,
+    method: 'post',
+    loading: false,
+    data: params
   })
 }

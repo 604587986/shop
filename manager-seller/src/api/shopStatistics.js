@@ -9,14 +9,10 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getShopSurvey() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/shop_profile/data',
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/shop_profile/data',
+    method: 'get',
+    loading: false
   })
 }
 
@@ -26,13 +22,9 @@ export function getShopSurvey() {
  * @returns {Promise<any>}
  */
 export function getShopSurveyCharts() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/shop_profile/chart',
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/shop_profile/chart',
+    method: 'get',
+    loading: false
   })
 }

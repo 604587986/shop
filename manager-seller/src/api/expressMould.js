@@ -11,15 +11,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getTplList(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/ship-templates`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/ship-templates`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -30,15 +26,11 @@ export function getTplList(ids, params) {
  * @returns {Promise<any>}
  */
 export function getSimpleTpl(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/ship-templates/${id}`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/ship-templates/${id}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -48,14 +40,10 @@ export function getSimpleTpl(id, params) {
  * @returns {Promise<any>}
  */
 export function deleteExpressMould(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/ship-templates/${ids}`,
-      method: 'delete',
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/ship-templates/${ids}`,
+    method: 'delete',
+    params
   })
 }
 
@@ -66,14 +54,10 @@ export function deleteExpressMould(ids, params) {
  * @returns {Promise<any>}
  */
 export function saveExpressMould(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/ship-templates/${ids}`,
-      method: 'put',
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/ship-templates/${ids}`,
+    method: 'put',
+    data: params
   })
 }
 
@@ -84,13 +68,9 @@ export function saveExpressMould(ids, params) {
  * @returns {Promise<any>}
  */
 export function addExpressMould(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/ship-templates',
-      method: 'post',
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/shops/ship-templates',
+    method: 'post',
+    data: params
   })
 }

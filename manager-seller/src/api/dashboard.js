@@ -9,14 +9,10 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getDashboardData() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/dashboard/shop',
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/dashboard/shop',
+    method: 'get',
+    loading: false
   })
 }
 
@@ -26,15 +22,11 @@ export function getDashboardData() {
  * @returns {Promise<any>}
  */
 export function getNotice(type, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `${process.env.BASE_API}/pages/article-categories/${type}/articles`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `${process.env.BASE_API}/pages/article-categories/${type}/articles`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -44,15 +36,11 @@ export function getNotice(type, params) {
  * @returns {Promise<any>}
  */
 export function getConcate(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `${process.env.BASE_API}/pages/articles`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `${process.env.BASE_API}/pages/articles`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

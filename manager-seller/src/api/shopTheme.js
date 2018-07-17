@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getShopThemeList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/themes',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/shops/themes',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -29,12 +25,10 @@ export function getShopThemeList(params) {
  * @returns {Promise<any>}
  */
 export function saveShopTheme(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/themes/${id}`,
-      method: 'put',
-      params
-    }).then(response => resolve(response))
+  return request({
+    url: `/shops/themes/${id}`,
+    method: 'put',
+    params
   })
 }
 

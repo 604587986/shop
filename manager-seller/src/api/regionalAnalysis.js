@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getRegionalAnalysisList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/reports/regions/data',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/reports/regions/data',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

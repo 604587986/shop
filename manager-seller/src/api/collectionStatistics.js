@@ -10,14 +10,10 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getCollectionStatistics() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/collect/chart',
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/collect/chart',
+    method: 'get',
+    loading: false
   })
 }
 
@@ -27,14 +23,10 @@ export function getCollectionStatistics() {
  * @returns {Promise<any>}
  */
 export function getCollectionGoods(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/collect/page',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/collect/page',
+    method: 'get',
+    loading: false,
+    params
   })
 }

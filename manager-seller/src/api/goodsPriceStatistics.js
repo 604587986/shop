@@ -6,14 +6,10 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getPriceStatisticsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/goods/price_sales',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/goods/price_sales',
+    method: 'get',
+    loading: false,
+    params
   })
 }
