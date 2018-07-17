@@ -25,7 +25,7 @@ export const uploadApi = api.base + '/uploaders'
  * 地区选择API
  * @type {string}
  */
-export const regionApi = api.base + '/regions/@id/children'
+export const regionApi = process.env.ADMIN_API + '/systems/regions/@id/children'
 
 /**
  * 获取首页数据
