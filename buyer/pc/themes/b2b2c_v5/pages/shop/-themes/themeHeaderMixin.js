@@ -1,5 +1,5 @@
 /**
- * Created by andste.cc@gmail.com on 2018/7/4.
+ * Created by Andste on 2018/7/4.
  * 店铺头部Mixin
  */
 

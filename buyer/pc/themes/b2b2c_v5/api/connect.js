@@ -1,5 +1,5 @@
 /**
- * Created by andste.cc@gmail.com on 2018/7/2.
+ * Created by Andste on 2018/7/2.
  * 信任登录相关API
  */
 

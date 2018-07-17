@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="pointForm" :rules="pointRules" ref="pointForm" label-width="210px" label-position="left" style="width: 500px">
+  <el-form :model="pointForm" :rules="pointRules" ref="pointForm" label-width="210px" label-position="left" style="width: 400px">
     <!--成功注册-->
     <el-form-item prop="cancel_order_day">
       <template slot="label">
@@ -13,7 +13,7 @@
       </el-input>
     </el-form-item>
     <!--完善个人资料-->
-    <el-form-item prop="cancel_order_day">
+    <!--<el-form-item prop="cancel_order_day">
       <template slot="label">
         <el-checkbox v-model="pointForm.perfect">完善个人资料</el-checkbox>
       </template>
@@ -23,7 +23,7 @@
       <el-input placeholder="10" size="small" v-model="pointForm.perfect_grade_point">
         <template slot="append">消费积分</template>
       </el-input>
-    </el-form-item>
+    </el-form-item>-->
     <!--登录（一天一次有效）-->
     <el-form-item prop="cancel_order_day">
       <template slot="label">

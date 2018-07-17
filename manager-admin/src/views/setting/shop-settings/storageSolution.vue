@@ -122,7 +122,7 @@
             const { bean } = this.storageForm
             API_StorageSolution.editStorageSolution(bean, this.storageForm).then(response => {
               this.dialogStorageVisible = false
-              this.MixinSetTableData(this.tableData, 'bean', 'bean', response)
+              this.MixinSetTableData(this.tableData, 'bean', bean, response)
               this.$message.success('修改成功！')
             })
           } else {

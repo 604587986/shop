@@ -1,5 +1,5 @@
 /**
- * Created by andste.cc@gmail.com on 2018/6/13.
+ * Created by Andste on 2018/6/13.
  * 地址相关mixin
  * 个人中心和结算页复用
  */
