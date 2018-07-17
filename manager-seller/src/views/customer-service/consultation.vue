@@ -310,7 +310,7 @@
     font-bold: 700;
     thead {
       th {
-        padding: 20px 0;
+        padding: 12px 0;
         border: 1px solid #ebeef5;
         border-collapse: collapse;
         color: #909399;
