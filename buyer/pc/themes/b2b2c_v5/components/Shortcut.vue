@@ -99,7 +99,7 @@
     },
     mounted() {
       // 如果有刷新Token，重新获取用户信息【第一次访问和用户刷新页面，会触发】
-      if (Storage.getItem('user')) {
+      if (Storage.getItem('refreshToken')) {
         this.getUserData()
         this.GET_UnreadMessage()
       }
