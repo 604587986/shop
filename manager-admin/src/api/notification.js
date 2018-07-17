@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getNotificationList(params) {
   return request({
-    url: 'systems/message',
+    url: 'system/messages',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getNotificationList(params) {
  */
 export function releaseNotification(params) {
   return request({
-    url: 'systems/message',
+    url: 'system/messages',
     method: 'post',
     data: params
   })

@@ -23,8 +23,14 @@
       </a>
     </div>
     <div class="shop-contact">
-      <h5>店铺名称：<span>{{ shopBaseInfo.shop_name }}</span></h5>
-      <h5>所&ensp;在&ensp;地：<span :title="shopRegions">{{ shopRegions }}</span></h5>
+      <dl>
+        <dt>店铺名称：</dt>
+        <dd>{{ shopBaseInfo.shop_name }}</dd>
+      </dl>
+      <dl>
+        <dt>所&ensp;在&ensp;地：</dt>
+        <dd>{{ shopRegions }}</dd>
+      </dl>
     </div>
   </div>
 </template>
@@ -151,22 +157,21 @@
       }
     }
     .shop-contact {
-      padding: 5px 0;
-      h5 {
-        color: #666;;
-        display: inline-block;
-        font-size: 12px;
-        letter-spacing: normal;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        vertical-align: top;
-        white-space: nowrap;
-        width: 200px;
-        word-spacing: normal;
-        font-weight: normal;
-        margin: 5px;
+      padding: 5px;
+      dl {
+        margin-bottom: 5px;
       }
-      span {
+      dt, dd {
+        display: inline-block;
+        vertical-align: top;
+        font-size: 12px;
+      }
+      dt {
+        width: 60px;
+        color: #666;
+      }
+      dd {
+        width: 199px - 60px;
         color: #333;
       }
     }

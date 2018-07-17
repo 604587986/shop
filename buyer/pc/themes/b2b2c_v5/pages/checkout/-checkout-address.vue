@@ -100,9 +100,13 @@
     },
     watch: {
       // 如果没有地址，设置第一个为选中地址
+      // 如果有地址，对比地址
       addressList: function (newVal) {
         if (!this.addressId) {
           this.handleSelectAddress(newVal[0], false)
+        } else {
+          const addresses = newVal.filter(item => item.addr_id == this.addressId)
+          if (addresses.length) this.$emit('change', addresses[0])
         }
       }
     },

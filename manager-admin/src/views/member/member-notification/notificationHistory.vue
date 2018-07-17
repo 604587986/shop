@@ -79,6 +79,7 @@
     </el-dialog>
     <en-member-picker
       :show="memberPickerShow"
+      :default-data="memberDefaultData"
       @close="memberPickerShow = false"
       @confirm="handleMemberPickerConfirm"/>
   </div>
@@ -154,7 +155,6 @@
       /** 选择会员回调 */
       handleMemberPickerConfirm(memberList) {
         this.notificationForm.member_ids = memberList
-        console.log(memberList)
       },
       /** 移除会员 */
       handleRemoveMember(index) {
