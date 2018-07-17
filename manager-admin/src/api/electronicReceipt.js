@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getElectronicReceiptList(params) {
   return request({
-    url: 'system/waybills',
+    url: 'systems/waybills',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getElectronicReceiptList(params) {
  */
 export function getElectronicReceiptDetail(bean) {
   return request({
-    url: `system/waybills/${bean}`,
+    url: `systems/waybills/${bean}`,
     method: 'get'
   })
 }
@@ -35,7 +35,7 @@ export function getElectronicReceiptDetail(bean) {
  */
 export function editElectronicReceipt(bean, params) {
   return request({
-    url: `system/waybills/${bean}`,
+    url: `systems/waybills/${bean}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -48,7 +48,7 @@ export function editElectronicReceipt(bean, params) {
  */
 export function openElectronicReceipt(bean) {
   return request({
-    url: `system/waybills/${bean}/open`,
+    url: `systems/waybills/${bean}/open`,
     method: 'put'
   })
 }
