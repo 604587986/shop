@@ -6,11 +6,9 @@ const tagsView = {
   mutations: {
     ADD_VISITED_VIEWS: (state, view) => {
       if (state.visitedViews.some(v => v.path === view.path)) return
-      state.visitedViews.push({
-        name: view.name,
-        path: view.path,
+      state.visitedViews.push(Object.assign({}, view, {
         title: view.meta.title || 'no-name'
-      })
+      }))
       if (!view.meta.noCache) {
         state.cachedViews.push(view.name)
       }
@@ -71,6 +69,21 @@ const tagsView = {
         commit('DEL_ALL_VIEWS')
         resolve([...state.visitedViews])
       })
+    },
+    /**
+     * 关闭当前页
+     * @param commit
+     * @param state
+     * @param params
+     */
+    delCurrentViews({ commit, state }, params) {
+      commit('DEL_VISITED_VIEWS', params.view)
+      const latestView = [...state.visitedViews].slice(-1)[0]
+      if (latestView) {
+        params.$router.push(latestView)
+      } else {
+        params.$router.push('/')
+      }
     }
   }
 }
