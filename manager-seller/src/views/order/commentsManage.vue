@@ -439,7 +439,7 @@
   .my-table {
     width: 100%;
     margin-bottom: 40px;
-    background: #ffffff;
+    background: #fff;
     border-collapse: collapse;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
     font-size: 14px;
@@ -453,7 +453,7 @@
         border: 1px solid #ebeef5;
         border-collapse: collapse;
         color: #909399;
-        padding: 20px;
+        padding: 10px 20px;
       }
     }
     tbody {
@@ -464,7 +464,7 @@
         border-collapse: collapse;
         vertical-align: middle;
         text-align: center;
-        padding: 20px;
+        padding: 10px 20px;
       }
       td:first-child {
         text-align: left;

@@ -274,7 +274,7 @@
             first_price: '',
             continued_company: '',
             continued_price: '',
-            type: '',
+            type: 2,
             area: []
           }
         } else if (this.activeName === 'logistics') {
@@ -351,7 +351,7 @@
 
           continued_price: '',
 
-          type: '',
+          type: 2,
 
           area: ''
         }
