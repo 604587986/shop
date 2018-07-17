@@ -9,7 +9,10 @@
         <!--如果有大于1个的sku，则显示价格区间-->
         <div v-if="priceRange" class="pro-content price">
           <span>￥</span>
-          <strong>{{ priceRange[0] | unitPrice }}</strong>~<strong>{{ priceRange[1] | unitPrice }}</strong>
+          <strong>{{ priceRange[0] | unitPrice }}</strong>
+          <template v-if="priceRange[1]">
+             ~ <strong>{{ priceRange[1] | unitPrice }}</strong>
+          </template>
         </div>
         <div v-else class="pro-content price">
           <span>￥</span>
@@ -134,9 +137,15 @@
             this.skuMap.set('no_spec', sku)
           }
         })
-        // 如果规格大于1个，显示价格区间
-        if (response.length > 1) {
-          this.priceRange = [Math.min(...priceList), Math.max(...priceList)]
+        // 如果价格区间大于1个
+        if (priceList.length > 1) {
+          const min = Math.min(...priceList)
+          const max = Math.max(...priceList)
+          if (min === max) {
+            this.priceRange = [max]
+          } else {
+            this.priceRange = [min, max]
+          }
         }
         this.specList = specList
         // 如果有sku信息，初始化已选规格

@@ -154,7 +154,7 @@
             API_Order.cancelOrder(order_sn, val).then(() => {
               this.$message.success('订单取消申请成功！')
               layer.close(index)
-              this.getOrderData()
+              this.GET_OrderList()
             })
           }
         })
@@ -164,7 +164,7 @@
         this.$confirm('请确认是否收到货物，否则可能会钱财两空！', () => {
           API_Order.confirmReceipt(order_sn).then(() => {
             this.$message.success('确认收货成功！')
-            this.getOrderData()
+            this.GET_OrderList()
           })
         })
       },
