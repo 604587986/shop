@@ -53,7 +53,7 @@
       </el-input>
     </el-form-item>
     <el-form-item label="">
-      <el-button type="primary" @click="submitEditGoodsSetting">保存修改</el-button>
+      <el-button type="primary" @click="submitEditGoodsSetting">保存设置</el-button>
     </el-form-item>
   </el-form>
 </template>

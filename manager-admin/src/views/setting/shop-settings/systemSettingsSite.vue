@@ -49,7 +49,7 @@
       </el-upload>
     </el-form-item>
     <el-form-item label="">
-      <el-button type="primary" @click="submitForm">保存修改</el-button>
+      <el-button type="primary" @click="submitForm">保存设置</el-button>
     </el-form-item>
   </el-form>
 </template>
