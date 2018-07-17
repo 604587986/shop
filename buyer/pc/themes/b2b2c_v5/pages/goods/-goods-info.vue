@@ -414,6 +414,7 @@
     padding: 10px 15px;
     margin: 0 5px 5px 0;
     cursor: pointer;
+    background-color: #fff;
     &.selected {
       border-color: #f42424;
       .icon-spec-selected{ display: block }
@@ -422,6 +423,7 @@
       width: 50px;
       height: 50px;
       margin-bottom: 25px;
+      background-color: #fff;
       img { width: 100%; height: 100% }
       .spec-text {
         position: absolute;
