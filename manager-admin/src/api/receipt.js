@@ -23,7 +23,7 @@ export function getHistoryReceiptList(params) {
  */
 export function getReceiptContentList(params) {
   return request({
-    url: 'receipt-contents',
+    url: 'systems/receipt-contents',
     method: 'get',
     loading: false,
     params
@@ -36,7 +36,7 @@ export function getReceiptContentList(params) {
  */
 export function addReceiptContent(content) {
   return request({
-    url: 'receipt-contents',
+    url: 'systems/receipt-contents',
     method: 'post',
     data: { content }
   })
@@ -49,7 +49,7 @@ export function addReceiptContent(content) {
  */
 export function editReceiptContent(id, content) {
   return request({
-    url: `receipt-contents/${id}`,
+    url: `systems/receipt-contents/${id}`,
     method: 'put',
     data: { content }
   })
@@ -61,7 +61,7 @@ export function editReceiptContent(id, content) {
  */
 export function deleteReceiptContent(id) {
   return request({
-    url: `receipt-contents/${id}`,
+    url: `systems/receipt-contents/${id}`,
     method: 'delete'
   })
 }
