@@ -98,7 +98,7 @@ function fedLogOut() {
 
 export default function request(options) {
   // 如果是刷新token或者登录，不需要检查token直接请求。
-  if (options.url.indexOf('systems/admin-user/login') + options.url.indexOf('systems/admin-user/token') > -2) {
+  if (options.url.indexOf('systems/admin-users/login') + options.url.indexOf('systems/admin-users/token') > -2) {
     console.log(options.url + ' | 请求的刷新token或是登录，不需要检查token直接请求。')
     return service(options)
   }

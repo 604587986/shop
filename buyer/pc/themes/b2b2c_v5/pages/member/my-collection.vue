@@ -17,7 +17,7 @@
             >
               <div class="goods-image">
                 <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
-                  <img :src="goods.goods_image" :alt="goods.goods_name">
+                  <img :src="goods.goods_img" :alt="goods.goods_name">
                 </nuxt-link>
                 <div class="goods-delete" @click="goods.show_del_pop = 1">
                   <i class="iconfont ea-icon-delete"></i>
