@@ -231,7 +231,7 @@
         </div>
       </div>
       <div class="logistics-info">
-        <div>
+        <div v-if="logisticsInfoList">
           <el-steps direction="vertical" :active="1" align-center space="100px">
             <el-step
               v-for="(row, index) in logisticsInfoList"
@@ -241,6 +241,7 @@
               :description="row.context"/>
           </el-steps>
         </div>
+        <div v-else>暂无物流信息，请您耐心等待！</div>
       </div>
     </el-dialog>
     <!--电子面单-->
@@ -468,7 +469,7 @@
       looklogistics() {
         this.logisticsShow = true
         const _params = {
-          com: this.orderDetail.logi_id,
+          id: this.orderDetail.logi_id,
           num: this.orderDetail.ship_no
         }
         API_order.getLogisticsInfo(_params).then(response => {
@@ -495,7 +496,6 @@
           logistics_id: row.logi_id
         }
         this.$confirm('确认生成电子面单?', '提示', { type: 'warning' }).then(() => {
-          this.loading = true
           API_order.generateElectronicSurface(_params).then((response) => {
             this.electronicSurfaceShow = true
             this.logisticsData.forEach(key => {
@@ -504,7 +504,6 @@
               }
             })
             setTimeout(() => {
-              this.loading = false
               this.$refs['electronicSurface'].innerHTML = response.template
             }, 200)
           })
