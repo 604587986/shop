@@ -9,7 +9,7 @@ import md5 from 'js-md5'
 export function login(params) {
   params.password = md5(params.password)
   return request({
-    url: 'systems/admin-user/login',
+    url: 'systems/admin-users/login',
     method: 'get',
     loading: false,
     params
@@ -22,7 +22,7 @@ export function login(params) {
  */
 export function logout() {
   return request({
-    url: 'systems/admin-user/logout',
+    url: 'systems/admin-users/logout',
     method: 'post'
   })
 }
