@@ -233,7 +233,11 @@
 
       /** 销售状态格式化 */
       marketStatus(row, column, cellValue) {
-        return row.market_enable === 1 ? '售卖中' : '已下架'
+        switch (row.is_auth) {
+          case 0 : return '待审核'
+          case 1 : return row.market_enable === 1 ? '售卖中' : '已下架'
+          case 2 : return '审核拒绝'
+        }
       },
 
       /** 搜索事件触发 */
