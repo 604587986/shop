@@ -176,8 +176,10 @@
       },
       /** 保存积分 */
       handleSavePoint() {
-        API_Member.editMemberConsumPoint(this.member_id, this.editPointForm.changedPoint).then(() => {
+        const { changedPoint } = this.editPointForm
+        API_Member.editMemberConsumPoint(this.member_id, changedPoint).then(() => {
           this.$message.success('修改成功！')
+          this.editPointForm.currentPoint = changedPoint
         })
       },
       /** 获取会员详情 */
