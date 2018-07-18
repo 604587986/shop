@@ -16,11 +16,11 @@
             <div class="comment-body">
               <strong>我的评论：</strong>
               <div>
-                <p>{{ comment.content }}</p>
+                <pre v-html="comment.content"></pre>
                 <div v-if="comment.images && comment.images.length > 0" class="comment-gallery">
-                  <template v-for="(image, index) in comment.images">
-                    <img :src="image" :key="index" class="comment-thumbnail">
-                  </template>
+                  <a v-for="(image, index) in comment.images" :key="index" :href="image" target="_blank">
+                    <img :src="image" class="comment-thumbnail">
+                  </a>
                 </div>
               </div>
             </div>
