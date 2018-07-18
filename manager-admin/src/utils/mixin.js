@@ -3,17 +3,16 @@
  */
 
 import Vue from 'vue'
-import * as API_Common from '@/api/common'
 import { Foundation } from '~/ui-utils'
-import { domain } from '~/ui-domain'
+import { api, domain } from '~/ui-domain'
 
 export default {
   data() {
     return {
       // 图片上传API
-      MixinUploadApi: API_Common.uploadApi,
+      MixinUploadApi: api.base + '/uploaders',
       // 地区API
-      MixinRegionApi: API_Common.regionApi,
+      MixinRegionApi: api.base + '/regions/@id/children',
       // 买家端域名
       MixinBuyerDomain: domain.buyer_pc
     }
