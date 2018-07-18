@@ -1,7 +1,7 @@
 <template>
   <div class="menus-container">
     <el-tree
-      :data="meuns"
+      :data="menus"
       node-key="identifier"
       :expand-on-click-node="true"
     >
@@ -33,8 +33,13 @@
         </span>
       </span>
     </el-tree>
-    <!--// Andste_TODO 2018/7/11: 添加顶级菜单待适配-->
-    <el-button type="primary" size="mini" style="margin-top: 10px">添加顶级菜单</el-button>
+    <el-button
+      v-if="menus"
+      type="text"
+      size="mini"
+      style="margin-top: 10px; margin-left: 20px"
+      @click="handleAddMenu('')"
+    >添加顶级菜单</el-button>
     <el-dialog
       :title="menuForm.menu_name ? '编辑菜单' : '添加菜单'"
       :visible.sync="dialogMenuVisible"
@@ -68,7 +73,7 @@
     name: 'menuManage',
     data() {
       return {
-        meuns: [],
+        menus: [],
         /** 添加、编辑菜单 表单 */
         menuForm: {},
         /** 添加、编辑菜单 表单规则 */
@@ -98,8 +103,10 @@
     methods: {
       /** 添加菜单 */
       handleAddMenu(menu) {
-        this.menuForm = { parent_id: menu.id }
-        this.currentMenu = menu
+        this.menuForm = {
+          parent_id: menu ? menu.id : 0
+        }
+        this.currentMenu = menu || {}
         this.dialogMenuVisible = true
       },
       /** 删除菜单 */
@@ -123,8 +130,9 @@
       submitMenuForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.menuForm.id) {
-              API_Menus.editMenu(this.menuForm.id, this.menuForm).then(response => {
+            const { id } = this.menuForm
+            if (id) {
+              API_Menus.editMenu(id, this.menuForm).then(response => {
                 this.currentMenu = {
                   ...this.currentMenu,
                   ...this.menuForm
@@ -135,8 +143,12 @@
             } else {
               API_Menus.addMenu(this.menuForm).then(response => {
                 const data = this.currentMenu
-                if (!data.children) this.$set(data, 'children', [])
-                data.children.push(response)
+                if (this.menuForm.parent_id === 0) {
+                  this.menus.push(response)
+                } else {
+                  if (!data.children) this.$set(data, 'children', [])
+                  data.children.push(response)
+                }
                 this.dialogMenuVisible = false
                 this.$message.success('保存成功！')
               })
@@ -150,7 +162,7 @@
       /** 获取菜单 */
       GET_Memus(parent_id) {
         API_Menus.getMenusChildren(parent_id).then(response => {
-          this.meuns = response
+          this.menus = response
         })
       }
     }

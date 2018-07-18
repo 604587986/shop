@@ -72,7 +72,8 @@ export function cancleOrder(order_sn) {
 export function getSettlementList(params) {
   return request({
     url: 'order/bills',
-    method: 'get'
+    method: 'get',
+    loading: false
   })
 }
 
