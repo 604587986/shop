@@ -8,7 +8,7 @@
             <b>{{ trade_sn || order_sn }}</b>
           </nuxt-link>
         </h2>
-        <h2>{{ online ? '在线支付' : '货到付款' }}
+        <h2>{{ !order ? '' : order.pay_type_text === 'ONLINE' ? '在线支付：' : '货到付款：' }}
           <span v-if="order">￥{{ order.need_pay_price | unitPrice }}</span>
           <span v-else>加载中...</span>
           <i>元</i>
@@ -28,7 +28,7 @@
             </h3>
           </div>
         </div>
-        <div v-if="online" class="cashier-tools">
+        <div v-if="order.pay_type_text === 'ONLINE'" class="cashier-tools">
           <div class="cashier-tools-inside">
             <div class="cashier-tools-title">
               <h3>支付平台</h3>
@@ -52,7 +52,7 @@
             <div class="alipay-right">
               <p>使用支付宝钱包扫一扫即可付款</p>
               <div class="pay-qrcode">
-                <iframe id="alipay-qrcode" type="text/html" class="alipay-qrcode" src="" frameborder="no"></iframe>
+                <iframe id="alipay-qrcode" type="text/html" class="alipay-qrcode" :src="payUrl" frameborder="no"></iframe>
               </div>
             </div>
           </div>
@@ -72,7 +72,7 @@
         </div>
         <div class="same-pay-way bank-pay paybtn">
           <nuxt-link v-if="!showPayBox" to="#">立即支付</nuxt-link>
-          <nuxt-link v-if="!online && showPayBox" :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
+          <nuxt-link v-if="!order.pay_type_text === 'ONLINE' && showPayBox" :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
         </div>
       </div>
     </div>
@@ -81,13 +81,13 @@
 
 <script>
   import * as API_Trade from '@/api/trade'
+  import request from '@/utils/request'
   export default {
     name: 'cashier',
     layout: 'full',
     middleware: 'auth-user',
     data() {
       return {
-        online: true, // true: 在线支付; false: 货到付款
         trade_sn: this.$route.query.trade_sn,
         order_sn: this.$route.query.order_sn,
         // 支付方式列表
@@ -99,7 +99,9 @@
         // 发起电脑支付url
         payUrl: 'javascript:;',
         // 支付方式代码
-        payment_plugin_id: ''
+        payment_plugin_id: '',
+        // 支付宝iframe内容
+        alipayIframeContent: ''
       }
     },
     mounted() {
@@ -129,11 +131,18 @@
         const sn = this.trade_sn || this.order_sn
         const client_type = 'PC'
         const payment_plugin_id = payment.plugin_id
-        const url = API_Trade.initiatePay(trade_type, sn, { client_type, pay_mode: 'normal', payment_plugin_id })
-        this.payUrl = url
+        // const url = API_Trade.initiatePay(trade_type, sn, { client_type, pay_mode: 'normal', payment_plugin_id })
+        // this.payUrl = url
         // if (payment_plugin_id === 'alipayDirectPlugin') {
         //   document.getElementById('alipay-qrcode').src = url
         // }
+        request({ url: 'http://192.168.2.14:7001/test/163' }).then(response => {
+          // this.alipayIframeContent = response
+          const iframe = document.getElementById('alipay-qrcode')
+          iframe.contentWindow.document.getElementsByTagName('html')[0].innerHTML = response
+          // contents().getElementsByTagName('html')
+          // console.log(response)
+        })
       },
       /** 发起电脑支付 */
       iniyiatePayByPc() {}
