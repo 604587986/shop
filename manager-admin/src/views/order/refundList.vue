@@ -235,7 +235,9 @@
         }
         const start_time = parseInt(range[0] / 1000)
         const end_time = parseInt(range[1] / 1000)
-        API_refund.exportRefundExcel(start_time, end_time).then(response => this.MixinExportFile(response, '售后订单'))
+        API_refund.exportRefundExcel(start_time, end_time).then(response => {
+          // to do somthing
+        })
       },
 
       /** 获取退款单列表数据 */
