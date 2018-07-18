@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getShopTraffic(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/page_view/shop',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/page_view/shop',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,15 +24,11 @@ export function getShopTraffic(params) {
  * @returns {Promise<any>}
  */
 export function getGoodsStatistics(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/page_view/goods',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/page_view/goods',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

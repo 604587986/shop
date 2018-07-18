@@ -95,10 +95,10 @@
         <el-form-item label="分组名称">
           <el-input v-model="goodsCatData.category_name" style="width: 100%;"></el-input>
         </el-form-item>
-        <el-form-item label="上级分组">
+        <el-form-item label="上级分组" v-show="goodsCatData.category_parent">
           <el-select v-model="goodsCatData.category_parent" placeholder="请选择" style="width: 100%;">
             <el-option
-              v-for="item in datafirst"
+              v-for="item in tableData"
               :key="item.shop_cat_id"
               :label="item.shop_cat_name"
               :value="item.shop_cat_id">
@@ -148,9 +148,6 @@
         /** 列表数据 */
         tableData: null,
 
-        /** 一级列表数据 */
-        datafirst: null,
-
         /** 分组更新弹框标题*/
         categorytitle: '增加分组',
 
@@ -159,9 +156,6 @@
 
         /** 显示新增/编辑分组弹框*/
         goodsCategoryShow: false,
-
-        /** 显示状态*/
-        showstatus: 1,
 
         /** 弹框数据*/
         goodsCatData: {

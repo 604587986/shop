@@ -10,7 +10,7 @@
         <div class="toolbar-btns">
           <div class="conditions">
             <span>消息类型:</span>
-            <el-select v-model="current_category" placeholder="请选择"  @change="handleChangeMsgCategory">
+            <el-select v-model="params.type" placeholder="请选择"  @change="handleChangeMsgCategory">
               <el-option
                 v-for="item in msg_categorys"
                 :key="item.msg_category_id"
@@ -20,12 +20,12 @@
             </el-select>
           </div>
           <el-button @click="handleDeleteAllMsgs" type="danger">全部删除</el-button>
-          <el-button @click="handleSignReadAllMsgs" type="primary">标记为已读</el-button>
+          <el-button @click="handleSignReadAllMsgs" v-if="isAllRead" type="primary">标记为已读</el-button>
         </div>
       </div>
       <template slot="table-columns">
         <el-table-column type="selection" width="55"/>
-        <el-table-column prop="msg_content" label="内容"/>
+        <el-table-column prop="notice_content" label="内容"/>
         <el-table-column label="发送时间" width="200" >
           <template slot-scope="scope">{{ scope.row.send_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
@@ -33,11 +33,11 @@
           <template slot-scope="scope">
             <el-button
               type="danger"
-              @click="handleDeleteMsgs(scope.row)">删除
+              @click="handleDeleteMsg(scope.row)">删除
             </el-button>
             <el-button
               type="primary"
-              v-if="!scope.row.is_read"
+              v-if="scope.row.is_read === 0"
               @click="handleSignRead(scope.row)">标记为已读
             </el-button>
           </template>
@@ -76,7 +76,8 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          type: ''
         },
 
         /** 列表数据 */
@@ -85,28 +86,25 @@
         /** 列表分页数据 */
         pageData: null,
 
-        /** 选中项的msg_id们 */
+        /** 选中项的ids */
         selectionids: [],
 
-        /** 消息类型*/
-        current_category: 0,
+        /** 是否全部已读 */
+        isAllRead: false,
 
         /** 消息类型列表 */
         msg_categorys: [
           {
-            /** 消息类型id*/
-            msg_category_id: 0,
-
-            /** 消息类型文本*/
+            msg_category_id: '',
             msg_category_label: '所有'
           }, {
-            msg_category_id: 1,
+            msg_category_id: 'GOODS',
             msg_category_label: '商品相关消息'
           }, {
-            msg_category_id: 2,
+            msg_category_id: 'ORDER',
             msg_category_label: '订单相关消息'
           }, {
-            msg_category_id: 3,
+            msg_category_id: 'AFTERSALE',
             msg_category_label: '售后相关消息'
           }
         ]
@@ -141,34 +139,34 @@
             data_total: response.data_total
           }
           this.tableData = response.data
+          this.isAllRead = this.tableData.every(key => {
+            return key.is_read === 0
+          })
         })
       },
 
       /** 改变分类*/
       handleChangeMsgCategory(val) {
-        this.current_category = val
         this.params = {
           ...this.params,
-          current_category: val
+          type: val
         }
         this.GET_MsgsList()
       },
 
       /** 获取选中项*/
       handleSelectionChange(val) {
-        this.selectionids = val.map(item => item.msg_id)
+        this.selectionids = val.map(item => item.id)
       },
 
       /** 删除消息 */
-      handleDeleteMsgs(row) {
+      handleDeleteMsg(row) {
         this.$confirm('确认删除此消息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.Delete_messages(row.msg_id)
-        }).catch(() => {
-          this.$message.info({ message: '已取消删除' })
+          this.Delete_messages(row.id)
         })
       },
 
@@ -192,7 +190,7 @@
 
       /** 标记为已读 */
       handleSignRead(row) {
-        this.signReadMsgs(row.msg_id)
+        this.signReadMsgs(row.id)
       },
 
       /** 标记为已读 批量*/
@@ -207,7 +205,7 @@
 
       /** 执行标记为已读*/
       signReadMsgs(ids) {
-        API_Messages.signMsgs(ids, {}).then(response => {
+        API_Messages.signMsgs(ids, {}).then(() => {
           this.GET_MsgsList()
         })
       }

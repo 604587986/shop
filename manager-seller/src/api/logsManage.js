@@ -10,14 +10,10 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getLogsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logs/list',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/logs/list',
+    method: 'get',
+    loading: false,
+    params
   })
 }

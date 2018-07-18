@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getGroupBuyGoodsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/group-buy-goods',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/group-buy-goods',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,14 +24,10 @@ export function getGroupBuyGoodsList(params) {
  * @returns {Promise<any>}
  */
 export function getGroupCateGoriesList() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/group-buy-cats',
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/group-buy-cats',
+    method: 'get',
+    loading: false
   })
 }
 
@@ -46,15 +38,11 @@ export function getGroupCateGoriesList() {
  * @returns {Promise<any>}
  */
 export function deleteGroupBuyGoods(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/group-buy-goods/${ids}`,
-      method: 'delete',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/group-buy-goods/${ids}`,
+    method: 'delete',
+    loading: false,
+    params
   })
 }
 
@@ -65,16 +53,12 @@ export function deleteGroupBuyGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function saveGroupBuyGoods(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/group-buy-goods/${ids}`,
-      method: 'put',
-      loading: false,
-      headers: { 'Content-Type': 'application/json' },
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/group-buy-goods/${ids}`,
+    method: 'put',
+    loading: false,
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 
@@ -84,16 +68,12 @@ export function saveGroupBuyGoods(ids, params) {
  * @returns {Promise<any>}
  */
 export function addGroupBuyGoods(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/group-buy-goods',
-      method: 'post',
-      loading: false,
-      headers: { 'Content-Type': 'application/json' },
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/group-buy-goods',
+    method: 'post',
+    loading: false,
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 
@@ -104,15 +84,11 @@ export function addGroupBuyGoods(params) {
  * @returns {Promise<any>}
  */
 export function getGroupBuyGoodsDetails(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/group-buy-goods/${ids}`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/group-buy-goods/${ids}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -122,15 +98,11 @@ export function getGroupBuyGoodsDetails(ids, params) {
  * @returns {Promise<any>}
  */
 export function getGroupBuyActivityList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/group-buy-goods/active',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/group-buy-goods/active',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

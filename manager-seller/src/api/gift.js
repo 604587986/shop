@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getGiftsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/full-discount-gifts',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/full-discount-gifts',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -29,14 +25,10 @@ export function getGiftsList(params) {
  * @returns {Promise<any>}
  */
 export function deleteGifts(ids) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/full-discount-gifts/${ids}`,
-      method: 'delete',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/full-discount-gifts/${ids}`,
+    method: 'delete',
+    loading: false
   })
 }
 
@@ -47,15 +39,11 @@ export function deleteGifts(ids) {
  * @returns {Promise<any>}
  */
 export function saveGifts(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/full-discount-gifts/${ids}`,
-      method: 'put',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/full-discount-gifts/${ids}`,
+    method: 'put',
+    loading: false,
+    data: params
   })
 }
 
@@ -65,15 +53,11 @@ export function saveGifts(ids, params) {
  * @returns {Promise<any>}
  */
 export function addGifts(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/full-discount-gifts',
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/full-discount-gifts',
+    method: 'post',
+    loading: false,
+    data: params
   })
 }
 
@@ -84,14 +68,10 @@ export function addGifts(params) {
  * @returns {Promise<any>}
  */
 export function getGiftDetails(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/full-discount-gifts/${id}`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/full-discount-gifts/${id}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }

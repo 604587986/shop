@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getHotGoodsNum(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/goods/order_num',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/goods/order_num',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,15 +24,11 @@ export function getHotGoodsNum(params) {
  * @returns {Promise<any>}
  */
 export function getHotGoodsNumPage(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/goods/order_num_page',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/goods/order_num_page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -46,15 +38,11 @@ export function getHotGoodsNumPage(params) {
  * @returns {Promise<any>}
  */
 export function getHotGoodsPrice(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/goods/order_price',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/goods/order_price',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -64,15 +52,11 @@ export function getHotGoodsPrice(params) {
  * @returns {Promise<any>}
  */
 export function getHotGoodsPricePage(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/statistics/goods/order_price_page',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/statistics/goods/order_price_page',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

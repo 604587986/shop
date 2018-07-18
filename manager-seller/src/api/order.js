@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getOrderList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/trade/orders',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/trade/orders',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,14 +24,10 @@ export function getOrderList(params) {
  * @returns {Promise<any>}
  */
 export function getOrderDetail(sn) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/trade/orders/${sn}`,
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/trade/orders/${sn}`,
+    method: 'get',
+    loading: false
   })
 }
 
@@ -45,15 +37,11 @@ export function getOrderDetail(sn) {
  * @returns {Promise<any>}
  */
 export function updateOrderPrice(sn, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/trade/orders/${sn}/price`,
-      method: 'put',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/trade/orders/${sn}/price`,
+    method: 'put',
+    loading: false,
+    data: params
   })
 }
 
@@ -64,15 +52,11 @@ export function updateOrderPrice(sn, params) {
  * @returns {Promise<any>}
  */
 export function updateConsigneeInfo(sn, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/trade/orders/${sn}/address`,
-      method: 'put',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/trade/orders/${sn}/address`,
+    method: 'put',
+    loading: false,
+    data: params
   })
 }
 
@@ -83,15 +67,11 @@ export function updateConsigneeInfo(sn, params) {
  * @returns {Promise<any>}
  */
 export function confirmGetAmount(sn, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/trade/orders/${sn}/pay`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/trade/orders/${sn}/pay`,
+    method: 'post',
+    loading: false,
+    data: params
   })
 }
 
@@ -102,15 +82,11 @@ export function confirmGetAmount(sn, params) {
  * @returns {Promise<any>}
  */
 export function deliveryGoods(sn, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/trade/orders/${sn}/delivery`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/trade/orders/${sn}/delivery`,
+    method: 'post',
+    loading: false,
+    data: params
   })
 }
 
@@ -120,15 +96,11 @@ export function deliveryGoods(sn, params) {
  * @returns {Promise<any>}
  */
 export function getLogisticsInfo(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/express`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/express`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -138,15 +110,11 @@ export function getLogisticsInfo(params) {
  * @returns {Promise<any>}
  */
 export function generateElectronicSurface(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/waybill`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/waybill`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -157,14 +125,10 @@ export function generateElectronicSurface(params) {
  * @returns {Promise<any>}
  */
 export function getStepList(ids) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/trade/orders/${ids}/flow`,
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/trade/orders/${ids}/flow`,
+    method: 'get',
+    loading: false
   })
 }
 

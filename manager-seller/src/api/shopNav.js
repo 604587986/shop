@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getShopNavList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/navigations',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/shops/navigations',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,12 +24,10 @@ export function getShopNavList(params) {
  * @returns {Promise<any>}
  */
 export function addShopNav(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/navigations',
-      method: 'post',
-      data: params
-    }).then(response => resolve(response))
+  return request({
+    url: '/shops/navigations',
+    method: 'post',
+    data: params
   })
 }
 
@@ -44,12 +38,10 @@ export function addShopNav(params) {
  * @returns {Promise<any>}
  */
 export function editShopNav(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/navigations/${id}`,
-      method: 'put',
-      data: params
-    }).then(response => resolve(response))
+  return request({
+    url: `/shops/navigations/${id}`,
+    method: 'put',
+    data: params
   })
 }
 
@@ -60,11 +52,9 @@ export function editShopNav(id, params) {
  * @returns {Promise<any>}
  */
 export function delShopNav(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/navigations/${id}`,
-      method: 'delete',
-      params
-    }).then(response => resolve(response))
+  return request({
+    url: `/shops/navigations/${id}`,
+    method: 'delete',
+    params
   })
 }

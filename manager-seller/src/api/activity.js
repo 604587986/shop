@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getFullCutActivityList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/full-discounts',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/full-discounts',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -30,14 +26,10 @@ export function getFullCutActivityList(params) {
  * @constructor
  */
 export function deleteFullCutActivity(ids) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/full-discounts/${ids}`,
-      method: 'delete',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/full-discounts/${ids}`,
+    method: 'delete',
+    loading: false
   })
 }
 
@@ -49,16 +41,12 @@ export function deleteFullCutActivity(ids) {
  * @constructor
  */
 export function addFullCutActivity(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/full-discounts',
-      method: 'post',
-      loading: false,
-      headers: { 'Content-Type': 'application/json' },
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/full-discounts',
+    method: 'post',
+    loading: false,
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 
@@ -70,16 +58,12 @@ export function addFullCutActivity(params) {
  * @constructor
  */
 export function saveFullCutActivity(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/full-discounts/${ids}`,
-      method: 'put',
-      loading: false,
-      headers: { 'Content-Type': 'application/json' },
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/full-discounts/${ids}`,
+    method: 'put',
+    loading: false,
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 
@@ -90,15 +74,11 @@ export function saveFullCutActivity(ids, params) {
  * @returns {Promise<any>}
  */
 export function getFullCutActivityDetails(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/full-discounts/${ids}`,
-      method: 'get',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/full-discounts/${ids}`,
+    method: 'get',
+    loading: false,
+    data: params
   })
 }
 
@@ -108,15 +88,11 @@ export function getFullCutActivityDetails(ids, params) {
  * @returns {Promise<any>}
  */
 export function getSingleCutActivityList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/minus',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/minus',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -127,15 +103,11 @@ export function getSingleCutActivityList(params) {
  * @returns {Promise<any>}
  */
 export function deleteSingleCutActivity(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/minus/${ids}`,
-      method: 'delete',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/minus/${ids}`,
+    method: 'delete',
+    loading: false,
+    data: params
   })
 }
 
@@ -145,16 +117,12 @@ export function deleteSingleCutActivity(ids, params) {
  * @returns {Promise<any>}
  */
 export function addSingleCutActivity(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/minus',
-      method: 'post',
-      loading: false,
-      headers: { 'Content-Type': 'application/json' },
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/minus',
+    method: 'post',
+    loading: false,
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 
@@ -165,16 +133,12 @@ export function addSingleCutActivity(params) {
  * @returns {Promise<any>}
  */
 export function saveSingleCutActivity(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/minus/${ids}`,
-      method: 'put',
-      loading: false,
-      headers: { 'Content-Type': 'application/json' },
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/minus/${ids}`,
+    method: 'put',
+    loading: false,
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 
@@ -185,15 +149,11 @@ export function saveSingleCutActivity(ids, params) {
  * @returns {Promise<any>}
  */
 export function getSingleCutActivityDetails(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/minus/${ids}`,
-      method: 'get',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/minus/${ids}`,
+    method: 'get',
+    loading: false,
+    data: params
   })
 }
 
@@ -203,15 +163,11 @@ export function getSingleCutActivityDetails(ids, params) {
  * @returns {Promise<any>}
  */
 export function getSecondHalfActivityList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/half-prices',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/half-prices',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -222,15 +178,11 @@ export function getSecondHalfActivityList(params) {
  * @returns {Promise<any>}
  */
 export function deleteSeconedHalfActivity(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/half-prices/${ids}`,
-      method: 'delete',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/half-prices/${ids}`,
+    method: 'delete',
+    loading: false,
+    data: params
   })
 }
 
@@ -240,16 +192,12 @@ export function deleteSeconedHalfActivity(ids, params) {
  * @returns {Promise<any>}
  */
 export function addSeconedHalfActivity(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/half-prices',
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/half-prices',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    loading: false,
+    data: params
   })
 }
 
@@ -260,16 +208,12 @@ export function addSeconedHalfActivity(params) {
  * @returns {Promise<any>}
  */
 export function saveSeconedHalfActivity(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/half-prices/${ids}`,
-      method: 'put',
-      headers: { 'Content-Type': 'application/json' },
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/half-prices/${ids}`,
+    method: 'put',
+    headers: { 'Content-Type': 'application/json' },
+    loading: false,
+    data: params
   })
 }
 
@@ -280,15 +224,11 @@ export function saveSeconedHalfActivity(ids, params) {
  * @returns {Promise<any>}
  */
 export function getSeconedHalfActivityDetails(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/half-prices/${ids}`,
-      method: 'get',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/half-prices/${ids}`,
+    method: 'get',
+    loading: false,
+    data: params
   })
 }
 

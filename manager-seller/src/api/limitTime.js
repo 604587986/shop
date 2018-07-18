@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getLimitTimeActivityList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/seckill-applys/seckill',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/seckill-applys/seckill',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,15 +24,11 @@ export function getLimitTimeActivityList(params) {
  * @returns {Promise<any>}
  */
 export function getLimitTimeGoodsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/seckill-applys',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/seckill-applys',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -47,15 +39,11 @@ export function getLimitTimeGoodsList(params) {
  * @returns {Promise<any>}
  */
 export function getLimitTimeActivityDetails(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/promotion/seckill-applys/${ids}/seckill`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/promotion/seckill-applys/${ids}/seckill`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -67,16 +55,12 @@ export function getLimitTimeActivityDetails(ids, params) {
  * @constructor
  */
 export function signUpLimitTimeActivity(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/promotion/seckill-applys',
-      method: 'post',
-      loading: false,
-      headers: { 'Content-Type': 'application/json' },
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/promotion/seckill-applys',
+    method: 'post',
+    loading: false,
+    headers: { 'Content-Type': 'application/json' },
+    data: params
   })
 }
 

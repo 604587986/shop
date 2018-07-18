@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getMsgsList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/messages/list',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/shops/shop-notice-logs',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -28,16 +24,11 @@ export function getMsgsList(params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function deleteMsgs(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/messages/${ids}`,
-      method: 'delete',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+export function deleteMsgs(ids) {
+  return request({
+    url: `/shops/shop-notice-logs/${ids}`,
+    method: 'delete',
+    loading: false
   })
 }
 
@@ -47,15 +38,10 @@ export function deleteMsgs(ids, params) {
  * @param params
  * @returns {Promise<any>}
  */
-export function signMsgs(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `http://www.andste.cc/mock/5aa72c080d9d060b4b99b45b/seller/message/sign/${ids}`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+export function signMsgs(ids) {
+  return request({
+    url: `/shops/shop-notice-logs/${ids}/read`,
+    method: 'put',
+    loading: false
   })
 }

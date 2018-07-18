@@ -41,13 +41,25 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-table-layout>
-
     <el-dialog title="发票详情" center :visible.sync="dialogReceiptVisible" width="550px">
       <div v-for="item in viewRectiptData" class="item-receipt">
-        <span class="item-receipt-label">{{ item.label }}</span>
+        <span class="item-recitem-receipt-labeleipt-label">{{ item.label }}</span>
         <span v-if="item.key === 'goods_price'" class="item-receipt-value">{{ item.value | unitPrice('￥') }}</span>
         <span v-else class="item-receipt-value">{{ item.value || '无' }}</span>
       </div>
+      <en-table-layout :tableData="goodsList">
+        <template slot="table-columns">
+          <el-table-column label="商品名称">
+            <template slot-scope="scope">
+              <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+            </template>
+          </el-table-column>
+          <el-table-column label="单价">
+            <template slot-scope="scope"> {{ scope.row.price }}</template>
+          </el-table-column>
+          <el-table-column  prop="" label="数量" />
+        </template>
+      </en-table-layout>
     </el-dialog>
   </div>
 </template>
@@ -58,6 +70,9 @@
     name: 'receiptHistory',
     data() {
       return {
+        /** 域名配置 */
+        HTTP_URL: `${process.env.HTTP_URL}/goods`,
+
         /** 列表loading状态 */
         loading: false,
 
@@ -75,6 +90,9 @@
 
         /** 当前查看的发票数据 */
         viewRectiptData: [],
+
+        /** 当前发票所关联的商品列表信息 */
+        goodsList: [],
 
         /** 查看发票详情 dialog */
         dialogReceiptVisible: false

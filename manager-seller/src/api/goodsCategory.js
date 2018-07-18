@@ -6,14 +6,10 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getGoodsCategoryList() {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/cats',
-      method: 'get',
-      loading: false
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/shops/cats',
+    method: 'get',
+    loading: false
   })
 }
 
@@ -25,13 +21,9 @@ export function getGoodsCategoryList() {
  */
 export function deleteGoodsCategory(params) {
   const ids = params.toString()
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/cats/${ids}`,
-      method: 'delete'
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/cats/${ids}`,
+    method: 'delete'
   })
 }
 
@@ -42,14 +34,10 @@ export function deleteGoodsCategory(params) {
  * @returns {Promise<any>}
  */
 export function addGoodsCategory(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/cats',
-      method: 'post',
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/shops/cats',
+    method: 'post',
+    data: params
   })
 }
 
@@ -60,14 +48,10 @@ export function addGoodsCategory(params) {
  * @constructor
  */
 export function updateGoodsCategory(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/cats/${ids}`,
-      method: 'put',
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/cats/${ids}`,
+    method: 'put',
+    data: params
   })
 }
 
@@ -78,15 +62,11 @@ export function updateGoodsCategory(ids, params) {
  * @returns {Promise<any>}
  */
 export function getGoodsCategoryLevelList(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/goods/category/${ids}/children`,
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/goods/category/${ids}/children`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 

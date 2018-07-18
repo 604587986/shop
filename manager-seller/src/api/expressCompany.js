@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getExpressCompanyList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/shops/logi-companies',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/shops/logi-companies',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -29,15 +25,11 @@ export function getExpressCompanyList(params) {
  * @returns {Promise<any>}
  */
 export function openExpressPower(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/logi-companies/${ids}`,
-      method: 'post',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/logi-companies/${ids}`,
+    method: 'post',
+    loading: false,
+    data: params
   })
 }
 
@@ -48,14 +40,10 @@ export function openExpressPower(ids, params) {
  * @returns {Promise<any>}
  */
 export function closeExpressPower(ids, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/shops/logi-companies/${ids}`,
-      method: 'delete',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/shops/logi-companies/${ids}`,
+    method: 'delete',
+    loading: false,
+    params
   })
 }

@@ -10,15 +10,11 @@ import request from '@/utils/request'
  * @returns {Promise<any>}
  */
 export function getConsultationList(params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: '/members/asks',
-      method: 'get',
-      loading: false,
-      params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: '/members/asks',
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -29,14 +25,10 @@ export function getConsultationList(params) {
  * @returns {Promise<any>}
  */
 export function replyConsultationList(id, params) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/members/asks/${id}/reply`,
-      method: 'put',
-      loading: false,
-      data: params
-    }).then(response => {
-      resolve(response)
-    })
+  return request({
+    url: `/members/asks/${id}/reply`,
+    method: 'put',
+    loading: false,
+    data: params
   })
 }
