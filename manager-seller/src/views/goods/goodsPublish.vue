@@ -124,7 +124,7 @@
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
                 class="avatar-uploader goods-images"
-                :action="BASE_IMG_URL"
+                :action="`${MixinUploadApi}?scene=goods`"
                 list-type="picture-card"
                 :file-list="baseInfoForm.goods_gallery_list"
                 :on-preview="handlePictureCardPreview"
@@ -431,9 +431,6 @@
       }
 
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=goods`,
-
         /** 店铺信息 */
         shopInfo: this.$store.getters.shopInfo,
 

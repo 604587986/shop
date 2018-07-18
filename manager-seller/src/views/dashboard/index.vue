@@ -13,7 +13,7 @@
             <el-upload
               class="upload-demo"
               style="display: none;"
-              :action="BASE_IMG_URL"
+              :action="`${MixinUploadApi}?scene=shop`"
               :limit="1"
               :file-list="fileList"
               :on-success="uploaded">
@@ -150,9 +150,6 @@ export default {
   },
   data() {
     return {
-      /** 图片服务器地址 */
-      BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=shop`,
-
       /** 加载中*/
       loading: false,
 

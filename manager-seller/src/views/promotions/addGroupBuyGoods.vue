@@ -62,7 +62,7 @@
       <el-form-item label="团购图片" prop="img_url">
         <el-upload
           class="upload-demo"
-          :action="BASE_IMG_URL"
+          :action="`${MixinUploadApi}?scene=goods`"
           :file-list="fileList"
           :on-remove="handleRemove"
           :on-success="handleSuccess"
@@ -236,9 +236,6 @@
       }
 
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=goods`,
-
         /** input框长度*/
         inputLength: 300,
 

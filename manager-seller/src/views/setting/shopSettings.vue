@@ -37,7 +37,7 @@
         <el-upload
           class="upload-demo"
           key="shop_logo"
-          :action="BASE_IMG_URL"
+          :action="`${MixinUploadApi}?scene=shop`"
           :on-success="uploadSuccessLogo"
           :file-list="fileList_logo"
           ref="fileList_logo"
@@ -54,7 +54,7 @@
           class="upload-demo"
           key="shop_banner"
           :on-success="uploadSuccessBanner"
-          :action="BASE_IMG_URL"
+          :action="`${MixinUploadApi}?scene=shop`"
           :file-list="fileList_banner"
           ref="fileList_banner"
           list-type="picture">
@@ -89,9 +89,6 @@
         }
       }
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=shop`,
-
         areasapi: `${process.env.BASE_API}/regions/@id/children`,
 
         /** 店铺信息*/

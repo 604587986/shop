@@ -45,7 +45,7 @@
                 class="avatar-uploader"
                 style="text-align: center; margin-top: 10px;"
                 :key="index"
-                :action="BASE_IMG_URL"
+                :action="`${MixinUploadApi}?scene=goods`"
                 :show-file-list="false"
                 :on-success="getImgUrl"
                 :on-progress="upLoading"
@@ -88,9 +88,6 @@
     },
     data() {
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=goods`,
-
         /** 表单数据*/
         skuForm: {},
 

@@ -22,7 +22,7 @@
       <el-form-item label="赠品图片：" prop="enable_img">
         <el-upload
           class="upload-demo"
-          :action="BASE_IMG_URL"
+          :action="`${MixinUploadApi}?scene=other`"
           :file-list="fileList"
           :on-success="uploadSuccess"
           list-type="picture">
@@ -114,9 +114,6 @@
         }, 500)
       }
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=other`,
-
         giftShow: false,
 
         /** 赠品编辑表单*/
