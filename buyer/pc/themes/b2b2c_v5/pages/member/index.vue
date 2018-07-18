@@ -131,13 +131,14 @@
               <div class="shop-goods swiper-container-shop">
                 <div class="swiper-wrapper">
                   <nuxt-link
-                    v-for="goods in item.goodsList"
+                    v-for="goods in item.goods"
                     :key="goods.goods_id"
                     :to="'/goods/' + goods.goods_id"
-                    :title="goods.name"
+                    :title="goods.goods_name"
                     class="swiper-slide"
                   >
-                    <img :src="goods.goods_image" :alt="goods.name" class="shop-goods-image">
+                    <img :src="goods.thumbnail" :alt="goods.goods_name" class="shop-goods-image">
+                    <span class="shop-goods-name">{{ goods.goods_name }}</span>
                   </nuxt-link>
                 </div>
                 <div class="swiper-button-prev swiper-button-white"></div>
@@ -153,6 +154,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import Swiper from 'swiper'
   import * as API_Order from '@/api/order'
   import * as API_Members from '@/api/members'
   export default {
@@ -164,27 +166,31 @@
         // 统计数量
         statisticsNum: {},
         // 订单状态数量
-        orderStatusNum: {}
+        orderStatusNum: {},
+        // 店铺收藏
+        shopCollectionData: ''
       }
     },
     mounted() {
-      this.$nextTick(this.initShopSwiper)
       !this.goodsCollectionData && this.getGoodsCollectionData()
-      !this.shopCollectionData && this.getShopCollectionData()
       this.GET_OrderStatusNum()
       this.GET_StatisticsNum()
+      // 获取订单数据
       API_Order.getOrderList().then(response => { this.orderData = response })
+      // 获取店铺收藏数据
+      API_Members.getShopCollection({ page_no: 1, page_size: 4 }).then(response => {
+        this.shopCollectionData = response
+        this.$nextTick(() => {
+          this.initShopSwiper()
+        })
+      })
     },
     computed: {
       ...mapGetters({
         user: 'user',
         cartSkuList: 'cart/skuList',
-        goodsCollectionData: 'collection/goodsCollectionData',
-        shopCollectionData: 'collection/shopCollectionData'
+        goodsCollectionData: 'collection/goodsCollectionData'
       })
-    },
-    watch: {
-      shopCollectionData: 'initShopSwiper'
     },
     methods: {
       /** 删除购物车货品 */
@@ -207,6 +213,15 @@
       },
       /** 初始化shopSwiper */
       initShopSwiper() {
+        this.shopSwiper = new Swiper('.swiper-container-shop', {
+          slidesPerView: 3,
+          slidesPerGroup: 3,
+          spaceBetween: 5,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          }
+        })
       },
       /** 获取订单状态数量 */
       GET_OrderStatusNum() {
@@ -219,12 +234,8 @@
         API_Members.getStatisticsNum().then(response => { this.statisticsNum = response })
       },
       ...mapActions({
-        /** 获取订单列表 */
-        getOrderData: 'order/getOrderDataAction',
         /** 获取商品收藏列表 */
         getGoodsCollectionData: 'collection/getGoodsCollectionDataAction',
-        /** 获取店铺收藏列表 */
-        getShopCollectionData: 'collection/getShopCollectionDataAction',
         /** 删除购物车货品 */
         deleteSkuItem: 'cart/deleteSkuItemAction',
         /** 删除商品收藏 */
@@ -522,12 +533,28 @@
     }
     .shop-goods {
       position: relative;
-      width: 359px - 124px;
-      padding: 5px 10px;
       overflow: hidden;
       user-select: none;
       &:hover {
         /deep/ .swiper-button-next, .swiper-button-prev { opacity: 1 }
+      }
+      .shop-goods-name {
+        display: block;
+        position: absolute;
+        z-index: 10;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        color: #fff;
+        height: 20px;
+        font-size: 12px;
+        line-height: 12px;
+        background-color: rgba(0,0,0,.5);
+        padding: 3px;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
     .shop-goods-image {
@@ -535,6 +562,7 @@
       height: 100%;
     }
     /deep/ .swiper-button-next, .swiper-button-prev {
+      z-index: 11;
       opacity: 0;
       width: 20px;
       height: 100%;
@@ -545,7 +573,7 @@
       transition: opacity .2s ease-in;
     }
     /deep/ .swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
-      opacity: 1;
+      display: none;
     }
     /deep/ .swiper-button-prev { left: 0 }
     /deep/ .swiper-button-next { right: 0 }
