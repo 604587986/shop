@@ -1,8 +1,8 @@
 <template>
   <div class="static-page-container">
-    <el-form ref="form" label-width="100px" style="width: 500px;">
-      <el-form-item label="静态页地址">
-        <el-input v-model="address">
+    <el-form :model="pageForm" :rules="pageRules" ref="pageForm" label-width="120px" style="width: 500px;">
+      <el-form-item label="静态页服务地址" prop="address">
+        <el-input v-model="pageForm.address">
           <el-button slot="append" icon="el-icon-check" @click="handleSaveAddress"></el-button>
         </el-input>
       </el-form-item>
@@ -13,14 +13,14 @@
         </el-checkbox-group>
         <el-button
           type="primary"
-          :disabled="status === 'doing'"
-          :loading="status === 'doing'"
+          :disabled="status === 'DOING'"
+          :loading="status === 'DOING'"
           @click="handleCreateStaticPage"
-        >{{ status === 'doing' ? '生成中' : '生成' }}</el-button>
+        >{{ status === 'DOING' ? '生成中' : '生成' }}</el-button>
       </el-form-item>
       <el-form-item label="">
         <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
-        <p class="progress-text">{{ status_text }}</p>
+        <p :class="['progress-text', status === 'EXCEPTION' && 'error']">{{ status_text }}</p>
       </el-form-item>
     </el-form>
   </div>
@@ -42,31 +42,44 @@
         percentage: 0,
         status: '',
         status_text: '',
-        address: '',
         checkAll: true,
         checkedPages: pageOptions,
         pages: pageOptions,
-        isIndeterminate: true
+        isIndeterminate: true,
+        task_id: 'PAGE_CREATE',
+        // 静态页 表单
+        pageForm: {
+          address: ''
+        },
+        // 静态页 表单规则
+        pageRules: {
+          address: [this.MixinRequired('静态页服务地址不能为空！')]
+        }
       }
     },
     created() {
       /** 检查是否有静态页生成任务 */
-      API_Task.hasTask('page_create').then(response => {
-        if (response.message === true) {
-          this.status = 'doing'
-          this.GET_Progress()
-        }
+      API_Task.hasTask(this.task_id).then(response => {
+        this.status = 'DOING'
+        this.GET_Progress()
       })
       /** 获取静态页生成地址 */
       API_StaticPage.getStaticPageAddress().then(response => {
-        this.address = response.message
+        this.pageForm.address = response.message
       })
     },
     methods: {
       /** 保存静态页地址 */
       handleSaveAddress() {
-        API_StaticPage.saveStaticPageAddress(this.address).then(response => {
-          this.$message.success('保存成功！')
+        this.$refs['pageForm'].validate((valid) => {
+          if (valid) {
+            API_StaticPage.saveStaticPageAddress(this.pageForm.address).then(response => {
+              this.$message.success('保存成功！')
+            })
+          } else {
+            this.$message.error('请输入静态页服务地址！')
+            return false
+          }
         })
       },
       handleCheckAllChange(val) {
@@ -94,15 +107,15 @@
       },
       /** 获取生成进度 */
       GET_Progress() {
-        API_Task.getProgressById('page_create').then(response => {
+        API_Task.getProgressById(this.task_id).then(response => {
           const { text, status, percentage } = response
           this.percentage = percentage
           this.status = status
           this.status_text = text
-          if (status === 'SUCCESS') {
-            this.$message.success('静态页生成完成！')
-          } else {
+          if (status === 'DOING') {
             setTimeout(this.GET_Progress, 1000)
+          } else if (status === 'SUCCESS') {
+            this.$message.success('静态页生成完成！')
           }
         })
       }
@@ -117,12 +130,11 @@
   }
   .progress-text {
     font-size: 14px;
+    &.error {
+      color: #f42424;
+    }
   }
   /deep/ .progress-box .el-progress-bar__inner {
-    -webkit-transition: width ease-in .2s;
-    -moz-transition: width ease-in .2s;
-    -ms-transition: width ease-in .2s;
-    -o-transition: width ease-in .2s;
     transition: width ease-in .2s;
   }
 </style>
