@@ -199,7 +199,7 @@
             <el-input  v-model.number="ConsigneeForm.ship_mobile" ></el-input>
           </el-form-item>
           <el-form-item label="配送地区：" prop="region" class="area-select">
-            <en-region-picker :api="areasapi" :default="areas" @changed="handleChangeArea"></en-region-picker>
+            <en-region-picker :api="MixinRegionApi" :default="areas" @changed="handleChangeArea"></en-region-picker>
           </el-form-item>
           <el-form-item label="详细地址：" prop="ship_addr" >
             <el-input  v-model="ConsigneeForm.ship_addr" ></el-input>
@@ -275,8 +275,6 @@
     },
     data() {
       return {
-        areasapi: `${process.env.BASE_API}/regions/@id/children`,
-
         /** 列表loading状态 */
         loading: false,
 

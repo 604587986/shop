@@ -13,7 +13,7 @@
       </el-form-item>
       <!--店铺地址-->
       <el-form-item label="店铺地址：" prop="shop_address">
-        <en-region-picker :api="areasapi" :default="areas" @changed="handleChange"></en-region-picker>
+        <en-region-picker :api="MixinRegionApi" :default="areas" @changed="handleChange"></en-region-picker>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
@@ -89,8 +89,6 @@
         }
       }
       return {
-        areasapi: `${process.env.BASE_API}/regions/@id/children`,
-
         /** 店铺信息*/
         shopDataForm: {
           /** 店铺ID */
