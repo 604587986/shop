@@ -67,7 +67,7 @@
           month: '',
           start_time: '',
           end_time: '',
-          circle: 'MONTH',
+          cycle_type: 'MONTH',
           order_status: 99,
           categroy: 0,
           seller_id: 0
@@ -89,7 +89,7 @@
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.circle = object.type
+        this.params.cycle_type = object.type
       },
 
       /** 获取销售收入统计 */

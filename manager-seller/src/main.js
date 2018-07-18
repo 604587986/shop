@@ -17,7 +17,10 @@ import './icons' // icon
 import './errorLog'// error log
 import './permission' // permission control
 
+// register global utility filters.
 import * as filters from './filters' // global filter
+// register global utility mixins.
+import mixin from './utils/mixin'
 
 Vue.use(Element, {
   size: 'small',
@@ -36,6 +39,8 @@ Vue.prototype.$http = axios
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+
+Vue.mixin(mixin)
 
 Vue.config.productionTip = false
 
