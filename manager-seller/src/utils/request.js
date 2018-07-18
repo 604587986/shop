@@ -56,8 +56,10 @@ service.interceptors.response.use(
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
     if (error_response.status === 403) fedLogOut()
-    let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
-    Vue.prototype.$message.error(error_data.message || _message)
+    if (error.config.message !== false) {
+      let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '网络错误，请稍后再试！'
+      Vue.prototype.$message.error(error_data.message || _message)
+    }
     return Promise.reject(error)
   }
 )

@@ -26,16 +26,6 @@ export const SET_REFRESH_TOKEN = 'SET_REFRESH_TOKEN'
 // 移除刷新令牌
 export const REMOVE_REFRESH_TOKEN = 'REMOVE_REFRESH_TOKEN'
 
-/** 收藏相关 */
-// 设置商品收藏
-export const SET_COLLECTION_GOODS = 'SET_COLLECTION_GOODS'
-// 删除商品收藏
-export const DELETE_COLLECTION_GOODS = 'DELETE_COLLECTION_GOODS'
-// 设置店铺收藏
-export const SET_COLLECTION_SHOP = 'SET_COLLECTION_SHOP'
-// 删除店铺收藏
-export const DELETE_COLLECTION_SHOP = 'DELETE_COLLECTION_SHOP'
-
 /** 购物车相关 */
 // 设置购物车数据
 export const SET_CART_DATA = 'SET_CART_DATA'

@@ -6,6 +6,7 @@
   >
     <template slot="table-columns">
       <el-table-column prop="time" :formatter="MixinUnixToDate" label="日期"/>
+      <el-table-column prop="operator" label="操作者"></el-table-column>
       <el-table-column prop="reason" label="明细"></el-table-column>
       <el-table-column label="等级积分">
         <template slot-scope="{ row }">

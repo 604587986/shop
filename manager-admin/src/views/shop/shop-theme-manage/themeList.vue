@@ -60,7 +60,7 @@
             :action="MixinUploadApi"
             :on-success="(res) => { shopThemeForm.image_path = res.url }"
             :on-remove="() => { shopThemeForm.image_path = '' }"
-            :file-list="shopThemeForm.image_path ? [{ name: 'image', url: shopThemeForm.image_path }] : []"
+            :file-list="shopThemeForm.image_path ? [{ name: '模板图片', url: shopThemeForm.image_path }] : []"
             list-type="picture"
           >
             <el-button size="small" type="primary">点击上传</el-button>
