@@ -26,14 +26,14 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <a target='_blank' href="http://v64.javamall.com.cn/">
+          <a target='_blank' :href="MixinBuyerDomain">
             <el-dropdown-item>
               浏览网站
             </el-dropdown-item>
           </a>
-          <span @click="changePassword">
+          <!--<span @click="changePassword">
             <el-dropdown-item>修改密码</el-dropdown-item>
-          </span>
+          </span>-->
           <span @click="logout">
             <el-dropdown-item divided>退出登录</el-dropdown-item>
           </span>
@@ -67,13 +67,13 @@
       toggleSideBar() {
         this.$store.dispatch('toggleSideBar')
       },
-      changePassword() {
-        this.$notify({
-          title: '提示',
-          message: '修改密码成功',
-          type: 'success'
-        })
-      },
+      // changePassword() {
+      //   this.$notify({
+      //     title: '提示',
+      //     message: '修改密码成功',
+      //     type: 'success'
+      //   })
+      // },
       logout() {
         this.$confirm('确定退出吗？', '提示', {
           confirmButtonText: '确定',
