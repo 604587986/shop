@@ -95,7 +95,7 @@
               class="goods-collection-item"
             >
               <nuxt-link :to="'/goods/' + item.goods_id">
-                <img :src="item.goods_image" :alt="item.name" class="goods-image">
+                <img :src="item.goods_img" :alt="item.name" class="goods-image">
               </nuxt-link>
               <span class="goods-name">{{ item.name }}</span>
               <div class="goods-price">
