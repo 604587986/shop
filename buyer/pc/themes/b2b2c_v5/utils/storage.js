@@ -5,15 +5,13 @@
 import Cookies from 'js-cookie'
 
 export default {
-  setItem: (key, value, options) => {
-    options = options || {}
-    if (!options.path) options.path = '/'
+  setItem: (key, value, options = {}) => {
     Cookies.set(key, value, options)
   },
   getItem: (key) => {
     return Cookies.get(key)
   },
-  removeItem: (key) => {
-    Cookies.remove(key)
+  removeItem: (key, options = {}) => {
+    Cookies.remove(key, options)
   }
 }
