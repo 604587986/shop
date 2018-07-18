@@ -130,7 +130,7 @@
               </div>
               <no-ssr>
                 <swiper :options="shopSwiperOptions" class="shop-goods swiper-container-shop">
-                  <swiper-slide v-for="goods in shop.goods" :key="goods.goods_id" class="goods-item">
+                  <swiper-slide v-for="goods in shop.goods_list" :key="goods.goods_id" class="goods-item">
                     <nuxt-link :to="'/goods/' + goods.goods_id" :title="goods.goods_name">
                       <img :src="goods.thumbnail" :alt="goods.goods_name" class="shop-goods-image">
                       <span class="shop-goods-name">{{ goods.goods_name }}</span>
@@ -533,6 +533,7 @@
     }
     .shop-goods {
       position: relative;
+      width: 377px - 124px;
       overflow: hidden;
       user-select: none;
       &:hover {

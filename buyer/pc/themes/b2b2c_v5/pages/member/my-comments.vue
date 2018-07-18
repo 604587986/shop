@@ -18,7 +18,7 @@
               <div>
                 <p>{{ comment.content }}</p>
                 <div v-if="comment.images && comment.images.length > 0" class="comment-gallery">
-                  <template v-for="(image, index) in comment.comment.images">
+                  <template v-for="(image, index) in comment.images">
                     <img :src="image" :key="index" class="comment-thumbnail">
                   </template>
                 </div>

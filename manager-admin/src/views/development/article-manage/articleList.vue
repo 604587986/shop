@@ -221,7 +221,7 @@
               API_Article.editArticle(article_id, this.articleForm).then(response => {
                 this.dialogVisible = false
                 this.$message.success('修改成功！')
-                this.MixinSetTableData(this.tableData, 'article_id', article_id, response)
+                this.GET_ArticleList()
               })
             } else {
               API_Article.addArticle(this.articleForm).then(() => {

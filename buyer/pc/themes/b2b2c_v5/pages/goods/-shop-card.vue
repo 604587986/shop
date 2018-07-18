@@ -64,7 +64,8 @@
       shopRegions() {
         if (!this.shopBaseInfo) return ''
         const d = this.shopBaseInfo
-        return `${d.shop_province}-${d.shop_city}-${d.shop_county}${d.shop_town ? ('-' + d.shop_town) : ''}`
+        return `${d.shop_province}-${d.shop_city}`
+        // return `${d.shop_province}-${d.shop_city}-${d.shop_county}${d.shop_town ? ('-' + d.shop_town) : ''}`
       },
       ...mapGetters(['user'])
     },
