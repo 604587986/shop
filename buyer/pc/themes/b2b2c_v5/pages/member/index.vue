@@ -95,9 +95,9 @@
               class="goods-collection-item"
             >
               <nuxt-link :to="'/goods/' + item.goods_id">
-                <img :src="item.goods_img" :alt="item.name" class="goods-image">
+                <img :src="item.goods_img" :alt="item.goods_name" class="goods-image">
               </nuxt-link>
-              <span class="goods-name">{{ item.name }}</span>
+              <span class="goods-name">{{ item.goods_name }}</span>
               <div class="goods-price">
                 <span>￥{{ item.goods_price | unitPrice }}</span>
                 <a href="javascript:;" class="delete-btn" @click="handleDeleteGoodsCollection(item)">删除</a>
@@ -182,13 +182,9 @@
         this.orderData = response
       })
       // 获取商品收藏
-      API_Members.getGoodsCollection({ page_no: 1, page_size: 8 }).then(response => {
-        this.goodsCollectionData = response
-      })
+      this.GET_GoodsCollection()
       // 获取店铺收藏数据
-      API_Members.getShopCollection({ page_no: 1, page_size: 4 }).then(response => {
-        this.shopCollectionData = response
-      })
+      this.GET_ShopCollection()
     },
     computed: {
       ...mapGetters({
@@ -206,13 +202,19 @@
       /** 删除商品收藏 */
       handleDeleteGoodsCollection(goods) {
         this.$confirm('确定要删除这个商品收藏吗？', () => {
-          this.deleteGoodsCollection(goods.goods_id).then(() => this.$message.success('删除成功！'))
+          API_Members.deleteGoodsCollection(goods.goods_id).then(() => {
+            this.$message.success('删除成功！')
+            this.GET_GoodsCollection()
+          })
         })
       },
       /** 删除店铺收藏 */
       handleDeleteShopCollection(shop) {
         this.$confirm('确定要取消关注这个店铺吗？', () => {
-          this.deleteShopCollection(shop.shop_id).then(() => this.$message.success('删除成功！'))
+          API_Members.deleteShopCollection(shop.shop_id).then(() => {
+            this.$message.success('取消成功！')
+            this.GET_ShopCollection()
+          })
         })
       },
       /** 获取订单状态数量 */
@@ -225,13 +227,21 @@
       GET_StatisticsNum() {
         API_Members.getStatisticsNum().then(response => { this.statisticsNum = response })
       },
+      /** 获取商品收藏 */
+      GET_GoodsCollection() {
+        API_Members.getGoodsCollection({ page_no: 1, page_size: 8 }).then(response => {
+          this.goodsCollectionData = response
+        })
+      },
+      /** 获取店铺收藏 */
+      GET_ShopCollection() {
+        API_Members.getShopCollection({ page_no: 1, page_size: 4 }).then(response => {
+          this.shopCollectionData = response
+        })
+      },
       ...mapActions({
         /** 删除购物车货品 */
-        deleteSkuItem: 'cart/deleteSkuItemAction',
-        /** 删除商品收藏 */
-        deleteGoodsCollection: 'collection/deleteGoodsCollectionAction',
-        /** 删除店铺收藏 */
-        deleteShopCollection: 'collection/deleteShopCollectionAction'
+        deleteSkuItem: 'cart/deleteSkuItemAction'
       })
     }
   }
