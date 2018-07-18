@@ -533,6 +533,7 @@
     }
     .shop-goods {
       position: relative;
+      width: 377px - 124px;
       overflow: hidden;
       user-select: none;
       &:hover {
