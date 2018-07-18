@@ -30,7 +30,7 @@
           <el-radio v-model="profileForm.sex" :label="1">男</el-radio>
           <el-radio v-model="profileForm.sex" :label="0">女</el-radio>
         </el-form-item>
-        <el-form-item label="生日" prop="birthday">
+        <el-form-item label="生日">
           <el-date-picker
             v-model="profileForm.birthday"
             type="date"
@@ -43,7 +43,7 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="地区" prop="region">
+        <el-form-item label="地区">
           <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="address">
@@ -83,29 +83,25 @@
         profileForm: JSON.parse(JSON.stringify(this.$store.state.user.user)) || {},
         /** 个人资料 表单规则 */
         profileRules: {
-          uname: [
-            this.MixinRequired('请输入真实姓名！'),
-            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
-          ],
           nickname: [
             this.MixinRequired('请输入昵称！'),
-            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
-          ],
-          birthday: [this.MixinRequired('请选择生日！')],
-          region: [this.MixinRequired('请选择地区！')],
-          address: [
-            this.MixinRequired('请输入详细地址！'),
-            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+            { validator: (rule, value, callback) => {
+              if (!RegExp.userName.test(value)) {
+                callback(new Error('只支持汉字、字母、数字、“-”、“_”的组合！'))
+              } else {
+                callback()
+              }
+            } }
           ],
           email: [
-            this.MixinRequired('请输入邮箱地址！'),
             { validator: (rule, value, callback) => {
-                if (!RegExp.email.test(value)) {
-                  callback(new Error('邮箱格式不正确！'))
-                } else {
-                  callback()
-                }
-              },
+              if (value === undefined || value === null || value === '') {
+                callback()
+              } else if (!RegExp.email.test(value)) {
+                callback(new Error('邮箱格式不正确！'))
+              } else {
+                callback()
+              } },
               trigger: 'blur'
             }
           ]

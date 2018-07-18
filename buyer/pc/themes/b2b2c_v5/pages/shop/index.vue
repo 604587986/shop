@@ -112,7 +112,9 @@
       },
       /** 获取店铺列表 */
       GET_ShopList() {
-        API_Shop.getShopList(this.params).then(response => {
+        const params = JSON.parse(JSON.stringify(this.params))
+        if (params.keyword) params.name = params.keyword
+        API_Shop.getShopList(params).then(response => {
           response.data && response.data.map(shop => {
             shop.goods_on = true
             return shop

@@ -47,16 +47,15 @@
           </a>
         </template>
       </el-table-column>
-      <!--<el-table-column prop="category_name" label="商品分类"/>-->
       <el-table-column prop="seller_name" label="店铺名称" width="150"/>
       <el-table-column label="商品价格" width="120">
         <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
       </el-table-column>
-      <el-table-column prop="market_enable" label="上架状态" width="80" :formatter="marketStatus"/>
-      <!--<el-table-column prop="brand_name" label="品牌"> </el-table-column>-->
+      <el-table-column label="商品状态" width="80" :formatter="marketStatus"/>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button
+            v-if="scope.row.is_auth === 1"
             size="mini"
             :type="scope.row.market_enable === 0 ? 'primary' : 'danger'"
             @click="handleOperateGoods(scope.$index, scope.row)">{{ scope.row.market_enable === 0 ? '上架' : '下架' }}</el-button>
@@ -143,13 +142,19 @@
               row.market_enable = 0
               this.$message.success('下架商品成功！')
             })
-          })
+          }).catch(() => {})
         }
       },
 
       /** 销售状态格式化 */
       marketStatus(row, column, cellValue) {
-        return row.market_enable === 1 ? '售卖中' : '已下架'
+        console.log(row.is_auth)
+        const { market_enable, is_auth } = row
+        if (is_auth === 1) {
+          return row.market_enable === 1 ? '售卖中' : '已下架'
+        } else {
+          return is_auth === 2 ? '审核拒绝' : '待审核'
+        }
       },
 
       /** 搜索事件触发 */

@@ -31,9 +31,22 @@
       <el-input
         type="textarea"
         :autosize="{ minRows: 2, maxRows: 4}"
-        placeholder="请输入内容"
+        placeholder="请输入网站描述"
         v-model="siteForm.descript"
         :maxlength="200"
+      >
+      </el-input>
+    </el-form-item>
+    <el-form-item label="站点是否开启" prop="siteon">
+      <el-radio v-model="siteForm.siteon" :label="1">开启</el-radio>
+      <el-radio v-model="siteForm.siteon" :label="0">关闭</el-radio>
+    </el-form-item>
+    <el-form-item label="加密密匙" prop="global_auth_key">
+      <el-input
+        type="textarea"
+        :autosize="{ minRows: 2, maxRows: 4}"
+        placeholder="请输入加密密匙"
+        v-model="siteForm.global_auth_key"
       >
       </el-input>
     </el-form-item>
@@ -47,6 +60,21 @@
         <img v-if="siteForm.logo" :src="siteForm.logo" class="site-logo-img">
         <i v-else class="el-icon-plus logo-uploader-icon"></i>
       </el-upload>
+    </el-form-item>
+    <el-form-item label="默认图片" prop="default_img">
+      <el-upload
+        class="site-logo"
+        :action="MixinUploadApi"
+        :show-file-list="false"
+        :on-success="(res) => { siteForm.default_img = res.url }"
+        :multiple="false">
+        <img v-if="siteForm.default_img" :src="siteForm.default_img" class="site-logo-img">
+        <i v-else class="el-icon-plus logo-uploader-icon"></i>
+      </el-upload>
+    </el-form-item>
+    <el-form-item label="测试模式" prop="test_mode">
+      <el-radio v-model="siteForm.test_mode" :label="1">开启</el-radio>
+      <el-radio v-model="siteForm.test_mode" :label="0">关闭</el-radio>
     </el-form-item>
     <el-form-item label="">
       <el-button type="primary" @click="submitForm">保存设置</el-button>
@@ -69,7 +97,9 @@
           title: [this.MixinRequired('网站标题不能为空！')],
           keywords: [{ type: 'array', required: true, message: '请至少添加一个关键词！', trigger: 'change' }],
           descript: [this.MixinRequired('网站描述不能为空！')],
-          logo: [this.MixinRequired('请上传网站LOGO！')]
+          logo: [this.MixinRequired('请上传网站LOGO！')],
+          siteon: [{ required: true, message: '请选择站点状态！', trigger: 'change' }],
+          test_mode: [{ required: true, message: '请选择站点模式！', trigger: 'change' }]
         },
         siteTagInputVisible: false,
         siteTagInputValue: ''

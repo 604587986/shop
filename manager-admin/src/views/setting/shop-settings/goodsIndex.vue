@@ -12,7 +12,7 @@
     >停止</el-button>
     <div class="progress-box">
       <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
-      <p>{{ status_text }}</p>
+      <p :class="['progress-text', status === 'EXCEPTION' && 'error']">{{ status_text }}</p>
     </div>
   </div>
 </template>
@@ -83,16 +83,14 @@
   .progress-box {
     width: 500px;
     margin-top: 20px;
-    p {
-      margin-top: 10px;
+    .progress-text {
       font-size: 14px;
+      &.error {
+        color: #f42424;
+      }
     }
   }
   /deep/ .progress-box .el-progress-bar__inner {
-    -webkit-transition: width ease-in .2s;
-    -moz-transition: width ease-in .2s;
-    -ms-transition: width ease-in .2s;
-    -o-transition: width ease-in .2s;
     transition: width ease-in .2s;
   }
 </style>

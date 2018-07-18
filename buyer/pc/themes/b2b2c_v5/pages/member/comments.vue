@@ -31,7 +31,7 @@
               <el-form-item :prop="'comments.' + index + '.content'" label="">
                 <el-input
                   type="textarea"
-                  :autosize="{ minRows: 3, maxRows: 3}"
+                  :autosize="{ minRows: 3, maxRows: 10 }"
                   :maxlength="300"
                   placeholder="请在此处输入您的评论"
                   v-model="comment.content">

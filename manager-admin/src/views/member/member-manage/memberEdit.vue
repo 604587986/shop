@@ -3,9 +3,6 @@
     <el-tabs type="border-card">
       <el-tab-pane label="编辑会员">
         <el-form :model="editMemberForm" :rules="editMemberRules" ref="editForm" inline label-width="100px">
-          <!--<el-form-item label="用户名" prop="username">
-            <el-input v-model="editMemberForm.username" :maxlength="20"></el-input>
-          </el-form-item>-->
           <el-form-item label="昵称" prop="nickname">
             <el-input v-model="editMemberForm.nickname" :maxlength="20"></el-input>
           </el-form-item>
@@ -54,14 +51,12 @@
         <member-list-order :member-id="member_id"/>
       </el-tab-pane>
       <el-tab-pane label="消费积分">
-        <!--// Andste_TODO 2018/7/16: 缺少获取消费积分接口，且如果填负数后台会报错-->
         <el-form :model="editPointForm" ref="editPointForm" label-width="100px">
           <el-form-item label="当前消费积分">
             {{ editPointForm.currentPoint }}
           </el-form-item>
           <el-form-item label="调整消费积分">
             <el-input-number v-model="editPointForm.changedPoint" :max="99999999"></el-input-number>
-            <p style="color: #d93700">默认为增加积分，减少积分请填负值。</p>
           </el-form-item>
         </el-form>
         <el-button type="primary" @click="handleSavePoint" class="save">保存修改</el-button>
@@ -155,8 +150,8 @@
         defaultRegion: null,
         // 编辑积分 表单
         editPointForm: {
-          currentPoint: 4399,
-          changedPoint: 4399
+          currentPoint: 0,
+          changedPoint: 0
         }
       }
     },
@@ -181,8 +176,10 @@
       },
       /** 保存积分 */
       handleSavePoint() {
-        API_Member.editMemberConsumPoint(this.member_id, this.editPointForm.changedPoint).then(() => {
+        const { changedPoint } = this.editPointForm
+        API_Member.editMemberConsumPoint(this.member_id, changedPoint).then(() => {
           this.$message.success('修改成功！')
+          this.editPointForm.currentPoint = changedPoint
         })
       },
       /** 获取会员详情 */
@@ -191,6 +188,8 @@
           response.birthday *= 1000
           response.region = response.town_id || response.county_id
           this.editMemberForm = response
+          this.editPointForm.currentPoint = response.consum_point
+          this.editPointForm.changedPoint = response.consum_point
           if (response.province_id) {
             this.defaultRegion = [response.province_id, response.city_id, response.county_id || -1, response.town_id || -1]
           }

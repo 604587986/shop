@@ -95,9 +95,9 @@
               class="goods-collection-item"
             >
               <nuxt-link :to="'/goods/' + item.goods_id">
-                <img :src="item.goods_image" :alt="item.name" class="goods-image">
+                <img :src="item.goods_img" :alt="item.goods_name" class="goods-image">
               </nuxt-link>
-              <span class="goods-name">{{ item.name }}</span>
+              <span class="goods-name">{{ item.goods_name }}</span>
               <div class="goods-price">
                 <span>￥{{ item.goods_price | unitPrice }}</span>
                 <a href="javascript:;" class="delete-btn" @click="handleDeleteGoodsCollection(item)">删除</a>
@@ -116,33 +116,30 @@
           <empty-member v-if="!shopCollectionData || shopCollectionData.data.length === 0">暂无收藏店铺</empty-member>
           <template v-else>
             <div
-              v-for="(item, index) in shopCollectionData.data"
+              v-for="(shop, index) in shopCollectionData.data"
               v-if="index < 4"
-              :key="item.shop_id"
+              :key="shop.shop_id"
               class="shop-collection-item"
             >
               <div class="shop-info">
-                <img :src="item.logo" :alt="item.shop_name" :title="item.shop_name">
+                <img :src="shop.logo" :alt="shop.shop_name" :title="shop.shop_name">
                 <div class="shop-btns">
                   <a href="javascript:;">进入店铺</a>
-                  <a href="javascript:;" @click="handleDeleteShopCollection(item)">取消关注</a>
+                  <a href="javascript:;" @click="handleDeleteShopCollection(shop)">取消关注</a>
                 </div>
               </div>
-              <div class="shop-goods swiper-container-shop">
-                <div class="swiper-wrapper">
-                  <nuxt-link
-                    v-for="goods in item.goodsList"
-                    :key="goods.goods_id"
-                    :to="'/goods/' + goods.goods_id"
-                    :title="goods.name"
-                    class="swiper-slide"
-                  >
-                    <img :src="goods.goods_image" :alt="goods.name" class="shop-goods-image">
-                  </nuxt-link>
-                </div>
-                <div class="swiper-button-prev swiper-button-white"></div>
-                <div class="swiper-button-next swiper-button-white"></div>
-              </div>
+              <no-ssr>
+                <swiper :options="shopSwiperOptions" class="shop-goods swiper-container-shop">
+                  <swiper-slide v-for="goods in shop.goods" :key="goods.goods_id" class="goods-item">
+                    <nuxt-link :to="'/goods/' + goods.goods_id" :title="goods.goods_name">
+                      <img :src="goods.thumbnail" :alt="goods.goods_name" class="shop-goods-image">
+                      <span class="shop-goods-name">{{ goods.goods_name }}</span>
+                    </nuxt-link>
+                  </swiper-slide>
+                  <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+                  <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
+                </swiper>
+              </no-ssr>
             </div>
           </template>
         </div>
@@ -164,27 +161,36 @@
         // 统计数量
         statisticsNum: {},
         // 订单状态数量
-        orderStatusNum: {}
+        orderStatusNum: {},
+        // 商品收藏
+        goodsCollectionData: '',
+        // 店铺收藏
+        shopCollectionData: '',
+        // 店铺商品swiper配置
+        shopSwiperOptions: {
+          slidesPerView: 3,
+          slidesPerGroup: 3,
+          spaceBetween: 5,
+        }
       }
     },
     mounted() {
-      this.$nextTick(this.initShopSwiper)
-      !this.goodsCollectionData && this.getGoodsCollectionData()
-      !this.shopCollectionData && this.getShopCollectionData()
       this.GET_OrderStatusNum()
       this.GET_StatisticsNum()
-      API_Order.getOrderList().then(response => { this.orderData = response })
+      // 获取订单数据
+      API_Order.getOrderList().then(response => {
+        this.orderData = response
+      })
+      // 获取商品收藏
+      this.GET_GoodsCollection()
+      // 获取店铺收藏数据
+      this.GET_ShopCollection()
     },
     computed: {
       ...mapGetters({
         user: 'user',
-        cartSkuList: 'cart/skuList',
-        goodsCollectionData: 'collection/goodsCollectionData',
-        shopCollectionData: 'collection/shopCollectionData'
+        cartSkuList: 'cart/skuList'
       })
-    },
-    watch: {
-      shopCollectionData: 'initShopSwiper'
     },
     methods: {
       /** 删除购物车货品 */
@@ -196,17 +202,20 @@
       /** 删除商品收藏 */
       handleDeleteGoodsCollection(goods) {
         this.$confirm('确定要删除这个商品收藏吗？', () => {
-          this.deleteGoodsCollection(goods.goods_id).then(() => this.$message.success('删除成功！'))
+          API_Members.deleteGoodsCollection(goods.goods_id).then(() => {
+            this.$message.success('删除成功！')
+            this.GET_GoodsCollection()
+          })
         })
       },
       /** 删除店铺收藏 */
       handleDeleteShopCollection(shop) {
         this.$confirm('确定要取消关注这个店铺吗？', () => {
-          this.deleteShopCollection(shop.shop_id).then(() => this.$message.success('删除成功！'))
+          API_Members.deleteShopCollection(shop.shop_id).then(() => {
+            this.$message.success('取消成功！')
+            this.GET_ShopCollection()
+          })
         })
-      },
-      /** 初始化shopSwiper */
-      initShopSwiper() {
       },
       /** 获取订单状态数量 */
       GET_OrderStatusNum() {
@@ -218,19 +227,21 @@
       GET_StatisticsNum() {
         API_Members.getStatisticsNum().then(response => { this.statisticsNum = response })
       },
+      /** 获取商品收藏 */
+      GET_GoodsCollection() {
+        API_Members.getGoodsCollection({ page_no: 1, page_size: 8 }).then(response => {
+          this.goodsCollectionData = response
+        })
+      },
+      /** 获取店铺收藏 */
+      GET_ShopCollection() {
+        API_Members.getShopCollection({ page_no: 1, page_size: 4 }).then(response => {
+          this.shopCollectionData = response
+        })
+      },
       ...mapActions({
-        /** 获取订单列表 */
-        getOrderData: 'order/getOrderDataAction',
-        /** 获取商品收藏列表 */
-        getGoodsCollectionData: 'collection/getGoodsCollectionDataAction',
-        /** 获取店铺收藏列表 */
-        getShopCollectionData: 'collection/getShopCollectionDataAction',
         /** 删除购物车货品 */
-        deleteSkuItem: 'cart/deleteSkuItemAction',
-        /** 删除商品收藏 */
-        deleteGoodsCollection: 'collection/deleteGoodsCollectionAction',
-        /** 删除店铺收藏 */
-        deleteShopCollection: 'collection/deleteShopCollectionAction'
+        deleteSkuItem: 'cart/deleteSkuItemAction'
       })
     }
   }
@@ -522,12 +533,28 @@
     }
     .shop-goods {
       position: relative;
-      width: 359px - 124px;
-      padding: 5px 10px;
       overflow: hidden;
       user-select: none;
       &:hover {
         /deep/ .swiper-button-next, .swiper-button-prev { opacity: 1 }
+      }
+      .shop-goods-name {
+        display: block;
+        position: absolute;
+        z-index: 10;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        color: #fff;
+        height: 20px;
+        font-size: 12px;
+        line-height: 12px;
+        background-color: rgba(0,0,0,.5);
+        padding: 3px;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
     .shop-goods-image {
@@ -535,6 +562,7 @@
       height: 100%;
     }
     /deep/ .swiper-button-next, .swiper-button-prev {
+      z-index: 11;
       opacity: 0;
       width: 20px;
       height: 100%;
@@ -545,7 +573,7 @@
       transition: opacity .2s ease-in;
     }
     /deep/ .swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
-      opacity: 1;
+      display: none;
     }
     /deep/ .swiper-button-prev { left: 0 }
     /deep/ .swiper-button-next { right: 0 }
