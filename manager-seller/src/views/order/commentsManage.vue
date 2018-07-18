@@ -111,12 +111,6 @@
       </div>
       <el-dialog title="回复评论" :visible.sync="replyCommentShow" width="30%">
         <el-form :model="commentForm">
-          <el-form-item label="审核" :label-width="formLabelWidth">
-            <el-radio-group v-model="commentForm.isPass">
-              <el-radio :label="1">通过</el-radio>
-              <el-radio :label="0">拒绝</el-radio>
-            </el-radio-group>
-          </el-form-item>
           <el-form-item label="评论内容" :label-width="formLabelWidth">
             <span>{{commentForm.comment_content}}</span>
           </el-form-item>
@@ -247,9 +241,6 @@
         commentForm: {
           /** 评论id */
           comment_id: '',
-
-          /** 是否通过 */
-          isPass: 1,
 
           /** 是否有图 */
           have_image: '',
