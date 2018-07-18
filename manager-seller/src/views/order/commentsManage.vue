@@ -58,7 +58,7 @@
           <tr class="bg-order">
             <!--商品名称-->
             <td colspan="4">
-              <a class="shop-name" target="_blank" :href="`${HTTP_URL}/${item.goods_id}`" style="color: #00a2d4;">{{ item.goods_name }}</a>
+              <a class="shop-name" target="_blank" :href="`${MixinBuyerDomain}/goods/${item.goods_id}`" style="color: #00a2d4;">{{ item.goods_name }}</a>
             </td>
           </tr>
           <tr>
@@ -189,9 +189,6 @@
     },
     data() {
       return {
-        /** 域名配置 */
-        HTTP_URL: `${process.env.HTTP_URL}/goods`,
-
         /** 当前面板 */
         activeName: 'commentlist',
 

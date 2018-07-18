@@ -176,7 +176,7 @@
             </el-table-column>
             <el-table-column label="商品名称">
               <template slot-scope="scope">
-                <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+                <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
               </template>
             </el-table-column>
             <el-table-column  prop="price" label="单价">
@@ -207,9 +207,6 @@
     },
     data() {
       return {
-        /** 域名配置 */
-        HTTP_URL: `${process.env.HTTP_URL}/goods`,
-
         /** 列表loading状态 */
         loading: false,
 
@@ -274,11 +271,11 @@
 
       /** 搜索事件触发 */
       searchEvent(data) {
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.params = {
           ...this.params,
-          keyword: data
+          order_sn: data
         }
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_RefundOrder()
       },
 
@@ -294,7 +291,6 @@
           this.params.start_time = this.advancedForm.refund_time_range[0].getTime() / 1000
           this.params.end_time = this.advancedForm.refund_time_range[1].getTime() / 1000
         }
-        delete this.params.keyword
         delete this.params.refund_time_range
         this.GET_RefundOrder()
       },

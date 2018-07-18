@@ -43,7 +43,6 @@
           </template>
         </el-table-column>
       </template>
-
       <el-pagination
         slot="pagination"
         v-if="pageData"
@@ -139,7 +138,7 @@
             data_total: response.data_total
           }
           this.tableData = response.data
-          this.isAllRead = this.tableData.every(key => {
+          this.isAllRead = this.tableData.some(key => {
             return key.is_read === 0
           })
         })

@@ -20,7 +20,7 @@
         </el-table-column>
         <el-table-column label="名称">
           <template slot-scope="scope">
-            <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+            <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
           </template>
         </el-table-column>
         <el-table-column label="价格" width="120">
@@ -82,9 +82,6 @@
     },
     data() {
       return {
-        /** 域名配置 */
-        HTTP_URL: `${process.env.HTTP_URL}/goods`,
-
         /** 列表loading状态 */
         loading: false,
 
