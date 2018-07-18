@@ -35,8 +35,7 @@
       :default-data="defaultImageData"
       @close="dialogImageShow = false"
       @confirm="handleImagePickerConfirm"
-      :limit="10"
-      multiple
+      :limit="1"
     />
     <en-goods-picker
       :api="goodsListApi"

@@ -100,8 +100,8 @@
       handleRejectGoods(index, row) {
         this.$confirm('确定要拒绝这个活动吗？', '提示', { type: 'warning' }).then(() => {
           const { act_id, gb_id } = row
-          API_Promotion.reviewGroupBuyGoods(act_id, { status: 0, gb_id }).then(() => {
-            this.$message.success('已拒绝通过！')
+          API_Promotion.reviewGroupBuyGoods(act_id, { status: 2, gb_id }).then(() => {
+            this.$message.success('已拒绝！')
             this.GET_GroupBuyGoodsList()
           })
         }).catch(() => {})
