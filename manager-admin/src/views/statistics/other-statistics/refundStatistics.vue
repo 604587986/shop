@@ -33,7 +33,7 @@
         params: {
           year: '',
           month: '',
-          circle: 'MONTH',
+          cycle_type: 'MONTH',
           categroy: 0,
           seller_id: 0
         }
@@ -55,13 +55,13 @@
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.circle = object.type
+        this.params.cycle_type = object.type
       },
       /** 获取退款金额统计 */
       GET_RefundStatistics() {
         this.loading = true
-        const { circle } = this.params
-        const date_type = circle === 'MONTH' ? '月' : '年'
+        const { cycle_type } = this.params
+        const date_type = cycle_type === 'MONTH' ? '月' : '年'
         API_Statistics.getRefundStatistics(this.params).then(response => {
           this.loading = false
           const { data, name, localName } = response.series
@@ -70,7 +70,7 @@
             titleText: `退款金额统计（${date_type}）`,
             tooltipFormatter: (params) => {
               params = params[0]
-              return `日期：${params.dataIndex + 1}${circle === 'MONTH' ? '日' : '月'}<br/>${params.marker}退款金额：￥${Foundation.formatPrice(params.value)}`
+              return `日期：${params.dataIndex + 1}${cycle_type === 'MONTH' ? '日' : '月'}<br/>${params.marker}退款金额：￥${Foundation.formatPrice(params.value)}`
             },
             xAxisData: xAxis,
             seriesName: '退款金额',
