@@ -65,6 +65,7 @@
               <img v-if="shopForm.legal_img" :src="shopForm.legal_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
+            <a v-if="shopForm.legal_img" :href="shopForm.legal_img" target="_blank" class="see-original">查看原图</a>
           </el-form-item>
           <br>
           <el-form-item label="营业执照" prop="licence_img">
@@ -76,6 +77,7 @@
               <img v-if="shopForm.licence_img" :src="shopForm.licence_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
+            <a v-if="shopForm.licence_img" :href="shopForm.licence_img" target="_blank" class="see-original">查看原图</a>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="组织机构信息" name="organization">
@@ -92,6 +94,7 @@
               <img v-if="shopForm.code_img" :src="shopForm.code_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
+            <a v-if="shopForm.code_img" :href="shopForm.code_img" target="_blank" class="see-original">查看原图</a>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="开户行银行许可证" name="bank">
@@ -117,6 +120,7 @@
               <img v-if="shopForm.bank_img" :src="shopForm.bank_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
+            <a v-if="shopForm.bank_img" :href="shopForm.bank_img" target="_blank" class="see-original">查看原图</a>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="税务登记证" name="taxes">
@@ -136,6 +140,7 @@
               <img v-if="shopForm.taxes_img" :src="shopForm.taxes_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
+            <a v-if="shopForm.taxes_img" :href="shopForm.taxes_img" target="_blank" class="see-original">查看原图</a>
           </el-form-item>
           <br>
           <el-form-item label="税务登记证" prop="taxes_certificate_img">
@@ -147,6 +152,7 @@
               <img v-if="shopForm.taxes_certificate_img" :src="shopForm.taxes_certificate_img" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
+            <a v-if="shopForm.taxes_certificate_img" :href="shopForm.taxes_certificate_img" target="_blank" class="see-original">查看原图</a>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="店铺信息" name="shop">
@@ -372,6 +378,8 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
     &:hover {
       border-color: #409eff
     }
@@ -404,4 +412,9 @@
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
   }
   /deep/ .form-item-cat .el-form-item__content { width: auto }
+  .see-original {
+    font-size: 12px;
+    color: #006db7;
+    &:hover { color: #F00 }
+  }
 </style>

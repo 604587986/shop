@@ -102,6 +102,7 @@
       // 如果没有地址，设置第一个为选中地址
       // 如果有地址，对比地址
       addressList: function (newVal) {
+        if (!newVal || !newVal.length) return
         if (!this.addressId) {
           this.handleSelectAddress(newVal[0], false)
         } else {
