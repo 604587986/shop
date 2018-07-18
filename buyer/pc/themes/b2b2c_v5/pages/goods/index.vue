@@ -43,30 +43,15 @@
           </div>
         </div>
       </div>
-      <div class="gl-select-condition">
-        <dl class="brand logo-brand">
+      <div v-if="selectorData" class="gl-select-condition">
+        <dl v-if="selectorData.brand" class="brand logo-brand">
           <dt>品牌:</dt>
           <dd>
             <div class="small-list brand-list">
               <ul class="show-logo">
-                <li class="">
-                  <a href="/goods?category=1&amp;brand=2" title="新农哥">
+                <li v-for="(brand, index) in selectorData.brand" :key="index">
+                  <a href="/goods?category=1&amp;brand=2" :title="brand.name">
                     <img class="lazy" src="http://static.v4.javamall.com.cn/attachment/brand/201202211143461491.jpg" data-original="http://static.v4.javamall.com.cn/attachment/brand/201202211143461491.jpg" alt="新农哥" style="display: block;">新农哥
-                  </a>
-                </li>
-                <li class="">
-                  <a href="/goods?category=1&amp;brand=11" title="德芙">
-                    <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/C13CB8F002EF4BEE82F4A9BA875FCB45.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/C13CB8F002EF4BEE82F4A9BA875FCB45.jpg" alt="德芙" style="display: block;">德芙
-                  </a>
-                </li>
-                <li class="">
-                  <a href="/goods?category=1&amp;brand=13" title="百事">
-                    <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/5D971CEA5BBC4892863D9BC707239661.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/5D971CEA5BBC4892863D9BC707239661.jpg" alt="百事" style="display: block;">百事
-                  </a>
-                </li>
-                <li class="">
-                  <a href="/goods?category=1&amp;brand=3" title="洽洽">
-                    <img class="lazy" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/46315F247154475CACA0A3287AF94B16.jpg" data-original="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/46315F247154475CACA0A3287AF94B16.jpg" alt="洽洽" style="display: block;">洽洽
                   </a>
                 </li>
               </ul>
@@ -196,6 +181,7 @@
     data() {
       return {
         goodsListData: '',
+        selectorData: '',
         page: {
           page_no: 1,
           page_size: 20
@@ -223,7 +209,8 @@
       GET_GoodsSelector() {
         const params = { ...this.page, ...this.params }
         API_Goods.getGoodsSelector(params).then(response => {
-          // console.log(response)
+          this.selectorData = response
+          console.log(response)
         })
       },
       /** 获取商品列表 */
@@ -577,7 +564,6 @@
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
-        overflow: hidden;
       }
       .gl-attribute {
         display: block;
