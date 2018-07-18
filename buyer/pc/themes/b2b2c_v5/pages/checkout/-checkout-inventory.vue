@@ -26,7 +26,7 @@
             <div class="title-item-inventory">优惠折扣</div>
             <div class="content-item-inventory">
               <p class="no-item-discount-inventory">您在该店铺还没有领到优惠劵，去&nbsp;
-                <nuxt-link :to="'/shop?shop_id=' + shop.seller_id" target="_blank" style="color: #005ea7;">店铺</nuxt-link>&nbsp;看看吧！
+                <nuxt-link :to="'/shop/' + shop.seller_id" target="_blank" style="color: #005ea7;">店铺</nuxt-link>&nbsp;看看吧！
               </p>
               <div style="clear: both;"></div>
             </div>
@@ -36,7 +36,7 @@
           <div class="gooods-inventory">
             <div class="title-item-inventory">
               <div class="store-name">店铺名称：
-                <nuxt-link :to="'/shop?shop_id=' + shop.seller_id" target="_blank">{{ shop.seller_name }}</nuxt-link>
+                <nuxt-link :to="'/shop/' + shop.seller_id" target="_blank">{{ shop.seller_name }}</nuxt-link>
               </div>
               <div class="store-total">
                 <div class="discount-store-total">优惠折扣： <span>-￥{{ shop.price.discount_price | unitPrice }}</span>

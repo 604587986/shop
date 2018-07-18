@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getExpressPlatformList(params) {
   return request({
-    url: 'systems/express-platform',
+    url: 'systems/express-platforms',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getExpressPlatformList(params) {
  */
 export function editExpressPlatform(bean, params) {
   return request({
-    url: `systems/express-platform/${bean}`,
+    url: `systems/express-platforms/${bean}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -37,7 +37,7 @@ export function editExpressPlatform(bean, params) {
  */
 export function getExpressPlatformDetail(bean) {
   return request({
-    url: `systems/express-platform/${bean}`,
+    url: `systems/express-platforms/${bean}`,
     method: 'get'
   })
 }
@@ -48,7 +48,7 @@ export function getExpressPlatformDetail(bean) {
  */
 export function openExpressPlatformById(bean) {
   return request({
-    url: `systems/express-platform/${bean}/open`,
+    url: `systems/express-platforms/${bean}/open`,
     method: 'put'
   })
 }

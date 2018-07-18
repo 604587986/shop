@@ -16,18 +16,6 @@ export function getValidateCodeUrl(scene, uuid) {
 }
 
 /**
- * 图片上传API
- * @type {string}
- */
-export const uploadApi = api.base + '/uploaders'
-
-/**
- * 地区选择API
- * @type {string}
- */
-export const regionApi = api.base + '/regions/@id/children'
-
-/**
  * 获取首页数据
  */
 export function getIndexData() {

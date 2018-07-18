@@ -36,9 +36,11 @@
       }
     },
     mounted() {
-      this.editor = window.UE.getEditor('editor', this.config)
-      this.editor.addListener('ready', () => {
-        this.editor.setContent(this.defaultMsg)
+      this.$nextTick(() => {
+        this.editor = window.UE.getEditor('editor', this.config)
+        this.editor.addListener('ready', () => {
+          this.editor.setContent(this.defaultMsg)
+        })
       })
     },
     methods: {

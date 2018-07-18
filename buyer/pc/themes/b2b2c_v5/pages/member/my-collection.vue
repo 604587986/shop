@@ -80,10 +80,9 @@
                   </div>
                   <div class="shop-other">
                     <p style="margin-bottom: 5px">店铺评分：</p>
-                    <!--// Andste_TODO 2018/7/18: 店铺评分没有参数-->
-                    <p>描述相符: 4.5</p>
-                    <p>服务态度: 4.5</p>
-                    <p>发货速度: 4.5</p>
+                    <p>描述相符: {{ shop.shop_description_credit }}</p>
+                    <p>服务态度: {{ shop.shop_service_credit }}</p>
+                    <p>发货速度: {{ shop.shop_delivery_credit }}</p>
                   </div>
                 </div>
               </div>
@@ -96,7 +95,7 @@
                 </div>
                 <no-ssr>
                   <swiper :options="shopSwiperOptions" class="shop-goods-list">
-                    <swiper-slide v-for="goods in shop.goods" :key="goods.goods_id" class="goods-item">
+                    <swiper-slide v-for="goods in shop.goods_list" :key="goods.goods_id" class="goods-item">
                       <div class="goods-image">
                         <nuxt-link :to="'/goods/' + goods.goods_id">
                           <img :src="goods.thumbnail" :alt="goods.goods_name">
