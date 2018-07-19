@@ -3,7 +3,6 @@ const webpack = require('webpack')
 module.exports = {
   env: {},
   head: {
-    title: 'Javashop多店铺示例商城',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
