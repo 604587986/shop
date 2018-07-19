@@ -255,7 +255,7 @@
               :key="index"
               :label="`${goods_params_list.param_name}：`"
               :prop="'goods_params_list.' + index + '.param_value'"
-              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' }">
+              :rules="goods_params_list.required === 1 ? {required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' } : {}">
               <el-input
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
