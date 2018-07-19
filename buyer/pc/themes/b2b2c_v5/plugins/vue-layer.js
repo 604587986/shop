@@ -26,6 +26,7 @@ const confirm = function (message, fn) {
   return window.layer.confirm(message || '确认这个操作吗？', {
     icon: 3,
     title: '提示',
+    area: ['275px'],
     closeBtn: 0,
     scrollbar: false
   }, function (index) {
