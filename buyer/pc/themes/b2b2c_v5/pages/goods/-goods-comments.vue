@@ -1,7 +1,7 @@
 <template>
   <div id="goods-comments" class="goods-comments">
     <div class="inner-comments">
-      好评率：<em>99%</em>
+      好评率：<em>{{ grade }}%</em>
     </div>
     <div v-if="comments" class="content-comments">
       <div v-for="comment in comments.data" :key="comment.ask_id" class="item-comments">
@@ -10,7 +10,10 @@
           <div class="name-comments" :title="comment.member_name">{{ comment.member_name }}</div>
         </div>
         <div class="cons-right">
-          <div class="time-cons">{{ comment.create_time | unixToDate }}</div>
+          <div class="time-cons">
+            <span class="grade">评价：<em>{{ comment.grade | filterGrade }}</em></span>
+            {{ comment.create_time | unixToDate }}
+          </div>
           <div class="box-cons">
             <p class="content-cons" v-html="comment.content.replace(/\n/g, '<br>')"></p>
             <!--// Andste_TODO 2018/7/18: 后续引入商品相册功能-->
@@ -53,7 +56,7 @@
   import * as API_Goods from '@/api/goods'
   export default {
     name: "goods-comments",
-    props: ['goods-id'],
+    props: ['goods-id', 'grade'],
     data() {
       return {
         params: {
@@ -65,6 +68,19 @@
     },
     mounted() {
       this.GET_GoodsComments()
+    },
+    filters: {
+      /** 评分 */
+      filterGrade(val) {
+        switch (val) {
+          case 'bad':
+            return '差评'
+          case 'neutral':
+            return '中评'
+          default:
+            return '差评'
+        }
+      }
     },
     methods: {
       /** 当页数发生改变时 */
@@ -121,10 +137,13 @@
       padding: 20px;
       background-color: #fafafa;
       .time-cons {
-        padding: 10px;
+        padding: 10px 10px 10px 0;
         text-align: right;
         font-size: 14px;
         border-bottom: 1px dashed #ccc;
+        .grade {
+          float: left;
+        }
       }
       .box-cons {
         width: 900px - 70px - 40px;

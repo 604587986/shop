@@ -42,7 +42,7 @@
               <!--商品参数-->
               <goods-params v-show="curTab === '规格参数'" :goods-params="goods.param_list"/>
               <!--商品评论-->
-              <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id"/>
+              <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id" :grade="goods.grade"/>
               <!--商品咨询-->
               <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
               <!--销售记录-->
