@@ -1,6 +1,6 @@
 <template>
   <el-form :model="goodsForm" :rules="goodsRules" ref="goodsForm" label-width="130px" style="width: 350px">
-    <el-form-item label="商家商品是否审核">
+    <el-form-item label="上架商品是否审核">
       <el-radio-group v-model="goodsForm.marcket_auth">
         <el-radio :label="1">是</el-radio>
         <el-radio :label="0">否</el-radio>
@@ -12,16 +12,6 @@
         <el-radio :label="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
-    <!--<el-form-item label="极小图片尺寸">
-      <el-input placeholder="10" size="small" v-model="goodsForm.tiny_width">
-        <template slot="prepend">宽</template>
-        <template slot="append">px</template>
-      </el-input>
-      <el-input placeholder="10" size="small" v-model="goodsForm.tiny_height">
-        <template slot="prepend">高</template>
-        <template slot="append">px</template>
-      </el-input>
-    </el-form-item>-->
     <el-form-item label="缩略图尺寸">
       <el-input placeholder="100" size="small" v-model="goodsForm.thumbnail_width">
         <template slot="prepend">宽</template>
@@ -69,8 +59,6 @@
         goodsForm: {
           marcket_auth: 1,
           update_auth: 1,
-          // tiny_width: 10,
-          // tiny_height: 10,
           thumbnail_width: 100,
           thumbnail_height: 100,
           small_width: 400,
