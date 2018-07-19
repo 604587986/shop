@@ -185,7 +185,7 @@ let areaHTML =
 					</div>\
 					<button type='button' class='btn btn-default'>添加</button>\
 					<div class='area-right'>\
-						<h3> <span id='cancelChooseAll'>取消全选</span> 已选省、市、区</h3>\
+						<h3> <span id='cancelChooseAll'>移除全部</span> 已选省、市、区</h3>\
 						<ul>\
 \
 						</ul>\
@@ -272,14 +272,16 @@ let bindEventListener = function() {
 
   // 地区全选事件
   areaDOM.find('#chooseAll').click(function() {
-    $('.depth-one>div.item').each(function() {
-      toggleSelectedStyle($(this).closest('li'))
+    $('.area-left .depth-one>div.item').each(function() {
+      if (!$(this).parent().hasClass('selected')) {
+        toggleSelectedStyle($(this).closest('li'))
+      }
     })
   })
 
   // 取消全选事件
   areaDOM.find('#cancelChooseAll').click(function() {
-    $('.delete').each(function() {
+    $('.area-right .delete').each(function() {
       appearanceAtLeft($(this).closest('li'))
     })
   })
