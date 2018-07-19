@@ -56,8 +56,8 @@
         <div class="base-info-item">
           <h4>基本信息</h4>
           <div>
-            <el-form-item class="auth-info" label="拒绝原因：" >
-              都是辣鸡
+            <el-form-item class="auth-info" label="拒绝原因：" v-if="baseInfoForm.is_auth === 2">
+              {{ baseInfoForm.auth_message }}
             </el-form-item>
             <el-form-item label="商品分类：" style="width: 100%; text-align: left;">
               <span>{{ activeCategoryName1 }}</span>
