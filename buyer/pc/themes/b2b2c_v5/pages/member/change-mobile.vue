@@ -71,6 +71,11 @@
   import { RegExp } from '~/ui-utils'
   export default {
     name: 'change-mobile',
+    head() {
+      return {
+        title: `更改手机号-${this.site.title}`
+      }
+    },
     data() {
       return {
         /** 步骤 */

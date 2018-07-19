@@ -48,6 +48,11 @@
         return item
       })
       return { categorys }
+    },
+    head() {
+      return {
+        title: `帮助中心-${this.site.title}`
+      }
     }
   }
 </script>

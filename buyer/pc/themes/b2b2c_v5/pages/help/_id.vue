@@ -21,6 +21,11 @@
       const article = await API_Article.getArticleDetail(params.id)
       return { article }
     },
+    head() {
+      return {
+        title: `${this.article.article_name}-${this.site.title}`
+      }
+    },
     computed: {
       categoryName() {
         const { categorys } = this.$parent

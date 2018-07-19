@@ -6,7 +6,12 @@
 
 <script>
   export default {
-    name: 'points-mall'
+    name: 'points-mall',
+    head() {
+      return {
+        title: `积分商城-${this.site.title}`
+      }
+    }
   }
 </script>
 

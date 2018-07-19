@@ -3,12 +3,9 @@ const webpack = require('webpack')
 module.exports = {
   env: {},
   head: {
-    title: 'Javashop多店铺示例商城',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'keywords', name: 'keywords', content: '最好的Java网店系统,Java多用户商城,Java商城定制开发' },
-      { hid: 'description', name: 'description', content: 'Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。' },
       { name: 'renderer', content: 'webkit' },
       { name: 'force-rendering', content: 'webkit' },
       { hid: 'X-UA-Compatible', 'http-equiv': 'X-UA-Compatible', content: 'IE=edge,chrome=1' }
@@ -59,7 +56,7 @@ module.exports = {
   },
   css: [
     '~assets/styles/normalize.css',
-    '~assets/styles/base.css',
+    '~assets/styles/base.scss',
     '~assets/styles/page-transletion.scss',
     'swiper/dist/css/swiper.css'
   ],

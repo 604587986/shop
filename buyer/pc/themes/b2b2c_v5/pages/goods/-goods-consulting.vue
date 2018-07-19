@@ -13,10 +13,10 @@
         <div class="cons-right">
           <div class="time-cons">{{ consult.create_time | unixToDate }}</div>
           <div class="box-cons">
-            <div class="content-cons">{{ consult.content }}</div>
+            <p class="content-cons" v-html="consult.content.replace(/\n/g, '<br>')"></p>
             <template v-if="consult.reply_status === 1">
               <p>掌柜回复：</p>
-              <div class="reply-cons">{{ consult.reply }}</div>
+              <pre class="reply-cons">{{ consult.reply }}</pre>
             </template>
           </div>
         </div>
@@ -71,8 +71,9 @@
           scrollbar: false
         }, (value, index, elem) => {
           if (!value.trim()) return false
-          layer.close(index)
+          value.replace(/\n/g, '<br>')
           API_Members.consultating(this.goodsId, value).then(() => {
+            layer.close(index)
             this.$message.success('提交成功！')
             this.GET_Consulting()
           })
@@ -97,7 +98,7 @@
       border: 1px solid #d7d7d7;
       height: 67px;
       padding: 10px 10px 20px 10px;
-      background: url(~/assets/images/icon-goods-consulting-tip.png) no-repeat 10px 10px;
+      background: url(../../assets/images/icon-goods-consulting-tip.png) no-repeat 10px 10px;
     }
     .consu-tip {
       color: #9b827d;

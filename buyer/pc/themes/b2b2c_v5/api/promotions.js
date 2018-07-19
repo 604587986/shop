@@ -28,12 +28,13 @@ export function getGroupBuyCategorys() {
 
 /**
  * 获取团购商品
- * @param cat_id
+ * @param params
  */
-export function getGroupBuyGoods(cat_id) {
+export function getGroupBuyGoods(params) {
   return request({
     url: `promotions/group-buy/goods`,
-    method: Method.GET
+    method: Method.GET,
+    params
   })
 }
 

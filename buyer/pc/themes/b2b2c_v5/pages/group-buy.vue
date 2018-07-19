@@ -18,6 +18,11 @@
   import * as API_Promotions from '@/api/promotions'
   export default {
     name: 'group-buy',
+    head() {
+      return {
+        title: `团购-${this.site.title}`
+      }
+    },
     data() {
       return {
         categorys: [

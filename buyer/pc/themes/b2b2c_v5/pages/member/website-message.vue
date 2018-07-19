@@ -40,6 +40,11 @@
   import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'website-message',
+    head() {
+      return {
+        title: `站内消息-${this.site.title}`
+      }
+    },
     data() {
       return {
         params: {

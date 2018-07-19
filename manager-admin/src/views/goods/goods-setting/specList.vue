@@ -269,7 +269,7 @@
         API_spec.deleteSpecs(ids).then(response => {
           this.$message.success('删除成功！')
           this.GET_SpecsList()
-        }).catch(error => console.log(error))
+        })
       }
     }
   }

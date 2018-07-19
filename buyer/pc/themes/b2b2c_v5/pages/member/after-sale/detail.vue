@@ -9,11 +9,11 @@
         <dl><dt>申请售后原因：</dt><dd>{{ detail.refund_reason }}</dd></dl>
         <dl><dt>申请售后详细描述：</dt><dd>{{ detail.finance_remark }}</dd></dl>
         <dl><dt>退款方式：</dt><dd>{{ detail.account_type_text }}</dd></dl>
-        <dl><dt>申请售后金额：</dt><dd>2449</dd></dl>
+        <dl><dt>申请售后金额：</dt><dd>￥{{ detail.refund_price | unitPrice }}</dd></dl>
       </div>
     </div>
     <div v-if="sku" class="goods-list">
-      <sku-list :skuList="[sku]" num="return_num"></sku-list>
+      <sku-list :skuList="sku" num="return_num"></sku-list>
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@
       GET_AfterSaleDetail() {
         API_AfterSale.getAfterSaleDetail(this.sn).then(response => {
           this.detail = response.refund
-          this.sku = response.refund_goods_do
+          this.sku = response.refund_goods
         })
       }
     }

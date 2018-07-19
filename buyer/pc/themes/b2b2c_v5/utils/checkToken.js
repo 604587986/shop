@@ -62,7 +62,7 @@ export default function checkToken(options) {
      * 如果没有needToken，说明不需要等待获取到新的accessToken后再请求。
      * 否则，需要等待
      */
-    if (!accessToken && user && refreshToken) {
+    if (!accessToken && refreshToken) {
       /**
        * 如果没有刷新token锁，需要刷新token。
        * 如果有刷新token锁，则进入循环检测。

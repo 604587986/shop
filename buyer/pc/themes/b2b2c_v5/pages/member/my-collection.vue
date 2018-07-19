@@ -142,6 +142,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-collection',
+    head() {
+      return {
+        title: `我的收藏-${this.site.title}`
+      }
+    },
     data() {
       let hash = this.$route.hash
       if (hash) hash = hash.match(/#(\w+)/)[1]

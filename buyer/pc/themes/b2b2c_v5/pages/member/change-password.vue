@@ -58,6 +58,11 @@
   import { RegExp } from '~/ui-utils'
   export default {
     name: 'change-password',
+    head() {
+      return {
+        title: `修改密码-${this.site.title}`
+      }
+    },
     data() {
       return {
         /** 步骤 */

@@ -358,8 +358,7 @@ export const asyncRouterMap = [
         meta: { title: 'messageSettings' },
         children: [
           { path: 'shop', component: () => import('@/views/setting/message-settings/shopMessage'), name: 'shopMessageSettings', meta: { title: 'shopMessage' }},
-          { path: 'member', component: () => import('@/views/setting/message-settings/memberMessage'), name: 'memberMessageSettings', meta: { title: 'memberMessage' }},
-          { path: 'other', component: () => import('@/views/setting/message-settings/otherMessage'), name: 'otherMessageSettings', meta: { title: 'otherMessage' }}
+          { path: 'member', component: () => import('@/views/setting/message-settings/memberMessage'), name: 'memberMessageSettings', meta: { title: 'memberMessage' }}
         ]
       },
       {

@@ -53,6 +53,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'account-binding',
+    head() {
+      return {
+        title: `账号绑定-${this.site.title}`
+      }
+    },
     mounted() {
       API_Members.getAccountBinder().then(response => {
         console.log(response)

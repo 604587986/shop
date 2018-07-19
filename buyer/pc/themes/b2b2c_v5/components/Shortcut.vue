@@ -89,6 +89,14 @@
   import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'EnShortcut',
+    head() {
+      return {
+        meta: [
+          { hid: 'keywords', name: 'keywords', content: this.site.keywords },
+          { hid: 'description', name: 'description', content: `${this.site.descript}` }
+        ]
+      }
+    },
     data() {
       return {
         message_total: 0
