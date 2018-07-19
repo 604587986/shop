@@ -27,9 +27,9 @@
   export default {
     name: 'index',
     async asyncData() {
-      const floor = API_Home.getFloorData()
+      const floor = await API_Home.getFloorData()
       return {
-        floorList: floor.page_data ? global.JSON.parse(response.page_data) : []
+        floorList: floor.page_data ? global.JSON.parse(floor.page_data) : []
       }
     },
     head() {
