@@ -148,7 +148,6 @@
 
       /** 销售状态格式化 */
       marketStatus(row, column, cellValue) {
-        console.log(row.is_auth)
         const { market_enable, is_auth } = row
         if (is_auth === 1) {
           return row.market_enable === 1 ? '售卖中' : '已下架'

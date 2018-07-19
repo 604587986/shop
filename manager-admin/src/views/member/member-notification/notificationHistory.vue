@@ -177,7 +177,7 @@
               this.dialogVisible = false
               this.$message.success('发布成功！')
               this.GET_NotificationList()
-            }).catch(error => console.log(error))
+            })
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
