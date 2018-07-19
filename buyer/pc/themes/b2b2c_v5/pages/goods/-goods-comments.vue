@@ -12,7 +12,7 @@
         <div class="cons-right">
           <div class="time-cons">{{ comment.create_time | unixToDate }}</div>
           <div class="box-cons">
-            <pre class="content-cons">{{ comment.content }}</pre>
+            <p class="content-cons" v-html="comment.content.replace('\n', '<br>')"></p>
             <!--// Andste_TODO 2018/7/18: 后续引入商品相册功能-->
             <div v-if="comment.images && comment.images.length" class="comment-images">
               <a

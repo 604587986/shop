@@ -13,7 +13,7 @@
         <div class="cons-right">
           <div class="time-cons">{{ consult.create_time | unixToDate }}</div>
           <div class="box-cons">
-            <pre class="content-cons">{{ consult.content }}</pre>
+            <p class="content-cons" v-html="consult.content.replace('\n', '<br>')"></p>
             <template v-if="consult.reply_status === 1">
               <p>掌柜回复：</p>
               <pre class="reply-cons">{{ consult.reply }}</pre>

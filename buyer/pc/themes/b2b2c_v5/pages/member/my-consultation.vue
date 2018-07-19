@@ -17,7 +17,7 @@
               <div class="comment-content">
                 <strong>咨询内容：</strong>
                 <div>
-                  <p>{{ consultation.content }}</p>
+                  <p v-html="consultation.content.replace('\n', '<br>')"></p>
                 </div>
               </div>
               <div class="comment-content seller-reply">

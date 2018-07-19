@@ -16,7 +16,7 @@
             <div class="comment-body">
               <strong>我的评论：</strong>
               <div>
-                <pre v-html="comment.content"></pre>
+                <p v-html="comment.content.replace('\n', '<br>')"></p>
                 <div v-if="comment.images && comment.images.length > 0" class="comment-gallery">
                   <a v-for="(image, index) in comment.images" :key="index" :href="image" target="_blank">
                     <img :src="image" class="comment-thumbnail">
@@ -103,6 +103,10 @@
     overflow: hidden;
     padding: 10px;
     border-top: none;
+    strong {
+      width: 60px;
+      flex-shrink: 0;
+    }
     .comment-gallery {
       margin-top: 10px;
     }
