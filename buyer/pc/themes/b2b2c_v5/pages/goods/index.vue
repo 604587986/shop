@@ -180,7 +180,7 @@
     name: 'goods-list',
     head() {
       return {
-        title: `商品列表-￥${this.site.title}`
+        title: `商品列表-${this.site.title}`
       }
     },
     data() {
