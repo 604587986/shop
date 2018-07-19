@@ -27,15 +27,17 @@
         <a href="#" @mouseenter="card_news_tab_x = 0">商城公告</a>
         <a href="#" @mouseenter="card_news_tab_x = 70">联系方式</a>
         <div class="card-news-tab-active" :style="{transform: 'translateX('+ card_news_tab_x +'px)'}"></div>
-        <a href="#" class="card-news-more">更多</a>
+        <!--<a href="#" class="card-news-more">更多</a>-->
       </div>
       <div class="card-news-content">
         <div class="card-news-con-item" v-show="card_news_tab_x === 0">
           <ul>
-            <li class="news-item"><a href="">路由秒杀风暴，抢99减50神券</a></li>
-            <li class="news-item"><a href="">轮胎3送1每满500减50</a></li>
-            <li class="news-item"><a href="">春分保养领券最高减100</a></li>
-            <li class="news-item"><a href="">爆款手机立省800元</a></li>
+            <li
+              v-for="(notice, index) in mall_notices"
+              :key="index"
+              class="news-item">
+              <a href="javascript:;" @click="handleShowNotice(notice)">{{ notice.article_name }}</a>
+            </li>
           </ul>
         </div>
         <div class="card-news-con-item" v-show="card_news_tab_x === 70">
@@ -79,17 +81,41 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import * as API_Article from '@/api/article'
   import EnFace from '@/components/Face'
   export default {
     name: 'index-card',
     components: { EnFace },
     data() {
       return {
-        card_news_tab_x: 0
+        card_news_tab_x: 0,
+        mall_notices: [],
+        mall_promotions: []
       }
     },
     computed: {
       ...mapGetters(['user'])
+    },
+    mounted() {
+      API_Article.getArticlesByCategory('NOTICE').then(response => {
+        this.mall_notices = response
+      })
+    },
+    methods: {
+      /** 显示商城公告 */
+      handleShowNotice(notice) {
+        this.$layer.open({
+          type: 1,
+          skin: 'layer-skin-common',
+          title: notice.article_name,
+          area: ['500px', '350px'],
+          scrollbar: false,
+          shadeClose: true,
+          btn: ['确定'],
+          btnAlign: 'c',
+          content: `<div style="padding: 15px">${notice.content}</div>`
+        });
+      }
     }
   }
 </script>
@@ -212,7 +238,8 @@
       }
       .card-news-con-item {
         height: 100%;
-        overflow: hidden;
+        overflowx: hidden;
+        overflow-y: scroll;
       }
       .news-item {
         line-height: 22px;
