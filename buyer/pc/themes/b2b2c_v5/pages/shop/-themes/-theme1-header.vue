@@ -22,7 +22,6 @@
     <div class="shop-nav">
       <div class="w">
         <div class="item category">
-          <!--// Andste_TODO 2018/7/10: 分类未适配-->
           <h1>全部分类</h1>
           <div class="category-box">
             <div class="inner-category-box">
@@ -128,6 +127,7 @@
     }
     .item.category {
       position: relative;
+      display: inline-block;
       cursor: pointer;
       &:hover {
         .category-box {
