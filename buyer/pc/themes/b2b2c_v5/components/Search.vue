@@ -104,17 +104,17 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   #search {
     position: relative;
     .search-form {
-
     }
     .search-input {
       box-sizing: content-box;
       width: 378px;
       height: 14px;
       padding: 8px;
-      border: 2px solid #f42424;
+      border: 2px solid $color-main;
       outline: 0;
       font-size: 12px;
       float: left;
@@ -125,7 +125,7 @@
       height: 34px;
       line-height: 34px;
       padding: 0;
-      background-color: #f42424;
+      background-color: $color-main;
       font-size: 14px;
       cursor: pointer;
       float: left;
@@ -143,7 +143,7 @@
         border-bottom-left-radius: 0;
       }
       &.shop {
-        background-color: #b31919;
+        background-color: $color-main;
       }
     }
     .search-hot-keywords {
@@ -159,7 +159,7 @@
           display: block;
           color: #999;
           &:hover {
-            color: #e33333;
+            color: darken($color-main, 10%);
           }
         }
       }
