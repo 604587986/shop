@@ -231,15 +231,16 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   .have-account {
     font-size: 16px;
     float: right;
     margin-top: 24px;
     color: #999;
-    a { color: #f42424 }
+    a { color: $color-main }
   }
   .register-content {
-    border-top: 2px solid #f42424;
+    border-top: 2px solid $color-main;
     padding-top: 50px;
     margin-bottom: 50px;
   }
@@ -296,16 +297,17 @@
     .register-btn {
       width: 400px;
       height: 52px;
-      background-color: #f42424;
+      background-color: $color-main;
       color: #fff;
       font-size: 18px;
       cursor: pointer;
       border-radius: 2px;
-      &:hover { background-color: #d72121 }
+      &:hover { background-color: darken($color-main, 10%) }
     }
   }
 </style>
 <style type="text/scss" lang="scss">
+  @import "../assets/styles/color";
   .layer-register {
     .layui-layer-title {
       text-align: center;
@@ -325,8 +327,8 @@
       color: #999
     }
     .layui-layer-btn1 {
-      background-color: #f42424;
-      border-color: #f42424;
+      background-color: $color-main;
+      border-color: $color-main;
       color: #fff;
     }
   }
