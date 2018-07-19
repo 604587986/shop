@@ -178,6 +178,11 @@
   import * as API_Goods from '@/api/goods'
   export default {
     name: 'goods-list',
+    head() {
+      return {
+        title: `商品列表-￥${this.site.title}`
+      }
+    },
     data() {
       return {
         goodsListData: '',
