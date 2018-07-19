@@ -7,7 +7,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleReleaseNotification">发送</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleReleaseMessage">发送</el-button>
         </div>
       </div>
       <template slot="table-columns">
@@ -39,29 +39,29 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
-      <el-form :model="notificationForm" :rules="notificationRules" ref="notificationForm" label-width="100px">
+      <el-form :model="messageForm" :rules="messageRules" ref="messageForm" label-width="100px">
         <el-form-item label="消息标题" prop="title">
-          <el-input v-model="notificationForm.title" :maxlength="20" placeholder="标题在20字以内"></el-input>
+          <el-input v-model="messageForm.title" :maxlength="20" placeholder="标题在20字以内"></el-input>
         </el-form-item>
         <el-form-item label="消息内容" prop="content">
           <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="请输入消息内容"
-            v-model="notificationForm.content"
+            v-model="messageForm.content"
             :maxlength="2000">
           </el-input>
         </el-form-item>
         <el-form-item label="发送类型">
-          <el-radio-group v-model="notificationForm.send_type">
+          <el-radio-group v-model="messageForm.send_type">
             <el-radio :label="0">全站</el-radio>
             <el-radio :label="1">指定会员</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="notificationForm.send_type === 1" label="已选会员" prop="member_ids">
-          <template v-if="notificationForm.member_ids && notificationForm.member_ids.length">
+        <el-form-item v-show="messageForm.send_type === 1" label="已选会员" prop="member_ids">
+          <template v-if="messageForm.member_ids && messageForm.member_ids.length">
             <el-tag
-              v-for="(member, index) in notificationForm.member_ids"
+              v-for="(member, index) in messageForm.member_ids"
               :key="member.member_id"
               closable
               @close="handleRemoveMember(index)"
@@ -74,7 +74,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitNotificationForm('notificationForm')">确 定</el-button>
+        <el-button type="primary" @click="submitMessageForm('messageForm')">确 定</el-button>
       </span>
     </el-dialog>
     <en-member-picker
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-  import * as API_Notification from '@/api/notification'
+  import * as API_Message from '@/api/message'
 
   export default {
     name: 'notificationHistory',
@@ -104,12 +104,12 @@
         // 发布消息 dialog
         dialogVisible: false,
         // 发布消息 表单
-        notificationForm: {
+        messageForm: {
           send_type: 0,
           member_ids: []
         },
         // 发布消息 表单规则
-        notificationRules: {
+        messageRules: {
           title: [this.MixinRequired('请输入消息标题！')],
           content: [this.MixinRequired('请输入消息内容！')],
           member_ids: [{ type: 'array', required: false, message: '请至少选择一个会员！' }]
@@ -119,14 +119,14 @@
       }
     },
     mounted() {
-      this.GET_NotificationList()
+      this.GET_MessageList()
     },
     watch: {
-      'notificationForm.send_type': function(newVal) {
+      'messageForm.send_type': function(newVal) {
         this.memberPickerShow = !!newVal
-        this.notificationRules.member_ids[0].required = !!newVal
+        this.messageRules.member_ids[0].required = !!newVal
         if (newVal === 0) {
-          this.notificationForm.member_ids = []
+          this.messageForm.member_ids = []
         }
       }
     },
@@ -134,18 +134,18 @@
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_NotificationList()
+        this.GET_MessageList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_NotificationList()
+        this.GET_MessageList()
       },
 
       /** 发布消息 */
-      handleReleaseNotification() {
-        this.notificationForm = {
+      handleReleaseMessage() {
+        this.messageForm = {
           send_type: 0,
           member_ids: []
         }
@@ -154,29 +154,29 @@
 
       /** 选择会员回调 */
       handleMemberPickerConfirm(memberList) {
-        this.notificationForm.member_ids = memberList
+        this.messageForm.member_ids = memberList
       },
       /** 移除会员 */
       handleRemoveMember(index) {
-        const { member_ids } = this.notificationForm
+        const { member_ids } = this.messageForm
         member_ids.splice(index, 1)
-        this.$set(this.notificationForm, 'member_ids', member_ids)
+        this.$set(this.messageForm, 'member_ids', member_ids)
       },
 
       /** 发布消息 表单提交 */
-      submitNotificationForm(formName) {
+      submitMessageForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const params = this.MixinClone(this.notificationForm)
+            const params = this.MixinClone(this.messageForm)
             if (params.send_type === 1) {
               params.member_ids = params.member_ids.map(item => item.member_id)
             } else {
               delete params.member_ids
             }
-            API_Notification.releaseNotification(params).then(response => {
+            API_Message.releaseMessage(params).then(response => {
               this.dialogVisible = false
               this.$message.success('发布成功！')
-              this.GET_NotificationList()
+              this.GET_MessageList()
             })
           } else {
             this.$message.error('表单填写有误，请检查！')
@@ -186,9 +186,9 @@
       },
 
       /** 获取回收站会员列表 */
-      GET_NotificationList() {
+      GET_MessageList() {
         this.loading = true
-        API_Notification.getNotificationList(this.params).then(response => {
+        API_Message.getMessageList(this.params).then(response => {
           this.loading = false
           this.tableData = response
         }).catch(() => { this.loading = false })
