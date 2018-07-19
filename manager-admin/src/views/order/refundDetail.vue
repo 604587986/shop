@@ -16,11 +16,25 @@
         <el-col :span="4">退款方式</el-col><el-col :span="8">{{ refund.account_type_text }}</el-col>
         <el-col :span="4">售后状态</el-col><el-col :span="8">{{ refund.refund_status_text }}</el-col>
       </el-row>
-      <el-row :gutter="0">
-        <el-col :span="4">客户备注</el-col><el-col :span="20">{{ refund.customer_remark || '&nbsp;' }}</el-col>
+      <template v-if="refund.account_type === 'BANKTRANSFER'">
+        <el-row :gutter="0">
+          <el-col :span="4">银行名称</el-col><el-col :span="20">{{ refund.bank_name }}</el-col>
+        </el-row>
+        <el-row :gutter="0">
+          <el-col :span="4">银行开户行</el-col><el-col :span="20">{{ refund.bank_deposit_name }}</el-col>
+        </el-row>
+        <el-row :gutter="0">
+          <el-col :span="4">银行开户名</el-col><el-col :span="20">{{ refund.bank_account_name }}</el-col>
+        </el-row>
+        <el-row :gutter="0">
+          <el-col :span="4">银行账号</el-col><el-col :span="20">{{ refund.bank_account_number }}</el-col>
+        </el-row>
+      </template>
+      <el-row v-else :gutter="0">
+        <el-col :span="4">退款账户</el-col><el-col :span="20">{{ refund.return_account }}</el-col>
       </el-row>
       <el-row :gutter="0">
-        <el-col :span="4">退款账户</el-col><el-col :span="20">{{ refund.return_account }}</el-col>
+        <el-col :span="4">客户备注</el-col><el-col :span="20">{{ refund.customer_remark || '&nbsp;' }}</el-col>
       </el-row>
       <el-row :gutter="0">
         <el-col :span="4">审核操作</el-col>
