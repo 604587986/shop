@@ -11,17 +11,17 @@
           <div class="c-type">
             <div class="c-money">
               <span>￥</span>
-              <strong>{{ coupon.coupon_money }}</strong>
+              <strong>{{ coupon.coupon_price | unitPrice }}</strong>
             </div>
             <div class="c-limit">
-              满{{ coupon.coupon_limit_money }}可用
+              满￥{{ coupon.coupon_threshold_price | unitPrcie }}可用
             </div>
             <div class="c-time">
-              {{ coupon.coupon_start_date }} - {{ coupon.coupon_end_date }}
+              {{ coupon.start_time | unixToDate('yyyy-MM-dd') }} - {{ coupon.end_time | unixToDate('yyyy-MM-dd') }}
             </div>
           </div>
           <div class="c-othr">
-            <nuxt-link :to="'/shop/' + coupon.shop_id" class="use-btn">立即使用</nuxt-link>
+            <nuxt-link to="/goods" class="use-btn">立即使用</nuxt-link>
           </div>
         </li>
       </ul>
