@@ -16,7 +16,7 @@
             <div class="comment-body">
               <strong>我的评论：</strong>
               <div>
-                <p v-html="comment.content.replace('\n', '<br>')"></p>
+                <p v-html="comment.content.replace(/\n/g, '<br>')"></p>
                 <div v-if="comment.images && comment.images.length > 0" class="comment-gallery">
                   <a v-for="(image, index) in comment.images" :key="index" :href="image" target="_blank">
                     <img :src="image" class="comment-thumbnail">

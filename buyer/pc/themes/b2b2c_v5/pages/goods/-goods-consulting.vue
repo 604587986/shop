@@ -13,7 +13,7 @@
         <div class="cons-right">
           <div class="time-cons">{{ consult.create_time | unixToDate }}</div>
           <div class="box-cons">
-            <p class="content-cons" v-html="consult.content.replace('\n', '<br>')"></p>
+            <p class="content-cons" v-html="consult.content.replace(/\n/g, '<br>')"></p>
             <template v-if="consult.reply_status === 1">
               <p>掌柜回复：</p>
               <pre class="reply-cons">{{ consult.reply }}</pre>
@@ -71,7 +71,7 @@
           scrollbar: false
         }, (value, index, elem) => {
           if (!value.trim()) return false
-          value.replace('\n', '<br>')
+          value.replace(/\n/g, '<br>')
           API_Members.consultating(this.goodsId, value).then(() => {
             layer.close(index)
             this.$message.success('提交成功！')
