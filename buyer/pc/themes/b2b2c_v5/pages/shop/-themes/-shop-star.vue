@@ -35,5 +35,7 @@
 <style type="text/scss" lang="scss" scoped>
   .shop-star {
     display: inline-block;
+    position: relative;
+    top: -3px;
   }
 </style>
