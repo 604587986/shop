@@ -387,9 +387,6 @@
     .info-information {
       display: flex;
       justify-content: space-between;
-      .item {
-        width: 200px;
-      }
       h3 {
         font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
         font-size: 14px;
