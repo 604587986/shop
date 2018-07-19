@@ -45,6 +45,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-coupons',
+    head() {
+      return {
+        title: `我的优惠券-${this.site.title}`
+      }
+    },
     data() {
       return {
         coupons: '',

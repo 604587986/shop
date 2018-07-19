@@ -74,6 +74,11 @@
   import { RegExp } from '~/ui-utils'
   export default {
     name: 'my-profile',
+    head() {
+      return {
+        title: `我的资料-${this.site.title}`
+      }
+    },
     components: { EnRegionPicker },
     data() {
       return {

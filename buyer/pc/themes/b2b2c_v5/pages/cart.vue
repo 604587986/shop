@@ -133,6 +133,11 @@
     name: 'cart',
     layout: 'full',
     middleware: 'auth-user',
+    head() {
+      return {
+        title: `购物车-${this.site.title}`
+      }
+    },
     data() {
       return {
         /** 结算栏相对顶部高度 */

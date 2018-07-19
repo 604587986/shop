@@ -65,6 +65,11 @@
   import addressMixin from './addressMixin'
   export default {
     name: 'shipping-address',
+    head() {
+      return {
+        title: `我的收货地址-${this.site.title}`
+      }
+    },
     mixins: [addressMixin]
   }
 </script>

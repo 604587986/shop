@@ -67,6 +67,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-points',
+    head() {
+      return {
+        title: `我的积分${this.site.title}`
+      }
+    },
     data() {
       return {
         type: 1,

@@ -45,6 +45,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-comments',
+    head() {
+      return {
+        title: `我的评论-${this.site.title}`
+      }
+    },
     data() {
       return {
         comments: '',

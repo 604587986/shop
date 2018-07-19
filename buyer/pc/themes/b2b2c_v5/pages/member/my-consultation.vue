@@ -48,6 +48,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-consultation',
+    head() {
+      return {
+        title: `我的咨询-${this.site.title}`
+      }
+    },
     data() {
       return {
         consultation: '',
