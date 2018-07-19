@@ -106,7 +106,6 @@ export default {
     messageSettings: 'Message Settings',
     shopMessage: 'Shop Message',
     memberMessage: 'Member Message',
-    otherMessage: 'Other Message',
 
     pushSettings: 'Push Settings',
     goodsPush: 'Goods Push',
