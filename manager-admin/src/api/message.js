@@ -14,6 +14,7 @@ export function getMessageTemplate(params) {
   return request({
     url: 'systems/message-templates',
     method: 'get',
+    loading: false,
     params
   })
 }
@@ -26,7 +27,7 @@ export function getMessageTemplate(params) {
 export function editMessageTemplate(id, params) {
   return request({
     url: `systems/message-templates/${id}`,
-    method: 'get',
+    method: 'put',
     data: params
   })
 }
@@ -35,7 +36,7 @@ export function editMessageTemplate(id, params) {
  * 获取站内消息列表
  * @param params
  */
-export function getNotificationList(params) {
+export function getMessageList(params) {
   return request({
     url: 'systems/messages',
     method: 'get',
@@ -48,7 +49,7 @@ export function getNotificationList(params) {
  * 发布新的站内消息
  * @param params
  */
-export function releaseNotification(params) {
+export function releaseMessage(params) {
   return request({
     url: 'systems/messages',
     method: 'post',
