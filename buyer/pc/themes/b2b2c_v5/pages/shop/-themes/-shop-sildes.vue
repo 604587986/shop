@@ -14,12 +14,11 @@
 <script>
   import Vue from 'vue'
   import { Carousel, CarouselItem } from 'element-ui'
-  Vue.use(Carousel)
-  Vue.use(CarouselItem)
+  Vue.use(Carousel).use(CarouselItem)
   import * as API_Shop from '@/api/shop'
   export default {
     name: 'shop-sildes',
-    props: ['shopId'],
+    props: ['shop-id'],
     data() {
       return {
         sildes: []

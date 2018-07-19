@@ -93,13 +93,8 @@
         paramForm: {},
         /** 添加、编辑参数 规格 */
         paramsRules: {
-          param_name: [
-            { required: true, message: '请输入参数名称', trigger: 'blur' },
-            { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'blur' }
-          ],
-          options: [
-            { required: false, message: '请输入可选值', trigger: 'blur' }
-          ]
+          param_name: [this.MixinRequired('请输入参数名称！')],
+          options: [this.MixinRequired('请输入可选值！')]
         },
         /** 添加参数组 表单 */
         addGroupForm: {

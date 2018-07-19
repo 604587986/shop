@@ -48,10 +48,7 @@
   import Vue from 'vue'
   import { mapActions } from 'vuex'
   import { Button, Form, FormItem, Input } from 'element-ui'
-  Vue.use(Button)
-  Vue.use(Form)
-  Vue.use(FormItem)
-  Vue.use(Input)
+  Vue.use(Button).use(Form).use(FormItem).use(Input)
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Article from '@/api/article'
@@ -61,9 +58,13 @@
     name: 'register',
     components: { EnHeaderOther },
     layout: 'full',
+    async asyncData() {
+      const protocol = await API_Article.getArticleByPosition('REGISTRATION_AGREEMENT')
+      return { protocol }
+    },
     head() {
       return {
-        title: '会员注册-Javashop多店铺示例商城'
+        title: `会员注册-${this.site.title}`
       }
     },
     data() {
@@ -162,9 +163,25 @@
       }
     },
     mounted() {
-      API_Article.getArticleByPosition('REGISTRATION_AGREEMENT').then(response => {
-        console.log(response)
-      })
+      this.$layer.open({
+        type: 1,
+        skin: 'layer-register',
+        title: '注册协议',
+        area: ['800px', '600px'],
+        scrollbar: false,
+        btn: ['取消', '同意并继续'],
+        btnAlign: 'c',
+        yes: () => {
+          location.href = '/'
+        },
+        btn2: () => {
+          this.agreed = true
+        },
+        cancel: () => {
+          location.href = '/'
+        },
+        content: `<div style="padding: 15px">${this.protocol.content}</div>`
+      });
     },
     methods: {
       /** 获取图片验证码 */
@@ -191,6 +208,10 @@
       },
       /** 立即注册 */
       handleConfirmRegister() {
+        if (!this.agreed) {
+          this.$message.error('请先同意注册协议！')
+          return false
+        }
         this.$refs['registerForm'].validate(valide => {
           if (valide) {
             this.registerByMobile(this.registerForm).then(() => {
@@ -210,15 +231,16 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   .have-account {
     font-size: 16px;
     float: right;
     margin-top: 24px;
     color: #999;
-    a { color: #f42424 }
+    a { color: $color-main }
   }
   .register-content {
-    border-top: 2px solid #f42424;
+    border-top: 2px solid $color-main;
     padding-top: 50px;
     margin-bottom: 50px;
   }
@@ -275,12 +297,39 @@
     .register-btn {
       width: 400px;
       height: 52px;
-      background-color: #f42424;
+      background-color: $color-main;
       color: #fff;
       font-size: 18px;
       cursor: pointer;
       border-radius: 2px;
-      &:hover { background-color: #d72121 }
+      &:hover { background-color: darken($color-main, 10%) }
+    }
+  }
+</style>
+<style type="text/scss" lang="scss">
+  @import "../assets/styles/color";
+  .layer-register {
+    .layui-layer-title {
+      text-align: center;
+      font-size: 16px;
+    }
+    .layui-layer-content {
+      line-height: 30px;
+    }
+    .layui-layer-btn a {
+      min-width: 80px;
+      height: 35px;
+      line-height: 35px;
+    }
+    .layui-layer-btn0 {
+      background-color: #e3e4e5;
+      border-color: #e3e4e5;
+      color: #999
+    }
+    .layui-layer-btn1 {
+      background-color: $color-main;
+      border-color: $color-main;
+      color: #fff;
     }
   }
 </style>

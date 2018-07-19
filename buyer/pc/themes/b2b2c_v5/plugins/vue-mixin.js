@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import * as API_Common from '@/api/common'
-import { domain } from '~/ui-domain'
+import { domain, api } from '~/ui-domain'
 
 Vue.mixin({
   data() {
     return {
       // 图片上传API
-      MixinUploadApi: API_Common.uploadApi,
+      MixinUploadApi: `${api.base}/uploaders`,
       // 地区上传API
-      MixinRegionApi: API_Common.regionApi,
+      MixinRegionApi: `${api.base}/regions/@id/children`,
       // 域名
       MixinDomain: domain
     }
@@ -18,6 +18,10 @@ Vue.mixin({
     MixinForward() {
       const { forward } = this.$route.query
       return forward ? `?forward=${forward}` : ''
+    },
+    /** 站点信息 */
+    site() {
+      return this.$store.getters.site
     }
   },
   methods: {

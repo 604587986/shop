@@ -105,7 +105,6 @@ export default {
     messageSettings: '消息设置',
     shopMessage: '店铺消息',
     memberMessage: '会员消息',
-    otherMessage: '其它消息',
 
     pushSettings: '推送设置',
     goodsPush: '商品推送',

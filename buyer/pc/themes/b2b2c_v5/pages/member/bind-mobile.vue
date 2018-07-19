@@ -44,6 +44,11 @@
   import { RegExp } from '~/ui-utils'
   export default {
     name: 'bind-mobile',
+    head() {
+      return {
+        title: `绑定手机号-${this.site.title}`
+      }
+    },
     data() {
       return {
         bindMobileForm: {},

@@ -1,11 +1,16 @@
 <template>
   <div class="shop-star">
-    <i v-for="_ in star" :key="_" class="iconfont ea-icon-fill-star" :style="{color: fillColor}"></i>
-    <i v-for="_ in (5 - star)" :key="_ + 5" class="iconfont ea-icon-fill-star" :style="{color: color}"></i>
+    <el-rate
+      v-model="star"
+      disabled
+      :colors="['#99A9BF', '#F7BA2A', '#FF9900']"/>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Rate } from 'element-ui'
+  Vue.use(Rate)
   export default {
     name: 'EnShopStar',
     props: {

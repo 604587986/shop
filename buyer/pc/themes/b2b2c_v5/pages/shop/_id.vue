@@ -28,7 +28,7 @@
     },
     head () {
       return {
-        title: `${this.shop.shop_name}-Javashop多店铺示例商城`
+        title: `${this.shop.shop_name}-${this.site.title}`
       }
     },
     methods: {

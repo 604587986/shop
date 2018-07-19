@@ -19,6 +19,13 @@
   export default {
     name: 'member',
     middleware: 'auth-user',
+    head() {
+      const { $store, site } = this
+      const name = $store.getters.user.nickname || '个人中心'
+      return {
+        title: `${name}-${site.title}`
+      }
+    },
     components: {
       'en-breadcrumb': Breadcrumb,
       'en-menu': Menu

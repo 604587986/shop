@@ -5,13 +5,13 @@
       <div class="clearfix"></div>
     </div>
     <div class="content-ckt receipt">
-      <div v-if="receipt.need_receipt === 'no'" class="item">无须发票</div>
+      <div v-if="receipt.need_receipt !== 'yes'" class="item">无须发票</div>
       <template v-else>
         <div class="item receipt-title">{{ receipt.title }}</div>
         <div class="item receipt-content">{{ receipt.content }}</div>
       </template>
       <a href="javascript:;" class="item edit-btn" @click="handleEditReceiptInfo">修改</a>
-      <a v-if="receipt.need_receipt === 'yes'" href="javascript:;" class="item cancel-btn" @click="handleCancelReceipt">取消发票</a>
+      <a v-if="receipt && receipt.need_receipt === 'yes'" href="javascript:;" class="item cancel-btn" @click="handleCancelReceipt">取消发票</a>
     </div>
     <div id="receiptForm" class="receipt-layer" style="display: none">
       <el-form :model="receiptForm" :rules="receiptRules" ref="receiptForm" label-width="100px">
@@ -206,7 +206,7 @@
           this.$message.error('请先保存正在编辑的内容！')
           return
         }
-        let receipt = JSON.parse(JSON.stringify(this.selectedReceipt))
+        let receipt = JSON.parse(JSON.stringify(this.selectedReceipt)) || {}
         receipt.need_receipt = 'yes'
         API_Trade.setRecepit(receipt).then(() => {
           this.$message.success('设置成功！')

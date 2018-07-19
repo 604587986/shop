@@ -8,13 +8,13 @@
             v-if="index < 5"
             :key="goods.goods_id"
             class="goods-item">
-            <nuxt-link :to="'/goods/' + goods.goods_id">
+            <a :href="'/goods/' + goods.goods_id">
               <img :src="goods.thumbnail" :alt="goods.goods_name" class="goods-image">
               <div class="goods-info">
                 <div class="goods-name">{{ goods.goods_name }}</div>
                 <div class="goods-price">￥{{ goods.price | unitPrice }}</div>
               </div>
-            </nuxt-link>
+            </a>
           </li>
         </template>
       </ul>

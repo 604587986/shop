@@ -200,6 +200,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   .login-content .prompt {
     width: 100%;
     text-align: center;
@@ -256,7 +257,7 @@
         height: 18px;
         width: 99%;
         color: #666;
-        &:hover, &.active { color: #f42424 }
+        &:hover, &.active { color: $color-main }
       }
       .tab-a { border-right: 1px solid #f4f4f4 }
     }
@@ -266,7 +267,7 @@
     width: 280px;
     margin: 25px auto;
   }
-  .active { color: #f42424 }
+  .active { color: $color-main }
   .login-interface form .item.focus {
     border-color: #666;
     label {
@@ -339,7 +340,7 @@
   .login-interface form .form-sub {
     width: 100%;
     height: 35px;
-    background: #f42424;
+    background: $color-main;
     text-align: center;
     margin: 10px 0;
     cursor: pointer;
@@ -348,7 +349,7 @@
     transition: background ease-out .2s;
   }
   .login-interface form .form-sub:hover {
-    background: #f65555;
+    background: darken($color-main, 10%);
   }
   .login-box .login-form .other-login {
     height: 50px;
@@ -362,7 +363,7 @@
     a>span {
       padding: 0 10px;
       color: #666666;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
   }
   .login-box .login-form .other-login ul .other-one a>span {
@@ -372,7 +373,7 @@
     float: right;
   }
   .other-login ul .other-right a {
-    color: #f42424;
+    color: $color-main;
     font-size: 15px;
   }
   .send-sms-btn {

@@ -295,7 +295,7 @@
     padding-right: 20px;
     .price {
       span { font-size: 16px }
-      strong { font-size: 30px }
+      strong { font-size: 28px }
     }
     .pro-name {
       h1 {

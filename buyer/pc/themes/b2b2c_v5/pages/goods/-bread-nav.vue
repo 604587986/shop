@@ -4,7 +4,7 @@
       <span class="left-nav">
         <nuxt-link to="/">首页</nuxt-link>
         &gt;
-        <nuxt-link to="/notebook">{{ goods.category_name }}</nuxt-link>
+        <nuxt-link :to="'/goods?category=' + goods.category_id">{{ goods.category_name }}</nuxt-link>
         &gt;
         <a href="javascript:;">{{ goods.goods_name }}</a>
       </span>

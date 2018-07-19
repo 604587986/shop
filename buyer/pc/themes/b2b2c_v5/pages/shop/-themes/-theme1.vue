@@ -34,7 +34,7 @@
             <template v-for="(goods, index) in newGoods">
               <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
-                  <nuxt-link :to="'/goods' + goods.goods_id">
+                  <nuxt-link :to="'/goods/' + goods.goods_id">
                     <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
                   </nuxt-link>
                 </div>
@@ -387,9 +387,6 @@
     .info-information {
       display: flex;
       justify-content: space-between;
-      .item {
-        width: 200px;
-      }
       h3 {
         font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
         font-size: 14px;

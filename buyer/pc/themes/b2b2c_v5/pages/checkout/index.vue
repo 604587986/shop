@@ -44,7 +44,7 @@
           <!--送货时间 end-->
 
           <!--发票信息 start-->
-          <checkout-receipt :receipt="params.receipt" @change="(receipt) => { params.receipt = receipt }"/>
+          <checkout-receipt :receipt="params.receipt || {}" @change="(receipt) => { params.receipt = receipt }"/>
           <!--发票信息 end-->
         </div>
         <div class="ckt-total">

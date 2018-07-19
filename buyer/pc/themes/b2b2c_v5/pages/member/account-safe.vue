@@ -46,6 +46,11 @@
   import { mapGetters } from 'vuex'
   export default {
     name: 'account-safe',
+    head() {
+      return {
+        title: `账户安全-${this.site.title}`
+      }
+    },
     computed: {
       ...mapGetters({
         user: 'user'

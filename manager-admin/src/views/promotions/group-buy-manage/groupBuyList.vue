@@ -72,7 +72,7 @@
             end-placeholder="结束时间"
             :editable="false"
             value-format="timestamp"
-            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() }}">
+            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
           </el-date-picker>
         </el-form-item>
         <!--报名截止时间-->
@@ -83,7 +83,7 @@
             :editable="false"
             value-format="timestamp"
             placeholder="报名截止时间"
-            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() }}">
+            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
           </el-date-picker>
         </el-form-item>
       </el-form>

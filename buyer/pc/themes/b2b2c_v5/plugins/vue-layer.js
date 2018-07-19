@@ -8,7 +8,8 @@ import Vue from 'vue'
  */
 const alert = function (message, fn) {
   return window.layer.alert(message || '', {
-    scrollbar: false
+    scrollbar: false,
+    closeBtn: 0
   }, function (index) {
     let __ = true
     typeof (fn) === 'function' && (__ = fn(index))
@@ -25,6 +26,8 @@ const confirm = function (message, fn) {
   return window.layer.confirm(message || '确认这个操作吗？', {
     icon: 3,
     title: '提示',
+    area: ['275px'],
+    closeBtn: 0,
     scrollbar: false
   }, function (index) {
     let __ = true
@@ -77,6 +80,14 @@ const _message = {
     }, fn)
   }
 }
+
+/**
+ * 配置全局layer
+ */
+window.layer.config({
+  skin: 'layer-skin-common',
+  btnAlign: 'c'
+})
 
 // 注册到Vue原型链上
 Vue.prototype.$layer = window.layer

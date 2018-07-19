@@ -73,6 +73,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'comments',
+    head() {
+      return {
+        title: `评价商品-${this.site.title}`
+      }
+    },
     data() {
       return {
         order_sn: this.$route.query.order_sn,
