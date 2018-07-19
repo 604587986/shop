@@ -773,6 +773,8 @@
         if (!_params.has_changed) {
           _params.has_changed = 0
         }
+        /** 上架 market_enable 1上架0下架*/
+        _params.market_enable = 1
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
@@ -796,8 +798,6 @@
             })
           }
         } else {
-          /**  草稿箱商品上架 构造是否上架字段 1上架0下架*/
-          _params.market_enable = 1
           API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(() => {
             this.$message.success('上架草稿箱商品成功')
             this.$store.dispatch('delCurrentViews', {
