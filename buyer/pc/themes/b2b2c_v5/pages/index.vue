@@ -26,17 +26,16 @@
   import templates, { templateArray } from './-index/templates'
   export default {
     name: 'index',
-    asyncData({ params }, callback) {
-      API_Home.getFloorData().then(response => {
-        callback(null, { floorList: response.page_data ? global.JSON.parse(response.page_data) : [] })
-      }).catch(e => {
-        // Andste_TODO 2018/6/20: 错误处理需要优化
-        let _statusCode = e.data.status
-        if (e.code === 'ECONNREFUSED') {
-          _statusCode = 502
-        }
-        callback({ statusCode: _statusCode })
-      })
+    async asyncData() {
+      const floor = API_Home.getFloorData()
+      return {
+        floorList: floor.page_data ? global.JSON.parse(response.page_data) : []
+      }
+    },
+    head() {
+      return {
+        title: `商城首页-${this.site.title}`
+      }
     },
     components: {
       IndexBanner,

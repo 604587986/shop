@@ -79,12 +79,12 @@
       }
     },
     head() {
-      const { goods } = this
+      const { goods, site } = this
       return {
-        title: `${goods.page_title}-Javashop多店铺示例商城`,
+        title: `${goods.page_title}-${site.title}`,
         meta: [
           { hid: 'keywords', name: 'keywords', content: goods.meta_keywords },
-          { hid: 'description', name: 'description', content: `${goods.meta_description}-Javashop多店铺示例商城` },
+          { hid: 'description', name: 'description', content: `${goods.meta_description}-${site.title}` },
           { 'http-equiv': 'mobile-agent', content: `format=xhtml; url=/goods/${goods.goods_id}` },
           { 'http-equiv': 'mobile-agent', content: `format=html5; url=/goods/${goods.goods_id}` }
         ]
