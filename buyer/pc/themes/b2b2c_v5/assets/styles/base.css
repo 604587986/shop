@@ -133,10 +133,6 @@ html[xmlns] .clearfix {
   box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
 }
 
-.layui-layer-page .layui-layer-content {
-  overflow: visible;
-}
-
 /** dorpdown-layer */
 .dorpdown-layer {
   display: none;
