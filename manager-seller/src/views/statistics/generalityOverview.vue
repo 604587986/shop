@@ -1,6 +1,5 @@
 <template>
   <div class="bg-shop-summary">
-    <p>本页面所有有关近30天的展示数据,均为从昨日起最近30天的销售情况</p>
     <ul>
       <li><span>近30天下单金额 </span>:<span>{{ shopSurvey.order_money }}</span></li>
       <li><span>近30天下单会员数</span>:<span>{{ shopSurvey.order_member }}</span></li>
@@ -135,10 +134,6 @@
     padding: 15px;
     background-color: #fff;
     border: 1px solid #9a9a9a;
-    p {
-      margin: 15px 0;
-      text-align: left;
-    }
     ul {
       padding: 0 10px;
       width: 100%;
@@ -147,17 +142,16 @@
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-    }
-
-    ul>li {
-      margin: 0;
-      padding: 0;
-      width: 20%;
-      flex-grow: 1;
-      list-style: none;
-      span {
-        word-break:break-all;
-        font-size: 14px;
+      li {
+        margin: 0;
+        padding: 0;
+        width: 20%;
+        flex-grow: 1;
+        list-style: none;
+        span {
+          word-break:break-all;
+          font-size: 14px;
+        }
       }
     }
   }

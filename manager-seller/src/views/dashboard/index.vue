@@ -135,7 +135,7 @@ import * as API_Dashboard from '@/api/dashboard'
 import * as API_shop from '@/api/shop'
 export default {
   name: 'dashboard',
-  created() {
+  mounted() {
     /** 获取首页统计信息 */
     this.GET_DashBoard()
 
@@ -144,8 +144,7 @@ export default {
 
     /** 获取首页联系方式 */
     this.GET_Concate()
-  },
-  mounted() {
+
     window.onresize = this.countTableHeight
   },
   data() {

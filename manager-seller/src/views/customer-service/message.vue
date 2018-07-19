@@ -205,6 +205,7 @@
       /** 执行标记为已读*/
       signReadMsgs(ids) {
         API_Messages.signMsgs(ids, {}).then(() => {
+          this.$message.success('标记成功')
           this.GET_MsgsList()
         })
       }

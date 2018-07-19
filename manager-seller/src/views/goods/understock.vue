@@ -11,32 +11,31 @@
           <en-table-search @search="searchEvent" />
         </div>
       </div>
-
       <template slot="table-columns">
         <el-table-column label="图片" width="120">
           <template slot-scope="scope">
             <img :src="scope.row.thumbnail" class="goods-image"/>
           </template>
         </el-table-column>
-        <el-table-column label="名称">
+        <el-table-column label="名称" min-width="400">
           <template slot-scope="scope">
             <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
           </template>
         </el-table-column>
-        <el-table-column label="价格" width="120">
+        <el-table-column label="价格" width="130">
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
-        <el-table-column label="库存" width="180">
+        <el-table-column label="库存" width="140">
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
         </el-table-column>
-        <el-table-column label="可用库存" width="180">
+        <el-table-column label="可用库存" width="140">
           <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
         </el-table-column>
-        <el-table-column label="创建时间">
+        <el-table-column label="创建时间" width="280">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="状态" :formatter="marketStatus"/>
-        <el-table-column label="操作">
+        <el-table-column prop="market_enable" label="状态" :formatter="marketStatus" width="140"/>
+        <el-table-column label="操作" min-width="200">
           <template slot-scope="scope">
             <el-button
               type="primary"

@@ -20,13 +20,13 @@
             <!--活动名称-->
             <el-table-column prop="title" label="活动名称"/>
             <!--开始时间-->
-            <el-table-column label="开始时间">
+            <el-table-column label="开始时间" min-width="200">
               <template slot-scope="scope">
                 <span>{{ scope.row.start_time | unixToDate }}</span>
               </template>
             </el-table-column>
             <!--结束时间-->
-            <el-table-column label="结束时间">
+            <el-table-column label="结束时间" min-width="200">
               <template slot-scope="scope">
                 <span>{{ scope.row.end_time | unixToDate }}</span>
               </template>

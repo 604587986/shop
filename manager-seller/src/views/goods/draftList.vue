@@ -14,22 +14,22 @@
       </div>
     </div>
     <template slot="table-columns">
-      <el-table-column label="图片">
+      <el-table-column label="图片" width="120">
         <template slot-scope="scope">
           <img :src="scope.row.thumbnail" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="goods_name" label="名称" />
-      <el-table-column label="价格">
+      <el-table-column prop="goods_name" label="名称" min-width="400"/>
+      <el-table-column label="价格" width="130">
         <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
       </el-table-column>
-      <el-table-column label="库存">
+      <el-table-column label="库存" width="140">
         <template slot-scope="scope">{{ scope.row.quantity }}件</template>
       </el-table-column>
-      <el-table-column label="创建时间">
+      <el-table-column label="创建时间" width="280">
         <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" min-width="200">
         <template slot-scope="scope">
           <el-button
             type="success"
