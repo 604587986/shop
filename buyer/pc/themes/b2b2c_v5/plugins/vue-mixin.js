@@ -18,6 +18,10 @@ Vue.mixin({
     MixinForward() {
       const { forward } = this.$route.query
       return forward ? `?forward=${forward}` : ''
+    },
+    /** 站点信息 */
+    site() {
+      return this.$store.getters.site
     }
   },
   methods: {

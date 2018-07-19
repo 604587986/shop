@@ -57,3 +57,7 @@ export const DELETE_MESSAGE = 'DELETE_MESSAGE'
 /** 店铺相关 */
 // 设置店铺信息
 export const SET_SHOP_DATA = 'SET_SHOP_DATA'
+
+/** 站点信息相关 */
+// 设置站点信息
+export const SET_SITE_DATA = 'SET_SITE_DATA'
