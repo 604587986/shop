@@ -50,8 +50,8 @@
             <div class="small-list brand-list">
               <ul class="show-logo">
                 <li v-for="(brand, index) in selectorData.brand" :key="index">
-                  <a href="/goods?category=1&amp;brand=2" :title="brand.name">
-                    <img class="lazy" src="http://static.v4.javamall.com.cn/attachment/brand/201202211143461491.jpg" data-original="http://static.v4.javamall.com.cn/attachment/brand/201202211143461491.jpg" alt="新农哥" style="display: block;">新农哥
+                  <a :href="'/goods?brand=' + brand.value" :title="brand.name">
+                    <img :src="brand.url" alt="新农哥">新农哥
                   </a>
                 </li>
               </ul>
@@ -202,6 +202,7 @@
       const { ...props } = to.query
       this.params = props
       this.GET_GoodsList()
+      this.GET_GoodsSelector()
       next()
     },
     methods: {
