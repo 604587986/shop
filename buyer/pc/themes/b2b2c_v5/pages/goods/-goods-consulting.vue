@@ -71,8 +71,9 @@
           scrollbar: false
         }, (value, index, elem) => {
           if (!value.trim()) return false
-          layer.close(index)
+          value.replace('\n', '<br>')
           API_Members.consultating(this.goodsId, value).then(() => {
+            layer.close(index)
             this.$message.success('提交成功！')
             this.GET_Consulting()
           })
