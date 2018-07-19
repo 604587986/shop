@@ -148,6 +148,11 @@ let areaHTML =
 					background-color: #f6f6f6\
 				}\
 \
+        .area-selector-container .body h3 > span {\
+          color: red;\
+          cursor: pointer;\
+        }\
+\
 				.area-selector-container .body .selected {\
 					background: #d7d7d7;\
 				}\
@@ -174,13 +179,13 @@ let areaHTML =
 				</div>\
 				<div class='body'>\
 					<div class='area-left'>\
-						<h3>可选省、市、区</h3>\
+						<h3> <span id='chooseAll'>全选</span> 可选省、市、区</h3>\
 						<ul>\
 						</ul>\
 					</div>\
 					<button type='button' class='btn btn-default'>添加</button>\
 					<div class='area-right'>\
-						<h3>已选省、市、区</h3>\
+						<h3> <span id='cancelChooseAll'>取消全选</span> 已选省、市、区</h3>\
 						<ul>\
 \
 						</ul>\
@@ -263,6 +268,20 @@ let bindEventListener = function() {
       // 渲染第三层
       renderDepthThreeData(regionID, depthOneID, parentNext)
     }
+  })
+
+  // 地区全选事件
+  areaDOM.find('#chooseAll').click(function() {
+    $('.depth-one>div.item').each(function() {
+      toggleSelectedStyle($(this).closest('li'))
+    })
+  })
+
+  // 取消全选事件
+  areaDOM.find('#cancelChooseAll').click(function() {
+    $('.delete').each(function() {
+      appearanceAtLeft($(this).closest('li'))
+    })
   })
 
   // 监听 li子div元素 的点击
