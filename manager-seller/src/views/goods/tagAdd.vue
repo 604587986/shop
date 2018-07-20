@@ -156,6 +156,10 @@
 
       /** 批量取消 */
       cancelall() {
+        if (this.selectionids.length <= 0) {
+          this.$message.error('请选择要取消的商品')
+          return
+        }
         this.selectionids.forEach(key => {
           this.tableData.forEach((elem, index) => {
             if (elem.goods_id === key) {
