@@ -30,7 +30,7 @@
             </div>
             <div class="shop-info-credit">
               <span>
-                卖家信用：{{shop_info.shop_credit}}
+                卖家信用：{{shop_info.shop_credit}} &nbsp;
               </span>
               <div></div>
               <span>店铺地址：{{shop_info.shop_province}}

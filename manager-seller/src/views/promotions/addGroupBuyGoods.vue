@@ -137,7 +137,7 @@
       @close="showDialog = false"/>
     <!--用户注册协议-->
     <el-dialog
-      title="用户注册协议"
+      title="团购服务协议"
       :visible.sync="showAgreement"
       width="50%"
       center
