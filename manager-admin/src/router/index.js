@@ -77,6 +77,7 @@ export const asyncRouterMap = [
     children: [
       { path: 'order-list', component: () => import('@/views/order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
       { path: 'refund-list', component: () => import('@/views/order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
+      { path: 'collection-list', component: () => import('@/views/order/collectionList'), name: 'collectionList', meta: { title: 'collectionList' }},
       { path: 'receipt-history', component: () => import('@/views/order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }},
       { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
       { path: 'refund/:sn', component: () => import('@/views/order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }}
