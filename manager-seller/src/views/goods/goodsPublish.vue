@@ -181,7 +181,7 @@
           <h4>物流/其他</h4>
           <div>
             <el-form-item label="运费：" style="width: 50%;" prop="template_id">
-              <el-radio-group v-model="baseInfoForm.goods_transfee_charge">
+              <el-radio-group v-model="baseInfoForm.goods_transfee_charge" @change="changeTplItem">
                 <el-radio :label="1">卖家承担运费</el-radio>
                 <el-radio :label="0">买家承担运费</el-radio>
               </el-radio-group>
@@ -1092,9 +1092,16 @@
         })
       },
 
+      /** 选中值卖家运费/买家运费时出发 */
+      changeTplItem(val) {
+        if (val) {
+          this.baseInfoForm.template_id = ''
+        }
+      },
+
       /** 运费模板改变时触发 */
       changeTpl(val) {
-        this.baseInfoForm.template_id = val
+        this.baseInfoForm.template_id = this.baseInfoForm.goods_transfee_charge === 0 ? val : ''
       },
 
       /** 积分商品商城分类列表 */
