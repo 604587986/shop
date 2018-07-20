@@ -270,16 +270,26 @@ let bindEventListener = function() {
     }
   })
 
-  // 地区全选事件
+  // 地区全选/取消全选事件
   areaDOM.find('#chooseAll').click(function() {
-    $('.area-left .depth-one>div.item').each(function() {
-      if (!$(this).parent().hasClass('selected')) {
-        toggleSelectedStyle($(this).closest('li'))
-      }
-    })
+    if ($(this).text() === '全选') {
+      $('.area-left .depth-one>div.item').each(function() {
+        if (!$(this).parent().hasClass('selected')) {
+          toggleSelectedStyle($(this).closest('li'))
+        }
+      })
+      $('#chooseAll').text('取消全选')
+    } else {
+      $('.area-left .depth-one>div.item').each(function() {
+        if ($(this).parent().hasClass('selected')) {
+          toggleSelectedStyle($(this).closest('li'))
+        }
+      })
+      $('#chooseAll').text('全选')
+    }
   })
 
-  // 取消全选事件
+  // 移除全部事件
   areaDOM.find('#cancelChooseAll').click(function() {
     $('.area-right .delete').each(function() {
       appearanceAtLeft($(this).closest('li'))
