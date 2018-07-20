@@ -11,7 +11,7 @@
     name: 'defalt'
   }
 </script>
-<style>
+<style type="text/scss" lang="scss">
   #wrapper {
     min-height: calc(100vh - 31px - 219px)
   }
