@@ -125,7 +125,7 @@
       </el-col>
     </el-row>
     <el-dialog :title="currentName" :visible.sync="isShowArticle" width="30%" align="center">
-      <span>{{ currentContent }}</span>
+      <p v-html="currentContent.replace(/\n/g, '<br>')"></p>
     </el-dialog>
   </div>
 </template>

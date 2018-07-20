@@ -15156,37 +15156,37 @@ UE.plugins['list'] = function () {
     });
     //进入编辑器的li要套p标签
     me.addInputRule(function(root){
-        // utils.each(root.getNodesByTagName('li'),function(li){
-        //     var tmpP = UE.uNode.createElement('p');
-        //     for(var i= 0,ci;ci=li.children[i];){
-        //         if(ci.type == 'text' || dtd.p[ci.tagName]){
-        //             tmpP.appendChild(ci);
-        //         }else{
-        //             if(tmpP.firstChild()){
-        //                 li.insertBefore(tmpP,ci);
-        //                 tmpP = UE.uNode.createElement('p');
-        //                 i = i + 2;
-        //             }else{
-        //                 i++;
-        //             }
-        //
-        //         }
-        //     }
-        //     if(tmpP.firstChild() && !tmpP.parentNode || !li.firstChild()){
-        //         li.appendChild(tmpP);
-        //     }
-        //     //trace:3357
-        //     //p不能为空
-        //     if (!tmpP.firstChild()) {
-        //         tmpP.innerHTML(browser.ie ? '&nbsp;' : '<br/>')
-        //     }
-        //     //去掉末尾的空白
-        //     var p = li.firstChild();
-        //     var lastChild = p.lastChild();
-        //     if(lastChild && lastChild.type == 'text' && /^\s*$/.test(lastChild.data)){
-        //         p.removeChild(lastChild)
-        //     }
-        // });
+        utils.each(root.getNodesByTagName('li'),function(li){
+            var tmpP = UE.uNode.createElement('p');
+            for(var i= 0,ci;ci=li.children[i];){
+                if(ci.type == 'text' || dtd.p[ci.tagName]){
+                    tmpP.appendChild(ci);
+                }else{
+                    if(tmpP.firstChild()){
+                        li.insertBefore(tmpP,ci);
+                        tmpP = UE.uNode.createElement('p');
+                        i = i + 2;
+                    }else{
+                        i++;
+                    }
+
+                }
+            }
+            if(tmpP.firstChild() && !tmpP.parentNode || !li.firstChild()){
+                li.appendChild(tmpP);
+            }
+            //trace:3357
+            //p不能为空
+            if (!tmpP.firstChild()) {
+                tmpP.innerHTML(browser.ie ? '&nbsp;' : '<br/>')
+            }
+            //去掉末尾的空白
+            var p = li.firstChild();
+            var lastChild = p.lastChild();
+            if(lastChild && lastChild.type == 'text' && /^\s*$/.test(lastChild.data)){
+                p.removeChild(lastChild)
+            }
+        });
         if(me.options.autoTransWordToList){
             var orderlisttype = {
                     'num1':/^\d+\)/,
