@@ -236,6 +236,7 @@
         display: block;
       }
       .shop-score-box {
+        width: 180px;
         background-color: #FFF;
         display: none;
         padding: 8px;

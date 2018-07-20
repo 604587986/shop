@@ -72,23 +72,18 @@
   const theme2Header = () => import('@/pages/shop/-themes/-theme2-header')
   const theme3Header = () => import('@/pages/shop/-themes/-theme3-header')
   import { Pagination, Input, InputNumber } from 'element-ui'
-  Vue.use(Pagination)
-  Vue.use(Input)
-  Vue.use(InputNumber)
+  Vue.use(Pagination).use(Input).use(InputNumber)
   export default {
     name: 'shop-goods-list',
     validate({ query }) {
       return /^\d+$/.test(query.shop_id)
     },
-    asyncData({ query }, callback) {
-      Promise.all([
-        API_Shop.getShopBaseInfo(query.shop_id),
-        API_Shop.getShopGoods(query)
-      ]).then(values => {
-        callback(null, { shop: values[0], goods: values[1] })
-      }).catch(e => {
-        callback({ statusCode: e.response.status })
-      })
+    async asyncData({ query }) {
+      const values = await Promise.all([
+        API_Shop.getShopBaseInfo(query.shop_id)//,
+        // API_Shop.getShopGoods(query)
+      ])
+      return { shop: values[0]/*, goods: values[1]*/ }
     },
     components: { theme1Header, theme2Header, theme3Header },
     data() {

@@ -22,10 +22,30 @@
     <div class="shop-nav">
       <div class="w">
         <div class="item category">
-          <!--// Andste_TODO 2018/7/10: 分类未适配-->
           <h1>全部分类</h1>
+          <div class="category-box">
+            <div class="inner-category-box">
+              <div v-for="cate in categorys" :key="cate.shop_cat_id" class="category-item">
+                <nuxt-link
+                  :to="'/shop/goods-list?shop_id=' + shop_id + '&category=' + cate.shop_cat_id"
+                >{{ cate.shop_cat_name }}</nuxt-link>
+                <div class="category-item-box">
+                  <div
+                    v-if="cate.children && cate.children.length"
+                    v-for="cc in cate.children"
+                    :key="cc.shop_cat_id"
+                    class="category-item-cc"
+                  >
+                    <nuxt-link
+                      :to="'/shop/goods-list?shop_id=' + shop_id + '&category=' + cc.shop_cat_id"
+                    >{{ cc.shop_cat_name }}</nuxt-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <a href="#" class="item">店铺首页</a>
+        <a href="javascript:;" class="item">店铺首页</a>
         <span>|</span>
         <a href="#shop-intro" class="item">店铺简介</a>
         <span>|</span>
@@ -98,15 +118,73 @@
     color: #fff;
     h1 { font-size: 14px }
     span { color: #dddbdb }
-    .shop-category {
-      display: inline-block;
-    }
     .item {
       display: inline-block;
       font-size: 12px;
       font-weight: 600;
       padding: 0 15px;
       color: #dddbdb
+    }
+    .item.category {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      &:hover {
+        .category-box {
+          display: block;
+        }
+      }
+    }
+    .category-box {
+      display: none;
+      position: absolute;
+      z-index: 99;
+      padding-top: 6px;
+      left: 15px;
+    }
+    .inner-category-box {
+      width: 152px;
+      background-color: rgba(255,255,255,.8);
+      box-sizing: border-box;
+      .category-item {
+        position: relative;
+        line-height: 30px;
+        height: 30px;
+        border-bottom: 1px dashed #333;
+        cursor: pointer;
+        padding: 0 10px;
+        &:last-child { border-bottom: none }
+        &:hover {
+          background-color: #f2f2f2;
+          .category-item-box {
+            display: block;
+          }
+        }
+        a {
+          display: block;
+          color: #333
+        }
+      }
+      .category-item-box {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        width: 130px;
+        background-color: rgba(96,96,96,.8);
+        .category-item-cc {
+          border-bottom: 1px dashed #fff;
+          padding: 0 10px;
+          &:last-child { border-bottom: none }
+          &:hover {
+            background-color: rgba(96,96,96,1);
+          }
+          a {
+            display: block;
+            color: #fff;
+          }
+        }
+      }
     }
   }
 </style>
