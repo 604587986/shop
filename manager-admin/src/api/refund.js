@@ -45,6 +45,7 @@ export function refundMoney(sn) {
  * @param params
  */
 export function exportRefundExcel(params) {
+  params = JSON.parse(JSON.stringify(params))
   params.page_size = 9999999
   return request({
     url: 'after-sales/refund',
