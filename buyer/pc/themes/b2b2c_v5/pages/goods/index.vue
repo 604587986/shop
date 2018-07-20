@@ -105,11 +105,11 @@
           </div>
           <div class="price">
             <div class="p-c-b">
-              <span><em>￥</em><input type="text" class="custom-pro" maxlength="5"></span>
+              <span><em>￥</em><input type="text" v-model="prices[0]" class="custom-pro" maxlength="5"/></span>
               <i></i>
-              <span><em>￥</em><input type="text" class="custom-pro" maxlength="5"></span>
-              <a href="javascript:;" class="empty-pro">清空</a>
-              <a href="javascript:;" class="enter-pro">确定</a>
+              <span><em>￥</em><input type="text" v-model="prices[1]" class="custom-pro" maxlength="5"/></span>
+              <a href="javascript:;" class="empty-pro" @click="prices = []">清空</a>
+              <a href="javascript:;" class="enter-pro" @click="GET_GoodsList">确定</a>
             </div>
           </div>
         </div>
@@ -191,7 +191,9 @@
           page_no: 1,
           page_size: 20
         },
-        params: { ...this.$route.query }
+        params: { ...this.$route.query },
+        // 价格区间
+        prices: []
       }
     },
     mounted() {
@@ -216,7 +218,7 @@
         const params = { ...this.page, ...this.params }
         API_Goods.getGoodsSelector(params).then(response => {
           this.selectorData = response
-          console.log(response)
+          // console.log(response)
         })
       },
       /** 获取商品列表 */
@@ -225,6 +227,10 @@
         Object.keys(params).forEach(key => {
           if (!params[key]) delete params[key]
         })
+        const { prices } = this
+        if (prices.length) {
+          params.price = prices.join('_')
+        }
         API_Goods.getGoodsList(params).then(response => {
           this.goodsListData = response
           this.MixinScrollToTop(171)
