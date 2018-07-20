@@ -129,9 +129,7 @@
           const { data_total } = response
           this.message_total = data_total > 99 ? '99+' : data_total
           // 消息轮询，5分钟查一次
-          setTimeout(() => {
-            this.GET_UnreadMessage()
-          }, 50000)
+          setTimeout(this.GET_UnreadMessage, 1000 * 60 * 5)
         })
       }
     }
