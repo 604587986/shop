@@ -259,19 +259,19 @@
     computed: {
       socreDescription() {
         return {
-          'left': Number.isInteger(this.shopInfo.shop_description_credit)
+          'left': this.shopInfo.shop_description_credit
             ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       },
       socreService() {
         return {
-          'left': Number.isInteger(this.shopInfo.shop_service_credit)
+          'left': this.shopInfo.shop_service_credit
             ? parseFloat((this.shopInfo.shop_service_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       },
       socreDelivery() {
         return {
-          'left': Number.isInteger(this.shopInfo.shop_delivery_credit)
+          'left': this.shopInfo.shop_delivery_credit
             ? parseFloat((this.shopInfo.shop_delivery_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       }
