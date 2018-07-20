@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getHistoryReceiptList(params) {
   return request({
-    url: 'shop/admin/receipt/history-list-json.do',
+    url: 'trade/receipts',
     method: 'get',
     loading: false,
     params
