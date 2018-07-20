@@ -2,9 +2,7 @@
   <div class="header-other">
     <div class="inner-header-other" :style="{width: width + 'px'}">
       <div class="left-heander-other">
-        <a href="/" class="logo">
-          <img src="~/assets/images/logo-javashop.png" alt="logo" class="logo-img">
-        </a>
+        <en-logo/>
         <span class="logo-title">{{ title }}</span>
       </div>
       <div class="right-heander-other">
@@ -36,13 +34,9 @@
       margin: 0 auto;
       padding: 20px 0;
       height: 80px;
-      .logo {
+      /deep/ #logo {
         float: left;
         width: 245px;
-        height: 60px;
-      }
-      .logo-img {
-        width: 240px;
         height: 60px;
       }
       .logo-title {

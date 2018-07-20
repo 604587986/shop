@@ -1,6 +1,6 @@
 <template>
   <nuxt-link to="/">
-    <img src="~assets/images/logo-javashop.png" id="logo">
+    <img :src="$store.getters.site.logo" id="logo">
   </nuxt-link>
 </template>
 

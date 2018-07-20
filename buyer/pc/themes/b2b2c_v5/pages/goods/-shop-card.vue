@@ -22,7 +22,7 @@
         {{ collected ? '已收藏' : '收藏店铺' }}({{ shopBaseInfo.shop_collect }})
       </a>
     </div>
-    <div class="shop-contact">
+    <div class="shop-address">
       <dl>
         <dt>店铺名称：</dt>
         <dd>{{ shopBaseInfo.shop_name }}</dd>
@@ -31,6 +31,18 @@
         <dt>所&ensp;在&ensp;地：</dt>
         <dd>{{ shopRegions }}</dd>
       </dl>
+      <dl v-if="shopBaseInfo.shop_qq">
+        <dt>在线咨询：</dt>
+        <dd>
+          <a :href="'http://wpa.qq.com/msgrd?v=3&uin='+ shopBaseInfo.shop_qq +'&site=qq&menu=yes'" target="_blank">
+            <i class="iconfont ea-icon-service"></i>客服QQ
+          </a>
+        </dd>
+      </dl>
+    </div>
+    <div class="shop-contact">
+      <i class="iconfont ea-icon-call-phone"></i>
+      {{ shopBaseInfo.link_phone || '暂无联系方式' }}
     </div>
   </div>
 </template>
@@ -92,6 +104,7 @@
 
 <style type="text/scss" lang="scss" scoped>
   .shop-card {
+    position: relative;
     width: 210px;
     height: 400px;
     box-shadow: 0 0 10px 0 #cccccc;
@@ -157,10 +170,10 @@
         margin-right: 10px;
       }
     }
-    .shop-contact {
-      padding: 5px;
+    .shop-address {
+      padding: 5px 10px;
       dl {
-        margin-bottom: 5px;
+        margin: 10px 0;
       }
       dt, dd {
         display: inline-block;
@@ -172,9 +185,18 @@
         color: #666;
       }
       dd {
-        width: 199px - 60px;
         color: #333;
       }
+    }
+    .shop-contact {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 39px;
+      border-top: 1px dashed #e2e2e2;
+      line-height: 39px;
+      text-align: center;
     }
   }
 </style>

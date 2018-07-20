@@ -7,21 +7,21 @@
     </div>
     <div class="coupons-container">
       <ul v-if="coupons && coupons.data_total" class="coupon-list">
-        <li v-for="coupon in coupons.data" :key="coupon.coupon_id" class="coupon-item">
+        <li v-for="(coupon, index) in coupons.data" :key="index" class="coupon-item">
           <div class="c-type">
             <div class="c-money">
               <span>￥</span>
               <strong>{{ coupon.coupon_price | unitPrice }}</strong>
             </div>
             <div class="c-limit">
-              满￥{{ coupon.coupon_threshold_price | unitPrcie }}可用
+              满￥{{ coupon.coupon_threshold_price | unitPrice }}可用
             </div>
             <div class="c-time">
               {{ coupon.start_time | unixToDate('yyyy-MM-dd') }} - {{ coupon.end_time | unixToDate('yyyy-MM-dd') }}
             </div>
           </div>
           <div class="c-othr">
-            <nuxt-link to="/goods" class="use-btn">立即使用</nuxt-link>
+            <nuxt-link :to="'/shop/' + coupon.seller_id" class="use-btn">立即使用</nuxt-link>
           </div>
         </li>
       </ul>

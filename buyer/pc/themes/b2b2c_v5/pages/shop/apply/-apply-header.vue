@@ -2,9 +2,7 @@
   <div id="apply-header" class="header-container">
     <div class="inner w">
       <div class="logo-box">
-        <nuxt-link to="/">
-          <img src="~/assets/images/logo-javashop.png">
-        </nuxt-link>
+        <en-logo/>
         <h1>商家中心</h1>
       </div>
     </div>
@@ -35,7 +33,7 @@
       margin-top: 15px;
       margin-left: 10px;
     }
-    img {
+    /deep/ #logo {
       width: 180px;
       height: 45px;
     }

@@ -14,7 +14,7 @@ export default {
     order: 'Manage Order',
     orderList: 'Order List',
     refundList: 'Refund List',
-    settlementList: 'Settlement List',
+    collectionList: 'Collection List',
     receiptHistory: 'Receipt History',
     orderDetail: 'Order Detail',
     refundDetail: 'Refund Detail',
@@ -38,6 +38,7 @@ export default {
     themeList: 'Theme List',
     themeListWap: 'Wap Theme List',
     shopEdit: 'Shop Edit',
+    settlementList: 'Settlement List',
 
     promotions: 'promotions',
     groupBuyManage: 'GroupBuy Manage',

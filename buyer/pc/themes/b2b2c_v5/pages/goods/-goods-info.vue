@@ -91,8 +91,8 @@
         skuMap: new Map(),
         // 规格列表
         specList: [],
-        // 被选中规格Map
-        selectedSpecMap: new Map(),
+        // 被选中规格
+        selectedSpec: [],
         // 被选中sku
         selectedSku: '',
         // 没有选中sku，初始化为false
@@ -172,19 +172,19 @@
           })
         }
         const _selectedSpecVals = []
-        this.specList.forEach(spec => {
+        this.specList.forEach((spec, specIndex)=> {
           if (Array.isArray(spec.valueList)) {
-            spec.valueList.forEach((val, index) => {
+            spec.valueList.forEach((val, specValIndex) => {
               if (selectedSpecs) {
                 const spec_value_id = val.spec_value_id
                 if (selectedSpecs.includes(String(spec_value_id))) {
                   val.selected = true
-                  this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
+                  this.selectedSpec[specValIndex] = val.spec_value_id
                   _selectedSpecVals.push(val.spec_value_id)
                 }
-              } else if (index === 0) {
+              } else if (specValIndex === 0) {
                 val.selected = true
-                this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
+                this.selectedSpec[specValIndex] = val.spec_value_id
                 _selectedSpecVals.push(val.spec_value_id)
               }
             })
@@ -203,7 +203,7 @@
           return item
         })
         this.$set(this.specList, specIndex, spec)
-        this.selectedSpecMap.set(spec.spec_id, spec_val.spec_value_id)
+        this.selectedSpec[specIndex] = spec_val.spec_value_id
         this.handleSelectedSku()
       },
       /** 购买数量增加减少 */
@@ -228,9 +228,9 @@
       /** 根据已选规格选出对应的sku */
       handleSelectedSku() {
         let sku
-        if (this.selectedSpecMap.size !== 0) {
+        if (this.selectedSpec.size !== 0) {
           const spec_vals = []
-          this.selectedSpecMap.forEach((value, key, map) => spec_vals.push(value))
+          this.selectedSpec.forEach(item => spec_vals.push(item))
           sku = this.skuMap.get(spec_vals.join('-'))
         } else {
           sku = this.skuMap.get('no_spec')

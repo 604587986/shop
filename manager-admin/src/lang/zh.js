@@ -14,7 +14,7 @@ export default {
     order: '订单管理',
     orderList: '订单列表',
     refundList: '退款单',
-    settlementList: '结算列表',
+    collectionList: '收款单',
     receiptHistory: '发票历史',
     orderDetail: '订单详情',
     refundDetail: '售后详情',
@@ -38,6 +38,7 @@ export default {
     themeList: '模板列表',
     themeListWap: 'WAP模板列表',
     shopEdit: '编辑店铺',
+    settlementList: '结算列表',
 
     promotions: '促销管理',
     groupBuyManage: '团购管理',

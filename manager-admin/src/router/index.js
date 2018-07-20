@@ -77,8 +77,8 @@ export const asyncRouterMap = [
     children: [
       { path: 'order-list', component: () => import('@/views/order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
       { path: 'refund-list', component: () => import('@/views/order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
+      { path: 'collection-list', component: () => import('@/views/order/collectionList'), name: 'collectionList', meta: { title: 'collectionList' }},
       { path: 'receipt-history', component: () => import('@/views/order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }},
-      { path: 'settlement-list', component: () => import('@/views/order/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }},
       { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
       { path: 'refund/:sn', component: () => import('@/views/order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }}
     ]
@@ -156,7 +156,8 @@ export const asyncRouterMap = [
           { path: 'pc', component: () => import('@/views/shop/shop-theme-manage/themeList'), name: 'themeList', meta: { title: 'themeList' }},
           { path: 'wap', component: () => import('@/views/shop/shop-theme-manage/themeListWap'), name: 'themeListWap', meta: { title: 'themeListWap' }}
         ]
-      }
+      },
+      { path: 'settlement-list', component: () => import('@/views/order/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }}
     ]
   },
   // 促销管理
