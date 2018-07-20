@@ -45,7 +45,6 @@
           </div>
         </li>
         <li class="spacer"></li>
-        <li class="spacer"></li>
         <li class="dorpdown">
           <div class="dt hs-icon">
             <a href="#">站点导航</a>
@@ -59,8 +58,9 @@
             </dl>
           </div>
         </li>
+        <li class="spacer"></li>
         <li class="dorpdown">
-          <div class="dt hs-icon">
+          <div class="dt">
             <a href="/help">帮助中心</a>
             <!--<i class="iconfont ea-icon-arrow-down"></i>-->
           </div>
