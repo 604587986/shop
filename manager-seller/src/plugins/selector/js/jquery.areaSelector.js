@@ -272,6 +272,9 @@ let bindEventListener = function() {
 
   // 地区全选/取消全选事件
   areaDOM.find('#chooseAll').click(function() {
+    if ($('.area-left .depth-one').length <= 0) {
+      return
+    }
     if ($(this).text() === '全选') {
       $('.area-left .depth-one>div.item').each(function() {
         if (!$(this).parent().hasClass('selected')) {
