@@ -110,6 +110,7 @@
 
 <script>
   import * as API_Colection from '@/api/collection'
+  import { Foundation } from '~/ui-utils'
 
   export default {
     name: 'collectionList',
@@ -218,7 +219,19 @@
         const start_time = parseInt(range[0] / 1000)
         const end_time = parseInt(range[1] / 1000)
         API_Colection.exportCollection({ start_time, end_time }).then(response => {
-          // to do somthing
+          const json = response.data.map(item => ({
+            '退款单ID': item.id,
+            '退款流水号': item.sn,
+            '退款相关订单号': item.order_sn,
+            '支付方式': item.refund_way,
+            '店铺名称': item.seller_name,
+            '收款人': item.member_name,
+            '退款状态': item.refund_status_text,
+            '创建时间': Foundation.unixToDate(item.create_time),
+            '退款金额': Foundation.formatPrice(item.refund_price),
+            '退款时间': Foundation.unixToDate(item.refund_time)
+          }))
+          this.MixinExportJosnToExcel(json, '收款单')
         })
       },
 
