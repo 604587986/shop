@@ -52,7 +52,7 @@
         <!--订单号-->
         <el-table-column prop="order_sn" label="订单号"/>
         <!--会员名称-->
-        <el-table-column prop="seller_name" label="会员名称"/>
+        <el-table-column prop="member_name" label="会员名称"/>
         <!--创建时间-->
         <el-table-column label="申请时间">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
