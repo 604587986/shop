@@ -104,7 +104,8 @@
             this.loading = true
             this.$store.dispatch('loginAction', params).then(() => {
               this.loading = false
-              this.$router.push({ path: '/' })
+              const forward = this.$route.query.forward
+              this.$router.push({ path: forward || '/' })
             }).catch(() => {
               this.loading = false
               this.changeValidcode()

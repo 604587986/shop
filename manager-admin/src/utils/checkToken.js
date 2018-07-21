@@ -45,7 +45,7 @@ export default function checkToken(options) {
       MessageBox.alert('您的登录状态已失效，请重新登录！', '权限错误', {
         type: 'error',
         callback: () => {
-          router.push('/login')
+          router.push(`/login?forward=${location.pathname}`)
         }
       })
       return
@@ -87,7 +87,7 @@ export default function checkToken(options) {
             console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
             if (__RTK__ === undefined) {
               console.log('登录已失效了，不用再等待了...')
-              router.push({ path: '/login' })
+              router.push({ path: `/login?forward=${location.pathname}` })
               return
             }
             __RTK__ === null

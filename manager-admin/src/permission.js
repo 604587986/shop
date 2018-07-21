@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
         }).catch(() => {
           store.dispatch('fedLogOut').then(() => {
             Message.error('验证失败,请重新登录')
-            next({ path: '/login' })
+            next({ path: `/login?forward=${location.pathname}` })
           })
         })
       } else {
@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      next('/login')
+      next(`/login?forward=${location.pathname}`)
       NProgress.done()
     }
   }
