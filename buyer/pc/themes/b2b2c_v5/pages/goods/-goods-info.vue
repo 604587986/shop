@@ -4,6 +4,7 @@
       <h1>{{ goodsInfo.goods_name }}</h1>
     </div>
     <div class="pro-details">
+      <goods-groupbuy-seckill :promotions="promotions"/>
       <div class="price-box">
         <div class="pro-list">
           <div class="pro-title">价格</div>
@@ -73,16 +74,19 @@
    * 包括限时抢购
    * 包括团购活动
    */
+  import Vue from 'vue'
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
   import Storage from '@/utils/storage'
   import GoodsCoupons from './-goods-coupons'
   import GoodsPromotions from './-goods-promotions'
-  import GoodsGroup from './-goods-groupbuy'
+  import GoodsGroupbuySeckill from './-goods-groupbuy-seckill'
+  import GoodsPromBar from './-goods-prom-bar'
+  Vue.component('goods-prom-bar', GoodsPromBar)
   export default {
     name: 'goods-info',
     props: ['goods', 'promotions'],
-    components: { GoodsCoupons, GoodsPromotions, GoodsGroup },
+    components: { GoodsCoupons, GoodsPromotions, GoodsGroupbuySeckill },
     data() {
       return {
         goodsInfo: JSON.parse(JSON.stringify(this.goods)),
@@ -294,10 +298,6 @@
   .goods-info {
     padding-left: 20px;
     padding-right: 20px;
-    .price {
-      span { font-size: 16px }
-      strong { font-size: 22px }
-    }
     .pro-name {
       h1 {
         font: normal 16px/24px "microsoft yahei";
@@ -392,6 +392,10 @@
       width: 307px;
       min-height: 33px;
       line-height: 33px;
+      &.price {
+        span { font-size: 16px }
+        strong { font-size: 22px }
+      }
     }
   }
   .pro-spec {

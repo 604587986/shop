@@ -1,5 +1,5 @@
 <template>
-  <div v-if="promotions" class="promotions-container">
+  <div v-if="promotions && hasParom" class="promotions-container">
     <div class="pro-list promotions-box" id="promotions-box">
       <div class="pro-title">促销信息</div>
       <div class="pro-content prom">
@@ -36,8 +36,14 @@
   export default {
     name: 'goods-promotions',
     props: ['promotions'],
+    computed: {
+      hasParom() {
+        return false
+      }
+    },
     watch: {
       promotions: function () {
+        return false
         this.$nextTick(() => {
           const $proBox = document.getElementById('promotions-box')
           const $plaBox = document.getElementById('promotions-place')
