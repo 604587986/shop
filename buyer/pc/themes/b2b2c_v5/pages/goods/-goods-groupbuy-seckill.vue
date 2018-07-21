@@ -5,12 +5,12 @@
       <goods-prom-bar
         title="团购活动"
         :end-time="promotion.end_time - parseInt(new Date() / 1000)"
-        @count-end="showPromotion = false"
+        @count-end="handleCountEnd"
       >
         <i class="iconfont ea-icon-prom-tag" slot="icon"></i>
       </goods-prom-bar>
       <div class="pro-list">
-        <div class="pro-title">'团购价'</div>
+        <div class="pro-title">团购价</div>
         <div class="pro-content price">
           <span>￥</span>
           <strong>{{ promotion.groupbuy_goods_do.price | unitPrice }}</strong>
@@ -22,7 +22,7 @@
       <goods-prom-bar
         title="限时抢购"
         :end-time="promotion.seckill_goods_vo.distance_end_time"
-        @count-end="showPromotion = false"
+        @count-end="handleCountEnd"
       >
         <i class="iconfont ea-icon-time seckill" slot="icon"></i>
       </goods-prom-bar>
@@ -64,6 +64,12 @@
         // 如果都没有，返回false
         if (!prom || !prom[0]) return false
         return prom[0]
+      }
+    },
+    methods: {
+      handleCountEnd() {
+        this.showPromotion = false
+        this.$alert('活动已结束，商品已恢复原价。')
       }
     }
   }

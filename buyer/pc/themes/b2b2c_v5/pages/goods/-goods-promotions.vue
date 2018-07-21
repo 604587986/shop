@@ -1,5 +1,5 @@
 <template>
-  <div v-if="promotions && hasParom" class="promotions-container">
+  <div v-if="promotions && showPromotion" class="promotions-container">
     <div class="pro-list promotions-box" id="promotions-box">
       <div class="pro-title">促销信息</div>
       <div class="pro-content prom">
@@ -36,19 +36,28 @@
   export default {
     name: 'goods-promotions',
     props: ['promotions'],
-    computed: {
-      hasParom() {
-        return false
+    data() {
+      return {
+        showPromotion: true
       }
     },
     watch: {
-      promotions: function () {
-        return false
-        this.$nextTick(() => {
-          const $proBox = document.getElementById('promotions-box')
-          const $plaBox = document.getElementById('promotions-place')
-          $plaBox.style.height = $proBox.offsetHeight + 'px'
+      promotions: function (newVal) {
+        let flag = false
+        const proms = ['full_discount_vo', 'half_price_vo', 'minus_vo']
+        newVal.forEach(item => {
+          proms.forEach(porm => {
+            if (item[porm]) flag = true
+          })
         })
+        this.showPromotion = flag
+        if (flag) {
+          this.$nextTick(() => {
+            const $proBox = document.getElementById('promotions-box')
+            const $plaBox = document.getElementById('promotions-place')
+            $plaBox.style.height = $proBox.offsetHeight + 'px'
+          })
+        }
       }
     }
   }
