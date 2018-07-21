@@ -4,26 +4,22 @@
       <h1>{{ goodsInfo.goods_name }}</h1>
     </div>
     <div class="pro-details">
-      <div class="pro-list">
-        <div class="pro-title">价格</div>
-        <!--如果有大于1个的sku，则显示价格区间-->
-        <div v-if="priceRange" class="pro-content price">
-          <span>￥</span>
-          <strong>{{ priceRange[0] | unitPrice }}</strong>
-          <template v-if="priceRange[1]">
-             ~ <strong>{{ priceRange[1] | unitPrice }}</strong>
-          </template>
+      <div class="price-box">
+        <div class="pro-list">
+          <div class="pro-title">价格</div>
+          <!--如果有大于1个的sku，则显示价格区间-->
+          <div v-if="priceRange" class="pro-content price">
+            <span>￥</span>
+            <strong>{{ priceRange[0] | unitPrice }}</strong>
+            <template v-if="priceRange[1]"> ~ <strong>{{ priceRange[1] | unitPrice }}</strong></template>
+          </div>
+          <div v-else class="pro-content price">
+            <span>￥</span>
+            <strong>{{ goodsInfo.price | unitPrice }}</strong>
+          </div>
         </div>
-        <div v-else class="pro-content price">
-          <span>￥</span>
-          <strong>{{ goodsInfo.price | unitPrice }}</strong>
-        </div>
+        <goods-promotions :promotions="promotions"/>
       </div>
-      <div class="pro-list">
-        <div class="pro-title">温馨提示</div>
-        <div class="pro-content">本商品无质量问题不支持退换货</div>
-      </div>
-      <goods-promotions :goods-id="goods.goods_id"/>
       <goods-coupons :shop-id="goods.seller_id"/>
     </div>
     <div v-if="specList && specList.length" :class="['pro-spec', unselectedSku && 'error']">
@@ -71,17 +67,22 @@
 <script>
   /**
    * 商品信息模块
-   * 包括商品名称、商品价格、购买数量、加入购物车等等
+   * 包括商品名称、商品价格、购买数量、加入购物车
+   * 包括优惠券
+   * 包括促销信息
+   * 包括限时抢购
+   * 包括团购活动
    */
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
   import Storage from '@/utils/storage'
   import GoodsCoupons from './-goods-coupons'
   import GoodsPromotions from './-goods-promotions'
+  import GoodsGroup from './-goods-groupbuy'
   export default {
     name: 'goods-info',
-    props: ['goods'],
-    components: { GoodsCoupons, GoodsPromotions },
+    props: ['goods', 'promotions'],
+    components: { GoodsCoupons, GoodsPromotions, GoodsGroup },
     data() {
       return {
         goodsInfo: JSON.parse(JSON.stringify(this.goods)),
@@ -291,11 +292,11 @@
     padding-bottom: 15px;
   }
   .goods-info {
-    padding-left: 30px;
+    padding-left: 20px;
     padding-right: 20px;
     .price {
       span { font-size: 16px }
-      strong { font-size: 28px }
+      strong { font-size: 22px }
     }
     .pro-name {
       h1 {
@@ -305,15 +306,16 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
+        padding-left: 10px;
       }
     }
     .pro-details {
-      padding: 15px 0 10px 0;
+      padding: 10px 0;
       color: #666666;
       position: relative;
     }
     .buy-num {
-      padding-top: 20px;
+      padding-top: 5px;
       .pro-content { display: flex }
     }
     .count-num {
@@ -374,20 +376,23 @@
       }
     }
   }
-  /deep/ .pro-list {
-    display: flex;
-    margin-bottom: 5px;
-  }
-  /deep/ .pro-title {
-    width: 60px;
-    padding-right: 17px;
-    height: 33px;
-    line-height: 33px;
-  }
-  /deep/ .pro-content {
-    width: 307px;
-    min-height: 33px;
-    line-height: 33px;
+  /deep/ {
+    .pro-list {
+      display: flex;
+      margin-bottom: 5px;
+      padding-left: 10px;
+    }
+    .pro-title {
+      width: 60px;
+      padding-right: 17px;
+      height: 33px;
+      line-height: 33px;
+    }
+    .pro-content {
+      width: 307px;
+      min-height: 33px;
+      line-height: 33px;
+    }
   }
   .pro-spec {
     position: relative;
@@ -442,5 +447,9 @@
       width: 12px;
       height: 12px;
     }
+  }
+  .price-box {
+    position: relative;
+    background-color: #f3f3f3;
   }
 </style>
