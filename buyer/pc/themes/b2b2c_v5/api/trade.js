@@ -304,11 +304,26 @@ export function getWeChatQrStatus(sn) {
  * @param params
  */
 export function initiatePay(trade_type, sn, params) {
-  return `${api.buyer}/order/pay/${trade_type}/${sn}`
   return request({
     url: `order/pay/${trade_type}/${sn}`,
     method: Method.GET,
     needToken: true,
     params
+  })
+}
+
+/**
+ * 查询物流
+ * @param id
+ * @param num
+ */
+export function getExpress(id, num) {
+  return request({
+    url: 'express',
+    method: Method.GET,
+    params: {
+      id,
+      num
+    }
   })
 }
