@@ -32,7 +32,7 @@
       <empty-member v-else>暂无站内消息</empty-member>
     </div>
     <div class="member-pagination" v-if="tableData && tableData.data.length">
-      <a href="javascript:;" class="read-all" @click="handleReadPageMessages">标记当前页为已读</a>
+      <a v-if="type === 'unread'" href="javascript:;" class="read-all" @click="handleReadPageMessages">标记当前页为已读</a>
       <el-pagination
         @current-change="handleCurrentPageChange"
         :current-page.sync="params.page_no"
