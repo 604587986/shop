@@ -62,7 +62,7 @@
 <script>
   import mixin from './themeHeaderMixin'
   export default {
-    name: 'shop-theme-1-header',
+    name: 'theme-1-header',
     props: ['shop'],
     mixins: [mixin]
   }

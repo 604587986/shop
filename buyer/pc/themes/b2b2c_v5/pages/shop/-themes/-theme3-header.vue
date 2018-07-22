@@ -60,7 +60,7 @@
 <script>
   import mixin from './themeHeaderMixin'
   export default {
-    name: 'shop-theme-3',
+    name: 'theme-3-header',
     props: ['shop'],
     mixins: [mixin]
   }
