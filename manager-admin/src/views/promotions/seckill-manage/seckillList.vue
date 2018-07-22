@@ -66,16 +66,16 @@
             type="datetime"
             placeholder="选择日期时间"
             value-format="timestamp"
-            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() }}">
+            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="活动日期" prop="start_day">
           <el-date-picker
             v-model="seckillForm.start_day"
-            type="date"
+            type="datetime"
             placeholder="选择日期"
             value-format="timestamp"
-            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() }}">
+            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="抢购阶段" prop="range_list">
