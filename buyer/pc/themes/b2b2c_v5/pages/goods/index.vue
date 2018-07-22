@@ -109,9 +109,9 @@
           </div>
           <div class="price">
             <div class="p-c-i">
-              <span><em>￥</em><input type="text" v-model="prices[0]" class="custom-pro" maxlength="5"/></span>
+              <div class="p-c-i-b"><em>￥</em><input type="text" v-model="prices[0]" class="custom-pro" maxlength="5"/></div>
               <i></i>
-              <span><em>￥</em><input type="text" v-model="prices[1]" class="custom-pro" maxlength="5"/></span>
+              <div class="p-c-i-b"><em>￥</em><input type="text" v-model="prices[1]" class="custom-pro" maxlength="5"/></div>
             </div>
             <div class="p-c-b">
               <a href="javascript:;" class="empty-pro" @click="prices = []">清空</a>
@@ -479,21 +479,20 @@
           width: 100%;
           background: #ededed;
         }
-        span {
+        .p-c-i-b {
           display: inline-block;
           width: 45px;
           height: 22px;
           border: 1px solid #ededed;
           background-color: #fff;
-          background-position: 3px -281px;
-          text-align: right;
         }
-        em { margin-right: 2px }
         input {
           width: 33px;
           height: 14px;
           border: 0 none;
+          padding: 0 3px;
           margin-top: 4px;
+          box-sizing: border-box;
         }
         i {
           display: inline-block;
