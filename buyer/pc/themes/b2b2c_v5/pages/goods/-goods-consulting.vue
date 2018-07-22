@@ -15,7 +15,7 @@
           <div class="box-cons">
             <p class="content-cons" v-html="consult.content.replace(/\n/g, '<br>')"></p>
             <template v-if="consult.reply_status === 1">
-              <p>掌柜回复：</p>
+              <p style="margin-top: 10px;color: #e6a23c">掌柜回复：</p>
               <pre class="reply-cons">{{ consult.reply }}</pre>
             </template>
           </div>
