@@ -2,6 +2,7 @@
   <div id="shop-theme-1">
     <theme1-header :shop="shop"/>
     <en-shop-sildes :shop-id="shop.shop_id"/>
+    <theme1-coupons :shop-id="shop.shop_id"/>
     <div class="shop-tags">
       <div class="tags-container">
         <div class="item hot">
@@ -120,10 +121,11 @@
 <script>
   import mixin from './themeMixin'
   import theme1Header from './-theme1-header'
+  import theme1Coupons from './-theme1-coupons'
   export default {
     name: 'shop-theme-1',
     mixins: [mixin],
-    components: { theme1Header }
+    components: { theme1Header, theme1Coupons }
   }
 </script>
 
