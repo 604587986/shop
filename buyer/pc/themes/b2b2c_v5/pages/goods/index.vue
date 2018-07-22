@@ -108,10 +108,12 @@
             </a>
           </div>
           <div class="price">
-            <div class="p-c-b">
+            <div class="p-c-i">
               <span><em>￥</em><input type="text" v-model="prices[0]" class="custom-pro" maxlength="5"/></span>
               <i></i>
               <span><em>￥</em><input type="text" v-model="prices[1]" class="custom-pro" maxlength="5"/></span>
+            </div>
+            <div class="p-c-b">
               <a href="javascript:;" class="empty-pro" @click="prices = []">清空</a>
               <a href="javascript:;" class="enter-pro" @click="GET_GoodsList">确定</a>
             </div>
@@ -416,12 +418,14 @@
     overflow: hidden;
     box-shadow: rgb(204, 204, 204) 0 2px 5px;
     .gl-sku-filter {
-      display: flex;
-      align-items: center;
       position: relative;
+      z-index: 3;
       height: 45px;
       background-color: #f5f5f5;
+      $margin-top: (45px - 24px) / 2;
       .btns {
+        float: left;
+        margin-top: $margin-top;
         margin-left: 30px;
         .iconfont {
           transform: rotate(-180deg);
@@ -450,25 +454,30 @@
         }
       }
       .price {
+        position: relative;
+        float: left;
         width: 124px;
-        overflow: hidden;
+        height: 45px;
         margin-left: 15px;
         text-align: center;
         &:hover {
-          overflow: inherit;
-          align-self: end;
+          background: #ededed;
           .p-c-b {
-            background: #ededed;
-            padding-top: 10px;
-            height: 64px;
-            position: relative;
-            z-index: 3;
-            overflow: visible;
+            display: block;
           }
         }
-        .p-c-b {
+        .p-c-i {
           height: 24px;
+          margin-top: $margin-top;
           overflow: hidden;
+        }
+        .p-c-b {
+          display: none;
+          position: absolute;
+          bottom: -30px;
+          left: 0;
+          width: 100%;
+          background: #ededed;
         }
         span {
           display: inline-block;
