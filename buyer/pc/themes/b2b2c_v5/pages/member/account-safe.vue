@@ -2,7 +2,9 @@
   <div id="account-security">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">账号安全</li>
+        <li class="active">
+          <a href="./account-safe">账号安全</a>
+        </li>
       </ul>
     </div>
     <div class="safe-title">

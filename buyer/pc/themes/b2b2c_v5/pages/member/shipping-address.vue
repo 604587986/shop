@@ -2,7 +2,9 @@
   <div id="shipping-address">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">收货地址管理</li>
+        <li class="active">
+          <a href="./shipping-address">收货地址管理</a>
+        </li>
       </ul>
       <el-button size="mini" class="add-address-btn" @click="handleAddAddress">添加地址</el-button>
     </div>
