@@ -2,37 +2,102 @@
   <div id="points-mall">
     <div class="points-category">
       <ul class="inner-points-cate w">
-        <li v-for="i in 7" :key="i" :class="[i === 0 && 'active']">
-          <a href="javascript:;">食品饮料</a>
+        <li v-for="cat in categorys" :key="cat.cat_id" :class="[cat.active && 'active']">
+          <a href="javascript:;" @click="handleClickCat(cat)">{{ cat.name }}</a>
         </li>
       </ul>
     </div>
     <div class="points-goods">
-      <ul class="goods-list w">
-        <li v-for="i in 50" :key="i" class="goods-item">
-          <a href="javascript:;">
-            <img class="goods-img" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/7EBD931E14FF477FB248823F3CA3316A.jpg_300x300" alt="">
-          </a>
-          <div class="goods-info">
-            <p class="integral">
-              <span class="price">￥0+500积分</span>
-              <span class="origin-price">原价：￥52</span>
-            </p>
-            <p class="goods-name">资生堂 珊珂 绵润泡沫洁面乳 120g啊啊啊飒飒啊啊爱上a</p>
-            <p>已有<span>23</span>人兑换</p>
-          </div>
-        </li>
-      </ul>
+      <div v-if="!tableData || !tableData.data.length" class="no-goods w">
+        暂无商品...
+      </div>
+      <template v-else>
+        <ul class="goods-list w">
+          <li v-for="goods in tableData.data" :key="goods.goods_id" class="goods-item">
+            <a href="javascript:;">
+              <img class="goods-img" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/7EBD931E14FF477FB248823F3CA3316A.jpg_300x300" alt="">
+            </a>
+            <div class="goods-info">
+              <p class="integral">
+                <span class="price">￥0+500积分</span>
+                <span class="origin-price">原价：￥52</span>
+              </p>
+              <p class="goods-name">资生堂 珊珂 绵润泡沫洁面乳 120g啊啊啊飒飒啊啊爱上a</p>
+              <p>已有<span>23</span>人兑换</p>
+            </div>
+          </li>
+        </ul>
+        <el-pagination
+          @current-change="handleCurrentPageChange"
+          :current-page.sync="params.page_no"
+          :page-size="params.page_size"
+          layout="total, prev, pager, next"
+          :total="tableData.data_total">
+        </el-pagination>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Pagination } from 'element-ui'
+  Vue.use(Pagination)
+  import * as API_Promotions from '@/api/promotions'
   export default {
     name: 'points-mall',
     head() {
       return {
         title: `积分商城-${this.site.title}`
+      }
+    },
+    data() {
+      return {
+        categorys: '',
+        params: {
+          page_no: 1,
+          page_size: 20,
+          cat_id: 0
+        },
+        tableData: ''
+      }
+    },
+    mounted() {
+      this.GET_PointsCategory()
+    },
+    methods: {
+      /** 当前分页发生改变 */
+      handleCurrentPageChange(page_no) {
+        this.params.page_no = page_no
+        this.GET_PointsGoods()
+      },
+      /** 选择积分分类 */
+      handleClickCat(cat) {
+        this.$set(this, 'categorys', this.categorys.map(item => {
+          item.active = item.cat_id === cat.cat_id
+          return item
+        }))
+        this.params.cat_id = cat.cat_id
+        this.GET_PointsGoods()
+      },
+      /** 获取积分分类 */
+      GET_PointsCategory() {
+        API_Promotions.getPointsCategory().then(response => {
+          this.categorys = [
+            { name: '全部', cat_id: 0, active: true },
+            ...response.map(item => ({
+              active: false,
+              name: item.name,
+              cat_id: item.category_id
+            }))
+          ]
+        })
+      },
+      /** 获取积分商品 */
+      GET_PointsGoods() {
+        API_Promotions.getPointsGoods(this.params).then(response => {
+          this.tableData = response
+        })
       }
     }
   }
@@ -63,7 +128,7 @@
         font-size: 30px;
         content: '∙';
       }
-      &.active {
+      &.active a {
         color: $color-main;
       }
     }
@@ -113,5 +178,11 @@
         white-space: nowrap;
       }
     }
+  }
+  .no-goods {
+    text-align: center;
+    line-height: 100px;
+    font-size: 18px;
+    font-weight: 700;
   }
 </style>
