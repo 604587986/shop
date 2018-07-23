@@ -2,7 +2,9 @@
   <div id="my-profile">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">个人资料</li>
+        <li class="active">
+          <a href="./my-profile">个人资料</a>
+        </li>
       </ul>
     </div>
     <div class="profile-container">

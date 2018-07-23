@@ -2,7 +2,9 @@
   <div id="my-consultation">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">我的咨询</li>
+        <li class="active">
+          <a href="./my-consultation">我的咨询</a>
+        </li>
       </ul>
     </div>
     <template v-if="consultation && consultation.data.length > 0">

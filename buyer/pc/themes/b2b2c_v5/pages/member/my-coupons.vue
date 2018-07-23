@@ -2,7 +2,9 @@
   <div id="my-coupons">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">我的优惠券</li>
+        <li class="active">
+          <a href="./my-coupons">我的优惠券</a>
+        </li>
       </ul>
     </div>
     <div class="coupons-container">

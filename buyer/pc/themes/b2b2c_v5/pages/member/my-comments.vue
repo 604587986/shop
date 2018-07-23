@@ -2,7 +2,9 @@
   <div id="my-comments">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">我的评论</li>
+        <li class="active">
+          <a href="./my-comments">我的评论</a>
+        </li>
       </ul>
     </div>
     <template v-if="comments && comments.data.length > 0">
