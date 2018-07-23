@@ -199,7 +199,7 @@
             <el-input  v-model.number="ConsigneeForm.ship_mobile" ></el-input>
           </el-form-item>
           <el-form-item label="配送地区：" prop="region" class="area-select">
-            <en-region-picker :api="areasapi" :default="areas" @changed="handleChangeArea"></en-region-picker>
+            <en-region-picker :api="MixinRegionApi" :default="areas" @changed="handleChangeArea"></en-region-picker>
           </el-form-item>
           <el-form-item label="详细地址：" prop="ship_addr" >
             <el-input  v-model="ConsigneeForm.ship_addr" ></el-input>
@@ -275,8 +275,6 @@
     },
     data() {
       return {
-        areasapi: `${process.env.BASE_API}/regions/@id/children`,
-
         /** 列表loading状态 */
         loading: false,
 
@@ -310,7 +308,7 @@
         /** 是否显示物流信息弹框 */
         logisticsCompanyShow: false,
 
-        /** 是否显示查询物流信息显示 */
+        /** 是否显示调整价格/修改收货人信息显示 */
         orderDetailShow: false,
 
         /** 发货物流信息 */
@@ -403,7 +401,7 @@
           }
 
           // 是否可以修改收货人信息 未发货时皆可修改收货人信息（订单状态 新订单 已确认 未付款） 在线支付时已付款
-          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
+          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' || this.orderDetail.order_status === 'CANCELLED' ||
             this.orderDetail.order_status === 'PAY_NO' || (this.orderDetail.order_status === 'PAID_OFF' && this.orderDetail.payment_type === 'ONLINE')) {
             this.isShowEditShipName = true
           } else {

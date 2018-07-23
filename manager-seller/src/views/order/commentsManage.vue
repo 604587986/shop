@@ -58,7 +58,7 @@
           <tr class="bg-order">
             <!--商品名称-->
             <td colspan="4">
-              <a class="shop-name" target="_blank" :href="`${HTTP_URL}/${item.goods_id}`" style="color: #00a2d4;">{{ item.goods_name }}</a>
+              <a class="shop-name" target="_blank" :href="`${MixinBuyerDomain}/goods/${item.goods_id}`" style="color: #00a2d4;">{{ item.goods_name }}</a>
             </td>
           </tr>
           <tr>
@@ -111,12 +111,6 @@
       </div>
       <el-dialog title="回复评论" :visible.sync="replyCommentShow" width="30%">
         <el-form :model="commentForm">
-          <el-form-item label="审核" :label-width="formLabelWidth">
-            <el-radio-group v-model="commentForm.isPass">
-              <el-radio :label="1">通过</el-radio>
-              <el-radio :label="0">拒绝</el-radio>
-            </el-radio-group>
-          </el-form-item>
           <el-form-item label="评论内容" :label-width="formLabelWidth">
             <span>{{commentForm.comment_content}}</span>
           </el-form-item>
@@ -195,9 +189,6 @@
     },
     data() {
       return {
-        /** 域名配置 */
-        HTTP_URL: `${process.env.HTTP_URL}/goods`,
-
         /** 当前面板 */
         activeName: 'commentlist',
 
@@ -248,9 +239,6 @@
           /** 评论id */
           comment_id: '',
 
-          /** 是否通过 */
-          isPass: 1,
-
           /** 是否有图 */
           have_image: '',
 
@@ -271,19 +259,19 @@
     computed: {
       socreDescription() {
         return {
-          'left': Number.isInteger(this.shopInfo.shop_description_credit)
+          'left': this.shopInfo.shop_description_credit
             ? parseFloat((this.shopInfo.shop_description_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       },
       socreService() {
         return {
-          'left': Number.isInteger(this.shopInfo.shop_service_credit)
+          'left': this.shopInfo.shop_service_credit
             ? parseFloat((this.shopInfo.shop_service_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       },
       socreDelivery() {
         return {
-          'left': Number.isInteger(this.shopInfo.shop_delivery_credit)
+          'left': this.shopInfo.shop_delivery_credit
             ? parseFloat((this.shopInfo.shop_delivery_credit / 5).toFixed(2) * 100 - 7.5) + '%' : 0
         }
       }

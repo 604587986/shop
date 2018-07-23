@@ -20,7 +20,7 @@
               <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
               <div class="goodsinfo-txt">
                 <a class="goods-name"
-                  :href="`${HTTP_URL}/${scope.row.goods_id}`">
+                  :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`">
                   {{ scope.row.goods_name }}</a>
                 <span class="goods-price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
@@ -65,9 +65,6 @@
     name: 'tagAdd',
     data() {
       return {
-        /** 域名配置 */
-        HTTP_URL: `${process.env.HTTP_URL}/goods`,
-
         /** 标签商品列表loading状态 */
         loading: false,
 
@@ -159,6 +156,10 @@
 
       /** 批量取消 */
       cancelall() {
+        if (this.selectionids.length <= 0) {
+          this.$message.error('请选择要取消的商品')
+          return
+        }
         this.selectionids.forEach(key => {
           this.tableData.forEach((elem, index) => {
             if (elem.goods_id === key) {

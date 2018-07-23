@@ -95,7 +95,7 @@
         <el-form-item label="分组名称">
           <el-input v-model="goodsCatData.category_name" style="width: 100%;"></el-input>
         </el-form-item>
-        <el-form-item label="上级分组" v-show="goodsCatData.category_parent">
+        <el-form-item label="上级分组" >
           <el-select v-model="goodsCatData.category_parent" placeholder="请选择" style="width: 100%;">
             <el-option
               v-for="item in tableData"
@@ -221,6 +221,7 @@
         this.categorytitle = '增加分组'
         this.goodsCatData = {
           category_name: '',
+          category_parent: '',
           sort: '',
           disable: 1
         }

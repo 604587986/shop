@@ -72,7 +72,7 @@
     methods: {
       /** 查看店铺 */
       lookshop() {
-        window.open(`${process.env.HTTP_URL}/shop/${this.shopInfo.shop_id}`)
+        window.open(`${this.MixinBuyerDomain}/shop/${this.shopInfo.shop_id}`)
       },
 
       /** 获取PC店铺主题列表*/

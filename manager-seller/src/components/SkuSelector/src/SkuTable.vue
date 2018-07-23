@@ -20,7 +20,7 @@
           <div v-else class="input-error-model">
             <el-input
               :disabled="isEditModel === 1 && item==='quantity'"
-              v-model.number="scope.row[item]"
+              v-model="scope.row[item]"
               @input="updateSkuTable(index, scope, item)"
               @blur="updateSkuTable(index, scope, item)">
             </el-input>
@@ -102,7 +102,7 @@
         if (this.productSn && this.tableData.length > 0) {
           let count = 1
           this.tableData.forEach(key => {
-            key.sn = this.goodsSn + '-' + count
+            key.sn = this.goodsSn + '-00000' + count
             count++
           })
           /** 异步更新skuInfo数据 */

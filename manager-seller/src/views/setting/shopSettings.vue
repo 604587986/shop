@@ -13,7 +13,7 @@
       </el-form-item>
       <!--店铺地址-->
       <el-form-item label="店铺地址：" prop="shop_address">
-        <en-region-picker :api="areasapi" :default="areas" @changed="handleChange"></en-region-picker>
+        <en-region-picker :api="MixinRegionApi" :default="areas" @changed="handleChange"></en-region-picker>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
@@ -37,7 +37,7 @@
         <el-upload
           class="upload-demo"
           key="shop_logo"
-          :action="BASE_IMG_URL"
+          :action="`${MixinUploadApi}?scene=shop`"
           :on-success="uploadSuccessLogo"
           :file-list="fileList_logo"
           ref="fileList_logo"
@@ -54,7 +54,7 @@
           class="upload-demo"
           key="shop_banner"
           :on-success="uploadSuccessBanner"
-          :action="BASE_IMG_URL"
+          :action="`${MixinUploadApi}?scene=shop`"
           :file-list="fileList_banner"
           ref="fileList_banner"
           list-type="picture">
@@ -89,11 +89,6 @@
         }
       }
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=shop`,
-
-        areasapi: `${process.env.BASE_API}/regions/@id/children`,
-
         /** 店铺信息*/
         shopDataForm: {
           /** 店铺ID */

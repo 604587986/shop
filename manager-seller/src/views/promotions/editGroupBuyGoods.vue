@@ -57,7 +57,7 @@
       <el-form-item label="团购图片" prop="img_url">
         <el-upload
           class="upload-demo"
-          :action="BASE_IMG_URL"
+          :action="`${MixinUploadApi}?scene=goods`"
           :file-list="fileList"
           :on-remove="handleRemove"
           :on-success="handleSuccess"
@@ -130,7 +130,7 @@
       @close="showDialog = false"/>
     <!--用户注册协议-->
     <el-dialog
-      title="用户注册协议"
+      title="团购服务协议"
       :visible.sync="showAgreement"
       width="50%"
       center
@@ -228,9 +228,6 @@
         }, 500)
       }
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=goods`,
-
         /** input框长度*/
         inputLength: 300,
 
