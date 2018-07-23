@@ -16,7 +16,7 @@
           value-format="timestamp"
           :picker-options="pickerOptions">
         </el-date-picker>
-        <el-button size="mini" type="primary" icon="el-icon-download" @click="handleExportRefund" style="margin-left: 5px">导出Excel</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-download" @click="handleExportCollection" style="margin-left: 5px">导出Excel</el-button>
       </div>
       <div class="toolbar-search">
         <en-table-search
@@ -82,29 +82,16 @@
       </div>
     </div>
     <template slot="table-columns">
-      <!--退款ID-->
-      <el-table-column prop="id" label="售后ID"/>
-      <!--售后单号-->
-      <el-table-column prop="sn" label="售后单号"/>
-      <!--店铺名称-->
-      <el-table-column prop="seller_name" label="店铺名称"/>
-      <!--申请售后类型-->
-      <el-table-column prop="refuse_type_text" label="申请售后类型"/>
-      <!--售后状态-->
-      <el-table-column prop="refund_status_text" label="售后状态"/>
-      <!--创建时间-->
-      <el-table-column label="创建时间">
-        <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
+      <el-table-column prop="order_sn" label="订单号"/>
+      <el-table-column label="付款方式">
+        <template slot-scope="scope">{{ scope.row.pay_way === 'ONLINE' ? '在线支付' : '货到付款' }}</template>
       </el-table-column>
-      <!--申请金额-->
-      <el-table-column label="申请金额">
-        <template slot-scope="scope">{{ scope.row.refund_price | unitPrice('￥') }}</template>
-      </el-table-column>
-      <!--操作-->
-      <el-table-column label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="handleOperateRefund(scope.$index, scope.row)">操作</el-button>
-        </template>
+      <el-table-column prop="pay_type" label="支付方式"/>
+      <el-table-column prop="pay_time" :formatter="MixinUnixToDate" label="付款日期"/>
+      <el-table-column prop="pay_money" :formatter="MixinFormatPrice" label="付款金额"/>
+      <el-table-column prop="pay_member_name" label="付款人"/>
+      <el-table-column label="付款状态">
+        <template slot-scope="scope">{{ scope.row.pay_status === 'PAY_YES' ? '已支付' : '未支付' }}</template>
       </el-table-column>
     </template>
     <el-pagination
@@ -122,13 +109,13 @@
 </template>
 
 <script>
-  import * as API_refund from '@/api/refund'
+  import * as API_Colection from '@/api/collection'
   import { Foundation } from '~/ui-utils'
 
   export default {
-    name: 'refundList',
+    name: 'collectionList',
     mounted() {
-      this.GET_RefundOrder()
+      this.GET_CollectionOrder()
     },
     data() {
       return {
@@ -186,13 +173,13 @@
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_RefundOrder()
+        this.GET_CollectionOrder()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_RefundOrder()
+        this.GET_CollectionOrder()
       },
 
       /** 搜索事件触发 */
@@ -202,7 +189,7 @@
           order_sn: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
-        this.GET_RefundOrder()
+        this.GET_CollectionOrder()
       },
 
       /** 高级搜索事件触发 */
@@ -219,24 +206,19 @@
         }
         delete this.params.order_sn
         delete this.params.refund_time_range
-        this.GET_RefundOrder()
-      },
-
-      /** 操作订单 */
-      handleOperateRefund(index, row) {
-        this.$router.push({ path: `/order/refund/${row.sn}` })
+        this.GET_CollectionOrder()
       },
 
       /** 导出退款单 */
-      handleExportRefund() {
+      handleExportCollection() {
         const range = this.MixinClone(this.exportDateRange)
-        if (!range || range.length === 0) {
+        if (range.length === 0) {
           this.$message.error('请选择要导出的时间段！')
           return false
         }
         const start_time = parseInt(range[0] / 1000)
         const end_time = parseInt(range[1] / 1000)
-        API_refund.exportRefundExcel({ start_time, end_time }).then(response => {
+        API_Colection.exportCollection({ start_time, end_time }).then(response => {
           const json = response.data.map(item => ({
             '退款单ID': item.id,
             '退款流水号': item.sn,
@@ -249,14 +231,14 @@
             '退款金额': Foundation.formatPrice(item.refund_price),
             '退款时间': Foundation.unixToDate(item.refund_time)
           }))
-          this.MixinExportJosnToExcel(json, '退款单')
+          this.MixinExportJosnToExcel(json, '收款单')
         })
       },
 
       /** 获取退款单列表数据 */
-      GET_RefundOrder() {
+      GET_CollectionOrder() {
         this.loading = true
-        API_refund.getRefundList(this.params).then(response => {
+        API_Colection.getCollectionList(this.params).then(response => {
           this.loading = false
           this.tableData = response
         }).catch(() => { this.loading = false })

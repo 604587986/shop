@@ -47,20 +47,6 @@
         <li class="spacer"></li>
         <li class="dorpdown">
           <div class="dt hs-icon">
-            <a target="_blank" href="/">客户服务</a>
-            <i class="iconfont ea-icon-arrow-down"></i>
-          </div>
-          <div class="dd dorpdown-layer">
-            <dl>
-              <dd><nuxt-link to="/help">帮助中心</nuxt-link></dd>
-              <dd><nuxt-link to="/">售后中心</nuxt-link></dd>
-              <dd><nuxt-link to="/">客服中心</nuxt-link></dd>
-            </dl>
-          </div>
-        </li>
-        <li class="spacer"></li>
-        <li class="dorpdown">
-          <div class="dt hs-icon">
             <a href="#">站点导航</a>
             <i class="iconfont ea-icon-arrow-down"></i>
           </div>
@@ -71,6 +57,20 @@
               <dd><nuxt-link to="/member">个人中心</nuxt-link></dd>
             </dl>
           </div>
+        </li>
+        <li class="spacer"></li>
+        <li class="dorpdown">
+          <div class="dt">
+            <a href="/help">帮助中心</a>
+            <!--<i class="iconfont ea-icon-arrow-down"></i>-->
+          </div>
+          <!--<div class="dd dorpdown-layer">
+            <dl>
+              <dd><nuxt-link to="/help">帮助中心</nuxt-link></dd>
+              <dd><nuxt-link to="/">售后中心</nuxt-link></dd>
+              <dd><nuxt-link to="/">客服中心</nuxt-link></dd>
+            </dl>
+          </div>-->
         </li>
         <li class="spacer"></li>
         <li>
@@ -131,7 +131,7 @@
           // 消息轮询，5分钟查一次
           setTimeout(() => {
             this.GET_UnreadMessage()
-          }, 50000)
+          }, 1000 * 60 * 5)
         })
       }
     }

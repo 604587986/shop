@@ -132,6 +132,7 @@
       height: 500px;
       z-index: 30;
       background-color: rgba(0, 0, 0, .6);
+      padding-top: 3px;
     }
     .category-item {
       cursor: pointer;
@@ -181,7 +182,7 @@
     .item-layer {
       display: none;
       position: absolute;
-      top: 0;
+      top: 3px;
       left: 240px;
       width: 1210px - 240px;
       height: 498px;

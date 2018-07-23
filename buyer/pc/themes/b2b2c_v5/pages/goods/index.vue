@@ -98,18 +98,22 @@
       <div class="gl-sku-box">
         <div class="gl-sku-filter">
           <div class="btns">
-            <nuxt-link to="#" class="active">默认<i class="iconfont ea-icon-arrow-down3"></i></nuxt-link>
-            <nuxt-link to="#">销量<i class="iconfont ea-icon-arrow-down3"></i></nuxt-link>
-            <nuxt-link to="#">价格<i class="iconfont ea-icon-arrow-down3"></i></nuxt-link>
-            <nuxt-link to="#">评价<i class="iconfont ea-icon-arrow-down3"></i></nuxt-link>
+            <a
+              v-for="sort in sorts"
+              :key="sort.name"
+              href="javascript:;"
+              :class="[sort.active && 'active']"
+              @click="handleClickSort(sort)"
+            >{{ sort.title }}<i :class="['iconfont ea-icon-arrow-down3', sort.type === 'desc' && 'desc']"></i>
+            </a>
           </div>
           <div class="price">
             <div class="p-c-b">
-              <span><em>￥</em><input type="text" class="custom-pro" maxlength="5"></span>
+              <span><em>￥</em><input type="text" v-model="prices[0]" class="custom-pro" maxlength="5"/></span>
               <i></i>
-              <span><em>￥</em><input type="text" class="custom-pro" maxlength="5"></span>
-              <a href="javascript:;" class="empty-pro">清空</a>
-              <a href="javascript:;" class="enter-pro">确定</a>
+              <span><em>￥</em><input type="text" v-model="prices[1]" class="custom-pro" maxlength="5"/></span>
+              <a href="javascript:;" class="empty-pro" @click="prices = []">清空</a>
+              <a href="javascript:;" class="enter-pro" @click="GET_GoodsList">确定</a>
             </div>
           </div>
         </div>
@@ -157,7 +161,7 @@
             </li>
           </ul>
           <el-pagination
-            v-if="goodsListData && goodsListData.data"
+            v-if="goodsListData && goodsListData.data.length"
             @current-change="handleCurrentPageChange"
             :current-page.sync="page.page_no"
             :page-size="page.page_size"
@@ -191,7 +195,19 @@
           page_no: 1,
           page_size: 20
         },
-        params: { ...this.$route.query }
+        params: {
+          sort: 'def_asc',
+          ...this.$route.query
+        },
+        // 排序
+        sorts: [
+          { title: '默认', name: 'def', type: 'asc', active: true },
+          { title: '销量', name: 'buynum', type: 'asc', active: false },
+          { title: '价格', name: 'price', type: 'asc', active: false },
+          { title: '评价', name: 'grade', type: 'asc', active: false },
+        ],
+        // 价格区间
+        prices: ['', '']
       }
     },
     mounted() {
@@ -211,12 +227,24 @@
         this.page.page_no = page_no
         this.GET_GoodsList()
       },
+      /** 排序 */
+      handleClickSort(sort) {
+        if (sort.active) {
+          sort.type = sort.type === 'asc' ? 'desc' : 'asc'
+        }
+        this.$set(this, 'sorts', this.sorts.map(item => {
+          item.active = item.name === sort.name
+          return item
+        }))
+        this.params.sort = `${sort.name}_${sort.type}`
+        this.GET_GoodsList()
+      },
       /** 获取商品选择器 */
       GET_GoodsSelector() {
         const params = { ...this.page, ...this.params }
         API_Goods.getGoodsSelector(params).then(response => {
           this.selectorData = response
-          console.log(response)
+          // console.log(response)
         })
       },
       /** 获取商品列表 */
@@ -225,6 +253,10 @@
         Object.keys(params).forEach(key => {
           if (!params[key]) delete params[key]
         })
+        const { prices } = this
+        if (prices[0] || prices[1]) {
+          params.price = prices.join('_')
+        }
         API_Goods.getGoodsList(params).then(response => {
           this.goodsListData = response
           this.MixinScrollToTop(171)
@@ -393,6 +425,9 @@
         margin-left: 30px;
         .iconfont {
           transform: rotate(-180deg);
+        }
+        .iconfont.desc {
+          transform: rotate(0deg);
         }
         a {
           display: inline-block;

@@ -35,37 +35,26 @@
             </div>
             <ul class="cashier-pay-list">
               <li v-for="payment in paymentList" :key="payment.plugin_id" :class="['payment-item', payment.selected && 'selected']">
-                <img :src="payment.image" @click="initiatePay(payment)">
+                <img :src="payment.image" @click="initiatePay(payment, 'qr')">
               </li>
             </ul>
           </div>
         </div>
-        <div v-if="showPayBox" class="cashier-pay-box">
-          <div v-if="payment_plugin_id === 'alipayDirectPlugin'" class="pay-item alipay">
-            <div class="alipay-left">
-              <p>使用电脑支付</p>
-              <div class="pc-pay-img">
-              </div>
-              <a class="pay-btn" :href="payUrl">立即支付</a>
-              <i class="icon-or"></i>
-            </div>
-            <div class="alipay-right">
-              <p>使用支付宝钱包扫一扫即可付款</p>
-              <div class="pay-qrcode">
-                <iframe id="alipay-qrcode" type="text/html" class="alipay-qrcode" :src="payUrl" frameborder="no"></iframe>
-              </div>
-            </div>
-          </div>
-          <div v-if="payment_plugin_id === 'weixinPayPlugin'" class="pay-item wechat">
-            <div class="wechat-left">
-              <div class="pc-pay-img">
+        <div v-show="showPayBox" class="cashier-pay-box">
+          <div class="pay-item alipay">
+            <div class="pay-left">
+              <p v-if="payment_plugin_id !== 'weixinPayPlugin'">使用电脑支付</p>
+              <div v-if="payment_plugin_id === 'weixinPayPlugin'" class="pc-pay-img">
                 <img src="../../assets/images/background-wechat.jpg">
               </div>
+              <div v-else class="pc-pay-img"></div>
+              <a class="pay-btn" href="javascript:;" @click="initiatePay(false, 'normal')">立即支付</a>
+              <i v-if="payment_plugin_id === 'alipayDirectPlugin'" class="icon-or"></i>
             </div>
-            <div class="wechat-right">
-              <p>使用微信扫一扫即可付款</p>
-              <div class="pay-erweima">
-                <iframe src="" id="wechat-qrcode" class="wechat-qrcode" frameborder="no"></iframe>
+            <div v-if="payment_plugin_id === 'alipayDirectPlugin' || payment_plugin_id === 'weixinPayPlugin'" class="pay-right">
+              <p>使用支付宝钱包扫一扫即可付款</p>
+              <div class="pay-qrcode" id="pay-qrcode">
+                <iframe id="iframe-qrcode" width="200px" height="200px" scrolling="no"></iframe>
               </div>
             </div>
           </div>
@@ -96,12 +85,10 @@
         order: '',
         // 显示支付窗口
         showPayBox: false,
-        // 发起电脑支付url
-        payUrl: 'javascript:;',
-        // 支付方式代码
+        // 支付方式
         payment_plugin_id: '',
-        // 支付宝iframe内容
-        alipayIframeContent: ''
+        // 显示确认订单完成支付dialog
+        showConfirmDialog: false
       }
     },
     mounted() {
@@ -120,32 +107,50 @@
     },
     methods: {
       /** 发起支付 */
-      initiatePay(payment) {
+      initiatePay(payment, pay_mode) {
         this.showPayBox = true
-        this.$set(this, 'paymentList', this.paymentList.map(item => {
-          item.selected = item.plugin_id === payment.plugin_id
-          return item
-        }))
+        if (payment) {
+          this.$set(this, 'paymentList', this.paymentList.map(item => {
+            item.selected = item.plugin_id === payment.plugin_id
+            return item
+          }))
+        } else {
+          payment = this.paymentList.filter(item => item.selected)[0]
+        }
         this.payment_plugin_id = payment.plugin_id
         const trade_type = this.trade_sn ? 'trade' : 'order'
         const sn = this.trade_sn || this.order_sn
         const client_type = 'PC'
         const payment_plugin_id = payment.plugin_id
-        // const url = API_Trade.initiatePay(trade_type, sn, { client_type, pay_mode: 'normal', payment_plugin_id })
-        // this.payUrl = url
-        // if (payment_plugin_id === 'alipayDirectPlugin') {
-        //   document.getElementById('alipay-qrcode').src = url
-        // }
-        request({ url: 'http://192.168.2.14:7001/test/163' }).then(response => {
-          // this.alipayIframeContent = response
-          const iframe = document.getElementById('alipay-qrcode')
-          iframe.contentWindow.document.getElementsByTagName('html')[0].innerHTML = response
-          // contents().getElementsByTagName('html')
-          // console.log(response)
+        // 如果是普通模式，就跳新窗口支付
+        if (pay_mode === 'normal') {
+          window.open(`./cashier-load-pay?trade_type=${trade_type}&sn=${sn}&payment_plugin_id=${payment_plugin_id}`)
+          return false
+        }
+        // 如果是二维码模式，并且支付方式不是支付宝或微信，就跳新窗口支付
+        if (pay_mode === 'qr' && (payment_plugin_id !== 'alipayDirectPlugin' && payment_plugin_id !== 'weixinPayPlugin')) {
+          window.open(`./cashier-load-pay?trade_type=${trade_type}&sn=${sn}&payment_plugin_id=${payment_plugin_id}`)
+          return false
+        }
+        this.$nextTick(() => {
+          document.getElementById('pay-qrcode').innerHTML = `<iframe id="iframe-qrcode" width="200px" height="200px" scrolling="no"></iframe>`
+          // 如果是普通支付方式，打开新窗口再跳转到支付网站
+          API_Trade.initiatePay(trade_type, sn, {
+            client_type,
+            pay_mode,
+            payment_plugin_id
+          }).then(response => {
+            let $formItems = ''
+            response.form_items && response.form_items.forEach(item => {
+              $formItems += `<input name="${item.item_name}" type="hidden" value='${item.item_value}' />`
+            })
+            let $form = `<form action="${response.gateway_url}" method="post">${$formItems}</form>`
+            const qrIframe = document.getElementById('iframe-qrcode').contentWindow.document
+            qrIframe.getElementsByTagName('body')[0].innerHTML = $form
+            qrIframe.forms[0].submit()
+          })
         })
-      },
-      /** 发起电脑支付 */
-      iniyiatePayByPc() {}
+      }
     }
   }
 </script>
@@ -276,15 +281,16 @@
     background: #f4f4f4;
     margin: 0 0 40px 0;
     padding-top: 3px;
-    .pay-item.alipay {
+    .pay-item {
+      display: flex;
+      justify-content: center;
       margin: 0 3px 0 3px;
       background: #fff;
       overflow: hidden;
       height: 335px;
-      .alipay-left {
+      .pay-left {
         width: 471px;
         float: left;
-        border-right: 1px solid #f4f4f4;
         height: 310px;
         position: relative;
         p {
@@ -296,11 +302,11 @@
           font-size: 16px;
         }
         .pc-pay-img {
-          background: url(../../assets/images/icons-cashier.png) no-repeat 0 -1417px;
           height: 92px;
           margin-left: 150px;
           margin-top: 48px;
           width: 165px;
+          background: url(../../assets/images/icons-cashier.png) no-repeat 0 -1417px;
         }
         .pay-btn {
           width: 180px;
@@ -323,9 +329,9 @@
           width: 31px;
         }
       }
-      .alipay-right {
-        width: 272px;
+      .pay-right {
         float: left;
+        border-left: 1px solid #f4f4f4;
         p {
           width: 472px;
           text-align: center;
@@ -335,54 +341,10 @@
           font-size: 16px;
         }
         .pay-qrcode {
-          width: 472px;
-          height: 255px;
-          text-align: center;
-          position: relative;
-        }
-        .alipay-qrcode {
           margin: 20px auto;
           height: 200px;
           width: 200px;
-        }
-      }
-    }
-    .pay-item.wechat {
-      margin: 0 3px 0 3px;
-      background: #fff;
-      overflow: hidden;
-      height: 335px;
-      .wechat-left {
-        width: 400px;
-        float: left;
-        margin: 0 0 0 100px;
-      }
-      .pc-pay-img {
-        width: 400px;
-        text-align: center;
-        padding: 25px 0;
-        z-index: 999;
-      }
-      .wechat-right {
-        width: 400px;
-        float: left;
-        p {
-          width: 340px;
-          text-align: center;
-          height: 30px;
-          line-height: 30px;
-          margin: 25px 0 0 0;
-          font-size: 16px;
-        }
-        .pay-erweima {
-          width: 350px;
-          height: 255px;
-          text-align: center;
-        }
-        .wechat-qrcode {
-          width: 200px;
-          height: 200px;
-          margin: 0 auto;
+          overflow: hidden;
         }
       }
     }

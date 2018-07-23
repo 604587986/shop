@@ -25,7 +25,7 @@
     <div class="card-news">
       <div class="card-news-tab">
         <a href="#" @mouseenter="card_news_tab_x = 0">商城公告</a>
-        <a href="#" @mouseenter="card_news_tab_x = 70">联系方式</a>
+        <a href="#" @mouseenter="card_news_tab_x = 70">商城促销</a>
         <div class="card-news-tab-active" :style="{transform: 'translateX('+ card_news_tab_x +'px)'}"></div>
         <!--<a href="#" class="card-news-more">更多</a>-->
       </div>

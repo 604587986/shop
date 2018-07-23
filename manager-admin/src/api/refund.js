@@ -42,16 +42,14 @@ export function refundMoney(sn) {
 
 /**
  * 导出Excel
- * @param start_time
- * @param end_time
+ * @param params
  */
-export function exportRefundExcel(start_time, end_time) {
+export function exportRefundExcel(params) {
+  params = JSON.parse(JSON.stringify(params))
+  params.page_size = 9999999
   return request({
-    url: 'after-sales/exports/excel',
+    url: 'after-sales/refund',
     method: 'get',
-    params: {
-      start_time,
-      end_time
-    }
+    params
   })
 }

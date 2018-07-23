@@ -16,11 +16,13 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   #header {
+    border-bottom: 3px solid $color-main;
     .top-header {
       display: flex;
       justify-content: space-between;
-      height: 70px;
+      height: 67px;
       padding-top: 30px;
       /deep/ #logo {
         width: 240px;

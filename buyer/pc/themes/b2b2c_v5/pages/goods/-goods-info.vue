@@ -4,26 +4,23 @@
       <h1>{{ goodsInfo.goods_name }}</h1>
     </div>
     <div class="pro-details">
-      <div class="pro-list">
-        <div class="pro-title">价格</div>
-        <!--如果有大于1个的sku，则显示价格区间-->
-        <div v-if="priceRange" class="pro-content price">
-          <span>￥</span>
-          <strong>{{ priceRange[0] | unitPrice }}</strong>
-          <template v-if="priceRange[1]">
-             ~ <strong>{{ priceRange[1] | unitPrice }}</strong>
-          </template>
+      <goods-groupbuy-seckill :promotions="promotions"/>
+      <div class="price-box">
+        <div class="pro-list">
+          <div class="pro-title">价格</div>
+          <!--如果有大于1个的sku，则显示价格区间-->
+          <div v-if="priceRange" class="pro-content price">
+            <span>￥</span>
+            <strong>{{ priceRange[0] | unitPrice }}</strong>
+            <template v-if="priceRange[1]"> ~ <strong>{{ priceRange[1] | unitPrice }}</strong></template>
+          </div>
+          <div v-else class="pro-content price">
+            <span>￥</span>
+            <strong>{{ goodsInfo.price | unitPrice }}</strong>
+          </div>
         </div>
-        <div v-else class="pro-content price">
-          <span>￥</span>
-          <strong>{{ goodsInfo.price | unitPrice }}</strong>
-        </div>
+        <goods-promotions :promotions="promotions"/>
       </div>
-      <div class="pro-list">
-        <div class="pro-title">温馨提示</div>
-        <div class="pro-content">本商品无质量问题不支持退换货</div>
-      </div>
-      <goods-promotions :goods-id="goods.goods_id"/>
       <goods-coupons :shop-id="goods.seller_id"/>
     </div>
     <div v-if="specList && specList.length" :class="['pro-spec', unselectedSku && 'error']">
@@ -71,17 +68,25 @@
 <script>
   /**
    * 商品信息模块
-   * 包括商品名称、商品价格、购买数量、加入购物车等等
+   * 包括商品名称、商品价格、购买数量、加入购物车
+   * 包括优惠券
+   * 包括促销信息
+   * 包括限时抢购
+   * 包括团购活动
    */
+  import Vue from 'vue'
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
   import Storage from '@/utils/storage'
   import GoodsCoupons from './-goods-coupons'
   import GoodsPromotions from './-goods-promotions'
+  import GoodsGroupbuySeckill from './-goods-groupbuy-seckill'
+  import GoodsPromBar from './-goods-prom-bar'
+  Vue.component('goods-prom-bar', GoodsPromBar)
   export default {
     name: 'goods-info',
-    props: ['goods'],
-    components: { GoodsCoupons, GoodsPromotions },
+    props: ['goods', 'promotions'],
+    components: { GoodsCoupons, GoodsPromotions, GoodsGroupbuySeckill },
     data() {
       return {
         goodsInfo: JSON.parse(JSON.stringify(this.goods)),
@@ -91,8 +96,8 @@
         skuMap: new Map(),
         // 规格列表
         specList: [],
-        // 被选中规格Map
-        selectedSpecMap: new Map(),
+        // 被选中规格
+        selectedSpec: [],
         // 被选中sku
         selectedSku: '',
         // 没有选中sku，初始化为false
@@ -172,19 +177,19 @@
           })
         }
         const _selectedSpecVals = []
-        this.specList.forEach(spec => {
+        this.specList.forEach((spec, specIndex)=> {
           if (Array.isArray(spec.valueList)) {
-            spec.valueList.forEach((val, index) => {
+            spec.valueList.forEach((val, specValIndex) => {
               if (selectedSpecs) {
                 const spec_value_id = val.spec_value_id
                 if (selectedSpecs.includes(String(spec_value_id))) {
                   val.selected = true
-                  this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
+                  this.selectedSpec[specValIndex] = val.spec_value_id
                   _selectedSpecVals.push(val.spec_value_id)
                 }
-              } else if (index === 0) {
+              } else if (specValIndex === 0) {
                 val.selected = true
-                this.selectedSpecMap.set(spec.spec_id, val.spec_value_id)
+                this.selectedSpec[specValIndex] = val.spec_value_id
                 _selectedSpecVals.push(val.spec_value_id)
               }
             })
@@ -203,7 +208,7 @@
           return item
         })
         this.$set(this.specList, specIndex, spec)
-        this.selectedSpecMap.set(spec.spec_id, spec_val.spec_value_id)
+        this.selectedSpec[specIndex] = spec_val.spec_value_id
         this.handleSelectedSku()
       },
       /** 购买数量增加减少 */
@@ -228,9 +233,9 @@
       /** 根据已选规格选出对应的sku */
       handleSelectedSku() {
         let sku
-        if (this.selectedSpecMap.size !== 0) {
+        if (this.selectedSpec.size !== 0) {
           const spec_vals = []
-          this.selectedSpecMap.forEach((value, key, map) => spec_vals.push(value))
+          this.selectedSpec.forEach(item => spec_vals.push(item))
           sku = this.skuMap.get(spec_vals.join('-'))
         } else {
           sku = this.skuMap.get('no_spec')
@@ -291,12 +296,8 @@
     padding-bottom: 15px;
   }
   .goods-info {
-    padding-left: 30px;
+    padding-left: 20px;
     padding-right: 20px;
-    .price {
-      span { font-size: 16px }
-      strong { font-size: 28px }
-    }
     .pro-name {
       h1 {
         font: normal 16px/24px "microsoft yahei";
@@ -305,15 +306,16 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
+        padding-left: 10px;
       }
     }
     .pro-details {
-      padding: 15px 0 10px 0;
+      padding: 10px 0;
       color: #666666;
       position: relative;
     }
     .buy-num {
-      padding-top: 20px;
+      padding-top: 5px;
       .pro-content { display: flex }
     }
     .count-num {
@@ -374,20 +376,27 @@
       }
     }
   }
-  /deep/ .pro-list {
-    display: flex;
-    margin-bottom: 5px;
-  }
-  /deep/ .pro-title {
-    width: 60px;
-    padding-right: 17px;
-    height: 33px;
-    line-height: 33px;
-  }
-  /deep/ .pro-content {
-    width: 307px;
-    min-height: 33px;
-    line-height: 33px;
+  /deep/ {
+    .pro-list {
+      display: flex;
+      margin-bottom: 5px;
+      padding-left: 10px;
+    }
+    .pro-title {
+      width: 60px;
+      padding-right: 17px;
+      height: 33px;
+      line-height: 33px;
+    }
+    .pro-content {
+      width: 307px;
+      min-height: 33px;
+      line-height: 33px;
+      &.price {
+        span { font-size: 16px }
+        strong { font-size: 22px }
+      }
+    }
   }
   .pro-spec {
     position: relative;
@@ -442,5 +451,9 @@
       width: 12px;
       height: 12px;
     }
+  }
+  .price-box {
+    position: relative;
+    background-color: #f3f3f3;
   }
 </style>

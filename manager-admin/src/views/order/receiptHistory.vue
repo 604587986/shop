@@ -1,26 +1,15 @@
 <template>
   <div>
     <en-table-layout
-      pagination
-      :tableData="tableData"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <template slot="table-columns">
-        <!--订单编号-->
-        <el-table-column label="日期">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
-        </el-table-column>
-        <!--下单时间-->
+        <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="日期"/>
         <el-table-column prop="member_name" label="会员名称"/>
-        <!--订单总额-->
         <el-table-column prop="sn" label="订单编号"/>
-        <!--收货人-->
-        <el-table-column label="发票金额">
-          <template slot-scope="scope">{{ scope.row.goods_price | unitPrice('￥') }}</template>
-        </el-table-column>
-        <!--订单状态-->
+        <el-table-column prop="need_pay_money" :formatter="MixinFormatPrice" label="发票金额"/>
         <el-table-column prop="receipt_type" label="发票类别"/>
-        <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
@@ -30,25 +19,19 @@
         </el-table-column>
       </template>
       <el-pagination
+        v-if="tableData"
         slot="pagination"
-        v-if="pageData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
+        :current-page="params.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
+        :page-size="params.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-table-layout>
 
-    <el-dialog
-      title="发票详情"
-      center
-      :visible.sync="dialogReceiptVisible" width="550px"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
+    <el-dialog title="发票详情" :visible.sync="dialogReceiptVisible" center width="550px">
       <div v-for="item in viewRectiptData" class="item-receipt">
         <span class="item-receipt-label">{{ item.label }}</span>
         <span v-if="item.key === 'goods_price'" class="item-receipt-value">{{ item.value | unitPrice('￥') }}</span>
@@ -75,10 +58,7 @@
         },
 
         /** 列表数据 */
-        tableData: null,
-
-        /** 列表分页数据 */
-        pageData: null,
+        tableData: '',
 
         /** 当前查看的发票数据 */
         viewRectiptData: [],
@@ -109,7 +89,7 @@
           { label: '订单编号', key: 'sn' },
           { label: '发票类型', key: 'receipt_type' },
           { label: '会员名称', key: 'member_name' },
-          { label: '发票金额', key: 'goods_price' },
+          { label: '发票金额', key: 'need_pay_money' },
           { label: '发票抬头', key: 'receipt_title' },
           { label: '发票内容', key: 'receipt_content' },
           { label: '发票税号', key: 'duty_invoice' }
@@ -126,16 +106,8 @@
         this.loading = true
         API_Receipt.getHistoryReceiptList(this.params).then(response => {
           this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.draw,
-            page_size: 10,
-            data_total: response.recordsTotal
-          }
-        }).catch(error => {
-          this.loading = false
-          console.log(error)
-        })
+          this.tableData = response
+        }).catch(() => { this.loading = false })
       }
     }
   }

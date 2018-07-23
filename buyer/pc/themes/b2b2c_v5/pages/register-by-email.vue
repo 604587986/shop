@@ -2,9 +2,7 @@
   <div id="register-by-email">
     <div class="index-register w">
       <div class="welcome">
-        <a href="/">
-          <img src="~/assets/images/logo-javashop.png" alt="logo">
-        </a>
+        <en-logo/>
         <span>欢迎注册</span>
       </div>
       <div class="have-account">
@@ -62,8 +60,10 @@
   Vue.use(FormItem)
   Vue.use(Input)
   import { RegExp } from '~/ui-utils'
+  import EnLogo from "@/components/Logo"
   export default {
     name: 'register-by-email',
+    components: {EnLogo},
     validate() {
       return false
     },

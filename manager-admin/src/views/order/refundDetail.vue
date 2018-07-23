@@ -55,6 +55,7 @@
             <template slot="prepend">￥</template>
           </el-input>
           <el-button v-if="refund.after_sale_operate_allowable.allow_admin_refund" @click="handleRefundMoney" class="refund-btn">退款</el-button>
+          <p v-if="refund.payment_type === 'COD'" class="refund-tip">货到付款订单只能由商家退款</p>
         </el-col>
       </el-row>
     </el-card>
@@ -149,6 +150,12 @@
     position: relative;
     top: -1px;
     margin-left: 5px;
+  }
+  .refund-tip {
+    color: red;
+    font-size: 12px;
+    margin: 5px 0 0 0;
+    padding: 0;
   }
 </style>
 

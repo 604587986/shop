@@ -15,7 +15,7 @@
           <!--商品相册-->
           <goods-zoom :images="goods.gallery_list" :spec-img="specImage"/>
           <!--商品信息【包括规格、优惠券、促销等】-->
-          <goods-info :goods="goods" @spec-img-change="(img) => { this.specImage = img }"/>
+          <goods-info :goods="goods" :promotions="promotions" @spec-img-change="(img) => { this.specImage = img }"/>
           <!--店铺卡片-->
           <shop-card :shop-id="goods.seller_id"/>
         </div>
@@ -101,7 +101,9 @@
         // 商品是否已被收藏
         collected: false,
         // 显示分享按钮
-        showShare: false
+        showShare: false,
+        // 促销信息
+        promotions: ''
       }
     },
     mounted() {
@@ -116,6 +118,11 @@
         // 加载百度分享代码
         this.loadBdShareScript()
       }
+      // 获取促销信息
+      API_Promotions.getGoodsPromotions(goods_id).then(response => {
+        this.promotions = response
+        console.log(response)
+      })
     },
     computed: {
       ...mapGetters(['user'])
