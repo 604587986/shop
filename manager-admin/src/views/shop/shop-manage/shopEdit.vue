@@ -262,41 +262,20 @@
       }
     },
     mounted() {
-      Promise.all([
-        API_Shop.getShopDetail(this.shop_id),
-        API_Category.getCategoryChildren()
-      ]).then(responses => {
-        const shopInfo = responses[0]
-        const categorys = responses[1]
-        // 设置店铺信息
-        this.shopForm = this.MixinClone(shopInfo)
-        const {
-          license_province_id, license_city_id, license_county_id, license_town_id,
-          bank_province_id, bank_city_id, bank_county_id, bank_town_id,
-          shop_province_id, shop_city_id, shop_county_id, shop_town_id
-        } = shopInfo
-        this.defaultRegionLicense = [license_province_id, license_city_id, license_county_id, license_town_id]
-        this.defaultRegionBank = [bank_province_id, bank_city_id, bank_county_id, bank_town_id]
-        this.defaultRegionShop = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
-        this.shopForm.goods_management_category = []
-
-        if (shopInfo.goods_management_category) {
-          const _categorys = shopInfo.goods_management_category.split(',')
-          this.shopForm.goods_management_category = _categorys
-          if (_categorys.length !== 0) {
-            if (_categorys.length < categorys.length) {
-              this.isIndeterminateCat = true
-            } else if (_categorys.length === categorys.length) {
-              this.checkAllCat = true
-            }
-          }
-        }
-        // 设置经营类目
-        this.categorys = categorys.map(item => ({
-          id: String(item.category_id),
-          name: item.name
-        }))
-      })
+      this.initMemberInfo()
+    },
+    beforeRouteUpdate(to, from, next) {
+      this.shop_id = to.params.shop_id
+      next()
+    },
+    activated() {
+      this.shop_id = this.$route.params.shop_id
+    },
+    watch: {
+      shop_id: function() {
+        this.initMemberInfo()
+        this.shopForm = {}
+      }
     },
     methods: {
       /** 经营类目全选 */
@@ -362,6 +341,44 @@
             })
           })
         }).catch(() => {})
+      },
+      /** 初始化会员信息 */
+      initMemberInfo() {
+        Promise.all([
+          API_Shop.getShopDetail(this.shop_id),
+          API_Category.getCategoryChildren()
+        ]).then(responses => {
+          const shopInfo = responses[0]
+          const categorys = responses[1]
+          // 设置店铺信息
+          this.shopForm = this.MixinClone(shopInfo)
+          const {
+            license_province_id, license_city_id, license_county_id, license_town_id,
+            bank_province_id, bank_city_id, bank_county_id, bank_town_id,
+            shop_province_id, shop_city_id, shop_county_id, shop_town_id
+          } = shopInfo
+          this.defaultRegionLicense = [license_province_id, license_city_id, license_county_id, license_town_id]
+          this.defaultRegionBank = [bank_province_id, bank_city_id, bank_county_id, bank_town_id]
+          this.defaultRegionShop = [shop_province_id, shop_city_id, shop_county_id, shop_town_id]
+          this.shopForm.goods_management_category = []
+
+          if (shopInfo.goods_management_category) {
+            const _categorys = shopInfo.goods_management_category.split(',')
+            this.shopForm.goods_management_category = _categorys
+            if (_categorys.length !== 0) {
+              if (_categorys.length < categorys.length) {
+                this.isIndeterminateCat = true
+              } else if (_categorys.length === categorys.length) {
+                this.checkAllCat = true
+              }
+            }
+          }
+          // 设置经营类目
+          this.categorys = categorys.map(item => ({
+            id: String(item.category_id),
+            name: item.name
+          }))
+        })
       }
     }
   }
