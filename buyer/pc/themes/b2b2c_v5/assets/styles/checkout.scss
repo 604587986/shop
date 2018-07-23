@@ -1,3 +1,4 @@
+@import "./color";
 /deep/ {
   .listing-empty {
     text-align: center;
@@ -78,7 +79,7 @@
     border: 2px solid #ff3500;
   }
   .li-ckt-info.selected .ckt-checkbox, .ckt-checkbox.selected {
-    background: url("~/assets/images/icon-ckt-selected.png") no-repeat bottom right;
+    background: url("../../assets/images/icon-ckt-selected.png") no-repeat bottom right;
     background-size: 20px 20px;
   }
 
@@ -244,7 +245,7 @@
   .operate-li-ckt-info a {
     margin-right: 5px;
     color: #005ea7;
-    &.delete { color: #f42424 }
+    &.delete { color: $color-main }
   }
 
   .collapse-ckt-info {
@@ -257,7 +258,7 @@
   }
 
   .collapse-ckt-info.more .icon-collapse-ckt-info {
-    background: url('~/assets/images/icon-ckt-addr.png') no-repeat 0 -10px;
+    background: url('../../assets/images/icon-ckt-addr.png') no-repeat 0 -10px;
   }
 
   .icon-collapse-ckt-info {
@@ -267,7 +268,7 @@
     line-height: 10px;
     width: 9px;
     margin-left: 5px;
-    background: url('~/assets/images/icon-ckt-addr.png') no-repeat 0 0;
+    background: url('../../assets/images/icon-ckt-addr.png') no-repeat 0 0;
   }
 
   /* 支付方式
@@ -321,15 +322,15 @@
     line-height: 10px;
     width: 9px;
     margin-left: 5px;
-    background: url('~/assets/images/icon-ckt-pay.png') no-repeat 0 0;
+    background: url('../../assets/images/icon-ckt-pay.png') no-repeat 0 0;
   }
 
   .icon-collapse-ckt-pay.more {
-    background: url('~/assets/images/icon-ckt-pay.png') no-repeat -10px 0;
+    background: url('../../assets/images/icon-ckt-pay.png') no-repeat -10px 0;
   }
 
   .icon-collapse-ckt-pay.coll {
-    background: url('~/assets/images/icon-ckt-addr.png') no-repeat 0 -10px;;
+    background: url('../../assets/images/icon-ckt-addr.png') no-repeat 0 -10px;;
   }
 
   /* 配送清单
@@ -369,7 +370,7 @@
     float: left;
     a {
       color: #005ea7;
-      &:hover { color: #f42424}
+      &:hover { color: $color-main}
     }
   }
 
@@ -686,7 +687,7 @@
         color: #005ea7;
       }
       &.cancel-btn {
-        color: #f42424;
+        color: $color-main;
       }
     }
   }
