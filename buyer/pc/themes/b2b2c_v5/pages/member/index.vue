@@ -15,12 +15,12 @@
         <i class="iconfont ea-icon-my-order"></i>
         <p class="num">{{ statisticsNum.order_count || 0 }}</p>
       </nuxt-link>
-      <nuxt-link to="/member/my-collection#goods" class="other-item">
+      <nuxt-link to="/member/my-collection" class="other-item">
         <p>收藏的商品</p>
         <i class="iconfont ea-icon-collection-of-goods"></i>
         <p class="num">{{ statisticsNum.goods_collect_count || 0}}</p>
       </nuxt-link>
-      <nuxt-link to="/member/my-collection#shop" class="other-item">
+      <nuxt-link to="/member/my-collection?type=shop" class="other-item">
         <p>收藏的店铺</p>
         <i class="iconfont ea-icon-collection-of-shop" style="font-size: 42px"></i>
         <p class="num">{{ statisticsNum.shop_collect_count || 0}}</p>
@@ -83,7 +83,7 @@
       <div class="item left goods-collection">
         <div class="item-title">
           <h2>商品收藏</h2>
-          <nuxt-link to="/member/my-collection#goods">查看全部 	&gt;&gt;</nuxt-link>
+          <nuxt-link to="/member/my-collection">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
           <empty-member v-if="!goodsCollectionData || goodsCollectionData.data.length === 0">暂无收藏商品</empty-member>
@@ -110,7 +110,7 @@
       <div class="item right shop-collection">
         <div class="item-title">
           <h2>店铺收藏</h2>
-          <nuxt-link to="/member/my-collection#shop">查看全部 	&gt;&gt;</nuxt-link>
+          <nuxt-link to="/member/my-collection?type=shop">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
           <empty-member v-if="!shopCollectionData || shopCollectionData.data.length === 0">暂无收藏店铺</empty-member>
