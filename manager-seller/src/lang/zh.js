@@ -32,7 +32,7 @@ export default {
     fullCut: '满减满赠',
     singleCut: '单品立减',
     secondHalfPrice: '第二件半价',
-    discountManager: '优惠管理',
+    discountManager: '优惠券管理',
     giftManager: '赠品管理',
     groupBuyManager: '团购管理',
     timeLimit: '限时抢购',

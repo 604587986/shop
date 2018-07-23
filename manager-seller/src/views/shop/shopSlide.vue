@@ -40,7 +40,7 @@
               v-model="item.silde_url"></el-input>
             <el-upload
               class="upload-demo"
-              :action="BASE_IMG_URL"
+              :action="`${MixinUploadApi}?scene=shop`"
               :key="index"
               :limit="1"
               :show-file-list="false"
@@ -76,9 +76,6 @@
     name: 'shopBanner',
     data() {
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=shop`,
-
         /** 列表loading状态 */
         loading: false,
 

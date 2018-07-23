@@ -13,7 +13,7 @@
             <el-upload
               class="upload-demo"
               style="display: none;"
-              :action="BASE_IMG_URL"
+              :action="`${MixinUploadApi}?scene=shop`"
               :limit="1"
               :file-list="fileList"
               :on-success="uploaded">
@@ -30,7 +30,7 @@
             </div>
             <div class="shop-info-credit">
               <span>
-                卖家信用：{{shop_info.shop_credit}}
+                卖家信用：{{shop_info.shop_credit}} &nbsp;
               </span>
               <div></div>
               <span>店铺地址：{{shop_info.shop_province}}
@@ -45,15 +45,15 @@
             <div class="active-score">
               <div>
                 <span>描述</span>
-                <span>{{shop_info.shop_description_credit}}分</span>
+                <span>{{shop_info.shop_description_credit_text}}分</span>
               </div>
               <div>
                 <span>服务</span>
-                <span>{{shop_info.shop_service_credit}}分</span>
+                <span>{{shop_info.shop_service_credit_text}}分</span>
               </div>
               <div>
                 <span>发货</span>
-                <span>{{shop_info.shop_delivery_credit}}分</span>
+                <span>{{shop_info.shop_delivery_credit_text}}分</span>
               </div>
             </div>
           </div>
@@ -125,7 +125,7 @@
       </el-col>
     </el-row>
     <el-dialog :title="currentName" :visible.sync="isShowArticle" width="30%" align="center">
-      <span>{{ currentContent }}</span>
+      <p v-html="currentContent.replace(/\n/g, '<br>')"></p>
     </el-dialog>
   </div>
 </template>
@@ -135,7 +135,7 @@ import * as API_Dashboard from '@/api/dashboard'
 import * as API_shop from '@/api/shop'
 export default {
   name: 'dashboard',
-  created() {
+  mounted() {
     /** 获取首页统计信息 */
     this.GET_DashBoard()
 
@@ -144,15 +144,11 @@ export default {
 
     /** 获取首页联系方式 */
     this.GET_Concate()
-  },
-  mounted() {
+
     window.onresize = this.countTableHeight
   },
   data() {
     return {
-      /** 图片服务器地址 */
-      BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=shop`,
-
       /** 加载中*/
       loading: false,
 

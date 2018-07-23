@@ -17589,7 +17589,7 @@ UE.plugins['autofloat'] = function() {
             toolbarBox = me.ui.getDom('toolbarbox');
             orgTop = getPosition(toolbarBox).top;
             bakCssText = toolbarBox.style.cssText;
-            placeHolder.style.height = toolbarBox.offsetHeight + 'px';
+            placeHolder.style.height = toolbarBox.offsetHeight + 79 + 'px';
             if(LteIE6){
                 fixIE6FixedPos();
             }

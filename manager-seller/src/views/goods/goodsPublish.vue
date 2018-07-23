@@ -56,8 +56,8 @@
         <div class="base-info-item">
           <h4>基本信息</h4>
           <div>
-            <el-form-item class="auth-info" label="拒绝原因：" >
-              都是辣鸡
+            <el-form-item class="auth-info" label="拒绝原因：" v-if="baseInfoForm.is_auth === 2">
+              {{ baseInfoForm.auth_message }}
             </el-form-item>
             <el-form-item label="商品分类：" style="width: 100%; text-align: left;">
               <span>{{ activeCategoryName1 }}</span>
@@ -124,7 +124,7 @@
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
                 class="avatar-uploader goods-images"
-                :action="BASE_IMG_URL"
+                :action="`${MixinUploadApi}?scene=goods`"
                 list-type="picture-card"
                 :file-list="baseInfoForm.goods_gallery_list"
                 :on-preview="handlePictureCardPreview"
@@ -181,7 +181,7 @@
           <h4>物流/其他</h4>
           <div>
             <el-form-item label="运费：" style="width: 50%;" prop="template_id">
-              <el-radio-group v-model="baseInfoForm.goods_transfee_charge">
+              <el-radio-group v-model="baseInfoForm.goods_transfee_charge" @change="changeTplItem">
                 <el-radio :label="1">卖家承担运费</el-radio>
                 <el-radio :label="0">买家承担运费</el-radio>
               </el-radio-group>
@@ -255,7 +255,7 @@
               :key="index"
               :label="`${goods_params_list.param_name}：`"
               :prop="'goods_params_list.' + index + '.param_value'"
-              :rules="{required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' }">
+              :rules="goods_params_list.required === 1 ? {required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' } : {}">
               <el-input
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
@@ -431,9 +431,6 @@
       }
 
       return {
-        /** 图片服务器地址 */
-        BASE_IMG_URL: `${process.env.BASE_IMG_URL}?scene=goods`,
-
         /** 店铺信息 */
         shopInfo: this.$store.getters.shopInfo,
 
@@ -776,6 +773,8 @@
         if (!_params.has_changed) {
           _params.has_changed = 0
         }
+        /** 上架 market_enable 1上架0下架*/
+        _params.market_enable = 1
         if (this.currentStatus !== 2) {
           if (this.activeGoodsId) {
             /** 修改正常商品 */
@@ -799,8 +798,6 @@
             })
           }
         } else {
-          /**  草稿箱商品上架 构造是否上架字段 1上架0下架*/
-          _params.market_enable = 1
           API_goods.aboveDraftGoods(this.activeGoodsId, _params).then(() => {
             this.$message.success('上架草稿箱商品成功')
             this.$store.dispatch('delCurrentViews', {
@@ -1095,9 +1092,16 @@
         })
       },
 
+      /** 选中值卖家运费/买家运费时出发 */
+      changeTplItem(val) {
+        if (val) {
+          this.baseInfoForm.template_id = ''
+        }
+      },
+
       /** 运费模板改变时触发 */
       changeTpl(val) {
-        this.baseInfoForm.template_id = val
+        this.baseInfoForm.template_id = this.baseInfoForm.goods_transfee_charge === 0 ? val : ''
       },
 
       /** 积分商品商城分类列表 */

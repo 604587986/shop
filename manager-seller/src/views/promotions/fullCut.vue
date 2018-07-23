@@ -20,13 +20,13 @@
             <!--活动名称-->
             <el-table-column prop="title" label="活动名称"/>
             <!--开始时间-->
-            <el-table-column label="开始时间">
+            <el-table-column label="开始时间" min-width="200">
               <template slot-scope="scope">
                 <span>{{ scope.row.start_time | unixToDate }}</span>
               </template>
             </el-table-column>
             <!--结束时间-->
-            <el-table-column label="结束时间">
+            <el-table-column label="结束时间" min-width="200">
               <template slot-scope="scope">
                 <span>{{ scope.row.end_time | unixToDate }}</span>
               </template>
@@ -200,7 +200,7 @@
                               <div class="goods-info">
                                 <img :src="scope.row.thumbnail" alt="" class="goods-image">
                                 <div>
-                                  <a :href="`${HTTP_URL}/${scope.row.goods_id}`" target="_blank"
+                                  <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank"
                                     style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
                                   <span>{{ scope.row.price | unitPrice('￥') }}</span>
                                 </div>
@@ -374,9 +374,6 @@
       return {
         /** 当前面板的名字*/
         activeName: 'fullList',
-
-        /** 域名配置 */
-        HTTP_URL: `${process.env.HTTP_URL}/goods`,
 
         /** 列表loading状态 */
         loading: false,
