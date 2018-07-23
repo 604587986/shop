@@ -2,12 +2,10 @@
   <div id="my-order">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li
-          v-for="item in navList"
-          :key="item.status"
-          :class="[item.active && 'active']"
-          @click="handleClickNav(item)"
-        >{{ item.title }}</li>
+        <li v-for="item in navList" :key="item.status">
+          <nuxt-link v-if="!item.status" to="./my-order">{{ item.title }}</nuxt-link>
+          <nuxt-link v-else :to="'./my-order?order_status=' + item.status">{{ item.title }}</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="order-search">
@@ -68,6 +66,7 @@
                 <a v-if="order.order_operate_allowable_vo.allow_rog" href="javascript:;" @click="handleRogOrder(order.sn)">确认收货</a>
                 <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/checkout/cashier?order_sn=' + order.sn">订单付款</nuxt-link>
                 <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/member/comments?order_sn=' + order.sn">去评论</nuxt-link>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</nuxt-link>
                 <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
               </div>
             </div>
@@ -92,53 +91,38 @@
   export default {
     name: 'my-order-index',
     mounted() {
-      /** 如果有hash值，或者没有订单数据。需要重新请求数据 */
-      if (!this.orderData || this.$route.hash) this.GET_OrderList()
-      window.addEventListener('hashchange', this.handleHashChanged)
+      if (!this.orderData) this.GET_OrderList()
     },
     data() {
-      let _hash = this.$route.hash
-      _hash = _hash ? _hash.replace(/^#/,'') : 'ALL'
       return {
         params: {
           page_no: 1,
           page_size: 5,
-          order_status: _hash,
+          order_status: this.$route.query.order_status,
           goods_name: ''
         },
         orderData: '',
         navList: [
-          { title: '所有订单', status: 'ALL' },
+          { title: '所有订单', status: '' },
           { title: '待付款', status: 'WAIT_PAY' },
           { title: '待发货', status: 'WAIT_SHIP' },
           { title: '待收货', status: 'WAIT_ROG' },
           { title: '已取消', status: 'CANCELLED' },
           { title: '已完成', status: 'COMPLETE' },
           { title: '待评论', status: 'WAIT_COMMENT' }
-        ].map(item => {
-          item.active = item.status === _hash
-          return item
-        })
+        ]
+      }
+    },
+    watch: {
+      $route: function ({ query }) {
+        this.params.order_status = query.order_status
+        this.GET_OrderList()
       }
     },
     methods: {
-      /** 订单筛选栏点击 */
-      handleClickNav(nav) {
-        location.hash = nav.status
-      },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
-        this.GET_OrderList()
-      },
-      /** hash发生改变 */
-      handleHashChanged() {
-        const _hash = this.$route.hash.replace('#', '')
-        this.navList = this.navList.map(item => {
-          item.active = item.status === _hash
-          return item
-        })
-        this.params.order_status = _hash
         this.GET_OrderList()
       },
       /** 取消订单 */
@@ -175,14 +159,12 @@
           this.MixinScrollToTop()
         })
       }
-    },
-    destroyed() {
-      window.removeEventListener('hashchange', this.handleHashChanged)
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .order-search {
     display: flex;
     align-items: center;
@@ -199,7 +181,7 @@
       border-radius: 3px;
       transition: border .2s ease-out;
       &:focus {
-        border-color: rgba(244, 36, 36, .75);
+        border-color: darken($color-main, 75%);
       }
     }
     button {
@@ -242,7 +224,7 @@
         margin-left: 20px;
       }
       .price {
-        color: #f42424;
+        color: $color-main;
         font-size: 14px;
         font-weight: 600;
         em {
@@ -303,7 +285,7 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
       }
-      .sku-price { color: #f42424 }
+      .sku-price { color: $color-main }
       .sku-price, .sku-num {
         width: 80px;
         text-align: center;
@@ -311,7 +293,7 @@
       .after-sale-btn {
         width: 60px;
         a { color: #666 }
-        a:hover { color: #f42424 }
+        a:hover { color: $color-main }
       }
       .order-item-price, .order-item-status {
         width: 100px;
@@ -337,7 +319,7 @@
           height: 100%;
           background-color: #f9dbcc;
         }
-        strong { color: #f42424 }
+        strong { color: $color-main }
       }
       .order-item-status {
         &::after {

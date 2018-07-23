@@ -16,8 +16,9 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .header-container {
-    border-bottom: 3px solid #f42424;
+    border-bottom: 3px solid $color-main;
   }
   .inner {
     display: flex;

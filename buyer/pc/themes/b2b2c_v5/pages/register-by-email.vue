@@ -133,6 +133,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   .index-register {
     position: relative;
     width: 1000px;
@@ -160,7 +161,7 @@
       float: right;
       margin-top: 24px;
       color: #999;
-      a { color: #f42424 }
+      a { color: $color-main }
     }
   }
   .content-register {

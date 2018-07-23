@@ -2,8 +2,12 @@
   <div id="website-message">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li :class="[type === 'unread' && 'active']" @click="type = 'unread'">未读消息</li>
-        <li :class="[type === 'all' && 'active']" @click="type = 'all'">全部消息</li>
+        <li>
+          <nuxt-link to="./website-message">未读消息</nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="./website-message?type=all">全部消息</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="message-container">
@@ -14,7 +18,7 @@
             <div class="msg-title">
               <h4>{{ message.message_title || '站内消息' }}</h4>
               <div class="message-tools">
-                <i v-if="type === 'unread'"
+                <i v-if="params.type !== 'all'"
                    class="el-icon-check"
                    title="标记为已读"
                    @click="handleReadMessage(message)"
@@ -32,7 +36,7 @@
       <empty-member v-else>暂无站内消息</empty-member>
     </div>
     <div class="member-pagination" v-if="tableData && tableData.data.length">
-      <a v-if="type === 'unread'" href="javascript:;" class="read-all" @click="handleReadPageMessages">标记当前页为已读</a>
+      <a v-if="params.type !== 'all'" href="javascript:;" class="read-all" @click="handleReadPageMessages">标记当前页为已读</a>
       <el-pagination
         @current-change="handleCurrentPageChange"
         :current-page.sync="params.page_no"
@@ -56,19 +60,21 @@
     },
     data() {
       return {
-        type: 'unread',
         params: {
           page_no: 1,
-          page_size: 5
+          page_size: 5,
+          type: this.$route.query.type
         },
         tableData: ''
       }
     },
     mounted() {
-      this.GET_MessageList()
+      this.GET_MessageList(this.params.type)
     },
     watch: {
-      type: 'GET_MessageList'
+      $route: function({ query }) {
+        this.GET_MessageList(query.type)
+      },
     },
     methods: {
       /** 当前页数发生改变 */
@@ -99,15 +105,16 @@
         })
       },
       /** 获取站内消息 */
-      GET_MessageList(){
+      GET_MessageList(type){
         const params = JSON.parse(JSON.stringify(this.params))
-        if (this.type === 'unread') {
+        if (type !== 'all') {
           params.read = 0
         } else {
           delete params.read
         }
         API_Message.getMessages(params).then(response => {
           this.tableData = response
+          this.params.type = type
           this.MixinScrollToTop()
         })
       }

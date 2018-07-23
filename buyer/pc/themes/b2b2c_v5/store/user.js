@@ -108,10 +108,10 @@ export const actions = {
     return new Promise((resolve, reject) => {
       if (params.login_type === 'quick') {
         const { mobile, captcha } = params.form
-        API_Passport.loginByMobile(mobile, captcha).then(loginSccess).catch(error => reject(error))
+        API_Passport.loginByMobile(mobile, captcha).then(loginSccess).catch(reject)
       } else {
         params.form.uuid = Storage.getItem('uuid')
-        API_Passport.login(params.form).then(loginSccess).catch(error => reject(error))
+        API_Passport.login(params.form).then(loginSccess).catch(reject)
       }
       function loginSccess(res) {
         const { access_token, refresh_token, uid } = res
@@ -121,7 +121,7 @@ export const actions = {
           response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
           resolve(response)
-        }).catch(error => reject(error))
+        }).catch(reject)
       }
     })
   },

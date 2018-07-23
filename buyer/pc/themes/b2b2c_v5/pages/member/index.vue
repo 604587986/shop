@@ -15,12 +15,12 @@
         <i class="iconfont ea-icon-my-order"></i>
         <p class="num">{{ statisticsNum.order_count || 0 }}</p>
       </nuxt-link>
-      <nuxt-link to="/member/my-collection#goods" class="other-item">
+      <nuxt-link to="/member/my-collection" class="other-item">
         <p>收藏的商品</p>
         <i class="iconfont ea-icon-collection-of-goods"></i>
         <p class="num">{{ statisticsNum.goods_collect_count || 0}}</p>
       </nuxt-link>
-      <nuxt-link to="/member/my-collection#shop" class="other-item">
+      <nuxt-link to="/member/my-collection?type=shop" class="other-item">
         <p>收藏的店铺</p>
         <i class="iconfont ea-icon-collection-of-shop" style="font-size: 42px"></i>
         <p class="num">{{ statisticsNum.shop_collect_count || 0}}</p>
@@ -83,7 +83,7 @@
       <div class="item left goods-collection">
         <div class="item-title">
           <h2>商品收藏</h2>
-          <nuxt-link to="/member/my-collection#goods">查看全部 	&gt;&gt;</nuxt-link>
+          <nuxt-link to="/member/my-collection">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
           <empty-member v-if="!goodsCollectionData || goodsCollectionData.data.length === 0">暂无收藏商品</empty-member>
@@ -110,7 +110,7 @@
       <div class="item right shop-collection">
         <div class="item-title">
           <h2>店铺收藏</h2>
-          <nuxt-link to="/member/my-collection#shop">查看全部 	&gt;&gt;</nuxt-link>
+          <nuxt-link to="/member/my-collection?type=shop">查看全部 	&gt;&gt;</nuxt-link>
         </div>
         <div class="item-content">
           <empty-member v-if="!shopCollectionData || shopCollectionData.data.length === 0">暂无收藏店铺</empty-member>
@@ -248,6 +248,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .user-title {
     display: flex;
     justify-content: flex-start;
@@ -344,7 +345,7 @@
       &.right { width: 990px - 590px; border-left: none }
       &:hover {
         border-color: rgba(244, 36, 36, 0.5);
-        box-shadow: 0 0 10px 0 #f42424;
+        box-shadow: 0 0 10px 0 $color-main;
         z-index: 10;
       }
     }
@@ -388,7 +389,7 @@
           color: #333;
           font-weight: 600;
         }
-        .price { color: #f42424 }
+        .price { color: $color-main }
       }
       p {
         color: #777;
@@ -452,7 +453,7 @@
       }
       em {
         font-size: 12px;
-        color: #f42424;
+        color: $color-main;
       }
       span { margin-right: 50px }
     }
@@ -495,7 +496,7 @@
         justify-content: space-between;
         padding: 0 5px;
       }
-      .delete-btn { color: #f42424 }
+      .delete-btn { color: $color-main }
     }
   }
   .item.shop-collection {
@@ -526,7 +527,7 @@
           background-color: #f9f9f9;
           color: #666;
           &:hover {
-            color: #f42424
+            color: $color-main
           }
         }
       }

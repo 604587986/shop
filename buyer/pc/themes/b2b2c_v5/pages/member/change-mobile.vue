@@ -197,6 +197,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   /deep/ .el-alert {
     h2 { margin: 20px 0 }
     p { margin-bottom: 10px }
@@ -251,8 +252,8 @@
         font-size: 12px;
         color: #666;
         a {
-          color: #071BC9;
-          &:hover { color: #f42424 }
+          color: $color-href;
+          &:hover { color: $color-main }
         }
       }
     }

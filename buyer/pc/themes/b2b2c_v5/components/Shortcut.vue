@@ -39,8 +39,8 @@
           </div>
           <div class="dd dorpdown-layer">
             <dl>
-              <dd><nuxt-link to="/member/my-collection#goods">收藏的商品</nuxt-link></dd>
-              <dd><nuxt-link to="/member/my-collection#shop">收藏的店铺</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-collection">收藏的商品</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-collection?type=shop">收藏的店铺</nuxt-link></dd>
             </dl>
           </div>
         </li>
@@ -139,6 +139,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   #shortcut {
     border-bottom: 1px solid #ddd;
     background-color: #e3e4e5;
@@ -154,7 +155,7 @@
     }
     .logined a { color: #333 }
     a:hover {
-      color: #e33333
+      color: $color-main
     }
   }
   .links {

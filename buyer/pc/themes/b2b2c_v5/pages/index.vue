@@ -56,6 +56,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   @import "./-index/templates/floor-pc";
   .container {
     background-color: #F9F9F9;
@@ -91,7 +92,7 @@
           cursor: pointer;
         }
         .custom-pagination-btn.__active__ {
-          background-color: #f42424;
+          background-color: $color-main;
         }
         .custom-pagination-btn.__last__ {
           margin-right: 0;

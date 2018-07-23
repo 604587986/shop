@@ -127,6 +127,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .shop-list-container {
     .sort-bar {
       width: 100%;
@@ -175,7 +176,7 @@
       margin-left: 10px;
       font-size: 14px;
       .shop-name {
-        color: #f42424;
+        color: $color-main;
         font-weight: 700;
         margin-bottom: 10px;
       }
@@ -201,7 +202,7 @@
         position: relative;
       }
       .shop-score-tit {
-        color: #f42424;
+        color: $color-main;
       }
       .shop-score-arrow-span {
         background: #FFF;
@@ -220,7 +221,7 @@
         width: 0;
         height: 0;
         border-width: 4px;
-        border-color: #f42424 transparent transparent transparent;
+        border-color: $color-main transparent transparent transparent;
         border-style: solid dashed dashed dashed;
         position: absolute;
         z-index: 1;
@@ -228,7 +229,7 @@
         left: 2px;
       }
       .shop-score:hover .shop-score-arrow {
-        border-color: transparent transparent #f42424 transparent;
+        border-color: transparent transparent $color-main transparent;
         border-style: dashed dashed solid dashed;
         top: 0;
       }
@@ -288,7 +289,7 @@
         background: url(../../assets/images/icon-empty-member.png) no-repeat 380px center;
         a {
           color: #0366d6;
-          &:hover { color: #f42424 }
+          &:hover { color: $color-main }
         }
       }
     }

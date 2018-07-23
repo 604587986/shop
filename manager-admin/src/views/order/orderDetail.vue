@@ -101,8 +101,18 @@
         return Foundation.unixToDate(val)
       }
     },
+    beforeRouteUpdate(to, from, next) {
+      this.sn = to.params.sn
+      next()
+    },
+    activated() {
+      this.sn = this.$route.params.sn
+    },
     mounted() {
       this.GET_OrderDetail()
+    },
+    watch: {
+      sn: 'GET_OrderDetail'
     },
     methods: {
       GET_OrderDetail() {

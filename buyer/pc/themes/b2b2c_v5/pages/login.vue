@@ -188,7 +188,7 @@
           } else {
             this.$router.push({ path: forward || '/' })
           }
-        })
+        }).catch(this.handleChangeValUrl)
       },
       getConnectUrl: API_Connect.getConnectUrl,
       ...mapActions({

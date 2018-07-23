@@ -62,11 +62,12 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .safe-title {
     margin-top: 10px;
     p { margin-top: 3px }
-    a { color: #005ea7 }
-    a:hover { color: #f42424 }
+    a { color: $color-href }
+    a:hover { color: $color-main }
   }
   .safe-item {
     display: block;

@@ -113,10 +113,11 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   #category {
     width: 240px;
     height: 40px;
-    background-color: #f42424;
+    background-color: $color-main;
     flex-shrink: 0;
     z-index: 20;
     .category-title {
@@ -138,7 +139,7 @@
       cursor: pointer;
       height: 70px;
       a:hover {
-        color: #f42424;
+        color: $color-main;
       }
       &:hover {
         .item-content {
@@ -167,7 +168,7 @@
           font-size: 14px;
           margin-right: 5px;
           &:hover {
-            color: #f42424;
+            color: $color-main;
           }
         }
         span {
@@ -252,7 +253,7 @@
           }
         }
         a { color: #666 }
-        a:hover { color: #f42424 }
+        a:hover { color: $color-main }
       }
       .item-layer-right {
         float: right;
