@@ -2,12 +2,16 @@
   <div id="my-collection">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li :class="[type === 'goods' && 'active']" @click="handleTypeChanged('goods')">商品收藏</li>
-        <li :class="[type === 'shop' && 'active']" @click="handleTypeChanged('shop')">店铺收藏</li>
+        <li>
+          <nuxt-link to="./my-collection">商品收藏</nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="./my-collection?type=shop">店铺收藏</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="collection-container">
-      <div v-show="type === 'goods'" class="goods">
+      <div v-show="type !== 'shop'" class="goods">
         <template v-if="goodsData && goodsData.data.length">
           <ul>
             <li
@@ -148,10 +152,8 @@
       }
     },
     data() {
-      let hash = this.$route.hash
-      if (hash) hash = hash.match(/#(\w+)/)[1]
       return {
-        type: hash || 'goods',
+        type: this.$route.query.type,
         /** 商品收藏参数 */
         params_goods: {
           page_no: 1,
@@ -176,18 +178,15 @@
     mounted() {
       this.GET_Collection(this.type)
     },
-    methods: {
-      /** 类型改变 */
-      handleTypeChanged(type) {
+    watch: {
+      $route: function () {
+        const { type } = this.$route.query
         this.type = type
-        const _href = location.href.match(/(.+)#/)
-        // 改变地址栏hash值【不会刷新页面】
-        location.hash = type
-        // 如果没有商品收藏数据，则获取
-        if (!this.goodsData) this.GET_Collection('goods')
-        // 如果没有店铺收藏数据，则获取
-        if (!this.shopData) this.GET_Collection('shop')
-      },
+        if (type !== 'shop' && !this.goodsData) this.GET_Collection('goods')
+        if (type === 'shop' && !this.shopData) this.GET_Collection('shop')
+      }
+    },
+    methods: {
       /** 删除商品收藏 */
       handleDeleteGoodsColl(goods) {
         API_Members.deleteGoodsCollection(goods.goods_id).then(() => {
@@ -212,7 +211,7 @@
       },
       /** 获取收藏 */
       GET_Collection(type) {
-        if (type === 'goods') {
+        if (type !== 'shop') {
           API_Members.getGoodsCollection(this.params_goods).then(response => {
             response.data.map(item => {
               // 初始化是否显示删除遮罩标识
