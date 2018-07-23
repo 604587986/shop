@@ -374,8 +374,7 @@
               continued_company: this.mouldForm.continued_company,
               continued_price: this.mouldForm.continued_price,
               type: parseInt(this.mouldForm.type),
-              area_id: '54',
-              area: this.mouldForm.area
+              area_json: this.mouldForm.area
             }
             if (this.mouldForm.template_id) {
               API_express.saveExpressMould(this.mouldForm.template_id, _params).then(() => {
