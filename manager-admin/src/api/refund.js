@@ -32,11 +32,13 @@ export function getRefundDetail(sn) {
 /**
  * 平台退款
  * @param sn
+ * @param params
  */
-export function refundMoney(sn) {
+export function refundMoney(sn, params) {
   return request({
     url: `after-sales/refunds/${sn}`,
-    method: 'post'
+    method: 'post',
+    data: params
   })
 }
 
