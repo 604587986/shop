@@ -2,12 +2,16 @@
   <div id="my-points">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li :class="[type === 1 && 'active']" @click="type = 1">我的积分</li>
-        <li :class="[type === 2 && 'active']" @click="type = 2">积分明细</li>
+        <li :class="[type === 1 && 'active']">
+          <nuxt-link to="./my-points">我的积分</nuxt-link>
+        </li>
+        <li :class="[type === 2 && 'active']">
+          <nuxt-link to="./my-points?type=detail">积分明细</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="points-container">
-      <div v-show="type === 1" class="points-my">
+      <div v-show="type !== 'detail'" class="points-my">
         <el-alert type="warning" title="" :closable="false">
           <h2>积分规则:</h2>
           <p>当积分已达到某一兑换积分标准时，顾客可将累计积分依照网站相应积分及兑换标准兑换回馈商品，网站将即时从用户会员积分中扣减相应积分。</p>
@@ -23,7 +27,7 @@
           <p>可用积分：{{ points.grade_point || 0 }}</p>
         </el-alert>
       </div>
-      <div v-show="type === 2" class="points-detail">
+      <div v-show="type === 'detail'" class="points-detail">
         <el-table
           :data="pointsData.data"
           :header-cell-style="{textAlign: 'center'}"
@@ -74,7 +78,7 @@
     },
     data() {
       return {
-        type: 1,
+        type: this.$route.query.type,
         params: {
           page_no: 1,
           page_size: 10
@@ -89,6 +93,11 @@
     mounted() {
       this.GET_Points()
       this.GET_PointsData()
+    },
+    watch: {
+      $route: function () {
+        this.type = this.$route.query.type
+      }
     },
     methods: {
       /** 当前分页发生变化 */
