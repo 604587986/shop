@@ -52,12 +52,17 @@
     height: 36px;
     background-color: #fff;
     border-bottom: 1px solid #e7e7e7;
+    @mixin active {
+      background-color: #fff;
+      color: #f42424;
+      border-bottom: 1px solid #fff;
+    }
     li {
       background-color: #f7f7f7;
       border-right: 1px solid #e7e7e7;
       border-top: 1px solid #e7e7e7;
       line-height: 35px;
-      padding: 0 20px;
+      /*padding: 0 20px;*/
       color: #666;
       font-weight: 600;
       font-size: 12px;
@@ -67,13 +72,18 @@
         border-left: 1px solid #e7e7e7;
       }
       &.active {
-        background-color: #fff;
-        color: #f42424;
-        border-bottom: 1px solid #fff;
+        @include active
       }
       &:not(.active):hover {
         background-color: #e7e7e7;
         color: #000;
+      }
+      a {
+        display: block;
+        padding: 0 20px;
+        &.nuxt-link-exact-active {
+          @include active
+        }
       }
     }
   }
