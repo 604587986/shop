@@ -57,7 +57,7 @@
     .iconfont {
       margin-right: 5px;
     }
-    a { color: $color-href }
+    a { color: #666 }
     a:hover { color: $color-main }
   }
 </style>
