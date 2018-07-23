@@ -84,6 +84,16 @@
     mounted() {
       this.GET_RefundDetail()
     },
+    beforeRouteUpdate(to, from, next) {
+      this.sn = to.params.sn
+      next()
+    },
+    activated() {
+      this.sn = this.$route.params.sn
+    },
+    watch: {
+      sn: 'GET_RefundDetail'
+    },
     methods: {
       /** 退款操作 */
       handleRefundMoney() {
