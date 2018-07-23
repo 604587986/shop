@@ -68,11 +68,11 @@
         <el-table-column label="可用库存" width="140">
           <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
         </el-table-column>
-        <el-table-column label="创建时间" width="280">
+        <el-table-column label="创建时间" width="220">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus" width="120"/>
-        <el-table-column label="操作" min-width="200" style="text-align: left;">
+        <el-table-column label="操作" width="250" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
               type="success"
@@ -173,7 +173,6 @@
 
         /** 商品状态列表 */
         goodsStatusList: [
-          { value: -1, label: '请选择' },
           { value: 0, label: '未出售（已下架）' },
           { value: 1, label: '出售中（已上架）' }
         ],

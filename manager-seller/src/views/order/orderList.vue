@@ -6,7 +6,7 @@
       :tableData="tableData">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus" clearable>
+          <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus">
             <el-option
               v-for="item in orderStatusList"
               :key="item.value"
