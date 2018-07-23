@@ -91,12 +91,16 @@
       }
     },
     mounted() {
-      this.GET_Points()
-      this.GET_PointsData()
+      this.type !== 'detail'
+        ? this.GET_Points()
+        : this.GET_PointsData()
     },
     watch: {
       $route: function () {
-        this.type = this.$route.query.type
+        const { type } =this.$route.query
+        this.type = type
+        if (type !== 'detail' && this.points.consum_point === '获取中...') this.GET_Points()
+        if (type === 'detail' && !this.pointsData) this.GET_PointsData()
       }
     },
     methods: {
