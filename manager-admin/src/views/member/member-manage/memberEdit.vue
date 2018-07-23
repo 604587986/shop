@@ -158,6 +158,19 @@
     mounted() {
       this.GET_MemberDetail()
     },
+    beforeRouteUpdate(to, from, next) {
+      this.member_id = to.params.id
+      next()
+    },
+    activated() {
+      this.member_id = this.$route.params.id
+    },
+    watch: {
+      member_id: function() {
+        this.GET_MemberDetail()
+        this.editMemberForm = {}
+      }
+    },
     methods: {
       /** 提交修改会员表单 */
       submitEditMemberForm(formName) {
