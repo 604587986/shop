@@ -167,7 +167,7 @@
     .search-autocomplete {
       width: 395px;
       background: white;
-      border: 1px solid #f42424;
+      border: 1px solid $color-main;
       position: absolute;
       z-index: 99999;
       border-top: none;

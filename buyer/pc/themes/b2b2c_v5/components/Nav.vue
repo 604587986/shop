@@ -26,6 +26,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   #nav {
     display: flex;
     height: 40px;
@@ -47,7 +48,7 @@
           zoom: 1;
           font-weight: 500;
           &:hover {
-            color: #f42424
+            color: $color-main
           }
         }
       }
