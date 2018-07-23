@@ -650,13 +650,13 @@
       }
     },
     beforeRouteUpdate(to, from, next) {
-      if (this.$route.params && this.$route.params.goodsid) {
-        this.currentStatus = parseInt(this.$route.params.isdraft) || 0
-        this.activeGoodsId = this.$route.params.goodsid
-        this.activestep = this.$route.params.isdraft ? 1 : 0
-        if (this.currentStatus === 1 && this.$route.params.goodsid) {
+      if (to.params && to.params.goodsid) {
+        this.currentStatus = parseInt(to.params.isdraft) || 0
+        this.activeGoodsId = to.params.goodsid
+        this.activestep = to.params.isdraft ? 1 : 0
+        if (this.currentStatus === 1 && to.params.goodsid) {
           this.GET_GoodData()
-        } else if (this.currentStatus === 2 && this.$route.params.goodsid) {
+        } else if (this.currentStatus === 2 && to.params.goodsid) {
           this.GET_GoodDraftData()
         }
       } else {

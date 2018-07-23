@@ -113,16 +113,15 @@
   import * as API_Settlement from '@/api/settlement'
   export default {
     name: 'settlementDetail',
-    mounted() {
+    activated() {
       this.billId = this.$route.params.sn
-      this.GET_SettlementList()
-      this.GET_orderList()
     },
     beforeRouteUpdate(to, from, next) {
       this.billId = to.params.sn
-      this.GET_SettlementList()
-      this.GET_orderList()
       next()
+    },
+    watch: {
+      billId: ['GET_SettlementList', 'GET_orderList']
     },
     data() {
       return {

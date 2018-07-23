@@ -206,7 +206,7 @@
         shopInfo: this.$store.getters.shopInfo
       }
     },
-    mounted() {
+    activated() {
       this.GET_GoodsList()
     },
     beforeRouteUpdate(to, from, next) {
