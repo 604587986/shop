@@ -4,6 +4,7 @@
       ref="tableLayout"
       :tableData="tableData.data"
       :loading="loading"
+      :stripe="false"
       row-key="id"
       border
     >
@@ -42,7 +43,9 @@
                 </el-table-column>
                 <el-table-column prop="name" label="文章分类"/>
                 <el-table-column prop="type" label="显示位置"/>
-                <el-table-column prop="allow_delete" label="是否可删除"/>
+                <el-table-column label="是否可删除">
+                  <template slot-scope="scope">{{ scope.row.allow_delete ? '是' : '否' }}</template>
+                </el-table-column>
                 <!--操作-->
                 <el-table-column label="操作" width="150">
                   <template slot-scope="scope">
@@ -72,7 +75,9 @@
         </el-table-column>
         <el-table-column prop="name" label="文章分类"/>
         <el-table-column prop="type" label="显示位置"/>
-        <el-table-column prop="allow_delete" label="是否可删除"/>
+        <el-table-column label="是否可删除">
+          <template slot-scope="scope">{{ scope.row.allow_delete ? '是' : '否' }}</template>
+        </el-table-column>
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -286,6 +291,9 @@
       }
       .el-table::before {
         display: none;
+      }
+      .el-table tr {
+        background-color: #f5f7fa;
       }
     }
     .el-table__expand-column {
