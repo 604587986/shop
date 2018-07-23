@@ -16,7 +16,7 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column label="" type="expand" width="0">
+        <el-table-column type="expand" width="0" style="border-left: 0">
           <template slot-scope="scope">
             <en-table-layout
               v-if="scope.row.children && scope.row.children.length"
@@ -26,16 +26,22 @@
               :pagination="false"
               :stripe="false"
               style="width: 100%"
+              class="expand-table"
             >
               <template slot="table-columns">
-                <el-table-column label="" width="79">
-                  <template slot-scope="scope"><svg-icon icon-class="right-angle" class="right-angle"/></template>
+                <el-table-column type="expand" width="0" style="border-left: 0"></el-table-column>
+                <el-table-column label="" width="75">
+                  <template slot-scope="scope">
+                    <div class="expand">
+                      <svg-icon icon-class="right-angle" class="right-angle"/>
+                    </div>
+                  </template>
                 </el-table-column>
                 <el-table-column label="文章排序">
                   <template slot-scope="scope">{{ scope.row.sort || 0 }}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="文章分类" width="300"/>
-                <el-table-column prop="type" label="显示位置" width="300"/>
+                <el-table-column prop="name" label="文章分类"/>
+                <el-table-column prop="type" label="显示位置"/>
                 <el-table-column prop="allow_delete" label="是否可删除"/>
                 <!--操作-->
                 <el-table-column label="操作" width="150">
@@ -64,8 +70,8 @@
         <el-table-column label="文章排序">
           <template slot-scope="scope">{{ scope.row.sort || 0 }}</template>
         </el-table-column>
-        <el-table-column prop="name" label="文章分类" width="300"/>
-        <el-table-column prop="type" label="显示位置" width="300"/>
+        <el-table-column prop="name" label="文章分类"/>
+        <el-table-column prop="type" label="显示位置"/>
         <el-table-column prop="allow_delete" label="是否可删除"/>
         <!--操作-->
         <el-table-column label="操作" width="150">
@@ -290,6 +296,9 @@
     }
     .expand {
       cursor: pointer;
+    }
+    .el-table td, .el-table th {
+      border-right: none;
     }
   }
 </style>
