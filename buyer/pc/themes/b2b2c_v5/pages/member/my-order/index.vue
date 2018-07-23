@@ -66,7 +66,7 @@
                 <a v-if="order.order_operate_allowable_vo.allow_cancel" href="javascript:;" @click="handleCancelOrder(order.sn)">取消订单</a>
                 <nuxt-link v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :to="'./after-sale/apply?order_sn=' + order.sn">取消订单</nuxt-link>
                 <a v-if="order.order_operate_allowable_vo.allow_rog" href="javascript:;" @click="handleRogOrder(order.sn)">确认收货</a>
-                <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/pay/' + order.sn">订单付款</nuxt-link>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/checkout/cashier?order_sn=' + order.sn">订单付款</nuxt-link>
                 <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/member/comments?order_sn=' + order.sn">去评论</nuxt-link>
                 <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
               </div>

@@ -108,10 +108,12 @@
             </a>
           </div>
           <div class="price">
-            <div class="p-c-b">
-              <span><em>￥</em><input type="text" v-model="prices[0]" class="custom-pro" maxlength="5"/></span>
+            <div class="p-c-i">
+              <div class="p-c-i-b"><em>￥</em><input type="text" v-model="prices[0]" class="custom-pro" maxlength="5"/></div>
               <i></i>
-              <span><em>￥</em><input type="text" v-model="prices[1]" class="custom-pro" maxlength="5"/></span>
+              <div class="p-c-i-b"><em>￥</em><input type="text" v-model="prices[1]" class="custom-pro" maxlength="5"/></div>
+            </div>
+            <div class="p-c-b">
               <a href="javascript:;" class="empty-pro" @click="prices = []">清空</a>
               <a href="javascript:;" class="enter-pro" @click="GET_GoodsList">确定</a>
             </div>
@@ -416,12 +418,14 @@
     overflow: hidden;
     box-shadow: rgb(204, 204, 204) 0 2px 5px;
     .gl-sku-filter {
-      display: flex;
-      align-items: center;
       position: relative;
+      z-index: 3;
       height: 45px;
       background-color: #f5f5f5;
+      $margin-top: (45px - 24px) / 2;
       .btns {
+        float: left;
+        margin-top: $margin-top;
         margin-left: 30px;
         .iconfont {
           transform: rotate(-180deg);
@@ -450,41 +454,45 @@
         }
       }
       .price {
+        position: relative;
+        float: left;
         width: 124px;
-        overflow: hidden;
+        height: 45px;
         margin-left: 15px;
         text-align: center;
         &:hover {
-          overflow: inherit;
-          align-self: end;
+          background: #ededed;
           .p-c-b {
-            background: #ededed;
-            padding-top: 10px;
-            height: 64px;
-            position: relative;
-            z-index: 3;
-            overflow: visible;
+            display: block;
           }
         }
-        .p-c-b {
+        .p-c-i {
           height: 24px;
+          margin-top: $margin-top;
           overflow: hidden;
         }
-        span {
+        .p-c-b {
+          display: none;
+          position: absolute;
+          bottom: -30px;
+          left: 0;
+          width: 100%;
+          background: #ededed;
+        }
+        .p-c-i-b {
           display: inline-block;
           width: 45px;
           height: 22px;
           border: 1px solid #ededed;
           background-color: #fff;
-          background-position: 3px -281px;
-          text-align: right;
         }
-        em { margin-right: 2px }
         input {
           width: 33px;
           height: 14px;
           border: 0 none;
+          padding: 0 3px;
           margin-top: 4px;
+          box-sizing: border-box;
         }
         i {
           display: inline-block;

@@ -44,16 +44,6 @@ export const CLEAN_CART = 'CLEAN_CART'
 // 获取购物车总价
 export const SET_CART_TOTAL = 'SET_CART_TOTAL'
 
-/** 站内消息相关 */
-// 设置消息数据【获取站内消息列表之后】
-export const SET_MESSAGE_DATA = 'SET_MESSAGE_DATA'
-// 设置未读消息数据 【获取未读消息之后】
-export const SET_UNREAD_MESSAGE_DATA = 'SET_UNREAD_MESSAGE_DATA'
-// 标记消息为已读
-export const MESSAGE_MARK_AS_READ = 'MESSAGE_MARK_AS_READ'
-// 删除消息
-export const DELETE_MESSAGE = 'DELETE_MESSAGE'
-
 /** 店铺相关 */
 // 设置店铺信息
 export const SET_SHOP_DATA = 'SET_SHOP_DATA'
