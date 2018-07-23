@@ -81,6 +81,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .comments-container {
     padding-top: 10px;
   }
@@ -93,10 +94,10 @@
     background: #fafafa;
     overflow: hidden;
     a {
-      color: #0279b9;
+      color: $color-href;
       margin-left: 10px;
       margin-right: 20px;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
   }
   .comment-body {

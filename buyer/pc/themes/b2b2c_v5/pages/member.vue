@@ -34,6 +34,7 @@
 </script>
 
 <style type="text/scss" lang="scss">
+  @import "../assets/styles/color";
   .member-layout {
     display: flex;
     justify-content: space-between;
@@ -54,7 +55,7 @@
     border-bottom: 1px solid #e7e7e7;
     @mixin active {
       background-color: #fff;
-      color: #f42424;
+      color: $color-main;
       border-bottom: 1px solid #fff;
     }
     li {

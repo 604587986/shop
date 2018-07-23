@@ -28,6 +28,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .help-index {
     .list-box {
       overflow: hidden;
@@ -64,8 +65,8 @@
       width: 33%;
       line-height: 25px;
       a {
-        color: #4db7eb;
-        &:hover { color: #f42424 }
+        color: $color-href;
+        &:hover { color: $color-main }
       }
     }
   }

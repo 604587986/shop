@@ -214,6 +214,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   .container {
     background: #f5f5f5;
     overflow: hidden;
@@ -260,7 +261,7 @@
           width: 397px;
           text-align: center;
           &.active {
-            color: #f42424;
+            color: $color-main;
             font-weight: 600;
           }
         }

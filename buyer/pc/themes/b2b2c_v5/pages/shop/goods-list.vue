@@ -157,6 +157,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   img { width: 100%; height: 100% }
   .container {
     background-color: #F7F7F7;
@@ -184,13 +185,13 @@
       border-right: 1px solid #ccc;
       font-size: 14px;
       cursor: pointer;
-      &.active { color: #f42424 }
+      &.active { color: $color-main }
       &.down .iconfont { transform: rotate(0) scale(.8) }
       &:last-child { border-right: 0 }
       .iconfont {
         font-size: 12px;
         margin: 0 5px;
-        color: #f42424;
+        color: $color-main;
         transform: rotate(180deg) scale(.8);
       }
     }

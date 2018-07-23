@@ -248,6 +248,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .user-title {
     display: flex;
     justify-content: flex-start;
@@ -344,7 +345,7 @@
       &.right { width: 990px - 590px; border-left: none }
       &:hover {
         border-color: rgba(244, 36, 36, 0.5);
-        box-shadow: 0 0 10px 0 #f42424;
+        box-shadow: 0 0 10px 0 $color-main;
         z-index: 10;
       }
     }
@@ -388,7 +389,7 @@
           color: #333;
           font-weight: 600;
         }
-        .price { color: #f42424 }
+        .price { color: $color-main }
       }
       p {
         color: #777;
@@ -452,7 +453,7 @@
       }
       em {
         font-size: 12px;
-        color: #f42424;
+        color: $color-main;
       }
       span { margin-right: 50px }
     }
@@ -495,7 +496,7 @@
         justify-content: space-between;
         padding: 0 5px;
       }
-      .delete-btn { color: #f42424 }
+      .delete-btn { color: $color-main }
     }
   }
   .item.shop-collection {
@@ -526,7 +527,7 @@
           background-color: #f9f9f9;
           color: #666;
           &:hover {
-            color: #f42424
+            color: $color-main
           }
         }
       }

@@ -58,6 +58,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   .help-container {
     width: 1000px;
     margin: 20px auto;
@@ -73,7 +74,7 @@
       font-size: 18px;
       line-height: 40px;
       height: 40px;
-      background-color: #f42424;
+      background-color: $color-main;
       font-weight: normal;
     }
     .subside-mod {
@@ -123,7 +124,7 @@
           padding-left: 45px;
           color: #333;
           &:hover, &.nuxt-link-active {
-            color: #f42424;
+            color: $color-main;
           }
         }
       }
