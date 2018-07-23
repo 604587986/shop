@@ -44,7 +44,7 @@
         </div>
       </div>
       <div v-if="selectorData" class="gl-select-condition">
-        <dl v-if="selectorData.brand" class="brand logo-brand">
+        <dl v-if="selectorData.brand && selectorData.brand.length" class="brand logo-brand">
           <dt>品牌:</dt>
           <dd>
             <div class="small-list brand-list">
@@ -58,39 +58,15 @@
             </div>
           </dd>
         </dl>
-        <dl>
-          <dt>价格:</dt>
-          <dd>
-            <div class="small-list">
-              <a href="/goods.html?price=_5&amp;cat=1">5元以下</a>
-              <a href="/goods.html?price=5_10&amp;cat=1">5-10元</a>
-              <a href="/goods.html?price=10_20&amp;cat=1">10-20元</a>
-              <a href="/goods.html?price=20_50&amp;cat=1">20-50元</a>
-              <a href="/goods.html?price=50_100&amp;cat=1">50-100元</a>
-              <a href="/goods.html?price=100_200&amp;cat=1">100-200元</a>
-              <a href="/goods.html?price=200_500&amp;cat=1">200-500元</a>
-              <a href="/goods.html?price=500_1000&amp;cat=1">500-1000元</a>
-              <a href="/goods.html?price=1000_&amp;cat=1">1000元以上</a>
-            </div>
-          </dd>
-        </dl>
-        <dl>
+        <dl v-if="selectorData.cat && selectorData.cat.length">
           <dt>分类:</dt>
           <dd>
             <div class="small-list">
-              <a href="/goods?category=1_2_7">蜜饯</a>
-              <a href="/goods?category=1_2">休闲零食 </a>
-              <a href="/goods?category=1_13_14">碳酸饮料</a>
-              <a href="/goods?category=1_3_10">巧克力</a>
-              <a href="/goods?category=1_18_19">白酒</a>
-              <a href="/goods?category=1_377">牛奶乳品</a>
-              <a href="/goods?category=1_288_290">普洱</a>
-              <a href="/goods?category=1_288_289">铁观音</a>
-              <a href="/goods?category=1_2_306">牛肉干</a>
-              <a href="/goods?category=1_2_6">坚果</a>
-              <a href="/goods?category=1_18_21">洋酒</a>
-              <a href="/goods?category=1_18_168">葡萄酒</a>
-              <a href="/goods?category=1_377_380">儿童奶</a>
+              <a
+                v-for="(cat, index) in selectorData.cat"
+                :key="index"
+                :href="'/goods?category=' + cat.value"
+              >{{ cat.name }}</a>
             </div>
           </dd>
         </dl>
@@ -269,6 +245,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .gl-container {
     .iconfont {
       font-size: 12px;
@@ -327,7 +304,7 @@
       line-height: 26px;
       margin-right: 50px;
       a { color: #666 }
-      a:hover { color: #f42424 }
+      a:hover { color: $color-main }
     }
   }
   .gl-select-condition {
@@ -368,7 +345,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         color: #666;
-        &:hover { color: #f42424 }
+        &:hover { color: $color-main }
       }
     }
     .brand-list {
@@ -447,8 +424,8 @@
           z-index: 1;
           color: #666;
           &.active {
-            background: #e93b39;
-            border-color: #e93b39;
+            background: $color-main;
+            border-color: $color-main;
             color: #fff;
           }
         }
@@ -517,8 +494,8 @@
           color: #666;
         }
         .enter-pro {
-          border: 1px solid #e93b39;
-          background: #e93b39;
+          border: 1px solid $color-main;
+          background: $color-main;
           margin-left: 5px;
           color: #fff;
         }
@@ -589,7 +566,7 @@
       strong {
         float: left;
         margin-right: 10px;
-        color: #e4393c;
+        color: $color-main;
         font-size: 20px;
         font-weight: 400;
         font-family: Verdana;
@@ -602,7 +579,7 @@
       overflow: hidden;
       a {
         color: #666;
-        &:hover { color: #f42424 }
+        &:hover { color: $color-main }
       }
       em {
         display: block;
@@ -662,7 +639,7 @@
         position: relative;
         height: 18px;
         a { color: #999 }
-        a:hover { color: #f42424 }
+        a:hover { color: $color-main }
         i { margin-left: 5px }
       }
     }
