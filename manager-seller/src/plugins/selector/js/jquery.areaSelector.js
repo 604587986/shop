@@ -1338,6 +1338,7 @@ export default {
       // 设置cover遮罩层的高度为body的高
       $('.cover').css('height', document.documentElement.clientHeight)
     }
+    areaDOM.find('#chooseAll').text('全选')
     requestAndFirstRenderData(options.api, options.props)
     startDefault(options.defaultData)
   }
