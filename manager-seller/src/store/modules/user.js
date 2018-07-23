@@ -35,7 +35,6 @@ const user = {
       Storage.removeItem('user', { domain: domain.cookie })
       Storage.removeItem('accessToken', { domain: domain.cookie })
       Storage.removeItem('refreshToken', { domain: domain.cookie })
-      Storage.removeItem('shopInfo')
     },
     /**
      * 设置访问令牌

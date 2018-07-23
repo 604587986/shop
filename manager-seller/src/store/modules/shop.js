@@ -14,7 +14,6 @@ const shop = {
     // 存储店铺信息
     SetShop({ commit }, shopInfo) {
       commit('SetShop', shopInfo)
-      Storage.setItem('shopInfo', JSON.stringify(shopInfo), { domain: domain.cookie })
     }
   }
 }
