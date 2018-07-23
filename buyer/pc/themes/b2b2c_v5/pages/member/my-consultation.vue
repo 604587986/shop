@@ -3,7 +3,7 @@
     <div class="member-nav">
       <ul class="member-nav-list">
         <li class="active">
-          <a href="./my-consultation">我的咨询</a>
+          <nuxt-link to="./my-consultation">我的咨询</nuxt-link>
         </li>
       </ul>
     </div>

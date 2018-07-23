@@ -39,8 +39,8 @@
           </div>
           <div class="dd dorpdown-layer">
             <dl>
-              <dd><nuxt-link to="/member/my-collection#goods">收藏的商品</nuxt-link></dd>
-              <dd><nuxt-link to="/member/my-collection#shop">收藏的店铺</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-collection">收藏的商品</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-collection?type=shop">收藏的店铺</nuxt-link></dd>
             </dl>
           </div>
         </li>

@@ -79,7 +79,6 @@
     </el-dialog>
     <en-member-picker
       :show="memberPickerShow"
-      :default-data="memberDefaultData"
       @close="memberPickerShow = false"
       @confirm="handleMemberPickerConfirm"/>
   </div>

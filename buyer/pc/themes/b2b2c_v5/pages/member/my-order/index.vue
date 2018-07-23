@@ -2,12 +2,10 @@
   <div id="my-order">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li
-          v-for="item in navList"
-          :key="item.status"
-          :class="[item.active && 'active']"
-          @click="handleClickNav(item)"
-        >{{ item.title }}</li>
+        <li v-for="item in navList" :key="item.status">
+          <nuxt-link v-if="!item.status" to="./my-order">{{ item.title }}</nuxt-link>
+          <nuxt-link v-else :to="'./my-order?order_status=' + item.status">{{ item.title }}</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="order-search">
@@ -92,53 +90,38 @@
   export default {
     name: 'my-order-index',
     mounted() {
-      /** 如果有hash值，或者没有订单数据。需要重新请求数据 */
-      if (!this.orderData || this.$route.hash) this.GET_OrderList()
-      window.addEventListener('hashchange', this.handleHashChanged)
+      if (!this.orderData) this.GET_OrderList()
     },
     data() {
-      let _hash = this.$route.hash
-      _hash = _hash ? _hash.replace(/^#/,'') : 'ALL'
       return {
         params: {
           page_no: 1,
           page_size: 5,
-          order_status: _hash,
+          order_status: this.$route.query.order_status,
           goods_name: ''
         },
         orderData: '',
         navList: [
-          { title: '所有订单', status: 'ALL' },
+          { title: '所有订单', status: '' },
           { title: '待付款', status: 'WAIT_PAY' },
           { title: '待发货', status: 'WAIT_SHIP' },
           { title: '待收货', status: 'WAIT_ROG' },
           { title: '已取消', status: 'CANCELLED' },
           { title: '已完成', status: 'COMPLETE' },
           { title: '待评论', status: 'WAIT_COMMENT' }
-        ].map(item => {
-          item.active = item.status === _hash
-          return item
-        })
+        ]
+      }
+    },
+    watch: {
+      $route: function ({ query }) {
+        this.params.order_status = query.order_status
+        this.GET_OrderList()
       }
     },
     methods: {
-      /** 订单筛选栏点击 */
-      handleClickNav(nav) {
-        location.hash = nav.status
-      },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
-        this.GET_OrderList()
-      },
-      /** hash发生改变 */
-      handleHashChanged() {
-        const _hash = this.$route.hash.replace('#', '')
-        this.navList = this.navList.map(item => {
-          item.active = item.status === _hash
-          return item
-        })
-        this.params.order_status = _hash
         this.GET_OrderList()
       },
       /** 取消订单 */
@@ -175,9 +158,6 @@
           this.MixinScrollToTop()
         })
       }
-    },
-    destroyed() {
-      window.removeEventListener('hashchange', this.handleHashChanged)
     }
   }
 </script>
