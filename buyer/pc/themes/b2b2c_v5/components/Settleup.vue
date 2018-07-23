@@ -93,6 +93,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   #settleup {
     position: relative;
     height: 35px;
@@ -125,7 +126,7 @@
       border-color: #d2d2d2;
       a {
         display: block;
-        color: #f42424;
+        color: $color-main;
       }
       .icon-carts {
         display: block;
@@ -142,7 +143,7 @@
         line-height: 13px;
         padding: 1px;
         border-radius: 10px;
-        background: #f42424;
+        background: $color-main;
         color: #fff;
         position: absolute;
         top: 8px;
@@ -280,14 +281,14 @@
         width: 96px;
         height: 26px;
         line-height: 26px;
-        border: 1px solid #f42424;
+        border: 1px solid $color-main;
         background: #eee;
         text-align: center;
-        color: #f42424;
+        color: $color-main;
         font-weight: bold;
         transition: all .2s;
         &:hover {
-          background-color: #f42424;
+          background-color: $color-main;
           color: #fff;
         }
       }

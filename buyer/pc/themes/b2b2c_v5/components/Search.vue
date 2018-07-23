@@ -143,7 +143,7 @@
         border-bottom-left-radius: 0;
       }
       &.shop {
-        background-color: $color-main;
+        background-color: darken($color-main, 15%);
       }
     }
     .search-hot-keywords {
@@ -159,7 +159,7 @@
           display: block;
           color: #999;
           &:hover {
-            color: darken($color-main, 10%);
+            color: $color-main;
           }
         }
       }
@@ -167,7 +167,7 @@
     .search-autocomplete {
       width: 395px;
       background: white;
-      border: 1px solid #f42424;
+      border: 1px solid $color-main;
       position: absolute;
       z-index: 99999;
       border-top: none;

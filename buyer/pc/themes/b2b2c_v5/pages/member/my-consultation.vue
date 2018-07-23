@@ -85,6 +85,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .consultation-container {
     padding-top: 10px;
   }
@@ -98,7 +99,7 @@
     overflow: hidden;
     a {
       float: left;
-      color: #0279b9;
+      color: $color-href;
       margin-left: 10px;
       margin-right: 20px;
       display: -webkit-box;
@@ -106,7 +107,7 @@
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
       overflow: hidden;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
   }
   .comment-body {

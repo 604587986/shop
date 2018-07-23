@@ -62,11 +62,12 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   /* Footer */
   #footer {
     background-color: #f5f6f5;
     a { color: #666 }
-    a:hover { color: #f42424 }
+    a:hover { color: $color-main }
     .help-center-footer {
       border-bottom: solid 1px #eaeaea;
       padding: 20px 0;

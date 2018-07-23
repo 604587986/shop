@@ -238,6 +238,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .collection-container {
     position: relative;
     margin-top: 10px;
@@ -382,7 +383,7 @@
       text-overflow: ellipsis;
       font-size: 14px;
       color: #3c3c3c;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
     .shop-tools {
       position: absolute;
@@ -415,7 +416,7 @@
         border-right: #dcdcdc 1px solid;
         &.active {
           background-color: #f3f3f3;
-          color: #ff4200;
+          color: $color-main;
         }
         &:last-child { border-right: none }
       }
@@ -424,7 +425,7 @@
       float: right;
       color: #6c6c6c;
       padding-right: 10px;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
     .shop-goods-list {
       .goods-list {

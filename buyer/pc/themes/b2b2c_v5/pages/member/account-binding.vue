@@ -67,6 +67,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .el-alert {
     h2 { margin: 20px 0 }
     p { margin-bottom: 10px }
@@ -95,8 +96,8 @@
       width: 140px;
     }
     .ftx-05 {
-      color: #005ea7;
-      &:hover { color: #f42424 }
+      color: $color-href;
+      &:hover { color: $color-main }
     }
   }
 </style>

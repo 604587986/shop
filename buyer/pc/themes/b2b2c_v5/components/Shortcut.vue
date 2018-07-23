@@ -139,6 +139,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   #shortcut {
     border-bottom: 1px solid #ddd;
     background-color: #e3e4e5;
@@ -154,7 +155,7 @@
     }
     .logined a { color: #333 }
     a:hover {
-      color: #e33333
+      color: $color-main
     }
   }
   .links {

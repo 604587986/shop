@@ -66,6 +66,7 @@
                 <a v-if="order.order_operate_allowable_vo.allow_rog" href="javascript:;" @click="handleRogOrder(order.sn)">确认收货</a>
                 <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/checkout/cashier?order_sn=' + order.sn">订单付款</nuxt-link>
                 <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/member/comments?order_sn=' + order.sn">去评论</nuxt-link>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</nuxt-link>
                 <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
               </div>
             </div>
@@ -163,6 +164,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .order-search {
     display: flex;
     align-items: center;
@@ -179,7 +181,7 @@
       border-radius: 3px;
       transition: border .2s ease-out;
       &:focus {
-        border-color: rgba(244, 36, 36, .75);
+        border-color: darken($color-main, 75%);
       }
     }
     button {
@@ -222,7 +224,7 @@
         margin-left: 20px;
       }
       .price {
-        color: #f42424;
+        color: $color-main;
         font-size: 14px;
         font-weight: 600;
         em {
@@ -283,7 +285,7 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
       }
-      .sku-price { color: #f42424 }
+      .sku-price { color: $color-main }
       .sku-price, .sku-num {
         width: 80px;
         text-align: center;
@@ -291,7 +293,7 @@
       .after-sale-btn {
         width: 60px;
         a { color: #666 }
-        a:hover { color: #f42424 }
+        a:hover { color: $color-main }
       }
       .order-item-price, .order-item-status {
         width: 100px;
@@ -317,7 +319,7 @@
           height: 100%;
           background-color: #f9dbcc;
         }
-        strong { color: #f42424 }
+        strong { color: $color-main }
       }
       .order-item-status {
         &::after {

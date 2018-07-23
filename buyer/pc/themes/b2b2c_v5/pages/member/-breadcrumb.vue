@@ -47,6 +47,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   #member-breadcrumb {
     position: relative;
     font-size: 12px;
@@ -57,6 +58,6 @@
       margin-right: 5px;
     }
     a { color: #666 }
-    a:hover { color: #f42424 }
+    a:hover { color: $color-main }
   }
 </style>
