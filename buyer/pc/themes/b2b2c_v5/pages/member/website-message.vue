@@ -16,7 +16,7 @@
           <div class="msg-time">{{ message.send_time | unixToDate }}</div>
           <div class="msg-box">
             <div class="msg-title">
-              <h4>{{ message.message_title || '站内消息' }}</h4>
+              <h4>{{ message.title || '站内消息' }}</h4>
               <div class="message-tools">
                 <i v-if="params.type !== 'all'"
                    class="el-icon-check"
