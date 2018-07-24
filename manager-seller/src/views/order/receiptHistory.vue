@@ -7,15 +7,15 @@
       <template slot="table-columns">
         <!--日期-->
         <el-table-column label="日期">
-          <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
+          <template slot-scope="scope">{{ scope.row.add_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <!--会员名称-->
         <el-table-column prop="member_name" label="会员名称"/>
         <!--订单编号-->
-        <el-table-column prop="sn" label="订单编号"/>
+        <el-table-column prop="order_sn" label="订单编号"/>
         <!--发票金额-->
         <el-table-column label="发票金额">
-          <template slot-scope="scope">{{ scope.row.need_pay_money | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.receipt_amount | unitPrice('￥') }}</template>
         </el-table-column>
         <!--发票类别-->
         <el-table-column prop="receipt_type" label="发票类型"/>
@@ -51,13 +51,13 @@
         <template slot="table-columns">
           <el-table-column label="商品名称">
             <template slot-scope="scope">
-              <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
+              <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.name }}</a>
             </template>
           </el-table-column>
           <el-table-column label="单价">
-            <template slot-scope="scope"> {{ scope.row.price }}</template>
+            <template slot-scope="scope"> {{ scope.row.original_price }}</template>
           </el-table-column>
-          <el-table-column  prop="" label="数量" />
+          <el-table-column  prop="num" label="数量" />
         </template>
       </en-table-layout>
     </el-dialog>
@@ -116,7 +116,7 @@
         const keys = [
           { label: '发票抬头', key: 'receipt_title' },
           { label: '发票税号', key: 'duty_invoice' },
-          { label: '收件地址', key: 'receipt_content' },
+          { label: '收票地址', key: 'receipt_content' },
           { label: '发票明细', key: 'receipt_content' }
         ]
         this.viewRectiptData = keys.map(item => {
