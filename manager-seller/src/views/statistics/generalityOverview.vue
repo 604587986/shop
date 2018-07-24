@@ -70,7 +70,7 @@
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: response.xAxis.reverse()
+            data: response.xAxis
           },
           yAxis: {
             type: 'value',
