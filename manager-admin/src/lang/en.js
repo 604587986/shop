@@ -97,7 +97,6 @@ export default {
     smtpSettings: 'SMTP Settings',
     SMSGatewaySettings: 'SMS Gateway Setting',
     expressPlatformSettings: 'Express Platform Settings',
-    receiptContentSettings: 'Receipt Content Settings',
     electronicReceipt: 'Electronic Receipt',
     storageSolution: 'Storage Solution',
     staticPage: 'Static Page',

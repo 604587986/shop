@@ -96,7 +96,6 @@ export default {
     smtpSettings: 'SMTP设置',
     SMSGatewaySettings: '短信网关设置',
     expressPlatformSettings: '快递平台设置',
-    receiptContentSettings: '发票内容设置',
     electronicReceipt: '电子面单',
     storageSolution: '储存方案',
     staticPage: '静态页',
