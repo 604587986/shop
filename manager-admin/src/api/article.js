@@ -153,7 +153,7 @@ export function editArticle(id, params) {
  */
 export function deleteArticle(id) {
   return request({
-    url: `pages/articles/{id}`,
+    url: `pages/articles/${id}`,
     method: 'delete'
   })
 }

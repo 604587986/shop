@@ -75,7 +75,7 @@
         this.keyword = keyword
         this.show_autocomplete = false
         this.$refs['searchInput'].blur()
-        window.location.href = `/goods?keyword=${keyword}`
+        window.location.href = `/goods${keyword ? `?keyword=${keyword}` : ''}`
       },
       /** 搜索店铺 */
       handleSearchShop() {

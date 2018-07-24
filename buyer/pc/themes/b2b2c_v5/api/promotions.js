@@ -60,3 +60,25 @@ export function getShopCoupons(seller_id) {
     params: { seller_id }
   })
 }
+
+/**
+ * 获取积分商城分类
+ */
+export function getPointsCategory() {
+  return request({
+    url: 'promotions/exchange/cats',
+    method: Method.GET
+  })
+}
+
+/**
+ * 获取积分商城商品
+ * @param params
+ */
+export function getPointsGoods(params) {
+  return request({
+    url: `promotions/exchange/goods`,
+    method: Method.GET,
+    params
+  })
+}

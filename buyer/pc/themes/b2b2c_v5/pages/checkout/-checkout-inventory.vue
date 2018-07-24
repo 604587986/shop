@@ -15,8 +15,8 @@
           <div class="express-inventory">
             <div class="title-item-inventory">配送方式</div>
             <div class="content-item-inventory express">
-              <div class="ckt-checkbox express selected" title="运费&nbsp;（0&nbsp;元）">
-                <span>运费&nbsp;（0&nbsp;元）</span>
+              <div class="ckt-checkbox express selected" :title="'运费（' + shop.price.freight_price + '元）'">
+                <span>运费&nbsp;（{{ shop.price.freight_price }}&nbsp;元）</span>
               </div>
             </div>
             <div style="clear: both;"></div>

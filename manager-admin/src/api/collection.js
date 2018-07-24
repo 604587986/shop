@@ -23,10 +23,8 @@ export function getCollectionList(params) {
  * @param params
  */
 export function exportCollection(params) {
-  params = JSON.parse(JSON.stringify(params))
-  params.page_size = 9999999
   return request({
-    url: 'rade/orders/pay-log',
+    url: 'trade/orders/pay-log/list',
     method: 'get',
     params
   })

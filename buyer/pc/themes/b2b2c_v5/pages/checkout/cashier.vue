@@ -41,7 +41,7 @@
           </div>
         </div>
         <div v-show="showPayBox" class="cashier-pay-box">
-          <div class="pay-item alipay">
+          <div class="pay-item">
             <div class="pay-left">
               <p v-if="payment_plugin_id !== 'weixinPayPlugin'">使用电脑支付</p>
               <div v-if="payment_plugin_id === 'weixinPayPlugin'" class="pc-pay-img">
@@ -52,7 +52,8 @@
               <i v-if="payment_plugin_id === 'alipayDirectPlugin'" class="icon-or"></i>
             </div>
             <div v-if="payment_plugin_id === 'alipayDirectPlugin' || payment_plugin_id === 'weixinPayPlugin'" class="pay-right">
-              <p>使用支付宝钱包扫一扫即可付款</p>
+              <p v-if="payment_plugin_id === 'alipayDirectPlugin'">使用支付宝钱包扫一扫即可付款</p>
+              <p v-if="payment_plugin_id === 'weixinPayPlugin'">使用微信钱包扫一扫即可付款</p>
               <div class="pay-qrcode" id="pay-qrcode">
                 <iframe id="iframe-qrcode" width="200px" height="200px" scrolling="no"></iframe>
               </div>
@@ -156,6 +157,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .cashier-box {
     width: 100%;
     background: #f5f5f5;
@@ -181,7 +183,7 @@
       }
       span {
         font-size: 20px;
-        color: #f42424;
+        color: $color-main;
         margin: 0 5px 0 0;
       }
     }
@@ -269,7 +271,7 @@
         text-align: center;
         color: #fff;
         font-size: 14px;
-        background: #f42424;
+        background: $color-main;
         display: block;
         margin: 30px auto 0 auto;
       }
@@ -284,7 +286,7 @@
     .pay-item {
       display: flex;
       justify-content: center;
-      margin: 0 3px 0 3px;
+      margin: 0 3px 3px 3px;
       background: #fff;
       overflow: hidden;
       height: 335px;
@@ -315,7 +317,7 @@
           text-align: center;
           color: #fff;
           font-size: 14px;
-          background: #f42424;
+          background: $color-main;
           display: block;
           margin: 30px auto 0 auto;
         }
