@@ -80,14 +80,11 @@ export function getSettlementList(params) {
 /**
  * 获取结算单详情
  * @param id
- * @returns {Promise<any>}
  */
 export function getSettlementDetail(id) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `order/bills/${id}`,
-      method: 'get'
-    })
+  return request({
+    url: `order/bills/${id}`,
+    method: 'get'
   })
 }
 
@@ -95,14 +92,14 @@ export function getSettlementDetail(id) {
  * 获取账单中的订单列表或者退款单列表
  * @param id
  * @param type
- * @returns {Promise<any>}
+ * @param params
  */
-export function getSettlementOrderList(id, type) {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `order/bills/${id}/${type}`,
-      method: 'get'
-    }).then(response => resolve(response)).catch(error => reject(error))
+export function getSettlementOrderList(id, type, params) {
+  return request({
+    url: `order/bills/${id}/${type}`,
+    method: 'get',
+    loading: false,
+    params
   })
 }
 
@@ -114,6 +111,17 @@ export function operateSettlement(id) {
   return request({
     url: `order/bills/${id}/next`,
     method: 'put'
+  })
+}
+
+/**
+ * 导出结算单
+ * @param bill_id
+ */
+export function exportBill(bill_id) {
+  return request({
+    url: `order/bills/${bill_id}/export`,
+    method: 'get'
   })
 }
 
