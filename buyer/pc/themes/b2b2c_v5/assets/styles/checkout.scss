@@ -2,6 +2,7 @@
 /deep/ {
   .listing-empty {
     text-align: center;
+    margin: 50px auto;
     img {
       width: 300px;
       height: 300px;
@@ -73,12 +74,16 @@
   }
 
   .ckt-checkbox:hover,
-  .li-ckt-info.selected .ckt-checkbox, .ckt-checkbox.selected {
+  .li-ckt-info.selected .ckt-checkbox,
+  .ckt-checkbox.selected,
+  .ckt-checkbox.editting {
     height: 26px;
     line-height: 26px;
     border: 2px solid $color-main;
   }
-  .li-ckt-info.selected .ckt-checkbox, .ckt-checkbox.selected {
+  .li-ckt-info.selected .ckt-checkbox,
+  .ckt-checkbox.selected,
+  .ckt-checkbox.editting {
     background: url("../../assets/images/icon-ckt-selected.png") no-repeat bottom right;
     background-size: 20px 20px;
   }

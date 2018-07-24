@@ -188,7 +188,6 @@ export function setPaymentType(payment_type = 'ONLINE') {
  * @param params
  */
 export function setRecepit(params) {
-  params.duty_invoice = params.duty
   return request({
     url: 'trade/checkout-params/receipt',
     method: Method.POST,

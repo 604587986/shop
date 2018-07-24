@@ -266,7 +266,7 @@ export function logout() {
  */
 export function getReceipts() {
   return request({
-    url: 'members/receipts',
+    url: 'members/receipt',
     method: Method.GET,
     needToken: true
   })
@@ -278,7 +278,7 @@ export function getReceipts() {
  */
 export function addReceipt(params) {
   return request({
-    url: 'members/receipt',
+    url: 'members/receipt/ordinary',
     method: Method.POST,
     needToken: true,
     data: params
@@ -292,7 +292,7 @@ export function addReceipt(params) {
  */
 export function editReceipt(id, params) {
   return request({
-    url: `members/receipt/${id}`,
+    url: `members/receipt/${id}/ordinary`,
     method: Method.PUT,
     needToken: true,
     data: params
@@ -312,13 +312,13 @@ export function deleteReceipt(id) {
 }
 
 /**
- * 获取发票内容
+ * 设置发票为默认
+ * @param id
  */
-export function getReceiptContent() {
+export function setDefaultReceipt(id) {
   return request({
-    url: 'members/receipt-content',
-    method: Method.GET,
-    needToken: true
+    url: `members/receipt/${id}/default`,
+    method: Method.PUT
   })
 }
 
@@ -384,7 +384,20 @@ export function loginBindAccount(uuid) {
  */
 export function registerBindAccount(uuid) {
   return request({
-    url: `members/account-binder/register/{uuid}`,
+    url: `members/account-binder/register/${uuid}`,
     method: Method.POST
+  })
+}
+
+/**
+ * 获取商家可用优惠券列表
+ * @param seller_ids
+ * @param order_price
+ */
+export function getShopsCoupons(seller_ids, order_price) {
+  return request({
+    url: `members/coupon/${seller_ids}`,
+    method: Method.GET,
+    params: { order_price }
   })
 }
