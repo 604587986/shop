@@ -158,7 +158,7 @@ export const asyncRouterMap = [
         ]
       },
       { path: 'settlement-list', component: () => import('@/views/shop/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }},
-      { path: 'settlement-list/detail/:id', component: () => import('@/views/shop/settlementDetail'), name: 'settlementDetail', meta: { title: 'settlementDetail' }}
+      { path: 'settlement-list/detail/:id', component: () => import('@/views/shop/settlementDetail'), name: 'settlementDetail', hidden: true, meta: { title: 'settlementDetail' }}
     ]
   },
   // 促销管理
