@@ -42,14 +42,9 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
-      <el-form :model="smsForm" ref="smsForm" size="small" label-width="120px">
+      <el-form :model="smsForm" size="small" label-width="120px">
         <template v-for="(config, index) in smsForm.config_items">
-          <el-form-item
-            :label="config.text"
-            :key="config.name"
-            :prop="'config_items.' + index + '.value'"
-            :rules="{ required: true, message: config.text + '不能为空', trigger: 'blur' }"
-          >
+          <el-form-item :label="config.text" :key="config.name">
             <el-input v-model="config.value"/>
           </el-form-item>
         </template>
@@ -116,18 +111,11 @@
 
       /** 修改短信网关参数 提交表单 */
       submitSmsForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            const { bean } = this.smsForm
-            API_SmsGateway.editSmsGateway(bean, this.smsForm).then(response => {
-              this.dialogSmsVisible = false
-              this.$message.success('修改成功！')
-              this.MixinSetTableData(this.tableData, 'bean', bean, response)
-            })
-          } else {
-            this.$message.error('表单填写有误，请检查！')
-            return false
-          }
+        const { bean } = this.smsForm
+        API_SmsGateway.editSmsGateway(bean, this.smsForm).then(response => {
+          this.dialogSmsVisible = false
+          this.$message.success('修改成功！')
+          this.MixinSetTableData(this.tableData, 'bean', bean, response)
         })
       },
 
