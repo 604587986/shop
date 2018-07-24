@@ -306,8 +306,7 @@
 
       /** 编辑商品 isdraft 商品列表1*/
       handleEditGoods(row) {
-        const _goods_id = row.goods_id
-        this.$router.push({ path: `/goods/good-publish/${_goods_id}/1` })
+        this.$router.push({ path: `/goods/good-publish/${row.goods_id}/1` })
       },
 
       /** 删除商品 */

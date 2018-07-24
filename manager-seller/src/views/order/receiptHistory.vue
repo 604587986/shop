@@ -18,7 +18,7 @@
           <template slot-scope="scope">{{ scope.row.need_pay_money | unitPrice('￥') }}</template>
         </el-table-column>
         <!--发票类别-->
-        <el-table-column prop="receipt_type" label="发票类别"/>
+        <el-table-column prop="receipt_type" label="发票类型"/>
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
