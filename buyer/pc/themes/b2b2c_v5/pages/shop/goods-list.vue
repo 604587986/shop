@@ -67,6 +67,7 @@
 <script>
   import Vue from 'vue'
   import * as API_Shop from '@/api/shop'
+  import * as API_Goods from '@/api/goods'
   import { Foundation } from '~/ui-utils'
   const theme1Header = () => import('@/pages/shop/-themes/-theme1-header')
   const theme2Header = () => import('@/pages/shop/-themes/-theme2-header')
@@ -79,11 +80,8 @@
       return /^\d+$/.test(query.shop_id)
     },
     async asyncData({ query }) {
-      const values = await Promise.all([
-        API_Shop.getShopBaseInfo(query.shop_id)//,
-        // API_Shop.getShopGoods(query)
-      ])
-      return { shop: values[0]/*, goods: values[1]*/ }
+      const shop = await API_Shop.getShopBaseInfo(query.shop_id)
+      return { shop }
     },
     components: { theme1Header, theme2Header, theme3Header },
     data() {
@@ -97,6 +95,9 @@
           ...this.$route.query
         }
       }
+    },
+    mounted() {
+      this.GET_GoodsList()
     },
     methods: {
       /** 当前页数发生改变 */
@@ -126,7 +127,6 @@
           this.$message.error('价格区间格式有误！')
           return false
         }
-        this.handleQueryChanged()
         this.GET_GoodsList()
       },
       /** 商品搜索【店内、全站】 */
@@ -134,20 +134,22 @@
         if (type === 'all') {
           this.$router.push({ path: '/goods', query: { keyword: this.params.keyword } })
         } else {
-          this.handleQueryChanged()
           this.GET_GoodsList()
         }
       },
-      /** 当query发生改变时，替换地址栏state */
-      handleQueryChanged() {
-        Object.keys(this.params).forEach(key => {
-          this.$route.query[key] = this.params[key]
-        })
-        window.history.replaceState(null, null, `?${Foundation.formatQuery(this.$route.query)}`)
-      },
       /** 获取店铺商品列表 */
       GET_GoodsList() {
-        API_Shop.getShopGoods(this.params).then(response => {
+        const params = JSON.parse(JSON.stringify(this.params))
+        if (params.shop_id) {
+          params.seller_id = params.shop_id
+          delete  params.shop_id
+        }
+        if (params.min_price || params.max_price) {
+          params.price = [params.min_price, params.max_price].join('_')
+          delete params.min_price
+          delete params.max_price
+        }
+        API_Goods.getGoodsList(params).then(response => {
           this.goods = response
           this.MixinScrollToTop()
         })
