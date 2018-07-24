@@ -117,7 +117,7 @@
       categoryChanged(data) {
         delete this.params.keyword
         delete this.params.shop_cat_path
-        if (data !== '') {
+        if (data && Array.isArray(data) && data.length !== 0) {
           this.params = {
             ...this.params,
             shop_cat_path: '0|' + data.join('|') + '|'
