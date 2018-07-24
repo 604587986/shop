@@ -39,6 +39,7 @@ export default {
     themeListWap: 'WAP模板列表',
     shopEdit: '编辑店铺',
     settlementList: '结算列表',
+    settlementDetail: '结算单详情',
 
     promotions: '促销管理',
     groupBuyManage: '团购管理',

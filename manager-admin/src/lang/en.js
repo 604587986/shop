@@ -39,6 +39,7 @@ export default {
     themeListWap: 'Wap Theme List',
     shopEdit: 'Shop Edit',
     settlementList: 'Settlement List',
+    settlementDetail: 'Settlement Detail',
 
     promotions: 'promotions',
     groupBuyManage: 'GroupBuy Manage',

@@ -19,7 +19,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateSettlement(scope.$index, scope.row)">操作</el-button>
+              @click="handleOperateSettlement(scope.$index, scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -81,8 +81,7 @@
 
       /** 操作结算单 */
       handleOperateSettlement(index, row) {
-        this.$alert('还不能看！')
-        console.log('操作结算单：', row)
+        this.$router.push({ path: `/shop/settlement-list/detail/${row.bill_id}` })
       },
 
       /** 获取结算单列表 */
