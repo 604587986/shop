@@ -384,7 +384,20 @@ export function loginBindAccount(uuid) {
  */
 export function registerBindAccount(uuid) {
   return request({
-    url: `members/account-binder/register/{uuid}`,
+    url: `members/account-binder/register/${uuid}`,
     method: Method.POST
+  })
+}
+
+/**
+ * 获取商家可用优惠券列表
+ * @param seller_ids
+ * @param order_price
+ */
+export function getShopsCoupons(seller_ids, order_price) {
+  return request({
+    url: `members/coupon/${seller_ids}`,
+    method: Method.GET,
+    params: { order_price }
   })
 }
