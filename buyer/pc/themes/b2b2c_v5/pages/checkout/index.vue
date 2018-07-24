@@ -72,6 +72,7 @@
   import { mapGetters, mapActions } from 'vuex'
   import * as CheckoutComponents from './'
   import * as API_Trade from '@/api/trade'
+  import * as API_Members from '@/api/members'
   export default {
     name: 'checkout-index',
     components: CheckoutComponents,
@@ -91,6 +92,10 @@
       // 获取购物清单
       API_Trade.getCarts('checked').then(response => {
         this.inventoryList = response
+        const seller_ids = response.map(item => item.seller_id)
+        API_Members.getShopsCoupons(seller_ids.join(','), 200).then(response => {
+          console.log(response)
+        })
         if (response.length === 0) return
         // 获取默认结算数据
         API_Trade.getCheckoutParams().then(response => this.params = response)

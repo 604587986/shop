@@ -25,6 +25,11 @@
     },
     data() {
       return {
+        params: {
+          page_no: 1,
+          page_size: 10,
+          cat_id: 0
+        },
         categorys: [
           { cat_id: 0, cat_name: '全部', active: true }
         ]
@@ -35,6 +40,7 @@
       API_Promotions.getGroupBuyCategorys().then(response => {
         this.categorys.push(...response)
       })
+      this.GET_GroupBuyGoods()
     },
     methods: {
       /** 选择团购分类 */
@@ -44,6 +50,14 @@
           item.active = item.cat_id === cate.cat_id
           return item
         }))
+        this.params.cat_id = cate.cat_id
+        this.GET_GroupBuyGoods()
+      },
+      /** 获取团购商品 */
+      GET_GroupBuyGoods() {
+        API_Promotions.getGroupBuyGoods(this.params).then(response => {
+          console.log(response)
+        })
       }
     }
   }

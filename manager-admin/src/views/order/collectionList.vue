@@ -219,7 +219,7 @@
         const start_time = parseInt(range[0] / 1000)
         const end_time = parseInt(range[1] / 1000)
         API_Colection.exportCollection({ start_time, end_time }).then(response => {
-          const json = response.data.map(item => ({
+          const json = response.map(item => ({
             '退款单ID': item.id,
             '退款流水号': item.sn,
             '退款相关订单号': item.order_sn,

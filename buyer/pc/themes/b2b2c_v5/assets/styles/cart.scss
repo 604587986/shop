@@ -1,3 +1,4 @@
+@import "./color";
 .cart-header {
   width: 100%;
   background: #fff;
@@ -73,7 +74,7 @@
         background: #f5f5f5;
         font-size: 12px;
         color: #666;
-        &:hover { color: #f42424 }
+        &:hover { color: $color-main }
       }
     }
   }
@@ -117,7 +118,7 @@
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
-        &:hover { color: #f42424 }
+        &:hover { color: $color-main }
       }
       .sku-spec {
         color: #ff9800;
@@ -183,7 +184,7 @@
         width: 108px;
         text-align: center;
         font-size: 12px;
-        color: #ff5e5e;
+        color: $color-main;
       }
       .sku-action {
         width: 80px;
@@ -237,7 +238,7 @@
       &.price {
         font-size: 12px;
         font-weight: normal;
-        color: #ff5e5e;
+        color: $color-main;
         span {
           font-size: 14px;
           font-weight: bold;
@@ -306,7 +307,7 @@
       height: 60px;
       line-height: 60px;
       text-align: center;
-      background-color: #ff5e5e;
+      background-color: $color-main;
       font-weight: bold;
       font-size: 17px;
       color: #fff;
@@ -338,8 +339,8 @@
   transition: background-color 0.2s ease-in-out;
   vertical-align: middle;
   &.checked {
-    background-color: #ff5e5e;
-    border-color: #ff5e5e;
+    background-color: $color-main;
+    border-color: $color-main;
     i { opacity: 1 }
   }
   i {
@@ -352,6 +353,6 @@
 }
 .price {
   font-size: 16px;
-  color: #ff5e5e;
+  color: $color-main;
   font-weight: bold;
 }
