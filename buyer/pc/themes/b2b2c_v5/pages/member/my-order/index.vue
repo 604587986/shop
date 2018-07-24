@@ -11,7 +11,7 @@
     <div class="order-search">
       <input type="text" v-model="params.goods_name" placeholder="输入订单中商品关键词" @keyup.enter="GET_OrderList">
       <button type="button" @click="GET_OrderList">搜索</button>
-      <span v-if="orderData">搜到：<em style="color: #f42424">{{ orderData.data_total }}</em> 笔订单</span>
+      <span v-if="orderData">搜到：<em style="color: $color-main">{{ orderData.data_total }}</em> 笔订单</span>
       <span v-else>搜索中...</span>
     </div>
     <empty-member v-if="!orderData || !orderData.data.length">暂无订单</empty-member>

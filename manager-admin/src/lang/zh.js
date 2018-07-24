@@ -38,7 +38,9 @@ export default {
     themeList: '模板列表',
     themeListWap: 'WAP模板列表',
     shopEdit: '编辑店铺',
+    settlementManage: '店铺结算单',
     settlementList: '结算列表',
+    settlementDetail: '结算单详情',
 
     promotions: '促销管理',
     groupBuyManage: '团购管理',
@@ -96,7 +98,6 @@ export default {
     smtpSettings: 'SMTP设置',
     SMSGatewaySettings: '短信网关设置',
     expressPlatformSettings: '快递平台设置',
-    receiptContentSettings: '发票内容设置',
     electronicReceipt: '电子面单',
     storageSolution: '储存方案',
     staticPage: '静态页',

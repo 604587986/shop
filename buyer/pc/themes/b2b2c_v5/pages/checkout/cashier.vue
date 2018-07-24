@@ -3,9 +3,12 @@
     <en-header-other title="收银台"/>
     <div class="cashier-box">
       <div class="cashier-change">
-        <h2>{{ this.trade_sn ? '交易号：' : '订单编号：' }}
-          <nuxt-link :to="'/member/my-order/detail/' + order_sn" target="_blank">
-            <b>{{ trade_sn || order_sn }}</b>
+        <h2 v-if="this.trade_sn">
+          交易号：<b>{{ trade_sn }}</b>
+        </h2>
+        <h2 v-else>订单编号：
+          <nuxt-link :to="'/member/my-order/detail?order_sn=' + order_sn" target="_blank">
+            <b>{{ order_sn }}</b>
           </nuxt-link>
         </h2>
         <h2>{{ !order ? '' : order.pay_type_text === 'ONLINE' ? '在线支付：' : '货到付款：' }}
