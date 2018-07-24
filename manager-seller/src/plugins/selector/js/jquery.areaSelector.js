@@ -1015,7 +1015,6 @@ let getJSON = function() {
   let dataArray = []
   let areaObj
   // 解决全选省级
-
   // 遍历省份
   areaDOM.find('.area-right li.depth-one').each(function() {
     let provinceID = Number($(this).attr('region-id'))
@@ -1224,7 +1223,6 @@ let startDefault = function(sourceData) {
       return true
     })
   }
-
   dividedData[2] = dealLevelThreeData(areaData, dividedData[2], dividedData[1])
   dividedData[1] = dealLevelTwoData(areaData, dividedData[1], dividedData[0])
 
@@ -1338,8 +1336,10 @@ export default {
       // 设置cover遮罩层的高度为body的高
       $('.cover').css('height', document.documentElement.clientHeight)
     }
+    areaDOM.find('#chooseAll').text('全选')
     requestAndFirstRenderData(options.api, options.props)
-    startDefault(options.defaultData)
+    const _result = mapArea(options.defaultData, options.props)
+    startDefault(_result)
   }
 }
 // ---------------------------------------END-------------------------------------------

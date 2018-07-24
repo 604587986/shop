@@ -6,7 +6,7 @@
       :tableData="tableData">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus" clearable>
+          <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus">
             <el-option
               v-for="item in orderStatusList"
               :key="item.value"
@@ -166,7 +166,7 @@
         tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
       }
     },
-    mounted() {
+    activated() {
       this.GET_OrderList()
       window.onresize = this.countTableHeight
     },

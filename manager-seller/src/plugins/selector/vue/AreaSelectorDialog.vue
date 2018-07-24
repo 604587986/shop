@@ -54,7 +54,7 @@ export default {
         defaultData: this.defaultData,
         confirm: data => {
           const _data = this.mapArea(data, this.propertys)
-          this.$emit('confirmFunc', _data)
+          this.$emit('confirmFunc', data, _data)
         },
         callHideDialog: () => {
           this.$emit('hideDialogFunc')

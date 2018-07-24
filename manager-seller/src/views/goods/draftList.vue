@@ -26,10 +26,10 @@
       <el-table-column label="库存" width="140">
         <template slot-scope="scope">{{ scope.row.quantity }}件</template>
       </el-table-column>
-      <el-table-column label="创建时间" width="280">
+      <el-table-column label="创建时间" width="220">
         <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
       </el-table-column>
-      <el-table-column label="操作" min-width="200">
+      <el-table-column label="操作" min-width="250">
         <template slot-scope="scope">
           <el-button
             type="success"

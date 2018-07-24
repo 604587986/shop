@@ -19,6 +19,19 @@ export function getSettleMentList(params) {
 }
 
 /**
+ * 导出结算单
+ * @param params
+ */
+export function exportSettleMentExcel(params) {
+  return request({
+    url: '/order/bills',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
  * 商家查看某详细账单
  * @param ids
  * @param params

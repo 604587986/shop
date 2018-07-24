@@ -189,6 +189,10 @@
         this.$confirm('参与此活动进行报名的商品仅可在此次报名操作中编辑, 是否继续,请谨慎操作?', '提示', { type: 'warning' }).then(() => {
           API_limitTime.signUpLimitTimeActivity(_params).then(() => {
             this.$message.success('报名成功')
+            this.$store.dispatch('delCurrentViews', {
+              view: this.$route,
+              $router: this.$router
+            })
             this.$router.push({ path: `/promotions/activity-goods-data/${this.activityID}` })
           })
         }).catch(() => {

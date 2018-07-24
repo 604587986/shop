@@ -66,10 +66,6 @@
           <el-button type="primary">点击上传</el-button>
         </el-upload>
       </el-form-item>
-      <!--商品库存数-->
-      <!--<el-form-item label="商品库存数" v-if="gruopBuyForm.goods_name">-->
-        <!--<span>{{ gruopBuyForm.goods_stock}}</span>-->
-      <!--</el-form-item>-->
       <!--商品总数-->
       <el-form-item label="商品总数" prop="goods_num">
         <el-input :style="{ width:inputLength +'px' }"  v-model="gruopBuyForm.goods_num"></el-input>

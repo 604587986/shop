@@ -35,11 +35,11 @@ export const asyncRouterMap = [
       icon: 'goods-manage'
     },
     children: [
-      { path: 'goods-list', component: () => import('@/views/goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList', noCache: true }},
+      { path: 'goods-list', component: () => import('@/views/goods/goodsList'), name: 'goodsList', meta: { title: 'goodsList' }},
       { path: 'draft-list', component: () => import('@/views/goods/draftList'), name: 'draftList', meta: { title: 'draftList' }},
       { path: 'category-manage', component: () => import('@/views/goods/categoryManage'), name: 'categoryManage', meta: { title: 'categoryManage' }},
       { path: 'tag-manage', component: () => import('@/views/goods/tagManage'), name: 'tagManage', meta: { title: 'tagManage' }},
-      { path: 'tag-add/:tag_id', component: () => import('@/views/goods/tagAdd'), name: 'tagAdd', meta: { title: 'tagAdd', noCache: true }, hidden: true },
+      { path: 'tag-add/:tag_id', component: () => import('@/views/goods/tagAdd'), name: 'tagAdd', meta: { title: 'tagAdd' }, hidden: true },
       { path: 'recycle-station', component: () => import('@/views/goods/recycleStation'), name: 'recycleStation', meta: { title: 'recycleStation' }},
       { path: 'understock', component: () => import('@/views/goods/understock'), name: 'understock', meta: { title: 'understock' }},
       { path: 'good-publish/:goodsid?/:isdraft?', component: () => import('@/views/goods/goodsPublish'), name: 'goodPublish', meta: { title: 'goodPublish', noCache: true }, hidden: true }
@@ -54,13 +54,13 @@ export const asyncRouterMap = [
     redirect: '/order/order-list',
     meta: { title: 'order', icon: 'order-manage' },
     children: [
-      { path: 'order-list', component: () => import('@/views/order/orderList'), name: 'orderList', meta: { title: 'orderList', noCache: true }},
-      { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail', noCache: true }},
+      { path: 'order-list', component: () => import('@/views/order/orderList'), name: 'orderList', meta: { title: 'orderList' }},
+      { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
       { path: 'refund-list', component: () => import('@/views/order/refundList'), name: 'refundList', meta: { title: 'refundList' }},
       { path: 'logistics-manage', component: () => import('@/views/order/logisticsManage'), name: 'logisticsManage', meta: { title: 'logisticsManage' }},
       { path: 'comments-manage', component: () => import('@/views/order/commentsManage'), name: 'commentsManage', meta: { title: 'commentsManage' }},
       { path: 'settlement-manage', component: () => import('@/views/order/settlementManage'), name: 'settlementManage', meta: { title: 'settlementManage' }},
-      { path: 'settlement-detail/:sn', component: () => import('@/views/order/settlementDetail'), name: 'settlementDetail', meta: { title: 'settlementDetail', noCache: true }, hidden: true },
+      { path: 'settlement-detail/:sn', component: () => import('@/views/order/settlementDetail'), name: 'settlementDetail', meta: { title: 'settlementDetail' }, hidden: true },
       { path: 'receipt-history', component: () => import('@/views/order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }}
     ]
   },
@@ -92,11 +92,11 @@ export const asyncRouterMap = [
       { path: 'discount-manager', component: () => import('@/views/promotions/discountManager'), name: 'discountManager', meta: { title: 'discountManager' }},
       { path: 'gift-manager', component: () => import('@/views/promotions/giftManager'), name: 'giftManager', meta: { title: 'giftManager' }},
       { path: 'group-buy-manager', component: () => import('@/views/promotions/groupBuyManager'), name: 'groupBuyManager', meta: { title: 'groupBuyManager' }},
-      { path: 'group-time-limit', component: () => import('@/views/promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit' }},
+      { path: 'time-limit', component: () => import('@/views/promotions/timeLimit'), name: 'timeLimit', meta: { title: 'timeLimit', noCache: true }},
       { path: 'add-time-limit/:id', component: () => import('@/views/promotions/addTimeLimit'), name: 'addTimeLimit', meta: { title: 'addTimeLimit', noCache: true }, hidden: true },
-      { path: 'activity-goods-data/:id', component: () => import('@/views/promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData', noCache: true }, hidden: true },
+      { path: 'activity-goods-data/:id', component: () => import('@/views/promotions/activityGoodsData'), name: 'activityGoodsData', meta: { title: 'activityGoodsData' }, hidden: true },
       { path: 'add-group-buy-goods', component: () => import('@/views/promotions/addGroupBuyGoods'), name: 'addGroupBuyGoods', meta: { title: 'addGroupBuyGoods' }, hidden: true },
-      { path: 'edit-group-buy-goods/:goods_id', component: () => import('@/views/promotions/editGroupBuyGoods'), name: 'editGroupBuyGoods', meta: { title: 'editGroupBuyGoods', noCache: true }, hidden: true }
+      { path: 'edit-group-buy-goods/:goods_id', component: () => import('@/views/promotions/editGroupBuyGoods'), name: 'editGroupBuyGoods', meta: { title: 'editGroupBuyGoods' }, hidden: true }
     ]
   },
   // 统计
