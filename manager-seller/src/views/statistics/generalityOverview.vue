@@ -70,7 +70,7 @@
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: response.xAxis
+            data: response.xAxis.reverse()
           },
           yAxis: {
             type: 'value',
@@ -82,7 +82,7 @@
             {
               name: '下单金额',
               type: 'line',
-              data: response.series.data,
+              data: response.series.data.reverse(),
               markPoint: {
                 data: [
                   { type: 'max', name: '最大值' },
