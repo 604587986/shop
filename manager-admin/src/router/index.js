@@ -12,7 +12,7 @@ Vue.use(Router)
 * meta : {
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
-    noCache: true                if fasle ,the page will no be cached(default is false)
+    noCache: true                if true ,the page will no be cached(default is false)
   }
 **/
 export const constantRouterMap = [
@@ -355,9 +355,9 @@ export const asyncRouterMap = [
           { path: 'express-platform', component: () => import('@/views/setting/shop-settings/expressPlatformSettings'), name: 'expressPlatformSettings', meta: { title: 'expressPlatformSettings' }},
           { path: 'electronic-receipt', component: () => import('@/views/setting/shop-settings/electronicReceipt'), name: 'electronicrEceipt', meta: { title: 'electronicReceipt' }},
           { path: 'storage-solution', component: () => import('@/views/setting/shop-settings/storageSolution'), name: 'storageSolution', meta: { title: 'storageSolution' }},
-          { path: 'static-page', component: () => import('@/views/setting/shop-settings/staticPage'), name: 'staticPage', meta: { title: 'staticPage' }},
-          { path: 'goods-index', component: () => import('@/views/setting/shop-settings/goodsIndex'), name: 'goodsIndex', meta: { title: 'goodsIndex' }},
-          { path: 'trust-login', component: () => import('@/views/setting/shop-settings/trustLogin'), name: 'trustLogin', meta: { title: 'trustLogin' }}
+          { path: 'static-page', component: () => import('@/views/setting/shop-settings/staticPage'), name: 'staticPage', meta: { title: 'staticPage', noCache: true }},
+          { path: 'goods-index', component: () => import('@/views/setting/shop-settings/goodsIndex'), name: 'goodsIndex', meta: { title: 'goodsIndex', noCache: true }},
+          { path: 'trust-login', component: () => import('@/views/setting/shop-settings/trustLogin'), name: 'trustLogin', meta: { title: 'trustLogin', noCache: true }}
         ]
       },
       {
