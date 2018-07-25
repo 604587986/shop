@@ -164,8 +164,8 @@ export const asyncRouterMap = [
         name: 'settlementManage',
         meta: { title: 'settlementManage' },
         children: [
-          { path: 'settlement-list', component: () => import('@/views/shop/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }},
-          { path: 'detail/:id', component: () => import('@/views/shop/settlementDetail'), name: 'settlementDetail', hidden: true, meta: { title: 'settlementDetail' }}
+          { path: 'settlement-list', component: () => import('@/views/shop/settlement-manage/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }},
+          { path: 'detail/:id', component: () => import('@/views/shop/settlement-manage/settlementDetail'), name: 'settlementDetail', hidden: true, meta: { title: 'settlementDetail' }}
         ]
       }
     ]
