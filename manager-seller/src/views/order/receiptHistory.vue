@@ -24,7 +24,7 @@
           <template slot-scope="scope">
             <el-button
               type="primary"
-              @click="handleOperateReceipt(scope.$index, scope.row)">查看
+              @click="handleOperateReceipt(scope.row)">查看
             </el-button>
           </template>
         </el-table-column>
@@ -43,23 +43,25 @@
     </en-table-layout>
     <el-dialog title="发票详情" center :visible.sync="dialogReceiptVisible" width="550px">
       <div v-for="item in viewRectiptData" class="item-receipt">
-        <span class="item-recitem-receipt-labeleipt-label">{{ item.label }}</span>
-        <span v-if="item.key === 'goods_price'" class="item-receipt-value">{{ item.value | unitPrice('￥') }}</span>
+        <span >{{ item.label }}:</span>
+        <en-table-layout v-if="item.key === 'sku_list'" :tableData="goodsList">
+          <template slot="table-columns">
+            <el-table-column label="商品名称">
+              <template slot-scope="scope">
+                <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.name }}</a>
+              </template>
+            </el-table-column>
+            <el-table-column label="单价" width="80">
+              <template slot-scope="scope"> {{ scope.row.original_price | unitPrice('￥') }}</template>
+            </el-table-column>
+            <el-table-column  prop="num" label="数量" width="50"/>
+            <el-table-column  label="优惠金额" width="80">
+              <template slot-scope="scope"> {{ scope.row.discount | unitPrice('￥') }}</template>
+            </el-table-column>
+          </template>
+        </en-table-layout>
         <span v-else class="item-receipt-value">{{ item.value || '无' }}</span>
       </div>
-      <en-table-layout :tableData="goodsList">
-        <template slot="table-columns">
-          <el-table-column label="商品名称">
-            <template slot-scope="scope">
-              <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.name }}</a>
-            </template>
-          </el-table-column>
-          <el-table-column label="单价">
-            <template slot-scope="scope"> {{ scope.row.original_price }}</template>
-          </el-table-column>
-          <el-table-column  prop="num" label="数量" />
-        </template>
-      </en-table-layout>
     </el-dialog>
   </div>
 </template>
@@ -112,18 +114,28 @@
       },
 
       /** 查看发票 */
-      handleOperateReceipt(index, row) {
-        const keys = [
-          { label: '发票抬头', key: 'receipt_title' },
-          { label: '发票税号', key: 'duty_invoice' },
-          { label: '收票地址', key: 'receipt_content' },
-          { label: '发票明细', key: 'receipt_content' }
-        ]
-        this.viewRectiptData = keys.map(item => {
-          item.value = row[item.key]
-          return item
+      handleOperateReceipt(row) {
+        API_Receipt.getHistoryReceiptDetail(row.history_id).then(response => {
+          const keys = [
+            { label: '发票抬头', key: 'receipt_title' },
+            { label: '发票类型', key: 'receipt_type' },
+            { label: '发票税号', key: 'tax_no' },
+            { label: '收票地址', key: 'receipt_addr' },
+            { label: '发票内容', key: 'receipt_content' },
+            { label: '发票明细', key: 'sku_list' }
+          ]
+          this.viewRectiptData = keys.map(item => {
+            if (item.key === 'receipt_addr') {
+              item.value = (response['ship_province'] || '') + (response['ship_city'] || '') + (response['ship_county'] || '') +
+                (response['ship_town'] || '') + (response['ship_addr'] || '')
+            } else {
+              item.value = response[item.key]
+            }
+            return item
+          })
+          this.goodsList = response.sku_list
+          this.dialogReceiptVisible = true
         })
-        this.dialogReceiptVisible = true
       },
 
       /** 获取发票历史 */
@@ -154,7 +166,6 @@
 
   .item-receipt {
     padding: 10px;
-
     .item-receipt-label {
       display: inline-block;
     }

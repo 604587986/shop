@@ -18,3 +18,15 @@ export function getHistoryReceiptList(params) {
   })
 }
 
+/**
+ * 获取历史发票订单详情
+ * @param id
+ */
+export function getHistoryReceiptDetail(id) {
+  return request({
+    url: `/trade/receipts/${id}`,
+    method: 'get',
+    loading: false
+  })
+}
+
