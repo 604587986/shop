@@ -5,10 +5,10 @@
       :loading="loading"
     >
       <template slot="table-columns">
-        <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="日期"/>
+        <el-table-column prop="add_time" :formatter="MixinUnixToDate" label="日期"/>
         <el-table-column prop="member_name" label="会员名称"/>
-        <el-table-column prop="sn" label="订单编号"/>
-        <el-table-column prop="need_pay_money" :formatter="MixinFormatPrice" label="发票金额"/>
+        <el-table-column prop="order_sn" label="订单编号"/>
+        <el-table-column prop="receipt_amount" :formatter="MixinFormatPrice" label="发票金额"/>
         <el-table-column prop="receipt_type" label="发票类别"/>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -86,13 +86,13 @@
       /** 查看发票 */
       handleOperateReceipt(index, row) {
         const keys = [
-          { label: '订单编号', key: 'sn' },
+          { label: '订单编号', key: 'order_sn' },
           { label: '发票类型', key: 'receipt_type' },
           { label: '会员名称', key: 'member_name' },
-          { label: '发票金额', key: 'need_pay_money' },
+          { label: '发票金额', key: 'receipt_amount' },
           { label: '发票抬头', key: 'receipt_title' },
           { label: '发票内容', key: 'receipt_content' },
-          { label: '发票税号', key: 'duty_invoice' }
+          { label: '发票税号', key: 'tax_no' }
         ]
         this.viewRectiptData = keys.map(item => {
           item.value = row[item.key]
