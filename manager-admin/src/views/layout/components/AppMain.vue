@@ -21,4 +21,8 @@
     position: relative;
     overflow: hidden;
   }
+  /deep/ .container {
+    padding: 10px;
+    background-color: #fff;
+  }
 </style>
