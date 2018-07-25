@@ -353,11 +353,11 @@ export const asyncRouterMap = [
           { path: 'smtp', component: () => import('@/views/setting/shop-settings/SMTPSettings'), name: 'smtpSettings', meta: { title: 'smtpSettings' }},
           { path: 'sms-gateway', component: () => import('@/views/setting/shop-settings/SMSGatewaySettings'), name: 'smsGatewaySettings', meta: { title: 'SMSGatewaySettings' }},
           { path: 'express-platform', component: () => import('@/views/setting/shop-settings/expressPlatformSettings'), name: 'expressPlatformSettings', meta: { title: 'expressPlatformSettings' }},
-          { path: 'electronic-receipt', component: () => import('@/views/setting/shop-settings/electronicReceipt'), name: 'electronicrEceiptSettings', meta: { title: 'electronicReceipt' }},
-          { path: 'storage-solution', component: () => import('@/views/setting/shop-settings/storageSolution'), name: 'storageSolutionSettings', meta: { title: 'storageSolution' }},
-          { path: 'static-page', component: () => import('@/views/setting/shop-settings/staticPage'), name: 'staticPageSettings', meta: { title: 'staticPage' }},
-          { path: 'goods-index', component: () => import('@/views/setting/shop-settings/goodsIndex'), name: 'goodsIndexSettings', meta: { title: 'goodsIndex' }},
-          { path: 'trust-login', component: () => import('@/views/setting/shop-settings/trustLogin'), name: 'trustLoginSettings', meta: { title: 'trustLogin' }}
+          { path: 'electronic-receipt', component: () => import('@/views/setting/shop-settings/electronicReceipt'), name: 'electronicrEceipt', meta: { title: 'electronicReceipt' }},
+          { path: 'storage-solution', component: () => import('@/views/setting/shop-settings/storageSolution'), name: 'storageSolution', meta: { title: 'storageSolution' }},
+          { path: 'static-page', component: () => import('@/views/setting/shop-settings/staticPage'), name: 'staticPage', meta: { title: 'staticPage' }},
+          { path: 'goods-index', component: () => import('@/views/setting/shop-settings/goodsIndex'), name: 'goodsIndex', meta: { title: 'goodsIndex' }},
+          { path: 'trust-login', component: () => import('@/views/setting/shop-settings/trustLogin'), name: 'trustLogin', meta: { title: 'trustLogin' }}
         ]
       },
       {
