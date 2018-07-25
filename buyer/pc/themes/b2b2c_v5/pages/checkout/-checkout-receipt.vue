@@ -244,20 +244,15 @@
           this.$message.success('设置成功！')
           this.$emit('change', receipt)
           this.$layer.close(index)
+          API_Members.setDefaultReceipt(receipt.receipt_id)
         })
       },
       /** 取消发票 */
       handleCancelReceipt() {
         this.$confirm('确定要取消发票吗？', () => {
-          const receipt = {
-            type: '',
-            receipt_title: '',
-            receipt_content: '',
-            tax_no: ''
-          }
-          API_Trade.setRecepit(receipt).then(() => {
+          API_Trade.cancelReceipt().then(() => {
             this.$message.success('取消成功！')
-            this.$emit('change', receipt)
+            this.$emit('change', {})
           })
         })
       },
