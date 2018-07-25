@@ -128,7 +128,8 @@ export default {
     menuManage: '菜单管理',
     articleManage: '文章管理',
     articleCategory: '文章分类',
-    articleList: '文章列表'
+    articleList: '文章列表',
+    addArticle: '添加文章'
   },
   login: {
     logIn: '登录',
