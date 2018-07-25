@@ -6,10 +6,7 @@
       :loading="status === 'DOING'"
       @click="handleCreateGoodsIndex"
     >{{ status === 'doing' ? '生成中' : '生成' }}</el-button>
-    <el-button
-      type="danger"
-      @click="handleStopGoodsIndex"
-    >停止</el-button>
+    <el-button type="danger" @click="handleStopGoodsIndex">停止</el-button>
     <div class="progress-box">
       <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
       <p :class="['progress-text', status === 'EXCEPTION' && 'error']">{{ status_text }}</p>

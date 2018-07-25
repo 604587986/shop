@@ -22,6 +22,7 @@
           :loading="status === 'DOING'"
           @click="handleCreateStaticPage"
         >{{ status === 'DOING' ? '生成中' : '生成' }}</el-button>
+        <el-button type="danger" @click="handleStopStaticPage">停止</el-button>
       </el-form-item>
       <el-form-item label="">
         <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
@@ -110,6 +111,18 @@
             this.GET_Progress()
           })
         }).catch(() => {})
+      },
+      /** 停止生成静态页 */
+      handleStopStaticPage() {
+        if (this.status !== 'DOING' && this.status !== 'EXCEPTION') {
+          this.$message.error('当前没有任务正在进行！')
+        } else {
+          API_Task.clearTask(this.task_id).then(() => {
+            this.percentage = 0
+            this.status = 'SCUESS'
+            this.status_text = ''
+          })
+        }
       },
       /** 获取生成进度 */
       GET_Progress() {
