@@ -435,7 +435,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'article-category', component: () => import('@/views/development/article-manage/articleCategory'), name: 'articleCategory', meta: { title: 'articleCategory' }},
           { path: 'article-list', component: () => import('@/views/development/article-manage/articleList'), name: 'articleList', meta: { title: 'articleList' }},
-          { path: 'add', component: () => import('@/views/development/article-manage/addArticle'), name: 'addArticle', meta: { title: 'addArticle' }}
+          { path: 'add', component: () => import('@/views/development/article-manage/addArticle'), name: 'addArticle', hidden: true, meta: { title: 'addArticle' }}
         ]
       }
     ]
