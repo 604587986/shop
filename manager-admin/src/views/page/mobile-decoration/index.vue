@@ -1,16 +1,9 @@
 <template>
-  <keep-alive>
-    <router-view></router-view>
-  </keep-alive>
+  <router-view></router-view>
 </template>
 
 <script>
   export default {
-    name: 'mobileDecoration',
-    computed: {
-      cachedViews() {
-        return this.$store.state.tagsView.cachedViews
-      }
-    }
+    name: 'mobileDecoration'
   }
 </script>

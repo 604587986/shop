@@ -1,20 +1,9 @@
 <template>
-  <keep-alive>
-    <router-view></router-view>
-  </keep-alive>
+  <router-view></router-view>
 </template>
 
 <script>
   export default {
-    name: 'shopSettings',
-    computed: {
-      cachedViews() {
-        return this.$store.state.tagsView.cachedViews
-      }
-    }
+    name: 'shopSettings'
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getExpressList(params) {
   return request({
-    url: 'shops/logi-companies',
+    url: 'systems/logi-companies',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getExpressList(params) {
  */
 export function addExpress(params) {
   return request({
-    url: 'shops/logi-companies',
+    url: 'systems/logi-companies',
     method: 'post',
     data: params
   })
@@ -35,7 +35,7 @@ export function addExpress(params) {
  */
 export function deleteExpress(id) {
   return request({
-    url: 'shops/logi-companies',
+    url: 'systems/logi-companies',
     method: 'delete'
   })
 }
@@ -46,7 +46,7 @@ export function deleteExpress(id) {
  */
 export function getExpressDetail(id) {
   return request({
-    url: `shops/logi-companies/${id}`,
+    url: `systems/logi-companies/${id}`,
     method: 'get'
   })
 }
@@ -58,7 +58,7 @@ export function getExpressDetail(id) {
  */
 export function editExpress(id, params) {
   return request({
-    url: `shops/logi-companies/${id}`,
+    url: `systems/logi-companies/${id}`,
     method: 'put',
     data: params
   })

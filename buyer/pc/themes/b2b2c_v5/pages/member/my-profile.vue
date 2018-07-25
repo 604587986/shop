@@ -54,9 +54,6 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="profileForm.email" size="small" clearable></el-input>
         </el-form-item>
-        <el-form-item label="邮编">
-          <el-input v-model="profileForm.zip" size="small" clearable></el-input>
-        </el-form-item>
         <el-form-item label="">
           <el-button @click="submitProfile">保存资料</el-button>
         </el-form-item>

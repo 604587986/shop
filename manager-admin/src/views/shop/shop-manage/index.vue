@@ -1,7 +1,5 @@
 <template>
-  <keep-alive>
-    <router-view></router-view>
-  </keep-alive>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -9,7 +7,3 @@
     name: 'shopManage'
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

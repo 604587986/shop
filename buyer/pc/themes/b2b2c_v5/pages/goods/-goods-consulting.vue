@@ -40,6 +40,7 @@
    */
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
+  import Storage from '@/utils/storage'
   export default {
     name: "goods-consulting",
     props: ['goodsId'],
@@ -63,6 +64,12 @@
       },
       /** 显示咨询窗 */
       handleShowPrompt() {
+        if (!Storage.getItem('user')) {
+          this.$confirm('您还未登录，要现在去登录吗？', () => {
+            this.$router.push({ path: '/login', query: { forward: this.$route.path } })
+          })
+          return false
+        }
         this.$layer.prompt({
           formType: 2,
           title: '向商家咨询',

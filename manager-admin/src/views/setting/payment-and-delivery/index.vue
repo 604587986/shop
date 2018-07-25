@@ -1,20 +1,9 @@
 <template>
-  <keep-alive>
-    <router-view></router-view>
-  </keep-alive>
+  <router-view></router-view>
 </template>
 
 <script>
   export default {
-    name: 'paymentAndDelivery',
-    computed: {
-      cachedViews() {
-        return this.$store.state.tagsView.cachedViews
-      }
-    }
+    name: 'paymentAndDelivery'
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

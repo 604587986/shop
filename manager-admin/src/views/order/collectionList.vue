@@ -220,16 +220,13 @@
         const end_time = parseInt(range[1] / 1000)
         API_Colection.exportCollection({ start_time, end_time }).then(response => {
           const json = response.map(item => ({
-            '退款单ID': item.id,
-            '退款流水号': item.sn,
-            '退款相关订单号': item.order_sn,
-            '支付方式': item.refund_way,
-            '店铺名称': item.seller_name,
-            '收款人': item.member_name,
-            '退款状态': item.refund_status_text,
-            '创建时间': Foundation.unixToDate(item.create_time),
-            '退款金额': Foundation.formatPrice(item.refund_price),
-            '退款时间': Foundation.unixToDate(item.refund_time)
+            '订单号': item.order_sn,
+            '付款方式': item.pay_way === 'ONLINE' ? '在线支付' : '货到付款',
+            '支付方式': item.pay_type,
+            '付款日期': Foundation.unixToDate(item.pay_time),
+            '付款金额': Foundation.formatPrice(item.pay_money),
+            '付款人': item.pay_member_name,
+            '付款状态': item.pay_status === 'PAY_NO' ? '未支付' : '已支付'
           }))
           this.MixinExportJosnToExcel(json, '收款单')
         })

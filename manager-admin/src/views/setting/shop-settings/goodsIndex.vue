@@ -6,10 +6,7 @@
       :loading="status === 'DOING'"
       @click="handleCreateGoodsIndex"
     >{{ status === 'doing' ? '生成中' : '生成' }}</el-button>
-    <el-button
-      type="danger"
-      @click="handleStopGoodsIndex"
-    >停止</el-button>
+    <el-button type="danger" @click="handleStopGoodsIndex">停止</el-button>
     <div class="progress-box">
       <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
       <p :class="['progress-text', status === 'EXCEPTION' && 'error']">{{ status_text }}</p>
@@ -66,11 +63,17 @@
           this.percentage = percentage
           this.status = status
           this.status_text = text
-          if (status === 'DOING') {
+          if (status === 'DOING' && this) {
             setTimeout(() => { this.GET_Progress() }, 1000)
           }
         })
       }
+    },
+    deactivated() {
+      this.timer && clearTimeout(this.timer)
+    },
+    destroyed() {
+      this.timer && clearTimeout(this.timer)
     }
   }
 </script>

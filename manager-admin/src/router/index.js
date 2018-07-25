@@ -12,7 +12,7 @@ Vue.use(Router)
 * meta : {
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
-    noCache: true                if fasle ,the page will no be cached(default is false)
+    noCache: true                if true ,the page will no be cached(default is false)
   }
 **/
 export const constantRouterMap = [
@@ -164,8 +164,8 @@ export const asyncRouterMap = [
         name: 'settlementManage',
         meta: { title: 'settlementManage' },
         children: [
-          { path: 'settlement-list', component: () => import('@/views/shop/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }},
-          { path: 'detail/:id', component: () => import('@/views/shop/settlementDetail'), name: 'settlementDetail', hidden: true, meta: { title: 'settlementDetail' }}
+          { path: 'settlement-list', component: () => import('@/views/shop/settlement-manage/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }},
+          { path: 'detail/:id', component: () => import('@/views/shop/settlement-manage/settlementDetail'), name: 'settlementDetail', hidden: true, meta: { title: 'settlementDetail' }}
         ]
       }
     ]
@@ -347,17 +347,17 @@ export const asyncRouterMap = [
         component: () => import('@/views/setting/shop-settings/index'),
         redirect: '/setting/shop-settings/system',
         name: 'shopSettings',
-        meta: { title: 'shopSettings' },
+        meta: { title: 'shopSettings', noCache: true },
         children: [
           { path: 'system', component: () => import('@/views/setting/shop-settings/systemSettings'), name: 'systemSettings', meta: { title: 'systemSettings' }},
           { path: 'smtp', component: () => import('@/views/setting/shop-settings/SMTPSettings'), name: 'smtpSettings', meta: { title: 'smtpSettings' }},
           { path: 'sms-gateway', component: () => import('@/views/setting/shop-settings/SMSGatewaySettings'), name: 'smsGatewaySettings', meta: { title: 'SMSGatewaySettings' }},
           { path: 'express-platform', component: () => import('@/views/setting/shop-settings/expressPlatformSettings'), name: 'expressPlatformSettings', meta: { title: 'expressPlatformSettings' }},
-          { path: 'electronic-receipt', component: () => import('@/views/setting/shop-settings/electronicReceipt'), name: 'electronicrEceiptSettings', meta: { title: 'electronicReceipt' }},
-          { path: 'storage-solution', component: () => import('@/views/setting/shop-settings/storageSolution'), name: 'storageSolutionSettings', meta: { title: 'storageSolution' }},
-          { path: 'static-page', component: () => import('@/views/setting/shop-settings/staticPage'), name: 'staticPageSettings', meta: { title: 'staticPage' }},
-          { path: 'goods-index', component: () => import('@/views/setting/shop-settings/goodsIndex'), name: 'goodsIndexSettings', meta: { title: 'goodsIndex' }},
-          { path: 'trust-login', component: () => import('@/views/setting/shop-settings/trustLogin'), name: 'trustLoginSettings', meta: { title: 'trustLogin' }}
+          { path: 'electronic-receipt', component: () => import('@/views/setting/shop-settings/electronicReceipt'), name: 'electronicrEceipt', meta: { title: 'electronicReceipt' }},
+          { path: 'storage-solution', component: () => import('@/views/setting/shop-settings/storageSolution'), name: 'storageSolution', meta: { title: 'storageSolution' }},
+          { path: 'static-page', component: () => import('@/views/setting/shop-settings/staticPage'), name: 'staticPage', meta: { title: 'staticPage' }},
+          { path: 'goods-index', component: () => import('@/views/setting/shop-settings/goodsIndex'), name: 'goodsIndex', meta: { title: 'goodsIndex' }},
+          { path: 'trust-login', component: () => import('@/views/setting/shop-settings/trustLogin'), name: 'trustLogin', meta: { title: 'trustLogin' }}
         ]
       },
       {
