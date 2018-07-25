@@ -224,6 +224,7 @@
           params.start_time /= 1000
           params.end_time /= 1000
         }
+        if (params.seller_id === 0) delete params.seller_id
         API_order.getOrderList(params).then(response => {
           this.loading = false
           this.tableData = response
