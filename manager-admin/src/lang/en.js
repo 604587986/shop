@@ -38,7 +38,9 @@ export default {
     themeList: 'Theme List',
     themeListWap: 'Wap Theme List',
     shopEdit: 'Shop Edit',
+    settlementManage: 'Settlement Manage',
     settlementList: 'Settlement List',
+    settlementDetail: 'Settlement Detail',
 
     promotions: 'promotions',
     groupBuyManage: 'GroupBuy Manage',
@@ -97,7 +99,6 @@ export default {
     smtpSettings: 'SMTP Settings',
     SMSGatewaySettings: 'SMS Gateway Setting',
     expressPlatformSettings: 'Express Platform Settings',
-    receiptContentSettings: 'Receipt Content Settings',
     electronicReceipt: 'Electronic Receipt',
     storageSolution: 'Storage Solution',
     staticPage: 'Static Page',

@@ -19,7 +19,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateSettlement(scope.$index, scope.row)">操作</el-button>
+              @click="handleOperateSettlement(scope.$index, scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -45,16 +45,14 @@
     name: 'settlementList',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
+        // 列表数据
         tableData: ''
       }
     },
@@ -81,8 +79,7 @@
 
       /** 操作结算单 */
       handleOperateSettlement(index, row) {
-        this.$alert('还不能看！')
-        console.log('操作结算单：', row)
+        this.$router.push({ path: `/shop/settlement-manage/detail/${row.bill_id}` })
       },
 
       /** 获取结算单列表 */
@@ -91,9 +88,7 @@
         API_Order.getSettlementList(this.params).then(response => {
           this.loading = false
           this.tableData = response
-        }).catch(() => {
-          this.loading = false
-        })
+        }).catch(() => { this.loading = false })
       }
     }
   }

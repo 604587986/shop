@@ -1,47 +1,24 @@
 <template>
   <div id="goods-list" style="background-color: #ededed;padding-bottom: 20px">
     <div class="gl-container w">
-      <div class="gl-bar-title">
-        <span>全部<i class="iconfont ea-icon-arrow-right"></i></span>
-        <div class="gl-bar-item">
-          <nuxt-link to="#" class="gl-bar-trigger">
-            <span>数码家电</span>
-            <i class="iconfont ea-icon-arrow-right"></i>
-          </nuxt-link>
-          <div class="gl-bar-content">
-            <ul class="clearfix">
-              <li><a class="int" href="/goods?category=491">数码家电</a></li>
-              <li><a href="/goods?category=1">食品饮料</a></li>
-              <li><a href="/goods?category=4">进口食品</a></li>
-              <li><a href="/goods?category=38">美容化妆</a></li>
-              <li><a href="/goods?category=56">母婴玩具</a></li>
-              <li><a href="/goods?category=79">厨房用品</a></li>
-              <li><a href="/goods?category=35">钟表箱包</a></li>
-              <li><a href="/goods?category=85">营养保健</a></li>
-              <li><a href="/goods?category=86">服装鞋靴</a></li>
-            </ul>
+      <div v-if="selectorData.selected_cat && selectorData.selected_cat.length" class="gl-bar-title">
+        <span>全部</span>
+        <template v-for="(cat, catIndex) in selectorData.selected_cat">
+          <i :key="catIndex" class="iconfont ea-icon-arrow-right"></i>
+          <div :key="catIndex" class="gl-bar-item">
+            <a :href="'/goods?category=' + cat.value" class="gl-bar-trigger">
+              <span>{{ cat.name }}</span>
+              <i class="iconfont ea-icon-arrow-right"></i>
+            </a>
+            <div class="gl-bar-content">
+              <ul class="clearfix">
+                <li v-for="(cc, ccIndex) in cat.other_options" :key="ccIndex">
+                  <a class="int" :href="'/goods?category=' + cc.value">{{ cc.name }}</a>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <i class="iconfont ea-icon-arrow-right"></i>
-        <div class="gl-bar-item">
-          <nuxt-link to="#" class="gl-bar-trigger">
-            <span>数码家电</span>
-            <i class="iconfont ea-icon-arrow-right"></i>
-          </nuxt-link>
-          <div class="gl-bar-content">
-            <ul class="clearfix">
-              <li><a class="int" href="/goods?category=491">母婴玩具</a></li>
-              <li><a href="/goods?category=1">母婴玩具</a></li>
-              <li><a href="/goods?category=4">食品饮料</a></li>
-              <li><a href="/goods?category=38">美容化妆</a></li>
-              <li><a href="/goods?category=56">母婴玩具</a></li>
-              <li><a href="/goods?category=79">厨房用品</a></li>
-              <li><a href="/goods?category=35">钟表箱包</a></li>
-              <li><a href="/goods?category=85">营养保健</a></li>
-              <li><a href="/goods?category=86">服装鞋靴</a></li>
-            </ul>
-          </div>
-        </div>
+        </template>
       </div>
       <div v-if="selectorData" class="gl-select-condition">
         <dl v-if="selectorData.brand && selectorData.brand.length" class="brand logo-brand">
@@ -247,6 +224,7 @@
 <style type="text/scss" lang="scss" scoped>
   @import "../../assets/styles/color";
   .gl-container {
+    overflow: hidden;
     .iconfont {
       font-size: 12px;
       transition: all .3s ease;
@@ -256,7 +234,7 @@
   .gl-bar-title {
     font-size: 12px;
     color: #666;
-    padding: 25px 0 16px 0;
+    margin-top: 25px;
     line-height: 19px;
     position: relative;
     z-index: 2;
@@ -311,6 +289,7 @@
     box-shadow: rgb(204, 204, 204) 0 2px 5px;
     background-color: #fff;
     width: 1210px;
+    margin-top: 20px;
     dl {
       border-bottom: 1px dashed #ededed;
       min-height: 46px;

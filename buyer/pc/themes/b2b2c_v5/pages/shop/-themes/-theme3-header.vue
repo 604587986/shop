@@ -38,8 +38,8 @@
             <a :href="nav.nav_url" class="item" :key="nav.id" :target="nav.target ? '_blank' : '_self'">{{ nav.name }}</a>
           </template>
         </div>
-        <div class="shop-more" @click="collectionShop">
-          <div class="item">
+        <div class="shop-more">
+          <div class="item" @click="collectionShop">
             <i class="iconfont ea-icon-star"></i>
             <p>收藏</p>
           </div>

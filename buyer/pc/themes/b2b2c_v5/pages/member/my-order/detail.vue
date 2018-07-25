@@ -25,7 +25,7 @@
         <ul>
           <li v-if="order && order.order_operate_allowable_vo.allow_pay">
             - 如果您尚未对该订单进行支付，请
-            <strong><a href="#">按此为订单付款</a></strong>
+            <strong><a :href="'/checkout/cashier?order_sn=' + order.sn">按此为订单付款</a></strong>
             以确保商家及时发货。
           </li>
           <li v-if="order && order.order_operate_allowable_vo.allow_cancel">
