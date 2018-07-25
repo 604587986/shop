@@ -129,7 +129,8 @@ export default {
     menuManage: 'Menu Manage',
     articleManage: 'Article Manage',
     articleCategory: 'Article Category',
-    articleList: 'Article List'
+    articleList: 'Article List',
+    addArticle: 'Add Article'
   },
   login: {
     logIn: 'Log in',

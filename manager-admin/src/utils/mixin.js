@@ -18,6 +18,14 @@ export default {
       MixinBuyerDomain: domain.buyer_pc
     }
   },
+  computed: {
+    cachedViews() {
+      return this.$store.state.tagsView.cachedViews
+    },
+    key() {
+      return this.$route.fullPath
+    }
+  },
   methods: {
     /** 返回克隆后的对象 */
     MixinClone(obj) {
