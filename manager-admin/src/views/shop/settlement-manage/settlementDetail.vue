@@ -3,11 +3,11 @@
     <el-card v-if="settlement">
       <div slot="header" class="clearfix">
         <span>结算单详细信息</span>
-        <el-button type="primary" size="mini" @click="handleExportBill" style="margin-left: 10px">导出结算单</el-button>
+        <!--<el-button type="primary" size="mini" @click="handleExportBill" style="margin-left: 10px">导出结算单</el-button>-->
       </div>
       <el-row :gutter="0">
         <el-col :span="4">结算单号</el-col>
-        <el-col :span="8">{{ settlement.bill_sn }}</el-col>
+        <el-col :span="8">{{ settlement.bill_sn || '无' }}</el-col>
         <el-col :span="4">起止日期</el-col>
         <el-col :span="8">{{ settlement.start_time | unixToDate }} - {{ settlement.end_time | unixToDate }}</el-col>
       </el-row>
@@ -15,32 +15,38 @@
         <el-col :span="4">出账日期</el-col>
         <el-col :span="8">{{ settlement.create_time | unixToDate }}</el-col>
         <el-col :span="4">结算状态</el-col>
-        <el-col :span="8">{{ settlement.status_text }}</el-col>
+        <el-col :span="8">{{ settlement.status_text || '无' }}</el-col>
       </el-row>
       <el-row :gutter="0">
         <el-col :span="4">店铺名称</el-col>
-        <!--// Andste_TODO 2018/7/24: 缺少店铺信息-->
-        <el-col :span="20">{{ settlement.seller_id }}</el-col>
+        <el-col :span="20">{{ settlement.shop_name || '无' }}</el-col>
       </el-row>
       <el-row :gutter="0">
         <el-col :span="4">银行开户名</el-col>
-        <el-col :span="8">{{ settlement.bank_name || '无' }}</el-col>
-        <el-col :span="4">公司银行账号</el-col>
         <el-col :span="8">{{ settlement.bank_account_name || '无' }}</el-col>
+        <el-col :span="4">公司银行账号</el-col>
+        <el-col :span="8">{{ settlement.bank_account_number || '无' }}</el-col>
       </el-row>
       <el-row :gutter="0">
         <el-col :span="4">开户银行支行名称</el-col>
         <el-col :span="8">{{ settlement.bank_name || '无' }}</el-col>
         <el-col :span="4">支行联行号</el-col>
-        <el-col :span="8">{{ settlement.bank_account_name || '无' }}</el-col>
+        <el-col :span="8">{{ settlement.bank_code || '无' }}</el-col>
       </el-row>
       <el-row :gutter="0">
         <el-col :span="4">银行地址</el-col>
-        <el-col :span="20">北京-密云区-城区外</el-col>
+        <el-col :span="20">{{ settlement.bank_address || '无' }}</el-col>
       </el-row>
       <el-row :gutter="0">
         <el-col :span="4">平台应付金额</el-col>
-        <el-col :span="20">￥3900.00 = ￥4292.00(订单金额) - ￥218.00(佣金金额) - ￥0.00(退还佣金) - ￥2927.00(货到付款金额) + ￥0.00(货到付款退款金额)</el-col>
+        <el-col :span="20">
+          <em class="plus">￥{{ settlement.bill_price | unitPrice }}</em>
+          <em class="equal"> = </em>
+          <em class="plus">￥{{ settlement.price | unitPrice }}</em>(在线支付金额)
+          <em class="minus"> - ￥{{ settlement.refund_price | unitPrice }}</em>(在线退款金额)
+          <em class="minus"> - ￥{{ settlement.commi_price | unitPrice }}</em>(佣金金额)
+          <em class="plus"> + ￥{{ settlement.refund_commi_price | unitPrice }}</em>(退还佣金)
+        </el-col>
       </el-row>
     </el-card>
     <el-card v-loading="loading_order" style="margin-top: 10px">
@@ -255,6 +261,22 @@
     font-size: 12px;
     margin: 5px 0 0 0;
     padding: 0;
+  }
+  .equal, .plus, .minus {
+    font-weight: 700;
+    font-style: normal;
+  }
+  // 等于
+  .equal {
+    color: #409EFF
+  }
+  // 加
+  .plus {
+    color: #67C23A
+  }
+  // 减
+  .minus {
+    color: #F56C6C
   }
 </style>
 

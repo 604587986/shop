@@ -315,9 +315,8 @@
       user-select: none;
       transition: background-color 0.2s ease-in-out;
       &.disabled {
-        pointer-events: none;
         background-color: #ccc;
-        cursor: default;
+        cursor: not-allowed;
       }
     }
     em { font-size: 16px; color: #dedede }

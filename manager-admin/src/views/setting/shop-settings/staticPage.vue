@@ -1,9 +1,14 @@
 <template>
   <div class="static-page-container">
-    <el-form :model="pageForm" :rules="pageRules" ref="pageForm" label-width="120px" style="width: 500px;">
-      <el-form-item label="静态页服务地址" prop="address">
-        <el-input v-model="pageForm.address">
-          <el-button slot="append" icon="el-icon-check" @click="handleSaveAddress"></el-button>
+    <el-form :model="pageForm" :rules="pageRules" ref="pageForm" label-width="160px" style="width: 500px;">
+      <el-form-item label="PC静态页服务地址" prop="static_page_address">
+        <el-input v-model="pageForm.static_page_address">
+          <el-button slot="append" icon="el-icon-check" @click="handleSaveAddress('pc')"></el-button>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="WAP静态页服务地址" prop="static_page_wap_address">
+        <el-input v-model="pageForm.static_page_wap_address">
+          <el-button slot="append" icon="el-icon-check" @click="handleSaveAddress('wap')"></el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="要生成的页面">
@@ -17,6 +22,7 @@
           :loading="status === 'DOING'"
           @click="handleCreateStaticPage"
         >{{ status === 'DOING' ? '生成中' : '生成' }}</el-button>
+        <el-button type="danger" @click="handleStopStaticPage">停止</el-button>
       </el-form-item>
       <el-form-item label="">
         <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="status"/>
@@ -53,7 +59,8 @@
         },
         // 静态页 表单规则
         pageRules: {
-          address: [this.MixinRequired('静态页服务地址不能为空！')]
+          static_page_address: [this.MixinRequired('PC静态页服务地址不能为空！')],
+          static_page_wap_address: [this.MixinRequired('WAP静态页服务地址不能为空！')]
         }
       }
     },
@@ -65,15 +72,15 @@
       })
       /** 获取静态页生成地址 */
       API_StaticPage.getStaticPageAddress().then(response => {
-        this.pageForm.address = response.message
+        this.pageForm = response || {}
       })
     },
     methods: {
       /** 保存静态页地址 */
-      handleSaveAddress() {
+      handleSaveAddress(type) {
         this.$refs['pageForm'].validate((valid) => {
           if (valid) {
-            API_StaticPage.saveStaticPageAddress(this.pageForm.address).then(response => {
+            API_StaticPage.saveStaticPageAddress(this.pageForm).then(response => {
               this.$message.success('保存成功！')
             })
           } else {
@@ -104,6 +111,18 @@
             this.GET_Progress()
           })
         }).catch(() => {})
+      },
+      /** 停止生成静态页 */
+      handleStopStaticPage() {
+        if (this.status !== 'DOING' && this.status !== 'EXCEPTION') {
+          this.$message.error('当前没有任务正在进行！')
+        } else {
+          API_Task.clearTask(this.task_id).then(() => {
+            this.percentage = 0
+            this.status = 'SCUESS'
+            this.status_text = ''
+          })
+        }
       },
       /** 获取生成进度 */
       GET_Progress() {

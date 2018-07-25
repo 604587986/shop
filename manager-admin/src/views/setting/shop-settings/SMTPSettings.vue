@@ -94,7 +94,7 @@
   import { RegExp } from '~/ui-utils'
 
   export default {
-    name: 'SMTPSettings',
+    name: 'smtpSettings',
     data() {
       return {
         /** 列表loading状态 */

@@ -197,6 +197,17 @@ export function setRecepit(params) {
 }
 
 /**
+ * 取消使用发票
+ */
+export function cancelReceipt() {
+  return request({
+    url: 'trade/checkout-params/receipt',
+    method: Method.DELETE,
+    needToken: true
+  })
+}
+
+/**
  * 设置送货时间
  * @param receive_time
  */

@@ -1,7 +1,8 @@
 <template>
   <div class="tags-view-container">
     <scroll-pane class='tags-view-wrapper' ref='scrollPane'>
-      <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)" :to="tag" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
+      <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)"
+                   :to="tag" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
         {{generateTitle(tag.title)}}
         <span v-if="tag.name !== 'dashboard'" class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
       </router-link>
@@ -52,33 +53,20 @@
     methods: {
       generateTitle, // generateTitle by vue-i18n
       generateRoute() {
-        // if (this.$route.name) {
-        //   return this.$route
-        // }
-        let matched = [...this.$route.matched]
-        matched.splice(0, 1)
-        matched = matched.filter(item => item.name)
-        if (matched) return matched
+        if (this.$route.name) {
+          return this.$route
+        }
         return false
       },
       isActive(route) {
         return route.path === this.$route.path// || route.name === this.$route.name
       },
       addViewTags() {
-        // const route = this.generateRoute()
-        // if (!route) {
-        //   return false
-        // }
-        // this.$store.dispatch('addVisitedViews', route)
-        const routes = this.generateRoute()
-        if (!routes) return false
-        const length = routes.length
-        routes.forEach((item, index) => {
-          if (index === length - 1) {
-            item.showInVisitedViews = true
-          }
-          this.$store.dispatch('addVisitedViews', item)
-        })
+        const route = this.generateRoute()
+        if (!route) {
+          return false
+        }
+        this.$store.dispatch('addVisitedViews', route)
       },
       moveToCurrentTag() {
         const tags = this.$refs.tag
@@ -127,67 +115,66 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-.tags-view-container {
-  .tags-view-wrapper {
-    background: #fff;
-    height: 34px;
-    border-bottom: 1px solid #d8dce5;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
-    .tags-view-item {
-      display: inline-block;
-      position: relative;
-      height: 26px;
-      line-height: 26px;
-      border: 1px solid #d8dce5;
-      color: #495060;
+  .tags-view-container {
+    .tags-view-wrapper {
       background: #fff;
-      padding: 0 8px;
-      font-size: 12px;
-      margin-left: 5px;
-      margin-top: 4px;
-      border-radius: 3px;
-      &:first-of-type {
-        margin-left: 15px;
+      height: 34px;
+      border-bottom: 1px solid #d8dce5;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+      .tags-view-item {
+        display: inline-block;
+        position: relative;
+        height: 26px;
+        line-height: 26px;
+        border: 1px solid #d8dce5;
+        color: #495060;
+        background: #fff;
+        padding: 0 8px;
+        font-size: 12px;
+        margin-left: 5px;
+        margin-top: 4px;
+        &:first-of-type {
+          margin-left: 15px;
+        }
+        &.active {
+          background-color: #409EFF;
+          color: #fff;
+          border-color: #409EFF;
+          &::before {
+            content: '';
+            background: #fff;
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: relative;
+            margin-right: 2px;
+          }
+        }
       }
-      &.active {
-        background-color: #409EFF;
-        color: #fff;
-        border-color: #409EFF;
-        &::before {
-          content: '';
-          background: #fff;
-          display: inline-block;
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          position: relative;
-          margin-right: 2px;
+    }
+    .contextmenu {
+      margin: 0;
+      background: #fff;
+      z-index: 100;
+      position: absolute;
+      list-style-type: none;
+      padding: 5px 0;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #333;
+      box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
+      li {
+        margin: 0;
+        padding: 7px 16px;
+        cursor: pointer;
+        &:hover {
+          background: #eee;
         }
       }
     }
   }
-  .contextmenu {
-    margin: 0;
-    background: #fff;
-    z-index: 999;
-    position: absolute;
-    list-style-type: none;
-    padding: 5px 0;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #333;
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
-    li {
-      margin: 0;
-      padding: 7px 16px;
-      cursor: pointer;
-      &:hover {
-        background: #eee;
-      }
-    }
-  }
-}
 </style>
 
 <style type="text/scss" lang="scss">

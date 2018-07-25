@@ -78,7 +78,7 @@
           case 'neutral':
             return '中评'
           default:
-            return '差评'
+            return '好评'
         }
       }
     },

@@ -1,16 +1,9 @@
 <template>
-  <keep-alive :include="cachedViews">
-    <router-view></router-view>
-  </keep-alive>
+  <router-view></router-view>
 </template>
 
 <script>
   export default {
-    name: 'pointsMallManage',
-    computed: {
-      cachedViews() {
-        return this.$store.state.tagsView.cachedViews
-      }
-    }
+    name: 'pointsMallManage'
   }
 </script>

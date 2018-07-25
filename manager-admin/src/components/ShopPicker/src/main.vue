@@ -5,9 +5,10 @@
       placeholder="选择店铺"
       @change="handleShopChanged"
       style="width: 150px"
+      filterable
+      clearable
       v-bind="$attrs"
     >
-      <el-option label="全平台" :value="0"/>
       <el-option
         v-for="item in shopList"
         :key="item.shop_id"
@@ -24,7 +25,7 @@
     name: 'EnShopPicker',
     data() {
       return {
-        shop_id: 0,
+        shop_id: '',
         shopList: []
       }
     },

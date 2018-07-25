@@ -117,7 +117,7 @@
             <span>已选商品<b style="color: #ff5e5e; margin: 0 2px">{{ checkedCount }}</b>件</span>
             <em>|</em>
             <span>合计：<b class="price">￥<i>{{ (cartTotal.total_price || 0) | unitPrice }}</i></b></span>
-            <a href="javascript:;" class="check-btn" @click="handleCheckout">去结算</a>
+            <a href="javascript:;" :class="['check-btn', !checkedCount && 'disabled']" @click="handleCheckout">去结算</a>
           </div>
         </div>
       </div>
@@ -249,6 +249,7 @@
       },
       /** 去结算 */
       handleCheckout() {
+        if (!this.checkedCount) return false
         this.$router.push({ path: '/checkout' })
       },
       /** 监听页面滚动，实现结算栏浮起、固定 */

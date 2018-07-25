@@ -16,13 +16,13 @@ export function getStaticPageAddress() {
 
 /**
  * 保存静态页生成地址
- * @param address
+ * @param params
  */
-export function saveStaticPageAddress(address) {
+export function saveStaticPageAddress(params) {
   return request({
     url: 'page-create/save',
     method: 'post',
-    data: { address }
+    data: params
   })
 }
 
