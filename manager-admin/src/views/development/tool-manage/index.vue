@@ -1,7 +1,5 @@
 <template>
-  <keep-alive :include="cachedViews">
-    <router-view></router-view>
-  </keep-alive>
+  <router-view></router-view>
 </template>
 
 <script>
