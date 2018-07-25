@@ -99,6 +99,7 @@
               :propertys="props"
               :api="areaApi"
               :showDialog="areaDialog"
+              :defaultData="area"
               @confirmFunc="confirmFunc"
               @hideDialogFunc="hideDialogFunc"
             ></en-area-selector-dialog>
@@ -182,10 +183,10 @@
           level: 'level',
 
           /** 标签名 */
-          local_name: 'localName',
+          local_name: 'local_name',
 
           /** 父地区id */
-          p_regions_id: 'parentId',
+          p_regions_id: 'parent_id',
 
           /**  地区id */
           region_id: 'id',
@@ -193,6 +194,9 @@
           /** 子选项 */
           children: 'children'
         },
+
+        /** 地区信息 */
+        area: [],
 
         /** 模板表单信息 */
         mouldForm: {
@@ -218,7 +222,7 @@
           type: '',
 
           /** 模板地区*/
-          area: ''
+          area: []
         },
 
         /** 模板类型列表 */
@@ -293,8 +297,9 @@
       },
 
       /** 地区选择器确认回调 */
-      confirmFunc(val) {
+      confirmFunc(original, val) {
         this.mouldForm.area = JSON.stringify(val)
+        this.area = original
         this.areaDialog = false
       },
 
@@ -319,6 +324,7 @@
         API_express.getSimpleTpl(row.template_id, {}).then((response) => {
           this.mouldForm = { ...response }
           this.mouldForm.area = response.area_json
+          this.area = JSON.parse(response.area_json)
         })
       },
 
@@ -353,7 +359,7 @@
 
           type: 2,
 
-          area: ''
+          area: []
         }
       },
 
@@ -368,8 +374,7 @@
               continued_company: this.mouldForm.continued_company,
               continued_price: this.mouldForm.continued_price,
               type: parseInt(this.mouldForm.type),
-              area_id: '54',
-              area: this.mouldForm.area
+              area_json: this.mouldForm.area
             }
             if (this.mouldForm.template_id) {
               API_express.saveExpressMould(this.mouldForm.template_id, _params).then(() => {

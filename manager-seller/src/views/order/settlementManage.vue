@@ -5,6 +5,11 @@
       :tableData="tableData"
       :loading="loading"
     >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns">
+          <el-button @click="exportExcel" type="primary">导出Excel</el-button>
+        </div>
+      </div>
       <template slot="table-columns">
         <!--结算编号-->
         <el-table-column prop="bill_sn" label="结算编号"/>
@@ -54,6 +59,7 @@
 <script>
   import * as API_settlement from '@/api/settlement'
   import { CategoryPicker } from '@/components'
+  import Foundation from '@/framework/Foundation'
 
   export default {
     name: 'settlementManage',
@@ -99,6 +105,20 @@
         this.$router.push({ path: `/order/settlement-detail/${row.bill_id}` })
       },
 
+      /** 导出excel */
+      exportExcel() {
+        API_settlement.exportSettleMentExcel({}).then(response => {
+          const json = response.data.map(item => ({
+            '结算单号': item.bill_sn,
+            '起止时间': `${Foundation.unixToDate(item.start_time)}～${Foundation.unixToDate(item.end_time)}`,
+            '本期应收': Foundation.unixToDate(item.price),
+            '结算状态': item.status_text,
+            '付款时间': Foundation.unixToDate(item.create_time)
+          }))
+          this.MixinExportJosnToExcel(json, '结算单')
+        })
+      },
+
       /** 获取结算单列表 */
       GET_SetTelMentList() {
         this.loading = true
@@ -117,8 +137,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /** 工具条 */
   /deep/ div.toolbar {
-    display: none;
+    height: 70px;
+    padding: 20px 0;
   }
 
   /deep/ .el-table td:not(.is-left) {

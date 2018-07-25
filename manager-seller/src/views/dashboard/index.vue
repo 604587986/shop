@@ -69,11 +69,11 @@
             <h2>您需要关注的店铺信息以及待处理事项</h2>
           </div>
           <div class="store-index-content">
-            <p class="store-rompt" @click="toGoodsManager(0)">出售中的商品：
+            <p class="store-rompt" @click="toGoodsManager(1)">出售中的商品：
               <span style="color: red;">{{dashBoardData.market_goods}}</span>
             </p>
             <div>
-              <el-tag type="success" @click.native="toGoodsManager(1)">仓库待上架货品  {{dashBoardData.pending_goods}}</el-tag>
+              <el-tag type="success" @click.native="toGoodsManager(0)">仓库待上架货品  {{dashBoardData.pending_goods}}</el-tag>
               <el-tag type="success" @click.native="toConsumerMsg">买家留言  {{dashBoardData.pending_member_ask}}</el-tag>
             </div>
           </div>

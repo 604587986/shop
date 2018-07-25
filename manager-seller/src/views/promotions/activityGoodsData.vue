@@ -71,14 +71,15 @@
         activityID: ''
       }
     },
+    watch: {
+      activityID: 'GET_ActivityGoodsList'
+    },
     beforeRouteUpdate(to, from, next) {
       this.activityID = to.params.id
-      this.GET_ActivityGoodsList()
       next()
     },
-    mounted() {
+    activated() {
       this.activityID = this.$route.params.id
-      this.GET_ActivityGoodsList()
     },
     methods: {
       /** 分页大小发生改变 */

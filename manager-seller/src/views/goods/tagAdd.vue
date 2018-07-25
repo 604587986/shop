@@ -9,7 +9,7 @@
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-button type="primary" @click="selectgoodslist" >选择商品</el-button>
-          <el-button type="danger" @click="cancelall" >批量取消</el-button>
+          <el-button type="danger" @click="cancelall">批量取消</el-button>
         </div>
       </div>
       <template slot="table-columns">
@@ -74,6 +74,10 @@
           page_size: 10,
           tag_id: ''
         },
+
+        /** 标签id */
+        tag_id: '',
+
         /** 标签商品列表数据 */
         tableData: [],
 
@@ -98,14 +102,15 @@
         goodsIds: []
       }
     },
+    watch: {
+      tag_id: 'GET_TagGoodsList'
+    },
     beforeRouteUpdate(to, from, next) {
-      this.params.tag_id = to.params.tag_id
-      this.getTagGoodsList()
+      this.params.tag_id = this.tag_id = to.params.tag_id
       next()
     },
-    mounted() {
-      this.params.tag_id = this.$route.params.tag_id
-      this.getTagGoodsList()
+    activated() {
+      this.params.tag_id = this.tag_id = this.$route.params.tag_id
     },
     methods: {
       /**  显示商品选择器*/
@@ -125,7 +130,7 @@
       },
 
       /** 获取标签下的商品列表**/
-      getTagGoodsList() {
+      GET_TagGoodsList() {
         this.loading = true
         const _tag_id = this.params.tag_id
         API_goodsTag.getTagGoodsList(_tag_id, {}).then(response => {
