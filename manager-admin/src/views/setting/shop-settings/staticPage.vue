@@ -113,12 +113,18 @@
           this.status = status
           this.status_text = text
           if (status === 'DOING') {
-            setTimeout(this.GET_Progress, 1000)
+            this.timer = setTimeout(this.GET_Progress, 1000)
           } else if (status === 'SUCCESS') {
             this.$message.success('静态页生成完成！')
           }
         })
       }
+    },
+    deactivated() {
+      this.timer && clearTimeout(this.timer)
+    },
+    destroyed() {
+      this.timer && clearTimeout(this.timer)
     }
   }
 </script>

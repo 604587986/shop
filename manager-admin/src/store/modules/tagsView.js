@@ -6,11 +6,23 @@ const tagsView = {
   mutations: {
     ADD_VISITED_VIEWS: (state, view) => {
       if (state.visitedViews.some(v => v.path === view.path)) return
-      state.visitedViews.push(Object.assign({}, view, {
-        title: view.meta.title || 'no-name'
-      }))
+      // state.visitedViews.push(Object.assign({}, view, {
+      //   title: view.meta.title || 'no-name'
+      // }))
+      // if (!view.meta.noCache) {
+      //   state.cachedViews.push(view.name)
+      // }
+      if (view.showInVisitedViews) {
+        state.visitedViews.push({
+          name: view.name,
+          path: view.path,
+          title: view.meta.title || 'no-name'
+        })
+      }
       if (!view.meta.noCache) {
-        state.cachedViews.push(view.name)
+        const cachedViews = [...state.cachedViews]
+        cachedViews.push(view.name)
+        state.cachedViews = Array.from(new Set([...cachedViews]))
       }
     },
     DEL_VISITED_VIEWS: (state, view) => {

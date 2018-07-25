@@ -66,11 +66,17 @@
           this.percentage = percentage
           this.status = status
           this.status_text = text
-          if (status === 'DOING') {
+          if (status === 'DOING' && this) {
             setTimeout(() => { this.GET_Progress() }, 1000)
           }
         })
       }
+    },
+    deactivated() {
+      this.timer && clearTimeout(this.timer)
+    },
+    destroyed() {
+      this.timer && clearTimeout(this.timer)
     }
   }
 </script>
