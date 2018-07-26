@@ -59,9 +59,19 @@
       :close-on-press-escape="false"
     >
       <el-form :model="groupBuyForm" :rules="groupBuyRules" ref="groupBuyForm" label-width="120px">
-        <!--团购活动名称-->
         <el-form-item label="活动名称" prop="act_name">
           <el-input v-model="groupBuyForm.act_name" :maxlength="20"></el-input>
+        </el-form-item>
+        <el-form-item label="报名截止时间" prop="join_end_time">
+          <el-date-picker
+            v-model="groupBuyForm.join_end_time"
+            type="datetime"
+            :editable="false"
+            value-format="timestamp"
+            placeholder="报名截止时间"
+            :default-time="MixinDefaultTime"
+            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="活动时间段" prop="time_range">
           <el-date-picker
@@ -72,17 +82,7 @@
             end-placeholder="结束时间"
             :editable="false"
             value-format="timestamp"
-            :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
-          </el-date-picker>
-        </el-form-item>
-        <!--报名截止时间-->
-        <el-form-item label="报名截止时间" prop="join_end_time">
-          <el-date-picker
-            v-model="groupBuyForm.join_end_time"
-            type="datetime"
-            :editable="false"
-            value-format="timestamp"
-            placeholder="报名截止时间"
+            :default-time="[MixinDefaultTime, MixinDefaultTime]"
             :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
           </el-date-picker>
         </el-form-item>
