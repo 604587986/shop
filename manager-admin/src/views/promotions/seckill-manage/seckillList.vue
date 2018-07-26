@@ -64,16 +64,20 @@
           <el-date-picker
             v-model="seckillForm.apply_end_time"
             type="datetime"
-            placeholder="选择日期时间"
+            placeholder="选择报名截止时间"
+            :editable="false"
+            :default-time="MixinDefaultTime"
             value-format="timestamp"
             :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="活动日期" prop="start_day">
+        <el-form-item label="活动时间" prop="start_day">
           <el-date-picker
             v-model="seckillForm.start_day"
             type="datetime"
-            placeholder="选择日期"
+            :editable="false"
+            :default-time="MixinDefaultTime"
+            placeholder="选择活动时间"
             value-format="timestamp"
             :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
           </el-date-picker>
