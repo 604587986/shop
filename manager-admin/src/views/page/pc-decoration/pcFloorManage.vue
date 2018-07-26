@@ -326,12 +326,10 @@
     overflow-y: scroll;
   }
   .floor-list {
-    width: calc(100% - 50px);
     background-color: #E5E7EA;
   }
   .floor-item {
     position: relative;
-    width: 100%;
     box-sizing: border-box;
     .panel-handle {
       display: none;
