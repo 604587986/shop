@@ -47,7 +47,8 @@ sudo npm run build
 echo "买家WAP端build完成，等待部署..."
 
 # 删除所有应用
-pm2 delete all
+pm2 stop "buyer-pc"
+pm2 stop "buyer-wap"
 
 # 启动买家端PC
 cd $WEB_PATH/buyer/pc/themes/b2b2c_v5
