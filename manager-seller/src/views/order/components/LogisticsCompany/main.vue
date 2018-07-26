@@ -96,7 +96,7 @@
 
       /** 执行关闭  */
       closeLogistics(row) {
-        API_logistics.closeExpressPower(row.id, {}).then(response => {
+        API_logistics.closeExpressPower(row.logi_id, {}).then(response => {
           this.$message.success('关闭成功')
           this.GET_logisticsList()
           this.$emit('logisticsChanged')
@@ -105,7 +105,7 @@
 
       /** 执行开启 */
       openLogistics(row) {
-        API_logistics.openExpressPower(row.id, {}).then(response => {
+        API_logistics.openExpressPower(row.logi_id, {}).then(response => {
           this.$message.success('开启成功')
           this.GET_logisticsList()
           this.$emit('logisticsChanged')

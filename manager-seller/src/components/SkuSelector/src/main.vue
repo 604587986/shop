@@ -22,7 +22,6 @@
 </template>
 
 <script>
-  import * as API_goodsSku from '@/api/goodsSkuInfo'
   import SkuItem from './SkuItem'
   import SkuTable from './SkuTable'
   import { cloneObj, deepClone } from '@/utils/index'

@@ -181,6 +181,18 @@ export function getTplList(ids, params) {
 }
 
 /**
+ * 获取积分商品分类列表
+ * @param id
+ */
+export function getExchangeCatsList(id) {
+  return request({
+    url: `/promotion/exchange-cats/${id}/children`,
+    method: 'get',
+    loading: false
+  })
+}
+
+/**
  * 商家下架商品
  * @param ids
  * @param params

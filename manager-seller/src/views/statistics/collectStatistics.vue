@@ -12,7 +12,7 @@
             <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
           </template>
         </el-table-column>
-        <el-table-column label="商品价格" >
+        <el-table-column label="商品价格">
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <el-table-column prop="favorite_num" label="收藏量"></el-table-column>
