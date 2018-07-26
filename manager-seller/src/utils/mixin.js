@@ -18,6 +18,31 @@ export default {
       MixinBuyerDomain: domain.buyer_pc
     }
   },
+  computed: {
+    /**
+     * 缓存页面数组
+     * @returns {default.computed.cachedViews|(function())|Array|*|getters.cachedViews}
+     */
+    cachedViews() {
+      return this.$store.state.tagsView.cachedViews
+    },
+    /**
+     * 返回默认时间 + 5分钟
+     * 用于日期时间选择器的默认时间
+     * @returns {string}
+     * @constructor
+     */
+    MixinDefaultTime() {
+      const today = new Date()
+      let hours = today.getHours()
+      let minutes = today.getMinutes() + 5
+      let seconds = today.getSeconds()
+      if (hours < 10) hours = '0' + hours
+      if (minutes < 10) minutes = '0' + minutes
+      if (seconds < 10) seconds = '0' + seconds
+      return hours + ':' + minutes + ':' + seconds
+    }
+  },
   methods: {
     /** 返回克隆后的对象 */
     MixinClone(obj) {

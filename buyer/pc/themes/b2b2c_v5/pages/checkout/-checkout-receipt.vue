@@ -244,7 +244,6 @@
           this.$message.success('设置成功！')
           this.$emit('change', receipt)
           this.$layer.close(index)
-          API_Members.setDefaultReceipt(receipt.receipt_id)
         })
       },
       /** 取消发票 */
