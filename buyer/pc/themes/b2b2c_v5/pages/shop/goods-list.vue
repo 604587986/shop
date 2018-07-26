@@ -9,8 +9,8 @@
       <div class="inner w">
         <div class="left">
           <div class="inner-sort">
-            <template v-for="sort in sortNav">
-              <div class="item" :key="sort.title" :class="[sort.active && 'active', sort.sort]" @click="handleSortChanged(sort)">
+            <template v-for="sort in sorts">
+              <div class="item" :key="sort.title" :class="[sort.active && 'active', sort.type === 'asc' ? 'up' : 'down']" @click="handleSortChanged(sort)">
                 {{ sort.title }}<i class="iconfont ea-icon-arrow-down2"></i>
               </div>
             </template>
@@ -36,15 +36,15 @@
         <ul class="goods-list">
           <li v-for="goods in goods.data" :key="goods.goods_id" class="goods-item">
             <div class="goods-image">
-              <nuxt-link :to="'/goods/' + goods.goods_id">
-                <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
-              </nuxt-link>
+              <a :href="'/goods/' + goods.goods_id">
+                <img :src="goods.thumbnail" :alt="goods.name" :title="goods.name">
+              </a>
             </div>
             <div class="goods-name">
-              <nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.goods_name }}</nuxt-link>
+              <a :href="'/goods/' + goods.goods_id">{{ goods.name }}</a>
             </div>
             <div class="goods-price">
-              <span>RMB：<span class="price">￥<strong>{{ goods.goods_price | unitPrice }}</strong></span></span>
+              <span>RMB：<span class="price">￥<strong>{{ goods.price | unitPrice }}</strong></span></span>
               <span>已销售：{{ goods.buy_count }}件</span>
             </div>
           </li>
@@ -86,7 +86,12 @@
     components: { theme1Header, theme2Header, theme3Header },
     data() {
       return {
-        sortNav: ['新品', '价格', '销量', '收藏', '人气'].map((item, index) => ({ title: item, active: index === 0, sort: 'up', sort_id: index })),
+        sorts: [
+          { title: '默认', name: 'def', type: 'asc', active: true },
+          { title: '销量', name: 'buynum', type: 'asc', active: false },
+          { title: '价格', name: 'price', type: 'asc', active: false },
+          { title: '评价', name: 'grade', type: 'asc', active: false },
+        ],
         shop: '',
         goods: '',
         params: {
@@ -107,17 +112,14 @@
       },
       /** 排序发生改变 */
       handleSortChanged(sort) {
-        this.sortNav.map(item => {
-          if (sort.sort_id === item.sort_id) {
-            if (!sort.active) {
-              item.active = true
-            } else {
-              item.sort = item.sort === 'up' ? 'down' : 'up'
-            }
-          }
-          item.active = item.sort_id === sort.sort_id
-        })
-        this.handleQueryChanged()
+        if (sort.active) {
+          sort.type = sort.type === 'asc' ? 'desc' : 'asc'
+        }
+        this.$set(this, 'sorts', this.sorts.map(item => {
+          item.active = item.name === sort.name
+          return item
+        }))
+        this.params.sort = `${sort.name}_${sort.type}`
         this.GET_GoodsList()
       },
       /** 价格区间确认 */

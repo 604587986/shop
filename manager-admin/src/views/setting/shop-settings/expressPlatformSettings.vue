@@ -43,7 +43,10 @@
       <el-form :model="expressForm" label-width="140px" style="width: 500px">
         <template v-for="(config, index) in expressForm.config_items">
           <el-form-item :label="config.text" prop="desc">
-            <el-input type="textarea" v-model="config.value" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            <el-input v-if="config.type === 'text'" type="textarea" v-model="config.value" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            <el-radio-group v-else-if="config.type === 'radio'" v-model="config.value">
+              <el-radio v-for="option in config.options" :key="option.value" :label="option.value">{{ option.label }}</el-radio>
+            </el-radio-group>
           </el-form-item>
         </template>
       </el-form>

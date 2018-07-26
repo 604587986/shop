@@ -47,52 +47,14 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-table-layout>
-    <el-dialog
-      :title="articleForm.article_id ? ('编辑文章 - ' + articleForm.article_name) : '添加文章'"
-      :visible.sync="dialogVisible"
-      width="50%"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <el-form :model="articleForm" :rules="articleRules" ref="articleForm" label-width="100px">
-        <el-form-item label="文章名称" prop="article_name">
-          <el-input v-model="articleForm.article_name"></el-input>
-        </el-form-item>
-        <el-form-item label="文章分类" prop="category_id">
-          <el-cascader
-            :options="articleCategoryTree"
-            :props="{children: 'children',label: 'name',value: 'id'}"
-            :show-all-levels="false"
-            :value="defaultCascaderValue"
-            @change="handleCascaderChange"
-            change-on-select
-          ></el-cascader>
-        </el-form-item>
-        <el-form-item label="文章排序" prop="sort">
-          <el-input-number v-model="articleForm.sort" controls-position="right" :min="0" :max="99999"></el-input-number>
-        </el-form-item>
-        <el-form-item label="文章外链" prop="outside_url">
-          <el-input v-model="articleForm.outside_url"></el-input>
-        </el-form-item>
-        <el-form-item label="文章内容" prop="content">
-          <UE ref="ue" :defaultMsg="articleForm.content"></UE>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitArticleForm">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
   import * as API_Article from '@/api/article'
-  import { UE } from '@/components'
 
   export default {
     name: 'articleList',
-    components: { UE },
     data() {
       return {
         // 加载中
@@ -106,28 +68,12 @@
         },
         // 表格数据
         tableData: '',
-        // 添加、修改文章 表单
-        articleForm: {
-          article_name: '',
-          content: '',
-          category_id: 0
-        },
-        // 添加、修改文章 表单规则
-        articleRules: {
-          article_name: [this.MixinRequired('请输入文字名称！')],
-          category_id: [this.MixinRequired('请选择文章分类！')],
-          content: [this.MixinRequired('请输入文章内容！')]
-        },
-        // 添加、修改文章 dialog
-        dialogVisible: false,
         // 文章分类API
         articleCategoryApi: `${process.env.ADMIN_API}/pages/article-categories/@id/children`,
         // 文章分类树
         articleCategoryTree: [],
         // 被选分类名称
-        articleCategoryName: '',
-        // 级联选择器默认值
-        defaultCascaderValue: []
+        articleCategoryName: ''
       }
     },
     mounted() {
@@ -163,28 +109,23 @@
       },
       /** 添加文章 */
       handleAddArticle() {
-        this.articleForm = { sort: 0 }
-        this.dialogVisible = true
+        this.$router.push({
+          name: 'addArticle',
+          params: {
+            category: this.articleCategoryTree,
+            callback: this.GET_ArticleList
+          }
+        })
       },
       /** 修改文章 */
       handleEditArticle(index, row) {
-        API_Article.getArticleDetail(row.article_id).then(response => {
-          this.articleForm = response
-          this.dialogVisible = true
-          let d = []
-          const { category_id } = response
-          this.articleCategoryTree.forEach(item => {
-            if (item.id === category_id) {
-              d = [item.id]
-            } else {
-              item.children && item.children.forEach(_item => {
-                if (_item.id === category_id) {
-                  d = [item.id, _item.id]
-                }
-              })
-            }
-          })
-          this.defaultCascaderValue = d
+        this.$router.push({
+          name: 'addArticle',
+          params: {
+            article_id: row.article_id,
+            category: this.articleCategoryTree,
+            callback: this.GET_ArticleList
+          }
         })
       },
       /** 删除文章 */
@@ -206,35 +147,6 @@
         this.params.category_id = data.id
         this.GET_ArticleList()
         this.articleCategoryName = data.name
-      },
-      /** 当分类改变时 */
-      handleCascaderChange(data) {
-        this.articleForm.category_id = data[data.length - 1]
-      },
-      /** 添加、编辑文章 表单提交 */
-      submitArticleForm() {
-        this.articleForm.content = this.$refs['ue'].getUEContent()
-        this.$refs['articleForm'].validate((valid) => {
-          if (valid) {
-            const { article_id } = this.articleForm
-            if (article_id) {
-              API_Article.editArticle(article_id, this.articleForm).then(response => {
-                this.dialogVisible = false
-                this.$message.success('修改成功！')
-                this.GET_ArticleList()
-              })
-            } else {
-              API_Article.addArticle(this.articleForm).then(() => {
-                this.dialogVisible = false
-                this.$message.success('保存成功！')
-                this.GET_ArticleList()
-              })
-            }
-          } else {
-            this.$message.error('表单填写有误，请核对！')
-            return false
-          }
-        })
       },
       /** 获取文章列表 */
       GET_ArticleList() {
