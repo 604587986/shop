@@ -44,7 +44,6 @@
     mounted() {
       API_Shop.getApplyShopInfo().then(response => {
         if (response) {
-          Storage.setItem('applyShopStep', JSON.stringify(0))
           this.shop_status = response.shop_disable
         }
       })

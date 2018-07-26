@@ -35,17 +35,21 @@
             <li
               v-for="(notice, index) in mall_notices"
               :key="index"
-              class="news-item">
+              class="news-item"
+            >
               <a href="javascript:;" @click="handleShowNotice(notice)">{{ notice.article_name }}</a>
             </li>
           </ul>
         </div>
         <div class="card-news-con-item" v-show="card_news_tab_x === 70">
           <ul>
-            <li class="news-item"><a href="">京东启用全新客服电话“950618”</a></li>
-            <li class="news-item"><a href="">大家电订单超期自动取消公告</a></li>
-            <li class="news-item"><a href="">关于召回普利司通（天津）轮胎有限公司2个规格乘用车轮胎的公告</a></li>
-            <li class="news-item"><a href="">京东物流推出配送员统一外呼电话"95056”</a></li>
+            <li
+              v-for="(prom, index) in mall_promotions"
+              :key="index"
+              class="news-item"
+            >
+              <a href="javascript:;" @click="handleShowNotice(prom)">{{ prom.article_name }}</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -99,6 +103,9 @@
     mounted() {
       API_Article.getArticlesByCategory('NOTICE').then(response => {
         this.mall_notices = response
+      })
+      API_Article.getArticlesByCategory('PROMOTION').then(response => {
+        this.mall_promotions = response
       })
     },
     methods: {
