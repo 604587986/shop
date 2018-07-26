@@ -166,6 +166,9 @@
         tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
       }
     },
+    mounted() {
+      this.GET_OrderList()
+    },
     activated() {
       this.GET_OrderList()
       window.onresize = this.countTableHeight

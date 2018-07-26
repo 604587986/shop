@@ -80,7 +80,7 @@
 
           page_size: 10,
 
-          category_id: 1,
+          category_id: 0,
 
           goods_name: ''
         },

@@ -1106,7 +1106,7 @@
 
       /** 积分商品商城分类列表 */
       getGoodsCatrgory() {
-        API_goodsCategory.getGoodsCategoryLevelList(0, {}).then((response) => {
+        API_goods.getExchangeCatsList(0).then((response) => {
           this.exchangeGoodsCatrgoryList = response
         })
       },

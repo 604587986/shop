@@ -378,6 +378,10 @@
     activated() {
       this.sn = this.$route.params.sn
     },
+    mounted() {
+      this.sn = this.$route.params.sn
+      this.GET_OrderDetail()
+    },
     methods: {
       /** 获取订单详情信息 */
       GET_OrderDetail() {

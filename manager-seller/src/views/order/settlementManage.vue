@@ -12,27 +12,27 @@
       </div>
       <template slot="table-columns">
         <!--结算编号-->
-        <el-table-column prop="bill_sn" label="结算编号"/>
+        <el-table-column prop="bill_sn" label="结算编号" min-width="160" />
         <!--起止时间-->
-        <el-table-column label="起止时间">
+        <el-table-column label="起止时间"　min-width="280">
           <template slot-scope="scope">
             {{ scope.row.start_time | unixToDate }} - {{ scope.row.end_time | unixToDate }}
           </template>
         </el-table-column>
         <!--本期应收-->
-        <el-table-column label="本期应收">
+        <el-table-column label="本期应收" width="120">
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--结算状态-->
-        <el-table-column prop="status_text" label="结算状态"/>
+        <el-table-column prop="status_text" label="结算状态" width="120"/>
         <!--付款时间-->
-        <el-table-column label="付款时间">
+        <el-table-column label="付款时间" width="180">
           <template slot-scope="scope">
             {{ scope.row.create_time | unixToDate }}
           </template>
         </el-table-column>
         <!--操作-->
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作" min-width="150">
           <template slot-scope="scope">
             <el-button
               type="primary"

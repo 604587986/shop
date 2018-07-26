@@ -132,8 +132,7 @@
       /** 获取标签下的商品列表**/
       GET_TagGoodsList() {
         this.loading = true
-        const _tag_id = this.params.tag_id
-        API_goodsTag.getTagGoodsList(_tag_id, {}).then(response => {
+        API_goodsTag.getTagGoodsList(this.params.tag_id, {}).then(response => {
           this.loading = false
           this.tableData = response.data
           this.goodsIds = this.tableData.map(key => {
@@ -178,7 +177,6 @@
       },
       /** 保存设置 */
       savesetup() {
-        const _tag_id = this.params.tag_id
         const _goods_ids = this.tableData.map(key => {
           return key.goods_id
         })
@@ -186,7 +184,7 @@
           this.$message.error('请至少选择一种商品')
           return
         }
-        API_goodsTag.saveTagGoodsList(_tag_id, _goods_ids, this.params).then(() => {
+        API_goodsTag.saveTagGoodsList(this.params.tag_id, _goods_ids, this.params).then(() => {
           this.loading = false
           this.$message.success('保存设置成功！')
         })

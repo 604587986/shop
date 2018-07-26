@@ -42,14 +42,14 @@
           :loading="loading">
           <template slot="table-columns">
             <!--订单编号-->
-            <el-table-column prop="sn" label="订单编号"/>
+            <el-table-column prop="order_sn" label="订单编号"/>
             <!--下单时间-->
             <el-table-column label="下单时间">
               <template slot-scope="scope">{{ scope.row.order_time | unixToDate }}</template>
             </el-table-column>
             <!--订单金额-->
             <el-table-column label="订单金额">
-              <template slot-scope="scope">{{ scope.row.order_amount | unitPrice('￥') }}</template>
+              <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
             </el-table-column>
             <!--操作-->
             <el-table-column label="操作" width="150">
@@ -60,14 +60,14 @@
           </template>
           <el-pagination
             slot="pagination"
-            v-if="pageData"
-            @size-change="handlePageSizeChange"
-            @current-change="handlePageCurrentChange"
-            :current-page="pageData.page_no"
+            v-if="pageDataPayment"
+            @size-change="handlePaymentPageSizeChange"
+            @current-change="handlePaymentPageCurrentChange"
+            :current-page="pageDataPayment.page_no"
             :page-sizes="[10, 20, 50, 100]"
-            :page-size="pageData.page_size"
+            :page-size="pageDataPayment.page_size"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="pageData.data_total">
+            :total="pageDataPayment.data_total">
           </el-pagination>
         </en-table-layout>
       </el-tab-pane>
@@ -79,12 +79,12 @@
         <template slot="table-columns">
           <!--退款金额-->
           <el-table-column label="退款金额">
-            <template slot-scope="scope">{{ scope.row.refund_amount | unitPrice('￥') }}</template>
+            <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
           </el-table-column>
           <!--退货单号-->
           <el-table-column prop="refund_sn" label="退货单号" />
           <!--订单编号-->
-          <el-table-column prop="sn" label="订单编号"/>
+          <el-table-column prop="order_sn" label="订单编号"/>
           <!--会员名称-->
           <el-table-column prop="member_name" label="会员名称"/>
           <!--申请时间-->
@@ -94,14 +94,14 @@
         </template>
         <el-pagination
           slot="pagination"
-          v-if="pageData"
-          @size-change="handlePageSizeChange"
-          @current-change="handlePageCurrentChange"
-          :current-page="pageData.page_no"
+          v-if="pageDataRefund"
+          @size-change="handleRefundPageSizeChange"
+          @current-change="handleRefundPageCurrentChange"
+          :current-page="pageDataRefund.page_no"
           :page-sizes="[10, 20, 50, 100]"
-          :page-size="pageData.page_size"
+          :page-size="pageDataRefund.page_size"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="pageData.data_total">
+          :total="pageDataRefund.data_total">
         </el-pagination>
       </en-table-layout>
       </el-tab-pane>
@@ -113,6 +113,11 @@
   import * as API_Settlement from '@/api/settlement'
   export default {
     name: 'settlementDetail',
+    mounted() {
+      this.billId = this.$route.params.sn
+      this.GET_SettlementList()
+      this.GET_orderList()
+    },
     activated() {
       this.billId = this.$route.params.sn
     },
@@ -137,8 +142,14 @@
         /** 列表loading状态 */
         loading: false,
 
-        /** 列表参数 */
-        params: {
+        /** 退款单列表参数 */
+        refundParams: {
+          page_no: 1,
+          page_size: 10
+        },
+
+        /** 订单列表参数 */
+        paymentParams: {
           page_no: 1,
           page_size: 10
         },
@@ -146,8 +157,11 @@
         /** 列表数据 */
         tableData: [],
 
-        /** 列表分页数据 */
-        pageData: []
+        /** 退款单列表分页数据 */
+        pageDataRefund: [],
+
+        /** 订单列表分页数据 */
+        pageDataPayment: []
       }
     },
     methods: {
@@ -163,39 +177,72 @@
       /** 确认下一步操作 */
       handleConfirmSettlement() {
         API_Settlement.confirmSettle(this.billId, {}).then(response => {
-          this.settlementData = { ...response }
+          this.$message.success('操作成功')
+          this.GET_SettlementList()
         })
       },
 
       /** 获取订单列表 */
       GET_orderList() {
         this.loading = true
-        API_Settlement.getOrderList(this.billId, this.bill_type, this.params).then(response => {
+        let _params = {}
+        switch (this.bill_type) {
+          case 'REFUND':
+            _params = this.refundParams
+            break
+          case 'PAYMENT':
+            _params = this.paymentParams
+            break
+        }
+        API_Settlement.getOrderList(this.billId, this.bill_type, _params).then(response => {
           this.loading = false
           this.tableData = response.data
-          this.pageData = {
-            page_no: response.page_no,
-            page_size: response.page_size,
-            data_total: response.data_total
+          switch (this.bill_type) {
+            case 'REFUND':
+              this.pageDataRefund = {
+                page_no: response.page_no,
+                page_size: response.page_size,
+                data_total: response.data_total
+              }
+              break
+            case 'PAYMENT':
+              this.pageDataPayment = {
+                page_no: response.page_no,
+                page_size: response.page_size,
+                data_total: response.data_total
+              }
+              break
           }
         })
       },
 
-      /** 分页大小发生改变 */
-      handlePageSizeChange(size) {
-        this.params.page_size = size
-        this.GET_SettlementList()
+      /** 退款单分页大小发生改变 */
+      handleRefundPageSizeChange(size) {
+        this.refundParams.page_size = size
+        this.GET_orderList()
       },
 
-      /** 分页页数发生改变 */
-      handlePageCurrentChange(page) {
-        this.params.page_no = page
-        this.GET_SettlementList()
+      /** 退款单分页页数发生改变 */
+      handleRefundPageCurrentChange(page) {
+        this.refundParams.page_no = page
+        this.GET_orderList()
+      },
+
+      /** 订单分页大小发生改变 */
+      handlePaymentPageSizeChange(size) {
+        this.paymentParams.page_size = size
+        this.GET_orderList()
+      },
+
+      /** 订单分页页数发生改变 */
+      handlePaymentPageCurrentChange(page) {
+        this.paymentParams.page_no = page
+        this.GET_orderList()
       },
 
       /** 查看订单详情 */
       handleLookOrderDetails(row) {
-        this.$router.push({ path: `/order/detail/${row.sn}` })
+        this.$router.push({ path: `/order/detail/${row.order_sn}` })
       },
 
       /** 切换状态 */
