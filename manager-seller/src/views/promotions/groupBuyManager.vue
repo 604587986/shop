@@ -111,8 +111,6 @@
 
         /** 团购状态*/
         groupBuyStatus: [
-          { group_buy_status_id: -1, group_buy_status_name: '请选择' },
-
           { group_buy_status_id: 0, group_buy_status_name: '未审核' },
 
           { group_buy_status_id: 1, group_buy_status_name: '已通过' },
