@@ -75,9 +75,12 @@
   import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'EnCategory',
+    props: ['init-unfold'],
     data() {
+      let unfold = this.$route.path === '/'
+      if (this.initUnfold === false) unfold = false
       return {
-        unfold: this.$route.path === '/'
+        unfold
       }
     },
     mounted() {
@@ -99,12 +102,12 @@
     methods: {
       /** 鼠标移入 */
       handleCategoryMouseover() {
-        if (this.always_unfold) return
+        if (this.always_unfold && this.initUnfold !== false) return
         this.unfold = true
       },
       /** 鼠标移出 */
       handleCategoryMouseout() {
-        if (this.always_unfold) return
+        if (this.always_unfold && this.initUnfold !== false) return
         this.unfold = false
       },
       ...mapActions(['getCategoryData'])
