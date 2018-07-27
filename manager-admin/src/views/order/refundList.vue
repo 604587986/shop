@@ -237,18 +237,21 @@
         const start_time = parseInt(range[0] / 1000)
         const end_time = parseInt(range[1] / 1000)
         API_refund.exportRefundExcel({ start_time, end_time }).then(response => {
-          const json = response.map(item => ({
-            '退款单ID': item.id,
-            '退款流水号': item.sn,
-            '退款相关订单号': item.order_sn,
-            '支付方式': item.refund_way,
-            '店铺名称': item.seller_name,
-            '收款人': item.member_name,
-            '退款状态': item.refund_status,
-            '创建时间': Foundation.unixToDate(item.create_time),
-            '退款金额': Foundation.formatPrice(item.refund_price),
-            '退款时间': Foundation.unixToDate(item.refund_time)
-          }))
+          const json = {
+            sheet_name: '退款单',
+            sheet_values: response.map(item => ({
+              '退款单ID': item.id,
+              '退款流水号': item.sn,
+              '退款相关订单号': item.order_sn,
+              '支付方式': item.refund_way,
+              '店铺名称': item.seller_name,
+              '收款人': item.member_name,
+              '退款状态': item.refund_status,
+              '创建时间': Foundation.unixToDate(item.create_time),
+              '退款金额': Foundation.formatPrice(item.refund_price),
+              '退款时间': Foundation.unixToDate(item.refund_time)
+            }))
+          }
           this.MixinExportJosnToExcel(json, '退款单')
         })
       },
