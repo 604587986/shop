@@ -36,7 +36,7 @@
           >
             <img v-if="spec.spec_type === 1" :src="spec_val['spec_value_img'].thumbnail">
             <span class="spec-text">{{ spec_val.spec_value }}</span>
-            <i class="icon-spec-selected"></i>
+            <i class="iconfont ea-icon-right-bottom-checked"></i>
           </button>
         </div>
       </div>
@@ -59,8 +59,8 @@
       </div>
     </div>
     <div class="buy-btns">
-      <button type="button" class="buy-btn buy" @click="handleBuyNow"></button>
-      <button type="button" class="buy-btn add" @click="handleAddToCart"></button>
+      <button type="button" class="buy-btn buy" @click="handleBuyNow">立即购买</button>
+      <button type="button" class="buy-btn add" @click="handleAddToCart"><i class="iconfont ea-icon-cart"></i>加入购物车</button>
     </div>
   </div>
 </template>
@@ -291,6 +291,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .pro-name, .pro-details {
     background: url(../../assets/images/icons-goods.png) repeat-x 0 bottom;
     padding-bottom: 15px;
@@ -359,20 +360,28 @@
         display: block;
         width: 160px;
         height: 45px;
-        background: url(../../assets/images/icons-goods.png) no-repeat;
-        border: none;
-        padding-top: 0;
-        padding-bottom: 0;
+        border: 2px solid $color-main;
+        background-color: $color-main;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
         cursor: pointer;
+        margin-right: 20px;
       }
-      .buy {
-        background-position: right -551px;
-        margin-right: 8px;
-        &:hover { background-position: right -459px }
+      .buy:hover {
+        background-color: darken($color-main, 10%);
       }
       .add {
-        background-position: right -597px;
-        &:hover { background-position: right -505px }
+        color: $color-main;
+        background-color: #fff;
+        .ea-icon-cart {
+          font-size: 20px;
+          margin-right: 10px;
+        }
+        &:hover {
+          color: darken($color-main, 20%);
+          border-color: darken($color-main, 20%);
+        }
       }
     }
   }
@@ -425,8 +434,8 @@
     cursor: pointer;
     background-color: #fff;
     &.selected {
-      border-color: #f42424;
-      .icon-spec-selected{ display: block }
+      border-color: $color-main;
+      .ea-icon-right-bottom-checked{ display: block }
     }
     &.spec-image {
       width: 50px;
@@ -442,14 +451,13 @@
         margin-left: -23px;
       }
     }
-    .icon-spec-selected {
-      position: absolute;
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJUExURUxpcf8AN////7f4NBoAAAABdFJOUwBA5thmAAAAMUlEQVQI103MAQ4AMAQEQev/j66i6YrEXIKIX9jY2NjYyDmhZnlCo5rdyWvebfYDVAcSmABbA7WD+QAAAABJRU5ErkJggg==)  ;
-      right: 0;
-      bottom: 0;
+    .ea-icon-right-bottom-checked {
       display: none;
-      width: 12px;
-      height: 12px;
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      color: $color-main;
+      font-size: 18px;
     }
   }
   .price-box {

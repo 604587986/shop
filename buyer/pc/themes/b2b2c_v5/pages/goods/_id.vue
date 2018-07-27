@@ -194,6 +194,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .content {
     width: 1210px;
     min-height: 500px;
@@ -239,7 +240,7 @@
         text-align: center;
         cursor: pointer;
         transition: all .2s ease;
-        &:hover, &.active { background-color: #7f69b3 }
+        &:hover, &.active { background-color: $color-main }
         &:nth-child(5) { border-right: 0 }
       }
     }
@@ -263,7 +264,7 @@
       display: inline-block;
       min-width: 100px;
       height: 20px;
-      background-color: #f42424;
+      background-color: $color-main;
       color: #fff;
       padding: 10px 20px;
       margin-right: 20px;
@@ -272,7 +273,7 @@
       font-weight: 600;
       transition: background-color ease .2s;
       &:hover {
-        background-color: #d12323;
+        background-color: darken($color-main, 75%);
       }
     }
   }

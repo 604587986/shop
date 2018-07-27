@@ -17,7 +17,7 @@
           <dl class="bottom_line"><dt>运费：</dt><dd>￥{{ (order.shipping_price || 0) | unitPrice }}</dd></dl>
           <dl><dt>优惠金额:</dt><dd>￥{{ (order.discount_price || 0) | unitPrice }}</dd></dl>
           <dl><dt>订单总价：</dt><dd style="font-size: 16px; color: #49afcd">￥{{ (order.need_pay_money || 0) | unitPrice }}</dd></dl>
-          <dl><dt>实付金额：</dt><dd style="font-size: 22px; color: #f42424">￥{{ (order.pay_money || 0) | unitPrice }}</dd></dl>
+          <dl><dt>实付金额：</dt><dd style="font-size: 22px;" class="price">￥{{ (order.pay_money || 0) | unitPrice }}</dd></dl>
         </div>
       </div>
       <div class="status-order">

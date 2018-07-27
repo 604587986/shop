@@ -11,7 +11,7 @@
         :key="shop.seller_id"
         class="item-ckt-inventory"
       >
-        <div class="left-item-inventory" style="height: 221px;">
+        <div class="left-item-inventory">
           <div class="express-inventory">
             <div class="title-item-inventory">配送方式</div>
             <div class="content-item-inventory express">
@@ -25,9 +25,35 @@
           <div class="discount-inventory">
             <div class="title-item-inventory">优惠折扣</div>
             <div class="content-item-inventory">
-              <p class="no-item-discount-inventory">您在该店铺还没有领到优惠劵，去&nbsp;
-                <nuxt-link :to="'/shop/' + shop.seller_id" target="_blank" style="color: #005ea7;">店铺</nuxt-link>&nbsp;看看吧！
-              </p>
+              <template v-if="!shop.coupons || !shop.coupons.length">
+                <p class="no-item-discount-inventory">您在该店铺还没有领到优惠劵，去&nbsp;
+                  <nuxt-link :to="'/shop/' + shop.seller_id" target="_blank" style="color: #005ea7;">店铺</nuxt-link>&nbsp;看看吧！
+                </p>
+              </template>
+              <template v-else>
+                <div
+                  v-for="(coupon, index) in shop.coupons"
+                  :key="index"
+                  class="item-discount-inventory"
+                  :class="[coupon.used_status === 1 && 'selected']"
+                  @click="useCoupon(shop.seller_id, coupon)"
+                >
+                  <div class="lace-item-discount">
+                    <div class="lace-discount">
+                      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                    </div>
+                  </div>
+                  <div class="select-discount">
+                    <span class="bg-select-discount"></span>
+                    <i class="iconfont ea-icon-check"></i>
+                  </div>
+                  <div class="money-item-discount">￥{{ coupon.coupon_price || unitPrice }}</div>
+                  <div class="detail-item-discount">
+                    <p class="first">满&nbsp;<span style="color: red;">￥{{ coupon.coupon_threshold_price || unitPrice }}</span>&nbsp;可使用</p>
+                    <p>有效期至{{ coupon.end_time | unixToDate('yyyy-MM-dd') }}</p>
+                  </div>
+                </div>
+              </template>
               <div style="clear: both;"></div>
             </div>
           </div>
@@ -109,6 +135,14 @@
       remark(newVal) { this.iRemark = newVal }
     },
     methods: {
+      /** 使用优惠券 */
+      useCoupon(shop_id, coupon) {
+        console.log(shop_id, coupon)
+        API_Trade.useCoupon(shop_id, coupon.mc_id).then(() => {
+          this.$emit('coupon-change')
+        })
+      },
+      /** 设置备注 */
       handleSetRemark() {
         API_Trade.setRemark(this.iRemark).then(() => {
           this.$message.success('保存成功！')
