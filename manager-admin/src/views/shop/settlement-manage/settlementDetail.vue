@@ -187,7 +187,7 @@
             sheet_values: response.order_list.map(item => ({
               '订单编号': item.order_sn,
               '下单时间': f.unixToDate(item.add_time),
-              '订单总额': f.formatPrice(item.price),
+              '订单总额（元）': f.formatPrice(item.price),
               '支付方式': item.payment_type === 'COD' ? '货到付款' : '在线支付'
             }))
           }
@@ -198,7 +198,7 @@
               '退款订单号': item.order_sn,
               '支付方式': item.payment_type === 'COD' ? '货到付款' : '在线支付',
               '操作时间': f.unixToDate(item.refund_time),
-              '退款金额': f.formatPrice(item.price)
+              '退款金额（元）': f.formatPrice(item.price)
             }))
           }
           this.MixinExportJosnToExcel(jsonArray, `结算单-${response.bill.shop_name}`)
