@@ -40,11 +40,15 @@
           </li>
           <li v-if="order && order.order_operate_allowable_vo.allow_rog">
             - 当前订单已发货，您可以
-            <strong><a href="javascript:;" @click="handleViewExpress">刷新物流</a></strong>
+            <strong><a href="javascript:;" @click="handleViewExpress">刷新快递</a></strong>
           </li>
         </ul>
         <div v-if="express" class="express-box">
-          <ul>
+          <div class="express-info">
+            <span>快递公司：<em>{{ express.name }}</em></span>
+            <span style="margin-left: 20px">快递单号：<em>{{ express.courier_num }}</em></span>
+          </div>
+          <ul class="express-list">
             <li
               v-for="(item, index) in express.data"
               :key="index"
@@ -124,7 +128,7 @@
           })
         })
       },
-      /** 查看物流 */
+      /** 查看快递 */
       handleViewExpress() {
         const { logi_id, ship_no } = this.order
         API_Trade.getExpress(logi_id, ship_no).then(response => {
@@ -231,14 +235,28 @@
     margin-top: 30px;
   }
   .express-box {
+    position: relative;
     width: 520px;
-    height: 350px;
-    overflow: scroll;
     padding: 9px;
     border: 1px solid #e3e3e3;
     border-bottom-color: #e0e0e0;
     border-right-color: #ececec;
     box-shadow: 1px 2px 1px rgba(0,0,0,.072);
+    .express-info {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 0 10px;
+      height: 40px;
+      line-height: 40px;
+      background-color: #fff;
+    }
+    .express-list {
+      height: 350px;
+      margin-top: 37px;
+      overflow: scroll;
+    }
     .ex-item {
       list-style: none;
       border-bottom: solid 1px #f5f5f5;
