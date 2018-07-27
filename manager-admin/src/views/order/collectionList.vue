@@ -219,15 +219,18 @@
         const start_time = parseInt(range[0] / 1000)
         const end_time = parseInt(range[1] / 1000)
         API_Colection.exportCollection({ start_time, end_time }).then(response => {
-          const json = response.map(item => ({
-            '订单号': item.order_sn,
-            '付款方式': item.pay_way === 'ONLINE' ? '在线支付' : '货到付款',
-            '支付方式': item.pay_type,
-            '付款日期': Foundation.unixToDate(item.pay_time),
-            '付款金额': Foundation.formatPrice(item.pay_money),
-            '付款人': item.pay_member_name,
-            '付款状态': item.pay_status === 'PAY_NO' ? '未支付' : '已支付'
-          }))
+          const json = {
+            sheet_name: '收款单',
+            sheet_values: response.map(item => ({
+              '订单号': item.order_sn,
+              '付款方式': item.pay_way === 'ONLINE' ? '在线支付' : '货到付款',
+              '支付方式': item.pay_type,
+              '付款日期': Foundation.unixToDate(item.pay_time),
+              '付款金额': Foundation.formatPrice(item.pay_money),
+              '付款人': item.pay_member_name,
+              '付款状态': item.pay_status === 'PAY_NO' ? '未支付' : '已支付'
+            }))
+          }
           this.MixinExportJosnToExcel(json, '收款单')
         })
       },
