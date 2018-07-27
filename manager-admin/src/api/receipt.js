@@ -18,50 +18,12 @@ export function getHistoryReceiptList(params) {
 }
 
 /**
- * 获取发票内容列表
- * @param params
+ * 获取历史发票详情
+ * @param history_id
  */
-export function getReceiptContentList(params) {
+export function getHistoryReceiptDetail(history_id) {
   return request({
-    url: 'systems/receipt-contents',
-    method: 'get',
-    loading: false,
-    params
-  })
-}
-
-/**
- * 添加发票内容
- * @param content
- */
-export function addReceiptContent(content) {
-  return request({
-    url: 'systems/receipt-contents',
-    method: 'post',
-    data: { content }
-  })
-}
-
-/**
- * 编辑发票内容
- * @param id
- * @param content
- */
-export function editReceiptContent(id, content) {
-  return request({
-    url: `systems/receipt-contents/${id}`,
-    method: 'put',
-    data: { content }
-  })
-}
-
-/**
- * 删除发票内容
- * @param id
- */
-export function deleteReceiptContent(id) {
-  return request({
-    url: `systems/receipt-contents/${id}`,
-    method: 'delete'
+    url: `trade/receipts/${history_id}/detail`,
+    method: 'get'
   })
 }
