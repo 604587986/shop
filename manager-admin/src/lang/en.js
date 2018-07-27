@@ -16,6 +16,7 @@ export default {
     refundList: 'Refund List',
     collectionList: 'Collection List',
     receiptHistory: 'Receipt History',
+    receiptDetail: 'Receipt Detail',
     orderDetail: 'Order Detail',
     refundDetail: 'Refund Detail',
 
