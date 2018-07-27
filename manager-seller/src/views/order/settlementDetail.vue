@@ -112,7 +112,7 @@
 
 <script>
   import * as API_Settlement from '@/api/settlement'
-  import Foundation from '@/framework/Foundation'
+  import { Foundation } from '~/ui-utils'
   export default {
     name: 'settlementDetail',
     mounted() {
@@ -179,22 +179,65 @@
       /** 导出excel */
       exportExcel() {
         API_Settlement.exportSettleMentExcel(this.billId).then(response => {
-          const json = [{
-            '账单编号': response.bill.bill_sn,
-            '出账日期': Foundation.unixToDate(response.bill.create_time),
-            '本期应结（元）': response.bill.bill_price,
-            '账单状态': response.bill.status,
-            '开始日期': Foundation.unixToDate(response.bill.start_time),
-            '结束日期': Foundation.unixToDate(response.bill.end_time),
-            '商家': response.bill.shop_name,
-            '订单金额（元）': response.bill.create_time,
-            '平台分佣（元）': response.bill.commi_price,
-            '退单金额（元）': response.bill.refund_price,
-            '退单佣金（元）': response.bill.refund_commi_price,
-            '商家Id': response.bill.seller_id,
-            '付款时间': Foundation.unixToDate(response.bill.pay_time)
-          }]
-          this.MixinExportJosnToExcel(json, '结算单')
+          const b = response.bill
+          const f = Foundation
+          const jsonArray = []
+          jsonArray[0] = {
+            sheet_name: '结算单详细',
+            sheet_values: [
+              {
+                A: '账单编号',
+                B: '出账日期',
+                C: '本期应结（元）',
+                D: '账单状态',
+                E: '开始日期',
+                F: '结束日期',
+                G: '商家名称',
+                H: '订单金额（元）',
+                I: '平台分佣（元）',
+                J: '退单金额（元）',
+                K: '退单佣金（元）',
+                L: '商家Id',
+                M: '付款时间'
+              },
+              {
+                A: b.bill_sn,
+                B: f.unixToDate(b.create_time),
+                C: f.formatPrice(b.bill_price),
+                D: b.status,
+                E: f.unixToDate(b.start_time),
+                F: f.unixToDate(b.end_time),
+                G: b.shop_name,
+                H: f.formatPrice(b.price),
+                I: f.formatPrice(b.commi_price),
+                J: f.formatPrice(b.refund_price),
+                K: f.formatPrice(b.refund_commi_price),
+                L: b.seller_id,
+                M: f.unixToDate(b.pay_time)
+              }
+            ],
+            sheet_options: { header: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'], skipHeader: true }
+          }
+          jsonArray[1] = {
+            sheet_name: '订单列表',
+            sheet_values: response.order_list.map(item => ({
+              '订单编号': item.order_sn,
+              '下单时间': f.unixToDate(item.add_time),
+              '订单总额': f.formatPrice(item.price),
+              '支付方式': item.payment_type === 'COD' ? '货到付款' : '在线支付'
+            }))
+          }
+          jsonArray[2] = {
+            sheet_name: '退款单列表',
+            sheet_values: response.refund_list.map(item => ({
+              '退款单号': item.refund_sn,
+              '退款订单号': item.order_sn,
+              '支付方式': item.payment_type === 'COD' ? '货到付款' : '在线支付',
+              '操作时间': f.unixToDate(item.refund_time),
+              '退款金额': f.formatPrice(item.price)
+            }))
+          }
+          this.MixinExportJosnToExcel(jsonArray, `商家结算单`)
         })
       },
 
