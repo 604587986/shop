@@ -7,7 +7,7 @@
   >
     <div class="header-cart-con header-cart-cm">
       <nuxt-link to="/cart">
-        <i class="icon-carts"></i>
+        <i class="iconfont ea-icon-cart"></i>
         <span>我的购物车</span>
         <em class="count cart_num cart-num" id="cart-num">{{ allCount > 99 ? '99+' : allCount }}</em>
       </nuxt-link>
@@ -128,13 +128,12 @@
         display: block;
         color: $color-main;
       }
-      .icon-carts {
+      .ea-icon-cart {
         display: block;
         width: 25px;
         height: 30px;
-        background: url(../assets/images/icon-header-cart.png) no-repeat center;
-        background-size: 100%;
         margin-left: 30px;
+        font-size: 24px;
         float: left;
       }
       .count {
