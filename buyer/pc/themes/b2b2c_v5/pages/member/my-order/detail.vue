@@ -29,14 +29,19 @@
             以确保商家及时发货。
           </li>
           <li v-if="order && order.order_operate_allowable_vo.allow_cancel">
-            - 如果您不想购买此订单的商品，请
+            - 如果您不想购买此订单的商品，您可以
             <strong><a href="javascript:;" @click="handleCancelOrder">取消订单</a></strong>
-            订单操作。
+            操作。
+          </li>
+          <li v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'">
+            - 如果您依然不想购买此订单的商品，您可以
+            <strong><nuxt-link :to="'../after-sale/apply?order_sn=' + order.sn">申请取消订单</nuxt-link></strong>
+            操作
           </li>
           <li v-if="order && order.order_operate_allowable_vo.allow_rog">
             - 如果您已经收到商品，请
             <strong><a href="javascript:;" @click="handleRogOrder">确认收货</a></strong>
-            订单操作。
+            操作。
           </li>
           <li v-if="order && order.order_operate_allowable_vo.allow_rog">
             - 当前订单已发货，您可以
