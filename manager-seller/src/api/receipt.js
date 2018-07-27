@@ -24,7 +24,7 @@ export function getHistoryReceiptList(params) {
  */
 export function getHistoryReceiptDetail(id) {
   return request({
-    url: `/trade/receipts/${id}`,
+    url: `/trade/receipts/${id}/detail`,
     method: 'get',
     loading: false
   })

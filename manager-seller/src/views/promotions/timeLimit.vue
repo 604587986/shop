@@ -161,10 +161,6 @@
     justify-content: space-between;
   }
 
-  .toolbar-btns {
-
-  }
-
   .toolbar-search {
     margin-right: 10px;
   }

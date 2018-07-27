@@ -4,7 +4,8 @@
     <div class="sum-settlement">
       <div>
         <span>本期结算</span>
-        <span v-if="settlementData.operate_allowable && settlementData.operate_allowable.allow_recon">本期结算无误，我要
+        <span v-if="settlementData.operate_allowable && settlementData.operate_allowable.allow_recon" class="settlement-list">
+          <span>本期结算无误，我要</span>
           <el-button @click="handleConfirmSettlement" type="primary">确认</el-button>
         </span>
       </div>
@@ -177,7 +178,7 @@
       /** 确认下一步操作 */
       handleConfirmSettlement() {
         API_Settlement.confirmSettle(this.billId, {}).then(response => {
-          this.$message.success('操作成功')
+          this.$message.success('确认成功')
           this.GET_SettlementList()
         })
       },
@@ -270,6 +271,14 @@
     padding: 10px;
     border: 1px solid #e5e5e5;
     background-color: #fff;
+    /** 下一步操作 **/
+    .settlement-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
+    }
     /** 结算总结 */
     .sum-settlement {
       padding: 10px;
@@ -285,11 +294,11 @@
         justify-content: space-between;
         align-items: center;
         span:first-child {
-          font-size: 25px;
+          font-size: 19px;
           font-family: "Microsoft YaHei", "Microsoft JhengHei", SimSun, verdana, Tahoma, arial;
         }
         span:last-child {
-          font-size: 20px;
+          font-size: 16px;
         }
       }
     }
