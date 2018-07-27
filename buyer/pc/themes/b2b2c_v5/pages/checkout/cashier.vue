@@ -5,11 +5,10 @@
       <div class="cashier-change">
         <h2 v-if="this.trade_sn">
           交易号：<b>{{ trade_sn }}</b>
+          <a class="see-order-btn" href="/member/my-order">查看订单</a>
         </h2>
-        <h2 v-else>订单编号：
-          <nuxt-link :to="'/member/my-order/detail?order_sn=' + order_sn" target="_blank">
-            <b>{{ order_sn }}</b>
-          </nuxt-link>
+        <h2 v-else>订单编号：<b>{{ order_sn }}</b>
+          <a class="see-order-btn" :href="'/member/my-order/detail?order_sn=' + order_sn">查看订单</a>
         </h2>
         <h2>{{ !order ? '' : order.pay_type_text === 'ONLINE' ? '在线支付：' : '货到付款：' }}
           <span v-if="order">￥{{ order.need_pay_price | unitPrice }}</span>
@@ -64,8 +63,8 @@
           </div>
         </div>
         <div class="same-pay-way bank-pay paybtn">
-          <nuxt-link v-if="!showPayBox" to="#">立即支付</nuxt-link>
-          <nuxt-link v-if="!order.pay_type_text === 'ONLINE' && showPayBox" :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
+          <nuxt-link v-if="!showPayBox && order.pay_type_text === 'ONLINE'" to="#">立即支付</nuxt-link>
+          <nuxt-link v-if="order.pay_type_text !== 'ONLINE'" to="/member/my-order">查看订单</nuxt-link>
         </div>
       </div>
     </div>
@@ -353,5 +352,10 @@
         }
       }
     }
+  }
+  .see-order-btn {
+    margin-left: 20px;
+    color: $color-href;
+    &:hover { color: $color-main }
   }
 </style>

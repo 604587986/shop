@@ -505,6 +505,7 @@
     line-height: 34px;
     text-align: center;
     font-size: 16px;
+    font-weight: 600;
     color: #ffffff;
     overflow: hidden;
   }
@@ -545,10 +546,10 @@
     -webkit-box-shadow: 0 2px 15px #ccc;
     -moz-box-shadow: 0 2px 15px #ccc;
     box-shadow: 0 2px 15px #ccc;
+    transition: all .2s;
   }
-
-  .detail-item-discount.show {
-    height: 50px;
+  .item-discount-inventory:hover .detail-item-discount {
+    height: 50px
   }
 
   .detail-item-discount p {
@@ -583,7 +584,7 @@
     z-index: 2;
   }
 
-  .icon-select-discount {
+  .ea-icon-check {
     position: absolute;
     right: 1px;
     bottom: -4px;
