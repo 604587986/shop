@@ -2,8 +2,12 @@
   <div id="apply-after-sale">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li :class="[type === 'money' && 'active']" @click="handleChangeType('money')">申请退款</li>
-        <li v-if="$route.query.sku_id" :class="[type === 'goods' && 'active']" @click="handleChangeType('goods')">申请退货</li>
+        <li :class="[type === 'money' && 'active']" @click="handleChangeType('money')">
+          <a href="javascript:;">申请退款</a>
+        </li>
+        <li v-if="$route.query.sku_id" :class="[type === 'goods' && 'active']" @click="handleChangeType('goods')">
+          <a href="javascript:;">申请退货</a>
+        </li>
       </ul>
     </div>
     <div class="apply-container">
