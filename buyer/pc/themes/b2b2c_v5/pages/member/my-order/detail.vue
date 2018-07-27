@@ -22,7 +22,7 @@
       </div>
       <div class="status-order">
         <h2>订单状态：{{ order.order_status_text }}</h2>
-        <ul>
+        <ul class="status-list">
           <li v-if="order && order.order_operate_allowable_vo.allow_pay">
             - 如果您尚未对该订单进行支付，请
             <strong><a :href="'/checkout/cashier?order_sn=' + order.sn">按此为订单付款</a></strong>
@@ -38,7 +38,32 @@
             <strong><a href="javascript:;" @click="handleRogOrder">确认收货</a></strong>
             订单操作。
           </li>
+          <li v-if="order && order.order_operate_allowable_vo.allow_rog">
+            - 当前订单已发货，您可以
+            <strong><a href="javascript:;" @click="handleViewExpress">刷新物流</a></strong>
+          </li>
         </ul>
+        <div v-if="express" class="express-box">
+          <ul>
+            <li
+              v-for="(item, index) in express.data"
+              :key="index"
+              class="ex-item"
+            >
+              <div class="inner-ex">
+                <div class="ex-circle">
+                  <i class="ex-icon iconfont ea-icon-dot"></i>
+                  <i v-if="index === 0" class="ex-text">最新</i>
+                </div>
+                <div class="ex-info">
+                  {{ item.time }}
+                  <br>
+                  {{ item.context }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <!--// Andste_TODO 2018/7/5: 缺少一个订单流程图-->
@@ -50,6 +75,7 @@
 
 <script>
   import * as API_Order from '@/api/order'
+  import * as API_Trade from '@/api/trade'
   import SkuList from '../-skuList'
   export default {
     name: 'order-detail',
@@ -63,7 +89,8 @@
       return {
         order_sn: this.$route.query.order_sn,
         order: '',
-        skuList: ''
+        skuList: '',
+        express: ''
       }
     },
     mounted() {
@@ -97,10 +124,21 @@
           })
         })
       },
+      /** 查看物流 */
+      handleViewExpress() {
+        const { logi_id, ship_no } = this.order
+        API_Trade.getExpress(logi_id, ship_no).then(response => {
+          response.data = response.data.reverse()
+          this.express = response
+        })
+      },
       /** 获取订单详情 */
       GET_OrderDetail() {
         API_Order.getOrderDetail(this.order_sn).then(response => {
           this.order = response
+          if (response.order_operate_allowable_vo.allow_rog && response.logi_id && response.ship_no) {
+            this.handleViewExpress()
+          }
           this.skuList = JSON.parse(response.items_json)
         })
       }
@@ -109,6 +147,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .info-detail {
     display: flex;
     border: 1px solid #d8d8d8;
@@ -182,11 +221,81 @@
       border-bottom: 1px dotted #e7e7e7;
       margin-bottom: 20px;
     }
-    li {
-      margin-bottom: 10px;
+    .status-list {
+      li {
+        margin-bottom: 10px;
+      }
     }
   }
   .goods-list {
     margin-top: 30px;
+  }
+  .express-box {
+    width: 520px;
+    height: 350px;
+    overflow: scroll;
+    padding: 9px;
+    border: 1px solid #e3e3e3;
+    border-bottom-color: #e0e0e0;
+    border-right-color: #ececec;
+    box-shadow: 1px 2px 1px rgba(0,0,0,.072);
+    .ex-item {
+      list-style: none;
+      border-bottom: solid 1px #f5f5f5;
+      width: 500px;
+      overflow: hidden;
+      &:first-child {
+        color: $color-main
+      }
+    }
+    .inner-ex {
+      padding: 10px;
+      margin-left: 15px;
+      float: left;
+      border-left: solid 2px #ececec;
+    }
+    .ex-circle {
+      width: 55px;
+      float: left;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      background-color: #fff;
+      left: -18px;
+      margin-top: 17px;
+    }
+    .ex-icon {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      vertical-align: text-bottom;
+      font-style: normal;
+      overflow: hidden;
+      font-size: 18px;
+      text-align: center;
+      line-height: 14px;
+      margin-left: -2px;
+      color: #A2BDE3
+    }
+    .ex-text {
+      display: inline-block;
+      padding: 2px 5px;
+      margin-left: 5px;
+      text-align: center;
+      vertical-align: text-bottom;
+      font-size: 12px;
+      line-height: 100%;
+      font-style: normal;
+      font-weight: 400;
+      color: #fff;
+      overflow: hidden;
+      background-color: $color-main;
+    }
+    .ex-info {
+      float: left;
+      width: 390px;
+      margin-left: -10px;
+      word-break: normal;
+    }
   }
 </style>
