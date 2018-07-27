@@ -38,25 +38,24 @@ sudo npm install
 sudo npm run build
 echo "买家PC端build完成，等待部署..."
 
-echo "开始部署买家WAP端(buyer-wap)..."
-cd $WEB_PATH/buyer/wap/themes/default
-rm -rf node_modules
-echo "开始安装项目依赖..."
-sudo npm install
-sudo npm run build
-echo "买家WAP端build完成，等待部署..."
+# echo "开始部署买家WAP端(buyer-wap)..."
+# cd $WEB_PATH/buyer/wap/themes/default
+# rm -rf node_modules
+# echo "开始安装项目依赖..."
+# sudo npm install
+# sudo npm run build
+# echo "买家WAP端build完成，等待部署..."
 
 # 删除所有应用
-pm2 stop "buyer-pc"
-pm2 stop "buyer-wap"
+pm2 delete all
 
 # 启动买家端PC
 cd $WEB_PATH/buyer/pc/themes/b2b2c_v5
 pm2 start npm --name "buyer-pc" -- run start
 
 # 启动买家端WAP
-cd $WEB_PATH/buyer/wap/themes/default
-pm2 start npm --name "buyer-wap" -- run start
+# cd $WEB_PATH/buyer/wap/themes/default
+# pm2 start npm --name "buyer-wap" -- run start
 
 echo -e "\033[32m全部部署完成！\033[0m"
 
