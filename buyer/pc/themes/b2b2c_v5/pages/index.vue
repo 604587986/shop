@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <index-search-bar/>
     <div class="focus-container">
       <div class="w">
         <index-banner/>
@@ -21,7 +22,7 @@
   import Vue from 'vue'
   import { Tag } from 'element-ui'
   Vue.use(Tag)
-  import { IndexBanner, IndexCard } from '@/pages/-index'
+  import * as IndexComponents from '@/pages/-index'
   import * as API_Home from '@/api/home'
   import templates, { templateArray } from './-index/templates'
   export default {
@@ -37,10 +38,7 @@
         title: `商城首页-${this.site.title}`
       }
     },
-    components: {
-      IndexBanner,
-      IndexCard
-    },
+    components: IndexComponents,
     data() {
       return {
         /** 首页卡片tab x坐标 */
