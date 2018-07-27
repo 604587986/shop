@@ -103,6 +103,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .shop-card {
     position: relative;
     width: 210px;
@@ -137,7 +138,7 @@
         line-height: 16px;
       }
       span {
-        color: #da542e;
+        color: darken($color-main, 10%);
         height: 16px;
         line-height: 16px;
         font-weight: normal;

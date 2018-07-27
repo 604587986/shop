@@ -38,6 +38,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   #member-menu {
     width: 208px;
     .inner-menu {
@@ -60,7 +61,7 @@
       font-weight: 400;
       transition: all .3s ease-out;
       &.nuxt-link-active, &:hover {
-        background-color: #FF6A67;
+        background-color: $color-main;
         color: #fff;
         padding-left: 30px;
       }

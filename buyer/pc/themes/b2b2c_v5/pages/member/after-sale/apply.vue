@@ -52,8 +52,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="退款金额：">
-            <span style="color: #f42424;">￥</span>
-            <span style="font-size: 16px;font-weight: 600;color: #f42424;">{{ (returnMoneyForm.return_money || 0) | unitPrice }}</span>
+            <span class="price">￥</span>
+            <span class="price" style="font-size: 16px;font-weight: 600">{{ (returnMoneyForm.return_money || 0) | unitPrice }}</span>
           </el-form-item>
           <el-form-item label="问题描述：">
             <el-input
@@ -122,8 +122,8 @@
               </el-select>
             </el-form-item>
             <el-form-item label="退款金额：">
-              <span style="color: #f42424;">￥</span>
-              <span style="font-size: 16px;font-weight: 600;color: #f42424;">{{ returnGoodsForm.return_money | unitPrice }}</span>
+              <span class="price">￥</span>
+              <span class="price" style="font-size: 16px;font-weight: 600">{{ returnGoodsForm.return_money | unitPrice }}</span>
             </el-form-item>
             <el-form-item label="退货数量：" prop="return_num">
               <el-input-number size="mini" v-model="returnGoodsForm.return_num" :min="1" :max="maxReturnNum"></el-input-number>

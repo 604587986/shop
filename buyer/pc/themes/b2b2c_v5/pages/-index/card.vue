@@ -128,6 +128,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .index-card {
     position: absolute;
     top: 25px;
@@ -173,7 +174,7 @@
         a {
           color: #666;
           &:hover {
-            color: #f42424;
+            color: $color-main;
           }
         }
         .btns {
@@ -190,19 +191,19 @@
             text-align: center;
           }
           .please-login {
-            border-color: #f42424;
-            color: #f42424;
+            border-color: $color-main;
+            color: $color-main;
           }
         }
         &.logined .to-member {
           width: 60%;
-          color: #f42424;
-          border-color: #f42424;
+          color: $color-main;
+          border-color: $color-main;
           transition: all .2s ease;
           &:hover {
-            background-color: #f42424;
+            background-color: $color-main;
             color: #fff;
-            border-color: #f42424;
+            border-color: $color-main;
           }
         }
       }
@@ -233,7 +234,7 @@
         margin-left: 11px;
         width: 45px;
         height: 2px;
-        background: #db192b;
+        background: $color-main;
         transform: translateX(0);
         transition: transform .3s ease;
       }
@@ -259,7 +260,7 @@
         a {
           color: #666;
           &:hover {
-            color: #f42424;
+            color: $color-main;
           }
         }
       }
@@ -269,7 +270,7 @@
         top: 8px;
         font-size: 12px;
         &:hover {
-          color: #f42424;
+          color: $color-main;
         }
       }
     }
@@ -297,7 +298,7 @@
       .service-item {
         display: block;
         color: #666;
-        &:hover { color: #f42424 }
+        &:hover { color: $color-main }
         .iconfont {
           display: block;
           font-size: 30px;

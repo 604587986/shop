@@ -97,6 +97,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .goods-consulting {
     background-color: #fff;
     padding: 40px 30px 30px;
@@ -118,13 +119,13 @@
     }
     .want-consu-btn {
       padding: 5px 20px;
-      background-color: #da4f49;
-      border-color: #c44742;
+      background-color: $color-main;
+      border-color: $color-main;
       color: #fff;
       position: absolute;
       top: 30px;
       right: 30px;
-      &:hover { background-color: #ba4943 }
+      &:hover { background-color: darken($color-main,10%) }
     }
     .content-consulting {
       border-top: 1px dashed #ccc;
@@ -168,7 +169,7 @@
         margin-top: 10px;
         box-sizing: border-box;
         padding: 10px;
-        p { color: #da4f49 }
+        p { color: $color-main }
       }
     }
     /deep/ .el-pagination {

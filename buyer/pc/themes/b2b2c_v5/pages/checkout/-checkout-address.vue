@@ -129,6 +129,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .add-address-btn {
     position: absolute;
     top: 0;
@@ -136,7 +137,7 @@
   }
   .address-list {
     /deep/ .el-alert { margin: 10px 0}
-    /deep/ .delete-btn { color: #f42424 }
+    /deep/ .delete-btn { color: $color-main }
     /deep/ .address-cell {
       text-align: center;
     }

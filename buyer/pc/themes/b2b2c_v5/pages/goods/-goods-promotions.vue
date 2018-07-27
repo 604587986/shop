@@ -64,6 +64,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .promotions-container {
     position: relative;
   }
@@ -83,8 +84,8 @@
   .pro-content {
     em.hl_red_bg {
       padding: 2px 3px;
-      color: #df3033;
-      border: 1px solid #df3033;
+      color: $color-main;
+      border: 1px solid $color-main;
       margin-right: 4px;
     }
     .prom-item:not(:first-child) {
