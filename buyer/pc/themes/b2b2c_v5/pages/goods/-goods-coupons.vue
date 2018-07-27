@@ -102,6 +102,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .coupons-item {
     position: relative;
     display: inline-block;

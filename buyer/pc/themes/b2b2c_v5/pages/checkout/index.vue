@@ -33,7 +33,11 @@
           <!--支付方式 end-->
 
           <!--配送清单 start-->
-          <checkout-inventory :inventory-list="inventoryList" :remark="params.remark"/>
+          <checkout-inventory
+            :inventory-list="inventoryList"
+            :remark="params.remark"
+            @coupon-change="GET_ShopCoupons"
+          />
           <!--配送清单 end-->
 
           <!--送货时间 start-->
@@ -92,10 +96,7 @@
       // 获取购物清单
       API_Trade.getCarts('checked').then(response => {
         this.inventoryList = response
-        const seller_ids = response.map(item => item.seller_id)
-        API_Members.getShopsCoupons(seller_ids.join(','), 200).then(response => {
-          console.log(response)
-        })
+        this.GET_ShopCoupons()
         if (response.length === 0) return
         // 获取默认结算数据
         API_Trade.getCheckoutParams().then(response => this.params = response)
@@ -118,6 +119,18 @@
         /** 先调用创建订单接口，再跳转到收银台 */
         API_Trade.createTrade().then(response => {
           this.$router.push({ path: '/checkout/cashier?trade_sn=' + response.trade_sn })
+        })
+      },
+      /** 获取可用店铺优惠券 */
+      GET_ShopCoupons() {
+        const { inventoryList } = this
+        const seller_ids = inventoryList.map(item => item.seller_id)
+        API_Members.getShopsCoupons(seller_ids.join(',')).then(_response => {
+          const _inventoryList = inventoryList.map((item, ivIndex) => {
+            item.coupons = _response[ivIndex].member_coupon_list
+            return item
+          })
+          this.$set(this, 'inventoryList', _inventoryList)
         })
       }
     }

@@ -74,8 +74,12 @@ export default {
      * @constructor
      */
     MixinExportJosnToExcel(json, name = 'data', type = 'application/octet-stream') {
-      const wb = { SheetNames: ['Sheet1'], Sheets: {}, Props: { }}
-      wb.Sheets['Sheet1'] = XLSX.utils.json_to_sheet(json)
+      let wb = { SheetNames: [], Sheets: {}, Props: { }}
+      if (!Array.isArray(json)) json = [json]
+      json.forEach(item => {
+        wb.SheetNames.push(item.sheet_name)
+        wb.Sheets[item.sheet_name] = XLSX.utils.json_to_sheet(item.sheet_values, item.sheet_options)
+      })
       const wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' }
       let blob = new Blob([s2ab(XLSX.write(wb, wopts))], { type })
       let link = document.createElement('a')

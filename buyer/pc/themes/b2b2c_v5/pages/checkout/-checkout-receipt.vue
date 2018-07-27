@@ -266,6 +266,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   /deep/ {
     .receipt-layer {
       padding: 10px 30px;
@@ -296,7 +297,7 @@
             margin-right: 7px;
             color: #005ea7;
             &:hover {
-              color: #f42424;
+              color: $color-main;
             }
             &.save-btn, &.cancel-btn {
               display: none;

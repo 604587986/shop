@@ -13,7 +13,7 @@
       <button type="button" class="search-btn goods" @click="handleSearchGoods">搜商品</button>
       <button type="button" class="search-btn shop" @click="handleSearchShop">搜店铺</button>
     </div>
-    <ul class="search-hot-keywords">
+    <ul v-if="!hideKeywords" class="search-hot-keywords">
       <li v-for="item in hot_keywords" :key="item.id">
         <nuxt-link :to="'/goods?keyword=' + item.hot_name">{{ item.hot_name }}</nuxt-link>
       </li>
@@ -38,7 +38,7 @@
   import * as API_Goods from '@/api/goods'
   export default {
     name: 'EnSearch',
-    props: {},
+    props: ['hide-keywords'],
     data() {
       return {
         keyword: '',

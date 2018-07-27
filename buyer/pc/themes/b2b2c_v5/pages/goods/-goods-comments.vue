@@ -99,12 +99,13 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .goods-comments {
     background-color: #fff;
     padding: 40px 30px 30px;
     .inner-comments {
       font-size: 18px;
-      color: #f42424;
+      color: $color-main;
       font-weight: 600;
     }
     .content-comments {
@@ -153,7 +154,7 @@
         box-sizing: border-box;
         padding: 10px;
         .reply-p {
-          color: #da4f49;
+          color: darken($color-main, 10%);
           border-top: 1px dashed #e2e2e2;
           margin-top: 10px;
           padding-top: 5px;
