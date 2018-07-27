@@ -364,7 +364,6 @@ export default {
           font-size: 12px;
           letter-spacing: normal;
           line-height: 28px;
-          margin-left: 12px;
           vertical-align: bottom;
           word-spacing: normal;
         }
@@ -385,7 +384,6 @@ export default {
         border-bottom: 1px dotted #e7e7e7;
         font-size: 14px;
         color: #999;
-        line-height: 25px;
         line-height: 20px;
         padding-bottom: 5px;
       }
@@ -434,7 +432,7 @@ export default {
   h2 {
     color: #aaa;
     font: 12px/16px "microsoft yahei";
-    margin-left: 8px;
+    margin: 10px 0;
   }
   /* 店铺/交易提示内容 */
   .store-index-content {
@@ -460,6 +458,7 @@ export default {
     color: #aaa;
     cursor: pointer;
     font: 12px/16px "microsoft yahei";
+    margin: 10px 0;
     &:hover a {
       color: #337ab7;
     }

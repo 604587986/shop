@@ -3,8 +3,9 @@
     <!--结算总结-->
     <div class="sum-settlement">
       <div>
-        <span>本期结算</span>
-        <span v-if="settlementData.operate_allowable && settlementData.operate_allowable.allow_recon">本期结算无误，我要
+        <span>本期结算 <el-button @click="exportExcel" type="primary">导出Excel账单</el-button></span>
+        <span v-if="settlementData.operate_allowable && settlementData.operate_allowable.allow_recon" class="settlement-list">
+          <span>本期结算无误，我要</span>
           <el-button @click="handleConfirmSettlement" type="primary">确认</el-button>
         </span>
       </div>
@@ -111,6 +112,7 @@
 
 <script>
   import * as API_Settlement from '@/api/settlement'
+  import Foundation from '@/framework/Foundation'
   export default {
     name: 'settlementDetail',
     mounted() {
@@ -174,10 +176,32 @@
         })
       },
 
+      /** 导出excel */
+      exportExcel() {
+        API_Settlement.exportSettleMentExcel(this.billId).then(response => {
+          const json = [{
+            '账单编号': response.bill.bill_sn,
+            '出账日期': Foundation.unixToDate(response.bill.create_time),
+            '本期应结（元）': response.bill.bill_price,
+            '账单状态': response.bill.status,
+            '开始日期': Foundation.unixToDate(response.bill.start_time),
+            '结束日期': Foundation.unixToDate(response.bill.end_time),
+            '商家': response.bill.shop_name,
+            '订单金额（元）': response.bill.create_time,
+            '平台分佣（元）': response.bill.commi_price,
+            '退单金额（元）': response.bill.refund_price,
+            '退单佣金（元）': response.bill.refund_commi_price,
+            '商家Id': response.bill.seller_id,
+            '付款时间': Foundation.unixToDate(response.bill.pay_time)
+          }]
+          this.MixinExportJosnToExcel(json, '结算单')
+        })
+      },
+
       /** 确认下一步操作 */
       handleConfirmSettlement() {
         API_Settlement.confirmSettle(this.billId, {}).then(response => {
-          this.$message.success('操作成功')
+          this.$message.success('确认成功')
           this.GET_SettlementList()
         })
       },
@@ -270,6 +294,14 @@
     padding: 10px;
     border: 1px solid #e5e5e5;
     background-color: #fff;
+    /** 下一步操作 **/
+    .settlement-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
+    }
     /** 结算总结 */
     .sum-settlement {
       padding: 10px;
@@ -285,11 +317,11 @@
         justify-content: space-between;
         align-items: center;
         span:first-child {
-          font-size: 25px;
+          font-size: 19px;
           font-family: "Microsoft YaHei", "Microsoft JhengHei", SimSun, verdana, Tahoma, arial;
         }
         span:last-child {
-          font-size: 20px;
+          font-size: 16px;
         }
       }
     }

@@ -22,12 +22,11 @@ export function getSettleMentList(params) {
  * 导出结算单
  * @param params
  */
-export function exportSettleMentExcel(params) {
+export function exportSettleMentExcel(id) {
   return request({
-    url: '/order/bills',
+    url: `/order/bills/${id}/export`,
     method: 'get',
-    loading: false,
-    params
+    loading: false
   })
 }
 

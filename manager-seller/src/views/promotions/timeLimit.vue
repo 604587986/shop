@@ -24,12 +24,9 @@
             <span>{{ scope.row.apply_end_time | unixToDate }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="报名条件">
-          <template slot-scope="scope">
-            <span>{{ scope.row.seckill_rule }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" style="text-align: left;">
+        <el-table-column prop="seckill_rule" label="报名条件"/>
+        <el-table-column label="报名状态" :formatter="marketStatus"/>
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
               type="primary"
@@ -38,10 +35,9 @@
             </el-button>
             <el-button
               type="primary"
-              v-if="scope.row.is_apply === 1"
-              @click="activityGoodsInfo(scope.row)">已报名
+              v-else
+              @click="activityGoodsInfo(scope.row)">查看商品
             </el-button>
-            <span v-if="scope.row.is_apply === 2">已截止</span>
           </template>
         </el-table-column>
       </template>
@@ -113,6 +109,15 @@
         this.GET_LimitActivityList()
       },
 
+      /** 报名状态格式化 */
+      marketStatus(row, column, cellValue) {
+        switch (row.is_apply) {
+          case 0: return '未报名'
+          case 1: return '已报名'
+          case 2: return '已截止'
+        }
+      },
+
       /** 获取限时活动列表*/
       GET_LimitActivityList() {
         this.loading = true
@@ -154,10 +159,6 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-  }
-
-  .toolbar-btns {
-
   }
 
   .toolbar-search {

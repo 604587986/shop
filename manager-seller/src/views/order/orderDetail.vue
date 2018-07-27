@@ -476,10 +476,10 @@
           num: this.orderDetail.ship_no
         }
         API_order.getLogisticsInfo(_params).then(response => {
+          this.logisticsShow = true
           this.logisticsInfoList = response.data
           this.logisticsNo = response.courier_num
           this.logisticsName = response.name
-          this.logisticsShow = true
         })
       },
 
@@ -539,6 +539,7 @@
         }
         this.$confirm('确认发货?', '提示', { type: 'warning' }).then(() => {
           API_order.deliveryGoods(this.sn, _params).then(() => {
+            this.$message.success('发货成功')
             this.GET_OrderDetail()
           })
         })
