@@ -24,7 +24,7 @@ export function getSettleMentList(params) {
  */
 export function exportSettleMentExcel(params) {
   return request({
-    url: '/order/bills',
+    url: `/order/bills/{bill_id}/export`,
     method: 'get',
     loading: false,
     params

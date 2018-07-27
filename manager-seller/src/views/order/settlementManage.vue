@@ -109,10 +109,18 @@
       exportExcel() {
         API_settlement.exportSettleMentExcel({}).then(response => {
           const json = response.data.map(item => ({
-            '结算单号': item.bill_sn,
-            '起止时间': `${Foundation.unixToDate(item.start_time)}～${Foundation.unixToDate(item.end_time)}`,
-            '本期应收': Foundation.unixToDate(item.price),
-            '结算状态': item.status_text,
+            '账单编号': item.bill_sn,
+            '出账日期': Foundation.unixToDate(item.start_time),
+            '本期应结（元）': Foundation.unixToDate(item.price),
+            '账单状态': item.status_text,
+            '开始日期': Foundation.unixToDate(item.create_time),
+            '结束日期': Foundation.unixToDate(item.create_time),
+            '商家': Foundation.unixToDate(item.create_time),
+            '订单金额（元）': Foundation.unixToDate(item.create_time),
+            '平台分佣（元）': Foundation.unixToDate(item.create_time),
+            '退单金额（元）': Foundation.unixToDate(item.create_time),
+            '退单佣金（元）': Foundation.unixToDate(item.create_time),
+            '商家Id': Foundation.unixToDate(item.create_time),
             '付款时间': Foundation.unixToDate(item.create_time)
           }))
           this.MixinExportJosnToExcel(json, '结算单')
