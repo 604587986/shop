@@ -184,14 +184,14 @@
             spec.valueList.forEach((val, specValIndex) => {
               if (selectedSpecs) {
                 const spec_value_id = val.spec_value_id
-                if (selectedSpecs.includes(String(spec_value_id))) {
+                if (selectedSpecs.indexOf(String(spec_value_id)) !== -1) {
                   val.selected = true
-                  this.selectedSpec[specValIndex] = val.spec_value_id
+                  this.selectedSpec[specIndex] = val.spec_value_id
                   _selectedSpecVals.push(val.spec_value_id)
                 }
               } else if (specValIndex === 0) {
                 val.selected = true
-                this.selectedSpec[specValIndex] = val.spec_value_id
+                this.selectedSpec[specIndex] = val.spec_value_id
                 _selectedSpecVals.push(val.spec_value_id)
               }
             })
