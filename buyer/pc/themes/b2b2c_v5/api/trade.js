@@ -337,3 +337,15 @@ export function getExpress(id, num) {
     }
   })
 }
+
+/**
+ * 使用优惠券
+ * @param shop_id
+ * @param coupon_id
+ */
+export function useCoupon(shop_id, coupon_id) {
+  return request({
+    url: `trade/${shop_id}/seller/${coupon_id}/coupon`,
+    method: Method.POST
+  })
+}

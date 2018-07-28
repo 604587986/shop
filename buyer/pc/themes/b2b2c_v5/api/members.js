@@ -392,12 +392,10 @@ export function registerBindAccount(uuid) {
 /**
  * 获取商家可用优惠券列表
  * @param seller_ids
- * @param order_price
  */
-export function getShopsCoupons(seller_ids, order_price) {
+export function getShopsCoupons(seller_ids) {
   return request({
     url: `members/coupon/${seller_ids}`,
-    method: Method.GET,
-    params: { order_price }
+    method: Method.GET
   })
 }
