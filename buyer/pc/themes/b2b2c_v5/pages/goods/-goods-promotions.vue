@@ -6,12 +6,12 @@
         <template v-for="(prom, index) in promotions">
           <!--满减-->
           <template v-if="prom.full_discount_vo">
-            <div :key="index" class="prom-item">
+            <div :key="index + '-full'" class="prom-item">
               <em class="hl_red_bg">满减</em>
               <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立减现金 <span class="price">{{ prom.full_discount_vo.minus_value }}元</span></em>
               <!--<nuxt-link v-if="index === 0" :to="'/shop/'+ prom.full_discount_vo.seller_id + '/promotions'" target="blank"> 详情>></nuxt-link>&nbsp;-->
             </div>
-            <div v-if="prom.full_discount_vo.full_discount_gift_do" :key="index" class="prom-item">
+            <div v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'" class="prom-item">
               <em class="hl_red_bg">赠礼</em>
               <em class="hl_red">
                 价值<span class="price">{{ prom.full_discount_vo.full_discount_gift_do.gift_price }}元</span>的
@@ -20,7 +20,7 @@
                 </a>
               </em>
             </div>
-            <div v-if="prom.full_discount_vo.coupon_do" :key="index" class="prom-item">
+            <div v-if="prom.full_discount_vo.coupon_do" :key="index + '-coupon'" class="prom-item">
               <em class="hl_red_bg">赠券</em>
               <em class="hl_red">
                 <span class="price">{{ prom.full_discount_vo.coupon_do.coupon_price }}元</span>优惠券
