@@ -345,7 +345,6 @@
         height: 68px;
         line-height: 98px;
         overflow: hidden;
-        margin: 0;
         margin-right: -1px;
         margin-top: -1px;
         a {
