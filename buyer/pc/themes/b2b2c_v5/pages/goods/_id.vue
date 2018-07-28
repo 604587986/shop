@@ -1,5 +1,5 @@
 <template>
-  <div id="goods">
+  <div v-if="goods && goods.goods_name" id="goods">
     <div v-if="goods.is_auth === 0 || goods.goods_off === 0" class="goods-auth w">
       <img v-if="goods.goods_off === 0" src="../../assets/images/background-goods-off.jpg" alt="商品已下架">
       <img v-else src="../../assets/images/background-goods-auth.jpg" alt="商品待审核">
@@ -70,8 +70,14 @@
     validate({ params }) {
       return /^\d+$/.test(params.id)
     },
-    async asyncData({ params }) {
-      const goods = await API_Goods.getGoods(params.id)
+    async asyncData({ params, error }) {
+      let goods = {}
+      try {
+        goods = await API_Goods.getGoods(params.id)
+      } catch (e) {
+        console.log('e: ', e)
+        error({ statusCode: 404, message: 'Post not found' })
+      }
       return {
         goods,
         // 当前商品是否可以浏览
@@ -119,10 +125,7 @@
         this.loadBdShareScript()
       }
       // 获取促销信息
-      API_Promotions.getGoodsPromotions(goods_id).then(response => {
-        this.promotions = response
-        console.log(response)
-      })
+      API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
     },
     computed: {
       ...mapGetters(['user'])
