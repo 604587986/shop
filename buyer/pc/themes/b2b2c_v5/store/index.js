@@ -66,14 +66,16 @@ export const actions = {
    * @param res
    */
   async nuxtServerInit ({ commit }, { req, res }) {
-    let _uuid = ''
+    let _uuid
+    let _site
     if (req.headers.cookie) {
       const cookies = Cookie.parse(req.headers.cookie)
-      const { user } = cookies
+      const { user, site } = cookies
       commit('user/SET_USER_INFO', user ? global.JSON.parse(cookies.user) : '')
       commit('user/SET_ACCESS_TOKEN', cookies.accessToken)
       commit('user/SET_REFRESH_TOKEN', cookies.refreshToken)
       _uuid = cookies.uuid
+      _site = site
     }
     /***
      * 如果客户端请求携带的cookie中没有uuid
@@ -88,8 +90,13 @@ export const actions = {
     /**
      * 获取站点信息
      */
-    const site = await API_Common.getSiteData()
-    commit('SET_SITE_DATA', site)
+    try {
+      const site = await API_Common.getSiteData()
+      commit('SET_SITE_DATA', site)
+    } catch (e) {
+      // 如果获取出错，使用cookie中的站点信息
+      commit('SET_SITE_DATA', _site || {})
+    }
   },
   /**
    * 获取导航栏数据
