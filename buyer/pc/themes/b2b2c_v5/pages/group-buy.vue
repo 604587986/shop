@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="group-buy w">
-      <ul class="group-buy-list">
+      <ul v-if="groupBuy && groupBuy.data.length" class="group-buy-list">
         <li v-for="(gb, index) in groupBuy.data" :key="index" class="gb-item">
           <div class="inner-gb-item">
             <a target="_blank" class="pic_thumb" :href="'/goods/' + gb.goods_id" :title="gb.goods_name">
@@ -35,6 +35,7 @@
           </div>
         </li>
       </ul>
+      <div v-else class="no-data">暂无数据...</div>
       <el-pagination
         v-if="groupBuy"
         @current-change="handleCurrentPageChange"
@@ -272,5 +273,10 @@
   /deep/ .el-pagination {
     text-align: right;
     margin-top: 30px;
+  }
+  .no-data {
+    text-align: center;
+    height: 100px;
+    line-height: 100px;
   }
 </style>
