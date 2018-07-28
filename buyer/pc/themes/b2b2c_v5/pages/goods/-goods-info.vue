@@ -396,8 +396,8 @@
           margin-right: 10px;
         }
         &:hover {
-          color: darken($color-main, 20%);
-          border-color: darken($color-main, 20%);
+          color: darken($color-main, 10%);
+          border-color: darken($color-main, 10%);
         }
       }
     }
