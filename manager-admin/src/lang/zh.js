@@ -15,7 +15,8 @@ export default {
     orderList: '订单列表',
     refundList: '退款单',
     collectionList: '收款单',
-    receiptHistory: '发票历史',
+    receiptHistory: '开票历史',
+    receiptDetail: '开票详情',
     orderDetail: '订单详情',
     refundDetail: '售后详情',
 
