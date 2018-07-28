@@ -69,15 +69,10 @@ export const actions = {
     let _uuid = ''
     if (req.headers.cookie) {
       const cookies = Cookie.parse(req.headers.cookie)
-      const { user, site } = cookies
+      const { user } = cookies
       commit('user/SET_USER_INFO', user ? global.JSON.parse(cookies.user) : '')
       commit('user/SET_ACCESS_TOKEN', cookies.accessToken)
       commit('user/SET_REFRESH_TOKEN', cookies.refreshToken)
-      if (!site) {
-        const site = await API_Common.getSiteData()
-        console.log(`服务端请求站点信息成功！站点标题为：${site.title}`)
-        commit('SET_SITE_DATA', site)
-      }
       _uuid = cookies.uuid
     }
     /***
@@ -90,6 +85,11 @@ export const actions = {
       res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie}`])
     }
     commit('SET_UUID', _uuid)
+    /**
+     * 获取站点信息
+     */
+    const site = await API_Common.getSiteData()
+    commit('SET_SITE_DATA', site)
   },
   /**
    * 获取导航栏数据
