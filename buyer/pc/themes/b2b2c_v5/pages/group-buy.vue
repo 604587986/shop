@@ -11,10 +11,46 @@
         >{{ cate.cat_name }}</div>
       </div>
     </div>
+    <div class="group-buy w">
+      <ul class="group-buy-list">
+        <li v-for="(gb, index) in groupBuy.data" :key="index" class="gb-item">
+          <div class="inner-gb-item">
+            <a target="_blank" class="pic_thumb" :href="'/goods/' + gb.goods_id" :title="gb.goods_name">
+              <img :src="gb.img_url" border="0" :alt="gb.goods_name">
+            </a>
+            <h3 class="gb-title">
+              <a target="_blank" :href="'/goods/' + gb.goods_id" :title="gb.goods_name">gb.goods_name</a>
+            </h3>
+            <div class="group_price">
+              <span class="price"><i>¥</i>{{ gb.price }}</span>
+              <div class="dock">
+                <span class="group_discount">{{(gb.price / gb.original_price * 10).toFixed(1) }}&nbsp;折</span>
+                <del class="group_price">¥{{ gb.original_price }}</del>
+              </div>
+              <span class="group_num"><em>{{ gb.buy_num }}</em>件已购买</span>
+              <a class="buy-button" target="_blank" :href="'/goods/' + gb.goods_id">
+                我要团
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <el-pagination
+        v-if="groupBuy"
+        @current-change="handleCurrentPageChange"
+        :current-page.sync="groupBuy.page_no"
+        :page-size="groupBuy.page_size"
+        layout="total, prev, pager, next"
+        :total="groupBuy.data_total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Pagination } from 'element-ui'
+  Vue.use(Pagination)
   import * as API_Promotions from '@/api/promotions'
   export default {
     name: 'group-buy',
@@ -32,7 +68,8 @@
         },
         categorys: [
           { cat_id: 0, cat_name: '全部', active: true }
-        ]
+        ],
+        groupBuy: ''
       }
     },
     mounted() {
@@ -43,6 +80,11 @@
       this.GET_GroupBuyGoods()
     },
     methods: {
+      /** 当前分页数发生改变 */
+      handleCurrentPageChange(page_no) {
+        this.params.page_no = page_no
+        this.GET_GroupBuyGoods()
+      },
       /** 选择团购分类 */
       handleClickCate(cate) {
         const { categorys } = this
@@ -55,8 +97,11 @@
       },
       /** 获取团购商品 */
       GET_GroupBuyGoods() {
-        API_Promotions.getGroupBuyGoods(this.params).then(response => {
-          console.log(response)
+        const params = JSON.parse(JSON.stringify(this.params))
+        if (params.cat_id === 0) delete params.cat_id
+        API_Promotions.getGroupBuyGoods(params).then(response => {
+          response.data = [...response.data, ...response.data]
+          this.groupBuy = response
         })
       }
     }
@@ -64,10 +109,11 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   .nav-bar {
     width: 100%;
     height: 40px;
-    background-color: #d93600;
+    background-color: $color-main;
   }
   .cate-item {
     float: left;
@@ -82,13 +128,149 @@
     border-radius: 12.5px;
     transition: background-color, border-color ease .2s;
     cursor: pointer;
-    border: 2px solid #d93600;
+    border: 2px solid $color-main;
     &.active {
       background-color: #fff;
-      color: #d93600
+      color: $color-main
     }
     &:hover {
       border-color: #FFCFBF
     }
+  }
+  .group-buy {
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+  .gb-item {
+    font-size: 12px;
+    background-color: #FFF;
+    vertical-align: top;
+    letter-spacing: normal;
+    word-spacing: normal;
+    display: inline-block;
+    width: 324px;
+    margin-bottom: 20px;
+    border: solid 1px #E7E7E7;
+    margin: -1px;
+    &:hover .inner-gb-item {
+      padding: 20px 21px;
+      border: solid 1px #F30;
+      box-shadow: 0 0 3px rgba(204,204,204,0.9);
+      .group_num {
+        display: none;
+      }
+      .buy-button {
+        opacity: 1;
+        filter: alpha(opacity=100)/*IE*/;
+      }
+    }
+  }
+  .inner-gb-item {
+    width: 280px;
+    height: 296px;
+    padding: 21px 21px 21px 22px;
+    position: relative;
+  }
+  .pic_thumb {
+    line-height: 0;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    width: 290px;
+    height: 193px;
+    overflow: hidden;
+    img {
+      max-width: 280px;
+      max-height: 193px;
+    }
+  }
+  .gb-title {
+    display: block;
+    width: 100%;
+    height: 38px;
+    margin: 10px auto 0 auto;
+    overflow: hidden;
+  }
+  .group_price {
+    margin-top: 15px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    .price {
+      font: 700 32px/36px "microsoft yahei", Arial;
+      color: $color-main;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 125px;
+      height: 36px;
+      float: left;
+      overflow: hidden;
+      i {
+        font-weight: lighter;
+        font-size: 20px;
+        line-height: 24px;
+        vertical-align: bottom;
+        display: inline-block;
+        margin-right: 2px;
+        zoom: 1;
+      }
+    }
+    .dock {
+      width: 70px;
+      height: 40px;
+      float: left;
+      margin-left: 8px;
+      position: relative;
+      .group_discount {
+        font: 600 12px/20px "microsoft yahei";
+        color: #C30;
+        width: 50px;
+        height: 20px;
+        padding: 2px 0 1px 12px;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .group_price {
+        line-height: 16px;
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 8px;
+        z-index: 1;
+        overflow: hidden;
+      }
+    }
+    .group_num {
+      font: normal 14px/36px "microsoft yahei", Arial;
+      color: #999;
+      float: right;
+      em {
+        font-size: 16px;
+        font-weight: 700;
+        color: #396;
+        margin: 0 2px;
+      }
+    }
+    .buy-button {
+      font: normal 16px/20px "microsoft yahei";
+      color: #FFF;
+      background-color: #FF0000;
+      text-align: center;
+      display: block;
+      width: 80px;
+      height: 20px;
+      padding: 5px 0;
+      position: absolute;
+      right: 0;
+      bottom: 5px;
+      opacity: 0;
+      filter: alpha(opacity=0)/*IE*/;
+      transition: opacity 0.4s ease-in-out 0s;
+    }
+  }
+  /deep/ .el-pagination {
+    text-align: right;
+    margin-top: 30px;
   }
 </style>
