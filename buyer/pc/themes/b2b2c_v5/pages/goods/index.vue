@@ -116,10 +116,10 @@
             </li>
           </ul>
           <el-pagination
-            v-if="goodsListData && goodsListData.data.length"
+            v-if="goodsListData"
             @current-change="handleCurrentPageChange"
-            :current-page.sync="page.page_no"
-            :page-size="page.page_size"
+            :current-page.sync="goodsListData.page_no"
+            :page-size="goodsListData.page_size"
             layout="total, prev, pager, next"
             :total="goodsListData.data_total">
           </el-pagination>
@@ -133,60 +133,72 @@
   import Vue from 'vue'
   import { Pagination } from 'element-ui'
   Vue.use(Pagination)
+  import * as qs from 'qs'
   import { mapActions, mapGetters } from 'vuex'
   import * as API_Goods from '@/api/goods'
   export default {
     name: 'goods-list',
+    async asyncData({ params, query, error }) {
+      let goodsListData
+      let selectorData
+      const _parmas = {
+        page_no: 1,
+        page_size: 20,
+        sort: 'def_asc',
+        ...query
+      }
+      try {
+        goodsListData = await API_Goods.getGoodsList(_parmas)
+        selectorData = await API_Goods.getGoodsSelector(query)
+      } catch (e) {
+        error({ statusCode: 500, message: '服务器出错' })
+      }
+      return {
+        goodsListData,
+        selectorData,
+        params: _parmas
+      }
+    },
     head() {
       return {
         title: `商品列表-${this.site.title}`
       }
     },
     data() {
+      let { price, sort } = this.$route.query
+      if (sort) {
+        sort = sort.split('_')
+      } else {
+        sort = ['def', 'asc']
+      }
       return {
-        goodsListData: '',
-        selectorData: '',
-        page: {
-          page_no: 1,
-          page_size: 20
-        },
-        params: {
-          sort: 'def_asc',
-          ...this.$route.query
-        },
+        params: this.$route.query,
         // 排序
         sorts: [
-          { title: '默认', name: 'def', type: 'asc', active: true },
-          { title: '销量', name: 'buynum', type: 'asc', active: false },
-          { title: '价格', name: 'price', type: 'asc', active: false },
-          { title: '评价', name: 'grade', type: 'asc', active: false },
-        ],
+          { title: '默认', name: 'def', type: 'asc' },
+          { title: '销量', name: 'buynum', type: 'asc' },
+          { title: '价格', name: 'price', type: 'asc' },
+          { title: '评价', name: 'grade', type: 'asc' },
+        ].map(item => {
+          item.active = item.name === sort[0]
+          if (item.name === sort[0]) {
+            item.type = sort[1]
+          }
+          return item
+        }),
         // 价格区间
-        prices: ['', '']
+        prices: price ? price.split('_') : ['', '']
       }
-    },
-    mounted() {
-      this.GET_GoodsSelector()
-      this.GET_GoodsList()
-    },
-    beforeRouteUpdate (to, from, next) {
-      const { ...props } = to.query
-      this.params = props
-      this.GET_GoodsList()
-      this.GET_GoodsSelector()
-      next()
     },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentPageChange(page_no) {
-        this.page.page_no = page_no
+        this.params.page_no = page_no
         this.GET_GoodsList()
       },
       /** 排序 */
       handleClickSort(sort) {
-        if (sort.active) {
-          sort.type = sort.type === 'asc' ? 'desc' : 'asc'
-        }
+        if (sort.active) sort.type = sort.type === 'asc' ? 'desc' : 'asc'
         this.$set(this, 'sorts', this.sorts.map(item => {
           item.active = item.name === sort.name
           return item
@@ -194,28 +206,19 @@
         this.params.sort = `${sort.name}_${sort.type}`
         this.GET_GoodsList()
       },
-      /** 获取商品选择器 */
-      GET_GoodsSelector() {
-        const params = { ...this.page, ...this.params }
-        API_Goods.getGoodsSelector(params).then(response => {
-          this.selectorData = response
-          // console.log(response)
-        })
-      },
       /** 获取商品列表 */
       GET_GoodsList() {
-        const params = { ...this.page, ...this.params }
+        const params = JSON.parse(JSON.stringify(this.params))
         Object.keys(params).forEach(key => {
           if (!params[key]) delete params[key]
         })
         const { prices } = this
         if (prices[0] || prices[1]) {
           params.price = prices.join('_')
+        } else {
+          delete params.price
         }
-        API_Goods.getGoodsList(params).then(response => {
-          this.goodsListData = response
-          this.MixinScrollToTop(171)
-        })
+        location.href = `/goods?${qs.stringify(params)}`
       }
     }
   }
