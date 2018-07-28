@@ -1,44 +1,35 @@
 <template>
-  <div>
-    <en-table-layout
-      :tableData="tableData.data"
-      :loading="loading"
-    >
-      <template slot="table-columns">
-        <el-table-column prop="add_time" :formatter="MixinUnixToDate" label="日期"/>
-        <el-table-column prop="member_name" label="会员名称"/>
-        <el-table-column prop="order_sn" label="订单编号"/>
-        <el-table-column prop="receipt_amount" :formatter="MixinFormatPrice" label="发票金额"/>
-        <el-table-column prop="receipt_type" label="发票类别"/>
-        <el-table-column label="操作" width="150">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleOperateReceipt(scope.$index, scope.row)">查看</el-button>
-          </template>
-        </el-table-column>
-      </template>
-      <el-pagination
-        v-if="tableData"
-        slot="pagination"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="tableData.data_total">
-      </el-pagination>
-    </en-table-layout>
-
-    <el-dialog title="发票详情" :visible.sync="dialogReceiptVisible" center width="550px">
-      <div v-for="item in viewRectiptData" class="item-receipt">
-        <span class="item-receipt-label">{{ item.label }}</span>
-        <span v-if="item.key === 'goods_price'" class="item-receipt-value">{{ item.value | unitPrice('￥') }}</span>
-        <span v-else class="item-receipt-value">{{ item.value || '无' }}</span>
-      </div>
-    </el-dialog>
-  </div>
+  <en-table-layout
+    :tableData="tableData.data"
+    :loading="loading"
+    :toolbar="false"
+  >
+    <template slot="table-columns">
+      <el-table-column prop="add_time" :formatter="MixinUnixToDate" label="日期"/>
+      <el-table-column prop="member_name" label="会员名称"/>
+      <el-table-column prop="order_sn" label="订单编号"/>
+      <el-table-column prop="receipt_amount" :formatter="MixinFormatPrice" label="发票金额"/>
+      <el-table-column prop="receipt_type" label="发票类别"/>
+      <el-table-column label="操作" width="150">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleOperateReceipt(scope.$index, scope.row)">查看</el-button>
+        </template>
+      </el-table-column>
+    </template>
+    <el-pagination
+      v-if="tableData"
+      slot="pagination"
+      @size-change="handlePageSizeChange"
+      @current-change="handlePageCurrentChange"
+      :current-page="params.page_no"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="params.page_size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.data_total">
+    </el-pagination>
+  </en-table-layout>
 </template>
 
 <script>
@@ -48,23 +39,15 @@
     name: 'receiptHistory',
     data() {
       return {
-        /** 列表loading状态 */
+        // 列表loading状态
         loading: false,
-
-        /** 列表参数 */
+        // 列表参数
         params: {
           page_no: 1,
           page_size: 10
         },
-
-        /** 列表数据 */
-        tableData: '',
-
-        /** 当前查看的发票数据 */
-        viewRectiptData: [],
-
-        /** 查看发票详情 dialog */
-        dialogReceiptVisible: false
+        // 列表数据
+        tableData: ''
       }
     },
     mounted() {
@@ -85,20 +68,7 @@
 
       /** 查看发票 */
       handleOperateReceipt(index, row) {
-        const keys = [
-          { label: '订单编号', key: 'order_sn' },
-          { label: '发票类型', key: 'receipt_type' },
-          { label: '会员名称', key: 'member_name' },
-          { label: '发票金额', key: 'receipt_amount' },
-          { label: '发票抬头', key: 'receipt_title' },
-          { label: '发票内容', key: 'receipt_content' },
-          { label: '发票税号', key: 'tax_no' }
-        ]
-        this.viewRectiptData = keys.map(item => {
-          item.value = row[item.key]
-          return item
-        })
-        this.dialogReceiptVisible = true
+        this.$router.push({ name: 'receiptDetail', params: { id: row.history_id }})
       },
 
       /** 获取发票历史 */
