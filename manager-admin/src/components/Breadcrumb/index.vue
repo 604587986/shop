@@ -10,41 +10,40 @@
 </template>
 
 <script>
-import { generateTitle } from '@/utils/i18n'
+  import { generateTitle } from '@/utils/i18n'
 
-export default {
-  created() {
-    this.getBreadcrumb()
-  },
-  data() {
-    return {
-      levelList: null
-    }
-  },
-  watch: {
-    $route() {
+  export default {
+    created() {
       this.getBreadcrumb()
-    }
-  },
-  methods: {
-    generateTitle,
-    getBreadcrumb() {
-      let matched = this.$route.matched.filter(item => item.name)
-      const first = matched[0]
-      if (first && first.name !== 'dashboard') {
-        matched = [{ path: '/dashboard', meta: { title: 'dashboard' }}].concat(matched)
+    },
+    data() {
+      return {
+        levelList: null
       }
-      this.levelList = matched
+    },
+    watch: {
+      $route() {
+        this.getBreadcrumb()
+      }
+    },
+    methods: {
+      generateTitle,
+      getBreadcrumb() {
+        let matched = this.$route.matched.filter(item => item.name)
+        const first = matched[0]
+        if (first && first.name !== 'dashboard') {
+          matched = [{ path: '/dashboard', meta: { title: 'dashboard' }}].concat(matched)
+        }
+        this.levelList = matched
+      }
     }
   }
-}
 </script>
 
 <style type="text/scss" lang="scss" scoped>
   .app-breadcrumb.el-breadcrumb {
     display: inline-block;
     font-size: 14px;
-    line-height: 50px;
     margin-left: 10px;
     .no-redirect {
       color: #97a8be;
