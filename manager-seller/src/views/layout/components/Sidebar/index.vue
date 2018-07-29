@@ -1,19 +1,26 @@
 <template>
-  <scroll-bar>
-    <el-menu mode="vertical" :default-active="$route.path" :collapse="isCollapse" background-color="#304156" text-color="#fff" active-text-color="#409EFF">
-      <sidebar-item :routes="routers"></sidebar-item>
+  <el-scrollbar wrapClass="scrollbar-wrapper">
+    <div class="logo-container" :class="[isCollapse && 'collapse']">
+      <span class="logo-tip">商家中心</span>
+      <img src="../../../../assets/logo_images/logo-javashop-white.png" class="logo-img">
+    </div>
+    <el-menu
+      mode="vertical"
+      :default-active="$route.path"
+      :collapse="isCollapse"
+    >
+      <sidebar-item v-for="route in routers" :key="route.name" :item="route" :base-path="route.path"></sidebar-item>
     </el-menu>
-  </scroll-bar>
+  </el-scrollbar>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
-import ScrollBar from '@/components/ScrollBar'
 import { constantRouterMap, asyncRouterMap } from '@/router'
 
 export default {
-  components: { SidebarItem, ScrollBar },
+  components: { SidebarItem },
   computed: {
     ...mapGetters([
       'sidebar'
