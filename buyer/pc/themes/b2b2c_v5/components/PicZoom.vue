@@ -204,8 +204,8 @@ https://github.com/826327700/vue-piczoom
         let range = {
           minX:imgwrap.left,
           maxX:imgwrap.left + this.imgwrap.offsetWidth - this.cover.offsetWidth,
-          minY:imgwrap.top - document.documentElement.scrollTop,
-          maxY:imgwrap.top - document.documentElement.scrollTop + this.imgwrap.offsetHeight - this.cover.offsetHeight
+          minY:imgwrap.top - document.body.scrollTop,
+          maxY:imgwrap.top - document.body.scrollTop + this.imgwrap.offsetHeight - this.cover.offsetHeight
         }
         if(pos.x > range.maxX){
           pos.x = range.maxX
@@ -222,8 +222,8 @@ https://github.com/826327700/vue-piczoom
         this.cover.style.left = pos.x+'px'
         this.cover.style.top = pos.y+'px'
         this.ctx.clearRect(0, 0, this.imgwrap.offsetWidth, this.imgwrap.offsetHeight)
-        let startX = pos.x - (imgwrap.left - document.documentElement.scrollLeft),
-          startY = pos.y - (imgwrap.top - document.documentElement.scrollTop)
+        let startX = pos.x - (imgwrap.left - document.body.scrollLeft),
+          startY = pos.y - (imgwrap.top - document.body.scrollTop)
         this.ctx.drawImage(this.img,startX * this.imgTimesX, startY * this.imgTimesY, this.img.width * this.rectTimesX, this.img.height * this.rectTimesY, 0, 0, this.imgbox.offsetWidth, this.imgbox.offsetHeight)
       },
       mouseover(e){
