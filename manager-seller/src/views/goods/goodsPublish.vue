@@ -229,7 +229,6 @@
               <el-select
                 v-model="baseInfoForm.exchange.category_id"
                 placeholder="请选择积分商品分类"
-                @visible-change="getGoodsCatrgory"
                 @change="changeExangeCategory">
                 <el-option
                   v-for="item in exchangeGoodsCatrgoryList"
@@ -265,7 +264,7 @@
                 v-model="goods_params_list.param_value"
                 placeholder="请选择">
                 <el-option
-                  v-for="(option, index) in goods_params_list.option_list"
+                  v-for="(option) in goods_params_list.option_list"
                   :key="option"
                   :label="option"
                   :value="option">
@@ -677,9 +676,6 @@
       } else {
         this.GET_NextLevelCategory()
       }
-      if (!this.shopInfo) {
-        this.shopInfo = JSON.parse(localStorage.getItem('shop'))
-      }
     },
     methods: {
       /** 上一步*/
@@ -710,6 +706,8 @@
           this.getGoodsBrandList()
           /** 运费模板列表 */
           this.getTplList()
+          /** 积分商品分类列表 */
+          this.getGoodsCatrgory()
         }
 
         /** 2级校验 */
@@ -883,7 +881,7 @@
           if (!this.baseInfoForm.exchange || !this.baseInfoForm.exchange.enable_exchange) {
             this.baseInfoForm.exchange = {
               /** 积分兑换所属分类 */
-              category_id: 0,
+              category_id: '',
               /** 是否允许积分兑换  1是 0否*/
               enable_exchange: 0,
               /** 兑换所需金额 */
@@ -892,11 +890,7 @@
               exchange_point: 0
             }
           } else {
-            if (this.baseInfoForm.exchange.enable_exchange === 1) {
-              this.isShowExchangeConfig = true
-            } else {
-              this.isShowExchangeConfig = false
-            }
+            this.isShowExchangeConfig = (this.baseInfoForm.exchange.enable_exchange === 1)
           }
           /** 查询品牌列表 */
           this.getGoodsBrandList()
@@ -906,6 +900,9 @@
 
           /** 查询商品参数 */
           this.GET_GoodsParams()
+
+          /** 积分商品分类列表 */
+          this.getGoodsCatrgory()
 
           /** 查询商品sku信息 */
           API_goods.getGoodsStockList(this.activeGoodsId, {}).then((response) => {
@@ -976,27 +973,21 @@
       GET_GoodDraftData() {
         API_goods.getGoodDraftData(this.activeGoodsId, {}).then((response) => {
           /** 此处完成商品信息赋值 进行判断如果有值的话 */
-          this.baseInfoForm = {
-            ...response
-          }
+          this.baseInfoForm = { ...response }
+          /** 积分商品分类列表 */
+          this.getGoodsCatrgory()
           /** 积分相关设置 如果没有积分相关则设置为空 */
-          if (!this.baseInfoForm.exchange || !this.baseInfoForm.exchange.enable_exchange) {
-            this.baseInfoForm.exchange = {
-              /** 积分兑换所属分类 */
-              category_id: this.baseInfoForm.exchange_category_id || 0,
-              /** 是否允许积分兑换  1是 0否*/
-              enable_exchange: 0,
-              /** 兑换所需金额 */
-              exchange_money: this.baseInfoForm.exchange_money || 0,
-              /** 积分兑换使用的积分 */
-              exchange_point: this.baseInfoForm.exchange_point || 0
-            }
-          } else {
-            if (this.baseInfoForm.exchange.enable_exchange === 1) {
-              this.isShowExchangeConfig = true
-            } else {
-              this.isShowExchangeConfig = false
-            }
+          if (this.baseInfoForm.exchange_category_id || this.baseInfoForm.goods_type === 'POINT') {
+            this.$set(this.baseInfoForm, 'exchange', {
+              category_id: response.exchange_category_id,
+
+              enable_exchange: response.goods_type === 'POINT' ? 1 : 0,
+
+              exchange_money: response.exchange_money,
+
+              exchange_point: response.exchange_point
+            })
+            this.isShowExchangeConfig = (this.baseInfoForm.exchange.enable_exchange === 1)
           }
           /** 商品相册校验属性 */
           this.baseInfoForm.goods_gallery_list = response.gallery_list.map(key => {
