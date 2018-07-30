@@ -1,13 +1,14 @@
 <template>
   <el-scrollbar wrapClass="scrollbar-wrapper">
+    <div class="logo-container" :class="[isCollapse && 'collapse']">
+      <span class="logo-tip">管理员</span>
+      <img src="../../../../assets/logo_images/logo-javashop-white.png" class="logo-img">
+    </div>
     <el-menu
       mode="vertical"
       :show-timeout="200"
       :default-active="$route.path"
       :collapse="isCollapse"
-      background-color="#304156"
-      text-color="#bfcbd9"
-      active-text-color="#409EFF"
     >
       <sidebar-item v-for="route in permission_routers" :key="route.name" :item="route" :base-path="route.path"></sidebar-item>
     </el-menu>

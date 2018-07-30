@@ -4,6 +4,7 @@
       <h1>{{ goodsInfo.goods_name }}</h1>
     </div>
     <div class="pro-details">
+      <goods-exchange :promotions="promotions"/>
       <goods-groupbuy-seckill :promotions="promotions"/>
       <div class="price-box">
         <div class="pro-list">
@@ -81,12 +82,13 @@
   import GoodsCoupons from './-goods-coupons'
   import GoodsPromotions from './-goods-promotions'
   import GoodsGroupbuySeckill from './-goods-groupbuy-seckill'
+  import GoodsExchange from './-goods-exchange'
   import GoodsPromBar from './-goods-prom-bar'
   Vue.component('goods-prom-bar', GoodsPromBar)
   export default {
     name: 'goods-info',
     props: ['goods', 'promotions'],
-    components: { GoodsCoupons, GoodsPromotions, GoodsGroupbuySeckill },
+    components: { GoodsCoupons, GoodsPromotions, GoodsGroupbuySeckill, GoodsExchange },
     data() {
       return {
         goodsInfo: JSON.parse(JSON.stringify(this.goods)),
@@ -182,14 +184,14 @@
             spec.valueList.forEach((val, specValIndex) => {
               if (selectedSpecs) {
                 const spec_value_id = val.spec_value_id
-                if (selectedSpecs.includes(String(spec_value_id))) {
+                if (selectedSpecs.indexOf(String(spec_value_id)) !== -1) {
                   val.selected = true
-                  this.selectedSpec[specValIndex] = val.spec_value_id
+                  this.selectedSpec[specIndex] = val.spec_value_id
                   _selectedSpecVals.push(val.spec_value_id)
                 }
               } else if (specValIndex === 0) {
                 val.selected = true
-                this.selectedSpec[specValIndex] = val.spec_value_id
+                this.selectedSpec[specIndex] = val.spec_value_id
                 _selectedSpecVals.push(val.spec_value_id)
               }
             })
@@ -253,7 +255,7 @@
         if (!this.isLogin()) return
         const { num } = this
         const { sku_id } = this.selectedSku
-        API_Trade.buyNow(sku_id, num).then(response => {
+        API_Trade.buyNow(sku_id, num, this.getActivityId()).then(response => {
           this.$store.dispatch('cart/getCartDataAction')
           this.$router.push('/checkout')
         })
@@ -263,7 +265,7 @@
         if (!this.isLogin()) return
         const { num } = this
         const { sku_id } = this.selectedSku
-        API_Trade.addToCart(sku_id, num).then(response => {
+        API_Trade.addToCart(sku_id, num, this.getActivityId()).then(response => {
           this.$store.dispatch('cart/getCartDataAction')
           this.$confirm('加入购物车成功！要去看看吗？', () => {
             this.$router.push({ path: '/cart' })
@@ -285,6 +287,21 @@
         } else {
           return true
         }
+      },
+      /** 检查是否有积分兑换、团购、限时抢购活动 */
+      getActivityId() {
+        const { promotions } = this
+        if (!promotions || !promotions.length) return ''
+        let pro
+        for (let i = 0; i < promotions.length; i++) {
+          let item = promotions[i]
+          if (item.exchange || item.groupbuy_goods_do || item.seckill_goods_vo) {
+            pro = item
+            break
+          }
+        }
+        if (!pro) return ''
+        return pro.activity_id
       }
     }
   }
@@ -379,8 +396,8 @@
           margin-right: 10px;
         }
         &:hover {
-          color: darken($color-main, 20%);
-          border-color: darken($color-main, 20%);
+          color: darken($color-main, 10%);
+          border-color: darken($color-main, 10%);
         }
       }
     }

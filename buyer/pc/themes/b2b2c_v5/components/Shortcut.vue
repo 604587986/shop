@@ -93,7 +93,7 @@
       return {
         meta: [
           { hid: 'keywords', name: 'keywords', content: this.site.keywords },
-          { hid: 'description', name: 'description', content: `${this.site.descript}` }
+          { hid: 'description', name: 'description', content: this.site.descript }
         ]
       }
     },

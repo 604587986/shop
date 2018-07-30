@@ -171,14 +171,38 @@
       /** 导出结算单 */
       handleExportBill() {
         API_Order.exportBill(this.settlement.bill_id).then(response => {
-          const { settlement: s } = this
+          const { bill: b } = response
           const f = Foundation
           const jsonArray = []
           jsonArray[0] = {
             sheet_name: '结算单详细',
             sheet_values: [
-              { A: '结算单号', B: '起止日期', C: '出账日期', D: '结算状态', E: '店铺名称', F: '银行开户名', G: '公司银行账号', H: '开户银行支行名称', I: '支行联行号', J: '银行地址', K: '平台应付金额' },
-              { A: s.bill_sn, B: f.unixToDate(s.start_time) + ' - ' + f.unixToDate(s.end_time), C: f.unixToDate(s.create_time), D: s.status_text, E: s.shop_name, F: s.bank_account_name || '无', G: s.bank_account_number || '无', H: s.bank_name || '无', I: s.bank_code || '无', J: s.bank_address || '无', K: `￥${f.formatPrice(s.bill_price)} = ￥${f.formatPrice(s.price)}(在线支付金额) - ￥${f.formatPrice(s.refund_price)}(在线退款金额) - ￥${f.formatPrice(s.commi_price)}(佣金金额) + ￥${f.formatPrice(s.refund_commi_price)}(退还佣金)` }
+              {
+                A: '结算单号',
+                B: '起止日期',
+                C: '出账日期',
+                D: '结算状态',
+                E: '店铺名称',
+                F: '银行开户名',
+                G: '公司银行账号',
+                H: '开户银行支行名称',
+                I: '支行联行号',
+                J: '银行地址',
+                K: '平台应付金额'
+              },
+              {
+                A: b.bill_sn,
+                B: f.unixToDate(b.start_time) + ' - ' + f.unixToDate(b.end_time),
+                C: f.unixToDate(b.create_time),
+                D: b.status_text,
+                E: b.shop_name,
+                F: b.bank_account_name || '无',
+                G: b.bank_account_number || '无',
+                H: b.bank_name || '无',
+                I: b.bank_code || '无',
+                J: b.bank_address || '无',
+                K: `￥${f.formatPrice(b.bill_price)} = ￥${f.formatPrice(b.price)}(在线支付金额) - ￥${f.formatPrice(b.refund_price)}(在线退款金额) - ￥${f.formatPrice(b.commi_price)}(佣金金额) + ￥${f.formatPrice(b.refund_commi_price)}(退还佣金)`
+              }
             ],
             sheet_options: { header: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'], skipHeader: true }
           }
@@ -187,7 +211,7 @@
             sheet_values: response.order_list.map(item => ({
               '订单编号': item.order_sn,
               '下单时间': f.unixToDate(item.add_time),
-              '订单总额': f.formatPrice(item.price),
+              '订单总额（元）': f.formatPrice(item.price),
               '支付方式': item.payment_type === 'COD' ? '货到付款' : '在线支付'
             }))
           }
@@ -198,7 +222,7 @@
               '退款订单号': item.order_sn,
               '支付方式': item.payment_type === 'COD' ? '货到付款' : '在线支付',
               '操作时间': f.unixToDate(item.refund_time),
-              '退款金额': f.formatPrice(item.price)
+              '退款金额（元）': f.formatPrice(item.price)
             }))
           }
           this.MixinExportJosnToExcel(jsonArray, `结算单-${response.bill.shop_name}`)

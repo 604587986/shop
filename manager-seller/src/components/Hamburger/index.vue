@@ -28,18 +28,20 @@ export default {
 }
 </script>
 
-<style scoped>
-.hamburger {
-	display: inline-block;
-	cursor: pointer;
-	width: 20px;
-	height: 20px;
-	transform: rotate(90deg);
-	transition: .38s;
-	transform-origin: 50% 50%;
-}
+<style type="text/scss" lang="scss" scoped>
+  @import "../../styles/variables";
+  .hamburger {
+    display: inline-block;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    transform: rotate(90deg);
+    transition: .38s;
+    transform-origin: 50% 50%;
+    fill: $nav_text;
+  }
 
-.hamburger.is-active {
-	transform: rotate(0deg);
-}
+  .hamburger.is-active {
+    transform: rotate(0deg);
+  }
 </style>

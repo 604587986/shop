@@ -151,7 +151,9 @@
       /** 获取文章列表 */
       GET_ArticleList() {
         this.loading = true
-        API_Article.getArticleList(this.params).then(response => {
+        const params = this.MixinClone(this.params)
+        if (!params.name) delete params.name
+        API_Article.getArticleList(params).then(response => {
           this.loading = false
           this.tableData = response
         }).catch(() => { this.loading = false })

@@ -1,8 +1,9 @@
 <template>
   <el-menu class="navbar" mode="horizontal">
-    <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
-
-    <breadcrumb class="breadcrumb-container"></breadcrumb>
+    <div class="navbar-left">
+      <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
+      <breadcrumb class="breadcrumb-container"></breadcrumb>
+    </div>
 
     <div class="right-menu">
       <el-tooltip effect="dark" content="全屏" placement="bottom">
@@ -11,9 +12,9 @@
 
       <lang-select class="international right-menu-item"></lang-select>
 
-      <el-tooltip effect="dark" content="换肤" placement="bottom">
-        <theme-picker class="theme-switch right-menu-item"></theme-picker>
-      </el-tooltip>
+      <!--<el-tooltip effect="dark" content="换肤" placement="bottom">-->
+        <!--<theme-picker class="theme-switch right-menu-item"></theme-picker>-->
+      <!--</el-tooltip>-->
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
@@ -90,62 +91,71 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-.navbar {
-  height: 50px;
-  line-height: 50px;
-  border-radius: 0 !important;
-  .hamburger-container {
-    line-height: 58px;
-    height: 50px;
-    float: left;
-    padding: 0 10px;
-  }
-  .breadcrumb-container{
-    float: left;
-  }
-  .errLog-container {
-    display: inline-block;
-    vertical-align: top;
-  }
-  .right-menu {
-    float: right;
-    height: 100%;
-    &:focus{
-     outline: none;
+  @import "../../../styles/variables";
+  .navbar {
+    height: 80px;
+    border-radius: 0 !important;
+    background-color: $nav_bg !important;
+    border-color: $nav_bg !important;
+    .navbar-left {
+      float: left;
+      display: flex;
+      height: 80px;
+      align-items: center;
     }
-    .right-menu-item {
-      display: inline-block;
-      margin: 0 8px;
+    .hamburger-container {
+      padding: 0 10px;
     }
-    .screenfull {
-      height: 20px;
-    }
-    .international{
-      vertical-align: top;
-    }
-    .theme-switch {
-      vertical-align: 15px;
-    }
-    .avatar-container {
-      height: 50px;
-      margin-right: 30px;
-      .avatar-wrapper {
-        cursor: pointer;
-        margin-top: 5px;
-        position: relative;
-        .user-avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 100%;
+    .breadcrumb-container {
+      float: left;
+      /deep/ {
+        .el-breadcrumb__separator,
+        .el-breadcrumb__item .el-breadcrumb__inner a {
+          color: $nav_text !important;
         }
-        .el-icon-caret-bottom {
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
+        .el-breadcrumb__item .el-breadcrumb__inner .no-redirect {
+          color: $nav_text_active !important;
+        }
+      }
+    }
+    .right-menu {
+      display: flex;
+      align-items: center;
+      float: right;
+      height: 80px;
+      /deep/ svg {
+        fill: $nav_text_active !important;
+      }
+      &:focus{
+        outline: none;
+      }
+      .right-menu-item {
+        display: inline-block;
+        margin: 0 15px;
+      }
+      .avatar-container {
+        height: 50px;
+        margin-right: 30px;
+        .avatar-wrapper {
+          cursor: pointer;
+          margin-top: 5px;
+          position: relative;
+          .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+          }
+          .el-icon-caret-bottom {
+            position: absolute;
+            right: -20px;
+            top: 25px;
+            font-size: 12px;
+          }
+          /deep/ .el-icon-caret-bottom {
+            color: $nav_text_active !important;
+          }
         }
       }
     }
   }
-}
 </style>

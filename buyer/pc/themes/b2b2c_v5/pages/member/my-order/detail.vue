@@ -4,14 +4,21 @@
       <div class="info-order">
         <h2>订单信息</h2>
         <div class="info-list">
+          <dl><dt>订单编号：</dt><dd>{{ order.sn }}</dd></dl>
           <dl><dt>下单时间：</dt><dd>{{ order.create_time | unixToDate }}</dd></dl>
           <dl><dt>收货地址：</dt><dd>{{ order.ship_province }} {{ order.ship_city }} {{ order.ship_county }} {{ order.ship_town }} {{order.ship_address}} - {{ order.ship_addr }}</dd></dl>
           <dl><dt>收货人：</dt><dd>{{ order.ship_name }}</dd></dl>
-          <dl><dt>发票信息:</dt><dd>无</dd></dl>
           <dl><dt>送货时间:</dt><dd>{{ order.receive_time }}</dd></dl>
           <dl><dt>客户留言：</dt><dd>{{ order.remark || '无' }}</dd></dl>
-          <dl class="top_line"><dt>订单编号：</dt><dd>{{ order.sn }}</dd></dl>
-          <dl><dt>付款方式：</dt><dd>{{ order.payment_type === "ONLINE" ? order.payment_method_name : '货到付款' }}</dd></dl>
+          <template v-if="order.receipt_history">
+            <dl class="top_line"><dt>发票抬头:</dt><dd>{{ order.receipt_history.receipt_title }}</dd></dl>
+            <dl><dt>发票内容:</dt><dd>{{ order.receipt_history.receipt_content }}</dd></dl>
+            <dl><dt>发票类型:</dt><dd>￥{{ order.receipt_history.receipt_type }}</dd></dl>
+            <dl v-if="order.receipt_history.tax_no"><dt>发票税号:</dt><dd>￥{{ order.receipt_history.tax_no }}</dd></dl>
+            <dl><dt>开票金额:</dt><dd>￥{{ order.receipt_history.receipt_amount | unitPrice }}</dd></dl>
+          </template>
+          <dl v-else><dt>发票信息:</dt><dd>无</dd></dl>
+          <dl class="top_line"><dt>付款方式：</dt><dd>{{ order.payment_type === "ONLINE" ? order.payment_method_name : '货到付款' }}</dd></dl>
           <dl><dt>支付状态：</dt><dd>{{ order.pay_status_text }}</dd></dl>
           <dl><dt>商品总价：</dt><dd>￥{{ (order.goods_price || 0) | unitPrice }}</dd></dl>
           <dl class="bottom_line"><dt>运费：</dt><dd>￥{{ (order.shipping_price || 0) | unitPrice }}</dd></dl>
