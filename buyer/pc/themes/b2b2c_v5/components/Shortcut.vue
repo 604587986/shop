@@ -109,8 +109,8 @@
       // 如果有刷新Token，重新获取用户信息【第一次访问和用户刷新页面，会触发】
       if (Storage.getItem('refreshToken')) {
         this.getUserData()
-        this.GET_UnreadMessage()
       }
+      this.GET_UnreadMessage()
     },
     methods: {
       ...mapActions({
@@ -125,6 +125,7 @@
       },
       /** 获取未读消息 */
       GET_UnreadMessage() {
+        if (!Storage.getItem('refreshToken')) return
         API_Message.getMesssagesAsUnread().then(response => {
           const { data_total } = response
           this.message_total = data_total > 99 ? '99+' : data_total
