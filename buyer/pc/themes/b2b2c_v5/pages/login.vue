@@ -21,11 +21,11 @@
               </div>
               <div class="login-tab">
                 <ul>
-                  <li @click="login_type = 'quick'">
-                    <a :class="['tab-a', login_type === 'quick' ? 'active' : '']">快捷登录</a>
+                  <li @click="!isConnect && (login_type = 'quick')">
+                    <a href="javascript:;" class="tab-a" :class="[login_type === 'quick' && 'active', isConnect && 'disabled']">快捷登录</a>
                   </li>
                   <li @click="login_type = 'account'">
-                    <a :class="[login_type === 'account' ? 'active' : '']">账号登录</a>
+                    <a href="javascript:;" :class="[login_type === 'account' && 'active']">账号登录</a>
                   </li>
                 </ul>
               </div>
@@ -113,13 +113,13 @@
 <script>
   import { mapActions } from 'vuex'
   import { RegExp } from '~/ui-utils'
+  import { domain } from '~/ui-domain'
+  import Storage from '@/utils/storage'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
-  import EnHeaderOther from "@/components/HeaderOther";
   export default {
     name: 'login',
-    components: {EnHeaderOther},
     layout: 'full',
     head() {
       return {
@@ -128,14 +128,23 @@
     },
     data() {
       return {
-        login_type: 'quick', // 'account',
-        login_banner: 'http://data.andste.cc/developers/web/temp/images/background-banner.jpg',
-        /** 图片验证码 */
+        login_type: 'quick',
+        // 图片验证码
         val_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN'),
-        /** 快捷登录 表单 */
+        // 快捷登录 表单
         quickForm: {},
-        /** 普通登录 表单 */
-        accountForm: {}
+        // 普通登录 表单
+        accountForm: {},
+        // 是否为信任登录
+        isConnect: false
+      }
+    },
+    mounted() {
+      const uuid_connect = Storage.getItem('uuid_connect')
+      const isConnect = this.$route.query.form === 'connect' && !!uuid_connect
+      this.isConnect = isConnect
+      if (isConnect) {
+        this.login_type = 'account'
       }
     },
     methods: {
@@ -181,19 +190,65 @@
             return false
           }
         }
-        this.login({ login_type, form }).then(() => {
-          this.getCartData()
-          if (forward && /^http/.test(forward)) {
-            window.location.href = forward
-          } else {
-            this.$router.push({ path: forward || '/' })
+        if (this.isConnect) {
+          const uuid = Storage.getItem('uuid_connect')
+          if (!uuid) {
+            this.$message.error('参数异常，请刷新页面！')
+            return false
           }
-        }).catch(this.handleChangeValUrl)
+          const params = JSON.parse(JSON.stringify(form))
+          params.uuid = Storage.getItem('uuid')
+          API_Connect.loginByConnect(uuid, params).then(response => {
+            this.setAccessToken(response.access_token)
+            this.setRefreshToken(response.refresh_token)
+            if (response.result === 'bind_success') {
+              this.getUserData()
+              Storage.removeItem('uuid_connect', { domain: domain.cookie })
+              if (forward && /^http/.test(forward)) {
+                window.location.href = forward
+              } else {
+                this.$router.push({path: forward || '/'})
+              }
+            } else {
+              this.$confirm('当前用户已绑定其它账号，确认要覆盖吗？', () => {
+                API_Connect.loginBindConnect(uuid).then(() => {
+                  this.getUserData()
+                  Storage.removeItem('uuid_connect', { domain: domain.cookie })
+                  if (forward && /^http/.test(forward)) {
+                    window.location.href = forward
+                  } else {
+                    this.$router.push({path: forward || '/'})
+                  }
+                }).catch(() => {
+                  this.removeAccessToken()
+                  this.removeRefreshToken()
+                })
+              }, () => {
+                this.removeAccessToken()
+                this.removeRefreshToken()
+              })
+            }
+          }).catch(this.handleChangeValUrl)
+        } else {
+          this.login({ login_type, form }).then(() => {
+            this.getCartData()
+            if (forward && /^http/.test(forward)) {
+              window.location.href = forward
+            } else {
+              this.$router.push({ path: forward || '/' })
+            }
+          }).catch(this.handleChangeValUrl)
+        }
       },
       getConnectUrl: API_Connect.getConnectUrl,
       ...mapActions({
         login: 'user/loginAction',
-        getCartData: 'cart/getCartDataAction'
+        getCartData: 'cart/getCartDataAction',
+        setAccessToken: 'user/setAccessTokenAction',
+        removeAccessToken: 'user/removeAccessTokenAction',
+        setRefreshToken: 'user/setRefreshTokenAction',
+        removeRefreshToken: 'user/removeRefreshTokenAction',
+        getUserData: 'user/getUserDataAction'
       })
     }
   }
@@ -221,15 +276,15 @@
         background-size: cover;
         height: 560px;
       }
-      .login-box {
-        float: right;
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        width: 346px;
-        background: #ffffff;
-      }
     }
+  }
+  .login-box {
+    float: right;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 346px;
+    background: #ffffff;
   }
   .login-box .login-form .tips-wapper {
     background: #fff8f0;
@@ -251,13 +306,16 @@
       padding: 20px 0;
       text-align: center;
       font-size: 20px;
-      cursor: pointer;
       a {
         display: block;
         height: 18px;
         width: 99%;
         color: #666;
         &:hover, &.active { color: $color-main }
+        &.disabled {
+          cursor: not-allowed;
+          color: #ccc
+        }
       }
       .tab-a { border-right: 1px solid #f4f4f4 }
     }

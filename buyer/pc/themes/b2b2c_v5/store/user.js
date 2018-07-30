@@ -171,13 +171,10 @@ export const actions = {
   registerByMobileAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Passport.registerByMobile(params).then(res=> {
-        const { access_token, refresh_token, uid } = res
+        const { access_token, refresh_token } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        API_Members.getUserInfo(uid).then(response => {
-          commit(types.SET_USER_INFO, response)
-          resolve(response)
-        }).catch(error => reject(error))
+        resolve(res)
       })
     })
   },
