@@ -182,10 +182,6 @@
       border-radius: 4px;
       text-align: center;
       user-select: none;
-      &.active {
-        background-color: $nav_bg !important;
-        border-color: $nav_bg !important;
-      }
       .el-icon-close {
         width: 16px;
         height: 16px;
