@@ -19,7 +19,7 @@
         },
         btn2: (index) => {
           this.$layer.close(index)
-          this.$router.push({ name: 'register' })
+          this.$router.push({ name: 'register', query: { form: 'connect' } })
         }
       })
     },

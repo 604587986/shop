@@ -42,3 +42,14 @@ export function loginBindConnect(uuid) {
   })
 }
 
+/**
+ * 注册绑定openid
+ * @param uuid
+ */
+export function registerBindConnect(uuid) {
+  return request({
+    url: `account-binder/register/${uuid}`,
+    method: Method.POST
+  })
+}
+
