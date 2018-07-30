@@ -176,10 +176,11 @@
               title: '发票信息',
               key: 'receipt',
               items: [
-                { label: '发票类型', value: o.need_receipt === 'yes' ? (o.receipt_type === 'PERSON' ? '个人' : '单位') : '不需要发票' },
-                { label: '发票抬头', value: o.need_receipt === 'yes' ? o.receipt_title || '无' : '无' },
-                { label: '发票内容', value: o.need_receipt === 'yes' ? o.receipt_content || '无' : '无' },
-                { label: '发票税号', value: o.need_receipt === 'yes' ? o.duty_invoice || '无' : '无' }
+                { label: '发票类型', value: o.receipt_history ? o.receipt_history.receipt_type || '无' : '不需要发票' },
+                { label: '发票抬头', value: o.receipt_history ? o.receipt_history.receipt_title || '无' : '无' },
+                { label: '发票内容', value: o.receipt_history ? o.receipt_history.receipt_content || '无' : '无' },
+                { label: '发票税号', value: o.receipt_history ? o.receipt_history.tax_no || '无' : '无' },
+                { label: '发票金额', value: o.receipt_history ? f.formatPrice(o.receipt_history.receipt_amount) || '无' : '无' }
               ]
             }
           ],
