@@ -52,11 +52,12 @@
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Article from '@/api/article'
+  import * as API_Connect from '@/api/connect'
   import { RegExp } from '~/ui-utils'
-  import EnHeaderOther from "@/components/HeaderOther";
+  import { domain } from '~/ui-domain'
+  import Storage from '@/utils/storage'
   export default {
     name: 'register',
-    components: { EnHeaderOther },
     layout: 'full',
     async asyncData() {
       const protocol = await API_Article.getArticleByPosition('REGISTRATION_AGREEMENT')
@@ -159,10 +160,15 @@
         // 图片验证码URL
         valid_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER'),
         // 同意注册协议
-        agreed: false
+        agreed: false,
+        // 是否为信任登录
+        isConnect: false
       }
     },
     mounted() {
+      const uuid_connect = Storage.getItem('uuid_connect')
+      const isConnect = this.$route.query.form === 'connect' && !!uuid_connect
+      this.isConnect = isConnect
       this.$layer.open({
         type: 1,
         skin: 'layer-register',
@@ -215,7 +221,16 @@
         this.$refs['registerForm'].validate(valide => {
           if (valide) {
             this.registerByMobile(this.registerForm).then(() => {
-              this.$router.push({ path: '/member' })
+              if (this.isConnect) {
+                API_Connect.registerBindConnect(Storage.getItem('uuid_connect')).then(() => {
+                  Storage.removeItem('uuid_connect', { domain: domain.cookie })
+                  this.getUserData()
+                  this.$router.push({ path: '/member' })
+                })
+              } else {
+                this.getUserData()
+                this.$router.push({ path: '/member' })
+              }
             })
           } else {
             this.$message.error('表单填写有误，请检查！')
@@ -224,7 +239,8 @@
         })
       },
       ...mapActions({
-        registerByMobile: 'user/registerByMobileAction'
+        registerByMobile: 'user/registerByMobileAction',
+        getUserData: 'user/getUserDataAction'
       })
     }
   }

@@ -22,7 +22,7 @@ const alert = function (message, fn) {
  * @param fn
  * @returns {*|boolean}
  */
-const confirm = function (message, fn) {
+const confirm = function (message, fn, cancel) {
   return window.layer.confirm(message || '确认这个操作吗？', {
     icon: 3,
     title: '提示',
@@ -33,6 +33,8 @@ const confirm = function (message, fn) {
     let __ = true
     typeof (fn) === 'function' && (__ = fn(index))
     __ !== false && window.layer.close(index)
+  }, function (index) {
+    typeof (cancel) === 'function' && cancel()
   });
 }
 

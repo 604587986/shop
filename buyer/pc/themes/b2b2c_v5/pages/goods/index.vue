@@ -240,7 +240,7 @@
     margin-top: 25px;
     line-height: 19px;
     position: relative;
-    z-index: 2;
+    z-index: 10;
   }
   .gl-bar-item {
     display: inline;

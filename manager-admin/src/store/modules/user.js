@@ -4,9 +4,9 @@ import { Base64 } from 'js-base64'
 
 const user = {
   state: {
-    user: '',
-    accessToken: '',
-    refreshToken: ''
+    user: JSON.parse(Storage.getItem('adminUser') || '""'),
+    accessToken: Storage.getItem('adminAccessToken'),
+    refreshToken: Storage.getItem('adminRefreshToken')
   },
 
   mutations: {
