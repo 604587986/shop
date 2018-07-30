@@ -20,7 +20,7 @@
         <li class="spacer"></li>
         <li class="dorpdown">
           <div class="dt hs-icon">
-            <nuxt-link to="/member/my-order#ALL">我的订单</nuxt-link>
+            <nuxt-link to="/member/my-order">我的订单</nuxt-link>
             <i class="iconfont ea-icon-arrow-down"></i>
           </div>
           <div class="dd dorpdown-layer">
