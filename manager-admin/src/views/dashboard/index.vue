@@ -134,7 +134,6 @@
     methods: {
       /** 窗口缩放时计算table高度 */
       countTableHeight() {
-        console.log('...')
         this.tableHeight = (document.body.clientHeight - 80 - 44 - 80 - 80 - 20 - 20 - 4) / 2
         /** 图表刷新 */
         setTimeout(this.sesalChart.resize)
