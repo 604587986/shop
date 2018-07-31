@@ -36,7 +36,7 @@
           <checkout-inventory
             :inventory-list="inventoryList"
             :remark="params.remark"
-            @coupon-change="GET_ShopCoupons"
+            @coupon-change="couponUseChange"
           />
           <!--配送清单 end-->
 
@@ -88,6 +88,8 @@
         orderTotal: {},
         // 购物清单
         inventoryList: '',
+        // 缓存优惠券列表
+        coupons: '',
         // 已选地址
         selectedAddress: ''
       }
@@ -105,6 +107,25 @@
       })
     },
     methods: {
+      /** 使用优惠券 */
+      couponUseChange(shopIndex, couponIndex, use) {
+        const inventoryList = JSON.parse(JSON.stringify(this.inventoryList))
+        inventoryList.map(item => {
+          item.coupons.map(_item => {
+            _item.used_status = 0
+          })
+        })
+        if (use) {
+          inventoryList[shopIndex]['coupons'][couponIndex].used_status = 1
+        }
+        API_Trade.getOrderTotal().then(response => this.orderTotal = response)
+        API_Trade.getCarts('checked').then(response => {
+          response.map((item, index) => {
+            item.coupons = inventoryList[index].coupons
+          })
+          this.$set(this, 'inventoryList', response)
+        })
+      },
       /** 收货地址发生改变 */
       handleAddressChanged(address) {
         this.selectedAddress = address
@@ -126,6 +147,7 @@
         const { inventoryList } = this
         const seller_ids = inventoryList.map(item => item.seller_id)
         API_Members.getShopsCoupons(seller_ids.join(',')).then(_response => {
+          this.coupons = _response
           const _inventoryList = inventoryList.map((item, ivIndex) => {
             item.coupons = _response[ivIndex].member_coupon_list
             return item

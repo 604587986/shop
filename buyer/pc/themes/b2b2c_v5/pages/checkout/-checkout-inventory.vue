@@ -7,7 +7,7 @@
     </div>
     <div class="content-ckt-inventory inventory">
       <div
-        v-for="shop in inventoryList"
+        v-for="(shop, shopIndex) in inventoryList"
         :key="shop.seller_id"
         class="item-ckt-inventory"
       >
@@ -32,11 +32,11 @@
               </template>
               <template v-else>
                 <div
-                  v-for="(coupon, index) in shop.coupons"
-                  :key="index"
+                  v-for="(coupon, couponIndex) in shop.coupons"
+                  :key="couponIndex"
                   class="item-discount-inventory"
                   :class="[coupon.used_status === 1 && 'selected']"
-                  @click="useCoupon(shop.seller_id, coupon)"
+                  @click="useCoupon(shop.seller_id, shopIndex, coupon, couponIndex)"
                 >
                   <div class="lace-item-discount">
                     <div class="lace-discount">
@@ -136,11 +136,17 @@
     },
     methods: {
       /** 使用优惠券 */
-      useCoupon(shop_id, coupon) {
-        console.log(shop_id, coupon)
-        API_Trade.useCoupon(shop_id, coupon.mc_id).then(() => {
-          this.$emit('coupon-change')
-        })
+      useCoupon(shop_id, shopIndex, coupon, couponIndex) {
+        // 取消使用
+        if (coupon.used_status === 1) {
+          API_Trade.useCoupon(shop_id, 0).then(() => {
+            this.$emit('coupon-change', shopIndex, couponIndex, false)
+          })
+        } else {
+          API_Trade.useCoupon(shop_id, coupon.mc_id).then(() => {
+            this.$emit('coupon-change', shopIndex, couponIndex, true)
+          })
+        }
       },
       /** 设置备注 */
       handleSetRemark() {
