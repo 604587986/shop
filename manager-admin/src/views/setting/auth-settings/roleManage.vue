@@ -76,12 +76,12 @@
 
       /** 添加角色 */
       handleAddRole() {
-        this.$router.push({ name: 'rolePermission', params: { id: 0 }})
+        this.$router.push({ name: 'rolePermission', params: { id: 0, callback: this.GET_RoleList }})
       },
 
       /** 编辑角色 */
       handleEditRole(row) {
-        this.$router.push({ name: 'rolePermission', params: { id: row.role_id }})
+        this.$router.push({ name: 'rolePermission', params: { id: row.role_id, callback: this.GET_RoleList }})
       },
 
       /** 删除角色 */
