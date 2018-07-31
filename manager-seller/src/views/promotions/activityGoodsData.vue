@@ -98,6 +98,7 @@
       GET_ActivityGoodsList() {
         this.loading = true
         const _params = {
+          ...this.params,
           seckill_id: this.activityID
         }
         API_LimitTime.getLimitTimeGoodsList(_params).then(response => {
