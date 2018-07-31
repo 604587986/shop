@@ -103,11 +103,6 @@
         if (item.children && item.children.length) {
           this.$set(item, 'children', this.setPermissionsCheck(item.children, item.checked))
         }
-        // if (parent) {
-        //   const _len = parent.children.length
-        //   const _c_len = parent.children.filter(_item => _item.checked).length
-        //   this.$set(parent, 'checked', (_c_len !== 0 && _len === _c_len))
-        // }
         this.countAllPermissions()
         this.countParentChecked()
       },
