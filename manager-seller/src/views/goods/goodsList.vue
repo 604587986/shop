@@ -209,10 +209,23 @@
     mounted() {
       this.GET_GoodsList()
     },
-    // beforeRouteUpdate(to, from, next) {
-    //   this.GET_GoodsList()
-    //   next()
-    // },
+    activated() {
+      delete this.params.market_enable
+      this.params = {
+        ...this.params,
+        ...this.$route.query
+      }
+      this.GET_GoodsList()
+    },
+    beforeRouteUpdate(to, from, next) {
+      delete this.params.market_enable
+      this.params = {
+        ...this.params,
+        ...this.$route.queryv
+      }
+      this.GET_GoodsList()
+      next()
+    },
     methods: {
 
       /** 分页大小发生改变 */

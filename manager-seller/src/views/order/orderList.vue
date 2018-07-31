@@ -170,10 +170,20 @@
       this.GET_OrderList()
     },
     activated() {
+      delete this.params.market_enable
+      this.params = {
+        ...this.params,
+        ...this.$route.query
+      }
       this.GET_OrderList()
       window.onresize = this.countTableHeight
     },
     beforeRouteUpdate(to, from, next) {
+      delete this.params.market_enable
+      this.params = {
+        ...this.params,
+        ...this.$route.query
+      }
       this.GET_OrderList()
       next()
     },
