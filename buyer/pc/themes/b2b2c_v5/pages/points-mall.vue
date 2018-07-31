@@ -11,19 +11,19 @@
       <div v-if="!tableData || !tableData.data.length" class="no-goods w">
         暂无商品...
       </div>
-      <template v-else>
-        <ul class="goods-list w">
+      <div v-else class="w">
+        <ul class="goods-list">
           <li v-for="goods in tableData.data" :key="goods.goods_id" class="goods-item">
             <a href="javascript:;">
               <img class="goods-img" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/7EBD931E14FF477FB248823F3CA3316A.jpg_300x300" alt="">
             </a>
             <div class="goods-info">
               <p class="integral">
-                <span class="price">￥0+500积分</span>
+                <span class="price">￥{{ goods.exchange_money | unitPrice }}+{{ goods.exchange_point }}积分</span>
                 <span class="origin-price">原价：￥52</span>
               </p>
               <p class="goods-name">资生堂 珊珂 绵润泡沫洁面乳 120g啊啊啊飒飒啊啊爱上a</p>
-              <p>已有<span>23</span>人兑换</p>
+              <p>已有<span>{{ goods.enable_exchange }}</span>人兑换</p>
             </div>
           </li>
         </ul>
@@ -34,7 +34,7 @@
           layout="total, prev, pager, next"
           :total="tableData.data_total">
         </el-pagination>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -95,7 +95,9 @@
       },
       /** 获取积分商品 */
       GET_PointsGoods() {
-        API_Promotions.getPointsGoods(this.params).then(response => {
+        const params = JSON.parse(JSON.stringify(this.params))
+        if (params.cat_id === 0) delete params.cat_id
+        API_Promotions.getPointsGoods(params).then(response => {
           this.tableData = response
         })
       }
@@ -171,12 +173,15 @@
       }
       .goods-name {
         font-size: 18px;
-        margin: 1rem 0;
+        margin: 10px 0;
         width: 200px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+    }
+    /deep/ .el-pagination {
+      text-align: right;
     }
   }
   .no-goods {
