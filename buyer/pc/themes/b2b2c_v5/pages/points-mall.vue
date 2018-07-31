@@ -22,7 +22,7 @@
                 <span class="price">￥{{ goods.exchange_money | unitPrice }}+{{ goods.exchange_point }}积分</span>
                 <span class="origin-price">原价：￥52</span>
               </p>
-              <p class="goods-name">资生堂 珊珂 绵润泡沫洁面乳 120g啊啊啊飒飒啊啊爱上a</p>
+              <p class="goods-name">{{ goods.goods_name }}</p>
               <p>已有<span>{{ goods.enable_exchange }}</span>人兑换</p>
             </div>
           </li>

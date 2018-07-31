@@ -57,15 +57,18 @@
 </template>
 
 <script>
+  import * as API_Promotions from '@/api/promotions'
   export default {
     name: 'seckill',
     data() {
       return {
-        timeline_fixed: false
+        timeline_fixed: false,
+        timeLines: '',
       }
     },
     mounted() {
       window.addEventListener('scroll', this.timeLineFixedStatus)
+      this.GET_TimeLine()
     },
     methods: {
       /** 时间段盒子是否浮动 */
@@ -78,6 +81,12 @@
       /** 时间段被选中 */
       handleClickTimeLine(i) {
         this.MixinScrollToTop(31 + 140 + 90)
+      },
+      /** 获取时间线 */
+      GET_TimeLine() {
+        API_Promotions.getSeckillTimeLine().then(response => {
+          console.log(response)
+        })
       }
     },
     destroyed() {
