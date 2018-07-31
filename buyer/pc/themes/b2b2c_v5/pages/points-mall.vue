@@ -14,8 +14,8 @@
       <div v-else class="w">
         <ul class="goods-list">
           <li v-for="goods in tableData.data" :key="goods.goods_id" class="goods-item">
-            <a href="javascript:;">
-              <img class="goods-img" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/7EBD931E14FF477FB248823F3CA3316A.jpg_300x300" alt="">
+            <a :href="'/goods/' + goods.goods_id">
+              <img class="goods-img" :src="goods.goods_img">
             </a>
             <div class="goods-info">
               <p class="integral">
@@ -64,6 +64,7 @@
     },
     mounted() {
       this.GET_PointsCategory()
+      this.GET_PointsGoods()
     },
     methods: {
       /** 当前分页发生改变 */
