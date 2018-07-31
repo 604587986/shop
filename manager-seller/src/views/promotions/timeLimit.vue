@@ -134,7 +134,7 @@
 
       /** 报名 */
       handleSignUpTimeLimt(row) {
-        this.$router.push({ path: `/promotions/add-time-limit/${row.seckill_id}` })
+        this.$router.push({ name: 'addTimeLimit', params: { id: row.seckill_id, callback: this.GET_LimitActivityList }})
       },
 
       /** 活动商品信息 已报名*/

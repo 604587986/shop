@@ -206,10 +206,23 @@
         shopInfo: this.$store.getters.shopInfo
       }
     },
+    mounted() {
+      this.GET_GoodsList()
+    },
     activated() {
+      delete this.params.market_enable
+      this.params = {
+        ...this.params,
+        ...this.$route.query
+      }
       this.GET_GoodsList()
     },
     beforeRouteUpdate(to, from, next) {
+      delete this.params.market_enable
+      this.params = {
+        ...this.params,
+        ...this.$route.queryv
+      }
       this.GET_GoodsList()
       next()
     },
@@ -296,7 +309,7 @@
 
       /** 发布商品*/
       publishGoods() {
-        this.$router.push({ path: '/goods/good-publish' })
+        this.$router.push({ name: 'goodPublish', params: { callback: this.GET_GoodsList }})
       },
 
       /** 跳转回收站*/
@@ -306,7 +319,7 @@
 
       /** 编辑商品 isdraft 商品列表1*/
       handleEditGoods(row) {
-        this.$router.push({ path: `/goods/good-publish/${row.goods_id}/1` })
+        this.$router.push({ name: 'goodPublish', params: { goodsid: row.goods_id, isdraft: 1, callback: this.GET_GoodsList }})
       },
 
       /** 删除商品 */
