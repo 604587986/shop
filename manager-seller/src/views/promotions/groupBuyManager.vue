@@ -121,14 +121,10 @@
         ]
       }
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.GET_GroupGoodsList()
-        next()
-      })
+    mounted() {
+      this.GET_GroupGoodsList()
     },
     methods: {
-
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
@@ -179,12 +175,12 @@
 
       /** 新增团购商品商品 */
       handleAddGroupBuyGoods() {
-        this.$router.push({ path: 'add-group-buy-goods' })
+        this.$router.push({ name: 'addGroupBuyGoods', params: { callback: this.GET_GroupGoodsList }})
       },
 
       /** 编辑团购商品 */
       handleEditGroupGoods(row) {
-        this.$router.push({ path: `edit-group-buy-goods/${row.gb_id}` })
+        this.$router.push({ name: 'editGroupBuyGoods', params: { goods_id: row.gb_id, callback: this.GET_GroupGoodsList }})
       },
 
       /** 删除团购商品 */

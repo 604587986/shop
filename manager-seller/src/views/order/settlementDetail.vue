@@ -360,16 +360,10 @@
         justify-content: space-between;
         align-items: center;
         span:first-child {
-          font-size: 19px;
-          font-family: "Microsoft YaHei", "Microsoft JhengHei", SimSun, verdana, Tahoma, arial;
-        }
-        span:last-child {
-          font-size: 16px;
+          font-size: 15px;
+          font-family: "Microsoft YaHei";
         }
       }
     }
   }
-
-
-
 </style>

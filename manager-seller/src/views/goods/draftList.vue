@@ -147,7 +147,7 @@
       /** 草稿箱编辑 */
       handleDraftEdit(row) {
         const _draft_goods_id = row.draft_goods_id || '0'
-        this.$router.push({ path: `/goods/good-publish/${_draft_goods_id}/2` })
+        this.$router.push({ name: 'goodPublish', params: { goodsid: _draft_goods_id, isdraft: 2, callback: this.GET_DraftGoodsList }})
       },
 
       /** 草稿箱商品删除 */

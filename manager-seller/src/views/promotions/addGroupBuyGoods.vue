@@ -433,6 +433,7 @@
                 view: this.$route,
                 $router: this.$router
               })
+              this.$route.params.callback()
               this.$router.push({ path: '/promotions/group-buy-manager' })
             })
           }
