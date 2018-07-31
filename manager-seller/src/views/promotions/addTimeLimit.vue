@@ -193,9 +193,9 @@
               view: this.$route,
               $router: this.$router
             })
+            this.$route.params.callback()
             this.$router.push({ path: `/promotions/activity-goods-data/${this.activityID}` })
           })
-        }).catch(() => {
         })
       },
 

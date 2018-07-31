@@ -746,11 +746,13 @@
           API_goods.editDraftGoods(this.activeGoodsId, _params).then(() => {
             this.$message.success('修改草稿箱商品成功')
             this.$router.push({ path: '/goods/draft-list' })
+            this.$route.params.callback()
           })
         } else {
           /** 保存草稿操作 */
           API_goods.saveDraft(_params).then(() => {
             this.$message.success('保存草稿成功')
+            this.$route.params.callback()
             this.$router.push({ path: '/goods/draft-list' })
           })
         }
@@ -782,6 +784,7 @@
                 view: this.$route,
                 $router: this.$router
               })
+              this.$route.params.callback()
               this.$router.push({ path: '/goods/goods-list' })
             })
           } else {
@@ -792,6 +795,7 @@
                 view: this.$route,
                 $router: this.$router
               })
+              this.$route.params.callback()
               this.$router.push({ path: '/goods/goods-list' })
             })
           }
@@ -802,6 +806,7 @@
               view: this.$route,
               $router: this.$router
             })
+            this.$route.params.callback()
             this.$router.push({ path: '/goods/goods-list' })
           })
         }
