@@ -18,6 +18,19 @@ export function getConnectUrl(client_type, login_type) {
 }
 
 /**
+ * 获取个人中心绑定url
+ * @param login_type
+ * @returns {string}
+ */
+export function getLogindConnectUrl(login_type) {
+  return request({
+    url: `account-binder/pc/${login_type}`,
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
  * 第三方登录绑定
  * @param uuid
  * @param params
@@ -38,7 +51,8 @@ export function loginByConnect(uuid, params) {
 export function loginBindConnect(uuid) {
   return request({
     url: `account-binder/login/${uuid}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -49,7 +63,31 @@ export function loginBindConnect(uuid) {
 export function registerBindConnect(uuid) {
   return request({
     url: `account-binder/register/${uuid}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
+  })
+}
+
+/**
+ * 获取绑定列表
+ */
+export function getConnectList() {
+  return request({
+    url: 'account-binder/list',
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 解绑
+ * @param type
+ */
+export function unbindConnect(type) {
+  return request({
+    url: `account-binder/pc/${type}`,
+    method: Method.POST,
+    needToken: true
   })
 }
 
