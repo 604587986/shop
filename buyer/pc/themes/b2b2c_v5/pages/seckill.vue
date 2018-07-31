@@ -7,22 +7,40 @@
       <div class="inner-timeline w">
         <ul class="timeline-list">
           <li
-            v-for="i in 5"
-            :key="i"
-            :class="['timeline-item', , i === 1 && 'active']"
-            @click="handleClickTimeLine(i)"
+            v-for="(timeLine, index) in timeLines"
+            :key="index"
+            :class="['timeline-item', , timeLine.active && 'active']"
+            @click="handleClickTimeLine(index, timeLine)"
           >
             <a href="javascript:;" class="main-timeline-item">
               <div class="timeline-wrap">
-                <div class="line-timeline"><i>14:00</i></div>
+                <div class="line-timeline"><i>{{ timeLine.time_text }}:00</i></div>
                 <div class="next-timeline"><i>即将开始</i></div>
                 <div class="time-timeline">
-                  <b class="b-text">正在抢购</b>
-                  <b class="b-time">距离结束<i>01</i>:<i>20</i>:<i>59</i></b>
+                  <b class="b-text">{{ index === 0 ? '正在抢购' : '即将开始' }}</b>
+                  <b class="b-time">{{ index === 0 ? '距结束' : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
                 </div>
               </div>
             </a>
           </li>
+          <template v-if="timeLines.length < 5">
+            <li
+              v-for="i in (5 - timeLines.length)"
+              :key="i + '_pla'"
+              class="timeline-item"
+            >
+              <a href="javascript:;" class="main-timeline-item">
+                <div class="timeline-wrap">
+                  <div class="line-timeline"></div>
+                  <div class="next-timeline"></div>
+                  <div class="time-timeline">
+                    <b class="b-text"></b>
+                    <b class="b-time"></b>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </template>
         </ul>
       </div>
     </div>
@@ -57,15 +75,25 @@
 </template>
 
 <script>
+  import * as API_Promotions from '@/api/promotions'
+  import { Foundation } from '~/ui-utils'
   export default {
     name: 'seckill',
     data() {
       return {
-        timeline_fixed: false
+        timeline_fixed: false,
+        timeLines: '',
+        times: [],
+        timesText: [],
+        goodsList: []
       }
     },
     mounted() {
-      window.addEventListener('scroll', this.timeLineFixedStatus)
+      this.$nextTick(() => {
+        this.timeLineFixedStatus()
+        window.addEventListener('scroll', this.timeLineFixedStatus)
+      })
+      this.GET_TimeLine()
     },
     methods: {
       /** 时间段盒子是否浮动 */
@@ -76,12 +104,67 @@
         this.timeline_fixed = bodyScrollTop >= 31 + 140 + 90
       },
       /** 时间段被选中 */
-      handleClickTimeLine(i) {
+      handleClickTimeLine(timeLineIndex, timeLine) {
+        const { timeLines } = this
         this.MixinScrollToTop(31 + 140 + 90)
+        timeLines.map((item, index) => {
+          item.active = index === timeLineIndex
+          return item
+        })
+        this.GET_TimeLineGoods(timeLineIndex, timeLine.time_text)
+      },
+      /** 开始倒计时 */
+      startCountDown() {
+        this.interval = setInterval(() => {
+          const { times, timesText } = this
+          for (let i = 0; i < times.length; i ++) {
+            if (!times[i]) continue
+            times[i] -= 1
+            const timeText = Foundation.countTimeDown(times[i])
+            this.$set(this.timesText, i, Foundation.countTimeDown(times[i]))
+          }
+          this.$set(this, 'times', times)
+        }, 1000)
+      },
+      /** 获取时间线 */
+      GET_TimeLine() {
+        API_Promotions.getSeckillTimeLine().then(response => {
+          if (response && response.length) {
+            response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
+            const times = []
+            const timesText = []
+            response.map((item, index) => {
+              item.active = index === 0
+              if (index === 0) {
+                times.push(Foundation.theNextDayTime())
+              } else {
+                times.push(item.distance_time)
+              }
+              timesText.push({ hours: '00', minutes: '00', seconds: '00' })
+              return item
+            })
+            this.times = times
+            this.timesText = timesText
+            this.timeLines = response
+            this.startCountDown()
+          }
+        })
+      },
+      /** 获取对应时刻的商品 */
+      GET_TimeLineGoods(timeIndex, range_time) {
+        const params = {
+          page_no: 1,
+          page_size: 20,
+          range_time
+        }
+        API_Promotions.getSeckillTimeGoods(params).then(response => {
+          console.log(response)
+        })
       }
     },
     destroyed() {
       window.removeEventListener('scroll', this.timeLineFixedStatus)
+      if (this.interval) clearInterval(this.interval)
     }
   }
 </script>

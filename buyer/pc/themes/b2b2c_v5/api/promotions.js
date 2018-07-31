@@ -82,3 +82,25 @@ export function getPointsGoods(params) {
     params
   })
 }
+
+/**
+ * 获取限时抢购时间线
+ */
+export function getSeckillTimeLine() {
+  return request({
+    url: 'promotions/seckill/time-line',
+    method: Method.GET
+  })
+}
+
+/**
+ * 获取限时抢购商品
+ * @param params
+ */
+export function getSeckillTimeGoods(params) {
+  return request({
+    url: 'promotions/seckill/goods-list',
+    method: Method.GET,
+    params
+  })
+}

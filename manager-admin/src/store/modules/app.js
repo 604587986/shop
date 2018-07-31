@@ -3,24 +3,24 @@ import Cookies from 'js-cookie'
 const app = {
   state: {
     sidebar: {
-      opened: !+Cookies.get('sidebarStatus'),
+      opened: !+Cookies.get('adminSidebarStatus'),
       withoutAnimation: false
     },
     device: 'desktop',
-    language: Cookies.get('language') || 'zh'
+    language: Cookies.get('adminLanguage') || 'zh'
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
       if (state.sidebar.opened) {
-        Cookies.set('sidebarStatus', 1)
+        Cookies.set('adminSidebarStatus', 1)
       } else {
-        Cookies.set('sidebarStatus', 0)
+        Cookies.set('adminSidebarStatus', 0)
       }
       state.sidebar.opened = !state.sidebar.opened
       state.sidebar.withoutAnimation = false
     },
     CLOSE_SIDEBAR: (state, withoutAnimation) => {
-      Cookies.set('sidebarStatus', 1)
+      Cookies.set('adminSidebarStatus', 1)
       state.sidebar.opened = false
       state.sidebar.withoutAnimation = withoutAnimation
     },
@@ -29,7 +29,7 @@ const app = {
     },
     SET_LANGUAGE: (state, language) => {
       state.language = language
-      Cookies.set('language', language)
+      Cookies.set('adminLanguage', language)
     }
   },
   actions: {

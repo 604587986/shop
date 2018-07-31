@@ -14,15 +14,15 @@
       <div v-else class="w">
         <ul class="goods-list">
           <li v-for="goods in tableData.data" :key="goods.goods_id" class="goods-item">
-            <a href="javascript:;">
-              <img class="goods-img" src="http://javashop-statics.oss-cn-beijing.aliyuncs.com/demo/7EBD931E14FF477FB248823F3CA3316A.jpg_300x300" alt="">
+            <a :href="'/goods/' + goods.goods_id">
+              <img class="goods-img" :src="goods.goods_img">
             </a>
             <div class="goods-info">
               <p class="integral">
                 <span class="price">￥{{ goods.exchange_money | unitPrice }}+{{ goods.exchange_point }}积分</span>
                 <span class="origin-price">原价：￥52</span>
               </p>
-              <p class="goods-name">资生堂 珊珂 绵润泡沫洁面乳 120g啊啊啊飒飒啊啊爱上a</p>
+              <p class="goods-name">{{ goods.goods_name }}</p>
               <p>已有<span>{{ goods.enable_exchange }}</span>人兑换</p>
             </div>
           </li>
@@ -64,6 +64,7 @@
     },
     mounted() {
       this.GET_PointsCategory()
+      this.GET_PointsGoods()
     },
     methods: {
       /** 当前分页发生改变 */
