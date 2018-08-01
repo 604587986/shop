@@ -279,7 +279,7 @@
           this.unselectedSku = true
           return false
         }
-        if (!Storage.getItem('user')) {
+        if (!Storage.getItem('refreshToken')) {
           this.$confirm('您还未登录，要现在去登录吗？', () => {
             this.$router.push({ path: '/login', query: { forward: `${this.$route.path}?sku_id=${this.selectedSku.sku_id}`} })
           })

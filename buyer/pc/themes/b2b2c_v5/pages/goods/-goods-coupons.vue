@@ -66,6 +66,7 @@
    */
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
+  import Storage from '@/utils/storage'
   export default {
     name: 'goods-coupons',
     props: ['shop-id'],
@@ -90,6 +91,12 @@
       },
       /** 领取优惠券 */
       handleReceiveCoupon(coupon) {
+        if (!Storage.getItem('refreshToken')) {
+          this.$confirm('您还未登录，要现在去登录吗？', () => {
+            this.$router.push({ path: '/login', query: { forward: this.$route.path } })
+          })
+          return false
+        }
         API_Members.receiveCoupons(coupon.coupon_id).then(response => {
           this.$message.success('领取成功！')
         })
