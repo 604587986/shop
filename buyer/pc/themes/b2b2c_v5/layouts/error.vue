@@ -16,8 +16,16 @@
         </div>
       </div>
     </div>
-    <div v-else-if="error.statusCode === 502">服务器出错</div>
-    <div v-else>{{ error.statusCode }}：{{ error.message }}</div>
+    <!--<div v-else-if="error.statusCode === 502">服务器出错</div>-->
+    <div v-else class="error-500">
+      <div class="inner-error">
+        <p>服务器出现错误...</p>
+      </div>
+      <div class="inner-btns">
+        <el-button size="small" @click="$router.back()">返回上页</el-button>
+        <el-button size="small" @click="handleReload">刷新页面</el-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -25,11 +33,18 @@
   export default {
     name: 'error',
     props: ['error'],
-    layout: 'full'
+    layout: 'full',
+    methods: {
+      /** 刷新网页 */
+      handleReload() {
+        window.location.reload()
+      }
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../assets/styles/color";
   .container {
     background-color: #fff;
   }
@@ -64,6 +79,32 @@
         margin-left: 30px;
       }
       /deep/ .el-button { width: 90px }
+    }
+  }
+  .error-500 {
+    text-align: center;
+    .inner-error {
+      width: 500px;
+      height: 350px;
+      margin: 50px auto 20px;
+      text-align: center;
+      line-height: 200px;
+      font-size: 18px;
+      font-weight: 600;
+      background: url("../assets/images/backbround-500.png") no-repeat center;
+    }
+    .inner-btns {
+      margin-bottom: 30px;
+      /deep/ .el-button {
+        &:hover, &:focus, &:active {
+          border-color: lighten($color-main, 10%);
+          color: lighten($color-main, 10%);
+          background-color: #fff;
+        }
+        &:first-child {
+          margin-right: 10px;
+        }
+      }
     }
   }
 </style>
