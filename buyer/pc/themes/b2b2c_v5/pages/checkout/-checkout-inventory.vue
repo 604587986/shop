@@ -89,7 +89,7 @@
                   </td>
                   <td class="price-gooods-inventory">
                     ￥{{ goods.purchase_price | unitPrice }}
-                    <p class="price-goods-org">原价￥{{ goods.original_price | unitPrice }}</p>
+                    <p v-if="goods.purchase_price < goods.original_price" class="price-goods-org">原价￥{{ goods.original_price | unitPrice }}</p>
                   </td>
                   <td class="num-gooods-inventory">x{{ goods.num }}</td>
                   <td class="subtotal-gooods-inventory">￥{{ goods.subtotal | unitPrice }}</td>
