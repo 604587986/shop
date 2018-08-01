@@ -22,7 +22,12 @@ export const mutations = {
    */
   [types.SET_USER_INFO](state, data) {
     state.user = data
-    process.client && Storage.setItem('user', JSON.stringify(data), { domain: domain.cookie })
+    if (process.client) {
+      const refreshToken = Storage.getItem('refreshToken')
+      const refresh_token_time = Base64.decode(refreshToken).match(/"exp":(\d+)/)[1] * 1000
+      const expires = new Date(refresh_token_time)
+      Storage.setItem('user', JSON.stringify(data), { expires, domain: domain.cookie })
+    }
   },
   /**
    * 移除用户信息
@@ -103,10 +108,10 @@ export const actions = {
     return new Promise((resolve, reject) => {
       if (params.login_type === 'quick') {
         const { mobile, captcha } = params.form
-        API_Passport.loginByMobile(mobile, captcha).then(loginSccess).catch(error => reject(error))
+        API_Passport.loginByMobile(mobile, captcha).then(loginSccess).catch(reject)
       } else {
         params.form.uuid = Storage.getItem('uuid')
-        API_Passport.login(params.form).then(loginSccess).catch(error => reject(error))
+        API_Passport.login(params.form).then(loginSccess).catch(reject)
       }
       function loginSccess(res) {
         const { access_token, refresh_token, uid } = res
@@ -116,7 +121,7 @@ export const actions = {
           response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
           resolve(response)
-        }).catch(error => reject(error))
+        }).catch(reject)
       }
     })
   },
@@ -166,13 +171,10 @@ export const actions = {
   registerByMobileAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Passport.registerByMobile(params).then(res=> {
-        const { access_token, refresh_token, uid } = res
+        const { access_token, refresh_token } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        API_Members.getUserInfo(uid).then(response => {
-          commit(types.SET_USER_INFO, response)
-          resolve(response)
-        }).catch(error => reject(error))
+        resolve(res)
       })
     })
   },

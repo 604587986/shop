@@ -27,10 +27,12 @@ export function getMessages(params) {
  */
 export function getMesssagesAsUnread(params) {
   params = params || {}
-  params.page_size = params.page_size || 5
+  params.read = 0
   return request({
-    url: 'http://www.andste.cc/mock/5aab2c100d9d060b4b99b47f/buyer/message',
+    url: 'members/member-nocice-logs',
     method: Method.GET,
+    needToken: true,
+    loading: false,
     params
   })
 }
@@ -53,7 +55,8 @@ export function messageMarkAsRead(ids) {
  */
 export function deleteMessage(ids) {
   return request({
-    url: `members/member-nocice-logs/${ids}}`,
-    method: Method.DELETE
+    url: `members/member-nocice-logs/${ids}`,
+    method: Method.DELETE,
+    needToken: true
   })
 }

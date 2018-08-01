@@ -17,13 +17,11 @@ export function getValidateCodeUrl(uuid, type) {
 }
 
 /**
- * 图片上传API
- * @type {string}
+ * 获取站点设置
  */
-export const uploadApi = `${api.base}/uploaders`
-
-/**
- * 地区API
- * @type {string}
- */
-export const regionApi = `${api.base}/regions/@id/children`
+export function getSiteData() {
+  return request({
+    url: `${api.base}/site-show`,
+    method: Method.GET
+  })
+}

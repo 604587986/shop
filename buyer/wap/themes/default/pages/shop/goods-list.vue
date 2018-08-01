@@ -9,8 +9,8 @@
       <div class="inner w">
         <div class="left">
           <div class="inner-sort">
-            <template v-for="sort in sortNav">
-              <div class="item" :key="sort.title" :class="[sort.active && 'active', sort.sort]" @click="handleSortChanged(sort)">
+            <template v-for="sort in sorts">
+              <div class="item" :key="sort.title" :class="[sort.active && 'active', sort.type === 'asc' ? 'up' : 'down']" @click="handleSortChanged(sort)">
                 {{ sort.title }}<i class="iconfont ea-icon-arrow-down2"></i>
               </div>
             </template>
@@ -18,7 +18,7 @@
           <div class="inner-price">
             ￥
             <el-input-number size="mini" :controls="false" v-model="params.min_price"/>
-             -
+            -
             <el-input-number size="mini" :controls="false" v-model="params.max_price"/>
             <el-button size="mini" class="price-btn" @click="handlePriceConfirm">确认</el-button>
           </div>
@@ -36,15 +36,15 @@
         <ul class="goods-list">
           <li v-for="goods in goods.data" :key="goods.goods_id" class="goods-item">
             <div class="goods-image">
-              <nuxt-link :to="'/goods/' + goods.goods_id">
-                <img :src="goods.goods_image" :alt="goods.goods_name" :title="goods.goods_name">
-              </nuxt-link>
+              <a :href="'/goods/' + goods.goods_id">
+                <img :src="goods.thumbnail" :alt="goods.name" :title="goods.name">
+              </a>
             </div>
             <div class="goods-name">
-              <nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.goods_name }}</nuxt-link>
+              <a :href="'/goods/' + goods.goods_id">{{ goods.name }}</a>
             </div>
             <div class="goods-price">
-              <span>RMB：<span class="price">￥<strong>{{ goods.goods_price | unitPrice }}</strong></span></span>
+              <span>RMB：<span class="price">￥<strong>{{ goods.price | unitPrice }}</strong></span></span>
               <span>已销售：{{ goods.buy_count }}件</span>
             </div>
           </li>
@@ -67,33 +67,31 @@
 <script>
   import Vue from 'vue'
   import * as API_Shop from '@/api/shop'
+  import * as API_Goods from '@/api/goods'
   import { Foundation } from '~/ui-utils'
   const theme1Header = () => import('@/pages/shop/-themes/-theme1-header')
   const theme2Header = () => import('@/pages/shop/-themes/-theme2-header')
   const theme3Header = () => import('@/pages/shop/-themes/-theme3-header')
   import { Pagination, Input, InputNumber } from 'element-ui'
-  Vue.use(Pagination)
-  Vue.use(Input)
-  Vue.use(InputNumber)
+  Vue.use(Pagination).use(Input).use(InputNumber)
   export default {
     name: 'shop-goods-list',
     validate({ query }) {
       return /^\d+$/.test(query.shop_id)
     },
-    asyncData({ query }, callback) {
-      Promise.all([
-        API_Shop.getShopBaseInfo(query.shop_id),
-        API_Shop.getShopGoods(query)
-      ]).then(values => {
-        callback(null, { shop: values[0], goods: values[1] })
-      }).catch(e => {
-        callback({ statusCode: e.response.status })
-      })
+    async asyncData({ query }) {
+      const shop = await API_Shop.getShopBaseInfo(query.shop_id)
+      return { shop }
     },
     components: { theme1Header, theme2Header, theme3Header },
     data() {
       return {
-        sortNav: ['新品', '价格', '销量', '收藏', '人气'].map((item, index) => ({ title: item, active: index === 0, sort: 'up', sort_id: index })),
+        sorts: [
+          { title: '默认', name: 'def', type: 'asc', active: true },
+          { title: '销量', name: 'buynum', type: 'asc', active: false },
+          { title: '价格', name: 'price', type: 'asc', active: false },
+          { title: '评价', name: 'grade', type: 'asc', active: false },
+        ],
         shop: '',
         goods: '',
         params: {
@@ -103,6 +101,9 @@
         }
       }
     },
+    mounted() {
+      this.GET_GoodsList()
+    },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentChange(page) {
@@ -111,17 +112,14 @@
       },
       /** 排序发生改变 */
       handleSortChanged(sort) {
-        this.sortNav.map(item => {
-          if (sort.sort_id === item.sort_id) {
-            if (!sort.active) {
-              item.active = true
-            } else {
-              item.sort = item.sort === 'up' ? 'down' : 'up'
-            }
-          }
-          item.active = item.sort_id === sort.sort_id
-        })
-        this.handleQueryChanged()
+        if (sort.active) {
+          sort.type = sort.type === 'asc' ? 'desc' : 'asc'
+        }
+        this.$set(this, 'sorts', this.sorts.map(item => {
+          item.active = item.name === sort.name
+          return item
+        }))
+        this.params.sort = `${sort.name}_${sort.type}`
         this.GET_GoodsList()
       },
       /** 价格区间确认 */
@@ -131,7 +129,6 @@
           this.$message.error('价格区间格式有误！')
           return false
         }
-        this.handleQueryChanged()
         this.GET_GoodsList()
       },
       /** 商品搜索【店内、全站】 */
@@ -139,20 +136,22 @@
         if (type === 'all') {
           this.$router.push({ path: '/goods', query: { keyword: this.params.keyword } })
         } else {
-          this.handleQueryChanged()
           this.GET_GoodsList()
         }
       },
-      /** 当query发生改变时，替换地址栏state */
-      handleQueryChanged() {
-        Object.keys(this.params).forEach(key => {
-          this.$route.query[key] = this.params[key]
-        })
-        window.history.replaceState(null, null, `?${Foundation.formatQuery(this.$route.query)}`)
-      },
       /** 获取店铺商品列表 */
       GET_GoodsList() {
-        API_Shop.getShopGoods(this.params).then(response => {
+        const params = JSON.parse(JSON.stringify(this.params))
+        if (params.shop_id) {
+          params.seller_id = params.shop_id
+          delete  params.shop_id
+        }
+        if (params.min_price || params.max_price) {
+          params.price = [params.min_price, params.max_price].join('_')
+          delete params.min_price
+          delete params.max_price
+        }
+        API_Goods.getGoodsList(params).then(response => {
           this.goods = response
           this.MixinScrollToTop()
         })
@@ -162,6 +161,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   img { width: 100%; height: 100% }
   .container {
     background-color: #F7F7F7;
@@ -189,13 +189,13 @@
       border-right: 1px solid #ccc;
       font-size: 14px;
       cursor: pointer;
-      &.active { color: #f42424 }
+      &.active { color: $color-main }
       &.down .iconfont { transform: rotate(0) scale(.8) }
       &:last-child { border-right: 0 }
       .iconfont {
         font-size: 12px;
         margin: 0 5px;
-        color: #f42424;
+        color: $color-main;
         transform: rotate(180deg) scale(.8);
       }
     }
