@@ -62,7 +62,7 @@ module.exports = {
   },
   css: [
     '~assets/styles/normalize.css',
-    '~assets/styles/base.css',
+    '~assets/styles/base.scss',
     '~assets/styles/page-transletion.scss',
     'swiper/dist/css/swiper.css',
     'vant/lib/vant-css/index.css',
