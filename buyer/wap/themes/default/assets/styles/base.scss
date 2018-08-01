@@ -1,3 +1,5 @@
+@import "color";
+
 /* 公共样式重置
    ========================================================================== */
 body {
@@ -6,6 +8,11 @@ body {
   color: #666;
   background: #fff;
   display: block;
+}
+
+body {
+  font-family: "Microsoft YaHei","Microsoft JhengHei",SimSun,verdana,Tahoma,arial;
+  position: relative;
 }
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
@@ -38,7 +45,7 @@ a:visited {
 a:hover {
   text-decoration: none;
   outline: none;
-  color: #f42424;
+  color: $color-main;
 }
 
 a:active {
@@ -58,6 +65,10 @@ li {
   list-style: none;
 }
 
+a, p, span, div, th, td {
+  word-break: break-all;
+}
+
 img {
   border: 0;
   vertical-align:bottom
@@ -67,27 +78,13 @@ img {
   outline: 0;
 }
 
-input[type="color"],
-input[type="date"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="email"],
-input[type="month"],
-input[type="number"],
-input[type="password"],
-input[type="search"],
-input[type="tel"],
-input[type="text"],
-input[type="time"],
-input[type="url"],
-input[type="week"],
-select:focus,
-textarea {
-  font-size: 16px;
-}
-
 /* 公共样式
    ========================================================================== */
+.w {
+  margin: auto;
+  width: 1210px;
+}
+
 .clear, .clr {
   display: block;
   overflow: hidden;
@@ -130,6 +127,56 @@ html[xmlns] .clearfix {
   float: right;
 }
 
+
+/** layer skin */
+.layer-skin-custom-msg {
+  border: 0 !important;
+  box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
+}
+
+.layer-skin-common, .layui-layer-prompt {
+  .layui-layer-title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    box-sizing: border-box;
+    padding: 0 40px;
+    text-align: center;
+    //color: #fff;
+    //background-color: darken($color-main, 10%);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    font-weight: 600;
+  }
+  .layui-layer-setwin {
+    color: #fff
+  }
+  .layui-layer-content {
+    margin-top: 44px;
+  }
+  .layui-layer-btn-c a {
+    color: #333;
+    min-width: 50px;
+    &:first-child {
+      background-color: $color-main;
+      border-color: $color-main;
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+}
+
+/** dorpdown-layer */
+.dorpdown-layer {
+  display: none;
+  position: absolute;
+  border: 1px solid #d2d2d2;
+  background-color: #fff;
+  top: 30px;
+  right: 0;
+}
+
 /** input */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -141,7 +188,7 @@ input[type="number"]{
 
 /** others */
 .price {
-  color: #f42424 !important;
+  color: $color-main !important;
 }
 
 .sku-spec {
