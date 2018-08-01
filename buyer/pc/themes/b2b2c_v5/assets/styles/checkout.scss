@@ -668,6 +668,11 @@
     color: $color-main;
     font-weight: bold;
   }
+  .price-goods-org {
+    text-decoration-line: line-through;
+    color: #ccc;
+    font-weight: normal;
+  }
 
   .bottom-ckt-inventory {
     display: flex;

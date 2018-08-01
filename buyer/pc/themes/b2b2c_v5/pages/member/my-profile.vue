@@ -80,11 +80,12 @@
     },
     components: { EnRegionPicker },
     data() {
+      const user = this.$store.state.user.user
       return {
         /** 地区 */
         regions: {},
         /** 个人资料 表单 */
-        profileForm: JSON.parse(JSON.stringify(this.$store.state.user.user)) || {},
+        profileForm: user ? JSON.parse(JSON.stringify(user)) : {},
         /** 个人资料 表单规则 */
         profileRules: {
           nickname: [
@@ -114,7 +115,7 @@
     },
     watch: {
       user(newVal, oldVal) {
-        this.profileForm = JSON.parse(JSON.stringify(newVal))
+        this.profileForm = newVal ? JSON.parse(JSON.stringify(newVal)) : {}
       }
     },
     computed: {
