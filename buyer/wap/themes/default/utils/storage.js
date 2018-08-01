@@ -1,19 +1,17 @@
 /**
- * Created by andste.cc@gmail.com on 2018/5/3.
+ * Created by Andste on 2018/5/3.
  */
 
 import Cookies from 'js-cookie'
 
 export default {
-  setItem: (key, value, options) => {
-    options = options || {}
-    if (!options.path) options.path = '/'
+  setItem: (key, value, options = {}) => {
     Cookies.set(key, value, options)
   },
   getItem: (key) => {
     return Cookies.get(key)
   },
-  removeItem: (key) => {
-    Cookies.remove(key)
+  removeItem: (key, options = {}) => {
+    Cookies.remove(key, options)
   }
 }
