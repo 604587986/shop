@@ -26,9 +26,7 @@
           <div class="category-box">
             <div class="inner-category-box">
               <div v-for="cate in categorys" :key="cate.shop_cat_id" class="category-item">
-                <nuxt-link
-                  :to="'/shop/goods-list?shop_id=' + shop_id + '&category=' + cate.shop_cat_id"
-                >{{ cate.shop_cat_name }}</nuxt-link>
+                <a :href="'/shop/goods-list?shop_id=' + shop_id + '&category=' + cate.shop_cat_id">{{ cate.shop_cat_name }}</a>
                 <div class="category-item-box">
                   <div
                     v-if="cate.children && cate.children.length"
@@ -36,9 +34,7 @@
                     :key="cc.shop_cat_id"
                     class="category-item-cc"
                   >
-                    <nuxt-link
-                      :to="'/shop/goods-list?shop_id=' + shop_id + '&category=' + cc.shop_cat_id"
-                    >{{ cc.shop_cat_name }}</nuxt-link>
+                    <a :href="'/shop/goods-list?shop_id=' + shop_id + '&category=' + cc.shop_cat_id">{{ cc.shop_cat_name }}</a>
                   </div>
                 </div>
               </div>

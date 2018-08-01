@@ -114,15 +114,11 @@
       },
       /** 停止生成静态页 */
       handleStopStaticPage() {
-        if (this.status !== 'DOING' && this.status !== 'EXCEPTION') {
-          this.$message.error('当前没有任务正在进行！')
-        } else {
-          API_Task.clearTask(this.task_id).then(() => {
-            this.percentage = 0
-            this.status = 'SCUESS'
-            this.status_text = ''
-          })
-        }
+        API_Task.clearTask(this.task_id).then(() => {
+          this.percentage = 0
+          this.status = 'SCUESS'
+          this.status_text = ''
+        })
       },
       /** 获取生成进度 */
       GET_Progress() {
