@@ -1,5 +1,5 @@
 /**
- * Created by andste.cc@gmail.com on 2018/6/8.
+ * Created by Andste on 2018/6/8.
  */
 
 import request, { Method } from '@/utils/request'
@@ -24,7 +24,8 @@ export function getCoupons(params) {
 export function receiveCoupons(coupon_id) {
   return request({
     url: `members/coupon/${coupon_id}/receive`,
-    method: Method.GET
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -78,6 +79,7 @@ export function commentsOrder(params) {
     url: 'members/comments',
     method: Method.POST,
     needToken: true,
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
@@ -264,7 +266,7 @@ export function logout() {
  */
 export function getReceipts() {
   return request({
-    url: 'members/receipts',
+    url: 'members/receipt',
     method: Method.GET,
     needToken: true
   })
@@ -276,7 +278,7 @@ export function getReceipts() {
  */
 export function addReceipt(params) {
   return request({
-    url: 'members/receipt',
+    url: 'members/receipt/ordinary',
     method: Method.POST,
     needToken: true,
     data: params
@@ -290,7 +292,7 @@ export function addReceipt(params) {
  */
 export function editReceipt(id, params) {
   return request({
-    url: `members/receipt/${id}`,
+    url: `members/receipt/${id}/ordinary`,
     method: Method.PUT,
     needToken: true,
     data: params
@@ -310,13 +312,13 @@ export function deleteReceipt(id) {
 }
 
 /**
- * 获取发票内容
+ * 设置发票为默认
+ * @param id
  */
-export function getReceiptContent() {
+export function setDefaultReceipt(id) {
   return request({
-    url: 'members/receipt-content',
-    method: Method.GET,
-    needToken: true
+    url: `members/receipt/${id}/default`,
+    method: Method.PUT
   })
 }
 
@@ -382,7 +384,18 @@ export function loginBindAccount(uuid) {
  */
 export function registerBindAccount(uuid) {
   return request({
-    url: `members/account-binder/register/{uuid}`,
+    url: `members/account-binder/register/${uuid}`,
     method: Method.POST
+  })
+}
+
+/**
+ * 获取商家可用优惠券列表
+ * @param seller_ids
+ */
+export function getShopsCoupons(seller_ids) {
+  return request({
+    url: `members/coupon/${seller_ids}`,
+    method: Method.GET
   })
 }
