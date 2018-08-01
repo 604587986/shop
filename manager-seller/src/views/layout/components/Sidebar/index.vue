@@ -1,17 +1,19 @@
 <template>
-  <el-scrollbar wrapClass="scrollbar-wrapper">
+  <div>
     <div class="logo-container" :class="[isCollapse && 'collapse']">
       <span class="logo-tip">商家中心</span>
       <img src="../../../../assets/logo_images/logo-javashop-white.png" class="logo-img">
     </div>
-    <el-menu
-      mode="vertical"
-      :default-active="$route.path"
-      :collapse="isCollapse"
-    >
-      <sidebar-item v-for="route in routers" :key="route.name" :item="route" :base-path="route.path"></sidebar-item>
-    </el-menu>
-  </el-scrollbar>
+    <el-scrollbar wrapClass="scrollbar-wrapper">
+      <el-menu
+        mode="vertical"
+        :default-active="$route.path"
+        :collapse="isCollapse"
+      >
+        <sidebar-item v-for="route in routers" :key="route.name" :item="route" :base-path="route.path"></sidebar-item>
+      </el-menu>
+    </el-scrollbar>
+  </div>
 </template>
 
 <script>

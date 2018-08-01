@@ -21,15 +21,14 @@
     left: 0;
     z-index: 1001;
     overflow: hidden;
+    background-color: $menu_bg !important;
     //reset element-ui css
     .horizontal-collapse-transition {
       transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
     }
-    .scrollbar-wrapper {
-      height: calc(100% + 15px);
-      .el-scrollbar__view {
-        height: 100%;
-      }
+    .el-scrollbar {
+      height: calc(100vh - 80px);
+      margin-top: 80px;
     }
     .is-horizontal {
       display: none;
@@ -75,12 +74,8 @@
         }
       }
     }
-    & .el-scrollbar__view>.el-menu {
-      margin-top: 80px;
-    }
     .el-menu {
       border: none;
-      height: 100%;
       width: 100% !important;
       background-color: $menu_bg !important;
     }
