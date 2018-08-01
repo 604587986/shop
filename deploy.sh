@@ -1,6 +1,6 @@
 #! /bin/bash
 
-WEB_PATH=$PWD$1
+WEB_PATH=$PWD
 
 echo "开始部署..."
 cd $WEB_PATH
@@ -44,7 +44,7 @@ if [[ ! -n "$1" || "$1" == "buyer-pc" ]];then
   echo -e "\033[32m买家PC端build完成，等待部署...\033[0m"
 fi
 
-if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
+#if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
   #echo "开始部署买家WAP端(buyer-wap)..."
   #cd $WEB_PATH/buyer/wap/themes/default
   #rm -rf node_modules
@@ -52,7 +52,7 @@ if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
   #sudo npm install
   #sudo npm run build
   #echo "买家WAP端build完成，等待部署..."
-fi
+#fi
 
 # 删除所有应用
 pm2 delete all
