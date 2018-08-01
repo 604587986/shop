@@ -57,13 +57,19 @@ fi
 # 删除所有应用
 pm2 delete all
 
-# 启动买家端PC
-cd $WEB_PATH/buyer/pc/themes/b2b2c_v5
-pm2 start npm --name "buyer-pc" -- run start
+if [[ ! -n "$1" || "$1" == "buyer-pc" ]];then
+  # 启动买家端PC
+  cd $WEB_PATH/buyer/pc/themes/b2b2c_v5
+  pm2 start npm --name "buyer-pc" -- run start
+  echo -e "\033[32mbuyer-pc部署完成！\033[0m"
+fi
 
-# 启动买家端WAP
-# cd $WEB_PATH/buyer/wap/themes/default
-# pm2 start npm --name "buyer-wap" -- run start
+if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
+  #启动买家端WAP
+  cd $WEB_PATH/buyer/wap/themes/default
+  pm2 start npm --name "buyer-wap" -- run start
+  echo -e "\033[32mbuyer-wap部署完成！\033[0m"
+fi
 
 echo -e "\033[32m全部部署完成！\033[0m"
 
