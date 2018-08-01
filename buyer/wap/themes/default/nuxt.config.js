@@ -7,15 +7,13 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no' },
-      { hid: 'keywords', name: 'keywords', content: '最好的Java网店系统,Java多用户商城,Java商城定制开发' },
-      { hid: 'description', name: 'description', content: 'Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。' },
       { name: 'renderer', content: 'webkit' },
       { name: 'force-rendering', content: 'webkit' },
       { hid: 'X-UA-Compatible', 'http-equiv': 'X-UA-Compatible', content: 'IE=edge,chrome=1' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_iopkwi8gkd6xbt9.css' }
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_2yritt4lz7c.css' }
     ],
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },
@@ -64,7 +62,7 @@ module.exports = {
   },
   css: [
     '~assets/styles/normalize.css',
-    '~assets/styles/base.css',
+    '~assets/styles/base.scss',
     '~assets/styles/page-transletion.scss',
     'swiper/dist/css/swiper.css',
     'vant/lib/vant-css/index.css',

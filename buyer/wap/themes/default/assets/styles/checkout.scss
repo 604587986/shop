@@ -1,6 +1,8 @@
+@import "./color";
 /deep/ {
   .listing-empty {
     text-align: center;
+    margin: 50px auto;
     img {
       width: 300px;
       height: 300px;
@@ -72,13 +74,17 @@
   }
 
   .ckt-checkbox:hover,
-  .li-ckt-info.selected .ckt-checkbox, .ckt-checkbox.selected {
+  .li-ckt-info.selected .ckt-checkbox,
+  .ckt-checkbox.selected,
+  .ckt-checkbox.editting {
     height: 26px;
     line-height: 26px;
-    border: 2px solid #ff3500;
+    border: 2px solid $color-main;
   }
-  .li-ckt-info.selected .ckt-checkbox, .ckt-checkbox.selected {
-    background: url("~/assets/images/icon-ckt-selected.png") no-repeat bottom right;
+  .li-ckt-info.selected .ckt-checkbox,
+  .ckt-checkbox.selected,
+  .ckt-checkbox.editting {
+    background: url("../../assets/images/icon-ckt-selected.png") no-repeat bottom right;
     background-size: 20px 20px;
   }
 
@@ -148,7 +154,7 @@
   }
 
   .other-top a:hover {
-    color: #ff6700;
+    color: $color-main;
   }
 
   /* 收货人信息
@@ -244,7 +250,7 @@
   .operate-li-ckt-info a {
     margin-right: 5px;
     color: #005ea7;
-    &.delete { color: #f42424 }
+    &.delete { color: $color-main }
   }
 
   .collapse-ckt-info {
@@ -257,7 +263,7 @@
   }
 
   .collapse-ckt-info.more .icon-collapse-ckt-info {
-    background: url('~/assets/images/icon-ckt-addr.png') no-repeat 0 -10px;
+    background: url('../../assets/images/icon-ckt-addr.png') no-repeat 0 -10px;
   }
 
   .icon-collapse-ckt-info {
@@ -267,7 +273,7 @@
     line-height: 10px;
     width: 9px;
     margin-left: 5px;
-    background: url('~/assets/images/icon-ckt-addr.png') no-repeat 0 0;
+    background: url('../../assets/images/icon-ckt-addr.png') no-repeat 0 0;
   }
 
   /* 支付方式
@@ -321,15 +327,15 @@
     line-height: 10px;
     width: 9px;
     margin-left: 5px;
-    background: url('~/assets/images/icon-ckt-pay.png') no-repeat 0 0;
+    background: url('../../assets/images/icon-ckt-pay.png') no-repeat 0 0;
   }
 
   .icon-collapse-ckt-pay.more {
-    background: url('~/assets/images/icon-ckt-pay.png') no-repeat -10px 0;
+    background: url('../../assets/images/icon-ckt-pay.png') no-repeat -10px 0;
   }
 
   .icon-collapse-ckt-pay.coll {
-    background: url('~/assets/images/icon-ckt-addr.png') no-repeat 0 -10px;;
+    background: url('../../assets/images/icon-ckt-addr.png') no-repeat 0 -10px;;
   }
 
   /* 配送清单
@@ -369,7 +375,7 @@
     float: left;
     a {
       color: #005ea7;
-      &:hover { color: #f42424}
+      &:hover { color: $color-main}
     }
   }
 
@@ -385,7 +391,7 @@
 
   .title-item-inventory .store-total div i,
   .title-item-inventory .store-total div span {
-    color: red;
+    color: $color-main;
     font-weight: bold;
   }
 
@@ -447,7 +453,7 @@
     float: left;
     position: relative;
     width: 130px;
-    background-color: rgba(255, 51, 0, 0.8);
+    background-color: $color-main;
     margin-top: 20px;
     margin-left: 10px;
     cursor: pointer;
@@ -477,12 +483,12 @@
   .tag-item-bottom-inventory >a {
     color: #ffffff;
     padding: 5px 10px;
-    background-color: #ff3500;
+    background-color: $color-main;
   }
 
   .price-item-bottom-inventory {
     margin-left: 10px;
-    color: red;
+    color: $color-main;
   }
 
   .name-item-bottom-inventory {
@@ -499,6 +505,7 @@
     line-height: 34px;
     text-align: center;
     font-size: 16px;
+    font-weight: 600;
     color: #ffffff;
     overflow: hidden;
   }
@@ -539,10 +546,10 @@
     -webkit-box-shadow: 0 2px 15px #ccc;
     -moz-box-shadow: 0 2px 15px #ccc;
     box-shadow: 0 2px 15px #ccc;
+    transition: all .2s;
   }
-
-  .detail-item-discount.show {
-    height: 50px;
+  .item-discount-inventory:hover .detail-item-discount {
+    height: 50px
   }
 
   .detail-item-discount p {
@@ -577,11 +584,11 @@
     z-index: 2;
   }
 
-  .icon-select-discount {
+  .ea-icon-check {
     position: absolute;
     right: 1px;
     bottom: -4px;
-    color: rgba(255, 51, 0, 0.8);
+    color: $color-main;
     z-index: 3;
     font-size: 12px;
   }
@@ -634,7 +641,7 @@
     display: block;
     height: 15px;
     color: #ffffff;
-    background-color: #ff3500;
+    background-color: $color-main;
     top: 11px;
     left: 18px;
     z-index: 2;
@@ -658,7 +665,7 @@
 
   .price-gooods-inventory,
   .subtotal-gooods-inventory {
-    color: red;
+    color: $color-main;
     font-weight: bold;
   }
 
@@ -671,7 +678,7 @@
       width: 275px;
       margin-right: 15px;
     }
-    .remark-tip { color: #F56C6C }
+    .remark-tip { color: red }
   }
 
   .ckt-item.receipt {
@@ -686,7 +693,7 @@
         color: #005ea7;
       }
       &.cancel-btn {
-        color: #f42424;
+        color: $color-main;
       }
     }
   }
@@ -766,7 +773,7 @@
   }
 
   .price-details-ckt-total.amounts {
-    color: #ff3500;
+    color: $color-main;
     font-size: 30px;
     font-weight: bold;
   }

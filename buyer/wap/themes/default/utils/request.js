@@ -106,7 +106,6 @@ export const Method = {
 export default function request(options) {
   // 如果是服务端或者是请求的刷新token，不需要检查token直接请求。
   if (process.server || options.url.indexOf('passport/token') !== -1) {
-    console.log(options.url + ' | 服务端或者是请求的刷新token，不需要检查token直接请求。')
     return service(options)
   }
   return new Promise((resolve, reject) => {

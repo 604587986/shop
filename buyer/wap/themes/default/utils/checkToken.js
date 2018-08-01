@@ -1,5 +1,5 @@
 /**
- * Created by andste.cc@gmail.com on 2018/5/7.
+ * Created by Andste on 2018/5/7.
  */
 
 import Vue from 'vue'
@@ -62,7 +62,7 @@ export default function checkToken(options) {
      * 如果没有needToken，说明不需要等待获取到新的accessToken后再请求。
      * 否则，需要等待
      */
-    if (!accessToken && user && refreshToken) {
+    if (!accessToken && refreshToken) {
       /**
        * 如果没有刷新token锁，需要刷新token。
        * 如果有刷新token锁，则进入循环检测。
@@ -103,6 +103,9 @@ export default function checkToken(options) {
             console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
             if (__RTK__ === undefined) {
               console.log('登录已失效了，不用再等待了...')
+              $store.dispatch('user/removeUserAction')
+              $store.dispatch('user/removeAccessTokenAction')
+              $store.dispatch('user/removeRefreshTokenAction')
               return
             }
             __RTK__ === null

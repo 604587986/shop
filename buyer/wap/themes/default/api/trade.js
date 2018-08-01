@@ -1,9 +1,10 @@
 /**
- * Created by andste.cc@gmail.com on 2018/6/7.
+ * Created by Andste on 2018/6/7.
  * 交♂易相关API
  */
 
 import request, { Method } from '@/utils/request'
+import { api } from '@/ui-domain'
 
 /**
  * 获取购物车列表
@@ -31,6 +32,24 @@ export function addToCart(sku_id, num = 1, activity_id) {
     method: Method.POST,
     needToken: true,
     data: {
+      sku_id,
+      num,
+      activity_id
+    }
+  })
+}
+
+/**
+ * 立即购买
+ * @param sku_id
+ * @param num
+ * @param activity_id
+ */
+export function buyNow(sku_id, num = 1, activity_id) {
+  return request({
+    url: 'trade/carts/buy',
+    method: Method.POST,
+    params: {
       sku_id,
       num,
       activity_id
@@ -169,12 +188,22 @@ export function setPaymentType(payment_type = 'ONLINE') {
  * @param params
  */
 export function setRecepit(params) {
-  params.duty_invoice = params.duty
   return request({
     url: 'trade/checkout-params/receipt',
     method: Method.POST,
     needToken: true,
     data: params
+  })
+}
+
+/**
+ * 取消使用发票
+ */
+export function cancelReceipt() {
+  return request({
+    url: 'trade/checkout-params/receipt',
+    method: Method.DELETE,
+    needToken: true
   })
 }
 
@@ -235,5 +264,88 @@ export function getPaymentList(client_type = 'PC') {
     url: `order/pay/${client_type}`,
     method: Method.GET,
     needToken: true
+  })
+}
+
+/**
+ * 根据交易编号或订单编号查询收银台数据
+ * @param params
+ */
+export function getCashierData(params) {
+  return request({
+    url: 'trade/orders/cashier',
+    method: Method.GET,
+    needToken: true,
+    params
+  })
+}
+
+/**
+ * 主动查询支付结果
+ * @param trade_type
+ * @param sn
+ * @param params
+ */
+export function getPayStatus(trade_type, sn, params) {
+  return request({
+    url: `order/pay/query/${trade_type}/${sn}`,
+    method: Method.GET,
+    needToken: true,
+    params
+  })
+}
+
+/**
+ * 获取微信扫描支付的状态
+ * @param sn
+ */
+export function getWeChatQrStatus(sn) {
+  return request({
+    url: `order/pay/weixin/status/${sn}`,
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 对一个交易发起支付
+ * @param trade_type
+ * @param sn
+ * @param params
+ */
+export function initiatePay(trade_type, sn, params) {
+  return request({
+    url: `order/pay/${trade_type}/${sn}`,
+    method: Method.GET,
+    needToken: true,
+    params
+  })
+}
+
+/**
+ * 查询物流
+ * @param id
+ * @param num
+ */
+export function getExpress(id, num) {
+  return request({
+    url: 'express',
+    method: Method.GET,
+    params: {
+      id,
+      num
+    }
+  })
+}
+
+/**
+ * 使用优惠券
+ * @param shop_id
+ * @param coupon_id
+ */
+export function useCoupon(shop_id, coupon_id) {
+  return request({
+    url: `trade/${shop_id}/seller/${coupon_id}/coupon`,
+    method: Method.POST
   })
 }
