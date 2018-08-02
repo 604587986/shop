@@ -1,10 +1,12 @@
 import { login, logout } from '@/api/login'
 import Storage from '@/utils/storage'
 import { Base64 } from 'js-base64'
+import { domain } from '~/ui-domain'
 
+const _user = Storage.getItem('adminUser')
 const user = {
   state: {
-    user: JSON.parse(Storage.getItem('adminUser') || '""'),
+    user: _user ? JSON.parse(_user) : '',
     accessToken: Storage.getItem('adminAccessToken'),
     refreshToken: Storage.getItem('adminRefreshToken')
   },
@@ -18,7 +20,7 @@ const user = {
      */
     SET_USER: (state, user) => {
       state.user = user
-      Storage.setItem('adminUser', JSON.stringify(user))
+      Storage.setItem('adminUser', JSON.stringify(user), { domain: domain.cookie })
     },
     /**
      * 设置访问令牌
@@ -30,7 +32,7 @@ const user = {
       state.accessToken = token
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
-      Storage.setItem('adminAccessToken', token, { expires })
+      Storage.setItem('adminAccessToken', token, { expires, domain: domain.cookie })
     },
     /**
      * 设置刷新令牌
@@ -42,7 +44,7 @@ const user = {
       state.refreshToken = token
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
-      Storage.setItem('adminRefreshToken', token, { expires })
+      Storage.setItem('adminRefreshToken', token, { expires, domain: domain.cookie })
     },
     /**
      * 移除用户信息
@@ -51,7 +53,7 @@ const user = {
      */
     REMOVE_USER: (state) => {
       state.user = ''
-      Storage.removeItem('adminUser')
+      Storage.removeItem('adminUser', { domain: domain.cookie })
     },
     /**
      * 移除访问令牌
@@ -60,7 +62,7 @@ const user = {
      */
     REMOVE_ACCESS_TOKEN: (state) => {
       state.accessToken = ''
-      Storage.removeItem('adminAccessToken')
+      Storage.removeItem('adminAccessToken', { domain: domain.cookie })
     },
     /**
      * 移除刷新令牌
@@ -69,7 +71,7 @@ const user = {
      */
     REMOVE_REFRESH_TOKEN: (state) => {
       state.refreshToken = ''
-      Storage.removeItem('adminRefreshToken')
+      Storage.removeItem('adminRefreshToken', { domain: domain.cookie })
     }
   },
 
