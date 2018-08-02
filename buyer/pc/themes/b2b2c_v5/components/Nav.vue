@@ -3,7 +3,7 @@
     <en-category/>
     <ul class="nav-list">
       <li v-for="nav in navList" :key="nav.navigation_id">
-        <nuxt-link :to="nav.url">{{ nav.navigation_name }}</nuxt-link>
+        <a :href="nav.url">{{ nav.navigation_name }}</a>
       </li>
     </ul>
   </div>
