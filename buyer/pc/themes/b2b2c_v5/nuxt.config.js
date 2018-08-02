@@ -1,7 +1,13 @@
 const webpack = require('webpack')
 
 module.exports = {
-  env: {},
+  env: {
+    /**
+     * 分销功能开关
+     * 如果您购买了分销相关功能，请设置为true
+     */
+    distribution: false
+  },
   head: {
     meta: [
       { charset: 'utf-8' },

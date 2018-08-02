@@ -26,7 +26,6 @@
         let _bcs = []
         menus.forEach(item => {
           item.children.forEach(_item => {
-            console.log(_item.name)
             if (_item.name === _paths[0]) {
               _bcs.push({ title: _item.title, path: '/member/' + _item.path })
               if (_item.children) {
