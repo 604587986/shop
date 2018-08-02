@@ -3,7 +3,7 @@
     <nuxt-link to="/"><i class="iconfont ea-icon-home"></i>首页</nuxt-link>&ensp;&gt;
     <nuxt-link to="/member">会员中心</nuxt-link>&ensp;&gt;
     <template v-if="fullPath === '/member'">
-      <nuxt-link to="/member"> {{ user.uname }}</nuxt-link>
+      <nuxt-link to="/member/my-profile"> {{ $store.getters.user.uname }}</nuxt-link>
     </template>
     <template v-else v-for="(b, i) in breadcrumbs">
       <nuxt-link :to="b.path" :key="b.path"> {{ b.title }}</nuxt-link>
@@ -14,7 +14,6 @@
 
 <script>
   import menus from './menus'
-  import { mapGetters } from 'vuex'
   export default {
     name: 'member-breadcrumb',
     computed: {
@@ -28,20 +27,17 @@
         menus.forEach(item => {
           item.children.forEach(_item => {
             if (_item.name === _paths[0]) {
-              _bcs.push({ title: _item.title, path: '/member/' + _item.name })
+              _bcs.push({ title: _item.title, path: '/member/' + _item.path })
               if (_item.children) {
                 _item.children.forEach(__item => {
-                  if (__item.name === _paths[1]) _bcs.push({ title: __item.title, path: '/member/' + _item.name + '/' + __item.name })
+                  if (__item.name === _paths[1]) _bcs.push({ title: __item.title, path: '/member/' + _item.path })
                 })
               }
             }
           })
         })
         return _bcs
-      },
-      ...mapGetters({
-        user: 'user'
-      })
+      }
     }
   }
 </script>

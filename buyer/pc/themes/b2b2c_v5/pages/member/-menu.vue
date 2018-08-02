@@ -7,12 +7,10 @@
           <nuxt-link
             v-if="!item.hidden"
             :key="item.name"
-            :to="'/member/' + item.name"
+            :to="'/member/' + item.path"
             :class="[item.include && item.include.includes(name) && 'nuxt-link-exact-active nuxt-link-active']"
           >
-            <em>&gt;</em>
-            {{ item.title }}
-            <em>&lt;</em>
+            <em>&gt;</em>{{ item.title }}<em>&lt;</em>
           </nuxt-link>
         </template>
       </div>
@@ -25,9 +23,7 @@
   export default {
     name: 'member-menu',
     data() {
-      return {
-        menus
-      }
+      return { menus }
     },
     computed: {
       name() {
