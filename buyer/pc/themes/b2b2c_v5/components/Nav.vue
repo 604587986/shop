@@ -10,17 +10,12 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import * as API_Home from '@/api/home'
   export default {
     name: 'EnNav',
-    mounted() {
-      this.getNavData()
-    },
-    computed: {
-      ...mapGetters(['navList'])
-    },
-    methods: {
-      ...mapActions(['getNavData'])
+    data: () => ({ navList: '' }),
+    async mounted() {
+      this.navList = await API_Home.getSiteMenu()
     }
   }
 </script>
