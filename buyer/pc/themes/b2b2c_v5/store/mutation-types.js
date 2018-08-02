@@ -1,9 +1,3 @@
-/** 导航栏相关 */
-export const SET_NAV_DATA = 'SET_NAV_DATA'
-
-/** 分类相关 */
-export const SET_CATEGORY_DATA = 'SET_CATEGORY_DATA'
-
 /** UUID相关 */
 // 设置UUID
 export const SET_UUID = 'SET_UUID'

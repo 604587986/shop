@@ -72,7 +72,7 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import * as API_Home from '@/api/home'
   export default {
     name: 'EnCategory',
     props: ['init-unfold'],
@@ -80,11 +80,12 @@
       let unfold = this.$route.path === '/'
       if (this.initUnfold === false) unfold = false
       return {
-        unfold
+        unfold,
+        categoryList: ''
       }
     },
-    mounted() {
-      this.getCategoryData()
+    async mounted() {
+      this.categoryList = await API_Home.getCategory()
     },
     watch: {
       $route() {
@@ -95,9 +96,7 @@
       /** 如果为首页，总是展开 */
       always_unfold() {
         return this.$route.path === '/'
-      },
-      /** 分类数据 */
-      ...mapGetters(['categoryList'])
+      }
     },
     methods: {
       /** 鼠标移入 */
@@ -109,8 +108,7 @@
       handleCategoryMouseout() {
         if (this.always_unfold && this.initUnfold !== false) return
         this.unfold = false
-      },
-      ...mapActions(['getCategoryData'])
+      }
     }
   }
 </script>
