@@ -349,3 +349,14 @@ export function useCoupon(shop_id, coupon_id) {
     method: Method.POST
   })
 }
+
+/**
+ * 获取订单流程图
+ * @param order_sn
+ */
+export function getOrderFlow(order_sn) {
+  return request({
+    url: `trade/orders/${order_sn}/flow`,
+    method: Method.GET
+  })
+}
