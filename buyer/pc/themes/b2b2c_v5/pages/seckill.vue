@@ -93,6 +93,11 @@
   import { Foundation } from '~/ui-utils'
   export default {
     name: 'seckill',
+    head() {
+      return {
+        title: `限时抢购-${this.site.title}`
+      }
+    },
     data() {
       return {
         timeline_fixed: false,
