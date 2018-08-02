@@ -48,7 +48,7 @@
     <div class="seckill-goods w">
       <ul class="seckill-list">
         <li v-for="(goods, index) in goodsList.data" :key="index" class="goods-item">
-          <a href="javascript:;" class="link-goods-item">
+          <a :href="'/goods/' + goods.goods_id" class="link-goods-item">
             <img class="goods-img" :src="goods.goods_image" :alt="goods.goods_name">
             <h4 class="goods-name">{{ goods.goods_name }}</h4>
           </a>
