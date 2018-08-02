@@ -86,7 +86,7 @@
     head() {
       const { goods, site } = this
       return {
-        title: `${goods.page_title}-${site.title}`,
+        title: `${goods.page_title || goods.goods_name || '商品详情'}-${site.title}`,
         meta: [
           { hid: 'keywords', name: 'keywords', content: goods.meta_keywords },
           { hid: 'description', name: 'description', content: `${goods.meta_description}-${site.title}` },
