@@ -125,3 +125,15 @@ export function editRole(id, params) {
     data: params
   })
 }
+
+/**
+ * 修改当前管理员的头像以及密码
+ * @param params
+ */
+export function editUserInfo(params) {
+  return request({
+    url: 'systems/admin-users',
+    method: 'put',
+    data: params
+  })
+}
