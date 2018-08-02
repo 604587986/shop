@@ -17,8 +17,8 @@
                 <div class="line-timeline"><i>{{ timeLine.time_text }}:00</i></div>
                 <div class="next-timeline"><i>即将开始</i></div>
                 <div class="time-timeline">
-                  <b class="b-text">{{ index === 0 ? '正在抢购' : '即将开始' }}</b>
-                  <b class="b-time">{{ index === 0 ? '距结束' : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
+                  <b class="b-text">{{ distance_time === 0 ? '正在抢购' : '即将开始' }}</b>
+                  <b class="b-time">{{ distance_time === 0 ? '距结束' : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
                 </div>
               </div>
             </a>

@@ -224,12 +224,14 @@
               if (this.isConnect) {
                 API_Connect.registerBindConnect(Storage.getItem('uuid_connect')).then(() => {
                   Storage.removeItem('uuid_connect', { domain: domain.cookie })
-                  this.getUserData()
-                  this.$router.push({ path: '/member' })
+                  this.getUserData().then(() => {
+                    this.$router.push({ path: '/member' })
+                  })
                 })
               } else {
-                this.getUserData()
-                this.$router.push({ path: '/member' })
+                this.getUserData().then(() => {
+                  this.$router.push({ path: '/member' })
+                })
               }
             })
           } else {
