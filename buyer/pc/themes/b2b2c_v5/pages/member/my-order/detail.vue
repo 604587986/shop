@@ -126,7 +126,8 @@
       this.GET_OrderDetail()
       const flow = await API_Trade.getOrderFlow(this.order_sn)
       this.flow = flow
-      this.flow_active = flow.findIndex(item => item.show_status === 0)
+      const index = flow.findIndex(item => item.show_status === 0)
+      this.flow_active = index === -1 ? flow.length : index
     },
     methods: {
       /** 取消订单 */
