@@ -10,9 +10,7 @@
             :to="'/member/' + item.name"
             :class="[item.include && item.include.includes(name) && 'nuxt-link-exact-active nuxt-link-active']"
           >
-            <em>&gt;</em>
-            {{ item.title }}
-            <em>&lt;</em>
+            <em>&gt;</em>{{ item.title }}<em>&lt;</em>
           </nuxt-link>
         </template>
       </div>
