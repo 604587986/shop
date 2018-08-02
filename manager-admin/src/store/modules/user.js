@@ -121,7 +121,7 @@ const user = {
     },
 
     // 前端 登出
-    fedLogOut({ commit }) {
+    fedLogOut: ({ commit }) => {
       commit('REMOVE_USER')
       commit('REMOVE_ACCESS_TOKEN')
       commit('REMOVE_REFRESH_TOKEN')
