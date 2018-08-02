@@ -34,9 +34,9 @@
           slot="pagination"
           @size-change="(page_size) => { params.page_size = page_size }"
           @current-change="(page_no) => { params.page_no = page_no }"
-          :current-page="params.page_no"
+          :current-page="tableData.page_no"
           :page-sizes="[10, 20, 50, 100]"
-          :page-size="params.page_size"
+          :page-size="tableData.page_size"
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableData.data_total">
         </el-pagination>
