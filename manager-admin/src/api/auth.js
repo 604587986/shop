@@ -3,6 +3,7 @@
  */
 
 import request from '@/utils/request'
+import md5 from 'js-md5'
 
 /**
  * 获取管理员列表
@@ -122,6 +123,20 @@ export function editRole(id, params) {
     url: `systems/roles/${id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
+    data: params
+  })
+}
+
+/**
+ * 修改当前管理员的头像以及密码
+ * @param params
+ */
+export function editUserInfo(params) {
+  params.old_passwprd = md5(params.old_passwprd)
+  params.password = md5(params.password)
+  return request({
+    url: 'systems/admin-users',
+    method: 'put',
     data: params
   })
 }
