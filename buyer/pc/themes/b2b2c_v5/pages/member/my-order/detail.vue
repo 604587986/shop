@@ -82,7 +82,15 @@
         </div>
       </div>
     </div>
-    <!--// Andste_TODO 2018/7/5: 缺少一个订单流程图-->
+    <div v-if="flow" class="order-flow">
+      <el-steps align-center :active="flow_active" finish-status="success">
+        <el-step
+          v-for="(step, index) in flow"
+          :key="index"
+          :title="step.text"
+        ></el-step>
+      </el-steps>
+    </div>
     <div v-if="skuList" class="goods-list">
       <sku-list :skuList="skuList" name="name" price="purchase_price" total="subtotal"></sku-list>
     </div>
@@ -90,6 +98,9 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Steps, Step } from 'element-ui'
+  Vue.use(Steps).use(Step)
   import * as API_Order from '@/api/order'
   import * as API_Trade from '@/api/trade'
   import SkuList from '../-skuList'
@@ -106,11 +117,16 @@
         order_sn: this.$route.query.order_sn,
         order: '',
         skuList: '',
-        express: ''
+        express: '',
+        flow: '',
+        flow_active: 0
       }
     },
-    mounted() {
+    async mounted() {
       this.GET_OrderDetail()
+      const flow = await API_Trade.getOrderFlow(this.order_sn)
+      this.flow = flow
+      this.flow_active = flow.findIndex(item => item.show_status === 0)
     },
     methods: {
       /** 取消订单 */
@@ -244,7 +260,7 @@
     }
   }
   .goods-list {
-    margin-top: 30px;
+    margin-top: 10px;
   }
   .express-box {
     position: relative;
@@ -326,6 +342,18 @@
       width: 390px;
       margin-left: -10px;
       word-break: normal;
+    }
+  }
+  .order-flow {
+    width: 100%;
+    padding-top: 10px;
+    /deep/ {
+      .el-step__head, .el-step__title {
+        &.is-success, &.is-finish {
+          color: lighten($color-main, 10%);
+          border-color: lighten($color-main, 10%);
+        }
+      }
     }
   }
 </style>
