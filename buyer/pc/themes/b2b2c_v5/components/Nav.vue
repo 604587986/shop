@@ -3,24 +3,19 @@
     <en-category/>
     <ul class="nav-list">
       <li v-for="nav in navList" :key="nav.navigation_id">
-        <nuxt-link :to="nav.url">{{ nav.navigation_name }}</nuxt-link>
+        <a :href="nav.url">{{ nav.navigation_name }}</a>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import * as API_Home from '@/api/home'
   export default {
     name: 'EnNav',
-    mounted() {
-      this.getNavData()
-    },
-    computed: {
-      ...mapGetters(['navList'])
-    },
-    methods: {
-      ...mapActions(['getNavData'])
+    data: () => ({ navList: '' }),
+    async mounted() {
+      this.navList = await API_Home.getSiteMenu()
     }
   }
 </script>
