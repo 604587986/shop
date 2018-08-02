@@ -1,6 +1,6 @@
 <template>
   <en-table-layout
-    :tableData="goodsData.data"
+    :tableData="tableData.data"
     :loading="loading"
   >
     <div slot="toolbar" class="inner-toolbar">
@@ -64,15 +64,15 @@
     </template>
 
     <el-pagination
-      v-if="goodsData"
+      v-if="tableData"
       slot="pagination"
       @size-change="handlePageSizeChange"
       @current-change="handlePageCurrentChange"
-      :current-page="params.page_no"
+      :current-page="tableData.page_no"
       :page-sizes="[10, 20, 50, 100]"
-      :page-size="params.page_size"
+      :page-size="tableData.page_size"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="goodsData.data_total">
+      :total="tableData.data_total">
     </el-pagination>
   </en-table-layout>
 </template>
@@ -94,7 +94,7 @@
         },
 
         /** 商品列表数据 */
-        goodsData: '',
+        tableData: '',
 
         /** 高级搜索数据 */
         advancedForm: {
@@ -162,6 +162,7 @@
           ...this.params,
           keyword: data
         }
+        this.params.page_no = 1
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_GoodsList()
       },
@@ -173,6 +174,7 @@
           ...this.advancedForm
         }
         delete this.params.keyword
+        this.params.page_no = 1
         this.GET_GoodsList()
       },
 
@@ -185,7 +187,7 @@
         this.loading = true
         API_goods.getGoodsList(this.params).then(response => {
           this.loading = false
-          this.goodsData = response
+          this.tableData = response
         }).catch(() => (this.loading = false))
       }
     }
