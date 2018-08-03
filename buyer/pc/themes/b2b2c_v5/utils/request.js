@@ -69,6 +69,7 @@ service.interceptors.response.use(
     if (error_data.code === '109') {
       Vue.prototype.$message.error('您已被登出！')
       const { $store } = Vue.prototype.$nuxt
+      $store.dispatch('cart/cleanCartStoreAction')
       $store.dispatch('user/removeUserAction')
       $store.dispatch('user/removeAccessTokenAction')
       $store.dispatch('user/removeRefreshTokenAction')
