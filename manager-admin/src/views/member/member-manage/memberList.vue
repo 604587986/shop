@@ -41,7 +41,9 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     value-format="timestamp"
-                    style="width: 324px">
+                    style="width: 324px"
+                    :picker-options="{ shortcuts: MixinPickerShortcuts }"
+                  >
                   </el-date-picker>
                 </el-form-item>
               </el-form>
