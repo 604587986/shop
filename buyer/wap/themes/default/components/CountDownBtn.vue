@@ -1,5 +1,11 @@
 <template>
-  <el-button :disabled="disabled" @click.stop="handleClicked" class="count-down-btn">{{ message || initTip }}</el-button>
+  <van-button
+    size="small"
+    type="primary"
+    class="count-down-btn"
+    :disabled="disabled"
+    @click.stop="handleClicked"
+  >{{ message || initTip }}</van-button>
 </template>
 
 <script>
@@ -14,7 +20,7 @@
       /** 初始化提示 */
       initTip: {
         type: String,
-        default: '获取验证码'
+        default: '发送验证码'
       },
       /** 倒计时结束的提示 */
       endTip: {
@@ -67,15 +73,3 @@
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-  .count-down-btn {
-    &.is-disabled {
-      color: #c0c4cc;
-      cursor: not-allowed;
-      background-image: none;
-      background-color: #fff;
-      border-color: transparent;
-    }
-  }
-</style>
