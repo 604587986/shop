@@ -13,7 +13,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_2yritt4lz7c.css' }
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_1yxf0885ge4.css' }
     ],
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },
@@ -21,7 +21,7 @@ module.exports = {
     ],
     __dangerouslyDisableSanitizers: ['script']
   },
-  loading: { color: '#29d' },
+  loading: false,
   build: {
     analyze: false,
     extend (config, { isDev, isClient }) {
@@ -70,7 +70,6 @@ module.exports = {
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
-    { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
