@@ -31,9 +31,6 @@
               <el-form-item label="售后单号">
                 <el-input size="medium" v-model="advancedForm.sn" clearable></el-input>
               </el-form-item>
-              <el-form-item label="售后订单号">
-                <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
-              </el-form-item>
               <el-form-item label="店铺名称">
                 <el-input size="medium" v-model="advancedForm.seller_name" clearable></el-input>
               </el-form-item>
@@ -182,11 +179,11 @@
         }
         delete this.params.start_time
         delete this.params.end_time
-        if (this.advancedForm.refund_time_range) {
-          this.params.start_time = parseInt(this.advancedForm.refund_time_range[0] / 1000)
-          this.params.end_time = parseInt(this.advancedForm.refund_time_range[1] / 1000)
+        const { refund_time_range } = this.advancedForm
+        if (refund_time_range) {
+          this.params.start_time = parseInt(refund_time_range[0] / 1000)
+          this.params.end_time = parseInt(refund_time_range[1] / 1000)
         }
-        delete this.params.order_sn
         delete this.params.refund_time_range
         this.GET_RefundOrder()
       },
@@ -194,6 +191,13 @@
       /** 操作订单 */
       handleOperateRefund(index, row) {
         this.$router.push({ path: `/order/refund/${row.sn}` })
+        this.$router.push({
+          name: 'refundDetail',
+          params: {
+            sn: row.sn,
+            callback: this.GET_RefundOrder
+          }
+        })
       },
 
       /** 导出退款单 */
