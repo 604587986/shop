@@ -13,8 +13,8 @@
           <template v-if="order.receipt_history">
             <dl class="top_line"><dt>发票抬头:</dt><dd>{{ order.receipt_history.receipt_title }}</dd></dl>
             <dl><dt>发票内容:</dt><dd>{{ order.receipt_history.receipt_content }}</dd></dl>
-            <dl><dt>发票类型:</dt><dd>￥{{ order.receipt_history.receipt_type }}</dd></dl>
-            <dl v-if="order.receipt_history.tax_no"><dt>发票税号:</dt><dd>￥{{ order.receipt_history.tax_no }}</dd></dl>
+            <dl><dt>发票类型:</dt><dd>{{ order.receipt_history.receipt_type }}</dd></dl>
+            <dl v-if="order.receipt_history.tax_no"><dt>发票税号:</dt><dd>{{ order.receipt_history.tax_no }}</dd></dl>
             <dl><dt>开票金额:</dt><dd>￥{{ order.receipt_history.receipt_amount | unitPrice }}</dd></dl>
           </template>
           <dl v-else><dt>发票信息:</dt><dd>无</dd></dl>
