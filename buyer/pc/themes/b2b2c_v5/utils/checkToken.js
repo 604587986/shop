@@ -41,6 +41,7 @@ export default function checkToken(options) {
      * 说明登录已失效、或者cookie有问题，需要重新登录。
      */
     if (options.needToken && (!refreshToken)) {
+      $store.dispatch('cart/cleanCartStoreAction')
       $store.dispatch('user/removeUserAction')
       $store.dispatch('user/removeAccessTokenAction')
       $store.dispatch('user/removeRefreshTokenAction')
@@ -84,6 +85,7 @@ export default function checkToken(options) {
           options.needToken && resolve()
         }).catch(error => {
           window.__refreshTokenLock__ = undefined
+          $store.dispatch('cart/cleanCartStoreAction')
           $store.dispatch('user/removeUserAction')
           $store.dispatch('user/removeAccessTokenAction')
           $store.dispatch('user/removeRefreshTokenAction')

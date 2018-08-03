@@ -40,7 +40,7 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     value-format="timestamp"
-                    :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: this.MixinPickerShortcuts }">
+                    :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: MixinPickerShortcuts }">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="订单状态">

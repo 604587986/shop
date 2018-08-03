@@ -14,7 +14,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           value-format="timestamp"
-          :picker-options="pickerOptions">
+          :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: MixinPickerShortcuts }">
         </el-date-picker>
         <el-button size="mini" type="primary" icon="el-icon-download" @click="handleExportRefund" style="margin-left: 5px">导出Excel</el-button>
       </div>
@@ -30,9 +30,6 @@
             <el-form ref="advancedForm" :model="advancedForm" label-width="110px">
               <el-form-item label="售后单号">
                 <el-input size="medium" v-model="advancedForm.sn" clearable></el-input>
-              </el-form-item>
-              <el-form-item label="售后订单号">
-                <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
               </el-form-item>
               <el-form-item label="店铺名称">
                 <el-input size="medium" v-model="advancedForm.seller_name" clearable></el-input>
@@ -60,7 +57,7 @@
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
                   value-format="timestamp"
-                  :picker-options="pickerOptions">
+                  :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: MixinPickerShortcuts }">
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="售后状态">
@@ -147,37 +144,6 @@
         /** 高级搜索数据 */
         advancedForm: {},
 
-        /** 高级搜索时间选择组件配置 */
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now()
-          },
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        },
         /** 导出Excel日期 */
         exportDateRange: []
       }
@@ -213,11 +179,11 @@
         }
         delete this.params.start_time
         delete this.params.end_time
-        if (this.advancedForm.refund_time_range) {
-          this.params.start_time = parseInt(this.advancedForm.refund_time_range[0] / 1000)
-          this.params.end_time = parseInt(this.advancedForm.refund_time_range[1] / 1000)
+        const { refund_time_range } = this.advancedForm
+        if (refund_time_range) {
+          this.params.start_time = parseInt(refund_time_range[0] / 1000)
+          this.params.end_time = parseInt(refund_time_range[1] / 1000)
         }
-        delete this.params.order_sn
         delete this.params.refund_time_range
         this.GET_RefundOrder()
       },
@@ -225,6 +191,13 @@
       /** 操作订单 */
       handleOperateRefund(index, row) {
         this.$router.push({ path: `/order/refund/${row.sn}` })
+        this.$router.push({
+          name: 'refundDetail',
+          params: {
+            sn: row.sn,
+            callback: this.GET_RefundOrder
+          }
+        })
       },
 
       /** 导出退款单 */
@@ -247,9 +220,9 @@
               '店铺名称': item.seller_name,
               '收款人': item.member_name,
               '退款状态': item.refund_status,
-              '创建时间': Foundation.unixToDate(item.create_time),
+              '创建时间': item.create_time ? Foundation.unixToDate(item.create_time) : '',
               '退款金额': Foundation.formatPrice(item.refund_price),
-              '退款时间': Foundation.unixToDate(item.refund_time)
+              '退款时间': item.refund_time ? Foundation.unixToDate(item.refund_time) : ''
             }))
           }
           this.MixinExportJosnToExcel(json, '退款单')
