@@ -41,6 +41,7 @@ export default function checkToken(options) {
      * 说明登录已失效、或者cookie有问题，需要重新登录。
      */
     if (options.needToken && (!refreshToken)) {
+      $store.dispatch('cart/cleanCartStoreAction')
       $store.dispatch('user/removeUserAction')
       $store.dispatch('user/removeAccessTokenAction')
       $store.dispatch('user/removeRefreshTokenAction')
@@ -68,7 +69,7 @@ export default function checkToken(options) {
        * 如果有刷新token锁，则进入循环检测。
        */
       if (!window.__refreshTokenLock__) {
-        console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
+        // console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
         // 如果不需要Token，则不需要等拿到新的Token再请求。
         if (!options.needToken) resolve()
         // 开始请求新的Token，并加锁。
@@ -80,32 +81,34 @@ export default function checkToken(options) {
           $store.dispatch('user/setAccessTokenAction', response.accessToken)
           $store.dispatch('user/setRefreshTokenAction', response.refreshToken)
           window.__refreshTokenLock__ = null
-          console.log(options.url + ' | 已拿到新的token。')
+          // console.log(options.url + ' | 已拿到新的token。')
           options.needToken && resolve()
         }).catch(error => {
           window.__refreshTokenLock__ = undefined
+          $store.dispatch('cart/cleanCartStoreAction')
           $store.dispatch('user/removeUserAction')
           $store.dispatch('user/removeAccessTokenAction')
           $store.dispatch('user/removeRefreshTokenAction')
         })
       } else {
         if (!options.needToken) {
-          console.log(options.url + ' | 不需要Token，直接通过...')
+          // console.log(options.url + ' | 不需要Token，直接通过...')
           resolve()
           return
         }
-        console.log('进入循环检测...')
+        // console.log('进入循环检测...')
         // 循环检测刷新token锁，当刷新锁变为null时，说明新的token已经取回。
         checkLock()
         function checkLock() {
           setTimeout(() => {
             const __RTK__ = window.__refreshTokenLock__
-            console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
+            // console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
             if (__RTK__ === undefined) {
-              console.log('登录已失效了，不用再等待了...')
+              // console.log('登录已失效了，不用再等待了...')
               $store.dispatch('user/removeUserAction')
               $store.dispatch('user/removeAccessTokenAction')
               $store.dispatch('user/removeRefreshTokenAction')
+              location.reload()
               return
             }
             __RTK__ === null
