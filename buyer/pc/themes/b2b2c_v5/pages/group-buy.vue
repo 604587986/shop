@@ -19,7 +19,7 @@
               <img :src="gb.img_url" border="0" :alt="gb.goods_name">
             </a>
             <h3 class="gb-title">
-              <a target="_blank" :href="'/goods/' + gb.goods_id" :title="gb.goods_name">gb.goods_name</a>
+              <a target="_blank" :href="'/goods/' + gb.goods_id" :title="gb.goods_name">{{ gb.goods_name }}</a>
             </h3>
             <div class="group_price">
               <span class="price"><i>¥</i>{{ gb.price }}</span>
