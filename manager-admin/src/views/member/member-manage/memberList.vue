@@ -41,7 +41,9 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     value-format="timestamp"
-                    style="width: 324px">
+                    style="width: 324px"
+                    :picker-options="{ shortcuts: MixinPickerShortcuts }"
+                  >
                   </el-date-picker>
                 </el-form-item>
               </el-form>
@@ -289,6 +291,7 @@
       searchEvent(keyword) {
         this.params.keyword = keyword
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.params.page_no = 1
         this.GET_MemberList()
       },
 
@@ -307,6 +310,7 @@
         }
         delete this.params.register_time_range
         delete this.params.keyword
+        this.params.page_no = 1
         this.GET_MemberList()
       },
 
