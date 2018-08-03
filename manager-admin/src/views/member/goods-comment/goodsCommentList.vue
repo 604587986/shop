@@ -122,7 +122,7 @@
       /** 删除评论 */
       handleDeleteComments(index, row) {
         this.$confirm('确定要删除这条评论吗？', '提示', { type: 'warning' }).then(() => {
-          API_Member.deleteMemberComments(row.comments_id).then(() => {
+          API_Member.deleteMemberComments(row.comment_id).then(() => {
             this.$message.success('删除成功！')
             this.GET_CommentList()
           })
