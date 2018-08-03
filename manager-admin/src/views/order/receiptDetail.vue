@@ -30,10 +30,6 @@
             <span class="item-value">{{ receipt.receipt_type }}</span>
           </div>
           <div class="item">
-            <span class="item-label">发票类型</span>
-            <span class="item-value">{{ receipt.receipt_type || '无' }}</span>
-          </div>
-          <div class="item">
             <span class="item-label">发票抬头</span>
             <span class="item-value">{{ receipt.receipt_title || '无' }}</span>
           </div>

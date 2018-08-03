@@ -10,16 +10,6 @@
 
 <script>
   import Vue from 'vue'
-  import { Alert, Checkbox, Form, FormItem, Input, Pagination, Radio, Table, TableColumn } from 'element-ui'
-  Vue.use(Alert)
-  Vue.use(Checkbox)
-  Vue.use(Form)
-  Vue.use(FormItem)
-  Vue.use(Input)
-  Vue.use(Pagination)
-  Vue.use(Radio)
-  Vue.use(Table)
-  Vue.use(TableColumn)
   import Breadcrumb from '@/pages/member/-breadcrumb'
   import Menu from '@/pages/member/-menu'
   import Empty from '@/pages/member/-empty'

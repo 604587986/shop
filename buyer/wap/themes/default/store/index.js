@@ -22,22 +22,6 @@ export const state = () => ({
 /** mutations */
 export const mutations = {
   /**
-   * 设置导航栏数据
-   * @param state
-   * @param data
-   */
-  [types.SET_NAV_DATA](state, data) {
-    state.navList = data
-  },
-  /**
-   * 设置分类数据
-   * @param state
-   * @param data
-   */
-  [types.SET_CATEGORY_DATA](state, data) {
-    state.categoryList = data
-  },
-  /**
    * 设置UUID
    * @param state
    * @param uuid
@@ -99,24 +83,6 @@ export const actions = {
     }
   },
   /**
-   * 获取导航栏数据
-   * @param commit
-   */
-  getNavData: ({ commit }) => {
-    API_Home.getSiteMenu().then(response => {
-      commit(types.SET_NAV_DATA, response)
-    })
-  },
-  /**
-   * 获取分类数据
-   * @param commit
-   */
-  getCategoryData: ({ commit }) => {
-    API_Goods.getCategory().then(response => {
-      commit(types.SET_CATEGORY_DATA, response)
-    })
-  },
-  /**
    * 获取站点信息
    * @param commit
    */
@@ -130,19 +96,12 @@ export const actions = {
 /** getters */
 export const getters = {
   /**
-   * 导航栏列表
-   * @param state
-   * @returns {*}
-   */
-  navList: state => state.navList,
-  
-  /**
    * 分类列表
    * @param state
    * @returns {*}
    */
   categoryList: state => state.categoryList,
-  
+
   /**
    * 获取UUID
    * @param state

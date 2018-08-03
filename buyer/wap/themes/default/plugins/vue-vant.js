@@ -6,16 +6,24 @@ import Vue from 'vue'
 
 import {
   Button,
+  Cell,
+  CellGroup,
+  Field,
   NavBar,
-  Tabbar,
-  TabbarItem,
+  NumberKeyboard,
   Icon,
-  Popup
+  Popup,
+  Tabbar,
+  TabbarItem
 } from 'vant'
 
 Vue.use(Button)
+Vue.use(Cell)
+Vue.use(CellGroup)
+Vue.use(Field)
 Vue.use(NavBar)
-Vue.use(Tabbar)
-Vue.use(TabbarItem)
+Vue.use(NumberKeyboard)
 Vue.use(Icon)
 Vue.use(Popup)
+Vue.use(Tabbar)
+Vue.use(TabbarItem)

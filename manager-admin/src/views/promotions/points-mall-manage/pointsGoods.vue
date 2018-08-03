@@ -7,7 +7,7 @@
     <template slot="table-columns">
       <el-table-column label="商品图片">
         <template slot-scope="scope">
-          <img :src="scope.row.goods_image" :alt="scope.row.goods_name" class="goods-image">
+          <img :src="scope.row.goods_img" :alt="scope.row.goods_name" class="goods-image">
         </template>
       </el-table-column>
       <el-table-column prop="goods_sn" label="商品编号"/>
@@ -26,9 +26,9 @@
       slot="pagination"
       @size-change="handlePageSizeChange"
       @current-change="handlePageCurrentChange"
-      :current-page="params.page_no"
+      :current-page="tableData.page_no"
       :page-sizes="[10, 20, 50, 100]"
-      :page-size="params.page_size"
+      :page-size="tableData.page_size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="tableData.data_total">
     </el-pagination>

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { Loading } from 'element-ui'
 import { api } from '~/ui-domain'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
@@ -28,12 +27,12 @@ service.interceptors.request.use(config => {
   }
   /** 配置全屏加载 */
   if (loading !== false) {
-    config.loading = Loading.service({
-      fullscreen: true,
-      background: 'rgba(255,255,255,.3)',
-      spinner: 'icon-custom-loading',
-      lock: false
-    })
+    // config.loading = Loading.service({
+    //   fullscreen: true,
+    //   background: 'rgba(255,255,255,.3)',
+    //   spinner: 'icon-custom-loading',
+    //   lock: false
+    // })
   }
 
   // 获取访问Token
@@ -69,13 +68,14 @@ service.interceptors.response.use(
     if (error_data.code === '109') {
       Vue.prototype.$message.error('您已被登出！')
       const { $store } = Vue.prototype.$nuxt
+      $store.dispatch('cart/cleanCartStoreAction')
       $store.dispatch('user/removeUserAction')
       $store.dispatch('user/removeAccessTokenAction')
       $store.dispatch('user/removeRefreshTokenAction')
       return Promise.reject(error)
     }
-    let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '出现错误，请稍后再试！'
     if (error.config.message !== false) {
+      let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '网络错误，请稍后再试！'
       Vue.prototype.$message.error(error_data.message || _message)
     }
     return Promise.reject(error)

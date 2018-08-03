@@ -124,6 +124,7 @@ export function getGoodsCollection(params) {
   return request({
     url: 'members/collection/goods',
     method: Method.GET,
+    needToken: true,
     loading: false,
     message: false,
     params
@@ -396,6 +397,7 @@ export function registerBindAccount(uuid) {
 export function getShopsCoupons(seller_ids) {
   return request({
     url: `members/coupon/${seller_ids}`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }

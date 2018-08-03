@@ -59,14 +59,10 @@
 <script>
   import Vue from 'vue'
   import { mapGetters } from 'vuex'
-  import { Form, FormItem, Input } from 'element-ui'
   import * as API_Passport from '@/api/passport'
   import * as API_Common from '@/api/common'
   import { RegExp } from '~/ui-utils'
 
-  Vue.use(Form)
-  Vue.use(FormItem)
-  Vue.use(Input)
   export default {
     name: 'find-password',
     layout: 'full',

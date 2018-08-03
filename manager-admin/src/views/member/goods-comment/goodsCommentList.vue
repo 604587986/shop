@@ -31,9 +31,9 @@
         slot="pagination"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
+        :current-page="tableData.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
+        :page-size="tableData.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
@@ -48,8 +48,10 @@
           <br>
           <span style="color: #409EFF">{{ reviewComments.content }}</span>
           <div v-if="reviewComments.images && reviewComments.images.length">
-            <!--// Andste_TODO 2018/6/28: 图片地址未适配-->
-            <img v-for="image in reviewComments.images" :src="image.url" class="comments-image">
+            <a v-for="(image, index) in reviewComments.images" :href="image" :key="index" target="_blank">
+              <img :src="image" style="max-width: 150px;height: 80px;display: inline-block;margin-right: 10px">
+            </a>
+
           </div>
         </el-form-item>
         <template v-if="reviewComments.reply_status === 1">
@@ -94,9 +96,12 @@
     filters: {
       gradeFilter(val) {
         switch (val) {
-          case 1: return '差评'
-          case 2: return '中评'
-          case 3: return '好评'
+          case 'bad':
+            return '差评'
+          case 'neutral':
+            return '中评'
+          default:
+            return '好评'
         }
       }
     },
@@ -122,7 +127,7 @@
       /** 删除评论 */
       handleDeleteComments(index, row) {
         this.$confirm('确定要删除这条评论吗？', '提示', { type: 'warning' }).then(() => {
-          API_Member.deleteMemberComments(row.comments_id).then(() => {
+          API_Member.deleteMemberComments(row.comment_id).then(() => {
             this.$message.success('删除成功！')
             this.GET_CommentList()
           })

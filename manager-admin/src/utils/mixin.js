@@ -15,7 +15,33 @@ export default {
       // 地区API
       MixinRegionApi: api.base + '/regions/@id/children',
       // 买家端域名
-      MixinBuyerDomain: domain.buyer_pc
+      MixinBuyerDomain: domain.buyer_pc,
+      // 日期选择器快捷选项
+      MixinPickerShortcuts: [{
+        text: '最近一周',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+          picker.$emit('pick', [start, end])
+        }
+      }, {
+        text: '最近一个月',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          picker.$emit('pick', [start, end])
+        }
+      }, {
+        text: '最近三个月',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+          picker.$emit('pick', [start, end])
+        }
+      }]
     }
   },
   computed: {
@@ -60,6 +86,7 @@ export default {
     },
     /** 格式化金钱 */
     MixinFormatPrice(row, column, cellValue, index) {
+      if (!cellValue) return ''
       return '￥' + Foundation.formatPrice(cellValue)
     },
     /** 格式化时间戳 */

@@ -133,6 +133,7 @@ export const actions = {
    */
   getCartDataAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
+      commit(types.CLEAN_CART)
       API_Trade.getCarts(params).then(response => {
         commit(types.SET_CART_DATA, response)
         dispatch('getCartTotalAction')
@@ -243,6 +244,13 @@ export const actions = {
         resolve(response)
       }).catch(error => reject(error))
     })
+  },
+  /**
+   * 清空vuex中的购物车
+   * @param commit
+   */
+  cleanCartStoreAction: ({ commit }) => {
+    commit(types.CLEAN_CART)
   }
 }
 
