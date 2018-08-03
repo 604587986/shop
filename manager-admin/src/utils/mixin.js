@@ -86,6 +86,7 @@ export default {
     },
     /** 格式化金钱 */
     MixinFormatPrice(row, column, cellValue, index) {
+      if (!cellValue) return ''
       return '￥' + Foundation.formatPrice(cellValue)
     },
     /** 格式化时间戳 */
