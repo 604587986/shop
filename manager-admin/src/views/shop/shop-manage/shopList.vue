@@ -43,7 +43,7 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     value-format="timestamp"
-                    :picker-options="pickerOptions">
+                    :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: this.MixinPickerShortcuts }">
                   </el-date-picker>
                 </el-form-item>
               </el-form>
@@ -123,37 +123,7 @@
         /** 列表数据 */
         tableData: '',
         /** 高级搜索数据 */
-        advancedForm: {},
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now()
-          },
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        }
+        advancedForm: {}
       }
     },
     mounted() {
@@ -215,6 +185,7 @@
           keyword: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.params.page_no = 1
         this.GET_ShopList()
       },
 
@@ -226,12 +197,14 @@
         }
         delete this.params.start_time
         delete this.params.end_time
-        if (this.advancedForm.shop_time_range) {
-          this.params.start_time = this.advancedForm.shop_time_range[0] /= 1000
-          this.params.end_time = this.advancedForm.shop_time_range[1] /= 1000
+        const { shop_time_range } = this.advancedForm
+        if (shop_time_range) {
+          this.params.start_time = parseInt(shop_time_range[0] /= 1000)
+          this.params.end_time = parseInt(shop_time_range[1] /= 1000)
         }
         delete this.params.keyword
         delete this.params.shop_time_range
+        this.params.page_no = 1
         this.GET_ShopList()
       },
 

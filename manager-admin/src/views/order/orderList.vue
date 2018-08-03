@@ -185,7 +185,13 @@
 
       /** 查看、操作订单 */
       handleOperateOrder(index, row) {
-        this.$router.push({ path: `/order/detail/${row.sn}` })
+        this.$router.push({
+          name: 'orderDetail',
+          params: {
+            sn: row.sn,
+            callback: this.GET_OrderList
+          }
+        })
       },
 
       /** 获取订单列表 */

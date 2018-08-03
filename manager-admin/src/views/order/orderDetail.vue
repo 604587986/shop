@@ -140,6 +140,7 @@
         this.$confirm('确定要确认收款吗？', '提示', { type: 'warning' }).then(() => {
           API_order.confirmPay(this.sn, this.orderDetail.order_price).then(response => {
             this.$message.success('订单确认收款成功！')
+            this.$route.params.callback()
             this.GET_OrderDetail()
           })
         }).catch(() => {})
@@ -150,6 +151,7 @@
         this.$confirm('确定要取消这个订单吗？', '提示', { type: 'warning' }).then(() => {
           API_order.cancleOrder(this.sn).then(() => {
             this.$message.success('订单取消成功！')
+            this.$route.params.callback()
             this.GET_OrderDetail()
           })
         }).catch(() => {})

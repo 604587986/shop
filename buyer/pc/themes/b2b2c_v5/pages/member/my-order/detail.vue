@@ -122,12 +122,8 @@
         flow_active: 0
       }
     },
-    async mounted() {
+    mounted() {
       this.GET_OrderDetail()
-      const flow = await API_Trade.getOrderFlow(this.order_sn)
-      this.flow = flow
-      const index = flow.findIndex(item => item.show_status === 0)
-      this.flow_active = index === -1 ? flow.length : index
     },
     methods: {
       /** 取消订单 */
@@ -173,6 +169,12 @@
             this.handleViewExpress()
           }
           this.skuList = JSON.parse(response.items_json)
+        })
+        // 订单流程
+        API_Trade.getOrderFlow(this.order_sn).then(response => {
+          this.flow = response
+          const index = response.findIndex(item => item.show_status === 0)
+          this.flow_active = index === -1 ? response.length : index
         })
       }
     }

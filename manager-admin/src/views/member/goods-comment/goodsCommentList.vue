@@ -48,8 +48,10 @@
           <br>
           <span style="color: #409EFF">{{ reviewComments.content }}</span>
           <div v-if="reviewComments.images && reviewComments.images.length">
-            <!--// Andste_TODO 2018/6/28: 图片地址未适配-->
-            <img v-for="image in reviewComments.images" :src="image.url" class="comments-image">
+            <a v-for="(image, index) in reviewComments.images" :href="image" :key="index" target="_blank">
+              <img :src="image" style="max-width: 150px;height: 80px;display: inline-block;margin-right: 10px">
+            </a>
+
           </div>
         </el-form-item>
         <template v-if="reviewComments.reply_status === 1">
@@ -94,9 +96,12 @@
     filters: {
       gradeFilter(val) {
         switch (val) {
-          case 1: return '差评'
-          case 2: return '中评'
-          case 3: return '好评'
+          case 'bad':
+            return '差评'
+          case 'neutral':
+            return '中评'
+          default:
+            return '好评'
         }
       }
     },
