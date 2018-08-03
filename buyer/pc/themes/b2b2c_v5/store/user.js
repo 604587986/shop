@@ -115,6 +115,7 @@ export const actions = {
       }
       function loginSccess(res) {
         const { access_token, refresh_token, uid } = res
+        dispatch('cart/cleanCartStoreAction')
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
         API_Members.getUserInfo(uid).then(response => {
@@ -170,10 +171,11 @@ export const actions = {
    * @param params
    * @returns {Promise<any>}
    */
-  registerByMobileAction: ({ commit }, params) => {
+  registerByMobileAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
       API_Passport.registerByMobile(params).then(res=> {
         const { access_token, refresh_token } = res
+        dispatch('cart/cleanCartStoreAction')
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
         resolve(res)
