@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { Loading } from 'element-ui'
 import { api } from '~/ui-domain'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
@@ -28,12 +27,12 @@ service.interceptors.request.use(config => {
   }
   /** 配置全屏加载 */
   if (loading !== false) {
-    config.loading = Loading.service({
-      fullscreen: true,
-      background: 'rgba(255,255,255,.3)',
-      spinner: 'icon-custom-loading',
-      lock: false
-    })
+    // config.loading = Loading.service({
+    //   fullscreen: true,
+    //   background: 'rgba(255,255,255,.3)',
+    //   spinner: 'icon-custom-loading',
+    //   lock: false
+    // })
   }
 
   // 获取访问Token

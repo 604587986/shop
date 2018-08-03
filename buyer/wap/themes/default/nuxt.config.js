@@ -42,21 +42,6 @@ module.exports = {
       allChunks: true
     },
     vendor: ['axios'],
-    babel: {
-      "plugins": [
-        ["component",
-          {
-            "libraryName": "element-ui",
-            "styleLibraryName": "theme-chalk"
-          },
-        "import",
-          {
-            "libraryName": "vant",
-            "libraryDirectory": "es",
-            "style": true
-          }]
-      ]
-    },
     plugins: [],
     publicPath: '/'
   },
@@ -73,7 +58,6 @@ module.exports = {
     { src: '~plugins/vue-components', ssr: true },
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
-    { src: '~plugins/element-ui', ssr: true },
     { src: '~plugins/vue-vant', ssr: true },
     { src: '~plugins/vue-swiper', ssr: false }
   ],

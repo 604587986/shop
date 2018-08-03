@@ -72,8 +72,6 @@
 
 <script>
   import Vue from 'vue'
-  import { Pagination } from 'element-ui'
-  Vue.use(Pagination)
   import * as API_Shop from '@/api/shop'
   import ShopStar from '@/pages/shop/-themes/-shop-star'
   export default {

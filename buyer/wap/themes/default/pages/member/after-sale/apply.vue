@@ -132,10 +132,6 @@
 
 <script>
   import Vue from 'vue'
-  import { InputNumber, Select, Option } from 'element-ui'
-  Vue.use(InputNumber)
-  Vue.use(Select)
-  Vue.use(Option)
   import * as API_AfterSale from '@/api/after-sale'
   import SkuList from '../-skuList'
   export default {

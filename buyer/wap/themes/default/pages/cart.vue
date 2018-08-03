@@ -1,134 +1,139 @@
 <template>
-  <div id="cart" style="background: #f5f5f5;padding-bottom: 20px">
-    <div class="cart-header">
-      <div class="w">
-      </div>
-    </div>
-    <div class="cart-content" id="cart-content">
-      <div class="w">
-        <div class="list-header">
-          <span class="checkbox select-all" @click="handleCheckAll">
-            <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']">
-              <i class="iconfont ea-icon-check"></i>
-            </a>全选
-          </span>
-          <span class="title">商品信息</span>
-          <span class="price">单价（元）</span>
-          <span class="num">数量</span>
-          <span class="weight">重量（kg）</span>
-          <span class="total">小计（元）</span>
-          <span class="action">操作</span>
-        </div>
-        <div class="list-content">
-          <div v-if="shopList && shopList.length > 0" class="">
-            <div v-for="shop in shopList" :key="shop.shop_id" class="shop-item">
-              <div class="shop-header">
-                <a href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
-                  <i class="iconfont ea-icon-check"></i>
-                </a>
-                <nuxt-link :to="'/shop?shop_id=' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>
-              </div>
-              <div class="shop-body">
-                <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item">
-                  <div class="item clearfix">
-                    <a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
-                      <i class="iconfont ea-icon-check"></i>
-                    </a>
-                    <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-pic">
-                      <img :src="sku.goods_image" :alt="sku.name">
-                    </nuxt-link>
-                    <div class="sku-name-box">
-                      <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">
-                        {{ sku.name }}
-                      </nuxt-link>
-                      <span v-if="sku.spec_list && sku.spec_list.length > 0" class="sku-spec">
-                        {{ sku | formatterSkuSpec }}
-                      </span>
-                    </div>
-                    <div class="sku-price">
-                      <span v-if="sku.purchase_price < sku.original_price" class="original-price">{{ sku.original_price | unitPrice }}</span>
-                      {{ sku.purchase_price | unitPrice }}
-                    </div>
-                    <div class="sku-num">
-                      <div class="num-action clearfix">
-                        <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
-                        <input
-                          class="input"
-                          type="number"
-                          :value="sku.num"
-                          :title="sku.num"
-                          @focus="handleSkuNumFocus(sku)"
-                          @change="handleSkuNumChanged($event, sku)"
-                        >
-                        <a :class="['oper', sku.num >= sku.enable_quantity && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
-                      </div>
-                    </div>
-                    <div class="sku-weight">
-                      {{ (sku.num * sku.goods_weight).toFixed(2) }}
-                    </div>
-                    <div class="sku-total">
-                      {{ sku.subtotal | unitPrice }}
-                    </div>
-                    <div class="sku-action">
-                      <i class="iconfont ea-icon-delete" @click="handleDelete(sku)"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="shop-footer">
-                <div class="shop-footer-item">
-                  重量：<span>{{ shop.weight.toFixed(2) }}kg</span>
-                </div>
-                <div class="shop-footer-item price">
-                  <em>￥</em>
-                  <span>{{ shop.price.total_price | unitPrice }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-else style="background: #fff">
-            <div class="empty-cart">
-              <h1>您的购物车中暂无商品</h1>
-              <nuxt-link to="/">挑选心爱的商品</nuxt-link>
-              <nuxt-link to="/member/my-order">查看我的订单</nuxt-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div :class="['cart-checkbar', check_bar_fiexd_top && 'fiexd-top', check_bar_fiexd_bottom && 'fiexd-bottom']" id="check-bar">
-      <div class="check-bar">
-        <div class="w">
-          <div class="check-bar-left">
-            <span class="select-all" @click="handleCheckAll">
-              <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']">
-                  <i class="iconfont ea-icon-check"></i>
-                </a>
-                <span>全选（共<b>{{ allCount }}</b>）件</span>
-            </span>
-            <em>|</em>
-            <a href="javascript:;" class="check-tool-a" @click="handleBatchDelete">批量删除</a>
-            <em>|</em>
-            <a href="javascript:;" class="check-tool-a" @click="handleCleanCart">清空购物车</a>
-          </div>
-          <div class="check-bar-right">
-            <span>已选商品<b style="color: #ff5e5e; margin: 0 2px">{{ checkedCount }}</b>件</span>
-            <em>|</em>
-            <span>合计：<b class="price">￥<i>{{ (cartTotal.total_price || 0) | unitPrice }}</i></b></span>
-            <a href="javascript:;" class="check-btn" @click="handleCheckout">去结算</a>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div id="cart">
+    <nav-bar title="购物车"></nav-bar>
   </div>
+  <!--<div id="cart" style="background: #f5f5f5;padding-bottom: 20px">-->
+    <!--<div class="cart-header">-->
+      <!--<div class="w">-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div class="cart-content" id="cart-content">-->
+      <!--<div class="w">-->
+        <!--<div class="list-header">-->
+          <!--<span class="checkbox select-all" @click="handleCheckAll">-->
+            <!--<a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']">-->
+              <!--<i class="iconfont ea-icon-check"></i>-->
+            <!--</a>全选-->
+          <!--</span>-->
+          <!--<span class="title">商品信息</span>-->
+          <!--<span class="price">单价（元）</span>-->
+          <!--<span class="num">数量</span>-->
+          <!--<span class="weight">重量（kg）</span>-->
+          <!--<span class="total">小计（元）</span>-->
+          <!--<span class="action">操作</span>-->
+        <!--</div>-->
+        <!--<div class="list-content">-->
+          <!--<div v-if="shopList && shopList.length > 0" class="">-->
+            <!--<div v-for="shop in shopList" :key="shop.shop_id" class="shop-item">-->
+              <!--<div class="shop-header">-->
+                <!--<a href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">-->
+                  <!--<i class="iconfont ea-icon-check"></i>-->
+                <!--</a>-->
+                <!--<nuxt-link :to="'/shop?shop_id=' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>-->
+              <!--</div>-->
+              <!--<div class="shop-body">-->
+                <!--<div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item">-->
+                  <!--<div class="item clearfix">-->
+                    <!--<a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">-->
+                      <!--<i class="iconfont ea-icon-check"></i>-->
+                    <!--</a>-->
+                    <!--<nuxt-link :to="'/goods/' + sku.goods_id" class="sku-pic">-->
+                      <!--<img :src="sku.goods_image" :alt="sku.name">-->
+                    <!--</nuxt-link>-->
+                    <!--<div class="sku-name-box">-->
+                      <!--<nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">-->
+                        <!--{{ sku.name }}-->
+                      <!--</nuxt-link>-->
+                      <!--<span v-if="sku.spec_list && sku.spec_list.length > 0" class="sku-spec">-->
+                        <!--{{ sku | formatterSkuSpec }}-->
+                      <!--</span>-->
+                    <!--</div>-->
+                    <!--<div class="sku-price">-->
+                      <!--<span v-if="sku.purchase_price < sku.original_price" class="original-price">{{ sku.original_price | unitPrice }}</span>-->
+                      <!--{{ sku.purchase_price | unitPrice }}-->
+                    <!--</div>-->
+                    <!--<div class="sku-num">-->
+                      <!--<div class="num-action clearfix">-->
+                        <!--<a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>-->
+                        <!--<input-->
+                          <!--class="input"-->
+                          <!--type="number"-->
+                          <!--:value="sku.num"-->
+                          <!--:title="sku.num"-->
+                          <!--@focus="handleSkuNumFocus(sku)"-->
+                          <!--@change="handleSkuNumChanged($event, sku)"-->
+                        <!--&gt;-->
+                        <!--<a :class="['oper', sku.num >= sku.enable_quantity && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="sku-weight">-->
+                      <!--{{ (sku.num * sku.goods_weight).toFixed(2) }}-->
+                    <!--</div>-->
+                    <!--<div class="sku-total">-->
+                      <!--{{ sku.subtotal | unitPrice }}-->
+                    <!--</div>-->
+                    <!--<div class="sku-action">-->
+                      <!--<i class="iconfont ea-icon-delete" @click="handleDelete(sku)"></i>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="shop-footer">-->
+                <!--<div class="shop-footer-item">-->
+                  <!--重量：<span>{{ shop.weight.toFixed(2) }}kg</span>-->
+                <!--</div>-->
+                <!--<div class="shop-footer-item price">-->
+                  <!--<em>￥</em>-->
+                  <!--<span>{{ shop.price.total_price | unitPrice }}</span>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div v-else style="background: #fff">-->
+            <!--<div class="empty-cart">-->
+              <!--<h1>您的购物车中暂无商品</h1>-->
+              <!--<nuxt-link to="/">挑选心爱的商品</nuxt-link>-->
+              <!--<nuxt-link to="/member/my-order">查看我的订单</nuxt-link>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div :class="['cart-checkbar', check_bar_fiexd_top && 'fiexd-top', check_bar_fiexd_bottom && 'fiexd-bottom']" id="check-bar">-->
+      <!--<div class="check-bar">-->
+        <!--<div class="w">-->
+          <!--<div class="check-bar-left">-->
+            <!--<span class="select-all" @click="handleCheckAll">-->
+              <!--<a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']">-->
+                  <!--<i class="iconfont ea-icon-check"></i>-->
+                <!--</a>-->
+                <!--<span>全选（共<b>{{ allCount }}</b>）件</span>-->
+            <!--</span>-->
+            <!--<em>|</em>-->
+            <!--<a href="javascript:;" class="check-tool-a" @click="handleBatchDelete">批量删除</a>-->
+            <!--<em>|</em>-->
+            <!--<a href="javascript:;" class="check-tool-a" @click="handleCleanCart">清空购物车</a>-->
+          <!--</div>-->
+          <!--<div class="check-bar-right">-->
+            <!--<span>已选商品<b style="color: #ff5e5e; margin: 0 2px">{{ checkedCount }}</b>件</span>-->
+            <!--<em>|</em>-->
+            <!--<span>合计：<b class="price">￥<i>{{ (cartTotal.total_price || 0) | unitPrice }}</i></b></span>-->
+            <!--<a href="javascript:;" class="check-btn" @click="handleCheckout">去结算</a>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
 </template>
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
   import * as API_Trade from '@/api/trade'
   import { RegExp } from '~/ui-utils'
+  import NavBar from "@/components/NavBar"
   export default {
     name: 'cart',
+    components: {NavBar},
     layout: 'full',
     middleware: 'auth-user',
     data() {

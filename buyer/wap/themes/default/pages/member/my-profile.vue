@@ -71,9 +71,6 @@
 
 <script>
   import Vue from 'vue'
-  import { DatePicker, Upload } from 'element-ui'
-  Vue.use(DatePicker)
-  Vue.use(Upload)
   import { mapGetters, mapActions } from 'vuex'
   import EnRegionPicker from "@/components/RegionPicker"
   import { RegExp } from '~/ui-utils'
