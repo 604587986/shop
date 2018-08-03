@@ -42,16 +42,6 @@ module.exports = {
       allChunks: true
     },
     vendor: ['axios'],
-    babel: {
-      "plugins": [
-        ["import",
-          {
-            "libraryName": "vant",
-            "libraryDirectory": "es",
-            "style": true
-          }]
-      ]
-    },
     plugins: [],
     publicPath: '/'
   },
