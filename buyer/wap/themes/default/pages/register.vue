@@ -41,11 +41,6 @@
 <script>
   import Vue from 'vue'
   import { mapActions } from 'vuex'
-  import { Button, Form, FormItem, Input } from 'element-ui'
-  Vue.use(Button)
-  Vue.use(Form)
-  Vue.use(FormItem)
-  Vue.use(Input)
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Article from '@/api/article'
