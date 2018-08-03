@@ -76,7 +76,7 @@
     mounted() {
       // 获取团购分类
       API_Promotions.getGroupBuyCategorys().then(response => {
-        this.categorys.push(...response)
+        this.categorys.push(...response.sort((x, y) => x.cat_order > y.cat_order))
       })
       this.GET_GroupBuyGoods()
     },
