@@ -6,6 +6,17 @@ import request, { Method } from '@/utils/request'
 
 
 /**
+ * 获取推荐人列表
+ */
+export function getRefereeList() {
+  return request({
+    url: `http://192.168.2.5:7005/distribution/lower-list`,
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
  * 获取提现参数设置
  */
 export function getWithdrawalsParams() {
