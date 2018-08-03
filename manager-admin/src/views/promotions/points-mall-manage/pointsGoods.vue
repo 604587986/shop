@@ -7,7 +7,7 @@
     <template slot="table-columns">
       <el-table-column label="商品图片">
         <template slot-scope="scope">
-          <img :src="scope.row.goods_image" :alt="scope.row.goods_name" class="goods-image">
+          <img :src="scope.row.goods_img" :alt="scope.row.goods_name" class="goods-image">
         </template>
       </el-table-column>
       <el-table-column prop="goods_sn" label="商品编号"/>
