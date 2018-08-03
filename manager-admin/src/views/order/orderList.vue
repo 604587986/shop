@@ -40,7 +40,7 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     value-format="timestamp"
-                    :picker-options="pickerOptions">
+                    :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: this.MixinPickerShortcuts }">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="订单状态">
@@ -130,37 +130,7 @@
         // 列表数据
         tableData: '',
         // 高级搜索数据
-        advancedForm: {},
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now()
-          },
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        }
+        advancedForm: {}
       }
     },
     filters: {
@@ -191,6 +161,7 @@
           order_sn: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.params.page_no = 1
         this.GET_OrderList()
       },
 
@@ -208,6 +179,7 @@
         }
         delete this.params.order_sn
         delete this.params.order_time_range
+        this.params.page_no = 1
         this.GET_OrderList()
       },
 
@@ -221,8 +193,8 @@
         this.loading = true
         const params = this.MixinClone(this.params)
         if (params.start_time && params.end_time) {
-          params.start_time /= 1000
-          params.end_time /= 1000
+          params.start_time = parseInt(params.start_time / 1000)
+          params.end_time = parseInt(params.end_time / 1000)
         }
         if (params.seller_id === 0) delete params.seller_id
         API_order.getOrderList(params).then(response => {
