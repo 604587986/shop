@@ -14,7 +14,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           value-format="timestamp"
-          :picker-options="pickerOptions">
+          :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: MixinPickerShortcuts }">
         </el-date-picker>
         <el-button size="mini" type="primary" icon="el-icon-download" @click="handleExportRefund" style="margin-left: 5px">导出Excel</el-button>
       </div>
@@ -60,7 +60,7 @@
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
                   value-format="timestamp"
-                  :picker-options="pickerOptions">
+                  :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: MixinPickerShortcuts }">
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="售后状态">
@@ -147,37 +147,6 @@
         /** 高级搜索数据 */
         advancedForm: {},
 
-        /** 高级搜索时间选择组件配置 */
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now()
-          },
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        },
         /** 导出Excel日期 */
         exportDateRange: []
       }
@@ -247,9 +216,9 @@
               '店铺名称': item.seller_name,
               '收款人': item.member_name,
               '退款状态': item.refund_status,
-              '创建时间': Foundation.unixToDate(item.create_time),
+              '创建时间': item.create_time ? Foundation.unixToDate(item.create_time) : '',
               '退款金额': Foundation.formatPrice(item.refund_price),
-              '退款时间': Foundation.unixToDate(item.refund_time)
+              '退款时间': item.refund_time ? Foundation.unixToDate(item.refund_time) : ''
             }))
           }
           this.MixinExportJosnToExcel(json, '退款单')
