@@ -49,12 +49,9 @@
             </van-field>
           </van-cell-group>
         </no-ssr>
-        <van-button
-          size="large"
-          class="login-btn"
-          :disabled="login_disabled_account"
-          @click="handleLogin"
-        >登&nbsp;&nbsp;&nbsp;录</van-button>
+        <div class="login-btn">
+          <van-button size="large" :disabled="login_disabled_account" @click="handleLogin">登&nbsp;&nbsp;&nbsp;录</van-button>
+        </div>
       </div>
       <div v-show="login_type === 'quick'" class="content-item quick">
         <no-ssr>
@@ -89,12 +86,9 @@
             </van-field>
           </van-cell-group>
         </no-ssr>
-        <van-button
-          size="large"
-          class="login-btn"
-          :disabled="login_disabled_quick"
-          @click="handleLogin"
-        >登&nbsp;&nbsp;&nbsp;录</van-button>
+        <div class="login-btn">
+          <van-button size="large" :disabled="login_disabled_quick" @click="handleLogin">登&nbsp;&nbsp;&nbsp;录</van-button>
+        </div>
       </div>
     </div>
     <!--忘记密码、手机注册-->
@@ -248,16 +242,18 @@
     }
   }
   .login-content {
-    padding: 10px 20px 20px 20px;
+    padding-top: 10px;
+    padding-bottom: 20px;
     /deep/ {
       .van-cell {
-        padding: 10px 0;
         &::after { left: 0 }
       }
       .login-btn {
-        color: #fff;
-        margin-top: 10px;
-        background-color: $color-main;
+        padding: 10px 15px 10px 15px;
+        .van-button {
+          color: #fff;
+          background-color: $color-main;
+        }
         &.van-button--disabled {
           color: #999;
           background-color: #e8e8e8;
@@ -271,7 +267,7 @@
     }
   }
   .login-nav {
-    padding: 0 20px;
+    padding: 0 15px;
     a + a { float: right }
   }
   .login-other {
