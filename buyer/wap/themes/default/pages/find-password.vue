@@ -9,7 +9,9 @@
           clearable
           label="账户名"
           placeholder="请输入账户名"
-        />
+        >
+          <span slot="label">账&emsp;户&emsp;名</span>
+        </van-field>
         <van-field
           v-model="validAccountForm.img_code"
           clearable
@@ -20,12 +22,9 @@
           <img v-if="valid_img_url" :src="valid_img_url" slot="button" @click="getValidImgUrl" class="captcha-img">
         </van-field>
       </van-cell-group>
-      <van-button
-        size="large"
-        class="big-btn"
-        :disabled="val_disabled_account"
-        @click="handleValidAccount"
-      >验证账户</van-button>
+      <div class="big-btn">
+        <van-button size="large" :disabled="val_disabled_account" @click="handleValidAccount">验证账户</van-button>
+      </div>
     </div>
     <!--验证手机号-->
     <div v-show="step === 2" class="find-item">
@@ -34,8 +33,9 @@
           v-model="validMobileForm.mobile"
           clearable
           readonly
-          label="手机号"
-        />
+        >
+          <span slot="label">手&emsp;机&emsp;号</span>
+        </van-field>
         <van-field
           v-model="validMobileForm.img_code"
           clearable
@@ -56,12 +56,9 @@
           <en-count-down-btn slot="button" :start="sendValidMobileSms">发送验证码</en-count-down-btn>
         </van-field>
       </van-cell-group>
-      <van-button
-        size="large"
-        class="big-btn"
-        :disabled="val_disabled_mobile"
-        @click="handleNextStep"
-      >下一步</van-button>
+      <div class="big-btn">
+        <van-button size="large" :disabled="val_disabled_mobile" @click="handleNextStep">下一步</van-button>
+      </div>
     </div>
     <!--更新密码-->
     <div v-show="step === 3">
@@ -74,11 +71,12 @@
             v-model="changePasswordForm.password"
             type="password"
             clearable
-            label="新密码"
             placeholder="请输入密码"
             maxlength="20"
             :error-message="passwordError"
-          />
+          >
+            <span slot="label">新&emsp;密&emsp;码</span>
+          </van-field>
           <van-field
             v-model="changePasswordForm.rep_password"
             type="password"
@@ -89,12 +87,9 @@
             :error-message="repPasswordError"
           />
         </van-cell-group>
-        <van-button
-          size="large"
-          class="big-btn"
-          :disabled="val_disabled_password"
-          @click="submitChangeForm"
-        >确认修改</van-button>
+        <div class="big-btn">
+          <van-button size="large" :disabled="val_disabled_password" @click="submitChangeForm">确认修改</van-button>
+        </div>
       </div>
     </div>
   </div>
@@ -110,6 +105,11 @@
   export default {
     name: 'find-password',
     layout: 'full',
+    head() {
+      return {
+        title: `找回密码-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         step: 1,
@@ -220,17 +220,10 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../assets/styles/color";
-  .find-item {
-    padding: 10px 20px 20px 20px;
-  }
-  /deep/ {
-    .van-cell {
-      padding: 10px 0;
-      &::after { left: 0 }
-    }
-    .big-btn {
+  .big-btn {
+    padding: 10px 15px 10px 15px;
+    .van-button {
       color: #fff;
-      margin-top: 10px;
       background-color: $color-main;
       &.van-button--disabled {
         color: #999;
@@ -238,9 +231,9 @@
         border: 1px solid #e5e5e5;
       }
     }
-    .captcha-img {
-      width: 70px;
-      height: 24px;
-    }
+  }
+  .captcha-img {
+    width: 70px;
+    height: 24px;
   }
 </style>

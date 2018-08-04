@@ -26,15 +26,17 @@
             <van-field
               v-model="accountForm.username"
               clearable
-              label="用户名"
               placeholder="邮箱/用户名/已验证手机"
-            />
+            >
+              <span slot="label">用&emsp;户&emsp;名</span>
+            </van-field>
             <van-field
               v-model="accountForm.password"
               type="password"
-              label="密码"
               placeholder="请输入密码"
-            />
+            >
+              <span slot="label">密&emsp;&emsp;&emsp;码</span>
+            </van-field>
             <van-field
               v-model="accountForm.captcha"
               center
@@ -47,12 +49,9 @@
             </van-field>
           </van-cell-group>
         </no-ssr>
-        <van-button
-          size="large"
-          class="login-btn"
-          :disabled="login_disabled_account"
-          @click="handleLogin"
-        >登&nbsp;&nbsp;&nbsp;录</van-button>
+        <div class="login-btn">
+          <van-button size="large" :disabled="login_disabled_account" @click="handleLogin">登&nbsp;&nbsp;&nbsp;录</van-button>
+        </div>
       </div>
       <div v-show="login_type === 'quick'" class="content-item quick">
         <no-ssr>
@@ -71,11 +70,11 @@
               v-model="quickForm.mobile"
               type="tel"
               clearable
-              label="手机号码"
               placeholder="请输入手机号"
               maxlength="11"
-              @focus="showKeyboard = true"
-            />
+            >
+              <span slot="label">手&emsp;机&emsp;号</span>
+            </van-field>
             <van-field
               v-model="quickForm.sms_code"
               center
@@ -87,12 +86,9 @@
             </van-field>
           </van-cell-group>
         </no-ssr>
-        <van-button
-          size="large"
-          class="login-btn"
-          :disabled="login_disabled_quick"
-          @click="handleLogin"
-        >登&nbsp;&nbsp;&nbsp;录</van-button>
+        <div class="login-btn">
+          <van-button size="large" :disabled="login_disabled_quick" @click="handleLogin">登&nbsp;&nbsp;&nbsp;录</van-button>
+        </div>
       </div>
     </div>
     <!--忘记密码、手机注册-->
@@ -133,7 +129,7 @@
     layout: 'full',
     head() {
       return {
-        title: `会员登录-${this.site.title}`
+        title: `会员登录-${this.site.site_name}`
       }
     },
     data() {
@@ -152,9 +148,7 @@
           username: '',
           password: '',
           captcha: ''
-        },
-        /** 显示数字键盘 */
-        showKeyboard: false
+        }
       }
     },
     computed: {
@@ -248,15 +242,12 @@
     }
   }
   .login-content {
-    padding: 10px 20px 20px 20px;
-    /deep/ {
-      .van-cell {
-        padding: 10px 0;
-        &::after { left: 0 }
-      }
-      .login-btn {
+    padding-top: 10px;
+    padding-bottom: 20px;
+    .login-btn {
+      padding: 10px 15px 10px 15px;
+      .van-button {
         color: #fff;
-        margin-top: 10px;
         background-color: $color-main;
         &.van-button--disabled {
           color: #999;
@@ -271,7 +262,7 @@
     }
   }
   .login-nav {
-    padding: 0 20px;
+    padding: 0 15px;
     a + a { float: right }
   }
   .login-other {
