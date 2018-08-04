@@ -75,7 +75,6 @@
               clearable
               placeholder="请输入手机号"
               maxlength="11"
-              @focus="showKeyboard = true"
             >
               <span slot="label">手&emsp;机&emsp;号</span>
             </van-field>
@@ -155,9 +154,7 @@
           username: '',
           password: '',
           captcha: ''
-        },
-        /** 显示数字键盘 */
-        showKeyboard: false
+        }
       }
     },
     computed: {
