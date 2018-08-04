@@ -62,6 +62,7 @@ module.exports = {
     { src: '~plugins/vue-swiper', ssr: false }
   ],
   router: {
+    middleware: 'auth-site',
     scrollBehavior: function (to, from, savedPosition) {
       return { x: 0, y: 0 }
     }
