@@ -8,8 +8,3 @@
     name: 'full'
   }
 </script>
-<style>
-  #wrapper {
-    min-height: calc(100vh - 31px - 219px)
-  }
-</style>
