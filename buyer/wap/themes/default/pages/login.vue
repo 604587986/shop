@@ -26,15 +26,17 @@
             <van-field
               v-model="accountForm.username"
               clearable
-              label="用户名"
               placeholder="邮箱/用户名/已验证手机"
-            />
+            >
+              <span slot="label">用&emsp;户&emsp;名</span>
+            </van-field>
             <van-field
               v-model="accountForm.password"
               type="password"
-              label="密码"
               placeholder="请输入密码"
-            />
+            >
+              <span slot="label">密&emsp;&emsp;&emsp;码</span>
+            </van-field>
             <van-field
               v-model="accountForm.captcha"
               center
@@ -71,11 +73,12 @@
               v-model="quickForm.mobile"
               type="tel"
               clearable
-              label="手机号码"
               placeholder="请输入手机号"
               maxlength="11"
               @focus="showKeyboard = true"
-            />
+            >
+              <span slot="label">手&emsp;机&emsp;号</span>
+            </van-field>
             <van-field
               v-model="quickForm.sms_code"
               center
@@ -133,7 +136,7 @@
     layout: 'full',
     head() {
       return {
-        title: `会员登录-${this.site.title}`
+        title: `会员登录-${this.site.site_name}`
       }
     },
     data() {
