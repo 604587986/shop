@@ -16,10 +16,17 @@
         </div>
       </div>
     </div>
-    <!--<div v-else-if="error.statusCode === 502">服务器出错</div>-->
+    <div v-else-if="error.statusCode === 503" class="error-500">
+      <div class="inner-error">
+        <p>{{ error.message || '服务器出现错误...' }}</p>
+      </div>
+      <div class="inner-btns">
+        <el-button size="small" @click="handleReload">刷新页面</el-button>
+      </div>
+    </div>
     <div v-else class="error-500">
       <div class="inner-error">
-        <p>服务器出现错误...</p>
+        <p>{{ error.message || '服务器出现错误...' }}</p>
       </div>
       <div class="inner-btns">
         <el-button size="small" @click="$router.back()">返回上页</el-button>
