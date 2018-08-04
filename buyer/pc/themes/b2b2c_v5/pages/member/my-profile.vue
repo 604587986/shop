@@ -75,7 +75,7 @@
     name: 'my-profile',
     head() {
       return {
-        title: `我的资料-${this.site.title}`
+        title: `我的资料-${this.site.site_name}`
       }
     },
     components: { EnRegionPicker },

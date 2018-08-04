@@ -48,7 +48,7 @@
     name: 'points-mall',
     head() {
       return {
-        title: `积分商城-${this.site.title}`
+        title: `积分商城-${this.site.site_name}`
       }
     },
     data() {

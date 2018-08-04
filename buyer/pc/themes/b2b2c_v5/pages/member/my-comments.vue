@@ -49,7 +49,7 @@
     name: 'my-comments',
     head() {
       return {
-        title: `我的评论-${this.site.title}`
+        title: `我的评论-${this.site.site_name}`
       }
     },
     data() {

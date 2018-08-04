@@ -161,7 +161,7 @@
     },
     head() {
       return {
-        title: `商品列表-${this.site.title}`
+        title: `商品列表-${this.site.site_name}`
       }
     },
     data() {

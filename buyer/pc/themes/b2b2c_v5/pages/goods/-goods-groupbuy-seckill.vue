@@ -41,6 +41,7 @@
   /**
    * 商品页团购模块
    */
+  // Andste_TODO 2018/8/2: 当活动未开始，会出现问题
   export default {
     name: 'goods-groupbuy-seckill',
     props: ['promotions'],

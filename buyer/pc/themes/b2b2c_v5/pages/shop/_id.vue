@@ -28,7 +28,7 @@
     },
     head () {
       return {
-        title: `${this.shop.shop_name}-${this.site.title}`
+        title: `${this.shop.shop_name}-${this.site.site_name}`
       }
     },
     methods: {

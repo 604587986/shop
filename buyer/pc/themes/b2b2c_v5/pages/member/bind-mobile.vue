@@ -46,7 +46,7 @@
     name: 'bind-mobile',
     head() {
       return {
-        title: `绑定手机号-${this.site.title}`
+        title: `绑定手机号-${this.site.site_name}`
       }
     },
     data() {

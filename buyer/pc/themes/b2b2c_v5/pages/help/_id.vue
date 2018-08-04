@@ -23,7 +23,7 @@
     },
     head() {
       return {
-        title: `${this.article.article_name}-${this.site.title}`
+        title: `${this.article.article_name}-${this.site.site_name}`
       }
     },
     computed: {

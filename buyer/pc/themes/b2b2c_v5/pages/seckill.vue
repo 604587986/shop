@@ -95,7 +95,7 @@
     name: 'seckill',
     head() {
       return {
-        title: `限时抢购-${this.site.title}`
+        title: `限时抢购-${this.site.site_name}`
       }
     },
     data() {
