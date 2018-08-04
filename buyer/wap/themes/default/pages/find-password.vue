@@ -9,7 +9,9 @@
           clearable
           label="账户名"
           placeholder="请输入账户名"
-        />
+        >
+          <span slot="label">账&emsp;户&emsp;名</span>
+        </van-field>
         <van-field
           v-model="validAccountForm.img_code"
           clearable
@@ -34,8 +36,9 @@
           v-model="validMobileForm.mobile"
           clearable
           readonly
-          label="手机号"
-        />
+        >
+          <span slot="label">手&emsp;机&emsp;号</span>
+        </van-field>
         <van-field
           v-model="validMobileForm.img_code"
           clearable
@@ -74,11 +77,12 @@
             v-model="changePasswordForm.password"
             type="password"
             clearable
-            label="新密码"
             placeholder="请输入密码"
             maxlength="20"
             :error-message="passwordError"
-          />
+          >
+            <span slot="label">新&emsp;密&emsp;码</span>
+          </van-field>
           <van-field
             v-model="changePasswordForm.rep_password"
             type="password"
@@ -110,6 +114,11 @@
   export default {
     name: 'find-password',
     layout: 'full',
+    head() {
+      return {
+        title: `找回密码-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         step: 1,
