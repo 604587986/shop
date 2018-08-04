@@ -244,16 +244,11 @@
   .login-content {
     padding-top: 10px;
     padding-bottom: 20px;
-    /deep/ {
-      .van-cell {
-        &::after { left: 0 }
-      }
-      .login-btn {
-        padding: 10px 15px 10px 15px;
-        .van-button {
-          color: #fff;
-          background-color: $color-main;
-        }
+    .login-btn {
+      padding: 10px 15px 10px 15px;
+      .van-button {
+        color: #fff;
+        background-color: $color-main;
         &.van-button--disabled {
           color: #999;
           background-color: #e8e8e8;
