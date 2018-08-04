@@ -23,7 +23,7 @@
       const { $store, site } = this
       const name = $store.getters.user.nickname || '个人中心'
       return {
-        title: `${name}-${site.title}`
+        title: `${name}-${site.site_name}`
       }
     },
     components: {

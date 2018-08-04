@@ -86,10 +86,10 @@
     head() {
       const { goods, site } = this
       return {
-        title: `${goods.page_title || goods.goods_name || '商品详情'}-${site.title}`,
+        title: `${goods.page_title || goods.goods_name || '商品详情'}-${site.site_name}`,
         meta: [
           { hid: 'keywords', name: 'keywords', content: goods.meta_keywords },
-          { hid: 'description', name: 'description', content: `${goods.meta_description}-${site.title}` },
+          { hid: 'description', name: 'description', content: `${goods.meta_description}-${site.site_name}` },
           { 'http-equiv': 'mobile-agent', content: `format=xhtml; url=/goods/${goods.goods_id}` },
           { 'http-equiv': 'mobile-agent', content: `format=html5; url=/goods/${goods.goods_id}` }
         ]

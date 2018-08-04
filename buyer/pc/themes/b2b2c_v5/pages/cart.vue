@@ -135,7 +135,7 @@
     middleware: 'auth-user',
     head() {
       return {
-        title: `购物车-${this.site.title}`
+        title: `购物车-${this.site.site_name}`
       }
     },
     data() {

@@ -73,7 +73,7 @@
     name: 'my-points',
     head() {
       return {
-        title: `我的积分${this.site.title}`
+        title: `我的积分${this.site.site_name}`
       }
     },
     data() {

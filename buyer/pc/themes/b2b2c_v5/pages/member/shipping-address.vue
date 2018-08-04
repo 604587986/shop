@@ -69,7 +69,7 @@
     name: 'shipping-address',
     head() {
       return {
-        title: `我的收货地址-${this.site.title}`
+        title: `我的收货地址-${this.site.site_name}`
       }
     },
     mixins: [addressMixin]

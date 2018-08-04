@@ -72,7 +72,7 @@
     name: 'account-binding',
     head() {
       return {
-        title: `账号绑定-${this.site.title}`
+        title: `账号绑定-${this.site.site_name}`
       }
     },
     data() {

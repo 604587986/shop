@@ -57,7 +57,7 @@
     name: 'group-buy',
     head() {
       return {
-        title: `团购-${this.site.title}`
+        title: `团购-${this.site.site_name}`
       }
     },
     data() {

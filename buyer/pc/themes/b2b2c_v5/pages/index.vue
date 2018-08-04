@@ -35,7 +35,7 @@
     },
     head() {
       return {
-        title: `商城首页-${this.site.title}`
+        title: `商城首页-${this.site.site_name}`
       }
     },
     components: IndexComponents,

@@ -75,7 +75,7 @@
     name: 'comments',
     head() {
       return {
-        title: `评价商品-${this.site.title}`
+        title: `评价商品-${this.site.site_name}`
       }
     },
     data() {

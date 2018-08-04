@@ -73,7 +73,7 @@
     name: 'change-mobile',
     head() {
       return {
-        title: `更改手机号-${this.site.title}`
+        title: `更改手机号-${this.site.site_name}`
       }
     },
     data() {

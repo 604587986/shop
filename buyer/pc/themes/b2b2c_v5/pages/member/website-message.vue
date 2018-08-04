@@ -55,7 +55,7 @@
     name: 'website-message',
     head() {
       return {
-        title: `站内消息-${this.site.title}`
+        title: `站内消息-${this.site.site_name}`
       }
     },
     data() {

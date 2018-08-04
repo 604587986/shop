@@ -7,7 +7,7 @@
     name: 'my-order',
     head() {
       return {
-        title: `我的订单-${this.site.title}`
+        title: `我的订单-${this.site.site_name}`
       }
     }
   }

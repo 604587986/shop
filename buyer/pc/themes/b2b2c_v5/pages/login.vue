@@ -123,7 +123,7 @@
     layout: 'full',
     head() {
       return {
-        title: `会员登录-${this.site.title}`
+        title: `会员登录-${this.site.site_name}`
       }
     },
     data() {

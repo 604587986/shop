@@ -15,7 +15,6 @@
                     <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>
                     <div class="goods-price">
                       <span>RMB：<strong>￥{{ goods.price | unitPrice }}</strong></span>
-                      <!--// Andste_TODO 2018/7/4: 缺少参数-->
                       <span>已销售：{{ goods.buy_count }}件</span>
                     </div>
                     <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-btn">查看详情</nuxt-link>
@@ -43,7 +42,6 @@
                   <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>
                   <div class="goods-price">
                     <span>RMB：<strong>￥{{ goods.price | unitPrice }}</strong></span>
-                    <!--// Andste_TODO 2018/7/4: 缺少参数-->
                     <span>已销售：{{ goods.buy_count }}件</span>
                   </div>
                 </div>

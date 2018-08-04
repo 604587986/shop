@@ -148,7 +148,7 @@
     name: 'my-collection',
     head() {
       return {
-        title: `我的收藏-${this.site.title}`
+        title: `我的收藏-${this.site.site_name}`
       }
     },
     data() {
