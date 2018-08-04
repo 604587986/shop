@@ -1,12 +1,10 @@
 <template>
-  <div class="classify">
-    <van-nav-bar
-      left-arrow
-      @click-left="$router.go(-1)"
-      v-bind="$attrs"
-      v-on="$listeners"
-    />
-  </div>
+  <van-nav-bar
+    left-arrow
+    @click-left="$router.go(-1)"
+    v-bind="$attrs"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
