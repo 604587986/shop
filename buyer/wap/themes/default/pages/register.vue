@@ -126,7 +126,7 @@
         // 图片验证码URL
         valid_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER'),
         // 显示注册协议
-        showAgreement: false,
+        showAgreement: true,
         // 注册协议
         agreement: '',
         // 同意注册协议
