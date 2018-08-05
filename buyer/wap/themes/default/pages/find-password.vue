@@ -221,7 +221,7 @@
 <style type="text/scss" lang="scss" scoped>
   @import "../assets/styles/color";
   .big-btn {
-    padding: 10px 15px 10px 15px;
+    padding: 10px 15px;
     .van-button {
       color: #fff;
       background-color: $color-main;

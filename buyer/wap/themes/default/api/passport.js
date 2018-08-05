@@ -93,15 +93,17 @@ export function checkMobileRepeat(mobile) {
 
 /**
  * 注册会员【手机号】
- * @param params
+ * @param mobile
+ * @param password
  */
-export function registerByMobile(params) {
-  params = JSON.parse(JSON.stringify(params))
-  params.password = md5(params.password)
+export function registerByMobile({ mobile, password }) {
   return request({
-    url: `${api.passport}/passport/register/pc`,
+    url: `${api.passport}/passport/register/wap`,
     method: Method.POST,
-    data: params
+    data: {
+      mobile,
+      password: md5(password)
+    }
   })
 }
 

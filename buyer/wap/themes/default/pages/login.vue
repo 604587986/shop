@@ -245,7 +245,7 @@
     padding-top: 10px;
     padding-bottom: 20px;
     .login-btn {
-      padding: 10px 15px 10px 15px;
+      padding: 10px 15px;
       .van-button {
         color: #fff;
         background-color: $color-main;
