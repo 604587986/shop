@@ -12,7 +12,9 @@ export const state = () => ({
   // 导航栏
   navList: [],
   // 分类
-  categoryList: [],
+  categories: [],
+  // 热搜关键词
+  hotKeywords: [],
   // uuid
   uuid: '',
   // 站点信息
@@ -38,6 +40,30 @@ export const mutations = {
   [types.SET_SITE_DATA](state, data) {
     state.site = data
     process.client && Storage.setItem('site', global.JSON.stringify(data), { domain: domain.cookie })
+  },
+  /**
+   * 设置分类数据
+   * @param state
+   * @param data
+   */
+  [types.SET_CATEGORY_DATA](state, data) {
+    state.categories = data
+  },
+  /**
+   * 设置导航栏数据
+   * @param state
+   * @param data
+   */
+  [types.SET_NAV_DATA](state, data) {
+    state.navList = data
+  },
+  /**
+   * 设置热搜关键词数据
+   * @param state
+   * @param data
+   */
+  [types.SET_HOT_KEYWORDS](state, data) {
+    state.hotKeywords = data
   }
 }
 
@@ -49,7 +75,7 @@ export const actions = {
    * @param req
    * @param res
    */
-  async nuxtServerInit ({ commit }, { req, res }) {
+  async nuxtServerInit ({ commit, dispatch }, { req, res }) {
     let _uuid
     let _site
     if (req.headers.cookie) {
@@ -71,25 +97,50 @@ export const actions = {
       res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie}`])
     }
     commit('SET_UUID', _uuid)
-    /**
-     * 获取站点信息
-     */
-    try {
-      const site = await API_Common.getSiteData()
-      commit('SET_SITE_DATA', site)
-    } catch (e) {
-      // 如果获取出错，使用cookie中的站点信息
-      commit('SET_SITE_DATA', _site || {})
-    }
+    // 获取站点信息
+    await dispatch('getSiteAction')
+    // 获取分类数据
+    await dispatch('getCategoriesAction')
+    // 获取导航数据
+    await dispatch('getNavAction')
+    // 获取热搜关键词数据
+    await dispatch('getHotKeywordsAction')
   },
   /**
    * 获取站点信息
    * @param commit
+   * @returns {Promise<void>}
    */
-  getSiteData: ({ commit }) => {
-    API_Common.getSiteData().then(response => {
-      commit(types.SET_SITE_DATA, response)
-    })
+  async getSiteAction({ commit }) {
+    const site = await API_Common.getSiteData()
+    commit(types.SET_SITE_DATA, site)
+  },
+  /**
+   * 获取分类列表
+   * @param commit
+   * @returns {Promise<void>}
+   */
+  async getCategoriesAction({ commit }) {
+    const categories = await API_Home.getCategory()
+    commit(types.SET_CATEGORY_DATA, categories)
+  },
+  /**
+   * 获取导航列表
+   * @param commit
+   * @returns {Promise<void>}
+   */
+  async getNavAction({ commit }) {
+    const nav = await API_Home.getSiteMenu()
+    commit(types.SET_NAV_DATA, nav)
+  },
+  /**
+   * 获取热搜关键词
+   * @param commit
+   * @returns {Promise<void>}
+   */
+  async getHotKeywordsAction({ commit }) {
+    const hotKeywords = await API_Home.getHotKeywords()
+    commit(types.SET_HOT_KEYWORDS, hotKeywords)
   }
 }
 
@@ -100,8 +151,19 @@ export const getters = {
    * @param state
    * @returns {*}
    */
-  categoryList: state => state.categoryList,
-
+  categories: state => state.categories,
+  /**
+   * 导航栏
+   * @param state
+   * @returns {*}
+   */
+  navList: state => state.navList,
+  /**
+   * 热搜关键词
+   * @param state
+   * @returns {*}
+   */
+  hotKeywords: state => state.hotKeywords,
   /**
    * 获取UUID
    * @param state

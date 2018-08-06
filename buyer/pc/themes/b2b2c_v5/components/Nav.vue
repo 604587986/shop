@@ -2,7 +2,7 @@
   <div id="nav" class="w">
     <en-category/>
     <ul class="nav-list">
-      <li v-for="nav in navList" :key="nav.navigation_id">
+      <li v-for="nav in $store.getters.navList" :key="nav.navigation_id">
         <a :href="nav.url">{{ nav.navigation_name }}</a>
       </li>
     </ul>
@@ -10,13 +10,8 @@
 </template>
 
 <script>
-  import * as API_Home from '@/api/home'
   export default {
-    name: 'EnNav',
-    data: () => ({ navList: '' }),
-    async mounted() {
-      this.navList = await API_Home.getSiteMenu()
-    }
+    name: 'EnNav'
   }
 </script>
 
