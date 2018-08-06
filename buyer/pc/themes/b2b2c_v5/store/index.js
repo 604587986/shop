@@ -97,50 +97,33 @@ export const actions = {
       res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie}`])
     }
     commit('SET_UUID', _uuid)
-    // 获取站点信息
-    await dispatch('getSiteAction')
-    // 获取分类数据
-    await dispatch('getCategoriesAction')
-    // 获取导航数据
-    await dispatch('getNavAction')
-    // 获取热搜关键词数据
-    await dispatch('getHotKeywordsAction')
+    // 获取公共数据
+    await dispatch('getCommonDataAction')
   },
   /**
-   * 获取站点信息
+   * 获取公共数据
    * @param commit
    * @returns {Promise<void>}
    */
-  async getSiteAction({ commit }) {
-    const site = await API_Common.getSiteData()
-    commit(types.SET_SITE_DATA, site)
-  },
-  /**
-   * 获取分类列表
-   * @param commit
-   * @returns {Promise<void>}
-   */
-  async getCategoriesAction({ commit }) {
-    const categories = await API_Home.getCategory()
-    commit(types.SET_CATEGORY_DATA, categories)
-  },
-  /**
-   * 获取导航列表
-   * @param commit
-   * @returns {Promise<void>}
-   */
-  async getNavAction({ commit }) {
-    const nav = await API_Home.getSiteMenu()
-    commit(types.SET_NAV_DATA, nav)
-  },
-  /**
-   * 获取热搜关键词
-   * @param commit
-   * @returns {Promise<void>}
-   */
-  async getHotKeywordsAction({ commit }) {
-    const hotKeywords = await API_Home.getHotKeywords()
-    commit(types.SET_HOT_KEYWORDS, hotKeywords)
+  async getCommonDataAction({ commit }) {
+    const commons = await Promise.all([
+      // 站点信息
+      API_Common.getSiteData(),
+      // 导航栏
+      API_Home.getSiteMenu(),
+      // 分类数据
+      API_Home.getCategory(),
+      // 热门关键字
+      API_Home.getHotKeywords()
+    ])
+    // 站点信息
+    commit(types.SET_SITE_DATA, commons[0])
+    // 导航栏
+    commit(types.SET_NAV_DATA, commons[1])
+    // 分类数据
+    commit(types.SET_CATEGORY_DATA, commons[2])
+    // 热门关键字
+    commit(types.SET_HOT_KEYWORDS, commons[3])
   }
 }
 
