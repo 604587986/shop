@@ -119,7 +119,7 @@ export const actions = {
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
         Storage.setItem('uid', uid, { domain: domain.cookie })
-        API_Members.getUserInfo(uid).then(response => {
+        API_Members.getUserInfo().then(response => {
           response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
           resolve(response)
@@ -174,9 +174,10 @@ export const actions = {
   registerByMobileAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
       API_Passport.registerByMobile(params).then(res=> {
-        const { access_token, refresh_token } = res
+        const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
+        Storage.setItem('uid', uid, { domain: domain.cookie })
         resolve(res)
       })
     })
