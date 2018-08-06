@@ -119,7 +119,13 @@
         <!--上级分类-->
         <el-form-item v-if="parentOptions && categoryForm.parent_id !== 0" label="上级分类" prop="parent_id">
           <el-select v-model="categoryForm.parent_id" placeholder="请选择上级分类">
-            <el-option v-for="item in parentOptions" :label="item.name" :value="item.id" :key="item.id"/>
+            <el-option
+              v-for="item in parentOptions"
+              :label="item.name"
+              :value="item.id"
+              :key="item.id"
+              :disabled="item.id !== 13"
+            />
           </el-select>
         </el-form-item>
         <!--排序-->
