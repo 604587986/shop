@@ -129,13 +129,10 @@
         this.loadBdShareScript()
       }
     },
-    computed: {
-      ...mapGetters(['user'])
-    },
     methods: {
       /** 收藏商品 */
       handleCollectionGoods() {
-        if (!Storage.getItem('user')) {
+        if (!Storage.getItem('refreshToken')) {
           this.$message.error('您还未登录，不能收藏商品！')
           return false
         }
