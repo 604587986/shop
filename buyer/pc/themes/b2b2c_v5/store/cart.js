@@ -135,7 +135,6 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commit(types.CLEAN_CART)
       API_Trade.getCarts(params).then(response => {
-        commit(types.SET_CART_DATA, response)
         dispatch('getCartTotalAction')
         resolve(response)
       }).catch(error => reject(error))

@@ -28,7 +28,7 @@ service.interceptors.request.use(config => {
   }
   // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
-  if (accessToken && config.needToken) {
+  if (accessToken) {
     // 如果前台为开发环境，后台API，则需要替换为下面的代码
     // process.env.NODE_ENV === 'development'
     if (process.env.NODE_ENV === 'production') {
