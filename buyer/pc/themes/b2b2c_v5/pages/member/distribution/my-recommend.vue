@@ -8,6 +8,7 @@
       </ul>
     </div>
     <div>
+      <div class="my-refereer">我的推荐人：<span>{{ myRefereer || '没有推荐人' }}</span></div>
       <div v-if="referee && referee.length > 0 ">
         <el-table :data="referee" style="width: 100%">
           <el-table-column label="会员" prop="name" align="center"/>
@@ -30,7 +31,6 @@
           </el-pagination>
         </div>
       </div>
-      <empty-member v-if="!referee || !referee.length">没有推荐人</empty-member>
     </div>
   </div>
 </template>
@@ -57,14 +57,25 @@
           data_total: 0
         },
 
+        /** 我的推荐人 */
+        myRefereer: '',
+
         /** 推荐人列表 */
         referee: []
       }
     },
     mounted() {
+      this.GET_myReferee()
       this.GET_referee()
     },
     methods: {
+      /** 我的推荐人 */
+      GET_myReferee() {
+        API_distribution.getMyRefereer().then(response => {
+          this.myRefereer = response
+        })
+      },
+
       /** 获取推荐人 */
       GET_referee() {
         API_distribution.getRefereeList().then(response => {
@@ -92,5 +103,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  .my-refereer {
+    line-height: 50px;
+    font-size: 16px;
+    margin-left: 10px;
+    color: #333;
+  }
 </style>
