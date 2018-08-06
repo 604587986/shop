@@ -21,6 +21,7 @@ const user = {
     SET_USER: (state, user) => {
       state.user = user
       Storage.setItem('adminUser', JSON.stringify(user), { domain: domain.cookie })
+      Storage.setItem('adminUid', user.id, { domain: domain.cookie })
     },
     /**
      * 设置访问令牌
@@ -54,6 +55,7 @@ const user = {
     REMOVE_USER: (state) => {
       state.user = ''
       Storage.removeItem('adminUser', { domain: domain.cookie })
+      Storage.removeItem('adminUid', { domain: domain.cookir })
     },
     /**
      * 移除访问令牌
