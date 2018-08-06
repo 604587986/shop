@@ -27,7 +27,7 @@
   import templates, { templateArray } from './-index/templates'
   export default {
     name: 'index',
-    async asyncData() {
+    async asyncData({ store }) {
       const floor = await API_Home.getFloorData()
       return {
         floorList: floor.page_data ? global.JSON.parse(floor.page_data) : []

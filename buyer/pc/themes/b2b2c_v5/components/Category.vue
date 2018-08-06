@@ -6,7 +6,7 @@
   >
     <a href="/goods" class="category-title">全部商品分类</a>
     <div v-show="unfold" class="category-layer">
-      <div v-for="(item, index) in categoryList" v-if="index < 7" :key="item.category_id" class="category-item">
+      <div v-for="(item, index) in $store.getters.categories" v-if="index < 7" :key="item.category_id" class="category-item">
         <div class="item-content">
           <i class="item-icon"></i>
           <div class="item-title">
@@ -80,12 +80,8 @@
       let unfold = this.$route.path === '/'
       if (this.initUnfold === false) unfold = false
       return {
-        unfold,
-        categoryList: ''
+        unfold
       }
-    },
-    async mounted() {
-      this.categoryList = await API_Home.getCategory()
     },
     watch: {
       $route() {
