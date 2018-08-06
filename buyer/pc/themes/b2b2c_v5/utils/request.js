@@ -38,7 +38,7 @@ service.interceptors.request.use(config => {
 
   // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
-  if (accessToken) {
+  if (accessToken && config.needToken) {
     if (/*process.env.NODE_ENV === 'production'*/true) {
       const uid = Storage.getItem('uid')
       const nonce = Foundation.randomString(6)
@@ -46,10 +46,7 @@ service.interceptors.request.use(config => {
       const sign = md5(uid + nonce + timestamp + accessToken)
       const _params = { uid, nonce, timestamp, sign }
       let params = config.params || {}
-      params = {
-        ...params,
-        ..._params
-      }
+      params = { ...params, ..._params }
       config.params = params
     } else {
       config.headers['Authorization'] = accessToken
