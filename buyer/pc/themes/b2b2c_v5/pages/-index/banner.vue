@@ -14,14 +14,13 @@
 </template>
 
 <script>
-  import * as API_Home from '@/api/home'
   import EnOperation from "@/components/Operation";
   export default {
     name: 'index-banner',
+    props: ['focus-list'],
     components: {EnOperation},
     data() {
       return {
-        focusList: [],
         swiperOption: {
           autoplay: true,
           // loop: true,
@@ -33,11 +32,6 @@
           }
         }
       }
-    },
-    mounted() {
-      API_Home.getFocusPictures().then(response => {
-        this.focusList = response
-      })
     }
   }
 </script>

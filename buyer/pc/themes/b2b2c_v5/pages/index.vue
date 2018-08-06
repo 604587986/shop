@@ -3,7 +3,7 @@
     <index-search-bar/>
     <div class="focus-container">
       <div class="w">
-        <index-banner/>
+        <index-banner :focus-list="focusList"/>
         <index-card/>
       </div>
     </div>
@@ -29,8 +29,10 @@
     name: 'index',
     async asyncData() {
       const floor = await API_Home.getFloorData()
+      const focus = await API_Home.getFocusPictures()
       return {
-        floorList: floor.page_data ? global.JSON.parse(floor.page_data) : []
+        floorList: floor.page_data ? global.JSON.parse(floor.page_data) : [],
+        focusList: focus
       }
     },
     head() {

@@ -4,7 +4,7 @@
 
 import request, { Method } from '@/utils/request'
 import Storage from '@/utils/storage'
-import { api } from '~/ui-domain'
+import { api, api_dev } from '~/ui-domain'
 
 /**
  * 获取图片验证码URL
@@ -21,7 +21,7 @@ export function getValidateCodeUrl(uuid, type) {
  */
 export function getSiteData() {
   return request({
-    url: `${api.base}/site-show`,
+    url: `${api_dev.base}/site-show`,
     method: Method.GET
   })
 }
