@@ -49,6 +49,7 @@ export function buyNow(sku_id, num = 1, activity_id) {
   return request({
     url: 'trade/carts/buy',
     method: Method.POST,
+    needToken: true,
     params: {
       sku_id,
       num,
@@ -331,6 +332,7 @@ export function getExpress(id, num) {
   return request({
     url: 'express',
     method: Method.GET,
+    needToken: true,
     params: {
       id,
       num
@@ -346,7 +348,8 @@ export function getExpress(id, num) {
 export function useCoupon(shop_id, coupon_id) {
   return request({
     url: `trade/${shop_id}/seller/${coupon_id}/coupon`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -357,6 +360,7 @@ export function useCoupon(shop_id, coupon_id) {
 export function getOrderFlow(order_sn) {
   return request({
     url: `trade/orders/${order_sn}/flow`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
