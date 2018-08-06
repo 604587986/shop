@@ -28,7 +28,9 @@
   export default {
     name: 'index',
     async asyncData() {
+      // 楼层数据
       const floor = await API_Home.getFloorData()
+      // 焦点图
       const focus = await API_Home.getFocusPictures()
       return {
         floorList: floor.page_data ? global.JSON.parse(floor.page_data) : [],

@@ -38,18 +38,17 @@ service.interceptors.request.use(config => {
 
   // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
-  if (accessToken) {
-    if (/*process.env.NODE_ENV === 'production'*/true) {
+  if (accessToken && config.needToken) {
+    // 如果前台为开发环境，后台API，则需要替换为下面的代码
+    // process.env.NODE_ENV === 'development'
+    if (process.env.NODE_ENV === 'production') {
       const uid = Storage.getItem('uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
       const sign = md5(uid + nonce + timestamp + accessToken)
       const _params = { uid, nonce, timestamp, sign }
       let params = config.params || {}
-      params = {
-        ...params,
-        ..._params
-      }
+      params = { ...params, ..._params }
       config.params = params
     } else {
       config.headers['Authorization'] = accessToken
@@ -57,8 +56,6 @@ service.interceptors.request.use(config => {
   }
   return config
 }, error => {
-  // Do something with request error
-  console.log(error) // for debug
   Promise.reject(error)
 })
 
