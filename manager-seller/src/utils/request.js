@@ -26,15 +26,24 @@ service.interceptors.request.use(config => {
       spinner: 'el-icon-loading'
     })
   }
-  /** 设置令牌 */
+  // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
-  // if (process.env.NODE_ENV === 'production') {
-  //   const { member_id } = JSON.parse(Storage.getItem('user'))
-  //   const nonce = Foundation.randomString(6)
-  //   const timestamp = parseInt(new Date().getTime() / 1000)
-  //   accessToken = md5(member_id + nonce + timestamp + accessToken)
-  // }
-  config.headers['Authorization'] = accessToken
+  if (accessToken && config.needToken) {
+    // 如果前台为开发环境，后台API，则需要替换为下面的代码
+    // process.env.NODE_ENV === 'development'
+    if (process.env.NODE_ENV === 'production') {
+      const uid = Storage.getItem('uid')
+      const nonce = Foundation.randomString(6)
+      const timestamp = parseInt(new Date().getTime() / 1000)
+      const sign = md5(uid + nonce + timestamp + accessToken)
+      const _params = { uid, nonce, timestamp, sign }
+      let params = config.params || {}
+      params = { ...params, ..._params }
+      config.params = params
+    } else {
+      config.headers['Authorization'] = accessToken
+    }
+  }
   /** 进行参数序列化 */
   if ((config.method === 'put' || config.method === 'post') && config.headers['Content-Type'] !== 'application/json') {
     config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
@@ -91,7 +100,6 @@ function fedLogOut() {
 export default function request(options) {
   // 如果是请求刷新token，不需要检查token直接请求。
   if (options.url.indexOf('passport/token') !== -1) {
-    console.log(options.url + ' | 刷新token，不需要检查token直接请求。')
     return service(options)
   }
   return new Promise((resolve, reject) => {
