@@ -3,6 +3,7 @@
  */
 
 import request, { Method } from '@/utils/request'
+import { api_dev } from '@/ui-domain'
 
 /**
  * 获取焦点图
@@ -10,7 +11,7 @@ import request, { Method } from '@/utils/request'
  */
 export function getFocusPictures(client_type = 'PC') {
   return request({
-    url: 'focus-pictures',
+    url: `${api_dev.buyer}/focus-pictures`,
     method: Method.GET,
     loading: false,
     params: { client_type }
@@ -22,7 +23,7 @@ export function getFocusPictures(client_type = 'PC') {
  */
 export function getSiteMenu(client_type = 'PC') {
   return request({
-    url: 'pages/site-navigations',
+    url: `${api_dev.buyer}/pages/site-navigations`,
     method: Method.GET,
     loading: false,
     params: { client_type }
@@ -35,7 +36,7 @@ export function getSiteMenu(client_type = 'PC') {
  */
 export function getCategory(parent_id = 0) {
   return request({
-    url: `goods/categories/${parent_id}/children`,
+    url: `${api_dev.buyer}/goods/categories/${parent_id}/children`,
     method: Method.GET,
     loading: false
   })
@@ -47,7 +48,7 @@ export function getCategory(parent_id = 0) {
  */
 export function getHotKeywords(num = 7) {
   return request({
-    url: 'pages/hot-keywords',
+    url: `${api_dev.buyer}/pages/hot-keywords`,
     method: Method.GET,
     loading: false,
     params: { num }
@@ -61,7 +62,7 @@ export function getHotKeywords(num = 7) {
  */
 export function getFloorData(client_type = 'PC', page_type = 'INDEX') {
   return request({
-    url: `pages/${client_type}/${page_type}`,
+    url: `${api_dev.buyer}/pages/${client_type}/${page_type}`,
     method: 'get'
   })
 }

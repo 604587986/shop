@@ -39,13 +39,21 @@ service.interceptors.request.use(config => {
   // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
   if (accessToken) {
-    // if (process.env.NODE_ENV === 'production') {
-    //   const { member_id } = JSON.parse(Storage.getItem('user') || "{}")
-    //   const nonce = Foundation.randomString(6)
-    //   const timestamp = parseInt(new Date().getTime() / 1000)
-    //   accessToken = md5(member_id + nonce + timestamp + accessToken)
-    // }
-    config.headers['Authorization'] = accessToken
+    if (/*process.env.NODE_ENV === 'production'*/true) {
+      const uid = Storage.getItem('uid')
+      const nonce = Foundation.randomString(6)
+      const timestamp = parseInt(new Date().getTime() / 1000)
+      const sign = md5(uid + nonce + timestamp + accessToken)
+      const _params = { uid, nonce, timestamp, sign }
+      let params = config.params || {}
+      params = {
+        ...params,
+        ..._params
+      }
+      config.params = params
+    } else {
+      config.headers['Authorization'] = accessToken
+    }
   }
   return config
 }, error => {

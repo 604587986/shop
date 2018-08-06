@@ -37,6 +37,7 @@ export const mutations = {
   [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
     Storage.removeItem('user', { domain: domain.cookie })
+    Storage.removeItem('uid', { domain: domain.cookie })
   },
   /**
    * 设置访问令牌
@@ -115,9 +116,9 @@ export const actions = {
       }
       function loginSccess(res) {
         const { access_token, refresh_token, uid } = res
-        dispatch('cart/cleanCartStoreAction')
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
+        Storage.setItem('uid', uid, { domain: domain.cookie })
         API_Members.getUserInfo(uid).then(response => {
           response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
@@ -135,7 +136,6 @@ export const actions = {
   logoutAction: ({ commit, dispatch }) => {
     return new Promise((resolve, reject) => {
       API_Members.logout().then(() => {
-        dispatch('cart/cleanCartStoreAction')
         commit(types.REMOVE_USER_INFO)
         commit(types.REMOVE_ACCESS_TOKEN)
         commit(types.REMOVE_REFRESH_TOKEN)
@@ -175,7 +175,6 @@ export const actions = {
     return new Promise((resolve, reject) => {
       API_Passport.registerByMobile(params).then(res=> {
         const { access_token, refresh_token } = res
-        dispatch('cart/cleanCartStoreAction')
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
         resolve(res)

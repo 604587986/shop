@@ -1,238 +1,24 @@
 <template>
   <div id="member-index">
-    <div class="user-title">
-      <div class="user-item">
-        <nuxt-link to="/member/my-profile" class="user-avatar">
-          <en-face :url="user.face"/>
-        </nuxt-link>
-        <div class="user-info">
-          <p>{{ user.uname }}</p>
-          <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
-        </div>
-      </div>
-      <nuxt-link to="/member/my-order" class="other-item">
-        <p>我的订单</p>
-        <i class="iconfont ea-icon-my-order"></i>
-        <p class="num">{{ statisticsNum.order_count || 0 }}</p>
-      </nuxt-link>
-      <nuxt-link to="/member/my-collection#goods" class="other-item">
-        <p>收藏的商品</p>
-        <i class="iconfont ea-icon-collection-of-goods"></i>
-        <p class="num">{{ statisticsNum.goods_collect_count || 0}}</p>
-      </nuxt-link>
-      <nuxt-link to="/member/my-collection#shop" class="other-item">
-        <p>收藏的店铺</p>
-        <i class="iconfont ea-icon-collection-of-shop" style="font-size: 42px"></i>
-        <p class="num">{{ statisticsNum.shop_collect_count || 0}}</p>
-      </nuxt-link>
-    </div>
-    <div class="box-item">
-      <div class="item left order">
-        <div class="item-title">
-          <h2>我的订单</h2>
-          <div class="order-status">
-            <nuxt-link to="/member/my-order#ALL">所有订单({{ orderStatusNum.all_num || 0 }})</nuxt-link>
-            <nuxt-link to="/member/my-order#WAIT_PAY">等待付款({{ orderStatusNum.wait_pay_num || 0 }})</nuxt-link>
-            <nuxt-link to="/member/my-order#COMPLETE">已完成({{ orderStatusNum.complete_num || 0 }})</nuxt-link>
-          </div>
-        </div>
-        <div class="item-content">
-          <empty-member v-if="!orderData || orderData.data.length === 0">暂无订单</empty-member>
-          <template v-else>
-            <div v-for="(order, index) in orderData.data" v-if="index < 3" :key="order.sn" class="order-item" >
-              <nuxt-link :to="'/goods/' + order.sku_list[0].goods_id" target="_blank" class="goods-image">
-                <img :src="order.sku_list[0].goods_image"/>
-              </nuxt-link>
-              <div class="order-info">
-                <nuxt-link :to="'/goods/' + order.sku_list[0].goods_id" class="goods-name" target="_blank">{{ order.sku_list[0].name }}</nuxt-link>
-                <p v-if="order.sku_list[0].spec_list" class="sku-spec">{{ order.sku_list[0] | formatterSkuSpec }}</p>
-                <p>下单时间：{{ order.create_time | unixToDate }}</p>
-                <p>订单金额：<span class="price">￥{{ order.order_amount | unitPrice }}</span></p>
-                <p class="order-status-num"><span>订单状态：{{ order.order_status_text }}</span><span>订单内共有（{{ order.sku_list.length }}）种商品</span></p>
-              </div>
-              <div class="order-oper">
-                <nuxt-link :to="'/member/my-order/detail?order_sn=' + order.sn">查看订单</nuxt-link>
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-      <div class="item right cart">
-        <div class="item-title">
-          <h2>购物车</h2>
-          <nuxt-link to="/cart">查看全部 	&gt;&gt;</nuxt-link>
-        </div>
-        <div class="item-content">
-          <empty-member v-if="cartSkuList.length === 0">暂无商品</empty-member>
-          <template v-else>
-            <div v-for="(item, index) in cartSkuList" v-if="index < 4" :key="item.sku_id" class="cart-item">
-              <nuxt-link :to="'/goods/' + item.goods_id" class="goods-image">
-                <img :src="item.goods_image" :alt="item.name">
-              </nuxt-link>
-              <div class="goods-name">
-                <nuxt-link :to="'/goods/' + item.goods_id">{{ item.name }}</nuxt-link>
-                <p><em>￥{{ item.purchase_price | unitPrice }}</em> <span>x {{ item.num }}</span></p>
-              </div>
-              <a href="javascript:;" class="delete-btn" @click="handleDeleteSkuItem(item)">删除</a>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-    <div class="box-item">
-      <div class="item left goods-collection">
-        <div class="item-title">
-          <h2>商品收藏</h2>
-          <nuxt-link to="/member/my-collection#goods">查看全部 	&gt;&gt;</nuxt-link>
-        </div>
-        <div class="item-content">
-          <empty-member v-if="!goodsCollectionData || goodsCollectionData.data.length === 0">暂无收藏商品</empty-member>
-          <template v-else>
-            <div
-              v-for="(item, index) in goodsCollectionData.data"
-              v-if="index < 8"
-              :key="item.goods_id"
-              class="goods-collection-item"
-            >
-              <nuxt-link :to="'/goods/' + item.goods_id">
-                <img :src="item.goods_image" :alt="item.name" class="goods-image">
-              </nuxt-link>
-              <span class="goods-name">{{ item.name }}</span>
-              <div class="goods-price">
-                <span>￥{{ item.goods_price | unitPrice }}</span>
-                <a href="javascript:;" class="delete-btn" @click="handleDeleteGoodsCollection(item)">删除</a>
-              </div>
-            </div>
-            <span class="clear"></span>
-          </template>
-        </div>
-      </div>
-      <div class="item right shop-collection">
-        <div class="item-title">
-          <h2>店铺收藏</h2>
-          <nuxt-link to="/member/my-collection#shop">查看全部 	&gt;&gt;</nuxt-link>
-        </div>
-        <div class="item-content">
-          <empty-member v-if="!shopCollectionData || shopCollectionData.data.length === 0">暂无收藏店铺</empty-member>
-          <template v-else>
-            <div
-              v-for="(item, index) in shopCollectionData.data"
-              v-if="index < 4"
-              :key="item.shop_id"
-              class="shop-collection-item"
-            >
-              <div class="shop-info">
-                <img :src="item.logo" :alt="item.shop_name" :title="item.shop_name">
-                <div class="shop-btns">
-                  <a href="javascript:;">进入店铺</a>
-                  <a href="javascript:;" @click="handleDeleteShopCollection(item)">取消关注</a>
-                </div>
-              </div>
-              <div class="shop-goods swiper-container-shop">
-                <div class="swiper-wrapper">
-                  <nuxt-link
-                    v-for="goods in item.goodsList"
-                    :key="goods.goods_id"
-                    :to="'/goods/' + goods.goods_id"
-                    :title="goods.name"
-                    class="swiper-slide"
-                  >
-                    <img :src="goods.goods_image" :alt="goods.name" class="shop-goods-image">
-                  </nuxt-link>
-                </div>
-                <div class="swiper-button-prev swiper-button-white"></div>
-                <div class="swiper-button-next swiper-button-white"></div>
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
+    <tab-bar :active="3"/>
   </div>
 </template>
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import EnFace from '@/components/Face'
-  import * as API_Order from '@/api/order'
   import * as API_Members from '@/api/members'
   export default {
     name: 'member-index',
-    components: { EnFace },
     data() {
       return {
-        // 统计数量
-        statisticsNum: {},
-        // 订单状态数量
-        orderStatusNum: {}
       }
     },
     mounted() {
-      this.$nextTick(this.initShopSwiper)
-      !this.orderData && this.getOrderData({order_status: 'ALL'})
-      !this.goodsCollectionData && this.getGoodsCollectionData()
-      !this.shopCollectionData && this.getShopCollectionData()
-      this.GET_OrderStatusNum()
-      this.GET_StatisticsNum()
     },
     computed: {
-      ...mapGetters({
-        user: 'user',
-        cartSkuList: 'cart/skuList',
-        orderData: 'order/orderData',
-        goodsCollectionData: 'collection/goodsCollectionData',
-        shopCollectionData: 'collection/shopCollectionData'
-      })
-    },
-    watch: {
-      shopCollectionData: 'initShopSwiper'
+      ...mapGetters(['user'])
     },
     methods: {
-      /** 删除购物车货品 */
-      handleDeleteSkuItem(sku) {
-        this.$confirm('确定要删除这个货品吗？', () => {
-          this.deleteSkuItem(sku.sku_id).then(() => this.$message.success('删除成功！'))
-        })
-      },
-      /** 删除商品收藏 */
-      handleDeleteGoodsCollection(goods) {
-        this.$confirm('确定要删除这个商品收藏吗？', () => {
-          this.deleteGoodsCollection(goods.goods_id).then(() => this.$message.success('删除成功！'))
-        })
-      },
-      /** 删除店铺收藏 */
-      handleDeleteShopCollection(shop) {
-        this.$confirm('确定要取消关注这个店铺吗？', () => {
-          this.deleteShopCollection(shop.shop_id).then(() => this.$message.success('删除成功！'))
-        })
-      },
-      /** 初始化shopSwiper */
-      initShopSwiper() {
-      },
-      /** 获取订单状态数量 */
-      GET_OrderStatusNum() {
-        API_Order.getOrderStatusNum().then(response => {
-          this.orderStatusNum = response
-        })
-      },
-      /** 获取统计数量 包括但不限于【订单数量、收藏的商品数量、收藏的店铺数量】 */
-      GET_StatisticsNum() {
-        API_Members.getStatisticsNum().then(response => { this.statisticsNum = response })
-      },
-      ...mapActions({
-        /** 获取订单列表 */
-        getOrderData: 'order/getOrderDataAction',
-        /** 获取商品收藏列表 */
-        getGoodsCollectionData: 'collection/getGoodsCollectionDataAction',
-        /** 获取店铺收藏列表 */
-        getShopCollectionData: 'collection/getShopCollectionDataAction',
-        /** 删除购物车货品 */
-        deleteSkuItem: 'cart/deleteSkuItemAction',
-        /** 删除商品收藏 */
-        deleteGoodsCollection: 'collection/deleteGoodsCollectionAction',
-        /** 删除店铺收藏 */
-        deleteShopCollection: 'collection/deleteShopCollectionAction'
-      })
     }
   }
 </script>

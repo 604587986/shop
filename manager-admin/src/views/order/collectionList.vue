@@ -28,9 +28,6 @@
         >
           <template slot="advanced-content">
             <el-form ref="advancedForm" :model="advancedForm" label-width="110px">
-              <el-form-item label="订单号">
-                <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
-              </el-form-item>
               <el-form-item label="会员名称">
                 <el-input size="medium" v-model="advancedForm.member_name" clearable></el-input>
               </el-form-item>
