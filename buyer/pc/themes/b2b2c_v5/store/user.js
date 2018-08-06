@@ -37,6 +37,7 @@ export const mutations = {
   [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
     Storage.removeItem('user', { domain: domain.cookie })
+    Storage.removeItem('uid', { domain: domain.cookie })
   },
   /**
    * 设置访问令牌
@@ -117,6 +118,7 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
+        Storage.setItem('uid', uid, { domain: domain.cookie })
         API_Members.getUserInfo(uid).then(response => {
           response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
