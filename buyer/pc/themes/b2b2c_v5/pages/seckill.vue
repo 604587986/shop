@@ -18,7 +18,7 @@
                 <div class="next-timeline"><i>{{ timeLine.distance_time === 0 ? '在在抢购' : '即将开始' }}</i></div>
                 <div class="time-timeline">
                   <b class="b-text">{{ timeLine.distance_time === 0 ? '正在抢购' : '即将开始' }}</b>
-                  <b class="b-time">{{ timeLine.distance_time === 0 ? '距下一轮' : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
+                  <b class="b-time">{{ timeLine.distance_time === 0 ? (timeLine.next_distance_time === 0 ? '距结束' : '距下一轮') : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
                 </div>
               </div>
             </a>
@@ -185,7 +185,11 @@
             response.map((item, index) => {
               item.active = index === 0
               if (item.distance_time === 0 && index === 0) {
-                times.push(item.next_distance_time)
+                if (item.next_distance_time === 0) {
+                  times.push(Foundation.theNextDayTime())
+                } else {
+                  times.push(item.next_distance_time)
+                }
               } else {
                 times.push(item.distance_time)
               }
