@@ -16,7 +16,8 @@ router.beforeEach((to, from, next) => {
   } else {
     request({
       url: api.buyer + '/shops/status',
-      method: 'get'
+      method: 'get',
+      loading: 0.2
     }).then(response => {
       switch (response) {
         case 'NO_SHOP':
