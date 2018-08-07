@@ -79,12 +79,14 @@ service.interceptors.response.use(
  * @param target
  */
 const closeLoading = (target) => {
-  if (!target.config.loading) return true
+  const { loading } = target.config
+  if (!loading) return true
+  const is_num = typeof (loading) === 'number'
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       target.config.loading.close()
       resolve()
-    }, 200)
+    }, is_num ? 0 : 200)
   })
 }
 
