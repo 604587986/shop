@@ -12,7 +12,7 @@
     <search :show="showSearch" @close="showSearch = false"/>
     <!--// Andste_TODO 2018/7/11: 筛选功能未做-->
     <van-list v-model="loading" :finished="finished" @load="onLoad">
-      <nuxt-link :to="'/goods/' + goods.goods_id" v-for="(goods, index) in goodsList" :key="index" class="goods-item">
+      <a :href="'/goods/' + goods.goods_id" v-for="(goods, index) in goodsList" :key="index" class="goods-item">
         <div class="goods-image">
           <img :src="goods.thumbnail" :alt="goods.name">
         </div>
@@ -26,10 +26,10 @@
             <span>&nbsp;{{ goods.comment_num || 0 }}条评论</span>
           </div>
           <div class="goods-shop">
-            <nuxt-link :to="'/shop/' + goods.seller_id"><van-icon name="shop"/>&nbsp;{{ goods.seller_name }}</nuxt-link>
+            <a :href="'/shop/' + goods.seller_id"><van-icon name="shop"/>&nbsp;{{ goods.seller_name }}</a>
           </div>
         </div>
-      </nuxt-link>
+      </a>
     </van-list>
   </div>
 </template>
