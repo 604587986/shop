@@ -20,9 +20,12 @@ service.interceptors.request.use(config => {
   // Do something before request is sent
   /** 配置全屏加载 */
   if (config.loading !== false) {
+    const { loading } = config
+    const is_num = typeof (config.loading) === 'number'
+    if (is_num) config.loading_num = true
     config.loading = Loading.service({
       lock: true,
-      background: `rgba(0, 0, 0, ${typeof (config.loading) === 'number' ? config.loading : '0.8'})`,
+      background: `rgba(0, 0, 0, ${is_num ? loading : '0.8'})`,
       spinner: 'el-icon-loading'
     })
   }
@@ -79,14 +82,13 @@ service.interceptors.response.use(
  * @param target
  */
 const closeLoading = (target) => {
-  const { loading } = target.config
+  const { loading, loading_num } = target.config
   if (!loading) return true
-  const is_num = typeof (loading) === 'number'
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       target.config.loading.close()
       resolve()
-    }, is_num ? 0 : 200)
+    }, loading_num ? 0 : 200)
   })
 }
 
