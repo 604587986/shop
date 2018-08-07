@@ -2,7 +2,9 @@
   <div id="my-consultation">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">我的咨询</li>
+        <li class="active">
+          <nuxt-link to="./my-consultation">我的咨询</nuxt-link>
+        </li>
       </ul>
     </div>
     <template v-if="consultation && consultation.data.length > 0">
@@ -17,7 +19,7 @@
               <div class="comment-content">
                 <strong>咨询内容：</strong>
                 <div>
-                  <p>{{ consultation.content }}</p>
+                  <p v-html="consultation.content.replace(/\n/g, '<br>')"></p>
                 </div>
               </div>
               <div class="comment-content seller-reply">
@@ -48,6 +50,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-consultation',
+    head() {
+      return {
+        title: `我的咨询-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         consultation: '',
@@ -78,6 +85,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .consultation-container {
     padding-top: 10px;
   }
@@ -91,7 +99,7 @@
     overflow: hidden;
     a {
       float: left;
-      color: #0279b9;
+      color: $color-href;
       margin-left: 10px;
       margin-right: 20px;
       display: -webkit-box;
@@ -99,7 +107,7 @@
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
       overflow: hidden;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
   }
   .comment-body {

@@ -1,5 +1,77 @@
 <template>
-  <div id="member-index">
+  <div id="member-index" style="background-color: #f0f2f5">
+    <van-nav-bar>
+      <span slot="title">我的</span>
+    </van-nav-bar>
+    <div class="member-container">
+      <div class="head-box" :style="{backgroundImage: 'url('+ user.face +')'}"></div>
+      <div class="head-items">
+        <div class="head-img">
+          <en-face :url="user.face"/>
+        </div>
+        <div class="head-user-name">{{ user.nickname }}</div>
+        <!--<div class="head-user-lvname"></div>-->
+        <div class="items">
+          <nuxt-link to="/member/my-collection" class="item">
+            <span>
+              <p>5</p>
+              <p>收藏的商品</p>
+            </span>
+          </nuxt-link>
+          <nuxt-link class="item" to="/member/my-collection?type=shop">
+            <p>0</p>
+            <p>收藏的店铺</p>
+          </nuxt-link>
+          <nuxt-link class="item" to="/member//my-order?order_status=WAIT_COMMENT">
+            <p>4</p>
+            <p>待评论</p>
+          </nuxt-link>
+        </div>
+      </div>
+      <div class="member-nav">
+        <ul class="member-nav-items">
+          <li>
+            <a href="/member/my-order?order_status=WAIT_PAY">
+              <i class="iconfont ea-icon-wait-pay"></i>
+              <p>待付款</p>
+            </a>
+          </li>
+          <li>
+            <a href="/member/my-order?order_status=WAIT_SHIP">
+              <i class="iconfont ea-icon-wait-ship"></i>
+              <p>待发货</p>
+            </a>
+          </li>
+          <li>
+            <a href="/member/my-order?order_status=WAIT_ROG">
+              <i class="iconfont ea-icon-wait-rog"></i>
+              <p>待收货</p>
+            </a>
+          </li>
+          <li>
+            <a href="/member/after-sale">
+              <i class="iconfont ea-icon-after-sale"></i>
+              <p>退款/售后</p>
+            </a>
+          </li>
+        </ul>
+        <van-cell title="全部订单" is-link value="查看全部订单" url="/member/my-order"/>
+      </div>
+      <van-cell-group style="margin-top: 10px">
+        <van-cell title="我的优惠券" is-link value="查看优惠券" url="/member/my-coupons"/>
+        <van-cell title="我的积分" is-link value="消费、等级积分" url="/member/my-coupons"/>
+        <van-cell title="站内消息" is-link value="查看我的消息" url="/member/website-message"/>
+        <van-cell v-if="show_dis" title="分销管理" is-link value="分销管理菜单" url="/member/distribution/my-performance"/>
+      </van-cell-group>
+      <van-cell-group style="margin-top: 10px">
+        <van-cell title="我的资料" is-link value="修改资料" url="/member/my-profile"/>
+        <van-cell title="收货地址" is-link value="消费、等级积分" url="/member/shipping-address"/>
+        <van-cell title="账户安全" is-link value="修改密码" url="/member/account-safe"/>
+      </van-cell-group>
+      <div class="big-btn">
+        <van-button type="danger" size="large" @click="handleLogout">退出登录</van-button>
+      </div>
+    </div>
     <tab-bar :active="3"/>
   </div>
 </template>
@@ -16,326 +88,147 @@
     mounted() {
     },
     computed: {
+      // 显示分销菜单
+      show_dis() {
+        return process.env.distribution
+      },
       ...mapGetters(['user'])
     },
     methods: {
+      /** 退出登录 */
+      handleLogout() {
+        this.$confirm('确定要退出登录吗？', () => {
+          this.logout().then(() => {
+            location.href = '/'
+          })
+        })
+      },
+      ...mapActions({
+        logout: 'user/logoutAction',
+      })
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .user-title {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    height: 148px;
-    padding: 15px;
-    border: 1px solid #e7e7e7;
-    border-bottom: none;
-    box-sizing: border-box;
-    .user-item {
-      display: flex;
-      align-items: center;
-      width: 375px;
-      height: 100%;
-      .user-avatar {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100px;
-        height: 100px;
-        margin-left: 10px;
-        overflow: hidden;
-        border-radius: 100%;
-        box-shadow: 0 0 10px #ccc;
-        img {
-          width: 90px;
-          height: 90px;
-          border-radius: 100%;
-          transition: all .2s ease-out;
-          &:hover {
-            width: 100%;
-            height: 100%;
-          }
-        }
-      }
-      .user-info {
-        margin-left: 15px;
-        p {
-          color: #777;
-          font-size: 14px;
-          font-weight: 400;
-        }
-      }
-    }
-    .other-item {
-      display: flex;
-      align-items: center;
-      flex-flow: column;
-      width: 189px;
-      height: 100%;
-      border-left: 1px solid #e7e7e7;
-      cursor: pointer;
-      p {
-        color: #666;
-        font-size: 15px;
-      }
-      .iconfont {
-        color: #FD92B0;
-        font-size: 36px;
-        margin: 15px 0;
-      }
-      .num { font-size: 20px }
-    }
-  }
-  .box-item {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    height: 410px;
-    z-index: 1;
-    font-family: "Hiragino Sans GB", "Microsoft Yahei", arial, 宋体, "Helvetica Neue", Helvetica, STHeiTi, sans-serif;;
-    .item {
-      box-sizing: border-box;
-      height: 100%;
-      padding: 10px;
-      border: 1px solid #e7e7e7;
-      transition: all .3s ease-out;
-      z-index: 2;
-      overflow: hidden;
-      .item-title {
-        display: flex;
-        align-content: center;
-        justify-content: space-between;
-        h2 {
-          border-left: 3px solid #fd6760;
-          padding-left: 5px;
-          font-size: 13px;
-        }
-      }
-      .item-content { margin-top: 10px }
-      &.left { width: 590px }
-      &.right { width: 990px - 590px; border-left: none }
-      &:hover {
-        border-color: rgba(244, 36, 36, 0.5);
-        box-shadow: 0 0 10px 0 #f42424;
-        z-index: 10;
-      }
-    }
-  }
-  .box-item:last-child .item {
-    border-top: none;
-  }
-  .goods-image {
-    display: block;
-    width: 80px;
-    height: 80px;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .item.order {
-    background-color: #fefbf8;
-    .order-status {
-      a {
-        border-right: 1px solid #e7e7e7;
-        padding: 0 15px;
-        &:last-child { border-right: none }
-      }
-    }
-    .order-item {
-      display: flex;
-      justify-items: center;
-      background-color: #fbf8e9;
-      margin-top: 10px;
-      padding: 12px;
-      .order-info {
-        width: 320px;
-        margin-left: 10px;
-        .goods-name {
-          display: block;
-          overflow: hidden;
-          text-overflow:ellipsis;
-          white-space: nowrap;
-          font-size: 12px;
-          color: #333;
-          font-weight: 600;
-        }
-        .price { color: #f42424 }
-      }
-      p {
-        color: #777;
-        font-weight: 400;
-      }
-      .order-status-num {
-        display: flex;
-        justify-content: space-between;
-      }
-      .order-oper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 130px;
-        a {
-          cursor: pointer;
-          font: 12px/20px "microsoft yahei";
-          height: 20px;
-          padding: 4px 12px;
-          text-align: center;
-          vertical-align: middle;
-          color: #777 !important;
-          border: 1px solid #dcdcdc;
-          background: #f5f5f5;
-        }
-      }
-    }
-  }
-  .item.cart {
-    .cart-item {
-      display: flex;
-      justify-items: center;
-      width: 100%;
-      margin-bottom: 10px;
-      transition: background-color .2s ease-in;
-      &:hover { background-color: #fefbf8 }
-    }
-    .goods-image {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    img {
-      width: 60px;
-      height: 60px;
-    }
-    .goods-name {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      width: 200px;
-      a {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-      }
-      p {
-        display: flex;
-        justify-content: space-between;
-      }
-      em {
-        font-size: 12px;
-        color: #f42424;
-      }
-      span { margin-right: 50px }
-    }
-    .delete-btn {
-      color: red;
-      align-self: center;
-      margin-left: 20px;
-    }
-  }
-  .item.goods-collection {
-    .item-content {
-      margin-left: -25px;
-    }
-    .goods-collection-item {
-      width: 119px;
-      height: 165px;
-      border: 1px solid #e7e7e7;
-      border-radius: 3px;
-      float: left;
-      margin-bottom: 10px;
-      margin-left: 25px;
-      transition: all .2s ease-in;
-      &:hover {
-        box-shadow: 0 0 15px #ccc;
-      }
-      .goods-image {
-        width: 119px;
-        height: 119px;
-      }
-      .goods-name {
-        display: block;
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
-        color: #333;
-        padding: 0 5px;
-      }
-      .goods-price {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 5px;
-      }
-      .delete-btn { color: #f42424 }
-    }
-  }
-  .item.shop-collection {
-    .shop-collection-item {
-      display: flex;
-      height: 78px;
-      border: 1px solid #e7e7e7;
-      margin-bottom: 10px;
-    }
-    .shop-info {
-      display: flex;
-      flex-flow: column;
-      width: 124px;
-      height: 100%;
-      img {
-        width: 124px;
-        height: 55px;
-      }
-      .shop-btns {
-        display: flex;
-        justify-content: space-between;
-        height: 78px - 55px;
-        a {
-          width: 100%;
-          height: 100%;
-          text-align: center;
-          border-right: 1px solid #e7e7e7;
-          background-color: #f9f9f9;
-          color: #666;
-          &:hover {
-            color: #f42424
-          }
-        }
-      }
-    }
-    .shop-goods {
-      position: relative;
-      width: 359px - 124px;
-      padding: 5px 10px;
-      overflow: hidden;
-      user-select: none;
-      &:hover {
-        /deep/ .swiper-button-next, .swiper-button-prev { opacity: 1 }
-      }
-    }
-    .shop-goods-image {
-      width: 100%;
-      height: 100%;
-    }
-    /deep/ .swiper-button-next, .swiper-button-prev {
-      opacity: 0;
-      width: 20px;
-      height: 100%;
+  /deep/ {
+    .van-nav-bar {
+      position: fixed;
       top: 0;
-      margin-top: 0;
-      background-size: 10px 20px;
-      background-color: rgba(0,0,0,.5);
-      transition: opacity .2s ease-in;
+      left: 0;
+      right: 0;
     }
-    /deep/ .swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
-      opacity: 1;
+  }
+  .member-container {
+    padding-top: 46px;
+    padding-bottom: 50px;
+    .head-box {
+      width: 100%;
+      height: 130px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: blur(15px);
     }
-    /deep/ .swiper-button-prev { left: 0 }
-    /deep/ .swiper-button-next { right: 0 }
+    .head-items {
+      position: relative;
+      height: 55px;
+      background-color: #fff;
+    }
+    .head-img {
+      position: absolute;
+      top: -35px;
+      left: 15px;
+      width: 70px;
+      height: 70px;
+      border: 3px rgba(255, 255, 255, 0.8) solid;
+      border-radius: 100%;
+      background-color: #fff;
+      img {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+      }
+    }
+    .head-user-name {
+      position: absolute;
+      top: -40px;
+      left: 100px;
+      max-width: 168px;
+      font-size: 16px;
+      color: #fff;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      display: -webkit-box;
+      word-break: break-all;
+      -webkit-box-orient: vertical;
+      box-orient: vertical;
+      overflow: hidden;
+    }
+    .items {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      width: calc(100% - 100px);
+      height: 55px;
+      float: right;
+      .item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: calc(100% / 3);
+        border-left: 1px solid #e7e7e7;
+        &:first-child {
+          border-left: none;
+        }
+        span {
+          align-self: flex-start;
+        }
+        p {
+          text-align: center;
+          font-size: 12px;
+          line-height: 18px;
+        }
+      }
+    }
+    .member-nav {
+      position: relative;
+      margin-top: 15px;
+      width: 100%;
+      min-height: 110px;
+      background-color: #fff;
+    }
+    .member-nav-items {
+      position: relative;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 66px;
+      border-bottom: 1px solid #e7e7e7;
+      margin-top: -1px;
+      li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 25%;
+        a {
+          display: block;
+          width: 100%;
+          text-align: center;
+        }
+      }
+      i {
+        display: block;
+        height: 26px;
+        font-size: 26px;
+        text-align: center;
+      }
+    }
+    .big-btn {
+      padding: 10px 15px;
+    }
   }
 </style>
 

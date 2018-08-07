@@ -44,6 +44,11 @@
   import { RegExp } from '~/ui-utils'
   export default {
     name: 'bind-mobile',
+    head() {
+      return {
+        title: `绑定手机号-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         bindMobileForm: {},
@@ -122,6 +127,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   /deep/ .el-alert {
     h2 { margin: 20px 0 }
     p { margin-bottom: 10px }
@@ -172,8 +178,8 @@
         font-size: 12px;
         color: #666;
         a {
-          color: #071BC9;
-          &:hover { color: #f42424 }
+          color: $color-href;
+          &:hover { color: $color-main }
         }
       }
     }

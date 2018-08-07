@@ -21,12 +21,12 @@
               <div v-for="cat in currentCat.children" :key="cat.category_id" class="item">
                 <div class="title-item">{{ cat.name }}</div>
                 <div class="content-item">
-                  <nuxt-link v-for="cc in cat.children" :to="'/goods?category=' + cc.category_id" :key="cc.category_id" class="cat-item">
+                  <a v-for="cc in cat.children" :href="'/goods?category=' + cc.category_id" :key="cc.category_id" class="cat-item">
                     <div class="img-cat-item">
                       <img :src="cc.image" alt=""/>
                     </div>
                     <div class="name-cat-item">{{ cc.name }}</div>
-                  </nuxt-link>
+                  </a>
                 </div>
               </div>
             </div>

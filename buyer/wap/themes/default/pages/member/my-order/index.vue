@@ -2,21 +2,19 @@
   <div id="my-order">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li
-          v-for="item in navList"
-          :key="item.status"
-          :class="[item.active && 'active']"
-          @click="handleClickNav(item)"
-        >{{ item.title }}</li>
+        <li v-for="item in navList" :key="item.status">
+          <nuxt-link v-if="!item.status" to="./my-order">{{ item.title }}</nuxt-link>
+          <nuxt-link v-else :to="'./my-order?order_status=' + item.status">{{ item.title }}</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="order-search">
-      <input type="text" v-model="goods_name" placeholder="输入订单中商品关键词" @keyup.enter="handleSearch">
-      <button type="button" @click="handleSearch">搜索</button>
-      <span v-if="orderData">搜到：<em style="color: #f42424">{{ orderData.data_total }}</em> 笔订单</span>
+      <input type="text" v-model="params.goods_name" placeholder="输入订单中商品关键词" @keyup.enter="GET_OrderList">
+      <button type="button" @click="GET_OrderList">搜索</button>
+      <span v-if="orderData">搜到：<em>{{ orderData.data_total }}</em> 笔订单</span>
       <span v-else>搜索中...</span>
     </div>
-    <empty-member v-if="!orderData || orderData.data.length === 0">暂无订单</empty-member>
+    <empty-member v-if="!orderData || !orderData.data.length">暂无订单</empty-member>
     <template v-else>
       <div class="order-table">
         <div class="order-table-thead">
@@ -34,7 +32,7 @@
               <span class="price"><em>￥</em>{{ order.order_amount | unitPrice }}</span>
             </div>
             <div class="order-tbody-ordersn">
-              <span>订单编号：{{ order.order_sn }}</span>
+              <span>订单编号：{{ order.sn }}</span>
               <span>下单时间：{{ order.create_time | unixToDate }}</span>
             </div>
             <div class="order-tbody-item">
@@ -64,9 +62,11 @@
               <div class="order-item-status">{{ order.order_status_text }}</div>
               <div class="order-item-operate">
                 <a v-if="order.order_operate_allowable_vo.allow_cancel" href="javascript:;" @click="handleCancelOrder(order.sn)">取消订单</a>
+                <nuxt-link v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :to="'./after-sale/apply?order_sn=' + order.sn">取消订单</nuxt-link>
                 <a v-if="order.order_operate_allowable_vo.allow_rog" href="javascript:;" @click="handleRogOrder(order.sn)">确认收货</a>
-                <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/pay/' + order.sn">订单付款</nuxt-link>
-                <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/pay/' + order.sn">去评论</nuxt-link>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/checkout/cashier?order_sn=' + order.sn">订单付款</nuxt-link>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/member/comments?order_sn=' + order.sn">去评论</nuxt-link>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</nuxt-link>
                 <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
               </div>
             </div>
@@ -88,67 +88,42 @@
 
 <script>
   import * as API_Order from '@/api/order'
-  import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'my-order-index',
     mounted() {
-      /** 如果有hash值，或者没有订单数据。需要重新请求数据 */
-      if (!this.orderData || this.$route.hash) this.getOrderData(this.params).then(() => this.MixinScrollToTop())
-      window.addEventListener('hashchange', this.handleHashChanged)
+      if (!this.orderData) this.GET_OrderList()
     },
     data() {
-      let _hash = this.$route.hash
-      _hash = _hash ? _hash.replace(/^#/,'') : 'ALL'
       return {
-        goods_name: '',
         params: {
           page_no: 1,
           page_size: 5,
-          order_status: _hash
+          order_status: this.$route.query.order_status,
+          goods_name: ''
         },
+        orderData: '',
         navList: [
-          { title: '所有订单', status: 'ALL' },
+          { title: '所有订单', status: '' },
           { title: '待付款', status: 'WAIT_PAY' },
           { title: '待发货', status: 'WAIT_SHIP' },
           { title: '待收货', status: 'WAIT_ROG' },
           { title: '已取消', status: 'CANCELLED' },
           { title: '已完成', status: 'COMPLETE' },
           { title: '待评论', status: 'WAIT_COMMENT' }
-        ].map(item => {
-          item.active = item.status === _hash
-          return item
-        })
+        ]
       }
     },
-    computed: {
-      ...mapGetters({
-        orderData: 'order/orderData'
-      })
+    watch: {
+      $route: function ({ query }) {
+        this.params.order_status = query.order_status
+        this.GET_OrderList()
+      }
     },
     methods: {
-      /** 订单筛选栏点击 */
-      handleClickNav(nav) {
-        location.hash = nav.status
-      },
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
-        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
-      },
-      /** 订单搜索 */
-      handleSearch() {
-        this.params.goods_name = this.goods_name
-        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
-      },
-      /** hash发生改变 */
-      handleHashChanged() {
-        const _hash = this.$route.hash.replace('#', '')
-        this.navList = this.navList.map(item => {
-          item.active = item.status === _hash
-          return item
-        })
-        this.params.order_status = _hash
-        this.getOrderData(this.params).then(() => this.MixinScrollToTop())
+        this.GET_OrderList()
       },
       /** 取消订单 */
       handleCancelOrder(order_sn) {
@@ -163,7 +138,7 @@
             API_Order.cancelOrder(order_sn, val).then(() => {
               this.$message.success('订单取消申请成功！')
               layer.close(index)
-              this.getOrderData()
+              this.GET_OrderList()
             })
           }
         })
@@ -173,21 +148,23 @@
         this.$confirm('请确认是否收到货物，否则可能会钱财两空！', () => {
           API_Order.confirmReceipt(order_sn).then(() => {
             this.$message.success('确认收货成功！')
-            this.getOrderData()
+            this.GET_OrderList()
           })
         })
       },
-      ...mapActions({
-        getOrderData: 'order/getOrderDataAction'
-      })
-    },
-    destroyed() {
-      window.removeEventListener('hashchange', this.handleHashChanged)
+      /** 获取订单数据 */
+      GET_OrderList() {
+        API_Order.getOrderList(this.params).then(response => {
+          this.orderData = response
+          this.MixinScrollToTop()
+        })
+      }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .order-search {
     display: flex;
     align-items: center;
@@ -195,6 +172,9 @@
     width: 100%;
     height: 44px;
     border-bottom: 1px solid #e7e7e7;
+    em {
+      color: $color-main;
+    }
     input {
       border: 1px solid #ccc;
       padding: 5px 15px;
@@ -204,7 +184,7 @@
       border-radius: 3px;
       transition: border .2s ease-out;
       &:focus {
-        border-color: rgba(244, 36, 36, .75);
+        border-color: darken($color-main, 75%);
       }
     }
     button {
@@ -247,7 +227,7 @@
         margin-left: 20px;
       }
       .price {
-        color: #f42424;
+        color: $color-main;
         font-size: 14px;
         font-weight: 600;
         em {
@@ -308,7 +288,7 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
       }
-      .sku-price { color: #f42424 }
+      .sku-price { color: $color-main }
       .sku-price, .sku-num {
         width: 80px;
         text-align: center;
@@ -316,7 +296,7 @@
       .after-sale-btn {
         width: 60px;
         a { color: #666 }
-        a:hover { color: #f42424 }
+        a:hover { color: $color-main }
       }
       .order-item-price, .order-item-status {
         width: 100px;
@@ -342,7 +322,7 @@
           height: 100%;
           background-color: #f9dbcc;
         }
-        strong { color: #f42424 }
+        strong { color: $color-main }
       }
       .order-item-status {
         &::after {

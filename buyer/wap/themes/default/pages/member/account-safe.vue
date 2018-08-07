@@ -2,7 +2,9 @@
   <div id="account-security">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">账号安全</li>
+        <li class="active">
+          <a href="./account-safe">账号安全</a>
+        </li>
       </ul>
     </div>
     <div class="safe-title">
@@ -46,6 +48,11 @@
   import { mapGetters } from 'vuex'
   export default {
     name: 'account-safe',
+    head() {
+      return {
+        title: `账户安全-${this.site.site_name}`
+      }
+    },
     computed: {
       ...mapGetters({
         user: 'user'
@@ -55,11 +62,12 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .safe-title {
     margin-top: 10px;
     p { margin-top: 3px }
-    a { color: #005ea7 }
-    a:hover { color: #f42424 }
+    a { color: $color-href }
+    a:hover { color: $color-main }
   }
   .safe-item {
     display: block;

@@ -46,6 +46,7 @@ export function sendMobileSms(uuid, captcha) {
   return request({
     url: 'members/security/send',
     method: Method.POST,
+    needToken: true,
     data: {
       uuid,
       captcha
@@ -61,6 +62,7 @@ export function validChangeMobileSms(sms_code) {
   return request({
     url: 'members/security/exchange-bind',
     method: Method.GET,
+    needToken: true,
     params: { sms_code }
   })
 }
@@ -74,6 +76,7 @@ export function changeMobile(mobile, sms_code) {
   return request({
     url: `members/security/exchange-bind/${mobile}`,
     method: Method.PUT,
+    needToken: true,
     data: { sms_code }
   })
 }
@@ -86,6 +89,7 @@ export function validChangePasswordSms(sms_code) {
   return request({
     url: 'members/security/password',
     method: Method.GET,
+    needToken: true,
     params: { sms_code }
   })
 }
@@ -100,6 +104,7 @@ export function changePassword(uuid, captcha, password) {
   return request({
     url: 'members/security/password',
     method: Method.PUT,
+    needToken: true,
     data: {
       uuid,
       captcha,
