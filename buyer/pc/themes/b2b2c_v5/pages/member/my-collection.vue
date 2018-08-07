@@ -93,7 +93,9 @@
               <div class="shop-content">
                 <div class="shop-goods-box">
                   <div class="goods-tab clearfix">
-                    <div class="tab-item">店铺商品</div>
+                    <div class="tab-item">
+                      <nuxt-link :to="'/shop/goods-list?shop_id=' + shop.shop_id">店铺商品</nuxt-link>
+                    </div>
                   </div>
                   <nuxt-link :to="'/shop/' + shop.shop_id" class="see-more">查看更多&gt;&gt;</nuxt-link>
                 </div>
