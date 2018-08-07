@@ -7,15 +7,163 @@
         <li><nuxt-link to="./my-performance-history">我的历史业绩</nuxt-link></li>
       </ul>
     </div>
+    <div class="recommend-container">
+      <div class="achievement-summary">
+        <div>
+          <span class="current-money performance-money">本期佣金：</span>
+          <span>2018-08-01 ～ 2018-02-02 </span>
+        </div>
+        <div>
+          <span class="finally-money performance-money">¥0.00</span>
+          <span>最终佣金</span>
+        </div>
+        <div>
+          <span class="performance-symbol">=</span>
+        </div>
+        <div>
+          <span class="summary-money performance-money">¥0.00</span>
+          <span>付款总金额</span>
+        </div>
+        <div>
+          <span class="performance-symbol">-</span>
+        </div>
+        <div>
+          <span class="refund-money performance-money">¥0.00</span>
+          <span>订单退款金额</span>
+        </div>
+      </div>
+      <el-table :data="myHistoryList" style="width: 100%">
+      <el-table-column prop="status" label="结算单编号" align="center"/>
+      <el-table-column label="结算时间" align="center">
+        <template slot-scope="scope">
+          <span class="price">￥{{ scope.row.apply_money | unixToDate('yyyy-MM-dd HH') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="结算金额" align="center">
+        <template slot-scope="scope">
+          <span class="price">￥{{ scope.row.apply_money | unitPrice('¥') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button size="small" @click="lookDetails(scope.row)">查看详情</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+      <div class="member-pagination">
+        <el-pagination
+          @current-change="handleCurrentPageChange"
+          :current-page.sync="pageData.page_no"
+          :page-size="pageData.page_size"
+          layout="total, prev, pager, next"
+          :total="pageData.data_total">
+        </el-pagination>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Table, TableColumn, Pagination } from 'element-ui'
+  Vue.use(Table).use(TableColumn).use(Pagination)
+  import * as API_distribution from '@/api/distribution'
   export default {
-    name: 'my-performance-history'
+    name: 'my-performance-history',
+    data() {
+      return {
+        /** 分页请求参数 */
+        params: {
+          page_no: 1,
+          page_size: 10,
+          member_id: 0
+        },
+
+        /** 分页信息 */
+        pageData: {
+          page_no: 1,
+          page_size: 10,
+          data_total: 0
+        },
+
+        /** 提现记录列表 */
+        myHistoryList: [],
+
+        /** 当前行的对象 */
+        currentRow: {}
+      }
+    },
+    mounted() {
+      this.GET_MyhistoryList()
+    },
+    methods: {
+      /** 当前页数发生改变 */
+      handleCurrentPageChange(cur) {
+        this.params.page_no = cur
+        this.GET_MyhistoryList()
+      },
+
+      /** 获取我的历史业绩记录 */
+      GET_MyhistoryList() {
+        API_distribution.getMyHistoryList(this.params).then(response => {
+          this.pageData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
+          this.myHistoryList = response.data
+        })
+      },
+
+      /** 查看详情 */
+      lookDetails(row) {
+        this.currentRow = row
+      }
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  /*业绩总结*/
+  .achievement-summary {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin: 15px 0 20px;
+    padding: 0;
+    border: 1px solid #ddd;
+    & > div {
+      margin:0 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      & > span {
+        display:inline-block;
+        line-height: 40px;
+        width: 100%;
+        text-align: center;
+      }
+      span.performance-money {
+        font-size: 20px;
+        font-weight: 700;
+      }
+      span.current-money {
+        color: #00a0e9;
+      }
+      span.finally-money, span.summary-money {
+        color: #D93600;
+      }
+      span.refund-money {
+        color: #aaa;
+      }
+      span.performance-symbol {
+        font-family: "Yuanti SC", Arial, "Yuanti SC", Helvetica, sans-serif;
+        font-size: 60px;
+        color: #aaa;
+      }
+    }
+  }
 </style>

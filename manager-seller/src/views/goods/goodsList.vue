@@ -207,6 +207,11 @@
       }
     },
     mounted() {
+      delete this.params.market_enable
+      this.params = {
+        ...this.params,
+        market_enable: parseInt(this.$route.query.market_enable)
+      }
       this.GET_GoodsList()
     },
     activated() {
@@ -221,7 +226,7 @@
       delete this.params.market_enable
       this.params = {
         ...this.params,
-        ...this.$route.queryv
+        ...this.$route.query
       }
       this.GET_GoodsList()
       next()
