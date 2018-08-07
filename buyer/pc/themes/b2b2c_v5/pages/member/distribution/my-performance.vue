@@ -11,24 +11,24 @@
       <div class="achievement-summary">
         <div>
           <span class="current-money performance-money">本期佣金：</span>
-          <span>2018-08-01 ～ 2018-02-02 </span>
+          <span> {{ relevantTotal.start_time | unixToDate('yyyy-MM-dd') }} ～ {{ relevantTotal.end_time | unixToDate('yyyy-MM-dd') }} </span>
         </div>
         <div>
-          <span class="finally-money performance-money">¥0.00</span>
+          <span class="finally-money performance-money">{{ relevantTotal.push_money | unitPrice('¥') }}</span>
           <span>最终佣金</span>
         </div>
         <div>
           <span class="performance-symbol">=</span>
         </div>
         <div>
-          <span class="summary-money performance-money">¥0.00</span>
+          <span class="summary-money performance-money">{{ relevantTotal.final_money | unitPrice('¥') }}</span>
           <span>付款总金额</span>
         </div>
         <div>
           <span class="performance-symbol">-</span>
         </div>
         <div>
-          <span class="refund-money performance-money">¥0.00</span>
+          <span class="refund-money performance-money">{{ relevantTotal.return_order_money | unitPrice('¥') }}</span>
           <span>订单退款金额</span>
         </div>
       </div>
@@ -36,20 +36,20 @@
         <el-table-column prop="sn" label="订单编号" align="center"/>
         <el-table-column label="订单金额" align="center">
           <template slot-scope="scope">
-            <span class="price">￥{{ scope.row.orer_price | unitPrice('¥') }}</span>
+            <span class="price">{{ scope.row.orer_price | unitPrice('¥') }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="member_name" label="会员名称" align="center"/>
-        <!--<el-table-column prop="status" label="会员级别" align="center"/>-->
+        <el-table-column prop="point" label="会员级别" align="center"/>
         <el-table-column prop="point" label="会员返利" align="center"/>
         <el-table-column label="返利金额" align="center">
           <template slot-scope="scope">
-            <span class="price">￥{{ scope.row.price | unitPrice('¥') }}</span>
+            <span class="price">{{ scope.row.price | unitPrice('¥') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="下单时间" align="center">
           <template slot-scope="scope">
-            <span class="price">￥{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+            <span class="price">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -91,17 +91,28 @@
         },
 
         /** 与我相关的订单 */
-        relevantList: []
+        relevantList: [],
+
+        /** 我的结算单 */
+        relevantTotal: {}
       }
     },
     mounted() {
       this.GET_RelevantList()
+      this.GET_RelevantTotal()
     },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
         this.GET_RelevantList()
+      },
+
+      /** 获取与我相关的结算单信息 */
+      GET_RelevantTotal(){
+        API_distribution.getRelevantTotal({member_id: 0}).then(response => {
+          this.relevantTotal = response
+        })
       },
 
       /** 获取与我相关的订单记录 */

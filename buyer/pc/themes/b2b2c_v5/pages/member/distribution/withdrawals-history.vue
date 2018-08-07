@@ -9,12 +9,12 @@
       <el-table :data="withdrawalsList" style="width: 100%">
         <el-table-column label="提现时间" align="center">
           <template slot-scope="scope">
-            <span class="time">￥{{ scope.row.apply_time | unixToDate }}</span>
+            <span class="time">{{ scope.row.apply_time | unixToDate }}</span>
           </template>
         </el-table-column>
         <el-table-column label="提现金额" align="center">
           <template slot-scope="scope">
-            <span class="price">￥{{ scope.row.apply_money | unitPrice }}</span>
+            <span class="price">{{ scope.row.apply_money | unitPrice('¥') }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="提现状态" align="center"/>
