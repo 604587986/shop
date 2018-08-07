@@ -176,31 +176,35 @@
       /** 获取时间线 */
       GET_TimeLine() {
         API_Promotions.getSeckillTimeLine().then(response => {
-          if (response && response.length) {
-            this.params.range_time = response[0].time_text
-            this.GET_TimeLineGoods()
-            response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
-            const times = []
-            const timesText = []
-            response.map((item, index) => {
-              item.active = index === 0
-              if (item.distance_time === 0 && index === 0) {
-                if (item.next_distance_time === 0) {
-                  times.push(Foundation.theNextDayTime())
-                } else {
-                  times.push(item.next_distance_time)
-                }
-              } else {
-                times.push(item.distance_time)
-              }
-              timesText.push({ hours: '00', minutes: '00', seconds: '00' })
-              return item
+          if (!response || !response.length) {
+            this.$alert('暂时还没有限时抢购正在进行，去别处看看吧！', () => {
+              this.$router.push({ path: '/' })
             })
-            this.times = times
-            this.timesText = timesText
-            this.timeLines = response
-            this.startCountDown()
+            return false
           }
+          this.params.range_time = response[0].time_text
+          this.GET_TimeLineGoods()
+          response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
+          const times = []
+          const timesText = []
+          response.map((item, index) => {
+            item.active = index === 0
+            if (item.distance_time === 0 && index === 0) {
+              if (item.next_distance_time === 0) {
+                times.push(Foundation.theNextDayTime())
+              } else {
+                times.push(item.next_distance_time)
+              }
+            } else {
+              times.push(item.distance_time)
+            }
+            timesText.push({ hours: '00', minutes: '00', seconds: '00' })
+            return item
+          })
+          this.times = times
+          this.timesText = timesText
+          this.timeLines = response
+          this.startCountDown()
         })
       },
       /** 获取对应时刻的商品 */
