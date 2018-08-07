@@ -2,32 +2,36 @@
   <div id="my-coupons">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">我的优惠券</li>
+        <li class="active">
+          <a href="./my-coupons">我的优惠券</a>
+        </li>
       </ul>
     </div>
     <div class="coupons-container">
-      <ul class="coupon-list">
-        <li v-for="coupon in coupons.data" :key="coupon.coupon_id" class="coupon-item">
+      <ul v-if="coupons && coupons.data_total" class="coupon-list">
+        <li v-for="(coupon, index) in coupons.data" :key="index" class="coupon-item">
           <div class="c-type">
             <div class="c-money">
               <span>￥</span>
-              <strong>{{ coupon.coupon_money }}</strong>
+              <strong>{{ coupon.coupon_price | unitPrice }}</strong>
             </div>
             <div class="c-limit">
-              满{{ coupon.coupon_limit_money }}可用
+              满￥{{ coupon.coupon_threshold_price | unitPrice }}可用
             </div>
             <div class="c-time">
-              {{ coupon.coupon_start_date }} - {{ coupon.coupon_end_date }}
+              {{ coupon.start_time | unixToDate('yyyy-MM-dd') }} - {{ coupon.end_time | unixToDate('yyyy-MM-dd') }}
             </div>
           </div>
           <div class="c-othr">
-            <nuxt-link :to="'/shop/' + coupon.shop_id" class="use-btn">立即使用</nuxt-link>
+            <nuxt-link :to="'/shop/' + coupon.seller_id" class="use-btn">立即使用</nuxt-link>
           </div>
         </li>
       </ul>
+      <empty-member v-else>暂无优惠券</empty-member>
       <span class="clr"></span>
       <div class="member-pagination" v-if="coupons">
         <el-pagination
+          v-if="coupons.data_total"
           @current-change="handleCurrentPageChange"
           :current-page.sync="params.page_no"
           :page-size="params.page_size"
@@ -43,6 +47,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-coupons',
+    head() {
+      return {
+        title: `我的优惠券-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         coupons: '',

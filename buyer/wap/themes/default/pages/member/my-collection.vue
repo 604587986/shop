@@ -2,13 +2,17 @@
   <div id="my-collection">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li :class="[type === 'goods' && 'active']" @click="handleTypeChanged('goods')">商品收藏</li>
-        <li :class="[type === 'shop' && 'active']" @click="handleTypeChanged('shop')">店铺收藏</li>
+        <li>
+          <nuxt-link to="./my-collection">商品收藏</nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="./my-collection?type=shop">店铺收藏</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="collection-container">
-      <div v-show="type === 'goods'" class="goods">
-        <template v-if="goodsData && goodsData.length > 0">
+      <div v-show="type !== 'shop'" class="goods">
+        <template v-if="goodsData && goodsData.data.length">
           <ul>
             <li
               v-for="goods in goodsData.data"
@@ -17,14 +21,14 @@
             >
               <div class="goods-image">
                 <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
-                  <img :src="goods.goods_image" :alt="goods.goods_name">
+                  <img :src="goods.goods_img" :alt="goods.goods_name">
                 </nuxt-link>
                 <div class="goods-delete" @click="goods.show_del_pop = 1">
                   <i class="iconfont ea-icon-delete"></i>
                 </div>
                 <div class="goods-image-btns">
-                  <nuxt-link :to="'/shop/' + goods.shop_id">进入店铺</nuxt-link>
-                  <a href="javascript:;" @click="handleAddToCart(goods)">加入购物车</a>
+                  <nuxt-link :to="'/shop/' + goods.shop_id" target="_blank">进入店铺</nuxt-link>
+                  <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">查看商品</nuxt-link>
                 </div>
               </div>
               <div class="goods-name">
@@ -80,42 +84,39 @@
                   </div>
                   <div class="shop-other">
                     <p style="margin-bottom: 5px">店铺评分：</p>
-                    <p>描述相符: 4.5</p>
-                    <p>服务态度: 4.5</p>
-                    <p>发货速度: 4.5</p>
+                    <p>描述相符: {{ shop.shop_description_credit }}</p>
+                    <p>服务态度: {{ shop.shop_service_credit }}</p>
+                    <p>发货速度: {{ shop.shop_delivery_credit }}</p>
                   </div>
                 </div>
               </div>
               <div class="shop-content">
                 <div class="shop-goods-box">
                   <div class="goods-tab clearfix">
-                    <div v-for="tag in shop.tagList" :key="tag.tag_name" :class="['tab-item', tag.active && 'active']" @click="handleShopTabChanged(shop.tagList, tag)">
-                      {{ tag.tag_name }}
-                      <em>{{ tag.goods_num }}</em>
-                    </div>
+                    <div class="tab-item">店铺商品</div>
                   </div>
                   <nuxt-link :to="'/shop/' + shop.shop_id" class="see-more">查看更多&gt;&gt;</nuxt-link>
                 </div>
-                <div class="shop-goods-list">
-                  <ul v-for="tag in shop.tagList" :key="tag.tag_name" v-show="tag.active" class="goods-list">
-                    <li v-for="goods in tag.goodsList" :key="goods.goods_id" class="goods-item">
+                <no-ssr>
+                  <swiper :options="shopSwiperOptions" class="shop-goods-list">
+                    <swiper-slide v-for="goods in shop.goods_list" :key="goods.goods_id" class="goods-item">
                       <div class="goods-image">
                         <nuxt-link :to="'/goods/' + goods.goods_id">
-                          <img :src="goods.goods_image" :alt="goods.goods_name">
+                          <img :src="goods.thumbnail" :alt="goods.goods_name">
                         </nuxt-link>
                       </div>
                       <div class="goods-price">
                         <div class="price">
                           <span>￥</span>
-                          <strong>{{ goods.goods_price | unitPrice }}</strong>
+                          <strong>{{ goods.price | unitPrice }}</strong>
                         </div>
-                        <div v-if="goods.goods_original_price" class="original-price">
-                          <span>￥{{ goods.goods_original_price | unitPrice }}</span>
+                        <div v-if="goods.original_price" class="original-price">
+                          <span>￥{{ goods.original_price | unitPrice }}</span>
                         </div>
                       </div>
-                    </li>
-                  </ul>
-                </div>
+                    </swiper-slide>
+                  </swiper>
+                </no-ssr>
               </div>
               <div class="del-pop">
                 <div class="del-pop-bg"></div>
@@ -145,11 +146,14 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-collection',
-    data() {
-      let hash = this.$route.hash
-      if (hash) hash = hash.match(/#(\w+)/)[1]
+    head() {
       return {
-        type: hash || 'goods',
+        title: `我的收藏-${this.site.site_name}`
+      }
+    },
+    data() {
+      return {
+        type: this.$route.query.type,
         /** 商品收藏参数 */
         params_goods: {
           page_no: 1,
@@ -163,28 +167,26 @@
         /** 商品数据 */
         goodsData: '',
         /** 店铺数据 */
-        shopData: ''
+        shopData: '',
+        // 店铺swiper配置
+        shopSwiperOptions: {
+          slidesPerView: 5,
+          slidesPerGroup: 5
+        }
       }
     },
     mounted() {
       this.GET_Collection(this.type)
     },
-    methods: {
-      /** 类型改变 */
-      handleTypeChanged(type) {
+    watch: {
+      $route: function () {
+        const { type } = this.$route.query
         this.type = type
-        const _href = location.href.match(/(.+)#/)
-        // 改变地址栏hash值【不会刷新页面】
-        location.hash = type
-        // 如果没有商品收藏数据，则获取
-        if (!this.goodsData) this.GET_Collection('goods')
-        // 如果没有店铺收藏数据，则获取
-        if (!this.shopData) this.GET_Collection('shop')
-      },
-      /** 加入到购物车 */
-      handleAddToCart(goods) {
-        console.log(goods)
-      },
+        if (type !== 'shop' && !this.goodsData) this.GET_Collection('goods')
+        if (type === 'shop' && !this.shopData) this.GET_Collection('shop')
+      }
+    },
+    methods: {
       /** 删除商品收藏 */
       handleDeleteGoodsColl(goods) {
         API_Members.deleteGoodsCollection(goods.goods_id).then(() => {
@@ -207,16 +209,9 @@
         this.params_shop.page_no = page
         this.GET_Collection('shop')
       },
-      /** 店铺标签tab切换 */
-      handleShopTabChanged(tagList, tag) {
-        tagList.map(item => {
-          item.active = item.tag_name === tag.tag_name
-          return item
-        })
-      },
       /** 获取收藏 */
       GET_Collection(type) {
-        if (type === 'goods') {
+        if (type !== 'shop') {
           API_Members.getGoodsCollection(this.params_goods).then(response => {
             response.data.map(item => {
               // 初始化是否显示删除遮罩标识
@@ -231,12 +226,6 @@
             response.data.map(item => {
               // 初始化是否显示删除遮罩标识
               item.show_del_pop = 0
-              item.tagList && item.tagList.map((_item, index) => {
-                // 初始化标签显示状态【第一个默认显示】
-                _item.active = index === 0
-                _item.goodsList = _item.goodsList.slice(0, 5)
-                return _item
-              })
               return item
             })
             this.shopData = response
@@ -249,6 +238,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .collection-container {
     position: relative;
     margin-top: 10px;
@@ -331,7 +321,6 @@
         strong {
           color: #f40;
           font-weight: 700;
-          font-family: verdana,arial;
         }
       }
       .original-price {
@@ -394,7 +383,7 @@
       text-overflow: ellipsis;
       font-size: 14px;
       color: #3c3c3c;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
     .shop-tools {
       position: absolute;
@@ -406,7 +395,7 @@
       }
     }
     .shop-content {
-      width: 100%;
+      width: 990px - 300px;
     }
     .shop-goods-box {
       padding-top: 20px;
@@ -427,7 +416,7 @@
         border-right: #dcdcdc 1px solid;
         &.active {
           background-color: #f3f3f3;
-          color: #ff4200;
+          color: $color-main;
         }
         &:last-child { border-right: none }
       }
@@ -436,7 +425,7 @@
       float: right;
       color: #6c6c6c;
       padding-right: 10px;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
     .shop-goods-list {
       .goods-list {
@@ -447,13 +436,8 @@
       .goods-item {
         position: relative;
         float: left;
-        width: 135px;
         height: 205px;
         text-align: center;
-        margin-right: 15px;
-        &:nth-child(5n) {
-          margin-right: 0;
-        }
       }
       .goods-image {
         width: 132px;
@@ -478,7 +462,6 @@
           strong {
             color: #f40;
             font-weight: 700;
-            font-family: verdana,arial;
           }
         }
         .original-price {
