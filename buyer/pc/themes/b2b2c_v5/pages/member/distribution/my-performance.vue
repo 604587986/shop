@@ -11,24 +11,24 @@
       <div class="achievement-summary">
         <div>
           <span class="current-money performance-money">本期佣金：</span>
-          <span> {{ relevantTotal.start_time | unixToDate('yyyy-MM-dd') }} ～ {{ relevantTotal.end_time | unixToDate('yyyy-MM-dd') }} </span>
+          <span> {{ settlementTotal.start_time | unixToDate('yyyy-MM-dd') }} ～ {{ settlementTotal.end_time | unixToDate('yyyy-MM-dd') }} </span>
         </div>
         <div>
-          <span class="finally-money performance-money">{{ relevantTotal.push_money | unitPrice('¥') }}</span>
+          <span class="finally-money performance-money">{{ settlementTotal.push_money | unitPrice('¥') }}</span>
           <span>最终佣金</span>
         </div>
         <div>
           <span class="performance-symbol">=</span>
         </div>
         <div>
-          <span class="summary-money performance-money">{{ relevantTotal.final_money | unitPrice('¥') }}</span>
+          <span class="summary-money performance-money">{{ settlementTotal.final_money | unitPrice('¥') }}</span>
           <span>付款总金额</span>
         </div>
         <div>
           <span class="performance-symbol">-</span>
         </div>
         <div>
-          <span class="refund-money performance-money">{{ relevantTotal.return_order_money | unitPrice('¥') }}</span>
+          <span class="refund-money performance-money">{{ settlementTotal.return_order_money | unitPrice('¥') }}</span>
           <span>订单退款金额</span>
         </div>
       </div>
@@ -94,12 +94,12 @@
         relevantList: [],
 
         /** 我的结算单 */
-        relevantTotal: {}
+        settlementTotal: {}
       }
     },
     mounted() {
       this.GET_RelevantList()
-      this.GET_RelevantTotal()
+      this.GET_SettlementTotal()
     },
     methods: {
       /** 当前页数发生改变 */
@@ -109,9 +109,9 @@
       },
 
       /** 获取与我相关的结算单信息 */
-      GET_RelevantTotal(){
-        API_distribution.getRelevantTotal({member_id: 0}).then(response => {
-          this.relevantTotal = response
+      GET_SettlementTotal(){
+        API_distribution.getSettlementTotal({member_id: 0}).then(response => {
+          this.settlementTotal = response
         })
       },
 

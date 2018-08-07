@@ -9,8 +9,13 @@
     </div>
     <div>
       <div class="my-refereer">我的推荐人：<span>{{ myRefereer || '没有推荐人' }}</span></div>
-      <div v-if="referee && referee.length > 0 ">
+      <div v-if="referee && referee.length">
         <el-table :data="referee" style="width: 100%">
+          <el-table-column align="center">
+            <template slot-scope="scope">
+              <img src="" alt="" class="user-avatar">
+            </template>
+          </el-table-column>
           <el-table-column label="会员" prop="name" align="center"/>
           <el-table-column label="TA的等级" prop="name" align="center"/>
           <el-table-column label="TA的推荐人数" prop="downline"  align="center"/>
@@ -72,7 +77,7 @@
       /** 我的推荐人 */
       GET_myReferee() {
         API_distribution.getMyRefereer().then(response => {
-          this.myRefereer = response
+          this.myRefereer = response.message
         })
       },
 
@@ -108,5 +113,11 @@
     font-size: 16px;
     margin-left: 10px;
     color: #333;
+  }
+  /*用户头像*/
+  .user-avatar {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
   }
 </style>

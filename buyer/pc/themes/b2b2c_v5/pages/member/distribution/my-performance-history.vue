@@ -11,24 +11,24 @@
       <div class="achievement-summary">
         <div>
           <span class="current-money performance-money">本期佣金：</span>
-          <span> {{ myHistoryTotal.start_time | unixToDate('yyyy-MM-dd') }} ～ {{ myHistoryTotal.end_time | unixToDate('yyyy-MM-dd') }} </span>
+          <span> {{ settlementTotal.start_time | unixToDate('yyyy-MM-dd') }} ～ {{ settlementTotal.end_time | unixToDate('yyyy-MM-dd') }} </span>
         </div>
         <div>
-          <span class="finally-money performance-money">{{ myHistoryTotal.push_money | unitPrice('¥') }}</span>
+          <span class="finally-money performance-money">{{ settlementTotal.push_money | unitPrice('¥') }}</span>
           <span>最终佣金</span>
         </div>
         <div>
           <span class="performance-symbol">=</span>
         </div>
         <div>
-          <span class="summary-money performance-money">{{ myHistoryTotal.final_money | unitPrice('¥') }}</span>
+          <span class="summary-money performance-money">{{ settlementTotal.final_money | unitPrice('¥') }}</span>
           <span>付款总金额</span>
         </div>
         <div>
           <span class="performance-symbol">-</span>
         </div>
         <div>
-          <span class="refund-money performance-money">{{ myHistoryTotal.return_order_money | unitPrice('¥') }}</span>
+          <span class="refund-money performance-money">{{ settlementTotal.return_order_money | unitPrice('¥') }}</span>
           <span>订单退款金额</span>
         </div>
       </div>
@@ -89,16 +89,13 @@
         /** 我的历史记录 */
         myHistoryList: [],
 
-        /** 当前行的对象 */
-        currentRow: {},
-
         /** 我的历史业绩单 */
-        myHistoryTotal: {}
+        settlementTotal: {}
       }
     },
     mounted() {
       this.GET_MyhistoryList()
-      this.GET_MyhistoryTotal()
+      this.GET_SettlementTotal()
     },
     methods: {
       /** 当前页数发生改变 */
@@ -107,14 +104,10 @@
         this.GET_MyhistoryList()
       },
 
-      /** 获取我的历史业绩单 */
-      GET_MyhistoryTotal(){
-        const _params = {
-          member_id: 0,
-          sn: ''
-        }
-        API_distribution.getMyHistoryTotal(_params).then(response => {
-          this.myHistoryTotal = response
+      /** 获取结算单 */
+      GET_SettlementTotal(){
+        API_distribution.getSettlementTotal({member_id: 0}).then(response => {
+          this.settlementTotal = response
         })
       },
 
@@ -132,7 +125,8 @@
 
       /** 查看详情 */
       lookDetails(row) {
-        this.currentRow = row
+        this.$router.push({ path: '/member/distribution/my-performance',
+          query: { member_id: row.member_id, sn: row.sn } })
       }
     }
   }
