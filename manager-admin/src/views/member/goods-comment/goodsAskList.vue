@@ -9,6 +9,11 @@
         <el-table-column prop="member_name" label="会员名称"/>
         <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="咨询日期"/>
         <el-table-column prop="content" label="咨询内容" width="500"/>
+        <el-table-column label="商品名称" width="250">
+          <template slot-scope="{ row }">
+            <a :href="MixinBuyerDomain + '/goods/' + row.goods_id" class="goods-name" target="_blank">{{ row.goods_name }}</a>
+          </template>
+        </el-table-column>
         <el-table-column label="审核状态">
           <template slot-scope="scope">{{ scope.row.status | statusFilter }}</template>
         </el-table-column>
@@ -142,3 +147,10 @@
     }
   }
 </script>
+
+<style type="text/scss" lang="scss" scoped>
+  .goods-name {
+    color: #4183c4;
+    &:hover { color: #f42424 }
+  }
+</style>
