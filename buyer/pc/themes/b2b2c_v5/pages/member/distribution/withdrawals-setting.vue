@@ -18,7 +18,7 @@
           <el-input v-model="setWithdrawalsForm.bank_name" auto-complete="off"/>
         </el-form-item>
         <el-form-item label="开户行号：">
-          <el-input v-model="setWithdrawalsForm.opening_name"></el-input>
+          <el-input v-model="setWithdrawalsForm.opening_num"></el-input>
         </el-form-item>
         <el-form-item label="银行卡号：">
           <el-input v-model="setWithdrawalsForm.bank_card"></el-input>
@@ -49,7 +49,7 @@
           bank_name: '',
 
           /** 开户行号 */
-          opening_name: '',
+          opening_num: '',
 
           /** 银行卡号 */
           bank_card: ''
