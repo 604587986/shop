@@ -12,21 +12,64 @@
         <div class="head-user-name">{{ user.nickname }}</div>
         <!--<div class="head-user-lvname"></div>-->
         <div class="items">
-          <a href="/member/my-collection" class="item">
+          <nuxt-link to="/member/my-collection" class="item">
             <span>
               <p>5</p>
               <p>收藏的商品</p>
             </span>
-          </a>
-          <a class="item" href="/member/my-collection?type=shop">
+          </nuxt-link>
+          <nuxt-link class="item" to="/member/my-collection?type=shop">
             <p>0</p>
             <p>收藏的店铺</p>
-          </a>
-          <a class="item" href="/member//my-order?order_status=WAIT_COMMENT">
+          </nuxt-link>
+          <nuxt-link class="item" to="/member//my-order?order_status=WAIT_COMMENT">
             <p>4</p>
             <p>待评论</p>
-          </a>
+          </nuxt-link>
         </div>
+      </div>
+      <div class="member-nav">
+        <ul class="member-nav-items">
+          <li>
+            <a href="/member/my-order?order_status=WAIT_PAY">
+              <i class="iconfont ea-icon-wait-pay"></i>
+              <p>待付款</p>
+            </a>
+          </li>
+          <li>
+            <a href="/member/my-order?order_status=WAIT_SHIP">
+              <i class="iconfont ea-icon-wait-ship"></i>
+              <p>待发货</p>
+            </a>
+          </li>
+          <li>
+            <a href="/member/my-order?order_status=WAIT_ROG">
+              <i class="iconfont ea-icon-wait-rog"></i>
+              <p>待收货</p>
+            </a>
+          </li>
+          <li>
+            <a href="/member/after-sale">
+              <i class="iconfont ea-icon-after-sale"></i>
+              <p>退款/售后</p>
+            </a>
+          </li>
+        </ul>
+        <van-cell title="全部订单" is-link value="查看全部订单" url="/member/my-order"/>
+      </div>
+      <van-cell-group style="margin-top: 10px">
+        <van-cell title="我的优惠券" is-link value="查看优惠券" url="/member/my-coupons"/>
+        <van-cell title="我的积分" is-link value="消费、等级积分" url="/member/my-coupons"/>
+        <van-cell title="站内消息" is-link value="查看我的消息" url="/member/website-message"/>
+        <van-cell v-if="show_dis" title="分销管理" is-link value="分销管理菜单" url="/member/distribution/my-performance"/>
+      </van-cell-group>
+      <van-cell-group style="margin-top: 10px">
+        <van-cell title="我的资料" is-link value="修改资料" url="/member/my-profile"/>
+        <van-cell title="收货地址" is-link value="消费、等级积分" url="/member/shipping-address"/>
+        <van-cell title="账户安全" is-link value="修改密码" url="/member/account-safe"/>
+      </van-cell-group>
+      <div class="big-btn">
+        <van-button type="danger" size="large">退出登录</van-button>
       </div>
     </div>
     <tab-bar :active="3"/>
@@ -45,6 +88,10 @@
     mounted() {
     },
     computed: {
+      // 显示分销菜单
+      show_dis() {
+        return process.env.distribution
+      },
       ...mapGetters(['user'])
     },
     methods: {
@@ -63,6 +110,7 @@
   }
   .member-container {
     padding-top: 46px;
+    padding-bottom: 50px;
     .head-box {
       width: 100%;
       height: 130px;
@@ -133,6 +181,42 @@
           line-height: 18px;
         }
       }
+    }
+    .member-nav {
+      position: relative;
+      margin-top: 15px;
+      width: 100%;
+      min-height: 110px;
+      background-color: #fff;
+    }
+    .member-nav-items {
+      position: relative;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 66px;
+      border-bottom: 1px solid #e7e7e7;
+      margin-top: -1px;
+      li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 25%;
+        a {
+          display: block;
+          width: 100%;
+          text-align: center;
+        }
+      }
+      i {
+        display: block;
+        height: 26px;
+        font-size: 26px;
+        text-align: center;
+      }
+    }
+    .big-btn {
+      padding: 10px 15px;
     }
   }
 </style>
