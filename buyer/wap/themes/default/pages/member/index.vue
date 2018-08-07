@@ -69,7 +69,7 @@
         <van-cell title="账户安全" is-link value="修改密码" url="/member/account-safe"/>
       </van-cell-group>
       <div class="big-btn">
-        <van-button type="danger" size="large">退出登录</van-button>
+        <van-button type="danger" size="large" @click="handleLogout">退出登录</van-button>
       </div>
     </div>
     <tab-bar :active="3"/>
@@ -95,6 +95,17 @@
       ...mapGetters(['user'])
     },
     methods: {
+      /** 退出登录 */
+      handleLogout() {
+        this.$confirm('确定要退出登录吗？', () => {
+          this.logout().then(() => {
+            location.href = '/'
+          })
+        })
+      },
+      ...mapActions({
+        logout: 'user/logoutAction',
+      })
     }
   }
 </script>
