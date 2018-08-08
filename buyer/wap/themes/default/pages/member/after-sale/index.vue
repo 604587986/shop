@@ -2,7 +2,9 @@
   <div id="after-sale">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">售后列表</li>
+        <li class="active">
+          <nuxt-link to="./after-sale">售后列表</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="after-sale-container">

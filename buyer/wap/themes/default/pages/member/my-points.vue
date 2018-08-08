@@ -2,12 +2,16 @@
   <div id="my-points">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li :class="[type === 1 && 'active']" @click="type = 1">我的积分</li>
-        <li :class="[type === 2 && 'active']" @click="type = 2">积分明细</li>
+        <li :class="[type === 1 && 'active']">
+          <nuxt-link to="./my-points">我的积分</nuxt-link>
+        </li>
+        <li :class="[type === 2 && 'active']">
+          <nuxt-link to="./my-points?type=detail">积分明细</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="points-container">
-      <div v-show="type === 1" class="points-my">
+      <div v-show="type !== 'detail'" class="points-my">
         <el-alert type="warning" title="" :closable="false">
           <h2>积分规则:</h2>
           <p>当积分已达到某一兑换积分标准时，顾客可将累计积分依照网站相应积分及兑换标准兑换回馈商品，网站将即时从用户会员积分中扣减相应积分。</p>
@@ -18,12 +22,12 @@
         </el-alert>
         <el-alert type="info" title="" :closable="false">
           <h2>消费积分</h2>
-          <p>可用积分：{{ points.consum_point }}</p>
+          <p>可用积分：{{ points.consum_point || 0 }}</p>
           <h2>等级积分</h2>
-          <p>可用积分：{{ points.gade_point }}</p>
+          <p>可用积分：{{ points.grade_point || 0 }}</p>
         </el-alert>
       </div>
-      <div v-show="type === 2" class="points-detail">
+      <div v-show="type === 'detail'" class="points-detail">
         <el-table
           :data="pointsData.data"
           :header-cell-style="{textAlign: 'center'}"
@@ -32,12 +36,24 @@
           <el-table-column label="日期" align="center">
             <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
           </el-table-column>
-          <el-table-column prop="point_detail" label="明细" align="center"/>
+          <el-table-column prop="reason" label="明细" align="center"/>
           <el-table-column label="等级积分" align="center" width="120">
-            <template slot-scope="scope">{{ scope.row.level_point | filterType }}</template>
+            <template slot-scope="{ row }">
+              <span v-if="row.grade_point === 0">{{ row.grade_point }}</span>
+              <span v-else-if="row.grade_point_type === 0">
+                -{{ row.grade_point }}
+              </span>
+              <span v-else>+{{ row.grade_point }}</span>
+            </template>
           </el-table-column>
           <el-table-column label="消费积分" align="center" width="120">
-            <template slot-scope="scope">{{ scope.row.consumption_point | filterType }}</template>
+            <template slot-scope="{ row }">
+              <span v-if="row.consum_point === 0">{{ row.consum_point }}</span>
+              <span v-else-if="row.consum_point_type === 0">
+                -{{ row.consum_point }}
+              </span>
+              <span v-else>+{{ row.consum_point }}</span>
+            </template>
           </el-table-column>
         </el-table>
         <el-pagination
@@ -55,9 +71,14 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-points',
+    head() {
+      return {
+        title: `我的积分${this.site.site_name}`
+      }
+    },
     data() {
       return {
-        type: 1,
+        type: this.$route.query.type,
         params: {
           page_no: 1,
           page_size: 10
@@ -65,17 +86,21 @@
         pointsData: '',
         points: {
           consum_point: '获取中...',
-          gade_point: '获取中...'
+          grade_point: '获取中...'
         }
       }
     },
     mounted() {
-      this.GET_Points()
-      this.GET_PointsData()
+      this.type !== 'detail'
+        ? this.GET_Points()
+        : this.GET_PointsData()
     },
-    filters: {
-      filterType(val) {
-        return (val > 0 ? '+' : '-') + val
+    watch: {
+      $route: function () {
+        const { type } =this.$route.query
+        this.type = type
+        if (type !== 'detail' && this.points.consum_point === '获取中...') this.GET_Points()
+        if (type === 'detail' && !this.pointsData) this.GET_PointsData()
       }
     },
     methods: {

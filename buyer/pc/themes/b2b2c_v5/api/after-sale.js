@@ -53,6 +53,7 @@ export function applyAfterSaleMoney(params) {
   return request({
     url: 'after-sales/refunds/apply',
     method: Method.POST,
+    needToken: true,
     data: params
   })
 }
@@ -65,6 +66,7 @@ export function applyAfterSaleGoods(params) {
   return request({
     url: 'after-sales/return-goods/apply',
     method: Method.POST,
+    needToken: true,
     data: params
   })
 }
@@ -77,6 +79,7 @@ export function applyAfterSaleCancel(params) {
   return request({
     url: 'after-sales/refunds/cancel-order',
     method: Method.POST,
+    needToken: true,
     data: params
   })
 }

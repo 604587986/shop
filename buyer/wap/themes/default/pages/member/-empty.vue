@@ -21,7 +21,7 @@
       display: block;
       width: 50px;
       height: 50px;
-      background: url(~/assets/images/icon-empty-member.png) no-repeat;
+      background: url(../../assets/images/icon-empty-member.png) no-repeat;
       background-size: 100%;
     }
     .text-empty {

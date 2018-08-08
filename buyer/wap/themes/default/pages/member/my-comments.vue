@@ -2,7 +2,9 @@
   <div id="my-comments">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">我的评论</li>
+        <li class="active">
+          <a href="./my-comments">我的评论</a>
+        </li>
       </ul>
     </div>
     <template v-if="comments && comments.data.length > 0">
@@ -16,11 +18,11 @@
             <div class="comment-body">
               <strong>我的评论：</strong>
               <div>
-                <p>{{ comment.content }}</p>
+                <p v-html="comment.content.replace(/\n/g, '<br>')"></p>
                 <div v-if="comment.images && comment.images.length > 0" class="comment-gallery">
-                  <template v-for="(image, index) in comment.comment.images">
-                    <img :src="image" :key="index" class="comment-thumbnail">
-                  </template>
+                  <a v-for="(image, index) in comment.images" :key="index" :href="image" target="_blank">
+                    <img :src="image" class="comment-thumbnail">
+                  </a>
                 </div>
               </div>
             </div>
@@ -45,6 +47,11 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'my-comments',
+    head() {
+      return {
+        title: `我的评论-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         comments: '',
@@ -74,6 +81,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .comments-container {
     padding-top: 10px;
   }
@@ -86,10 +94,10 @@
     background: #fafafa;
     overflow: hidden;
     a {
-      color: #0279b9;
+      color: $color-href;
       margin-left: 10px;
       margin-right: 20px;
-      &:hover { color: #f42424 }
+      &:hover { color: $color-main }
     }
   }
   .comment-body {
@@ -98,6 +106,10 @@
     overflow: hidden;
     padding: 10px;
     border-top: none;
+    strong {
+      width: 60px;
+      flex-shrink: 0;
+    }
     .comment-gallery {
       margin-top: 10px;
     }

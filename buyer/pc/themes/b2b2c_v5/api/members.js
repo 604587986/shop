@@ -319,7 +319,8 @@ export function deleteReceipt(id) {
 export function setDefaultReceipt(id) {
   return request({
     url: `members/receipt/${id}/default`,
-    method: Method.PUT
+    method: Method.PUT,
+    needToken: true
   })
 }
 
@@ -353,7 +354,8 @@ export function getAccountBinder() {
 export function bindAccount(type) {
   return request({
     url: `members/account-binder/pc/${type}`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
 
@@ -364,7 +366,8 @@ export function bindAccount(type) {
 export function unbundAccount(type) {
   return request({
     url: `members/account-binder/pc/${type}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -375,7 +378,8 @@ export function unbundAccount(type) {
 export function loginBindAccount(uuid) {
   return request({
     url: `members/account-binder/login/${uuid}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -386,7 +390,8 @@ export function loginBindAccount(uuid) {
 export function registerBindAccount(uuid) {
   return request({
     url: `members/account-binder/register/${uuid}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 

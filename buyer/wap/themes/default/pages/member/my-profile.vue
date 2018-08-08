@@ -2,7 +2,9 @@
   <div id="my-profile">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">个人资料</li>
+        <li class="active">
+          <a href="./my-profile">个人资料</a>
+        </li>
       </ul>
     </div>
     <div class="profile-container">
@@ -14,7 +16,7 @@
           :on-success="(res) => { profileForm.face = res.url }"
         >
           <img v-if="profileForm.face" :src="profileForm.face" class="avatar">
-          <img v-else src="~/assets/images/icon-noface.jpg" title="求真相" class="avatar">
+          <img v-else src="../../assets/images/icon-noface.jpg" title="求真相" class="avatar">
           <div class="eidt-mask">
             <i class="el-icon-edit-outline"></i>
             <p>修改头像</p>
@@ -23,20 +25,14 @@
         <p>头像修改在保存后生效</p>
       </div>
       <el-form :model="profileForm" :rules="profileRules" ref="profileForm" label-width="100px" style="width:350px">
-        <!--<el-form-item label="账户名称" prop="uname">-->
-          <!--<el-input v-model="profileForm.uname" size="small" clearable></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="真实姓名" prop="truename">-->
-          <!--<el-input v-model="profileForm.truename" size="small" clearable></el-input>-->
-        <!--</el-form-item>-->
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="profileForm.nickname" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="性别" required>
           <el-radio v-model="profileForm.sex" :label="1">男</el-radio>
-          <el-radio v-model="profileForm.sex" :label="2">女</el-radio>
+          <el-radio v-model="profileForm.sex" :label="0">女</el-radio>
         </el-form-item>
-        <el-form-item label="生日" prop="birthday">
+        <el-form-item label="生日">
           <el-date-picker
             v-model="profileForm.birthday"
             type="date"
@@ -49,16 +45,14 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="地区" prop="region">
+        <el-form-item label="地区">
+          <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="address">
           <el-input v-model="profileForm.address" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="profileForm.email" size="small" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="邮编">
-          <el-input v-model="profileForm.zip" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button @click="submitProfile">保存资料</el-button>
@@ -76,42 +70,40 @@
   import { RegExp } from '~/ui-utils'
   export default {
     name: 'my-profile',
+    head() {
+      return {
+        title: `我的资料-${this.site.site_name}`
+      }
+    },
     components: { EnRegionPicker },
     data() {
+      const user = this.$store.state.user.user
       return {
         /** 地区 */
         regions: {},
         /** 个人资料 表单 */
-        profileForm: JSON.parse(JSON.stringify(this.$store.state.user.user)) || {},
+        profileForm: user ? JSON.parse(JSON.stringify(user)) : {},
         /** 个人资料 表单规则 */
         profileRules: {
-          uname: [
-            this.MixinRequired('请输入真实姓名！'),
-            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
-          ],
-          // truename: [
-          //   this.MixinRequired('请输入真实姓名！'),
-          //   { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
-          // ],
           nickname: [
             this.MixinRequired('请输入昵称！'),
-            { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
-          ],
-          birthday: [this.MixinRequired('请选择生日！')],
-          region: [this.MixinRequired('请选择地区！')],
-          address: [
-            this.MixinRequired('请输入详细地址！'),
-            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
-          ],
-          email: [
-            this.MixinRequired('请输入邮箱地址！'),
             { validator: (rule, value, callback) => {
-                if (!RegExp.email.test(value)) {
-                  callback(new Error('邮箱格式不正确！'))
+                if (!RegExp.userName.test(value)) {
+                  callback(new Error('只支持汉字、字母、数字、“-”、“_”的组合！'))
                 } else {
                   callback()
                 }
-              },
+              } }
+          ],
+          email: [
+            { validator: (rule, value, callback) => {
+                if (value === undefined || value === null || value === '') {
+                  callback()
+                } else if (!RegExp.email.test(value)) {
+                  callback(new Error('邮箱格式不正确！'))
+                } else {
+                  callback()
+                } },
               trigger: 'blur'
             }
           ]
@@ -120,7 +112,7 @@
     },
     watch: {
       user(newVal, oldVal) {
-        this.profileForm = JSON.parse(JSON.stringify(newVal))
+        this.profileForm = newVal ? JSON.parse(JSON.stringify(newVal)) : {}
       }
     },
     computed: {

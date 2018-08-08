@@ -67,13 +67,13 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="原密码" prop="old_passwprd">
-          <el-input v-model="form.old_passwprd"></el-input>
+          <el-input v-model="form.old_passwprd" placeholder="不修改则不填"></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="password">
-          <el-input type="password" v-model="form.password"></el-input>
+          <el-input type="password" v-model="form.password" placeholder="不修改则不填"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="rep_password">
-          <el-input type="password" v-model="form.rep_password"></el-input>
+          <el-input type="password" v-model="form.rep_password" placeholder="不修改则不填"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -114,11 +114,11 @@
         },
         formRules: {
           face: [this.MixinRequired('请上传头像！')],
-          old_passwprd: [this.MixinRequired('请输入原密码！')],
+          old_passwprd: [{ required: false, message: '请输入原密码！', trigger: 'blur' }],
           password: [
-            this.MixinRequired('请输入新密码！'),
+            { required: false, message: '请输入新密码！', trigger: 'blur' },
             { validator: (rule, value, callback) => {
-              if (!RegExp.password.test(value)) {
+              if (value && !RegExp.password.test(value)) {
                 callback(new Error('密码应为6-20位英文或数字！'))
               } else {
                 callback()
@@ -126,9 +126,9 @@
             } }
           ],
           rep_password: [
-            this.MixinRequired('请确认您的新密码！'),
+            { required: false, message: '请确认您的新密码！', trigger: 'blur' },
             { validator: (rule, value, callback) => {
-              if (this.form.password !== value) {
+              if (value && this.form.password !== value) {
                 callback(new Error('两次输入不一致！'))
               } else {
                 callback()
@@ -141,12 +141,29 @@
     computed: {
       ...mapGetters(['sidebar', 'user'])
     },
+    watch: {
+      form: {
+        handler: function(newVal) {
+          const { old_passwprd, password, rep_password } = newVal
+          const required = !!(old_passwprd || password || rep_password)
+          this.formRules.old_passwprd[0].required = required
+          this.formRules.password[0].required = required
+          this.formRules.rep_password[0].required = required
+        },
+        deep: true
+      }
+    },
     methods: {
       /** 提交修改密码表单 */
       submitForm() {
         this.$refs['form'].validate(valid => {
           if (valid) {
             const params = this.MixinClone(this.form)
+            if (!params.old_passwprd) {
+              delete params.old_passwprd
+              delete params.password
+              delete params.rep_password
+            }
             API_Auth.editUserInfo(params).then(() => {
               this.dialogVisible = false
               this.$store.dispatch('fedLogOut')

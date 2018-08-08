@@ -12,7 +12,3 @@
     name: 'NavBar'
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-  /deep/ .van-nav-bar__left .van-nav-bar__arrow { color: #666 }
-</style>

@@ -1,7 +1,13 @@
 const webpack = require('webpack')
 
 module.exports = {
-  env: {},
+  env: {
+    /**
+     * 分销功能开关
+     * 如果您购买了分销相关功能，请设置为true
+     */
+    distribution: true
+  },
   head: {
     title: 'Javashop多店铺示例商城',
     meta: [
@@ -13,7 +19,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_1yxf0885ge4.css' }
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_ve0xf3ndbw.css' }
     ],
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },

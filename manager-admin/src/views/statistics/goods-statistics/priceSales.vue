@@ -4,7 +4,7 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker clearable @changed="(categroy) => { params.categroy = categroy.category_id || 0 }"/>
+          <en-category-picker clearable @changed="(category) => { params.category_id = category.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
           <span>销售周期：</span>
@@ -35,7 +35,7 @@
         loading: false,
         shopList: [],
         params: {
-          categroy: 0,
+          category_id: 0,
           seller_id: 0,
           year: '',
           month: '',

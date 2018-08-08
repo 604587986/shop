@@ -132,8 +132,10 @@ export function editRole(id, params) {
  * @param params
  */
 export function editUserInfo(params) {
-  params.old_passwprd = md5(params.old_passwprd)
-  params.password = md5(params.password)
+  if (params.old_passwprd && params.password) {
+    params.old_passwprd = md5(params.old_passwprd)
+    params.password = md5(params.password)
+  }
   return request({
     url: 'systems/admin-users',
     method: 'put',
