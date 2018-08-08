@@ -171,6 +171,11 @@
           slidesPerView: 3,
           slidesPerGroup: 3,
           spaceBetween: 5,
+          simulateTouch: false,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          }
         }
       }
     },
