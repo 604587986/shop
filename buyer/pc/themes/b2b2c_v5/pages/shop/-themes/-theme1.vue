@@ -80,7 +80,7 @@
     <div class="shop-intro" id="shop-intro">
       <div class="w">
         <div class="intro-title">店铺简介</div>
-        <div class="intro-body" v-html="shop.shop_intro"></div>
+        <div class="intro-body" v-html="shop.shop_desc"></div>
       </div>
     </div>
     <div class="shop-info" id="shop-info">

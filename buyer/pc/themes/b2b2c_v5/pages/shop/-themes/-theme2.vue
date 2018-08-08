@@ -89,7 +89,7 @@
               <span class="font-shop-en">SHOP-INTRODUCTION</span>
             </div>
           </div>
-          <div class="shop-intro-body" v-html="shop.shop_intro"></div>
+          <div class="shop-intro-body" v-html="shop.shop_desc"></div>
         </div>
       </div>
     </div>
