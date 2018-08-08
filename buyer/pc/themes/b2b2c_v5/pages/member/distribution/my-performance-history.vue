@@ -11,24 +11,24 @@
       <div class="achievement-summary">
         <div>
           <span class="current-money performance-money">本期佣金：</span>
-          <span>2018-08-01 ～ 2018-02-02 </span>
+          <span> {{ settlementTotal.start_time | unixToDate('yyyy-MM-dd') }} ～ {{ settlementTotal.end_time | unixToDate('yyyy-MM-dd') }} </span>
         </div>
         <div>
-          <span class="finally-money performance-money">¥0.00</span>
+          <span class="finally-money performance-money">{{ settlementTotal.push_money | unitPrice('¥') }}</span>
           <span>最终佣金</span>
         </div>
         <div>
           <span class="performance-symbol">=</span>
         </div>
         <div>
-          <span class="summary-money performance-money">¥0.00</span>
+          <span class="summary-money performance-money">{{ settlementTotal.final_money | unitPrice('¥') }}</span>
           <span>付款总金额</span>
         </div>
         <div>
           <span class="performance-symbol">-</span>
         </div>
         <div>
-          <span class="refund-money performance-money">¥0.00</span>
+          <span class="refund-money performance-money">{{ settlementTotal.return_order_money | unitPrice('¥') }}</span>
           <span>订单退款金额</span>
         </div>
       </div>
@@ -36,12 +36,12 @@
       <el-table-column prop="status" label="结算单编号" align="center"/>
       <el-table-column label="结算时间" align="center">
         <template slot-scope="scope">
-          <span class="price">￥{{ scope.row.apply_money | unixToDate('yyyy-MM-dd HH') }}</span>
+          <span class="price">{{ scope.row.apply_money | unixToDate('yyyy-MM-dd HH') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="结算金额" align="center">
         <template slot-scope="scope">
-          <span class="price">￥{{ scope.row.apply_money | unitPrice('¥') }}</span>
+          <span class="price">{{ scope.row.apply_money | unitPrice('¥') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -86,21 +86,29 @@
           data_total: 0
         },
 
-        /** 提现记录列表 */
+        /** 我的历史记录 */
         myHistoryList: [],
 
-        /** 当前行的对象 */
-        currentRow: {}
+        /** 我的历史业绩单 */
+        settlementTotal: {}
       }
     },
     mounted() {
       this.GET_MyhistoryList()
+      this.GET_SettlementTotal()
     },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
         this.GET_MyhistoryList()
+      },
+
+      /** 获取结算单 */
+      GET_SettlementTotal(){
+        API_distribution.getSettlementTotal({member_id: 0}).then(response => {
+          this.settlementTotal = response
+        })
       },
 
       /** 获取我的历史业绩记录 */
@@ -117,7 +125,8 @@
 
       /** 查看详情 */
       lookDetails(row) {
-        this.currentRow = row
+        this.$router.push({ path: '/member/distribution/my-performance',
+          query: { member_id: row.member_id, sn: row.sn } })
       }
     }
   }
