@@ -7,14 +7,18 @@
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
           <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddShopAssistant">添加</el-button>
-          <el-select
-            v-model="params.disabled"
-            placeholder="请选择店员状态"
-            @change="GET_ShopAssistantList"
-            style="margin-left: 20px;width: 150px">
-            <el-option label="正常" :value="0"/>
-            <el-option label="已禁用" :value="-1"/>
-          </el-select>
+          <div style="margin-left: 20px; display: inline-block;font-size: 12px">
+            店员状态：
+            <el-select
+              v-model="params.disabled"
+              placeholder="请选择店员状态"
+              size="mini"
+              @change="GET_ShopAssistantList"
+              style="width: 150px">
+              <el-option label="正常" :value="0"/>
+              <el-option label="已禁用" :value="-1"/>
+            </el-select>
+          </div>
         </div>
       </div>
 
