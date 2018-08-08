@@ -37,11 +37,16 @@ service.interceptors.request.use(config => {
       text: '请稍候...'
     })
   }
+
+  // uuid
+  const uuid = Storage.getItem('uuid')
+  config.headers['uuid'] = uuid
+
   /** 设置令牌 */
   let accessToken = Storage.getItem('adminAccessToken')
   if (accessToken) {
     // 如果前台为开发环境，后台API，则需要替换为下面的代码
-    // process.env.NODE_ENV === 'development'
+    // process.env.NODE_ENV === 'development', 'production'
     if (process.env.NODE_ENV === 'production') {
       const uid = Storage.getItem('adminUid')
       const nonce = Foundation.randomString(6)

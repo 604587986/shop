@@ -35,6 +35,12 @@ service.interceptors.request.use(config => {
       lock: false
     })
   }
+  
+  // uuid
+  if (process.client) {
+    const uuid = Storage.getItem('uuid')
+    config.headers['uuid'] = uuid
+  }
 
   // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
@@ -46,8 +52,7 @@ service.interceptors.request.use(config => {
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
       const sign = md5(uid + nonce + timestamp + accessToken)
-      const uuid = Storage.getItem('uuid')
-      const _params = { uid, nonce, timestamp, sign, uuid }
+      const _params = { uid, nonce, timestamp, sign }
       let params = config.params || {}
       params = { ...params, ..._params }
       config.params = params
