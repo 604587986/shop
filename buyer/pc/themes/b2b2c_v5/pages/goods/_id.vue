@@ -275,7 +275,7 @@
       font-weight: 600;
       transition: background-color ease .2s;
       &:hover {
-        background-color: darken($color-main, 75%);
+        background-color: lighten($color-main, 15%);
       }
     }
   }
