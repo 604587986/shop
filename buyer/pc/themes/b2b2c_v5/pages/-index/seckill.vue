@@ -114,6 +114,9 @@
           this.goodsList = response.data
         })
       }
+    },
+    destroyed() {
+      this.interval && clearInterval(this.interval)
     }
   }
 </script>
