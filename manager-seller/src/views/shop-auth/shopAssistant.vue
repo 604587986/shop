@@ -203,9 +203,14 @@
         this.dialogVisible = true
       },
 
+      // Andste_TODO 2018/8/8: 编辑功能待适配
       /** 编辑店员 */
       handleEditShopAssistant(index, row) {
-        this.shopAssistantForm = this.MixinClone(row)
+        const params = this.MixinClone(row)
+        this.shopAssistantForm = {
+          ...params,
+          uname: row.clerk_name
+        }
         this.dialogVisible = true
       },
 
