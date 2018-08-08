@@ -1210,10 +1210,11 @@
 
       /** 规格选择器规格数据改变时触发 */
       finalSku(val) {
+        console.log(val)
         /** 动态修改总库存 每次设置为0  此处每次进行循环计算 存在性能浪费 */
         this.baseInfoForm.quantity = 0
         val.forEach(key => {
-          if (key.quantity && Number.isInteger(key.quantity)) {
+          if (key.quantity) {
             this.baseInfoForm.quantity += parseInt(key.quantity)
           }
         })
