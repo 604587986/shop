@@ -63,6 +63,7 @@
         // swiper配置
         swiperOptions: {
           autoplay: false,
+          simulateTouch: false,
           slidesPerView: 5,
           slidesPerGroup: 5,
           navigation: {
@@ -283,6 +284,9 @@
       background-color: rgba(0,0,0,.15);
       z-index: 20;
       background-size: 50%;
+      &.swiper-button-disabled {
+        pointer-events: auto;
+      }
     }
   }
 </style>
