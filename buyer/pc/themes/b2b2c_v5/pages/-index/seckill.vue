@@ -1,7 +1,7 @@
 <template>
   <div v-if="time !== false" class="seckill-container w">
     <div class="seckill-hd">
-      <a href="/seckill" class="seckill-hd-a">
+      <a href="/seckill" class="seckill-hd-a" target="_blank">
         <div class="sk-title">限时抢购</div>
         <div class="sk-sub-title">FLASH DEALS</div>
         <i class="iconfont ea-icon-lightning sk-icon"></i>
