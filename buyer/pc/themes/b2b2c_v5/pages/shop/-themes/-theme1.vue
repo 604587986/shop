@@ -89,7 +89,6 @@
         <div class="item">
           <h3>{{ shop.shop_name }}</h3>
           <div class="information-same">
-            <!--// Andste_TODO 2018/7/4: 待适配-->
             <p>身份认证：身份已认证</p>
             <p>店铺认证：店铺已认证</p>
             <p>创店时间：{{ shop.shop_createtime | unixToDate('yyyy-MM-dd') }}</p>

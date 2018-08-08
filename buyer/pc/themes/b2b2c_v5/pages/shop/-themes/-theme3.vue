@@ -94,7 +94,6 @@
       <div class="info-information">
         <div class="item">
           <h3>{{ shop.shop_name }}</h3>
-          <!--// Andste_TODO 2018/7/4: 待适配-->
           <div class="information-same">
             <p>身份认证：身份已认证</p>
             <p>店铺认证：店铺已认证</p>
