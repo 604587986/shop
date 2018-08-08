@@ -204,6 +204,7 @@
 
       /** 添加店员 */
       handleAddShopAssistant() {
+        this.shopAssistantForm = {}
         this.dialogVisible = true
       },
 
@@ -220,9 +221,9 @@
 
       /** 删除店员 */
       handleDeleteShopAssistant(index, row) {
-        this.$confirm('确定要删除这个店员吗？', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确定要禁用这个店员吗？', '提示', { type: 'warning' }).then(() => {
           API_Auth.deleteShopAssistant(row.clerk_id).then(() => {
-            this.$message.success('删除成功！')
+            this.$message.success('禁用成功！')
             this.GET_ShopAssistantList()
           })
         }).catch(() => {})

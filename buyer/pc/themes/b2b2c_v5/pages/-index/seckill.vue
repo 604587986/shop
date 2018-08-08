@@ -103,7 +103,7 @@
           response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
           const onlyOne = response.length === 1
           this.onlyOne = onlyOne
-          this.time = onlyOne ? response[0].distance_time : response[1].distance_time
+          this.time = onlyOne ? Foundation.theNextDayTime() : response[1].distance_time
           this.startCountDown()
           this.GET_GoodsList(response[0].time_text)
         })
