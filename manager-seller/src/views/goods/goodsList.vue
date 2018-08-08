@@ -71,7 +71,12 @@
         <el-table-column label="创建时间" width="220">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus" width="120"/>
+        <el-table-column  label="状态" width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row | marketStatus }}</span>
+            <div class="under-reason" v-if="scope.row.under_message" @click="showUnderReason(scope.row)">(下架原因)</div>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="250" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
@@ -134,6 +139,9 @@
         <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="下架原因" :visible.sync="isShowUnderReason" width="17%" >
+      <div align="center">{{ under_reason }}</div>
+    </el-dialog>
   </div>
 </template>
 
@@ -194,6 +202,12 @@
         /** 商品库存显示*/
         goodsStockshow: false,
 
+        /** 是否显示下架原因 */
+        isShowUnderReason: false,
+
+        /** 下架原因 */
+        under_reason: '',
+
         /** 库存商品数量*/
         goodsStocknums: 0,
 
@@ -215,6 +229,16 @@
 
         /** 店铺信息 */
         shopInfo: this.$store.getters.shopInfo
+      }
+    },
+    filters: {
+      /** 销售状态格式化 */
+      marketStatus(row) {
+        switch (row.is_auth) {
+          case 0 : return row.market_enable === 1 ? '待审核' : '已下架'
+          case 1 : return row.market_enable === 1 ? '售卖中' : '已下架'
+          case 2 : return row.market_enable === 1 ? '审核拒绝' : '已下架'
+        }
       }
     },
     mounted() {
@@ -256,15 +280,6 @@
       handlePageCurrentChange(page) {
         this.params.page_no = page
         this.GET_GoodsList()
-      },
-
-      /** 销售状态格式化 */
-      marketStatus(row, column, cellValue) {
-        switch (row.is_auth) {
-          case 0 : return row.market_enable === 1 ? '待审核' : '已下架'
-          case 1 : return row.market_enable === 1 ? '售卖中' : '已下架'
-          case 2 : return row.market_enable === 1 ? '审核拒绝' : '已下架'
-        }
       },
 
       /** 搜索事件触发 */
@@ -311,6 +326,13 @@
           }
         }
         this.GET_GoodsList()
+      },
+
+      /** 显示下架原因 */
+      showUnderReason(row) {
+        this.isShowUnderReason = false
+        this.isShowUnderReason = true
+        this.under_reason = row.under_message
       },
 
       GET_GoodsList() {
@@ -550,6 +572,11 @@
     -webkit-box-orient:vertical;
 
     -webkit-line-clamp:2;
+  }
+  /*下架原因*/
+  .under-reason {
+    color: red;
+    cursor: pointer;
   }
 
 </style>
