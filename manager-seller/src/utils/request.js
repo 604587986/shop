@@ -29,11 +29,16 @@ service.interceptors.request.use(config => {
       spinner: 'el-icon-loading'
     })
   }
+
+  // uuid
+  const uuid = Storage.getItem('uuid')
+  config.headers['uuid'] = uuid
+
   // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
   if (accessToken) {
     // 如果前台为开发环境，后台API，则需要替换为下面的代码
-    // process.env.NODE_ENV === 'development'
+    // process.env.NODE_ENV === 'development'， 'production'
     if (process.env.NODE_ENV === 'production') {
       const uid = Storage.getItem('uid')
       const nonce = Foundation.randomString(6)
