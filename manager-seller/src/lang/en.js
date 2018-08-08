@@ -59,6 +59,11 @@ export default {
     consultation: 'consultation',
     message: 'message',
 
+    shopAuth: 'Shop Auth',
+    shopAssistant: 'Shop Assistant',
+    roleManage: 'Role Manage',
+    rolePermission: 'Role Permission',
+
     setting: 'Setting Mange',
     shopSettings: 'shop Settings',
     goodsWarning: 'goods Warning',
