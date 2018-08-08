@@ -112,15 +112,14 @@
             <el-input v-model="goodsStockData.deliver_goods_quantity"  disabled />
           </el-form-item>
         </el-form>
-        <en-table-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
+        <en-table-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums > 1">
           <template slot="table-columns">
-            <el-table-column prop="goods_name" label="商品名称"/>
-            <el-table-column label="库存">
+            <el-table-column v-for="(item, index) in goodsStockTitle" :label="item.label" :key="index">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.quantity" />
+                <el-input v-if="item.prop === 'quantity'" v-model="scope.row.quantity"/>
+                <span v-else>{{ scope.row[item.prop] }}</span>
               </template>
             </el-table-column>
-            <el-table-column  prop="deliver_goods_quantity" label="待发货数" />
           </template>
         </en-table-layout>
       </div>
@@ -190,10 +189,13 @@
         goodsStockshow: false,
 
         /** 库存商品数量*/
-        goodsStocknums: 1,
+        goodsStocknums: 0,
 
         /** 商品库存列表数据*/
-        goodsStockData: {},
+        goodsStockData: [],
+
+        /** 商品库存列表表头数据 */
+        goodsStockTitle: [],
 
         /** 校验规则 */
         rules: {
@@ -346,15 +348,38 @@
         this.goodsId = row.goods_id
         this.goodsStockshow = true
         API_goods.getGoodsStockList(row.goods_id, {}).then((response) => {
-          this.goodsStockData = response
+          this.goodsStockTitle = this.goodsStockData = []
           this.goodsStocknums = response.length
           // 构造待发货字段
-          if (Array.isArray(response) && response.length > 0) {
-            this.goodsStockData.forEach((key) => {
+          if (response.length > 1) {
+            response.forEach((key) => {
+              // 构造待发货字段
+              this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
+              // 构造表头
+              let _skus = key.spec_list.map(elem => {
+                return { label: elem.spec_name, prop: elem.spec_name }
+              })
+              this.goodsStockTitle = _skus.concat([
+                { label: '库存', prop: 'quantity' },
+                { label: '待发货数', prop: 'deliver_goods_quantity' }])
+              // 构造表结构
+              let _skuData = key.spec_list.map(elem => {
+                let _map = new Map().set(elem.spec_name, elem.spec_value)
+                let obj = Object.create(null)
+                for (let [k, v] of _map) {
+                  obj[k] = v
+                }
+                return obj
+              })
+              this.goodsStockData.push(Object.assign(key, ..._skuData))
+            })
+          } else {
+            response.forEach((key) => {
+              // 构造待发货字段
               this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
             })
+            this.goodsStockData = response[0]
           }
-          this.goodsStockData = this.goodsStockData.length > 1 ? this.goodsStockData : this.goodsStockData[0]
         })
       },
 
