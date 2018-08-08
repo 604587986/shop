@@ -63,6 +63,7 @@
         // swiper配置
         swiperOptions: {
           autoplay: false,
+          simulateTouch: false,
           slidesPerView: 5,
           slidesPerGroup: 5,
           navigation: {
@@ -102,7 +103,7 @@
           response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
           const onlyOne = response.length === 1
           this.onlyOne = onlyOne
-          this.time = onlyOne ? response[0].distance_time : response[0].next_distance_time
+          this.time = onlyOne ? response[0].distance_time : response[1].distance_time
           this.startCountDown()
           this.GET_GoodsList(response[0].time_text)
         })
@@ -283,6 +284,9 @@
       background-color: rgba(0,0,0,.15);
       z-index: 20;
       background-size: 50%;
+      &.swiper-button-disabled {
+        pointer-events: auto;
+      }
     }
   }
 </style>
