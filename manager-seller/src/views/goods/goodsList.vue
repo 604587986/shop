@@ -208,9 +208,11 @@
     },
     mounted() {
       delete this.params.market_enable
-      this.params = {
-        ...this.params,
-        market_enable: parseInt(this.$route.query.market_enable)
+      if (this.$route.query.market_enable) {
+        this.params = {
+          ...this.params,
+          market_enable: parseInt(this.$route.query.market_enable)
+        }
       }
       this.GET_GoodsList()
     },
@@ -289,6 +291,7 @@
 
       /** 切换分组*/
       changeGoodsCateGory(data) {
+        console.log(data)
         delete this.params.shop_cat_path
         if (data && Array.isArray(data) && data.length !== 0) {
           this.params = {
