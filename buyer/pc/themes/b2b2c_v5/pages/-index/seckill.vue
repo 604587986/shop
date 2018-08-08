@@ -1,7 +1,7 @@
 <template>
   <div v-if="time !== false" class="seckill-container w">
     <div class="seckill-hd">
-      <nuxt-link to="/seckill" class="seckill-hd-a">
+      <a href="/seckill" class="seckill-hd-a">
         <div class="sk-title">限时抢购</div>
         <div class="sk-sub-title">FLASH DEALS</div>
         <i class="iconfont ea-icon-lightning sk-icon"></i>
@@ -11,13 +11,13 @@
           <div class="time-item"><span class="time-text">{{ times.minutes }}</span></div>
           <div class="time-item"><span class="time-text">{{ times.seconds }}</span></div>
         </div>
-      </nuxt-link>
+      </a>
     </div>
     <div class="seckill-bd">
       <no-ssr>
         <swiper :options="swiperOptions">
           <swiper-slide v-for="(goods, index) in goodsList" :key="index" class="goods-item">
-            <nuxt-link to="/seckill" class="goods-item-a">
+            <a :href="'/goods/' + goods.goods_id" class="goods-item-a">
               <div class="goods-item-img">
                 <img :src="goods.goods_image" :alt="goods.goods_name">
               </div>
@@ -31,7 +31,7 @@
                   <i>¥</i><span>{{ goods.original_price | unitPrice }}</span>
                 </span>
               </div>
-            </nuxt-link>
+            </a>
           </swiper-slide>
           <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
           <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
