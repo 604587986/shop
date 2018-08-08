@@ -160,10 +160,16 @@
       <el-table :data="productList" :header-cell-style="{textAlign: 'center'}">
         <el-table-column label="商品图片" width="180">
           <template slot-scope="scope">
-            <img :src="scope.row.goods_image" class="goods-image"/>
+            <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank">
+              <img :src="scope.row.goods_image" class="goods-image"/>
+            </a>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="商品名称" />
+        <el-table-column label="商品名称" >
+          <template slot-scope="scope">
+            <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.name }}</a>
+          </template>
+        </el-table-column>
         <el-table-column label="单价（元）" width="150">
           <template slot-scope="scope">{{ scope.row.original_price | unitPrice('￥') }}</template>
         </el-table-column>
@@ -257,7 +263,7 @@
       :logisticsShow="logisticsCompanyShow"
       @logisticsChanged="logisticsChanged"
       @logstictisClosed="logstictisClosed"
-    ></en-logistics-company>
+    />
   </div>
 </template>
 
@@ -470,7 +476,7 @@
 
       /** 查看物流信息*/
       looklogistics() {
-        this.logisticsShow = true
+        this.logisticsShow = false
         const _params = {
           id: this.orderDetail.logi_id,
           num: this.orderDetail.ship_no
