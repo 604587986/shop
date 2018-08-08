@@ -112,7 +112,13 @@
             <el-input v-model="goodsStockData.deliver_goods_quantity"  disabled />
           </el-form-item>
         </el-form>
-        <en-table-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums > 1">
+        <en-table-layout
+          :tableData="goodsStockData"
+          :loading="loading"
+          border
+          v-if="goodsStocknums > 1"
+          :span-method="arraySpanMethod"
+          :stripe="false">
           <template slot="table-columns">
             <el-table-column v-for="(item, index) in goodsStockTitle" :label="item.label" :key="index">
               <template slot-scope="scope">
@@ -196,6 +202,9 @@
 
         /** 商品库存列表表头数据 */
         goodsStockTitle: [],
+
+        /** 要合并的列的位置数组 */
+        concactArray: [],
 
         /** 校验规则 */
         rules: {
@@ -343,6 +352,41 @@
         })
       },
 
+      /** 合并数据相同的单元格 */
+      arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+        if (columnIndex < this.goodsStockTitle.length - 2) {
+          const _row = this.concactArray[rowIndex][columnIndex]
+          const _col = _row > 0 ? 1 : 0
+          return {
+            rowspan: _row,
+            colspan: _col
+          }
+        }
+      },
+
+      /** 计算要合并列的位置 */
+      concactArrayCom(index, item) {
+        let _isMerge = false
+        /** 循环列 先循环第一列 若相同则合并 再循环第二列 依次循环 若不相同 则不合并并终止此列循环开始下一列循环 */
+        let _currnetRow = []
+        for (let i = 0, _len = this.goodsStockTitle.length - 2; i < _len; i++) {
+          if (index > 0 && item[this.goodsStockTitle[i].prop] !== this.goodsStockData[index - 1][this.goodsStockTitle[i].prop]) {
+            _currnetRow[i] = 1
+            _isMerge = true
+          } else if (index > 0 && !_isMerge) {
+            _currnetRow[i] = 0
+            let _count = 1
+            while (this.concactArray[index - _count][i] === 0) {
+              _count++
+            }
+            this.concactArray[index - _count][i] += 1
+          } else { // index === 0
+            _currnetRow[i] = 1
+          }
+        }
+        this.concactArray.push(_currnetRow)
+      },
+
       /** 库存 */
       handleStockGoods(row) {
         this.goodsId = row.goods_id
@@ -371,7 +415,16 @@
                 }
                 return obj
               })
-              this.goodsStockData.push(Object.assign(key, ..._skuData))
+              const _key = {
+                quantity: key.quantity,
+                deliver_goods_quantity: key.deliver_goods_quantity
+              }
+              this.goodsStockData.push(Object.assign(_key, ..._skuData))
+            })
+            // 计算表格合并的位置
+            this.concactArray = []
+            this.goodsStockData.forEach((key, index) => {
+              this.concactArrayCom(index, key)
             })
           } else {
             response.forEach((key) => {
