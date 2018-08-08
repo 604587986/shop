@@ -17,7 +17,7 @@
       <no-ssr>
         <swiper :options="swiperOptions">
           <swiper-slide v-for="(goods, index) in goodsList" :key="index" class="goods-item">
-            <a :href="'/goods/' + goods.goods_id" class="goods-item-a">
+            <a :href="'/goods/' + goods.goods_id" class="goods-item-a" target="_blank">
               <div class="goods-item-img">
                 <img :src="goods.goods_image" :alt="goods.goods_name">
               </div>
