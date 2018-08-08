@@ -35,6 +35,12 @@ service.interceptors.request.use(config => {
     // })
   }
   
+  // uuid
+  if (process.client) {
+    const uuid = Storage.getItem('uuid')
+    config.headers['uuid'] = uuid
+  }
+  
   // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
   if (accessToken && config.needToken) {
