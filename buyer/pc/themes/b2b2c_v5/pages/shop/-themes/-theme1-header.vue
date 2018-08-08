@@ -22,7 +22,7 @@
     <div class="shop-nav">
       <div class="w">
         <div class="item category">
-          <h1 @click="$router.push({ path: '/shop/goods-list?shop_id=' + shop_id })">全部分类</h1>
+          <h1 @click="$router.push({ path: '/shop/goods-list?shop_id=' + shop_id })">全部分组</h1>
           <div class="category-box">
             <div class="inner-category-box">
               <div v-for="cate in categorys" :key="cate.shop_cat_id" class="category-item">
