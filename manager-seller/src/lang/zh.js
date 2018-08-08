@@ -59,6 +59,11 @@ export default {
     consultation: '咨询管理',
     message: '消息',
 
+    shopAuth: '店员管理',
+    shopAssistant: '店员列表',
+    roleManage: '角色管理',
+    rolePermission: '角色权限',
+
     setting: '设置管理',
     shopSettings: '店铺设置',
     goodsWarning: '货品预警',
