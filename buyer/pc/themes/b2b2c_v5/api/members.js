@@ -3,6 +3,7 @@
  */
 
 import request, { Method } from '@/utils/request'
+import Storage from '@/utils/storage'
 
 /**
  * 获取优惠券列表
@@ -256,7 +257,7 @@ export function saveUserInfo(params) {
  */
 export function logout() {
   return request({
-    url: `members/logout`,
+    url: `members/logout?uid=${Storage.getItem('uid')}`,
     method: Method.POST,
     needToken: true
   })
