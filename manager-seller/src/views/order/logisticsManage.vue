@@ -281,6 +281,7 @@
             type: 2,
             area: []
           }
+          this.area = []
         } else if (this.activeName === 'logistics') {
           this.logisticsShow = true
         }
@@ -361,6 +362,7 @@
 
           area: []
         }
+        this.area = []
       },
 
       /** 保存模板 */
