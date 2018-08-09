@@ -1,64 +1,35 @@
 <template>
   <div id="my-profile">
-    <div class="member-nav">
-      <ul class="member-nav-list">
-        <li class="active">
-          <a href="./my-profile">个人资料</a>
-        </li>
-      </ul>
-    </div>
+    <nav-bar title="我的资料"></nav-bar>
     <div class="profile-container">
-      <div class="avatar-box">
-        <el-upload
-          :action="MixinUploadApi"
-          class="avatar-uploader"
-          :show-file-list="false"
-          :on-success="(res) => { profileForm.face = res.url }"
-        >
-          <img v-if="profileForm.face" :src="profileForm.face" class="avatar">
-          <img v-else src="../../assets/images/icon-noface.jpg" title="求真相" class="avatar">
-          <div class="eidt-mask">
-            <i class="el-icon-edit-outline"></i>
-            <p>修改头像</p>
-          </div>
-        </el-upload>
-        <p>头像修改在保存后生效</p>
-      </div>
-      <el-form :model="profileForm" :rules="profileRules" ref="profileForm" label-width="100px" style="width:350px">
-        <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="profileForm.nickname" size="small" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="性别" required>
-          <el-radio v-model="profileForm.sex" :label="1">男</el-radio>
-          <el-radio v-model="profileForm.sex" :label="0">女</el-radio>
-        </el-form-item>
-        <el-form-item label="生日">
-          <el-date-picker
-            v-model="profileForm.birthday"
-            type="date"
-            placeholder="请选择生日"
-            :editable="false"
-            :picker-options="{disabledDate(time) { return time.getTime() > Date.now() }}"
-            size="small"
-            clearable
-            value-format="timestamp"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="地区">
-          <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
-        </el-form-item>
-        <el-form-item label="详细地址" prop="address">
-          <el-input v-model="profileForm.address" size="small" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="profileForm.email" size="small" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <el-button @click="submitProfile">保存资料</el-button>
-        </el-form-item>
-      </el-form>
-      <span class="clr"></span>
+      <van-cell-group :border="false">
+        <van-cell title="头像" is-link class="face-cell">
+          <img :src="profileForm.face" class="img-face">
+          <input id="update-face" class="update-face" type="file" accept="image/jpg,image/jpeg,image/png" @change="handleUpdateFace">
+        </van-cell>
+        <van-cell title="用户名" :value="profileForm.uname"/>
+        <van-cell title="昵称" :value="profileForm.nickname" is-link @click="showEditNickname = true"/>
+        <van-cell title="性别" :value="profileForm.sex === 1 ? '男' : '女'" is-link @click="showSexActionsheet = true"/>
+        <van-cell title="生日" :value="birthday" is-link>
+          <input type="date" :value="birthday" class="birthday-input" @change="handleBirthdayChange">
+        </van-cell>
+      </van-cell-group>
+    </div>
+    <!--修改昵称弹框-->
+    <van-dialog
+      v-model="showEditNickname"
+      title="请输入昵称"
+      show-cancel-button
+      :before-close="beforeNicknameClose"
+      @confirm="profileForm.nickname = nickname"
+    >
+      <van-field v-model="nickname" clearable placeholder="2-20位汉字、字母或数字"/>
+    </van-dialog>
+    <!--修改性别弹出菜单-->
+    <van-actionsheet v-model="showSexActionsheet" :actions="sexActions" cancel-text="取消"/>
+    <!--登录-->
+    <div class="big-btn">
+      <van-button size="large" @click="submitProfile">保存修改</van-button>
     </div>
   </div>
 </template>
@@ -66,8 +37,8 @@
 <script>
   import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
-  import EnRegionPicker from "@/components/RegionPicker"
-  import { RegExp } from '~/ui-utils'
+  import { Foundation, RegExp } from '~/ui-utils'
+  import request, { Method } from '@/utils/request'
   export default {
     name: 'my-profile',
     head() {
@@ -75,76 +46,86 @@
         title: `我的资料-${this.site.site_name}`
       }
     },
-    components: { EnRegionPicker },
     data() {
       const user = this.$store.state.user.user
       return {
-        /** 地区 */
-        regions: {},
         /** 个人资料 表单 */
         profileForm: user ? JSON.parse(JSON.stringify(user)) : {},
-        /** 个人资料 表单规则 */
-        profileRules: {
-          nickname: [
-            this.MixinRequired('请输入昵称！'),
-            { validator: (rule, value, callback) => {
-                if (!RegExp.userName.test(value)) {
-                  callback(new Error('只支持汉字、字母、数字、“-”、“_”的组合！'))
-                } else {
-                  callback()
-                }
-              } }
-          ],
-          email: [
-            { validator: (rule, value, callback) => {
-                if (value === undefined || value === null || value === '') {
-                  callback()
-                } else if (!RegExp.email.test(value)) {
-                  callback(new Error('邮箱格式不正确！'))
-                } else {
-                  callback()
-                } },
-              trigger: 'blur'
-            }
-          ]
-        }
+        // 显示修改昵称 dialog
+        showEditNickname: false,
+        // 昵称
+        nickname: user.nickname || '',
+        // 显示性别选择菜单
+        showSexActionsheet: false,
+        // 性别选择菜单选项
+        sexActions: [
+          { name: '男', callback: (action) => {
+            this.profileForm.sex = 1
+            this.showSexActionsheet = false
+          }},
+          { name: '女', callback: () => {
+            this.profileForm.sex = 0
+            this.showSexActionsheet = false
+          }}
+        ],
+        // 生日
+        birthday: user.birthday ? Foundation.unixToDate(user.birthday, 'yyyy-MM-dd') : ''
       }
     },
     watch: {
       user(newVal, oldVal) {
         this.profileForm = newVal ? JSON.parse(JSON.stringify(newVal)) : {}
+        this.birthday = newVal.birthday ? Foundation.unixToDate(newVal.birthday, 'yyyy-MM-dd') : ''
+        this.nickname = newVal.nickname
       }
     },
     computed: {
-      /** 默认地址 */
-      defaultRegions() {
-        const { user } = this.$store.state.user
-        if(!user || !user.province_id) return null
-        return [
-          user.province_id,
-          user.city_id,
-          user.county_id,
-          user.town_id
-        ]
-      },
       ...mapGetters({
         user: 'user'
       })
     },
     methods: {
+      /** 头像发生改变 */
+      handleUpdateFace(event) {
+        const file = event.target.files[0]
+        const formData = new FormData()
+        formData.append('file', file)
+        request({
+          url: this.MixinUploadApi,
+          method: Method.POST,
+          headers: { 'Content-Type': 'multipart/form-data' },
+          data: formData
+        }).then(response => {
+          this.profileForm.face = response.url
+        })
+      },
+      /** 生日发生改变 */
+      handleBirthdayChange(event) {
+        const date = event.target.value
+        this.profileForm.birthday = Foundation.dateToUnix(date)
+      },
+      /** 昵称dialog关闭前 */
+      beforeNicknameClose(action, done) {
+        if (action === 'cancel') return done()
+        const { nickname } = this
+        if (!nickname) {
+          this.$message.error('请输入昵称！')
+          done(false)
+        } else if (nickname.length < 2 || nickname.length > 20) {
+          this.$message.error('长度应在2-20之间！')
+          done(false)
+        } else if (!RegExp.userName.test(nickname)) {
+          this.$message.error('格式不正确！')
+          done(false)
+        } else {
+          done()
+        }
+      },
       /** 保存资料提交表单 */
       submitProfile() {
-        this.$refs['profileForm'].validate((valid) => {
-          if (valid) {
-            const params = JSON.parse(JSON.stringify(this.profileForm))
-            params.birthday /= 1000
-            this.saveUserInfo(params).then(() => {
-              this.$message.success('修改成功！')
-            })
-          } else {
-            this.$message.error('表单填写有误，请检查！')
-            return false
-          }
+        this.saveUserInfo(this.profileForm).then(() => {
+          this.$store.dispatch('user/getUserDataAction')
+          this.$message.success('修改成功！')
         })
       },
       ...mapActions({
@@ -155,59 +136,30 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .profile-container {
-    padding-top: 15px;
-    .avatar-box {
-      float: left;
-      position: relative;
-      margin-left: 20px;
-      margin-right: 50px;
-      p { text-align: center }
-      .eidt-mask {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 20;
-        background-color: rgba(0,0,0,.3);
-        opacity: 0;
-        transition: opacity .2s ease-in;
-        color: #f5f7fa;
-        i { font-size: 24px }
-        p { font-size: 14px }
-      }
-      &:hover { .eidt-mask { opacity: 1 } }
-      .avatar-uploader {
-        /deep/ .el-upload {
-          border: 1px dashed #d9d9d9;
-          cursor: pointer;
-          position: relative;
-          overflow: hidden;
-          border-radius: 100%;
-          :hover { border-color: #409EFF }
-        }
-      }
-      .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 135px;
-        height: 135px;
-        line-height: 135px;
-        text-align: center;
-      }
-      .avatar {
-        width: 135px;
-        height: 135px;
-        display: block;
-      }
+  /deep/ {
+    .van-cell {
+      align-items: center;
     }
-    /deep/ .el-form { float: left }
-    /deep/ .el-date-editor.el-input { width: 100% }
-    /deep/ .app-address { margin-top: 7px }
+  }
+  .face-cell {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    .img-face {
+      width: 50px;
+      height: 50px;
+    }
+    .update-face {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+    }
+  }
+  .birthday-input {
+    background-color: #fff;
+    width: 100%;
+    text-align: right;
   }
 </style>
