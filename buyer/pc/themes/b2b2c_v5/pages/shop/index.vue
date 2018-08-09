@@ -61,8 +61,8 @@
       <el-pagination
         v-if="shopList"
         @current-change="handleCurrentPageChange"
-        :current-page.sync="params.page_no"
-        :page-size="params.page_size"
+        :current-page.sync="shopList.page_no"
+        :page-size="shopList.page_size"
         layout="total, prev, pager, next"
         :total="shopList.data_total">
       </el-pagination>
@@ -76,51 +76,42 @@
   Vue.use(Pagination)
   import * as API_Shop from '@/api/shop'
   import ShopStar from '@/pages/shop/-themes/-shop-star'
+  import * as qs from 'qs'
   export default {
     name: 'shopList',
     components: { [ShopStar.name]: ShopStar },
+    async asyncData({ query }) {
+      const shopList = await API_Shop.getShopList(query)
+      if (shopList.data) {
+        shopList.data = shopList.data.map(item => {
+          item.goods_on = true
+          return item
+        })
+      }
+      return { shopList }
+    },
     data() {
       return {
         // 店铺列表
         shopList: '',
         // 参数
-        params: {
-          page_no: 1,
-          page_size: 10,
-          order: 0,
-          ...this.$route.query
-        }
+        params: this.$route.query
       }
-    },
-    mounted() {
-      this.GET_ShopList()
     },
     methods: {
       /** 当前分页发生改变 */
       handleCurrentPageChange(page_no) {
         this.params.page_no = page_no
-        this.GET_ShopList()
+        location.href = `/shop?${qs.stringify(this.params)}`
       },
       /** 店铺列表排序 */
       handleSortShopList(order) {
         this.params.order = order
-        this.GET_ShopList()
+        location.href = `/shop?${qs.stringify(this.params)}`
       },
       /** 格式化地址信息 */
       formatAddress(shop) {
         return `${shop.shop_province} ${shop.shop_city} ${shop.shop_county} ${shop.shop_town}`
-      },
-      /** 获取店铺列表 */
-      GET_ShopList() {
-        const params = JSON.parse(JSON.stringify(this.params))
-        if (params.keyword) params.name = params.keyword
-        API_Shop.getShopList(params).then(response => {
-          response.data && response.data.map(shop => {
-            shop.goods_on = true
-            return shop
-          })
-          this.shopList = response
-        })
       }
     }
   }
