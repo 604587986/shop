@@ -124,9 +124,8 @@
       this.getSkuInfo()
     },
     watch: {
-      productSkuInfo() {
-        this.getSkuInfo()
-      }
+      productSkuInfo: 'getSkuInfo',
+      categoryId: 'getSkuInfoByCategory'
     },
     methods: {
       /** 根据分类id获取规格信息*/
