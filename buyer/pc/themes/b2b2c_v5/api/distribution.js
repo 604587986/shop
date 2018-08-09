@@ -40,19 +40,6 @@ export function getSettlementTotal(params) {
 }
 
 /**
- * 获取与别人相关的结算单信息
- * @param params
- */
-export function getOtherSettlementTotal(params) {
-  return request({
-    url: `http://192.168.2.5:7005/distribution/bill/member/total`,
-    method: Method.GET,
-    needToken: true,
-    params
-  })
-}
-
-/**
  * 获取与我相关的订单信息
  * @param params
  */

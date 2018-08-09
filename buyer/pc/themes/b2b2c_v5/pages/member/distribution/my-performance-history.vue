@@ -75,8 +75,7 @@
         /** 分页请求参数 */
         params: {
           page_no: 1,
-          page_size: 10,
-          member_id: 0
+          page_size: 10
         },
 
         /** 分页信息 */
@@ -94,7 +93,6 @@
       }
     },
     mounted() {
-      this.GET_MyhistoryList()
       this.GET_SettlementTotal()
     },
     methods: {
@@ -106,8 +104,13 @@
 
       /** 获取结算单 */
       GET_SettlementTotal(){
-        API_distribution.getSettlementTotal({member_id: 0}).then(response => {
+        API_distribution.getSettlementTotal({member_id: this.$route.query.member_id || 0}).then(response => {
           this.settlementTotal = response
+          this.params = {
+            ...this.params,
+            bill_id: response.bill_id
+          }
+          this.GET_MyhistoryList()
         })
       },
 
@@ -126,7 +129,7 @@
       /** 查看详情 */
       lookDetails(row) {
         this.$router.push({ path: '/member/distribution/my-performance',
-          query: { member_id: row.member_id, sn: row.sn } })
+          query: { member_id: row.member_id } })
       }
     }
   }

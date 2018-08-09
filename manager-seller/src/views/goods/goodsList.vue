@@ -71,7 +71,12 @@
         <el-table-column label="创建时间" width="220">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus" width="120"/>
+        <el-table-column  label="状态" width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row | marketStatus }}</span>
+            <div class="under-reason" v-if="scope.row.under_message" @click="showUnderReason(scope.row)">(下架原因)</div>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="250" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
@@ -120,10 +125,14 @@
           :span-method="arraySpanMethod"
           :stripe="false">
           <template slot="table-columns">
-            <el-table-column v-for="(item, index) in goodsStockTitle" :label="item.label" :key="index">
+            <el-table-column
+              v-for="(item, index) in goodsStockTitle"
+              v-if="item.prop !== 'sku_id'"
+              :label="item.label"
+              :key="index">
               <template slot-scope="scope">
                 <el-input v-if="item.prop === 'quantity'" v-model="scope.row.quantity"/>
-                <span v-else>{{ scope.row[item.prop] }}</span>
+                <span v-if="item.prop !== 'quantity'" >{{ scope.row[item.prop] }}</span>
               </template>
             </el-table-column>
           </template>
@@ -133,6 +142,9 @@
         <el-button @click="goodsStockshow = false">取 消</el-button>
         <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
       </div>
+    </el-dialog>
+    <el-dialog title="下架原因" :visible.sync="isShowUnderReason" width="17%" >
+      <div align="center">{{ under_reason }}</div>
     </el-dialog>
   </div>
 </template>
@@ -194,11 +206,17 @@
         /** 商品库存显示*/
         goodsStockshow: false,
 
+        /** 是否显示下架原因 */
+        isShowUnderReason: false,
+
+        /** 下架原因 */
+        under_reason: '',
+
         /** 库存商品数量*/
         goodsStocknums: 0,
 
         /** 商品库存列表数据*/
-        goodsStockData: [],
+        goodsStockData: null,
 
         /** 商品库存列表表头数据 */
         goodsStockTitle: [],
@@ -215,6 +233,16 @@
 
         /** 店铺信息 */
         shopInfo: this.$store.getters.shopInfo
+      }
+    },
+    filters: {
+      /** 销售状态格式化 */
+      marketStatus(row) {
+        switch (row.is_auth) {
+          case 0 : return row.market_enable === 1 ? '待审核' : '已下架'
+          case 1 : return row.market_enable === 1 ? '售卖中' : '已下架'
+          case 2 : return row.market_enable === 1 ? '审核拒绝' : '已下架'
+        }
       }
     },
     mounted() {
@@ -256,15 +284,6 @@
       handlePageCurrentChange(page) {
         this.params.page_no = page
         this.GET_GoodsList()
-      },
-
-      /** 销售状态格式化 */
-      marketStatus(row, column, cellValue) {
-        switch (row.is_auth) {
-          case 0 : return row.market_enable === 1 ? '待审核' : '已下架'
-          case 1 : return row.market_enable === 1 ? '售卖中' : '已下架'
-          case 2 : return row.market_enable === 1 ? '审核拒绝' : '已下架'
-        }
       },
 
       /** 搜索事件触发 */
@@ -313,6 +332,13 @@
         this.GET_GoodsList()
       },
 
+      /** 显示下架原因 */
+      showUnderReason(row) {
+        this.isShowUnderReason = false
+        this.isShowUnderReason = true
+        this.under_reason = row.under_message
+      },
+
       GET_GoodsList() {
         this.loading = true
         API_goods.getGoodsList(this.params).then(response => {
@@ -354,7 +380,7 @@
 
       /** 合并数据相同的单元格 */
       arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-        if (columnIndex < this.goodsStockTitle.length - 2) {
+        if (columnIndex < this.goodsStockTitle.length - 3) {
           const _row = this.concactArray[rowIndex][columnIndex]
           const _col = _row > 0 ? 1 : 0
           return {
@@ -369,7 +395,11 @@
         let _isMerge = false
         /** 循环列 先循环第一列 若相同则合并 再循环第二列 依次循环 若不相同 则不合并并终止此列循环开始下一列循环 */
         let _currnetRow = []
-        for (let i = 0, _len = this.goodsStockTitle.length - 2; i < _len; i++) {
+        for (let i = 0, _len = this.goodsStockTitle.length - 3; i < _len; i++) {
+          if (this.goodsStockTitle[i].prop === 'sku_id') {
+            i++
+            continue
+          }
           if (index > 0 && item[this.goodsStockTitle[i].prop] !== this.goodsStockData[index - 1][this.goodsStockTitle[i].prop]) {
             _currnetRow[i] = 1
             _isMerge = true
@@ -396,35 +426,39 @@
           this.goodsStocknums = response.length
           // 构造待发货字段
           if (response.length > 1) {
-            response.forEach((key) => {
-              // 构造待发货字段
-              this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
-              // 构造表头
-              let _skus = key.spec_list.map(elem => {
-                return { label: elem.spec_name, prop: elem.spec_name }
-              })
-              this.goodsStockTitle = _skus.concat([
-                { label: '库存', prop: 'quantity' },
-                { label: '待发货数', prop: 'deliver_goods_quantity' }])
-              // 构造表结构
-              let _skuData = key.spec_list.map(elem => {
-                let _map = new Map().set(elem.spec_name, elem.spec_value)
-                let obj = Object.create(null)
-                for (let [k, v] of _map) {
-                  obj[k] = v
+            this.$nextTick(() => {
+              response.forEach((key) => {
+                // 构造待发货字段
+                this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
+                // 构造表头
+                let _skus = key.spec_list.map(elem => {
+                  return { label: elem.spec_name, prop: elem.spec_name }
+                })
+                this.goodsStockTitle = _skus.concat([
+                  { label: '规格id', prop: 'sku_id' },
+                  { label: '库存', prop: 'quantity' },
+                  { label: '待发货数', prop: 'deliver_goods_quantity' }])
+                // 构造表结构
+                let _skuData = key.spec_list.map(elem => {
+                  let _map = new Map().set(elem.spec_name, elem.spec_value)
+                  let obj = Object.create(null)
+                  for (let [k, v] of _map) {
+                    obj[k] = v
+                  }
+                  return obj
+                })
+                const _key = {
+                  sku_id: key.sku_id,
+                  quantity: key.quantity,
+                  deliver_goods_quantity: key.deliver_goods_quantity
                 }
-                return obj
+                this.goodsStockData.push(Object.assign(_key, ..._skuData))
               })
-              const _key = {
-                quantity: key.quantity,
-                deliver_goods_quantity: key.deliver_goods_quantity
-              }
-              this.goodsStockData.push(Object.assign(_key, ..._skuData))
-            })
-            // 计算表格合并的位置
-            this.concactArray = []
-            this.goodsStockData.forEach((key, index) => {
-              this.concactArrayCom(index, key)
+              // 计算表格合并的位置
+              this.concactArray = []
+              this.goodsStockData.forEach((key, index) => {
+                this.concactArrayCom(index, key)
+              })
             })
           } else {
             response.forEach((key) => {
@@ -475,8 +509,12 @@
     padding: 20px 0;
   }
 
-  /deep/ .el-table td:not(.is-left) {
-    text-align: center;
+  /deep/ .el-table {
+    width: 100%;
+    overflow-x: scroll;
+    & td:not(.is-left) {
+      text-align: center;
+    }
   }
 
   .inner-toolbar {
@@ -550,6 +588,11 @@
     -webkit-box-orient:vertical;
 
     -webkit-line-clamp:2;
+  }
+  /*下架原因*/
+  .under-reason {
+    color: red;
+    cursor: pointer;
   }
 
 </style>
