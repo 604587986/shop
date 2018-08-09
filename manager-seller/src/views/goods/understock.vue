@@ -28,9 +28,7 @@
         <el-table-column label="库存" width="140">
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
         </el-table-column>
-        <el-table-column label="可用库存" width="140">
-          <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
-        </el-table-column>
+        <el-table-column label="可用库存" prop="enable_quantity" width="140"  :formatter="marketQuantity"/>
         <el-table-column label="创建时间" width="280">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate }}</template>
         </el-table-column>
@@ -123,6 +121,10 @@
       /** 销售状态格式化 */
       marketStatus(row, column, cellValue) {
         return row.market_enable === 1 ? '上架' : '下架'
+      },
+
+      marketQuantity(row, column, cellValue) {
+        return `${row.enable_quantity}件`
       },
 
       /** 搜索事件触发 */
