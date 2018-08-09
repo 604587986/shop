@@ -8,7 +8,7 @@
           v-else
           v-model="loading_goods"
           :finished="finished_goods"
-          @load="GET_Collection"
+          @load="onLoad"
         >
           <div v-for="(goods, index) in goodsList" :key="index" class="goods-item">
             <div class="goods-image">
@@ -35,7 +35,7 @@
           v-else
           v-model="loading_shop"
           :finished="finished_shop"
-          @load="GET_Collection"
+          @load="onLoad"
         >
           <div v-for="(shop, index) in shopList" :key="index" class="shop-item">
             <div class="shop-logo">
@@ -95,6 +95,9 @@
         shopList: []
       }
     },
+    mounted() {
+      this.GET_Collection()
+    },
     watch: {
       type: function (newVal) {
         if (newVal === 0 && !this.goodsList.length) {
@@ -106,6 +109,15 @@
       }
     },
     methods: {
+      /** 加载数据 */
+      onLoad() {
+        if (this.type === 0) {
+          this.params_goods.page_no += 1
+        } else {
+          this.params_shop.page_no += 1
+        }
+        this.GET_Collection()
+      },
       /** 删除商品收藏 */
       handleDeleteGoodsColl(goods) {
         this.$confirm('确定要删除这个商品收藏吗？', () => {
@@ -139,7 +151,6 @@
               this.finished_goods = true
             } else {
               this.goodsList.push(...data)
-              this.params_goods.page_no += 1
             }
           }).catch(() => { this.loading = false })
         } else {
@@ -151,7 +162,6 @@
               this.finished_shop = true
             } else {
               this.shopList.push(...data)
-              this.params_shop.page_no += 1
             }
           })
         }

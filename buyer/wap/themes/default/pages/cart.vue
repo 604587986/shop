@@ -3,7 +3,7 @@
     <van-nav-bar
       :left-arrow="!is_home"
       title="购物车"
-      @click-left="$router.go(-1)"
+      @click-left="MixinRouterBack"
     >
       <header-shortcut v-if="!is_home" slot="right"/>
     </van-nav-bar>

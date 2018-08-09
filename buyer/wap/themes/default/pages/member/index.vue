@@ -22,7 +22,7 @@
             <p>{{ nums.shop_collect_count || 0 }}</p>
             <p>收藏的店铺</p>
           </a>
-          <a class="item" href="/member//my-order?order_status=WAIT_COMMENT">
+          <a class="item" href="/member/my-order?order_status=WAIT_COMMENT">
             <p>{{ nums.pending_comment_count || 0}}</p>
             <p>待评论</p>
           </a>
