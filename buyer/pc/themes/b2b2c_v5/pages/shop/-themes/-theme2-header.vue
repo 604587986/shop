@@ -110,7 +110,10 @@
     height: 30px;
     background-color: #333;
     color: #fff;
-    h1 { font-size: 14px }
+    h1 {
+      font-size: 14px;
+      color: #fff;
+    }
     span { color: #dddbdb }
     .item {
       font-size: 12px;

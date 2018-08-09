@@ -114,7 +114,10 @@
     height: 30px;
     background-color: #818181;
     color: #fff;
-    h1 { font-size: 14px }
+    h1 {
+      font-size: 14px;
+      color: #fff;
+    }
     span { color: #dddbdb }
     .item {
       display: inline-block;
