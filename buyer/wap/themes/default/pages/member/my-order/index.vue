@@ -23,7 +23,15 @@
           <div class="info-order-item">
             <p><span>状<i></i>态：</span><em style="color: #3985ff;">{{ order.ship_status_text }}</em></p>
             <p><span>总<i></i>价：</span><em class="price">￥{{ order.order_amount | unitPrice }}</em></p>
-            <button type="button" class="order-btn" style="background-color: #f19325">取消订单</button>
+            <div class="order-btns">
+              <a v-if="order.order_operate_allowable_vo.allow_cancel" @click="handleCancelOrder(order.sn)" style="background-color: #f19325">取消订单</a>
+              <a v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :href="'/member/after-sale/apply?order_sn=' + order.sn" style="background-color: #f19325">取消订单</a>
+              <a v-if="order.order_operate_allowable_vo.allow_rog" @click="handleRogOrder(order.sn)">确认收货</a>
+              <a v-if="order.order_operate_allowable_vo.allow_pay" :href="'/checkout/cashier?order_sn=' + order.sn">订单付款</a>
+              <a v-if="order.order_operate_allowable_vo.allow_comment" :href="'/member/comments?order_sn=' + order.sn">去评论</a>
+              <a v-if="order.order_operate_allowable_vo.allow_apply_service" :href="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</a>
+              <a :href="'./my-order/detail?order_sn=' + order.sn">查看详情</a>
+            </div>
           </div>
           <a :href="'/shop/' + order.seller_id" class="shop-order-item">
             <em>数码家电</em>
@@ -33,9 +41,12 @@
               <a :href="'/goods/' + sku.goods_id">
                 <img :src="sku.goods_image" :alt="sku.name">
               </a>
-              <a :href="'/goods/' + sku.goods_id" style="margin-top: 10px">
+              <a :href="'./my-order/detail?order_sn=' + order.sn" style="margin-top: 10px">
                 <div style="margin-top: 3px" class="sku-name">{{ sku.name }}</div>
                 <p><span class="sku-spec" style="margin-right: 5px">{{ sku | formatterSkuSpec }}</span><span>{{ sku.num }}件</span></p>
+                <p v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" style="margin-top: 5px">
+                  <a :href="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</a>
+                </p>
               </a>
             </div>
           </div>
@@ -160,6 +171,7 @@
   .order-container {
     padding-top: 46px + 44px;
     overflow: hidden;
+    margin-bottom: 20px;
   }
   .order-item {
     margin-top: 10px;
@@ -209,22 +221,25 @@
         }
       }
     }
-    .order-btn {
+    .order-btns {
       position: absolute;
       top: 17px;
       right: 0;
-      display: block;
-      width: 75px;
-      height: 30px;
-      text-align: center;
-      color: #fff;
-      line-height: 30px;
-      z-index: 1;
-      border-radius: 2px;
-      background: #e4393c;
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
-      outline: 0;
-      border: none;
+      a {
+        display: inline-block;
+        width: 75px;
+        height: 30px;
+        margin-right: 5px;
+        text-align: center;
+        color: #fff;
+        line-height: 30px;
+        z-index: 1;
+        border-radius: 2px;
+        background: #e4393c;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        outline: 0;
+        border: none;
+      }
     }
     .shop-order-item {
       display: block;
