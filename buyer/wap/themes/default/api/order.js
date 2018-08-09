@@ -13,6 +13,7 @@ export function getOrderList(params) {
     url: 'trade/orders',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }

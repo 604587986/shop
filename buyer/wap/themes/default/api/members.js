@@ -232,6 +232,7 @@ export function getUserInfo() {
   return request({
     url: `members`,
     method: Method.GET,
+    loading: false,
     needToken: true
   })
 }
