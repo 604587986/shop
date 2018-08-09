@@ -23,9 +23,8 @@
       </div>
 
       <template slot="table-columns">
-        <el-table-column prop="clerk_name" label="店员名称"/>
-        <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="创建时间"/>
-        <el-table-column prop="role_name" label="所属角色"/>
+        <el-table-column prop="uname" label="店员名称"/>
+        <el-table-column prop="role" label="所属角色"/>
         <el-table-column prop="mobile" label="手机号"/>
         <el-table-column prop="email" label="邮箱"/>
         <el-table-column label="店员状态">
@@ -34,16 +33,17 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
+              v-if="scope.row.founder !== 1"
               size="mini"
               type="primary"
               @click="handleEditShopAssistant(scope.$index, scope.row)">编辑</el-button>
             <el-button
-              v-if="scope.row.user_state === 0"
+              v-if="params.disabled === 0 && scope.row.founder !== 1"
               size="mini"
               type="danger"
               @click="handleDeleteShopAssistant(scope.$index, scope.row)">禁用</el-button>
             <el-button
-              v-if="scope.row.user_state === -1"
+              v-if="params.disabled === -1"
               size="mini"
               type="success"
               @click="handleRecoveryShopAssistant(scope.$index, scope.row)">恢复</el-button>
@@ -82,9 +82,10 @@
           <el-select
             v-model="shopAssistantForm.role_id"
             placeholder="请选择角色'"
+            :disabled="shopAssistantForm.founder === 1"
             clearable
           >
-            <el-option label="店主" :value="0">
+            <el-option :label="shopAssistantForm.founder === 1 ? '店主' : '超级店员'" :value="0">
             </el-option>
             <el-option
               v-for="item in rolesOptions"
@@ -208,14 +209,9 @@
         this.dialogVisible = true
       },
 
-      // Andste_TODO 2018/8/8: 编辑功能待适配
       /** 编辑店员 */
       handleEditShopAssistant(index, row) {
-        const params = this.MixinClone(row)
-        this.shopAssistantForm = {
-          ...params,
-          uname: row.clerk_name
-        }
+        this.shopAssistantForm = this.MixinClone(row)
         this.dialogVisible = true
       },
 
