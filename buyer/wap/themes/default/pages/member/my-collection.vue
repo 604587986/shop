@@ -1,7 +1,7 @@
 <template>
   <div id="my-collection">
     <nav-bar title="我的收藏"/>
-    <van-tabs v-model="type">
+    <van-tabs v-model="type" :line-width="100">
       <van-tab title="收藏的商品">
         <empty-member v-if="finished_goods && !goodsList.length">暂无收藏的商品</empty-member>
         <van-list
