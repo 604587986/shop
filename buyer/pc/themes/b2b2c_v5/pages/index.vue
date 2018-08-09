@@ -7,6 +7,7 @@
         <index-card/>
       </div>
     </div>
+    <index-seckill/>
     <div v-if="floorList" class="floor-container">
       <div v-for="(item, index) in floorList" :key="index" :class="'item-' + item.tpl_id" class="floor-item">
         <component
@@ -28,13 +29,16 @@
   export default {
     name: 'index',
     async asyncData() {
-      // 楼层数据
-      const floor = await API_Home.getFloorData()
-      // 焦点图
-      const focus = await API_Home.getFocusPictures()
+      const datas = await Promise.all([
+        API_Home.getFloorData(),
+        API_Home.getFocusPictures()
+      ])
+      const floor = datas[0]
       return {
+        // 楼层数据
         floorList: floor.page_data ? global.JSON.parse(floor.page_data) : [],
-        focusList: focus
+        // 焦点图
+        focusList: datas[1]
       }
     },
     head() {

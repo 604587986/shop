@@ -1,11 +1,15 @@
 
 <template>
   <el-table :data="skuList" style="width: 100%">
-    <el-table-column label="商品名称" class-name="goods-name-img">
+    <el-table-column label="" width="70">
       <template slot-scope="scope">
         <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank">
-          <img :src="scope.row[image]">
+          <img :src="scope.row[image]"  class="goods-image">
         </nuxt-link>
+      </template>
+    </el-table-column>
+    <el-table-column label="商品名称">
+      <template slot-scope="scope">
         <div style="display: inline-block">
           <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row[name] }}</nuxt-link>
           <p v-if="scope.row.spec_list" class="sku-spec">{{ scope.row | formatterSkuSpec }}</p>
@@ -58,20 +62,14 @@
   }
   .el-table /deep/ .el-table__header .cell { text-align: center }
   .el-table /deep/ .el-table__body .cell { text-align: center }
-  .el-table /deep/ .el-table__body .goods-name-img .cell {
-    display: flex;
-    align-items: center;
-    text-align: left;
-    .goods-name {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-    }
-    img {
-      width: 50px;
-      height: 50px;
-      margin-right: 10px;
-    }
+  .goods-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+  .goods-image {
+    width: 50px;
+    height: 50px;
   }
 </style>

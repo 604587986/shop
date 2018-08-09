@@ -18,7 +18,7 @@
                 <div class="next-timeline"><i>{{ timeLine.distance_time === 0 ? '在在抢购' : '即将开始' }}</i></div>
                 <div class="time-timeline">
                   <b class="b-text">{{ timeLine.distance_time === 0 ? '正在抢购' : '即将开始' }}</b>
-                  <b class="b-time">{{ timeLine.distance_time === 0 ? (timeLine.next_distance_time === 0 ? '距结束' : '距下一轮') : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
+                  <b class="b-time">{{ timeLine.distance_time === 0 ? (onlyOne ? '距结束' : '距下一轮') : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
                 </div>
               </div>
             </a>
@@ -108,7 +108,8 @@
         params: {
           page_no: 1,
           page_size: 20
-        }
+        },
+        onlyOne: false
       }
     },
     computed: {
@@ -187,13 +188,15 @@
           response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
           const times = []
           const timesText = []
+          const onlyOne = response.length === 1
+          this.onlyOne = onlyOne
           response.map((item, index) => {
             item.active = index === 0
             if (item.distance_time === 0 && index === 0) {
-              if (item.next_distance_time === 0) {
+              if (onlyOne) {
                 times.push(Foundation.theNextDayTime())
               } else {
-                times.push(item.next_distance_time)
+                times.push(response[1].distance_time)
               }
             } else {
               times.push(item.distance_time)

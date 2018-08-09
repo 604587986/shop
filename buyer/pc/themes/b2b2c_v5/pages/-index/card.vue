@@ -163,6 +163,7 @@
           border-radius: 50%;
           overflow: hidden;
           box-shadow: 3px 6px 25px #c3c3c3;
+          background: #fff;
         }
         img {
           display: block;

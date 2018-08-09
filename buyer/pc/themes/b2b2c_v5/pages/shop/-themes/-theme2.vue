@@ -89,7 +89,7 @@
               <span class="font-shop-en">SHOP-INTRODUCTION</span>
             </div>
           </div>
-          <div class="shop-intro-body" v-html="shop.shop_intro"></div>
+          <div class="shop-intro-body" v-html="shop.shop_desc"></div>
         </div>
       </div>
     </div>
@@ -102,7 +102,6 @@
         <div class="infomation-box">
           <div class="item info">
             <h3>{{ shop.shop_name }}</h3>
-            <!--// Andste_TODO 2018/7/4: 待适配-->
             <p>身份认证：身份已认证</p>
             <p>店铺认证：店铺已认证</p>
             <p>创店时间：{{ shop.shop_createtime | unixToDate('yyyy-MM-dd') }}</p>

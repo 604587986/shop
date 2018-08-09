@@ -39,7 +39,7 @@ service.interceptors.request.use(config => {
   }
 
   // uuid
-  const uuid = Storage.getItem('uuid')
+  const uuid = Storage.getItem('adminUuid')
   config.headers['uuid'] = uuid
 
   /** 设置令牌 */

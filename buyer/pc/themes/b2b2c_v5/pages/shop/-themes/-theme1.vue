@@ -80,7 +80,7 @@
     <div class="shop-intro" id="shop-intro">
       <div class="w">
         <div class="intro-title">店铺简介</div>
-        <div class="intro-body" v-html="shop.shop_intro"></div>
+        <div class="intro-body" v-html="shop.shop_desc"></div>
       </div>
     </div>
     <div class="shop-info" id="shop-info">
@@ -89,7 +89,6 @@
         <div class="item">
           <h3>{{ shop.shop_name }}</h3>
           <div class="information-same">
-            <!--// Andste_TODO 2018/7/4: 待适配-->
             <p>身份认证：身份已认证</p>
             <p>店铺认证：店铺已认证</p>
             <p>创店时间：{{ shop.shop_createtime | unixToDate('yyyy-MM-dd') }}</p>
