@@ -80,6 +80,7 @@
                 v-model="baseInfoForm.brand_id"
                 filterable
                 @change="changeGoodsBrand"
+                clearable
                 placeholder="请选择">
                 <el-option
                   v-for="item in brandList"
