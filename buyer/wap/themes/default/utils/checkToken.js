@@ -76,6 +76,7 @@ export default function checkToken(options) {
         window.__refreshTokenLock__ = request({
           url: `${api.passport}/passport/token`,
           method: 'post',
+          headers: { uuid: Storage.getItem('uuid') },
           data: { refersh_token: refreshToken }
         }).then(response => {
           $store.dispatch('user/setAccessTokenAction', response.accessToken)

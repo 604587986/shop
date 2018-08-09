@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import Storage from '@/utils/storage'
 import md5 from 'js-md5'
 
 /**
@@ -22,7 +23,7 @@ export function login(params) {
  */
 export function logout() {
   return request({
-    url: 'systems/admin-users/logout',
+    url: `systems/admin-users/logout?uid=${Storage.getItem('adminUid')}`,
     method: 'post'
   })
 }

@@ -7,26 +7,24 @@
       <div class="head-box" :style="{backgroundImage: 'url('+ user.face +')'}"></div>
       <div class="head-items">
         <div class="head-img">
-          <en-face :url="user.face"/>
+          <a href="/member/my-profile"><en-face :url="user.face"/></a>
         </div>
         <div class="head-user-name">{{ user.nickname }}</div>
-        <!--<div class="head-user-lvname"></div>-->
         <div class="items">
-          <nuxt-link to="/member/my-collection" class="item">
+          <a href="/member/my-collection" class="item">
             <span>
               <p>{{ nums.goods_collect_count || 0 }}</p>
               <p>收藏的商品</p>
             </span>
-          </nuxt-link>
-          <nuxt-link class="item" to="/member/my-collection?type=shop">
+          </a>
+          <a class="item" href="/member/my-collection?type=shop">
             <p>{{ nums.shop_collect_count || 0 }}</p>
             <p>收藏的店铺</p>
-          </nuxt-link>
-          <nuxt-link class="item" to="/member//my-order?order_status=WAIT_COMMENT">
-            <!--// Andste_TODO 2018/8/7: API缺少字段-->
-            <p>{{ nums.goods_collect_count || 0}}</p>
+          </a>
+          <a class="item" href="/member/my-order?order_status=WAIT_COMMENT">
+            <p>{{ nums.pending_comment_count || 0}}</p>
             <p>待评论</p>
-          </nuxt-link>
+          </a>
         </div>
       </div>
       <div class="member-nav">

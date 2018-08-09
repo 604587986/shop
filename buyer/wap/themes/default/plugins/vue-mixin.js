@@ -33,6 +33,14 @@ Vue.mixin({
     /** 用得比较多，放到mixin里 */
     MixinRequired(message, trigger) {
       return { required: true, message, trigger: trigger || 'blur' }
+    },
+    /** 返回上一页 */
+    MixinRouterBack() {
+      if (window.history.length <= 1) {
+        location.href = '/'
+      } else {
+        this.$router.back()
+      }
     }
   }
 })

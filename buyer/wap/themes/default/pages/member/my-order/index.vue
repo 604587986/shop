@@ -1,88 +1,58 @@
 <template>
   <div id="my-order">
-    <div class="member-nav">
-      <ul class="member-nav-list">
-        <li v-for="item in navList" :key="item.status">
-          <nuxt-link v-if="!item.status" to="./my-order">{{ item.title }}</nuxt-link>
-          <nuxt-link v-else :to="'./my-order?order_status=' + item.status">{{ item.title }}</nuxt-link>
-        </li>
-      </ul>
-    </div>
-    <div class="order-search">
-      <input type="text" v-model="params.goods_name" placeholder="输入订单中商品关键词" @keyup.enter="GET_OrderList">
-      <button type="button" @click="GET_OrderList">搜索</button>
-      <span v-if="orderData">搜到：<em>{{ orderData.data_total }}</em> 笔订单</span>
-      <span v-else>搜索中...</span>
-    </div>
-    <empty-member v-if="!orderData || !orderData.data.length">暂无订单</empty-member>
-    <template v-else>
-      <div class="order-table">
-        <div class="order-table-thead">
-          <span style="width: 450px">商品名称</span>
-          <span style="width: 80px">单价</span>
-          <span style="width: 80px">数量</span>
-          <span style="width: 150px">订单金额</span>
-          <span style="width: 100px">订单状态</span>
-          <span style="width: 110px">订单操作</span>
+    <nav-bar title="我的订单"/>
+    <van-tabs v-model="tabActive" :swipe-threshold="5" @change="handleTabChange">
+      <van-tab title="全部"/>
+      <van-tab title="待付款"/>
+      <van-tab title="待发货"/>
+      <van-tab title="待收货"/>
+      <van-tab title="待评论"/>
+    </van-tabs>
+    <div class="order-container">
+      <empty-member v-if="finished && !orderList.length">暂无订单</empty-member>
+      <van-list
+        v-else
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+      >
+        <div class="order-item" v-for="(order, index) in orderList" :key="index">
+          <div class="sn-order-item">
+            订单号：{{ order.sn }}
+          </div>
+          <div class="info-order-item">
+            <p><span>状<i></i>态：</span><em style="color: #3985ff;">{{ order.ship_status_text }}</em></p>
+            <p><span>总<i></i>价：</span><em class="price">￥{{ order.order_amount | unitPrice }}</em></p>
+            <div class="order-btns">
+              <a v-if="order.order_operate_allowable_vo.allow_cancel" @click="handleCancelOrder(order.sn)" style="background-color: #f19325">取消订单</a>
+              <a v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :href="'/member/after-sale/apply?order_sn=' + order.sn" style="background-color: #f19325">取消订单</a>
+              <a v-if="order.order_operate_allowable_vo.allow_rog" @click="handleRogOrder(order.sn)">确认收货</a>
+              <a v-if="order.order_operate_allowable_vo.allow_pay" :href="'/checkout/cashier?order_sn=' + order.sn">订单付款</a>
+              <a v-if="order.order_operate_allowable_vo.allow_comment" :href="'/member/comments?order_sn=' + order.sn">去评论</a>
+              <a v-if="order.order_operate_allowable_vo.allow_apply_service" :href="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</a>
+              <a :href="'./my-order/detail?order_sn=' + order.sn">查看详情</a>
+            </div>
+          </div>
+          <a :href="'/shop/' + order.seller_id" class="shop-order-item">
+            <em>数码家电</em>
+          </a>
+          <div class="sku-order-item" v-for="(sku, index) in order.sku_list" :key="index">
+            <div class="sku-content">
+              <a :href="'/goods/' + sku.goods_id">
+                <img :src="sku.goods_image" :alt="sku.name">
+              </a>
+              <a :href="'./my-order/detail?order_sn=' + order.sn" style="margin-top: 10px">
+                <div style="margin-top: 3px" class="sku-name">{{ sku.name }}</div>
+                <p><span class="sku-spec" style="margin-right: 5px">{{ sku | formatterSkuSpec }}</span><span>{{ sku.num }}件</span></p>
+                <p v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" style="margin-top: 5px">
+                  <a :href="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</a>
+                </p>
+              </a>
+            </div>
+          </div>
         </div>
-        <ul class="order-table-tbody">
-          <li v-if="orderData" v-for="order in orderData.data" :key="order.order_sn">
-            <div class="order-tbody-title">
-              <span class="pay-type">{{ order.payment_type === 'ONLINE' ? '线上支付' : '货到付款' }}：</span>
-              <span class="price"><em>￥</em>{{ order.order_amount | unitPrice }}</span>
-            </div>
-            <div class="order-tbody-ordersn">
-              <span>订单编号：{{ order.sn }}</span>
-              <span>下单时间：{{ order.create_time | unixToDate }}</span>
-            </div>
-            <div class="order-tbody-item">
-              <div class="order-item-sku">
-                <div class="sku-item" v-for="sku in order.sku_list" :key="sku.sku_id">
-                  <div class="goods-image">
-                    <nuxt-link :to="'/goods/' + sku.goods_id" target="_blank">
-                      <img :src="sku.goods_image" :alt="sku.name">
-                    </nuxt-link>
-                  </div>
-                  <div class="goods-name-box">
-                    <nuxt-link :to="'/goods/' + sku.goods_id" class="goods-name" target="_blank">{{ sku.name }}</nuxt-link>
-                    <p v-if="sku.spec_list" class="sku-spec">{{ sku | formatterSkuSpec }}</p>
-                  </div>
-                  <div class="sku-price">{{ sku.purchase_price | unitPrice('￥') }}</div>
-                  <div class="sku-num">x {{ sku.num }}</div>
-                  <div v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" class="after-sale-btn">
-                    <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
-                  </div>
-                </div>
-              </div>
-              <div class="order-item-price">
-                <strong>{{ order.order_amount | unitPrice('￥') }}</strong>
-                <p>运费（{{ order.shipping_amount | unitPrice('￥') }}）</p>
-                <p>{{ order.payment_text }}</p>
-              </div>
-              <div class="order-item-status">{{ order.order_status_text }}</div>
-              <div class="order-item-operate">
-                <a v-if="order.order_operate_allowable_vo.allow_cancel" href="javascript:;" @click="handleCancelOrder(order.sn)">取消订单</a>
-                <nuxt-link v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :to="'./after-sale/apply?order_sn=' + order.sn">取消订单</nuxt-link>
-                <a v-if="order.order_operate_allowable_vo.allow_rog" href="javascript:;" @click="handleRogOrder(order.sn)">确认收货</a>
-                <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/checkout/cashier?order_sn=' + order.sn">订单付款</nuxt-link>
-                <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/member/comments?order_sn=' + order.sn">去评论</nuxt-link>
-                <nuxt-link v-if="order.order_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</nuxt-link>
-                <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="member-pagination">
-        <el-pagination
-          @current-change="handleCurrentPageChange"
-          :current-page.sync="params.page_no"
-          :page-size="params.page_size"
-          layout="total, prev, pager, next"
-          :total="orderData.data_total">
-        </el-pagination>
-      </div>
-    </template>
+      </van-list>
+    </div>
   </div>
 </template>
 
@@ -90,39 +60,53 @@
   import * as API_Order from '@/api/order'
   export default {
     name: 'my-order-index',
-    mounted() {
-      if (!this.orderData) this.GET_OrderList()
-    },
     data() {
+      const { order_status } = this.$route.query
       return {
+        // 加载中
+        loading: false,
+        // 是否全部已加载完成
+        finished: false,
+        // 当前tab的index
+        tabActive: this.getParam(order_status),
         params: {
           page_no: 1,
           page_size: 5,
-          order_status: this.$route.query.order_status,
-          goods_name: ''
+          order_status
         },
-        orderData: '',
-        navList: [
-          { title: '所有订单', status: '' },
-          { title: '待付款', status: 'WAIT_PAY' },
-          { title: '待发货', status: 'WAIT_SHIP' },
-          { title: '待收货', status: 'WAIT_ROG' },
-          { title: '已取消', status: 'CANCELLED' },
-          { title: '已完成', status: 'COMPLETE' },
-          { title: '待评论', status: 'WAIT_COMMENT' }
-        ]
+        orderList: []
       }
     },
-    watch: {
-      $route: function ({ query }) {
-        this.params.order_status = query.order_status
-        this.GET_OrderList()
-      }
+    mounted() {
+      this.GET_OrderList()
     },
     methods: {
-      /** 当前页数发生改变 */
-      handleCurrentPageChange(cur) {
-        this.params.page_no = cur
+      /** tabIndex发生改变 */
+      handleTabChange(index) {
+        this.finished = false
+        this.orderList = []
+        this.params.page_no = 1
+        this.params.order_status = this.getParam(index)
+        this.GET_OrderList()
+      },
+      /** 根据订单状态获取tabActive */
+      getParam(param) {
+        switch (param) {
+          case 0: return ''
+          case 1: return 'WAIT_PAY'
+          case 2: return 'WAIT_SHIP'
+          case 3: return 'WAIT_ROG'
+          case 4: return 'WAIT_COMMENT'
+          case '': return 0
+          case 'WAIT_PAY': return 1
+          case 'WAIT_SHIP': return 2
+          case 'WAIT_ROG': return 3
+          case 'WAIT_COMMENT': return 4
+        }
+      },
+      /** 加载数据 */
+      onLoad() {
+        this.params.page_no += 1
         this.GET_OrderList()
       },
       /** 取消订单 */
@@ -154,9 +138,15 @@
       },
       /** 获取订单数据 */
       GET_OrderList() {
+        this.loading = true
         API_Order.getOrderList(this.params).then(response => {
-          this.orderData = response
-          this.MixinScrollToTop()
+          this.loading = false
+          const { data } = response
+          if(!data || !data.length) {
+            this.finished = true
+          } else {
+            this.orderList.push(...data)
+          }
         })
       }
     }
@@ -165,201 +155,144 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../../assets/styles/color";
-  .order-search {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%;
-    height: 44px;
-    border-bottom: 1px solid #e7e7e7;
-    em {
-      color: $color-main;
+  /deep/ {
+    .van-nav-bar, .van-tabs {
+      position: fixed;
+      z-index: 10 !important;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
     }
-    input {
-      border: 1px solid #ccc;
-      padding: 5px 15px;
-      height: 15px;
-      width: 150px;
-      color: #333;
-      border-radius: 3px;
-      transition: border .2s ease-out;
-      &:focus {
-        border-color: darken($color-main, 75%);
-      }
-    }
-    button {
-      width: 80px;
-      background-color: #e7e7e7;
-      color: #333;
-      cursor: pointer;
-      line-height: 27px;
-      margin-left: 10px;
-      margin-right: 10px;
-      transition: background-color .2s ease-out;
-      border-radius: 3px;
-      &:hover {
-        background-color: #d3d3d3;
-      }
+    .van-tabs {
+      top: 46px;
     }
   }
-  .order-table {
-    .order-table-thead {
-      display: flex;
-      align-items: center;
-      height: 20px;
-      padding: 8px 0;
-      text-align: center;
-      color: #999;
-    }
-    .order-table-tbody {
-      li {
-        margin-bottom: 20px;
-      }
-    }
-    .order-tbody-title {
-      background-color: #faece0;
-      border: 1px solid #f9dbcc;
-      padding: 9px 0;
-      text-align: left;
-      .pay-type {
-        color: #53514f;
-        font-weight: 600;
-        margin-left: 20px;
-      }
-      .price {
-        color: $color-main;
-        font-size: 14px;
-        font-weight: 600;
-        em {
-          font-size: 12px;
-          font-weight: normal;
-        }
-      }
-    }
-    .order-tbody-ordersn {
-      background-color: #fff;
-      border: 1px solid #f9dbcc;
-      padding: 5px 0;
-      color: #999;
-      height: 20px;
-      font-size: 12px;
-      font-weight: 400;
-      span { margin-left: 20px }
-    }
-    .order-tbody-item {
-      display: flex;
-      align-items: center;
+  .order-container {
+    padding-top: 46px + 44px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .order-item {
+    margin-top: 10px;
+    background-color: #fff;
+    padding: 0 10px;
+    .sn-order-item {
       position: relative;
-      border: 1px solid #f9dbcc;
-      border-top: none;
-      .order-item-sku {
-        width: 470px + 80px + 80px;
+      height: 45px;
+      line-height: 45px;
+      font-size: 14px;
+      color: #333;
+      &::after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+        background-color: #e5e5e5;
+        height: 1px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0 -10px;
       }
-      .sku-item {
-        display: flex;
-        align-items: center;
-        margin-top: 6px;
+    }
+    .info-order-item {
+      display: block;
+      padding: 10px 0;
+      position: relative;
+      &::after {
+        content: "";
+        height: 0;
+        display: block;
+        border-bottom: 1px solid #e5e5e5;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
       }
-      .goods-image {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 86px;
-        height: 86px;
-        a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 66px;
-          height: 66px;
-          text-align: center;
-          border: 1px solid #ccc;
-          background-color: #fff;
+      p {
+        line-height: 20px;
+        font-size: 12px;
+        color: #999;
+        span { color: #666 }
+        i {
+          display: inline-block;
+          width: 24px;
         }
-        img {
-          width: 62px;
-          height: 62px;
-        }
       }
-      .goods-name-box { width: 450px - 86px }
-      .goods-name {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
+    }
+    .order-btns {
+      position: absolute;
+      top: 17px;
+      right: 0;
+      a {
+        display: inline-block;
+        width: 75px;
+        height: 30px;
+        margin-right: 5px;
+        text-align: center;
+        color: #fff;
+        line-height: 30px;
+        z-index: 1;
+        border-radius: 2px;
+        background: #e4393c;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        outline: 0;
+        border: none;
+      }
+    }
+    .shop-order-item {
+      display: block;
+      position: relative;
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+      color: $color-href;
+      em {
+        display: block;
+        position: relative;
+        padding-right: 20px;
         overflow: hidden;
-      }
-      .sku-price { color: $color-main }
-      .sku-price, .sku-num {
-        width: 80px;
-        text-align: center;
-      }
-      .after-sale-btn {
-        width: 60px;
-        a { color: #666 }
-        a:hover { color: $color-main }
-      }
-      .order-item-price, .order-item-status {
-        width: 100px;
-        text-align: center;
-      }
-      .order-item-price {
-        width: 150px;
-        &::before {
-          content: ' ';
-          position: absolute;
-          top: 0;
-          right: 110px + 100px + 150px;
-          width: 1px;
-          height: 100%;
-          background-color: #f9dbcc;
-        }
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-style: normal;
         &::after {
-          content: ' ';
           position: absolute;
-          top: 0;
-          right: 110px + 100px;
-          width: 1px;
-          height: 100%;
-          background-color: #f9dbcc;
-        }
-        strong { color: $color-main }
-      }
-      .order-item-status {
-        &::after {
-          content: ' ';
-          position: absolute;
-          top: 0;
-          right: 110px;
-          width: 1px;
-          height: 100%;
-          background-color: #f9dbcc;
-        }
-      }
-      .order-item-operate {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        width: 110px;
-        a {
+          content: "";
           display: block;
-          width: 80px;
-          height: 30px;
-          line-height: 30px;
-          border: 1px solid #ccc;
-          text-align: center;
-          background: #f9f9f9;
-          color: #666;
-          cursor: pointer;
-          margin-bottom: 5px;
-          &:first-child {
-            margin-top: 5px;
-          };
-          &:hover {
-            background: #eaeaea;
-          }
+          width: 8px;
+          height: 8px;
+          border-top: 1px solid #666;
+          border-left: 1px solid #666;
+          transform-origin: 50%;
+          transform: rotate(135deg);
+          right: 5px;
+          top: 14px;
         }
       }
+    }
+    .sku-order-item {
+      position: relative;
+      margin-top: 10px;
+      .sku-content {
+        display: block;
+        overflow: hidden;
+        img {
+          position: relative;
+          display: block;
+          width: 75px;
+          height: 75px;
+          float: left;
+          margin-right: 10px;
+        }
+      }
+    }
+    .sku-name {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      min-height: 36px;
     }
   }
 </style>

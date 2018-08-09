@@ -159,3 +159,12 @@ input[type="number"]{
 .van-icon.van-nav-bar__arrow {
   color: $color-van-nav-bar-back !important;
 }
+
+/** 大按钮样式 */
+.big-btn {
+  padding: 10px 10px 0 10px;
+  .van-button--large {
+    background-color: $color-main;
+    color: #fff;
+  }
+}

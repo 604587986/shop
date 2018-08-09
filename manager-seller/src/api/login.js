@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import Storage from '@/utils/storage'
 import { api } from '~/ui-domain'
 
 /**
@@ -7,7 +8,7 @@ import { api } from '~/ui-domain'
  */
 export function logout() {
   return request({
-    url: `${api.buyer}/members/logout`,
+    url: `${api.buyer}/members/logout?uid=${Storage.getItem('uid')}`,
     method: 'post'
   })
 }

@@ -1,7 +1,7 @@
 <template>
   <van-nav-bar
     left-arrow
-    @click-left="$router.go(-1)"
+    @click-left="MixinRouterBack"
     v-bind="$attrs"
     v-on="$listeners"
   />
