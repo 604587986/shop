@@ -7,10 +7,9 @@
       <div class="head-box" :style="{backgroundImage: 'url('+ user.face +')'}"></div>
       <div class="head-items">
         <div class="head-img">
-          <en-face :url="user.face"/>
+          <a href="/member/my-profile"><en-face :url="user.face"/></a>
         </div>
         <div class="head-user-name">{{ user.nickname }}</div>
-        <!--<div class="head-user-lvname"></div>-->
         <div class="items">
           <a href="/member/my-collection" class="item">
             <span>
