@@ -210,7 +210,7 @@
           if (forward && /^http/.test(forward)) {
             window.location.href = forward
           } else {
-            this.$router.push({ path: forward || '/' })
+            this.$router.replace({ path: forward || '/' })
           }
         })
       },
