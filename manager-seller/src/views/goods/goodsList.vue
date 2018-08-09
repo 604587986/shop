@@ -125,10 +125,14 @@
           :span-method="arraySpanMethod"
           :stripe="false">
           <template slot="table-columns">
-            <el-table-column v-for="(item, index) in goodsStockTitle" :label="item.label" :key="index">
+            <el-table-column
+              v-for="(item, index) in goodsStockTitle"
+              v-if="item.prop !== 'sku_id'"
+              :label="item.label"
+              :key="index">
               <template slot-scope="scope">
                 <el-input v-if="item.prop === 'quantity'" v-model="scope.row.quantity"/>
-                <span v-else>{{ scope.row[item.prop] }}</span>
+                <span v-if="item.prop !== 'quantity'" >{{ scope.row[item.prop] }}</span>
               </template>
             </el-table-column>
           </template>
@@ -212,7 +216,7 @@
         goodsStocknums: 0,
 
         /** 商品库存列表数据*/
-        goodsStockData: [],
+        goodsStockData: null,
 
         /** 商品库存列表表头数据 */
         goodsStockTitle: [],
@@ -376,7 +380,7 @@
 
       /** 合并数据相同的单元格 */
       arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-        if (columnIndex < this.goodsStockTitle.length - 2) {
+        if (columnIndex < this.goodsStockTitle.length - 3) {
           const _row = this.concactArray[rowIndex][columnIndex]
           const _col = _row > 0 ? 1 : 0
           return {
@@ -391,7 +395,11 @@
         let _isMerge = false
         /** 循环列 先循环第一列 若相同则合并 再循环第二列 依次循环 若不相同 则不合并并终止此列循环开始下一列循环 */
         let _currnetRow = []
-        for (let i = 0, _len = this.goodsStockTitle.length - 2; i < _len; i++) {
+        for (let i = 0, _len = this.goodsStockTitle.length - 3; i < _len; i++) {
+          if (this.goodsStockTitle[i].prop === 'sku_id') {
+            i++
+            continue
+          }
           if (index > 0 && item[this.goodsStockTitle[i].prop] !== this.goodsStockData[index - 1][this.goodsStockTitle[i].prop]) {
             _currnetRow[i] = 1
             _isMerge = true
@@ -418,35 +426,39 @@
           this.goodsStocknums = response.length
           // 构造待发货字段
           if (response.length > 1) {
-            response.forEach((key) => {
-              // 构造待发货字段
-              this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
-              // 构造表头
-              let _skus = key.spec_list.map(elem => {
-                return { label: elem.spec_name, prop: elem.spec_name }
-              })
-              this.goodsStockTitle = _skus.concat([
-                { label: '库存', prop: 'quantity' },
-                { label: '待发货数', prop: 'deliver_goods_quantity' }])
-              // 构造表结构
-              let _skuData = key.spec_list.map(elem => {
-                let _map = new Map().set(elem.spec_name, elem.spec_value)
-                let obj = Object.create(null)
-                for (let [k, v] of _map) {
-                  obj[k] = v
+            this.$nextTick(() => {
+              response.forEach((key) => {
+                // 构造待发货字段
+                this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
+                // 构造表头
+                let _skus = key.spec_list.map(elem => {
+                  return { label: elem.spec_name, prop: elem.spec_name }
+                })
+                this.goodsStockTitle = _skus.concat([
+                  { label: '规格id', prop: 'sku_id' },
+                  { label: '库存', prop: 'quantity' },
+                  { label: '待发货数', prop: 'deliver_goods_quantity' }])
+                // 构造表结构
+                let _skuData = key.spec_list.map(elem => {
+                  let _map = new Map().set(elem.spec_name, elem.spec_value)
+                  let obj = Object.create(null)
+                  for (let [k, v] of _map) {
+                    obj[k] = v
+                  }
+                  return obj
+                })
+                const _key = {
+                  sku_id: key.sku_id,
+                  quantity: key.quantity,
+                  deliver_goods_quantity: key.deliver_goods_quantity
                 }
-                return obj
+                this.goodsStockData.push(Object.assign(_key, ..._skuData))
               })
-              const _key = {
-                quantity: key.quantity,
-                deliver_goods_quantity: key.deliver_goods_quantity
-              }
-              this.goodsStockData.push(Object.assign(_key, ..._skuData))
-            })
-            // 计算表格合并的位置
-            this.concactArray = []
-            this.goodsStockData.forEach((key, index) => {
-              this.concactArrayCom(index, key)
+              // 计算表格合并的位置
+              this.concactArray = []
+              this.goodsStockData.forEach((key, index) => {
+                this.concactArrayCom(index, key)
+              })
             })
           } else {
             response.forEach((key) => {
@@ -497,8 +509,12 @@
     padding: 20px 0;
   }
 
-  /deep/ .el-table td:not(.is-left) {
-    text-align: center;
+  /deep/ .el-table {
+    width: 100%;
+    overflow-x: scroll;
+    & td:not(.is-left) {
+      text-align: center;
+    }
   }
 
   .inner-toolbar {
