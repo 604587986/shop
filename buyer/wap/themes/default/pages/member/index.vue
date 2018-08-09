@@ -1,8 +1,6 @@
 <template>
   <div id="member-index" style="background-color: #f0f2f5">
-    <van-nav-bar>
-      <span slot="title">我的</span>
-    </van-nav-bar>
+    <van-nav-bar title="我的"></van-nav-bar>
     <div class="member-container">
       <div class="head-box" :style="{backgroundImage: 'url('+ user.face +')'}"></div>
       <div class="head-items">
@@ -88,7 +86,6 @@
     },
     mounted() {
       if (Storage.getItem('refreshToken')) {
-        this.getUserData()
         API_Members.getStatisticsNum().then(response => {
           this.nums = response
         })
@@ -111,8 +108,7 @@
         })
       },
       ...mapActions({
-        logout: 'user/logoutAction',
-        getUserData: 'user/getUserDataAction'
+        logout: 'user/logoutAction'
       })
     }
   }

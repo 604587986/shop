@@ -94,7 +94,7 @@ export const actions = {
      */
     if (!_uuid) {
       _uuid = uuidv1()
-      res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie}`])
+      res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie};Path=/`])
     }
     commit('SET_UUID', _uuid)
     // 获取公共数据
