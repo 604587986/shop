@@ -1,59 +1,57 @@
 <template>
   <div id="my-collection">
     <nav-bar title="我的收藏"/>
-    <div class="collection-container">
-      <van-tabs v-model="type">
-        <van-tab title="收藏的商品">
-          <empty-member v-if="finished_goods && !goodsList.length">暂无收藏的商品</empty-member>
-          <van-list
-            v-else
-            v-model="loading_goods"
-            :finished="finished_goods"
-            @load="onLoad"
-          >
-            <div v-for="(goods, index) in goodsList" :key="index" class="goods-item">
-              <div class="goods-image">
-                <a :href="'/goods/' + goods.goods_id">
-                  <img :src="goods.goods_img" :alt="goods.goods_name">
-                </a>
+    <van-tabs v-model="type">
+      <van-tab title="收藏的商品">
+        <empty-member v-if="finished_goods && !goodsList.length">暂无收藏的商品</empty-member>
+        <van-list
+          v-else
+          v-model="loading_goods"
+          :finished="finished_goods"
+          @load="onLoad"
+        >
+          <div v-for="(goods, index) in goodsList" :key="index" class="goods-item">
+            <div class="goods-image">
+              <a :href="'/goods/' + goods.goods_id">
+                <img :src="goods.goods_img" :alt="goods.goods_name">
+              </a>
+            </div>
+            <div class="goods-detail">
+              <a :href="'/goods/' + goods.goods_id" class="goods-detail-name">{{ goods.goods_name }}</a>
+              <div class="goods-detail-price">
+                <span class="price">￥{{ goods.goods_price | unitPrice }}</span>
               </div>
-              <div class="goods-detail">
-                <a :href="'/goods/' + goods.goods_id" class="goods-detail-name">{{ goods.goods_name }}</a>
-                <div class="goods-detail-price">
-                  <span class="price">￥{{ goods.goods_price | unitPrice }}</span>
-                </div>
-                <div class="goods-detail-info"></div>
-                <div class="goods-detai-buttons">
-                  <span class="btn-item delete" @click="handleDeleteGoodsColl(goods)">取消收藏</span>
-                </div>
+              <div class="goods-detail-info"></div>
+              <div class="goods-detai-buttons">
+                <span class="btn-item delete" @click="handleDeleteGoodsColl(goods)">取消收藏</span>
               </div>
             </div>
-          </van-list>
-        </van-tab>
-        <van-tab title="收藏的店铺">
-          <empty-member v-if="finished_shop && !shopList.length">暂无收藏的店铺</empty-member>
-          <van-list
-            v-else
-            v-model="loading_shop"
-            :finished="finished_shop"
-            @load="onLoad"
-          >
-            <div v-for="(shop, index) in shopList" :key="index" class="shop-item">
-              <div class="shop-logo">
-                <img :src="shop.logo" :alt="shop.shop_name">
-              </div>
-              <div class="shop-tools">
-                <span class="shop-name">平台自营</span>
-                <div class="shop-btns">
-                  <a href="javascript:;" @click="handleDeleteShopColl(shop)">取消收藏</a>
-                  <a :href="'/shop/' + shop.shop_id">进入店铺</a>
-                </div>
+          </div>
+        </van-list>
+      </van-tab>
+      <van-tab title="收藏的店铺">
+        <empty-member v-if="finished_shop && !shopList.length">暂无收藏的店铺</empty-member>
+        <van-list
+          v-else
+          v-model="loading_shop"
+          :finished="finished_shop"
+          @load="onLoad"
+        >
+          <div v-for="(shop, index) in shopList" :key="index" class="shop-item">
+            <div class="shop-logo">
+              <img :src="shop.logo" :alt="shop.shop_name">
+            </div>
+            <div class="shop-tools">
+              <span class="shop-name">平台自营</span>
+              <div class="shop-btns">
+                <a href="javascript:;" @click="handleDeleteShopColl(shop)">取消收藏</a>
+                <a :href="'/shop/' + shop.shop_id">进入店铺</a>
               </div>
             </div>
-          </van-list>
-        </van-tab>
-      </van-tabs>
-    </div>
+          </div>
+        </van-list>
+      </van-tab>
+    </van-tabs>
   </div>
 </template>
 
