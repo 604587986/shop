@@ -332,6 +332,7 @@ export function getStatisticsNum() {
   return request({
     url: 'members/statistics',
     method: Method.GET,
+    loading: false,
     needToken: true
   })
 }
