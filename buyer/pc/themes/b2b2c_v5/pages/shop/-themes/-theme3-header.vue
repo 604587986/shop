@@ -5,7 +5,9 @@
       <div class="shop-header-right">
         <div class="shop-nav">
           <div class="item category">
-            <h3 @click="$router.push({ path: '/shop/goods-list?shop_id=' + shop_id })">全部分组</h3>
+            <a :href="'/shop/goods-list?shop_id=' + shop_id">
+              <h3>全部分组</h3>
+            </a>
             <div class="category-box">
               <div class="inner-category-box">
                 <div v-for="cate in categorys" :key="cate.shop_cat_id" class="category-item">

@@ -33,7 +33,8 @@
     </div>
     <div class="goods-container">
       <div class="inner w">
-        <ul class="goods-list">
+        <div v-if="goods && !goods.data.length" style="text-align: center;line-height: 100px">暂无商品</div>
+        <ul v-esle class="goods-list">
           <li v-for="goods in goods.data" :key="goods.goods_id" class="goods-item">
             <div class="goods-image">
               <a :href="'/goods/' + goods.goods_id">
