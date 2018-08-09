@@ -10,7 +10,8 @@ const qs = require('qs')
 // 创建axios实例
 const service = axios.create({
   timeout: 8000,     // 请求超时时间
-  baseURL: api.buyer // 买家端API
+  baseURL: api.buyer, // 买家端API
+  paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
 })
 
 // request拦截器
@@ -21,9 +22,6 @@ service.interceptors.request.use(config => {
   const is_json = config.headers['Content-Type'] === 'application/json'
   if (is_put_post && is_json) {
     config.data = JSON.stringify(config.data)
-  }
-  if (is_put_post && !is_json) {
-    config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   /** 配置全屏加载 */
   if (loading !== false) {
@@ -46,7 +44,7 @@ service.interceptors.request.use(config => {
   if (accessToken && config.needToken) {
     // 如果前台为开发环境，后台API，则需要替换为下面的代码
     // process.env.NODE_ENV === 'development', 'production'
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'production') {
       const uid = Storage.getItem('uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
