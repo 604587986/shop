@@ -20,8 +20,12 @@ service.interceptors.request.use(config => {
   // 如果是put/post请求，用qs.stringify序列化参数
   const is_put_post = config.method === 'put' || config.method === 'post'
   const is_json = config.headers['Content-Type'] === 'application/json'
+  const is_file = config.headers['Content-Type'] === 'multipart/form-data'
   if (is_put_post && is_json) {
     config.data = JSON.stringify(config.data)
+  }
+  if (is_put_post && !is_file) {
+    config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   /** 配置全屏加载 */
   if (loading !== false) {
