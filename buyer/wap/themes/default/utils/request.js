@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { api } from '~/ui-domain'
+import { Toast } from 'vant'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
 import md5 from 'js-md5'
@@ -28,13 +29,11 @@ service.interceptors.request.use(config => {
     config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   /** 配置全屏加载 */
-  if (loading !== false) {
-    // config.loading = Loading.service({
-    //   fullscreen: true,
-    //   background: 'rgba(255,255,255,.3)',
-    //   spinner: 'icon-custom-loading',
-    //   lock: false
-    // })
+  if (process.client && loading !== false) {
+    config.loading = Toast.loading({
+      mask: true,
+      message: '加载中...'
+    })
   }
   
   // uuid
@@ -103,7 +102,8 @@ const closeLoading = (target) => {
   if (!target.config || !target.config.loading) return true
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      target.config.loading.close()
+      // target.config.loading.close()
+      Toast.clear()
       resolve()
     }, 200)
   })
