@@ -22,7 +22,9 @@
     <div class="shop-nav">
       <div class="w">
         <div class="item category">
-          <h1 @click="$router.push({ path: '/shop/goods-list?shop_id=' + shop_id })">全部分组</h1>
+          <a :href="'/shop/goods-list?shop_id=' + shop_id">
+            <h1>全部分组</h1>
+          </a>
           <div class="category-box">
             <div class="inner-category-box">
               <div v-for="cate in categorys" :key="cate.shop_cat_id" class="category-item">
@@ -112,7 +114,10 @@
     height: 30px;
     background-color: #818181;
     color: #fff;
-    h1 { font-size: 14px }
+    h1 {
+      font-size: 14px;
+      color: #fff;
+    }
     span { color: #dddbdb }
     .item {
       display: inline-block;
