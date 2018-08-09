@@ -18,7 +18,7 @@
           </el-autocomplete>
           <el-checkbox v-if="$index === 0 " v-model="checkedImage" @change="handleChangeImage">添加规格图片</el-checkbox>
           <div class="empty"></div>
-          <el-button type="danger"   size="mini" @click="handleCloseSkuItem($index)" icon="el-icon-delete"></el-button>
+          <el-button type="danger" size="mini" @click="handleCloseSkuItem($index)" icon="el-icon-delete"></el-button>
         </el-form-item>
         <el-form-item label="规格值：" prop="spec_value">
           <!--规格值文本列表-->
@@ -51,10 +51,16 @@
                 :on-progress="upLoading"
                 :before-upload="beforeImgUpload">
                 <img v-show="val.spec_image" :src="val.spec_image" class="sku-image" @click="handleClickImg(index)">
+                <el-progress
+                  type="circle"
+                  class="progress-circle"
+                  v-show="activeSkuValIndex === index && isShowProgress"
+                  :percentage="currentPercent"
+                  :width="100"/>
                 <span class="el-upload-img-actions" v-show="val.spec_image">
                   <i class="el-icon-delete" @click.stop="handleDeleteImg(index)"></i>
                 </span>
-                <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon"  @click="handleClickImg(index)"></i>
+                <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon" @click="handleClickImg(index)"></i>
               </el-upload>
             </div>
           </div>
@@ -116,7 +122,16 @@
         activeSkuVal: {},
 
         /** 开始上传为true */
-        upLoadStatus: false
+        upLoadStatus: false,
+
+        /** 是否显示进度条 */
+        isShowProgress: false,
+
+        /** 当前百分比 */
+        currentPercent: 0,
+
+        /** 定时器 */
+        timer: null
       }
     },
     mounted() {
@@ -448,6 +463,7 @@
 
       /** 点击已上传的图片 或者 i标签 */
       handleClickImg(index) {
+        this.currentPercent = 0
         this.activeSkuValIndex = index
       },
 
@@ -466,11 +482,27 @@
       /** 文件正在上传时的钩子 */
       upLoading(event, file, fileList) {
         this.upLoadStatus = true
+        this.timer = setInterval(() => {
+          if (this.currentPercent < 100) {
+            this.currentPercent += 5
+          } else {
+            clearInterval(this.timer)
+            this.timer = null
+            setTimeout(() => {
+              this.isShowProgress = false
+            }, 500)
+          }
+        }, 30)
+        this.isShowProgress = true
       },
 
       /** 文件上传成功之后的钩子 */
       getImgUrl(response, file, fileList) {
         this.upLoadStatus = false
+        clearInterval(this.timer)
+        this.timer = null
+        this.currentPercent = 100
+        this.isShowProgress = false
         /** 更新skuInfo数据 */
         if (this.activeSkuItemIndex === 0) {
           let _arr = cloneObj(this.skuInfo[this.activeSkuItemIndex])
@@ -583,6 +615,18 @@
     position: relative;
     width: 120px;
     height: 120px;
+    /*圆形进度条*/
+    .progress-circle {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      left: 10px;
+      top: 10px;
+      z-index: 5000;
+      & > div.el-progress__text {
+        color: #fff;
+      }
+    }
     /** 为规格图添加删除功能 */
     .el-upload-img-actions {
       position: absolute;
@@ -608,7 +652,6 @@
       opacity: 1;
     }
   }
-
 
   /*禁止编辑时的样式覆盖*/
   /deep/ input.el-input.is-disabled {
