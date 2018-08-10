@@ -87,7 +87,7 @@
         <h2>关于店铺</h2>
         <h3>Welcome to my shop I wish you a happy shopping</h3>
       </div>
-      <div class="intro-body" v-html="shop.shop_desc"></div>
+      <div class="intro-body" v-html="shop.shop_desc || '暂无简介'"></div>
     </div>
     <div class="shop-info">
       <div class="info-title">关于本店</div>
