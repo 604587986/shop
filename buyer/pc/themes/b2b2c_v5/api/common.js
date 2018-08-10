@@ -6,7 +6,7 @@ import request, { Method } from '@/utils/request'
 import Storage from '@/utils/storage'
 import { api, api_dev } from '~/ui-domain'
 
-const urlPrefix = process.server ? (api_dev.buyer + '/') : ''
+const urlPrefix = process.server ? (api_dev.base + '/') : ''
 
 /**
  * 获取图片验证码URL
