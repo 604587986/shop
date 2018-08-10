@@ -6,9 +6,6 @@ import request, { Method } from '@/utils/request'
 import Storage from '@/utils/storage'
 import { api, api_dev } from '~/ui-domain'
 
-const isServer = process.server
-const urlPrefix = `${isServer ? (api_dev.buyer + '/') : ''}`
-
 /**
  * 获取图片验证码URL
  * @param uuid
@@ -24,7 +21,7 @@ export function getValidateCodeUrl(uuid, type) {
  */
 export function getSiteData() {
   return request({
-    url: `${urlPrefix}/site-show`,
+    url: `${api_dev.base}/site-show`,
     method: Method.GET
   })
 }
