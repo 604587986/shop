@@ -55,7 +55,7 @@ const user = {
     REMOVE_USER: (state) => {
       state.user = ''
       Storage.removeItem('adminUser', { domain: domain.cookie })
-      Storage.removeItem('adminUid', { domain: domain.cookir })
+      Storage.removeItem('adminUid', { domain: domain.cookie })
     },
     /**
      * 移除访问令牌
