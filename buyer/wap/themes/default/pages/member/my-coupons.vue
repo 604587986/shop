@@ -1,44 +1,34 @@
 <template>
   <div id="my-coupons">
-    <div class="member-nav">
-      <ul class="member-nav-list">
-        <li class="active">
-          <a href="./my-coupons">我的优惠券</a>
-        </li>
-      </ul>
-    </div>
+    <nav-bar title="我的优惠券"/>
+    <van-tabs v-model="tabActive" :line-width="100">
+      <van-tab title="可用优惠券"/>
+      <van-tab title="不可用优惠券"/>
+    </van-tabs>
     <div class="coupons-container">
-      <ul v-if="coupons && coupons.data_total" class="coupon-list">
-        <li v-for="(coupon, index) in coupons.data" :key="index" class="coupon-item">
-          <div class="c-type">
-            <div class="c-money">
-              <span>￥</span>
-              <strong>{{ coupon.coupon_price | unitPrice }}</strong>
+      <empty-member v-if="finished && !couponsList.length">暂无优惠券</empty-member>
+      <van-list
+        v-else
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+      >
+        <div class="coupon-item content-unavailable show" v-for="(coupon, index) in couponsList" :key="index">
+          <div class="inner-coupon" :class="[tabActive === 1 && 'unavailable']">
+            <div class="par">
+              <p>{{ coupon.title }}</p>
+              <sub class="sign">￥</sub><span>{{ coupon.coupon_price | unitPrice }}</span>
+              <p>订单满{{ coupon.coupon_threshold_price | unitPrice }}元</p>
             </div>
-            <div class="c-limit">
-              满￥{{ coupon.coupon_threshold_price | unitPrice }}可用
+            <div class="copy">副券
+              <p>{{ coupon.start_time | unixToDate('yyyy-MM-dd') }}</p>
+              <p>至</p>
+              <p>{{ coupon.end_time | unixToDate('yyyy-MM-dd') }}</p>
             </div>
-            <div class="c-time">
-              {{ coupon.start_time | unixToDate('yyyy-MM-dd') }} - {{ coupon.end_time | unixToDate('yyyy-MM-dd') }}
-            </div>
+            <i></i>
           </div>
-          <div class="c-othr">
-            <nuxt-link :to="'/shop/' + coupon.seller_id" class="use-btn">立即使用</nuxt-link>
-          </div>
-        </li>
-      </ul>
-      <empty-member v-else>暂无优惠券</empty-member>
-      <span class="clr"></span>
-      <div class="member-pagination" v-if="coupons">
-        <el-pagination
-          v-if="coupons.data_total"
-          @current-change="handleCurrentPageChange"
-          :current-page.sync="params.page_no"
-          :page-size="params.page_size"
-          layout="total, prev, pager, next"
-          :total="coupons.data_total">
-        </el-pagination>
-      </div>
+        </div>
+      </van-list>
     </div>
   </div>
 </template>
@@ -54,26 +44,45 @@
     },
     data() {
       return {
-        coupons: '',
+        tabActive: 0,
+        couponsList: [],
+        loading: false,
+        finished: false,
         params: {
           page_no: 1,
-          page_size: 8
+          page_size: 10,
+          status: 1
         }
       }
     },
     mounted() {
       this.GET_Coupons()
     },
+    watch: {
+      tabActive(newVal) {
+        this.params.status = newVal === 0 ? 1 : 2
+        this.finished = false
+        this.params.page_no = 1
+        this.couponsList = []
+        this.GET_Coupons()
+      }
+    },
     methods: {
       /** 当前页数发生改变 */
-      handleCurrentPageChange(page) {
-        this.params.page_no = page
+      onLoad(page) {
+        this.params.page_no += 1
         this.GET_Coupons()
       },
       GET_Coupons() {
+        this.loading = true
         API_Members.getCoupons(this.params).then(response => {
-          this.coupons = response
-          this.MixinScrollToTop()
+          this.loading = false
+          const { data } = response
+          if (!data || !data.length) {
+            this.finished = true
+          } else {
+            this.couponsList.push(...data)
+          }
         })
       }
     }
@@ -81,91 +90,117 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
+  /deep/ {
+    .van-nav-bar, .van-tabs {
+      position: fixed;
+      z-index: 10 !important;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+    }
+    .van-tabs {
+      top: 46px;
+    }
+  }
   .coupons-container {
-    padding-top: 10px;
+    padding-top: 46px + 44px;
+    overflow: hidden;
   }
   .coupon-item {
-    float: left;
     position: relative;
-    width: 227px;
-    margin: 0 20px 20px 0;
-    &:nth-child(4n) {
-      margin-right: 0;
+    width: 100%;
+    list-style: none;
+    font-family: "Microsoft YaHei", 'Source Code Pro', Menlo, Consolas, Monaco, monospace;
+  }
+  .inner-coupon {
+    position: relative;
+    padding: 0 10px;
+    height: 98px;
+    margin: 10px;
+    overflow: hidden;
+    background: $color-main;
+    background: radial-gradient(transparent 0, transparent 5px, $color-main 5px);
+    background-size: 15px 15px;
+    background-position: 9px 3px;
+    &.unavailable {
+      background: #7a7a7a;
+      background: radial-gradient(rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 5px, #7a7a7a 5px);
+      background-size: 15px 15px;
+      background-position: 9px 3px;
+      &::before {
+        background-color: #7a7a7a;
+      }
     }
-    .c-type {
-      position: relative;
-      background-color: #ff5e5e;
-      height: 125px;
-      padding-top: 30px;
-      color: #fff;
-      overflow: hidden;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 10px;
+      right: 10px;
+      z-index: -1;
+      background-color: $color-main;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      right: 10px;
+      bottom: 10px;
+      box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
+      z-index: -2;
+    }
+    .par {
+      float: left;
+      padding: 12px 12px;
+      width: 53%;
+      border-right: 2px dashed rgba(255, 255, 255, .3);
+      text-align: left;
+       p {
+         color: #fff;
+         font-size: 12px;
+         line-height: 12px;
+       }
+      sub {
+        position: relative;
+        top: -2px;
+        color: rgba(255, 255, 255, .8);
+      }
+      span {
+        font-size: 30px;
+        color: #fff;
+        margin-right: 5px;
+        line-height: 45.5px;
+      }
+      .sign {
+        font-size: 34px;
+      }
+    }
+    .copy {
+      display: inline-block;
+      padding: 15px 10px;
+      width: 30%;
+      font-size: 25px;
+      color: rgb(255, 255, 255);
       text-align: center;
-      background-image:
-        -webkit-gradient(linear, 50% 0, 0 100%, from(transparent),
-          color-stop(.5,transparent),
-          color-stop(.5,#f9f9f9),
-          to(#f9f9f9)),
-        -webkit-gradient(linear,50% 0,100% 100%,from(transparent),
-          color-stop(.5,transparent),
-          color-stop(.5,#f9f9f9),
-          to(#f9f9f9));
-      background-size:12px 6px;
-      background-repeat:repeat-x;
-      background-position:0 100%;
-      &:before, &:after {
-        content: ' ';
-        position: absolute;
-        top: 50%;
-        margin-top: -35px;
-        width: 40px;
-        height: 40px;
-        background-color: #fff;
-        border-radius: 100%;
-      }
-      &:before { left: -20px }
-      &:after { right: -20px }
-    }
-    .c-money {
-      span { font-size: 18px }
-      strong {
-        line-height: 45px;
-        font-size: 40px;
-        font-family: Arial;
-        margin-left: 3px;
+      line-height: initial;
+      p {
+        font-size: 12px;
+        color: #fff;
+        line-height: 13px;
       }
     }
-    .c-limit {
-      height: 40px;
-      line-height: 22px;
-      overflow: hidden;
-      margin: 0 5px 5px;
-    }
-    .c-time {
-      font-family: Verdana;
-    }
-    .c-othr {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 75px;
-      background-color: #fff;
-      box-shadow: 0 2px 10px 0 #ccc;
-      .use-btn {
-        display: block;
-        width: 100px;
-        line-height: 28px;
-        text-align: center;
-        color: #ff5d5e;
-        border-radius: 15px;
-        cursor: pointer;
-        border: 1px solid #ff6966;
-        transition: all .2s ease;
-        font-weight: 500;
-        &:hover {
-          background-color: #ff6966;
-          color: #fff;
-        }
-      }
+    i {
+      position: absolute;
+      left: 20%;
+      top: 45px;
+      height: 190px;
+      width: 390px;
+      background-color: rgba(255, 255, 255, .15);
+      transform: rotate(-30deg);
     }
   }
 </style>

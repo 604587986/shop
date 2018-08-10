@@ -212,7 +212,7 @@
           } else {
             this.$router.replace({ path: forward || '/' })
           }
-        })
+        }).catch(this.handleChangeCaptchalUrl)
       },
       /** 获取第三方登录链接 */
       getConnectUrl: API_Connect.getConnectUrl,

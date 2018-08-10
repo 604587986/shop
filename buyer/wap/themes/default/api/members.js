@@ -13,6 +13,7 @@ export function getCoupons(params) {
     url: 'members/coupon',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -52,6 +53,7 @@ export function getPointsData(params) {
     url: 'members/points',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -66,6 +68,7 @@ export function getComments(params) {
     url: 'members/comments',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -94,6 +97,7 @@ export function getConsultations(params) {
     url: 'members/asks',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
