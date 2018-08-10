@@ -202,3 +202,12 @@ input[type="number"]{
   background: url("../images/loading.gif") no-repeat;
   background-size: 100% 100%;
 }
+
+/** 懒加载 */
+img[lazy=loading] {
+  background-color: #fff !important;
+  background-image: url("../images/icon-place-loading.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50%;
+}
