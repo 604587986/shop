@@ -16,11 +16,15 @@
         <div class="coupon-item content-unavailable show" v-for="(coupon, index) in couponsList" :key="index">
           <div class="inner-coupon" :class="[tabActive === 1 && 'unavailable']">
             <div class="par">
-              <p>优惠券1</p>
-              <sub class="sign">￥</sub><span>10.00</span>
-              <p>订单满100.00元</p>
+              <p>{{ coupon.title }}</p>
+              <sub class="sign">￥</sub><span>{{ coupon.coupon_price | unitPrice }}</span>
+              <p>订单满{{ coupon.coupon_threshold_price | unitPrice }}元</p>
             </div>
-            <div class="copy">副券<p>2018-07-15<br>2018-07-31</p></div>
+            <div class="copy">副券
+              <p>{{ coupon.start_time | unixToDate('yyyy-MM-dd') }}</p>
+              <p>至</p>
+              <p>{{ coupon.end_time | unixToDate('yyyy-MM-dd') }}</p>
+            </div>
             <i></i>
           </div>
         </div>
@@ -186,6 +190,7 @@
       p {
         font-size: 12px;
         color: #fff;
+        line-height: 13px;
       }
     }
     i {
