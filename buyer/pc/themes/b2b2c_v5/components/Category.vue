@@ -19,9 +19,7 @@
                   v-if="_index < 2"
                   :key="_item.catrgory_id"
                   :href="'/goods?category=' + _item.category_id"
-                >
-                  {{ _item.name }}
-                </a>
+                >{{ _item.name }}</a>
               </template>
             </span>
           </div>
@@ -56,10 +54,10 @@
                 <div class="item-layer-promotions"></div>
               </div>
             </div>
-            <div class="item-layer-right">
+            <div class="item-layer-right" v-lazy-container="{ selector: 'img' }">
               <div v-for="(brand, index) in item.brand_list" v-if="index < 20" :key="index" class="brand-item">
                 <a :href="'/goods?brand=' + brand.brand_id">
-                  <img :src="brand.logo" :alt="brand.name">
+                  <img :data-src="brand.logo" :alt="brand.name">
                 </a>
               </div>
             </div>
@@ -79,9 +77,7 @@
     data() {
       let unfold = this.$route.path === '/'
       if (this.initUnfold === false) unfold = false
-      return {
-        unfold
-      }
+      return { unfold }
     },
     watch: {
       $route() {
@@ -97,6 +93,7 @@
     methods: {
       /** 鼠标移入 */
       handleCategoryMouseover() {
+        this.$Lazyload.lazyLoadHandler()
         if (this.always_unfold && this.initUnfold !== false) return
         this.unfold = true
       },
