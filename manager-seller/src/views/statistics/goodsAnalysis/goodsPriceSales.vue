@@ -71,10 +71,8 @@
         tableHeight: document.body.clientHeight / 2
       }
     },
-    created() {
-      this.GET_PriceStatistics()
-    },
     mounted() {
+      this.GET_PriceStatistics()
       window.onresize = this.countTableHeight
       this.$nextTick(() => {
         this.sesalChart = this.$echarts.init(document.getElementById('trafficStatistics'))

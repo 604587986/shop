@@ -104,11 +104,9 @@
         tableHeight: document.body.clientHeight / 2
       }
     },
-    created() {
+    mounted() {
       this.GET_OrderTotaltChart()
       this.GET_OrderGoodsData()
-    },
-    mounted() {
       window.onresize = this.countTableHeight
       this.$nextTick(() => {
         this.orderAmountChart = this.$echarts.init(document.getElementById('orderAmount'))

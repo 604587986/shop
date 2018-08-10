@@ -54,10 +54,8 @@
         tableHeight: document.body.clientHeight * 0.82
       }
     },
-    created() {
-      this.GET_RegionalAnalysis()
-    },
     mounted() {
+      this.GET_RegionalAnalysis()
       window.onresize = this.countTableHeight
       this.$nextTick(() => {
         this.regionalAnalysisMap = this.$echarts.init(document.getElementById('regionalAnalysisMap'))
