@@ -58,7 +58,7 @@
         },
 
         /** 分类请求api */
-        api: `${process.env.SELLER_API}/goods/category/seller/children`,
+        api: 'seller/goods/category/seller/children',
 
         /** 映射属性 */
         props: {

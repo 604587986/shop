@@ -119,6 +119,7 @@
 <script>
   import * as API_express from '@/api/expressMould'
   import { RegExp } from '~/ui-utils'
+  import { api } from '~/ui-domain'
   import { LogisticsCompany } from './components'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
 
@@ -175,7 +176,7 @@
         /** 地区选择器 */
         areaDialog: false,
 
-        areaApi: `${process.env.BASE_API}/regions/depth/3`,
+        areaApi: `${api.base}/regions/depth/3`,
 
         /** 地址选择器 映射属性 */
         props: {

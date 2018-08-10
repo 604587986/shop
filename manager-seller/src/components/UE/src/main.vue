@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  import { api } from '~/ui-domain'
   import '../../../../static/UE/ueditor.config'
   import '../../../../static/UE/ueditor.all'
   import '../../../../static/UE/lang/zh-cn/zh-cn'
@@ -30,7 +31,7 @@
       config: {
         type: Object,
         default: () => ({
-          serverUrl: `${process.env.BASE_API}/ueditor/`
+          serverUrl: `${api.base}/ueditor/`
         })
       }
     },

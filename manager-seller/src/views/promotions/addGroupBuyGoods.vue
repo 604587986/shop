@@ -130,7 +130,7 @@
     <en-goods-picker
       type="seller"
       :show="showDialog"
-      :api="goods_api"
+      :api="goodsApi"
       :categoryApi="categoryApi"
       :limit="maxsize"
       @confirm="refreshFunc"
@@ -249,10 +249,10 @@
         maxsize: 1,
 
         /** 商品选择器列表api*/
-        goods_api: `${process.env.SELLER_API}/goods`,
+        goodsApi: 'seller/goods',
 
         /** 商城分类api */
-        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
+        categoryApi: 'seller/goods/category/0/children',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
