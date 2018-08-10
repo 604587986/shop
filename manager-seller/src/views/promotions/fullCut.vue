@@ -628,6 +628,11 @@
             this.is_free_ship = false
             this.is_send_bonus = false
             this.is_send_gift = false
+            this.changeDiscount(this.is_discount)
+            this.changeReduceCash(this.is_full_minus)
+            this.changeIntegral(this.isIntegral)
+            this.isChangeCoupon(this.is_send_bonus)
+            this.isChangeGift(this.is_send_gift)
         }
       },
 
@@ -817,6 +822,11 @@
         this.is_free_ship = false
         this.is_send_bonus = false
         this.is_send_gift = false
+        this.changeDiscount(this.is_discount)
+        this.changeReduceCash(this.is_full_minus)
+        this.changeIntegral(this.isIntegral)
+        this.isChangeCoupon(this.is_send_bonus)
+        this.isChangeGift(this.is_send_gift)
       },
 
       /** 是否打折 */
