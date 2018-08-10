@@ -36,7 +36,7 @@ export function editFloor(client_type, page_type, params) {
  */
 export function getFocus(client_type) {
   return request({
-    url: 'focus-pictures',
+    url: 'admin/focus-pictures',
     method: 'get',
     params: { client_type }
   })
@@ -48,7 +48,7 @@ export function getFocus(client_type) {
  */
 export function addFocus(params) {
   return request({
-    url: 'focus-pictures',
+    url: 'admin/focus-pictures',
     method: 'post',
     data: params
   })

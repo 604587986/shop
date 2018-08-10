@@ -9,7 +9,7 @@ import request from '@/utils/request'
  */
 export function getStaticPageAddress() {
   return request({
-    url: 'page-create/input',
+    url: 'admin/page-create/input',
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getStaticPageAddress() {
  */
 export function saveStaticPageAddress(params) {
   return request({
-    url: 'page-create/save',
+    url: 'admin/page-create/save',
     method: 'post',
     data: params
   })
@@ -32,7 +32,7 @@ export function saveStaticPageAddress(params) {
  */
 export function createStaticPage(params) {
   return request({
-    url: `page-create/create`,
+    url: `admin/page-create/create`,
     method: 'post',
     data: params
   })

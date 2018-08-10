@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getMenusChildren(parent_id = 0) {
   return request({
-    url: `systems/menus/${parent_id}/children`,
+    url: `admin/systems/menus/${parent_id}/children`,
     method: 'get',
     params: { parent_id }
   })
@@ -22,7 +22,7 @@ export function getMenusChildren(parent_id = 0) {
  */
 export function addMenu(params) {
   return request({
-    url: 'systems/menus',
+    url: 'admin/systems/menus',
     method: 'post',
     data: params
   })
@@ -35,7 +35,7 @@ export function addMenu(params) {
  */
 export function editMenu(id, params) {
   return request({
-    url: `systems/menus/${id}`,
+    url: `admin/systems/menus/${id}`,
     method: 'put',
     data: params
   })
@@ -47,7 +47,7 @@ export function editMenu(id, params) {
  */
 export function deleteMenu(id) {
   return request({
-    url: `systems/menus/${id}`,
+    url: `admin/systems/menus/${id}`,
     method: 'delete'
   })
 }

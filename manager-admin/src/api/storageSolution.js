@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getStorageSolutionList(params) {
   return request({
-    url: 'systems/uploaders',
+    url: 'admin/systems/uploaders',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getStorageSolutionList(params) {
  */
 export function editStorageSolution(bean, params) {
   return request({
-    url: `systems/uploaders/${bean}`,
+    url: `admin/systems/uploaders/${bean}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -38,7 +38,7 @@ export function editStorageSolution(bean, params) {
  */
 export function getStorageSolutionConfig(code) {
   return request({
-    url: `systems/uploaders/${code}/setting`,
+    url: `admin/systems/uploaders/${code}/setting`,
     method: 'get'
   })
 }
@@ -50,7 +50,7 @@ export function getStorageSolutionConfig(code) {
  */
 export function openStorageSolutionById(bean) {
   return request({
-    url: `systems/uploaders/${bean}/open`,
+    url: `admin/systems/uploaders/${bean}/open`,
     method: 'put'
   })
 }

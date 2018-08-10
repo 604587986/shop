@@ -10,7 +10,7 @@ import md5 from 'js-md5'
 export function login(params) {
   params.password = md5(params.password)
   return request({
-    url: 'systems/admin-users/login',
+    url: 'admin/systems/admin-users/login',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function login(params) {
  */
 export function logout() {
   return request({
-    url: `systems/admin-users/logout?uid=${Storage.getItem('adminUid')}`,
+    url: `admin/systems/admin-users/logout?uid=${Storage.getItem('adminUid')}`,
     method: 'post'
   })
 }
@@ -35,7 +35,7 @@ export function logout() {
  */
 export function getUserRolesPermissions(role_id) {
   return request({
-    url: `systems/roles/${role_id}/checked`,
+    url: `admin/systems/roles/${role_id}/checked`,
     method: 'get'
   })
 }

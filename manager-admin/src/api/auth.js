@@ -11,7 +11,7 @@ import md5 from 'js-md5'
  */
 export function getAdministratorList(params) {
   return request({
-    url: 'systems/manager/admin-users',
+    url: 'admin/systems/manager/admin-users',
     method: 'get',
     loaidng: false,
     params
@@ -24,7 +24,7 @@ export function getAdministratorList(params) {
  */
 export function addAdministrator(params) {
   return request({
-    url: 'systems/manager/admin-users',
+    url: 'admin/systems/manager/admin-users',
     method: 'post',
     data: params
   })
@@ -36,7 +36,7 @@ export function addAdministrator(params) {
  */
 export function getAdministratorDetail(id) {
   return request({
-    url: `systems/manager/admin-users/${id}`,
+    url: `admin/systems/manager/admin-users/${id}`,
     method: 'get'
   })
 }
@@ -48,7 +48,7 @@ export function getAdministratorDetail(id) {
  */
 export function editAdministrator(id, parmas) {
   return request({
-    url: `systems/manager/admin-users/${id}`,
+    url: `admin/systems/manager/admin-users/${id}`,
     method: 'put',
     data: parmas
   })
@@ -60,7 +60,7 @@ export function editAdministrator(id, parmas) {
  */
 export function deleteAdministrator(id) {
   return request({
-    url: `systems/manager/admin-users/${id}`,
+    url: `admin/systems/manager/admin-users/${id}`,
     method: 'delete'
   })
 }
@@ -71,7 +71,7 @@ export function deleteAdministrator(id) {
  */
 export function getRoleList(params) {
   return request({
-    url: 'systems/roles',
+    url: 'admin/systems/roles',
     method: 'get',
     loading: false,
     params
@@ -84,7 +84,7 @@ export function getRoleList(params) {
  */
 export function deleteRole(id) {
   return request({
-    url: `systems/roles/${id}`,
+    url: `admin/systems/roles/${id}`,
     method: 'delete'
   })
 }
@@ -95,7 +95,7 @@ export function deleteRole(id) {
  */
 export function getRolePermission(id) {
   return request({
-    url: `systems/roles/${id}`,
+    url: `admin/systems/roles/${id}`,
     method: 'get'
   })
 }
@@ -106,7 +106,7 @@ export function getRolePermission(id) {
  */
 export function addRole(params) {
   return request({
-    url: 'systems/roles',
+    url: 'admin/systems/roles',
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -120,7 +120,7 @@ export function addRole(params) {
  */
 export function editRole(id, params) {
   return request({
-    url: `systems/roles/${id}`,
+    url: `admin/systems/roles/${id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -137,7 +137,7 @@ export function editUserInfo(params) {
     params.password = md5(params.password)
   }
   return request({
-    url: 'systems/admin-users',
+    url: 'admin/systems/admin-users',
     method: 'put',
     data: params
   })

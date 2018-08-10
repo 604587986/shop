@@ -9,7 +9,7 @@ import request from '@/utils/request'
  */
 export function getArticleCategory() {
   return request({
-    url: 'pages/article-categories',
+    url: 'admin/pages/article-categories',
     method: 'get',
     loading: false
   })
@@ -21,7 +21,7 @@ export function getArticleCategory() {
  */
 export function getArticleCategoryChildren(id = 0) {
   return request({
-    url: `pages/article-categories/${id}/children`,
+    url: `admin/pages/article-categories/${id}/children`,
     method: 'get',
     loading: false
   })
@@ -33,7 +33,7 @@ export function getArticleCategoryChildren(id = 0) {
  */
 export function addArticleCategory(params) {
   return request({
-    url: 'pages/article-categories',
+    url: 'admin/pages/article-categories',
     method: 'post',
     data: params
   })
@@ -45,7 +45,7 @@ export function addArticleCategory(params) {
  */
 export function getArticleCategoryDetail(id) {
   return request({
-    url: `pages/article-categories/${id}`,
+    url: `admin/pages/article-categories/${id}`,
     method: 'get'
   })
 }
@@ -57,7 +57,7 @@ export function getArticleCategoryDetail(id) {
  */
 export function editArticleCategory(id, params) {
   return request({
-    url: `pages/article-categories/${id}`,
+    url: `admin/pages/article-categories/${id}`,
     method: 'put',
     data: params
   })
@@ -69,7 +69,7 @@ export function editArticleCategory(id, params) {
  */
 export function deleteAritcleCategory(id) {
   return request({
-    url: `pages/article-categories/${id}`,
+    url: `admin/pages/article-categories/${id}`,
     method: 'delete'
   })
 }
@@ -79,22 +79,8 @@ export function deleteAritcleCategory(id) {
  */
 export function getAritcleCategoryTree() {
   return request({
-    url: 'pages/article-categories/childrens',
+    url: 'admin/pages/article-categories/childrens',
     method: 'get'
-  })
-}
-
-/**
- * 获取模型字段列表
- * @param id
- * @returns {Promise<any>}
- */
-export function getArticleFieldList(id) {
-  return request({
-    url: 'cms/admin/model/file-list-json.do',
-    method: 'get',
-    loading: false,
-    params: { modelid: id }
   })
 }
 
@@ -104,7 +90,7 @@ export function getArticleFieldList(id) {
  */
 export function getArticleList(params) {
   return request({
-    url: 'pages/articles',
+    url: 'admin/pages/articles',
     method: 'get',
     loading: false,
     params
@@ -117,7 +103,7 @@ export function getArticleList(params) {
  */
 export function addArticle(params) {
   return request({
-    url: 'pages/articles',
+    url: 'admin/pages/articles',
     method: 'post',
     data: params
   })
@@ -129,7 +115,7 @@ export function addArticle(params) {
  */
 export function getArticleDetail(id) {
   return request({
-    url: `pages/articles/${id}`,
+    url: `admin/pages/articles/${id}`,
     method: 'get'
   })
 }
@@ -141,7 +127,7 @@ export function getArticleDetail(id) {
  */
 export function editArticle(id, params) {
   return request({
-    url: `pages/articles/${id}`,
+    url: `admin/pages/articles/${id}`,
     method: 'put',
     data: params
   })
@@ -153,7 +139,7 @@ export function editArticle(id, params) {
  */
 export function deleteArticle(id) {
   return request({
-    url: `pages/articles/${id}`,
+    url: `admin/pages/articles/${id}`,
     method: 'delete'
   })
 }

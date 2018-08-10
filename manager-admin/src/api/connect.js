@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getConnect() {
   return request({
-    url: 'members/connect',
+    url: 'admin/members/connect',
     method: 'get'
   })
 }
@@ -22,7 +22,7 @@ export function getConnect() {
  */
 export function editConnect(type, params) {
   return request({
-    url: `members/connect/${type}`,
+    url: `admin/members/connect/${type}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params

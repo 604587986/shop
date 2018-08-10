@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getSiteMenuList(params) {
   return request({
-    url: 'pages/site-navigations',
+    url: 'admin/pages/site-navigations',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getSiteMenuList(params) {
  */
 export function addSiteMenu(client_type = 'PC', params) {
   return request({
-    url: 'pages/site-navigations',
+    url: 'admin/pages/site-navigations',
     method: 'post',
     data: {
       ...params,
@@ -39,7 +39,7 @@ export function addSiteMenu(client_type = 'PC', params) {
  */
 export function getSiteMenuDetail(id) {
   return request({
-    url: `pages/site-navigations/${id}`,
+    url: `admin/pages/site-navigations/${id}`,
     method: 'get'
   })
 }
@@ -51,7 +51,7 @@ export function getSiteMenuDetail(id) {
  */
 export function editSiteMenu(id, parmas) {
   return request({
-    url: `pages/site-navigations/${id}`,
+    url: `admin/pages/site-navigations/${id}`,
     method: 'put',
     data: parmas
   })
@@ -63,7 +63,7 @@ export function editSiteMenu(id, parmas) {
  */
 export function deleteSiteMenu(id) {
   return request({
-    url: `pages/site-navigations/${id}`,
+    url: `admin/pages/site-navigations/${id}`,
     method: 'delete'
   })
 }
