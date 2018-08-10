@@ -44,10 +44,10 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-table-layout>
-    <el-dialog title="新增导航" :visible.sync="addShopNavshow"  width="30%">
+    <el-dialog title="新增导航" :visible.sync="addShopNavshow"  width="35%">
       <el-form :model="navform" :rules="rules" ref="navform" label-position="right" label-width="120px">
         <el-form-item label="导航名称:" prop="name">
-          <el-input v-model="navform.name" />
+          <el-input v-model="navform.name"/>
         </el-form-item>
         <el-form-item label="是否显示:" prop="disable">
           <el-radio-group v-model="navform.disable">
@@ -271,7 +271,8 @@
     width: 60%;
   }
   span.URLtip {
-    font-size: 13px;
+    display: block;
+    font-size: 12px;
   }
 
 </style>

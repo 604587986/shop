@@ -207,7 +207,7 @@
 
       /** 订单状态改变 */
       changeOrderStatus(data) {
-        delete this.params.keyword
+        delete this.params.keywords
         delete this.params.order_status
         if (data) {
           this.params = {
@@ -223,7 +223,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          keyword: data
+          keywords: data
         }
         delete this.params.order_status
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
@@ -242,7 +242,7 @@
           this.params.start_time = this.advancedForm.order_time_range[0].getTime() / 1000
           this.params.end_time = this.advancedForm.order_time_range[1].getTime() / 1000
         }
-        delete this.params.keyword
+        delete this.params.keywords
         delete this.params.order_time_range
         this.GET_OrderList()
       },

@@ -79,10 +79,7 @@
             gift_price: 0,
 
             /** 实际库存 */
-            actual_store: 0,
-
-            /** 创建时间 */
-            create_time: ''
+            actual_store: 0
           }
           this.fileList = []
         }
@@ -129,10 +126,7 @@
           gift_price: '',
 
           /** 实际库存 */
-          actual_store: '',
-
-          /** 创建时间 */
-          create_time: ''
+          actual_store: ''
         },
 
         /** 存储上传的图片*/

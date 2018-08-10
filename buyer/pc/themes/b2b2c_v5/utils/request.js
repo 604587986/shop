@@ -35,7 +35,7 @@ service.interceptors.request.use(config => {
       lock: false
     })
   }
-  
+
   // uuid
   if (process.client) {
     const uuid = Storage.getItem('uuid')

@@ -27,9 +27,9 @@
         </el-table-column>
         <el-table-column prop="actual_store" label="实际库存" />
         <el-table-column prop="enable_store" label="可用库存" />
-        <el-table-column prop="coupon_used_num" label="创建时间">
+        <el-table-column label="创建时间">
           <template slot-scope="scope">
-            {{ scope.row.gift_price | unixToDate }}
+            {{ scope.row.create_time | unixToDate }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="280">
@@ -164,17 +164,11 @@
 
       /** 删除赠品 */
       handleDeleteGifts(row) {
-        this.$confirm('确认删除此赠品, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+        this.$confirm('确认删除此赠品, 是否继续?', '提示', { type: 'warning' }).then(() => {
           API_Gift.deleteGifts(row.gift_id).then(() => {
             this.GET_GiftsList()
             this.$message.success('删除赠品成功！')
           })
-        }).catch(() => {
-          this.$message.info({ message: '已取消删除' })
         })
       },
 

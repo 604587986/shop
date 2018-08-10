@@ -108,7 +108,8 @@
           this.settlementTotal = response
           this.params = {
             ...this.params,
-            bill_id: response.bill_id
+            member_id: response.member_id,
+            bill_id: response.total_id
           }
           this.GET_MyhistoryList()
         })
