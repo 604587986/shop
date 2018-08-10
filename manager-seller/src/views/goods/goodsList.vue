@@ -71,7 +71,12 @@
         <el-table-column label="创建时间" width="220">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
-        <el-table-column prop="market_enable" label="状态"  :formatter="marketStatus" width="120"/>
+        <el-table-column  label="状态" width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row | marketStatus }}</span>
+            <div class="under-reason" v-if="scope.row.under_message" @click="showUnderReason(scope.row)">(下架原因)</div>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="250" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
@@ -112,15 +117,24 @@
             <el-input v-model="goodsStockData.deliver_goods_quantity"  disabled />
           </el-form-item>
         </el-form>
-        <en-table-layout :tableData="goodsStockData" :loading="loading" v-if="goodsStocknums != 1">
+        <en-table-layout
+          :tableData="goodsStockData"
+          :loading="loading"
+          border
+          v-if="goodsStocknums > 1"
+          :span-method="arraySpanMethod"
+          :stripe="false">
           <template slot="table-columns">
-            <el-table-column prop="goods_name" label="商品名称"/>
-            <el-table-column label="库存">
+            <el-table-column
+              v-for="(item, index) in goodsStockTitle"
+              v-if="item.prop !== 'sku_id'"
+              :label="item.label"
+              :key="index">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.quantity" />
+                <el-input v-if="item.prop === 'quantity'" v-model="scope.row.quantity"/>
+                <span v-if="item.prop !== 'quantity'" >{{ scope.row[item.prop] }}</span>
               </template>
             </el-table-column>
-            <el-table-column  prop="deliver_goods_quantity" label="待发货数" />
           </template>
         </en-table-layout>
       </div>
@@ -128,6 +142,9 @@
         <el-button @click="goodsStockshow = false">取 消</el-button>
         <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
       </div>
+    </el-dialog>
+    <el-dialog title="下架原因" :visible.sync="isShowUnderReason" width="17%" >
+      <div align="center">{{ under_reason }}</div>
     </el-dialog>
   </div>
 </template>
@@ -189,11 +206,23 @@
         /** 商品库存显示*/
         goodsStockshow: false,
 
+        /** 是否显示下架原因 */
+        isShowUnderReason: false,
+
+        /** 下架原因 */
+        under_reason: '',
+
         /** 库存商品数量*/
-        goodsStocknums: 1,
+        goodsStocknums: 0,
 
         /** 商品库存列表数据*/
-        goodsStockData: {},
+        goodsStockData: null,
+
+        /** 商品库存列表表头数据 */
+        goodsStockTitle: [],
+
+        /** 要合并的列的位置数组 */
+        concactArray: [],
 
         /** 校验规则 */
         rules: {
@@ -206,7 +235,24 @@
         shopInfo: this.$store.getters.shopInfo
       }
     },
+    filters: {
+      /** 销售状态格式化 */
+      marketStatus(row) {
+        switch (row.is_auth) {
+          case 0 : return row.market_enable === 1 ? '待审核' : '已下架'
+          case 1 : return row.market_enable === 1 ? '售卖中' : '已下架'
+          case 2 : return row.market_enable === 1 ? '审核拒绝' : '已下架'
+        }
+      }
+    },
     mounted() {
+      delete this.params.market_enable
+      if (this.$route.query.market_enable) {
+        this.params = {
+          ...this.params,
+          market_enable: parseInt(this.$route.query.market_enable)
+        }
+      }
       this.GET_GoodsList()
     },
     activated() {
@@ -221,7 +267,7 @@
       delete this.params.market_enable
       this.params = {
         ...this.params,
-        ...this.$route.queryv
+        ...this.$route.query
       }
       this.GET_GoodsList()
       next()
@@ -238,15 +284,6 @@
       handlePageCurrentChange(page) {
         this.params.page_no = page
         this.GET_GoodsList()
-      },
-
-      /** 销售状态格式化 */
-      marketStatus(row, column, cellValue) {
-        switch (row.is_auth) {
-          case 0 : return row.market_enable === 1 ? '待审核' : '已下架'
-          case 1 : return row.market_enable === 1 ? '售卖中' : '已下架'
-          case 2 : return row.market_enable === 1 ? '审核拒绝' : '已下架'
-        }
       },
 
       /** 搜索事件触发 */
@@ -284,6 +321,7 @@
 
       /** 切换分组*/
       changeGoodsCateGory(data) {
+        console.log(data)
         delete this.params.shop_cat_path
         if (data && Array.isArray(data) && data.length !== 0) {
           this.params = {
@@ -292,6 +330,13 @@
           }
         }
         this.GET_GoodsList()
+      },
+
+      /** 显示下架原因 */
+      showUnderReason(row) {
+        this.isShowUnderReason = false
+        this.isShowUnderReason = true
+        this.under_reason = row.under_message
       },
 
       GET_GoodsList() {
@@ -333,20 +378,95 @@
         })
       },
 
+      /** 合并数据相同的单元格 */
+      arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+        if (columnIndex < this.goodsStockTitle.length - 3) {
+          const _row = this.concactArray[rowIndex][columnIndex]
+          const _col = _row > 0 ? 1 : 0
+          return {
+            rowspan: _row,
+            colspan: _col
+          }
+        }
+      },
+
+      /** 计算要合并列的位置 */
+      concactArrayCom(index, item) {
+        let _isMerge = false
+        /** 循环列 先循环第一列 若相同则合并 再循环第二列 依次循环 若不相同 则不合并并终止此列循环开始下一列循环 */
+        let _currnetRow = []
+        for (let i = 0, _len = this.goodsStockTitle.length - 3; i < _len; i++) {
+          if (this.goodsStockTitle[i].prop === 'sku_id') {
+            i++
+            continue
+          }
+          if (index > 0 && item[this.goodsStockTitle[i].prop] !== this.goodsStockData[index - 1][this.goodsStockTitle[i].prop]) {
+            _currnetRow[i] = 1
+            _isMerge = true
+          } else if (index > 0 && !_isMerge) {
+            _currnetRow[i] = 0
+            let _count = 1
+            while (this.concactArray[index - _count][i] === 0) {
+              _count++
+            }
+            this.concactArray[index - _count][i] += 1
+          } else { // index === 0
+            _currnetRow[i] = 1
+          }
+        }
+        this.concactArray.push(_currnetRow)
+      },
+
       /** 库存 */
       handleStockGoods(row) {
         this.goodsId = row.goods_id
         this.goodsStockshow = true
         API_goods.getGoodsStockList(row.goods_id, {}).then((response) => {
-          this.goodsStockData = response
+          this.goodsStockTitle = this.goodsStockData = []
           this.goodsStocknums = response.length
           // 构造待发货字段
-          if (Array.isArray(response) && response.length > 0) {
-            this.goodsStockData.forEach((key) => {
+          if (response.length > 1) {
+            this.$nextTick(() => {
+              response.forEach((key) => {
+                // 构造待发货字段
+                this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
+                // 构造表头
+                let _skus = key.spec_list.map(elem => {
+                  return { label: elem.spec_name, prop: elem.spec_name }
+                })
+                this.goodsStockTitle = _skus.concat([
+                  { label: '规格id', prop: 'sku_id' },
+                  { label: '库存', prop: 'quantity' },
+                  { label: '待发货数', prop: 'deliver_goods_quantity' }])
+                // 构造表结构
+                let _skuData = key.spec_list.map(elem => {
+                  let _map = new Map().set(elem.spec_name, elem.spec_value)
+                  let obj = Object.create(null)
+                  for (let [k, v] of _map) {
+                    obj[k] = v
+                  }
+                  return obj
+                })
+                const _key = {
+                  sku_id: key.sku_id,
+                  quantity: key.quantity,
+                  deliver_goods_quantity: key.deliver_goods_quantity
+                }
+                this.goodsStockData.push(Object.assign(_key, ..._skuData))
+              })
+              // 计算表格合并的位置
+              this.concactArray = []
+              this.goodsStockData.forEach((key, index) => {
+                this.concactArrayCom(index, key)
+              })
+            })
+          } else {
+            response.forEach((key) => {
+              // 构造待发货字段
               this.$set(key, 'deliver_goods_quantity', parseInt(key.quantity) - parseInt(key.enable_quantity))
             })
+            this.goodsStockData = response[0]
           }
-          this.goodsStockData = this.goodsStockData.length > 1 ? this.goodsStockData : this.goodsStockData[0]
         })
       },
 
@@ -389,8 +509,12 @@
     padding: 20px 0;
   }
 
-  /deep/ .el-table td:not(.is-left) {
-    text-align: center;
+  /deep/ .el-table {
+    width: 100%;
+    overflow-x: scroll;
+    & td:not(.is-left) {
+      text-align: center;
+    }
   }
 
   .inner-toolbar {
@@ -464,6 +588,11 @@
     -webkit-box-orient:vertical;
 
     -webkit-line-clamp:2;
+  }
+  /*下架原因*/
+  .under-reason {
+    color: red;
+    cursor: pointer;
   }
 
 </style>

@@ -42,13 +42,15 @@
     name: 'withdrawals-apply',
     data() {
       const checkApplyMoney = (rule, value, callback) => {
-        if (!value) {
+        if (!value && value !== 0) {
           return callback(new Error('提现金额不能为空'))
         }
         setTimeout(() => {
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入正整数或者两位小数'))
-          } else {
+          } else if (parseFloat(value) > parseFloat(this.applyWithdrawalsForm.can_rebate) ) {
+            callback(new Error('提现金额超出限额'))
+          }else {
               callback()
           }
         }, 1000)

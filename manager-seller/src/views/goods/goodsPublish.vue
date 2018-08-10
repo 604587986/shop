@@ -63,7 +63,7 @@
               <span>{{ activeCategoryName1 }}</span>
               <span v-show="activeCategoryName2"> > {{ activeCategoryName2 }}</span>
               <span v-show="activeCategoryName3"> > {{ activeCategoryName3 }}</span>
-              <span v-if="!activeCategoryName1">{{ baseInfoForm.category_name }}</span>
+              <span v-if="!activeCategoryName1" v-html="baseInfoForm.category_name"></span>
             </el-form-item>
             <el-form-item label="商品分组：" >
               <!--商品分组 获取分类列表 传入默认值-->
@@ -80,6 +80,7 @@
                 v-model="baseInfoForm.brand_id"
                 filterable
                 @change="changeGoodsBrand"
+                clearable
                 placeholder="请选择">
                 <el-option
                   v-for="item in brandList"
@@ -1213,7 +1214,7 @@
         /** 动态修改总库存 每次设置为0  此处每次进行循环计算 存在性能浪费 */
         this.baseInfoForm.quantity = 0
         val.forEach(key => {
-          if (key.quantity && Number.isInteger(key.quantity)) {
+          if (key.quantity) {
             this.baseInfoForm.quantity += parseInt(key.quantity)
           }
         })
