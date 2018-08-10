@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getRegionalAnalysisList(params) {
   return request({
-    url: '/statistics/reports/regions/data',
+    url: 'seller/statistics/reports/regions/data',
     method: 'get',
     loading: false,
     params

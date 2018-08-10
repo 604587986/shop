@@ -8,7 +8,7 @@ import request from '@/utils/request'
  */
 export function getCategorySkuList(category_id, params) {
   return request({
-    url: `/goods/categories/${category_id}/specs`,
+    url: `seller/goods/categories/${category_id}/specs`,
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getCategorySkuList(category_id, params) {
  */
 export function saveCustomSkuItem(category_id, params) {
   return request({
-    url: `/goods/categories/${category_id}/specs`,
+    url: `seller/goods/categories/${category_id}/specs`,
     method: 'post',
     loading: false,
     data: params
@@ -38,7 +38,7 @@ export function saveCustomSkuItem(category_id, params) {
  */
 export function saveCustomSkuValue(spec_id, params) {
   return request({
-    url: `/goods/specs/${spec_id}/values`,
+    url: `seller/goods/specs/${spec_id}/values`,
     method: 'post',
     loading: false,
     data: params

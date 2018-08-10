@@ -65,7 +65,7 @@ export default function checkToken(options) {
         // console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
         // 开始请求新的Token，并加锁。
         window.__refreshTokenLock__ = request({
-          url: 'systems/admin-users/token',
+          url: 'admin/systems/admin-users/token',
           method: 'post',
           headers: { uuid: Storage.getItem('adminUuid') },
           data: { refersh_token: refreshToken }

@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getConsultationList(params) {
   return request({
-    url: '/members/asks',
+    url: 'seller/members/asks',
     method: 'get',
     loading: false,
     params
@@ -26,7 +26,7 @@ export function getConsultationList(params) {
  */
 export function replyConsultationList(id, params) {
   return request({
-    url: `/members/asks/${id}/reply`,
+    url: `seller/members/asks/${id}/reply`,
     method: 'put',
     loading: false,
     data: params

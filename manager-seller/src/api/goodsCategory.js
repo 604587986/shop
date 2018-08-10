@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function getGoodsCategoryList() {
   return request({
-    url: '/shops/cats',
+    url: 'seller/shops/cats',
     method: 'get',
     loading: false
   })
@@ -22,7 +22,7 @@ export function getGoodsCategoryList() {
 export function deleteGoodsCategory(params) {
   const ids = params.toString()
   return request({
-    url: `/shops/cats/${ids}`,
+    url: `seller/shops/cats/${ids}`,
     method: 'delete'
   })
 }
@@ -35,7 +35,7 @@ export function deleteGoodsCategory(params) {
  */
 export function addGoodsCategory(params) {
   return request({
-    url: '/shops/cats',
+    url: 'seller/shops/cats',
     method: 'post',
     data: params
   })
@@ -49,7 +49,7 @@ export function addGoodsCategory(params) {
  */
 export function updateGoodsCategory(ids, params) {
   return request({
-    url: `/shops/cats/${ids}`,
+    url: `seller/shops/cats/${ids}`,
     method: 'put',
     data: params
   })
@@ -63,7 +63,7 @@ export function updateGoodsCategory(ids, params) {
  */
 export function getGoodsCategoryLevelList(ids, params) {
   return request({
-    url: `/goods/category/${ids}/children`,
+    url: `seller/goods/category/${ids}/children`,
     method: 'get',
     loading: false,
     params

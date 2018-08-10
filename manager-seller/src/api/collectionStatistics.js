@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getCollectionStatistics() {
   return request({
-    url: '/statistics/collect/chart',
+    url: 'seller/statistics/collect/chart',
     method: 'get',
     loading: false
   })
@@ -24,7 +24,7 @@ export function getCollectionStatistics() {
  */
 export function getCollectionGoods(params) {
   return request({
-    url: '/statistics/collect/page',
+    url: 'seller/statistics/collect/page',
     method: 'get',
     loading: false,
     params

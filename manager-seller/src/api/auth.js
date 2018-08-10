@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getShopAssistantList(params) {
   return request({
-    url: 'shops/clerks',
+    url: 'seller/shops/clerks',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getShopAssistantList(params) {
  */
 export function addShopAssistant(params) {
   return request({
-    url: 'shops/clerks',
+    url: 'seller/shops/clerks',
     method: 'post',
     data: params
   })
@@ -36,7 +36,7 @@ export function addShopAssistant(params) {
  */
 export function editShopAssistant(id, params) {
   return request({
-    url: `shops/clerks/${id}`,
+    url: `seller/shops/clerks/${id}`,
     method: 'put',
     data: params
   })
@@ -48,7 +48,7 @@ export function editShopAssistant(id, params) {
  */
 export function deleteShopAssistant(id) {
   return request({
-    url: `shops/clerks/${id}`,
+    url: `seller/shops/clerks/${id}`,
     method: 'delete'
   })
 }
@@ -59,7 +59,7 @@ export function deleteShopAssistant(id) {
  */
 export function recoveryShopAssistant(id) {
   return request({
-    url: `shops/clerks/${id}/recovery`,
+    url: `seller/shops/clerks/${id}/recovery`,
     method: 'put'
   })
 }
@@ -70,7 +70,7 @@ export function recoveryShopAssistant(id) {
  */
 export function getRoleList(params) {
   return request({
-    url: 'shops/roles',
+    url: 'seller/shops/roles',
     method: 'get',
     loading: false,
     params
@@ -83,7 +83,7 @@ export function getRoleList(params) {
  */
 export function addRole(params) {
   return request({
-    url: 'shops/roles',
+    url: 'seller/shops/roles',
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -96,7 +96,7 @@ export function addRole(params) {
  */
 export function getRoleDetail(id) {
   return request({
-    url: `shops/roles/${id}`,
+    url: `seller/shops/roles/${id}`,
     method: 'get'
   })
 }
@@ -108,7 +108,7 @@ export function getRoleDetail(id) {
  */
 export function editRole(id, params) {
   return request({
-    url: `shops/roles/${id}`,
+    url: `seller/shops/roles/${id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -121,7 +121,7 @@ export function editRole(id, params) {
  */
 export function deleteRole(id) {
   return request({
-    url: `shops/roles/${id}`,
+    url: `seller/shops/roles/${id}`,
     method: 'delete'
   })
 }

@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getRefundList(params) {
   return request({
-    url: '/after-sales/refunds',
+    url: 'seller/after-sales/refunds',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getRefundList(params) {
  */
 export function getRefundDetails(sn) {
   return request({
-    url: `/after-sales/refunds/${sn}`,
+    url: `seller/after-sales/refunds/${sn}`,
     method: 'get',
     loading: false
   })
@@ -39,7 +39,7 @@ export function getRefundDetails(sn) {
  */
 export function refundAuth(sn, params) {
   return request({
-    url: `/after-sales/audits/${sn}`,
+    url: `seller/after-sales/audits/${sn}`,
     method: 'post',
     loading: false,
     data: params
@@ -54,7 +54,7 @@ export function refundAuth(sn, params) {
  */
 export function toRefund(sn, params) {
   return request({
-    url: `/after-sales/refunds/${sn}`,
+    url: `seller/after-sales/refunds/${sn}`,
     method: 'post',
     loading: false,
     data: params
@@ -70,7 +70,7 @@ export function toRefund(sn, params) {
  */
 export function wareHousing(sn, params) {
   return request({
-    url: `/after-sales/stock-ins/${sn}`,
+    url: `seller/after-sales/stock-ins/${sn}`,
     method: 'post',
     loading: false,
     data: params

@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getShopData(params) {
   return request({
-    url: '/shops',
+    url: 'seller/shops',
     method: 'get',
     loading: false,
     params
@@ -26,7 +26,7 @@ export function getShopData(params) {
  */
 export function saveShopSettings(params) {
   return request({
-    url: '/shops',
+    url: 'seller/shops',
     method: 'put',
     loading: false,
     data: params
@@ -40,7 +40,7 @@ export function saveShopSettings(params) {
  */
 export function saveStockWarningNum(params) {
   return request({
-    url: '/shops/warning-counts',
+    url: 'seller/shops/warning-counts',
     method: 'put',
     loading: false,
     data: params
@@ -68,7 +68,7 @@ export function promoteShopGrade(ids, params) {
  */
 export function updateShopLogo(params) {
   return request({
-    url: '/shops/logos',
+    url: 'seller/shops/logos',
     method: 'put',
     data: params
   })

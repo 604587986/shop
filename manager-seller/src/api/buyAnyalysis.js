@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function getbuyAnyalysisPeriodList(params) {
   return request({
-    url: '/statistics/reports/purchase/period',
+    url: 'seller/statistics/reports/purchase/period',
     method: 'get',
     loading: false,
     params
@@ -21,7 +21,7 @@ export function getbuyAnyalysisPeriodList(params) {
  */
 export function getbuyAnyalysisRangesList(params) {
   return request({
-    url: '/statistics/reports/purchase/ranges',
+    url: 'seller/statistics/reports/purchase/ranges',
     method: 'get',
     loading: false,
     params

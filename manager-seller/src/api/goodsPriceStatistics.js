@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function getPriceStatisticsList(params) {
   return request({
-    url: '/statistics/goods/price_sales',
+    url: 'seller/statistics/goods/price_sales',
     method: 'get',
     loading: false,
     params
