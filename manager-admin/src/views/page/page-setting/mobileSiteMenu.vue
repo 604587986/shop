@@ -105,7 +105,7 @@
         /** 添加、编辑导航菜单 表单 */
         siteMenuForm: {
           navigation_name: '',
-          url: '',
+          url: 'admin/',
           image: ''
         },
 

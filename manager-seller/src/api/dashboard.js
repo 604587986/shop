@@ -3,6 +3,7 @@
  */
 
 import request from '@/utils/request'
+import { api } from '~/ui-domain'
 
 /**
  * 获取首页统计信息
@@ -23,7 +24,7 @@ export function getDashboardData() {
  */
 export function getNotice(type, params) {
   return request({
-    url: `pages/article-categories/${type}/articles`,
+    url: `${api.base}/pages/article-categories/${type}/articles`,
     method: 'get',
     loading: false,
     params
@@ -37,7 +38,7 @@ export function getNotice(type, params) {
  */
 export function getConcate(params) {
   return request({
-    url: `pages/articles`,
+    url: `${api.base}/pages/articles`,
     method: 'get',
     loading: false,
     params

@@ -18,7 +18,7 @@
       /** api */
       api: {
         type: String,
-        default: `${process.env.SELLER_API}/shops/cats`
+        default: 'seller/shops/cats'
       },
       /** 最大级数 */
       maxLevel: {
