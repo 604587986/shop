@@ -23,3 +23,15 @@ export function getUserInfo() {
   })
 }
 
+/**
+ * 获取用户角色权限
+ * @param role_id
+ * @returns {*}
+ */
+export function getUserRolesPermissions(role_id) {
+  return request({
+    url: `seller/shops/roles/${role_id}/checked`,
+    method: 'get'
+  })
+}
+

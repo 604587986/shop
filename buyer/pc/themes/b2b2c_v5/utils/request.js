@@ -27,7 +27,7 @@ service.interceptors.request.use(config => {
     config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   /** 配置全屏加载 */
-  if (loading !== false) {
+  if (process.client && loading !== false) {
     config.loading = Loading.service({
       fullscreen: true,
       background: 'rgba(255,255,255,.3)',
