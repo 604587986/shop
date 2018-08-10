@@ -53,7 +53,7 @@
       return {
         loading: false,
         // 层级编辑器获取下级的API
-        gradeApi: process.env.ADMIN_API + '/promotion/exchange-cats/@id/children',
+        gradeApi: 'admin/promotion/exchange-cats/@id/children',
         // 积分分类 表单
         pointsForm: {},
         // 积分分类 表单规则

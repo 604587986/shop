@@ -68,8 +68,6 @@
         },
         // 表格数据
         tableData: '',
-        // 文章分类API
-        articleCategoryApi: `${process.env.ADMIN_API}/pages/article-categories/@id/children`,
         // 文章分类树
         articleCategoryTree: [],
         // 被选分类名称
