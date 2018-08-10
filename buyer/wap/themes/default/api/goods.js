@@ -25,6 +25,7 @@ export function getGoodsList(params) {
   return request({
     url: 'goods/search',
     method: Method.GET,
+    loading: false,
     params
   })
 }
