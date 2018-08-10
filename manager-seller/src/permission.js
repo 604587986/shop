@@ -62,15 +62,8 @@ const shopCloed = () => {
 const shopOpen = (next) => {
   if (!store.getters.shopInfo) {
     API_shop.getShopData({}).then(response => {
-      const { shop_disable } = response
-      switch (shop_disable) {
-        case 'OPEN':
-          store.dispatch('SetShop', response)
-          next()
-          break
-        default:
-          next()
-      }
+      store.dispatch('SetShop', response)
+      next()
     })
   } else {
     next()
