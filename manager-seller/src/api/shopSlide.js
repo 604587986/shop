@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getShopSlideList(params) {
   return request({
-    url: '/shops/sildes',
+    url: 'seller/shops/sildes',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getShopSlideList(params) {
  */
 export function saveShopSlide(params) {
   return request({
-    url: '/shops/sildes',
+    url: 'seller/shops/sildes',
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -40,7 +40,7 @@ export function saveShopSlide(params) {
  */
 export function delShopSlide(ids, params) {
   return request({
-    url: `/shops/sildes/${ids}`,
+    url: `seller/shops/sildes/${ids}`,
     method: 'delete',
     params
   })

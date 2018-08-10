@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function getTagsList(params) {
   return request({
-    url: '/goods/tags',
+    url: 'seller/goods/tags',
     method: 'get',
     loading: false,
     params
@@ -21,7 +21,7 @@ export function getTagsList(params) {
  */
 export function getTagGoodsList(id, params) {
   return request({
-    url: `/goods/tags/${id}/goods`,
+    url: `seller/goods/tags/${id}/goods`,
     method: 'get',
     loading: false,
     params
@@ -35,7 +35,7 @@ export function getTagGoodsList(id, params) {
  */
 export function saveTagGoodsList(tag_id, goods_ids, params) {
   return request({
-    url: `/goods/tags/${tag_id}/goods/${goods_ids}`,
+    url: `seller/goods/tags/${tag_id}/goods/${goods_ids}`,
     method: 'put',
     loading: false,
     data: params

@@ -8,7 +8,7 @@ import { api } from '~/ui-domain'
  */
 export function logout() {
   return request({
-    url: `${api.buyer}/members/logout?uid=${Storage.getItem('uid')}`,
+    url: `members/logout?uid=${Storage.getItem('uid')}`,
     method: 'post'
   })
 }
@@ -18,7 +18,7 @@ export function logout() {
  */
 export function getUserInfo() {
   return request({
-    url: `${api.buyer}/members`,
+    url: `members`,
     method: 'get'
   })
 }

@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getGoodsList(params) {
   return request({
-    url: '/goods',
+    url: 'seller/goods',
     method: 'get',
     loading: false,
     params
@@ -27,7 +27,7 @@ export function getGoodsList(params) {
 export function deleteGoods(ids, params) {
   const _params = {}
   return request({
-    url: `/goods/${ids}/recycle`,
+    url: `seller/goods/${ids}/recycle`,
     method: 'put',
     data: _params
   })
@@ -41,7 +41,7 @@ export function deleteGoods(ids, params) {
  */
 export function getGoodsStockList(ids, params) {
   return request({
-    url: `/goods/${ids}/skus`,
+    url: `seller/goods/${ids}/skus`,
     method: 'get',
     loading: false,
     params
@@ -56,7 +56,7 @@ export function getGoodsStockList(ids, params) {
  */
 export function reserveStockGoods(goods_id, params) {
   return request({
-    url: `/goods/${goods_id}/quantity`,
+    url: `seller/goods/${goods_id}/quantity`,
     method: 'put',
     data: params,
     headers: { 'Content-Type': 'application/json' }
@@ -70,7 +70,7 @@ export function reserveStockGoods(goods_id, params) {
  */
 export function getGoodsParams(category_id) {
   return request({
-    url: `/goods/category/${category_id}/params`,
+    url: `seller/goods/category/${category_id}/params`,
     method: 'get',
     loading: false
   })
@@ -84,7 +84,7 @@ export function getGoodsParams(category_id) {
  */
 export function getEditGoodsParams(category_id, goods_id) {
   return request({
-    url: `/goods/category/${category_id}/${goods_id}/params`,
+    url: `seller/goods/category/${category_id}/${goods_id}/params`,
     method: 'get',
     loading: false
   })
@@ -98,7 +98,7 @@ export function getEditGoodsParams(category_id, goods_id) {
  */
 export function getGoodsDraftParams(ids, params) {
   return request({
-    url: `/goods/draft-goods/${ids}/params`,
+    url: `seller/goods/draft-goods/${ids}/params`,
     method: 'get',
     loading: false,
     params
@@ -113,7 +113,7 @@ export function getGoodsDraftParams(ids, params) {
  */
 export function getGoodsCatrgory(ids, params) {
   return request({
-    url: `/goods/${ids}/skus`,
+    url: `seller/goods/${ids}/skus`,
     method: 'get',
     loading: false,
     params
@@ -128,7 +128,7 @@ export function getGoodsCatrgory(ids, params) {
  */
 export function getGoodData(ids, params) {
   return request({
-    url: `/goods/${ids}`,
+    url: `seller/goods/${ids}`,
     method: 'get',
     loading: false,
     params
@@ -143,7 +143,7 @@ export function getGoodData(ids, params) {
  */
 export function getGoodDraftData(ids, params) {
   return request({
-    url: `/goods/draft-goods/${ids}`,
+    url: `seller/goods/draft-goods/${ids}`,
     method: 'get',
     loading: false,
     params
@@ -158,7 +158,7 @@ export function getGoodDraftData(ids, params) {
  */
 export function getGoodsBrandList(ids, params) {
   return request({
-    url: `/goods/category/${ids}/brands`,
+    url: `seller/goods/category/${ids}/brands`,
     method: 'get',
     loading: false,
     params
@@ -173,7 +173,7 @@ export function getGoodsBrandList(ids, params) {
  */
 export function getTplList(ids, params) {
   return request({
-    url: `/shops/ship-templates`,
+    url: `seller/shops/ship-templates`,
     method: 'get',
     loading: false,
     params
@@ -186,7 +186,7 @@ export function getTplList(ids, params) {
  */
 export function getExchangeCatsList(id) {
   return request({
-    url: `/promotion/exchange-cats/${id}/children`,
+    url: `seller/promotion/exchange-cats/${id}/children`,
     method: 'get',
     loading: false
   })
@@ -200,7 +200,7 @@ export function getExchangeCatsList(id) {
  */
 export function underGoods(ids, params) {
   return request({
-    url: `/goods/${ids}/under`,
+    url: `seller/goods/${ids}/under`,
     method: 'put',
     data: params
   })
@@ -213,7 +213,7 @@ export function underGoods(ids, params) {
  */
 export function aboveGoods(params) {
   return request({
-    url: '/goods',
+    url: 'seller/goods',
     method: 'post',
     data: params,
     headers: { 'Content-Type': 'application/json' }
@@ -228,7 +228,7 @@ export function aboveGoods(params) {
  */
 export function editGoods(id, params) {
   return request({
-    url: `/goods/${id}`,
+    url: `seller/goods/${id}`,
     method: 'put',
     data: params,
     headers: { 'Content-Type': 'application/json' }
@@ -242,7 +242,7 @@ export function editGoods(id, params) {
  */
 export function saveDraft(params) {
   return request({
-    url: `/goods/draft-goods`,
+    url: `seller/goods/draft-goods`,
     method: 'post',
     data: params,
     headers: { 'Content-Type': 'application/json' }
@@ -256,7 +256,7 @@ export function saveDraft(params) {
  */
 export function aboveDraftGoods(ids, params) {
   return request({
-    url: `/goods/draft-goods/${ids}/market`,
+    url: `seller/goods/draft-goods/${ids}/market`,
     method: 'put',
     data: params,
     headers: { 'Content-Type': 'application/json' }
@@ -266,7 +266,7 @@ export function aboveDraftGoods(ids, params) {
 /** 草稿箱商品 保存草稿 即 修改草稿箱商品 */
 export function editDraftGoods(id, params) {
   return request({
-    url: `/goods/draft-goods/${id}`,
+    url: `seller/goods/draft-goods/${id}`,
     method: 'put',
     data: params,
     headers: { 'Content-Type': 'application/json' }
@@ -281,7 +281,7 @@ export function editDraftGoods(id, params) {
  */
 export function draftSku(id, params) {
   return request({
-    url: `/goods/draft-goods/${id}/skus`,
+    url: `seller/goods/draft-goods/${id}/skus`,
     method: 'get',
     data: params
   })
@@ -294,7 +294,7 @@ export function draftSku(id, params) {
  */
 export function getDraftGoodsList(params) {
   return request({
-    url: '/goods/draft-goods',
+    url: 'seller/goods/draft-goods',
     method: 'get',
     loading: false,
     params
@@ -310,7 +310,7 @@ export function getDraftGoodsList(params) {
 export function deleteDraftGoods(ids, params) {
   const _params = {}
   return request({
-    url: `/goods/draft-goods/${ids}`,
+    url: `seller/goods/draft-goods/${ids}`,
     method: 'delete',
     data: _params
   })
@@ -323,7 +323,7 @@ export function deleteDraftGoods(ids, params) {
  */
 export function getRecycleGoodsList(params) {
   return request({
-    url: '/goods',
+    url: 'seller/goods',
     method: 'get',
     loading: false,
     params
@@ -339,7 +339,7 @@ export function getRecycleGoodsList(params) {
  */
 export function RecycleReductionGoods(ids, params) {
   return request({
-    url: `/goods/${ids}/revert`,
+    url: `seller/goods/${ids}/revert`,
     method: 'put',
     data: params
   })
@@ -354,7 +354,7 @@ export function RecycleReductionGoods(ids, params) {
  */
 export function RecycleDeleteGoods(ids, params) {
   return request({
-    url: `/goods/${ids}`,
+    url: `seller/goods/${ids}`,
     method: 'delete',
     data: params
   })
@@ -367,7 +367,7 @@ export function RecycleDeleteGoods(ids, params) {
  */
 export function getWarningGoodsList(params) {
   return request({
-    url: '/goods/warning',
+    url: 'seller/goods/warning',
     method: 'get',
     loading: false,
     params
@@ -382,7 +382,7 @@ export function getWarningGoodsList(params) {
  */
 export function getWarningGoodsStockList(ids, params) {
   return request({
-    url: `/goods/${ids}/skus`,
+    url: `seller/goods/${ids}/skus`,
     method: 'get',
     loading: false,
     params

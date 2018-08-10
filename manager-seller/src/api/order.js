@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getOrderList(params) {
   return request({
-    url: '/trade/orders',
+    url: 'seller/trade/orders',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getOrderList(params) {
  */
 export function getOrderDetail(sn) {
   return request({
-    url: `/trade/orders/${sn}`,
+    url: `seller/trade/orders/${sn}`,
     method: 'get',
     loading: false
   })
@@ -38,7 +38,7 @@ export function getOrderDetail(sn) {
  */
 export function updateOrderPrice(sn, params) {
   return request({
-    url: `/trade/orders/${sn}/price`,
+    url: `seller/trade/orders/${sn}/price`,
     method: 'put',
     loading: false,
     data: params
@@ -53,7 +53,7 @@ export function updateOrderPrice(sn, params) {
  */
 export function updateConsigneeInfo(sn, params) {
   return request({
-    url: `/trade/orders/${sn}/address`,
+    url: `seller/trade/orders/${sn}/address`,
     method: 'put',
     loading: false,
     data: params
@@ -68,7 +68,7 @@ export function updateConsigneeInfo(sn, params) {
  */
 export function confirmGetAmount(sn, params) {
   return request({
-    url: `/trade/orders/${sn}/pay`,
+    url: `seller/trade/orders/${sn}/pay`,
     method: 'post',
     loading: false,
     data: params
@@ -83,7 +83,7 @@ export function confirmGetAmount(sn, params) {
  */
 export function deliveryGoods(sn, params) {
   return request({
-    url: `/trade/orders/${sn}/delivery`,
+    url: `seller/trade/orders/${sn}/delivery`,
     method: 'post',
     loading: false,
     data: params
@@ -97,7 +97,7 @@ export function deliveryGoods(sn, params) {
  */
 export function getLogisticsInfo(params) {
   return request({
-    url: `/express`,
+    url: `seller/express`,
     method: 'get',
     loading: false,
     params
@@ -111,7 +111,7 @@ export function getLogisticsInfo(params) {
  */
 export function generateElectronicSurface(params) {
   return request({
-    url: `/waybill`,
+    url: `seller/waybill`,
     method: 'get',
     loading: false,
     params
@@ -126,7 +126,7 @@ export function generateElectronicSurface(params) {
  */
 export function getStepList(ids) {
   return request({
-    url: `/trade/orders/${ids}/flow`,
+    url: `seller/trade/orders/${ids}/flow`,
     method: 'get',
     loading: false
   })

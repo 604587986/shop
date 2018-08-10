@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getDashboardData() {
   return request({
-    url: '/statistics/dashboard/shop',
+    url: 'seller/statistics/dashboard/shop',
     method: 'get',
     loading: false
   })
@@ -23,7 +23,7 @@ export function getDashboardData() {
  */
 export function getNotice(type, params) {
   return request({
-    url: `${process.env.BASE_API}/pages/article-categories/${type}/articles`,
+    url: `pages/article-categories/${type}/articles`,
     method: 'get',
     loading: false,
     params
@@ -37,7 +37,7 @@ export function getNotice(type, params) {
  */
 export function getConcate(params) {
   return request({
-    url: `${process.env.BASE_API}/pages/articles`,
+    url: `pages/articles`,
     method: 'get',
     loading: false,
     params

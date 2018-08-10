@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getExpressCompanyList(params) {
   return request({
-    url: '/shops/logi-companies',
+    url: 'seller/shops/logi-companies',
     method: 'get',
     loading: false,
     params
@@ -26,7 +26,7 @@ export function getExpressCompanyList(params) {
  */
 export function openExpressPower(ids, params) {
   return request({
-    url: `/shops/logi-companies/${ids}`,
+    url: `seller/shops/logi-companies/${ids}`,
     method: 'post',
     loading: false,
     data: params
@@ -41,7 +41,7 @@ export function openExpressPower(ids, params) {
  */
 export function closeExpressPower(ids, params) {
   return request({
-    url: `/shops/logi-companies/${ids}`,
+    url: `seller/shops/logi-companies/${ids}`,
     method: 'delete',
     loading: false,
     params

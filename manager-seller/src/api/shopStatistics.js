@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getShopSurvey() {
   return request({
-    url: '/statistics/shop_profile/data',
+    url: 'seller/statistics/shop_profile/data',
     method: 'get',
     loading: false
   })
@@ -23,7 +23,7 @@ export function getShopSurvey() {
  */
 export function getShopSurveyCharts() {
   return request({
-    url: '/statistics/shop_profile/chart',
+    url: 'seller/statistics/shop_profile/chart',
     method: 'get',
     loading: false
   })

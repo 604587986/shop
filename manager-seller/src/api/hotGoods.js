@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getHotGoodsNum(params) {
   return request({
-    url: '/statistics/goods/order_num',
+    url: 'seller/statistics/goods/order_num',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getHotGoodsNum(params) {
  */
 export function getHotGoodsNumPage(params) {
   return request({
-    url: '/statistics/goods/order_num_page',
+    url: 'seller/statistics/goods/order_num_page',
     method: 'get',
     loading: false,
     params
@@ -39,7 +39,7 @@ export function getHotGoodsNumPage(params) {
  */
 export function getHotGoodsPrice(params) {
   return request({
-    url: '/statistics/goods/order_price',
+    url: 'seller/statistics/goods/order_price',
     method: 'get',
     loading: false,
     params
@@ -53,7 +53,7 @@ export function getHotGoodsPrice(params) {
  */
 export function getHotGoodsPricePage(params) {
   return request({
-    url: '/statistics/goods/order_price_page',
+    url: 'seller/statistics/goods/order_price_page',
     method: 'get',
     loading: false,
     params

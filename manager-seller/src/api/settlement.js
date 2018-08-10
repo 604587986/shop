@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getSettleMentList(params) {
   return request({
-    url: '/order/bills',
+    url: 'seller/order/bills',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getSettleMentList(params) {
  */
 export function exportSettleMentExcel(id) {
   return request({
-    url: `/order/bills/${id}/export`,
+    url: `seller/order/bills/${id}/export`,
     method: 'get',
     loading: false
   })
@@ -38,7 +38,7 @@ export function exportSettleMentExcel(id) {
  */
 export function getBillDetails(ids, params) {
   return request({
-    url: `/order/bills/${ids}`,
+    url: `seller/order/bills/${ids}`,
     method: 'get',
     loading: false,
     params
@@ -54,7 +54,7 @@ export function getBillDetails(ids, params) {
  */
 export function getOrderList(id, type, params) {
   return request({
-    url: `/order/bills/${id}/${type}`,
+    url: `seller/order/bills/${id}/${type}`,
     method: 'get',
     loading: false,
     params
@@ -69,7 +69,7 @@ export function getOrderList(id, type, params) {
  */
 export function confirmSettle(id, params) {
   return request({
-    url: `/order/bills/${id}/next`,
+    url: `seller/order/bills/${id}/next`,
     method: 'put',
     loading: false,
     params

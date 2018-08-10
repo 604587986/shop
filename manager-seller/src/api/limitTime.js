@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getLimitTimeActivityList(params) {
   return request({
-    url: '/promotion/seckill-applys/seckill',
+    url: 'seller/promotion/seckill-applys/seckill',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getLimitTimeActivityList(params) {
  */
 export function getLimitTimeGoodsList(params) {
   return request({
-    url: '/promotion/seckill-applys',
+    url: 'seller/promotion/seckill-applys',
     method: 'get',
     loading: false,
     params
@@ -40,7 +40,7 @@ export function getLimitTimeGoodsList(params) {
  */
 export function getLimitTimeActivityDetails(ids, params) {
   return request({
-    url: `/promotion/seckill-applys/${ids}/seckill`,
+    url: `seller/promotion/seckill-applys/${ids}/seckill`,
     method: 'get',
     loading: false,
     params
@@ -56,7 +56,7 @@ export function getLimitTimeActivityDetails(ids, params) {
  */
 export function signUpLimitTimeActivity(params) {
   return request({
-    url: '/promotion/seckill-applys',
+    url: 'seller/promotion/seckill-applys',
     method: 'post',
     loading: false,
     headers: { 'Content-Type': 'application/json' },
