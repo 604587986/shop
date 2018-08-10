@@ -29,6 +29,12 @@
           <el-form-item label="电子邮箱" prop="company_email">
             <el-input v-model="shopForm.company_email" :maxlength="50"></el-input>
           </el-form-item>
+          <el-form-item label="自营店铺" prop="self_operated">
+            <el-radio-group v-model="shopForm.self_operated">
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="0">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="营业执照信息" name="legal">
           <el-form-item label="法人姓名" prop="legal_name">

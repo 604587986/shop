@@ -182,6 +182,7 @@ export function getShopCollection(params) {
     url: 'members/collection/shops',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -270,7 +271,8 @@ export function getReceipts() {
   return request({
     url: 'members/receipt',
     method: Method.GET,
-    needToken: true
+    needToken: true,
+    loading: false,
   })
 }
 
