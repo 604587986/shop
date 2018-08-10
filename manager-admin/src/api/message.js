@@ -12,7 +12,7 @@ import request from '@/utils/request'
  */
 export function getMessageTemplate(params) {
   return request({
-    url: 'systems/message-templates',
+    url: 'admin/systems/message-templates',
     method: 'get',
     loading: false,
     params
@@ -38,7 +38,7 @@ export function editMessageTemplate(id, params) {
  */
 export function getMessageList(params) {
   return request({
-    url: 'systems/messages',
+    url: 'admin/systems/messages',
     method: 'get',
     loading: false,
     params
@@ -51,7 +51,7 @@ export function getMessageList(params) {
  */
 export function releaseMessage(params) {
   return request({
-    url: 'systems/messages',
+    url: 'admin/systems/messages',
     method: 'post',
     data: params
   })

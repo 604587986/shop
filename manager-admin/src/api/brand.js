@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getBrandList(params) {
   return request({
-    url: 'goods/brands',
+    url: 'admin/goods/brands',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getBrandList(params) {
  */
 export function addBrand(params) {
   return request({
-    url: 'goods/brands',
+    url: 'admin/goods/brands',
     method: 'post',
     data: params
   })
@@ -36,7 +36,7 @@ export function addBrand(params) {
  */
 export function getBrandDetail(id) {
   return request({
-    url: `goods/brands/${id}`,
+    url: `admin/goods/brands/${id}`,
     method: 'get'
   })
 }
@@ -48,7 +48,7 @@ export function getBrandDetail(id) {
  */
 export function editBrand(id, params) {
   return request({
-    url: `goods/brands/${id}`,
+    url: `admin/goods/brands/${id}`,
     method: 'put',
     data: params
   })
@@ -62,7 +62,7 @@ export function editBrand(id, params) {
 export function deleteBrand(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `goods/brands/${ids}`,
+    url: `admin/goods/brands/${ids}`,
     method: 'delete'
   })
 }

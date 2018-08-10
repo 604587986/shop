@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getCollectionList(params) {
   return request({
-    url: 'trade/orders/pay-log',
+    url: 'admin/trade/orders/pay-log',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getCollectionList(params) {
  */
 export function exportCollection(params) {
   return request({
-    url: 'trade/orders/pay-log/list',
+    url: 'admin/trade/orders/pay-log/list',
     method: 'get',
     params
   })

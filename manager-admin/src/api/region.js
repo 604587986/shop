@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function addRegion(params) {
   return request({
-    url: 'systems/regions',
+    url: 'admin/systems/regions',
     method: 'post',
     data: params
   })

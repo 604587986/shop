@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getOrderList(params) {
   return request({
-    url: 'trade/orders',
+    url: 'admin/trade/orders',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getOrderList(params) {
  */
 export function getOrderDetail(order_sn) {
   return request({
-    url: `trade/orders/${order_sn}`,
+    url: `admin/trade/orders/${order_sn}`,
     method: 'get',
     loading: false
   })
@@ -35,7 +35,7 @@ export function getOrderDetail(order_sn) {
  */
 export function getOrderLog(order_sn) {
   return request({
-    url: `trade/orders/${order_sn}/log`,
+    url: `admin/trade/orders/${order_sn}/log`,
     method: 'get',
     loading: false
   })
@@ -48,7 +48,7 @@ export function getOrderLog(order_sn) {
  */
 export function confirmPay(order_sn, pay_price) {
   return request({
-    url: `trade/orders/${order_sn}/pay`,
+    url: `admin/trade/orders/${order_sn}/pay`,
     method: 'post',
     data: { pay_price }
   })
@@ -60,7 +60,7 @@ export function confirmPay(order_sn, pay_price) {
  */
 export function cancleOrder(order_sn) {
   return request({
-    url: `trade/orders/${order_sn}/cancelled`,
+    url: `admin/trade/orders/${order_sn}/cancelled`,
     method: 'post'
   })
 }
@@ -71,7 +71,7 @@ export function cancleOrder(order_sn) {
  */
 export function getSettlementList(params) {
   return request({
-    url: 'order/bills',
+    url: 'admin/order/bills',
     method: 'get',
     loading: false
   })
@@ -83,7 +83,7 @@ export function getSettlementList(params) {
  */
 export function getSettlementDetail(id) {
   return request({
-    url: `order/bills/${id}`,
+    url: `admin/order/bills/${id}`,
     method: 'get'
   })
 }
@@ -96,7 +96,7 @@ export function getSettlementDetail(id) {
  */
 export function getSettlementOrderList(id, type, params) {
   return request({
-    url: `order/bills/${id}/${type}`,
+    url: `admin/order/bills/${id}/${type}`,
     method: 'get',
     loading: false,
     params
@@ -109,7 +109,7 @@ export function getSettlementOrderList(id, type, params) {
  */
 export function operateSettlement(id) {
   return request({
-    url: `order/bills/${id}/next`,
+    url: `admin/order/bills/${id}/next`,
     method: 'put'
   })
 }
@@ -120,7 +120,7 @@ export function operateSettlement(id) {
  */
 export function exportBill(bill_id) {
   return request({
-    url: `order/bills/${bill_id}/export`,
+    url: `admin/order/bills/${bill_id}/export`,
     method: 'get'
   })
 }
@@ -131,7 +131,7 @@ export function exportBill(bill_id) {
  */
 export function getSettlementStatistics(id) {
   return request({
-    url: 'order/bills/statistics',
+    url: 'admin/order/bills/statistics',
     method: 'get'
   })
 }
@@ -141,7 +141,7 @@ export function getSettlementStatistics(id) {
  */
 export function getOrderSettings() {
   return request({
-    url: 'trade/orders/setting',
+    url: 'admin/trade/orders/setting',
     method: 'get'
   })
 }
@@ -152,7 +152,7 @@ export function getOrderSettings() {
  */
 export function editOrderSettings(params) {
   return request({
-    url: 'trade/orders/setting',
+    url: 'admin/trade/orders/setting',
     method: 'post',
     data: params
   })

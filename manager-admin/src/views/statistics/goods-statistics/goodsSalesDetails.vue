@@ -22,7 +22,7 @@
       >
         <template slot="table-columns">
           <el-table-column prop="goods_name" label="商品名称"/>
-          <el-table-column prop="ordernum" label="下单量"/>
+          <el-table-column prop="order_num" label="下单量"/>
           <el-table-column prop="num" label="下单商品件数"/>
           <el-table-column prop="price" label="下单金额" :formatter="MixinFormatPrice"/>
         </template>

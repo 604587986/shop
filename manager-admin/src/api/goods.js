@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getGoodsList(params) {
   return request({
-    url: '/goods',
+    url: 'admin/goods',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getGoodsList(params) {
  */
 export function underGoods(goods_id, reason) {
   return request({
-    url: `/goods/${goods_id}/under`,
+    url: `admin/goods/${goods_id}/under`,
     method: 'put',
     data: { reason }
   })
@@ -38,7 +38,7 @@ export function underGoods(goods_id, reason) {
  */
 export function upGoods(goods_id) {
   return request({
-    url: `/goods/${goods_id}/up`,
+    url: `admin/goods/${goods_id}/up`,
     method: 'put'
   })
 }
@@ -50,7 +50,7 @@ export function upGoods(goods_id) {
 export function getAuditGoods(params) {
   params.is_auth = 0
   return request({
-    url: `/goods`,
+    url: `admin/goods`,
     method: 'get',
     loading: false,
     params
@@ -65,7 +65,7 @@ export function getAuditGoods(params) {
  */
 export function auditGoods(goods_id, params) {
   return request({
-    url: `goods/${goods_id}/auth`,
+    url: `admin/goods/${goods_id}/auth`,
     method: 'put',
     data: params
   })
@@ -76,7 +76,7 @@ export function auditGoods(goods_id, params) {
  */
 export function initSearchIndex() {
   return request({
-    url: 'goods/search',
+    url: 'admin/goods/search',
     method: 'get'
   })
 }
@@ -86,7 +86,7 @@ export function initSearchIndex() {
  */
 export function getGoodsSettings() {
   return request({
-    url: 'goods/settings',
+    url: 'admin/goods/settings',
     method: 'get'
   })
 }
@@ -97,7 +97,7 @@ export function getGoodsSettings() {
  */
 export function editGoodsSettings(params) {
   return request({
-    url: 'goods/settings',
+    url: 'admin/goods/settings',
     method: 'post',
     data: params
   })

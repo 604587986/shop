@@ -9,7 +9,7 @@ import request from '@/utils/request'
  */
 export function getSiteSetting() {
   return request({
-    url: 'settings/site',
+    url: 'admin/settings/site',
     method: 'get',
     loading: false
   })
@@ -21,7 +21,7 @@ export function getSiteSetting() {
  */
 export function editSiteSetting(params) {
   return request({
-    url: 'settings/site',
+    url: 'admin/settings/site',
     method: 'put',
     data: params
   })
@@ -32,7 +32,7 @@ export function editSiteSetting(params) {
  */
 export function getPointSetting() {
   return request({
-    url: 'settings/point',
+    url: 'admin/settings/point',
     method: 'get'
   })
 }
@@ -43,7 +43,7 @@ export function getPointSetting() {
  */
 export function editPointSetting(params) {
   return request({
-    url: 'settings/point',
+    url: 'admin/settings/point',
     method: 'put',
     data: params
   })

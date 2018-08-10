@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getSmsGatewayList(params) {
   return request({
-    url: 'systems/platforms',
+    url: 'admin/systems/platforms',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getSmsGatewayList(params) {
  */
 export function editSmsGateway(id, params) {
   return request({
-    url: `systems/platforms/${id}`,
+    url: `admin/systems/platforms/${id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -39,7 +39,7 @@ export function editSmsGateway(id, params) {
  */
 export function openSmsGatewayById(bean) {
   return request({
-    url: `systems/platforms/${bean}/open`,
+    url: `admin/systems/platforms/${bean}/open`,
     method: 'put'
   })
 }

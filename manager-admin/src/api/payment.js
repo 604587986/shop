@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getPaymentList(params) {
   return request({
-    url: 'payment/payment-methods',
+    url: 'admin/payment/payment-methods',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getPaymentList(params) {
  */
 export function editPayment(payment_plugin_id, payment_method) {
   return request({
-    url: `payment/payment-methods/${payment_plugin_id}`,
+    url: `admin/payment/payment-methods/${payment_plugin_id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: { ...payment_method }
@@ -37,7 +37,7 @@ export function editPayment(payment_plugin_id, payment_method) {
  */
 export function getPaymentDetail(payment_plugin_id) {
   return request({
-    url: `payment/payment-methods/${payment_plugin_id}`,
+    url: `admin/payment/payment-methods/${payment_plugin_id}`,
     method: 'get'
   })
 }

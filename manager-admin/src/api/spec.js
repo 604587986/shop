@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getSpecs(params) {
   return request({
-    url: 'goods/specs',
+    url: 'admin/goods/specs',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getSpecs(params) {
  */
 export function addSpec(params) {
   return request({
-    url: 'goods/specs',
+    url: 'admin/goods/specs',
     method: 'post',
     data: params
   })
@@ -36,7 +36,7 @@ export function addSpec(params) {
  */
 export function eidtSpec(id, params) {
   return request({
-    url: `goods/specs/${id}`,
+    url: `admin/goods/specs/${id}`,
     method: 'put',
     data: params
   })
@@ -50,7 +50,7 @@ export function eidtSpec(id, params) {
 export function deleteSpecs(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `goods/specs/${ids}`,
+    url: `admin/goods/specs/${ids}`,
     method: 'delete'
   })
 }
@@ -62,7 +62,7 @@ export function deleteSpecs(ids) {
  */
 export function getSpecValues(spec_id) {
   return request({
-    url: `goods/specs/${spec_id}/values`,
+    url: `admin/goods/specs/${spec_id}/values`,
     method: 'get'
   })
 }
@@ -75,7 +75,7 @@ export function getSpecValues(spec_id) {
  */
 export function saveSpecValues(spec_id, value_list) {
   return request({
-    url: `goods/specs/${spec_id}/values`,
+    url: `admin/goods/specs/${spec_id}/values`,
     method: 'post',
     data: { value_list }
   })

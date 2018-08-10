@@ -20,7 +20,7 @@ export function getValidateCodeUrl(scene, uuid) {
  */
 export function getIndexData() {
   return request({
-    url: 'index/page',
+    url: 'admin/index/page',
     method: 'get',
     loading: false
   })

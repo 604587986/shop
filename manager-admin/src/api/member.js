@@ -11,7 +11,7 @@ import md5 from 'js-md5'
  */
 export function getMemberList(params) {
   return request({
-    url: 'members',
+    url: 'admin/members',
     method: 'get',
     loading: false,
     params
@@ -26,7 +26,7 @@ export function addMember(params) {
   params = JSON.parse(JSON.stringify(params))
   params.password = md5(params.password)
   return request({
-    url: 'members',
+    url: 'admin/members',
     method: 'post',
     data: params
   })
@@ -38,7 +38,7 @@ export function addMember(params) {
  */
 export function getMemberDetail(id) {
   return request({
-    url: `members/${id}`,
+    url: `admin/members/${id}`,
     method: 'get'
   })
 }
@@ -53,7 +53,7 @@ export function editMember(id, params) {
     params.password = md5(params.password)
   }
   return request({
-    url: `members/${id}`,
+    url: `admin/members/${id}`,
     method: 'put',
     data: params
   })
@@ -65,7 +65,7 @@ export function editMember(id, params) {
  */
 export function deleteMember(id) {
   return request({
-    url: `members/${id}`,
+    url: `admin/members/${id}`,
     method: 'delete'
   })
 }
@@ -76,7 +76,7 @@ export function deleteMember(id) {
  */
 export function getRecycleMemberList(params) {
   return request({
-    url: 'members',
+    url: 'admin/members',
     method: 'get',
     loading: false,
     params
@@ -89,7 +89,7 @@ export function getRecycleMemberList(params) {
  */
 export function recycleMember(id) {
   return request({
-    url: `members/${id}`,
+    url: `admin/members/${id}`,
     method: 'post'
   })
 }
@@ -101,7 +101,7 @@ export function recycleMember(id) {
  */
 export function getMemberAddress(member_id, params) {
   return request({
-    url: `members/addresses/${member_id}`,
+    url: `admin/members/addresses/${member_id}`,
     method: 'get',
     loading: false,
     params
@@ -114,7 +114,7 @@ export function getMemberAddress(member_id, params) {
  */
 export function getMemberAsks(params) {
   return request({
-    url: 'members/asks',
+    url: 'admin/members/asks',
     method: 'get',
     loading: false,
     params
@@ -127,7 +127,7 @@ export function getMemberAsks(params) {
  */
 export function deleteMemberAsk(ask_id) {
   return request({
-    url: `members/asks/${ask_id}`,
+    url: `admin/members/asks/${ask_id}`,
     method: 'delete'
   })
 }
@@ -138,7 +138,7 @@ export function deleteMemberAsk(ask_id) {
  */
 export function getMemberComments(params) {
   return request({
-    url: 'members/comments',
+    url: 'admin/members/comments',
     method: 'get',
     loading: false,
     params
@@ -151,7 +151,7 @@ export function getMemberComments(params) {
  */
 export function deleteMemberComments(comment_id) {
   return request({
-    url: `members/comments/${comment_id}`,
+    url: `admin/members/comments/${comment_id}`,
     method: 'delete'
   })
 }
@@ -163,7 +163,7 @@ export function deleteMemberComments(comment_id) {
  */
 export function editMemberConsumPoint(member_id, point) {
   return request({
-    url: `members/point/${member_id}`,
+    url: `admin/members/point/${member_id}`,
     method: 'put',
     data: { point }
   })
@@ -175,7 +175,7 @@ export function editMemberConsumPoint(member_id, point) {
  */
 export function getMemberPointList(params) {
   return request({
-    url: `members/point/${params.member_id}`,
+    url: `admin/members/point/${params.member_id}`,
     method: 'get',
     loading: false,
     params
