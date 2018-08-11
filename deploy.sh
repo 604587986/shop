@@ -12,7 +12,7 @@ git submodule update --init --recursive
 git submodule update
 echo -e "\033[32m代码拉取完成...\033[0m"
 
-if [[ "$1" === "ui-domain" ]];then
+if [[ "$1" == "ui-domain" ]];then
   echo "开始复制ui-domain到buyer-pc..."
   cp -arf WEB_PATH/ui-domain WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-domain
   echo -e "\033[32m拷贝完成\033[0m"
