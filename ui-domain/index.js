@@ -12,7 +12,8 @@ module.exports =  {
   domain_dev: domain.dev,
   // 生产环境下的域名
   domain_pro: domain.pro,
-  // API和域名自动适配
+  // API环境自动适配
   api: isDev ? api.dev : api.pro,
+  // 域名环境自动适配
   domain: isDev ? domain.dev : domain.pro
 }
