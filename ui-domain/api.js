@@ -13,15 +13,15 @@ module.exports = {
     base    : 'http://192.168.2.5:7000',
     passport: 'http://192.168.2.5:7001',
     buyer   : 'http://192.168.2.5:7002',
-    seller  : 'http://192.168.2.5:7003/seller',
-    manager : 'http://192.168.2.5:7004/admin'
+    seller  : 'http://192.168.2.5:7003',
+    admin   : 'http://192.168.2.5:7004'
   },
   // 生产环境
   pro: {
     base    : 'http://yiqisi.s1.natapp.cc/base-api',
     passport: 'http://yiqisi.s1.natapp.cc/passport',
     buyer   : 'http://yiqisi.s1.natapp.cc/buyer-api',
-    seller  : 'http://yiqisi.s1.natapp.cc/seller-api/seller',
-    manager : 'http://yiqisi.s1.natapp.cc/manager-api/admin'
+    seller  : 'http://yiqisi.s1.natapp.cc/seller-api',
+    admin   : 'http://yiqisi.s1.natapp.cc/manager-api'
   }
 }
