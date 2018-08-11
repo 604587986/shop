@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getShopThemeList(params) {
   return request({
-    url: '/shops/themes',
+    url: 'seller/shops/themes',
     method: 'get',
     loading: false,
     params
@@ -26,7 +26,7 @@ export function getShopThemeList(params) {
  */
 export function saveShopTheme(id, params) {
   return request({
-    url: `/shops/themes/${id}`,
+    url: `seller/shops/themes/${id}`,
     method: 'put',
     params
   })

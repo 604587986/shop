@@ -110,7 +110,36 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="物流公司" name="logistics">
-        <en-logistics-company :logisticsShow="logisticsShow"/>
+        <en-table-layout
+          :tableData="logisticsTableData"
+          :loading="loading">
+          <template slot="table-columns">
+            <!--物流公司-->
+            <el-table-column prop="name" label="物流公司"/>
+            <!--公司状态-->
+            <el-table-column label="公司状态">
+              <template slot-scope="scope">
+                <span v-if="!scope.row.shop_id">未选择</span>
+                <span v-if="scope.row.shop_id" class="company-choosed">已选择</span>
+              </template>
+            </el-table-column>
+            <!--操作-->
+            <el-table-column label="操作" width="200">
+              <template slot-scope="scope">
+                <el-button
+                  type="success"
+                  v-if="!scope.row.shop_id"
+                  @click="handleLogisticsSwitch(scope.row)">开启
+                </el-button>
+                <el-button
+                  type="danger"
+                  v-if="scope.row.shop_id"
+                  @click="handleLogisticsSwitch(scope.row)">关闭
+                </el-button>
+              </template>
+            </el-table-column>
+          </template>
+        </en-table-layout>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -118,14 +147,14 @@
 
 <script>
   import * as API_express from '@/api/expressMould'
+  import * as API_logistics from '@/api/expressCompany'
   import { RegExp } from '~/ui-utils'
-  import { LogisticsCompany } from './components'
+  import { api } from '~/ui-domain'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
 
   export default {
     name: 'logisticsManage',
     components: {
-      [LogisticsCompany.name]: LogisticsCompany,
       [AreaSelectorDialog.name]: AreaSelectorDialog
     },
     data() {
@@ -160,9 +189,6 @@
         /** 新增模版/修改模版 */
         tplOperaName: '新增模版',
 
-        /** 是否显示物流公司弹框 */
-        logisticsShow: false,
-
         /** 列表loading状态 */
         loading: false,
 
@@ -175,7 +201,7 @@
         /** 地区选择器 */
         areaDialog: false,
 
-        areaApi: `${process.env.BASE_API}/regions/depth/3`,
+        areaApi: `${api.base}/regions/depth/3`,
 
         /** 地址选择器 映射属性 */
         props: {
@@ -231,6 +257,9 @@
           { label: '计件算运费', value: 2 }
         ],
 
+        /** 物流公司列表数据 */
+        logisticsTableData: [],
+
         /** 表单校验规则*/
         rules: {
           name: [
@@ -268,9 +297,7 @@
         this.tplOperaName = '新增模版'
         if (this.activeName === 'express') {
           this.GET_ExpressMould()
-          this.logisticsShow = false
         } else if (this.activeName === 'add') {
-          this.logisticsShow = false
           this.mouldForm = {
             template_id: '',
             name: '',
@@ -281,8 +308,9 @@
             type: 2,
             area: []
           }
-        } else if (this.activeName === 'logistics') {
-          this.logisticsShow = true
+          this.area = []
+        } else {
+          this.GET_logisticsList()
         }
       },
 
@@ -361,6 +389,7 @@
 
           area: []
         }
+        this.area = []
       },
 
       /** 保存模板 */
@@ -392,6 +421,39 @@
               })
             }
           }
+        })
+      },
+
+      /** 获取物流公司信息*/
+      GET_logisticsList() {
+        this.loading = true
+        API_logistics.getExpressCompanyList({}).then(response => {
+          this.loading = false
+          this.logisticsTableData = response
+        })
+      },
+
+      /** 物流公司信息开启 /关闭 */
+      handleLogisticsSwitch(row) {
+        const _tip = row.shop_id ? '关闭' : '开启'
+        this.$confirm(`确定要${_tip}么?`, '确认信息').then(() => {
+          row.shop_id ? this.closeLogistics(row) : this.openLogistics(row)
+        })
+      },
+
+      /** 执行关闭  */
+      closeLogistics(row) {
+        API_logistics.closeExpressPower(row.logi_id, {}).then(() => {
+          this.$message.success('关闭成功')
+          this.GET_logisticsList()
+        })
+      },
+
+      /** 执行开启 */
+      openLogistics(row) {
+        API_logistics.openExpressPower(row.logi_id, {}).then(() => {
+          this.$message.success('开启成功')
+          this.GET_logisticsList()
         })
       }
     }

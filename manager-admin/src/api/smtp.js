@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getSmtpList(params) {
   return request({
-    url: 'systems/smtps',
+    url: 'admin/systems/smtps',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getSmtpList(params) {
  */
 export function addSmtp(params) {
   return request({
-    url: 'systems/smtps',
+    url: 'admin/systems/smtps',
     method: 'post',
     data: params
   })
@@ -36,7 +36,7 @@ export function addSmtp(params) {
  */
 export function editSmtp(id, params) {
   return request({
-    url: `systems/smtps/${id}`,
+    url: `admin/systems/smtps/${id}`,
     method: 'put',
     data: params
   })
@@ -49,7 +49,7 @@ export function editSmtp(id, params) {
 export function deleteSmtp(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `systems/smtps/${ids}`,
+    url: `admin/systems/smtps/${ids}`,
     method: 'delete'
   })
 }
@@ -60,7 +60,7 @@ export function deleteSmtp(ids) {
  */
 export function getSmtpDetial(id) {
   return request({
-    url: `systems/smtps/${id}`,
+    url: `admin/systems/smtps/${id}`,
     method: 'get'
   })
 }
@@ -71,7 +71,7 @@ export function getSmtpDetial(id) {
  */
 export function sendTestEmail(params) {
   return request({
-    url: 'systems/smtps/send',
+    url: 'admin/systems/smtps/send',
     timeout: 20000,
     method: 'post',
     data: params

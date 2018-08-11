@@ -14,7 +14,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           value-format="timestamp"
-          :picker-options="pickerOptions">
+          :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: MixinPickerShortcuts }">
         </el-date-picker>
         <el-button size="mini" type="primary" icon="el-icon-download" @click="handleExportCollection" style="margin-left: 5px">导出Excel</el-button>
       </div>
@@ -28,28 +28,16 @@
         >
           <template slot="advanced-content">
             <el-form ref="advancedForm" :model="advancedForm" label-width="110px">
-              <el-form-item label="售后单号">
-                <el-input size="medium" v-model="advancedForm.sn" clearable></el-input>
+              <el-form-item label="会员名称">
+                <el-input size="medium" v-model="advancedForm.member_name" clearable></el-input>
               </el-form-item>
-              <el-form-item label="售后订单号">
-                <el-input size="medium" v-model="advancedForm.order_sn" clearable></el-input>
-              </el-form-item>
-              <el-form-item label="店铺名称">
-                <el-input size="medium" v-model="advancedForm.seller_name" clearable></el-input>
-              </el-form-item>
-              <el-form-item label="申请售后类型">
-                <el-select v-model="advancedForm.refund_type" placeholder="请选择" clearable>
-                  <el-option label="取消订单" value="CANCEL_ORDER"/>
-                  <el-option label="申请售后" value="AFTER_SALE"/>
+              <el-form-item label="支付方式">
+                <el-select v-model="advancedForm.pay_way" placeholder="请选择" clearable>
+                  <el-option label="支付宝" value="alipay"/>
+                  <el-option label="微信支付" value="wechat"/>
                 </el-select>
               </el-form-item>
-              <el-form-item label="退款（货）类型">
-                <el-select v-model="advancedForm.refuse_type" placeholder="请选择" clearable>
-                  <el-option label="退款" value="RETURN_MONEY"/>
-                  <el-option label="退货" value="RETURN_GOODS"/>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="申请时间">
+              <el-form-item label="账单日期">
                 <el-date-picker
                   v-model="advancedForm.refund_time_range"
                   type="daterange"
@@ -60,21 +48,8 @@
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
                   value-format="timestamp"
-                  :picker-options="pickerOptions">
+                  :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() }, shortcuts: MixinPickerShortcuts }">
                 </el-date-picker>
-              </el-form-item>
-              <el-form-item label="售后状态">
-                <el-select v-model="advancedForm.refund_status" placeholder="请选择" clearable>
-                  <el-option label="申请中" value="apply"/>
-                  <el-option label="审核通过" value="pass"/>
-                  <el-option label="审核拒绝" value="refuse"/>
-                  <el-option label="全部入库" value="all_stock_in"/>
-                  <el-option label="部分入库" value="part_stock_in"/>
-                  <el-option label="取消申请售后" value="cancel"/>
-                  <el-option label="退款中" value="refunding"/>
-                  <el-option label="退款失败" value="refundfail"/>
-                  <el-option label="已完成售后" value="completed"/>
-                </el-select>
               </el-form-item>
             </el-form>
           </template>
@@ -99,9 +74,9 @@
       slot="pagination"
       @size-change="handlePageSizeChange"
       @current-change="handlePageCurrentChange"
-      :current-page="params.page_no"
+      :current-page="tableData.page_no"
       :page-sizes="[10, 20, 50, 100]"
-      :page-size="params.page_size"
+      :page-size="tableData.page_size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="tableData.data_total">
     </el-pagination>
@@ -134,37 +109,6 @@
         /** 高级搜索数据 */
         advancedForm: {},
 
-        /** 高级搜索时间选择组件配置 */
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now()
-          },
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }]
-        },
         /** 导出Excel日期 */
         exportDateRange: []
       }
@@ -223,12 +167,12 @@
             sheet_name: '收款单',
             sheet_values: response.map(item => ({
               '订单号': item.order_sn,
-              '付款方式': item.pay_way === 'ONLINE' ? '在线支付' : '货到付款',
+              '付款方式': item.pay_way === 'COD' ? '货到付款' : '在线支付',
               '支付方式': item.pay_type,
-              '付款日期': Foundation.unixToDate(item.pay_time),
+              '付款日期': item.pay_time ? Foundation.unixToDate(item.pay_time) : '',
               '付款金额': Foundation.formatPrice(item.pay_money),
               '付款人': item.pay_member_name,
-              '付款状态': item.pay_status === 'PAY_NO' ? '未支付' : '已支付'
+              '付款状态': item.pay_status === 'PAY_YES' ? '已支付' : '未支付'
             }))
           }
           this.MixinExportJosnToExcel(json, '收款单')

@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getCouponsList(params) {
   return request({
-    url: '/promotion/coupons',
+    url: 'seller/promotion/coupons',
     method: 'get',
     loading: false,
     params
@@ -27,7 +27,7 @@ export function getCouponsList(params) {
  */
 export function deleteCoupons(ids, params) {
   return request({
-    url: `/promotion/coupons/${ids}`,
+    url: `seller/promotion/coupons/${ids}`,
     method: 'delete',
     loading: false,
     params
@@ -43,7 +43,7 @@ export function deleteCoupons(ids, params) {
  */
 export function modifyCoupons(ids, params) {
   return request({
-    url: `/promotion/coupons/${ids}`,
+    url: `seller/promotion/coupons/${ids}`,
     method: 'put',
     loading: false,
     data: params
@@ -58,7 +58,7 @@ export function modifyCoupons(ids, params) {
  */
 export function addCoupons(params) {
   return request({
-    url: '/promotion/coupons',
+    url: 'seller/promotion/coupons',
     method: 'post',
     loading: false,
     data: params
@@ -73,7 +73,7 @@ export function addCoupons(params) {
  */
 export function getCouponDetails(id, params) {
   return request({
-    url: `/promotion/coupons/${id}`,
+    url: `seller/promotion/coupons/${id}`,
     method: 'get',
     loading: false,
     params

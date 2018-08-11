@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getPushSettings() {
   return request({
-    url: 'systems/push',
+    url: 'admin/systems/push',
     method: 'get'
   })
 }
@@ -21,7 +21,7 @@ export function getPushSettings() {
  */
 export function editPushSettings(params) {
   return request({
-    url: 'systems/push',
+    url: 'admin/systems/push',
     method: 'put',
     data: params
   })
@@ -34,7 +34,7 @@ export function editPushSettings(params) {
  */
 export function pushGoods(title, goods_ids) {
   return request({
-    url: `systems/push/${goods_ids}`,
+    url: `admin/systems/push/${goods_ids}`,
     method: 'get',
     params: { title }
   })

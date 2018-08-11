@@ -51,7 +51,7 @@
     },
     head() {
       return {
-        title: `帮助中心-${this.site.title}`
+        title: `帮助中心-${this.site.site_name}`
       }
     }
   }

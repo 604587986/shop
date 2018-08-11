@@ -15,10 +15,10 @@
             <a href="javascript:;" class="main-timeline-item">
               <div class="timeline-wrap">
                 <div class="line-timeline"><i>{{ timeLine.time_text }}:00</i></div>
-                <div class="next-timeline"><i>即将开始</i></div>
+                <div class="next-timeline"><i>{{ timeLine.distance_time === 0 ? '在在抢购' : '即将开始' }}</i></div>
                 <div class="time-timeline">
-                  <b class="b-text">{{ distance_time === 0 ? '正在抢购' : '即将开始' }}</b>
-                  <b class="b-time">{{ distance_time === 0 ? '距结束' : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
+                  <b class="b-text">{{ timeLine.distance_time === 0 ? '正在抢购' : '即将开始' }}</b>
+                  <b class="b-time">{{ timeLine.distance_time === 0 ? (onlyOne ? '距结束' : '距下一轮') : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
                 </div>
               </div>
             </a>
@@ -45,47 +45,77 @@
       </div>
     </div>
     <div v-if="timeline_fixed" class="seckill-timeline-place"></div>
-    <div class="seckill-goods">
-      <ul class="seckill-list w">
-        <li v-for="i in 40" :key="i" class="goods-item">
-          <a href="javascript:;" class="link-goods-item">
-            <img class="goods-img" src="//img11.360buyimg.com/mobilecms/s250x250_jfs/t19564/83/2399750212/215147/d3928910/5af2cd17Nf5c51553.jpg" alt="">
-            <h4 class="goods-name">纽曼（Newman） P10 全网通4G 老人智能手机 移动联通电信 双卡双待 军绿色 3G+32G三网通</h4>
+    <div class="seckill-goods w">
+      <ul class="seckill-list">
+        <li v-for="(goods, index) in goodsList.data" :key="index" class="goods-item">
+          <a :href="'/goods/' + goods.goods_id" class="link-goods-item">
+            <img class="goods-img" :src="goods.goods_image" :alt="goods.goods_name">
+            <h4 class="goods-name">{{ goods.goods_name }}</h4>
           </a>
-          <div :class="['info-goods-item', false && 'no-start']">
+          <div :class="['info-goods-item', !seckillIsStart && 'no-start']">
             <div class="goods-price">
               <span class="price">
-                <em>￥</em>19.90
+                <em>￥</em>{{ goods.seckill_price | unitPrice }} <span class="goods-org-price">{{ goods.original_price | unitPrice }}</span>
               </span>
-              <span class="progress">
-                <i class="progress-txt">已售27%</i>
+              <span v-if="seckillIsStart" class="progress">
+                <i class="progress-txt">已售{{ countProgress(goods) }}%</i>
                 <i class="progress-inner">
-                  <b class="progress-completed" style="width:38%"></b>
+                  <b class="progress-completed" :style="{width: countProgress(goods) + '%'}"></b>
                 </i>
               </span>
-              <span v-if="false" class="tip">限时抢购 抢先提醒</span>
+              <span v-else class="tip">限时抢购 抢先提醒</span>
             </div>
-            <a href="javascript:;" class="buy-btn" target="_blank">立即抢购</a>
-            <!--<a href="javascript:;" class="buy-btn">即将开始</a>-->
+            <a
+              :href="'/goods/' + goods.goods_id"
+              class="buy-btn"
+              target="_blank"
+            >{{ seckillIsStart ? '立即抢购' : '即将开始' }}</a>
           </div>
         </li>
       </ul>
+      <el-pagination
+        v-if="goodsList"
+        @current-change="handleCurrentPageChange"
+        :current-page.sync="goodsList.page_no"
+        :page-size="goodsList.page_size"
+        layout="total, prev, pager, next"
+        :total="goodsList.data_total">
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Pagination } from 'element-ui'
+  Vue.use(Pagination)
   import * as API_Promotions from '@/api/promotions'
   import { Foundation } from '~/ui-utils'
   export default {
     name: 'seckill',
+    head() {
+      return {
+        title: `限时抢购-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         timeline_fixed: false,
         timeLines: '',
         times: [],
         timesText: [],
-        goodsList: []
+        goodsList: '',
+        params: {
+          page_no: 1,
+          page_size: 20
+        },
+        onlyOne: false
+      }
+    },
+    computed: {
+      /** 获取当前选中的时间节点是否开始 */
+      seckillIsStart() {
+        return this.timeLines.filter(item => item.active)[0].distance_time === 0
       }
     },
     mounted() {
@@ -96,6 +126,11 @@
       this.GET_TimeLine()
     },
     methods: {
+      /** 当前页数发生改变 */
+      handleCurrentPageChange(page_no) {
+        this.params.page_no = page_no
+        this.GET_TimeLineGoods()
+      },
       /** 时间段盒子是否浮动 */
       timeLineFixedStatus() {
         // 获取滚动条当前位置
@@ -111,14 +146,22 @@
           item.active = index === timeLineIndex
           return item
         })
-        this.GET_TimeLineGoods(timeLineIndex, timeLine.time_text)
+        this.params.page_no = 1
+        this.params.range_time = timeLine.time_text
+        this.GET_TimeLineGoods()
       },
       /** 开始倒计时 */
       startCountDown() {
         this.interval = setInterval(() => {
           const { times, timesText } = this
           for (let i = 0; i < times.length; i ++) {
-            if (!times[i]) continue
+            if (i === 0 && times[i] === 0) {
+              clearInterval(this.interval)
+              this.$alert('新的限时抢购开始啦，请确认查看！', function () {
+                location.reload()
+              })
+              break
+            }
             times[i] -= 1
             const timeText = Foundation.countTimeDown(times[i])
             this.$set(this.timesText, i, Foundation.countTimeDown(times[i]))
@@ -126,39 +169,51 @@
           this.$set(this, 'times', times)
         }, 1000)
       },
+      /** 计算销售百分比 */
+      countProgress(goods) {
+        if (!this.seckillIsStart) return 0
+        return (goods.sold_num / goods.sold_quantity * 100).toFixed(0)
+      },
       /** 获取时间线 */
       GET_TimeLine() {
         API_Promotions.getSeckillTimeLine().then(response => {
-          if (response && response.length) {
-            response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
-            const times = []
-            const timesText = []
-            response.map((item, index) => {
-              item.active = index === 0
-              if (index === 0) {
+          if (!response || !response.length) {
+            this.$alert('暂时还没有限时抢购正在进行，去别处看看吧！', () => {
+              this.$router.push({ path: '/' })
+            })
+            return false
+          }
+          this.params.range_time = response[0].time_text
+          this.GET_TimeLineGoods()
+          response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
+          const times = []
+          const timesText = []
+          const onlyOne = response.length === 1
+          this.onlyOne = onlyOne
+          response.map((item, index) => {
+            item.active = index === 0
+            if (item.distance_time === 0 && index === 0) {
+              if (onlyOne) {
                 times.push(Foundation.theNextDayTime())
               } else {
-                times.push(item.distance_time)
+                times.push(response[1].distance_time)
               }
-              timesText.push({ hours: '00', minutes: '00', seconds: '00' })
-              return item
-            })
-            this.times = times
-            this.timesText = timesText
-            this.timeLines = response
-            this.startCountDown()
-          }
+            } else {
+              times.push(item.distance_time)
+            }
+            timesText.push({ hours: '00', minutes: '00', seconds: '00' })
+            return item
+          })
+          this.times = times
+          this.timesText = timesText
+          this.timeLines = response
+          this.startCountDown()
         })
       },
       /** 获取对应时刻的商品 */
-      GET_TimeLineGoods(timeIndex, range_time) {
-        const params = {
-          page_no: 1,
-          page_size: 20,
-          range_time
-        }
-        API_Promotions.getSeckillTimeGoods(params).then(response => {
-          console.log(response)
+      GET_TimeLineGoods() {
+        API_Promotions.getSeckillTimeGoods(this.params).then(response => {
+          this.$set(this, 'goodsList', response)
         })
       }
     },
@@ -349,7 +404,11 @@
     margin-top: 100px;
   }
   .seckill-list {
-    min-height: 1200px;
+    overflow: hidden;
+  }
+  /deep/ .el-pagination {
+    text-align: right;
+    button, li { background-color: #f6f6f6 }
   }
   .goods-item {
     float: left;
@@ -415,6 +474,11 @@
             font-size: 12px;
           }
         }
+        .goods-org-price {
+          font-size: 14px;
+          color: #82848a;
+          text-decoration: line-through;
+        }
         .progress {
           display: block;
           margin-top: 5px;
@@ -461,6 +525,9 @@
       &.no-start {
         border-color: #443630;
         .buy-btn { background: #443630 }
+        .progress {
+          display: none;
+        }
       }
     }
   }

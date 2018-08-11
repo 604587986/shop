@@ -14,7 +14,7 @@
       <button type="button" class="search-btn shop" @click="handleSearchShop">搜店铺</button>
     </div>
     <ul v-if="!hideKeywords" class="search-hot-keywords">
-      <li v-for="item in hot_keywords" :key="item.id">
+      <li v-for="item in $store.getters.hotKeywords" :key="item.id">
         <nuxt-link :to="'/goods?keyword=' + item.hot_name">{{ item.hot_name }}</nuxt-link>
       </li>
     </ul>
@@ -42,7 +42,6 @@
     data() {
       return {
         keyword: '',
-        hot_keywords: [],
         autoCompleteStr: '',
         autoCompleteData: [],
         show_autocomplete: false
@@ -50,8 +49,6 @@
     },
     mounted() {
       this.handleQueryKeywordChange()
-       /** 获取热门关键词 */
-      API_Home.getHotKeywords().then(response => this.hot_keywords = response)
     },
     watch: {
       $route: 'handleQueryKeywordChange'

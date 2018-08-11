@@ -49,7 +49,7 @@
     name: 'my-coupons',
     head() {
       return {
-        title: `我的优惠券-${this.site.title}`
+        title: `我的优惠券-${this.site.site_name}`
       }
     },
     data() {

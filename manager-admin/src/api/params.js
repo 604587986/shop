@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function addParamsGroup(params) {
   return request({
-    url: 'goods/parameter-groups',
+    url: 'admin/goods/parameter-groups',
     method: 'post',
     data: params
   })
@@ -25,7 +25,7 @@ export function addParamsGroup(params) {
  */
 export function editParamsGroup(group_id, params) {
   return request({
-    url: `goods/parameter-groups/${group_id}`,
+    url: `admin/goods/parameter-groups/${group_id}`,
     method: 'put',
     data: params
   })
@@ -38,7 +38,7 @@ export function editParamsGroup(group_id, params) {
  */
 export function deleteParamsGroup(group_id) {
   return request({
-    url: `goods/parameter-groups/${group_id}`,
+    url: `admin/goods/parameter-groups/${group_id}`,
     method: 'delete'
   })
 }
@@ -51,7 +51,7 @@ export function deleteParamsGroup(group_id) {
  */
 export function sortParamsGroup(group_id, sort_type) {
   return request({
-    url: `goods/parameter-groups/${group_id}/sort`,
+    url: `admin/goods/parameter-groups/${group_id}/sort`,
     method: 'put',
     data: { sort_type }
   })
@@ -64,7 +64,7 @@ export function sortParamsGroup(group_id, sort_type) {
  */
 export function getParamsGroupDetail(id) {
   return request({
-    url: `goods/parameter-groups/${id}`,
+    url: `admin/goods/parameter-groups/${id}`,
     method: 'get'
   })
 }
@@ -76,7 +76,7 @@ export function getParamsGroupDetail(id) {
  */
 export function addParams(params) {
   return request({
-    url: 'goods/parameters',
+    url: 'admin/goods/parameters',
     method: 'post',
     data: params
   })
@@ -90,7 +90,7 @@ export function addParams(params) {
  */
 export function editParams(id, params) {
   return request({
-    url: `goods/parameters/${id}`,
+    url: `admin/goods/parameters/${id}`,
     method: 'put',
     data: params
   })
@@ -103,7 +103,7 @@ export function editParams(id, params) {
  */
 export function deleteParams(id) {
   return request({
-    url: `goods/parameters/${id}`,
+    url: `admin/goods/parameters/${id}`,
     method: 'delete'
   })
 }
@@ -116,7 +116,7 @@ export function deleteParams(id) {
  */
 export function sortParams(param_id, sort_type) {
   return request({
-    url: `goods/parameters/${param_id}/sort`,
+    url: `admin/goods/parameters/${param_id}/sort`,
     method: 'put',
     data: { sort_type }
   })
@@ -129,7 +129,7 @@ export function sortParams(param_id, sort_type) {
  */
 export function getParamDetail(id) {
   return request({
-    url: `goods/parameters/${id}`,
+    url: `admin/goods/parameters/${id}`,
     method: 'get'
   })
 }

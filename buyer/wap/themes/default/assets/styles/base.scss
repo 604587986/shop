@@ -137,56 +137,6 @@ html[xmlns] .clearfix {
   float: right;
 }
 
-
-/** layer skin */
-.layer-skin-custom-msg {
-  border: 0 !important;
-  box-shadow: 0 5px 15px 1px rgba(0,0,0,.2) !important;
-}
-
-.layer-skin-common, .layui-layer-prompt {
-  .layui-layer-title {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    box-sizing: border-box;
-    padding: 0 40px;
-    text-align: center;
-    //color: #fff;
-    //background-color: darken($color-main, 10%);
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    font-weight: 600;
-  }
-  .layui-layer-setwin {
-    color: #fff
-  }
-  .layui-layer-content {
-    margin-top: 44px;
-  }
-  .layui-layer-btn-c a {
-    color: #333;
-    min-width: 50px;
-    &:first-child {
-      background-color: $color-main;
-      border-color: $color-main;
-      color: #fff;
-      font-weight: 600;
-    }
-  }
-}
-
-/** dorpdown-layer */
-.dorpdown-layer {
-  display: none;
-  position: absolute;
-  border: 1px solid #d2d2d2;
-  background-color: #fff;
-  top: 30px;
-  right: 0;
-}
-
 /** input */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -205,10 +155,16 @@ input[type="number"]{
   color: #ff9800 !important;
 }
 
-.icon-custom-loading {
-  display: inline-block;
-  width: 100px;
-  height: 100px;
-  background: url("../images/loading.gif") no-repeat;
-  background-size: 100% 100%;
+/** vant样式覆盖 */
+.van-icon.van-nav-bar__arrow {
+  color: $color-van-nav-bar-back !important;
+}
+
+/** 大按钮样式 */
+.big-btn {
+  padding: 10px 10px 0 10px;
+  .van-button--large {
+    background-color: $color-main;
+    color: #fff;
+  }
 }

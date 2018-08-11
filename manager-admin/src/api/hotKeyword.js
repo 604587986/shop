@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getHotKeywords(params) {
   return request({
-    url: 'pages/hot-keywords',
+    url: 'admin/pages/hot-keywords',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getHotKeywords(params) {
  */
 export function addHotKeywords(params) {
   return request({
-    url: 'pages/hot-keywords',
+    url: 'admin/pages/hot-keywords',
     method: 'post',
     data: params
   })
@@ -35,7 +35,7 @@ export function addHotKeywords(params) {
  */
 export function getHotKeywordsDetail(id) {
   return request({
-    url: `pages/hot-keywords/${id}`,
+    url: `admin/pages/hot-keywords/${id}`,
     method: 'get'
   })
 }
@@ -47,7 +47,7 @@ export function getHotKeywordsDetail(id) {
  */
 export function editHotKeywords(id, params) {
   return request({
-    url: `pages/hot-keywords/${id}`,
+    url: `admin/pages/hot-keywords/${id}`,
     method: 'put',
     data: params
   })
@@ -59,7 +59,7 @@ export function editHotKeywords(id, params) {
  */
 export function deleteHotKeywords(id) {
   return request({
-    url: `pages/hot-keywords/${id}`,
+    url: `admin/pages/hot-keywords/${id}`,
     method: 'delete'
   })
 }

@@ -33,9 +33,9 @@
         slot="pagination"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
+        :current-page="tableData.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
+        :page-size="tableData.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
@@ -70,7 +70,7 @@
         <el-form-item label="每日最大发信数" prop="max_count">
           <el-input v-model="smtpForm.max_count"/>
         </el-form-item>
-        <el-form-item label="From" prop="mail_from">
+        <el-form-item label="发信邮箱" prop="mail_from">
           <el-input v-model="smtpForm.mail_from"/>
         </el-form-item>
         <el-form-item label="测试" :error="test_email_error">
@@ -112,22 +112,27 @@
         smtpForm: {},
         /** smtp 表单规则*/
         smtpRules: {
-          host: [this.MixinRequired('请输入HOST')],
+          host: [this.MixinRequired('请输入HOST！')],
           port: [
-            this.MixinRequired('请输入PORT'),
+            this.MixinRequired('请输入PORT！'),
             { validator: (rule, value, callback) => {
-              /^[1-9]\d*$/.test(value) ? callback() : callback(new Error('PORT应为正整数！'))
+              RegExp.integer.test(value) ? callback() : callback(new Error('PORT应为正整数！'))
             } }
           ],
-          username: [this.MixinRequired('请输入用户名')],
-          password: [this.MixinRequired('请输入密码')],
+          username: [this.MixinRequired('请输入用户名！')],
+          password: [this.MixinRequired('请输入密码！')],
           max_count: [
-            this.MixinRequired('请输入每日最大发信数'),
+            this.MixinRequired('请输入每日最大发信数！'),
             { validator: (rule, value, callback) => {
-              /^[1-9]\d*$/.test(value) ? callback() : callback(new Error('发信数应为正整数！'))
+              RegExp.integer.test(value) ? callback() : callback(new Error('发信数应为正整数！'))
             } }
           ],
-          mail_from: [this.MixinRequired('请输入From字段')]
+          mail_from: [
+            this.MixinRequired('请输入发信邮箱！'),
+            { validator: (rule, value, callback) => {
+              RegExp.email.test(value) ? callback() : callback(new Error('发信邮箱格式有误！'))
+            } }
+          ]
         },
         /** smtp表单 dialog */
         dialogSmtpVisible: false,

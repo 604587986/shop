@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function getGoodsStatisticsList(params) {
   return request({
-    url: '/statistics/goods/goods_detail',
+    url: 'seller/statistics/goods/goods_detail',
     method: 'get',
     loading: false,
     params

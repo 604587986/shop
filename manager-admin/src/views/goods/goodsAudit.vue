@@ -1,7 +1,7 @@
 <template>
   <div>
     <en-table-layout
-      :tableData="goodsData.data"
+      :tableData="tableData.data"
       :loading="loading"
     >
       <div slot="toolbar" class="inner-toolbar">
@@ -72,15 +72,15 @@
         </el-table-column>
       </template>
       <el-pagination
-        v-if="goodsData"
+        v-if="tableData"
         slot="pagination"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
+        :current-page="tableData.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
+        :page-size="tableData.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="goodsData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </en-table-layout>
 
@@ -134,7 +134,7 @@
           page_size: 10
         },
         // 商品数据
-        goodsData: '',
+        tableData: '',
         // 审核商品 表单
         goodsAuditForm: {
           message: '',
@@ -235,7 +235,7 @@
         this.loading = true
         API_goods.getAuditGoods(this.params).then(response => {
           this.loading = false
-          this.goodsData = response
+          this.tableData = response
         }).catch(() => (this.loading = false))
       }
     }

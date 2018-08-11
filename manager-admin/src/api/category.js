@@ -15,7 +15,7 @@ export function addCategory(params) {
     image: params.category_image
   }
   return request({
-    url: 'goods/categories',
+    url: 'admin/goods/categories',
     method: 'post',
     data: _params
   })
@@ -34,7 +34,7 @@ export function editCategory(id, params) {
     image: params.category_image
   }
   return request({
-    url: `goods/categories/${id}`,
+    url: `admin/goods/categories/${id}`,
     method: 'put',
     data: _params
   })
@@ -47,7 +47,7 @@ export function editCategory(id, params) {
  */
 export function getBrandByCategoryId(category_id) {
   return request({
-    url: `goods/categories/${category_id}/brands`,
+    url: `admin/goods/categories/${category_id}/brands`,
     method: 'get'
   })
 }
@@ -59,7 +59,7 @@ export function getBrandByCategoryId(category_id) {
  */
 export function editCategoryBrand(category_id, choose_brands) {
   return request({
-    url: `goods/categories/${category_id}/brands`,
+    url: `admin/goods/categories/${category_id}/brands`,
     method: 'put',
     data: { choose_brands }
   })
@@ -72,7 +72,7 @@ export function editCategoryBrand(category_id, choose_brands) {
  */
 export function getSpecsByCategoryId(category_id) {
   return request({
-    url: `goods/categories/${category_id}/specs`,
+    url: `admin/goods/categories/${category_id}/specs`,
     method: 'get'
   })
 }
@@ -85,7 +85,7 @@ export function getSpecsByCategoryId(category_id) {
  */
 export function editCategorySpecs(category_id, choose_specs) {
   return request({
-    url: `goods/categories/${category_id}/specs`,
+    url: `admin/goods/categories/${category_id}/specs`,
     method: 'put',
     data: { choose_specs }
   })
@@ -99,7 +99,7 @@ export function editCategorySpecs(category_id, choose_specs) {
 export function deleteCategory(ids) {
   if (Array.isArray(ids)) ids = ids.join(',')
   return request({
-    url: `goods/categories/${ids}`,
+    url: `admin/goods/categories/${ids}`,
     method: 'delete'
   })
 }
@@ -111,7 +111,7 @@ export function deleteCategory(ids) {
  */
 export function getCategoryParams(category_id) {
   return request({
-    url: `goods/categories/${category_id}/param`,
+    url: `admin/goods/categories/${category_id}/param`,
     method: 'get'
   })
 }
@@ -122,7 +122,7 @@ export function getCategoryParams(category_id) {
  */
 export function getCategoryChildren(parent_id = 0) {
   return request({
-    url: `goods/categories/${parent_id}/children`,
+    url: `admin/goods/categories/${parent_id}/children`,
     method: 'get',
     loading: false
   })

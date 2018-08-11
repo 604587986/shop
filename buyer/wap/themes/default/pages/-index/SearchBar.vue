@@ -10,7 +10,7 @@
             <span>搜索商品/店铺</span>
           </div>
         </div>
-        <nuxt-link to="/member" class="search-icon"><van-icon name="contact" color="#fff"/></nuxt-link>
+        <a href="/member" class="search-icon"><van-icon name="contact" color="#fff"/></a>
       </div>
     </div>
     <search :show="showSearch" @close="showSearch = false"/>

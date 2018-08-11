@@ -97,9 +97,9 @@
         slot="pagination"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
+        :current-page="tableData.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
+        :page-size="tableData.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>
@@ -119,7 +119,13 @@
         <!--上级分类-->
         <el-form-item v-if="parentOptions && categoryForm.parent_id !== 0" label="上级分类" prop="parent_id">
           <el-select v-model="categoryForm.parent_id" placeholder="请选择上级分类">
-            <el-option v-for="item in parentOptions" :label="item.name" :value="item.id" :key="item.id"/>
+            <el-option
+              v-for="item in parentOptions"
+              :label="item.name"
+              :value="item.id"
+              :key="item.id"
+              :disabled="item.id !== 13"
+            />
           </el-select>
         </el-form-item>
         <!--排序-->

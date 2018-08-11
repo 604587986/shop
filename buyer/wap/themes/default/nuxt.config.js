@@ -1,7 +1,13 @@
 const webpack = require('webpack')
 
 module.exports = {
-  env: {},
+  env: {
+    /**
+     * 分销功能开关
+     * 如果您购买了分销相关功能，请设置为true
+     */
+    distribution: true
+  },
   head: {
     title: 'Javashop多店铺示例商城',
     meta: [
@@ -13,7 +19,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_2yritt4lz7c.css' }
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_ve0xf3ndbw.css' }
     ],
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },
@@ -21,7 +27,7 @@ module.exports = {
     ],
     __dangerouslyDisableSanitizers: ['script']
   },
-  loading: { color: '#29d' },
+  loading: false,
   build: {
     analyze: false,
     extend (config, { isDev, isClient }) {
@@ -42,21 +48,6 @@ module.exports = {
       allChunks: true
     },
     vendor: ['axios'],
-    babel: {
-      "plugins": [
-        ["component",
-          {
-            "libraryName": "element-ui",
-            "styleLibraryName": "theme-chalk"
-          },
-        "import",
-          {
-            "libraryName": "vant",
-            "libraryDirectory": "es",
-            "style": true
-          }]
-      ]
-    },
     plugins: [],
     publicPath: '/'
   },
@@ -70,15 +61,14 @@ module.exports = {
   ],
   plugins: [
     { src: '~plugins/vue-layer', ssr: false },
-    { src: '~plugins/vue-lazyload', ssr: true },
     { src: '~plugins/vue-components', ssr: true },
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
-    { src: '~plugins/element-ui', ssr: true },
     { src: '~plugins/vue-vant', ssr: true },
     { src: '~plugins/vue-swiper', ssr: false }
   ],
   router: {
+    middleware: 'auth-site',
     scrollBehavior: function (to, from, savedPosition) {
       return { x: 0, y: 0 }
     }

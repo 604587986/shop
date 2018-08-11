@@ -20,21 +20,38 @@ service.interceptors.request.use(config => {
   // Do something before request is sent
   /** 配置全屏加载 */
   if (config.loading !== false) {
+    const { loading } = config
+    const is_num = typeof (config.loading) === 'number'
+    if (is_num) config.loading_num = true
     config.loading = Loading.service({
       lock: true,
-      background: 'rgba(0, 0, 0, 0.8)',
+      background: `rgba(0, 0, 0, ${is_num ? loading : '0.8'})`,
       spinner: 'el-icon-loading'
     })
   }
-  /** 设置令牌 */
+
+  // uuid
+  const uuid = Storage.getItem('uuid')
+  config.headers['uuid'] = uuid
+
+  // 获取访问Token
   let accessToken = Storage.getItem('accessToken')
-  // if (process.env.NODE_ENV === 'production') {
-  //   const { member_id } = JSON.parse(Storage.getItem('user'))
-  //   const nonce = Foundation.randomString(6)
-  //   const timestamp = parseInt(new Date().getTime() / 1000)
-  //   accessToken = md5(member_id + nonce + timestamp + accessToken)
-  // }
-  config.headers['Authorization'] = accessToken
+  if (accessToken) {
+    // 如果前台为开发环境，后台API，则需要替换为下面的代码
+    // process.env.NODE_ENV === 'development'， 'production'
+    if (process.env.NODE_ENV === 'production') {
+      const uid = Storage.getItem('uid')
+      const nonce = Foundation.randomString(6)
+      const timestamp = parseInt(new Date().getTime() / 1000)
+      const sign = md5(uid + nonce + timestamp + accessToken)
+      const _params = { uid, nonce, timestamp, sign }
+      let params = config.params || {}
+      params = { ...params, ..._params }
+      config.params = params
+    } else {
+      config.headers['Authorization'] = accessToken
+    }
+  }
   /** 进行参数序列化 */
   if ((config.method === 'put' || config.method === 'post') && config.headers['Content-Type'] !== 'application/json') {
     config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
@@ -70,12 +87,13 @@ service.interceptors.response.use(
  * @param target
  */
 const closeLoading = (target) => {
-  if (!target.config.loading) return true
+  const { loading, loading_num } = target.config
+  if (!loading) return true
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       target.config.loading.close()
       resolve()
-    }, 200)
+    }, loading_num ? 0 : 200)
   })
 }
 
@@ -91,7 +109,6 @@ function fedLogOut() {
 export default function request(options) {
   // 如果是请求刷新token，不需要检查token直接请求。
   if (options.url.indexOf('passport/token') !== -1) {
-    console.log(options.url + ' | 刷新token，不需要检查token直接请求。')
     return service(options)
   }
   return new Promise((resolve, reject) => {

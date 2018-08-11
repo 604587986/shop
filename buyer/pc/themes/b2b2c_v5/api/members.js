@@ -3,6 +3,7 @@
  */
 
 import request, { Method } from '@/utils/request'
+import Storage from '@/utils/storage'
 
 /**
  * 获取优惠券列表
@@ -124,6 +125,7 @@ export function getGoodsCollection(params) {
   return request({
     url: 'members/collection/goods',
     method: Method.GET,
+    needToken: true,
     loading: false,
     message: false,
     params
@@ -255,7 +257,7 @@ export function saveUserInfo(params) {
  */
 export function logout() {
   return request({
-    url: `members/logout`,
+    url: `members/logout?uid=${Storage.getItem('uid')}`,
     method: Method.POST,
     needToken: true
   })
@@ -318,7 +320,8 @@ export function deleteReceipt(id) {
 export function setDefaultReceipt(id) {
   return request({
     url: `members/receipt/${id}/default`,
-    method: Method.PUT
+    method: Method.PUT,
+    needToken: true
   })
 }
 
@@ -352,7 +355,8 @@ export function getAccountBinder() {
 export function bindAccount(type) {
   return request({
     url: `members/account-binder/pc/${type}`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
 
@@ -363,7 +367,8 @@ export function bindAccount(type) {
 export function unbundAccount(type) {
   return request({
     url: `members/account-binder/pc/${type}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -374,7 +379,8 @@ export function unbundAccount(type) {
 export function loginBindAccount(uuid) {
   return request({
     url: `members/account-binder/login/${uuid}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -385,7 +391,8 @@ export function loginBindAccount(uuid) {
 export function registerBindAccount(uuid) {
   return request({
     url: `members/account-binder/register/${uuid}`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -396,6 +403,7 @@ export function registerBindAccount(uuid) {
 export function getShopsCoupons(seller_ids) {
   return request({
     url: `members/coupon/${seller_ids}`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }

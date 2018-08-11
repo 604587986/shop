@@ -2,7 +2,9 @@
   <div id="shipping-address">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">收货地址管理</li>
+        <li class="active">
+          <a href="./shipping-address">收货地址管理</a>
+        </li>
       </ul>
       <el-button size="mini" class="add-address-btn" @click="handleAddAddress">添加地址</el-button>
     </div>
@@ -15,7 +17,7 @@
         show-icon>
       </el-alert>
       <el-table
-        :data="address"
+        :data="addressList"
         :header-cell-style="{textAlign: 'center'}"
         cell-class-name="address-cell"
         style="width: 100%"
@@ -45,6 +47,7 @@
           <el-input v-model="addressForm.mobile" size="small" :maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="收货地区" prop="region">
+          <en-region-picker :api="MixinRegionApi" :default="regions" @changed="(object) => { this.addressForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="addr">
           <el-input v-model="addressForm.addr" size="small"></el-input>
@@ -64,11 +67,17 @@
   import addressMixin from './addressMixin'
   export default {
     name: 'shipping-address',
+    head() {
+      return {
+        title: `我的收货地址-${this.site.site_name}`
+      }
+    },
     mixins: [addressMixin]
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .add-address-btn {
     position: absolute;
     top: 0;
@@ -76,7 +85,7 @@
   }
   .address-list {
     /deep/ .el-alert { margin: 10px 0}
-    /deep/ .delete-btn { color: #f42424 }
+    /deep/ .delete-btn { color: $color-main }
     /deep/ .address-cell {
       text-align: center;
     }

@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getGiftsList(params) {
   return request({
-    url: '/promotion/full-discount-gifts',
+    url: 'seller/promotion/full-discount-gifts',
     method: 'get',
     loading: false,
     params
@@ -26,7 +26,7 @@ export function getGiftsList(params) {
  */
 export function deleteGifts(ids) {
   return request({
-    url: `/promotion/full-discount-gifts/${ids}`,
+    url: `seller/promotion/full-discount-gifts/${ids}`,
     method: 'delete',
     loading: false
   })
@@ -40,7 +40,7 @@ export function deleteGifts(ids) {
  */
 export function saveGifts(ids, params) {
   return request({
-    url: `/promotion/full-discount-gifts/${ids}`,
+    url: `seller/promotion/full-discount-gifts/${ids}`,
     method: 'put',
     loading: false,
     data: params
@@ -54,7 +54,7 @@ export function saveGifts(ids, params) {
  */
 export function addGifts(params) {
   return request({
-    url: '/promotion/full-discount-gifts',
+    url: 'seller/promotion/full-discount-gifts',
     method: 'post',
     loading: false,
     data: params
@@ -69,7 +69,7 @@ export function addGifts(params) {
  */
 export function getGiftDetails(id, params) {
   return request({
-    url: `/promotion/full-discount-gifts/${id}`,
+    url: `seller/promotion/full-discount-gifts/${id}`,
     method: 'get',
     loading: false,
     params

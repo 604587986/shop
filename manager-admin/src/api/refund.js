@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getRefundList(params) {
   return request({
-    url: 'after-sales/refund',
+    url: 'admin/after-sales/refund',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getRefundList(params) {
  */
 export function getRefundDetail(sn) {
   return request({
-    url: `after-sales/refund/${sn}`,
+    url: `admin/after-sales/refund/${sn}`,
     method: 'get',
     loading: false
   })
@@ -36,7 +36,7 @@ export function getRefundDetail(sn) {
  */
 export function refundMoney(sn, params) {
   return request({
-    url: `after-sales/refunds/${sn}`,
+    url: `admin/after-sales/refunds/${sn}`,
     method: 'post',
     data: params
   })
@@ -48,7 +48,7 @@ export function refundMoney(sn, params) {
  */
 export function exportRefundExcel(params) {
   return request({
-    url: 'after-sales/exports/excel',
+    url: 'admin/after-sales/exports/excel',
     method: 'get',
     params
   })

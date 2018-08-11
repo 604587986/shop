@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import Storage from '@/utils/storage'
 import { api } from '~/ui-domain'
 
 /**
@@ -7,7 +8,7 @@ import { api } from '~/ui-domain'
  */
 export function logout() {
   return request({
-    url: `${api.buyer}/members/logout`,
+    url: `${api.buyer}/members/logout?uid=${Storage.getItem('uid')}`,
     method: 'post'
   })
 }
@@ -18,6 +19,18 @@ export function logout() {
 export function getUserInfo() {
   return request({
     url: `${api.buyer}/members`,
+    method: 'get'
+  })
+}
+
+/**
+ * 获取用户角色权限
+ * @param role_id
+ * @returns {*}
+ */
+export function getUserRolesPermissions(role_id) {
+  return request({
+    url: `seller/shops/roles/${role_id}/checked`,
     method: 'get'
   })
 }

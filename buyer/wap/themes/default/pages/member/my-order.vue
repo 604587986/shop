@@ -4,6 +4,11 @@
 
 <script>
   export default {
-    name: 'my-order'
+    name: 'my-order',
+    head() {
+      return {
+        title: `我的订单-${this.site.site_name}`
+      }
+    }
   }
 </script>

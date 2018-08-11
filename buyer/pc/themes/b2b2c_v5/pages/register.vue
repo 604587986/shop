@@ -65,7 +65,7 @@
     },
     head() {
       return {
-        title: `会员注册-${this.site.title}`
+        title: `会员注册-${this.site.site_name}`
       }
     },
     data() {

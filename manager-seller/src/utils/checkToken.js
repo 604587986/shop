@@ -1,5 +1,5 @@
 /**
- * Created by andste.cc@gmail.com on 2018/5/7.
+ * Created by Andste on 2018/5/7.
  */
 
 import Vue from 'vue'
@@ -62,31 +62,32 @@ export default function checkToken(options) {
        * 如果有刷新token锁，则进入循环检测。
        */
       if (!window.__refreshTokenLock__) {
-        console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
+        // console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
         // 开始请求新的Token，并加锁。
         window.__refreshTokenLock__ = request({
-          url: `${api.passport}/passport/token`,
+          url: `passport/token`,
           method: 'post',
+          headers: { uuid: Storage.getItem('uuid') },
           data: { refersh_token: refreshToken }
         }).then(response => {
           store.dispatch('setAccessTokenAction', response.accessToken)
           store.dispatch('setRefreshTokenAction', response.refreshToken)
           window.__refreshTokenLock__ = null
-          console.log(options.url + ' | 已拿到新的token。')
+          // console.log(options.url + ' | 已拿到新的token。')
           resolve()
         }).catch(() => {
           window.__refreshTokenLock__ = undefined
           store.dispatch('removeUserAction')
         })
       } else {
-        console.log('进入循环检测...')
+        // console.log('进入循环检测...')
         // 循环检测刷新token锁，当刷新锁变为null时，说明新的token已经取回。
         const checkLock = () => {
           setTimeout(() => {
             const __RTK__ = window.__refreshTokenLock__
-            console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
+            // console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
             if (__RTK__ === undefined) {
-              console.log('登录已失效了，不用再等待了...')
+              // console.log('登录已失效了，不用再等待了...')
               Storage.removeItem('user', { domain: domain.cookie })
               Storage.removeItem('accessToken', { domain: domain.cookie })
               Storage.removeItem('refreshToken', { domain: domain.cookie })

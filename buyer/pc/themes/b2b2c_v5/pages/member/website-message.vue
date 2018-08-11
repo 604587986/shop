@@ -18,7 +18,7 @@
             <div class="msg-title">
               <h4>{{ message.title || '站内消息' }}</h4>
               <div class="message-tools">
-                <i v-if="params.type !== 'all'"
+                <i v-if="message.is_read === 0"
                    class="el-icon-check"
                    title="标记为已读"
                    @click="handleReadMessage(message)"
@@ -55,7 +55,7 @@
     name: 'website-message',
     head() {
       return {
-        title: `站内消息-${this.site.title}`
+        title: `站内消息-${this.site.site_name}`
       }
     },
     data() {
@@ -69,11 +69,12 @@
       }
     },
     mounted() {
-      this.GET_MessageList(this.params.type)
+      this.GET_MessageList()
     },
     watch: {
       $route: function({ query }) {
-        this.GET_MessageList(query.type)
+        this.params.type = query.type
+        this.GET_MessageList()
       },
     },
     methods: {
@@ -105,16 +106,15 @@
         })
       },
       /** 获取站内消息 */
-      GET_MessageList(type){
+      GET_MessageList(){
         const params = JSON.parse(JSON.stringify(this.params))
-        if (type !== 'all') {
+        if (params.type !== 'all') {
           params.read = 0
         } else {
           delete params.read
         }
         API_Message.getMessages(params).then(response => {
           this.tableData = response
-          this.params.type = type
           this.MixinScrollToTop()
         })
       }

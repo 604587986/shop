@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getShopNavList(params) {
   return request({
-    url: '/shops/navigations',
+    url: 'seller/shops/navigations',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getShopNavList(params) {
  */
 export function addShopNav(params) {
   return request({
-    url: '/shops/navigations',
+    url: 'seller/shops/navigations',
     method: 'post',
     data: params
   })
@@ -39,7 +39,7 @@ export function addShopNav(params) {
  */
 export function editShopNav(id, params) {
   return request({
-    url: `/shops/navigations/${id}`,
+    url: `seller/shops/navigations/${id}`,
     method: 'put',
     data: params
   })
@@ -53,7 +53,7 @@ export function editShopNav(id, params) {
  */
 export function delShopNav(id, params) {
   return request({
-    url: `/shops/navigations/${id}`,
+    url: `seller/shops/navigations/${id}`,
     method: 'delete',
     params
   })

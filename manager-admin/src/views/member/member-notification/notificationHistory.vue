@@ -12,12 +12,8 @@
       </div>
       <template slot="table-columns">
         <el-table-column prop="title" label="消息标题"/>
-        <el-table-column label="发送类型">
-          <template slot-scope="scope">{{ scope.row.type ? '指定会员' : '全站' }}</template>
-        </el-table-column>
-        <el-table-column label="发送时间">
-          <template slot-scope="scope">{{ scope.row.send_time | unixToDate }}</template>
-        </el-table-column>
+        <el-table-column prop="send_type" label="发送类型"/>
+        <el-table-column prop="send_time" :formatter="MixinUnixToDate" label="发送时间"/>
         <el-table-column prop="content" label="消息内容" width="500"/>
       </template>
       <el-pagination
@@ -25,9 +21,9 @@
         slot="pagination"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
+        :current-page="tableData.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
+        :page-size="tableData.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>

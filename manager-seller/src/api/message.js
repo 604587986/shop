@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getMsgsList(params) {
   return request({
-    url: '/shops/shop-notice-logs',
+    url: 'seller/shops/shop-notice-logs',
     method: 'get',
     loading: false,
     params
@@ -26,7 +26,7 @@ export function getMsgsList(params) {
  */
 export function deleteMsgs(ids) {
   return request({
-    url: `/shops/shop-notice-logs/${ids}`,
+    url: `seller/shops/shop-notice-logs/${ids}`,
     method: 'delete',
     loading: false
   })
@@ -40,7 +40,7 @@ export function deleteMsgs(ids) {
  */
 export function signMsgs(ids) {
   return request({
-    url: `/shops/shop-notice-logs/${ids}/read`,
+    url: `seller/shops/shop-notice-logs/${ids}/read`,
     method: 'put',
     loading: false
   })

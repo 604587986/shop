@@ -1,12 +1,10 @@
 <template>
-  <div class="classify">
-    <van-nav-bar
-      left-arrow
-      @click-left="$router.go(-1)"
-      v-bind="$attrs"
-      v-on="$listeners"
-    />
-  </div>
+  <van-nav-bar
+    left-arrow
+    @click-left="MixinRouterBack"
+    v-bind="$attrs"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
@@ -14,9 +12,3 @@
     name: 'NavBar'
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
- .classify {
-   /deep/ .van-nav-bar__left .van-nav-bar__arrow { color: #666 }
- }
-</style>

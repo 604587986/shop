@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import menus from './menus'
+  // import menus from './menus'
   import { mapGetters } from 'vuex'
   export default {
     name: 'member-breadcrumb',
@@ -25,18 +25,18 @@
         let _name = this.$route.name
         let _paths = this.$route.path.split('/').slice(2, 6)
         let _bcs = []
-        menus.forEach(item => {
-          item.children.forEach(_item => {
-            if (_item.name === _paths[0]) {
-              _bcs.push({ title: _item.title, path: '/member/' + _item.name })
-              if (_item.children) {
-                _item.children.forEach(__item => {
-                  if (__item.name === _paths[1]) _bcs.push({ title: __item.title, path: '/member/' + _item.name + '/' + __item.name })
-                })
-              }
-            }
-          })
-        })
+        // [].forEach(item => {
+        //   item.children.forEach(_item => {
+        //     if (_item.name === _paths[0]) {
+        //       _bcs.push({ title: _item.title, path: '/member/' + _item.name })
+        //       if (_item.children) {
+        //         _item.children.forEach(__item => {
+        //           if (__item.name === _paths[1]) _bcs.push({ title: __item.title, path: '/member/' + _item.name + '/' + __item.name })
+        //         })
+        //       }
+        //     }
+        //   })
+        // })
         return _bcs
       },
       ...mapGetters({

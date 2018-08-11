@@ -1,9 +1,3 @@
-/** 导航栏相关 */
-export const SET_NAV_DATA = 'SET_NAV_DATA'
-
-/** 分类相关 */
-export const SET_CATEGORY_DATA = 'SET_CATEGORY_DATA'
-
 /** UUID相关 */
   // 设置UUID
 export const SET_UUID = 'SET_UUID'
@@ -51,3 +45,11 @@ export const SET_SHOP_DATA = 'SET_SHOP_DATA'
 /** 站点信息相关 */
   // 设置站点信息
 export const SET_SITE_DATA = 'SET_SITE_DATA'
+
+/** 首页静态数据 */
+  // 设置分类
+export const SET_CATEGORY_DATA = 'SET_CATEGORY_DATA'
+// 设置导航栏
+export const SET_NAV_DATA = 'SET_NAV_DATA'
+// 设置热搜关键词
+export const SET_HOT_KEYWORDS = 'SET_HOT_KEYWORDS'

@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getShopTraffic(params) {
   return request({
-    url: '/statistics/page_view/shop',
+    url: 'seller/statistics/page_view/shop',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getShopTraffic(params) {
  */
 export function getGoodsStatistics(params) {
   return request({
-    url: '/statistics/page_view/goods',
+    url: 'seller/statistics/page_view/goods',
     method: 'get',
     loading: false,
     params

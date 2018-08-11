@@ -86,10 +86,10 @@
     head() {
       const { goods, site } = this
       return {
-        title: `${goods.page_title}-${site.title}`,
+        title: `${goods.page_title || goods.goods_name || '商品详情'}-${site.site_name}`,
         meta: [
           { hid: 'keywords', name: 'keywords', content: goods.meta_keywords },
-          { hid: 'description', name: 'description', content: `${goods.meta_description}-${site.title}` },
+          { hid: 'description', name: 'description', content: `${goods.meta_description}-${site.site_name}` },
           { 'http-equiv': 'mobile-agent', content: `format=xhtml; url=/goods/${goods.goods_id}` },
           { 'http-equiv': 'mobile-agent', content: `format=html5; url=/goods/${goods.goods_id}` }
         ]
@@ -113,26 +113,26 @@
     },
     mounted() {
       const { goods_id, seller_id } = this.goods
-      // 如果用户已登录，查询是否已收藏商品、店铺
-      if (this.canView && Storage.getItem('refreshToken')) {
-        API_Members.getGoodsIsCollect(goods_id).then(response => {
-          this.collected = response.message
-        })
-        // 浏览量+1【服务端去重】
+      // 如果商品可以查看
+      if (this.canView) {
+        // 如果用户已登录，加载收藏状态
+        if (Storage.getItem('refreshToken')) {
+          API_Members.getGoodsIsCollect(goods_id).then(response => {
+            this.collected = response.message
+          })
+        }
+        // 浏览量+1
         API_Goods.visitGoods(goods_id)
+        // 获取促销信息
+        API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
         // 加载百度分享代码
         this.loadBdShareScript()
       }
-      // 获取促销信息
-      API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
-    },
-    computed: {
-      ...mapGetters(['user'])
     },
     methods: {
       /** 收藏商品 */
       handleCollectionGoods() {
-        if (!Storage.getItem('user')) {
+        if (!Storage.getItem('refreshToken')) {
           this.$message.error('您还未登录，不能收藏商品！')
           return false
         }
@@ -275,7 +275,7 @@
       font-weight: 600;
       transition: background-color ease .2s;
       &:hover {
-        background-color: darken($color-main, 75%);
+        background-color: lighten($color-main, 15%);
       }
     }
   }

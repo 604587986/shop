@@ -1,103 +1,106 @@
 <template>
   <div id="my-points">
-    <div class="member-nav">
-      <ul class="member-nav-list">
-        <li :class="[type === 1 && 'active']" @click="type = 1">我的积分</li>
-        <li :class="[type === 2 && 'active']" @click="type = 2">积分明细</li>
-      </ul>
-    </div>
-    <div class="points-container">
-      <div v-show="type === 1" class="points-my">
-        <el-alert type="warning" title="" :closable="false">
-          <h2>积分规则:</h2>
-          <p>当积分已达到某一兑换积分标准时，顾客可将累计积分依照网站相应积分及兑换标准兑换回馈商品，网站将即时从用户会员积分中扣减相应积分。</p>
-          <p>各项回馈项目（包含各项商品、服务或抵用券等）及兑换标准及兑换规则均以兑换当时最新回馈活动公告或目录为准。</p>
-          <p>部分兑换商品有数量限制的，兑完为止。</p>
-          <p>公告或目录如有有效期限的，逾期即不得兑换。</p>
-          <p>积分兑换区的商品为只可用积分兑换的商品(如积分价格：100积分)</p>
-        </el-alert>
-        <el-alert type="info" title="" :closable="false">
-          <h2>消费积分</h2>
-          <p>可用积分：{{ points.consum_point }}</p>
-          <h2>等级积分</h2>
-          <p>可用积分：{{ points.gade_point }}</p>
-        </el-alert>
-      </div>
-      <div v-show="type === 2" class="points-detail">
-        <el-table
-          :data="pointsData.data"
-          :header-cell-style="{textAlign: 'center'}"
-          style="width: 100%"
+    <nav-bar title="我的积分"></nav-bar>
+    <van-tabs v-model="tabActive" :line-width="100" sticky>
+      <van-tab title="我的积分">
+        <van-cell-group :border="false">
+          <van-cell title="消费积分" :value="points.consum_point || 0"/>
+          <van-cell title="等级积分" :value="points.grade_point || 0"/>
+        </van-cell-group>
+      </van-tab>
+      <van-tab title="积分明细">
+        <empty-member v-if="finished && !pointsList.length">暂无收藏的店铺</empty-member>
+        <van-list
+          v-else
+          v-model="loading"
+          :finished="finished"
+          @load="onLoad"
         >
-          <el-table-column label="日期" align="center">
-            <template slot-scope="scope">{{ scope.row.time | unixToDate }}</template>
-          </el-table-column>
-          <el-table-column prop="point_detail" label="明细" align="center"/>
-          <el-table-column label="等级积分" align="center" width="120">
-            <template slot-scope="scope">{{ scope.row.level_point | filterType }}</template>
-          </el-table-column>
-          <el-table-column label="消费积分" align="center" width="120">
-            <template slot-scope="scope">{{ scope.row.consumption_point | filterType }}</template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          v-if="pointsData"
-          layout="prev, pager, next"
-          @current-change="handleCurrentChange"
-          :total="pointsData.data_total">
-        </el-pagination>
-      </div>
-    </div>
+          <van-cell-group :border="false">
+            <van-cell
+              v-for="(point, index) in pointsList"
+              :key="index"
+              :title="f.unixToDate(point.time)"
+              :label="point.reason"
+              :value="getPointValue(point)"
+            />
+          </van-cell-group>
+        </van-list>
+      </van-tab>
+    </van-tabs>
   </div>
 </template>
 
 <script>
   import * as API_Members from '@/api/members'
+  import { Foundation } from '@/ui-utils'
   export default {
     name: 'my-points',
+    head() {
+      return {
+        title: `我的积分${this.site.site_name}`
+      }
+    },
     data() {
       return {
-        type: 1,
+        f: Foundation,
+        tabActive: this.$route.query.type === 'detail' ? 1 : 0,
+        points: {
+          consum_point: '获取中...',
+          grade_point: '获取中...'
+        },
         params: {
           page_no: 1,
           page_size: 10
         },
-        pointsData: '',
-        points: {
-          consum_point: '获取中...',
-          gade_point: '获取中...'
-        }
+        pointsList: [],
+        // 积分明细加载中
+        loading: false,
+        // 积分明细是否加载完成
+        finished: false
       }
     },
     mounted() {
-      this.GET_Points()
-      this.GET_PointsData()
+      this.tabActive === 0
+        ? this.GET_Points()
+        : this.GET_PointsData()
     },
-    filters: {
-      filterType(val) {
-        return (val > 0 ? '+' : '-') + val
+    watch: {
+      tabActive(newVal) {
+        if (newVal === 0 && this.points.consum_point === '获取中...') {
+          this.GET_Points()
+        }
+        if (newVal === 1 && !this.pointsList.length) {
+          this.GET_PointsData()
+        }
       }
     },
     methods: {
-      /** 当前分页发生变化 */
-      handleCurrentChange(page) {
-        this.params.page_no = page
+      /** 加载积分明细 */
+      onLoad() {
+        this.params.page_no += 1
         this.GET_PointsData()
       },
-      /**
-       * 获取积分明细
-       * @constructor
-       */
+      /** 获取积分明细值 */
+      getPointValue(point) {
+        const g_p = point.grade_point_type === 0 ? `-${point.grade_point}` : `+${point.grade_point}`
+        const c_p = point.consum_point_type === 0 ? `-${point.consum_point}` : `+${point.consum_point}`
+        return `消费：${point.grade_point === 0 ? 0 : g_p}  等级：${point.consum_point === 0 ? 0 : c_p}`
+      },
+      /** 获取积分明细 */
       GET_PointsData() {
+        this.loading = true
         API_Members.getPointsData(this.params).then(response => {
-          this.pointsData = response
-          this.MixinScrollToTop()
+          this.loading = false
+          const { data } = response
+          if (!data || !data.length) {
+            this.finished = true
+          } else {
+            this.pointsList.push(...data)
+          }
         })
       },
-      /**
-       * 获取当前会员的积分
-       * @constructor
-       */
+      /** 获取当前会员的积分 */
       GET_Points() {
         API_Members.getPoints().then(response => {
           this.points = response

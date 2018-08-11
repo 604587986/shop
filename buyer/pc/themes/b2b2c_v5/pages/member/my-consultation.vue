@@ -52,7 +52,7 @@
     name: 'my-consultation',
     head() {
       return {
-        title: `我的咨询-${this.site.title}`
+        title: `我的咨询-${this.site.site_name}`
       }
     },
     data() {

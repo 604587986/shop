@@ -58,7 +58,7 @@
         },
 
         /** 分类请求api */
-        api: `${process.env.SELLER_API}/goods/category/seller/children`,
+        api: 'seller/goods/category/seller/children',
 
         /** 映射属性 */
         props: {
@@ -71,10 +71,8 @@
         tableHeight: document.body.clientHeight / 2
       }
     },
-    created() {
-      this.GET_PriceStatistics()
-    },
     mounted() {
+      this.GET_PriceStatistics()
       window.onresize = this.countTableHeight
       this.$nextTick(() => {
         this.sesalChart = this.$echarts.init(document.getElementById('trafficStatistics'))

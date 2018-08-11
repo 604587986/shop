@@ -12,7 +12,7 @@ import request from '@/utils/request'
  */
 export function getMemberOrderNum(params) {
   return request({
-    url: 'statistics/member/order/quantity',
+    url: 'admin/statistics/member/order/quantity',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getMemberOrderNum(params) {
  */
 export function getMemberOrderNumPage(params) {
   return request({
-    url: 'statistics/member/order/quantity/page',
+    url: 'admin/statistics/member/order/quantity/page',
     method: 'get',
     loading: false,
     params
@@ -38,7 +38,7 @@ export function getMemberOrderNumPage(params) {
  */
 export function getMemberGoodsNum(params) {
   return request({
-    url: 'statistics/member/order/goods/num',
+    url: 'admin/statistics/member/order/goods/num',
     method: 'get',
     loading: false,
     params
@@ -51,7 +51,7 @@ export function getMemberGoodsNum(params) {
  */
 export function getMemberGoodsNumPage(params) {
   return request({
-    url: 'statistics/member/order/goods/num/page',
+    url: 'admin/statistics/member/order/goods/num/page',
     method: 'get',
     loading: false,
     params
@@ -64,7 +64,7 @@ export function getMemberGoodsNumPage(params) {
  */
 export function getMemberPrice(params) {
   return request({
-    url: 'statistics/member/order/money',
+    url: 'admin/statistics/member/order/money',
     method: 'get',
     loading: false,
     params
@@ -77,7 +77,7 @@ export function getMemberPrice(params) {
  */
 export function getMemberPricePage(params) {
   return request({
-    url: 'statistics/member/order/money/page',
+    url: 'admin/statistics/member/order/money/page',
     method: 'get',
     loading: false,
     params
@@ -90,7 +90,7 @@ export function getMemberPricePage(params) {
  */
 export function addedMember(params) {
   return request({
-    url: 'statistics/member/increase/member',
+    url: 'admin/statistics/member/increase/member',
     method: 'get',
     loading: false,
     params
@@ -103,7 +103,7 @@ export function addedMember(params) {
  */
 export function addedMemberPage(params) {
   return request({
-    url: 'statistics/member/increase/member/page',
+    url: 'admin/statistics/member/increase/member/page',
     method: 'get',
     loading: false,
     params
@@ -118,7 +118,7 @@ export function addedMemberPage(params) {
  */
 export function getPriceSales(params) {
   return request({
-    url: 'statistics/goods/price/sales',
+    url: 'admin/statistics/goods/price/sales',
     method: 'get',
     loading: false,
     params
@@ -131,7 +131,7 @@ export function getPriceSales(params) {
  */
 export function getHotGoodsPrice(params) {
   return request({
-    url: 'statistics/goods/hot/money',
+    url: 'admin/statistics/goods/hot/money',
     method: 'get',
     loading: false,
     params
@@ -144,7 +144,7 @@ export function getHotGoodsPrice(params) {
  */
 export function getHotGoodsPricePage(params) {
   return request({
-    url: 'statistics/goods/hot/money/page',
+    url: 'admin/statistics/goods/hot/money/page',
     method: 'get',
     loading: false,
     params
@@ -157,7 +157,7 @@ export function getHotGoodsPricePage(params) {
  */
 export function getHotGoodsNum(params) {
   return request({
-    url: 'statistics/goods/hot/num',
+    url: 'admin/statistics/goods/hot/num',
     method: 'get',
     loading: false,
     params
@@ -170,7 +170,7 @@ export function getHotGoodsNum(params) {
  */
 export function getHotGoodsNumPage(params) {
   return request({
-    url: 'statistics/goods/hot/num/page',
+    url: 'admin/statistics/goods/hot/num/page',
     method: 'get',
     loading: false,
     params
@@ -183,7 +183,7 @@ export function getHotGoodsNumPage(params) {
  */
 export function getGoodsCollectTop(params) {
   return request({
-    url: 'statistics/goods/collect',
+    url: 'admin/statistics/goods/collect',
     method: 'get',
     loading: false,
     params
@@ -196,7 +196,7 @@ export function getGoodsCollectTop(params) {
  */
 export function getGoodsCollectTopPage(params) {
   return request({
-    url: 'statistics/goods/collect/page',
+    url: 'admin/statistics/goods/collect/page',
     method: 'get',
     loading: false,
     params
@@ -211,7 +211,7 @@ export function getGoodsCollectTopPage(params) {
  */
 export function getIndustryScaleOrder(params) {
   return request({
-    url: 'statistics/industry/order/quantity',
+    url: 'admin/statistics/industry/order/quantity',
     method: 'get',
     loading: false,
     params
@@ -224,7 +224,7 @@ export function getIndustryScaleOrder(params) {
  */
 export function getIndustryScaleGoods(params) {
   return request({
-    url: 'statistics/industry/goods/num',
+    url: 'admin/statistics/industry/goods/num',
     method: 'get',
     loading: false,
     params
@@ -237,7 +237,7 @@ export function getIndustryScaleGoods(params) {
  */
 export function getIndustryScalePrice(params) {
   return request({
-    url: 'statistics/industry/order/money',
+    url: 'admin/statistics/industry/order/money',
     method: 'get',
     loading: false,
     params
@@ -250,7 +250,7 @@ export function getIndustryScalePrice(params) {
  */
 export function getGeneralityOverviewData(params) {
   return request({
-    url: 'statistics/industry/overview',
+    url: 'admin/statistics/industry/overview',
     method: 'get',
     loading: false,
     params
@@ -264,7 +264,7 @@ export function getGeneralityOverviewData(params) {
  */
 export function getTrafficAnalysisShop(params) {
   return request({
-    url: 'statistics/page_view/shop',
+    url: 'admin/statistics/page_view/shop',
     method: 'get',
     loading: false,
     params
@@ -277,7 +277,7 @@ export function getTrafficAnalysisShop(params) {
  */
 export function getTrafficAnalysisGoods(params) {
   return request({
-    url: 'statistics/page_view/goods',
+    url: 'admin/statistics/page_view/goods',
     method: 'get',
     loading: false,
     params
@@ -292,7 +292,7 @@ export function getTrafficAnalysisGoods(params) {
  */
 export function getOrderStatisticsPrice(params) {
   return request({
-    url: 'statistics/order/order/money',
+    url: 'admin/statistics/order/order/money',
     method: 'get',
     loading: false,
     params
@@ -305,7 +305,7 @@ export function getOrderStatisticsPrice(params) {
  */
 export function getOrderStatisticsOrder(params) {
   return request({
-    url: 'statistics/order/order/num',
+    url: 'admin/statistics/order/order/num',
     method: 'get',
     loading: false,
     params
@@ -319,7 +319,7 @@ export function getOrderStatisticsOrder(params) {
  */
 export function getOrderStatisticsPage(params) {
   return request({
-    url: 'statistics/order/order/page',
+    url: 'admin/statistics/order/order/page',
     method: 'get',
     loading: false,
     params
@@ -332,7 +332,7 @@ export function getOrderStatisticsPage(params) {
  */
 export function getSalesRevenueStatisticsPage(params) {
   return request({
-    url: 'statistics/order/sales/money',
+    url: 'admin/statistics/order/sales/money',
     method: 'get',
     loading: false,
     params
@@ -345,7 +345,7 @@ export function getSalesRevenueStatisticsPage(params) {
  */
 export function getSalesRevenueStatisticsTotal(params) {
   return request({
-    url: 'statistics/order/sales/total',
+    url: 'admin/statistics/order/sales/total',
     method: 'get',
     loading: false,
     params
@@ -358,7 +358,7 @@ export function getSalesRevenueStatisticsTotal(params) {
  */
 export function getRegionalAnalysisTable(params) {
   return request({
-    url: 'statistics/order/region/form',
+    url: 'admin/statistics/order/region/form',
     method: 'get',
     loading: false,
     params
@@ -371,7 +371,7 @@ export function getRegionalAnalysisTable(params) {
  */
 export function getRegionalAnalysisMember(params) {
   return request({
-    url: 'statistics/order/region/member',
+    url: 'admin/statistics/order/region/member',
     method: 'get',
     loading: false,
     params
@@ -384,7 +384,7 @@ export function getRegionalAnalysisMember(params) {
  */
 export function getRegionalAnalysisPrice(params) {
   return request({
-    url: 'statistics/order/region/money',
+    url: 'admin/statistics/order/region/money',
     method: 'get',
     loading: false,
     params
@@ -397,7 +397,7 @@ export function getRegionalAnalysisPrice(params) {
  */
 export function getRegionalAnalysisNum(params) {
   return request({
-    url: 'statistics/order/region/num',
+    url: 'admin/statistics/order/region/num',
     method: 'get',
     loading: false,
     params
@@ -410,7 +410,7 @@ export function getRegionalAnalysisNum(params) {
  */
 export function getOrderPriceDistribution(params) {
   return request({
-    url: 'statistics/order/unit/price',
+    url: 'admin/statistics/order/unit/price',
     method: 'get',
     loading: false,
     params
@@ -423,7 +423,7 @@ export function getOrderPriceDistribution(params) {
  */
 export function getBuyTimeDistribution(params) {
   return request({
-    url: 'statistics/order/unit/time',
+    url: 'admin/statistics/order/unit/time',
     method: 'get',
     loading: false,
     params
@@ -436,7 +436,7 @@ export function getBuyTimeDistribution(params) {
  */
 export function getBuyFrequency(params) {
   return request({
-    url: 'statistics/order/unit/num',
+    url: 'admin/statistics/order/unit/num',
     method: 'get',
     loading: false,
     params
@@ -449,7 +449,7 @@ export function getBuyFrequency(params) {
  */
 export function getRefundStatistics(params) {
   return request({
-    url: 'statistics/order/return/money',
+    url: 'admin/statistics/order/return/money',
     method: 'get',
     loading: false,
     params
@@ -462,7 +462,7 @@ export function getRefundStatistics(params) {
  */
 export function getGoodsSaleDetail(params) {
   return request({
-    url: 'statistics/goods/sale/details',
+    url: 'admin/statistics/goods/sale/details',
     method: 'get',
     loading: false,
     params

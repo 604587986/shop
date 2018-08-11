@@ -30,8 +30,19 @@ export default {
   },
   mounted() {
     this.getShopTagGoods()
+    this.goToAnchor()
+  },
+  watch: {
+    $route: 'goToAnchor'
   },
   methods: {
+    /** 去描点处 */
+    goToAnchor() {
+      const { hash } = location
+      if (hash === '#shop-intro' || hash === '#shop-info') {
+        $('html,body').animate({ scrollTop: $(hash).offset().top }, 300)
+      }
+    },
     /** 格式化店铺地址 */
     formatAddress() {
       const { shop_province, shop_city, shop_county, shop_town } = this.shop

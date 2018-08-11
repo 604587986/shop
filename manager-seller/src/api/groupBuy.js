@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getGroupBuyGoodsList(params) {
   return request({
-    url: '/promotion/group-buy-goods',
+    url: 'seller/promotion/group-buy-goods',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getGroupBuyGoodsList(params) {
  */
 export function getGroupCateGoriesList() {
   return request({
-    url: '/promotion/group-buy-cats',
+    url: 'seller/promotion/group-buy-cats',
     method: 'get',
     loading: false
   })
@@ -39,7 +39,7 @@ export function getGroupCateGoriesList() {
  */
 export function deleteGroupBuyGoods(ids, params) {
   return request({
-    url: `/promotion/group-buy-goods/${ids}`,
+    url: `seller/promotion/group-buy-goods/${ids}`,
     method: 'delete',
     loading: false,
     params
@@ -54,7 +54,7 @@ export function deleteGroupBuyGoods(ids, params) {
  */
 export function saveGroupBuyGoods(ids, params) {
   return request({
-    url: `/promotion/group-buy-goods/${ids}`,
+    url: `seller/promotion/group-buy-goods/${ids}`,
     method: 'put',
     loading: false,
     headers: { 'Content-Type': 'application/json' },
@@ -69,7 +69,7 @@ export function saveGroupBuyGoods(ids, params) {
  */
 export function addGroupBuyGoods(params) {
   return request({
-    url: '/promotion/group-buy-goods',
+    url: 'seller/promotion/group-buy-goods',
     method: 'post',
     loading: false,
     headers: { 'Content-Type': 'application/json' },
@@ -85,7 +85,7 @@ export function addGroupBuyGoods(params) {
  */
 export function getGroupBuyGoodsDetails(ids, params) {
   return request({
-    url: `/promotion/group-buy-goods/${ids}`,
+    url: `seller/promotion/group-buy-goods/${ids}`,
     method: 'get',
     loading: false,
     params
@@ -99,7 +99,7 @@ export function getGroupBuyGoodsDetails(ids, params) {
  */
 export function getGroupBuyActivityList(params) {
   return request({
-    url: '/promotion/group-buy-goods/active',
+    url: 'seller/promotion/group-buy-goods/active',
     method: 'get',
     loading: false,
     params

@@ -15,7 +15,6 @@
                     <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>
                     <div class="goods-price">
                       <span>RMB：<strong>￥{{ goods.price | unitPrice }}</strong></span>
-                      <!--// Andste_TODO 2018/7/4: 缺少参数-->
                       <span>已销售：{{ goods.buy_count }}件</span>
                     </div>
                     <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-btn">查看详情</nuxt-link>
@@ -43,7 +42,6 @@
                   <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>
                   <div class="goods-price">
                     <span>RMB：<strong>￥{{ goods.price | unitPrice }}</strong></span>
-                    <!--// Andste_TODO 2018/7/4: 缺少参数-->
                     <span>已销售：{{ goods.buy_count }}件</span>
                   </div>
                 </div>
@@ -82,7 +80,7 @@
     <div class="shop-intro" id="shop-intro">
       <div class="w">
         <div class="intro-title">店铺简介</div>
-        <div class="intro-body" v-html="shop.shop_intro"></div>
+        <div class="intro-body" v-html="shop.shop_desc || '暂无简介'"></div>
       </div>
     </div>
     <div class="shop-info" id="shop-info">
@@ -91,7 +89,6 @@
         <div class="item">
           <h3>{{ shop.shop_name }}</h3>
           <div class="information-same">
-            <!--// Andste_TODO 2018/7/4: 待适配-->
             <p>身份认证：身份已认证</p>
             <p>店铺认证：店铺已认证</p>
             <p>创店时间：{{ shop.shop_createtime | unixToDate('yyyy-MM-dd') }}</p>

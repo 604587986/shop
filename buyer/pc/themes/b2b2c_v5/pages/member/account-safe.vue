@@ -50,7 +50,7 @@
     name: 'account-safe',
     head() {
       return {
-        title: `账户安全-${this.site.title}`
+        title: `账户安全-${this.site.site_name}`
       }
     },
     computed: {

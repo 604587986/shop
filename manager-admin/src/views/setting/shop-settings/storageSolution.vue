@@ -16,6 +16,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
+              v-if="scope.row.bean !== 'localPlugin'"
               size="mini"
               type="primary"
               @click="handleEditStorageSolution(scope.$index, scope.row)">修改</el-button>
@@ -27,9 +28,9 @@
         v-if="tableData"
         @size-change="handlePageSizeChange"
         @current-change="handlePageCurrentChange"
-        :current-page="params.page_no"
+        :current-page="tableData.page_no"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="params.page_size"
+        :page-size="tableData.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.data_total">
       </el-pagination>

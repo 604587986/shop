@@ -37,6 +37,7 @@ export const mutations = {
   [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
     Storage.removeItem('user', { domain: domain.cookie })
+    Storage.removeItem('uid', { domain: domain.cookie })
   },
   /**
    * 设置访问令牌
@@ -92,7 +93,6 @@ export const actions = {
   getUserDataAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
       API_Members.getUserInfo().then(response => {
-        response.birthday *= 1000
         commit(types.SET_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
@@ -117,8 +117,8 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        API_Members.getUserInfo(uid).then(response => {
-          response.birthday *= 1000
+        Storage.setItem('uid', uid, { domain: domain.cookie })
+        API_Members.getUserInfo().then(response => {
           commit(types.SET_USER_INFO, response)
           resolve(response)
         }).catch(reject)
@@ -128,9 +128,10 @@ export const actions = {
   /**
    * 登出
    * @param commit
+   * @param dispatch
    * @returns {Promise<any>}
    */
-  logoutAction: ({ commit }) => {
+  logoutAction: ({ commit, dispatch }) => {
     return new Promise((resolve, reject) => {
       API_Members.logout().then(() => {
         commit(types.REMOVE_USER_INFO)
@@ -149,7 +150,6 @@ export const actions = {
   saveUserInfoAction: ({ commit }, params) => {
     return new Promise((resolve, reject) => {
       API_Members.saveUserInfo(params).then(response => {
-        response.birthday *= 1000
         commit(types.SET_USER_INFO, response)
         resolve(response)
       }).catch(error => reject(error))
@@ -168,12 +168,13 @@ export const actions = {
    * @param params
    * @returns {Promise<any>}
    */
-  registerByMobileAction: ({ commit }, params) => {
+  registerByMobileAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
       API_Passport.registerByMobile(params).then(res=> {
-        const { access_token, refresh_token } = res
+        const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
+        Storage.setItem('uid', uid, { domain: domain.cookie })
         resolve(res)
       })
     })

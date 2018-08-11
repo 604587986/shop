@@ -72,8 +72,6 @@
   const theme1Header = () => import('@/pages/shop/-themes/-theme1-header')
   const theme2Header = () => import('@/pages/shop/-themes/-theme2-header')
   const theme3Header = () => import('@/pages/shop/-themes/-theme3-header')
-  import { Pagination, Input, InputNumber } from 'element-ui'
-  Vue.use(Pagination).use(Input).use(InputNumber)
   export default {
     name: 'shop-goods-list',
     validate({ query }) {

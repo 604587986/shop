@@ -4,7 +4,7 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+          <en-category-picker clearable @changed="(category) => { params.category_id = category.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
           <span>查询周期：</span>
@@ -22,7 +22,7 @@
       >
         <template slot="table-columns">
           <el-table-column prop="goods_name" label="商品名称"/>
-          <el-table-column prop="ordernum" label="下单量"/>
+          <el-table-column prop="order_num" label="下单量"/>
           <el-table-column prop="num" label="下单商品件数"/>
           <el-table-column prop="price" label="下单金额" :formatter="MixinFormatPrice"/>
         </template>
@@ -31,9 +31,9 @@
           slot="pagination"
           @size-change="(size) => { params.page_size = size }"
           @current-change="(page_no) => { params.page_no = page_no }"
-          :current-page="params.page_no"
+          :current-page="tableData.page_no"
           :page-sizes="[10, 20, 50, 100]"
-          :page-size="params.page_size"
+          :page-size="tableData.page_size"
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableData.data_total">
         </el-pagination>
@@ -57,7 +57,7 @@
           year: '',
           month: '',
           cycle_type: 'MONTH',
-          categroy: 0,
+          category_id: 0,
           seller_id: 0,
           page_no: 1,
           page_size: 10

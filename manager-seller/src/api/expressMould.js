@@ -12,7 +12,7 @@ import request from '@/utils/request'
  */
 export function getTplList(ids, params) {
   return request({
-    url: `/shops/ship-templates`,
+    url: `seller/shops/ship-templates`,
     method: 'get',
     loading: false,
     params
@@ -27,7 +27,7 @@ export function getTplList(ids, params) {
  */
 export function getSimpleTpl(id, params) {
   return request({
-    url: `/shops/ship-templates/${id}`,
+    url: `seller/shops/ship-templates/${id}`,
     method: 'get',
     loading: false,
     params
@@ -41,7 +41,7 @@ export function getSimpleTpl(id, params) {
  */
 export function deleteExpressMould(ids, params) {
   return request({
-    url: `/shops/ship-templates/${ids}`,
+    url: `seller/shops/ship-templates/${ids}`,
     method: 'delete',
     params
   })
@@ -55,7 +55,7 @@ export function deleteExpressMould(ids, params) {
  */
 export function saveExpressMould(ids, params) {
   return request({
-    url: `/shops/ship-templates/${ids}`,
+    url: `seller/shops/ship-templates/${ids}`,
     method: 'put',
     data: params
   })
@@ -69,7 +69,7 @@ export function saveExpressMould(ids, params) {
  */
 export function addExpressMould(params) {
   return request({
-    url: '/shops/ship-templates',
+    url: 'seller/shops/ship-templates',
     method: 'post',
     data: params
   })

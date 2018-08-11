@@ -239,7 +239,7 @@
     <en-goods-picker
       type="seller"
       :show="showDialog"
-      :api="goods_api"
+      :api="goodsApi"
       :multipleApi="multipleApi"
       :categoryApi="categoryApi"
       :defaultData="goodsIds"
@@ -488,13 +488,13 @@
         goodsIds: [],
 
         /** 商品选择器列表api*/
-        goods_api: `${process.env.SELLER_API}/goods`,
+        goodsApi: 'seller/goods',
 
         /** 商城分类api */
-        categoryApi: `${process.env.SELLER_API}/goods/category/0/children`,
+        categoryApi: 'seller/goods/category/0/children',
 
         /** 回显数据使用 */
-        multipleApi: `${process.env.SELLER_API}/goods/@ids/details`,
+        multipleApi: 'seller/goods/@ids/details',
 
         /** 显示/隐藏商品选择器 */
         showDialog: false,
@@ -628,6 +628,11 @@
             this.is_free_ship = false
             this.is_send_bonus = false
             this.is_send_gift = false
+            this.changeDiscount(this.is_discount)
+            this.changeReduceCash(this.is_full_minus)
+            this.changeIntegral(this.isIntegral)
+            this.isChangeCoupon(this.is_send_bonus)
+            this.isChangeGift(this.is_send_gift)
         }
       },
 
@@ -817,6 +822,11 @@
         this.is_free_ship = false
         this.is_send_bonus = false
         this.is_send_gift = false
+        this.changeDiscount(this.is_discount)
+        this.changeReduceCash(this.is_full_minus)
+        this.changeIntegral(this.isIntegral)
+        this.isChangeCoupon(this.is_send_bonus)
+        this.isChangeGift(this.is_send_gift)
       },
 
       /** 是否打折 */

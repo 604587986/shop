@@ -59,7 +59,7 @@
           <p class="p1">您已成功更换手机号：<span class="success-mobile">{{changeMobileForm.mobile | secrecyMobile }}</span></p>
           <p class="p2">您可能需要：<nuxt-link to="/member/account-safe">返回安全中心</nuxt-link></p>
         </div>
-    </div>
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +71,11 @@
   import { RegExp } from '~/ui-utils'
   export default {
     name: 'change-mobile',
+    head() {
+      return {
+        title: `更改手机号-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         /** 步骤 */
@@ -192,6 +197,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   /deep/ .el-alert {
     h2 { margin: 20px 0 }
     p { margin-bottom: 10px }
@@ -246,8 +252,8 @@
         font-size: 12px;
         color: #666;
         a {
-          color: #071BC9;
-          &:hover { color: #f42424 }
+          color: $color-href;
+          &:hover { color: $color-main }
         }
       }
     }

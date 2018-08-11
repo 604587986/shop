@@ -4,24 +4,22 @@
     @mouseover="handleCategoryMouseover"
     @mouseout="handleCategoryMouseout"
   >
-    <nuxt-link to="/goods" class="category-title">全部商品分类</nuxt-link>
+    <a href="/goods" class="category-title">全部商品分类</a>
     <div v-show="unfold" class="category-layer">
-      <div v-for="(item, index) in categoryList" v-if="index < 7" :key="item.category_id" class="category-item">
+      <div v-for="(item, index) in $store.getters.categories" v-if="index < 7" :key="item.category_id" class="category-item">
         <div class="item-content">
           <i class="item-icon"></i>
           <div class="item-title">
             <strong>
-              <nuxt-link :to="'/goods?category=' + item.category_id">{{ item.name }}</nuxt-link>
+              <a :href="'/goods?category=' + item.category_id">{{ item.name }}</a>
             </strong>
             <span>
               <template v-for="(_item, _index) in item.children">
-                <nuxt-link
+                <a
                   v-if="_index < 2"
                   :key="_item.catrgory_id"
-                  :to="'/goods?category=' + _item.category_id"
-                >
-                  {{ _item.name }}
-                </nuxt-link>
+                  :href="'/goods?category=' + _item.category_id"
+                >{{ _item.name }}</a>
               </template>
             </span>
           </div>
@@ -38,16 +36,16 @@
                 <span>
                   <dl v-for="_item in item.children" :key="_item.category_id">
                     <dt>
-                      <nuxt-link :to="'/goods?category=' + _item.category_id">{{ _item.name }}</nuxt-link>
+                      <a :href="'/goods?category=' + _item.category_id">{{ _item.name }}</a>
                     </dt>
                     <dd>
-                      <nuxt-link
+                      <a
                         v-for="__item in _item.children"
                         :key="__item.category_id"
-                        :to="'/goods?category=' + __item.category_id"
+                        :href="'/goods?category=' + __item.category_id"
                       >
                         {{ __item.name }}
-                      </nuxt-link>
+                      </a>
                     </dd>
                   </dl>
                 </span>
@@ -56,11 +54,11 @@
                 <div class="item-layer-promotions"></div>
               </div>
             </div>
-            <div class="item-layer-right">
+            <div class="item-layer-right" v-lazy-container="{ selector: 'img' }">
               <div v-for="(brand, index) in item.brand_list" v-if="index < 20" :key="index" class="brand-item">
-                <nuxt-link :to="'/goods?brand=' + brand.brand_id">
-                  <img :src="brand.logo" :alt="brand.name">
-                </nuxt-link>
+                <a :href="'/goods?brand=' + brand.brand_id">
+                  <img :data-src="brand.logo" :alt="brand.name">
+                </a>
               </div>
             </div>
           </div>
@@ -72,19 +70,14 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import * as API_Home from '@/api/home'
   export default {
     name: 'EnCategory',
     props: ['init-unfold'],
     data() {
       let unfold = this.$route.path === '/'
       if (this.initUnfold === false) unfold = false
-      return {
-        unfold
-      }
-    },
-    mounted() {
-      this.getCategoryData()
+      return { unfold }
     },
     watch: {
       $route() {
@@ -95,13 +88,12 @@
       /** 如果为首页，总是展开 */
       always_unfold() {
         return this.$route.path === '/'
-      },
-      /** 分类数据 */
-      ...mapGetters(['categoryList'])
+      }
     },
     methods: {
       /** 鼠标移入 */
       handleCategoryMouseover() {
+        this.$Lazyload.lazyLoadHandler()
         if (this.always_unfold && this.initUnfold !== false) return
         this.unfold = true
       },
@@ -109,8 +101,7 @@
       handleCategoryMouseout() {
         if (this.always_unfold && this.initUnfold !== false) return
         this.unfold = false
-      },
-      ...mapActions(['getCategoryData'])
+      }
     }
   }
 </script>
@@ -219,7 +210,7 @@
         }
       }
       .item-layer-detail {
-        margin-top: 20px;
+        /*margin-top: 20px;*/
         width: 100%;
         dl {
           padding-left: 80px;

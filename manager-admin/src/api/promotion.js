@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getExchangeCatsChildren(parent_id = 0) {
   return request({
-    url: `promotion/exchange-cats/${parent_id}/children`,
+    url: `admin/promotion/exchange-cats/${parent_id}/children`,
     method: 'get'
   })
 }
@@ -21,7 +21,7 @@ export function getExchangeCatsChildren(parent_id = 0) {
  */
 export function addExchangeCat(params) {
   return request({
-    url: 'promotion/exchange-cats',
+    url: 'admin/promotion/exchange-cats',
     method: 'post',
     data: params
   })
@@ -68,7 +68,7 @@ export function deleteExchangeCat(id) {
  */
 export function getExchangeGoods(params) {
   return request({
-    url: 'promotion/exchange-goods',
+    url: 'admin/promotion/exchange-goods',
     method: 'get',
     loading: false,
     params
@@ -81,7 +81,7 @@ export function getExchangeGoods(params) {
  */
 export function getGroupBuyActives(params) {
   return request({
-    url: 'promotion/group-buy-actives',
+    url: 'admin/promotion/group-buy-actives',
     method: 'get',
     loading: false,
     params
@@ -94,7 +94,7 @@ export function getGroupBuyActives(params) {
  */
 export function addGrouBuyActivity(params) {
   return request({
-    url: 'promotion/group-buy-actives',
+    url: 'admin/promotion/group-buy-actives',
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -180,7 +180,7 @@ export function getGroupBuyGoodsList(params) {
  */
 export function getGroupBuyCategory(params) {
   return request({
-    url: 'promotion/group-buy-cats',
+    url: 'admin/promotion/group-buy-cats',
     method: 'get',
     loading: false,
     params
@@ -193,7 +193,7 @@ export function getGroupBuyCategory(params) {
  */
 export function addGroupBuyCategory(params) {
   return request({
-    url: 'promotion/group-buy-cats',
+    url: 'admin/promotion/group-buy-cats',
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -242,7 +242,7 @@ export function deleteGroupBuyCategory(id) {
  */
 export function getSeckillList(params) {
   return request({
-    url: 'promotion/seckills',
+    url: 'admin/promotion/seckills',
     method: 'get',
     loading: false,
     params
@@ -255,7 +255,7 @@ export function getSeckillList(params) {
  */
 export function addSeckill(params) {
   return request({
-    url: 'promotion/seckills',
+    url: 'admin/promotion/seckills',
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     data: params

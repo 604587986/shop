@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getShopList(params) {
   return request({
-    url: 'shops',
+    url: 'admin/shops',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getShopList(params) {
  */
 export function getShopDetail(shop_id) {
   return request({
-    url: `shops/${shop_id}`,
+    url: `admin/shops/${shop_id}`,
     method: 'get'
   })
 }
@@ -35,7 +35,7 @@ export function getShopDetail(shop_id) {
  */
 export function closeShop(shop_id) {
   return request({
-    url: `shops/disable/${shop_id}`,
+    url: `admin/shops/disable/${shop_id}`,
     method: 'put'
   })
 }
@@ -46,7 +46,7 @@ export function closeShop(shop_id) {
  */
 export function recoverShop(shop_id) {
   return request({
-    url: `shops/enable/${shop_id}`,
+    url: `admin/shops/enable/${shop_id}`,
     method: 'put'
   })
 }
@@ -58,36 +58,8 @@ export function recoverShop(shop_id) {
  */
 export function editAuthShop(shop_id, params) {
   return request({
-    url: `shops/${shop_id}`,
+    url: `admin/shops/${shop_id}`,
     method: 'put',
-    data: params
-  })
-}
-
-/**
- * 获取店铺等级申请列表
- * @param params
- * @returns {Promise<any>}
- */
-export function getShopLevelApplyList(params) {
-  return request({
-    url: 'b2b2c/admin/shop/level-audit-list-json.do',
-    method: 'get',
-    loading: false,
-    params
-  })
-}
-
-/**
- * 审核店铺等级申请
- * @param id
- * @param status
- * @returns {Promise<any>}
- */
-export function auditShopLevelApply(id, params) {
-  return request({
-    url: 'b2b2c/admin/shop/level-audit.do',
-    method: 'post',
     data: params
   })
 }
@@ -99,7 +71,7 @@ export function auditShopLevelApply(id, params) {
  */
 export function getShopThemeList(params) {
   return request({
-    url: 'shops/themes',
+    url: 'admin/shops/themes',
     method: 'get',
     loading: false,
     params
@@ -113,7 +85,7 @@ export function getShopThemeList(params) {
  */
 export function addShopTheme(params) {
   return request({
-    url: 'shops/themes',
+    url: 'admin/shops/themes',
     method: 'post',
     data: params
   })
@@ -126,7 +98,7 @@ export function addShopTheme(params) {
  */
 export function getShopThemeDetail(id) {
   return request({
-    url: `shops/themes/${id}`,
+    url: `admin/shops/themes/${id}`,
     method: 'get'
   })
 }
@@ -139,7 +111,7 @@ export function getShopThemeDetail(id) {
  */
 export function editShopTheme(id, params) {
   return request({
-    url: `shops/themes/${id}`,
+    url: `admin/shops/themes/${id}`,
     method: 'put',
     data: params
   })
@@ -152,7 +124,7 @@ export function editShopTheme(id, params) {
  */
 export function deleteShopTheme(id) {
   return request({
-    url: `shops/themes/${id}`,
+    url: `admin/shops/themes/${id}`,
     method: 'delete'
   })
 }

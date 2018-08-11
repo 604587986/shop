@@ -17,11 +17,6 @@
       <div class="goods-buy">
         <div class="goods-name">
           <h1>{{ goods.goods_name }}</h1>
-          <div class="collection-goods" @click="handleCollectGoods">
-            <van-icon v-if="collected" name="like" color="#f42424"/>
-            <van-icon v-else name="like-o"/>
-            关注
-          </div>
         </div>
         <van-cell-group :border="false">
           <van-cell class="goods-price">
@@ -35,8 +30,8 @@
     </div>
     <div style="height: 50px"></div>
     <van-goods-action>
-      <van-goods-action-mini-btn icon="chat" text="客服"/>
-      <van-goods-action-mini-btn icon="cart" info="5" text="购物车"/>
+      <van-goods-action-mini-btn icon="like-o" text="收藏" @click="handleCollectGoods"/>
+      <van-goods-action-mini-btn icon="cart" info="5" to="/cart?form=goods" text="购物车"/>
       <van-goods-action-mini-btn icon="shop" text="店铺"/>
       <van-goods-action-big-btn text="加入购物车"/>
       <van-goods-action-big-btn text="立即购买" primary/>
@@ -50,21 +45,36 @@
   Vue.use(Tabs).use(Tab).use(Swipe).use(SwipeItem).use(Cell).use(CellGroup).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn)
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
+  import * as API_Promotions from '@/api/promotions'
   import Storage from '@/utils/storage'
   export default {
     name: 'goods-detail',
+    validate({ params }) {
+      return /^\d+$/.test(params.id)
+    },
     async asyncData({ params }) {
-      let goods = await API_Goods.getGoods(params.id)
-      return { goods, galleryList: goods.gallery_list || [] }
+      let goods = {}
+      try {
+        goods = await API_Goods.getGoods(params.id)
+      } catch (e) {
+        error({ statusCode: 500, message: '服务器出错' })
+      }
+      return {
+        // 商品信息
+        goods,
+        // 商品相册
+        galleryList: goods.gallery_list || [],
+        // 当前商品是否可以浏览
+        canView: goods.is_auth !== 0 && goods.goods_off === 1
+      }
     },
     head() {
+      const { goods, site } = this
       return {
-        title: `${this.goods.page_title}-Javashop多店铺示例商城`,
+        title: `${goods.page_title || goods.goods_name || '商品详情'}-${site.site_name}`,
         meta: [
-          { hid: 'keywords', name: 'keywords', content: this.goods.meta_keywords },
-          { hid: 'description', name: 'description', content: `${this.goods.meta_description}-Javashop多店铺示例商城` },
-          { 'http-equiv': 'mobile-agent', content: `format=xhtml; url=/goods/${this.goods.goods_id}` },
-          { 'http-equiv': 'mobile-agent', content: `format=html5; url=/goods/${this.goods.goods_id}` }
+          { hid: 'keywords', name: 'keywords', content: goods.meta_keywords },
+          { hid: 'description', name: 'description', content: `${goods.meta_description}-${goods.site_name}` }
         ]
       }
     },
@@ -82,21 +92,39 @@
     },
     mounted() {
       const { goods_id, seller_id } = this.goods
-      // 用于服务端记录浏览次数，每次+1【服务端去重】
-      API_Goods.visitGoods(goods_id)
-      // 如果用户已登录，查询是否已收藏商品
-      Storage.getItem('user') && API_Members.getGoodsIsCollect(goods_id).then(response => {
-        this.collected = response.message
-      })
+      // 如果商品可以查看
+      if (this.canView) {
+        // 如果用户已登录，加载收藏状态
+        if (Storage.getItem('refreshToken')) {
+          API_Members.getGoodsIsCollect(goods_id).then(response => {
+            this.collected = response.message
+          })
+        }
+        // 浏览量+1
+        API_Goods.visitGoods(goods_id)
+        // 获取促销信息
+        API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
+      }
     },
     methods: {
       /** 收藏商品 */
       handleCollectGoods() {
-        if (!Storage.getItem('user')) {
-          this.$message.error('请先登录！')
-          return
+        if (!Storage.getItem('refreshToken')) {
+          this.$message.error('您还未登录！')
+          return false
         }
-        API_Members.collectionGoods(this.goods_id).then(() => { this.collected = true })
+        const { goods_id } = this.goods
+        if (this.collected) {
+          API_Members.deleteGoodsCollection(goods_id).then(() => {
+            this.$message.success('取消收藏成功！')
+            this.collected = false
+          })
+        } else {
+          API_Members.collectionGoods(goods_id).then(() => {
+            this.$message.success('收藏成功！')
+            this.collected = true
+          })
+        }
       },
       /** 商品图预览 */
       handlePreviewImage(index) {
@@ -154,7 +182,6 @@
           font-size: 16px;
           color: #333;
           line-height: 18px;
-          padding-right: 50px;
           min-height: 36px;
           font-weight: 400;
           display: -webkit-box;

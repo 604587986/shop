@@ -2,9 +2,6 @@
  * Created by Andste on 2018/5/18.
  */
 
-// import { swiper, swiperSlide } from 'vue-awesome-swiper'
-// import 'swiper/dist/css/swiper.css'
-
 /** mixin */
 export default {
   props: {
@@ -22,7 +19,7 @@ export default {
   components: {
     'layout-item': {
       props: ['block'],
-      template: `<div class="layout-item">
+      template: `<div class="layout-item" v-lazy-container="{ selector: 'img' }">
                    <template v-if="$parent.isEdit">
                      <div class="mask-floor" @click="$emit('handle-edit')">
                        <div class="mask-bg-floor">
@@ -37,7 +34,7 @@ export default {
                    </template>
                    <a v-else :href="$parent.blockHref(block)">
                      <slot :block="block"></slot>
-                     <img :src="block.block_value">
+                     <img :data-src="block.block_value">
                    </a>
                  </div>`
     }

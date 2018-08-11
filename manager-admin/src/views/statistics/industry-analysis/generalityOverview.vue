@@ -4,7 +4,7 @@
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
           <span>商品分类</span>
-          <en-category-picker clearable @changed="(category) => { params.categroy = category.category_id || 0 }"/>
+          <en-category-picker clearable @changed="(category) => { params.category_id = category.category_id || 0 }"/>
         </div>
         <div class="chart-header-item">
           <span>查询周期：</span>
@@ -34,9 +34,9 @@
           slot="pagination"
           @size-change="(page_size) => { params.page_size = page_size }"
           @current-change="(page_no) => { params.page_no = page_no }"
-          :current-page="params.page_no"
+          :current-page="tableData.page_no"
           :page-sizes="[10, 20, 50, 100]"
-          :page-size="params.page_size"
+          :page-size="tableData.page_size"
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableData.data_total">
         </el-pagination>
@@ -61,7 +61,7 @@
           year: '',
           month: '',
           cycle_type: 'MONTH',
-          categroy: 0,
+          category_id: 0,
           seller_id: 0
         },
         /** 列表数据 */

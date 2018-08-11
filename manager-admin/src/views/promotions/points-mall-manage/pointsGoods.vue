@@ -7,18 +7,20 @@
     <template slot="table-columns">
       <el-table-column label="商品图片">
         <template slot-scope="scope">
-          <img :src="scope.row.goods_image" :alt="scope.row.goods_name" class="goods-image">
+          <img :src="scope.row.thumbnail" :alt="scope.row.goods_name" class="goods-image">
         </template>
       </el-table-column>
-      <el-table-column prop="goods_sn" label="商品编号"/>
-      <el-table-column prop="shop_name" label="店铺名称"/>
-      <el-table-column prop="goods_name" label="商品名称" width="400"/>
-      <el-table-column prop="category_name" label="商品分类"/>
-      <el-table-column prop="goods_price" :formatter="MixinFormatPrice" label="商品价格"/>
-      <el-table-column label="商品状态">
-        <template slot-scope="scope">{{ scope.row.goods_status | statusFilter }}</template>
+      <el-table-column prop="sn" label="商品编号"/>
+      <el-table-column prop="seller_name" label="店铺名称"/>
+      <el-table-column label="商品名称" width="400">
+        <template slot-scope="{ row }">
+          <a :href="MixinBuyerDomain + '/goods/' + row.goods_id" class="goods-name" target="_blank">{{ row.goods_name }}</a>
+        </template>
       </el-table-column>
-      <el-table-column prop="brand_name" label="品牌名称"/>
+      <el-table-column prop="price" :formatter="MixinFormatPrice" label="商品价格"/>
+      <el-table-column label="商品状态">
+        <template slot-scope="scope">{{ scope.row.market_enable | statusFilter }}</template>
+      </el-table-column>
     </template>
 
     <el-pagination
@@ -26,9 +28,9 @@
       slot="pagination"
       @size-change="handlePageSizeChange"
       @current-change="handlePageCurrentChange"
-      :current-page="params.page_no"
+      :current-page="tableData.page_no"
       :page-sizes="[10, 20, 50, 100]"
-      :page-size="params.page_size"
+      :page-size="tableData.page_size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="tableData.data_total">
     </el-pagination>
@@ -36,7 +38,7 @@
 </template>
 
 <script>
-  import * as API_Promotion from '@/api/promotion'
+  import * as API_Goods from '@/api/goods'
 
   export default {
     name: 'pointsGoods',
@@ -48,7 +50,8 @@
         /** 列表参数 */
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          goods_type: 'POINT'
         },
 
         /** 列表数据 */
@@ -83,7 +86,7 @@
       /** 获取会员列表 */
       GET_PointGoodsList() {
         this.loading = true
-        API_Promotion.getExchangeGoods(this.params).then(response => {
+        API_Goods.getGoodsList(this.params).then(response => {
           this.loading = false
           this.tableData = response
         }).catch(() => { this.loading = false })
@@ -96,5 +99,9 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+  .goods-name {
+    color: #4183c4;
+    &:hover { color: #f42424 }
   }
 </style>

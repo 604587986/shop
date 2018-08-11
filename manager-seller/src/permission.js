@@ -16,7 +16,8 @@ router.beforeEach((to, from, next) => {
   } else {
     request({
       url: api.buyer + '/shops/status',
-      method: 'get'
+      method: 'get',
+      loading: 0.2
     }).then(response => {
       switch (response) {
         case 'NO_SHOP':
@@ -61,15 +62,8 @@ const shopCloed = () => {
 const shopOpen = (next) => {
   if (!store.getters.shopInfo) {
     API_shop.getShopData({}).then(response => {
-      const { shop_disable } = response
-      switch (shop_disable) {
-        case 'OPEN':
-          store.dispatch('SetShop', response)
-          next()
-          break
-        default:
-          next()
-      }
+      store.dispatch('SetShop', response)
+      next()
     })
   } else {
     next()

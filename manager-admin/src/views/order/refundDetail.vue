@@ -108,6 +108,7 @@
             remark: value
           }).then(response => {
             this.$message.success('操作成功！')
+            this.$route.params.callback()
             this.GET_RefundDetail()
           })
         }).catch(() => {})

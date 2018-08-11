@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="same-pay-way bank-pay paybtn">
-          <nuxt-link v-if="!showPayBox && order.pay_type_text === 'ONLINE'" to="#">立即支付</nuxt-link>
+          <a v-if="!showPayBox && order.pay_type_text === 'ONLINE'" href="javascript:;" @click="$message.error('请先选择支付方式！')">立即支付</a>
           <nuxt-link v-if="order.pay_type_text !== 'ONLINE'" to="/member/my-order">查看订单</nuxt-link>
         </div>
       </div>

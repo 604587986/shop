@@ -123,7 +123,7 @@
     layout: 'full',
     head() {
       return {
-        title: '会员登录-Javashop多店铺示例商城'
+        title: `会员登录-${this.site.site_name}`
       }
     },
     data() {

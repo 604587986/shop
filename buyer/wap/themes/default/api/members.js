@@ -13,6 +13,7 @@ export function getCoupons(params) {
     url: 'members/coupon',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -52,6 +53,7 @@ export function getPointsData(params) {
     url: 'members/points',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -66,6 +68,7 @@ export function getComments(params) {
     url: 'members/comments',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -94,6 +97,7 @@ export function getConsultations(params) {
     url: 'members/asks',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -124,6 +128,7 @@ export function getGoodsCollection(params) {
   return request({
     url: 'members/collection/goods',
     method: Method.GET,
+    needToken: true,
     loading: false,
     message: false,
     params
@@ -181,6 +186,7 @@ export function getShopCollection(params) {
     url: 'members/collection/shops',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -231,6 +237,7 @@ export function getUserInfo() {
   return request({
     url: `members`,
     method: Method.GET,
+    loading: false,
     needToken: true
   })
 }
@@ -268,7 +275,8 @@ export function getReceipts() {
   return request({
     url: 'members/receipt',
     method: Method.GET,
-    needToken: true
+    needToken: true,
+    loading: false,
   })
 }
 
@@ -330,6 +338,7 @@ export function getStatisticsNum() {
   return request({
     url: 'members/statistics',
     method: Method.GET,
+    loading: false,
     needToken: true
   })
 }
@@ -396,6 +405,7 @@ export function registerBindAccount(uuid) {
 export function getShopsCoupons(seller_ids) {
   return request({
     url: `members/coupon/${seller_ids}`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }

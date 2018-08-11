@@ -18,7 +18,7 @@
       /** api */
       api: {
         type: String,
-        default: `${process.env.SELLER_API}/shops/cats`
+        default: 'seller/shops/cats'
       },
       /** 最大级数 */
       maxLevel: {
@@ -76,7 +76,7 @@
           loading: false
         }).then(response => {
           if (!response || !response[0]) return
-          this.options = response
+          this.options = this.deleteEmptyChild(response)
           if (this.defaultVal !== -1) {
             this.findItem()
           }
@@ -88,7 +88,21 @@
         this.$emit('changed', val)
       },
 
-      /** 找出对应的选项 */
+      /** 如果chilren的length 为 0 则删除此项 */
+      deleteEmptyChild(arr = []) {
+        arr.forEach(key => {
+          if (key.children && !key.children.length) {
+            delete key.children
+          } else if (key.children && key.children.length) {
+            this.deleteEmptyChild(key.children)
+          } else {
+            return
+          }
+        })
+        return arr
+      },
+
+      /** 存在默认值时 找出对应的选项 */
       findItem() {
         if (!this.options || this.options.length === 0) return
         this.defaultArr = []

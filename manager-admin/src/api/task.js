@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function hasTask(task_id) {
   return request({
-    url: `task/${task_id}`,
+    url: `admin/task/${task_id}`,
     method: 'get',
     message: false,
     loading: false
@@ -23,7 +23,7 @@ export function hasTask(task_id) {
  */
 export function getProgressById(task_id) {
   return request({
-    url: `task/${task_id}/progress`,
+    url: `admin/task/${task_id}/progress`,
     method: 'get',
     loading: false
   })
@@ -35,7 +35,7 @@ export function getProgressById(task_id) {
  */
 export function clearTask(task_id) {
   return request({
-    url: `task/${task_id}`,
+    url: `admin/task/${task_id}`,
     method: 'delete'
   })
 }

@@ -2,26 +2,16 @@
   <div id="nav" class="w">
     <en-category/>
     <ul class="nav-list">
-      <li v-for="nav in navList" :key="nav.navigation_id">
-        <nuxt-link :to="nav.url">{{ nav.navigation_name }}</nuxt-link>
+      <li v-for="nav in $store.getters.navList" :key="nav.navigation_id">
+        <a :href="nav.url">{{ nav.navigation_name }}</a>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
   export default {
-    name: 'EnNav',
-    mounted() {
-      this.getNavData()
-    },
-    computed: {
-      ...mapGetters(['navList'])
-    },
-    methods: {
-      ...mapActions(['getNavData'])
-    }
+    name: 'EnNav'
   }
 </script>
 

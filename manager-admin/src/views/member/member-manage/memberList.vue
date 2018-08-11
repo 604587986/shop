@@ -31,6 +31,7 @@
                   <el-radio-group v-model="advancedForm.sex">
                     <el-radio :label="1">男</el-radio>
                     <el-radio :label="0">女</el-radio>
+                    <el-radio :label="-1">不限</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="注册时间区间">
@@ -41,7 +42,9 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     value-format="timestamp"
-                    style="width: 324px">
+                    style="width: 324px"
+                    :picker-options="{ shortcuts: MixinPickerShortcuts }"
+                  >
                   </el-date-picker>
                 </el-form-item>
               </el-form>
@@ -289,13 +292,14 @@
       searchEvent(keyword) {
         this.params.keyword = keyword
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.params.page_no = 1
         this.GET_MemberList()
       },
 
       /** 高级搜索事件触发 */
       advancedSearchEvent() {
         const { advancedForm } = this
-        const { register_time_range } = advancedForm
+        const { register_time_range, sex } = advancedForm
         Object.keys(this.advancedForm).forEach(key => {
           if (advancedForm[key] !== undefined) {
             this.params[key] = advancedForm[key]
@@ -307,6 +311,8 @@
         }
         delete this.params.register_time_range
         delete this.params.keyword
+        if (sex === -1) delete this.params.sex
+        this.params.page_no = 1
         this.GET_MemberList()
       },
 

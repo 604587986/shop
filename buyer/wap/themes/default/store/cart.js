@@ -243,6 +243,13 @@ export const actions = {
         resolve(response)
       }).catch(error => reject(error))
     })
+  },
+  /**
+   * 清空vuex中的购物车
+   * @param commit
+   */
+  cleanCartStoreAction: ({ commit }) => {
+    commit(types.CLEAN_CART)
   }
 }
 

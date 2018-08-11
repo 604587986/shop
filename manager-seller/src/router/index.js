@@ -161,6 +161,19 @@ export const asyncRouterMap = [
       { path: 'grade-application', component: () => import('@/views/setting/gradeApplication'), name: 'gradeApplication', meta: { title: 'gradeApplication' }, hidden: true }
     ]
   },
+  // 店员管理
+  {
+    path: '/shop-auth',
+    component: Layout,
+    redirect: '/shop-auth/shop-assistant',
+    name: 'shopAuth',
+    meta: { title: 'shopAuth', icon: 'shop-assistant' },
+    children: [
+      { path: 'shop-assistant', component: () => import('@/views/shop-auth/shopAssistant'), name: 'shopAssistant', meta: { title: 'shopAssistant' }},
+      { path: 'role-manage', component: () => import('@/views/shop-auth/roleManage'), name: 'roleManage', meta: { title: 'roleManage' }},
+      { path: 'role-permission/:id(\\d+)', component: () => import('@/views/shop-auth/rolePermission'), name: 'rolePermission', hidden: true, meta: { title: 'rolePermission', noCache: true }}
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

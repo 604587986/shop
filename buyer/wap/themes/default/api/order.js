@@ -13,6 +13,7 @@ export function getOrderList(params) {
     url: 'trade/orders',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
@@ -61,7 +62,8 @@ export function confirmReceipt(order_sn) {
 export function getOrderStatusNum() {
   return request({
     url: 'trade/orders/status-num',
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }
 
@@ -72,6 +74,7 @@ export function getOrderStatusNum() {
 export function getOrderListByTradeSn(trade_sn) {
   return request({
     url: `trade/orders/${trade_sn}/list`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
   })
 }

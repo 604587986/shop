@@ -63,6 +63,7 @@
     watch: {
       logisticsShow() {
         this.logisticsModelShow = this.logisticsShow
+        this.GET_logisticsList()
       }
     },
     mounted() {

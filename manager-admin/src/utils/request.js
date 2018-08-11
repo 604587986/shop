@@ -3,6 +3,8 @@ import { Loading, MessageBox } from 'element-ui'
 import axios from 'axios'
 import store from '@/store'
 import Storage from '@/utils/storage'
+import { Foundation } from '~/ui-utils'
+import md5 from 'js-md5'
 import checkToken from '@/utils/checkToken'
 
 const qs = require('qs')
@@ -35,15 +37,29 @@ service.interceptors.request.use(config => {
       text: '请稍候...'
     })
   }
+
+  // uuid
+  const uuid = Storage.getItem('adminUuid')
+  config.headers['uuid'] = uuid
+
   /** 设置令牌 */
   let accessToken = Storage.getItem('adminAccessToken')
-  // if (process.env.NODE_ENV === 'production') {
-  //   const { member_id } = JSON.parse(Storage.getItem('user'))
-  //   const nonce = Foundation.randomString(6)
-  //   const timestamp = parseInt(new Date().getTime() / 1000)
-  //   accessToken = md5(member_id + nonce + timestamp + accessToken)
-  // }
-  config.headers['Authorization'] = accessToken
+  if (accessToken) {
+    // 如果前台为开发环境，后台API，则需要替换为下面的代码
+    // process.env.NODE_ENV === 'development', 'production'
+    if (process.env.NODE_ENV === 'production') {
+      const uid = Storage.getItem('adminUid')
+      const nonce = Foundation.randomString(6)
+      const timestamp = parseInt(new Date().getTime() / 1000)
+      const sign = md5(uid + nonce + timestamp + accessToken)
+      const _params = { uid, nonce, timestamp, sign }
+      let params = config.params || {}
+      params = { ...params, ..._params }
+      config.params = params
+    } else {
+      config.headers['Authorization'] = accessToken
+    }
+  }
   return config
 }, error => {
   Promise.reject(error)
@@ -60,7 +76,7 @@ service.interceptors.response.use(
     const error_response = error.response || {}
     const error_data = error_response.data || {}
     // 403 --> 没有登录、登录状态失效
-    if (error_response.status === 403) fedLogOut()
+    if (error_response.code === '110') fedLogOut()
     if (error.config.message !== false) {
       let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '网络错误，请稍后再试！'
       Vue.prototype.$message.error(error_data.message || _message)

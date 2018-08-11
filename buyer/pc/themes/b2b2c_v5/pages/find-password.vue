@@ -200,7 +200,7 @@
             API_Passport.changePassword(uuid, password).then(() => {
               this.$message.success('密码找回成功，请牢记您的新密码！')
               setTimeout(() => {
-                this.$router.push('/login')
+                this.$router.push(`/login${this.MixinForward}`)
               }, 200)
             })
           } else {

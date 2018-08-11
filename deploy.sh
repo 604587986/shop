@@ -1,16 +1,35 @@
 #! /bin/bash
 
 WEB_PATH=$PWD
-
-echo "开始部署..."
 cd $WEB_PATH
-echo "拉取最新的代码..."
-git reset --hard origin/master
-git clean -f
-git pull origin master
-git submodule update --init --recursive
-git submodule update
-echo -e "\033[32m代码拉取完成...\033[0m"
+
+if [[ "$1" != "ui-domain" ]];then
+  echo "拉取最新的代码..."
+  git reset --hard origin/master
+  git clean -f
+  git pull origin master
+  git submodule update --init --recursive
+  git submodule update
+  echo -e "\033[32m代码拉取完成...\033[0m"
+fi
+
+if [[ "$1" == "ui-domain" ]];then
+  echo "拷贝ui-domain到buyer-pc..."
+  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/buyer/pc/themes/b2b2c_v5/
+  echo -e "\033[32m拷贝完成\033[0m"
+
+  echo "拷贝ui-domain到buyer-wap..."
+  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/buyer/wap/themes/default/
+  echo -e "\033[32m拷贝完成\033[0m"
+
+  echo "拷贝ui-domain到manager-seller..."
+  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/manager-seller/
+  echo -e "\033[32m拷贝到完成\033[0m"
+
+  echo "拷贝ui-domain到manager-admin..."
+  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/manager-admin/
+  echo -e "\033[32m拷贝完成\033[0m"
+fi
 
 if [[ ! -n "$1" || "$1" == "manager-admin" ]];then
   echo "开始部署后台管理(manager-admin)..."
@@ -69,6 +88,4 @@ if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
   pm2 start npm --name "buyer-wap" -- run start
   echo -e "\033[32mbuyer-wap部署完成！\033[0m"
 fi
-
-echo -e "\033[32m全部部署完成！\033[0m"
 

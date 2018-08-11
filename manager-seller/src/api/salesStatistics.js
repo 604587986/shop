@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getSalesStatisticsNum(params) {
   return request({
-    url: '/statistics/reports/sales_num',
+    url: 'seller/statistics/reports/sales_num',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getSalesStatisticsNum(params) {
  */
 export function getSalesStatisticsMoney(params) {
   return request({
-    url: '/statistics/reports/sales_money',
+    url: 'seller/statistics/reports/sales_money',
     method: 'get',
     loading: false,
     params
@@ -39,7 +39,7 @@ export function getSalesStatisticsMoney(params) {
  */
 export function getSalesStatisticsGoodsList(params) {
   return request({
-    url: '/statistics/reports/sales_page',
+    url: 'seller/statistics/reports/sales_page',
     method: 'get',
     loading: false,
     params

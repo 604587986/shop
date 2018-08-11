@@ -31,11 +31,12 @@
       </div>
       <div class="card-news-content">
         <div class="card-news-con-item" v-show="card_news_tab_x === 0">
-          <ul>
+          <ul style="overflow: hidden">
             <li
               v-for="(notice, index) in mall_notices"
               :key="index"
               class="news-item"
+              v-if="index < 4"
             >
               <a href="javascript:;" @click="handleShowNotice(notice)">{{ notice.article_name }}</a>
             </li>
@@ -162,6 +163,7 @@
           border-radius: 50%;
           overflow: hidden;
           box-shadow: 3px 6px 25px #c3c3c3;
+          background: #fff;
         }
         img {
           display: block;

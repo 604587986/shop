@@ -13,7 +13,7 @@
       </div>
       <div v-else class="w">
         <ul class="goods-list">
-          <li v-for="goods in tableData.data" :key="goods.goods_id" class="goods-item">
+          <li v-for="(goods, index) in tableData.data" :key="index" class="goods-item">
             <a :href="'/goods/' + goods.goods_id">
               <img class="goods-img" :src="goods.goods_img">
             </a>
@@ -48,7 +48,7 @@
     name: 'points-mall',
     head() {
       return {
-        title: `积分商城-${this.site.title}`
+        title: `积分商城-${this.site.site_name}`
       }
     },
     data() {

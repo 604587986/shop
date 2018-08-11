@@ -232,13 +232,13 @@
 
           /** 发行量 */
           create_num: [
-            { required: true, message: '请输入优惠券名称', trigger: 'blur' },
+            { required: true, message: '请输入优惠券发行量', trigger: 'blur' },
             { validator: checkCreateNum, trigger: 'blur' }
           ],
 
           /** 每人限领 */
           limit_num: [
-            { required: true, message: '请输入优惠券名称', trigger: 'blur' },
+            { required: true, message: '请输入限领数量', trigger: 'blur' },
             { validator: checkLimitNum, trigger: 'blur' }
           ]
         }

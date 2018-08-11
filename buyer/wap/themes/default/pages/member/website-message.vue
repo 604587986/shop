@@ -2,33 +2,47 @@
   <div id="website-message">
     <div class="member-nav">
       <ul class="member-nav-list">
-        <li class="active">站内消息</li>
+        <li>
+          <nuxt-link to="./website-message">未读消息</nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="./website-message?type=all">全部消息</nuxt-link>
+        </li>
       </ul>
     </div>
     <div class="message-container">
-      <ul>
-        <li v-for="message in messageData.data" :key="message.message_id" class="message-item">
-          <div class="msg-time">{{ message.message_time | unixToDate }}</div>
+      <ul v-if="tableData && tableData.data_total">
+        <li v-for="message in tableData.data" :key="message.id" class="message-item">
+          <div class="msg-time">{{ message.send_time | unixToDate }}</div>
           <div class="msg-box">
             <div class="msg-title">
-              <h4>{{ message.message_title }}</h4>
-              <i class="el-icon-close" @click="handleDeleteMessage(message)"></i>
+              <h4>{{ message.title || '站内消息' }}</h4>
+              <div class="message-tools">
+                <i v-if="message.is_read === 0"
+                   class="el-icon-check"
+                   title="标记为已读"
+                   @click="handleReadMessage(message)"
+                ></i>
+                <i class="el-icon-close" title="删除消息" @click="handleDeleteMessage(message)"></i>
+              </div>
             </div>
             <div class="msg-content clearfix">
-              <div>{{ message.message_content }}</div>
-              <nuxt-link to="#">查看详情 > </nuxt-link>
+              <div>{{ message.content }}</div>
+              <!--<nuxt-link to="#">查看详情 > </nuxt-link>-->
             </div>
           </div>
         </li>
       </ul>
+      <empty-member v-else>暂无站内消息</empty-member>
     </div>
-    <div class="member-pagination" v-if="messageData">
+    <div class="member-pagination" v-if="tableData && tableData.data.length">
+      <a v-if="params.type !== 'all'" href="javascript:;" class="read-all" @click="handleReadPageMessages">标记当前页为已读</a>
       <el-pagination
         @current-change="handleCurrentPageChange"
         :current-page.sync="params.page_no"
         :page-size="params.page_size"
         layout="total, prev, pager, next"
-        :total="messageData.data_total">
+        :total="tableData.data_total">
       </el-pagination>
     </div>
   </div>
@@ -36,53 +50,85 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import * as API_Message from '@/api/message'
   export default {
     name: 'website-message',
+    head() {
+      return {
+        title: `站内消息-${this.site.site_name}`
+      }
+    },
     data() {
       return {
         params: {
           page_no: 1,
-          page_size: 5
-        }
+          page_size: 5,
+          type: this.$route.query.type
+        },
+        tableData: ''
       }
     },
     mounted() {
-      this.getMessageData(this.params).then(() => this.MixinScrollToTop())
+      this.GET_MessageList()
     },
-    computed: {
-      ...mapGetters({
-        messageData: 'message/messageData'
-      })
+    watch: {
+      $route: function({ query }) {
+        this.params.type = query.type
+        this.GET_MessageList()
+      },
     },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentPageChange(page) {
         this.params.page_no = page
-        this.getMessageData(this.params).then(() => {
-          this.MixinScrollToTop()
-        })
+        this.GET_MessageList()
       },
       /** 删除消息 */
       handleDeleteMessage(message) {
         this.$confirm('确定要删除这条消息吗？', () => {
-          this.deleteMessage(message.message_id).then(() => {
+          API_Message.deleteMessage(message.id).then(() => {
             this.$message.success('删除成功！')
+            this.GET_MessageList()
           })
         })
       },
-      ...mapActions({
-        getMessageData: 'message/getMessageDataAction',
-        deleteMessage: 'message/deleteMessageAction'
-      })
+      /** 标记消息为已读 */
+      handleReadMessage(message) {
+        API_Message.messageMarkAsRead(message.id).then(() => {
+          this.GET_MessageList()
+        })
+      },
+      /** 标记当前页消息问已读 */
+      handleReadPageMessages() {
+        const ids = this.tableData.data.map(item => item.id).join(',')
+        API_Message.messageMarkAsRead(ids).then(() => {
+          this.GET_MessageList()
+        })
+      },
+      /** 获取站内消息 */
+      GET_MessageList(){
+        const params = JSON.parse(JSON.stringify(this.params))
+        if (params.type !== 'all') {
+          params.read = 0
+        } else {
+          delete params.read
+        }
+        API_Message.getMessages(params).then(response => {
+          this.tableData = response
+          this.MixinScrollToTop()
+        })
+      }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .message-container {
     padding-top: 10px;
   }
   .message-item {
+    position: relative;
     text-align: center;
     margin-bottom: 15px;
     .msg-time {
@@ -95,6 +141,7 @@
       text-align: center;
     }
     .msg-box {
+      position: relative;
       padding: 10px 20px;
       background-color: #f3f3f3;
       border: 1px solid #FFF;
@@ -105,10 +152,15 @@
         height: 32px;
         line-height: 32px;
         border-bottom: 1px solid #d3d3d3;
-        .el-icon-close {
+        .message-tools {
           position: absolute;
           top: 0;
           right: 0;
+        }
+        .el-icon-check {
+          margin-right: 10px;
+        }
+        .el-icon-close, .el-icon-check {
           width: 20px;
           height: 20px;
           text-align: center;
@@ -120,6 +172,18 @@
         width: 100%;
         padding-top: 10px;
         a { float: right }
+      }
+    }
+  }
+  .member-pagination {
+    position: relative;
+    .read-all {
+      position: absolute;
+      left: 10px;
+      color: $color-href;
+      &:hover {
+        color: $color-main;
+        text-decoration: underline;
       }
     }
   }

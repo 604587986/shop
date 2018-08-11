@@ -3,10 +3,11 @@
     <index-search-bar/>
     <div class="focus-container">
       <div class="w">
-        <index-banner/>
+        <index-banner :focus-list="focusList"/>
         <index-card/>
       </div>
     </div>
+    <index-seckill/>
     <div v-if="floorList" class="floor-container">
       <div v-for="(item, index) in floorList" :key="index" :class="'item-' + item.tpl_id" class="floor-item">
         <component
@@ -28,14 +29,21 @@
   export default {
     name: 'index',
     async asyncData() {
-      const floor = await API_Home.getFloorData()
+      const datas = await Promise.all([
+        API_Home.getFloorData(),
+        API_Home.getFocusPictures()
+      ])
+      const floor = datas[0]
       return {
-        floorList: floor.page_data ? global.JSON.parse(floor.page_data) : []
+        // 楼层数据
+        floorList: floor.page_data ? global.JSON.parse(floor.page_data) : [],
+        // 焦点图
+        focusList: datas[1]
       }
     },
     head() {
       return {
-        title: `商城首页-${this.site.title}`
+        title: `商城首页-${this.site.site_name}`
       }
     },
     components: IndexComponents,

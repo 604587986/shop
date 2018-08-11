@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getCommentList(params) {
   return request({
-    url: '/members/comments',
+    url: 'seller/members/comments',
     method: 'get',
     loading: false,
     params
@@ -25,7 +25,7 @@ export function getCommentList(params) {
  */
 export function replyComment(id, params) {
   return request({
-    url: `/members/comments/${id}/reply`,
+    url: `seller/members/comments/${id}/reply`,
     method: 'post',
     data: params
   })
