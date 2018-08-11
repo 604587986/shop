@@ -4,29 +4,32 @@ WEB_PATH=$PWD
 
 echo "开始部署..."
 cd $WEB_PATH
-echo "拉取最新的代码..."
-git reset --hard origin/master
-git clean -f
-git pull origin master
-git submodule update --init --recursive
-git submodule update
-echo -e "\033[32m代码拉取完成...\033[0m"
+
+if [[ "$1" != "ui-domain" ]];then
+  echo "拉取最新的代码..."
+  git reset --hard origin/master
+  git clean -f
+  git pull origin master
+  git submodule update --init --recursive
+  git submodule update
+  echo -e "\033[32m代码拉取完成...\033[0m"
+fi
 
 if [[ "$1" == "ui-domain" ]];then
-  echo "开始复制ui-domain到buyer-pc..."
-  cp -arf $WEB_PATH/ui-domain WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-domain
+  echo "拷贝ui-domain到buyer-pc..."
+  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-domain/
   echo -e "\033[32m拷贝完成\033[0m"
 
-  echo "开始复制ui-domain到buyer-wap..."
-  cp -arf $WEB_PATH/ui-domain WEB_PATH/buyer/buyer/wap/themes/default/ui-domain
+  echo "拷贝ui-domain到buyer-wap..."
+  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/buyer/wap/themes/default/ui-domain/
   echo -e "\033[32m拷贝完成\033[0m"
 
-  echo "开始复制ui-domain到manager-seller..."
-  cp -arf $WEB_PATH/ui-domain WEB_PATH/manager-seller/ui-domain
-  echo -e "\033[32m拷贝完成\033[0m"
+  echo "拷贝ui-domain到manager-seller..."
+  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/manager-seller/ui-domain/
+  echo -e "\033[32m拷贝到完成\033[0m"
 
-  echo "开始复制ui-domain到manager-admin..."
-  cp -arf $WEB_PATH/ui-domain WEB_PATH/manager-admin/ui-domain
+  echo "拷贝ui-domain到manager-admin..."
+  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/manager-admin/ui-domain/
   echo -e "\033[32m拷贝完成\033[0m"
 fi
 
