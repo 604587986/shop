@@ -144,21 +144,6 @@
     line-height: 14px;
     background-color: #fff;
     border-radius: 8px;
-    /deep/ {
-      .van-cell-swipe__left, .van-cell-swipe__right {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 65px;
-        background-color: #F56C6C;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 700;
-      }
-      .van-cell-swipe__left {
-        background-color: #409EFF;
-      }
-    }
   }
   .msg-title {
     padding: 10px 10px 0 10px;

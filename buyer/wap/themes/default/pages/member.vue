@@ -25,9 +25,27 @@
     .van-tabs {
       top: 46px;
     }
+    .van-cell-swipe__wrapper {
+      height: 100%;
+    }
+    .van-cell-swipe__left, .van-cell-swipe__right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 65px;
+      height: 100%;
+      background-color: #F56C6C;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .van-cell-swipe__left {
+      background-color: #409EFF;
+    }
     [class$="-container"] {
+      box-sizing: border-box;
       padding-top: 46px + 44px;
-      padding-bottom: 20px;
+      /*padding-bottom: 20px;*/
       overflow: hidden;
     }
   }

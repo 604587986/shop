@@ -1,70 +1,55 @@
 <template>
   <div id="shipping-address">
-    <div class="member-nav">
-      <ul class="member-nav-list">
-        <li class="active">
-          <a href="./shipping-address">收货地址管理</a>
+    <nav-bar title="收货地址"/>
+    <div class="address-container">
+      <empty-member v-if="finished && !addressList.length">暂无收货地址</empty-member>
+      <ul class="address-list">
+        <li class="address-item" v-for="(address, index) in addressList" :key="index">
+          <van-cell-swipe :right-width="65">
+            <div class="address-content">
+              <div class="info-address">
+                <div class="add-name">{{ address.name }}</div>
+                <div class="add-mobile">{{ address.mobile | secrecyMobile }}</div>
+              </div>
+              <div class="address-detail">
+                <span v-if="address.def_addr === 1" class="add-def-icon">默认</span>
+                {{ address.province }} {{ address.city }} {{ address.county }} {{ address.town }} {{ address.addr }}
+                <span class="add-alias">{{ address.ship_address_name }}</span>
+              </div>
+            </div>
+            <i class="iconfont ea-icon-edit" @click="handleEaitAddress(address)"></i>
+            <span slot="right" @click="handleDeleteAddress(address)">删除</span>
+          </van-cell-swipe>
         </li>
       </ul>
-      <el-button size="mini" class="add-address-btn" @click="handleAddAddress">添加地址</el-button>
     </div>
-    <div class="address-list">
-      <el-alert
-        title="友情提示"
-        type="warning"
-        description="最多只能保存20个收货地址"
-        close-text="我知道了"
-        show-icon>
-      </el-alert>
-      <el-table
-        :data="addressList"
-        :header-cell-style="{textAlign: 'center'}"
-        cell-class-name="address-cell"
-        style="width: 100%"
-      >
-        <el-table-column prop="name" label="收货人" width="100"/>
-        <el-table-column label="所在地区" width="200" :formatter="areaFormatter"/>
-        <el-table-column prop="addr" label="详细地址" width="280" align="left"/>
-        <el-table-column prop="ship_address_name" label="地址别名" width="100" align="left"/>
-        <el-table-column prop="mobile" label="联系方式" width="120"/>
-        <el-table-column label="默认" width="60">
-          <template slot-scope="scope">{{ scope.row.def_addr ? '是' : '否' }}</template>
-        </el-table-column>
-        <el-table-column label="操作" width="110">
-          <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="handleEaitAddress(scope.row)">编辑</el-button>
-            <el-button type="text" size="mini" class="delete-btn" @click="handleDeleteAddress(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div id="addressForm" style="display: none">
-      <el-form :model="addressForm" :rules="addressRules" ref="addressForm" label-width="100px">
-        <el-form-item label="收货人姓名" prop="name">
-          <el-input v-model="addressForm.name" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="联系方式" prop="mobile">
-          <el-input v-model="addressForm.mobile" size="small" :maxlength="11"></el-input>
-        </el-form-item>
-        <el-form-item label="收货地区" prop="region">
-          <en-region-picker :api="MixinRegionApi" :default="regions" @changed="(object) => { this.addressForm.region = object.last_id }"/>
-        </el-form-item>
-        <el-form-item label="详细地址" prop="addr">
-          <el-input v-model="addressForm.addr" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="地址别名" prop="ship_address_name">
-          <el-input v-model="addressForm.ship_address_name" size="small" placeholder="公司、家里、学校或其它"></el-input>
-        </el-form-item>
-        <el-form-item label="设置为默认">
-          <el-checkbox v-model="addressForm.def_addr" :true-label="1" :false-label="0">默认</el-checkbox>
-        </el-form-item>
-      </el-form>
-    </div>
+    <van-popup
+      v-model="showEditDialog"
+      position="bottom"
+      :close-on-click-overlay="false"
+      class="edit-dialog"
+    >
+      <van-nav-bar
+        :title="(addressForm.addr_id ? '编辑' : '添加') + '收货地址'"
+        left-arrow
+        @click-left="showEditDialog = false"
+        style="position: relative"
+      />
+      <van-cell-group>
+        <van-field v-model="addressForm.name" label="收货人" clearable placeholder="请填写收货人"/>
+        <van-field v-model="addressForm.mobile" label="手机号码" clearable placeholder="请填写手机号码"/>
+        <van-field v-model="addressForm.addrs" label="所在地区" readonly icon="arrow" placeholder="请选择所在地区" @click.native="showAddressSelector = true"/>
+        <van-field v-model="addressForm.addr" label="详细地址" clearable placeholder="请填写详细地址"/>
+        <van-field v-model="addressForm.addr" label="地址别名" clearable placeholder="请填写地址别名，如：公司"/>
+        <van-switch-cell v-model="addressForm.def_addr" title="默认地址" />
+      </van-cell-group>
+    </van-popup>
   </div>
 </template>
 
 <script>
-  import addressMixin from './addressMixin'
+  import * as API_Address from '@/api/address'
+  import { Foundation } from '~/ui-utils'
   export default {
     name: 'shipping-address',
     head() {
@@ -72,26 +57,124 @@
         title: `我的收货地址-${this.site.site_name}`
       }
     },
-    mixins: [addressMixin]
+    data() {
+      return {
+        loading: false,
+        finished: false,
+        addressList: [],
+        addressForm: {},
+        regions: '',
+        showEditDialog: false,
+        showAddressSelector: false
+      }
+    },
+    mounted() {
+      this.GET_AddressList()
+    },
+    methods: {
+      /** 编辑地址 */
+      handleEaitAddress(address) {
+        const params = JSON.parse(JSON.stringify(address))
+        params.def_addr = !!params.def_addr
+        params.addrs = `${params.province} ${params.city} ${params.county} ${params.town}`
+        this.addressForm = params
+        this.regions = [address.province_id, address.city_id, address.county_id || -1, address.town_id || -1]
+        this.showEditDialog = true
+      },
+      /** 删除地址 */
+      handleDeleteAddress(address) {
+        this.$confirm('确定要删除这个地址吗？', () => {
+          API_Address.deleteAddress(address.addr_id).then(this.GET_AddressList)
+        })
+      },
+      /** 获取地址列表 */
+      GET_AddressList() {
+        API_Address.getAddressList().then(response => {
+          this.addressList = response
+          this.finished = true
+        })
+      }
+    }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../assets/styles/color";
-  .add-address-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
+  .address-container {
+    padding-top: 46px;
   }
   .address-list {
-    /deep/ .el-alert { margin: 10px 0}
-    /deep/ .delete-btn { color: $color-main }
-    /deep/ .address-cell {
+    margin-left: 10px;
+  }
+  .address-item {
+    display: flex;
+    position: relative;
+  }
+  .address-content {
+    position: relative;
+    float: left;
+    width: calc(100% - 50px);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f1f1;
+    .add-name, .add-mobile {
+      display: inline-block;
+      font-size: 14px;
+      line-height: 15px;
+      margin-right: 15px;
+      overflow: hidden;
+    }
+    .address-detail {
+      color: #666;
+      font-size: 13px;
+      line-height: 20px;
+      word-break: break-all;
+      word-wrap: break-word;
+    }
+    .add-def-icon {
+      padding: 1px 7px;
+      background: #ff002d;
+      color: #fff;
+      font-size: 12px;
+      font-style: normal;
+      margin-right: 5px;
+    }
+    .add-alias {
+      display: inline-block;
+      height: 15px;
+      font-size: 12px;
+      border: 1px solid #686868;
+      line-height: 15px;
       text-align: center;
+      padding: 0 10px;
     }
   }
-  #addressForm{
-    padding: 10px 20px;
-    /deep/ .app-address { margin-top: 7px }
+  .address-place {
+    float: right;
+    width: 50px;
+    height: 100%;
+  }
+  .ea-icon-edit {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    height: 36px;
+    line-height: 36px;
+    margin-top: -18px;
+    border-left: 1px solid #cbcacf;
+    font-size: 24px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  /deep/ {
+    .van-cell-swipe__wrapper {
+      height: 100%;
+    }
+    .van-cell-swipe__wrapper, .van-cell-swipe {
+      width: 100%;
+    }
+    .edit-dialog {
+      height: 100%;
+    }
   }
 </style>
