@@ -155,24 +155,6 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../../assets/styles/color";
-  /deep/ {
-    .van-nav-bar, .van-tabs {
-      position: fixed;
-      z-index: 10 !important;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: #fff;
-    }
-    .van-tabs {
-      top: 46px;
-    }
-  }
-  .order-container {
-    padding-top: 46px + 44px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
   .order-item {
     margin-top: 10px;
     background-color: #fff;

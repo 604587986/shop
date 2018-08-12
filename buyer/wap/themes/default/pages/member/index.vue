@@ -115,14 +115,6 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  /deep/ {
-    .van-nav-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-    }
-  }
   .member-container {
     padding-top: 46px;
     padding-bottom: 50px;
