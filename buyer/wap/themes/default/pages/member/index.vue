@@ -5,65 +5,65 @@
       <div class="head-box" :style="{backgroundImage: 'url('+ user.face +')'}"></div>
       <div class="head-items">
         <div class="head-img">
-          <a href="/member/my-profile"><en-face :url="user.face"/></a>
+          <nuxt-link to="/member/my-profile"><en-face :url="user.face"/></nuxt-link>
         </div>
         <div class="head-user-name">{{ user.nickname }}</div>
         <div class="items">
-          <a href="/member/my-collection" class="item">
+          <nuxt-link to="/member/my-collection" class="item">
             <span>
               <p>{{ nums.goods_collect_count || 0 }}</p>
               <p>收藏的商品</p>
             </span>
-          </a>
-          <a class="item" href="/member/my-collection?type=shop">
+          </nuxt-link>
+          <nuxt-link to="/member/my-collection?type=shop" class="item">
             <p>{{ nums.shop_collect_count || 0 }}</p>
             <p>收藏的店铺</p>
-          </a>
-          <a class="item" href="/member/my-order?order_status=WAIT_COMMENT">
+          </nuxt-link>
+          <nuxt-link to="/member/my-order?order_status=WAIT_COMMENT" class="item">
             <p>{{ nums.pending_comment_count || 0}}</p>
             <p>待评论</p>
-          </a>
+          </nuxt-link>
         </div>
       </div>
       <div class="member-nav">
         <ul class="member-nav-items">
           <li>
-            <a href="/member/my-order?order_status=WAIT_PAY">
+            <nuxt-link to="/member/my-order?order_status=WAIT_PAY">
               <i class="iconfont ea-icon-wait-pay"></i>
               <p>待付款</p>
-            </a>
+            </nuxt-link>
           </li>
           <li>
-            <a href="/member/my-order?order_status=WAIT_SHIP">
+            <nuxt-link to="/member/my-order?order_status=WAIT_SHIP">
               <i class="iconfont ea-icon-wait-ship"></i>
               <p>待发货</p>
-            </a>
+            </nuxt-link>
           </li>
           <li>
-            <a href="/member/my-order?order_status=WAIT_ROG">
+            <nuxt-link to="/member/my-order?order_status=WAIT_ROG">
               <i class="iconfont ea-icon-wait-rog"></i>
               <p>待收货</p>
-            </a>
+            </nuxt-link>
           </li>
           <li>
-            <a href="/member/after-sale">
+            <nuxt-link to="/member/after-sale">
               <i class="iconfont ea-icon-after-sale"></i>
               <p>退款/售后</p>
-            </a>
+            </nuxt-link>
           </li>
         </ul>
-        <van-cell title="全部订单" is-link value="查看全部订单" url="/member/my-order"/>
+        <van-cell title="全部订单" is-link value="查看全部订单" to="/member/my-order"/>
       </div>
       <van-cell-group style="margin-top: 10px">
-        <van-cell title="我的优惠券" is-link value="查看优惠券" url="/member/my-coupons"/>
-        <van-cell title="我的积分" is-link value="消费、等级积分" url="/member/my-points"/>
-        <van-cell title="站内消息" is-link value="查看站内消息" url="/member/website-message"/>
-        <van-cell v-if="show_dis" title="分销管理" is-link value="查看我的分销" url="/member/distribution/my-performance"/>
+        <van-cell title="我的优惠券" is-link value="查看优惠券" to="/member/my-coupons"/>
+        <van-cell title="我的积分" is-link value="消费、等级积分" to="/member/my-points"/>
+        <van-cell title="站内消息" is-link value="查看站内消息" to="/member/website-message"/>
+        <van-cell v-if="show_dis" title="分销管理" is-link value="查看我的分销" to="/member/distribution/my-performance"/>
       </van-cell-group>
       <van-cell-group style="margin-top: 10px">
-        <van-cell title="我的资料" is-link value="修改资料" url="/member/my-profile"/>
-        <van-cell title="收货地址" is-link value="我的收货地址" url="/member/shipping-address"/>
-        <van-cell title="账户安全" is-link value="修改密码" url="/member/account-safe"/>
+        <van-cell title="我的资料" is-link value="修改资料" to="/member/my-profile"/>
+        <van-cell title="收货地址" is-link value="我的收货地址" to="/member/shipping-address"/>
+        <van-cell title="账户安全" is-link value="修改密码" to="/member/account-safe"/>
       </van-cell-group>
       <div class="big-btn">
         <van-button type="danger" size="large" @click="handleLogout">退出登录</van-button>
