@@ -15,19 +15,19 @@ fi
 
 if [[ "$1" == "ui-domain" ]];then
   echo "拷贝ui-domain到buyer-pc..."
-  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/buyer/pc/themes/b2b2c_v5/
+  cp -af $WEB_PATH/ui-domain/ $WEB_PATH/buyer/pc/themes/b2b2c_v5/
   echo -e "\033[32m拷贝完成\033[0m"
 
   echo "拷贝ui-domain到buyer-wap..."
-  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/buyer/wap/themes/default/
+  cp -af $WEB_PATH/ui-domain/ $WEB_PATH/buyer/wap/themes/default/
   echo -e "\033[32m拷贝完成\033[0m"
 
   echo "拷贝ui-domain到manager-seller..."
-  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/manager-seller/
+  cp -af $WEB_PATH/ui-domain/ $WEB_PATH/manager-seller/
   echo -e "\033[32m拷贝到完成\033[0m"
 
   echo "拷贝ui-domain到manager-admin..."
-  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/manager-admin/
+  cp -af $WEB_PATH/ui-domain/ $WEB_PATH/manager-admin/
   echo -e "\033[32m拷贝完成\033[0m"
 fi
 
