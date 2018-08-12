@@ -1,49 +1,32 @@
 <template>
   <div id="website-message">
-    <div class="member-nav">
-      <ul class="member-nav-list">
-        <li>
-          <nuxt-link to="./website-message">未读消息</nuxt-link>
-        </li>
-        <li>
-          <nuxt-link to="./website-message?type=all">全部消息</nuxt-link>
-        </li>
-      </ul>
-    </div>
+    <nav-bar title="站内消息"/>
+    <van-tabs v-model="tabActive" :line-width="100">
+      <van-tab title="未读消息"/>
+      <van-tab title="全部消息"/>
+    </van-tabs>
     <div class="message-container">
-      <ul v-if="tableData && tableData.data_total">
-        <li v-for="message in tableData.data" :key="message.id" class="message-item">
-          <div class="msg-time">{{ message.send_time | unixToDate }}</div>
-          <div class="msg-box">
-            <div class="msg-title">
-              <h4>{{ message.title || '站内消息' }}</h4>
-              <div class="message-tools">
-                <i v-if="message.is_read === 0"
-                   class="el-icon-check"
-                   title="标记为已读"
-                   @click="handleReadMessage(message)"
-                ></i>
-                <i class="el-icon-close" title="删除消息" @click="handleDeleteMessage(message)"></i>
-              </div>
+      <empty-member v-if="finished && !messageList.length">暂无消息</empty-member>
+      <van-list
+        v-else
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+      >
+        <ul class="message-list">
+          <li class="message-item" v-for="(message, index) in messageList" :key="index">
+            <div class="msg-date">{{ message.send_time | unixToDate }}</div>
+            <div class="msg-content">
+              <van-cell-swipe :right-width="65" :left-width="message.is_read === 0 ? 65 : 0">
+                <span slot="left" @click="handleReadMessage(message)">已读</span>
+                <p v-if="message.title" class="msg-title">{{ message.title }}</p>
+                <div class="msg-detail">{{ message.content }}</div>
+                <span slot="right" @click="handleDeleteMessage(message)">删除</span>
+              </van-cell-swipe>
             </div>
-            <div class="msg-content clearfix">
-              <div>{{ message.content }}</div>
-              <!--<nuxt-link to="#">查看详情 > </nuxt-link>-->
-            </div>
-          </div>
-        </li>
-      </ul>
-      <empty-member v-else>暂无站内消息</empty-member>
-    </div>
-    <div class="member-pagination" v-if="tableData && tableData.data.length">
-      <a v-if="params.type !== 'all'" href="javascript:;" class="read-all" @click="handleReadPageMessages">标记当前页为已读</a>
-      <el-pagination
-        @current-change="handleCurrentPageChange"
-        :current-page.sync="params.page_no"
-        :page-size="params.page_size"
-        layout="total, prev, pager, next"
-        :total="tableData.data_total">
-      </el-pagination>
+          </li>
+        </ul>
+      </van-list>
     </div>
   </div>
 </template>
@@ -60,27 +43,27 @@
     },
     data() {
       return {
+        loading: false,
+        finished: false,
+        tabActive: this.$route.query.type === 'all' ? 1 : 0,
         params: {
           page_no: 1,
-          page_size: 5,
-          type: this.$route.query.type
+          page_size: 10
         },
-        tableData: ''
+        messageList: []
       }
     },
     mounted() {
       this.GET_MessageList()
     },
     watch: {
-      $route: function({ query }) {
-        this.params.type = query.type
-        this.GET_MessageList()
-      },
+      tabActive: function () {
+        this.GET_MessageList(true)
+      }
     },
     methods: {
-      /** 当前页数发生改变 */
-      handleCurrentPageChange(page) {
-        this.params.page_no = page
+      onLoad(page) {
+        this.params.page_no += 1
         this.GET_MessageList()
       },
       /** 删除消息 */
@@ -88,14 +71,14 @@
         this.$confirm('确定要删除这条消息吗？', () => {
           API_Message.deleteMessage(message.id).then(() => {
             this.$message.success('删除成功！')
-            this.GET_MessageList()
+            this.GET_MessageList(true)
           })
         })
       },
       /** 标记消息为已读 */
       handleReadMessage(message) {
         API_Message.messageMarkAsRead(message.id).then(() => {
-          this.GET_MessageList()
+          this.GET_MessageList(true)
         })
       },
       /** 标记当前页消息问已读 */
@@ -106,16 +89,27 @@
         })
       },
       /** 获取站内消息 */
-      GET_MessageList(){
+      GET_MessageList(reset = false){
+        this.loading = true
+        if (reset) {
+          this.params.page_no = 1
+          this.finished = false
+          this.messageList = []
+        }
         const params = JSON.parse(JSON.stringify(this.params))
-        if (params.type !== 'all') {
+        if (this.tabActive !== 1) {
           params.read = 0
         } else {
           delete params.read
         }
         API_Message.getMessages(params).then(response => {
-          this.tableData = response
-          this.MixinScrollToTop()
+          this.loading = false
+          const { data } = response
+          if (!data || !data.length) {
+            this.finished = true
+          } else {
+            this.messageList.push(...data)
+          }
         })
       }
     }
@@ -125,66 +119,55 @@
 <style type="text/scss" lang="scss" scoped>
   @import "../../assets/styles/color";
   .message-container {
-    padding-top: 10px;
+    background-color: #f7f7f7;
   }
-  .message-item {
-    position: relative;
+  .message-list {
+    margin: 0 10px;
+  }
+  .msg-date {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 10px;
+    line-height: 14px;
+    color: #848689;
     text-align: center;
-    margin-bottom: 15px;
-    .msg-time {
-      display: inline-block;
-      background-color: #f7f7f7;
-      height: 20px;
-      padding: 0 10px;
-      margin-bottom: 10px;
-      border-radius: 1px;
-      text-align: center;
-    }
-    .msg-box {
-      position: relative;
-      padding: 10px 20px;
-      background-color: #f3f3f3;
-      border: 1px solid #FFF;
-      text-align: left;
-      &:hover { border: 1px solid #dbdbdb }
-      .msg-title {
-        position: relative;
-        height: 32px;
-        line-height: 32px;
-        border-bottom: 1px solid #d3d3d3;
-        .message-tools {
-          position: absolute;
-          top: 0;
-          right: 0;
-        }
-        .el-icon-check {
-          margin-right: 10px;
-        }
-        .el-icon-close, .el-icon-check {
-          width: 20px;
-          height: 20px;
-          text-align: center;
-          line-height: 20px;
-          cursor: pointer;
-        }
+    background-color: #f7f7f7;
+  }
+  .msg-content {
+    overflow: hidden;
+    font-size: 14px;
+    color: #343434;
+    line-height: 14px;
+    background-color: #fff;
+    border-radius: 8px;
+    /deep/ {
+      .van-cell-swipe__left, .van-cell-swipe__right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 65px;
+        background-color: #F56C6C;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
       }
-      .msg-content {
-        width: 100%;
-        padding-top: 10px;
-        a { float: right }
+      .van-cell-swipe__left {
+        background-color: #409EFF;
       }
     }
   }
-  .member-pagination {
-    position: relative;
-    .read-all {
-      position: absolute;
-      left: 10px;
-      color: $color-href;
-      &:hover {
-        color: $color-main;
-        text-decoration: underline;
-      }
-    }
+  .msg-title {
+    padding: 10px 10px 0 10px;
+    line-height: 21px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #343434;
+  }
+  .msg-detail {
+    padding: 15px 10px;
   }
 </style>

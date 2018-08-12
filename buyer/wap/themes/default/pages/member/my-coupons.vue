@@ -68,7 +68,6 @@
       }
     },
     methods: {
-      /** 当前页数发生改变 */
       onLoad(page) {
         this.params.page_no += 1
         this.GET_Coupons()
