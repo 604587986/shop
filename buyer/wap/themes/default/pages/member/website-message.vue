@@ -1,5 +1,5 @@
 <template>
-  <div id="website-message">
+  <div id="website-message" style="background-color: #f7f7f7">
     <nav-bar title="站内消息"/>
     <van-tabs v-model="tabActive" :line-width="100">
       <van-tab title="未读消息"/>

@@ -1,5 +1,5 @@
 <template>
-  <div id="my-order">
+  <div id="my-order" style="background-color: #f7f7f7">
     <nav-bar title="我的订单"/>
     <van-tabs v-model="tabActive" :swipe-threshold="5" @change="handleTabChange">
       <van-tab title="全部"/>
@@ -25,29 +25,29 @@
             <p><span>总<i></i>价：</span><em class="price">￥{{ order.order_amount | unitPrice }}</em></p>
             <div class="order-btns">
               <a v-if="order.order_operate_allowable_vo.allow_cancel" @click="handleCancelOrder(order.sn)" style="background-color: #f19325">取消订单</a>
-              <a v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :href="'/member/after-sale/apply?order_sn=' + order.sn" style="background-color: #f19325">取消订单</a>
+              <nuxt-link v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :to="'/member/after-sale/apply?order_sn=' + order.sn" style="background-color: #f19325">取消订单</nuxt-link>
               <a v-if="order.order_operate_allowable_vo.allow_rog" @click="handleRogOrder(order.sn)">确认收货</a>
-              <a v-if="order.order_operate_allowable_vo.allow_pay" :href="'/checkout/cashier?order_sn=' + order.sn">订单付款</a>
-              <a v-if="order.order_operate_allowable_vo.allow_comment" :href="'/member/comments?order_sn=' + order.sn">去评论</a>
-              <a v-if="order.order_operate_allowable_vo.allow_apply_service" :href="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</a>
-              <a :href="'./my-order/detail?order_sn=' + order.sn">查看详情</a>
+              <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/checkout/cashier?order_sn=' + order.sn">订单付款</nuxt-link>
+              <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/member/comments?order_sn=' + order.sn">去评论</nuxt-link>
+              <nuxt-link v-if="order.order_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</nuxt-link>
+              <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
             </div>
           </div>
           <a :href="'/shop/' + order.seller_id" class="shop-order-item">
-            <em>数码家电</em>
+            <em>{{ order.seller_name }}</em>
           </a>
           <div class="sku-order-item" v-for="(sku, index) in order.sku_list" :key="index">
             <div class="sku-content">
-              <a :href="'/goods/' + sku.goods_id">
+              <nuxt-link :to="'/goods/' + sku.goods_id">
                 <img :src="sku.goods_image" :alt="sku.name">
-              </a>
-              <a :href="'./my-order/detail?order_sn=' + order.sn" style="margin-top: 10px">
+              </nuxt-link>
+              <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn" style="margin-top: 10px">
                 <div style="margin-top: 3px" class="sku-name">{{ sku.name }}</div>
                 <p><span class="sku-spec" style="margin-right: 5px">{{ sku | formatterSkuSpec }}</span><span>{{ sku.num }}件</span></p>
                 <p v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" style="margin-top: 5px">
-                  <a :href="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</a>
+                  <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
                 </p>
-              </a>
+              </nuxt-link>
             </div>
           </div>
         </div>
@@ -158,7 +158,7 @@
   .order-item {
     margin-top: 10px;
     background-color: #fff;
-    padding: 0 10px;
+    padding: 0 10px 10px 10px;
     .sn-order-item {
       position: relative;
       height: 45px;
