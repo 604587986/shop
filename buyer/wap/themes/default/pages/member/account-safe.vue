@@ -1,46 +1,46 @@
 <template>
   <div id="account-security">
-    <div class="member-nav">
-      <ul class="member-nav-list">
-        <li class="active">
-          <a href="./account-safe">账号安全</a>
-        </li>
-      </ul>
-    </div>
-    <div class="safe-title">
-      <el-alert
-        title="安全提醒"
-        type="warning"
-        :closable="false"
-        show-icon
-      >
-        <p>建议您启动全部安全设置，以保障账户及资金安全。</p>
-        <p>确认您登录的是Javashop网址<a href="http://www.javamall.com.cn" target="_blank">http://www.javamall.com.cn</a>，注意防范进入钓鱼网站，不要轻信各种即时通讯工具发送的商品或支付链接，谨防网购诈骗。</p>
-        <p>建议您安装杀毒软件，并定期更新操作系统等软件补丁，确保账户及交易安全。</p>
-      </el-alert>
-    </div>
-    <div class="safe-item">
-      <div class="fore1"><strong>登录密码</strong></div>
-      <div class="fore2">
-        <span v-if="!user.mobile">互联网账号存在被盗风险，建议您先绑定手机号。</span>
-        <span v-else>互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</span>
-      </div>
-      <div class="fore3">
-        <nuxt-link v-if="!user.mobile" to="/member/bind-mobile">绑定</nuxt-link>
-        <nuxt-link v-else to="/member/change-password">修改</nuxt-link>
-      </div>
-    </div>
-    <div class="safe-item">
-      <div class="fore1"><strong>手机验证</strong></div>
-      <div class="fore2">
-        <span>您验证的手机：</span><strong>{{ user.mobile | secrecyMobile }}</strong>&nbsp;&nbsp;
-        <span>若已丢失或停用，请立即更换，</span><span style="color:#cc0000;">避免账户被盗</span>
-      </div>
-      <div class="fore3">
-        <nuxt-link v-if="user.mobile" to="/member/change-mobile">修改</nuxt-link>
-        <nuxt-link v-else to="/member/bind-mobile">绑定</nuxt-link>
-      </div>
-    </div>
+    <nav-bar title="账户安全"/>
+    <!--<div class="member-nav">-->
+      <!--<ul class="member-nav-list">-->
+        <!--<li class="active">-->
+          <!--<a href="./account-safe">账号安全</a>-->
+        <!--</li>-->
+      <!--</ul>-->
+    <!--</div>-->
+    <!--<div class="safe-title">-->
+      <!--<el-alert-->
+        <!--title="安全提醒"-->
+        <!--type="warning"-->
+        <!--:closable="false"-->
+        <!--show-icon-->
+      <!--&gt;-->
+        <!--<p>建议您启动全部安全设置，以保障账户及资金安全。</p>-->
+        <!--<p>确认您登录的是Javashop网址<a href="http://www.javamall.com.cn" target="_blank">http://www.javamall.com.cn</a>，注意防范进入钓鱼网站，不要轻信各种即时通讯工具发送的商品或支付链接，谨防网购诈骗。</p>-->
+        <!--<p>建议您安装杀毒软件，并定期更新操作系统等软件补丁，确保账户及交易安全。</p>-->
+      <!--</el-alert>-->
+    <!--</div>-->
+    <!--<div class="safe-item">-->
+      <!--<div class="fore1"><strong>登录密码</strong></div>-->
+      <!--<div class="fore2">-->
+        <!--<span v-if="!user.mobile">互联网账号存在被盗风险，建议您先绑定手机号。</span>-->
+        <!--<span v-else>互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</span>-->
+      <!--</div>-->
+      <!--<div class="fore3">-->
+        <!--<nuxt-link v-if="!user.mobile" to="/member/bind-mobile">绑定</nuxt-link>-->
+        <!--<nuxt-link v-else to="/member/change-password">修改</nuxt-link>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div class="safe-item">-->
+      <!--<div class="fore1"><strong>手机验证</strong></div>-->
+      <!--<div class="fore2">-->
+        <!--<span>您验证的手机：</span><strong>{{ user.mobile | secrecyMobile }}</strong>&nbsp;&nbsp;-->
+        <!--<span>若已丢失或停用，请立即更换，</span><span style="color:#cc0000;">避免账户被盗</span>-->
+      <!--</div>-->
+      <!--<div class="fore3">-->
+        <!--<nuxt-link v-if="user.mobile" to="/member/change-mobile">修改</nuxt-link>-->
+        <!--<nuxt-link v-else to="/member/bind-mobile">绑定</nuxt-link>-->
+      <!--</div>-->
   </div>
 </template>
 
@@ -51,6 +51,11 @@
     head() {
       return {
         title: `账户安全-${this.site.site_name}`
+      }
+    },
+    created() {
+      if (!this.$store.getters.user.mobile) {
+        this.$router.replace({ name: 'member-bind-mobile' })
       }
     },
     computed: {
