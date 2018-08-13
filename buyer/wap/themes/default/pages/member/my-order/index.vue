@@ -70,15 +70,12 @@
         // 当前tab的index
         tabActive: this.getParam(order_status),
         params: {
-          page_no: 1,
+          page_no: 0,
           page_size: 5,
           order_status
         },
         orderList: []
       }
-    },
-    mounted() {
-      this.GET_OrderList()
     },
     methods: {
       /** tabIndex发生改变 */
@@ -140,13 +137,14 @@
       GET_OrderList() {
         this.loading = true
         API_Order.getOrderList(this.params).then(response => {
-          this.loading = false
+          console.log(response)
           const { data } = response
           if(!data || !data.length) {
             this.finished = true
           } else {
             this.orderList.push(...data)
           }
+          this.loading = false
         })
       }
     }
