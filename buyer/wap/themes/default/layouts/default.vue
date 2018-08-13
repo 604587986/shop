@@ -1,5 +1,5 @@
 <template>
-  <nuxt id="wrapper"/>
+  <nuxt id="wrapper" style="min-height:100vh;"/>
 </template>
 <script>
   import Storage from '@/utils/storage'
