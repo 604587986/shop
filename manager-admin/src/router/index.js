@@ -441,6 +441,37 @@ export const asyncRouterMap = [
       }
     ]
   },
+  // 分销
+  {
+    path: '/distribution',
+    component: Layout,
+    redirect: '/distribution/extract-tpl',
+    name: 'distribution',
+    meta: { title: 'distribution', icon: 'development-manage' },
+    children: [
+      {
+        path: '/distribution/extract-tpl',
+        component: () => import('@/views/distribution/extractTpl/index'),
+        redirect: '/distribution/extract-tpl/upgrade-logs',
+        name: 'extractTpl',
+        meta: { title: 'extractTpl' },
+        children: [
+          { path: 'per-accomplishment-tpl', component: () => import('@/views/distribution/extractTpl/perAccomplishmentTpl'), name: 'perAccomplishmentTpl', meta: { title: 'perAccomplishmentTpl' }},
+          { path: 'upgrade-logs', component: () => import('@/views/distribution/extractTpl/upgradeLogs'), name: 'upgradeLogs', meta: { title: 'upgradeLogs' }}
+        ]
+      },
+      {
+        path: '/distribution/achievement',
+        component: () => import('@/views/distribution/achievement/index'),
+        redirect: '/distribution/achievement/achievement-list',
+        name: 'achievement',
+        meta: { title: 'achievement' },
+        children: [
+          { path: 'achievement-list', component: () => import('@/views/distribution/achievement/achievementList'), name: 'achievementList', meta: { title: 'achievementList' }}
+        ]
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
