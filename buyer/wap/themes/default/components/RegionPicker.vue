@@ -3,6 +3,7 @@
 </template>
 
 <script>
+  import { api } from '@/ui-domain'
   export default {
     name: 'EnRegionPicker',
     props: {
@@ -11,12 +12,18 @@
       },
       api: {
         type: String,
-        required: true
+        default: `${api.base}/regions/@id/children`
+      },
+      show: {
+        default: false
       }
     },
     watch: {
       default() {
         this.initAddressSelect()
+      },
+      show(newVal) {
+        newVal && $(this.$el).click()
       }
     },
     mounted() {
@@ -26,12 +33,19 @@
       callback(object) {
         this.$emit('changed', object)
       },
+      closed() {
+        this.$emit('closed')
+      },
       initAddressSelect() {
+        this.$nextTick(() => {
+          $(this.$el).addressSelect({
+            api: this.api,
+            callback: this.callback,
+            deData: this.default,
+            closed: this.closed
+          })
+        })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>
