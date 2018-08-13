@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getFloor(client_type, page_type) {
   return request({
-    url: `pages/${client_type}/${page_type}`,
+    url: `admin/pages/${client_type}/${page_type}`,
     method: 'get'
   })
 }
@@ -24,7 +24,7 @@ export function getFloor(client_type, page_type) {
  */
 export function editFloor(client_type, page_type, params) {
   return request({
-    url: `pages/${client_type}/${page_type}`,
+    url: `admin/pages/${client_type}/${page_type}`,
     method: 'put',
     data: params
   })
@@ -60,7 +60,7 @@ export function addFocus(params) {
  */
 export function getFocusDetail(id) {
   return request({
-    url: `focus-pictures/${id}`,
+    url: `admin/focus-pictures/${id}`,
     method: 'get'
   })
 }
@@ -72,7 +72,7 @@ export function getFocusDetail(id) {
  */
 export function editFocus(id, params) {
   return request({
-    url: `focus-pictures/${id}`,
+    url: `admin/focus-pictures/${id}`,
     method: 'put',
     data: params
   })
@@ -84,7 +84,7 @@ export function editFocus(id, params) {
  */
 export function deleteFocus(id) {
   return request({
-    url: `focus-pictures/${id}`,
+    url: `admin/focus-pictures/${id}`,
     method: 'delete'
   })
 }

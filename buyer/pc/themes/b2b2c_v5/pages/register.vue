@@ -35,7 +35,7 @@
         <el-form-item prop="sms_code" class="sms-code">
           <span slot="label">手机验证码</span>
           <el-input v-model="registerForm.sms_code" :maxlength="6" placeholder="10分钟内有效">
-            <en-count-down-btn :start="sendValidMobileSms" slot="append"/>
+            <en-count-down-btn :start="sendValidMobileSms" @end="changeValidCodeUrl" slot="append"/>
           </el-input>
         </el-form-item>
         <button type="button" class="register-btn" @click="handleConfirmRegister">立即注册</button>

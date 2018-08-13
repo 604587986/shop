@@ -1,14 +1,16 @@
 <template>
   <div id="my-points">
     <nav-bar title="我的积分"></nav-bar>
-    <van-tabs v-model="tabActive" :line-width="100" sticky>
-      <van-tab title="我的积分">
-        <van-cell-group :border="false">
-          <van-cell title="消费积分" :value="points.consum_point || 0"/>
-          <van-cell title="等级积分" :value="points.grade_point || 0"/>
-        </van-cell-group>
-      </van-tab>
-      <van-tab title="积分明细">
+    <van-tabs v-model="tabActive" :line-width="100">
+      <van-tab title="我的积分"/>
+      <van-tab title="积分明细"/>
+    </van-tabs>
+    <div class="points-container">
+      <van-cell-group v-if="tabActive === 0" :border="false">
+        <van-cell title="消费积分" :value="points.consum_point || 0"/>
+        <van-cell title="等级积分" :value="points.grade_point || 0"/>
+      </van-cell-group>
+      <template v-else>
         <empty-member v-if="finished && !pointsList.length">暂无收藏的店铺</empty-member>
         <van-list
           v-else
@@ -26,8 +28,8 @@
             />
           </van-cell-group>
         </van-list>
-      </van-tab>
-    </van-tabs>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -112,7 +114,6 @@
 
 <style type="text/scss" lang="scss" scoped>
   .points-container {
-    padding-top: 10px;
     /deep/ .cell { font-size: 12px }
     /deep/ .el-pagination {
       text-align: right;

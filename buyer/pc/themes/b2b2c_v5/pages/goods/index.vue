@@ -214,6 +214,15 @@
         })
         const { prices } = this
         if (prices[0] || prices[1]) {
+          const _price = params.price
+          if (_price) {
+            const _prices = params.price.split('_')
+            if (_prices[0] !== prices[0] || _prices[1] !== prices[1]) {
+              params.page_no = 1
+            }
+          } else {
+            params.page_no = 1
+          }
           params.price = prices.join('_')
         } else {
           delete params.price

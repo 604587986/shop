@@ -10,12 +10,11 @@ import request, { Method } from '@/utils/request'
  * @returns {AxiosPromise}
  */
 export function getMessages(params) {
-  params = params || {}
-  params.page_size = params.page_size || 5
   return request({
     url: 'members/member-nocice-logs',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
