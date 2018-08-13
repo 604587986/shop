@@ -156,6 +156,9 @@
         this.$confirm('请确认是否收到货物，否则可能会钱财两空！', () => {
           API_Order.confirmReceipt(order_sn).then(() => {
             this.$message.success('确认收货成功！')
+            this.finished = false
+            this.orderList = []
+            this.params.page_no = 1
             this.GET_OrderList()
           })
         })

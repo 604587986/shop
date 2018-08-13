@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="logistics-info">
-        <p v-if="!express" style="display:block; width: 100%; text-align: center; line-height: 100px;">暂无物流信息...</p>
+        <p v-if="!express" style="display:block; width: 100%; text-align: center; line-height: 100px;">物流信息获取中...</p>
         <ul v-else>
           <li v-for="(ship, index) in express.data" :key="index" class="ship-item">
             <i class="ship-dot"></i>
