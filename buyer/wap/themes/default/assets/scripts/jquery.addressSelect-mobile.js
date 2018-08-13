@@ -424,7 +424,7 @@
         initElement: function () {
             var _this = this;
             if ($('body').find('#selectAddressApp').length > 0) {
-                $('#selectAddressApp').addClass('show');
+                // $('#selectAddressApp').addClass('show');
                 return
             }
             var app = '<div id="selectAddressApp" class="s-a-app">'

@@ -1,6 +1,12 @@
 <template>
   <div id="shipping-address">
-    <nav-bar title="收货地址"/>
+    <van-nav-bar
+      left-arrow
+      @click-left="MixinRouterBack"
+      right-text="添加"
+      @click-right="handleAddAddress"
+      title="收货地址"
+    />
     <div class="address-container">
       <empty-member v-if="finished && !addressList.length">暂无收货地址</empty-member>
       <ul class="address-list">
@@ -14,7 +20,7 @@
               <div class="address-detail">
                 <span v-if="address.def_addr === 1" class="add-def-icon">默认</span>
                 {{ address.province }} {{ address.city }} {{ address.county }} {{ address.town }} {{ address.addr }}
-                <span class="add-alias">{{ address.ship_address_name }}</span>
+                <span v-if="address.ship_address_name" class="add-alias">{{ address.ship_address_name }}</span>
               </div>
             </div>
             <i class="iconfont ea-icon-edit" @click="handleEaitAddress(address)"></i>
@@ -49,7 +55,6 @@
     </van-popup>
     <en-region-picker
       :show="showAddressSelector"
-      :default="regions"
       @closed="showAddressSelector = false"
       @changed="handleAddressSelectorChanged"
     />
@@ -58,7 +63,7 @@
 
 <script>
   import * as API_Address from '@/api/address'
-  import { Foundation } from '~/ui-utils'
+  import { Foundation, RegExp } from '~/ui-utils'
   export default {
     name: 'shipping-address',
     head() {
@@ -72,7 +77,6 @@
         finished: false,
         addressList: [],
         addressForm: {},
-        regions: '',
         showEditDialog: false,
         showAddressSelector: false
       }
@@ -89,21 +93,45 @@
       /** 提交修改地址表单 */
       submitAddressForm() {
         const params = JSON.parse(JSON.stringify(this.addressForm))
-        const { addr_id } = params
-        params.def_addr = params.def_addr ? 1 : 0
-        if (addr_id) {
-          API_Address.editAddress(addr_id, params).then(() => {
-            this.showEditDialog = false
-            this.finished = false
-            this.GET_AddressList()
-          })
+        if (!params.name) {
+          this.$message.error('请填写收货人姓名！')
+        } else if (!params.mobile) {
+          this.$message.error('请填写手机号码！')
+        } else if (!RegExp.mobile.test(params.mobile)) {
+          this.$message.error('手机号码格式有误！')
+        } else if (!params.region) {
+          this.$message.error('请选择收货地区！')
+        } else if (!params.addr) {
+          this.$message.error('请填写收货详细地址！')
         } else {
-          API_Address.addAddress(params).then(() => {
-            this.showEditDialog = false
-            this.finished = false
-            this.GET_AddressList()
-          })
+          const { addr_id } = params
+          params.def_addr = params.def_addr ? 1 : 0
+          if (addr_id) {
+            API_Address.editAddress(addr_id, params).then(() => {
+              this.showEditDialog = false
+              this.finished = false
+              this.GET_AddressList()
+            })
+          } else {
+            API_Address.addAddress(params).then(() => {
+              this.showEditDialog = false
+              this.finished = false
+              this.GET_AddressList()
+            })
+          }
         }
+      },
+      /** 添加地址 */
+      handleAddAddress() {
+        this.addressForm = {
+          def_addr: false,
+          ship_address_name: '',
+          mobile: '',
+          name: '',
+          addrs: '',
+          region: ''
+        }
+        this.showEditDialog = true
       },
       /** 编辑地址 */
       handleEaitAddress(address) {
@@ -112,7 +140,6 @@
         params.addrs = `${params.province} ${params.city} ${params.county} ${params.town}`
         params.region = params.county_id || params.town_id
         this.addressForm = params
-        this.regions = [address.province_id, address.city_id, address.county_id || -1, address.town_id || -1]
         this.showEditDialog = true
       },
       /** 删除地址 */

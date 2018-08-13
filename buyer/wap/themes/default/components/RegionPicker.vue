@@ -19,9 +19,9 @@
       }
     },
     watch: {
-      default(newVal) {
-        this.initAddressSelect()
-      },
+      // default(newVal) {
+      //   this.initAddressSelect()
+      // },
       show(newVal) {
         newVal && $(this.$el).click()
       }
