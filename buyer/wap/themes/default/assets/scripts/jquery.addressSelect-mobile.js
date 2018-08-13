@@ -423,10 +423,7 @@
 
         initElement: function () {
             var _this = this;
-            if ($('body').find('#selectAddressApp').length > 0) {
-                // $('#selectAddressApp').addClass('show');
-                return
-            }
+            $('#selectAddressApp').length > 0 && $('#selectAddressApp').remove()
             var app = '<div id="selectAddressApp" class="s-a-app">'
                 + ' <div class="bg-s-a-app"></div>'
                 + '<div class="body-s-a-app">'

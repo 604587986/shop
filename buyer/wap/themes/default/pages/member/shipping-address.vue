@@ -51,6 +51,9 @@
         <div class="big-btn">
           <van-button size="large" @click="submitAddressForm">保存修改</van-button>
         </div>
+        <div class="cancel-btn">
+          <van-button size="large" @click="showEditDialog = false">取消修改</van-button>
+        </div>
       </van-cell-group>
     </van-popup>
     <en-region-picker
@@ -237,5 +240,8 @@
     .edit-dialog {
       height: 100%;
     }
+  }
+  .cancel-btn {
+    padding: 10px 10px 0 10px;
   }
 </style>

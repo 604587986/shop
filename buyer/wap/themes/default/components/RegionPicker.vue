@@ -46,6 +46,10 @@
           })
         })
       }
+    },
+    destroyed() {
+      $('#selectAddressApp').remove()
+      $('#addressSelectorStyle').remove()
     }
   }
 </script>
