@@ -73,7 +73,7 @@ module.exports = {
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
-    { src: '~plugins/address-selecter', ssr: false },
+    { src: '~plugins/address-selector', ssr: false },
     { src: '~plugins/vue-swiper', ssr: false }
   ],
   router: {
