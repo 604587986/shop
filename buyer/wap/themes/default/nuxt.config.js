@@ -19,7 +19,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_ve0xf3ndbw.css' }
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_wsffotgdfl.css' }
     ],
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },
@@ -65,6 +65,7 @@ module.exports = {
     { src: '~plugins/vue-filters', ssr: true },
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/vue-vant', ssr: true },
+    { src: '~plugins/address-selector', ssr: false },
     { src: '~plugins/vue-swiper', ssr: false }
   ],
   router: {

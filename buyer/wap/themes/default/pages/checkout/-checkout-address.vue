@@ -71,12 +71,11 @@
    * 收货地址组件
    */
   import Vue from 'vue'
-  import addressMixin from '@/pages/member/addressMixin'
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-address',
     // 和个人中心共用mixin
-    mixins: [addressMixin],
+    mixins: [],
     props: ['addressId'],
     data() {
       return {
