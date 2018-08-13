@@ -281,7 +281,7 @@
     min-height: 60px;
     line-height: 60px;
     text-align: center;
-    width: 200%;
+    width:  percentage(100 / 66);
     height: 100%;
     font-size: 14px;
     color: #606266;
@@ -311,7 +311,9 @@
         border: 1px solid #ebeef5;
         border-collapse: collapse;
         color: #909399;
-        width: 50%;
+        &:first-child {
+          width: 66%;
+        }
       }
     }
     tbody {
