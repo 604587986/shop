@@ -47,14 +47,11 @@
         finished: false,
         tabActive: this.$route.query.type === 'all' ? 1 : 0,
         params: {
-          page_no: 1,
+          page_no: 0,
           page_size: 10
         },
         messageList: []
       }
-    },
-    mounted() {
-      this.GET_MessageList()
     },
     watch: {
       tabActive: function () {
