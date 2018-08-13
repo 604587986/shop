@@ -7,7 +7,8 @@
         </nuxt-link>
         <div class="user-info">
           <p>{{ user.uname }}</p>
-          <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
+          <p v-if="user.mobile">联系方式：{{ user.mobile | secrecyMobile }} </p>
+          <p v-else>联系方式：无 </p>
         </div>
       </div>
       <nuxt-link to="/member/my-order" class="other-item">

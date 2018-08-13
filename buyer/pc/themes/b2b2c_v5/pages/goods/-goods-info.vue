@@ -253,9 +253,9 @@
       /** 立即购买 */
       handleBuyNow() {
         if (!this.isLogin()) return
-        const { num } = this
+        const { buyNum } = this
         const { sku_id } = this.selectedSku
-        API_Trade.buyNow(sku_id, num, this.getActivityId()).then(response => {
+        API_Trade.buyNow(sku_id, buyNum, this.getActivityId()).then(response => {
           this.$store.dispatch('cart/getCartDataAction')
           this.$router.push('/checkout')
         })
@@ -263,9 +263,9 @@
       /** 加入购物车 */
       handleAddToCart() {
         if (!this.isLogin()) return
-        const { num } = this
+        const { buyNum } = this
         const { sku_id } = this.selectedSku
-        API_Trade.addToCart(sku_id, num, this.getActivityId()).then(response => {
+        API_Trade.addToCart(sku_id, buyNum, this.getActivityId()).then(response => {
           this.$store.dispatch('cart/getCartDataAction')
           this.$confirm('加入购物车成功！要去看看吗？', () => {
             this.$router.push({ path: '/cart' })
