@@ -49,10 +49,10 @@
         <van-field v-model="addressForm.ship_address_name" label="地址别名" clearable placeholder="请填写地址别名，如：公司" :maxlength="4"/>
         <van-switch-cell v-model="addressForm.def_addr" title="默认地址" />
         <div class="big-btn">
-          <van-button size="large" @click="submitAddressForm">保存修改</van-button>
+          <van-button size="large" @click="submitAddressForm">保&nbsp;存</van-button>
         </div>
         <div class="cancel-btn">
-          <van-button size="large" @click="showEditDialog = false">取消修改</van-button>
+          <van-button size="large" @click="showEditDialog = false">取&nbsp;消</van-button>
         </div>
       </van-cell-group>
     </van-popup>
