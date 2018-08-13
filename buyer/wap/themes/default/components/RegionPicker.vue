@@ -19,7 +19,7 @@
       }
     },
     watch: {
-      default() {
+      default(newVal) {
         this.initAddressSelect()
       },
       show(newVal) {

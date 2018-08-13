@@ -37,13 +37,22 @@
       />
       <van-cell-group>
         <van-field v-model="addressForm.name" label="收货人" clearable placeholder="请填写收货人"/>
-        <van-field v-model="addressForm.mobile" label="手机号码" clearable placeholder="请填写手机号码"/>
+        <van-field v-model="addressForm.mobile" label="手机号码" clearable placeholder="请填写手机号码" :maxlength="11"/>
         <van-field v-model="addressForm.addrs" label="所在地区" readonly icon="arrow" placeholder="请选择所在地区" @click.native="showAddressSelector = true"/>
         <van-field v-model="addressForm.addr" label="详细地址" clearable placeholder="请填写详细地址"/>
-        <van-field v-model="addressForm.addr" label="地址别名" clearable placeholder="请填写地址别名，如：公司"/>
+        <van-field v-model="addressForm.ship_address_name" label="地址别名" clearable placeholder="请填写地址别名，如：公司" :maxlength="4"/>
         <van-switch-cell v-model="addressForm.def_addr" title="默认地址" />
+        <div class="big-btn">
+          <van-button size="large" @click="submitAddressForm">保存修改</van-button>
+        </div>
       </van-cell-group>
     </van-popup>
+    <en-region-picker
+      :show="showAddressSelector"
+      :default="regions"
+      @closed="showAddressSelector = false"
+      @changed="handleAddressSelectorChanged"
+    />
   </div>
 </template>
 
@@ -72,11 +81,36 @@
       this.GET_AddressList()
     },
     methods: {
+      /** 地址选择器发生改变 */
+      handleAddressSelectorChanged(object) {
+        this.addressForm.region = object.last_id
+        this.addressForm.addrs = object.string
+      },
+      /** 提交修改地址表单 */
+      submitAddressForm() {
+        const params = JSON.parse(JSON.stringify(this.addressForm))
+        const { addr_id } = params
+        params.def_addr = params.def_addr ? 1 : 0
+        if (addr_id) {
+          API_Address.editAddress(addr_id, params).then(() => {
+            this.showEditDialog = false
+            this.finished = false
+            this.GET_AddressList()
+          })
+        } else {
+          API_Address.addAddress(params).then(() => {
+            this.showEditDialog = false
+            this.finished = false
+            this.GET_AddressList()
+          })
+        }
+      },
       /** 编辑地址 */
       handleEaitAddress(address) {
         const params = JSON.parse(JSON.stringify(address))
         params.def_addr = !!params.def_addr
         params.addrs = `${params.province} ${params.city} ${params.county} ${params.town}`
+        params.region = params.county_id || params.town_id
         this.addressForm = params
         this.regions = [address.province_id, address.city_id, address.county_id || -1, address.town_id || -1]
         this.showEditDialog = true

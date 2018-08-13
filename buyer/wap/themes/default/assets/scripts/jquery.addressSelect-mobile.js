@@ -54,6 +54,7 @@
 
             //  将默认地址数组长度赋给this.deDataLen
             if (this.options.deData) {
+              
                 this.deDataLen = this.options.deData.length;
             }
         },
@@ -263,8 +264,10 @@
             var _this = this,
                 _node = _this.node;
             var as    = _node.app_nav.find('a');
-            var str   = '';
-            var ret   = {};
+            var str   = [];
+            var ret   = {
+              last_id: 0
+            };
             _this.$element.find("input[type='hidden']").remove();
             for (var i = 0, len = as.length; i < len; i++) {
                 var title  = as.eq(i).attr('title');
@@ -276,14 +279,15 @@
                     $(inputRegionId).appendTo(_this.$element);
                     $(inputRegion).appendTo(_this.$element);
                 }
-                str += title;
+                str.push(title);
                 ret[region] = {}
 
                 ret[region].id   = id;
                 ret[region].name = title;
+                ret.last_id = id
             }
             if (_this.options.callback) {
-                ret.string = str;
+                ret.string = str.join(' ');
                 _this.options.callback(ret);
             }
 
