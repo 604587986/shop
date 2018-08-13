@@ -15,7 +15,7 @@
     </div>
     <ul v-if="!hideKeywords" class="search-hot-keywords">
       <li v-for="item in $store.getters.hotKeywords" :key="item.id">
-        <nuxt-link :to="'/goods?keyword=' + item.hot_name">{{ item.hot_name }}</nuxt-link>
+        <a :href="'/goods?keyword=' + item.hot_name">{{ item.hot_name }}</a>
       </li>
     </ul>
     <div v-show="show_autocomplete && autoCompleteData.length > 0" class="search-autocomplete">
@@ -41,7 +41,7 @@
     props: ['hide-keywords'],
     data() {
       return {
-        keyword: '',
+        keyword: this.$route.query.keyword,
         autoCompleteStr: '',
         autoCompleteData: [],
         show_autocomplete: false
