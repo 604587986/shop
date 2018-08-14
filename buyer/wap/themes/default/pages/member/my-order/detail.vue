@@ -52,7 +52,7 @@
             <van-button size="small" type="default">查看物流</van-button>
           </nuxt-link>
           <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" to="/member/comments">
-            <van-button size="small" type="default">默认按钮</van-button>
+            <van-button size="small" type="default">去评论</van-button>
           </nuxt-link>
         </div>
       </div>
