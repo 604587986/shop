@@ -175,7 +175,7 @@
         }
         API_Members.commentsOrder(params).then(() => {
           this.$message.success('发表成功！')
-          this.$router.replace({ path: '/member/my-order' })
+          this.$router.back()
         })
       }
     }
