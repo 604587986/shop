@@ -82,7 +82,7 @@
         },
         // 店铺收藏参数
         params_shop: {
-          page_no: 1,
+          page_no: 0,
           page_size: 10
         },
         // 加载中 商品
@@ -98,9 +98,6 @@
         // 店铺数据
         shopList: []
       }
-    },
-    mounted() {
-      this.GET_Collection()
     },
     watch: {
       tabActive: function (newVal) {

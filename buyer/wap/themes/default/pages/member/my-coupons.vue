@@ -49,14 +49,11 @@
         loading: false,
         finished: false,
         params: {
-          page_no: 1,
+          page_no: 0,
           page_size: 10,
           status: 1
         }
       }
-    },
-    mounted() {
-      this.GET_Coupons()
     },
     watch: {
       tabActive(newVal) {

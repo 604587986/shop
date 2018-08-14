@@ -53,6 +53,20 @@
         </div>
       </van-list>
     </div>
+    <van-dialog
+      v-model="showCancelDialog"
+      title="取消订单"
+      show-cancel-button
+      :before-close="cancelBeforeClose"
+    >
+      <van-field
+        v-model="reason"
+        type="textarea"
+        rows="1"
+        autosize
+        placeholder="请输入取消原因"
+      />
+    </van-dialog>
   </div>
 </template>
 
@@ -70,15 +84,16 @@
         // 当前tab的index
         tabActive: this.getParam(order_status),
         params: {
-          page_no: 1,
+          page_no: 0,
           page_size: 5,
           order_status
         },
-        orderList: []
+        orderList: [],
+        // 显示取消订单dialog
+        showCancelDialog: false,
+        // 取消订单原因
+        reason: ''
       }
-    },
-    mounted() {
-      this.GET_OrderList()
     },
     methods: {
       /** tabIndex发生改变 */
@@ -109,29 +124,41 @@
         this.params.page_no += 1
         this.GET_OrderList()
       },
-      /** 取消订单 */
-      handleCancelOrder(order_sn) {
-        this.$layer.prompt({
-          formType: 2,
-          title: '请输入取消原因'
-        }, (value, index) => {
-          const val = value.trim()
-          if (!val) {
+      /** 取消dialog关闭前校验 */
+      cancelBeforeClose(action, done) {
+        if (action === 'confirm') {
+          const { reason, cancel_sn } = this
+          if (!reason) {
             this.$message.error('请填写取消原因！')
+            done(false)
           } else {
-            API_Order.cancelOrder(order_sn, val).then(() => {
+            API_Order.cancelOrder(cancel_sn, reason).then(() => {
+              done()
               this.$message.success('订单取消申请成功！')
-              layer.close(index)
+              this.finished = false
+              this.orderList = []
+              this.params.page_no = 1
               this.GET_OrderList()
             })
           }
-        })
+        } else {
+          done()
+        }
+      },
+      /** 取消订单 */
+      handleCancelOrder(order_sn) {
+        this.reason = ''
+        this.cancel_sn = order_sn
+        this.showCancelDialog = true
       },
       /** 确认收货 */
       handleRogOrder(order_sn) {
         this.$confirm('请确认是否收到货物，否则可能会钱财两空！', () => {
           API_Order.confirmReceipt(order_sn).then(() => {
             this.$message.success('确认收货成功！')
+            this.finished = false
+            this.orderList = []
+            this.params.page_no = 1
             this.GET_OrderList()
           })
         })
@@ -140,13 +167,13 @@
       GET_OrderList() {
         this.loading = true
         API_Order.getOrderList(this.params).then(response => {
-          this.loading = false
           const { data } = response
           if(!data || !data.length) {
             this.finished = true
           } else {
             this.orderList.push(...data)
           }
+          this.loading = false
         })
       }
     }
