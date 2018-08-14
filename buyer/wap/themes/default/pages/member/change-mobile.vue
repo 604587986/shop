@@ -91,7 +91,7 @@
     data() {
       return {
         /** 步骤 */
-        step: 3,
+        step: 1,
         /** 校验手机号 表单 */
         validMobileForm: {
           img_code: '',
