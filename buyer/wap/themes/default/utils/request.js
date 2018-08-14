@@ -25,7 +25,7 @@ service.interceptors.request.use(config => {
   if (is_put_post && is_json) {
     config.data = JSON.stringify(config.data)
   }
-  if (is_put_post && !is_file) {
+  if (is_put_post && !is_file && !is_json) {
     config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   /** 配置全屏加载 */
