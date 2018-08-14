@@ -3,10 +3,6 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
-          <span>商品分类</span>
-          <en-category-picker clearable @changed="(category) => { params.category_id = category.category_id || 0 }"/>
-        </div>
-        <div class="chart-header-item">
           <span>查询周期：</span>
           <en-year-month-picker @changed="handleYearMonthChanged"/>
         </div>
@@ -63,8 +59,7 @@
           start_time: '',
           end_time: '',
           cycle_type: 'MONTH',
-          order_status: 99,
-          category_id: 0,
+          order_status: '',
           seller_id: 0
         },
         loading: false,
