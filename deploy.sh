@@ -66,7 +66,6 @@ if [[ ! -n "$1" || "$1" == "buyer-pc" ]];then
   pm2 start npm --name "buyer-pc" -- run start
   echo -e "\033[32mbuyer-pc部署完成！\033[0m"
 fi
-fi
 
 if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
   echo "开始部署买家WAP端(buyer-wap)..."
