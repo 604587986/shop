@@ -18,7 +18,7 @@
           placeholder="请输入图片验证码"
           maxlength="4"
         >
-          <img v-if="valid_img_url" :src="valid_img_url" slot="button" @click="getValidImgUrl" class="captcha-img">
+          <img v-show="valid_img_url" :src="valid_img_url" slot="button" @click="getValidImgUrl" class="captcha-img">
         </van-field>
         <van-field
           v-model="bindMobileForm.sms_code"
@@ -84,8 +84,10 @@
           const { mobile, img_code } = this.bindMobileForm
           if (!mobile) {
             this.$message.error('请填写手机号！')
+            reject()
           } else if (!RegExp.mobile.test(mobile)) {
             this.$message.error('手机号码格式有误！')
+            reject()
           } else if (!img_code) {
             this.$message.error('请输入图片验证码！')
             reject()
@@ -102,6 +104,10 @@
       /** 绑定手机号 表单提交 */
       submitBindForm() {
         const { mobile, sms_code } = this.bindMobileForm
+        if (!RegExp.mobile.test(mobile)) {
+          this.$message.error('手机号码格式有误！')
+          return false
+        }
         API_Safe.bindMobile(mobile, sms_code).then(() => {
           this.$message.success('绑定成功！')
           this.$store.dispatch('user/getUserDataAction')

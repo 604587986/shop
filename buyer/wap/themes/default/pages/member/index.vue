@@ -63,7 +63,7 @@
       <van-cell-group style="margin-top: 10px">
         <van-cell title="我的资料" is-link value="修改资料" to="/member/my-profile"/>
         <van-cell title="收货地址" is-link value="我的收货地址" to="/member/shipping-address"/>
-        <van-cell title="账户安全" is-link value="修改密码" to="/member/account-safe"/>
+        <van-cell title="账户安全" is-link value="修改密码、手机绑定" to="/member/account-safe"/>
       </van-cell-group>
       <div class="big-btn">
         <van-button type="danger" size="large" @click="handleLogout">退出登录</van-button>
