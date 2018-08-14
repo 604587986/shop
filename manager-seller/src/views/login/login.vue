@@ -5,7 +5,7 @@
     <!--登录-->
     <el-carousel indicator-position="none">
       <!--背景轮播-->
-      <el-carousel-item v-for="item in 4" :key="item">
+      <el-carousel-item v-for="item in BroadcastList" :key="item">
         <div class="login"></div>
       </el-carousel-item>
       <!--登录表单-->
@@ -43,13 +43,13 @@
         <h2>申请开店流程</h2>
         <p>商家按照下面的流程步骤，即可在本商城开设您的店铺。</p>
         <ul class="index-joinin-step">
-          <li class="step" v-for="item in steps">
+          <li class="step" v-for="(item, index) in steps">
             <div class="step-info">
               <img :src="item.stepImg">
               <p>{{ item.text1 }}</p>
               <p>{{ item.text2 }}</p>
             </div>
-            <i class="arrow el-icon-arrow-right"></i>
+            <i v-if="index !== (steps.length - 1) " class="arrow el-icon-arrow-right"></i>
           </li>
         </ul>
       </div>
@@ -102,6 +102,18 @@
     },
     data() {
       return {
+
+        /** 轮播 */
+        BroadcastList: [
+          {
+            img_main: '',
+            img_auxiliary: ''
+          },
+          {
+            img_main: '',
+            img_auxiliary: ''
+          }
+        ],
 
         /** 登录表单 */
         loginForm: {
@@ -175,11 +187,22 @@
   /deep/ .el-carousel__container {
     width: 100%;
     height: 600px;
-    position:relative;
-    .login {
+    position: relative;
+    .el-carousel__item {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
       width: 100%;
       height: 600px;
-      background: url("http://java.bizpower.com/seller/static/img/joinin/banner_02.png");
+      background: url("http://java.bizpower.com/seller/static/img/joinin/banner_02_repeat.png") repeat-x 0 0;
+      .login {
+        position: absolute;
+        z-index: 10;
+        width: 100%;
+        height: 600px;
+        background: url("http://java.bizpower.com/seller/static/img/joinin/banner_02.png") no-repeat center top;
+      }
     }
     .container {
       position: absolute;
