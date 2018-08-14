@@ -12,7 +12,7 @@
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop.shop_id }"/>
         </div>
       </div>
       <en-table-layout
