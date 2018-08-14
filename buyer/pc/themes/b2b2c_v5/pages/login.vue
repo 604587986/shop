@@ -46,7 +46,7 @@
                       <img class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="item item-form-t">
-                      <en-count-down-btn :start="sendValidMobileSms" class="send-sms-btn"/>
+                      <en-count-down-btn :start="sendValidMobileSms" @end="handleChangeValUrl" class="send-sms-btn"/>
                     </div>
                     <div class="item item-form-p">
                       <label for="sms-code">
@@ -165,6 +165,9 @@
             API_Passport.sendLoginSms(mobile, captcha).then(() => {
               this.$message.success('短信发送成功，请注意查收！')
               resolve()
+            }).catch(() => {
+              this.handleChangeValUrl()
+              reject()
             })
           }
         })
