@@ -136,6 +136,10 @@
         return new Promise((resolve, reject) => {
           const { uuid } = this
           const { img_code } = this.validMobileForm
+          if (!img_code) {
+            this.$message.error('请填写图片验证码！')
+            return false
+          }
           API_Safe.sendMobileSms(this.uuid, img_code).then(() => {
             this.$message.success('发送成功，请注意查收！')
             resolve()
@@ -157,6 +161,10 @@
           const { mobile, img_code } = this.changeMobileForm
           if (!RegExp.mobile.test(mobile)) {
             this.$message.error('手机号码格式有误！')
+            return false
+          }
+          if (!img_code) {
+            this.$message.error('请填写图片验证码！')
             return false
           }
           API_Safe.sendBindMobileSms(mobile, img_code, uuid).then(() => {
