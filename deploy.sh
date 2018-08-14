@@ -3,7 +3,7 @@
 WEB_PATH=$PWD
 cd $WEB_PATH
 
-if [[ "$1" != "ui-domain" ]];then
+if [[ "$1" == "git-pull" ]];then
   echo "拉取最新的代码..."
   git reset --hard origin/master
   git clean -f

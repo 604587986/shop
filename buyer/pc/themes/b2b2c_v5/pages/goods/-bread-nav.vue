@@ -4,9 +4,10 @@
       <span class="left-nav">
         <nuxt-link to="/">首页</nuxt-link>
         &gt;
-        <nuxt-link :to="'/goods?category=' + goods.category_id">{{ goods.category_name }}</nuxt-link>
+        <nuxt-link v-if="goods.category_id" :to="'/goods?category=' + goods.category_id">{{ goods.category_name }}</nuxt-link>
+        <nuxt-link v-else :to="'/goods?keyword=' + goods.category_name">{{ goods.category_name }}</nuxt-link>
         &gt;
-        <a href="javascript:;">{{ goods.goods_name }}</a>
+        <a href="javascript:;">{{ goods.goods_name || goods.name }}</a>
       </span>
       <span>商品编码：{{ goods.sn }}</span>
     </div>

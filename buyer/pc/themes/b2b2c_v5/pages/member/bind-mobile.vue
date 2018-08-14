@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item label="请输入短信验证码：" prop="sms_code" class="sms-code">
           <el-input v-model="bindMobileForm.sms_code" placeholder="请输入短信验证码" auto-complete="off" :maxlength="6">
-            <en-count-down-btn :time="60" :start="sendBindMobileSms" slot="append"/>
+            <en-count-down-btn :time="60" :start="sendBindMobileSms" @end="getValidImgUrl" slot="append"/>
           </el-input>
         </el-form-item>
         <el-form-item label="">
@@ -100,7 +100,10 @@
                 API_Safe.sendBindMobileSms(mobile, captcha, uuid).then(() => {
                   this.$message.success('发送成功，请注意查收！')
                   resolve()
-                }).catch(reject)
+                }).catch(() => {
+                  this.getValidImgUrl()
+                  reject()
+                })
               }
             })
           })
@@ -115,7 +118,7 @@
               this.$message.success('绑定成功！')
               this.$store.dispatch('user/getUserDataAction')
               this.bindMobile = mobile
-            })
+            }).catch(this.getValidImgUrl)
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false

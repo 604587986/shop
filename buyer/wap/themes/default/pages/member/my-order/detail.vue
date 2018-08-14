@@ -51,7 +51,7 @@
           <nuxt-link v-if="order.logi_id && order.ship_no" :to="'./express?logi_id=' + order.logi_id + '&ship_no=' + order.ship_no">
             <van-button size="small" type="default">查看物流</van-button>
           </nuxt-link>
-          <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" to="/member/comments">
+          <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'../comments?order_sn=' + order.sn">
             <van-button size="small" type="default">去评论</van-button>
           </nuxt-link>
         </div>
