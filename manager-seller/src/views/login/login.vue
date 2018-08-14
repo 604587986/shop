@@ -5,7 +5,7 @@
     <!--登录-->
     <el-carousel indicator-position="none">
       <!--背景轮播-->
-      <el-carousel-item v-for="item in BroadcastList" :key="item">
+      <el-carousel-item v-for="(item, index) in BroadcastList" :key="index">
         <div class="login"></div>
       </el-carousel-item>
       <!--登录表单-->
@@ -105,6 +105,14 @@
 
         /** 轮播 */
         BroadcastList: [
+          {
+            img_main: '',
+            img_auxiliary: ''
+          },
+          {
+            img_main: '',
+            img_auxiliary: ''
+          },
           {
             img_main: '',
             img_auxiliary: ''
