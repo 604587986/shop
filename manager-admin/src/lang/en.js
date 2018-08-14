@@ -131,7 +131,14 @@ export default {
     articleManage: 'Article Manage',
     articleCategory: 'Article Category',
     articleList: 'Article List',
-    addArticle: 'Add Article'
+    addArticle: 'Add Article',
+
+    distribution: 'Distribution',
+    extractTpl: 'Extract Template',
+    perAccomplishmentTpl: 'Person Accomplishment Template',
+    upgradeLogs: 'Upgrade Logs',
+    achievement: 'Achievement',
+    achievementList: 'Achievement List'
   },
   login: {
     logIn: 'Log in',

@@ -74,7 +74,7 @@
         <el-table-column  label="状态" width="120">
           <template slot-scope="scope">
             <span>{{ scope.row | marketStatus }}</span>
-            <div class="under-reason" v-if="scope.row.under_message" @click="showUnderReason(scope.row)">(下架原因)</div>
+            <div class="under-reason" v-if="scope.row.market_enable === 0" @click="showUnderReason(scope.row)">(下架原因)</div>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="250" style="text-align: left;">

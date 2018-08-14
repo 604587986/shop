@@ -130,7 +130,14 @@ export default {
     articleManage: '文章管理',
     articleCategory: '文章分类',
     articleList: '文章列表',
-    addArticle: '添加文章'
+    addArticle: '添加文章',
+
+    distribution: '分销管理',
+    extractTpl: '提成模板',
+    perAccomplishmentTpl: '个人提成模板',
+    upgradeLogs: '升级日志',
+    achievement: '业绩管理',
+    achievementList: '业绩列表'
   },
   login: {
     logIn: '登录',
