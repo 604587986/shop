@@ -355,3 +355,10 @@
   color: $color-main;
   font-weight: bold;
 }
+
+.activity_list {
+  width: 80px;
+}
+.activity_list + .num-action {
+  margin-left: 10px;
+}

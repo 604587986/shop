@@ -51,6 +51,7 @@
                   <div class="sku-num">x {{ sku.num }}</div>
                   <div v-if="sku.goods_operate_allowable_vo.allow_apply_service" class="after-sale-btn">
                     <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
+                    <nuxt-link v-if="sku.snapshot_id" :to="'/goods/snapshot?id=' + sku.snapshot_id">交易快照</nuxt-link>
                   </div>
                 </div>
               </div>

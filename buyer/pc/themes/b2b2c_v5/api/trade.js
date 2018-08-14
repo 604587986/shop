@@ -364,3 +364,15 @@ export function getOrderFlow(order_sn) {
     needToken: true
   })
 }
+
+/**
+ * 获取订单交易快照数据
+ * @param id
+ */
+export function getSnapshot(id) {
+  return request({
+    url: `trade/snapshots/${id}`,
+    method: Method.GET,
+    needToken: true
+  })
+}
