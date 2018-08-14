@@ -66,7 +66,7 @@
     computed: {
       ...mapGetters(['uuid']),
       val_disabled() {
-        const { mobile, img_code, sms_code } = this
+        const { mobile, img_code, sms_code } = this.bindMobileForm
         return !(mobile && img_code && sms_code)
       }
     },
@@ -81,7 +81,7 @@
       /** 发送绑定手机验证码 */
       sendBindMobileSms () {
         return new Promise((resolve, reject) => {
-          const { mobile, img_code } = this.bindMobile
+          const { mobile, img_code } = this.bindMobileForm
           if (!mobile) {
             this.$message.error('请填写手机号！')
           } else if (!RegExp.mobile.test(mobile)) {
@@ -105,6 +105,7 @@
         API_Safe.bindMobile(mobile, sms_code).then(() => {
           this.$message.success('绑定成功！')
           this.$store.dispatch('user/getUserDataAction')
+          this.$router.back()
           this.bindMobile = mobile
         })
       }
