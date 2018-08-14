@@ -46,6 +46,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .express-container {
     padding-top: 46px;
     font-size: 14px;
@@ -75,6 +76,14 @@
         position: relative;
         display: flex;
         flex-wrap: wrap;
+        &:first-child {
+          .ship-dot {
+            background-color: $color-main;
+          }
+          p {
+            color: $color-main;
+          }
+        }
         &:not(:last-child)::after {
           content: "";
           position: absolute;
