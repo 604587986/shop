@@ -100,7 +100,11 @@
         /** 图片验证码URL */
         valid_img_url: '',
         /** 更换手机 表单 */
-        changeMobileForm: { mobile: 13888888888 }
+        changeMobileForm: {
+          mobile: '',
+          img_code: '',
+          sms_code: ''
+        }
       }
     },
     mounted() {
