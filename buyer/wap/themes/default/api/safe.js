@@ -89,6 +89,7 @@ export function validChangePasswordSms(sms_code) {
   return request({
     url: 'members/security/password',
     method: Method.GET,
+    needToken: true,
     params: { sms_code }
   })
 }
@@ -103,6 +104,7 @@ export function changePassword(uuid, captcha, password) {
   return request({
     url: 'members/security/password',
     method: Method.PUT,
+    needToken: true,
     data: {
       uuid,
       captcha,

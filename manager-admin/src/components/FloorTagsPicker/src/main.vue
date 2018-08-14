@@ -94,8 +94,8 @@
           { text: '关键字', value: 'KEYWORD' },
           { text: '商品序号', value: 'GOODS' },
           { text: '店铺编号', value: 'SHOP' },
-          { text: '商品分类', value: 'CATEGORY' },
-          { text: '专题', value: 'TOPIC' }
+          { text: '商品分类', value: 'CATEGORY' }
+          // { text: '专题', value: 'TOPIC' }
         ]
       }
     },

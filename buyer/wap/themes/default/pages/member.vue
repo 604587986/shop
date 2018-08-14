@@ -48,5 +48,9 @@
       /*padding-bottom: 20px;*/
       overflow: hidden;
     }
+    .captcha-img {
+      width: 70px;
+      height: 24px;
+    }
   }
 </style>
