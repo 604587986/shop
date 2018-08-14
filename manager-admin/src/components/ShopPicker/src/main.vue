@@ -35,7 +35,7 @@
     methods: {
       handleShopChanged() {
         const shop = this.shopList.filter(item => item.shop_id === this.shop_id)
-        this.$emit('change', shop[0] || { shop_id: 0, shop_name: '全平台' })
+        this.$emit('changed', shop[0] || { shop_id: 0, shop_name: '全平台' })
       }
     }
   }

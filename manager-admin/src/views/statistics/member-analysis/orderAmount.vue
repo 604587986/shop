@@ -8,7 +8,7 @@
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <en-shop-picker @change="(shop) => { params.seller_id = shop.shop_id }"/>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop.shop_id }"/>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">

@@ -8,7 +8,11 @@
         </div>
         <div class="chart-header-item">
           <span>店铺：</span>
-          <en-shop-picker @change="(shop) => { params.seller_id = shop_id }"/>
+          <en-shop-picker @changed="(shop) => { params.seller_id = shop_id }"/>
+        </div>
+        <div class="chart-header-item">
+          <span>订单状态：</span>
+          <en-order-status-picker @changed="(order_status) => { params.order_status = order_status }"/>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">
