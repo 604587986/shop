@@ -52,6 +52,9 @@
                       {{ sku.purchase_price | unitPrice }}
                     </div>
                     <div class="sku-num">
+                      <select v-if="sku.single_list && sku.single_list.length" class="activity_list" @change="(event) => { handleActChanged(sku, event) }">
+                        <option v-for="(act, index) in sku.single_list" :key="index" :value="act.activity_id">{{ act.title }}</option>
+                      </select>
                       <div class="num-action clearfix">
                         <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
                         <input
@@ -196,6 +199,11 @@
       /** 全选、取消全选 */
       handleCheckAll() {
         this.checkAll(this.all_checked ? 0 : 1)
+      },
+      /** 促销活动发生改变 */
+      handleActChanged(sku, event) {
+        // Andste_TODO 2018/8/14: 缺少切换促销API
+        console.log(sku, event.target.value)
       },
       /** 更新商品数量 */
       handleUpdateSkuNum(sku, symbol) {
