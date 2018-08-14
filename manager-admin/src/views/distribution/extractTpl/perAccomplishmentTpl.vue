@@ -1,7 +1,9 @@
 <template>
   <div>
     <en-table-layout
+      toolbar
       :tableData="tableData"
+      pagination
       :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
@@ -10,11 +12,11 @@
       </div>
       <template slot="table-columns">
         <!--模板名-->
-        <el-table-column prop="tpl_name" label="模板名"/>
+        <el-table-column prop="tpl_name" label="模板名" width="200"/>
         <!--说明-->
-        <el-table-column prop="tpl_describe" label="说明"/>
+        <el-table-column prop="tpl_describe" label="说明" width=""/>
         <!--操作-->
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="280">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="editPerAccomplishmentTpl(scope.row)">修改</el-button>
             <el-button type="danger" size="mini" @click="delPerAccomplishmentTpl(scope.row)">删除</el-button>

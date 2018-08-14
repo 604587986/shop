@@ -141,6 +141,7 @@ export default {
     distributorList: 'Distributor List',
     achievement: 'Achievement',
     achievementList: 'Achievement List',
+    billList: 'bill list',
     putforward: 'Put Forward',
     putforwardSettings: 'Put Forward Settings',
     putforwardApply: 'Put Forward Apply',

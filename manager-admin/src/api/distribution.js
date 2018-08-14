@@ -93,6 +93,32 @@ export function getAchievementList(params) {
 }
 
 /**
+ * 账单列表
+ * @param params
+ */
+export function getbillList(params) {
+  return request({
+    url: 'admin/distribution/bill/member',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 提现申请列表
+ * @param params
+ */
+export function getWithdrawApplyList(params) {
+  return request({
+    url: 'admin/distribution/withdraw/apply',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
  * 获取提现设置
  * @param params
  */

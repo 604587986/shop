@@ -5,6 +5,12 @@
       :tableData="tableData"
       pagination
       :loading="loading">
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns"></div>
+        <div class="toolbar-search">
+          <en-table-search @search="searchEvent" placeholder="请输入分销商用户名"/>
+        </div>
+      </div>
       <template slot="table-columns">
         <!--账单号-->
         <el-table-column prop="sn" label="账单号"/>
@@ -41,7 +47,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateSee(scope.row)">查看</el-button>
+              @click="handleOperateSee(scope.$index, scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -63,7 +69,7 @@
 <script>
   import * as API_distribution from '@/api/distribution'
   export default {
-    name: 'achievementList',
+    name: 'billList',
     data() {
       return {
         // 列表loading状态
@@ -72,7 +78,8 @@
         // 列表参数
         params: {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          ...this.$route.query
         },
         // 列表数据
         tableData: [],
@@ -81,25 +88,51 @@
       }
     },
     mounted() {
-      this.GET_AchievementList()
+      this.GET_BillList()
+    },
+    activated() {
+      delete this.params.uname
+      this.params = {
+        ...this.params,
+        ...this.$route.query
+      }
+      this.GET_BillList()
+    },
+    beforeRouteUpdate(to, from, next) {
+      delete this.params.uname
+      this.params = {
+        ...this.params,
+        ...this.$route.query
+      }
+      this.GET_BillList()
+      next()
     },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_AchievementList()
+        this.GET_BillList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_AchievementList()
+        this.GET_BillList()
       },
 
-      /** 获取业绩列表 */
-      GET_AchievementList() {
+      /** 搜索事件触发 */
+      searchEvent(data) {
+        this.params = {
+          ...this.params,
+          uname: data
+        }
+        this.GET_BillList()
+      },
+
+      /** 获取账单列表 */
+      GET_BillList() {
         this.loading = true
-        API_distribution.getAchievementList(this.params).then(response => {
+        API_distribution.getbillList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
@@ -111,8 +144,8 @@
       },
 
       /** 查看 */
-      handleOperateSee(row) {
-        this.$router.push({ path: '/distribution/achievement/bill-list', query: { total_id: row.id }})
+      handleOperateSee() {
+
       }
     }
   }
