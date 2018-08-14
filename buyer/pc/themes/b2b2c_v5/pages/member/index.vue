@@ -125,7 +125,7 @@
               <div class="shop-info">
                 <img :src="shop.logo" :alt="shop.shop_name" :title="shop.shop_name">
                 <div class="shop-btns">
-                  <a href="javascript:;">进入店铺</a>
+                  <nuxt-link :to="'/shop/' + shop.shop_id">进入店铺</nuxt-link>
                   <a href="javascript:;" @click="handleDeleteShopCollection(shop)">取消关注</a>
                 </div>
               </div>

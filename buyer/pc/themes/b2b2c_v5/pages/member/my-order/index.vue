@@ -49,7 +49,7 @@
                   </div>
                   <div class="sku-price">{{ sku.purchase_price | unitPrice('￥') }}</div>
                   <div class="sku-num">x {{ sku.num }}</div>
-                  <div v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" class="after-sale-btn">
+                  <div v-if="sku.goods_operate_allowable_vo.allow_apply_service" class="after-sale-btn">
                     <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
                   </div>
                 </div>

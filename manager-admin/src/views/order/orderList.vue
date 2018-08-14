@@ -27,7 +27,7 @@
                   <el-input size="medium" v-model="advancedForm.buyer_name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="选择店铺">
-                  <en-shop-picker @change="(shop) => { advancedForm.seller_id = shop.shop_id }"/>
+                  <en-shop-picker @changed="(shop) => { advancedForm.seller_id = shop.shop_id }"/>
                 </el-form-item>
                 <el-form-item label="下单日期">
                   <el-date-picker

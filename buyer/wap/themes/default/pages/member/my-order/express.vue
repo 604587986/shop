@@ -39,7 +39,6 @@
     mounted() {
       const { logi_id, ship_no } = this.$route.query
       API_Trade.getExpress(logi_id, ship_no).then(response => {
-        response.data = response.data.reverse()
         this.express = response
       })
     }

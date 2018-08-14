@@ -33,6 +33,7 @@
             <van-field
               v-model="accountForm.password"
               type="password"
+              clearable
               placeholder="请输入密码"
             >
               <span slot="label">密&emsp;&emsp;&emsp;码</span>
