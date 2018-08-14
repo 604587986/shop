@@ -115,11 +115,13 @@
     methods: {
       ...mapActions({
         logout: 'user/logoutAction',
-        getUserData: 'user/getUserDataAction'
+        getUserData: 'user/getUserDataAction',
+        cleanCartStore: 'cart/cleanCartStoreAction'
       }),
       /** 账户登出 */
       handleLogout() {
         this.logout().then(() => {
+          this.cleanCartStore()
           this.$router.push({ path: '/' })
         })
       },
