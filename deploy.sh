@@ -60,7 +60,12 @@ if [[ ! -n "$1" || "$1" == "buyer-pc" ]];then
   echo "开始安装项目依赖..."
   sudo npm install
   sudo npm run build
-  echo -e "\033[32m买家PC端build完成，等待部署...\033[0m"
+  echo -e "\033[32m买家PC端build完成\033[0m"
+  # 启动买家端PC
+  pm2 delete buyer-pc
+  pm2 start npm --name "buyer-pc" -- run start
+  echo -e "\033[32mbuyer-pc部署完成！\033[0m"
+fi
 fi
 
 if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
@@ -70,21 +75,9 @@ if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
   echo "开始安装项目依赖..."
   sudo npm install
   sudo npm run build
-  echo "买家WAP端build完成，等待部署..."
-fi
-
-if [[ ! -n "$1" || "$1" == "buyer-pc" ]];then
-  # 启动买家端PC
-  pm2 delete buyer-pc
-  cd $WEB_PATH/buyer/pc/themes/b2b2c_v5
-  pm2 start npm --name "buyer-pc" -- run start
-  echo -e "\033[32mbuyer-pc部署完成！\033[0m"
-fi
-
-if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
+  echo "买家WAP端build完成"
   #启动买家端WAP
   pm2 delete buyer-wap
-  cd $WEB_PATH/buyer/wap/themes/default
   pm2 start npm --name "buyer-wap" -- run start
   echo -e "\033[32mbuyer-wap部署完成！\033[0m"
 fi
