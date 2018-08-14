@@ -28,6 +28,7 @@
             v-model="cm.content"
             type="textarea"
             :placeholder="cm.grade === 'good' ? '宝贝满足您的期待吗？说说它的优点和美中不足的地方吧' : '可以告诉我们您遇到了什么问题吗？'"
+            :error-message="errorMsgs[index]"
             rows="4"
           />
         </div>
@@ -106,7 +107,9 @@
         skulist: '',
         commentsForm: {},
         // 不能评论【已评论过】
-        cantComments: false
+        cantComments: false,
+        // 错误信息
+        errorMsgs: []
       }
     },
     mounted() {
@@ -121,12 +124,15 @@
           delivery_score: 5,
           description_score: 5,
           service_score: 5,
-          comments: response.order_sku_list.map((item, index) => ({
-            sku_id: item.sku_id,
-            content: '',
-            grade: 'good',
-            images: []
-          }))
+          comments: response.order_sku_list.map((item, index) => {
+            this.errorMsgs[index] = ''
+            return {
+              sku_id: item.sku_id,
+              content: '',
+              grade: 'good',
+              images: []
+            }
+          })
         }
       })
     },
@@ -155,11 +161,18 @@
         })
       },
       submitForm() {
+        let err_flg = false
         const params = JSON.parse(JSON.stringify(this.commentsForm))
-        params.comments.map(item => {
-          item.images = item.images.map(img => img.response.url)
-          return item
+        params.comments.forEach((item, index) => {
+          if (item.grade !== 'goods' && !item.content) {
+            err_flg = true
+            this.$set(this.errorMsgs, index, '请填写您的评价！')
+          }
         })
+        if (err_flg) {
+          this.$message.error('表单填写有误，请核对！')
+          return false
+        }
         API_Members.commentsOrder(params).then(() => {
           this.$message.success('发表成功！')
           this.$router.replace({ path: '/member/my-order' })
