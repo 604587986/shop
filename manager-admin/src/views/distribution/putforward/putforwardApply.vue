@@ -4,7 +4,7 @@
 
 <script>
     export default {
-      name: 'put-forward-records'
+      name: 'putforwardApply'
     }
 </script>
 

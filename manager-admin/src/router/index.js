@@ -461,6 +461,16 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/distribution/distributor',
+        component: () => import('@/views/distribution/distributor/index'),
+        redirect: '/distribution/distributor/distributor-list',
+        name: 'distributor',
+        meta: { title: 'distributor' },
+        children: [
+          { path: 'distributor-list', component: () => import('@/views/distribution/distributor/distributorList'), name: 'distributorList', meta: { title: 'distributorList' }}
+        ]
+      },
+      {
         path: '/distribution/achievement',
         component: () => import('@/views/distribution/achievement/index'),
         redirect: '/distribution/achievement/achievement-list',
@@ -468,6 +478,18 @@ export const asyncRouterMap = [
         meta: { title: 'achievement' },
         children: [
           { path: 'achievement-list', component: () => import('@/views/distribution/achievement/achievementList'), name: 'achievementList', meta: { title: 'achievementList' }}
+        ]
+      },
+      {
+        path: '/distribution/put-forward',
+        component: () => import('@/views/distribution/putforward/index'),
+        redirect: '/distribution/putforward/put-forward-settings',
+        name: 'putforward',
+        meta: { title: 'putforward' },
+        children: [
+          { path: 'put-forward-settings', component: () => import('@/views/distribution/putforward/putforwardSettings'), name: 'putforwardSettings', meta: { title: 'putforwardSettings' }},
+          { path: 'put-forward-apply', component: () => import('@/views/distribution/putforward/putforwardApply'), name: 'putforwardApply', meta: { title: 'putforwardApply' }},
+          { path: 'put-forward-list', component: () => import('@/views/distribution/putforward/putforwardRecords'), name: 'putforwardRecords', meta: { title: 'putforwardRecords' }}
         ]
       }
     ]

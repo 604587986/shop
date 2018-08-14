@@ -137,8 +137,14 @@ export default {
     extractTpl: 'Extract Template',
     perAccomplishmentTpl: 'Person Accomplishment Template',
     upgradeLogs: 'Upgrade Logs',
+    distributor: 'Distributor Manage',
+    distributorList: 'Distributor List',
     achievement: 'Achievement',
-    achievementList: 'Achievement List'
+    achievementList: 'Achievement List',
+    putforward: 'Put Forward',
+    putforwardSettings: 'Put Forward Settings',
+    putforwardApply: 'Put Forward Apply',
+    putforwardRecords: 'Put Forward Records'
   },
   login: {
     logIn: 'Log in',

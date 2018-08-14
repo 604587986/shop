@@ -136,8 +136,14 @@ export default {
     extractTpl: '提成模板',
     perAccomplishmentTpl: '个人提成模板',
     upgradeLogs: '升级日志',
+    distributor: '分销商管理',
+    distributorList: '个人分销商',
     achievement: '业绩管理',
-    achievementList: '业绩列表'
+    achievementList: '业绩列表',
+    putforward: '提现',
+    putforwardSettings: '提现设置',
+    putforwardApply: '提现申请',
+    putforwardRecords: '提现记录'
   },
   login: {
     logIn: '登录',
