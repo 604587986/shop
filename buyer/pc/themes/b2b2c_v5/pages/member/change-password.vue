@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item label="短信验证码：" prop="sms_code" class="sms-code">
           <el-input v-model="validMobileForm.sms_code" placeholder="请输入短信验证码" clearable :maxlength="6">
-            <en-count-down-btn :time="60" :start="sendValidMobileSms" slot="append"/>
+            <en-count-down-btn :time="60" :start="sendValidMobileSms" @end="getValidImgUrl" slot="append"/>
           </el-input>
         </el-form-item>
         <el-form-item label="">
@@ -138,7 +138,10 @@
               API_Safe.sendMobileSms(uuid, img_code).then(() => {
                 this.$message.success('验证码发送成功，请注意查收！')
                 resolve()
-              }).catch(reject)
+              }).catch(() => {
+                this.getValidImgUrl()
+                reject()
+              })
             }
           })
         })
@@ -151,7 +154,7 @@
             API_Safe.validChangePasswordSms(sms_code).then(() => {
               this.step = 2
               this.getValidImgUrl()
-            })
+            }).catch(this.getValidImgUrl)
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -170,7 +173,7 @@
                 this.$store.dispatch('user/logoutAction')
                 this.$router.push('/login')
               }, 200)
-            })
+            }).catch(this.getValidImgUrl)
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
