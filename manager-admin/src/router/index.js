@@ -483,7 +483,7 @@ export const asyncRouterMap = [
       {
         path: '/distribution/put-forward',
         component: () => import('@/views/distribution/putforward/index'),
-        redirect: '/distribution/putforward/put-forward-settings',
+        redirect: '/distribution/put-forward/put-forward-settings',
         name: 'putforward',
         meta: { title: 'putforward' },
         children: [

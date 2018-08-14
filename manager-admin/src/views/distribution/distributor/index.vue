@@ -8,7 +8,7 @@
 
 <script>
   export default {
-    name: 'distributor-list'
+    name: 'distributor'
   }
 </script>
 

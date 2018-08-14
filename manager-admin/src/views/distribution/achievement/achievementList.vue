@@ -61,7 +61,7 @@
 <script>
   import * as API_distribution from '@/api/distribution'
   export default {
-    name: 'upgradeLogs',
+    name: 'achievementList',
     data() {
       return {
         // 列表loading状态

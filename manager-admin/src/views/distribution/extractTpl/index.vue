@@ -8,7 +8,7 @@
 
 <script>
   export default {
-    name: 'upgrade-logs'
+    name: 'extractTpl'
   }
 </script>
 

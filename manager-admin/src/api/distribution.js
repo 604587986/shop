@@ -92,3 +92,28 @@ export function getAchievementList(params) {
   })
 }
 
+/**
+ * 获取提现设置
+ * @param params
+ */
+export function getWithDrawSettings() {
+  return request({
+    url: 'admin/distribution/settings',
+    method: 'get',
+    loading: false
+  })
+}
+
+/**
+ * 保存提现设置
+ * @param params
+ */
+export function reserveWithDrawSettings(params) {
+  return request({
+    url: 'admin/distribution/settings',
+    method: 'put',
+    loading: false,
+    params
+  })
+}
+
