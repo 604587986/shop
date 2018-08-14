@@ -51,6 +51,7 @@
           </div>
         </div>
       </div>
+      <goods-distribution v-if="show_dis"/>
     </template>
   </div>
 </template>
@@ -98,6 +99,8 @@
     components: GoodsComponents,
     data() {
       return {
+        // 显示分销分享按钮
+        show_dis: process.env.distribution,
         goods: '',
         /** 规格图片 */
         specImage: '',
