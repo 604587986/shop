@@ -168,5 +168,10 @@ input[type="number"]{
   .van-button--large {
     background-color: $color-main;
     color: #fff;
+    &.van-button--disabled {
+      color: #999;
+      background-color: #e8e8e8;
+      border: 1px solid #e5e5e5;
+    }
   }
 }

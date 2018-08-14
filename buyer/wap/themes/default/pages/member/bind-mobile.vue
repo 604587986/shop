@@ -18,7 +18,7 @@
           placeholder="请输入图片验证码"
           maxlength="4"
         >
-          <img v-if="valid_img_url" :src="valid_img_url" slot="button" @click="getValidImgUrl" class="captcha-img">
+          <img v-show="valid_img_url" :src="valid_img_url" slot="button" @click="getValidImgUrl" class="captcha-img">
         </van-field>
         <van-field
           v-model="bindMobileForm.sms_code"
