@@ -119,7 +119,7 @@
       // 如果商品可以查看
       if (this.canView) {
         // 如果用户已登录，加载收藏状态
-        if (Storage.getItem('refreshToken')) {
+        if (Storage.getItem('refresh_token')) {
           API_Members.getGoodsIsCollect(goods_id).then(response => {
             this.collected = response.message
           })
@@ -135,7 +135,7 @@
     methods: {
       /** 收藏商品 */
       handleCollectionGoods() {
-        if (!Storage.getItem('refreshToken')) {
+        if (!Storage.getItem('refresh_token')) {
           this.$message.error('您还未登录，不能收藏商品！')
           return false
         }

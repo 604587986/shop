@@ -5,7 +5,6 @@ import * as API_Goods from '@/api/goods'
 import uuidv1 from 'uuid/v1'
 import Cookie from 'cookie'
 import Storage from '@/utils/storage'
-import { domain } from "@/ui-domain";
 
 /** state */
 export const state = () => ({
@@ -30,7 +29,7 @@ export const mutations = {
    */
   [types.SET_UUID](state, uuid) {
     state.uuid = uuid
-    process.client && Storage.setItem('uuid', uuid, { domain: domain.cookie })
+    process.client && Storage.setItem('uuid', uuid)
   },
   /**
    * 设置站点cookie
@@ -39,7 +38,7 @@ export const mutations = {
    */
   [types.SET_SITE_DATA](state, data) {
     state.site = data
-    process.client && Storage.setItem('site', global.JSON.stringify(data), { domain: domain.cookie })
+    process.client && Storage.setItem('site', global.JSON.stringify(data))
   },
   /**
    * 设置分类数据
@@ -94,7 +93,7 @@ export const actions = {
      */
     if (!_uuid) {
       _uuid = uuidv1()
-      res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie};Path=/`])
+      res.setHeader('Set-Cookie', [`uuid=${_uuid};Path=/`])
     }
     commit('SET_UUID', _uuid)
     // 获取公共数据
