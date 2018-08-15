@@ -59,6 +59,7 @@
 <script>
   import Vue from 'vue'
   import { mapGetters } from 'vuex'
+  import * as API_Common from '@/api/common'
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
@@ -127,7 +128,7 @@
         // 浏览量+1
         API_Goods.visitGoods(goods_id)
         // 记录浏览量统计【用于统计】
-        API_Goods.countViewGoods(window.location.href)
+        API_Common.recordViews(window.location.href)
         // 获取促销信息
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
         // 加载百度分享代码

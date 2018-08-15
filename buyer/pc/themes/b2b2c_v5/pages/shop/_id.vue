@@ -10,6 +10,7 @@
   const theme1 = () => import('@/pages/shop/-themes/-theme1').then(m => m.default || m)
   const theme2 = () => import('@/pages/shop/-themes/-theme2').then(m => m.default || m)
   const theme3 = () => import('@/pages/shop/-themes/-theme3').then(m => m.default || m)
+  import * as API_Common from '@/api/common'
   import * as API_Shop from '@/api/shop'
   export default {
     name: 'shopDetail',
@@ -30,6 +31,10 @@
       return {
         title: `${this.shop.shop_name}-${this.site.site_name}`
       }
+    },
+    mounted() {
+      /** 记录浏览量 */
+      API_Common.recordViews(window.location.href)
     },
     methods: {
       GET_ShopData() {

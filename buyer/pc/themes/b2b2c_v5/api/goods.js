@@ -2,7 +2,6 @@
  * 商品相关API
  */
 
-import Storage from '@/utils/storage'
 import request, { Method } from '@/utils/request'
 
 /**
@@ -148,19 +147,5 @@ export function getGoodsSales(goods_id, params) {
     method: Method.GET,
     loading: false,
     params
-  })
-}
-
-/**
- * 记录浏览量【用于统计】
- */
-export function countViewGoods(url) {
-  return request({
-    url: 'view',
-    method: Method.GET,
-    params: {
-      url,
-      uuid: Storage.getItem('uuid')
-    }
   })
 }
