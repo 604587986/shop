@@ -354,7 +354,7 @@ let bindClickListener = function(which) {
 // 请求并初次渲染数据.(仅渲染第一层,省级)
 let requestAndFirstRenderData = function(api, props) {
   request({url: api, method: 'get'}).then(response => {
-    areaData = mapArea(response.data, props)
+    areaData = mapArea(response, props)
     // 遍历各省插入到HTML中
     let li
     areaData.forEach(function(province) {

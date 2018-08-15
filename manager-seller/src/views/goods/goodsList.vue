@@ -4,6 +4,7 @@
       toolbar
       pagination
       :tableData="tableData"
+      :height="700"
       :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
@@ -80,16 +81,19 @@
         <el-table-column label="操作" width="250" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
+              size="mini"
               type="success"
               @click="handleEditGoods(scope.row)">编辑
             </el-button>
             <el-button
+              size="mini"
               type="danger"
               :disabled="scope.row.market_enable === 1 "
               @click="handleDeleteGoods(scope.row)">删除
             </el-button>
             <el-button
               type="primary"
+              size="mini"
               @click="handleStockGoods(scope.row)">库存
             </el-button>
           </template>

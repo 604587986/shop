@@ -312,7 +312,7 @@
     .label-sku {
       position: absolute;
       top: -5px;
-      left: -6.3%;
+      left: -84px;
       z-index: 100;
       color: #606266;
     }

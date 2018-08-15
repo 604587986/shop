@@ -5,10 +5,12 @@
     </keep-alive>
   </transition>
 </template>
-
 <script>
-  export default {
-    name: 'extractTpl'
-  }
+    export default {
+      name: 'putforward'
+    }
 </script>
 
+<style scoped>
+
+</style>

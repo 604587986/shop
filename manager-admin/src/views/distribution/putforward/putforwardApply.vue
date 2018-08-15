@@ -1,47 +1,28 @@
 <template>
   <div>
     <en-table-layout
-      toolbar
-      :tableData="tableData"
       pagination
+      :tableData="tableData"
       :loading="loading">
       <template slot="table-columns">
-        <!--账单号-->
+        <!--ID-->
         <el-table-column prop="sn" label="账单号"/>
-        <!--开始日期-->
-        <el-table-column prop="start_time" :formatter="MixinUnixToDate" label="开始日期"/>
-        <!--结束日期-->
-        <el-table-column prop="end_time" :formatter="MixinUnixToDate" label="结束日期"/>
-        <!--提成金额-->
-        <el-table-column label="提成金额">
-          <template slot-scope="scope">{{ scope.row.push_money | unitPrice('￥') }}</template>
+        <!--申请时间-->
+        <el-table-column prop="apply_time" :formatter="MixinUnixToDate" label="申请时间"/>
+        <!--申请金额-->
+        <el-table-column label="申请金额">
+          <template slot-scope="scope">{{ scope.row.apply_money | unitPrice('￥') }}</template>
         </el-table-column>
-        <!--订单金额-->
-        <el-table-column label="订单金额">
-          <template slot-scope="scope">{{ scope.row.order_money | unitPrice('￥') }}</template>
-        </el-table-column>
-        <!--订单数-->
-        <el-table-column prop="order_count" label="订单数" width="60"/>
-        <!--退还提成金额-->
-        <el-table-column label="退还提成金额">
-          <template slot-scope="scope">{{ scope.row.return_push_money | unitPrice('￥') }}</template>
-        </el-table-column>
-        <!--退还订单金额-->
-        <el-table-column label="退还订单金额">
-          <template slot-scope="scope">{{ scope.row.return_order_money | unitPrice('￥') }}</template>
-        </el-table-column>
-        <!--退还订单数-->
-        <el-table-column prop="return_order_count" label="退还订单数" width="100"/>
-        <!--本期应结-->
-        <el-table-column label="本期应结">
-          <template slot-scope="scope">{{ scope.row.final_money | unitPrice('￥') }}</template>
-        </el-table-column>
+        <!--会员-->
+        <el-table-column prop="member_name" label="会员"/>
+        <!--提现状态-->
+        <el-table-column prop="status" label="提现状态"/>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateSee(scope.row)">查看</el-button>
+              @click="handleOperateSee(scope.row)">审核</el-button>
           </template>
         </el-table-column>
       </template>
@@ -63,7 +44,7 @@
 <script>
   import * as API_distribution from '@/api/distribution'
   export default {
-    name: 'achievementList',
+    name: 'put-forward-apply',
     data() {
       return {
         // 列表loading状态
@@ -74,32 +55,34 @@
           page_no: 1,
           page_size: 10
         },
+
         // 列表数据
         tableData: [],
 
+        // 分页数据
         pageData: []
       }
     },
     mounted() {
-      this.GET_AchievementList()
+      this.GET_WithdrawApplyList()
     },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_AchievementList()
+        this.GET_WithdrawApplyList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_AchievementList()
+        this.GET_WithdrawApplyList()
       },
 
-      /** 获取业绩列表 */
-      GET_AchievementList() {
+      /** 获取提现申请列表 */
+      GET_WithdrawApplyList() {
         this.loading = true
-        API_distribution.getAchievementList(this.params).then(response => {
+        API_distribution.getWithdrawApplyList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
@@ -110,9 +93,9 @@
         })
       },
 
-      /** 查看 */
-      handleOperateSee(row) {
-        this.$router.push({ path: '/distribution/achievement/bill-list', query: { total_id: row.id }})
+      /** 审核 */
+      handleOperateSee() {
+
       }
     }
   }
@@ -130,4 +113,6 @@
     padding: 0 20px;
   }
 </style>
+
+
 
