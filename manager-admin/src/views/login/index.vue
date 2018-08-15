@@ -39,7 +39,6 @@
   import LangSelect from '@/components/LangSelect'
   import Storage from '@/utils/storage'
   import uuidv1 from 'uuid/v1'
-  import { domain } from '~/ui-domain'
 
   export default {
     components: { LangSelect },
@@ -64,17 +63,17 @@
           ]
         },
         validcodeImg: '',
-        uuid: Storage.getItem('adminUuid')
+        uuid: Storage.getItem('admin_uuid')
       }
     },
     mounted() {
-      const uuid = Storage.getItem('adminUuid')
+      const uuid = Storage.getItem('admin_uuid')
       if (uuid) {
         this.uuid = uuid
       } else {
         const _uuid = uuidv1()
         this.uuid = _uuid
-        Storage.setItem('adminUuid', _uuid, { domain: domain.cookie })
+        Storage.setItem('admin_uuid', _uuid)
       }
       this.changeValidcode()
       this.loadParticles()

@@ -9,7 +9,7 @@ const whiteList = ['/login']
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  const refreshToken = Storage.getItem('adminRefreshToken')
+  const refreshToken = Storage.getItem('admin_refresh_token')
   if (refreshToken) {
     if (to.path === '/login') {
       next({ path: '/' })

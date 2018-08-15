@@ -20,11 +20,11 @@ import { MessageBox } from 'element-ui'
  */
 export default function checkToken(options) {
   // user
-  const user = Storage.getItem('adminUser')
+  const user = Storage.getItem('admin_user')
   // 访问Token
-  const accessToken = Storage.getItem('adminAccessToken')
+  const accessToken = Storage.getItem('admin_access_token')
   // 刷新Token
-  const refreshToken = Storage.getItem('adminRefreshToken')
+  const refreshToken = Storage.getItem('admin_refresh_token')
   // 获取store
   // 返回异步方法
   return new Promise((resolve, reject) => {
@@ -67,7 +67,7 @@ export default function checkToken(options) {
         window.__refreshTokenLock__ = request({
           url: 'admin/systems/admin-users/token',
           method: 'post',
-          headers: { uuid: Storage.getItem('adminUuid') },
+          headers: { uuid: Storage.getItem('admin_uuid') },
           data: { refersh_token: refreshToken }
         }).then(response => {
           store.dispatch('setAccessTokenAction', response.accessToken)

@@ -1,14 +1,13 @@
 import { login, logout } from '@/api/login'
 import Storage from '@/utils/storage'
 import { Base64 } from 'js-base64'
-import { domain } from '~/ui-domain'
 
-const _user = Storage.getItem('adminUser')
+const _user = Storage.getItem('admin_user')
 const user = {
   state: {
     user: _user ? JSON.parse(_user) : '',
-    accessToken: Storage.getItem('adminAccessToken'),
-    refreshToken: Storage.getItem('adminRefreshToken')
+    accessToken: Storage.getItem('admin_access_token'),
+    refreshToken: Storage.getItem('admin_refresh_token')
   },
 
   mutations: {
@@ -20,8 +19,8 @@ const user = {
      */
     SET_USER: (state, user) => {
       state.user = user
-      Storage.setItem('adminUser', JSON.stringify(user), { domain: domain.cookie })
-      Storage.setItem('adminUid', user.id, { domain: domain.cookie })
+      Storage.setItem('admin_user', JSON.stringify(user))
+      Storage.setItem('admin_uid', user.id)
     },
     /**
      * 设置访问令牌
@@ -33,7 +32,7 @@ const user = {
       state.accessToken = token
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
-      Storage.setItem('adminAccessToken', token, { expires, domain: domain.cookie })
+      Storage.setItem('admin_access_token', token, { expires })
     },
     /**
      * 设置刷新令牌
@@ -45,7 +44,7 @@ const user = {
       state.refreshToken = token
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
-      Storage.setItem('adminRefreshToken', token, { expires, domain: domain.cookie })
+      Storage.setItem('admin_refresh_token', token, { expires })
     },
     /**
      * 移除用户信息
@@ -54,8 +53,8 @@ const user = {
      */
     REMOVE_USER: (state) => {
       state.user = ''
-      Storage.removeItem('adminUser', { domain: domain.cookie })
-      Storage.removeItem('adminUid', { domain: domain.cookie })
+      Storage.removeItem('admin_user')
+      Storage.removeItem('admin_uid')
     },
     /**
      * 移除访问令牌
@@ -64,7 +63,7 @@ const user = {
      */
     REMOVE_ACCESS_TOKEN: (state) => {
       state.accessToken = ''
-      Storage.removeItem('adminAccessToken', { domain: domain.cookie })
+      Storage.removeItem('admin_access_token')
     },
     /**
      * 移除刷新令牌
@@ -73,7 +72,7 @@ const user = {
      */
     REMOVE_REFRESH_TOKEN: (state) => {
       state.refreshToken = ''
-      Storage.removeItem('adminRefreshToken', { domain: domain.cookie })
+      Storage.removeItem('admin_refresh_token')
     }
   },
 
