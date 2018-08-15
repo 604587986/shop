@@ -41,7 +41,7 @@ export default function checkToken(options) {
      * 说明登录已失效、或者cookie有问题，需要重新登录。
      */
     if (!refreshToken || !user) {
-      store.dispatch('fedLogOut')
+      store.dispatch('fedLogoutAction')
       MessageBox.alert('您的登录状态已失效，请重新登录！', '权限错误', {
         type: 'error',
         callback: () => {
@@ -77,7 +77,7 @@ export default function checkToken(options) {
           resolve()
         }).catch(() => {
           window.__refreshTokenLock__ = undefined
-          store.dispatch('fedLogOut')
+          store.dispatch('fedLogoutAction')
         })
       } else {
         // console.log('进入循环检测...')

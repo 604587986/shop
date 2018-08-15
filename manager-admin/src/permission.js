@@ -20,7 +20,7 @@ router.beforeEach((to, from, next) => {
           router.addRoutes(store.getters.addRouters)
           next({ ...to, replace: true })
         }).catch(() => {
-          store.dispatch('fedLogOut').then(() => {
+          store.dispatch('fedLogoutAction').then(() => {
             Message.error('验证失败,请重新登录')
             next({ path: `/login?forward=${location.pathname}` })
           })
