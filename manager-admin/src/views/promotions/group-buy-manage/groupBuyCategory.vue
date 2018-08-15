@@ -129,7 +129,7 @@
 
       /** 删除团购分类 */
       handleDeleteGroupBuy(index, row) {
-        this.$confirm('确定要通过申请吗？', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确定要删除这个团购分类吗？', '提示', { type: 'warning' }).then(() => {
           API_Promotion.deleteGroupBuyCategory(row.cat_id).then(() => {
             this.GET_GroupBuyCategoryList()
             this.$message.success('删除成功！')
