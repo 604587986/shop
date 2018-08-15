@@ -10,7 +10,7 @@
             <li class="tag-title">
               <h2>本季の热卖</h2>
               <span>HOT-GOODS</span>
-              <nuxt-link to="#" title="查看更多"></nuxt-link>
+              <nuxt-link :to="'./goods-list?shop_id=' + shop_id" title="查看更多"></nuxt-link>
             </li>
             <template v-for="(goods, index) in hotGoods">
               <li v-if="index < 7" :key="goods.goods_id" class="goods-item">
@@ -33,7 +33,7 @@
           <div class="tag-title">
             <h2>店铺の新品</h2>
             <span>SHOP-NEW</span>
-            <nuxt-link to="#" title="查看更多"></nuxt-link>
+            <nuxt-link :to="'./goods-list?shop_id=' + shop_id" title="查看更多"></nuxt-link>
           </div>
           <ul>
             <template v-for="(goods, index) in newGoods">
@@ -61,7 +61,7 @@
           <div class="tag-title">
             <h2>店铺の推荐</h2>
             <span>SHOP-REC</span>
-            <nuxt-link to="#" title="查看更多"></nuxt-link>
+            <nuxt-link :to="'./goods-list?shop_id=' + shop_id" title="查看更多"></nuxt-link>
           </div>
           <ul>
             <template v-for="(goods, index) in recGoods">
