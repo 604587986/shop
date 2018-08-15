@@ -126,6 +126,8 @@
         }
         // 浏览量+1
         API_Goods.visitGoods(goods_id)
+        // 记录浏览量统计【用于统计】
+        API_Goods.countViewGoods(window.location.href)
         // 获取促销信息
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
         // 加载百度分享代码
