@@ -16,6 +16,19 @@ export function getValidateCodeUrl(scene, uuid) {
 }
 
 /**
+ * 刷新token
+ */
+export function refreshToken() {
+  return request({
+    url: 'admin/systems/admin-users/token',
+    method: 'post',
+    data: {
+      refresh_token: Storage.getItem('admin_refresh_token')
+    }
+  })
+}
+
+/**
  * 获取首页数据
  */
 export function getIndexData() {

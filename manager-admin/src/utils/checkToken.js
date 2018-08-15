@@ -3,9 +3,9 @@
  */
 
 import Storage from './storage'
-import request from '@/utils/request'
 import store from '@/store'
 import router from '@/router'
+import * as API_Common from '@/api/common'
 import { MessageBox } from 'element-ui'
 
 /**
@@ -25,7 +25,6 @@ export default function checkToken(options) {
   const accessToken = Storage.getItem('admin_access_token')
   // 刷新Token
   const refreshToken = Storage.getItem('admin_refresh_token')
-  // 获取store
   // 返回异步方法
   return new Promise((resolve, reject) => {
     /**
@@ -64,12 +63,7 @@ export default function checkToken(options) {
       if (!window.__refreshTokenLock__) {
         // console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
         // 开始请求新的Token，并加锁。
-        window.__refreshTokenLock__ = request({
-          url: 'admin/systems/admin-users/token',
-          method: 'post',
-          headers: { uuid: Storage.getItem('admin_uuid') },
-          data: { refersh_token: refreshToken }
-        }).then(response => {
+        window.__refreshTokenLock__ = API_Common.refreshToken().then(response => {
           store.dispatch('setAccessTokenAction', response.accessToken)
           store.dispatch('setRefreshTokenAction', response.refreshToken)
           window.__refreshTokenLock__ = null
@@ -88,6 +82,7 @@ export default function checkToken(options) {
             // console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
             if (__RTK__ === undefined) {
               // console.log('登录已失效了，不用再等待了...')
+              store.dispatch('fedLogoutAction')
               router.push({ path: `/login?forward=${location.pathname}` })
               return
             }
