@@ -1,10 +1,9 @@
-import { login, logout } from '@/api/login'
+import * as API_Login from '@/api/login'
 import Storage from '@/utils/storage'
 import { Base64 } from 'js-base64'
 
-const _user = Storage.getItem('admin_user')
-
 // state
+const _user = Storage.getItem('admin_user')
 export const state = {
   user: _user ? JSON.parse(_user) : ''
 }
@@ -29,7 +28,6 @@ export const mutations = {
    * @constructor
    */
   SET_ACCESS_TOKEN: (state, token) => {
-    state.accessToken = token
     const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
     const expires = new Date(access_token_time)
     Storage.setItem('admin_access_token', token, { expires })
@@ -41,7 +39,6 @@ export const mutations = {
    * @constructor
    */
   SET_REFRESH_TOKEN: (state, token) => {
-    state.refreshToken = token
     const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
     const expires = new Date(access_token_time)
     Storage.setItem('admin_refresh_token', token, { expires })
@@ -62,7 +59,6 @@ export const mutations = {
    * @constructor
    */
   REMOVE_ACCESS_TOKEN: (state) => {
-    state.accessToken = ''
     Storage.removeItem('admin_access_token')
   },
   /**
@@ -71,7 +67,6 @@ export const mutations = {
    * @constructor
    */
   REMOVE_REFRESH_TOKEN: (state) => {
-    state.refreshToken = ''
     Storage.removeItem('admin_refresh_token')
   }
 }
@@ -86,7 +81,7 @@ export const actions = {
    */
   loginAction({ commit }, params) {
     return new Promise((resolve, reject) => {
-      login(params).then(response => {
+      API_Login.login(params).then(response => {
         commit('SET_USER', response)
         commit('SET_ACCESS_TOKEN', response.access_token)
         commit('SET_REFRESH_TOKEN', response.refresh_token)
@@ -96,18 +91,16 @@ export const actions = {
   },
   /**
    * 登出
-   * @param commit
+   * @param dispatch
    * @param state
    * @returns {Promise<any>}
    */
-  logoutAction({ dispatch, state }) {
+  logoutAction({ dispatch }) {
     return new Promise((resolve, reject) => {
-      logout().then(() => {
+      API_Login.logout().then(() => {
         dispatch('fedLogoutAction')
         resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      }).catch(reject)
     })
   },
   /**
