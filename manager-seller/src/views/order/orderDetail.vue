@@ -228,7 +228,7 @@
       </div>
     </el-dialog>
     <!--查看物流信息-->
-    <el-dialog :visible.sync="logisticsShow" width="20%" align="center">
+    <el-dialog :visible.sync="logisticsShow" width="400px" align="center">
       <div slot="title">
         <h3>物流信息</h3>
         <div class="logistics-base">

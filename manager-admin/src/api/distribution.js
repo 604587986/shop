@@ -80,6 +80,19 @@ export function getUpgradeLogs(params) {
 }
 
 /**
+ * 获取个人分销商列表
+ * @param params
+ */
+export function getDistributorList(params) {
+  return request({
+    url: 'admin/distribution/member',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
  * 业绩列表
  * @param params
  */
@@ -96,7 +109,7 @@ export function getAchievementList(params) {
  * 账单列表
  * @param params
  */
-export function getbillList(params) {
+export function getBillList(params) {
   return request({
     url: 'admin/distribution/bill/member',
     method: 'get',
@@ -106,13 +119,65 @@ export function getbillList(params) {
 }
 
 /**
- * 提现申请列表
+ * 分销订单列表
+ * @param params
+ */
+export function getDisOrderList(params) {
+  return request({
+    url: 'admin/distribution/order',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 分销退款单查询
+ * @param params
+ */
+export function getDisRefundOrderList(params) {
+  return request({
+    url: 'admin/distribution/order/sellback',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 提现申请/提现记录列表
  * @param params
  */
 export function getWithdrawApplyList(params) {
   return request({
     url: 'admin/distribution/withdraw/apply',
     method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 审核提现申请
+ * @param params
+ */
+export function authWithdrawApply(params) {
+  return request({
+    url: 'admin/distribution/withdraw/auditing',
+    method: 'post',
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 设为已转账
+ * @param params
+ */
+export function setTransferAccounts(params) {
+  return request({
+    url: 'admin/distribution/withdraw/account/end',
+    method: 'post',
     loading: false,
     params
   })

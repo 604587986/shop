@@ -22,7 +22,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateSee(scope.row)">审核</el-button>
+              @click="handleSeeWithDraw(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -93,7 +93,7 @@
         })
       },
 
-      /** 审核 */
+      /** 查看 */
       handleOperateSee() {
 
       }

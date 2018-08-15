@@ -6,66 +6,75 @@
       :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <!--商品状态 上架 下架-->
+          <!--状态查询-->
           <div class="conditions">
-            <span>商品状态：</span>
+            <span>状态：</span>
             <el-select
               class="choose-machine"
-              v-model="params.market_enable"
-              placeholder="请选择商品状态"
-              @change="changeGoodsStatus"
+              v-model="params.status"
+              placeholder="请选择"
+              @change="changeStatus"
               clearable>
               <el-option
-                v-for="item in goodsStatusList"
+                v-for="item in statusList"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"></el-option>
             </el-select>
           </div>
-          <!--商品类型-->
-          <div v-if="parseInt(shopInfo.self_operated) === 1" class="conditions">
-            <span>商品类型：</span>
-            <el-select
-              class="choose-machine"
-              v-model="goods_type"
-              placeholder="请选择商品类型"
-              @change="changeGoodsType"
-              clearable>
-              <el-option key="NORMAL" label="正常商品" value="NORMAL"/>
-              <el-option key="POINT" label="积分商品" value="POINT"/>
-            </el-select>
-          </div>
-          <!--商品分组 获取分组列表-->
-          <div class="conditions">
-            <span>店铺分组：</span>
-            <en-category-picker class="choose-machine" size="mini" @changed="changeGoodsCateGory" :clearable='true'/>
-          </div>
-          <el-button @click="publishGoods" type="primary" >发布商品</el-button>
-          <el-button @click="gotoRecycle"  type="primary">回收站</el-button>
         </div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent" />
+          <en-table-search
+            @search="searchEvent"
+            @advancedSearch="advancedSearchEvent"
+            advanced
+            advancedWidth="465"
+            placeholder="请输入关键字">
+            <template slot="advanced-content">
+              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+                <el-form-item label="会员姓名">
+                  <el-input v-model="advancedForm.uname" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="申请时间">
+                  <el-date-picker
+                    v-model="advancedForm.putforward_time_range"
+                    type="daterange"
+                    align="center"
+                    :editable="false"
+                    unlink-panels
+                    range-separator="-"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
+                </el-form-item>
+              </el-form>
+            </template>
+          </en-table-search>
         </div>
       </div>
       <template slot="table-columns">
         <!--ID-->
         <el-table-column prop="sn" label="账单号"/>
         <!--申请时间-->
-        <el-table-column prop="start_time" :formatter="MixinUnixToDate" label="申请时间"/>
+        <el-table-column prop="apply_time" :formatter="MixinUnixToDate" label="申请时间"/>
         <!--申请金额-->
         <el-table-column label="申请金额">
-          <template slot-scope="scope">{{ scope.row.push_money | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.apply_money | unitPrice('￥') }}</template>
         </el-table-column>
         <!--会员-->
-        <el-table-column prop="order_count" label="会员"/>
+        <el-table-column prop="member_name" label="会员"/>
         <!--提现状态-->
-        <el-table-column prop="return_order_count" label="提现状态"/>
+        <el-table-column prop="status" label="提现状态"/>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
+            <!--<el-button-->
+            <!--size="mini"-->
+            <!--type="primary"-->
+            <!--@click="handleSeeWithDraw(scope.row)">查看</el-button>-->
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateSee(scope.$index, scope.row)">查看</el-button>
+              @click="handleTransferAccounts(scope.row)">设为已转账</el-button>
           </template>
         </el-table-column>
       </template>
@@ -87,7 +96,7 @@
 <script>
   import * as API_distribution from '@/api/distribution'
   export default {
-    name: 'put-forward-records',
+    name: 'put-forward-apply',
     data() {
       return {
         // 列表loading状态
@@ -98,32 +107,50 @@
           page_no: 1,
           page_size: 10
         },
+
+        /** 高级搜索参数 */
+        advancedForm: {
+          uname: '',
+          start_time: '',
+          end_time: '',
+          putforward_time_range: []
+        },
+
         // 列表数据
         tableData: [],
 
-        pageData: []
+        // 分页数据
+        pageData: [],
+
+        /** 状态列表 */
+        statusList: [
+          { label: '全部', value: '1' },
+          { label: '审核失败', value: '2' },
+          { label: '审核通过', value: '3' },
+          { label: '已转账', value: '4' }
+        ]
       }
     },
     mounted() {
-      this.GET_AchievementList()
+      this.GET_WithdrawApplyList()
     },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
-        this.GET_AchievementList()
+        this.GET_WithdrawApplyList()
       },
 
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
-        this.GET_AchievementList()
+        this.GET_WithdrawApplyList()
       },
 
-      /** 获取业绩列表 */
-      GET_AchievementList() {
+      /** 获取提现申请列表 */
+      GET_WithdrawApplyList() {
         this.loading = true
-        API_distribution.getAchievementList(this.params).then(response => {
+        API_distribution.getWithdrawApplyList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
@@ -134,8 +161,48 @@
         })
       },
 
+      /** 改变状态 */
+      changeStatus() {
+
+      },
+
+      /** 搜索事件触发 */
+      searchEvent(data) {
+        this.params = {
+          ...this.params,
+          keywords: data
+        }
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.GET_WithdrawApplyList()
+      },
+
+      /** 高级搜索事件触发 */
+      advancedSearchEvent() {
+        this.params = {
+          ...this.params,
+          ...this.advancedForm
+        }
+        delete this.params.start_time
+        delete this.params.end_time
+        if (this.advancedForm.putforward_time_range) {
+          this.params.start_time = this.advancedForm.putforward_time_range[0].getTime() / 1000
+          this.params.end_time = this.advancedForm.putforward_time_range[1].getTime() / 1000
+        }
+        delete this.params.keywords
+        delete this.params.putforward_time_range
+        this.GET_WithdrawApplyList()
+      },
+
+      /** 设为已转账 */
+      handleTransferAccounts(row) {
+        API_distribution.setTransferAccounts({ apply_id: row.id, remark: row.apply_remark }).then(() => {
+          this.$message.success('操作成功')
+          this.GET_WithdrawApplyList()
+        })
+      },
+
       /** 查看 */
-      handleOperateSee() {
+      handleOperateSee(row) {
 
       }
     }
@@ -154,5 +221,9 @@
     padding: 0 20px;
   }
 </style>
+
+
+
+
 
 

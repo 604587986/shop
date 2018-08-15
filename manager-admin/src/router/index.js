@@ -478,7 +478,8 @@ export const asyncRouterMap = [
         meta: { title: 'achievement' },
         children: [
           { path: 'achievement-list', component: () => import('@/views/distribution/achievement/achievementList'), name: 'achievementList', meta: { title: 'achievementList' }},
-          { path: 'bill-list', component: () => import('@/views/distribution/achievement/billList'), name: 'billList', meta: { title: 'billList' }, hidden: true }
+          { path: 'bill-list', component: () => import('@/views/distribution/achievement/billList'), name: 'billList', meta: { title: 'billList' }, hidden: true },
+          { path: 'bill-details', component: () => import('@/views/distribution/achievement/billDetails'), name: 'billDetails', meta: { title: 'billDetails' }, hidden: true }
         ]
       },
       {
