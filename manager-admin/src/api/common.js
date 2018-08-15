@@ -24,8 +24,7 @@ export function refreshToken() {
     url: 'admin/systems/admin-users/token',
     method: 'post',
     data: {
-      // Andste_TODO 2018/8/15: 后台将单词拼错 【refersh_token】
-      refersh_token: Storage.getItem('admin_refresh_token')
+      refresh_token: Storage.getItem('admin_refresh_token')
     }
   })
 }
