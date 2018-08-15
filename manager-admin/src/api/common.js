@@ -4,6 +4,7 @@
 
 import { api } from '~/ui-domain'
 import request from '@/utils/request'
+import Storage from '@/utils/storage'
 
 /**
  * 获取图片验证码URL
@@ -23,7 +24,8 @@ export function refreshToken() {
     url: 'admin/systems/admin-users/token',
     method: 'post',
     data: {
-      refresh_token: Storage.getItem('admin_refresh_token')
+      // Andste_TODO 2018/8/15: 后台将单词拼错 【refersh_token】
+      refersh_token: Storage.getItem('admin_refresh_token')
     }
   })
 }
