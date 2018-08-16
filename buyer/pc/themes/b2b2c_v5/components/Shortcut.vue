@@ -107,7 +107,7 @@
     },
     mounted() {
       // 如果有刷新Token，重新获取用户信息【第一次访问和用户刷新页面，会触发】
-      if (Storage.getItem('refreshToken')) {
+      if (Storage.getItem('refresh_token')) {
         this.getUserData()
       }
       this.GET_UnreadMessage()
@@ -127,7 +127,7 @@
       },
       /** 获取未读消息 */
       GET_UnreadMessage() {
-        if (!Storage.getItem('refreshToken')) return
+        if (!Storage.getItem('refresh_token')) return
         API_Message.getMesssagesAsUnread().then(response => {
           const { data_total } = response
           this.message_total = data_total > 99 ? '99+' : data_total

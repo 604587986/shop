@@ -4,6 +4,7 @@
 
 import { api } from '~/ui-domain'
 import request from '@/utils/request'
+import Storage from '@/utils/storage'
 
 /**
  * 获取图片验证码URL
@@ -13,6 +14,19 @@ import request from '@/utils/request'
  */
 export function getValidateCodeUrl(scene, uuid) {
   return `${api.base}/captchas/${uuid}/${scene}?rmd=${new Date().getTime()}`
+}
+
+/**
+ * 刷新token
+ */
+export function refreshToken() {
+  return request({
+    url: 'admin/systems/admin-users/token',
+    method: 'post',
+    data: {
+      refresh_token: Storage.getItem('admin_refresh_token')
+    }
+  })
 }
 
 /**

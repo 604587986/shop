@@ -5,7 +5,6 @@ import Storage from '@/utils/storage'
 import { Base64 } from 'js-base64'
 import { Foundation } from '~/ui-utils'
 import * as API_Address from "@/api/address";
-import { domain } from '~/ui-domain'
 
 export const state = () => ({
   user: '',
@@ -23,10 +22,10 @@ export const mutations = {
   [types.SET_USER_INFO](state, data) {
     state.user = data
     if (process.client) {
-      const refreshToken = Storage.getItem('refreshToken')
+      const refreshToken = Storage.getItem('refresh_token')
       const refresh_token_time = Base64.decode(refreshToken).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(refresh_token_time)
-      Storage.setItem('user', JSON.stringify(data), { expires, domain: domain.cookie })
+      Storage.setItem('user', JSON.stringify(data), { expires })
     }
   },
   /**
@@ -36,8 +35,8 @@ export const mutations = {
    */
   [types.REMOVE_USER_INFO](state, data) {
     state.user = ''
-    Storage.removeItem('user', { domain: domain.cookie })
-    Storage.removeItem('uid', { domain: domain.cookie })
+    Storage.removeItem('user')
+    Storage.removeItem('uid')
   },
   /**
    * 设置访问令牌
@@ -49,7 +48,7 @@ export const mutations = {
     if (process.client) {
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
-      Storage.setItem('accessToken', token, { expires, domain: domain.cookie })
+      Storage.setItem('access_token', token, { expires })
     }
   },
   /**
@@ -58,7 +57,7 @@ export const mutations = {
    */
   [types.REMOVE_ACCESS_TOKEN](state) {
     state.accessToken = ''
-    Storage.removeItem('accessToken', { domain: domain.cookie })
+    Storage.removeItem('access_token')
   },
   /**
    * 设置刷新令牌
@@ -70,7 +69,7 @@ export const mutations = {
     if (process.client) {
       const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(refresh_token_time)
-      Storage.setItem('refreshToken', token, { expires, domain: domain.cookie })
+      Storage.setItem('refresh_token', token, { expires })
     }
   },
   /**
@@ -79,7 +78,7 @@ export const mutations = {
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
     state.refreshToken = ''
-    Storage.removeItem('refreshToken', { domain: domain.cookie })
+    Storage.removeItem('refresh_token')
   }
 }
 
@@ -117,7 +116,7 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        Storage.setItem('uid', uid, { domain: domain.cookie })
+        Storage.setItem('uid', uid)
         API_Members.getUserInfo().then(response => {
           commit(types.SET_USER_INFO, response)
           resolve(response)
@@ -174,7 +173,7 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        Storage.setItem('uid', uid, { domain: domain.cookie })
+        Storage.setItem('uid', uid)
         resolve(res)
       })
     })

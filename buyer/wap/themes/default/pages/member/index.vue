@@ -85,7 +85,7 @@
       }
     },
     mounted() {
-      if (Storage.getItem('refreshToken')) {
+      if (Storage.getItem('refresh_token')) {
         API_Members.getStatisticsNum().then(response => {
           this.nums = response
         })

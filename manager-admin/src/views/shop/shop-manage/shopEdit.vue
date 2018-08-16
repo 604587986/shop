@@ -213,7 +213,7 @@
             this.MixinRequired('公司电话不能为空！'),
             { validator: (rule, value, callback) => {
               if (!RegExp.TEL.test(value)) {
-                callback(new Error('请输入固定电话，例如：010-8888888'))
+                callback(new Error('格式应为：010-8888888'))
               } else {
                 callback()
               }
