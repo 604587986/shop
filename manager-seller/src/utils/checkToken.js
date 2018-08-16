@@ -2,11 +2,10 @@
  * Created by Andste on 2018/5/7.
  */
 
-import Vue from 'vue'
-import store from '@/store'
 import Storage from './storage'
-import request from '@/utils/request'
-import { api, domain } from '~/ui-domain'
+import store from '@/store'
+import router from '@/router'
+import * as API_Common from '@/api/common'
 import { MessageBox } from 'element-ui'
 
 /**
@@ -21,11 +20,11 @@ import { MessageBox } from 'element-ui'
  */
 export default function checkToken(options) {
   // user
-  const user = Storage.getItem('user')
+  const user = Storage.getItem('seller_user')
   // 访问Token
-  const accessToken = Storage.getItem('accessToken')
+  const accessToken = Storage.getItem('seller_access_token')
   // 刷新Token
-  const refreshToken = Storage.getItem('refreshToken')
+  const refreshToken = Storage.getItem('seller_refresh_token')
   // 返回异步方法
   return new Promise((resolve, reject) => {
     /**
@@ -41,11 +40,11 @@ export default function checkToken(options) {
      * 说明登录已失效、或者cookie有问题，需要重新登录。
      */
     if (!refreshToken || !user) {
-      store.dispatch('removeUserAction')
       MessageBox.alert('您的登录状态已失效，请重新登录！', '权限错误', {
         type: 'error',
         callback: () => {
-          window.location.href = `${domain.buyer_pc}/login?forward=${window.location.href}`
+          store.dispatch('fedLogoutAction')
+          router.push(`/login?forward=${location.pathname}`)
         }
       })
       return
@@ -64,12 +63,8 @@ export default function checkToken(options) {
       if (!window.__refreshTokenLock__) {
         // console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
         // 开始请求新的Token，并加锁。
-        window.__refreshTokenLock__ = request({
-          url: `passport/token`,
-          method: 'post',
-          headers: { uuid: Storage.getItem('uuid') },
-          data: { refersh_token: refreshToken }
-        }).then(response => {
+        window.__refreshTokenLock__ = true
+        API_Common.refreshToken().then(response => {
           store.dispatch('setAccessTokenAction', response.accessToken)
           store.dispatch('setRefreshTokenAction', response.refreshToken)
           window.__refreshTokenLock__ = null
@@ -77,7 +72,7 @@ export default function checkToken(options) {
           resolve()
         }).catch(() => {
           window.__refreshTokenLock__ = undefined
-          store.dispatch('removeUserAction')
+          store.dispatch('fedLogoutAction')
         })
       } else {
         // console.log('进入循环检测...')
@@ -88,12 +83,8 @@ export default function checkToken(options) {
             // console.log(options.url + ' | 是否已拿到新的token：', __RTK__ === null)
             if (__RTK__ === undefined) {
               // console.log('登录已失效了，不用再等待了...')
-              Storage.removeItem('user', { domain: domain.cookie })
-              Storage.removeItem('accessToken', { domain: domain.cookie })
-              Storage.removeItem('refreshToken', { domain: domain.cookie })
-              setTimeout(() => {
-                window.location.href = `${domain.buyer_pc}/login?forward=${window.location.href}`
-              }, 100)
+              store.dispatch('fedLogoutAction')
+              router.push({ path: `/login?forward=${location.pathname}` })
               return
             }
             __RTK__ === null

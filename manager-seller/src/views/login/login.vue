@@ -1,184 +1,171 @@
 <template>
   <div class="login-container">
-    <!--顶部导航-->
-    <Navtop></Navtop>
-    <!--登录-->
-    <el-carousel indicator-position="none">
-      <!--背景轮播-->
-      <el-carousel-item v-for="(item, index) in BroadcastList" :key="index">
-        <div class="login"></div>
-      </el-carousel-item>
-      <!--登录表单-->
-      <div class="container">
-        <div class="login-form">
-          <h3> 商户卖家登录 </h3>
-          <h5>请使用卖家账户可登录后进入店铺或申请开店</h5>
-          <el-form :model="loginForm" size="large">
-            <el-form-item label="商家账号" :label-width="formLabelWidth">
-              <el-input v-model="loginForm.name" auto-complete="off"></el-input>
+    <div class="login-header">
+      <div class="inner-header">
+        <div class="logo-header">
+          <a :href="MixinBuyerDomain" target="_blank">
+            <img src="../../assets/logo_images/logo-javashop-white.png">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="login-banner">
+      <swiper :options="swiperOption">
+        <swiper-slide class="banner-item item-1">
+          <div class="banner-img"></div>
+        </swiper-slide>
+        <swiper-slide class="banner-item item-2">
+          <div class="banner-img"></div>
+        </swiper-slide>
+        <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+        <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
+      </swiper>
+    </div>
+    <div class="login-main">
+      <h2 class="lm-title">申请开店流程</h2>
+      <h5 class="lm-title-sb">商家按照下面的流程步骤，即可在本商城开设您的店铺。</h5>
+      <div class="lm-join-step">
+        <dl class="step step-1">
+          <dt></dt>
+          <dd>注册商家账号</dd>
+          <dd>登录后申请开店</dd>
+        </dl>
+        <span class="arrow"></span>
+        <dl class="step step-2">
+          <dt></dt>
+          <dd>在线申请开店</dd>
+          <dd>提交相关信息</dd>
+        </dl>
+        <span class="arrow"></span>
+        <dl class="step step-3">
+          <dt></dt>
+          <dd>申请提交平台</dd>
+          <dd>审核商家资料</dd>
+        </dl>
+        <span class="arrow"></span>
+        <dl class="step step-4">
+          <dt></dt>
+          <dd>缴纳相关费用</dd>
+          <dd>提交付款凭证</dd>
+        </dl>
+        <span class="arrow"></span>
+        <dl class="step step-5">
+          <dt></dt>
+          <dd>平台审核开通</dd>
+          <dd>进入店铺管理</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="login-form">
+      <div class="lf-content">
+        <h3 class="lf-title">商户卖家登录</h3>
+        <h5 class="lf-title-sb">请使用卖家账户可登录后进入店铺或申请开店</h5>
+        <div class="lf-form">
+          <el-form :model="loginForm" :rules="loginRules" ref="loginForm" size="large" label-width="80px">
+            <el-form-item label="商家账号" prop="username">
+              <el-input v-model="loginForm.username" clearable placeholder="用户名/邮箱/手机号"></el-input>
             </el-form-item>
-            <el-form-item label="登录密码" :label-width="formLabelWidth">
-              <el-input v-model="loginForm.name" auto-complete="off"></el-input>
+            <el-form-item label="登录密码" prop="password">
+              <el-input v-model="loginForm.password" type="password" clearable placeholder="请输入密码" maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item label="验证码" :label-width="formLabelWidth">
-              <el-input placeholder="验证码" v-model="loginForm.name">
+            <el-form-item prop="captcha" class="img-code">
+              <span slot="label">验&ensp;证&ensp;码</span>
+              <el-input v-model="loginForm.captcha" clearable placeholder="验证码" maxlength="4">
                 <template slot="append">
-                  <img src="http://yiqisi.s1.natapp.cc/base-api/captchas/880faf50-9f66-11e8-a0a7-f12ce8235848/LOGIN?rmd=1534218102051" alt="" class="verification-code">
+                  <img :src="validcodeImg" @click="changeValidcode" class="verification-code">
                 </template>
               </el-input>
             </el-form-item>
-            <el-form-item :label-width="formLabelWidth">
-              <el-button type="primary" @click="">确认登录</el-button>
+            <el-form-item>
+              <el-button type="primary" :loading="loading" @click="submitLoginForm" class="login-btn">确认登录</el-button>
             </el-form-item>
           </el-form>
-          <div class="to-register">
-            还没有成为我们的合作伙伴？<a @click="handleRegister">快速注册</a>
-          </div>
         </div>
       </div>
-    </el-carousel>
-    <!--申请开店流程-->
-    <div class="container">
-      <div class="shop-process  container">
-        <h2>申请开店流程</h2>
-        <p>商家按照下面的流程步骤，即可在本商城开设您的店铺。</p>
-        <ul class="index-joinin-step">
-          <li class="step" v-for="(item, index) in steps">
-            <div class="step-info">
-              <img :src="item.stepImg">
-              <p>{{ item.text1 }}</p>
-              <p>{{ item.text2 }}</p>
-            </div>
-            <i v-if="index !== (steps.length - 1) " class="arrow el-icon-arrow-right"></i>
-          </li>
-        </ul>
+      <div class="lf-register">
+        还没有成为我们的合作伙伴？<a :href="MixinBuyerDomain + '/register?to=shop-apply'">快速注册</a>
       </div>
     </div>
-    <!--入驻指南-->
-    <div class="admission container">
-      <h2>入驻指南</h2>
-      <p>了解商家入驻指南，提供完善的资料，快速开通店铺。</p>
-      <el-tabs type="card" stretch>
-        <el-tab-pane label="资费标准">资费标准</el-tab-pane>
-        <el-tab-pane label="资质要求">资质要求</el-tab-pane>
-        <el-tab-pane label="招商标准">招商标准</el-tab-pane>
-        <el-tab-pane label="招商方向">招商方向</el-tab-pane>
-      </el-tabs>
-    </div>
-    <!--注册-->
-    <el-dialog :visible.sync="registerFormDialog" width="30%">
-      <div slot="title" class="dialog-title">
-       <h2>商家账号注册</h2>
-       <h5>Bizpower【B2B2C】平台提供各类专业管家服务，协助您开通店铺、运营店铺、组织营销活动及分析运营数据，悉心为您解答各类疑问，引导您按相关规则展开运营；我们将竭尽全力，为您的店铺保驾护航。
-       </h5>
-      </div>
-      <el-form :model="registerForm">
-        <el-form-item label="会员登陆用户名" :label-width="registerFormLabelWidth">
-          <el-input v-model="registerForm.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="会员手机号码" :label-width="registerFormLabelWidth">
-          <el-input v-model="registerForm.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" :label-width="registerFormLabelWidth">
-          <el-input v-model="registerForm.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="短信验证码" :label-width="registerFormLabelWidth">
-          <el-input v-model="registerForm.name" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="">提交注册</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-  import Navtop from './components/Navtop'
+  import uuidv1 from 'uuid/v1'
+  import Storage from '@/utils/storage'
+  import * as API_Common from '@/api/common'
+
   export default {
     name: 'login',
-    components: {
-      Navtop
-    },
     data() {
       return {
-
-        /** 轮播 */
-        BroadcastList: [
-          {
-            img_main: '',
-            img_auxiliary: ''
-          },
-          {
-            img_main: '',
-            img_auxiliary: ''
-          },
-          {
-            img_main: '',
-            img_auxiliary: ''
-          },
-          {
-            img_main: '',
-            img_auxiliary: ''
-          }
-        ],
-
-        /** 登录表单 */
+        // 登录loading状态
+        loading: false,
+        // 登录表单 表单
         loginForm: {
-
+          username: '',
+          password: '',
+          captcha: ''
         },
-
-        /* 商家商户注册 */
-        registerFormDialog: false,
-
-        /** 注册表单 */
-        registerForm: {
-
+        // 登陆表单 规则
+        loginRules: {
+          username: [this.MixinRequired('请输入用户名/邮箱/手机号！')],
+          password: [this.MixinRequired('请输入密码！')],
+          captcha: [this.MixinRequired('请输入图片验证码！')]
         },
-
-        /** 登录表单label宽度 */
-        formLabelWidth: '80px',
-
-        /** 注册表单label宽度 */
-        registerFormLabelWidth: '120px',
-
-        /** 申请开店流程 */
-        steps: [
-          {
-            stepImg: 'http://img.zcool.cn/community/010a3f574d52de32f875a429122cba.jpg@1280w_1l_2o_100sh.jpg',
-            text1: '注册商家账号',
-            text2: '登录后申请开店'
+        // 轮播配置
+        swiperOption: {
+          loop: true,
+          effect: 'fade',
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
           },
-          {
-            stepImg: 'http://img.zcool.cn/community/010a3f574d52de32f875a429122cba.jpg@1280w_1l_2o_100sh.jpg',
-            text1: '在线申请开店',
-            text2: '提交相关信息'
+          autoplay: {
+            delay: 3000,
+            stopOnLastSlide: false,
+            disableOnInteraction: false
           },
-          {
-            stepImg: 'http://img.zcool.cn/community/010a3f574d52de32f875a429122cba.jpg@1280w_1l_2o_100sh.jpg',
-            text1: '申请提交平台',
-            text2: '审核商家资料'
-          },
-          {
-            stepImg: 'http://img.zcool.cn/community/010a3f574d52de32f875a429122cba.jpg@1280w_1l_2o_100sh.jpg',
-            text1: '缴纳相关费用',
-            text2: '提交付款凭证'
-          },
-          {
-            stepImg: 'http://img.zcool.cn/community/010a3f574d52de32f875a429122cba.jpg@1280w_1l_2o_100sh.jpg',
-            text1: '平台审核开通',
-            text2: '进入店铺管理'
-          }
-        ]
+          simulateTouch: false
+        },
+        // 图片验证码
+        validcodeImg: ''
       }
     },
     mounted() {
-
+      const uuid = Storage.getItem('seller_uuid')
+      if (uuid) {
+        this.uuid = uuid
+      } else {
+        const _uuid = uuidv1()
+        this.uuid = _uuid
+        Storage.setItem('seller_uuid', _uuid)
+      }
+      this.changeValidcode()
     },
     methods: {
-      /** 显示注册 */
-      handleRegister() {
-        this.registerFormDialog = true
+      /** 更换图片验证码 */
+      changeValidcode() {
+        this.validcodeImg = API_Common.getValidateCodeUrl('LOGIN', this.uuid)
+      },
+      /** 提交登录表单 */
+      submitLoginForm() {
+        this.$refs['loginForm'].validate((valid) => {
+          if (valid) {
+            const params = this.MixinClone(this.loginForm)
+            params.uuid = this.uuid
+            this.loading = true
+            this.$store.dispatch('loginAction', params).then(() => {
+              this.loading = false
+              const forward = this.$route.query.forward
+              this.$router.push({ path: forward || '/' })
+            }).catch(() => {
+              this.loading = false
+              this.changeValidcode()
+            })
+          } else {
+            this.$message.error('表单填写有误，请核对！')
+          }
+        })
       }
     }
   }
@@ -186,162 +173,195 @@
 
 <style lang="scss" type="text/scss" scoped >
   .login-container {
-    background-color: white;
+    background-color: #fff;
   }
-  .container {
-    width: 1200px;
-    margin: 0 auto;
-  }
-  /deep/ .el-carousel__container {
+  .login-header {
     width: 100%;
-    height: 600px;
+    height: 80px;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    .inner-header {
+      width: 1100px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .logo-header {
+      width: 220px;
+      height: 50px;
+      text-align: left;
+      float: left;
+      margin: 15px auto auto 0;
+      img {
+        height: 100%;
+      }
+    }
+  }
+  $banner-height: 600px;
+  .login-banner {
     position: relative;
-    .el-carousel__item {
-      position: absolute;
-      left: 0;
-      top: 0;
-      z-index: 2;
-      width: 100%;
-      height: 600px;
-      background: url("http://java.bizpower.com/seller/static/img/joinin/banner_02_repeat.png") repeat-x 0 0;
-      .login {
-        position: absolute;
-        z-index: 10;
-        width: 100%;
-        height: 600px;
-        background: url("http://java.bizpower.com/seller/static/img/joinin/banner_02.png") no-repeat center top;
+    z-index: 0;
+    height: $banner-height;
+    .banner-item {
+      background: repeat-x center top;
+      height: $banner-height;
+      .banner-img {
+        background: no-repeat center top;
+        height: 100%;
+      }
+      &.item-1 {
+        background-image: url("../../assets/login-banner_01_repeat.png");
+        .banner-img {
+          background-image: url("../../assets/login-banner_01.png");
+        }
+      }
+      &.item-2 {
+        background-image: url("../../assets/login-banner_02_repeat.png");
+        .banner-img {
+          background-image: url("../../assets/login-banner_02.png");
+        }
       }
     }
-    .container {
-      position: absolute;
-      left: calc((100% - 1200px) / 2);
-      z-index: 1000;
-      width: 1200px;
-      height: 600px;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      align-items: center;
-      .login-form {
-        width: 400px;
-        background: rgba(255, 255, 255, .9);
-        border-radius: 5px;
-        h3 {
-          display: block;
-          height: 30px;
-          margin: 20px 0 0;
-          text-align: center;
-          font-size: 24px;
-          font-weight: normal;
-          line-height: 30px;
-          color: #333;
-        }
-        h5 {
-          display: block;
-          height: 30px;
-          text-align: center;
-          font-size: 13px;
-          font-weight: normal;
-          line-height: 30px;
-          color: #999;
-        }
-        form {
-          margin: 0 20px;
-          /deep/ .el-input-group__append {
-            padding: 0;
-            margin: 0;
-            border: 0;
-            .verification-code {
-              width: 90px;
-              height: 40px;
-              display: block;
-              cursor: pointer;
-            }
-          }
-        }
-        .to-register {
-          width: 100%;
-          color: #CCC;
-          background: rgba(0,0,0,0.5);
-          text-align: center;
-          padding: 10px 0;
-          border-radius: 0 0 5px 5px;
-          line-height: 30px;
-          font-size: 14px;
-          a {
-            color: #FF0;
-          }
-        }
+    .swiper-button-prev, .swiper-button-next {
+      width: 35px;
+      height: 35px;
+      border-radius: 100%;
+      border: 2px solid rgba(255,255,255,.5);
+      background-size: 30%;
+      &:hover {
+        border-color: rgba(255,255,255,.8)
       }
+    }
+    .swiper-button-prev {
+      left: 50%;
+      margin-left: -600px;
+    }
+    .swiper-button-next {
+      right: 50%;
+      margin-right: -600px;
     }
   }
-
-  /*申请开店流程*/
-  .index-joinin-step {
-    padding: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    font-size: 0;
-    margin: 40px auto 60px auto;
+  .login-main {
+    width: 1200px;
+    padding: 30px 0;
+    margin: 0 auto;
     overflow: hidden;
-    li {
-      list-style: none;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      div.step-info {
-        display: inline-block;
-        img {
-          width: 100px;
-          height: 100px;
-          border: none;
-          border-radius: 50%;
-        }
-        p {
-          margin: 5px 0;
-          font-size: 12px;
-          color: #666;
-        }
-      }
-      i.arrow {
-        margin: 0 0 35px 55px ;
-        display: inline-block;
-        width: 22px;
-        height: 22px;
-        font-weight: bold;
-        font-size: 26px;
-        font-family: "Yuanti SC", Arial, "Yuanti SC", Helvetica, sans-serif;
-        color: #aaa;
-      }
+    background-color: #fff;
+    .lm-title, .lm-title-sb {
+      text-align: center;
     }
-  }
-  /*入驻*/
-  .admission, .shop-process{
-    h2 {
+    .lm-title {
       font: lighter 28px/36px "microsoft yahei";
       color: #333;
-      text-align: center;
     }
-    p {
+    .lm-title-sb {
       font: lighter 14px/20px "microsoft yahei";
       color: #999;
-      text-align: center;
+    }
+    .lm-join-step {
+      font-size: 0;
+      width: 1100px;
+      margin: 40px auto 60px auto;
+      overflow: hidden;
+      dl, span {
+        font-size: 12px;
+        vertical-align: middle;
+        letter-spacing: normal;
+        word-spacing: normal;
+        display: inline-block;
+      }
+      dl {
+        line-height: 20px;
+        text-align: center;
+        width: 100px;
+      }
+      span.arrow {
+        background: url("../../assets/login-join-seller.png") no-repeat 0 -100px;
+        width: 22px;
+        height: 22px;
+        margin: -30px 63px auto 63px;
+      }
+      dt {
+        background: url("../../assets/login-join-seller.png") no-repeat;
+        display: block;
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+      }
+      dd {
+        margin: 0;
+        padding: 0;
+        line-height: 20px;
+        color: #666
+      }
+      .step-1 dt { background-position: 0 0 }
+      .step-2 dt { background-position: -100px 0 }
+      .step-3 dt { background-position: -200px 0 }
+      .step-4 dt { background-position: -300px 0 }
+      .step-5 dt { background-position: -400px 0 }
     }
   }
-
-  .dialog-title {
-    h2 {
-      font-size: 16px;
+  .login-form {
+    position: absolute;
+    z-index: 2;
+    top: 100px;
+    left: 50%;
+    width: 396px;
+    margin-left: 100px;
+    .lf-content {
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#E5FFFFFF', endColorstr='#E5FFFFFF');
+      background: rgba(255,255,255,0.9);
+      overflow: hidden;
+      border-radius: 3px 3px 0 0;
     }
-    h5 {
-      margin: 0;
-      line-height: 16px;
-      font: lighter 12px/20px "microsoft yahei";
-      color: #666;
-      padding: 0px 15px 0 15px;
+    .lf-title {
+      display: block;
+      height: 30px;
+      margin: 20px 0 0;
+      text-align: center;
+      font-size: 24px;
+      font-weight: normal;
+      line-height: 30px;
+      color: #333;
+    }
+    .lf-title-sb {
+      display: block;
+      height: 30px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: normal;
+      line-height: 30px;
+      color: #999;
+    }
+    .lf-form {
+      padding: 0 10px;
+      overflow: hidden;
+      /deep/ .img-code {
+        .el-input-group__append {
+          padding: 0;
+          margin: 0;
+          img {
+            display: block;
+            height: 38px;
+            cursor: pointer;
+          }
+        }
+      }
+      .login-btn {
+        width: calc(100% - 76px);
+      }
+    }
+    .lf-register {
+      color: #CCC;
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#7F000000', endColorstr='#7F000000');
+      background: rgba(0,0,0,0.5);
+      text-align: center;
+      width: 100%;
+      padding: 10px 0;
+      border-radius: 0 0 5px 5px;
+      line-height: 30px;
+      font-size: 14px;
+      a { color: #ffd518 }
     }
   }
 </style>

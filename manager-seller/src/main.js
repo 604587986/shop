@@ -4,7 +4,9 @@ import 'normalize.css/normalize.css'// A modern alternative to CSS resets
 
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import EnComponents from '~/ui-components'
+import UIComponents from '~/ui-components'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 
 import '@/styles/index.scss' // global css
 
@@ -25,7 +27,8 @@ Vue.use(Element, {
   size: 'small',
   i18n: (key, value) => i18n.t(key, value)
 })
-Vue.use(EnComponents)
+Vue.use(UIComponents)
+Vue.use(VueAwesomeSwiper)
 
 // 全局注册echarts、jsonp
 import echarts from 'echarts'

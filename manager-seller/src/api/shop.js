@@ -9,12 +9,10 @@ import request from '@/utils/request'
  * @param params
  * @returns {Promise<any>}
  */
-export function getShopData(params) {
+export function getShopData() {
   return request({
     url: 'seller/shops',
-    method: 'get',
-    loading: false,
-    params
+    method: 'get'
   })
 }
 
@@ -71,6 +69,17 @@ export function updateShopLogo(params) {
     url: 'seller/shops/logos',
     method: 'put',
     data: params
+  })
+}
+
+/**
+ * 获取店铺状态
+ */
+export function getShopStatus() {
+  return request({
+    url: 'seller/shops/status',
+    method: 'get',
+    loading: 0.2
   })
 }
 

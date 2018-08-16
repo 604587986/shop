@@ -1,11 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const pathToRegexp = require('path-to-regexp')
-
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/views/layout/Layout'
+
+Vue.use(Router)
 
 export const constantRouterMap = [
   { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
@@ -181,5 +179,5 @@ export const asyncRouterMap = [
 export default new Router({
   mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
-  routes: [...constantRouterMap, ...asyncRouterMap]
+  routes: constantRouterMap
 })
