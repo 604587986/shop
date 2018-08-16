@@ -48,7 +48,7 @@ service.interceptors.request.use(config => {
     // 如果前台为开发环境，后台API，则需要替换为下面的代码
     // process.env.NODE_ENV === 'development', 'production'
     if (process.env.NODE_ENV === 'production') {
-      const uid = Storage.getItem('adminUid')
+      const uid = Storage.getItem('admin_uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
       const sign = md5(uid + nonce + timestamp + accessToken)
