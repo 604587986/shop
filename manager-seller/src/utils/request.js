@@ -4,6 +4,8 @@ import { MessageBox, Loading } from 'element-ui'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
 import { domain } from '~/ui-domain'
+import store from '@/store'
+import router from '@/router'
 import md5 from 'js-md5'
 import checkToken from '@/utils/checkToken'
 const qs = require('qs')
@@ -31,16 +33,16 @@ service.interceptors.request.use(config => {
   }
 
   // uuid
-  const uuid = Storage.getItem('uuid')
+  const uuid = Storage.getItem('seller_uuid')
   config.headers['uuid'] = uuid
 
   // 获取访问Token
-  let accessToken = Storage.getItem('accessToken')
+  let accessToken = Storage.getItem('seller_access_token')
   if (accessToken) {
     // 如果前台为开发环境，后台API，则需要替换为下面的代码
     // process.env.NODE_ENV === 'development'， 'production'
     if (process.env.NODE_ENV === 'production') {
-      const uid = Storage.getItem('uid')
+      const uid = Storage.getItem('seller_uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
       const sign = md5(uid + nonce + timestamp + accessToken)
@@ -101,14 +103,15 @@ function fedLogOut() {
   MessageBox.alert('您的登录状态已失效，请重新登录！', '权限错误', {
     type: 'error',
     callback: () => {
-      window.location.href = `${domain.buyer_pc}/login?forward=${window.location.href}`
+      store.dispatch('fedLogoutAction')
+      router.push({ path: `/login?forward=${location.pathname}` })
     }
   })
 }
 
 export default function request(options) {
-  // 如果是请求刷新token，不需要检查token直接请求。
-  if (options.url.indexOf('passport/token') !== -1) {
+  // 如果是请求【刷新token、登录、退出】不需要检查token，直接请求。
+  if (/seller\/check\/token|seller\/login|seller\/members\/logout/.test(options.url)) {
     return service(options)
   }
   return new Promise((resolve, reject) => {
