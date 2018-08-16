@@ -376,3 +376,18 @@ export function getSnapshot(id) {
     needToken: true
   })
 }
+
+/**
+ * 获取商品销售记录
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsSales(goods_id, params) {
+  return request({
+    url: `trade/goods/${goods_id}/sales`,
+    method: Method.GET,
+    loading: false,
+    params
+  })
+}
+

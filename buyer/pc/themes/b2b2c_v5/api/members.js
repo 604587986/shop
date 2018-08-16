@@ -407,3 +407,31 @@ export function getShopsCoupons(seller_ids) {
     needToken: true
   })
 }
+
+/**
+ * 获取商品咨询列表
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsConsultations(goods_id, params) {
+  return request({
+    url: `members/asks/goods/${goods_id}`,
+    method: Method.GET,
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取商品评论列表
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsComments(goods_id, params) {
+  return request({
+    url: `members/comments/goods/${goods_id}`,
+    method: Method.GET,
+    loading: false,
+    params
+  })
+}
