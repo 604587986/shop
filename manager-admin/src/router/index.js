@@ -486,12 +486,11 @@ export const asyncRouterMap = [
         path: '/distribution/put-forward',
         component: () => import('@/views/distribution/putforward/index'),
         redirect: '/distribution/put-forward/put-forward-settings',
-        name: 'putforward',
-        meta: { title: 'putforward' },
+        name: 'putforwardManage',
+        meta: { title: 'putforwardManage' },
         children: [
           { path: 'put-forward-settings', component: () => import('@/views/distribution/putforward/putforwardSettings'), name: 'putforwardSettings', meta: { title: 'putforwardSettings' }},
-          { path: 'put-forward-apply', component: () => import('@/views/distribution/putforward/putforwardApply'), name: 'putforwardApply', meta: { title: 'putforwardApply' }},
-          { path: 'put-forward-list', component: () => import('@/views/distribution/putforward/putforwardRecords'), name: 'putforwardRecords', meta: { title: 'putforwardRecords' }}
+          { path: 'put-forward-apply', component: () => import('@/views/distribution/putforward/putforwardApply'), name: 'putforwardApply', meta: { title: 'putforwardApply' }}
         ]
       }
     ]
