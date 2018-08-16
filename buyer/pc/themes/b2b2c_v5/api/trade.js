@@ -391,3 +391,15 @@ export function getGoodsSales(goods_id, params) {
   })
 }
 
+/**
+ * 更换参与活动
+ * @param params
+ */
+export function changeActivity(params) {
+  return request({
+    url: 'trade/carts/cart/promotion',
+    method: Method.POST,
+    needToken: true,
+    data: params
+  })
+}
