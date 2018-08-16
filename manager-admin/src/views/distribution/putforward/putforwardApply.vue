@@ -64,10 +64,10 @@
         <!--会员-->
         <el-table-column prop="member_name" label="会员"/>
         <!--提现状态-->
-        <el-table-column prop="status" label="提现状态"/>
+        <el-table-column prop="status" label="提现状态" :formatter="withDrawStatus"/>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleNext(scope.row)">{{ row.status | operaName }}</el-button>
+            <el-button size="mini" type="primary" @click="handleNext(scope.row)">{{ scope.row.status | operaName }}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -90,21 +90,21 @@
         <table class="putforawrd-baseinfo">
           <tr>
             <td>申请金额</td>
-            <td></td>
+            <td>{{ currentRow.apply_money  | unitPrice('￥') }}</td>
           </tr>
           <tr>
             <td>申请时间</td>
-            <td></td>
+            <td>{{ currentRow.apply_time | unixToDate }}</td>
           </tr>
           <tr>
             <td>申请备注</td>
-            <td></td>
+            <td>{{ currentRow.inspect_remark || '无' }}</td>
           </tr>
           <tr>
             <td>操作</td>
             <td>
-              <el-button type="success"  size="mini" @click="handleAudit('VIA_AUDITING')">通过审核</el-button>
-              <el-button type="danger" size="mini" @click="handleAudit('FAIL_AUDITING')">不能通过</el-button>
+              <el-button v-if="currentRow.status === 'APPLY'" type="success"  size="mini" @click="handleAudit('VIA_AUDITING')">通过审核</el-button>
+              <el-button v-if="currentRow.status === 'APPLY'" type="danger" size="mini" @click="handleAudit('FAIL_AUDITING')">不能通过</el-button>
             </td>
           </tr>
         </table>
@@ -112,17 +112,23 @@
         <div class="d-header"> 提现日志 </div>
         <en-table-layout :tableData="putforwardLogs" class="pop-table" border>
           <template slot="table-columns">
-            <el-table-column  prop="apply_time" :formatter="MixinUnixToDate" label="操作时间"/>
-            <el-table-column  prop="ship_num" label="操作名称"/>
-            <el-table-column  prop="ship_num" label="备注"/>
-            <el-table-column  prop="ship_num" label="操作人"/>
+            <el-table-column  prop="transfer_time" :formatter="MixinUnixToDate" label="操作时间"/>
+            <el-table-column  prop="status" label="状态" :formatter="withDrawStatus" />
+            <el-table-column  prop="transfer_remark" label="备注"/>
+            <!--<el-table-column  prop="ship_num" label="操作人"/>-->
           </template>
         </en-table-layout>
       </div>
     </el-dialog>
     <el-dialog title="审核拒绝备注" :visible.sync="isShowAuthRemarks" width="23%" align="center">
-      <div align="center">
-        <el-input type="textarea" v-model="authRemarks" clearable></el-input>
+      <el-form>
+        <el-form-item label="审核备注" label-width="80px">
+          <el-input type="textarea" v-model="authRemarks" clearable></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isShowAuthRemarks = false">取 消</el-button>
+        <el-button type="primary" @click="handleRefusedAudit('FAIL_AUDITING')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -191,6 +197,16 @@
       }
     },
     methods: {
+      /** 状态格式化 */
+      withDrawStatus(row) {
+        switch (row.status) {
+          case 'FAIL_AUDITING': return '审核失败'
+          case 'VIA_AUDITING': return '审核通过'
+          case 'TRANSFER_ACCOUNTS': return '已转账'
+          case 'APPLY': return '申请中'
+        }
+      },
+
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
         this.params.page_size = size
@@ -262,6 +278,11 @@
         } else { // 查看
           this.isShowPutForwardRecoreds = true
           this.currentRow = row
+          this.putforwardLogs = [{
+            'transfer_time': row.transfer_time,
+            'transfer_remark': row.transfer_remark,
+            'status': row.status
+          }]
         }
       },
 
@@ -280,6 +301,19 @@
         } else {
           this.isShowAuthRemarks = true
         }
+      },
+
+      /** 审核拒绝 */
+      handleRefusedAudit(operaName) {
+        const _params = {
+          apply_id: this.currentRow.id,
+          audit_result: operaName,
+          remark: this.authRemarks
+        }
+        API_distribution.authWithdrawApply(_params).then(() => {
+          this.$message.success('已保存审核结果')
+          this.GET_WithdrawApplyList()
+        })
       }
     }
   }
@@ -316,7 +350,7 @@
   div.d-header {
     width: 100%;
     line-height: 40px;
-    background-color: #ddd;
+    background-color: #eee;
     text-align: left;
     padding:0 15px;
     & + .container {

@@ -139,6 +139,7 @@ export default {
     upgradeLogs: 'Upgrade Logs',
     distributor: 'Distributor Manage',
     distributorList: 'Distributor List',
+    distributorStatistics: 'distributor Statistics',
     achievement: 'Achievement',
     achievementList: 'Achievement List',
     billList: 'bill List',

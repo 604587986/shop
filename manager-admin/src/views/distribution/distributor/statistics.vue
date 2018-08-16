@@ -27,7 +27,7 @@
 <script>
   import * as API_distribution from '@/api/distribution'
   export default {
-    name: 'statistic',
+    name: 'statistics',
     data() {
       return {
         /** 列表loading状态 */
@@ -99,7 +99,7 @@
       },
 
       GET_PriceStatistics() {
-        API_buyAnyalysis.getbuyAnyalysisPeriodList(this.params).then(response => {
+        API_distribution.getOrderCountChart(this.params).then(response => {
           this.purchaseTimeChart.setOption({
             title: { text: '购买时段分布', x: 'center', subtext: '当前时间段24小时购买总量分布' },
             tooltip: { trigger: 'axis' },
@@ -144,7 +144,7 @@
             ]
           })
         })
-        API_buyAnyalysis.getbuyAnyalysisRangesList(this.params).then(response => {
+        API_distribution.getOrderAmountChart(this.params).then(response => {
           this.priceListChart.setOption({
             title: { text: '客价单分布', x: 'center' },
             tooltip: { trigger: 'axis' },

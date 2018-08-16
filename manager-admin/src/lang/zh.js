@@ -138,6 +138,7 @@ export default {
     upgradeLogs: '升级日志',
     distributor: '分销商管理',
     distributorList: '个人分销商',
+    distributorStatistics: '分销商统计',
     achievement: '业绩管理',
     achievementList: '业绩列表',
     billList: '账单列表',

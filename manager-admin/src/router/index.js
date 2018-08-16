@@ -467,7 +467,8 @@ export const asyncRouterMap = [
         name: 'distributor',
         meta: { title: 'distributor' },
         children: [
-          { path: 'distributor-list', component: () => import('@/views/distribution/distributor/distributorList'), name: 'distributorList', meta: { title: 'distributorList' }}
+          { path: 'distributor-list', component: () => import('@/views/distribution/distributor/distributorList'), name: 'distributorList', meta: { title: 'distributorList' }},
+          { path: 'statistics', component: () => import('@/views/distribution/distributor/statistics'), name: 'statistics', meta: { title: 'statistics' }, hidden: true }
         ]
       },
       {
