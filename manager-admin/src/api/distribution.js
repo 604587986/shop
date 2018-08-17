@@ -135,7 +135,7 @@ export function getOrderAmountChart(params) {
  * 获取订单返现图 = 利润额
  * @param params
  */
-export function getOrderPushChart(params) {
+export function getProfitChart(params) {
   return request({
     url: 'admin/distribution/statistic/push',
     method: 'get',

@@ -213,13 +213,15 @@
       },
 
       /** 营业额统计 */
-      handleTurnoverStatistics() {
-        this.$router.push({ path: '/distribution/distributor/statistics', query: { isAmount: 1 }})
+      handleTurnoverStatistics(row) {
+        this.$router.push({ path: '/distribution/distributor/distributor-statistics',
+          query: { member_id: row.id, member_name: row.name, isAmount: 1 }})
       },
 
       /** 利润额统计 */
-      handleProfitStatistics() {
-        this.$router.push({ path: '/distribution/distributor/statistics', query: { isAmount: 2 }})
+      handleProfitStatistics(row) {
+        this.$router.push({ path: '/distribution/distributor/distributor-statistics',
+          query: { member_id: row.id, member_name: row.name, isAmount: 2 }})
       }
     }
   }
