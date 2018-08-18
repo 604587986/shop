@@ -139,14 +139,14 @@ export default {
     upgradeLogs: 'Upgrade Logs',
     distributor: 'Distributor Manage',
     distributorList: 'Distributor List',
+    distributorStatistics: 'distributor Statistics',
     achievement: 'Achievement',
     achievementList: 'Achievement List',
     billList: 'bill List',
     billDetails: 'Bill Details',
-    putforward: 'Put Forward',
+    putforwardManage: 'Put Forward Manage',
     putforwardSettings: 'Put Forward Settings',
-    putforwardApply: 'Put Forward Apply',
-    putforwardRecords: 'Put Forward Records'
+    putforwardApply: 'Put Forward Apply'
   },
   login: {
     logIn: 'Log in',

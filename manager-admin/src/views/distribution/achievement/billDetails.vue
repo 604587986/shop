@@ -1,17 +1,18 @@
 <template>
   <div class="order-detail-container">
     <!--分销商结算单-->
-    <!--<el-row v-for="(row, index) in orderInfo" :key="index" :gutter="0">-->
-      <!--<el-col v-for="col in row" :key="col.key" :span="12">-->
-        <!--<div class="d-header">{{ col.title }}</div>-->
-        <!--<div class="d-content">-->
-          <!--<div v-for="item in col.items" :key="item.key" class="item">-->
-            <!--<span class="item-label" v-html="item.label"></span>-->
-            <!--<span class="item-value">{{ item.value }}</span>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</el-col>-->
-    <!--</el-row>-->
+    <el-row :gutter="0">
+      <div class="d-header"> 分销商结算单  结算金额：
+        {{ billOriginInfo.final_money }}(最终佣金) = {{ billOriginInfo.push_money }}(本期佣金) - {{ billOriginInfo.return_push_money }}(退还佣金)</div>
+      <el-col v-for="col in billInfo" :key="col.key" :span="8">
+        <div class="d-content">
+          <div v-for="item in col.items" :key="item.key" class="item">
+            <span class="item-label" v-html="item.label"></span>
+            <span class="item-value">{{ item.value }}</span>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
     <!--分销商订单-->
     <el-row v-if="disOrderList" :gutter="0">
       <el-col :span="24">
@@ -54,12 +55,12 @@
           height="200px"
           :loading="disRefundOrderLoading">
           <template slot="table-columns">
-            <el-table-column prop="sn" label="账单号" width="100"/>
-            <el-table-column prop="op_name" label="订单金额" width="200">
-              <template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>
+            <el-table-column prop="sn" label="账单号"/>
+            <el-table-column prop="op_name" label="订单金额">
+              <template slot-scope="scope">￥{{ scope.row.order_price | unitPrice }}</template>
             </el-table-column>
-            <el-table-column prop="message" label="退换提成金额" width="400">
-              <template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>
+            <el-table-column prop="message" label="退换提成金额">
+              <template slot-scope="scope">￥{{ scope.row.price | unitPrice }}</template>
             </el-table-column>
           </template>
           <el-pagination
@@ -77,9 +78,9 @@
       </el-col>
     </el-row>
     <!--分销商结构图-->
-    <!--<el-row v-loading="loading_log" :gutter="0">-->
-      <!--<el-col :span="24">-->
-        <!--<div class="d-header">分销商结构图</div>-->
+    <el-row :gutter="0">
+      <el-col :span="24">
+        <div class="d-header">分销商结构图</div>
         <!--<el-table :data="orderLog" :header-cell-style="{textAlign: 'center'}">-->
           <!--<el-table-column prop="log_id" label="分销商" width="100"/>-->
           <!--<el-table-column prop="op_name" label="结算金额" width="200">-->
@@ -100,8 +101,8 @@
           <!--</el-table-column>-->
           <!--<el-table-column prop="op_name" label="退换订单量" width="200"/>-->
         <!--</el-table>-->
-      <!--</el-col>-->
-    <!--</el-row>-->
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -113,6 +114,12 @@
     name: 'billDetails',
     data() {
       return {
+        /** 结算单原始info */
+        billOriginInfo: {},
+
+        /** 结算单组合后info */
+        billInfo: [],
+
         /** 分销订单 */
         disOrderList: [],
 
@@ -155,8 +162,10 @@
         ...this.disRefundOrderParams,
         ...this.$route.query
       }
+      this.GET_BillDetails()
       this.GET_DisOrderList()
       this.GET_DisRefundOrderList()
+      this.GET_DisBillDown()
     },
     beforeRouteUpdate(to, from, next) {
       this.disOrderParams = {
@@ -167,13 +176,17 @@
         ...this.disRefundOrderParams,
         ...this.$route.query
       }
+      this.GET_BillDetails()
       this.GET_DisOrderList()
       this.GET_DisRefundOrderList()
+      this.GET_DisBillDown()
       next()
     },
     mounted() {
+      this.GET_BillDetails()
       this.GET_DisOrderList()
       this.GET_DisRefundOrderList()
+      this.GET_DisBillDown()
     },
     methods: {
       /** 获取分销订单列表 */
@@ -229,61 +242,50 @@
       },
 
       /** 获取分销商账单详情 */
-      GET_OrderLog() {
+      GET_BillDetails() {
+        API_distribution.getDisBillDetails(this.$route.query.bill_id).then(response => {
+          this.billOriginInfo = response
+          this.billInfo = this.countShowData(response)
+        })
       },
 
-      /** 组合基本信息、发票信息、买家信息、商家信息 */
-      countShowData() {
-        const o = this.orderDetail
+      /** 组合账单详情信息 */
+      countShowData(info) {
         const f = Foundation
-        this.orderInfo = [
-          [
-            {
-              title: '基本信息',
-              key: 'base',
-              items: [
-                { label: '订单编号', value: o.sn },
-                { label: '订单金额', value: '￥' + f.formatPrice(o.need_pay_money) },
-                { label: '支付方式', value: (o.payment_type === 'ONLINE' ? '在线支付' : '货到付款') + '-' + (o.payment_method_name || '未支付') },
-                { label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '') },
-                { label: '下单时间', value: f.unixToDate(o.create_time) }
-              ]
-            },
-            {
-              title: '发票信息',
-              key: 'receipt',
-              items: [
-                { label: '发票类型', value: o.receipt_history ? o.receipt_history.receipt_type || '无' : '不需要发票' },
-                { label: '发票抬头', value: o.receipt_history ? o.receipt_history.receipt_title || '无' : '无' },
-                { label: '发票内容', value: o.receipt_history ? o.receipt_history.receipt_content || '无' : '无' },
-                { label: '发票税号', value: o.receipt_history ? o.receipt_history.tax_no || '无' : '无' },
-                { label: '发票金额', value: o.receipt_history ? f.formatPrice(o.receipt_history.receipt_amount) || '无' : '无' }
-              ]
-            }
-          ],
-          [
-            {
-              title: '买家信息',
-              key: 'buyer',
-              items: [
-                { label: '收&ensp;货&ensp;人', value: o.ship_name },
-                { label: '收货地址', value: o.ship_province + o.ship_city + o.ship_county + o.ship_town + ' ' + o.ship_addr },
-                { label: '联系方式', value: o.ship_mobile },
-                { label: '买家留言', value: o.remark || '无' }
-              ]
-            },
-            {
-              title: '商家信息',
-              key: 'seller',
-              items: [
-                { label: '卖家账号', value: o.seller_name },
-                { label: '发货时间', value: o.ship_time ? f.unixToDate(o.ship_time) : '未发货' },
-                { label: '物流公司', value: o.logi_name || '未发货' },
-                { label: '快递单号', value: o.ship_no || '未发货' }
-              ]
-            }
-          ]
+        return [
+          {
+            items: [
+              { label: '分销商', value: info.member_name },
+              { label: '订单数', value: info.order_count },
+              { label: '退货订单数', value: info.return_order_count }
+            ]
+          },
+          {
+            items: [
+              { label: '结算单号', value: info.sn },
+              { label: '订单金额', value: f.formatPrice(info.order_money) },
+              { label: '退还订单金额', value: f.formatPrice(info.return_order_money) }
+            ]
+          },
+          {
+            items: [
+              { label: '周期', value: `${f.unixToDate(info.start_time, 'yyyy-MM-dd')} ~ ${f.unixToDate(info.end_time, 'yyyy-MM-dd')}` },
+              { label: '提成金额', value: f.formatPrice(info.push_money) },
+              { label: '退还提成金额', value: f.formatPrice(info.return_push_money) }
+            ]
+          }
         ]
+      },
+
+      /** 获取某个分销商下级业绩 */
+      GET_DisBillDown() {
+        const _params = {
+          id: this.$route.query.bill_id,
+          member_id: this.$route.query.member_id
+        }
+        API_distribution.getDisBillDown(_params).then(response => {
+
+        })
       }
     }
   }
@@ -322,10 +324,12 @@
     white-space: nowrap;
 
     & .item-label {
+      min-width: 80px;
       float: left;
       margin-right: 20px;
       font-size: 14px;
       color: #999;
+      text-align: right;
     }
     & .item-value {
       overflow: hidden;

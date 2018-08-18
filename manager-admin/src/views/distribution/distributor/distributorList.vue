@@ -11,33 +11,22 @@
         </div>
       </div>
       <template slot="table-columns">
-        <!--操作-->
-        <!--<el-table-column label="操作" width="150">-->
-          <!--<template slot-scope="scope">-->
-            <!--<el-button-->
-              <!--type="primary"-->
-              <!--size="mini"-->
-              <!--icon="el-icon-plus"-->
-              <!--circle-->
-              <!--@click="handleOperateSee(scope.row)"></el-button>-->
-          <!--</template>-->
-        <!--</el-table-column>-->
         <!--姓名-->
-        <el-table-column prop="sn" label="姓名"/>
+        <el-table-column prop="name" label="姓名"/>
         <!--人数-->
-        <el-table-column prop="start_time" :formatter="MixinUnixToDate" label="人数"/>
+        <el-table-column prop="downline"  label="人数"/>
         <!--销售金额-->
         <el-table-column label="销售金额">
-          <template slot-scope="scope">{{ scope.row.push_money | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.rebate_total | unitPrice('￥') }}</template>
         </el-table-column>
         <!--利润额-->
         <el-table-column label="利润额">
-          <template slot-scope="scope">{{ scope.row.push_money | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.turnover_price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--订单数	-->
-        <el-table-column prop="order_count" label="订单数	"/>
+        <el-table-column prop="order_num" label="订单数	"/>
         <!--提成模板	-->
-        <el-table-column prop="order_count" label="提成模板	"/>
+        <el-table-column prop="current_tpl_name" label="提成模板	"/>
         <!--注册时间-->
         <el-table-column prop="start_time" :formatter="MixinUnixToDate" label="注册时间"/>
         <!--修改模式-->
@@ -71,6 +60,36 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-table-layout>
+    <el-dialog :title="`${currentRow.name}的修改模式`" width="40%" :visible.sync="isShowModifyModel" class="modify-model">
+      <en-table-layout
+        pagination
+        border
+        :tableData="gridData">
+        <template slot="table-columns">
+          <el-table-column label="模板ID" width="150">
+            <template slot-scope="scope">
+              <el-radio :label="scope.row.id" v-model="currentRow.current_tpl_id"></el-radio>
+            </template>
+          </el-table-column>
+          <el-table-column property="tpl_name" label="模板名"></el-table-column>
+          <el-table-column property="tpl_describe" label="说明"></el-table-column>
+        </template>
+        <el-pagination
+          v-if="gridData"
+          slot="pagination"
+          @size-change="handleGridPageSizeChange"
+          @current-change="handleGridPageCurrentChange"
+          :current-page="pageGridData.page_no"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="pageGridData.page_size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageGridData.data_total">
+        </el-pagination>
+      </en-table-layout>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="reserveTpl">保 存</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -92,7 +111,22 @@
         tableData: [],
 
         /** 分页信息 */
-        pageData: []
+        pageData: {},
+
+        /** 是否显示修改模式 */
+        isShowModifyModel: false,
+
+        /** 修改模式模板列表 */
+        gridData: [],
+
+        /** 修改模式分页 */
+        pageGridData: {},
+
+        /** 当前操作分销商 */
+        currentRow: {},
+
+        /** 参数 */
+        gridParams: {}
       }
     },
     mounted() {
@@ -114,7 +148,8 @@
       /** 搜索事件触发 */
       searchEvent(data) {
         this.params = {
-          ...this.params,
+          page_no: 1,
+          page_size: 10,
           member_name: data
         }
         this.GET_DistributorList()
@@ -135,18 +170,58 @@
       },
 
       /** 修改模式 */
-      handleEditTpl() {
+      handleEditTpl(row) {
+        this.isShowModifyModel = true
+        this.currentRow = row
+        this.GET_PerAccomplishmentTpl()
+      },
 
+      /** 获取模板列表 */
+      GET_PerAccomplishmentTpl() {
+        API_distribution.getPerAccomplishmentTpl(this.gridParams).then(response => {
+          this.gridData = response.data
+          this.pageGridData = {
+            page_no: response.page_no,
+            page_size: response.page_size,
+            data_total: response.data_total
+          }
+        })
+      },
+
+      /** 修改模式分页大小发生改变 */
+      handleGridPageSizeChange(size) {
+        this.params.page_size = size
+        this.GET_PerAccomplishmentTpl()
+      },
+
+      /** 修改模式分页页数发生改变 */
+      handleGridPageCurrentChange(page) {
+        this.params.page_no = page
+        this.GET_PerAccomplishmentTpl()
+      },
+
+      /** 保存修改模式 */
+      reserveTpl() {
+        const _params = {
+          member_id: this.currentRow.id,
+          tpl_id: this.currentRow.current_tpl_id
+        }
+        API_distribution.modifyTpl(_params).then(() => {
+          this.$message.success('修改成功')
+          this.GET_DistributorList()
+        })
       },
 
       /** 营业额统计 */
-      handleTurnoverStatistics() {
-
+      handleTurnoverStatistics(row) {
+        this.$router.push({ path: '/distribution/distributor/distributor-statistics',
+          query: { member_id: row.id, member_name: row.name, isAmount: 1 }})
       },
 
       /** 利润额统计 */
-      handleProfitStatistics() {
-
+      handleProfitStatistics(row) {
+        this.$router.push({ path: '/distribution/distributor/distributor-statistics',
+          query: { member_id: row.id, member_name: row.name, isAmount: 2 }})
       }
     }
   }
@@ -162,6 +237,11 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
+  }
+  /deep/ .modify-model {
+    div.toolbar {
+      display: none;
+    }
   }
 </style>
 

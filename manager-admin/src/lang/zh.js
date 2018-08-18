@@ -138,14 +138,14 @@ export default {
     upgradeLogs: '升级日志',
     distributor: '分销商管理',
     distributorList: '个人分销商',
+    distributorStatistics: '分销商统计',
     achievement: '业绩管理',
     achievementList: '业绩列表',
     billList: '账单列表',
     billDetails: '结算单详情',
-    putforward: '提现',
+    putforwardManage: '提现管理',
     putforwardSettings: '提现设置',
-    putforwardApply: '提现申请',
-    putforwardRecords: '提现记录'
+    putforwardApply: '提现申请'
   },
   login: {
     logIn: '登录',
