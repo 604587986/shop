@@ -8,8 +8,6 @@ if [[ "$1" == "git-pull" ]];then
   git reset --hard origin/master
   git clean -f
   git pull origin master
-  git submodule update --init --recursive
-  git submodule update
   echo -e "\033[32m代码拉取完成...\033[0m"
 fi
 
