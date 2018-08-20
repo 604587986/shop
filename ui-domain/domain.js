@@ -10,11 +10,10 @@
 module.exports = {
   // 开发环境
   dev: {
-    buyer_pc : 'http://127.0.0.1:3000',
-    buyer_wap: 'http://127.0.0.1:3001',
-    seller   : 'http://127.0.0.1:3002',
-    admin    : 'http://127.0.0.1:3003',
-    cookie   : '127.0.0.1'
+    buyer_pc : 'http://192.168.2.105:3000',
+    buyer_wap: 'http://192.168.2.105:3001',
+    seller   : 'http://192.168.2.105:3002',
+    admin    : 'http://192.168.2.105:3003',
   },
   // 生产环境
   pro: {
@@ -22,6 +21,5 @@ module.exports = {
     buyer_wap: 'http://m.yiqisi.s1.natapp.cc',
     seller   : 'http://seller.yiqisi.s1.natapp.cc',
     admin    : 'http://admin.yiqisi.s1.natapp.cc',
-    cookie   : 'yiqisi.s1.natapp.cc'
   }
 }
