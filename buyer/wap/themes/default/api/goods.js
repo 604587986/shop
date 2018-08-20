@@ -50,7 +50,7 @@ export function getGoodsSelector(params) {
  */
 export function getKeywordNum(keyword) {
   return request({
-    url: 'goods/search/words',
+    url: `${urlPrefix}goods/search/words`,
     method: Method.GET,
     loading: false,
     params: { keyword }
@@ -77,34 +77,6 @@ export function getGoodsSkus(goods_id) {
     url: `goods/${goods_id}/skus`,
     method: Method.GET,
     loading: false
-  })
-}
-
-/**
- * 获取商品咨询列表
- * @param goods_id
- * @param params
- */
-export function getGoodsConsultations(goods_id, params) {
-  return request({
-    url: `goods/${goods_id}/asks`,
-    method: Method.GET,
-    loading: false,
-    params
-  })
-}
-
-/**
- * 获取商品评论列表
- * @param goods_id
- * @param params
- */
-export function getGoodsComments(goods_id, params) {
-  return request({
-    url: `goods/${goods_id}/comments`,
-    method: Method.GET,
-    loading: false,
-    params
   })
 }
 
@@ -136,19 +108,5 @@ export function getCategory(parent_id = 0) {
     url: `${urlPrefix}goods/categories/${parent_id}/children`,
     method: Method.GET,
     loading: false
-  })
-}
-
-/**
- * 获取商品销售记录
- * @param goods_id
- * @param params
- */
-export function getGoodsSales(goods_id, params) {
-  return request({
-    url: `goods/${goods_id}/sales`,
-    method: Method.GET,
-    loading: false,
-    params
   })
 }
