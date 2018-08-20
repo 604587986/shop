@@ -9,16 +9,16 @@
 module.exports = {
   // 开发环境
   dev: {
-    base    : 'http://127.0.0.1:7000',
-    buyer   : 'http://127.0.0.1:7002',
-    seller  : 'http://127.0.0.1:7003',
-    admin   : 'http://127.0.0.1:7004'
+    base    : 'http://192.168.2.5:7000',
+    buyer   : 'http://192.168.2.5:7002',
+    seller  : 'http://192.168.2.5:7003',
+    admin   : 'http://192.168.2.5:7004'
   },
   // 生产环境
   pro: {
-    base    : 'http://api.base.javamall.com.cn',
-    buyer   : 'http://api.buyer.javamall.com.cn',
-    seller  : 'http://api.seller.javamall.com.cn',
-    admin   : 'http://api.admin.javamall.com.cn'
+    base    : 'http://yiqisi.s1.natapp.cc/base-api',
+    buyer   : 'http://yiqisi.s1.natapp.cc/buyer-api',
+    seller  : 'http://yiqisi.s1.natapp.cc/seller-api',
+    admin   : 'http://yiqisi.s1.natapp.cc/manager-api'
   }
 }
