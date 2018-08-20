@@ -74,7 +74,7 @@
       handleClickCategory(cat, $event) {
         const catEle = $event.target.parentElement
         this.$set(this, 'currentCat', cat)
-        this.$set(this, 'category', this.category.map(item => {
+        this.$set(this, 'categorys', this.categorys.map(item => {
           item.selected = item.category_id === cat.category_id
           return item
         }))
