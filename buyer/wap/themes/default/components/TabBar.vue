@@ -19,7 +19,7 @@
     computed: {
       /** 购物车徽章 */
       cartBadge() {
-        return this.$store.getters.allCount
+        return this.$store.getters['cart/allCount']
       }
     }
   }
