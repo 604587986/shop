@@ -11,7 +11,7 @@ if [[ "$1" == "git-pull" ]];then
   echo -e "\033[32m代码拉取完成...\033[0m"
 fi
 
-if [[ ! -n "$1" || "$1" == "copy" ]];then
+if [[ "$1" == "copy" ]];then
   echo "拷贝ui-domain..."
   cp -a $WEB_PATH/ui-domain/* $WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-domain
   cp -a $WEB_PATH/ui-domain/* $WEB_PATH/buyer/wap/themes/default/ui-domain
