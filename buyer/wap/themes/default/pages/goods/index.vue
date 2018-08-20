@@ -12,7 +12,7 @@
     <search :show="showSearch" @close="showSearch = false"/>
     <!--// Andste_TODO 2018/7/11: 筛选功能未做-->
     <van-list v-model="loading" :finished="finished" @load="onLoad">
-      <nuxt-link :to="'/goods/' + goods.goods_id" v-for="(goods, index) in goodsList" :key="index" class="goods-item">
+      <a :href="'/goods/' + goods.goods_id" v-for="(goods, index) in goodsList" :key="index" class="goods-item">
         <div class="goods-image">
           <img :src="goods.thumbnail" :alt="goods.name">
         </div>
@@ -29,7 +29,7 @@
             <nuxt-link :to="'/shop/' + goods.seller_id"><van-icon name="shop"/>&nbsp;{{ goods.seller_name }}</nuxt-link>
           </div>
         </div>
-      </nuxt-link>
+      </a>
     </van-list>
   </div>
 </template>
