@@ -8,6 +8,7 @@
 </template>
 
 <script>
+  import Storage from '@/utils/storage'
   export default {
     name: 'TabBar',
     props: ['active'],
@@ -23,7 +24,10 @@
       }
     },
     mounted() {
-      this.$store.dispatch('cart/getCartDataAction')
+      if (Storage.getItem('refresh_token')) {
+        const shopList  = this.$store.getters['cart/shopList']
+        shopList && !shopList.length && this.$store.dispatch('cart/getCartDataAction')
+      }
     }
   }
 </script>

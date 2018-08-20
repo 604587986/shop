@@ -93,11 +93,14 @@
       const { goods_id, seller_id } = this.goods
       // 如果商品可以查看
       if (this.canView) {
-        // 如果用户已登录，加载收藏状态
+        // 如果用户已登录，加载收藏状态，加载购物车
         if (Storage.getItem('refresh_token')) {
+          // 获取收藏状态
           API_Members.getGoodsIsCollect(goods_id).then(response => {
             this.collected = response.message
           })
+          // 获取购物车数据
+          this.$store.dispatch('cart/getCartDataAction')
         }
         // 浏览量+1
         API_Goods.visitGoods(goods_id)
