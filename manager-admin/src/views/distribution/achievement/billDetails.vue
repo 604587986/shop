@@ -81,26 +81,41 @@
     <el-row :gutter="0">
       <el-col :span="24">
         <div class="d-header">分销商结构图</div>
-        <!--<el-table :data="orderLog" :header-cell-style="{textAlign: 'center'}">-->
-          <!--<el-table-column prop="log_id" label="分销商" width="100"/>-->
-          <!--<el-table-column prop="op_name" label="结算金额" width="200">-->
-            <!--<template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>-->
-          <!--</el-table-column>-->
-          <!--<el-table-column prop="op_name" label="提成金额" width="200">-->
-            <!--<template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>-->
-          <!--</el-table-column>-->
-          <!--<el-table-column prop="op_name" label="订单量" width="200"/>-->
-          <!--<el-table-column prop="op_name" label="订单金额" width="200">-->
-            <!--<template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>-->
-          <!--</el-table-column>-->
-          <!--<el-table-column prop="op_name" label="退换提成金额" width="200">-->
-            <!--<template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>-->
-          <!--</el-table-column>-->
-          <!--<el-table-column prop="op_name" label="退换订单金额" width="200">-->
-            <!--<template slot-scope="scope">￥{{ scope.row.purchase_price | unitPrice }}</template>-->
-          <!--</el-table-column>-->
-          <!--<el-table-column prop="op_name" label="退换订单量" width="200"/>-->
-        <!--</el-table>-->
+        <en-table-layout
+          :tableData="dataDown"
+          pagination
+          height="170px"
+          style="width: 100%"
+          :row-style="showTr">
+          <template slot="table-columns">
+            <el-table-column
+              v-for="(column, index) in columns"
+              :key="column.dataIndex"
+              :label="column.text"
+              :width="column.width"
+              align="center">
+              <template slot-scope="scope">
+                <span
+                  v-if="spaceIconShow(index)"
+                  v-for="(space, levelIndex) in scope.row._level"
+                  :key="levelIndex"
+                  class="ms-tree-space"></span>
+                  <button
+                    style="border:0;background:transparent;outline:none;"
+                    class="button is-outlined is-primary is-small"
+                    v-if="toggleIconShow(index,scope.row)"
+                    @click="toggle(scope.$index)">
+                    <i v-if="!scope.row._expanded" class="el-icon el-icon-arrow-right" aria-hidden="true"></i>
+                    <i v-if="scope.row._expanded" class="el-icon el-icon-arrow-down" aria-hidden="true"></i>
+                  </button>
+                  <span v-else-if="index===0" class="ms-tree-space">
+                  <i class="el-icon el-icon-arrow-down"></i>
+                </span>
+                <span v-else>{{scope.row[column.dataIndex]}}</span>
+              </template>
+            </el-table-column>
+          </template>
+        </en-table-layout>
       </el-col>
     </el-row>
   </div>
@@ -109,7 +124,7 @@
 <script>
   import * as API_distribution from '@/api/distribution'
   import { Foundation } from '~/ui-utils'
-
+  import Utils from './utils/index.js'
   export default {
     name: 'billDetails',
     data() {
@@ -150,7 +165,56 @@
           page_no: 1,
           page_size: 10,
           ...this.$route.query
-        }
+        },
+
+        /** 默认展开 */
+        defaultExpandAll: false,
+
+        /** 是否默认树形结构数据 */
+        treeStructure: true,
+
+        /** 列信息 */
+        columns: [
+          {
+            width: 50
+          },
+          {
+            text: '分销商',
+            dataIndex: 'member_name',
+            width: 100
+          },
+          {
+            text: '结算金额',
+            dataIndex: 'final_money'
+          },
+          {
+            text: '提成金额',
+            dataIndex: 'push_money'
+          },
+          {
+            text: '订单量',
+            dataIndex: 'order_count'
+          },
+          {
+            text: '订单金额',
+            dataIndex: 'order_money'
+          },
+          {
+            text: '退还提成金额',
+            dataIndex: 'return_push_money'
+          },
+          {
+            text: '退还订单金额',
+            dataIndex: 'return_order_money'
+          },
+          {
+            text: '退还订单量',
+            dataIndex: 'return_order_count'
+          }
+        ],
+
+        /**  下级分销商列表  */
+        dataSource: []
       }
     },
     activated() {
@@ -187,6 +251,12 @@
       this.GET_DisOrderList()
       this.GET_DisRefundOrderList()
       this.GET_DisBillDown()
+    },
+    computed: {
+      // 格式化数据源
+      dataDown() {
+        return Utils.MSDataTransfer.treeToArray(this.dataSource, null, null, this.defaultExpandAll)
+      }
     },
     methods: {
       /** 获取分销订单列表 */
@@ -284,8 +354,30 @@
           member_id: this.$route.query.member_id
         }
         API_distribution.getDisBillDown(_params).then(response => {
-
+          this.dataSource = response
         })
+      },
+
+      // 显示行
+      showTr({ row, index }) {
+        let show = (row._parent ? (row._parent._expanded && row._parent._show) : true)
+        row._show = show
+        return show ? '' : 'display:none;'
+      },
+
+      // 展开下级
+      toggle(trIndex) {
+        this.dataDown[trIndex]._expanded = !this.dataDown[trIndex]._expanded
+      },
+
+      // 显示层级关系的空格和图标
+      spaceIconShow(index) {
+        return this.treeStructure && index === 0
+      },
+
+      // 点击展开和关闭的时候，图标的切换
+      toggleIconShow(index, record) {
+        return this.treeStructure && index === 0 && record.item && record.item.length
       }
     }
   }
@@ -355,6 +447,25 @@
   .sku-spec {
     color: #ff9800;
     margin: 0;
+  }
+
+  /*层级展开*/
+  .ms-tree-space{
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: "Glyphicons Halflings";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    width: 14px;
+    height: 14px;
+  }
+  .ms-tree-space::before{
+    content: ""
+  }
+  /deep/ .el-icon-arrow-right {
+    cursor: pointer;
   }
 </style>
 

@@ -10,7 +10,6 @@
     <div>
       <div class="my-refereer">我的推荐人：<span>{{ myRefereer || '没有推荐人' }}</span></div>
       <div>
-        <!--v-if="referee && referee.length"-->
         <el-table
           :data="data"
           style="width: 100%"
@@ -95,9 +94,6 @@
         /** 我的推荐人 */
         myRefereer: '',
 
-        /** 一级列表数据 */
-        datafirst: null,
-
         /** 显示状态*/
         showstatus: 1,
 
@@ -173,7 +169,7 @@
       },
 
       // 显示行
-      showTr({row, index}) {
+      showTr({ row, index }) {
         let show = (row._parent ? (row._parent._expanded && row._parent._show) : true)
         row._show = show
         return show ? '' : 'display:none;'
@@ -185,12 +181,12 @@
       },
 
       // 显示层级关系的空格和图标
-      spaceIconShow (index) {
+      spaceIconShow(index) {
         return this.treeStructure && index === 0
       },
 
       // 点击展开和关闭的时候，图标的切换
-      toggleIconShow (index, record) {
+      toggleIconShow(index, record) {
         return this.treeStructure && index === 0 && record.item && record.item.length
       }
     }
