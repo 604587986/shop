@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="logo-container" :class="[isCollapse && 'collapse']">
+    <div class="logo-container" @click="linkIndex" :class="[isCollapse && 'collapse']">
       <span class="logo-tip">商家中心</span>
       <img src="../../../../assets/logo_images/logo-javashop-white.png" class="logo-img">
     </div>
@@ -35,6 +35,18 @@ export default {
     return {
       routers: [...constantRouterMap, ...asyncRouterMap]
     }
+  },
+  methods: {
+    linkIndex() {
+      location.href = this.MixinBuyerDomain
+    }
   }
 }
 </script>
+
+<style lang="scss" type="text/scss" scoped>
+  .logo-container{
+    cursor: pointer;
+  }
+</style>
+
