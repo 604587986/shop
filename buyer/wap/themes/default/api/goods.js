@@ -3,7 +3,9 @@
  */
 
 import request, { Method } from '@/utils/request'
+import { api_dev } from '~/ui-domain'
 
+const urlPrefix = process.server ? (api_dev.buyer + '/') : ''
 /**
  * 获取商品详情
  * @param goods_id 商品ID
@@ -11,7 +13,7 @@ import request, { Method } from '@/utils/request'
  */
 export function getGoods(goods_id) {
   return request({
-    url: `goods/${goods_id}`,
+    url: `${urlPrefix}goods/${goods_id}`,
     method: Method.GET
   })
 }
@@ -23,7 +25,7 @@ export function getGoods(goods_id) {
  */
 export function getGoodsList(params) {
   return request({
-    url: 'goods/search',
+    url: `${urlPrefix}goods/search`,
     method: Method.GET,
     loading: false,
     params
@@ -36,7 +38,7 @@ export function getGoodsList(params) {
  */
 export function getGoodsSelector(params) {
   return request({
-    url: 'goods/search/selector',
+    url: `${urlPrefix}goods/search/selector`,
     method: Method.GET,
     params
   })
@@ -131,7 +133,7 @@ export function getTagGoods(seller_id, mark = 'hot', num = 5) {
  */
 export function getCategory(parent_id = 0) {
   return request({
-    url: `goods/categories/${parent_id}/children`,
+    url: `${urlPrefix}goods/categories/${parent_id}/children`,
     method: Method.GET,
     loading: false
   })
