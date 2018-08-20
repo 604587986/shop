@@ -31,10 +31,10 @@
   import { Table, TableColumn } from 'element-ui'
   Vue.use(Table)
   Vue.use(TableColumn)
-  import * as API_Goods from '@/api/goods'
+  import * as API_Trade from '@/api/trade'
   export default {
     name: "sales-record",
-    props: ['goodsId'],
+    props: ['goods-id'],
     data() {
       return {
         salesList: '',
@@ -55,14 +55,10 @@
       },
       /** 获取销售记录 */
       GET_SalesList() {
-        API_Goods.getGoodsSales(this.goodsId, this.params).then(response => {
+        API_Trade.getGoodsSales(this.goodsId, this.params).then(response => {
           this.salesList = response
         })
       }
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

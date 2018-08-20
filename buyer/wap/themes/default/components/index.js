@@ -7,6 +7,7 @@ import Operation from './Operation'
 import Search from './Search'
 import TabBar from './TabBar'
 import NavBar from './NavBar'
+import HeaderShortcut from './HeaderShortcut'
 
 export {
   RegionPicker,
@@ -16,5 +17,6 @@ export {
   Operation,
   Search,
   TabBar,
-  NavBar
+  NavBar,
+  HeaderShortcut
 }

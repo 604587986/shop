@@ -38,7 +38,6 @@
    * 商品咨询模块
    * 这里可以对商品进行咨询
    */
-  import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
   import Storage from '@/utils/storage'
   export default {
@@ -88,7 +87,7 @@
       },
       /** 获取咨询列表 */
       GET_Consulting() {
-        API_Goods.getGoodsConsultations(this.goodsId, this.params).then(response => {
+        API_Members.getGoodsConsultations(this.goodsId, this.params).then(response => {
           this.consulting = response
         })
       }
