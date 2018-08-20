@@ -14,7 +14,7 @@
       <ul class="links">
         <li>
           <div class="dt">
-            <a :href="MixinDomain.seller">商家中心</a>
+            <a href="/shop/apply">商家入驻</a>
           </div>
         </li>
         <li class="spacer"></li>
@@ -53,7 +53,7 @@
           <div class="dd dorpdown-layer">
             <dl>
               <dd><nuxt-link to="/">商城首页</nuxt-link></dd>
-              <dd><a :href="MixinDomain.seller">商家中心</a></dd>
+              <dd><a href="/shop/apply">商家入驻</a></dd>
               <dd><nuxt-link to="/member">个人中心</nuxt-link></dd>
             </dl>
           </div>
