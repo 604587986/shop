@@ -63,10 +63,9 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   import * as API_Home from '@/api/home'
-  import * as API_Goods from '@/api/goods'
   import Storage from '@/utils/storage'
+
   export default {
     name: 'Search',
     props: ['show'],
