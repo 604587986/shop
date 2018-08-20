@@ -8,6 +8,10 @@
     >
       <header-shortcut slot="right"/>
     </van-nav-bar>
+    <div v-if="!shopList || !shopList.length" class="empty-cart">
+      <i class="icon-empty"></i>
+      <span class="text-empty">暂无货品</span>
+    </div>
     <div class="cart-container">
       <div class="shop-item" v-for="(shop, index) in shopList" :key="index">
         <div class="inner-shop-item">
@@ -398,6 +402,25 @@
     }
     .van-icon-checked {
       color: $color-main;
+    }
+  }
+  .empty-cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 46px;
+    line-height: 220px;
+    .icon-empty {
+      display: block;
+      width: 50px;
+      height: 50px;
+      background: url(../../assets/images/icon-empty-member.png) no-repeat;
+      background-size: 100%;
+    }
+    .text-empty {
+      font-size: 16px;
+      color: #333;
+      margin: 5px 0 0 15px;
     }
   }
 </style>
