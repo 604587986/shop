@@ -47,7 +47,7 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleOperateSee(scope.$index, scope.row)">查看</el-button>
+              @click="handleSeeBillDetails(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -84,7 +84,7 @@
         // 列表数据
         tableData: [],
 
-        pageData: []
+        pageData: {}
       }
     },
     mounted() {
@@ -132,7 +132,7 @@
       /** 获取账单列表 */
       GET_BillList() {
         this.loading = true
-        API_distribution.getbillList(this.params).then(response => {
+        API_distribution.getBillList(this.params).then(response => {
           this.loading = false
           this.tableData = response.data
           this.pageData = {
@@ -143,9 +143,9 @@
         })
       },
 
-      /** 查看 */
-      handleOperateSee() {
-
+      /** 查看结算单详情 */
+      handleSeeBillDetails(row) {
+        this.$router.push({ path: '/distribution/achievement/bill-details', query: { bill_id: row.id, member_id: row.member_id }})
       }
     }
   }
