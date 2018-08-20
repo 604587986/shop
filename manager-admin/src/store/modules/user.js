@@ -19,7 +19,7 @@ export const mutations = {
   SET_USER: (state, user) => {
     state.user = user
     Storage.setItem('admin_user', JSON.stringify(user))
-    Storage.setItem('admin_uid', user.id)
+    Storage.setItem('admin_uid', user.uid)
   },
   /**
    * 设置访问令牌
