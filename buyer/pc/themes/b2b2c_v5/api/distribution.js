@@ -5,11 +5,22 @@
 import request, { Method } from '@/utils/request'
 
 /**
+ * 生成短链接
+ */
+export function generateShortLink() {
+  return request({
+    url: 'distribution/su/get-short-url',
+    method: Method.POST,
+    needToken: true
+  })
+}
+
+/**
  * 获取我的推荐人
  */
 export function getMyRefereer() {
   return request({
-    url: '/distribution/recommend-me',
+    url: 'distribution/recommend-me',
     method: Method.GET,
     needToken: true
   })
@@ -20,7 +31,7 @@ export function getMyRefereer() {
  */
 export function getRefereeList() {
   return request({
-    url: '/distribution/lower-list',
+    url: 'distribution/lower-list',
     method: Method.GET,
     needToken: true
   })
@@ -32,7 +43,7 @@ export function getRefereeList() {
  */
 export function getSettlementTotal(params) {
   return request({
-    url: '/distribution/bill/member',
+    url: 'distribution/bill/member',
     method: Method.GET,
     needToken: true,
     params
@@ -45,7 +56,7 @@ export function getSettlementTotal(params) {
  */
 export function getRelevantList(params) {
   return request({
-    url: '/distribution/bill/order-list',
+    url: 'distribution/bill/order-list',
     method: Method.GET,
     needToken: true,
     params
@@ -58,7 +69,7 @@ export function getRelevantList(params) {
  */
 export function getRelevantRefundList(params) {
   return request({
-    url: '/distribution/bill/sellback-order-list',
+    url: 'distribution/bill/sellback-order-list',
     method: Method.GET,
     needToken: true,
     params
@@ -71,7 +82,7 @@ export function getRelevantRefundList(params) {
  */
 export function getMyHistoryList(params) {
   return request({
-    url: '/distribution/bill/history',
+    url: 'distribution/bill/history',
     method: Method.GET,
     needToken: true,
     params
@@ -83,7 +94,7 @@ export function getMyHistoryList(params) {
  */
 export function getWithdrawalsParams() {
   return request({
-    url: '/distribution/withdraw/params',
+    url: 'distribution/withdraw/params',
     method: Method.GET,
     needToken: true
   })
@@ -95,7 +106,7 @@ export function getWithdrawalsParams() {
  */
 export function reserveWithdrawalsParams(params) {
   return request({
-    url: '/distribution/withdraw/params',
+    url: 'distribution/withdraw/params',
     method: Method.PUT,
     needToken: true,
     params
@@ -108,7 +119,7 @@ export function reserveWithdrawalsParams(params) {
  */
 export function applyWithdrawals(params) {
   return request({
-    url: '/distribution/withdraw/apply-withdraw',
+    url: 'distribution/withdraw/apply-withdraw',
     method: Method.POST,
     needToken: true,
     params
@@ -121,7 +132,7 @@ export function applyWithdrawals(params) {
  */
 export function getWithdrawalsCanRebate() {
   return request({
-    url: '/distribution/withdraw/can-rebate',
+    url: 'distribution/withdraw/can-rebate',
     method: Method.GET,
     needToken: true
   })
@@ -133,7 +144,7 @@ export function getWithdrawalsCanRebate() {
  */
 export function getWithdrawalsList(params) {
   return request({
-    url: '/distribution/withdraw/apply-history',
+    url: 'distribution/withdraw/apply-history',
     method: Method.GET,
     needToken: true,
     params

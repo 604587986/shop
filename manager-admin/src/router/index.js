@@ -467,7 +467,8 @@ export const asyncRouterMap = [
         name: 'distributor',
         meta: { title: 'distributor' },
         children: [
-          { path: 'distributor-list', component: () => import('@/views/distribution/distributor/distributorList'), name: 'distributorList', meta: { title: 'distributorList' }}
+          { path: 'distributor-list', component: () => import('@/views/distribution/distributor/distributorList'), name: 'distributorList', meta: { title: 'distributorList' }},
+          { path: 'distributor-statistics', component: () => import('@/views/distribution/distributor/distributorStatistics'), name: 'distributorStatistics', meta: { title: 'distributorStatistics' }, hidden: true }
         ]
       },
       {
@@ -478,19 +479,19 @@ export const asyncRouterMap = [
         meta: { title: 'achievement' },
         children: [
           { path: 'achievement-list', component: () => import('@/views/distribution/achievement/achievementList'), name: 'achievementList', meta: { title: 'achievementList' }},
-          { path: 'bill-list', component: () => import('@/views/distribution/achievement/billList'), name: 'billList', meta: { title: 'billList' }, hidden: true }
+          { path: 'bill-list', component: () => import('@/views/distribution/achievement/billList'), name: 'billList', meta: { title: 'billList' }, hidden: true },
+          { path: 'bill-details', component: () => import('@/views/distribution/achievement/billDetails'), name: 'billDetails', meta: { title: 'billDetails' }, hidden: true }
         ]
       },
       {
         path: '/distribution/put-forward',
         component: () => import('@/views/distribution/putforward/index'),
         redirect: '/distribution/put-forward/put-forward-settings',
-        name: 'putforward',
-        meta: { title: 'putforward' },
+        name: 'putforwardManage',
+        meta: { title: 'putforwardManage' },
         children: [
           { path: 'put-forward-settings', component: () => import('@/views/distribution/putforward/putforwardSettings'), name: 'putforwardSettings', meta: { title: 'putforwardSettings' }},
-          { path: 'put-forward-apply', component: () => import('@/views/distribution/putforward/putforwardApply'), name: 'putforwardApply', meta: { title: 'putforwardApply' }},
-          { path: 'put-forward-list', component: () => import('@/views/distribution/putforward/putforwardRecords'), name: 'putforwardRecords', meta: { title: 'putforwardRecords' }}
+          { path: 'put-forward-apply', component: () => import('@/views/distribution/putforward/putforwardApply'), name: 'putforwardApply', meta: { title: 'putforwardApply' }}
         ]
       }
     ]
