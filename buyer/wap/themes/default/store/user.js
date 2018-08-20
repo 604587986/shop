@@ -106,8 +106,8 @@ export const actions = {
   loginAction: ({ commit, dispatch }, params) => {
     return new Promise((resolve, reject) => {
       if (params.login_type === 'quick') {
-        const { mobile, captcha } = params.form
-        API_Passport.loginByMobile(mobile, captcha).then(loginSccess).catch(reject)
+        const { mobile, sms_code } = params.form
+        API_Passport.loginByMobile(mobile, sms_code).then(loginSccess).catch(reject)
       } else {
         params.form.uuid = Storage.getItem('uuid')
         API_Passport.login(params.form).then(loginSccess).catch(reject)
