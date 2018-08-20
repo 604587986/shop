@@ -13,20 +13,20 @@ fi
 
 if [[ "$1" == "copy" ]];then
   echo "拷贝ui-domain..."
-  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-domain
-  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/buyer/wap/themes/default/ui-domain
-  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/manager-seller/ui-domain
-  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/manager-admin/ui-domain
+  cp -a $WEB_PATH/ui-domain $WEB_PATH/buyer/pc/themes/b2b2c_v5
+  cp -a $WEB_PATH/ui-domain $WEB_PATH/buyer/wap/themes/default
+  cp -a $WEB_PATH/ui-domain $WEB_PATH/manager-seller
+  cp -a $WEB_PATH/ui-domain $WEB_PATH/manager-admin
   echo -e "\033[32m拷贝完成\033[0m"
   echo "拷贝ui-components..."
-  cp -a $WEB_PATH/ui-components/* $WEB_PATH/manager-seller/ui-components
-  cp -a $WEB_PATH/ui-components/* $WEB_PATH/manager-admin/ui-components
+  cp -a $WEB_PATH/ui-components $WEB_PATH/manager-seller
+  cp -a $WEB_PATH/ui-components $WEB_PATH/manager-admin
   echo -e "\033[32m拷贝完成\033[0m"
   echo "拷贝ui-utils..."
-  cp -a $WEB_PATH/ui-utils/* $WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-utils
-  cp -a $WEB_PATH/ui-utils/* $WEB_PATH/buyer/wap/themes/default/ui-utils
-  cp -a $WEB_PATH/ui-utils/* $WEB_PATH/manager-seller/ui-utils
-  cp -a $WEB_PATH/ui-utils/* $WEB_PATH/manager-admin/ui-utils
+  cp -a $WEB_PATH/ui-utils $WEB_PATH/buyer/pc/themes/b2b2c_v5
+  cp -a $WEB_PATH/ui-utils $WEB_PATH/buyer/wap/themes/default
+  cp -a $WEB_PATH/ui-utils $WEB_PATH/manager-seller
+  cp -a $WEB_PATH/ui-utils $WEB_PATH/manager-admin
   echo -e "\033[32m拷贝完成\033[0m"
 fi
 
