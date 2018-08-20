@@ -39,16 +39,16 @@ service.interceptors.request.use(config => {
   }
 
   // uuid
-  const uuid = Storage.getItem('adminUuid')
+  const uuid = Storage.getItem('admin_uuid')
   config.headers['uuid'] = uuid
 
   /** 设置令牌 */
-  let accessToken = Storage.getItem('adminAccessToken')
+  let accessToken = Storage.getItem('admin_access_token')
   if (accessToken) {
     // 如果前台为开发环境，后台API，则需要替换为下面的代码
     // process.env.NODE_ENV === 'development', 'production'
-    if (process.env.NODE_ENV === 'production') {
-      const uid = Storage.getItem('adminUid')
+    if (process.env.NODE_ENV === 'development') {
+      const uid = Storage.getItem('admin_uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
       const sign = md5(uid + nonce + timestamp + accessToken)
@@ -106,7 +106,7 @@ function fedLogOut() {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    store.dispatch('fedLogOut').then(() => {
+    store.dispatch('fedLogoutAction').then(() => {
       location.reload()
     })
   }).catch(() => {})

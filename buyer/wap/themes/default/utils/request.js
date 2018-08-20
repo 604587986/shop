@@ -25,7 +25,7 @@ service.interceptors.request.use(config => {
   if (is_put_post && is_json) {
     config.data = JSON.stringify(config.data)
   }
-  if (is_put_post && !is_file) {
+  if (is_put_post && !is_file && !is_json) {
     config.data = qs.stringify(config.data, { arrayFormat: 'repeat' })
   }
   /** 配置全屏加载 */
@@ -43,7 +43,7 @@ service.interceptors.request.use(config => {
   }
   
   // 获取访问Token
-  let accessToken = Storage.getItem('accessToken')
+  let accessToken = Storage.getItem('access_token')
   if (accessToken && config.needToken) {
     // 如果前台为开发环境，后台API，则需要替换为下面的代码
     // process.env.NODE_ENV === 'development', 'production'

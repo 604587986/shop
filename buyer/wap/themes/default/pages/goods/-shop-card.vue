@@ -50,7 +50,7 @@
         this.shopBaseInfo = response
       })
       // 如果用户已登录，获取是否已收藏此店铺
-      Storage.getItem('refreshToken') && API_Members.getShopIsCollect(this.shopId).then(response => {
+      Storage.getItem('refresh_token') && API_Members.getShopIsCollect(this.shopId).then(response => {
         this.collected = response.message
       })
     },

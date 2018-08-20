@@ -65,6 +65,7 @@ export function getHotKeywords(num = 7) {
 export function getFloorData(client_type = 'PC', page_type = 'INDEX') {
   return request({
     url: `${urlPrefix}pages/${client_type}/${page_type}`,
-    method: 'get'
+    method: 'get',
+    loading: false
   })
 }

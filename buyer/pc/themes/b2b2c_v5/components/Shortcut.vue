@@ -14,7 +14,7 @@
       <ul class="links">
         <li>
           <div class="dt">
-            <a :href="MixinDomain.seller">商家中心</a>
+            <a href="/shop/apply">商家入驻</a>
           </div>
         </li>
         <li class="spacer"></li>
@@ -53,7 +53,7 @@
           <div class="dd dorpdown-layer">
             <dl>
               <dd><nuxt-link to="/">商城首页</nuxt-link></dd>
-              <dd><a :href="MixinDomain.seller">商家中心</a></dd>
+              <dd><a href="/shop/apply">商家入驻</a></dd>
               <dd><nuxt-link to="/member">个人中心</nuxt-link></dd>
             </dl>
           </div>
@@ -107,7 +107,7 @@
     },
     mounted() {
       // 如果有刷新Token，重新获取用户信息【第一次访问和用户刷新页面，会触发】
-      if (Storage.getItem('refreshToken')) {
+      if (Storage.getItem('refresh_token')) {
         this.getUserData()
       }
       this.GET_UnreadMessage()
@@ -115,17 +115,19 @@
     methods: {
       ...mapActions({
         logout: 'user/logoutAction',
-        getUserData: 'user/getUserDataAction'
+        getUserData: 'user/getUserDataAction',
+        cleanCartStore: 'cart/cleanCartStoreAction'
       }),
       /** 账户登出 */
       handleLogout() {
         this.logout().then(() => {
+          this.cleanCartStore()
           this.$router.push({ path: '/' })
         })
       },
       /** 获取未读消息 */
       GET_UnreadMessage() {
-        if (!Storage.getItem('refreshToken')) return
+        if (!Storage.getItem('refresh_token')) return
         API_Message.getMesssagesAsUnread().then(response => {
           const { data_total } = response
           this.message_total = data_total > 99 ? '99+' : data_total

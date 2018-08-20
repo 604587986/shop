@@ -130,7 +130,21 @@ export default {
     articleManage: '文章管理',
     articleCategory: '文章分类',
     articleList: '文章列表',
-    addArticle: '添加文章'
+    addArticle: '添加文章',
+
+    distribution: '分销管理',
+    extractTpl: '提成模板',
+    perAccomplishmentTpl: '个人提成模板',
+    upgradeLogs: '升级日志',
+    distributor: '分销商管理',
+    distributorList: '个人分销商',
+    achievement: '业绩管理',
+    achievementList: '业绩列表',
+    billList: '账单列表',
+    putforward: '提现',
+    putforwardSettings: '提现设置',
+    putforwardApply: '提现申请',
+    putforwardRecords: '提现记录'
   },
   login: {
     logIn: '登录',

@@ -30,7 +30,7 @@
             </el-form-item>
             <el-form-item label="短信验证码：" prop="sms_code">
               <el-input v-model="validMobileForm.sms_code" :maxlength="6">
-                <en-count-down-btn :time="60" :start="sendValidMobileSms" slot="append"/>
+                <en-count-down-btn :time="60" :start="sendValidMobileSms" @end="getValidImgUrl" slot="append"/>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -151,6 +151,7 @@
               this.step = 2
               this.getValidImgUrl()
             }).catch(error => {
+              this.getValidImgUrl()
               this.accountError = error.response.data.message
             })
           } else {
@@ -171,7 +172,10 @@
               API_Passport.sendFindPasswordSms(uuid, img_code).then(() => {
                 this.$message.success('发送成功，请注意查收！')
                 resolve()
-              }).catch(reject)
+              }).catch(() => {
+                this.getValidImgUrl()
+                reject()
+              })
             }
           })
         })
@@ -184,7 +188,7 @@
             API_Passport.validFindPasswordSms(uuid, sms_code).then(() => {
               this.step = 3
               this.getValidImgUrl()
-            })
+            }).catch(this.getValidImgUrl)
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -202,7 +206,7 @@
               setTimeout(() => {
                 this.$router.push(`/login${this.MixinForward}`)
               }, 200)
-            })
+            }).catch(this.getValidImgUrl)
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false

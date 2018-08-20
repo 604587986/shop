@@ -18,9 +18,10 @@
     <template v-else>
       <div class="order-table">
         <div class="order-table-thead">
-          <span style="width: 450px">商品名称</span>
+          <span style="width: 420px">商品名称</span>
           <span style="width: 80px">单价</span>
           <span style="width: 80px">数量</span>
+          <span style="width: 60px"></span>
           <span style="width: 150px">订单金额</span>
           <span style="width: 100px">订单状态</span>
           <span style="width: 110px">订单操作</span>
@@ -49,8 +50,9 @@
                   </div>
                   <div class="sku-price">{{ sku.purchase_price | unitPrice('￥') }}</div>
                   <div class="sku-num">x {{ sku.num }}</div>
-                  <div v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" class="after-sale-btn">
-                    <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
+                  <div class="after-sale-btn">
+                    <nuxt-link v-if="sku.goods_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
+                    <nuxt-link v-if="sku.snapshot_id" :to="'/goods/snapshot?id=' + sku.snapshot_id">交易快照</nuxt-link>
                   </div>
                 </div>
               </div>
@@ -62,7 +64,7 @@
               <div class="order-item-status">{{ order.order_status_text }}</div>
               <div class="order-item-operate">
                 <a v-if="order.order_operate_allowable_vo.allow_cancel" href="javascript:;" @click="handleCancelOrder(order.sn)">取消订单</a>
-                <nuxt-link v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :to="'./after-sale/apply?order_sn=' + order.sn">取消订单</nuxt-link>
+                <nuxt-link v-if="order.order_operate_allowable_vo.allow_service_cancel" :to="'./after-sale/apply?order_sn=' + order.sn">取消订单</nuxt-link>
                 <a v-if="order.order_operate_allowable_vo.allow_rog" href="javascript:;" @click="handleRogOrder(order.sn)">确认收货</a>
                 <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/checkout/cashier?order_sn=' + order.sn">订单付款</nuxt-link>
                 <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/member/comments?order_sn=' + order.sn">去评论</nuxt-link>

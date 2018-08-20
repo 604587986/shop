@@ -3,6 +3,7 @@
     <en-table-layout
       toolbar
       pagination
+      :loading="loading"
       :tableData="tableData">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">

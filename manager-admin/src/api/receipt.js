@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getHistoryReceiptList(params) {
   return request({
-    url: 'admin/trade/receipts',
+    url: 'admin/members/receipts',
     method: 'get',
     loading: false,
     params
@@ -23,7 +23,7 @@ export function getHistoryReceiptList(params) {
  */
 export function getHistoryReceiptDetail(history_id) {
   return request({
-    url: `admin/trade/receipts/${history_id}/detail`,
+    url: `admin/members/receipts/${history_id}/detail`,
     method: 'get'
   })
 }

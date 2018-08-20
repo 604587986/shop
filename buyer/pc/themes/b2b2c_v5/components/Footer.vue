@@ -5,36 +5,36 @@
       <div class="w">
         <dl class="fore1">
           <dt>购物指南</dt>
-          <dd><a target="_blank" href="/help/102">网站使用条款</a></dd>
-          <dd><a target="_blank" href="/help/103">购物流程</a></dd>
-          <dd><a target="_blank" href="/help/104">常见问题</a></dd>
+          <dd><a target="_blank" href="/help/38">网站使用条款</a></dd>
+          <dd><a target="_blank" href="/help/40">购物流程</a></dd>
+          <dd><a target="_blank" href="/help/39">常见问题</a></dd>
         </dl>
 
         <dl class="fore2">
           <dt>配送方式</dt>
-          <dd><a target="_blank" href="/help/106">配送方式</a></dd>
-          <dd><a target="_blank" href="/help/105">验货</a></dd>
+          <dd><a target="_blank" href="/help/42">配送方式</a></dd>
+          <dd><a target="_blank" href="/help/41">验货</a></dd>
         </dl>
 
         <dl class="fore3">
           <dt>支付方式</dt>
-          <dd><a target="_blank" href="/help/108">在线支付</a></dd>
-          <dd><a target="_blank" href="/help/109">货到付款</a></dd>
-          <dd><a target="_blank" href="/help/107">索取发票</a></dd>
+          <dd><a target="_blank" href="/help/43">在线支付</a></dd>
+          <dd><a target="_blank" href="/help/44">货到付款</a></dd>
+          <dd><a target="_blank" href="/help/37">索取发票</a></dd>
         </dl>
 
         <dl class="fore4">
           <dt>售后服务</dt>
-          <dd><a target="_blank" href="/help/110">售后服务</a></dd>
-          <dd><a target="_blank" href="/help/111">免责条款</a></dd>
-          <dd><a target="_blank" href="/help/112">商品退换货保障</a></dd>
+          <dd><a target="_blank" href="/help/34">售后服务</a></dd>
+          <dd><a target="_blank" href="/help/35">免责条款</a></dd>
+          <dd><a target="_blank" href="/help/36">商品退换货保障</a></dd>
         </dl>
 
         <dl class="fore5">
           <dt>关于网站</dt>
-          <dd><a target="_blank" href="/help/98">关于我们</a></dd>
-          <dd><a target="_blank" href="/help/99">联系我们</a></dd>
-          <dd><a target="_blank" href="/help/101">业务合作</a></dd>
+          <dd><a target="_blank" href="/help/31">关于我们</a></dd>
+          <dd><a target="_blank" href="/help/32">联系我们</a></dd>
+          <dd><a target="_blank" href="/help/33">业务合作</a></dd>
         </dl>
         <span class="clr"></span>
       </div>
@@ -43,10 +43,10 @@
       <div class="w">
         <a href="/">首页</a>
         | <nuxt-link to="/member">会员中心</nuxt-link>
-        | <a :href="MixinDomain.seller" target="_blank">商家中心</a>
-        | <a href="/help/100">关于网站</a>
-        | <a href="/help/98">关于我们</a>
-        | <a href="/help/99">联系我们</a>
+        | <a href="/shop/apply" target="_blank">商家入驻</a>
+        | <a href="/help/45">关于网站</a>
+        | <a href="/help/33">关于我们</a>
+        | <a href="/help/31">联系我们</a>
         | <a href="http://www.javamall.com.cn" title="JAVA B2B2C网店系统">网店系统</a>
       </div>
     </div>

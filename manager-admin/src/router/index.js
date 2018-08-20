@@ -441,6 +441,60 @@ export const asyncRouterMap = [
       }
     ]
   },
+  // 分销
+  {
+    path: '/distribution',
+    component: Layout,
+    redirect: '/distribution/extract-tpl',
+    name: 'distribution',
+    meta: { title: 'distribution', icon: 'development-manage' },
+    children: [
+      {
+        path: '/distribution/extract-tpl',
+        component: () => import('@/views/distribution/extractTpl/index'),
+        redirect: '/distribution/extract-tpl/upgrade-logs',
+        name: 'extractTpl',
+        meta: { title: 'extractTpl' },
+        children: [
+          { path: 'per-accomplishment-tpl', component: () => import('@/views/distribution/extractTpl/perAccomplishmentTpl'), name: 'perAccomplishmentTpl', meta: { title: 'perAccomplishmentTpl' }},
+          { path: 'upgrade-logs', component: () => import('@/views/distribution/extractTpl/upgradeLogs'), name: 'upgradeLogs', meta: { title: 'upgradeLogs' }}
+        ]
+      },
+      {
+        path: '/distribution/distributor',
+        component: () => import('@/views/distribution/distributor/index'),
+        redirect: '/distribution/distributor/distributor-list',
+        name: 'distributor',
+        meta: { title: 'distributor' },
+        children: [
+          { path: 'distributor-list', component: () => import('@/views/distribution/distributor/distributorList'), name: 'distributorList', meta: { title: 'distributorList' }}
+        ]
+      },
+      {
+        path: '/distribution/achievement',
+        component: () => import('@/views/distribution/achievement/index'),
+        redirect: '/distribution/achievement/achievement-list',
+        name: 'achievement',
+        meta: { title: 'achievement' },
+        children: [
+          { path: 'achievement-list', component: () => import('@/views/distribution/achievement/achievementList'), name: 'achievementList', meta: { title: 'achievementList' }},
+          { path: 'bill-list', component: () => import('@/views/distribution/achievement/billList'), name: 'billList', meta: { title: 'billList' }, hidden: true }
+        ]
+      },
+      {
+        path: '/distribution/put-forward',
+        component: () => import('@/views/distribution/putforward/index'),
+        redirect: '/distribution/put-forward/put-forward-settings',
+        name: 'putforward',
+        meta: { title: 'putforward' },
+        children: [
+          { path: 'put-forward-settings', component: () => import('@/views/distribution/putforward/putforwardSettings'), name: 'putforwardSettings', meta: { title: 'putforwardSettings' }},
+          { path: 'put-forward-apply', component: () => import('@/views/distribution/putforward/putforwardApply'), name: 'putforwardApply', meta: { title: 'putforwardApply' }},
+          { path: 'put-forward-list', component: () => import('@/views/distribution/putforward/putforwardRecords'), name: 'putforwardRecords', meta: { title: 'putforwardRecords' }}
+        ]
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

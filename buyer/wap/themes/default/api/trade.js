@@ -49,6 +49,7 @@ export function buyNow(sku_id, num = 1, activity_id) {
   return request({
     url: 'trade/carts/buy',
     method: Method.POST,
+    needToken: true,
     params: {
       sku_id,
       num,
@@ -331,6 +332,7 @@ export function getExpress(id, num) {
   return request({
     url: 'express',
     method: Method.GET,
+    needToken: true,
     params: {
       id,
       num
@@ -346,7 +348,8 @@ export function getExpress(id, num) {
 export function useCoupon(shop_id, coupon_id) {
   return request({
     url: `trade/${shop_id}/seller/${coupon_id}/coupon`,
-    method: Method.POST
+    method: Method.POST,
+    needToken: true
   })
 }
 
@@ -357,6 +360,46 @@ export function useCoupon(shop_id, coupon_id) {
 export function getOrderFlow(order_sn) {
   return request({
     url: `trade/orders/${order_sn}/flow`,
-    method: Method.GET
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 获取订单交易快照数据
+ * @param id
+ */
+export function getSnapshot(id) {
+  return request({
+    url: `trade/snapshots/${id}`,
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 获取商品销售记录
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsSales(goods_id, params) {
+  return request({
+    url: `trade/goods/${goods_id}/sales`,
+    method: Method.GET,
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 更换参与活动
+ * @param params
+ */
+export function changeActivity(params) {
+  return request({
+    url: 'trade/carts/cart/promotion',
+    method: Method.POST,
+    needToken: true,
+    data: params
   })
 }

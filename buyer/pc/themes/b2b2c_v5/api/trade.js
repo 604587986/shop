@@ -364,3 +364,42 @@ export function getOrderFlow(order_sn) {
     needToken: true
   })
 }
+
+/**
+ * 获取订单交易快照数据
+ * @param id
+ */
+export function getSnapshot(id) {
+  return request({
+    url: `trade/snapshots/${id}`,
+    method: Method.GET,
+    needToken: true
+  })
+}
+
+/**
+ * 获取商品销售记录
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsSales(goods_id, params) {
+  return request({
+    url: `trade/goods/${goods_id}/sales`,
+    method: Method.GET,
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 更换参与活动
+ * @param params
+ */
+export function changeActivity(params) {
+  return request({
+    url: 'trade/carts/cart/promotion',
+    method: Method.POST,
+    needToken: true,
+    data: params
+  })
+}

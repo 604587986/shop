@@ -23,7 +23,7 @@
           </el-form-item>
           <el-form-item label="短信验证码：" prop="sms_code" class="sms-code">
             <el-input v-model="validMobileForm.sms_code" placeholder="请输入短信验证码" clearable :maxlength="6">
-              <en-count-down-btn :time="60" :start="sendValidMobileSms" slot="append"/>
+              <en-count-down-btn :time="60" :start="sendValidMobileSms" @end="getValidImgUrl" slot="append"/>
             </el-input>
           </el-form-item>
           <el-form-item label="">
@@ -43,7 +43,7 @@
           </el-form-item>
           <el-form-item label="请输入短信验证码：" prop="sms_code">
             <el-input v-model="changeMobileForm.sms_code" placeholder="请输入短信验证码" auto-complete="off">
-              <en-count-down-btn :time="60" :start="sendChangeMobileSms" slot="append"/>
+              <en-count-down-btn :time="60" :start="sendChangeMobileSms" @end="getValidImgUrl" slot="append"/>
             </el-input>
           </el-form-item>
           <el-form-item label="">
@@ -135,7 +135,10 @@
               API_Safe.sendMobileSms(this.uuid, img_code).then(() => {
                 this.$message.success('发送成功，请注意查收！')
                 resolve()
-              }).catch(reject)
+              }).catch(() => {
+                this.getValidImgUrl()
+                reject()
+              })
             }
           })
         })
@@ -148,7 +151,7 @@
             API_Safe.validChangeMobileSms(sms_code).then(() => {
               this.step = 2
               this.getValidImgUrl()
-            })
+            }).catch(this.getValidImgUrl)
           } else {
             this.$message.error('表单填写有误，请检查！')
             return false
@@ -170,7 +173,10 @@
                 API_Safe.sendBindMobileSms(mobile, img_code, uuid).then(() => {
                   this.$message.success('验证码发送成功，请注意查收！')
                   resolve()
-                }).catch(reject)
+                }).catch(() => {
+                  this.getValidImgUrl()
+                  reject()
+                })
               }
             })
           })
@@ -185,7 +191,7 @@
               this.$message.success('更换成功！')
               this.$store.dispatch('user/getUserDataAction')
               this.step = 3
-            })
+            }).catch(this.getValidImgUrl)
           } else {
             this.$message.error('请输入手机验证码！')
             return false

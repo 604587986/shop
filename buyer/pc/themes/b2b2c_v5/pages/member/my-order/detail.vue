@@ -157,7 +157,6 @@
       handleViewExpress() {
         const { logi_id, ship_no } = this.order
         API_Trade.getExpress(logi_id, ship_no).then(response => {
-          response.data = response.data.reverse()
           this.express = response
         })
       },

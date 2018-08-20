@@ -5,7 +5,6 @@ import * as API_Goods from '@/api/goods'
 import uuidv1 from 'uuid/v1'
 import Cookie from 'cookie'
 import Storage from '@/utils/storage'
-import { domain } from "@/ui-domain";
 
 /** state */
 export const state = () => ({
@@ -30,7 +29,7 @@ export const mutations = {
    */
   [types.SET_UUID](state, uuid) {
     state.uuid = uuid
-    process.client && Storage.setItem('uuid', uuid, { domain: domain.cookie })
+    process.client && Storage.setItem('uuid', uuid)
   },
   /**
    * 设置站点cookie
@@ -39,7 +38,7 @@ export const mutations = {
    */
   [types.SET_SITE_DATA](state, data) {
     state.site = data
-    process.client && Storage.setItem('site', global.JSON.stringify(data), { domain: domain.cookie })
+    process.client && Storage.setItem('site', global.JSON.stringify(data))
   },
   /**
    * 设置分类数据
@@ -94,7 +93,7 @@ export const actions = {
      */
     if (!_uuid) {
       _uuid = uuidv1()
-      res.setHeader('Set-Cookie', [`uuid=${_uuid};Domain=${domain.cookie};Path=/`])
+      res.setHeader('Set-Cookie', [`uuid=${_uuid};Path=/`])
     }
     commit('SET_UUID', _uuid)
     // 获取公共数据
@@ -106,24 +105,9 @@ export const actions = {
    * @returns {Promise<void>}
    */
   async getCommonDataAction({ commit }) {
-    const commons = await Promise.all([
-      // 站点信息
-      API_Common.getSiteData(),
-      // 导航栏
-      API_Home.getSiteMenu(),
-      // 分类数据
-      API_Home.getCategory(),
-      // 热门关键字
-      API_Home.getHotKeywords()
-    ])
     // 站点信息
-    commit(types.SET_SITE_DATA, commons[0])
-    // 导航栏
-    commit(types.SET_NAV_DATA, commons[1])
-    // 分类数据
-    commit(types.SET_CATEGORY_DATA, commons[2])
-    // 热门关键字
-    commit(types.SET_HOT_KEYWORDS, commons[3])
+    const site = await API_Common.getSiteData()
+    commit(types.SET_SITE_DATA, site)
   }
 }
 

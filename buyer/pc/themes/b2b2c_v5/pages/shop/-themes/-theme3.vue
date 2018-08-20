@@ -9,7 +9,7 @@
           <div class="item-header">
             <h2>店铺热卖</h2>
             <span>HOT-GOODS</span>
-            <nuxt-link to="./goods-list" class="more">更多&gt;&gt;</nuxt-link>
+            <nuxt-link :to="'./goods-list?shop_id=' + shop_id" class="more">更多&gt;&gt;</nuxt-link>
           </div>
           <ul>
             <template v-for="(goods, index) in hotGoods">
@@ -34,7 +34,7 @@
           <div class="item-header">
             <h2>店铺新品</h2>
             <span>SHOP-NEW</span>
-            <nuxt-link to="./goods-list" class="more">更多&gt;&gt;</nuxt-link>
+            <nuxt-link :to="'./goods-list?shop_id=' + shop_id" class="more">更多&gt;&gt;</nuxt-link>
           </div>
           <ul>
             <template v-for="(goods, index) in newGoods">
@@ -59,7 +59,7 @@
           <div class="item-header">
             <h2>店铺推荐</h2>
             <span>SHOP-RECOMMEND</span>
-            <nuxt-link to="./goods-list" class="more">更多&gt;&gt;</nuxt-link>
+            <nuxt-link :to="'./goods-list?shop_id=' + shop_id" class="more">更多&gt;&gt;</nuxt-link>
           </div>
           <ul>
             <template v-for="(goods, index) in recGoods">

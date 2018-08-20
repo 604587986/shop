@@ -156,8 +156,10 @@ input[type="number"]{
 }
 
 /** vant样式覆盖 */
-.van-icon.van-nav-bar__arrow {
-  color: $color-van-nav-bar-back !important;
+.van-nav-bar {
+  .van-nav-bar__title, .van-nav-bar__text, .van-icon {
+    color: $color-van-nav-bar-icon !important;
+  }
 }
 
 /** 大按钮样式 */
@@ -166,5 +168,10 @@ input[type="number"]{
   .van-button--large {
     background-color: $color-main;
     color: #fff;
+    &.van-button--disabled {
+      color: #999;
+      background-color: #e8e8e8;
+      border: 1px solid #e5e5e5;
+    }
   }
 }

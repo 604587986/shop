@@ -141,6 +141,9 @@
       align-items: center;
     }
   }
+  .profile-container {
+    padding-top: 46px;
+  }
   .face-cell {
     padding-top: 5px;
     padding-bottom: 5px;

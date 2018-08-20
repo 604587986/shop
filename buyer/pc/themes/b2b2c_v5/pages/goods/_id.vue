@@ -51,6 +51,7 @@
           </div>
         </div>
       </div>
+      <goods-distribution v-if="show_dis"/>
     </template>
   </div>
 </template>
@@ -58,6 +59,7 @@
 <script>
   import Vue from 'vue'
   import { mapGetters } from 'vuex'
+  import * as API_Common from '@/api/common'
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
@@ -98,6 +100,8 @@
     components: GoodsComponents,
     data() {
       return {
+        // 显示分销分享按钮
+        show_dis: process.env.distribution,
         goods: '',
         /** 规格图片 */
         specImage: '',
@@ -116,13 +120,15 @@
       // 如果商品可以查看
       if (this.canView) {
         // 如果用户已登录，加载收藏状态
-        if (Storage.getItem('refreshToken')) {
+        if (Storage.getItem('refresh_token')) {
           API_Members.getGoodsIsCollect(goods_id).then(response => {
             this.collected = response.message
           })
         }
         // 浏览量+1
         API_Goods.visitGoods(goods_id)
+        // 记录浏览量统计【用于统计】
+        API_Common.recordViews(window.location.href)
         // 获取促销信息
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
         // 加载百度分享代码
@@ -132,7 +138,7 @@
     methods: {
       /** 收藏商品 */
       handleCollectionGoods() {
-        if (!Storage.getItem('refreshToken')) {
+        if (!Storage.getItem('refresh_token')) {
           this.$message.error('您还未登录，不能收藏商品！')
           return false
         }

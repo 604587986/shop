@@ -14,7 +14,8 @@
       <div v-show="type === 'money'">
         <el-form :model="returnMoneyForm" :rules="returnMoneyRules" ref="returnMoneyForm" label-width="120px">
           <el-form-item label="退款方式：" prop="account_type">
-            <el-select v-model="returnMoneyForm.account_type" size="small" placeholder="请选择退款方式">
+            <el-select v-model="returnMoneyForm.account_type" :disabled="original_way" size="small" placeholder="请选择退款方式">
+              <el-option v-if="original_way" label="原路退回" value=""></el-option>
               <el-option label="支付宝" value="ALIPAY"></el-option>
               <el-option label="微信" value="WEIXINPAY"></el-option>
               <el-option label="银行转账" value="BANKTRANSFER"></el-option>
@@ -35,7 +36,7 @@
             </el-form-item>
           </div>
           <el-form-item v-else label="退款账号：" prop="return_account">
-            <el-input v-model="returnMoneyForm.return_account" size="small" :maxlength="180" placeholder="请输入退款账号"/>
+            <el-input v-model="returnMoneyForm.return_account" :disabled="original_way" size="small" :maxlength="180" placeholder="请输入退款账号"/>
           </el-form-item>
           <el-form-item label="退款原因：" prop="refund_reason">
             <el-select v-model="returnMoneyForm.refund_reason" size="small" placeholder="请选择退款原因">
@@ -78,13 +79,14 @@
               <dl><dt>收货地址：</dt><dd>北京海淀区三环以内-asdfasdf-adsf</dd></dl>
               <dl class="top-line"><dt>订单编号：</dt><dd>{{ this.order_sn }}</dd></dl>
               <dl><dt>付款方式：</dt><dd>{{ this.order.payment_type === 'ONLINE' ? `在线支付 ${this.order.payment_method_name || ''}` : '货到付款' }}</dd></dl>
-              <dl><dt>已付款金额：</dt><dd><span class="price">￥{{ this.order.order_price | unitPrice }}</span>（整单）</dd></dl>
+              <dl><dt>已付款金额：</dt><dd><span class="price">￥{{ this.order.order_price | unitPrice }}</span></dd></dl>
               <dl><dt>下单时间：</dt><dd>{{ this.order.create_time | unixToDate }}</dd></dl>
             </div>
           </div>
           <el-form :model="returnGoodsForm" :rules="returnGoodsRules" ref="returnGoodsForm" label-width="120px" style="margin-top: 10px;margin-left: 10px">
             <el-form-item label="退款方式：" prop="account_type">
-              <el-select v-model="returnGoodsForm.account_type" size="small" placeholder="请选择退款方式">
+              <el-select v-model="returnGoodsForm.account_type" :disabled="original_way" size="small" placeholder="请选择退款方式">
+                <el-option v-if="original_way" label="原路退回" value=""></el-option>
                 <el-option label="支付宝" value="ALIPAY"></el-option>
                 <el-option label="微信" value="WEIXINPAY"></el-option>
                 <el-option label="银行转账" value="BANKTRANSFER"></el-option>
@@ -105,7 +107,7 @@
               </el-form-item>
             </div>
             <el-form-item v-else label="退款账号：" prop="return_account">
-              <el-input v-model="returnGoodsForm.return_account" size="small" :maxlength="180" placeholder="请输入退款账号"/>
+              <el-input v-model="returnGoodsForm.return_account" :disabled="original_way" size="small" :maxlength="180" placeholder="请输入退款账号"/>
             </el-form-item>
             <el-form-item label="退货原因：" prop="refund_reason">
               <el-select v-model="returnGoodsForm.refund_reason" size="small" placeholder="请选择退款原因">
@@ -172,12 +174,13 @@
         type: this.$route.query.sku_id ? 'money' : 'money',
         // 申请退款 表单
         returnMoneyForm: {
+          account_type: '',
           order_sn: this.$route.query.order_sn
         },
         // 申请退款 表单规则
         returnMoneyRules: {
           // 退款方式
-          account_type: [this.MixinRequired('请选择退款方式！', 'change')],
+          account_type: [{ required: true, message: '请选择退款方式！', trigger: 'change' }],
           // 退款账号
           return_account: [{ required: true, message: '请输入退款账号', trigger: 'blur' }],
           // 银行名称
@@ -193,6 +196,7 @@
         },
         // 申请退货 表单
         returnGoodsForm: {
+          account_type: '',
           order_sn: this.$route.query.order_sn,
           return_num: 1
         },
@@ -219,6 +223,8 @@
         maxReturnNum: 1,
         // 是否为取消订单模式
         isCancel: !(!!this.$route.query.sku_id),
+        // 是否为原路返回方式
+        original_way: false,
         ...this.$route.query
       }
     },
@@ -229,6 +235,15 @@
         this.skuList = response.sku_list
         this.returnMoneyForm.return_money = response.return_money
         this.returnGoodsForm.return_money = response.return_money
+        if (response.original_way === 'yes') {
+          this.returnMoneyForm.account_type = ''
+          this.returnGoodsForm.account_type = ''
+          this.returnMoneyRules.account_type[0].required = false
+          this.returnMoneyRules.return_account[0].required = false
+          this.returnGoodsRules.account_type[0].required = false
+          this.returnGoodsRules.return_account[0].required = false
+          this.original_way = true
+        }
         if (response.sku_list && response.sku_list.length) {
           this.returnGoodsForm.return_num = response.sku_list[0].num
           this.maxReturnNum = response.sku_list[0].num
@@ -289,7 +304,7 @@
       /** 申请售后成功 */
       handleApplySuccess() {
         this.$message.success('申请成功！')
-        this.$router.go(-1)
+        this.$router.back()
       }
     }
   }

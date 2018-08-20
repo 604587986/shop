@@ -63,10 +63,9 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   import * as API_Home from '@/api/home'
-  import * as API_Goods from '@/api/goods'
   import Storage from '@/utils/storage'
+
   export default {
     name: 'Search',
     props: ['show'],
@@ -89,7 +88,7 @@
         document.querySelector('body').addEventListener('click', this.handleCloseSearcyType);
       })
       // 初始化搜索历史
-      const searchHistory = Storage.getItem('searchHistory')
+      const searchHistory = Storage.getItem('search_history')
       if(searchHistory) this.searchHistory = JSON.parse(searchHistory)
     },
     methods: {
@@ -117,7 +116,7 @@
           }
           if (keyword.trim()) searchHistory.splice(0, 0, keyword)
           this.$set(this, 'searchHistory', searchHistory)
-          Storage.setItem('searchHistory', JSON.stringify(searchHistory))
+          Storage.setItem('search_history', JSON.stringify(searchHistory))
           window.location.href = keyword ? `/goods?keyword=${keyword}` : '/goods'
         } else {
           window.location.href = `/shop?name=${keyword}`
@@ -126,13 +125,13 @@
       /** 删除搜索历史 */
       handleDeleteHistory(index) {
         this.searchHistory.splice(index, 1)
-        Storage.setItem('searchHistory', JSON.stringify(this.searchHistory))
+        Storage.setItem('search_history', JSON.stringify(this.searchHistory))
       },
       /** 清空搜索历史 */
       handleClearHistory() {
         this.$confirm('确定要清空搜索历史吗？', () => {
           this.$set(this, 'searchHistory', [])
-          Storage.removeItem('searchHistory')
+          Storage.removeItem('search_history')
         })
       }
     },

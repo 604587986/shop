@@ -7,7 +7,8 @@
         </nuxt-link>
         <div class="user-info">
           <p>{{ user.uname }}</p>
-          <p>联系方式：{{ user.mobile | secrecyMobile }} </p>
+          <p v-if="user.mobile">联系方式：{{ user.mobile | secrecyMobile }} </p>
+          <p v-else>联系方式：无 </p>
         </div>
       </div>
       <nuxt-link to="/member/my-order" class="other-item">
@@ -124,7 +125,7 @@
               <div class="shop-info">
                 <img :src="shop.logo" :alt="shop.shop_name" :title="shop.shop_name">
                 <div class="shop-btns">
-                  <a href="javascript:;">进入店铺</a>
+                  <nuxt-link :to="'/shop/' + shop.shop_id">进入店铺</nuxt-link>
                   <a href="javascript:;" @click="handleDeleteShopCollection(shop)">取消关注</a>
                 </div>
               </div>

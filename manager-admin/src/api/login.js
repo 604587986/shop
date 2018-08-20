@@ -23,7 +23,7 @@ export function login(params) {
  */
 export function logout() {
   return request({
-    url: `admin/systems/admin-users/logout?uid=${Storage.getItem('adminUid')}`,
+    url: `admin/systems/admin-users/logout?uid=${Storage.getItem('admin_uid')}`,
     method: 'post'
   })
 }

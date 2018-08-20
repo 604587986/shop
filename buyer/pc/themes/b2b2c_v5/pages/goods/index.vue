@@ -47,6 +47,20 @@
             </div>
           </dd>
         </dl>
+        <template v-if="selectorData.prop && selectorData.prop.length">
+          <dl v-for="(prop, index) in selectorData.prop" :key="index">
+            <dt>{{ prop.key }}:</dt>
+            <dd>
+              <div class="small-list">
+                <a
+                  v-for="(prop_val, index) in prop.value"
+                  :key="index"
+                  :href="'/goods?prop=' + prop_val.name + '_' +prop_val.value"
+                >{{ prop_val.value }}</a>
+              </div>
+            </dd>
+          </dl>
+        </template>
       </div>
       <div class="gl-sku-box">
         <div class="gl-sku-filter">
@@ -214,6 +228,15 @@
         })
         const { prices } = this
         if (prices[0] || prices[1]) {
+          const _price = params.price
+          if (_price) {
+            const _prices = params.price.split('_')
+            if (_prices[0] !== prices[0] || _prices[1] !== prices[1]) {
+              params.page_no = 1
+            }
+          } else {
+            params.page_no = 1
+          }
           params.price = prices.join('_')
         } else {
           delete params.price

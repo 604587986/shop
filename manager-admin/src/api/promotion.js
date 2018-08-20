@@ -33,7 +33,7 @@ export function addExchangeCat(params) {
  */
 export function getExchangeCatsDetail(id) {
   return request({
-    url: `promotion/exchange-cats/${id}`,
+    url: `admin/promotion/exchange-cats/${id}`,
     method: 'get'
   })
 }
@@ -45,7 +45,7 @@ export function getExchangeCatsDetail(id) {
  */
 export function editExhcangeCat(id, params) {
   return request({
-    url: `promotion/exchange-cats/${id}`,
+    url: `admin/promotion/exchange-cats/${id}`,
     method: 'put',
     data: params
   })
@@ -57,7 +57,7 @@ export function editExhcangeCat(id, params) {
  */
 export function deleteExchangeCat(id) {
   return request({
-    url: `promotion/exchange-cats/${id}`,
+    url: `admin/promotion/exchange-cats/${id}`,
     method: 'delete'
   })
 }
@@ -107,7 +107,7 @@ export function addGrouBuyActivity(params) {
  */
 export function getGroupBuyGoods(params) {
   return request({
-    url: `promotion/group-buy-goods`,
+    url: `admin/promotion/group-buy-goods`,
     method: 'get',
     loading: false,
     params
@@ -120,7 +120,7 @@ export function getGroupBuyGoods(params) {
  */
 export function getGroupBuyGoodsDetail(gb_id) {
   return request({
-    url: `promotion/group-buy-goods/${gb_id}`,
+    url: `admin/promotion/group-buy-goods/${gb_id}`,
     method: 'get'
   })
 }
@@ -132,7 +132,7 @@ export function getGroupBuyGoodsDetail(gb_id) {
  */
 export function editGroupBuyActivity(id, params) {
   return request({
-    url: `promotion/group-buy-actives/${id}`,
+    url: `admin/promotion/group-buy-actives/${id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -145,7 +145,7 @@ export function editGroupBuyActivity(id, params) {
  */
 export function deleteGroupBuyActivity(id) {
   return request({
-    url: `promotion/group-buy-actives/${id}`,
+    url: `admin/promotion/group-buy-actives/${id}`,
     method: 'delete'
   })
 }
@@ -157,7 +157,7 @@ export function deleteGroupBuyActivity(id) {
  */
 export function reviewGroupBuyGoods(act_id, params) {
   return request({
-    url: `/promotion/group-buy-actives/review/${act_id}`,
+    url: `admin/promotion/group-buy-actives/review/${act_id}`,
     method: 'post',
     data: params
   })
@@ -169,7 +169,7 @@ export function reviewGroupBuyGoods(act_id, params) {
  */
 export function getGroupBuyGoodsList(params) {
   return request({
-    url: `promotion/group-buy-goods`,
+    url: `admin/promotion/group-buy-goods`,
     method: 'get'
   })
 }
@@ -206,7 +206,7 @@ export function addGroupBuyCategory(params) {
  */
 export function getGroupBuyCategoryDetail(id) {
   return request({
-    url: `promotion/group-buy-cats/${id}`,
+    url: `admin/promotion/group-buy-cats/${id}`,
     method: 'get'
   })
 }
@@ -218,7 +218,7 @@ export function getGroupBuyCategoryDetail(id) {
  */
 export function editGroupBuyCategory(id, params) {
   return request({
-    url: `promotion/group-buy-cats/${id}`,
+    url: `admin/promotion/group-buy-cats/${id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -231,7 +231,7 @@ export function editGroupBuyCategory(id, params) {
  */
 export function deleteGroupBuyCategory(id) {
   return request({
-    url: `promotion/group-buy-cats/${id}`,
+    url: `admin/promotion/group-buy-cats/${id}`,
     method: 'delete'
   })
 }
@@ -268,7 +268,7 @@ export function addSeckill(params) {
  */
 export function getSeckillDetail(id) {
   return request({
-    url: `promotion/seckills/${id}`,
+    url: `admin/promotion/seckills/${id}`,
     method: 'get'
   })
 }
@@ -280,7 +280,7 @@ export function getSeckillDetail(id) {
  */
 export function editSeckill(id, params) {
   return request({
-    url: `promotion/seckills/${id}`,
+    url: `admin/promotion/seckills/${id}`,
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -293,7 +293,7 @@ export function editSeckill(id, params) {
  */
 export function deleteSeckill(id) {
   return request({
-    url: `promotion/seckills/${id}`,
+    url: `admin/promotion/seckills/${id}`,
     method: 'delete'
   })
 }
@@ -305,7 +305,7 @@ export function deleteSeckill(id) {
  */
 export function releaseSeckill(seckill_id, params) {
   return request({
-    url: `promotion/seckills/${seckill_id}/release`,
+    url: `admin/promotion/seckills/${seckill_id}/release`,
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     data: params
@@ -318,7 +318,7 @@ export function releaseSeckill(seckill_id, params) {
  */
 export function getSeckillGoods(params) {
   return request({
-    url: `promotion/seckill-applys`,
+    url: `admin/promotion/seckill-applys`,
     method: 'get',
     loading: false,
     params
@@ -333,7 +333,7 @@ export function getSeckillGoods(params) {
  */
 export function reviewSckillGoods(apply_id, status = 'yes', fail_reason) {
   return request({
-    url: `promotion/seckills/review/${apply_id}`,
+    url: `admin/promotion/seckills/review/${apply_id}`,
     method: 'post',
     data: {
       status,

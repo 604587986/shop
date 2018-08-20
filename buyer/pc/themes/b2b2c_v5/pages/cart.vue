@@ -52,6 +52,13 @@
                       {{ sku.purchase_price | unitPrice }}
                     </div>
                     <div class="sku-num">
+                      <select
+                        v-if="sku.single_list && sku.single_list.length"
+                        class="activity_list"
+                        @change="(event) => { handleActChanged(sku, event) }"
+                      >
+                        <option v-for="(act, index) in sku.single_list" :key="index" :value="act.activity_id">{{ act.title }}</option>
+                      </select>
                       <div class="num-action clearfix">
                         <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
                         <input
@@ -197,6 +204,26 @@
       handleCheckAll() {
         this.checkAll(this.all_checked ? 0 : 1)
       },
+      /** 促销活动发生改变 */
+      handleActChanged(sku, event) {
+        const { seller_id, single_list = [] } = sku
+        const activity_id = Number(event.target.value)
+        let promotion_type = ''
+        const pros = single_list.filter(item => item.activity_id === activity_id)
+        if (pros.length) {
+          promotion_type = pros[0].promotion_type
+        } else {
+          this.$message.error('选择活动出错，请稍后再试！')
+          return false
+        }
+        const params = {
+          seller_id: 1,
+          sku_id: sku.sku_id,
+          activity_id,
+          promotion_type
+        }
+        this.changeActivity(params)
+      },
       /** 更新商品数量 */
       handleUpdateSkuNum(sku, symbol) {
         if (symbol === '-' && sku.num < 2) return
@@ -276,7 +303,9 @@
         // 删除货品
         deleteSkuItem: 'cart/deleteSkuItemAction',
         // 清空购物车
-        cleanCart: 'cart/cleanCartAction'
+        cleanCart: 'cart/cleanCartAction',
+        // 更换促销活动
+        changeActivity: 'cart/changeActivityAction'
       })
     },
     destroyed() {

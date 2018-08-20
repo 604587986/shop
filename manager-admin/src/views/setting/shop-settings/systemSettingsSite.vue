@@ -41,6 +41,16 @@
       <el-radio v-model="siteForm.siteon" :label="1">开启</el-radio>
       <el-radio v-model="siteForm.siteon" :label="0">关闭</el-radio>
     </el-form-item>
+    <el-form-item v-if="siteForm.siteon === 0" label="关闭原因" prop="close_reson">
+      <el-input
+        type="textarea"
+        :autosize="{ minRows: 2, maxRows: 4}"
+        placeholder="请输入关闭原因"
+        v-model="siteForm.close_reson"
+        :maxlength="100"
+      >
+      </el-input>
+    </el-form-item>
     <el-form-item label="加密密匙" prop="global_auth_key">
       <el-input
         type="textarea"
@@ -96,6 +106,7 @@
           site_name: [this.MixinRequired('网站名称不能为空！')],
           title: [this.MixinRequired('网站标题不能为空！')],
           keywords: [{ type: 'array', required: true, message: '请至少添加一个关键词！', trigger: 'change' }],
+          close_reson: [{ required: false, message: '请填写关闭原因！', trigger: 'blur' }],
           descript: [this.MixinRequired('网站描述不能为空！')],
           logo: [this.MixinRequired('请上传网站LOGO！')],
           siteon: [{ required: true, message: '请选择站点状态！', trigger: 'change' }],
@@ -111,6 +122,11 @@
         this.siteForm = response
         this.siteForm.keywords = response.keywords.split(',')
       }).catch(() => { this.loading = false })
+    },
+    watch: {
+      'siteForm.siteon': function(newVal) {
+        this.siteRules.close_reson[0].required = newVal === 0
+      }
     },
     methods: {
       /** 关键字标签关闭 */

@@ -21,9 +21,9 @@ export default function checkToken(options) {
   // user
   const user = Storage.getItem('user')
   // 访问Token
-  const accessToken = Storage.getItem('accessToken')
+  const accessToken = Storage.getItem('access_token')
   // 刷新Token
-  const refreshToken = Storage.getItem('refreshToken')
+  const refreshToken = Storage.getItem('refresh_token')
   // 获取store
   const { $store } = Vue.prototype.$nuxt
   // 返回异步方法
@@ -74,7 +74,7 @@ export default function checkToken(options) {
         if (!options.needToken) resolve()
         // 开始请求新的Token，并加锁。
         window.__refreshTokenLock__ = request({
-          url: `${api.passport}/passport/token`,
+          url: `passport/token`,
           method: 'post',
           headers: { uuid: Storage.getItem('uuid') },
           data: { refersh_token: refreshToken }

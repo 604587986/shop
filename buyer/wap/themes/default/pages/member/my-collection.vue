@@ -1,8 +1,12 @@
 <template>
   <div id="my-collection">
     <nav-bar title="我的收藏"/>
-    <van-tabs v-model="type" :line-width="100">
-      <van-tab title="收藏的商品">
+    <van-tabs v-model="tabActive" :line-width="100">
+      <van-tab title="收藏的商品"/>
+      <van-tab title="收藏的店铺"/>
+    </van-tabs>
+    <div class="collection-container">
+      <template v-if="tabActive === 0">
         <empty-member v-if="finished_goods && !goodsList.length">暂无收藏的商品</empty-member>
         <van-list
           v-else
@@ -28,8 +32,8 @@
             </div>
           </div>
         </van-list>
-      </van-tab>
-      <van-tab title="收藏的店铺">
+      </template>
+      <template v-else>
         <empty-member v-if="finished_shop && !shopList.length">暂无收藏的店铺</empty-member>
         <van-list
           v-else
@@ -50,8 +54,8 @@
             </div>
           </div>
         </van-list>
-      </van-tab>
-    </van-tabs>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -70,7 +74,7 @@
     data() {
       return {
         // 收藏类型 0商品 1店铺
-        type: this.$route.query.type !== 'shop' ? 0 : 1,
+        tabActive: this.$route.query.type !== 'shop' ? 0 : 1,
         // 商品收藏参数
         params_goods: {
           page_no: 1,
@@ -78,7 +82,7 @@
         },
         // 店铺收藏参数
         params_shop: {
-          page_no: 1,
+          page_no: 0,
           page_size: 10
         },
         // 加载中 商品
@@ -95,11 +99,8 @@
         shopList: []
       }
     },
-    mounted() {
-      this.GET_Collection()
-    },
     watch: {
-      type: function (newVal) {
+      tabActive: function (newVal) {
         if (newVal === 0 && !this.goodsList.length) {
           this.GET_Collection()
         }
@@ -111,7 +112,7 @@
     methods: {
       /** 加载数据 */
       onLoad() {
-        if (this.type === 0) {
+        if (this.tabActive === 0) {
           this.params_goods.page_no += 1
         } else {
           this.params_shop.page_no += 1
@@ -142,7 +143,7 @@
       },
       /** 获取收藏 */
       GET_Collection() {
-        if (this.type === 0) {
+        if (this.tabActive === 0) {
           this.loading_goods = true
           API_Members.getGoodsCollection(this.params_goods).then(response => {
             this.loading_goods = false

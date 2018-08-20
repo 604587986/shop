@@ -76,7 +76,7 @@
         <i class="iconfont ea-icon-security"></i>
         <span>账号安全</span>
       </nuxt-link>
-      <a :href="MixinDomain.seller" class="service-item">
+      <a href="/shop/apply" class="service-item">
         <i class="iconfont ea-icon-shop"></i>
         <span>商家中心</span>
       </a>

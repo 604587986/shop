@@ -1,5 +1,5 @@
 <template>
-  <div id="my-order">
+  <div id="my-order" style="background-color: #f7f7f7">
     <nav-bar title="我的订单"/>
     <van-tabs v-model="tabActive" :swipe-threshold="5" @change="handleTabChange">
       <van-tab title="全部"/>
@@ -25,34 +25,48 @@
             <p><span>总<i></i>价：</span><em class="price">￥{{ order.order_amount | unitPrice }}</em></p>
             <div class="order-btns">
               <a v-if="order.order_operate_allowable_vo.allow_cancel" @click="handleCancelOrder(order.sn)" style="background-color: #f19325">取消订单</a>
-              <a v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'" :href="'/member/after-sale/apply?order_sn=' + order.sn" style="background-color: #f19325">取消订单</a>
+              <nuxt-link v-if="order.order_operate_allowable_vo.allow_service_cancel" :to="'/member/after-sale/apply?order_sn=' + order.sn" style="background-color: #f19325">取消订单</nuxt-link>
               <a v-if="order.order_operate_allowable_vo.allow_rog" @click="handleRogOrder(order.sn)">确认收货</a>
-              <a v-if="order.order_operate_allowable_vo.allow_pay" :href="'/checkout/cashier?order_sn=' + order.sn">订单付款</a>
-              <a v-if="order.order_operate_allowable_vo.allow_comment" :href="'/member/comments?order_sn=' + order.sn">去评论</a>
-              <a v-if="order.order_operate_allowable_vo.allow_apply_service" :href="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</a>
-              <a :href="'./my-order/detail?order_sn=' + order.sn">查看详情</a>
+              <nuxt-link v-if="order.order_operate_allowable_vo.allow_pay" :to="'/checkout/cashier?order_sn=' + order.sn">订单付款</nuxt-link>
+              <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'/member/comments?order_sn=' + order.sn">去评论</nuxt-link>
+              <nuxt-link v-if="order.order_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn">申请售后</nuxt-link>
+              <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn">查看详情</nuxt-link>
             </div>
           </div>
           <a :href="'/shop/' + order.seller_id" class="shop-order-item">
-            <em>数码家电</em>
+            <em>{{ order.seller_name }}</em>
           </a>
           <div class="sku-order-item" v-for="(sku, index) in order.sku_list" :key="index">
             <div class="sku-content">
-              <a :href="'/goods/' + sku.goods_id">
+              <nuxt-link :to="'/goods/' + sku.goods_id">
                 <img :src="sku.goods_image" :alt="sku.name">
-              </a>
-              <a :href="'./my-order/detail?order_sn=' + order.sn" style="margin-top: 10px">
+              </nuxt-link>
+              <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn" style="margin-top: 10px">
                 <div style="margin-top: 3px" class="sku-name">{{ sku.name }}</div>
                 <p><span class="sku-spec" style="margin-right: 5px">{{ sku | formatterSkuSpec }}</span><span>{{ sku.num }}件</span></p>
                 <p v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" style="margin-top: 5px">
-                  <a :href="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</a>
+                  <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
                 </p>
-              </a>
+              </nuxt-link>
             </div>
           </div>
         </div>
       </van-list>
     </div>
+    <van-dialog
+      v-model="showCancelDialog"
+      title="取消订单"
+      show-cancel-button
+      :before-close="cancelBeforeClose"
+    >
+      <van-field
+        v-model="reason"
+        type="textarea"
+        rows="1"
+        autosize
+        placeholder="请输入取消原因"
+      />
+    </van-dialog>
   </div>
 </template>
 
@@ -70,15 +84,16 @@
         // 当前tab的index
         tabActive: this.getParam(order_status),
         params: {
-          page_no: 1,
+          page_no: 0,
           page_size: 5,
           order_status
         },
-        orderList: []
+        orderList: [],
+        // 显示取消订单dialog
+        showCancelDialog: false,
+        // 取消订单原因
+        reason: ''
       }
-    },
-    mounted() {
-      this.GET_OrderList()
     },
     methods: {
       /** tabIndex发生改变 */
@@ -109,29 +124,41 @@
         this.params.page_no += 1
         this.GET_OrderList()
       },
-      /** 取消订单 */
-      handleCancelOrder(order_sn) {
-        this.$layer.prompt({
-          formType: 2,
-          title: '请输入取消原因'
-        }, (value, index) => {
-          const val = value.trim()
-          if (!val) {
+      /** 取消dialog关闭前校验 */
+      cancelBeforeClose(action, done) {
+        if (action === 'confirm') {
+          const { reason, cancel_sn } = this
+          if (!reason) {
             this.$message.error('请填写取消原因！')
+            done(false)
           } else {
-            API_Order.cancelOrder(order_sn, val).then(() => {
+            API_Order.cancelOrder(cancel_sn, reason).then(() => {
+              done()
               this.$message.success('订单取消申请成功！')
-              layer.close(index)
+              this.finished = false
+              this.orderList = []
+              this.params.page_no = 1
               this.GET_OrderList()
             })
           }
-        })
+        } else {
+          done()
+        }
+      },
+      /** 取消订单 */
+      handleCancelOrder(order_sn) {
+        this.reason = ''
+        this.cancel_sn = order_sn
+        this.showCancelDialog = true
       },
       /** 确认收货 */
       handleRogOrder(order_sn) {
         this.$confirm('请确认是否收到货物，否则可能会钱财两空！', () => {
           API_Order.confirmReceipt(order_sn).then(() => {
             this.$message.success('确认收货成功！')
+            this.finished = false
+            this.orderList = []
+            this.params.page_no = 1
             this.GET_OrderList()
           })
         })
@@ -140,13 +167,13 @@
       GET_OrderList() {
         this.loading = true
         API_Order.getOrderList(this.params).then(response => {
-          this.loading = false
           const { data } = response
           if(!data || !data.length) {
             this.finished = true
           } else {
             this.orderList.push(...data)
           }
+          this.loading = false
         })
       }
     }
@@ -155,28 +182,10 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../../assets/styles/color";
-  /deep/ {
-    .van-nav-bar, .van-tabs {
-      position: fixed;
-      z-index: 10 !important;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: #fff;
-    }
-    .van-tabs {
-      top: 46px;
-    }
-  }
-  .order-container {
-    padding-top: 46px + 44px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
   .order-item {
     margin-top: 10px;
     background-color: #fff;
-    padding: 0 10px;
+    padding: 0 10px 10px 10px;
     .sn-order-item {
       position: relative;
       height: 45px;

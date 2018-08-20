@@ -49,14 +49,11 @@
         loading: false,
         finished: false,
         params: {
-          page_no: 1,
+          page_no: 0,
           page_size: 10,
           status: 1
         }
       }
-    },
-    mounted() {
-      this.GET_Coupons()
     },
     watch: {
       tabActive(newVal) {
@@ -68,7 +65,6 @@
       }
     },
     methods: {
-      /** 当前页数发生改变 */
       onLoad(page) {
         this.params.page_no += 1
         this.GET_Coupons()
@@ -91,23 +87,6 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../assets/styles/color";
-  /deep/ {
-    .van-nav-bar, .van-tabs {
-      position: fixed;
-      z-index: 10 !important;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: #fff;
-    }
-    .van-tabs {
-      top: 46px;
-    }
-  }
-  .coupons-container {
-    padding-top: 46px + 44px;
-    overflow: hidden;
-  }
   .coupon-item {
     position: relative;
     width: 100%;

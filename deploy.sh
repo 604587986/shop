@@ -3,7 +3,7 @@
 WEB_PATH=$PWD
 cd $WEB_PATH
 
-if [[ "$1" != "ui-domain" ]];then
+if [[ "$1" == "git-pull" ]];then
   echo "拉取最新的代码..."
   git reset --hard origin/master
   git clean -f
@@ -13,21 +13,22 @@ if [[ "$1" != "ui-domain" ]];then
   echo -e "\033[32m代码拉取完成...\033[0m"
 fi
 
-if [[ "$1" == "ui-domain" ]];then
-  echo "拷贝ui-domain到buyer-pc..."
-  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/buyer/pc/themes/b2b2c_v5/
+if [[ ! -n "$1" || "$1" == "copy" ]];then
+  echo "拷贝ui-domain..."
+  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-domain
+  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/buyer/wap/themes/default/ui-domain
+  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/manager-seller/ui-domain
+  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/manager-admin/ui-domain
   echo -e "\033[32m拷贝完成\033[0m"
-
-  echo "拷贝ui-domain到buyer-wap..."
-  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/buyer/wap/themes/default/
+  echo "拷贝ui-components..."
+  cp -a $WEB_PATH/ui-components/* $WEB_PATH/manager-seller/ui-components
+  cp -a $WEB_PATH/ui-components/* $WEB_PATH/manager-admin/ui-components
   echo -e "\033[32m拷贝完成\033[0m"
-
-  echo "拷贝ui-domain到manager-seller..."
-  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/manager-seller/
-  echo -e "\033[32m拷贝到完成\033[0m"
-
-  echo "拷贝ui-domain到manager-admin..."
-  cp -arf $WEB_PATH/ui-domain/ $WEB_PATH/manager-admin/
+  echo "拷贝ui-utils..."
+  cp -a $WEB_PATH/ui-utils/* $WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-utils
+  cp -a $WEB_PATH/ui-utils/* $WEB_PATH/buyer/wap/themes/default/ui-utils
+  cp -a $WEB_PATH/ui-utils/* $WEB_PATH/manager-seller/ui-utils
+  cp -a $WEB_PATH/ui-utils/* $WEB_PATH/manager-admin/ui-utils
   echo -e "\033[32m拷贝完成\033[0m"
 fi
 
@@ -60,7 +61,11 @@ if [[ ! -n "$1" || "$1" == "buyer-pc" ]];then
   echo "开始安装项目依赖..."
   sudo npm install
   sudo npm run build
-  echo -e "\033[32m买家PC端build完成，等待部署...\033[0m"
+  echo -e "\033[32m买家PC端build完成\033[0m"
+  # 启动买家端PC
+  pm2 delete buyer-pc
+  pm2 start npm --name "buyer-pc" -- run start
+  echo -e "\033[32mbuyer-pc部署完成！\033[0m"
 fi
 
 if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
@@ -70,21 +75,9 @@ if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
   echo "开始安装项目依赖..."
   sudo npm install
   sudo npm run build
-  echo "买家WAP端build完成，等待部署..."
-fi
-
-if [[ ! -n "$1" || "$1" == "buyer-pc" ]];then
-  # 启动买家端PC
-  pm2 delete buyer-pc
-  cd $WEB_PATH/buyer/pc/themes/b2b2c_v5
-  pm2 start npm --name "buyer-pc" -- run start
-  echo -e "\033[32mbuyer-pc部署完成！\033[0m"
-fi
-
-if [[ ! -n "$1" || "$1" == "buyer-wap" ]];then
+  echo "买家WAP端build完成"
   #启动买家端WAP
   pm2 delete buyer-wap
-  cd $WEB_PATH/buyer/wap/themes/default
   pm2 start npm --name "buyer-wap" -- run start
   echo -e "\033[32mbuyer-wap部署完成！\033[0m"
 fi
