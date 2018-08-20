@@ -1,7 +1,8 @@
 <template>
   <div id="coupons">
     <nav-bar fixed title="店铺优惠券"/>
-    <div class="coupons-container">
+    <en-empty v-if="!coupons || !coupons.length">该店铺暂无优惠券</en-empty>
+    <div v-else class="coupons-container">
       <div
         class="coupon-item"
         v-for="(coupon, index) in coupons"
