@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar left-arrow @click-left="$router.go(-1)">
+    <van-nav-bar left-arrow @click-left="MixinRouterBack">
       <van-tabs v-model="tabActive" slot="title">
         <van-tab title="商品"/>
         <van-tab title="评价"/>

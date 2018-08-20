@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar left-arrow @click-left="$router.go(-1)">
+    <van-nav-bar left-arrow @click-left="MixinRouterBack">
       <div slot="title">
         <div class="search-box" @click="showSearch = true">
           <van-icon name="search"/>
