@@ -250,6 +250,18 @@ export const actions = {
    */
   cleanCartStoreAction: ({ commit }) => {
     commit(types.CLEAN_CART)
+  },
+  /**
+   * 更换促销活动
+   * @param dispatch
+   */
+  changeActivityAction: ({ dispatch }, params) => {
+    return new Promise((resolve, reject) => {
+      API_Trade.changeActivity(params).then(() => {
+        dispatch('getCartDataAction')
+        resolve()
+      }).catch(reject)
+    })
   }
 }
 

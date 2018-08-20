@@ -23,13 +23,16 @@
   export default {
     name: 'index',
     async asyncData() {
-      const floor = await API_Home.getFloorData('WAP')
-      const menus = await API_Home.getSiteMenu('MOBILE') // Andste_TODO 2018/7/9: 这里为什么又是MOBILE
-      const banner = await API_Home.getFocusPictures('WAP')
+      const values = await Promise.all([
+        API_Home.getFloorData('WAP'),
+        API_Home.getSiteMenu('MOBILE'),  // Andste_TODO 2018/7/9: 这里为什么又是MOBILE
+        API_Home.getFocusPictures('WAP')
+      ])
+      const floor = values[0]
       return {
         floorList: floor.page_data ? global.JSON.parse(floor.page_data) : [],
-        menus,
-        banner
+        menus: values[1],
+        banner: values[2]
       }
     },
     components: IndexComponents,

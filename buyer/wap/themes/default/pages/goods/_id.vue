@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar left-arrow @click-left="$router.go(-1)">
+    <van-nav-bar left-arrow @click-left="MixinRouterBack">
       <van-tabs v-model="tabActive" slot="title">
         <van-tab title="商品"/>
         <van-tab title="评价"/>
@@ -9,11 +9,7 @@
       <header-shortcut slot="right"/>
     </van-nav-bar>
     <div class="goods-container">
-      <van-swipe :autoplay="3000" class="goods-swipe">
-        <van-swipe-item v-for="(gallery, index) in galleryList" :key="index">
-          <img :src="gallery.original" @click="handlePreviewImage(index)">
-        </van-swipe-item>
-      </van-swipe>
+      <goods-gallery :data="galleryList"/>
       <div class="goods-buy">
         <div class="goods-name">
           <h1>{{ goods.goods_name }}</h1>
@@ -31,7 +27,7 @@
     <div style="height: 50px"></div>
     <van-goods-action>
       <van-goods-action-mini-btn icon="like-o" text="收藏" @click="handleCollectGoods"/>
-      <van-goods-action-mini-btn icon="cart" info="5" to="/cart?form=goods" text="购物车"/>
+      <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
       <van-goods-action-mini-btn icon="shop" text="店铺"/>
       <van-goods-action-big-btn text="加入购物车"/>
       <van-goods-action-big-btn text="立即购买" primary/>
@@ -41,11 +37,13 @@
 
 <script>
   import Vue from 'vue'
-  import { Tabs, Tab, Swipe, SwipeItem, ImagePreview, Cell, CellGroup, GoodsAction, GoodsActionBigBtn, GoodsActionMiniBtn } from 'vant'
+  import { mapGetters } from 'vuex'
+  import { Tabs, Tab, Swipe, SwipeItem, Cell, CellGroup, GoodsAction, GoodsActionBigBtn, GoodsActionMiniBtn } from 'vant'
   Vue.use(Tabs).use(Tab).use(Swipe).use(SwipeItem).use(Cell).use(CellGroup).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn)
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
+  import * as goodsComponents from './index'
   import Storage from '@/utils/storage'
   export default {
     name: 'goods-detail',
@@ -78,6 +76,7 @@
         ]
       }
     },
+    components: goodsComponents,
     data() {
       return {
         // 商品id
@@ -106,6 +105,12 @@
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
       }
     },
+    computed: {
+      /** 购物车徽章 */
+      cartBadge() {
+        return this.$store.getters['cart/allCount']
+      }
+    },
     methods: {
       /** 收藏商品 */
       handleCollectGoods() {
@@ -125,10 +130,6 @@
             this.collected = true
           })
         }
-      },
-      /** 商品图预览 */
-      handlePreviewImage(index) {
-        ImagePreview(this.galleryList.map(item => item.original), index)
       }
     }
   }
@@ -156,14 +157,6 @@
   }
   .goods-container {
     margin-top: 46px;
-    .goods-swipe {
-      width: 100%;
-      height: 375px;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
     .goods-buy {
       position: relative;
       .goods-name {

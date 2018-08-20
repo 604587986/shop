@@ -8,10 +8,9 @@ import GoodsComments from './-goods-comments'
 import GoodsConsulting from './-goods-consulting'
 import GoodsInfo from './-goods-info'
 import GoodsParams from './-goods-params'
-import GoodsTags from './-goods-tags'
-import GoodsZoom from './-goods-zoom'
 import SalesRecord from './-sales-record'
 import ShopCard from './-shop-card'
+import GoodsGallery from './-goods-gallery'
 
 export {
   BreadNav,
@@ -19,8 +18,7 @@ export {
   GoodsConsulting,
   GoodsInfo,
   GoodsParams,
-  GoodsTags,
-  GoodsZoom,
   SalesRecord,
-  ShopCard
+  ShopCard,
+  GoodsGallery
 }

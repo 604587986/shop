@@ -14,6 +14,7 @@ export function getAfterSale(params) {
     url: 'after-sales/refunds',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
