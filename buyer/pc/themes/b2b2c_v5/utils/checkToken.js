@@ -74,7 +74,7 @@ export default function checkToken(options) {
         if (!options.needToken) resolve()
         // 开始请求新的Token，并加锁。
         window.__refreshTokenLock__ = request({
-          url: `${api.passport}/passport/token`,
+          url: `passport/token`,
           method: 'post',
           headers: { uuid: Storage.getItem('uuid') },
           data: { refersh_token: refreshToken }
