@@ -204,11 +204,6 @@
         prices: price ? price.split('_') : ['', '']
       }
     },
-    mounted() {
-      API_Goods.getGoodsSelector(this.params).then(response => {
-        console.log(response)
-      })
-    },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentPageChange(page_no) {
