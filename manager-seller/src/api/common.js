@@ -21,21 +21,10 @@ export function getValidateCodeUrl(scene, uuid) {
  */
 export function refreshToken() {
   return request({
-    url: 'admin/systems/admin-users/token',
+    url: 'seller/check/token',
     method: 'post',
     data: {
-      refresh_token: Storage.getItem('admin_refresh_token')
+      refresh_token: Storage.getItem('seller_refresh_token')
     }
-  })
-}
-
-/**
- * 获取首页数据
- */
-export function getIndexData() {
-  return request({
-    url: 'admin/index/page',
-    method: 'get',
-    loading: false
   })
 }

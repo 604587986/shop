@@ -21,9 +21,9 @@ export default function checkToken(options) {
   // user
   const user = Storage.getItem('user')
   // 访问Token
-  const accessToken = Storage.getItem('accessToken')
+  const accessToken = Storage.getItem('access_token')
   // 刷新Token
-  const refreshToken = Storage.getItem('refreshToken')
+  const refreshToken = Storage.getItem('refresh_token')
   // 获取store
   const { $store } = Vue.prototype.$nuxt
   // 返回异步方法

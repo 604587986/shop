@@ -206,7 +206,7 @@
             this.setRefreshToken(response.refresh_token)
             if (response.result === 'bind_success') {
               this.getUserData()
-              Storage.removeItem('uuid_connect', { domain: domain.cookie })
+              Storage.removeItem('uuid_connect')
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
               } else {
@@ -216,7 +216,7 @@
               this.$confirm('当前用户已绑定其它账号，确认要覆盖吗？', () => {
                 API_Connect.loginBindConnect(uuid).then(() => {
                   this.getUserData()
-                  Storage.removeItem('uuid_connect', { domain: domain.cookie })
+                  Storage.removeItem('uuid_connect')
                   if (forward && /^http/.test(forward)) {
                     window.location.href = forward
                   } else {

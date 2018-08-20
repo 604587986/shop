@@ -91,7 +91,7 @@
       },
       /** 领取优惠券 */
       handleReceiveCoupon(coupon) {
-        if (!Storage.getItem('refreshToken')) {
+        if (!Storage.getItem('refresh_token')) {
           this.$confirm('您还未登录，要现在去登录吗？', () => {
             this.$router.push({ path: '/login', query: { forward: this.$route.path } })
           })

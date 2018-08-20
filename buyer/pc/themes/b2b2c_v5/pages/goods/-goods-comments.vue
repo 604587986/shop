@@ -53,7 +53,7 @@
    * 商品评论模块
    * 这里只负责展示商品的评论
    */
-  import * as API_Goods from '@/api/goods'
+  import * as API_Members from '@/api/members'
   export default {
     name: "goods-comments",
     props: ['goods-id', 'grade'],
@@ -90,7 +90,7 @@
       },
       /** 获取商品评论 */
       GET_GoodsComments(){
-        API_Goods.getGoodsComments(this.goodsId, this.params).then(response => {
+        API_Members.getGoodsComments(this.goodsId, this.params).then(response => {
           this.comments = response
         })
       }

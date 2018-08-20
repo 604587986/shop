@@ -9,7 +9,7 @@ const whiteList = ['/login']
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  const refreshToken = Storage.getItem('adminRefreshToken')
+  const refreshToken = Storage.getItem('admin_refresh_token')
   if (refreshToken) {
     if (to.path === '/login') {
       next({ path: '/' })
@@ -20,7 +20,7 @@ router.beforeEach((to, from, next) => {
           router.addRoutes(store.getters.addRouters)
           next({ ...to, replace: true })
         }).catch(() => {
-          store.dispatch('fedLogOut').then(() => {
+          store.dispatch('fedLogoutAction').then(() => {
             Message.error('验证失败,请重新登录')
             next({ path: `/login?forward=${location.pathname}` })
           })

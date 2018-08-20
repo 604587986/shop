@@ -70,7 +70,7 @@
     display: block;
     margin: 0 auto;
     position: fixed;
-    top: -260px;
+    top: -160px;
     height: 60px;
     width: 100%;
     z-index: 10000;

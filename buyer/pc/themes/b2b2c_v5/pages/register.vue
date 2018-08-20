@@ -223,7 +223,7 @@
             this.registerByMobile(this.registerForm).then(() => {
               if (this.isConnect) {
                 API_Connect.registerBindConnect(Storage.getItem('uuid_connect')).then(() => {
-                  Storage.removeItem('uuid_connect', { domain: domain.cookie })
+                  Storage.removeItem('uuid_connect')
                   this.getUserData().then(() => {
                     this.$router.push({ path: '/member' })
                   })

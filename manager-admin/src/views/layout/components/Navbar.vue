@@ -166,7 +166,7 @@
             }
             API_Auth.editUserInfo(params).then(() => {
               this.dialogVisible = false
-              this.$store.dispatch('fedLogOut')
+              this.$store.dispatch('fedLogoutAction')
               location.reload()
             })
           } else {
@@ -186,7 +186,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$store.dispatch('logOutAction').then(() => {
+          this.$store.dispatch('logoutAction').then(() => {
             location.reload()// 为了重新实例化vue-router对象 避免bug
           })
         }).catch(() => {})

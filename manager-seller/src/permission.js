@@ -1,71 +1,57 @@
 import router from './router'
 import store from './store'
-import * as API_shop from '@/api/shop'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { MessageBox } from 'element-ui'
+import { MessageBox, Message } from 'element-ui'
 import Storage from '@/utils/storage'
-import { domain, api } from '~/ui-domain'
-import request from '@/utils/request'
+import * as API_Shop from '@/api/shop'
 
-router.beforeEach((to, from, next) => {
+const whiteList = ['/login']
+
+async function routerBeforeEach(to, from, next) {
   NProgress.start()
-  const user = Storage.getItem('user')
-  if (!user) {
-    window.location.href = `${domain.buyer_pc}/login?forward=${window.location.href}`
-  } else {
-    request({
-      url: api.buyer + '/shops/status',
-      method: 'get',
-      loading: 0.2
-    }).then(response => {
-      switch (response) {
-        case 'NO_SHOP':
-        case 'APPLY':
-        case 'APPLYING':
-        case 'REFUSED':
-          noShop()
-          break
-        case 'CLOSED':
-          shopCloed()
-          break
-        case 'OPEN':
-          shopOpen(next)
-          break
+  const refreshToken = Storage.getItem('seller_refresh_token')
+  if (refreshToken) {
+    if (to.path === '/login') {
+      next({ path: '/' })
+      NProgress.done()
+    } else {
+      // 获取店铺状态
+      const status = await API_Shop.getShopStatus()
+      if (status === 'OPEN') {
+        const shopInfo = Storage.getItem('seller_shop')
+        if (!shopInfo) await store.dispatch('getShopInfoAction')
+        if (store.getters.addRouters.length === 0) {
+          store.dispatch('GenerateRoutes').then(() => {
+            router.addRoutes(store.getters.addRouters)
+            next({ ...to, replace: true })
+          }).catch(() => {
+            store.dispatch('fedLogoutAction').then(() => {
+              Message.error('验证失败,请重新登录')
+              next({ path: `/login?forward=${location.pathname}` })
+            })
+          })
+        } else {
+          next()
+        }
+      } else if (status === 'CLOSED') {
+        MessageBox.alert('您的店铺已被关闭，请联系管理员！', '权限错误', {
+          type: 'error',
+          callback: () => {
+            next({ path: `/login?forward=${location.pathname}` })
+          }
+        })
       }
-    })
-  }
-})
-
-router.afterEach(() => {
-  NProgress.done()
-})
-
-const noShop = () => {
-  MessageBox.alert('您还没有店铺，快去申请开店吧！', '权限错误', {
-    type: 'error',
-    callback: () => {
-      window.location.href = `${domain.buyer_pc}/shop/apply`
     }
-  })
-}
-
-const shopCloed = () => {
-  MessageBox.alert('您的店铺已被关闭，请联系管理员！', '权限错误', {
-    type: 'error',
-    callback: () => {
-      window.location.href = `${domain.buyer_pc}`
-    }
-  })
-}
-
-const shopOpen = (next) => {
-  if (!store.getters.shopInfo) {
-    API_shop.getShopData({}).then(response => {
-      store.dispatch('SetShop', response)
-      next()
-    })
   } else {
-    next()
+    if (whiteList.indexOf(to.path) !== -1) {
+      next()
+    } else {
+      next(`/login?forward=${location.pathname}`)
+      NProgress.done()
+    }
   }
 }
+router.beforeEach(routerBeforeEach)
+
+router.afterEach(NProgress.done)

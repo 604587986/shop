@@ -6,7 +6,7 @@
   export default {
     name: 'defalt',
     mounted() {
-      if (Storage.getItem('refreshToken')) {
+      if (Storage.getItem('refresh_token')) {
         this.$store.dispatch('user/getUserDataAction')
       }
     }
