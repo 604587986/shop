@@ -116,8 +116,8 @@
             searchHistory.pop()
           }
           if (keyword.trim()) searchHistory.splice(0, 0, keyword)
-          this.$set(this, 'search_history', searchHistory)
-          Storage.setItem('searchHistory', JSON.stringify(searchHistory))
+          this.$set(this, 'searchHistory', searchHistory)
+          Storage.setItem('search_history', JSON.stringify(searchHistory))
           window.location.href = keyword ? `/goods?keyword=${keyword}` : '/goods'
         } else {
           window.location.href = `/shop?name=${keyword}`
