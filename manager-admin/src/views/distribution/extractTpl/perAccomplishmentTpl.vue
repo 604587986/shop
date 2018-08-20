@@ -14,7 +14,7 @@
         <!--模板名-->
         <el-table-column prop="tpl_name" label="模板名" width="200"/>
         <!--说明-->
-        <el-table-column prop="tpl_describe" label="说明" width=""/>
+        <el-table-column prop="tpl_describe" label="说明"/>
         <!--操作-->
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
@@ -290,6 +290,10 @@
       /** 删除模板 */
       delPerAccomplishmentTpl(row) {
         this.$confirm('确认删除此模板?', { type: 'warning' }).then(() => {
+          if (row.is_default === 1) {
+            this.$message.error('默认模版不允许删除')
+            return
+          }
           API_distribution.delPerTpl(row.id).then(() => {
             this.$message.success('删除成功')
             this.GET_PerAccomplishmentTpl()

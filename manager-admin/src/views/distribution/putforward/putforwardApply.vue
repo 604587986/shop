@@ -115,7 +115,6 @@
             <el-table-column  prop="transfer_time" :formatter="MixinUnixToDate" label="操作时间"/>
             <el-table-column  prop="status" label="状态" :formatter="withDrawStatus" />
             <el-table-column  prop="transfer_remark" label="备注"/>
-            <!--<el-table-column  prop="ship_num" label="操作人"/>-->
           </template>
         </en-table-layout>
       </div>
@@ -155,7 +154,7 @@
           uname: '',
           start_time: '',
           end_time: '',
-          putforward_time_range: []
+          putforward_time_range: ''
         },
 
         // 列表数据
@@ -329,6 +328,12 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
+  }
+  .conditions {
+    span {
+      font-size: 14px;
+      color: #666;
+    }
   }
 
   /*提现基本信息*/

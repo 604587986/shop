@@ -92,6 +92,7 @@
               v-for="(column, index) in columns"
               :key="column.dataIndex"
               :label="column.text"
+              :width="column.width"
               align="center">
               <template slot-scope="scope">
                 <span
@@ -104,11 +105,11 @@
                     class="button is-outlined is-primary is-small"
                     v-if="toggleIconShow(index,scope.row)"
                     @click="toggle(scope.$index)">
-                    <i v-if="!scope.row._expanded" class="el-icon el-icon-plus " aria-hidden="true"></i>
-                    <i v-if="scope.row._expanded" class="el-icon el-icon-minus" aria-hidden="true"></i>
+                    <i v-if="!scope.row._expanded" class="el-icon el-icon-arrow-right" aria-hidden="true"></i>
+                    <i v-if="scope.row._expanded" class="el-icon el-icon-arrow-down" aria-hidden="true"></i>
                   </button>
                   <span v-else-if="index===0" class="ms-tree-space">
-                  <i class="el-icon el-icon-tickets"></i>
+                  <i class="el-icon el-icon-arrow-down"></i>
                 </span>
                 <span v-else>{{scope.row[column.dataIndex]}}</span>
               </template>
@@ -175,8 +176,12 @@
         /** 列信息 */
         columns: [
           {
+            width: 50
+          },
+          {
             text: '分销商',
-            dataIndex: 'member_name'
+            dataIndex: 'member_name',
+            width: 100
           },
           {
             text: '结算金额',
@@ -458,6 +463,9 @@
   }
   .ms-tree-space::before{
     content: ""
+  }
+  /deep/ .el-icon-arrow-right {
+    cursor: pointer;
   }
 </style>
 
