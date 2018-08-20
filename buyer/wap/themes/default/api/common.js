@@ -27,3 +27,17 @@ export function getSiteData() {
     method: Method.GET
   })
 }
+
+/**
+ * 记录浏览量【用于统计】
+ */
+export function recordViews(url) {
+  return request({
+    url: 'view',
+    method: Method.GET,
+    params: {
+      url,
+      uuid: Storage.getItem('uuid')
+    }
+  })
+}
