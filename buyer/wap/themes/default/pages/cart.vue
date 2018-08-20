@@ -1,9 +1,9 @@
 <template>
-  <div id="cart">
+  <div id="cart" style="background: #f5f5f5">
     <van-nav-bar
       :left-arrow="!is_home"
       title="购物车"
-      @click-left="MixinRouterBack"
+      @click-left="$router.go(-1)"
     >
       <header-shortcut v-if="!is_home" slot="right"/>
     </van-nav-bar>
@@ -19,24 +19,24 @@
     name: 'cart',
     layout: 'full',
     middleware: 'auth-user',
+    head() {
+      return {
+        title: `购物车-${this.site.site_name}`
+      }
+    },
     data() {
       return {
-        // 当前操作的输入框的值【变化之前】
+        /** 当前操作的输入框的值【变化之前】 */
         current_input_value: 1
       }
     },
     mounted() {
-      /** 获取购物车数据 */
-      this.getCartData()
+      // this.getCartData()
     },
     computed: {
       // 是否处于首页
       is_home() {
         return !this.$route.query.form
-      },
-      /** 是否全部选中 */
-      all_checked() {
-        return !!this.checkedCount && this.checkedCount === this.allCount
       },
       ...mapGetters({
         shopList: 'cart/shopList',
@@ -44,7 +44,11 @@
         checkedCount: 'cart/checkedCount',
         allCount: 'cart/allCount',
         cartTotal: 'cart/cartTotal'
-      })
+      }),
+      /** 是否全部选中 */
+      all_checked() {
+        return !!this.checkedCount && this.checkedCount === this.allCount
+      }
     },
     methods: {
       /** 勾选、取消勾选商品 */
@@ -58,6 +62,26 @@
       /** 全选、取消全选 */
       handleCheckAll() {
         this.checkAll(this.all_checked ? 0 : 1)
+      },
+      /** 促销活动发生改变 */
+      handleActChanged(sku, event) {
+        const { seller_id, single_list = [] } = sku
+        const activity_id = Number(event.target.value)
+        let promotion_type = ''
+        const pros = single_list.filter(item => item.activity_id === activity_id)
+        if (pros.length) {
+          promotion_type = pros[0].promotion_type
+        } else {
+          this.$message.error('选择活动出错，请稍后再试！')
+          return false
+        }
+        const params = {
+          seller_id: 1,
+          sku_id: sku.sku_id,
+          activity_id,
+          promotion_type
+        }
+        this.changeActivity(params)
       },
       /** 更新商品数量 */
       handleUpdateSkuNum(sku, symbol) {
@@ -111,6 +135,7 @@
       },
       /** 去结算 */
       handleCheckout() {
+        if (!this.checkedCount) return false
         this.$router.push({ path: '/checkout' })
       },
       /** vuex/cart */
@@ -128,12 +153,14 @@
         // 删除货品
         deleteSkuItem: 'cart/deleteSkuItemAction',
         // 清空购物车
-        cleanCart: 'cart/cleanCartAction'
+        cleanCart: 'cart/cleanCartAction',
+        // 更换促销活动
+        changeActivity: 'cart/changeActivityAction'
       })
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  @import "../assets/styles/cart";
+  @import "../assets/styles/color";
 </style>
