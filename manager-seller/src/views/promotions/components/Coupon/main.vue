@@ -27,7 +27,8 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           clearable
-          :picker-options="pickoptions">
+          :default-time="[MixinDefaultTime]"
+          :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="发行量：" prop="create_num">
