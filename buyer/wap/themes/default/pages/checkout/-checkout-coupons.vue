@@ -1,6 +1,8 @@
 <template>
   <van-popup id="coupons" v-model="show" position="bottom" style="height:100%">
-    <van-nav-bar title="店铺优惠券" fixed left-arrow @click-left="$emit('close')"/>
+    <van-nav-bar title="店铺优惠券" fixed @click-right="$emit('close')">
+      <i class="iconfont ea-icon-close" slot="right"/>
+    </van-nav-bar>
     <div class="coupons-container">
       <div class="shop-item" v-for="(shop, shopIndex) in shopList" :key="shopIndex">
         <div class="title-shop-item">{{ shop.seller_name || `店铺${shopIndex + 1}` }}</div>
