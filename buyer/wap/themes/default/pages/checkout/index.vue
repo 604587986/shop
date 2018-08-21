@@ -25,7 +25,7 @@
       <!--收货地址 end-->
       <van-cell-group>
         <!--购物清单 start-->
-        <van-cell v-if="inventories.length > 1" is-link to="./checkout/inventory">
+        <van-cell v-if="inventories.length > 1" is-link @click="showInventoryPopup = true">
           <div class="sku-list">
             <div v-for="(sku, index) in inventories" v-if="index < 4" :key="index" class="sku-item">
               <img :src="sku.goods_image">
@@ -70,9 +70,18 @@
         <!--备注信息 end-->
       </van-cell-group>
       <van-cell-group class="price-cells">
-        <van-cell title="商品金额"></van-cell>
-        <van-cell title="优惠金额">-￥{{ orderTotal.discount_price | unitPrice }}</van-cell>
-        <van-cell title="运费"></van-cell>
+        <van-cell title="商品金额">
+          <span>￥{{ orderTotal.goods_price | unitPrice }}</span>
+        </van-cell>
+        <van-cell v-if="orderTotal.exchange_point" title="积分">
+          <span>{{ orderTotal.exchange_point }}分</span>
+        </van-cell>
+        <van-cell title="优惠金额">
+          <span>-￥{{ orderTotal.discount_price | unitPrice }}</span>
+        </van-cell>
+        <van-cell title="运费">
+          <span>￥{{ orderTotal.freight_price | unitPrice }}</span>
+        </van-cell>
       </van-cell-group>
     </div>
     <van-submit-bar
@@ -80,7 +89,14 @@
       :price="orderTotal.total_price * 100"
       :disabled="submitDisabled"
       button-text="提交订单"
+      tip="修改地址或支付方式后，请重新选择使用优惠券"
       @submit="handleCreateTrade"
+    />
+    <checkout-inventory
+      v-if="inventories.length"
+      :show="showInventoryPopup"
+      :inventories="inventories"
+      @close="showInventoryPopup = false"
     />
     <checkout-coupons
       v-if="seller_ids.length"
@@ -111,7 +127,12 @@
         params: '',
         // 订单总金额
         orderTotal: {
-          total_price: 0
+          discount_price: 0,
+          exchange_point: 0,
+          freight_price: 0,
+          goods_price: 0,
+          is_free_freight: 0,
+          total_price: 0,
         },
         // 购物清单
         inventories: '',
@@ -124,7 +145,9 @@
         // 使用优惠券金额
         coupon_price: 0,
         // 优惠券张数
-        coupon_num: 0
+        coupon_num: 0,
+        // 显示购物清单弹窗
+        showInventoryPopup: false
       }
     },
     mounted() {

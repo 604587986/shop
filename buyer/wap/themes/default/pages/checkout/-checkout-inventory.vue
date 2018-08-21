@@ -1,7 +1,7 @@
 <template>
-  <div id="inventory">
-    <nav-bar title="购物清单" fixed/>
-    <div class="invs-container">
+  <van-popup id="inventory" v-model="show" position="right" style="width:100%;height:100%">
+    <van-nav-bar title="购物清单" fixed left-arrow @click-left="$emit('close')"/>
+    <div v-if="inventories" class="invs-container">
       <div class="list-item" v-for="(sku, index) in inventories" :key="index">
         <div class="container-item">
           <div class="img-container-item">
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </van-popup>
 </template>
 
 <script>
@@ -34,21 +34,8 @@
    */
   import * as API_Trade from '@/api/trade'
   export default {
-    name: 'inventory',
-    data() {
-      return {
-        inventories: []
-      }
-    },
-    mounted() {
-      API_Trade.getCarts('checked').then(response => {
-        const ivs = []
-        response.forEach(item => {
-          ivs.push(...item.sku_list)
-        })
-        this.inventories = ivs
-      })
-    }
+    name: 'checkout-inventory',
+    props: ['show', 'inventories']
   }
 </script>
 
