@@ -4,15 +4,13 @@
  */
 
 import CheckoutPayment from './-checkout-payment'
-import CheckoutTime from './-checkout-time'
-import CheckoutTotal from './-checkout-total'
 import CheckoutCoupons from './-checkout-coupons'
 import CheckoutInventory from './-checkout-inventory'
+import CheckoutReceipt from './-checkout-receipt'
 
 export {
   CheckoutPayment,
-  CheckoutTime,
-  CheckoutTotal,
   CheckoutCoupons,
-  CheckoutInventory
+  CheckoutInventory,
+  CheckoutReceipt
 }

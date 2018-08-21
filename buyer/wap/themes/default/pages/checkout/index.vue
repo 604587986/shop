@@ -39,16 +39,16 @@
         </van-cell>
         <!--购物清单 end-->
         <!--支付配送 start-->
-        <van-cell title="支付配送" is-link>
+        <van-cell title="支付配送" is-link @click="showPaymentPopup = true">
           <div>
-            <p>在线支付</p>
-            <p>任意时间</p>
+            <p>{{ params.payment_type === 'ONLINE' ? '在线支付' : '货到付款' }}</p>
+            <p>{{ params.receive_time }}</p>
           </div>
         </van-cell>
         <!--支付配送 end-->
         <!--发票信息 start-->
-        <van-cell title="发票信息" is-link>
-          不开发票
+        <van-cell title="发票信息" is-link @click="showReceiptPopup = true">
+          <span>不开发票</span>
         </van-cell>
         <!--发票信息 end-->
       </van-cell-group>
@@ -69,6 +69,7 @@
         </van-cell>
         <!--备注信息 end-->
       </van-cell-group>
+      <!--订单金额 start-->
       <van-cell-group class="price-cells">
         <van-cell title="商品金额">
           <span>￥{{ orderTotal.goods_price | unitPrice }}</span>
@@ -83,21 +84,25 @@
           <span>￥{{ orderTotal.freight_price | unitPrice }}</span>
         </van-cell>
       </van-cell-group>
+      <!--订单金额 end-->
     </div>
     <van-submit-bar
       :loading="loading"
       :price="orderTotal.total_price * 100"
       :disabled="submitDisabled"
       button-text="提交订单"
-      tip="修改地址或支付方式后，请重新选择使用优惠券"
+      tip="修改地址或支付方式后，需要重新选择使用优惠券"
       @submit="handleCreateTrade"
     />
+    <!--购物清单popup start-->
     <checkout-inventory
       v-if="inventories.length"
       :show="showInventoryPopup"
       :inventories="inventories"
       @close="showInventoryPopup = false"
     />
+    <!--购物清单popup end-->
+    <!--优惠券popup start-->
     <checkout-coupons
       v-if="seller_ids.length"
       :show="showCouponsPopup"
@@ -106,6 +111,25 @@
       @changed="handleCouponChanged"
       @loaded="(coupons_num) => { coupon_num = coupons_num  }"
     />
+    <!--优惠券popup end-->
+    <!--发票信息popup start-->
+    <checkout-receipt
+      v-if="params.receipt"
+      :show="showReceiptPopup"
+      @close="showReceiptPopup = false"
+      @changed="handleReceiptChanged"
+    />
+    <!--发票信息popup end-->
+    <!--支付配送 start-->
+    <checkout-payment
+      v-if="params"
+      :show="showPaymentPopup"
+      :payment-type="params.payment_type"
+      :receive-time="params.receive_time"
+      @close="showPaymentPopup = false"
+      @changed="handlePaymentChanged"
+    />
+    <!--支付配送 end-->
   </div>
 </template>
 
@@ -147,7 +171,11 @@
         // 优惠券张数
         coupon_num: 0,
         // 显示购物清单弹窗
-        showInventoryPopup: false
+        showInventoryPopup: false,
+        // 显示发票信息弹窗
+        showReceiptPopup: false,
+        // 显示支付配送弹窗
+        showPaymentPopup: false
       }
     },
     mounted() {
@@ -189,6 +217,15 @@
         this.coupon_price = coupon.coupon_price
         // console.log(coupon)
         this.GET_TotalPrice()
+      },
+      /** 发票信息发生改变 */
+      handleReceiptChanged(receipt) {
+        console.log('receipt-changed: ', receipt)
+      },
+      /** 支付配送发生改变 */
+      handlePaymentChanged(payment) {
+        const { params } = this
+        this.$set(this, 'params', {...params, ...payment})
       },
       /** 格式化地址信息 */
       formatterAddress() {
@@ -310,5 +347,58 @@
     color: #fff;
     line-height: 12px;
     margin-left: 5px;
+  }
+  /deep/ {
+    .big-btn {
+      position: absolute;
+      padding: 0;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      text-align: center;
+      .van-button {
+        width: 100%;
+        border-radius: 0;
+        background-color: $color-main;
+        border-color: $color-main;
+      }
+    }
+    .eui-checkbox-btn {
+      display: inline-block;
+      padding: 0 16px;
+      font-size: 12px;
+      color: #686868;
+      border-radius: 2px;
+      height: 30px;
+      line-height: 30px;
+      position: relative;
+      box-sizing: border-box;
+      & + .eui-checkbox-btn {
+        margin-left: 10px;
+        margin-bottom: 15px;
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 1px solid #bfbfbf;
+        width: 200%;
+        height: 200%;
+        transform: scale(0.5, 0.5);
+        transform-origin: left top;
+        box-sizing: border-box;
+        border-radius: 8px;
+      }
+      &.checked {
+        color: $color-main;
+        padding: 0 10px 0 23px;
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAMAAAAYGszCAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAACWUExURQAAAPIwMPIvL/EvL/UxMew2NvIvL/8AAP8qKv9VVfEvL/EvL/EvL/EuLvIwMPIwMPQ1NfIwMPEvL/QvL/EwMPIwMPIwMPEuLvIvL/IvL/EwMPEwMPEwMPIvL/IvL/IvL/EvL/84OPEwMPEvL/EvL/EwMPAzM+UzM/EvL/EvL/EwMPEvL/8/P/8/P/EvL/IwMPEwMPIwMMNbt20AAAAxdFJOUwB+i5caDrUBBgOH/PpNj/MYZKwwqN6eN6L16JjjysagwQnSp+vCIwpgq668BAiGP/mq889uAAAAe0lEQVQY02NgIAaoKclhiOmrGCqgi2kYGKqyogqx6xkaaquDmQIsUDFFTUNDNl0IW0pSEEyzyBoaanFAFYgZGooAzRGWMTRU1oGZxMFmaCgqzstvaCjPiTCfQ8jQkIfb0FCaHdlWTglDIOBjR3MLs6EhF4ZH2JkYCfkfAKpCCddSCmBzAAAAAElFTkSuQmCC') no-repeat 10px 12px;
+        background-size: 10px 7px;
+        &::before {
+          border-color: $color-main
+        }
+      }
+    }
   }
 </style>
