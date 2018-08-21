@@ -68,3 +68,16 @@ export function setDefaultAddress(id) {
     needToken: true
   })
 }
+
+/**
+ * 获取某个地址详情
+ * @param id
+ */
+export function getAddressDetail(id) {
+  return request({
+    url: `members/address/${id}`,
+    method: Method.GET,
+    loading: false,
+    needToken: true
+  })
+}
