@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar left-arrow @click-left="$router.go(-1)">
+    <van-nav-bar left-arrow @click-left="MixinRouterBack">
       <div slot="title">
         <div class="search-box" @click="showSearch = true">
           <van-icon name="search"/>
@@ -26,7 +26,7 @@
             <span>&nbsp;{{ goods.comment_num || 0 }}条评论</span>
           </div>
           <div class="goods-shop">
-            <a :href="'/shop/' + goods.seller_id"><van-icon name="shop"/>&nbsp;{{ goods.seller_name }}</a>
+            <nuxt-link :to="'/shop/' + goods.seller_id"><van-icon name="shop"/>&nbsp;{{ goods.seller_name }}</nuxt-link>
           </div>
         </div>
       </a>

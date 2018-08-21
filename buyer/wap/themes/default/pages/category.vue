@@ -5,7 +5,7 @@
       <div class="cat-wrapper" ref="catWrapper">
         <ul>
           <li
-            v-for="(cat, index) in category"
+            v-for="(cat, index) in categorys"
             :class="['item', cat.selected && 'focus']"
             :key="index"
             @click="handleClickCategory(cat, $event)"
@@ -44,27 +44,29 @@
 
   export default {
     name: 'category',
-    data() {
+    async asyncData() {
+      let categorys = await API_Goods.getCategory()
+      categorys = categorys.map((item, index) => {
+        item.selected = index === 0
+        return item
+      })
       return {
         // 分类数据
-        category: '',
+        categorys,
         // 当前内容区显示的数据
-        currentCat: [],
+        currentCat: categorys[0]
+      }
+    },
+    data() {
+      return {
         // 加载状态
         loading: true
       }
     },
     mounted() {
-      API_Goods.getCategory().then(response => {
-        this.category = response.map((item, index) => {
-          item.selected = index === 0
-          return item
-        })
-        this.$nextTick(() => {
-          this.catScroll = new BScroll(this.$refs.catWrapper, { click: true })
-          this.conScroll = new BScroll(this.$refs.conWrapper, { click: true })
-        })
-        this.currentCat = response[0]
+      this.$nextTick(() => {
+        this.catScroll = new BScroll(this.$refs.catWrapper, { click: true })
+        this.conScroll = new BScroll(this.$refs.conWrapper, { click: true })
       })
     },
     methods: {
@@ -72,7 +74,7 @@
       handleClickCategory(cat, $event) {
         const catEle = $event.target.parentElement
         this.$set(this, 'currentCat', cat)
-        this.$set(this, 'category', this.category.map(item => {
+        this.$set(this, 'categorys', this.categorys.map(item => {
           item.selected = item.category_id === cat.category_id
           return item
         }))

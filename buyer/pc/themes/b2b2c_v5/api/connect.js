@@ -14,7 +14,7 @@ import md5 from 'js-md5'
  * @returns {string}
  */
 export function getConnectUrl(client_type, login_type) {
-  return `${api.passport}/connect/${client_type}/${login_type}`
+  return `${api.buyer}connect/${client_type}/${login_type}`
 }
 
 /**
@@ -38,7 +38,7 @@ export function getLogindConnectUrl(login_type) {
 export function loginByConnect(uuid, params) {
   params.password = md5(params.password)
   return request({
-    url: `${api.passport}/login-binder/pc/${uuid}`,
+    url: `login-binder/pc/${uuid}`,
     method: Method.PUT,
     data: params
   })

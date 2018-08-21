@@ -8,26 +8,25 @@ if [[ "$1" == "git-pull" ]];then
   git reset --hard origin/master
   git clean -f
   git pull origin master
-  git submodule update --init --recursive
-  git submodule update
   echo -e "\033[32m代码拉取完成...\033[0m"
 fi
 
-if [[ "$1" == "ui-domain" ]];then
-  echo "拷贝ui-domain到buyer-pc..."
-  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-domain
+if [[ "$1" == "copy" ]];then
+  echo "拷贝ui-domain..."
+  cp -a $WEB_PATH/ui-domain $WEB_PATH/buyer/pc/themes/b2b2c_v5
+  cp -a $WEB_PATH/ui-domain $WEB_PATH/buyer/wap/themes/default
+  cp -a $WEB_PATH/ui-domain $WEB_PATH/manager-seller
+  cp -a $WEB_PATH/ui-domain $WEB_PATH/manager-admin
   echo -e "\033[32m拷贝完成\033[0m"
-
-  echo "拷贝ui-domain到buyer-wap..."
-  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/buyer/wap/themes/default/ui-domain
+  echo "拷贝ui-components..."
+  cp -a $WEB_PATH/ui-components $WEB_PATH/manager-seller
+  cp -a $WEB_PATH/ui-components $WEB_PATH/manager-admin
   echo -e "\033[32m拷贝完成\033[0m"
-
-  echo "拷贝ui-domain到manager-seller..."
-  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/manager-seller/ui-domain
-  echo -e "\033[32m拷贝到完成\033[0m"
-
-  echo "拷贝ui-domain到manager-admin..."
-  cp -a $WEB_PATH/ui-domain/* $WEB_PATH/manager-admin/ui-domain
+  echo "拷贝ui-utils..."
+  cp -a $WEB_PATH/ui-utils $WEB_PATH/buyer/pc/themes/b2b2c_v5
+  cp -a $WEB_PATH/ui-utils $WEB_PATH/buyer/wap/themes/default
+  cp -a $WEB_PATH/ui-utils $WEB_PATH/manager-seller
+  cp -a $WEB_PATH/ui-utils $WEB_PATH/manager-admin
   echo -e "\033[32m拷贝完成\033[0m"
 fi
 

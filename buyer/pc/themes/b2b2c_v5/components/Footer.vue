@@ -43,7 +43,7 @@
       <div class="w">
         <a href="/">首页</a>
         | <nuxt-link to="/member">会员中心</nuxt-link>
-        | <a :href="MixinDomain.seller" target="_blank">商家中心</a>
+        | <a href="/shop/apply" target="_blank">商家入驻</a>
         | <a href="/help/45">关于网站</a>
         | <a href="/help/33">关于我们</a>
         | <a href="/help/31">联系我们</a>
