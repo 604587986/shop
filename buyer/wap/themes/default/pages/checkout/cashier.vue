@@ -1,41 +1,70 @@
 <template>
   <div id="cashier">
+    <en-header-other title="收银台"/>
     <div class="cashier-box">
       <div class="cashier-change">
-        <!--// Andste_TODO 2018/7/5: 在拆单上有些问题-->
-        <h2>交易号：
-          <nuxt-link :to="'/member/my-order/detail/' + order_sn" target="_blank">
-            <b>{{ trade_sn || order_sn }}</b>
-          </nuxt-link>
+        <h2 v-if="this.trade_sn">
+          交易号：<b>{{ trade_sn }}</b>
+          <a class="see-order-btn" href="/member/my-order">查看订单</a>
         </h2>
-        <h2>{{ online ? '在线支付' : '货到付款' }}：<span>￥4,498.00</span><i>元</i></h2>
+        <h2 v-else>订单编号：<b>{{ order_sn }}</b>
+          <a class="see-order-btn" :href="'/member/my-order/detail?order_sn=' + order_sn">查看订单</a>
+        </h2>
+        <h2>{{ !order ? '' : order.pay_type_text === 'ONLINE' ? '在线支付：' : '货到付款：' }}
+          <span v-if="order">￥{{ order.need_pay_price | unitPrice }}</span>
+          <span v-else>加载中...</span>
+          <i>元</i>
+        </h2>
         <div class="cashier-order-detail">
           <div class="cashier-order-inside">
             <h3><i></i>送货至：
-              <span>{{ order.ship_province }}</span>
-              <span>{{ order.ship_city }}</span>
-              <span>{{ order.ship_county }}</span>
-              <span>{{ order.ship_town || '' }}</span>
-              <span>{{ order.ship_addr }}</span>
-              <span>{{ order.ship_mobile }}</span>
+              <template v-if="order">
+                <span>{{ order.ship_province }}</span>
+                <span>{{ order.ship_city }}</span>
+                <span>{{ order.ship_county }}</span>
+                <span>{{ order.ship_town || '' }}</span>
+                <span>{{ order.ship_addr }}</span>
+                <span>{{ order.ship_mobile }}</span>
+              </template>
+              <span v-else>加载中...</span>
             </h3>
           </div>
         </div>
-        <div v-if="online" class="cashier-tools">
+        <div v-if="order.pay_type_text === 'ONLINE'" class="cashier-tools">
           <div class="cashier-tools-inside">
             <div class="cashier-tools-title">
               <h3>支付平台</h3>
             </div>
             <ul class="cashier-pay-list">
-              <li v-for="payment in paymentList" :key="payment.plugin_id">
-                <img :src="payment.image">
+              <li v-for="payment in paymentList" :key="payment.plugin_id" :class="['payment-item', payment.selected && 'selected']">
+                <img :src="payment.image" @click="initiatePay(payment, 'qr')">
               </li>
             </ul>
           </div>
         </div>
+        <div v-show="showPayBox" class="cashier-pay-box">
+          <div class="pay-item">
+            <div class="pay-left">
+              <p v-if="payment_plugin_id !== 'weixinPayPlugin'">使用电脑支付</p>
+              <div v-if="payment_plugin_id === 'weixinPayPlugin'" class="pc-pay-img">
+                <!--<img src="../../assets/images/background-wechat.jpg">-->
+              </div>
+              <div v-else class="pc-pay-img"></div>
+              <a class="pay-btn" href="javascript:;" @click="initiatePay(false, 'normal')">立即支付</a>
+              <i v-if="payment_plugin_id === 'alipayDirectPlugin'" class="icon-or"></i>
+            </div>
+            <div v-if="payment_plugin_id === 'alipayDirectPlugin' || payment_plugin_id === 'weixinPayPlugin'" class="pay-right">
+              <p v-if="payment_plugin_id === 'alipayDirectPlugin'">使用支付宝钱包扫一扫即可付款</p>
+              <p v-if="payment_plugin_id === 'weixinPayPlugin'">使用微信钱包扫一扫即可付款</p>
+              <div class="pay-qrcode" id="pay-qrcode">
+                <iframe id="iframe-qrcode" width="200px" height="200px" scrolling="no"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="same-pay-way bank-pay paybtn">
-          <nuxt-link v-if="online" to="#">立即支付</nuxt-link>
-          <nuxt-link v-else :to="'/member/my-order/' + order_sn">查看订单</nuxt-link>
+          <a v-if="!showPayBox && order.pay_type_text === 'ONLINE'" href="javascript:;" @click="$message.error('请先选择支付方式！')">立即支付</a>
+          <nuxt-link v-if="order.pay_type_text !== 'ONLINE'" to="/member/my-order">查看订单</nuxt-link>
         </div>
       </div>
     </div>
@@ -44,60 +73,91 @@
 
 <script>
   import * as API_Trade from '@/api/trade'
-  import * as API_Order from '@/api/order'
   export default {
     name: 'cashier',
-    layout: 'full',
     middleware: 'auth-user',
     data() {
       return {
-        online: true, // true: 在线支付; false: 货到付款
         trade_sn: this.$route.query.trade_sn,
         order_sn: this.$route.query.order_sn,
         // 支付方式列表
         paymentList: [],
         // 订单详情
-        order: ''
+        order: '',
+        // 显示支付窗口
+        showPayBox: false,
+        // 支付方式
+        payment_plugin_id: '',
+        // 显示确认订单完成支付dialog
+        showConfirmDialog: false
       }
     },
     mounted() {
       Promise.all([
-        this.trade_sn ?
-          API_Order.getOrderListByTradeSn(this.trade_sn)
-          : API_Order.getOrderDetail(this.order_sn),
+        this.trade_sn
+          ? API_Trade.getCashierData({ trade_sn: this.trade_sn })
+          : API_Trade.getCashierData({ order_sn: this.order_sn }),
         API_Trade.getPaymentList()
       ]).then(responses => {
-        this.order = this.trade_sn ? responses[0][0] : responses[0]
-        this.paymentList = responses[1]
+        this.order = responses[0]
+        this.paymentList = responses[1].map(item => {
+          item.selected = false
+          return item
+        })
       })
+    },
+    methods: {
+      /** 发起支付 */
+      initiatePay(payment, pay_mode) {
+        this.showPayBox = true
+        if (payment) {
+          this.$set(this, 'paymentList', this.paymentList.map(item => {
+            item.selected = item.plugin_id === payment.plugin_id
+            return item
+          }))
+        } else {
+          payment = this.paymentList.filter(item => item.selected)[0]
+        }
+        this.payment_plugin_id = payment.plugin_id
+        const trade_type = this.trade_sn ? 'trade' : 'order'
+        const sn = this.trade_sn || this.order_sn
+        const client_type = 'PC'
+        const payment_plugin_id = payment.plugin_id
+        // 如果是普通模式，就跳新窗口支付
+        if (pay_mode === 'normal') {
+          window.open(`./cashier-load-pay?trade_type=${trade_type}&sn=${sn}&payment_plugin_id=${payment_plugin_id}`)
+          return false
+        }
+        // 如果是二维码模式，并且支付方式不是支付宝或微信，就跳新窗口支付
+        if (pay_mode === 'qr' && (payment_plugin_id !== 'alipayDirectPlugin' && payment_plugin_id !== 'weixinPayPlugin')) {
+          window.open(`./cashier-load-pay?trade_type=${trade_type}&sn=${sn}&payment_plugin_id=${payment_plugin_id}`)
+          return false
+        }
+        this.$nextTick(() => {
+          document.getElementById('pay-qrcode').innerHTML = `<iframe id="iframe-qrcode" width="200px" height="200px" scrolling="no"></iframe>`
+          // 如果是普通支付方式，打开新窗口再跳转到支付网站
+          API_Trade.initiatePay(trade_type, sn, {
+            client_type,
+            pay_mode,
+            payment_plugin_id
+          }).then(response => {
+            let $formItems = ''
+            response.form_items && response.form_items.forEach(item => {
+              $formItems += `<input name="${item.item_name}" type="hidden" value='${item.item_value}' />`
+            })
+            let $form = `<form action="${response.gateway_url}" method="post">${$formItems}</form>`
+            const qrIframe = document.getElementById('iframe-qrcode').contentWindow.document
+            qrIframe.getElementsByTagName('body')[0].innerHTML = $form
+            qrIframe.forms[0].submit()
+          })
+        })
+      }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .index-cashier {
-    position: relative;
-    width: 1000px;
-    margin: 20px auto;
-    height: 60px;
-    .welcome {
-      a {
-        float: left;
-        width: 245px;
-        height: 60px;
-      }
-      img {
-        width: 240px;
-        height: 60px;
-      }
-      span {
-        font-size: 23px;
-        float: left;
-        display: block;
-        margin: 25px 5px;
-      }
-    }
-  }
+  @import "../../assets/styles/color";
   .cashier-box {
     width: 100%;
     background: #f5f5f5;
@@ -123,7 +183,7 @@
       }
       span {
         font-size: 20px;
-        color: #f42424;
+        color: $color-main;
         margin: 0 5px 0 0;
       }
     }
@@ -160,9 +220,8 @@
         overflow: hidden;
         margin: 0 10px;
         padding: 10px 40px;
-        li {
+        .payment-item {
           float: left;
-          height: 35px;
           line-height: 30px;
           margin: 0 8px 10px 0;
           padding: 5px 5px;
@@ -171,7 +230,11 @@
           cursor: pointer;
           img {
             width: 150px;
-            height: 35px
+            height: 35px;
+          }
+          &.selected {
+            border: 2px solid #f56a3e;
+            padding: 4px;
           }
         }
       }
@@ -208,10 +271,89 @@
         text-align: center;
         color: #fff;
         font-size: 14px;
-        background: #f42424;
+        background: $color-main;
         display: block;
         margin: 30px auto 0 auto;
       }
     }
+  }
+  .cashier-pay-box {
+    width: 950px;
+    border: 1px solid #e1e1e1;
+    background: #f4f4f4;
+    margin: 0 0 40px 0;
+    padding-top: 3px;
+    .pay-item {
+      display: flex;
+      justify-content: center;
+      margin: 0 3px 3px 3px;
+      background: #fff;
+      overflow: hidden;
+      height: 335px;
+      .pay-left {
+        width: 471px;
+        float: left;
+        height: 310px;
+        position: relative;
+        p {
+          width: 450px;
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          margin: 25px 0 0 0;
+          font-size: 16px;
+        }
+        .pc-pay-img {
+          height: 92px;
+          margin-left: 150px;
+          margin-top: 48px;
+          width: 165px;
+          background: url(../../assets/images/icons-cashier.png) no-repeat 0 -1417px;
+        }
+        .pay-btn {
+          width: 180px;
+          height: 40px;
+          line-height: 40px;
+          text-align: center;
+          color: #fff;
+          font-size: 14px;
+          background: $color-main;
+          display: block;
+          margin: 30px auto 0 auto;
+        }
+        .icon-or {
+          display: block;
+          background: url(../../assets/images/icons-cashier.png) no-repeat -212px -1417px;
+          height: 41px;
+          left: 464px;
+          position: absolute;
+          top: 130px;
+          width: 31px;
+        }
+      }
+      .pay-right {
+        float: left;
+        border-left: 1px solid #f4f4f4;
+        p {
+          width: 472px;
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          margin: 25px 0 0 0;
+          font-size: 16px;
+        }
+        .pay-qrcode {
+          margin: 20px auto;
+          height: 200px;
+          width: 200px;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+  .see-order-btn {
+    margin-left: 20px;
+    color: $color-href;
+    &:hover { color: $color-main }
   }
 </style>
