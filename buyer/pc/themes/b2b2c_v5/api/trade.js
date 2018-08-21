@@ -165,7 +165,7 @@ export function getCheckoutParams() {
  */
 export function setAddressId(address_id) {
   return request({
-    url: `trade/checkout-params/addressId/${address_id}`,
+    url: `trade/checkout-params/address-id/${address_id}`,
     method: Method.POST,
     needToken: true
   })
