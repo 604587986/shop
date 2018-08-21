@@ -80,7 +80,7 @@
       },
       /** 获取咨询列表 */
       GET_Consulting() {
-        API_Goods.getGoodsConsultations(this.goodsId, this.params).then(response => {
+        API_Members.getGoodsConsultations(this.goodsId, this.params).then(response => {
           this.consulting = response
         })
       }
