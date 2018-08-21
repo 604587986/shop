@@ -78,7 +78,7 @@
         // 商品收藏参数
         params_goods: {
           page_no: 0,
-          page_size: 30
+          page_size: 10
         },
         // 店铺收藏参数
         params_shop: {
