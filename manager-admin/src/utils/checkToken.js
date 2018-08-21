@@ -63,7 +63,8 @@ export default function checkToken(options) {
       if (!window.__refreshTokenLock__) {
         // console.log(options.url + ' | 检测到accessToken失效，这个请求需要等待刷新token。')
         // 开始请求新的Token，并加锁。
-        window.__refreshTokenLock__ = API_Common.refreshToken().then(response => {
+        window.__refreshTokenLock__ = true
+        API_Common.refreshToken().then(response => {
           store.dispatch('setAccessTokenAction', response.accessToken)
           store.dispatch('setRefreshTokenAction', response.refreshToken)
           window.__refreshTokenLock__ = null
