@@ -26,7 +26,7 @@ export function getMessageTemplate(params) {
  */
 export function editMessageTemplate(id, params) {
   return request({
-    url: `systems/message-templates/${id}`,
+    url: `admin/systems/message-templates/${id}`,
     method: 'put',
     data: params
   })

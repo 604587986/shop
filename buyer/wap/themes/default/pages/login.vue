@@ -124,6 +124,7 @@
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
   import EnCountDownBtn from "@/components/CountDownBtn"
+  import Storage from '@/utils/storage'
   export default {
     name: 'login',
     components: {EnCountDownBtn},
@@ -135,9 +136,12 @@
     },
     data() {
       return {
+        // uuid
+        uuid: Storage.getItem('uuid'),
+        // 登录类型
         login_type: 'account', // 'account',
         /** 图片验证码 */
-        captcha_url: process.client ? API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN') : '',
+        captcha_url: '',
         /** 快捷登录 表单 */
         quickForm: {
           mobile: '',
@@ -164,6 +168,9 @@
         return !(captcha && mobile && sms_code)
       }
     },
+    mounted() {
+      this.handleChangeCaptchalUrl()
+    },
     methods: {
       /** 发送短信验证码异步回调 */
       sendValidMobileSms() {
@@ -188,7 +195,7 @@
       },
       /** 改变图片验证码URL */
       handleChangeCaptchalUrl() {
-        this.captcha_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN')
+        this.captcha_url = API_Common.getValidateCodeUrl(this.uuid, 'LOGIN')
       },
       /** 登录事件 */
       handleLogin() {

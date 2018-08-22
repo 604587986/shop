@@ -54,7 +54,6 @@ module.exports = {
   css: [
     '~assets/styles/normalize.css',
     '~assets/styles/base.scss',
-    '~assets/styles/page-transletion.scss',
     'swiper/dist/css/swiper.css',
     'vant/lib/vant-css/index.css',
     'vant/lib/vant-css/icon-local.css'
@@ -74,7 +73,6 @@ module.exports = {
       return { x: 0, y: 0 }
     }
   },
-  transition: 'page',
   ignorePrefix: '-',
   generate: {
     subFolders: true

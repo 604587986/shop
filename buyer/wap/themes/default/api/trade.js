@@ -165,7 +165,7 @@ export function getCheckoutParams() {
  */
 export function setAddressId(address_id) {
   return request({
-    url: `trade/checkout-params/addressId/${address_id}`,
+    url: `trade/checkout-params/address-id/${address_id}`,
     method: Method.POST,
     needToken: true
   })
@@ -343,11 +343,11 @@ export function getExpress(id, num) {
 /**
  * 使用优惠券
  * @param shop_id
- * @param coupon_id
+ * @param mc_id
  */
-export function useCoupon(shop_id, coupon_id) {
+export function useCoupon(shop_id, mc_id) {
   return request({
-    url: `trade/${shop_id}/seller/${coupon_id}/coupon`,
+    url: `trade/${shop_id}/seller/${mc_id}/coupon`,
     method: Method.POST,
     needToken: true
   })

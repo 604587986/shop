@@ -6,6 +6,10 @@ import uuidv1 from 'uuid/v1'
 import Cookie from 'cookie'
 import Storage from '@/utils/storage'
 
+if (!Storage.getItem('uuid') && process.client) {
+  Storage.setItem('uuid', uuidv1())
+}
+
 /** state */
 export const state = () => ({
   // 导航栏
@@ -14,23 +18,12 @@ export const state = () => ({
   categories: [],
   // 热搜关键词
   hotKeywords: [],
-  // uuid
-  uuid: '',
   // 站点信息
   site: ''
 })
 
 /** mutations */
 export const mutations = {
-  /**
-   * 设置UUID
-   * @param state
-   * @param uuid
-   */
-  [types.SET_UUID](state, uuid) {
-    state.uuid = uuid
-    process.client && Storage.setItem('uuid', uuid)
-  },
   /**
    * 设置站点cookie
    * @param state
@@ -74,28 +67,12 @@ export const actions = {
    * @param req
    * @param res
    */
-  async nuxtServerInit ({ commit, dispatch }, { req, res }) {
-    let _uuid
-    let _site
+  async nuxtServerInit({ commit, dispatch }, { req, res }) {
     if (req.headers.cookie) {
       const cookies = Cookie.parse(req.headers.cookie)
       const { user, site } = cookies
-      commit('user/SET_USER_INFO', user ? global.JSON.parse(cookies.user) : '')
-      commit('user/SET_ACCESS_TOKEN', cookies.accessToken)
-      commit('user/SET_REFRESH_TOKEN', cookies.refreshToken)
-      _uuid = cookies.uuid
-      _site = site
+      await commit('user/SET_USER_INFO', user ? global.JSON.parse(cookies.user) : '')
     }
-    /***
-     * 如果客户端请求携带的cookie中没有uuid
-     * 则创建一个uuid
-     * 并在res中设置cookie
-     */
-    if (!_uuid) {
-      _uuid = uuidv1()
-      res.setHeader('Set-Cookie', [`uuid=${_uuid};Path=/`])
-    }
-    commit('SET_UUID', _uuid)
     // 获取公共数据
     await dispatch('getCommonDataAction')
   },
@@ -131,24 +108,6 @@ export const getters = {
    * @returns {*}
    */
   hotKeywords: state => state.hotKeywords,
-  /**
-   * 获取UUID
-   * @param state
-   * @returns {getters.uuid|(function(*))|*}
-   */
-  uuid: state => state.uuid,
-  /**
-   * 获取访问令牌
-   * @param state
-   * @returns {getters.accessToken|(function(*))|string|*}
-   */
-  accessToken: state => state.user.accessToken,
-  /**
-   * 获取刷新访问令牌
-   * @param state
-   * @returns {getters.refreshToken|(function(*))|string|*}
-   */
-  refreshToken: state => state.user.refreshToken,
   /**
    * 获取用户信息
    * @param state

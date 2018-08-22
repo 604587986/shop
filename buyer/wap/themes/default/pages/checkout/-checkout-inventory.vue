@@ -1,94 +1,30 @@
 <template>
-  <div class="ckt-item inventory">
-    <div class="top-ckt">
-      <span class="title-top">配送清单</span>
-      <span class="other-top"><nuxt-link to="/cart" class="c-back-cart">返回购物车修改</nuxt-link></span>
-      <div class="clearfix"></div>
-    </div>
-    <div class="content-ckt-inventory inventory">
-      <div
-        v-for="shop in inventoryList"
-        :key="shop.seller_id"
-        class="item-ckt-inventory"
-      >
-        <div class="left-item-inventory" style="height: 221px;">
-          <div class="express-inventory">
-            <div class="title-item-inventory">配送方式</div>
-            <div class="content-item-inventory express">
-              <div class="ckt-checkbox express selected" title="运费&nbsp;（0&nbsp;元）">
-                <span>运费&nbsp;（0&nbsp;元）</span>
-              </div>
+  <van-popup id="inventory" v-model="show" position="right" style="width:100%;height:100%">
+    <van-nav-bar title="购物清单" fixed left-arrow @click-left="$emit('close')"/>
+    <div v-if="inventories" class="invs-container">
+      <div class="list-item" v-for="(sku, index) in inventories" :key="index">
+        <div class="container-item">
+          <div class="img-container-item">
+            <div class="box-img">
+              <img :src="sku.goods_image">
             </div>
-            <div style="clear: both;"></div>
           </div>
-          <div class="hr-inventory"></div>
-          <div class="discount-inventory">
-            <div class="title-item-inventory">优惠折扣</div>
-            <div class="content-item-inventory">
-              <p class="no-item-discount-inventory">您在该店铺还没有领到优惠劵，去&nbsp;
-                <nuxt-link :to="'/shop?shop_id=' + shop.seller_id" target="_blank" style="color: #005ea7;">店铺</nuxt-link>&nbsp;看看吧！
-              </p>
-              <div style="clear: both;"></div>
+          <div class="title-container-item">
+            <div class="name-container-item">{{ sku.name }}</div>
+            <div class="detail-container-item">
+              <div class="price-box">
+                <span class="price-box-span"><em>￥</em><span class="price"></span><em>{{ sku.purchase_price | unitPrice }}</em></span>
+              </div>
+              <span class="sam-num">x{{ sku.num }}</span>
             </div>
           </div>
         </div>
-        <div class="right-item-inventory">
-          <div class="gooods-inventory">
-            <div class="title-item-inventory">
-              <div class="store-name">店铺名称：
-                <nuxt-link :to="'/shop?shop_id=' + shop.seller_id" target="_blank">{{ shop.seller_name }}</nuxt-link>
-              </div>
-              <div class="store-total">
-                <div class="discount-store-total">优惠折扣： <span>-￥{{ shop.price.discount_price | unitPrice }}</span>
-                </div>
-                <div class="total-store-total">店铺合计（含运费）： <span>￥{{ shop.price.total_price | unitPrice }}</span>
-                </div>
-              </div>
-              <input type="hidden" name="storeid" value="18">
-            </div>
-            <div class="content-item-inventory goods">
-              <table class="table-gooods-inventory">
-                <tbody>
-                <tr v-for="goods in shop.sku_list" :key="goods.sku_id">
-                  <td class="img-gooods-inventory">
-                    <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
-                      <img :src="goods.goods_image">
-                    </nuxt-link>
-                  </td>
-                  <td class="name-gooods-inventory">
-                    <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
-                      {{ goods.name }}
-                    </nuxt-link>
-                    <span class="sku-spec">{{ goods | formatterSkuSpec }}</span>
-                  </td>
-                  <td class="price-gooods-inventory">￥{{ goods.purchase_price | unitPrice }}</td>
-                  <td class="num-gooods-inventory">x{{ goods.num }}</td>
-                  <td class="subtotal-gooods-inventory">￥{{ goods.subtotal | unitPrice }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div class="gift-item">
+          <div></div>
         </div>
-        <div style="clear: both;"></div>
-        <div class="bottom-item-inventory">
-          <!--// Andste_TODO 2018/6/13: 促销相关未适配-->
-          <!-- 注释 [store.activity_id??] -->
-          <!-- 注释 [store.storeprice.gift_id != 0] -->
-          <!-- 注释 [store.storeprice.bonus_id != 0]-->
-        </div>
-        <div style="clear: both;"></div>
       </div>
     </div>
-    <div class="bottom-ckt-inventory">
-      订单备注：
-      <el-input v-model="iRemark" size="small" :maxlength="120" clearable>
-        <el-button slot="append" icon="el-icon-check" @click="handleSetRemark"></el-button>
-      </el-input>
-      <span class="remark-tip">*请勿填写有关支付、收货、发票方面的信息，如有特殊需要请联系客服人员。</span>
-    </div>
-    <div class="placeholder-20"></div>
-  </div>
+  </van-popup>
 </template>
 
 <script>
@@ -99,21 +35,110 @@
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-inventory',
-    props: ['inventoryList', 'remark'],
-    data() {
-      return {
-        iRemark: this.remark
+    props: ['show', 'inventories']
+  }
+</script>
+
+<style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
+  .invs-container {
+    padding-top: 46px;
+  }
+  .list-item {
+    position: relative;
+    padding: 15px 0 7px 10px;
+    line-height: 18px;
+    background-color: #fff;
+    overflow: hidden;
+    &:after {
+      content: '';
+      border-top: 1px solid #e0e0e0;
+      display: block;
+      width: 100%;
+      position: absolute;
+      right: 0;
+    }
+  }
+  .container-item {
+    display: flex;
+  }
+  .gift-item {
+    width: 100%;
+    height: auto;
+    padding-right: 10px;
+    box-sizing: border-box;
+    margin-top: 12px;
+  }
+  .img-container-item {
+    float: left;
+    padding-right: 10px;
+    text-align: center;
+    width: 87px;
+    .box-img {
+      position: relative;
+      float: left;
+      margin-right: 7px;
+      width: 77px;
+      height: 77px;
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 200%;
+        border: 1px solid #e3e5e9;
+        border-radius: 4px;
+        transform: scale(0.5);
+        transform-origin: top left;
       }
-    },
-    watch: {
-      remark(newVal) { this.iRemark = newVal }
-    },
-    methods: {
-      handleSetRemark() {
-        API_Trade.setRemark(this.iRemark).then(() => {
-          this.$message.success('设置成功！')
-        })
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
   }
-</script>
+  .title-container-item {
+    position: relative;
+    padding-right: 10px;
+    width: auto;
+    clear: both;
+    float: none;
+    -webkit-box-flex: 1;
+    .name-container-item {
+      display: -webkit-box;
+      padding-top: 1px;
+      padding-right: 20px;
+      height: 34px;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 17px;
+      color: #232326;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .detail-container-item {
+      white-space: nowrap;
+      font-size: 0;
+      line-height: 17px;
+      overflow: hidden;
+      zoom: 1;
+    }
+    .price-box {
+      float: left;
+      font-size: 16px;
+      color: $color-main;
+      em {
+        font-size: 12px;
+      }
+    }
+    .sam-num {
+      float: right;
+      color: #848689;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+  }
+</style>

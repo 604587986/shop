@@ -77,8 +77,8 @@
         tabActive: this.$route.query.type !== 'shop' ? 0 : 1,
         // 商品收藏参数
         params_goods: {
-          page_no: 1,
-          page_size: 30
+          page_no: 0,
+          page_size: 10
         },
         // 店铺收藏参数
         params_shop: {
@@ -102,10 +102,16 @@
     watch: {
       tabActive: function (newVal) {
         if (newVal === 0 && !this.goodsList.length) {
-          this.GET_Collection()
+          this.params_goods.page_no = 0
+          this.goodsList = []
+          this.finished_goods = false
+          this.onLoad()
         }
         if (newVal === 1 && !this.shopList.length) {
-          this.GET_Collection()
+          this.params_shop.page_no = 0
+          this.shopList = []
+          this.finished_shop = false
+          this.onLoad()
         }
       }
     },

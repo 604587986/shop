@@ -6,7 +6,7 @@
           <en-face :url="user.face"/>
         </nuxt-link>
         <div class="user-info">
-          <p>{{ user.uname }}</p>
+          <p>{{ user.nickname || user.uname }}</p>
           <p v-if="user.mobile">联系方式：{{ user.mobile | secrecyMobile }} </p>
           <p v-else>联系方式：无 </p>
         </div>

@@ -15,6 +15,7 @@ const urlPrefix = process.server ? (api_dev.base + '/') : ''
  * @returns {string}
  */
 export function getValidateCodeUrl(uuid, type) {
+  if (!uuid || !type) return ''
   return `${api.base}/captchas/${uuid}/${type}?r=${new Date().getTime()}`
 }
 

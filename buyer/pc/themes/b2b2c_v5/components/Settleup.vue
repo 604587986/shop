@@ -53,6 +53,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
+  import Storage from '@/utils/storage'
   export default {
     name: 'EnSettleup',
     data() {
@@ -61,7 +62,7 @@
       }
     },
     mounted() {
-      if (!this.cartTotal && this.refreshToken) {
+      if (!this.cartTotal && Storage.getItem('refresh_token')) {
         this.$store.dispatch('cart/getCartDataAction')
       }
     },
@@ -69,8 +70,7 @@
       ...mapGetters({
         skuList: 'cart/skuList',
         allCount: 'cart/allCount',
-        cartTotal: 'cart/cartTotal',
-        refreshToken: 'refreshToken'
+        cartTotal: 'cart/cartTotal'
       })
     },
     methods: {

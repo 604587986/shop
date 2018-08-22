@@ -326,7 +326,8 @@ export function deleteReceipt(id) {
 export function setDefaultReceipt(id) {
   return request({
     url: `members/receipt/${id}/default`,
-    method: Method.PUT
+    method: Method.PUT,
+    needToken: true
   })
 }
 
@@ -407,5 +408,33 @@ export function getShopsCoupons(seller_ids) {
     url: `members/coupon/${seller_ids}`,
     method: Method.GET,
     needToken: true
+  })
+}
+
+/**
+ * 获取商品咨询列表
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsConsultations(goods_id, params) {
+  return request({
+    url: `members/asks/goods/${goods_id}`,
+    method: Method.GET,
+    loading: false,
+    params
+  })
+}
+
+/**
+ * 获取商品评论列表
+ * @param goods_id
+ * @param params
+ */
+export function getGoodsComments(goods_id, params) {
+  return request({
+    url: `members/comments/goods/${goods_id}`,
+    method: Method.GET,
+    loading: false,
+    params
   })
 }

@@ -10,7 +10,12 @@
     <div class="address-container">
       <empty-member v-if="finished && !addressList.length">暂无收货地址</empty-member>
       <ul class="address-list">
-        <li class="address-item" v-for="(address, index) in addressList" :key="index">
+        <li
+          class="address-item"
+          v-for="(address, index) in addressList"
+          :key="index"
+          @click="handleSelectAddress(address)"
+        >
           <van-cell-swipe :right-width="65">
             <div class="address-content">
               <div class="info-address">
@@ -66,6 +71,7 @@
 
 <script>
   import * as API_Address from '@/api/address'
+  import * as API_Trade from '@/api/trade'
   import { Foundation, RegExp } from '~/ui-utils'
   export default {
     name: 'shipping-address',
@@ -150,6 +156,14 @@
         this.$confirm('确定要删除这个地址吗？', () => {
           API_Address.deleteAddress(address.addr_id).then(this.GET_AddressList)
         })
+      },
+      /** 选择地址 */
+      handleSelectAddress(address) {
+        if (this.$route.query.from === 'checkout') {
+          API_Trade.setAddressId(address.addr_id).then(() => {
+            this.MixinRouterBack()
+          })
+        }
       },
       /** 获取地址列表 */
       GET_AddressList() {
