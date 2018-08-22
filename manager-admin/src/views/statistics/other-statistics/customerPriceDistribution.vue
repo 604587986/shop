@@ -3,10 +3,6 @@
     <el-card>
       <div slot="header" class="chart-header">
         <div class="chart-header-item">
-          <span>商品分类</span>
-          <en-category-picker clearable @changed="(category) => { params.category_id = category.category_id || 0 }" :disabled="cur_tab === 'frequency'"/>
-        </div>
-        <div class="chart-header-item">
           <span>查询周期：</span>
           <en-year-month-picker @changed="handleYearMonthChanged" :disabled="cur_tab === 'frequency'"/>
         </div>
@@ -53,7 +49,6 @@
           year: '',
           month: '',
           cycle_type: 'MONTH',
-          category_id: 0,
           seller_id: 0
         },
         priceRange: [[0, 100], [100, 1000], [1000, 10000], [10000, 50000]]
