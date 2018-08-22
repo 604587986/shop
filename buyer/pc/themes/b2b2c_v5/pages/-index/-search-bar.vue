@@ -103,11 +103,10 @@
       line-height: 34px;
     }
     .header-cart {
-      float: right;
+      float: left;
       margin-top: 12px;
       .header-cart-con {
         position: relative;
-        width: 150px;
         height: 34px;
         line-height: 34px;
         border: none;
