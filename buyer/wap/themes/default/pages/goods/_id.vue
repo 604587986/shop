@@ -23,9 +23,19 @@
         </van-cell-group>
       </div>
       <span class="separated"></span>
+      <shop-card :shop-id="goods.seller_id"/>
+      <span class="separated"></span>
+      <van-tabs class="params-container" :line-width="100">
+        <van-tab title="商品介绍">
+          <div v-html="goods.intro" class="goods-intro"></div>
+        </van-tab>
+        <van-tab title="商品参数">
+          <goods-params :goods-params="goods.param_list"/>
+        </van-tab>
+      </van-tabs>
     </div>
     <div style="height: 50px"></div>
-    <van-goods-action>
+    <van-goods-action style="z-index: 99">
       <van-goods-action-mini-btn icon="like-o" text="收藏" @click="handleCollectGoods"/>
       <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
       <van-goods-action-mini-btn icon="shop" text="店铺"/>
@@ -86,7 +96,16 @@
         // 当前tab
         tabActive: 0,
         // 商品是否已被收藏
-        collected: false
+        collected: false,
+        // 详情滚动条高度
+        params_offset_top: 0
+      }
+    },
+    watch: {
+      tabActive: function (newVal) {
+        if (newVal === 0) this.MixinScrollToTop(0)
+        if (newVal === 1) this.MixinScrollToTop(100)
+        if (newVal === 2) this.MixinScrollToTop($('.params-container').offset().top - 54)
       }
     },
     mounted() {
@@ -151,7 +170,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      z-index: 99;
+      z-index: 99 !important;
     }
     .van-nav-bar__left .van-nav-bar__arrow { color: #666 }
     .van-tabs__wrap::after {
@@ -206,6 +225,19 @@
         em {
           font-size: 18px;
           font-weight: 700;
+        }
+      }
+    }
+    .params-container {
+      z-index: 1;
+      /deep/ .van-tabs__wrap {
+        border-bottom: 1px solid #f5f5f5;
+      }
+      .goods-intro {
+        padding: 10px;
+        box-sizing: border-box;
+        /deep/ img {
+          max-width: 100%;
         }
       }
     }
