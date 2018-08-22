@@ -3,7 +3,6 @@
  * 商品页组件导出
  */
 
-import BreadNav from './-bread-nav'
 import GoodsComments from './-goods-comments'
 import GoodsConsulting from './-goods-consulting'
 import GoodsInfo from './-goods-info'
@@ -13,7 +12,6 @@ import ShopCard from './-shop-card'
 import GoodsGallery from './-goods-gallery'
 
 export {
-  BreadNav,
   GoodsComments,
   GoodsConsulting,
   GoodsInfo,
