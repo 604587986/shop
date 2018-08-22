@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function getHistoryReceiptList(params) {
   return request({
-    url: 'seller/trade/receipts',
+    url: 'seller/members/receipts',
     method: 'get',
     loading: false,
     params
@@ -24,7 +24,7 @@ export function getHistoryReceiptList(params) {
  */
 export function getHistoryReceiptDetail(id) {
   return request({
-    url: `seller/trade/receipts/${id}/detail`,
+    url: `seller/members/receipts/${id}/detail`,
     method: 'get',
     loading: false
   })

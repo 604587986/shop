@@ -70,6 +70,8 @@
     },
     data() {
       return {
+        //uuid
+        uuid: Storage.getItem('uuid'),
         // 会员注册 表单
         registerForm: {
           username: '',
@@ -158,7 +160,7 @@
         // 是否显示图片验证码
         showValidCode: false,
         // 图片验证码URL
-        valid_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER'),
+        valid_code_url: '',
         // 同意注册协议
         agreed: false,
         // 是否为信任登录
@@ -166,6 +168,7 @@
       }
     },
     mounted() {
+      this.changeValidCodeUrl()
       const uuid_connect = Storage.getItem('uuid_connect')
       const isConnect = this.$route.query.form === 'connect' && !!uuid_connect
       this.isConnect = isConnect
@@ -192,7 +195,7 @@
     methods: {
       /** 获取图片验证码 */
       changeValidCodeUrl() {
-        this.valid_code_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'REGISTER')
+        this.valid_code_url = API_Common.getValidateCodeUrl(this.uuid, 'REGISTER')
       },
       /** 发送手机验证码异步方法 */
       sendValidMobileSms() {

@@ -6,11 +6,12 @@ import { Base64 } from 'js-base64'
 import { Foundation } from '~/ui-utils'
 import * as API_Address from "@/api/address";
 
-export const state = () => ({
-  user: '',
-  accessToken: '',
-  refreshToken: ''
-})
+export const state = () => {
+  const user = Storage.getItem('user')
+  return {
+    user: user ? JSON.parse(user) : ''
+  }
+}
 
 /** mutations */
 export const mutations = {
@@ -44,7 +45,6 @@ export const mutations = {
    * @param token
    */
   [types.SET_ACCESS_TOKEN](state, token) {
-    state.accessToken = token
     if (process.client) {
       const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(access_token_time)
@@ -56,7 +56,6 @@ export const mutations = {
    * @param state
    */
   [types.REMOVE_ACCESS_TOKEN](state) {
-    state.accessToken = ''
     Storage.removeItem('access_token')
   },
   /**
@@ -65,7 +64,6 @@ export const mutations = {
    * @param token
    */
   [types.SET_REFRESH_TOKEN](state, token) {
-    state.refreshToken = token
     if (process.client) {
       const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
       const expires = new Date(refresh_token_time)
@@ -77,7 +75,6 @@ export const mutations = {
    * @param state
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
-    state.refreshToken = ''
     Storage.removeItem('refresh_token')
   }
 }

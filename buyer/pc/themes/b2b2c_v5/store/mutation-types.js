@@ -1,8 +1,4 @@
 /** UUID相关 */
-// 设置UUID
-export const SET_UUID = 'SET_UUID'
-// 移除UUID
-export const REMOVE_UUID = 'REMOVE_UUID'
 
 /** 用户信息相关 */
 // 保存用户信息

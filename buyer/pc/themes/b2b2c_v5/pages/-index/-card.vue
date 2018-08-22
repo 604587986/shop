@@ -8,7 +8,7 @@
           </nuxt-link>
         </div>
         <div v-if="user" class="card-user-show logined">
-          <p>Hi,<nuxt-link to="/member"> {{ user.uname }}</nuxt-link></p>
+          <p>Hi,<nuxt-link to="/member"> {{ user.nickname || user.uname }}</nuxt-link></p>
           <p class="btns">
             <nuxt-link to="/member" class="to-member">进入个人中心</nuxt-link>
           </p>

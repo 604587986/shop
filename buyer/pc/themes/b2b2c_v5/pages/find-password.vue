@@ -58,11 +58,11 @@
 
 <script>
   import Vue from 'vue'
-  import { mapGetters } from 'vuex'
   import { Form, FormItem, Input } from 'element-ui'
   import * as API_Passport from '@/api/passport'
   import * as API_Common from '@/api/common'
   import { RegExp } from '~/ui-utils'
+  import Storage from '@/utils/storage'
 
   Vue.use(Form)
   Vue.use(FormItem)
@@ -72,6 +72,9 @@
     layout: 'full',
     data() {
       return {
+        // uuid
+        uuid: Storage.getItem('uuid'),
+        // 步骤
         step: 1,
         /** 校验账户信息 表单 */
         validAccountForm: {},
@@ -125,9 +128,6 @@
           ]
         }
       }
-    },
-    computed: {
-      ...mapGetters(['uuid'])
     },
     mounted() {
       this.getValidImgUrl()

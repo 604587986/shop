@@ -97,10 +97,10 @@
 
 <script>
   import Vue from 'vue'
-  import { mapGetters } from 'vuex'
   import * as API_Passport from '@/api/passport'
   import * as API_Common from '@/api/common'
   import { RegExp } from '~/ui-utils'
+  import Storage from '@/utils/storage'
 
   export default {
     name: 'find-password',
@@ -112,6 +112,9 @@
     },
     data() {
       return {
+        // uuid
+        uuid: Storage.getItem('uuid'),
+        // 步骤
         step: 1,
         // 校验账户信息 表单
         validAccountForm: {},
@@ -127,7 +130,6 @@
       }
     },
     computed: {
-      ...mapGetters(['uuid']),
       /** 验证账户按钮 按钮是否禁用 */
       val_disabled_account() {
         const { account, img_code } = this.validAccountForm

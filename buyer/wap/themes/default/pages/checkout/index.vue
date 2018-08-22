@@ -1,65 +1,135 @@
 <template>
-  <div id="checkout">
-    <div v-if="inventoryList && inventoryList.length === 0" class="listing-empty">
-      <img src="../../assets/images/icon-listing-empty.png" alt="购物清单为空！">
-      <h2>
-        您的购物清单为空，请
-        <nuxt-link to="/cart" class="back-cart-btn">返回购物车</nuxt-link>
-        选择要结算的商品！
-      </h2>
-    </div>
-    <template v-else>
-      <div class="checkout-header">
-        <div class="w">
-        </div>
-      </div>
-      <div v-if="params" class="ckt-control">
-        <div class="ckt-title">填写并核对订单信息</div>
-        <div class="ckt-content">
-          <!--收货人信息 start-->
-          <checkout-address
-            :address-id="params.address_id"
-            @change="handleAddressChanged"
-          />
-          <!--收货人信息 end-->
-
-          <!--支付方式 start-->
-          <checkout-payment
-            :payment-type="params.payment_type"
-            @change="(type) => { params.payment_type = type }"
-          />
-          <!--支付方式 end-->
-
-          <!--配送清单 start-->
-          <checkout-inventory :inventory-list="inventoryList" :remark="params.remark"/>
-          <!--配送清单 end-->
-
-          <!--送货时间 start-->
-          <checkout-time
-            :receive-time="params.receive_time"
-            @change="(time) => { params.receive_time = time }"
-          />
-          <!--送货时间 end-->
-
-          <!--发票信息 start-->
-          <checkout-receipt :receipt="params.receipt" @change="(receipt) => { params.receipt = receipt }"/>
-          <!--发票信息 end-->
-        </div>
-        <div class="ckt-total">
-          <checkout-total :order-total="orderTotal"/>
-          <div v-if="selectedAddress" class="summary-ckt-total">
-            <div class="address-info-ckt">
-              <span>收货人信息：</span>
-              <span>{{ formatterAddress(selectedAddress) }}</span>
-              <span>&nbsp;收货人：&nbsp;<em>{{ selectedAddress.name }}</em>&nbsp;<em>{{ selectedAddress.mobile }}</em></span>
+  <div id="checkout" style="background-color: #f7f7f7">
+    <nav-bar fixed title="填写订单"/>
+    <en-empty v-if="inventories.length === 0">
+      购物清单为空
+    </en-empty>
+    <div v-else class="checkout-container">
+      <!--收货地址 start-->
+      <van-cell-group>
+        <van-cell is-link to="/member/shipping-address?from=checkout">
+          <div v-if="!address" class="no-address">新建或选择收货地址以确保商品顺利送达</div>
+          <div v-else>
+            <div class="tit-address">
+              <div class="name-tit-address">{{ address.name }}</div>
+              <div class="mobile-tit-address">{{ address.mobile }}</div>
+            </div>
+            <div class="cnt-address">
+              <van-icon name="location"/>
+              <span class="address-where">{{ formatterAddress() }}</span>
             </div>
           </div>
-          <div class="bill-btn-ckt">
-            <a href="javascript:;" class="bill_btn" @click="handleCreateTrade">提交订单</a>
+        </van-cell>
+        <div class="address-list-hr"></div>
+      </van-cell-group>
+      <!--收货地址 end-->
+      <van-cell-group>
+        <!--购物清单 start-->
+        <van-cell v-if="inventories.length > 1" is-link @click="showInventoryPopup = true">
+          <div class="sku-list">
+            <div v-for="(sku, index) in inventories" v-if="index < 4" :key="index" class="sku-item">
+              <img :src="sku.goods_image">
+              <p>x{{ sku.num }}</p>
+            </div>
           </div>
-        </div>
-      </div>
-    </template>
+          <div class="sku-count">共{{ inventories.length }}件</div>
+        </van-cell>
+        <van-cell v-else>
+          单件
+        </van-cell>
+        <!--购物清单 end-->
+        <!--支付配送 start-->
+        <van-cell title="支付配送" is-link @click="showPaymentPopup = true">
+          <div>
+            <p>{{ params.payment_type === 'ONLINE' ? '在线支付' : '货到付款' }}</p>
+            <p>{{ params.receive_time }}</p>
+          </div>
+        </van-cell>
+        <!--支付配送 end-->
+        <!--发票信息 start-->
+        <van-cell title="发票信息" is-link @click="showReceiptPopup = true">
+          <span>不开发票</span>
+        </van-cell>
+        <!--发票信息 end-->
+      </van-cell-group>
+      <van-cell-group>
+        <!--优惠券 start-->
+        <van-cell v-if="seller_ids.length" is-link @click="showCouponsPopup = true">
+          <div slot="title">
+            <span>优惠券</span>
+            <em class="can-use-coupon-num">{{ coupon_num }}张可用</em>
+          </div>
+          <span v-if="!coupon_price">未使用</span>
+          <span v-else>-￥{{ coupon_price | unitPrice }}</span>
+        </van-cell>
+        <!--优惠券 end-->
+        <!--备注信息 start-->
+        <van-cell title="备注信息" is-link>
+          {{ params.remark || '未填写' }}
+        </van-cell>
+        <!--备注信息 end-->
+      </van-cell-group>
+      <!--订单金额 start-->
+      <van-cell-group class="price-cells">
+        <van-cell title="商品金额">
+          <span>￥{{ orderTotal.goods_price | unitPrice }}</span>
+        </van-cell>
+        <van-cell v-if="orderTotal.exchange_point" title="积分">
+          <span>{{ orderTotal.exchange_point }}分</span>
+        </van-cell>
+        <van-cell title="优惠金额">
+          <span>-￥{{ orderTotal.discount_price | unitPrice }}</span>
+        </van-cell>
+        <van-cell title="运费">
+          <span>￥{{ orderTotal.freight_price | unitPrice }}</span>
+        </van-cell>
+      </van-cell-group>
+      <!--订单金额 end-->
+    </div>
+    <van-submit-bar
+      :loading="loading"
+      :price="orderTotal.total_price * 100"
+      :disabled="submitDisabled"
+      button-text="提交订单"
+      tip="修改地址或支付方式后，需要重新选择使用优惠券"
+      @submit="handleCreateTrade"
+    />
+    <!--购物清单popup start-->
+    <checkout-inventory
+      v-if="inventories.length"
+      :show="showInventoryPopup"
+      :inventories="inventories"
+      @close="showInventoryPopup = false"
+    />
+    <!--购物清单popup end-->
+    <!--优惠券popup start-->
+    <checkout-coupons
+      v-if="seller_ids.length"
+      :show="showCouponsPopup"
+      :ids="seller_ids"
+      @close="showCouponsPopup = false"
+      @changed="handleCouponChanged"
+      @loaded="(coupons_num) => { coupon_num = coupons_num  }"
+    />
+    <!--优惠券popup end-->
+    <!--发票信息popup start-->
+    <checkout-receipt
+      v-if="params.receipt"
+      :show="showReceiptPopup"
+      @close="showReceiptPopup = false"
+      @changed="handleReceiptChanged"
+    />
+    <!--发票信息popup end-->
+    <!--支付配送 start-->
+    <checkout-payment
+      v-if="params"
+      :show="showPaymentPopup"
+      :payment-type="params.payment_type"
+      :receive-time="params.receive_time"
+      @close="showPaymentPopup = false"
+      @changed="handlePaymentChanged"
+    />
+    <!--支付配送 end-->
   </div>
 </template>
 
@@ -68,40 +138,99 @@
   import { mapGetters, mapActions } from 'vuex'
   import * as CheckoutComponents from './'
   import * as API_Trade from '@/api/trade'
+  import * as API_Members from '@/api/members'
+  import * as API_Address from '@/api/address'
   export default {
     name: 'checkout-index',
     components: CheckoutComponents,
     data() {
       return {
+        // 加载订单结算中
+        loading: false,
         // 结算参数
         params: '',
         // 订单总金额
-        orderTotal: {},
+        orderTotal: {
+          discount_price: 0,
+          exchange_point: 0,
+          freight_price: 0,
+          goods_price: 0,
+          is_free_freight: 0,
+          total_price: 0,
+        },
         // 购物清单
-        inventoryList: '',
+        inventories: '',
         // 已选地址
-        selectedAddress: ''
+        address: '',
+        // 购物清单的店铺id集合
+        seller_ids: [],
+        // 显示优惠券弹窗
+        showCouponsPopup: false,
+        // 使用优惠券金额
+        coupon_price: 0,
+        // 优惠券张数
+        coupon_num: 0,
+        // 显示购物清单弹窗
+        showInventoryPopup: false,
+        // 显示发票信息弹窗
+        showReceiptPopup: false,
+        // 显示支付配送弹窗
+        showPaymentPopup: false
       }
     },
     mounted() {
       // 获取购物清单
-      API_Trade.getCarts('checked').then(response => {
-        this.inventoryList = response
-        if (response.length === 0) return
+      this.loading = true
+      API_Trade.getCarts('checked').then(async response => {
+        const inventories = []
+        const ids = []
+        response.forEach(item => {
+          ids.push(item.seller_id)
+          inventories.push(...item.sku_list)
+        })
+        this.inventories = inventories
+        this.seller_ids = ids
+        if (!inventories.length) {
+          this.loading = false
+          return
+        }
         // 获取默认结算数据
-        API_Trade.getCheckoutParams().then(response => this.params = response)
+        await API_Trade.getCheckoutParams().then(response => this.params = response)
+        const { address_id } = this.params
+        if (address_id) {
+          this.address = await API_Address.getAddressDetail(address_id)
+        }
         // 获取订单金额
-        API_Trade.getOrderTotal().then(response => this.orderTotal = response)
+        await this.GET_TotalPrice()
+        this.loading = false
       })
     },
+    computed: {
+      // 计算是否禁用提交订单按钮
+      submitDisabled() {
+        return !this.inventories.length
+      }
+    },
     methods: {
-      /** 收货地址发生改变 */
-      handleAddressChanged(address) {
-        this.selectedAddress = address
-        this.params.address_id = address.addr_id
+      /** 使用优惠券 */
+      handleCouponChanged(coupon) {
+        this.coupon_price = coupon.coupon_price
+        // console.log(coupon)
+        this.GET_TotalPrice()
+      },
+      /** 发票信息发生改变 */
+      handleReceiptChanged(receipt) {
+        console.log('receipt-changed: ', receipt)
+      },
+      /** 支付配送发生改变 */
+      handlePaymentChanged(payment) {
+        const { params } = this
+        this.$set(this, 'params', {...params, ...payment})
       },
       /** 格式化地址信息 */
-      formatterAddress(address) {
+      formatterAddress() {
+        const { address } = this
+        if (!address) return ''
         return `${address.province} ${address.city} ${address.county} ${address.town} ${address.addr}`
       },
       /** 提交订单 */
@@ -110,11 +239,166 @@
         API_Trade.createTrade().then(response => {
           this.$router.push({ path: '/checkout/cashier?trade_sn=' + response.trade_sn })
         })
+      },
+      /** 获取结算金额 */
+      async GET_TotalPrice() {
+        API_Trade.getOrderTotal().then(response => this.orderTotal = response)
       }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  @import "../../assets/styles/checkout";
+  @import "../../assets/styles/color";
+  .checkout-container {
+    padding-top: 46px;
+    /deep/ {
+      .van-cell-group:not(:first-child) {
+        margin-top: 10px;
+      }
+      .van-cell {
+        align-items: center;
+      }
+    }
+  }
+  .no-address {
+    height: 50px;
+    font-size: 14px;
+    line-height: 50px;
+    text-align: center;
+  }
+  .address-list-hr {
+    width: 100%;
+    height: 5px;
+    background: url(../../assets/images/icon-address-hr.png) repeat-x left top;
+  }
+  .tit-address {
+    padding-bottom: 10px;
+    overflow: hidden;
+    color: #252525;
+    .name-tit-address {
+      float: left;
+      font-size: 16px;
+      color: #252525;
+      font-weight: bold;
+      margin-left: 23px;
+    }
+    .mobile-tit-address {
+      float: left;
+      font-size: 16px;
+      margin-left: 4px;
+    }
+  }
+  .cnt-address {
+    padding-right: 10px;
+    padding-left: 23px;
+    font-size: 14px;
+    color: #232326;
+    line-height: 22px;
+    position: relative;
+    .van-icon-location {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 18px;
+    }
+    .address-where {
+      color: #232326;
+    }
+  }
+  .sku-list {
+    float: left;
+    padding-left: 0;
+    padding-right: 2.5%;
+    width: 80%;
+    height: 70px;
+    text-align: center;
+    overflow: hidden;
+    .sku-item {
+      position: relative;
+      width: 50px;
+      height: 70px;
+      float: left;
+      margin-right: 7px;
+      img {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+  .sku-count {
+    text-align: right;
+    line-height: 70px;
+  }
+  .price-cells {
+    .van-cell {
+      padding: 3px 15px;
+      &:after {
+        content: none;
+      }
+    }
+  }
+  .can-use-coupon-num {
+    display: inline-block;
+    padding: 2px;
+    font-size: 12px;
+    background-color: #f42424;
+    color: #fff;
+    line-height: 12px;
+    margin-left: 5px;
+  }
+  /deep/ {
+    .big-btn {
+      position: absolute;
+      padding: 0;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      text-align: center;
+      .van-button {
+        width: 100%;
+        border-radius: 0;
+        background-color: $color-main;
+        border-color: $color-main;
+      }
+    }
+    .eui-checkbox-btn {
+      display: inline-block;
+      padding: 0 16px;
+      font-size: 12px;
+      color: #686868;
+      border-radius: 2px;
+      height: 30px;
+      line-height: 30px;
+      position: relative;
+      box-sizing: border-box;
+      & + .eui-checkbox-btn {
+        margin-left: 10px;
+        margin-bottom: 15px;
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 1px solid #bfbfbf;
+        width: 200%;
+        height: 200%;
+        transform: scale(0.5, 0.5);
+        transform-origin: left top;
+        box-sizing: border-box;
+        border-radius: 8px;
+      }
+      &.checked {
+        color: $color-main;
+        padding: 0 10px 0 23px;
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAMAAAAYGszCAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAACWUExURQAAAPIwMPIvL/EvL/UxMew2NvIvL/8AAP8qKv9VVfEvL/EvL/EvL/EuLvIwMPIwMPQ1NfIwMPEvL/QvL/EwMPIwMPIwMPEuLvIvL/IvL/EwMPEwMPEwMPIvL/IvL/IvL/EvL/84OPEwMPEvL/EvL/EwMPAzM+UzM/EvL/EvL/EwMPEvL/8/P/8/P/EvL/IwMPEwMPIwMMNbt20AAAAxdFJOUwB+i5caDrUBBgOH/PpNj/MYZKwwqN6eN6L16JjjysagwQnSp+vCIwpgq668BAiGP/mq889uAAAAe0lEQVQY02NgIAaoKclhiOmrGCqgi2kYGKqyogqx6xkaaquDmQIsUDFFTUNDNl0IW0pSEEyzyBoaanFAFYgZGooAzRGWMTRU1oGZxMFmaCgqzstvaCjPiTCfQ8jQkIfb0FCaHdlWTglDIOBjR3MLs6EhF4ZH2JkYCfkfAKpCCddSCmBzAAAAAElFTkSuQmCC') no-repeat 10px 12px;
+        background-size: 10px 7px;
+        &::before {
+          border-color: $color-main
+        }
+      }
+    }
+  }
 </style>

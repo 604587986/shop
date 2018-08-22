@@ -133,12 +133,9 @@
             const { id } = this.menuForm
             if (id) {
               API_Menus.editMenu(id, this.menuForm).then(response => {
-                this.currentMenu = {
-                  ...this.currentMenu,
-                  ...this.menuForm
-                }
                 this.dialogMenuVisible = false
                 this.$message.success('保存成功！')
+                this.GET_Memus()
               })
             } else {
               API_Menus.addMenu(this.menuForm).then(response => {

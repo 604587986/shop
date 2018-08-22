@@ -25,6 +25,9 @@
         <p>头像修改在保存后生效</p>
       </div>
       <el-form :model="profileForm" :rules="profileRules" ref="profileForm" label-width="100px" style="width:350px">
+        <el-form-item label="用户名" prop="uname">
+          <span>{{ profileForm.uname }}</span>
+        </el-form-item>
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="profileForm.nickname" size="small" clearable></el-input>
         </el-form-item>
