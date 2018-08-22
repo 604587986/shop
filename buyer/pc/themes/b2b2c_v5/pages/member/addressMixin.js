@@ -116,7 +116,7 @@ export default {
         type: 1,
         title: '编辑地址',
         zIndex: 200,
-        area: '500px',
+        area: '550px',
         scrollbar: false,
         content: $('#addressForm'),
         btn: ['确认', '取消'],
