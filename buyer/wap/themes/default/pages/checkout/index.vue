@@ -35,7 +35,27 @@
           <div class="sku-count">共{{ inventories.length }}件</div>
         </van-cell>
         <van-cell v-else>
-          单件
+          <div class="sku-single">
+            <div class="img-single-item">
+              <div class="inner-img-sinle-item">
+                <img :src="inventories[0].goods_image">
+              </div>
+            </div>
+            <div class="content-single-item">
+              <div class="name-single-item">{{ inventories[0].name }}</div>
+              <span v-if="inventories[0].spec_list" class="sku-spec">{{ inventories[0] | formatterSkuSpec }}</span>
+              <div class="price-single-item">
+                <div class="sitem-sam-l cf">
+                    <span class="price-box">
+                      <em>￥</em>
+                      <span class="price">{{ inventories[0].purchase_price | unitPrice('', 'before') }}</span>
+                      <em>.{{ inventories[0].purchase_price | unitPrice('', 'after') }}</em>
+                    </span>
+                </div>
+                <span class="sam-num">×{{ inventories[0].num }}</span>
+              </div>
+            </div>
+          </div>
         </van-cell>
         <!--购物清单 end-->
         <!--支付配送 start-->
@@ -64,7 +84,7 @@
         </van-cell>
         <!--优惠券 end-->
         <!--备注信息 start-->
-        <van-cell title="备注信息" is-link>
+        <van-cell title="备注信息" is-link @click="showRemarkDialog = true" class="remark-cell">
           {{ params.remark || '未填写' }}
         </van-cell>
         <!--备注信息 end-->
@@ -120,7 +140,7 @@
       @changed="handleReceiptChanged"
     />
     <!--发票信息popup end-->
-    <!--支付配送 start-->
+    <!--支付配送popup start-->
     <checkout-payment
       v-if="params"
       :show="showPaymentPopup"
@@ -129,7 +149,24 @@
       @close="showPaymentPopup = false"
       @changed="handlePaymentChanged"
     />
-    <!--支付配送 end-->
+    <!--支付配送popup end-->
+    <!--订单备注dialog start-->
+    <van-dialog
+      v-model="showRemarkDialog"
+      title="订单备注"
+      show-cancel-button
+      :before-close="remarkBeforeClose"
+    >
+      <van-field
+        v-model="remark"
+        type="textarea"
+        rows="2"
+        autosize
+        maxlength="30"
+        placeholder="超过30个字我就记不住了嗷！"
+      />
+    </van-dialog>
+    <!--订单备注dialog end-->
   </div>
 </template>
 
@@ -175,7 +212,11 @@
         // 显示发票信息弹窗
         showReceiptPopup: false,
         // 显示支付配送弹窗
-        showPaymentPopup: false
+        showPaymentPopup: false,
+        // 显示订单备注弹窗
+        showRemarkDialog: false,
+        // 订单备注暂缓区
+        remark: ''
       }
     },
     mounted() {
@@ -196,7 +237,8 @@
         }
         // 获取默认结算数据
         await API_Trade.getCheckoutParams().then(response => this.params = response)
-        const { address_id } = this.params
+        const { address_id, remark } = this.params
+        this.remark = remark
         if (address_id) {
           this.address = await API_Address.getAddressDetail(address_id)
         }
@@ -226,6 +268,18 @@
       handlePaymentChanged(payment) {
         const { params } = this
         this.$set(this, 'params', {...params, ...payment})
+      },
+      /** 订单备注dialog关闭前 */
+      remarkBeforeClose(action, done) {
+        if (action === 'confirm') {
+          const { remark } = this
+          API_Trade.setRemark(remark).then(() => {
+            this.$set(this.params, 'remark', remark)
+            done()
+          })
+        } else {
+          done()
+        }
       },
       /** 格式化地址信息 */
       formatterAddress() {
@@ -331,6 +385,77 @@
     text-align: right;
     line-height: 70px;
   }
+  .sku-single {
+    position: relative;
+    line-height: 18px;
+    .img-single-item {
+      padding-right: 10px;
+      width: 87px;
+      float: left;
+      text-align: center;
+    }
+    .inner-img-sinle-item {
+      width: 77px;
+      height: 77px;
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 200%;
+        border: 1px solid #e3e5e9;
+        border-radius: 4px;
+        transform: scale(0.5);
+        transform-origin: top left;
+      }
+      img { width: 100%; height: 100% }
+    }
+    .content-single-item {
+      position: relative;
+      width: auto;
+      float: none;
+      padding-right: 10px;
+      font-size: 14px;
+      color: #232326;
+    }
+    .name-single-item {
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 17px;
+      color: #232326;
+      padding-top: 10px;
+    }
+    .price-single-item {
+      white-space: nowrap;
+      line-height: 17px;
+      overflow: hidden;
+      zoom: 1;
+    }
+    .price-box {
+      float: left;
+      font-size: 16px;
+      color: $color-main;
+      em {
+        font-size: 12px;
+      }
+      .price {
+        font-size: 16px;
+      }
+    }
+    .sam-num {
+      float: right;
+      color: #848689;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+  }
   .price-cells {
     .van-cell {
       padding: 3px 15px;
@@ -399,6 +524,12 @@
           border-color: $color-main
         }
       }
+    }
+    .remark-cell .van-cell__value {
+      flex: 3;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
   }
 </style>
