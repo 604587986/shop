@@ -41,7 +41,7 @@
     </div>
     <div class="placeholder-20"></div>
     <div id="addressForm" style="display: none">
-      <el-form :model="addressForm" :rules="addressRules" ref="addressForm" label-width="100px">
+      <el-form :model="addressForm" :rules="addressRules" ref="addressForm" label-width="100px" style="width: 450px">
         <el-form-item label="收货人姓名" prop="name">
           <el-input v-model="addressForm.name" size="small"></el-input>
         </el-form-item>
