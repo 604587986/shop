@@ -43,7 +43,7 @@
                         <i class="iconfont ea-icon-safe"></i>
                       </label>
                       <input id="validcode-mobile" v-model="quickForm.captcha" placeholder="图片验证码" maxlength="4">
-                      <img class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
+                      <img v-if="val_code_url" class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="item item-form-t">
                       <en-count-down-btn :start="sendValidMobileSms" @end="handleChangeValUrl" class="send-sms-btn"/>
@@ -79,7 +79,7 @@
                         <i class="iconfont ea-icon-safe"></i>
                       </label>
                       <input id="validcode" v-model="accountForm.captcha" placeholder="图片验证码" maxlength="4" @keyup.enter="handleLogin">
-                      <img class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
+                      <img v-if="val_code_url" class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="forget">
                       <span><nuxt-link :to="'/find-password' + MixinForward">忘记密码</nuxt-link></span>
@@ -128,9 +128,12 @@
     },
     data() {
       return {
+        // uuid
+        uuid: Storage.getItem('uuid'),
+        // 登录类型
         login_type: 'quick',
         // 图片验证码
-        val_code_url: API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN'),
+        val_code_url: '',
         // 快捷登录 表单
         quickForm: {},
         // 普通登录 表单
@@ -140,6 +143,7 @@
       }
     },
     mounted() {
+      this.handleChangeValUrl()
       const uuid_connect = Storage.getItem('uuid_connect')
       const isConnect = this.$route.query.form === 'connect' && !!uuid_connect
       this.isConnect = isConnect
@@ -174,7 +178,7 @@
       },
       /** 改变图片验证码URL */
       handleChangeValUrl() {
-        this.val_code_url = API_Common.getValidateCodeUrl(this.$store.state.uuid, 'LOGIN')
+        this.val_code_url = API_Common.getValidateCodeUrl(this.uuid, 'LOGIN')
       },
       /** 登录事件 */
       handleLogin() {
@@ -200,7 +204,7 @@
             return false
           }
           const params = JSON.parse(JSON.stringify(form))
-          params.uuid = Storage.getItem('uuid')
+          params.uuid = this.uuid
           API_Connect.loginByConnect(uuid, params).then(response => {
             this.setAccessToken(response.access_token)
             this.setRefreshToken(response.refresh_token)
