@@ -67,8 +67,9 @@
         </van-cell>
         <!--支付配送 end-->
         <!--发票信息 start-->
-        <van-cell title="发票信息" is-link @click="showReceiptPopup = true">
-          <span>不开发票</span>
+        <van-cell title="发票信息" is-link @click="showReceiptPopup = true" class="remark-cell">
+          <span v-if="!params.receipt || !params.receipt.receipt_title">不开具发票</span>
+          <span v-else>{{ params.receipt.receipt_title }}-{{ params.receipt.receipt_content }}</span>
         </van-cell>
         <!--发票信息 end-->
       </van-cell-group>
@@ -80,7 +81,7 @@
             <em class="can-use-coupon-num">{{ coupon_num }}张可用</em>
           </div>
           <span v-if="!coupon_price">未使用</span>
-          <span v-else>-￥{{ coupon_price | unitPrice }}</span>
+          <span v-else class="price">-￥{{ coupon_price | unitPrice }}</span>
         </van-cell>
         <!--优惠券 end-->
         <!--备注信息 start-->
@@ -92,16 +93,16 @@
       <!--订单金额 start-->
       <van-cell-group class="price-cells">
         <van-cell title="商品金额">
-          <span>￥{{ orderTotal.goods_price | unitPrice }}</span>
+          <span class="price">￥{{ orderTotal.goods_price | unitPrice }}</span>
         </van-cell>
         <van-cell v-if="orderTotal.exchange_point" title="积分">
           <span>{{ orderTotal.exchange_point }}分</span>
         </van-cell>
         <van-cell title="优惠金额">
-          <span>-￥{{ orderTotal.discount_price | unitPrice }}</span>
+          <span class="price">-￥{{ orderTotal.discount_price | unitPrice }}</span>
         </van-cell>
         <van-cell title="运费">
-          <span>￥{{ orderTotal.freight_price | unitPrice }}</span>
+          <span class="price">￥{{ orderTotal.freight_price | unitPrice }}</span>
         </van-cell>
       </van-cell-group>
       <!--订单金额 end-->
@@ -134,8 +135,9 @@
     <!--优惠券popup end-->
     <!--发票信息popup start-->
     <checkout-receipt
-      v-if="params.receipt"
+      v-if="params"
       :show="showReceiptPopup"
+      :receipt="params.receipt"
       @close="showReceiptPopup = false"
       @changed="handleReceiptChanged"
     />
@@ -262,6 +264,7 @@
       },
       /** 发票信息发生改变 */
       handleReceiptChanged(receipt) {
+        this.$set(this.params, 'receipt', receipt)
         console.log('receipt-changed: ', receipt)
       },
       /** 支付配送发生改变 */
