@@ -44,7 +44,7 @@
           </el-table-column>
           <el-table-column label="TA的订单" align="center">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="lookDetails(scope.row)">查看详情</el-button>
+              <el-button type="text" size="mini" @click="lookDetails(scope.row)">查看详情</el-button>
             </template>
           </el-table-column>
         </el-table>

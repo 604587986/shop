@@ -16,6 +16,20 @@ export function generateShortLink() {
 }
 
 /**
+ * 访问短链接
+ * @param params
+ */
+export function accessShortLink(params) {
+  return request({
+    url: 'distribution/su/visit',
+    method: Method.GET,
+    needToken: false,
+    params
+  })
+}
+
+
+/**
  * 获取我的推荐人
  */
 export function getMyRefereer() {

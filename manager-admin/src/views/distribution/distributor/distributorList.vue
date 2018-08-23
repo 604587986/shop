@@ -28,7 +28,7 @@
         <!--提成模板	-->
         <el-table-column prop="current_tpl_name" label="提成模板	"/>
         <!--注册时间-->
-        <el-table-column prop="start_time" :formatter="MixinUnixToDate" label="注册时间"/>
+        <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="注册时间"/>
         <!--修改模式-->
         <el-table-column label="修改模式" width="150">
           <template slot-scope="scope">

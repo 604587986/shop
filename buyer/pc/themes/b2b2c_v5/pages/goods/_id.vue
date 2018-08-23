@@ -70,6 +70,7 @@
   import * as API_Goods from '@/api/goods'
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
+  import * as API_distribution from '@/api/distribution'
   import * as GoodsComponents from './'
   import Storage from '@/utils/storage'
   import { Pagination } from 'element-ui'
@@ -140,6 +141,10 @@
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
         // 加载百度分享代码
         this.loadBdShareScript()
+        // 如果页面是被分享的
+        if (this.$route.query.su) {
+          API_distribution.accessShortLink({su: this.$route.query.su }).then(() => { console.log(9856) })
+        }
       }
     },
     methods: {
