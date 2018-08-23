@@ -7,7 +7,6 @@ import GoodsComments from './-goods-comments'
 import GoodsConsulting from './-goods-consulting'
 import GoodsInfo from './-goods-info'
 import GoodsParams from './-goods-params'
-import SalesRecord from './-sales-record'
 import ShopCard from './-shop-card'
 import GoodsGallery from './-goods-gallery'
 
@@ -16,7 +15,6 @@ export {
   GoodsConsulting,
   GoodsInfo,
   GoodsParams,
-  SalesRecord,
   ShopCard,
   GoodsGallery
 }
