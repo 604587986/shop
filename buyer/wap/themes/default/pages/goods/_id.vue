@@ -9,7 +9,9 @@
       <header-shortcut slot="right"/>
     </van-nav-bar>
     <div class="goods-container">
+      <!--商品相册 start-->
       <goods-gallery :data="galleryList"/>
+      <!--商品相册 end-->
       <div class="goods-buy">
         <div class="goods-name">
           <h1>{{ goods.goods_name }}</h1>
@@ -23,8 +25,15 @@
         </van-cell-group>
       </div>
       <span class="separated"></span>
+      <!--店铺卡片 start-->
       <shop-card :shop-id="goods.seller_id"/>
+      <!--店铺卡片 end-->
       <span class="separated"></span>
+      <!--评价 start-->
+      <goods-comments :goods-id="goods.goods_id" :grade="goods.grade"/>
+      <!--评价 end-->
+      <span class="separated"></span>
+      <!--商品简介、参数 start-->
       <van-tabs class="params-container" :line-width="100">
         <van-tab title="商品介绍">
           <div v-html="goods.intro" class="goods-intro"></div>
@@ -33,6 +42,7 @@
           <goods-params :goods-params="goods.param_list"/>
         </van-tab>
       </van-tabs>
+      <!--商品简介、参数 end-->
     </div>
     <div style="height: 50px"></div>
     <van-goods-action style="z-index: 99">
@@ -104,7 +114,7 @@
     watch: {
       tabActive: function (newVal) {
         if (newVal === 0) this.MixinScrollToTop(0)
-        if (newVal === 1) this.MixinScrollToTop(100)
+        if (newVal === 1) this.MixinScrollToTop($('#goods-comments').offset().top - 54)
         if (newVal === 2) this.MixinScrollToTop($('.params-container').offset().top - 54)
       }
     },
@@ -158,6 +168,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .separated {
     display: block;
     width: 100%;
