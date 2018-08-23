@@ -35,6 +35,7 @@
           <!--配送清单 start-->
           <checkout-inventory
             :inventory-list="inventoryList"
+            :shop-coupons="shopCoupons"
             :remark="params.remark"
             @coupon-change="couponUseChange"
           />
@@ -88,41 +89,26 @@
         orderTotal: {},
         // 购物清单
         inventoryList: '',
-        // 缓存优惠券列表
-        coupons: '',
+        // 店铺优惠券列表
+        shopCoupons: '',
         // 已选地址
         selectedAddress: ''
       }
     },
     mounted() {
       // 获取购物清单
-      API_Trade.getCarts('checked').then(response => {
-        this.inventoryList = response
-        this.GET_ShopCoupons()
-        if (response.length === 0) return
-        // 获取默认结算数据
-        API_Trade.getCheckoutParams().then(response => this.params = response)
-        // 获取订单金额
-        API_Trade.getOrderTotal().then(response => this.orderTotal = response)
-      })
+      this.GET_Inventories(true)
     },
     methods: {
       /** 使用优惠券 */
       couponUseChange(shopIndex, couponIndex, use) {
-        const inventoryList = JSON.parse(JSON.stringify(this.inventoryList))
-        inventoryList.map(item => {
-          item.coupons.map(_item => {
-            _item.used_status = 0
-          })
+        const { shopCoupons } = this
+        shopCoupons[shopIndex].member_coupon_list.map((item, index) => {
+          item.used_status = (use && index === couponIndex) ? 1 : 0
         })
-        if (use) {
-          inventoryList[shopIndex]['coupons'][couponIndex].used_status = 1
-        }
+        this.$set(this, 'shopCoupons', shopCoupons)
         API_Trade.getOrderTotal().then(response => this.orderTotal = response)
         API_Trade.getCarts('checked').then(response => {
-          response.map((item, index) => {
-            item.coupons = inventoryList[index].coupons
-          })
           this.$set(this, 'inventoryList', response)
         })
       },
@@ -130,6 +116,7 @@
       handleAddressChanged(address) {
         this.selectedAddress = address
         this.params.address_id = address.addr_id
+        this.GET_Inventories()
       },
       /** 格式化地址信息 */
       formatterAddress(address) {
@@ -146,14 +133,24 @@
       GET_ShopCoupons() {
         const { inventoryList } = this
         const seller_ids = inventoryList.map(item => item.seller_id)
-        API_Members.getShopsCoupons(seller_ids.join(',')).then(_response => {
-          this.coupons = _response
-          const _inventoryList = inventoryList.map((item, ivIndex) => {
-            item.coupons = _response[ivIndex].member_coupon_list
-            return item
-          })
-          this.$set(this, 'inventoryList', _inventoryList)
+        API_Members.getShopsCoupons(seller_ids.join(',')).then(response => {
+          this.shopCoupons = response
         })
+      },
+      /** 获取购物清单 */
+      GET_Inventories(get_params = false) {
+        API_Trade.getCarts('checked').then(response => {
+          this.inventoryList = response
+          if (response.length === 0) return
+          this.GET_ShopCoupons()
+          get_params && this.GET_CheckoutParams()
+          // 获取订单金额
+          API_Trade.getOrderTotal().then(response => this.orderTotal = response)
+        })
+      },
+      /** 获取结算参数 */
+      GET_CheckoutParams() {
+        API_Trade.getCheckoutParams().then(response => this.params = response)
       }
     }
   }
