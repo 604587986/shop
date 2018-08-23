@@ -96,15 +96,7 @@
     },
     mounted() {
       // 获取购物清单
-      API_Trade.getCarts('checked').then(response => {
-        this.inventoryList = response
-        this.GET_ShopCoupons()
-        if (response.length === 0) return
-        // 获取默认结算数据
-        API_Trade.getCheckoutParams().then(response => this.params = response)
-        // 获取订单金额
-        API_Trade.getOrderTotal().then(response => this.orderTotal = response)
-      })
+      this.GET_Inventories(true)
     },
     methods: {
       /** 使用优惠券 */
@@ -130,6 +122,7 @@
       handleAddressChanged(address) {
         this.selectedAddress = address
         this.params.address_id = address.addr_id
+        this.GET_Inventories()
       },
       /** 格式化地址信息 */
       formatterAddress(address) {
@@ -154,6 +147,21 @@
           })
           this.$set(this, 'inventoryList', _inventoryList)
         })
+      },
+      /** 获取购物清单 */
+      GET_Inventories(get_params = false) {
+        API_Trade.getCarts('checked').then(response => {
+          this.inventoryList = response
+          if (response.length === 0) return
+          this.GET_ShopCoupons()
+          get_params && this.GET_CheckoutParams()
+          // 获取订单金额
+          API_Trade.getOrderTotal().then(response => this.orderTotal = response)
+        })
+      },
+      /** 获取结算参数 */
+      GET_CheckoutParams() {
+        API_Trade.getCheckoutParams().then(response => this.params = response)
       }
     }
   }
