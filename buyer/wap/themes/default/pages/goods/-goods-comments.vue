@@ -4,7 +4,7 @@
       <van-cell value="全部评价" is-link @click="showPopup = true">
         <div slot="title">好评<span class="rate">好评{{ grade }}%</span></div>
       </van-cell>
-      <div v-if="finished && !comments.length" class="no-comments">暂无评论</div>
+      <div v-if="finished && !comments.length" class="no-comments">暂无评价</div>
       <div v-else class="some-comments">
         <div v-for="(comment, index) in comments" v-if="index < 3" :key="index" class="com-item">
           <div class="com-user">
@@ -26,7 +26,7 @@
     </van-cell-group>
     <van-popup v-model="showPopup" position="bottom" style="height:100%">
       <van-nav-bar title="商品评价" left-arrow @click-left="showPopup = false"/>
-      <div v-if="finished && !comments.length" class="no-comments" style="padding-top: 50px">暂无评论</div>
+      <div v-if="finished && !comments.length" class="no-comments" style="padding-top: 50px">暂无评价</div>
       <van-list
         v-else
         v-model="loading"
