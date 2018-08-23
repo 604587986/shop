@@ -25,10 +25,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .goods-params{
+  .goods-params {
+    padding: 10px;
     .params-table {
       width: 100%;
-      margin: 20px 0;
       text-align: left;
       border-collapse:collapse;
       th, td {

@@ -11,7 +11,7 @@
         <template v-if="!user">
           <a href="/login">登录</a> | <a href="/register">注册</a>
         </template>
-        <nuxt-link v-else to="/member">{{ user.uname }}</nuxt-link>
+        <nuxt-link v-else to="/member">{{ user.nickname || user.uname }}</nuxt-link>
       </div>
       <div class="header-cart">
         <div class="header-cart-con">
@@ -103,11 +103,10 @@
       line-height: 34px;
     }
     .header-cart {
-      float: right;
+      float: left;
       margin-top: 12px;
       .header-cart-con {
         position: relative;
-        width: 150px;
         height: 34px;
         line-height: 34px;
         border: none;

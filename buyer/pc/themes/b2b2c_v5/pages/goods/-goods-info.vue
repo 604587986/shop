@@ -46,23 +46,28 @@
         <div class="pro-content">请选择商品规格！</div>
       </div>
     </div>
-    <div class="pro-list buy-num">
-      <div class="pro-title">购买数量</div>
-      <div class="pro-content">
-        <div class="count-num">
-          <a href="javascript:;" @click="handleBuyNumChanged('-')" class="oper-num down" :class="[buyNum < 2 && 'not-oper']"></a>
-          <span class="num">
+    <div v-if="goods.is_auth === 0" class="no-auth">
+      此商品正在审核中，先看看其它商品吧。
+    </div>
+    <template v-else>
+      <div class="pro-list buy-num">
+        <div class="pro-title">购买数量</div>
+        <div class="pro-content">
+          <div class="count-num">
+            <a href="javascript:;" @click="handleBuyNumChanged('-')" class="oper-num down" :class="[buyNum < 2 && 'not-oper']"></a>
+            <span class="num">
             <input type="number" v-model.number="buyNum">
           </span>
-          <a href="javascript:;" @click="handleBuyNumChanged('+')" class="oper-num up"></a>
+            <a href="javascript:;" @click="handleBuyNumChanged('+')" class="oper-num up"></a>
+          </div>
+          <span style="margin-left: 15px">仅剩 {{ goodsInfo.quantity }} 件，抓紧时间购买哦！</span>
         </div>
-        <span style="margin-left: 15px">仅剩 {{ goodsInfo.quantity }} 件，抓紧时间购买哦！</span>
       </div>
-    </div>
-    <div class="buy-btns">
-      <button type="button" class="buy-btn buy" @click="handleBuyNow">立即购买</button>
-      <button type="button" class="buy-btn add" @click="handleAddToCart"><i class="iconfont ea-icon-cart"></i>加入购物车</button>
-    </div>
+      <div class="buy-btns">
+        <button type="button" class="buy-btn buy" @click="handleBuyNow">立即购买</button>
+        <button type="button" class="buy-btn add" @click="handleAddToCart"><i class="iconfont ea-icon-cart"></i>加入购物车</button>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -480,5 +485,16 @@
   .price-box {
     position: relative;
     background-color: #f3f3f3;
+  }
+  .no-auth {
+    width: 100%;
+    line-height: 20px;
+    background-color: #FFF7D1;
+    margin: 10px auto;
+    text-align: left;
+    border: solid 1px #E5DEBC;
+    color: #666;
+    padding: 10px;
+    box-sizing: border-box;
   }
 </style>
