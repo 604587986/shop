@@ -3,6 +3,7 @@
  */
 
 import request from '@/utils/request'
+import { api } from '~/ui-domain'
 
 /**
  * 运费模版列表
@@ -74,3 +75,15 @@ export function addExpressMould(params) {
     data: params
   })
 }
+
+/**
+ * 获取树形选择器地区信息
+ * @param params
+ */
+export function getAreaList() {
+  return request({
+    url: `${api.base}/regions/depth/3`,
+    method: 'get'
+  })
+}
+

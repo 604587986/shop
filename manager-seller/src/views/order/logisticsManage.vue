@@ -31,8 +31,6 @@
                 <span>{{ scope.row.continued_price | unitPrice('￥') }}</span>
               </template>
             </el-table-column>
-            <!--模板类型-->
-            <el-table-column prop="type" label="模板类型" :formatter="typeStatus"/>
             <!--操作-->
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
@@ -51,58 +49,66 @@
       </el-tab-pane>
       <el-tab-pane :label="tplOperaName" name="add">
         <el-form
-          :model="mouldForm" status-icon
-          :rules="rules" ref="mouldForm"
-          label-width="160px"
-          class="demo-ruleForm"
-          style="width: 33%;margin-left: 3%;">
+          :model="mouldForm"
+          status-icon
+          :rules="rules"
+          ref="mouldForm"
+          label-width="120px"
+          class="demo-ruleForm">
           <el-form-item label="模板名称:" prop="name">
-            <el-input v-model="mouldForm.name"></el-input>
+            <el-input v-model="mouldForm.name" id="tplName"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.type === 1 ? '首重:': '首件:'" prop="first_company">
-            <el-input placeholder="请输入首重" v-model.number="mouldForm.first_company">
-              <template slot="prepend">
-                {{ mouldForm.type === 1 ? 'kg': '个' }}
-              </template>
-            </el-input>
+          <el-form-item label="计费方式:" prop="type">
+            <span v-if="mouldForm.template_id">{{ mouldForm.type | typeStatus }}</span>
+            <el-radio-group v-model="mouldForm.type" v-else>
+              <el-radio :label="1">按件数计费</el-radio>
+              <el-radio :label="2">按重量计费</el-radio>
+            </el-radio-group>
           </el-form-item>
-          <el-form-item label="运费:" prop="first_price">
-            <el-input placeholder="请输入运费" v-model="mouldForm.first_price">
-              <template slot="prepend">¥</template>
-            </el-input>
+          <el-form-item label="配送区域:" prop="items">
+            <el-table
+              :data="mouldForm.items"
+              style="width: 80%"
+              border>
+              <el-table-column label="可配送区域" align="left" >
+                <template slot-scope="scope">
+                  <div class="dispatchingAreas">
+                    <!--地区名称显示-->
+                    <div>
+
+                    </div>
+                    <el-button type="text" plain @click="editArea(scope.row)">编辑</el-button>
+                    <el-button type="text" plain @click="delArea(scope.row)">删除</el-button>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column :label="mouldForm.type === 1 ? '首件（个）': '首重（kg）'" prop="id" align="center" width="200">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.first_company"
+                    @blur="intFirstCompany(scope.row)"
+                    clearable></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="运费（元）" prop="name" align="center" width="200">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.first_price" @blur="intMoney(scope.row)" clearable></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column :label="mouldForm.type === 1 ? '续件（个）': '续重（kg）'" prop="desc" align="center" width="200">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.continued_company" @blur="intContinuedCompany(scope.row)" clearable></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="续费（元）" prop="desc" align="center" width="200">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.continued_price" @blur="intMoney(scope.row)" clearable></el-input>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-form-item>
-          <el-form-item :label="mouldForm.type === 1 ? '续重:':'续件:'" prop="continued_company">
-            <el-input placeholder="请输入续重" v-model.number="mouldForm.continued_company">
-              <template slot="prepend">
-                {{ mouldForm.type === 1 ? 'kg': '个' }}
-              </template>
-            </el-input>
-          </el-form-item>
-          <el-form-item :label="mouldForm.type === 1? '续重运费:':'续件运费:'" prop="continued_price">
-            <el-input placeholder="请输入续重运费" v-model="mouldForm.continued_price">
-              <template slot="prepend">¥</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="模板类型:" prop="type">
-            <el-select v-model.number="mouldForm.type" placeholder="请选择">
-              <el-option
-                v-for="item in tplTypeList"
-                :label="item.label"
-                :key="item.value"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择配送地区:" prop="area">
-            <el-button type="primary" @click="chooseArea">选择地区</el-button>
-            <en-area-selector-dialog
-              :propertys="props"
-              :api="areaApi"
-              :showDialog="areaDialog"
-              :defaultData="area"
-              @confirmFunc="confirmFunc"
-              @hideDialogFunc="hideDialogFunc"
-            ></en-area-selector-dialog>
+          <el-form-item label="" prop="area">
+            <el-button type="text" plain @click="chooseArea">指定可配送区域和运费</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveMould('mouldForm')">保存模板</el-button>
@@ -142,6 +148,18 @@
         </en-table-layout>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog title="选择可配送区域" align="center" :visible.sync="isShowArea" width="34%">
+      <en-transfer-Tree
+        height="400px"
+        :from_data="fromData"
+        :to_data="toData"
+        filter
+        pid="parent_id"
+        :title="['可选省、市、区', '已选省、市、区']"
+        :defaultProps="{label:'local_name'}"
+        @addBtn='addArea'
+        @removeBtn='removeArea'></en-transfer-Tree>
+    </el-dialog>
   </div>
 </template>
 
@@ -149,13 +167,14 @@
   import * as API_express from '@/api/expressMould'
   import * as API_logistics from '@/api/expressCompany'
   import { RegExp } from '~/ui-utils'
-  import { api } from '~/ui-domain'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
+  import { TransferTree } from '@/components'
 
   export default {
     name: 'logisticsManage',
     components: {
-      [AreaSelectorDialog.name]: AreaSelectorDialog
+      [AreaSelectorDialog.name]: AreaSelectorDialog,
+      [TransferTree.name]: TransferTree
     },
     data() {
       const checkFirstPrice = (rule, value, callback) => {
@@ -198,32 +217,6 @@
         /** 快递模板列表数据 */
         tableData: [],
 
-        /** 地区选择器 */
-        areaDialog: false,
-
-        areaApi: `${api.base}/regions/depth/3`,
-
-        /** 地址选择器 映射属性 */
-        props: {
-          /** 等级 */
-          level: 'level',
-
-          /** 标签名 */
-          local_name: 'local_name',
-
-          /** 父地区id */
-          p_regions_id: 'parent_id',
-
-          /**  地区id */
-          region_id: 'id',
-
-          /** 子选项 */
-          children: 'children'
-        },
-
-        /** 地区信息 */
-        area: [],
-
         /** 模板表单信息 */
         mouldForm: {
           /** 模板id */
@@ -232,30 +225,82 @@
           /** 模板名称 */
           name: '',
 
-          /** 首重 */
-          first_company: '',
-
-          /** 首重价格 */
-          first_price: '',
-
-          /** 续重*/
-          continued_company: '',
-
-          /** 续重价格 */
-          continued_price: '',
-
-          /** 模板类型 */
+          /** 模版类型 */
           type: '',
 
-          /** 模板地区*/
-          area: []
+          items: [
+            {
+              /** 首重 */
+              first_company: '',
+
+              /** 首重价格 */
+              first_price: '',
+
+              /** 续重*/
+              continued_company: '',
+
+              /** 续重价格 */
+              continued_price: '',
+
+              /** 模板地区*/
+              area: []
+            }
+          ]
         },
 
-        /** 模板类型列表 */
-        tplTypeList: [
-          { label: '重量算运费', value: 1 },
-          { label: '计件算运费', value: 2 }
+        /** 是否显示地区选择器 */
+        isShowArea: false,
+
+        /** 原始 全部数据 */
+        originData: [],
+
+        /** 源数据 */
+        fromData: [
+          {
+            re_id: 1,
+            pid: 0,
+            label: '测试',
+            children: [
+              {
+                re_id: 2,
+                pid: 1,
+                label: '水电费是打发斯蒂芬斯蒂芬gas噶水电费噶地方死光光',
+                children: []
+              },
+              {
+                re_id: 3,
+                pid: 1,
+                label: '11-3',
+                children: []
+              },
+              {
+                re_id: 4,
+                pid: 1,
+                label: '11-4',
+                children: [
+                  {
+                    re_id: 5,
+                    pid: 4,
+                    label: '11-5',
+                    children: []
+                  },
+                  {
+                    re_id: 6,
+                    pid: 4,
+                    label: '11-6',
+                    children: []
+                  }
+                ]
+              }
+            ]
+          }
         ],
+
+        /** 目标数据 默认数据*/
+        toData: [],
+
+        /** 已选数据 */
+        choosedData: [],
 
         /** 物流公司列表数据 */
         logisticsTableData: [],
@@ -287,8 +332,17 @@
         }
       }
     },
+    filters: {
+      typeStatus(type) {
+        return type === 1 ? '重量算运费' : '计件算运费'
+      }
+    },
     mounted() {
       this.GET_ExpressMould()
+      // 获取地区数据
+      API_express.getAreaList().then(response => {
+        this.originData = this.fromData = response
+      })
     },
     methods: {
       /** 切换模块 */
@@ -298,42 +352,68 @@
         if (this.activeName === 'express') {
           this.GET_ExpressMould()
         } else if (this.activeName === 'add') {
-          this.mouldForm = {
-            template_id: '',
-            name: '',
-            first_company: '',
-            first_price: '',
-            continued_company: '',
-            continued_price: '',
-            type: 2,
-            area: []
-          }
-          this.area = []
+          console.log(132)
         } else {
           this.GET_logisticsList()
         }
       },
 
-      /** 模板类型格式化 */
-      typeStatus(row, column, cellValue) {
-        return row.type === 1 ? '重量算运费' : '计件算运费'
-      },
-
-      /** 选择配送地区 */
+      /** 选择配送地区 配置源数据 */
       chooseArea() {
-        this.areaDialog = true
+        this.isShowArea = true
+        /** 过滤已选数据 */
+        this.retainData()
       },
 
-      /** 地区选择器确认回调 */
-      confirmFunc(original, val) {
-        this.mouldForm.area = JSON.stringify(val)
-        this.area = original
-        this.areaDialog = false
+      /** 过滤已选数据 */
+      retainData() {
+
       },
 
-      /** 地区选择器取消回调 */
-      hideDialogFunc() {
-        this.areaDialog = false
+      /** 过滤first_company */
+      intFirstCompany(row) {
+        if (!RegExp.integer.test(row.first_company)) {
+          row.first_company = 1
+        }
+      },
+
+      /** 过滤continued_company */
+      intContinuedCompany(row) {
+        if (!RegExp.integer.test(row.continued_company) && row.continued_company !== 0) {
+          row.continued_company = 0
+        }
+      },
+
+      /** 过滤first_price continued_price */
+      intMoney(row) {
+        if (!RegExp.money.test(row.first_price)) {
+          row.first_price = 0.00
+        } else {
+          row.first_price = Number.parseFloat(row.first_price).toFixed(2)
+        }
+        if (!RegExp.money.test(row.continued_price)) {
+          row.continued_price = 0.00
+        } else {
+          row.continued_price = Number.parseFloat(row.continued_price).toFixed(2)
+        }
+      },
+
+      /** 编辑地区 */
+      editArea(row) {
+        this.isShowArea = true
+        // 过滤已选数据
+        this.retainData()
+        // 更新目标数据
+        this.toData = row.area
+        // 更新源数据
+      },
+
+      /** 删除地区 */
+      delArea(row) {
+        this.$confirm('确定删除?', '提示', { type: 'warning' }).then(() => {
+          // 更新源数据
+          // 更新表格数据
+        })
       },
 
       /** 获取快递模板信息*/
@@ -390,6 +470,20 @@
           area: []
         }
         this.area = []
+      },
+
+      // 添加地区
+      addArea(fromData, toData, obj) {
+        // console.log('fromData:', fromData)
+        // console.log('toData:', toData)
+        // console.log('obj:', obj)
+      },
+
+      // 移除地区
+      removeArea(fromData, toData, obj) {
+        // console.log(fromData)
+        // console.log(toData)
+        // console.log(obj)
       },
 
       /** 保存模板 */
@@ -463,6 +557,26 @@
 <style type="text/scss" lang="scss" scoped>
   /deep/ div.toolbar {
     display: none;
+  }
+  /deep/ #tplName {
+    width: 20%;
+  }
+  /deep/ .el-table__body {
+    .el-input {
+      width: 60%;
+      .el-input__inner {
+        text-align: center;
+        padding-right: 15px;
+      }
+    }
+  }
+
+  /deep/ .el-tabs__content {
+    padding-top: 20px;
+    background-color: #fff;
+  }
+  /deep/ .el-button.is-plain:focus, .el-button.is-plain:hover {
+    border: none;
   }
 </style>
 
