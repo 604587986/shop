@@ -29,10 +29,10 @@
                 <div class="sku-check" @click="handleCheckSku(sku)">
                   <van-icon :name="sku.checked ? 'checked' : 'check'"/>
                 </div>
-                <div class="sku-image">
+                <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-image">
                   <img :src="sku.goods_image" :alt="sku.name">
-                </div>
-                <div class="sku-content">
+                </nuxt-link>
+                <nuxt-link :to="'/goods/ + sku.goods_id'" class="sku-content">
                   <div class="sku-name">{{ sku.name }}</div>
                   <div class="sku-spec">{{ sku | formatterSkuSpec }}</div>
                   <div class="sku-tools">
@@ -45,7 +45,7 @@
                       <a class="sku-symbol symbol-add add" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
                     </div>
                   </div>
-                </div>
+                </nuxt-link>
               </div>
               <span slot="right" class="del-sku" @click="handleDelete(sku)">删除</span>
             </van-cell-swipe>
