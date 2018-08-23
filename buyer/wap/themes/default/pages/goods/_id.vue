@@ -46,7 +46,11 @@
     </div>
     <div style="height: 50px"></div>
     <van-goods-action style="z-index: 99">
-      <van-goods-action-mini-btn icon="like-o" text="收藏" @click="handleCollectGoods"/>
+      <van-goods-action-mini-btn
+        :icon="collected ? 'like' : 'like-o'"
+        :text="collected ? '已收藏' : '收藏'"
+        @click="handleCollectGoods"
+      />
       <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
       <van-goods-action-mini-btn icon="shop" text="店铺"/>
       <van-goods-action-big-btn text="加入购物车"/>
@@ -251,6 +255,14 @@
           max-width: 100%;
         }
       }
+    }
+  }
+  /deep/ .van-goods-action {
+    a:hover {
+      color: #666
+    }
+    .van-icon-like {
+      color: $color-main
     }
   }
 </style>
