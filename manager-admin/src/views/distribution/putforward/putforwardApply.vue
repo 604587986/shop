@@ -6,14 +6,14 @@
       :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <!--状态查询-->
-          <div class="conditions">
-            <span>状态：</span>
-            <el-select
-              class="choose-machine"
-              v-model="params.status"
-              placeholder="请选择"
-              @change="changeStatus"
+            <!--状态查询-->
+            <div class="conditions">
+              <span>状态：</span>
+              <el-select
+                class="choose-machine"
+                v-model="params.status"
+                placeholder="请选择"
+                @change="changeStatus"
               clearable>
               <el-option
                 v-for="item in statusList"
@@ -167,7 +167,7 @@
         statusList: [
           { label: '审核失败', value: 'FAIL_AUDITING' },
           { label: '审核通过', value: 'VIA_AUDITING' },
-          { label: '已转账', value: 'RANSFER_ACCOUNTS' },
+          { label: '已转账', value: 'TRANSFER_ACCOUNTS' },
           { label: '申请中', value: 'APPLY' }
         ],
 
