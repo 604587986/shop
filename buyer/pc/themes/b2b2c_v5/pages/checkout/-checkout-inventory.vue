@@ -25,14 +25,14 @@
           <div class="discount-inventory">
             <div class="title-item-inventory">优惠折扣</div>
             <div class="content-item-inventory">
-              <template v-if="!shop.coupons || !shop.coupons.length">
+              <template v-if="!shopCoupons[shopIndex] || !shopCoupons[shopIndex].member_coupon_list">
                 <p class="no-item-discount-inventory">您在该店铺还没有领到优惠劵，去&nbsp;
                   <nuxt-link :to="'/shop/' + shop.seller_id" target="_blank" style="color: #005ea7;">店铺</nuxt-link>&nbsp;看看吧！
                 </p>
               </template>
               <template v-else>
                 <div
-                  v-for="(coupon, couponIndex) in shop.coupons"
+                  v-for="(coupon, couponIndex) in shopCoupons[shopIndex].member_coupon_list"
                   :key="couponIndex"
                   class="item-discount-inventory"
                   :class="[coupon.used_status === 1 && 'selected']"
@@ -128,7 +128,7 @@
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-inventory',
-    props: ['inventoryList', 'remark'],
+    props: ['inventoryList', 'shop-coupons', 'remark'],
     data() {
       return {
         iRemark: this.remark
