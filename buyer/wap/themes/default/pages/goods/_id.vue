@@ -126,8 +126,6 @@
         tabActive: 0,
         // 商品是否已被收藏
         collected: false,
-        // 详情滚动条高度
-        params_offset_top: 0,
         // 已选sku
         selectedSku: '',
         // 购买数量
