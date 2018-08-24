@@ -28,9 +28,14 @@
       <!--店铺优惠券 start-->
       <goods-coupons :shop-id="goods.seller_id"/>
       <!--店铺优惠券 end-->
-      <span class="separated"></span>
       <!--商品规格 start-->
-      <goods-specs :goods-id="goods.goods_id"/>
+      <goods-specs
+        :goods-id="goods.goods_id"
+        @sku-changed="(sku) => { selectedSku = sku }"
+        @num-changed="(num) => { buyNum = num }"
+        @add-cart="handleAddToCart"
+        @buy-now="handleBuyNow"
+      />
       <!--商品规格 end-->
       <span class="separated"></span>
       <!--店铺卡片 start-->
@@ -61,8 +66,8 @@
       />
       <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
       <van-goods-action-mini-btn icon="shop" text="店铺"/>
-      <van-goods-action-big-btn text="加入购物车"/>
-      <van-goods-action-big-btn text="立即购买" primary/>
+      <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
+      <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
     </van-goods-action>
   </div>
 </template>
@@ -73,6 +78,7 @@
   import { Tabs, Tab, Swipe, SwipeItem, Cell, CellGroup, GoodsAction, GoodsActionBigBtn, GoodsActionMiniBtn } from 'vant'
   Vue.use(Tabs).use(Tab).use(Swipe).use(SwipeItem).use(Cell).use(CellGroup).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn)
   import * as API_Goods from '@/api/goods'
+  import * as API_Trade from '@/api/trade'
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
   import * as goodsComponents from './index'
@@ -120,7 +126,11 @@
         // 商品是否已被收藏
         collected: false,
         // 详情滚动条高度
-        params_offset_top: 0
+        params_offset_top: 0,
+        // 已选sku
+        selectedSku: '',
+        // 购买数量
+        buyNum: 1
       }
     },
     watch: {
@@ -174,6 +184,59 @@
             this.collected = true
           })
         }
+      },
+      /** 立即购买 */
+      handleBuyNow() {
+        if (!this.isLogin()) return
+        const { buyNum } = this
+        const { sku_id } = this.selectedSku
+        API_Trade.buyNow(sku_id, buyNum, this.getActivityId()).then(response => {
+          this.$store.dispatch('cart/getCartDataAction')
+          this.$router.push('/checkout')
+        })
+      },
+      /** 加入购物车 */
+      handleAddToCart() {
+        if (!this.isLogin()) return
+        const { buyNum } = this
+        const { sku_id } = this.selectedSku
+        API_Trade.addToCart(sku_id, buyNum, this.getActivityId()).then(response => {
+          this.$store.dispatch('cart/getCartDataAction')
+          this.$confirm('加入购物车成功！要去看看吗？', () => {
+            this.$router.push({ path: '/cart' })
+          })
+        })
+      },
+      /** 是否已登录 */
+      isLogin() {
+        if (!this.selectedSku) {
+          this.$message.error('请选择商品规格！')
+          this.unselectedSku = true
+          return false
+        }
+        if (!Storage.getItem('refresh_token')) {
+          this.$confirm('您还未登录，要现在去登录吗？', () => {
+            this.$router.push({ path: '/login', query: { forward: `${this.$route.path}?sku_id=${this.selectedSku.sku_id}`} })
+          })
+          return false
+        } else {
+          return true
+        }
+      },
+      /** 检查是否有积分兑换、团购、限时抢购活动 */
+      getActivityId() {
+        const { promotions } = this
+        if (!promotions || !promotions.length) return ''
+        let pro
+        for (let i = 0; i < promotions.length; i++) {
+          let item = promotions[i]
+          if (item.exchange || item.groupbuy_goods_do || item.seckill_goods_vo) {
+            pro = item
+            break
+          }
+        }
+        if (!pro) return ''
+        return pro.activity_id
       }
     }
   }
