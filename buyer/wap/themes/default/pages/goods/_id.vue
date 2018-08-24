@@ -25,6 +25,14 @@
         </van-cell-group>
       </div>
       <span class="separated"></span>
+      <!--店铺优惠券 start-->
+      <goods-coupons :shop-id="goods.seller_id"/>
+      <!--店铺优惠券 end-->
+      <span class="separated"></span>
+      <!--商品规格 start-->
+      <goods-specs :goods-id="goods.goods_id"/>
+      <!--商品规格 end-->
+      <span class="separated"></span>
       <!--店铺卡片 start-->
       <shop-card :shop-id="goods.seller_id"/>
       <!--店铺卡片 end-->
@@ -212,7 +220,6 @@
           font-size: 16px;
           color: #333;
           line-height: 18px;
-          min-height: 36px;
           font-weight: 400;
           display: -webkit-box;
           -webkit-box-orient: vertical;

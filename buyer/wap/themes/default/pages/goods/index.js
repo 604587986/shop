@@ -9,6 +9,8 @@ import GoodsInfo from './-goods-info'
 import GoodsParams from './-goods-params'
 import ShopCard from './-shop-card'
 import GoodsGallery from './-goods-gallery'
+import GoodsSpecs from './-goods-specs'
+import GoodsCoupons from './-goods-coupons'
 
 export {
   GoodsComments,
@@ -16,5 +18,7 @@ export {
   GoodsInfo,
   GoodsParams,
   ShopCard,
-  GoodsGallery
+  GoodsGallery,
+  GoodsSpecs,
+  GoodsCoupons
 }
