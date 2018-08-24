@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-nav-bar left-arrow @click-left="MixinRouterBack">
-      <van-tabs v-model="tabActive" slot="title">
+      <van-tabs v-model="tabActive" slot="title" @click="handleClickNavTab">
         <van-tab title="商品"/>
         <van-tab title="评价"/>
         <van-tab title="详情"/>
@@ -79,6 +79,7 @@
   Vue.use(Tabs).use(Tab).use(Swipe).use(SwipeItem).use(Cell).use(CellGroup).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn)
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
+  import * as API_Common from '@/api/common'
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
   import * as goodsComponents from './index'
@@ -130,14 +131,14 @@
         // 已选sku
         selectedSku: '',
         // 购买数量
-        buyNum: 1
-      }
-    },
-    watch: {
-      tabActive: function (newVal) {
-        if (newVal === 0) this.MixinScrollToTop(0)
-        if (newVal === 1) this.MixinScrollToTop($('#goods-comments').offset().top - 54)
-        if (newVal === 2) this.MixinScrollToTop($('.params-container').offset().top - 54)
+        buyNum: 1,
+        // 距离顶部距离
+        offsetTop: {
+          cm: 0,
+          pa: 0
+        },
+        // 锁住滚动出发事件
+        lockScroll: false
       }
     },
     mounted() {
@@ -155,8 +156,12 @@
         }
         // 浏览量+1
         API_Goods.visitGoods(goods_id)
+        // 记录浏览量统计【用于统计】
+        API_Common.recordViews(window.location.href)
         // 获取促销信息
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
+        // 滚动监听
+        window.addEventListener('scroll', this.handleCountOffset)
       }
     },
     computed: {
@@ -237,7 +242,44 @@
         }
         if (!pro) return ''
         return pro.activity_id
+      },
+      /** 导航栏tab发生改变 */
+      handleClickNavTab(index) {
+        const { cm, pa } = this.offsetTop
+        this.lockScroll = true
+        if (index === 0) this.MixinScrollToTop(0)
+        if (index === 1) this.MixinScrollToTop(cm)
+        if (index === 2) this.MixinScrollToTop(pa)
+      },
+      /** 计算滚动offset */
+      handleCountOffset() {
+        if (this.lockScroll) {
+          setTimeout(() => {
+            this.lockScroll = false
+          }, 300)
+          return
+        }
+        const sy = window.scrollY
+        const { cm, pa } = this.offsetTop
+        if (sy >= cm && sy < pa) {
+          this.tabActive = 1
+        } else if (sy >= pa) {
+          this.tabActive = 2
+        } else {
+          this.tabActive = 0
+        }
       }
+    },
+    updated() {
+      this.$nextTick(() => {
+        this.offsetTop = {
+          cm: $('#goods-comments').offset().top - 54,
+          pa: $('.params-container').offset().top - 54
+        }
+      })
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.handleCountOffset)
     }
   }
 </script>
