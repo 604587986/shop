@@ -77,8 +77,8 @@
                     <div>
 
                     </div>
-                    <el-button type="text" plain @click="editArea(scope.row)">编辑</el-button>
-                    <el-button type="text" plain @click="delArea(scope.row)">删除</el-button>
+                    <el-button type="text" plain @click="editArea(scope.row, scope.$index)">编辑</el-button>
+                    <el-button type="text" plain @click="delArea(scope.row, scope.$index)">删除</el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -107,7 +107,7 @@
               </el-table-column>
             </el-table>
           </el-form-item>
-          <el-form-item label="" prop="area">
+          <el-form-item prop="area">
             <el-button type="text" plain @click="chooseArea">指定可配送区域和运费</el-button>
           </el-form-item>
           <el-form-item>
@@ -226,27 +226,30 @@
           name: '',
 
           /** 模版类型 */
-          type: '',
+          type: 1,
 
           items: [
             {
               /** 首重 */
-              first_company: '',
+              first_company: 1,
 
               /** 首重价格 */
-              first_price: '',
+              first_price: 0,
 
               /** 续重*/
-              continued_company: '',
+              continued_company: 0,
 
               /** 续重价格 */
-              continued_price: '',
+              continued_price: 0,
 
               /** 模板地区*/
               area: []
             }
           ]
         },
+
+        /** 是否是编辑模式 */
+        isEdit: false,
 
         /** 是否显示地区选择器 */
         isShowArea: false,
@@ -255,52 +258,16 @@
         originData: [],
 
         /** 源数据 */
-        fromData: [
-          {
-            re_id: 1,
-            pid: 0,
-            label: '测试',
-            children: [
-              {
-                re_id: 2,
-                pid: 1,
-                label: '水电费是打发斯蒂芬斯蒂芬gas噶水电费噶地方死光光',
-                children: []
-              },
-              {
-                re_id: 3,
-                pid: 1,
-                label: '11-3',
-                children: []
-              },
-              {
-                re_id: 4,
-                pid: 1,
-                label: '11-4',
-                children: [
-                  {
-                    re_id: 5,
-                    pid: 4,
-                    label: '11-5',
-                    children: []
-                  },
-                  {
-                    re_id: 6,
-                    pid: 4,
-                    label: '11-6',
-                    children: []
-                  }
-                ]
-              }
-            ]
-          }
-        ],
+        fromData: [],
 
-        /** 目标数据 默认数据*/
+        /** 目标数据 当前项默认数据*/
         toData: [],
 
         /** 已选数据 */
         choosedData: [],
+
+        /** 当前操作行索引 */
+        currentIndex: 0,
 
         /** 物流公司列表数据 */
         logisticsTableData: [],
@@ -310,24 +277,8 @@
           name: [
             { required: true, message: '请输入模板名称', trigger: 'blur' }
           ],
-          first_company: [
-            { required: true, message: '请输入首重数量', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
-          ],
-          first_price: [
-            { required: true, message: '请输入首重运费', trigger: 'blur' },
-            { validator: checkFirstPrice, trigger: 'blur' }
-          ],
-          continued_company: [
-            { required: true, message: '请输入续重数量', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
-          ],
-          continued_price: [
-            { required: true, message: '请输入续重运费', trigger: 'blur' },
-            { validator: checkContinuedPrice, trigger: 'blur' }
-          ],
           type: [
-            { required: true, message: '请选择模板类型', trigger: 'blur' }
+            { required: true, message: '请选择模板类型', trigger: 'change' }
           ]
         }
       }
@@ -339,10 +290,6 @@
     },
     mounted() {
       this.GET_ExpressMould()
-      // 获取地区数据
-      API_express.getAreaList().then(response => {
-        this.originData = this.fromData = response
-      })
     },
     methods: {
       /** 切换模块 */
@@ -352,7 +299,7 @@
         if (this.activeName === 'express') {
           this.GET_ExpressMould()
         } else if (this.activeName === 'add') {
-          console.log(132)
+          // console.log(132)
         } else {
           this.GET_logisticsList()
         }
@@ -360,14 +307,34 @@
 
       /** 选择配送地区 配置源数据 */
       chooseArea() {
-        this.isShowArea = true
-        /** 过滤已选数据 */
-        this.retainData()
+        // 获取地区数据
+        API_express.getAreaList().then(response => {
+          this.isShowArea = true
+          this.originData = response
+          this.fromData = response
+          // this.fromData = this.retainData(this.originData, this.choosedData)
+          this.isEdit = false
+        })
       },
 
       /** 过滤已选数据 */
-      retainData() {
-
+      retainData(origin, choosed) {
+        let result = []
+        if (!(origin.length && choosed.length)) {
+          return origin
+        }
+        origin.forEach(key => {
+          choosed.forEach(item => {
+            if (key.id !== item.id) {
+              result.push(key)
+            } else {
+              if (key.children && item.children) {
+                key.children = this.retainData(key.children, item.children)
+              }
+            }
+          })
+        })
+        return result
       },
 
       /** 过滤first_company */
@@ -398,22 +365,83 @@
         }
       },
 
-      /** 编辑地区 */
-      editArea(row) {
+      /** 编辑子地区 */
+      editArea(row, $index) {
         this.isShowArea = true
-        // 过滤已选数据
-        this.retainData()
+        this.isEdit = true
         // 更新目标数据
         this.toData = row.area
+        this.currentIndex = $index
         // 更新源数据
+        this.fromData = this.retainData(this.originData, this.choosedData)
       },
 
-      /** 删除地区 */
-      delArea(row) {
+      /** 删除子地区 */
+      delArea(row, $index) {
         this.$confirm('确定删除?', '提示', { type: 'warning' }).then(() => {
           // 更新源数据
+          // this.fromData.push(row.area)
           // 更新表格数据
+          this.mouldForm.items.splice($index, 1)
         })
+      },
+
+      // 添加地区回调
+      addArea(fromData, toData, obj) {
+        // console.log(toData, obj)
+        // if (this.isEdit) { // 编辑
+        //   // 更新当前项默认数据（更新表格数据）
+        //   this.mouldForm.items[this.currentIndex].area = this.toData = toData
+        // } else {
+        //   // 添加表格数据
+        //   this.mouldForm.items.push({
+        //     area: toData,
+        //
+        //     first_company: 1,
+        //
+        //     first_price: 0,
+        //
+        //     continued_company: 0,
+        //
+        //     continued_price: 0
+        //   })
+        // }
+        // // 更新已选数据 把toData融合进choosedData中
+        // if (!this.choosedData.length) {
+        //   this.choosedData = toData
+        // } else {
+        //   this.choosedData = this.getChoosedData(this.choosedData, toData)
+        // }
+      },
+
+      /** 获取已选数据 */
+      getChoosedData(choosedData, toData) {
+        let result = []
+        if (!(choosedData.length && toData.length)) {
+          return choosedData
+        }
+        choosedData.forEach((key) => {
+          toData.forEach(item => {
+            if (key.id === item.id) {
+              if (key.children && item.children) {
+                key.children = this.getChoosedData(key.children, item.children)
+              }
+            } else {
+              result.push(item)
+            }
+          })
+        })
+        return result
+      },
+
+      // 移除地区
+      removeArea(fromData, toData, obj) {
+        console.log(fromData)
+        // this.fromData.push(fromData)
+        // 去除已选数据
+        // console.log(fromData)
+        // console.log(toData)
+        // console.log(obj)
       },
 
       /** 获取快递模板信息*/
@@ -472,41 +500,23 @@
         this.area = []
       },
 
-      // 添加地区
-      addArea(fromData, toData, obj) {
-        // console.log('fromData:', fromData)
-        // console.log('toData:', toData)
-        // console.log('obj:', obj)
-      },
-
-      // 移除地区
-      removeArea(fromData, toData, obj) {
-        // console.log(fromData)
-        // console.log(toData)
-        // console.log(obj)
-      },
-
       /** 保存模板 */
       saveMould(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let _params = {
               name: this.mouldForm.name,
-              first_company: this.mouldForm.first_company,
-              first_price: this.mouldForm.first_price,
-              continued_company: this.mouldForm.continued_company,
-              continued_price: this.mouldForm.continued_price,
-              type: parseInt(this.mouldForm.type),
-              area_json: this.mouldForm.area
+              type: Number.parseInt(this.mouldForm.type),
+              items: this.mouldForm.items
             }
-            if (this.mouldForm.template_id) {
+            if (this.mouldForm.template_id) { // 修改
               API_express.saveExpressMould(this.mouldForm.template_id, _params).then(() => {
                 this.$message.success('修改成功')
                 this.GET_ExpressMould()
                 this.activeName = 'express'
                 this.tplOperaName = '新增模板'
               })
-            } else {
+            } else { // 添加
               delete _params.template_id
               API_express.addExpressMould(_params).then(() => {
                 this.$message.success('添加成功')
