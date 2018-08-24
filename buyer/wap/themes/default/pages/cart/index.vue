@@ -32,7 +32,7 @@
                 <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-image">
                   <img :src="sku.goods_image" :alt="sku.name">
                 </nuxt-link>
-                <nuxt-link :to="'/goods/ + sku.goods_id'" class="sku-content">
+                <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-content">
                   <div class="sku-name">{{ sku.name }}</div>
                   <div class="sku-spec">{{ sku | formatterSkuSpec }}</div>
                   <div class="sku-tools">
