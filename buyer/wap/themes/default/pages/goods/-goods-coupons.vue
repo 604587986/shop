@@ -35,7 +35,6 @@
         </div>
       </div>
     </van-popup>
-    <span class="separated"></span>
   </div>
 </template>
 
@@ -78,7 +77,10 @@
   @import "../../assets/styles/color";
   /deep/ {
     .van-nav-bar { position: relative }
-    .coupons-cells .van-cell__title { flex: 5 }
+    .coupons-cells {
+      border-bottom: 10px solid #e8e8ed;;
+      .van-cell__title { flex: 5 }
+    }
   }
   .coupons-cell {
     display: inline-block;
