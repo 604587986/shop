@@ -35,6 +35,7 @@
         </div>
       </div>
     </van-popup>
+    <span class="separated"></span>
   </div>
 </template>
 
