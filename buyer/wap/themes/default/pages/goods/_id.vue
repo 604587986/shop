@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-nav-bar left-arrow @click-left="MixinRouterBack">
-      <van-tabs v-model="tabActive" slot="title">
+      <van-tabs v-model="tabActive" slot="title" @click="handleClickNavTab">
         <van-tab title="商品"/>
         <van-tab title="评价"/>
         <van-tab title="详情"/>
@@ -9,7 +9,9 @@
       <header-shortcut slot="right"/>
     </van-nav-bar>
     <div class="goods-container">
+      <!--商品相册 start-->
       <goods-gallery :data="galleryList"/>
+      <!--商品相册 end-->
       <div class="goods-buy">
         <div class="goods-name">
           <h1>{{ goods.goods_name }}</h1>
@@ -23,8 +25,28 @@
         </van-cell-group>
       </div>
       <span class="separated"></span>
-      <shop-card :shop-id="goods.seller_id"/>
+      <!--店铺优惠券 start-->
+      <goods-coupons :shop-id="goods.seller_id"/>
+      <!--店铺优惠券 end-->
+      <!--商品规格 start-->
+      <goods-specs
+        :goods-id="goods.goods_id"
+        @sku-changed="(sku) => { selectedSku = sku }"
+        @num-changed="(num) => { buyNum = num }"
+        @add-cart="handleAddToCart"
+        @buy-now="handleBuyNow"
+      />
+      <!--商品规格 end-->
       <span class="separated"></span>
+      <!--店铺卡片 start-->
+      <shop-card :shop-id="goods.seller_id"/>
+      <!--店铺卡片 end-->
+      <span class="separated"></span>
+      <!--评价 start-->
+      <goods-comments :goods-id="goods.goods_id" :grade="goods.grade"/>
+      <!--评价 end-->
+      <span class="separated"></span>
+      <!--商品简介、参数 start-->
       <van-tabs class="params-container" :line-width="100">
         <van-tab title="商品介绍">
           <div v-html="goods.intro" class="goods-intro"></div>
@@ -33,14 +55,19 @@
           <goods-params :goods-params="goods.param_list"/>
         </van-tab>
       </van-tabs>
+      <!--商品简介、参数 end-->
     </div>
     <div style="height: 50px"></div>
     <van-goods-action style="z-index: 99">
-      <van-goods-action-mini-btn icon="like-o" text="收藏" @click="handleCollectGoods"/>
+      <van-goods-action-mini-btn
+        :icon="collected ? 'like' : 'like-o'"
+        :text="collected ? '已收藏' : '收藏'"
+        @click="handleCollectGoods"
+      />
       <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
       <van-goods-action-mini-btn icon="shop" text="店铺"/>
-      <van-goods-action-big-btn text="加入购物车"/>
-      <van-goods-action-big-btn text="立即购买" primary/>
+      <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
+      <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
     </van-goods-action>
   </div>
 </template>
@@ -51,6 +78,8 @@
   import { Tabs, Tab, Swipe, SwipeItem, Cell, CellGroup, GoodsAction, GoodsActionBigBtn, GoodsActionMiniBtn } from 'vant'
   Vue.use(Tabs).use(Tab).use(Swipe).use(SwipeItem).use(Cell).use(CellGroup).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn)
   import * as API_Goods from '@/api/goods'
+  import * as API_Trade from '@/api/trade'
+  import * as API_Common from '@/api/common'
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
   import * as goodsComponents from './index'
@@ -97,15 +126,17 @@
         tabActive: 0,
         // 商品是否已被收藏
         collected: false,
-        // 详情滚动条高度
-        params_offset_top: 0
-      }
-    },
-    watch: {
-      tabActive: function (newVal) {
-        if (newVal === 0) this.MixinScrollToTop(0)
-        if (newVal === 1) this.MixinScrollToTop(100)
-        if (newVal === 2) this.MixinScrollToTop($('.params-container').offset().top - 54)
+        // 已选sku
+        selectedSku: '',
+        // 购买数量
+        buyNum: 1,
+        // 距离顶部距离
+        offsetTop: {
+          cm: 0,
+          pa: 0
+        },
+        // 锁住滚动出发事件
+        lockScroll: false
       }
     },
     mounted() {
@@ -123,8 +154,12 @@
         }
         // 浏览量+1
         API_Goods.visitGoods(goods_id)
+        // 记录浏览量统计【用于统计】
+        API_Common.recordViews(window.location.href)
         // 获取促销信息
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
+        // 滚动监听
+        window.addEventListener('scroll', this.handleCountOffset)
       }
     },
     computed: {
@@ -152,12 +187,103 @@
             this.collected = true
           })
         }
+      },
+      /** 立即购买 */
+      handleBuyNow() {
+        if (!this.isLogin()) return
+        const { buyNum } = this
+        const { sku_id } = this.selectedSku
+        API_Trade.buyNow(sku_id, buyNum, this.getActivityId()).then(response => {
+          this.$store.dispatch('cart/getCartDataAction')
+          this.$router.push('/checkout')
+        })
+      },
+      /** 加入购物车 */
+      handleAddToCart() {
+        if (!this.isLogin()) return
+        const { buyNum } = this
+        const { sku_id } = this.selectedSku
+        API_Trade.addToCart(sku_id, buyNum, this.getActivityId()).then(response => {
+          this.$store.dispatch('cart/getCartDataAction')
+          this.$confirm('加入购物车成功！要去看看吗？', () => {
+            this.$router.push({ path: '/cart' })
+          })
+        })
+      },
+      /** 是否已登录 */
+      isLogin() {
+        if (!this.selectedSku) {
+          this.$message.error('请选择商品规格！')
+          this.unselectedSku = true
+          return false
+        }
+        if (!Storage.getItem('refresh_token')) {
+          this.$confirm('您还未登录，要现在去登录吗？', () => {
+            this.$router.push({ path: '/login', query: { forward: `${this.$route.path}?sku_id=${this.selectedSku.sku_id}`} })
+          })
+          return false
+        } else {
+          return true
+        }
+      },
+      /** 检查是否有积分兑换、团购、限时抢购活动 */
+      getActivityId() {
+        const { promotions } = this
+        if (!promotions || !promotions.length) return ''
+        let pro
+        for (let i = 0; i < promotions.length; i++) {
+          let item = promotions[i]
+          if (item.exchange || item.groupbuy_goods_do || item.seckill_goods_vo) {
+            pro = item
+            break
+          }
+        }
+        if (!pro) return ''
+        return pro.activity_id
+      },
+      /** 导航栏tab发生改变 */
+      handleClickNavTab(index) {
+        const { cm, pa } = this.offsetTop
+        this.lockScroll = true
+        if (index === 0) this.MixinScrollToTop(0)
+        if (index === 1) this.MixinScrollToTop(cm)
+        if (index === 2) this.MixinScrollToTop(pa)
+      },
+      /** 计算滚动offset */
+      handleCountOffset() {
+        if (this.lockScroll) {
+          setTimeout(() => {
+            this.lockScroll = false
+          }, 300)
+          return
+        }
+        const sy = window.scrollY
+        const { cm, pa } = this.offsetTop
+        if (sy >= cm && sy < pa) {
+          this.tabActive = 1
+        } else if (sy >= pa) {
+          this.tabActive = 2
+        } else {
+          this.tabActive = 0
+        }
       }
+    },
+    updated() {
+      this.$nextTick(() => {
+        this.offsetTop = {
+          cm: $('#goods-comments').offset().top - 54,
+          pa: $('.params-container').offset().top - 54
+        }
+      })
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.handleCountOffset)
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .separated {
     display: block;
     width: 100%;
@@ -197,7 +323,6 @@
           font-size: 16px;
           color: #333;
           line-height: 18px;
-          min-height: 36px;
           font-weight: 400;
           display: -webkit-box;
           -webkit-box-orient: vertical;
@@ -240,6 +365,14 @@
           max-width: 100%;
         }
       }
+    }
+  }
+  /deep/ .van-goods-action {
+    a:hover {
+      color: #666
+    }
+    .van-icon-like {
+      color: $color-main
     }
   }
 </style>

@@ -42,8 +42,6 @@
 <script>
   import { mapGetters } from 'vuex'
   import * as API_Shop from '@/api/shop'
-  import * as API_Members from '@/api/members'
-  import Storage from '@/utils/storage'
   export default {
     name: "shop-card",
     props: ['shop-id'],
