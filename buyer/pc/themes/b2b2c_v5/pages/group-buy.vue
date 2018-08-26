@@ -101,7 +101,6 @@
         const params = JSON.parse(JSON.stringify(this.params))
         if (params.cat_id === 0) delete params.cat_id
         API_Promotions.getGroupBuyGoods(params).then(response => {
-          response.data = [...response.data, ...response.data]
           this.groupBuy = response
         })
       }
