@@ -5,7 +5,7 @@
       <strong>{{ title }}</strong>
     </div>
     <div class="prom-time">
-      {{ endTime > 0 ? '距离结束' : '距离开始' }}
+      距离开始
       <template v-if="day > 0">
         <span>{{ day }}</span>天
       </template>
@@ -29,9 +29,7 @@
       }
     },
     mounted() {
-      let time = this.endTime
-      if (time < 0) time = Math.abs(time)
-      this.contDown(time)
+      this.contDown(this.endTime)
     },
     methods: {
       contDown(times) {

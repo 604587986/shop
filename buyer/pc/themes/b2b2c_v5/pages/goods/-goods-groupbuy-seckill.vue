@@ -21,7 +21,7 @@
     <template v-else>
       <goods-prom-bar
         title="限时抢购"
-        :end-time="promotion.seckill_goods_vo.distance_end_time || promotion.seckill_goods_vo.distance_start_time"
+        :end-time="promotion.seckill_goods_vo.distance_end_time"
         @count-end="handleCountEnd"
       >
         <i class="iconfont ea-icon-time seckill" slot="icon"></i>
@@ -60,6 +60,9 @@
         } else {
           // 否则再试试有没有限时抢购活动
           prom = this.promotions.filter(item => item.seckill_goods_vo)
+          if (prom && prom[0] && prom[0].seckill_goods_vo.distance_start_time < 0) {
+            return false
+          }
         }
         // 如果都没有，返回false
         if (!prom || !prom[0]) return false
