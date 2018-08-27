@@ -103,6 +103,7 @@ export function getSeckillTimeGoods(params) {
   return request({
     url: 'promotions/seckill/goods-list',
     method: Method.GET,
+    loading: false,
     params
   })
 }
