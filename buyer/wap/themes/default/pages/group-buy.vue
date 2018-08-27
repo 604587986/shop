@@ -3,7 +3,7 @@
     <nav-bar title="团购活动" fixed/>
     <van-tabs @click="handleClickCate">
       <van-tab
-        v-for="(cate, index) in categorys"
+        v-for="(cate, index) in categories"
         :title="cate.cat_name"
         :key="index"
       >
@@ -49,6 +49,13 @@
         title: `团购-${this.site.site_name}`
       }
     },
+    async asyncData() {
+      // 获取团购分类
+      let categories = await API_Promotions.getGroupBuyCategorys()
+      categories.unshift({ cat_id: 0, cat_name: '全部', cat_order: 0, active: true })
+      categories.sort((x, y) => x.cat_order > y.cat_order)
+      return { categories }
+    },
     data() {
       return {
         loading: false,
@@ -58,17 +65,8 @@
           page_size: 10,
           cat_id: 0
         },
-        categorys: [
-          { cat_id: 0, cat_name: '全部', active: true }
-        ],
         groupBuy: []
       }
-    },
-    mounted() {
-      // 获取团购分类
-      API_Promotions.getGroupBuyCategorys().then(response => {
-        this.categorys.push(...response.sort((x, y) => x.cat_order > y.cat_order))
-      })
     },
     methods: {
       /** 加载数据 */
@@ -78,9 +76,9 @@
       },
       /** 选择团购分类 */
       handleClickCate(index) {
-        const { categorys } = this
-        const cate = categorys[index]
-        this.$set(this, 'categorys', categorys.map(item => {
+        const { categories } = this
+        const cate = categories[index]
+        this.$set(this, 'categories', categories.map(item => {
           item.active = item.cat_id === cate.cat_id
           return item
         }))
