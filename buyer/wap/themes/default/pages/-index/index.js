@@ -5,9 +5,11 @@
 import IndexBanner from './-banner'
 import IndexMenu from './-menu'
 import IndexSearchBar from './-searchBar'
+import IndexSeckill from './-seckill'
 
 export {
   IndexBanner,
   IndexMenu,
-  IndexSearchBar
+  IndexSearchBar,
+  IndexSeckill
 }
