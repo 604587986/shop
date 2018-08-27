@@ -41,7 +41,7 @@
     props: ['hide-keywords'],
     data() {
       return {
-        keyword: this.$route.query.keyword,
+        keyword: this.$route.query.keyword || '',
         autoCompleteStr: '',
         autoCompleteData: [],
         show_autocomplete: false
@@ -58,6 +58,7 @@
       handleKeywordChnaged(event) {
         let _str = event.target.value || ''
         _str = _str.replace('\'', '')
+        // this.keyword = _str
         this.GET_AutoCompleteWords(_str)
       },
       /** 搜索框失去焦点 */

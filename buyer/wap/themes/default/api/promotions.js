@@ -34,6 +34,7 @@ export function getGroupBuyGoods(params) {
   return request({
     url: `promotions/group-buy/goods`,
     method: Method.GET,
+    loading: false,
     params
   })
 }
