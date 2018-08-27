@@ -3,6 +3,7 @@
     <index-search-bar/>
     <index-banner :data="banner"/>
     <index-menu :data="menus"/>
+    <index-seckill/>
     <div v-if="floorList" class="floor-container">
       <div v-for="(item, index) in floorList" :key="index" :class="'item-' + item.tpl_id" class="floor-item">
         <component

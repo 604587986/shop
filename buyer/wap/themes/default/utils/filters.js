@@ -8,6 +8,7 @@ import { Foundation } from '~/ui-utils'
  * @returns {*}
  */
 export function unitPrice(val, unit, location) {
+  if (!val) val = 0
   let price = Foundation.formatPrice(val)
   if (location === 'before') {
     return price.substr(0, price.length - 3)

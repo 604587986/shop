@@ -1,38 +1,38 @@
 <template>
-  <div id="group-buy">
-    <nav-bar title="团购活动" fixed/>
+  <div id="points-mall">
+    <nav-bar title="积分商城" fixed/>
     <van-tabs @click="handleClickCate">
       <van-tab
         v-for="(cate, index) in categories"
-        :title="cate.cat_name"
+        :title="cate.name"
         :key="index"
       >
       </van-tab>
     </van-tabs>
-    <en-empty v-if="finished && !groupBuy.length" style="line-height:420px">暂无商品</en-empty>
+    <en-empty v-if="finished && !pointsList.length" style="line-height:420px">暂无商品</en-empty>
     <van-list
       v-model="loading"
       :finished="finished"
       @load="onLoad"
-      class="group-buy-container"
+      class="points-goods-container"
     >
-      <li v-for="(goods, index) in groupBuy" :key="index" class="item-goods">
+      <li v-for="(goods, index) in pointsList" :key="index" class="item-goods">
         <dt>
           <nuxt-link :to="'/goods/' + goods.goods_id">
-            <img :src="goods.img_url" :alt="goods.goods_name">
+            <img :src="goods.goods_img" :alt="goods.goods_name">
           </nuxt-link>
         </dt>
         <dd>
           <div class="name-goods">{{ goods.goods_name }}</div>
           <div class="descrip-goods">
             <p></p>
-            <p class="price">￥{{ goods.price | unitPrice }}</p>
-            <nuxt-link :to="'/goods/' + goods.goods_id" class="grab-btn">去团购</nuxt-link>
+            <p>{{ goods.exchange_point }}积分 + ￥{{ goods.exchange_money | unitPrice }}</p>
           </div>
           <div class="price-goods">
-            <div>原价：￥{{ goods.original_price | unitPrice }}</div>
-            <div>已售出：<span>{{ goods.buy_num }}</span>件</div>
+            <div>原价：￥{{ goods.goods_price | unitPrice }}</div>
+            <div>已兑换：<span>{{ goods.enable_exchange }}</span>人</div>
           </div>
+          <nuxt-link :to="'/goods/' + goods.goods_id" class="grab-btn">兑换</nuxt-link>
         </dd>
       </li>
     </van-list>
@@ -43,17 +43,23 @@
   import Vue from 'vue'
   import * as API_Promotions from '@/api/promotions'
   export default {
-    name: 'group-buy',
+    name: 'points-mall',
     head() {
       return {
-        title: `团购-${this.site.site_name}`
+        title: `积分商城-${this.site.site_name}`
       }
     },
     async asyncData() {
       // 获取团购分类
-      let categories = await API_Promotions.getGroupBuyCategorys()
-      categories.unshift({ cat_id: 0, cat_name: '全部', cat_order: 0, active: true })
-      categories.sort((x, y) => x.cat_order > y.cat_order)
+      let categories = await API_Promotions.getPointsCategory()
+      categories = categories.map(item => {
+        return {
+          active: false,
+          name: item.name,
+          cat_id: item.category_id
+        }
+      })
+      categories.unshift({ cat_id: 0, name: '全部', active: true })
       return { categories }
     },
     data() {
@@ -65,41 +71,40 @@
           page_size: 10,
           cat_id: 0
         },
-        groupBuy: []
+        pointsList: []
       }
     },
     methods: {
       /** 加载数据 */
       onLoad(page_no) {
         this.params.page_no += 1
-        this.GET_GroupBuyGoods()
+        this.GET_PointsGoods()
       },
-      /** 选择团购分类 */
+      /** 选择积分分类 */
       handleClickCate(index) {
         const { categories } = this
-        const cate = categories[index]
+        const cat = categories[index]
         this.$set(this, 'categories', categories.map(item => {
-          item.active = item.cat_id === cate.cat_id
+          item.active = item.cat_id === cat.cat_id
           return item
         }))
         this.finished = false
-        this.groupBuy = []
+        this.pointsList = []
         this.params.page_no = 1
-        this.params.cat_id = cate.cat_id
-        this.GET_GroupBuyGoods()
+        this.params.cat_id = cat.cat_id
+        this.GET_PointsGoods()
       },
-      /** 获取团购商品 */
-      GET_GroupBuyGoods() {
-        this.loading = true
+      /** 获取积分商品 */
+      GET_PointsGoods() {
         const params = JSON.parse(JSON.stringify(this.params))
         if (params.cat_id === 0) delete params.cat_id
-        API_Promotions.getGroupBuyGoods(params).then(response => {
+        API_Promotions.getPointsGoods(params).then(response => {
           this.loading = false
           const { data } = response
           if (!data || !data.length) {
             this.finished = true
           } else {
-            this.groupBuy.push(...data)
+            this.pointsList.push(...data)
           }
         }).catch(() => {
           this.loading = false
@@ -122,7 +127,7 @@
       }
     }
   }
-  .group-buy-container {
+  .points-goods-container {
     padding-top: 46px + 46px;
   }
   .item-goods {
@@ -159,6 +164,9 @@
     }
     .descrip-goods {
       padding-top: 15px;
+    }
+    .descrip-goods p {
+      color: $color-main;
     }
     .price-goods {
       display: flex;
