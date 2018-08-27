@@ -5,7 +5,11 @@
       <strong>{{ title }}</strong>
     </div>
     <div class="prom-time">
-      距离结束<template v-if="day > 0"><span>{{ day }}</span>天</template><span>{{ hours }}</span>:<span>{{ minutes }}</span>:<span>{{ seconds }}</span>
+      {{ endTime > 0 ? '距离结束' : '距离开始' }}
+      <template v-if="day > 0">
+        <span>{{ day }}</span>天
+      </template>
+      <span>{{ hours }}</span>:<span>{{ minutes }}</span>:<span>{{ seconds }}</span>
     </div>
   </div>
 </template>
@@ -14,7 +18,7 @@
   import { Foundation } from '~/ui-utils'
   export default {
     name: 'goods-prom-bar',
-    props: ['title', 'start-time', 'end-time'],
+    props: ['title', 'end-time'],
     data() {
       return {
         timer: null,
@@ -25,7 +29,9 @@
       }
     },
     mounted() {
-      this.contDown(this.endTime)
+      let time = this.endTime
+      if (time < 0) time = Math.abs(time)
+      this.contDown(time)
     },
     methods: {
       contDown(times) {
