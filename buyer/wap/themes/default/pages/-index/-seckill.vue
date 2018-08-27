@@ -155,6 +155,7 @@
   .seckill-container {
     box-shadow: 0 1px 1px #f2f2f2;
     background: #fff;
+    margin-bottom: 10px;
   }
   .title-seckill {
     display: flex;
