@@ -80,6 +80,7 @@ export function getPointsGoods(params) {
   return request({
     url: `promotions/exchange/goods`,
     method: Method.GET,
+    loading: false,
     params
   })
 }
