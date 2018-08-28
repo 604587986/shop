@@ -308,7 +308,7 @@
     top: 100px;
     left: 50%;
     width: 396px;
-    margin-left: 100px;
+    margin-left: 150px;
     .lf-content {
       filter: progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#E5FFFFFF', endColorstr='#E5FFFFFF');
       background: rgba(255,255,255,0.9);
