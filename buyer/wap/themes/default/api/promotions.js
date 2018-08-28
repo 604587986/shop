@@ -34,6 +34,7 @@ export function getGroupBuyGoods(params) {
   return request({
     url: `promotions/group-buy/goods`,
     method: Method.GET,
+    loading: false,
     params
   })
 }
@@ -79,6 +80,7 @@ export function getPointsGoods(params) {
   return request({
     url: `promotions/exchange/goods`,
     method: Method.GET,
+    loading: false,
     params
   })
 }
@@ -101,6 +103,7 @@ export function getSeckillTimeGoods(params) {
   return request({
     url: 'promotions/seckill/goods-list',
     method: Method.GET,
+    loading: false,
     params
   })
 }

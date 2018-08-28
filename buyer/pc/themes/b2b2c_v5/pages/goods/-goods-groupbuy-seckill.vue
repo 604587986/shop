@@ -41,7 +41,6 @@
   /**
    * 商品页团购模块
    */
-  // Andste_TODO 2018/8/2: 当活动未开始，会出现问题
   export default {
     name: 'goods-groupbuy-seckill',
     props: ['promotions'],
@@ -61,6 +60,9 @@
         } else {
           // 否则再试试有没有限时抢购活动
           prom = this.promotions.filter(item => item.seckill_goods_vo)
+          if (prom && prom[0] && prom[0].seckill_goods_vo.distance_start_time < 0) {
+            return false
+          }
         }
         // 如果都没有，返回false
         if (!prom || !prom[0]) return false
