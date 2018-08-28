@@ -13,7 +13,7 @@
         <div class="pro-title">团购价</div>
         <div class="pro-content price">
           <span>￥</span>
-          <strong>{{ promotion.groupbuy_goods_do.price | unitPrice }}</strong>
+          <strong>{{ promotion.groupbuy_goods_vo.price | unitPrice }}</strong>
         </div>
       </div>
     </template>
@@ -53,7 +53,7 @@
       promotion() {
         if (!this.promotions || !this.promotions.length) return false
         // 先试试看有没有团购活动
-        let prom = this.promotions.filter(item => item.groupbuy_goods_do)
+        let prom = this.promotions.filter(item => item.groupbuy_goods_vo)
         // 如果有团购活动，活动类型标记为groupbuy
         if (prom && prom[0]) {
           prom[0].prom_type = 'gb'
