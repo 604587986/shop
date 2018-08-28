@@ -203,7 +203,7 @@
     z-index: 0;
     height: $banner-height;
     .banner-item {
-      background: repeat-x center top;
+      // background: repeat-x center top;
       height: $banner-height;
       .banner-img {
         background: no-repeat center top;
@@ -213,13 +213,13 @@
       &.item-1 {
         background-image: url("../../assets/login-banner_01_repeat.png");
         .banner-img {
-          background-image: url("../../assets/login-banner_01.jpg");
+          background-image: url("../../assets/login-banner_01.png");
         }
       }
       &.item-2 {
         background-image: url("../../assets/login-banner_02_repeat.png");
         .banner-img {
-          background-image: url("../../assets/login-banner_02.jpg");
+          background-image: url("../../assets/login-banner_02.png");
         }
       }
     }
