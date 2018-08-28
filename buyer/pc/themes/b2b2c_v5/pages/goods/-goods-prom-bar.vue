@@ -79,12 +79,13 @@
         display: inline-block;
         font-size: 14px;
         color: #fff;
-        width: 22px;
+        min-width: 22px;
+        height: 22px;
         background: #443b3b;
         margin: 0 4px;
         line-height: 24px;
         text-align: center;
-        vertical-align: -1px;
+        vertical-align: middle;
       }
     }
   }
