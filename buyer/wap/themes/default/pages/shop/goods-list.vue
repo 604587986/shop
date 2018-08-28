@@ -1,10 +1,5 @@
 <template>
   <div id="shop-goods-list" class="container">
-    <template v-if="shop">
-      <theme1-header v-if="shop.shop_theme_path === 'pc_1'" :shop="shop"/>
-      <theme2-header v-if="shop.shop_theme_path === 'pc_2'" :shop="shop"/>
-      <theme3-header v-if="shop.shop_theme_path === 'pc_3'" :shop="shop"/>
-    </template>
     <div class="sort-nav">
       <div class="inner w">
         <div class="left">
@@ -69,9 +64,6 @@
   import * as API_Shop from '@/api/shop'
   import * as API_Goods from '@/api/goods'
   import { Foundation } from '~/ui-utils'
-  const theme1Header = () => import('@/pages/shop/-themes/-theme1-header')
-  const theme2Header = () => import('@/pages/shop/-themes/-theme2-header')
-  const theme3Header = () => import('@/pages/shop/-themes/-theme3-header')
   export default {
     name: 'shop-goods-list',
     validate({ query }) {
@@ -81,7 +73,6 @@
       const shop = await API_Shop.getShopBaseInfo(query.shop_id)
       return { shop }
     },
-    components: { theme1Header, theme2Header, theme3Header },
     data() {
       return {
         sorts: [

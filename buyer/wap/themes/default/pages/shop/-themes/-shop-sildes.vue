@@ -1,14 +1,13 @@
 <template>
-  <el-carousel height="500px" class="banner-container">
-    <el-carousel-item
-      v-for="silde in sildes"
-      :key="silde.silde_id"
-    >
-      <nuxt-link :to="silde.silde_url">
-        <img :src="silde.img" class="banner-img">
-      </nuxt-link>
-    </el-carousel-item>
-  </el-carousel>
+  <no-ssr>
+    <swiper :options="swiperOptions">
+      <swiper-slide v-for="(silde, index) in sildes" :key="index">
+        <a :href="silde.silde_url">
+          <img :src="silde.img">
+        </a>
+      </swiper-slide>
+    </swiper>
+  </no-ssr>
 </template>
 
 <script>
@@ -16,9 +15,13 @@
   import * as API_Shop from '@/api/shop'
   export default {
     name: 'shop-sildes',
-    props: ['shopId'],
+    props: ['shop-id'],
     data() {
       return {
+        swiperOptions: {
+          autoplay: true,
+          loop: true
+        },
         sildes: []
       }
     },
@@ -29,14 +32,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .banner-container {
-    /deep/ .el-carousel__arrow--left {
-      left: 100px;
-    }
-    /deep/ .el-carousel__arrow--right {
-      right: 100px;
-    }
-    .banner-img {
+  .swiper-container {
+    width: 100%;
+    height: 160px;
+    img {
       width: 100%;
       height: 100%;
     }
