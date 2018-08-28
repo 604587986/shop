@@ -1,7 +1,7 @@
 import * as API_Login from '@/api/login'
 import * as API_Shop from '@/api/shop'
 import Storage from '@/utils/storage'
-import { Base64 } from 'js-base64'
+import jwt_decode from 'jwt-decode'
 
 // state
 const _user = Storage.getItem('seller_user')
@@ -31,8 +31,7 @@ export const mutations = {
    * @constructor
    */
   SET_ACCESS_TOKEN: (state, token) => {
-    const access_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
-    const expires = new Date(access_token_time)
+    const expires = new Date(jwt_decode(token).exp * 1000)
     Storage.setItem('seller_access_token', token, { expires })
   },
   /**
@@ -42,8 +41,7 @@ export const mutations = {
    * @constructor
    */
   SET_REFRESH_TOKEN: (state, token) => {
-    const refresh_token_time = Base64.decode(token).match(/"exp":(\d+)/)[1] * 1000
-    const expires = new Date(refresh_token_time)
+    const expires = new Date(jwt_decode(token).exp * 1000)
     Storage.setItem('seller_refresh_token', token, { expires })
   },
   /**

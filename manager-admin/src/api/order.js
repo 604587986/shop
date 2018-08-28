@@ -66,14 +66,27 @@ export function cancleOrder(order_sn) {
 }
 
 /**
- * 获取结算单列表
+ * 获取所有周期结算单列表
+ * @param params
+ */
+export function getAllSettlement(params) {
+  return request({
+    url: 'admin/order/bills/statistics',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 获取某周期内结算单列表
  * @param params
  */
 export function getSettlementList(params) {
   return request({
     url: 'admin/order/bills',
     method: 'get',
-    loading: false
+    loading: false,
+    params
   })
 }
 
