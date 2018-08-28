@@ -1,121 +1,83 @@
 <template>
   <div id="shop-list">
-    <en-header></en-header>
-    <div class="shop-list-container w">
-      <div class="sort-bar">
-        <a href="javascript:;" :class="['sort-item', !params.order && 'selected']" @click="handleSortShopList(0)">默认</a>
-        <a href="javascript:;" :class="['sort-item', params.order && 'selected']" @click="handleSortShopList(1)">信用</a>
-      </div>
-      <ul class="shop-list">
-        <li v-for="shop in shopList.data" :key="shop.shop_id" class="shop-item">
+    <nav-bar title="店铺列表" fixed/>
+    <en-empty v-if="finished && !shopList.length" style="line-height:420px">暂无店铺</en-empty>
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      @load="onLoad"
+      class="shop-list-container"
+    >
+      <div v-for="(shop, index) in shopList" :key="index" class="shop-item">
+        <div class="shop-hd">
+          <div class="shop-logo">
+            <img :src="shop.shop_logo">
+          </div>
           <div class="shop-info">
-            <div class="shop-member-face">
-              <img :src="shop.member_face" class="member-face">
+            <div class="shop-name">{{ shop.shop_name }}</div>
+            <div class="shop-desc">
+              <span>关注数数<em>{{ shop.shop_collect }}</em></span>
             </div>
-            <div class="shop-member-name">
-              <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
-              <p>店主：{{ shop.member_name }}</p>
-            </div>
-            <div class="shop-other-info">
-              <div class="goods-num">商品数量{{ shop.goods_num }}件</div>
-              <div class="shop-add-score">
-                <div class="shop-address" :title="formatAddress(shop)">{{ formatAddress(shop) }}</div>
-                <div class="shop-score">
-                  <span class="shop-score-tit">店铺动态评分：</span>
-                  <span class="shop-score-arrow-span"><i class="shop-score-arrow"></i></span>
-                  <div class="shop-score-box">
-                    <div>描述相符：<en-shop-star :star="shop.shop_description_credit"/></div>
-                    <div>服务态度：<en-shop-star :star="shop.shop_service_credit"/></div>
-                    <div>发货速度：<en-shop-star :star="shop.shop_delivery_credit"/></div>
-                  </div>
+          </div>
+          <nuxt-link class="shop-btn" :to="'/shop/' + shop.shop_id">进店</nuxt-link>
+        </div>
+        <div class="shop-bd">
+          <ul class="shop-rec">
+            <li v-for="(goods, index) in shop.goods_list" v-if="index < 3" :key="index" class="shop-rec-item">
+              <nuxt-link :to="'/goods/' + goods.goods_id">
+                <div class="cover">
+                  <img :src="goods.small">
                 </div>
-              </div>
-              <div class="expanded-opt">
-                <a
-                  href="javascript:;"
-                  class="expanded-opt-a"
-                  @click="shop.goods_on = !shop.goods_on"
-                >
-                  {{ shop.goods_on ? '收起' : '展开' }}店铺商品
-                  <i class="iconfont ea-icon-right-d-arrow" :class="[shop.goods_on && 'on']"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div :class="['shop-goods', shop.goods_on && 'on']">
-            <template v-if="!shop.goods_list || !shop.goods_list.length">
-              <p class="no-goods">哎呀！店铺还没商品呢，去<nuxt-link :to="'/shop/' + shop.shop_id">店铺首页</nuxt-link>看看试试吧！</p>
-            </template>
-            <ul v-else>
-              <li v-for="(goods, index) in shop.goods_list" v-if="index < 5" :key="goods.goods_id" class="goods-item">
-                <nuxt-link :to="'/goods/' + goods.goods_id">
-                  <img :src="goods.thumbnail" class="goods-image">
-                  <p class="goods-price price">￥{{ goods.price | unitPrice }}</p>
-                  <p class="goods-name">{{ goods.goods_name }}</p>
-                </nuxt-link>
-              </li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-      <el-pagination
-        v-if="shopList"
-        @current-change="handleCurrentPageChange"
-        :current-page.sync="params.page_no"
-        :page-size="params.page_size"
-        layout="total, prev, pager, next"
-        :total="shopList.data_total">
-      </el-pagination>
-    </div>
+                <p class="item-price">¥{{ goods.price | unitPrice }}</p>
+              </nuxt-link>
+            </li>
+          </ul>
+        </div>
+        <div class="shop-aside">
+          <p class="shop-count">店铺商品：{{ shop.goods_num }}件</p>
+        </div>
+      </div>
+    </van-list>
   </div>
 </template>
 
 <script>
-  import Vue from 'vue'
   import * as API_Shop from '@/api/shop'
-  import ShopStar from '@/pages/shop/-themes/-shop-star'
   export default {
     name: 'shopList',
-    components: { [ShopStar.name]: ShopStar },
     data() {
       return {
+        loading: false,
+        finished: false,
         // 店铺列表
-        shopList: '',
+        shopList: [],
         // 参数
         params: {
-          page_no: 1,
+          page_no: 0,
           page_size: 10,
-          order: 0,
-          ...this.$route.query
+          name: this.$route.query.keyword || ''
         }
       }
     },
-    mounted() {
-      this.GET_ShopList()
-    },
     methods: {
-      /** 当前分页发生改变 */
-      handleCurrentPageChange(page_no) {
-        this.params.page_no = page_no
+      /** 加载数据 */
+      onLoad() {
+        this.params.page_no += 1
         this.GET_ShopList()
-      },
-      /** 店铺列表排序 */
-      handleSortShopList(order) {
-        this.params.order = order
-        this.GET_ShopList()
-      },
-      /** 格式化地址信息 */
-      formatAddress(shop) {
-        return `${shop.shop_province} ${shop.shop_city} ${shop.shop_county} ${shop.shop_town}`
       },
       /** 获取店铺列表 */
       GET_ShopList() {
-        API_Shop.getShopList(this.params).then(response => {
-          response.data && response.data.map(shop => {
-            shop.goods_on = true
-            return shop
-          })
-          this.shopList = response
+        this.loading = true
+        const params = JSON.parse(JSON.stringify(this.params))
+        if (!params.name) delete params.name
+        API_Shop.getShopList(params).then(response => {
+          this.loading = false
+          const { data } = response
+          if(!data || !data.length) {
+            this.finished = true
+          } else {
+            this.shopList.push(...data)
+          }
         })
       }
     }
@@ -123,192 +85,133 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   .shop-list-container {
-    .sort-bar {
-      width: 100%;
-      border-bottom: solid 1px #E7E7E7;
-      display: inline-block;
-      height: 37px;
-      margin-top: 10px;
-      text-align: right;
-    }
-    .sort-item {
-      display: inline-block;
-      height: 37px;
-      line-height: 37px;
-      text-align: center;
-      padding: 0 15px;
-      margin-left: 5px;
-      border: 1px solid #E7E7E7;
-      border-bottom: none;
-      &.selected {
-        background-color: #E7E7E7;
-        border-color: #d8d8d8
+    padding-top: 46px;
+  }
+  .shop-item {
+    padding: 0 10px;
+    background: #fff;
+    margin-bottom: 10px;
+  }
+  .shop-hd {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    .shop-logo {
+      margin-right: 10px;
+      width: 90px;
+      height: 30px;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
-    }
-    .shop-item {
-      border-bottom: solid 1px #E7E7E7;
-      padding: 20px 0;
-      vertical-align: top;
-      &:last-child { border-bottom: none }
     }
     .shop-info {
-      height: 70px;
-      margin-bottom: 10px;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
     }
-    .shop-member-face {
-      float: left;
-      .member-face {
-        display: block;
-        width: 70px;
-        height: 70px;
-        background-color: #fff;
-      }
-    }
-    .shop-member-name {
-      float: left;
-      padding: 10px 0;
-      margin-left: 10px;
+    .shop-name {
+      color: #333;
       font-size: 14px;
-      .shop-name {
-        color: #f42424;
-        font-weight: 700;
-        margin-bottom: 10px;
-      }
-    }
-    .shop-other-info {
-      float: right;
-      .goods-num {
-        float: left;
-        width: 120px;
-        line-height: 70px;
-      }
-      .shop-add-score {
-        float: left;
-        width: 150px;
-      }
-      .shop-address {
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
-        margin: 10px 0;
-      }
-      .shop-score {
-        position: relative;
-      }
-      .shop-score-tit {
-        color: #f42424;
-      }
-      .shop-score-arrow-span {
-        background: #FFF;
-        vertical-align: middle;
-        display: inline-block;
-        width: 12px;
-        height: 11px;
-        border: solid 1px #AAA;
-        border-radius: 3px;
-        position: relative;
-        z-index: 1;
-      }
-      .shop-score-arrow {
-        font-size: 0;
-        line-height: 0;
-        width: 0;
-        height: 0;
-        border-width: 4px;
-        border-color: #f42424 transparent transparent transparent;
-        border-style: solid dashed dashed dashed;
-        position: absolute;
-        z-index: 1;
-        top: 4px;
-        left: 2px;
-      }
-      .shop-score:hover .shop-score-arrow {
-        border-color: transparent transparent #f42424 transparent;
-        border-style: dashed dashed solid dashed;
-        top: 0;
-      }
-      .shop-score:hover .shop-score-box {
-        display: block;
-      }
-      .shop-score-box {
-        background-color: #FFF;
-        display: none;
-        padding: 8px;
-        border: solid 1px #AAA;
-        position: absolute;
-        z-index: 5;
-        top: 20px;
-        left: -30px;
-        box-shadow: 2px 2px 1px rgba(153,153,153,0.5)
-      }
-      .expanded-opt {
-        float: left;
-        width: 120px;
-        line-height: 70px;
-        text-align: center;
-        .expanded-opt-a {
-          text-decoration-line: underline;
-        }
-        .ea-icon-right-d-arrow {
-          font-size: 12px;
-          margin-left: 3px;
-          display: inline-block;
-          transform: rotate(90deg);
-          transition: all ease .3s;
-          &.on {
-            transform: rotate(-90deg);
-          }
-        }
-      }
-    }
-    .shop-goods {
-      position: relative;
-      width: 1210px - 80px;
-      margin-left: 80px;
-      height: 0;
-      transition: all ease .3s;
-      border: solid 1px transparent;
-      background: transparent;
-      box-sizing: border-box;
+      line-height: 21px;
       overflow: hidden;
-      &.on {
-        height: 232px;
-        border-color: #E7E7E7;
-        background-color: #F8F8F8;
-      }
-      .no-goods {
-        text-align: center;
-        line-height: 232px;
-        background: url(../../assets/images/icon-empty-member.png) no-repeat 380px center;
-        a {
-          color: #0366d6;
-          &:hover { color: #f42424 }
-        }
-      }
-    }
-    .goods-item {
-      float: left;
-      width: 165px;
-      margin-left: 50px;
-      margin-top: 10px;
-      overflow: hidden;
-    }
-    .goods-image {
-      width: 165px;
-      height: 165px;
-    }
-    .goods-price {
-      margin-top: 5px;
-    }
-    .goods-name {
-      overflow: hidden;
-      text-overflow:ellipsis;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
+    .shop-desc {
+      color: #999;
+      font-size: 10px;
+      line-height: 15px;
+      height: 15px;
+      overflow: hidden;
+      span {
+        display: inline-block;
+        margin-right: 10px;
+      }
+    }
+    .shop-btn {
+      position: relative;
+      margin-left: 10px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+      height: 30px;
+      line-height: 30px;
+      width: 60px;
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+        border: 1px solid #ccc;
+        top: 0;
+        left: 0;
+        background: none;
+        right: -100%;
+        bottom: -100%;
+        -webkit-transform: scale(.5);
+        -webkit-transform-origin: 0 0;
+        border-radius: 8px;
+      }
+    }
   }
-  /deep/ .el-pagination {
+  .shop-bd {
+    .shop-rec {
+      padding-right: 20px;
+      &::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+    }
+    .shop-rec-item {
+      float: left;
+      margin: 0 10px 10px 0;
+      background-color: #ccc;
+      width: 33.33%;
+      box-sizing: border-box;
+      &:last-child {
+        margin-right: -20px;
+      }
+      a {
+        position: relative;
+        display: block;
+        padding-top: 100%;
+      }
+    }
+    .cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      img {
+        display: block;
+        max-width: 100%;
+      }
+    }
+    .item-price {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 12px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #fff;
+      background-color: rgba(0,0,0,.5);
+    }
+  }
+  .shop-count {
+    margin: -2px 0 8px;
+    flex: 1;
+    color: #999;
+    font-size: 12px;
+    line-height: 18px;
     text-align: right;
-    margin-bottom: 20px;
   }
 </style>
