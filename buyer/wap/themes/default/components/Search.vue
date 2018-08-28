@@ -106,7 +106,7 @@
       handleOnSubmit(_keyword) {
         let { searchType, keyword } = this
         if (typeof _keyword === 'string') keyword = _keyword
-        if (_keyword || searchType === '商品') {
+        if (searchType === '商品') {
           const searchHistory = JSON.parse(JSON.stringify(this.searchHistory))
           const _index = searchHistory.indexOf(keyword)
           if (_index !== -1) {
@@ -119,7 +119,7 @@
           Storage.setItem('search_history', JSON.stringify(searchHistory))
           window.location.href = keyword ? `/goods?keyword=${keyword}` : '/goods'
         } else {
-          window.location.href = `/shop?name=${keyword}`
+          window.location.href = `/shop?keyword=${keyword}`
         }
       },
       /** 删除搜索历史 */
