@@ -208,17 +208,18 @@
       .banner-img {
         background: no-repeat center top;
         height: 100%;
+        background-size: contain;
       }
       &.item-1 {
         background-image: url("../../assets/login-banner_01_repeat.png");
         .banner-img {
-          background-image: url("../../assets/login-banner_01.png");
+          background-image: url("../../assets/login-banner_01.jpg");
         }
       }
       &.item-2 {
         background-image: url("../../assets/login-banner_02_repeat.png");
         .banner-img {
-          background-image: url("../../assets/login-banner_02.png");
+          background-image: url("../../assets/login-banner_02.jpg");
         }
       }
     }
@@ -276,13 +277,13 @@
         width: 100px;
       }
       span.arrow {
-        background: url("../../assets/login-join-seller.png") no-repeat 0 -100px;
+        background: url("../../assets/login-join-icons.png") no-repeat 0 -100px;
         width: 22px;
         height: 22px;
         margin: -30px 63px auto 63px;
       }
       dt {
-        background: url("../../assets/login-join-seller.png") no-repeat;
+        background: url("../../assets/login-join-icons.png") no-repeat;
         display: block;
         width: 100px;
         height: 100px;
