@@ -5,7 +5,7 @@
       <strong>{{ title }}</strong>
     </div>
     <div class="prom-time">
-      距离开始
+      距离结束
       <template v-if="day > 0">
         <span>{{ day }}</span>天
       </template>
@@ -79,12 +79,13 @@
         display: inline-block;
         font-size: 14px;
         color: #fff;
-        width: 22px;
+        min-width: 22px;
+        height: 22px;
         background: #443b3b;
         margin: 0 4px;
         line-height: 24px;
         text-align: center;
-        vertical-align: -1px;
+        vertical-align: middle;
       }
     }
   }
