@@ -4,12 +4,14 @@ import * as API_Goods from '@/api/goods'
 import * as API_Members from '@/api/members'
 import ShopSildes from './-shop-sildes'
 import ShopStar from './-shop-star'
+import ShopHeader from './-shop-header'
+import ShopNav from './-shop-nav'
 
 export default {
   data() {
     return {
+      // 店铺id
       shop_id: this.$route.params.id,
-      categorys: [],
       // 热销商品
       hotGoods: [],
       // 新品上架
@@ -26,26 +28,21 @@ export default {
   },
   components: {
     'en-shop-sildes': ShopSildes,
-    'en-shop-star': ShopStar
+    'en-shop-star': ShopStar,
+    'en-shop-header': ShopHeader,
+    'en-shop-nav': ShopNav
   },
   mounted() {
     this.getShopTagGoods()
+  },
+  watch: {
+    $route: 'goToAnchor'
   },
   methods: {
     /** 格式化店铺地址 */
     formatAddress() {
       const { shop_province, shop_city, shop_county, shop_town } = this.shop
       return `${shop_province}-${shop_city}${shop_county ? '-' + shop_county : ''}${shop_town ? '-' + shop_town : ''}`
-    },
-    /** 收藏店铺 */
-    collectionShop() {
-      if (!this.$store.getters.user) {
-        this.$message.error('未登录不能收藏店铺！')
-        return false
-      }
-      API_Members.collectionShop(this.shop_id).then(() => {
-        this.$message.success('收藏成功！')
-      })
     },
     /** 获取店铺标签商品 */
     getShopTagGoods() {

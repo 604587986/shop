@@ -1,8 +1,8 @@
 <template>
   <div v-if="shop">
-    <theme1 v-if="shop.shop_theme_path === 'pc_1'" :shop="shop"/>
-    <theme2 v-if="shop.shop_theme_path === 'pc_2'" :shop="shop"/>
-    <theme3 v-if="shop.shop_theme_path === 'pc_3'" :shop="shop"/>
+    <theme1 v-if="shop.wap_theme_path === 'wap_1'" :shop="shop"/>
+    <theme2 v-if="shop.wap_theme_path === 'wap_2'" :shop="shop"/>
+    <theme3 v-if="shop.wap_theme_path === 'wap_3'" :shop="shop"/>
   </div>
 </template>
 
@@ -28,7 +28,7 @@
     },
     head () {
       return {
-        title: `${this.shop.shop_name}-Javashop多店铺示例商城`
+        title: `${this.shop.shop_name}-${this.site.site_name}`
       }
     },
     methods: {
@@ -42,5 +42,4 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
 </style>
