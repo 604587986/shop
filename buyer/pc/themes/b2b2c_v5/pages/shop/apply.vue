@@ -25,6 +25,11 @@
   export default {
     name: 'apply',
     middleware: 'auth-user',
+    head() {
+      return {
+        title: `申请开店-${this.site.site_name}`
+      }
+    },
     components: { applyHeader, applyMenu, applySteps },
     computed: {
       step() {
