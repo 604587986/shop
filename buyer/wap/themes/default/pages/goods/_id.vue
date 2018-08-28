@@ -178,6 +178,8 @@
         if (promotions.filter(item => item.groupbuy_goods_vo)[0]) return true
         // 如果有限时抢购，隐藏价格
         if (promotions.filter(item => item.seckill_goods_vo)[0]) return true
+        // 如果有积分兑换，隐藏价格
+        if (promotions.filter(item => item.exchange)[0]) return true
         return false
       }
     },

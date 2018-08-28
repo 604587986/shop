@@ -126,7 +126,7 @@
       position: absolute;
       right: 0;
       top: 0;
-      width: 116px;
+      min-width: 116px;
       height: 100%;
       text-align: center;
       background-color: #f8f8f8;

@@ -5,7 +5,8 @@
       v-if="promotion.prom_type === 'gb'"
       title="团购活动"
       type="groupbuy"
-      :price="promotion.groupbuy_goods_do.price"
+      :price="promotion.groupbuy_goods_vo.price"
+      :old-price="promotion.groupbuy_goods_vo.original_price"
       :end-time="promotion.end_time - parseInt(new Date() / 1000)"
       @count-end="handleCountEnd"
     />
@@ -38,15 +39,16 @@
     },
     computed: {
       promotion() {
-        if (!this.promotions || !this.promotions.length) return false
+        const { promotions } = this
+        if (!promotions || !promotions.length) return false
         // 先试试看有没有团购活动
-        let prom = this.promotions.filter(item => item.groupbuy_goods_do)
+        let prom = promotions.filter(item => item.groupbuy_goods_vo)
         // 如果有团购活动，活动类型标记为groupbuy
         if (prom && prom[0]) {
           prom[0].prom_type = 'gb'
         } else {
           // 否则再试试有没有限时抢购活动
-          prom = this.promotions.filter(item => item.seckill_goods_vo)
+          prom = promotions.filter(item => item.seckill_goods_vo)
           if (prom && prom[0] && prom[0].seckill_goods_vo.distance_start_time < 0) {
             return false
           }
