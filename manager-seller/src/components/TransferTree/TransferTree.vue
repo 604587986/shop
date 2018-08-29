@@ -86,7 +86,7 @@
       }
     },
     components: {
-      [TreeList.name]: TreeList
+      TreeList
     },
     props: {
       // 宽度
@@ -276,7 +276,7 @@
         let halfNodes = JSON.parse(JSON.stringify(arrayHalfCheckedNodes))
 
         // 自定义参数读取设置
-        let children__ = this.defaultProps.children || "children"
+        let children__ = this.defaultProps.children || 'children'
         let pid__ = this.pid || 'pid'
         let id__ = this['node_key'] || 'id'
 

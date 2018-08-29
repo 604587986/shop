@@ -12,7 +12,8 @@ let areaHTML =
 					width: 692px;\
 					height: 545px;\
 					border: 1px solid grey;\
-					position: absolute;\
+					position: fixed;\
+					z-index: 1000;\
 					top: 15%;\
 					left: 45%;\
                     left: calc(50% - 346px);\
@@ -214,7 +215,7 @@ let areaHTML =
 let areaData = [{}] // 所有,省市县数据.
 let areaDOM = $(areaHTML) // DOM数据,后续操作全部基于此DOM
 let confirmCallback = null // 全局回调变量
-let hideDialogFunc;  //在关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
+let hideDialogFunc  //在关闭Dialog后，动态修改顶层dialogVisible的属性值，做到和效果同步。
 
 // ---------------------------------------END-------------------------------------------
 
@@ -330,6 +331,7 @@ let bindEventListener = function() {
       .css('display', 'none')
     $('.cover').css('display', 'none')
     // 执行回调,把已选数据传递出去.
+    // console.log(getJSON2())
     confirmCallback(getJSON())
     hideDialogFunc();
   })
@@ -352,20 +354,43 @@ let bindClickListener = function(which) {
 }
 
 // 请求并初次渲染数据.(仅渲染第一层,省级)
-let requestAndFirstRenderData = function(api, props) {
+let requestAndFirstRenderData = function(api, isfilter = true, filterData = []) {
   request({url: api, method: 'get'}).then(response => {
-    areaData = mapArea(response, props)
+    let _areaData = areaData = response
+    filterData = filterData.map((item) =>{
+      return item.id
+    })
+    if (isfilter && filterData.length) {
+      _areaData = handleFilter(areaData, filterData)
+    }
     // 遍历各省插入到HTML中
     let li
-    areaData.forEach(function(province) {
+    _areaData.forEach(function(province) {
       li = areaDOM.find('.model li').clone(true)
 
       li.addClass('depth-one')
-      li.attr('region-id', province.region_id)
+      li.attr('region-id', province.id)
+      li.attr('is-show', province.isShow || 'block');
       li.find('div .name').text(province.local_name)
       areaDOM.find('.body .area-left > ul').append(li)
     })
+    // 隐藏已选元素
+    $("div.area-left").find("li").each(function(){
+      $(this).css("display", $(this).attr("is-show"))
+    })
   })
+}
+// 为数据添加过滤标记
+let handleFilter = function (data, filterData) {
+  data.forEach(function(key){
+    if (filterData.includes(key.id)) {
+      key.isShow = 'none'
+    }
+    if (key.children && key.children.length) {
+      key.children = handleFilter(key.children, filterData)
+    }
+  })
+  return data
 }
 
 // 渲染第二层数据,市级
@@ -376,7 +401,7 @@ let renderDepthTwoData = function(regionID, where) {
   let li
   areaData.forEach(function(province) {
     // 找到用户点击的省份的对象
-    if (province.region_id == regionID) {
+    if (province.id == regionID) {
       province.children.forEach(function(city) {
         li = areaDOM.find('.model li').clone(true)
         //如果用户点击的+在右边那块.则清除掉div的click事件
@@ -392,11 +417,16 @@ let renderDepthTwoData = function(regionID, where) {
           li.addClass('unselected').removeClass('selected')
           li.find('.open-close').removeClass('icon-grey')
         }
-        li.attr('region-id', city.region_id)
+        li.attr('region-id', city.id)
+        li.attr('is-show', city.isShow || 'block');
         li.find('div .name').text(city.local_name)
         where.append(li)
       })
     }
+  })
+  // 隐藏已选元素
+  $("div.area-left").find("li").each(function(){
+    $(this).css("display", $(this).attr("is-show"))
   })
 }
 
@@ -408,10 +438,10 @@ let renderDepthThreeData = function(regionID, depthOneID, where) {
   let li
   areaData.forEach(function(province) {
     // 找到对应省份
-    if (province.region_id == depthOneID) {
+    if (province.id == depthOneID) {
       province.children.forEach(function(city) {
         // 找到对应市
-        if (city.region_id == regionID) {
+        if (city.id == regionID) {
           city.children.forEach(function(county) {
             li = areaDOM.find('.model li').clone(true)
             //如果用户点击的+在右边那块.则清除掉div的click事件
@@ -427,13 +457,18 @@ let renderDepthThreeData = function(regionID, depthOneID, where) {
               li.addClass('unselected')
             }
             li.addClass('depth-three')
-            li.attr('region-id', county.region_id)
+            li.attr('region-id', county.id)
+            li.attr('is-show', county.isShow || 'block');
             li.find('div .name').text(county.local_name)
             where.append(li)
           })
         }
       })
     }
+  })
+  // 隐藏已选元素
+  $("div.area-left").find("li").each(function(){
+    $(this).css("display", $(this).attr("is-show"))
   })
 }
 
@@ -651,6 +686,10 @@ let addDomToRight = function() {
       // 把克隆过的添加到右边.
       appendOperation(right, liCloned)
     }
+  })
+  // 显示右边已选数据
+  $(".area-right").find("li").each(function(){
+    $(this).css("display", "block")
   })
 }
 
@@ -1019,14 +1058,11 @@ let getJSON = function() {
   areaDOM.find('.area-right li.depth-one').each(function() {
     let provinceID = Number($(this).attr('region-id'))
     // 如果左边不存在该省份, 就把该省份及下面市县数据全部添加进来.
-    if (
-      areaDOM.find('.area-left li.depth-one[region-id=' + provinceID + ']')
-        .length === 0
-    ) {
+    if (areaDOM.find('.area-left li.depth-one[region-id=' + provinceID + ']').length === 0) {
       // 从源数据,把下面市/县数据挨个添加进来
       areaData.forEach(function(province) {
         // 找到特定省份
-        if (province.region_id !== provinceID) {
+        if (province.id !== provinceID) {
           return
         }
         // 首先把当前省份添加进来
@@ -1073,7 +1109,7 @@ let getJSON = function() {
       // 从源数据,把县数据添加进来
       areaData.forEach(function(province) {
         // 找到特定省份
-        if (province.region_id !== provinceID) {
+        if (province.id !== provinceID) {
           return
         }
         if (!province.children || province.children.length === 0) {
@@ -1082,7 +1118,7 @@ let getJSON = function() {
         }
 
         province.children.forEach(function(city) {
-          if (city.region_id !== cityID) {
+          if (city.id !== cityID) {
             // 不是对应 市, 跳出当前循环
             return
           }
@@ -1117,7 +1153,7 @@ let getJSON = function() {
     )
 
     areaData.forEach(function(province) {
-      if (province.region_id !== provinceID) {
+      if (province.id !== provinceID) {
         return
       }
       if (!province.children || province.children.length === 0) {
@@ -1126,7 +1162,7 @@ let getJSON = function() {
 
       // 遍历市
       province.children.forEach(function(city) {
-        if (city.region_id !== cityID) {
+        if (city.id !== cityID) {
           return
         }
         if (!city.children || city.children.length === 0) {
@@ -1134,7 +1170,127 @@ let getJSON = function() {
         }
 
         city.children.forEach(function(county) {
-          if (county.region_id !== countyID) {
+          if (county.id !== countyID) {
+            return
+          }
+          dataArray.push(cloneData(county))
+        })
+      })
+    })
+  })
+  return dataArray
+}
+
+// 遍历获取已选择的区域的数据. (新添加)
+let getJSON2 = function() {
+  let dataArray = []
+  let areaObj
+  // 解决全选省级
+  // 遍历省份
+  areaDOM.find('.area-right li.depth-one').each(function() {
+    let provinceID = Number($(this).attr('region-id'))
+    // 无论左边是否存在该省份信息 均添加
+    // 从源数据,把下面市/县数据挨个添加进来
+    areaData.forEach(function(province) {
+      // 找到特定省份
+      if (province.id !== provinceID) {
+        return
+      }
+      // 首先把当前省份添加进来
+      dataArray.push(cloneData(province))
+
+      if (!province.children || province.children.length === 0) {
+        // 跳出当前循环
+        return
+      }
+
+      province.children.forEach(function(city) {
+        dataArray.push(cloneData(city))
+
+        // 遍历县级数据, 挨个添加进来.
+        if (!city.children || city.children.length === 0) {
+          // 跳出当前循环
+          return
+        }
+        city.children.forEach(function(county) {
+          dataArray.push(cloneData(county))
+        })
+      })
+    })
+    // 移除当前省级DOM,省的影响到后面
+    $(this).remove()
+  })
+  // 遍历市级
+  areaDOM.find('.area-right li.depth-two').each(function() {
+    let cityID = Number($(this).attr('region-id'))
+    // 如果左边不存在对应市, 说明全选了市
+    // 把所有县级数据添加进来
+    let provinceID = Number($(this).closest('li.depth-one').attr('region-id'))
+
+    // 从源数据,把县数据添加进来
+    areaData.forEach(function(province) {
+      // 找到特定省份
+      if (province.id !== provinceID) {
+        return
+      }
+      if (!province.children || province.children.length === 0) {
+        // 跳出当前循环
+        return
+      }
+
+      province.children.forEach(function(city) {
+        if (city.id !== cityID) {
+          // 不是对应 市, 跳出当前循环
+          return
+        }
+        dataArray.push(cloneData(city))
+        // 没有县级数据
+        if (!city.children || city.children.length === 0) {
+          // 跳出当前循环
+          return
+        }
+        // 遍历县级数据.
+        city.children.forEach(function(county) {
+          dataArray.push(cloneData(county))
+        })
+      })
+    })
+    // 移除当前市级DOM,省的影响到后面
+    $(this).remove()
+  })
+  // 遍历县级
+  areaDOM.find('.area-right li.depth-three').each(function() {
+    let countyID = Number($(this).attr('region-id'))
+    let cityID = Number(
+      $(this)
+        .closest('li.depth-two')
+        .attr('region-id')
+    )
+    let provinceID = Number(
+      $(this)
+        .closest('li.depth-one')
+        .attr('region-id')
+    )
+
+    areaData.forEach(function(province) {
+      if (province.id !== provinceID) {
+        return
+      }
+      if (!province.children || province.children.length === 0) {
+        return
+      }
+
+      // 遍历市
+      province.children.forEach(function(city) {
+        if (city.id !== cityID) {
+          return
+        }
+        if (!city.children || city.children.length === 0) {
+          return
+        }
+
+        city.children.forEach(function(county) {
+          if (county.id !== countyID) {
             return
           }
           dataArray.push(cloneData(county))
@@ -1150,14 +1306,14 @@ let startDefault = function(sourceData) {
     return
   }
   // 划分源数据为三部分, level 1 , level 2 , level 3
-  // 其中level 1,2 只留region_id
+  // 其中level 1,2 只留id
   let divideData = function(data) {
     let levelOne = [],
       levelTwo = [],
       levelThree = []
     data.forEach(function(tempObj) {
       if (tempObj.level == 1) {
-        levelOne.push(tempObj.region_id)
+        levelOne.push(tempObj.id)
       } else if (tempObj.level == 2) {
         levelTwo.push(tempObj)
       } else {
@@ -1176,14 +1332,14 @@ let startDefault = function(sourceData) {
         */
   let dealLevelThreeData = function(completeData, data, levelTwoData) {
     let levelTwoArray = levelTwoData.map(function(tempObj) {
-      return tempObj.region_id
+      return tempObj.id
     })
 
     return data.filter(function(tempObj) {
       // 如果level 3数据的父级id在level 2数据中,说明一定是用户全选了level 2地区.
       // 因为用户只选择level 3地区,不会获取到他的parent地区数据.
       // 而只有全选,才会获取parent地区和所有children地区数据.
-      if (levelTwoArray.indexOf(tempObj.p_regions_id) >= 0) {
+      if (levelTwoArray.indexOf(tempObj.parent_id) >= 0) {
         // 存在
         return false
       }
@@ -1196,9 +1352,9 @@ let startDefault = function(sourceData) {
 
         levelOne.children.forEach(function(levelTwo) {
           // 找到第三层数据的父级数据
-          if (levelTwo.region_id === tempObj.p_regions_id) {
+          if (levelTwo.id === tempObj.parent_id) {
             // 给当前第三层增加属性. 直连第一层.
-            tempObj.p_p_regions_id = levelOne.region_id
+            tempObj.p_p_regions_id = levelOne.id
             ok = true
           }
         })
@@ -1217,7 +1373,7 @@ let startDefault = function(sourceData) {
       // 与 dealLevelThreeData 同理
       // 检测到parent是全选.
       // 丢掉此level 2数据.
-      if (levelOne.indexOf(tempObj.p_regions_id) >= 0) {
+      if (levelOne.indexOf(tempObj.parent_id) >= 0) {
         return false
       }
       return true
@@ -1241,7 +1397,7 @@ let startDefault = function(sourceData) {
       dividedData[1].forEach(function(city) {
         // 找到特定省/市
         let provinceDOM = areaDOM.find(
-          '.area-left li.depth-one[region-id=' + city.p_regions_id + ']'
+          '.area-left li.depth-one[region-id=' + city.parent_id + ']'
         )
         provinceDOM
           .children('div')
@@ -1249,7 +1405,7 @@ let startDefault = function(sourceData) {
           .click()
 
         let cityDOM = provinceDOM.find(
-          'li.depth-two[region-id=' + city.region_id + ']'
+          'li.depth-two[region-id=' + city.id + ']'
         )
         cityDOM.children('div').click()
       })
@@ -1267,7 +1423,7 @@ let startDefault = function(sourceData) {
             .click()
         }
         let cityDOM = provinceDOM.find(
-          'li.depth-two[region-id=' + county.p_regions_id + ']'
+          'li.depth-two[region-id=' + county.parent_id + ']'
         )
         // 如果不存在县级数据,说明还没有点击过 +
         if (cityDOM.find('li.depth-three').length === 0) {
@@ -1277,7 +1433,7 @@ let startDefault = function(sourceData) {
             .click()
         }
         let countyDOM = provinceDOM.find(
-          'li.depth-three[region-id=' + county.region_id + ']'
+          'li.depth-three[region-id=' + county.id + ']'
         )
         countyDOM.children('div').click()
       })
@@ -1286,36 +1442,6 @@ let startDefault = function(sourceData) {
     }
   }, 500)
 }
-
-/** 数据映射 */
-let mapArea = function(arr, props) {
-  if (!arr || !Array.isArray(arr) || !props) return arr
-  const result = []
-  const configurableProps = ['level', 'local_name', 'p_regions_id', 'region_id']
-  const childrenProp = props.children || 'children'
-  arr.forEach(function(item) {
-    const itemCopy = {}
-    Object.keys(props).forEach(key => {
-      configurableProps.forEach(prop => {
-        let name = props[prop]
-        let value = item[name]
-        if (value === undefined) {
-          name = prop
-          value = item[name]
-        }
-        if(prop === key && value !== undefined) {
-          itemCopy[prop] = value
-        }
-      })
-    })
-    if (Array.isArray(item[childrenProp])) {
-      itemCopy[childrenProp] = mapArea(item[childrenProp], props)
-    }
-    result.push(itemCopy)
-  })
-  return result
-}
-
 export default {
   show: function(options) {
     // 把回调函数赋值给全局变量
@@ -1337,9 +1463,8 @@ export default {
       $('.cover').css('height', document.documentElement.clientHeight)
     }
     areaDOM.find('#chooseAll').text('全选')
-    requestAndFirstRenderData(options.api, options.props)
-    const _result = mapArea(options.defaultData, options.props)
-    startDefault(_result)
+    requestAndFirstRenderData(options.api, options.isfilter = true, options.filterData)
+    startDefault(options.defaultData)
   }
 }
 // ---------------------------------------END-------------------------------------------

@@ -1,15 +1,19 @@
 <template>
   <li>
     <!--图标 & 当前项数据-->
-     <div @click="toggle(model.id)">
-         <i v-if="isFolder" :class="[open ? 'el-icon-caret-bottom': 'el-icon-caret-right']"></i>
-         <i v-if="!isFolder"></i>
-         {{ model.local_name }}
+     <div :class="[model.isSelected ? 'is-selected' : '']" @click="toggle(model.id)">
+       <i v-if="isFolder" :class="[open ? 'el-icon-caret-bottom': 'el-icon-caret-right']"></i>
+       <i v-if="!isFolder"></i>
+       <!--<span @click="toggle(model.id)">-->
+         <!--<i v-if="isFolder" :class="[open ? 'el-icon-caret-bottom': 'el-icon-caret-right']"></i>-->
+         <!--<i v-if="!isFolder"></i>-->
+       <!--</span>-->
+       {{ model.local_name }}
      </div>
     <!--子项数据-->
     <collapse-transition>
       <ul style="padding-left: 18px"  v-show="open" v-if="isFolder">
-        <en-tree-item @selectCaputure="onselect(item)" v-for="item in model.children" :model="item" :key="item.id"></en-tree-item>
+        <en-tree-item v-for="item in model.children" @selectCaputure="onselect(item)" :model="item" :key="item.id"></en-tree-item>
       </ul>
     </collapse-transition>
   </li>
@@ -66,6 +70,13 @@
     &:hover {
       background-color: #f5f7fa;
     }
+    & > span{
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .is-selected {
+    background-color: #777;
   }
 </style>
 

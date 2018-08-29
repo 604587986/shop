@@ -1,11 +1,6 @@
 <template>
   <div class="tree-menu" :style="{width, height}">
     <ul v-for="menuItem in treeData" :key="menuItem.id">
-      <!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
-      <!--<div style="margin: 15px 0;"></div>-->
-      <!--<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">-->
-        <!--<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>-->
-      <!--</el-checkbox-group>-->
       <en-tree-item @selectCaputure="onselect(menuItem)" :model="menuItem"></en-tree-item>
     </ul>
   </div>
@@ -29,6 +24,12 @@
       height: {
         type: String,
         default: '400px'
+      },
+
+      /** 是否全部展开 */
+      'default-expand-all': {
+        type: Boolean,
+        default: false
       }
     },
     components: {
