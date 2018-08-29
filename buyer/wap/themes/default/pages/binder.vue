@@ -8,13 +8,17 @@
   import { domain } from '~/ui-domain'
   export default {
     name: 'binder',
-    layout: 'full',
     mounted() {
       if (Storage.getItem('repeat_connect')) {
-        this.$alert('当前使用的第三方账号已绑定过其它账号，您可以直接登录。如果需要换绑，请先登录账号进行解绑。', () => {
-          Storage.removeItem('repeat_connect')
-          Storage.removeItem('uuid_connect')
-          this.$router.replace({ name: 'member-account-binding' })
+        this.$dialog.alert({
+          title: '授权成功',
+          message: '当前使用的第三方账号已绑定过其它账号，您可以直接登录。如果需要换绑，请先登录账号进行解绑。',
+          beforeClose: (action, done) => {
+            done()
+            Storage.removeItem('repeat_connect')
+            Storage.removeItem('uuid_connect')
+            this.$router.replace({ name: 'member-account-binding' })
+          }
         })
         return false
       }
