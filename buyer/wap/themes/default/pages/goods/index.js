@@ -9,6 +9,7 @@ import ShopCard from './-shop-card'
 import GoodsGallery from './-goods-gallery'
 import GoodsSpecs from './-goods-specs'
 import GoodsCoupons from './-goods-coupons'
+import GoodsGroupbuySeckill from './-goods-groupbuy-seckill'
 
 export {
   GoodsComments,
@@ -16,5 +17,6 @@ export {
   ShopCard,
   GoodsGallery,
   GoodsSpecs,
-  GoodsCoupons
+  GoodsCoupons,
+  GoodsGroupbuySeckill
 }

@@ -22,9 +22,9 @@
   "dependencies": {
     "axios": "0.18.0",
     "better-scroll": "^1.12.4",
-    "js-base64": "2.4.3",
     "js-cookie": "2.2.0",
     "js-md5": "^0.7.3",
+    "jwt-decode": "^2.2.0",
     "normalize.css": "8.0.0",
     "nuxt": "1.4.0",
     "uuid": "3.2.1",

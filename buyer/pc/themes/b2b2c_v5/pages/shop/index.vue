@@ -6,7 +6,8 @@
         <a href="javascript:;" :class="['sort-item', !params.order && 'selected']" @click="handleSortShopList(0)">默认</a>
         <a href="javascript:;" :class="['sort-item', params.order && 'selected']" @click="handleSortShopList(1)">信用</a>
       </div>
-      <ul class="shop-list">
+      <div v-if="!shopList || !shopList.data.length" style="text-align:center;line-height:200px">暂无数据</div>
+      <ul v-else class="shop-list">
         <li v-for="shop in shopList.data" :key="shop.shop_id" class="shop-item">
           <div class="shop-info">
             <div class="shop-member-face">
@@ -81,6 +82,7 @@
     name: 'shopList',
     components: { [ShopStar.name]: ShopStar },
     async asyncData({ query }) {
+      if (query.keyword) query.name = query.keyword
       const shopList = await API_Shop.getShopList(query)
       if (shopList.data) {
         shopList.data = shopList.data.map(item => {

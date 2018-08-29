@@ -16,9 +16,9 @@ module.exports = {
   },
   // 生产环境
   pro: {
-    base    : 'http://yiqisi.s1.natapp.cc/base-api',
-    buyer   : 'http://yiqisi.s1.natapp.cc/buyer-api',
-    seller  : 'http://yiqisi.s1.natapp.cc/seller-api',
-    admin   : 'http://yiqisi.s1.natapp.cc/manager-api'
+    base    : 'http://javashop7.s1.natapp.cc/base-api',
+    buyer   : 'http://javashop7.s1.natapp.cc/buyer-api',
+    seller  : 'http://javashop7.s1.natapp.cc/seller-api',
+    admin   : 'http://javashop7.s1.natapp.cc/manager-api'
   }
 }

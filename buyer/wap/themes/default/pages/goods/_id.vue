@@ -11,12 +11,13 @@
     <div class="goods-container">
       <!--商品相册 start-->
       <goods-gallery :data="galleryList"/>
+      <goods-groupbuy-seckill :promotions="promotions"/>
       <!--商品相册 end-->
       <div class="goods-buy">
         <div class="goods-name">
           <h1>{{ goods.goods_name }}</h1>
         </div>
-        <van-cell-group :border="false">
+        <van-cell-group v-if="!hiddenPrice" :border="false">
           <van-cell class="goods-price">
             <div slot="title" class="price">
               ￥<em>{{ goods.price | unitPrice('', 'before') }}</em>.{{ goods.price | unitPrice('', 'after') }}
@@ -136,7 +137,9 @@
           pa: 0
         },
         // 锁住滚动出发事件
-        lockScroll: false
+        lockScroll: false,
+        // 促销信息
+        promotions: ''
       }
     },
     mounted() {
@@ -166,6 +169,18 @@
       /** 购物车徽章 */
       cartBadge() {
         return this.$store.getters['cart/allCount']
+      },
+      /** 是否隐藏价格 */
+      hiddenPrice() {
+        const { promotions = prom } = this
+        if (!promotions || !promotions.length) return false
+        // 如果有团购，隐藏价格
+        if (promotions.filter(item => item.groupbuy_goods_vo)[0]) return true
+        // 如果有限时抢购，隐藏价格
+        if (promotions.filter(item => item.seckill_goods_vo)[0]) return true
+        // 如果有积分兑换，隐藏价格
+        if (promotions.filter(item => item.exchange)[0]) return true
+        return false
       }
     },
     methods: {

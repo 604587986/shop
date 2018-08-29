@@ -12,6 +12,7 @@ export function getShopList(params) {
   return request({
     url: 'shops/list',
     method: Method.GET,
+    loading: false,
     params
   })
 }

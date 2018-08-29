@@ -203,11 +203,12 @@
     z-index: 0;
     height: $banner-height;
     .banner-item {
-      background: repeat-x center top;
+      // background: repeat-x center top;
       height: $banner-height;
       .banner-img {
         background: no-repeat center top;
         height: 100%;
+        background-size: contain;
       }
       &.item-1 {
         background-image: url("../../assets/login-banner_01_repeat.png");
@@ -276,13 +277,13 @@
         width: 100px;
       }
       span.arrow {
-        background: url("../../assets/login-join-seller.png") no-repeat 0 -100px;
+        background: url("../../assets/login-join-icons.png") no-repeat 0 -100px;
         width: 22px;
         height: 22px;
         margin: -30px 63px auto 63px;
       }
       dt {
-        background: url("../../assets/login-join-seller.png") no-repeat;
+        background: url("../../assets/login-join-icons.png") no-repeat;
         display: block;
         width: 100px;
         height: 100px;
@@ -307,7 +308,7 @@
     top: 100px;
     left: 50%;
     width: 396px;
-    margin-left: 100px;
+    margin-left: 150px;
     .lf-content {
       filter: progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#E5FFFFFF', endColorstr='#E5FFFFFF');
       background: rgba(255,255,255,0.9);

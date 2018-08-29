@@ -81,7 +81,7 @@ export function deepClone(object) {
  * @returns {string}
  */
 export function formatPrice(price) {
-  if (!price && typeof price !== 'number') return price
+  if (typeof price !== 'number') return price
   return String(Number(price).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
