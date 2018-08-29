@@ -36,7 +36,7 @@
     mounted() {
       /** 获取店铺分类【分组】 */
       API_Shop.getShopCategorys(this.shop.shop_id).then(response => {
-        const categories = []
+        const categories = [{ shop_cat_name: '全部分组', shop_cat_id: 0 }]
         response.forEach(item => {
           categories.push(item)
           if (item.children && item.children.length) {

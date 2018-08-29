@@ -81,6 +81,15 @@
         }
       }
     },
+    watch: {
+      $route() {
+        this.params.page_no = 1
+        this.finished = false
+        this.goodsList = []
+        this.params.category = this.$route.query.category
+        this.GET_GoodsList()
+      }
+    },
     methods: {
       /** 加载数据 */
       onLoad() {
@@ -124,6 +133,7 @@
         params.seller_id = params.shop_id
         delete params.shop_id
         if (!params.keyword) delete params.keyword
+        if (!params.category || params.category === '0') delete params.category
         API_Goods.getGoodsList(params).then(response => {
           this.loading = false
           const { data } = response
