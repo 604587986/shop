@@ -23,7 +23,7 @@
             <span class="price-coupon">
               <em>¥{{ coupon.coupon_price }}</em>满{{ coupon.coupon_threshold_price }}可用
             </span>
-            <div class="receive-coupon">
+            <div class="receive-coupon" @click="receiveCoupon(coupon)">
               <span class="icon-receive-coupon">立即<br>领取</span>
             </div>
           </div>
@@ -35,6 +35,8 @@
 
 <script>
   import * as API_promotions from '@/api/promotions'
+  import * as API_Members from '@/api/members'
+  import Storage from '@/utils/storage'
   export default {
     name: 'coupons',
     data() {
@@ -55,6 +57,16 @@
       onLoad() {
         this.params.page_no += 1
         this.GET_Coupons()
+      },
+      /** 领取优惠券 */
+      receiveCoupon(coupon) {
+        if (!Storage.getItem('refresh_token')) {
+          this.$message.error('请先登录！')
+          return false
+        }
+        API_Members.receiveCoupons(coupon.coupon_id).then(() => {
+          this.$message.success('领取成功！')
+        })
       },
       /** 获取优惠券列表 */
       GET_Coupons() {
