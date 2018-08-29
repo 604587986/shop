@@ -236,9 +236,9 @@
       right: 0;
       a {
         display: inline-block;
-        width: 75px;
+        width: 65px;
         height: 30px;
-        margin-right: 5px;
+        margin-left: 5px;
         text-align: center;
         color: #fff;
         line-height: 30px;

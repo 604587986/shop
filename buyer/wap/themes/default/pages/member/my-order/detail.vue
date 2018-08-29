@@ -57,7 +57,7 @@
         </div>
       </div>
       <van-cell-group class="receipt-cell">
-        <van-cell v-if="!order.receipt_history" title="发票信息" value="无" />
+        <van-cell v-if="!order.receipt_history || !order.receipt_history.receipt_title" title="发票信息" value="无" />
         <van-cell
           v-else
           title="发票信息"
