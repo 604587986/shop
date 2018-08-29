@@ -5,7 +5,6 @@
 <script>
   import Storage from '@/utils/storage'
   import * as API_Connect from '@/api/connect'
-  import { domain } from '~/ui-domain'
   export default {
     name: 'binder',
     mounted() {
