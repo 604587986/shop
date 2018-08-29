@@ -5,10 +5,10 @@
       <div class="cashier-change">
         <h2 v-if="this.trade_sn">
           交易号：<b>{{ trade_sn }}</b>
-          <a class="see-order-btn" href="/member/my-order">查看订单</a>
+          <nuxt-link class="see-order-btn" to="/member/my-order" replace>查看订单</nuxt-link>
         </h2>
         <h2 v-else>订单编号：<b>{{ order_sn }}</b>
-          <a class="see-order-btn" :href="'/member/my-order/detail?order_sn=' + order_sn">查看订单</a>
+          <nuxt-link class="see-order-btn" :href="'/member/my-order/detail?order_sn=' + order_sn" replace>查看订单</nuxt-link>
         </h2>
         <h2>{{ !order ? '' : order.pay_type_text === 'ONLINE' ? '在线支付：' : '货到付款：' }}
           <span v-if="order">￥{{ order.need_pay_price | unitPrice }}</span>
@@ -73,6 +73,7 @@
 
 <script>
   import * as API_Trade from '@/api/trade'
+  import request from '@/utils/request'
   export default {
     name: 'cashier',
     middleware: 'auth-user',
