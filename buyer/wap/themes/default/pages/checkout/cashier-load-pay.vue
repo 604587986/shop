@@ -1,5 +1,6 @@
 <template>
   <div class="__pay_form__">
+    <van-nav-bar title="支付跳转"/>
     <h3 class="tip">支付跳转中...</h3>
   </div>
 </template>
