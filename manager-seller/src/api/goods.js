@@ -388,3 +388,38 @@ export function getWarningGoodsStockList(ids, params) {
     params
   })
 }
+
+/**
+ * 获取分销设置
+ */
+export function getDistributionSet() {
+  return request({
+    url: 'seller/distribution/setting',
+    method: 'get',
+    loading: false
+  })
+}
+
+/**
+ * 获取分销返利信息
+ * @param id
+ */
+export function getDistributionInfo(id) {
+  return request({
+    url: `seller/distribution/goods/${id}`,
+    method: 'get',
+    loading: false
+  })
+}
+
+/**
+ * 保存分销返利
+ * @param params
+ */
+export function setDistributionInfo(params) {
+  return request({
+    url: 'seller/distribution/goods',
+    method: 'put',
+    data: params
+  })
+}
