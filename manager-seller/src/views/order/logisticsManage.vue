@@ -60,8 +60,8 @@
           ref="mouldForm"
           label-width="120px"
           class="demo-ruleForm">
-          <el-form-item label="模板名称:" prop="name">
-            <el-input v-model="mouldForm.name" id="tplName"></el-input>
+          <el-form-item label="模板名称:" prop="name" id="tplName">
+            <el-input v-model="mouldForm.name"></el-input>
           </el-form-item>
           <el-form-item label="计费方式:" prop="type" v-if="!mouldForm.template_id">
             <el-radio-group v-model="mouldForm.type" >
@@ -70,7 +70,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="计费方式:" v-if="mouldForm.template_id">
-            <span>{{ mouldForm.type | typeStatus }}</span>
+            <div style="color: #909399;font-size: 13px;">{{ mouldForm.type | typeStatus }}</div>
           </el-form-item>
           <el-form-item label="配送区域:" prop="items">
             <el-table
@@ -181,30 +181,6 @@
       [AreaSelectorDialog.name]: AreaSelectorDialog
     },
     data() {
-      const checkFirstPrice = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('首重运费不能为空'))
-        }
-        setTimeout(() => {
-          if (!RegExp.money.test(value)) {
-            callback(new Error('请输入正确的金额'))
-          } else {
-            callback()
-          }
-        }, 1000)
-      }
-      const checkContinuedPrice = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('续重运费不能为空'))
-        }
-        setTimeout(() => {
-          if (!RegExp.money.test(value)) {
-            callback(new Error('请输入正确的金额'))
-          } else {
-            callback()
-          }
-        }, 1000)
-      }
       return {
         /** 当前面板的名字*/
         activeName: 'express',
@@ -275,7 +251,9 @@
         if (typeof area === 'string') {
           _area = JSON.parse(area)
         }
-        return _area.map(key => { return key.local_name })
+        return _area.map(key => {
+          return key.local_name
+        }).toString()
       }
     },
     mounted() {
@@ -582,7 +560,7 @@
     display: none;
   }
   /deep/ #tplName {
-    width: 20%;
+    width: 25%;
   }
   /deep/ .el-table__body {
     .el-input {
@@ -601,9 +579,12 @@
   /deep/ .el-button.is-plain:focus, .el-button.is-plain:hover {
     border: none;
   }
-  /deep/ .el-collapse-item{
-    margin-bottom: 10px;
-    background-color: #ddd;
+  /deep/ .el-collapse {
+    border-bottom: none;
+    .el-collapse-item{
+      margin-bottom: 10px;
+      background-color: #f6f6f6;
+    }
   }
   .colla-title {
     padding: 0 15px;
@@ -612,7 +593,7 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    background-color: #ddd;
+    background-color: #f6f6f6;
   }
 </style>
 
