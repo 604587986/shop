@@ -25,9 +25,9 @@
           </div>
           <div class="dd dorpdown-layer">
             <dl>
-              <dd><nuxt-link to="/member/my-order#WAIT_PAY">待付款订单</nuxt-link></dd>
-              <dd><nuxt-link to="/member/my-order#WAIT_ROG">已发货订单</nuxt-link></dd>
-              <dd><nuxt-link to="/member/my-order#WAIT_COMMENT">待评价订单</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-order?order_status=WAIT_PAY">待付款订单</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-order?order_status=WAIT_ROG">已发货订单</nuxt-link></dd>
+              <dd><nuxt-link to="/member/my-order?order_status=WAIT_COMMENT">待评价订单</nuxt-link></dd>
             </dl>
           </div>
         </li>
