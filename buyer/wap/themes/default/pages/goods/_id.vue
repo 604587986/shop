@@ -66,7 +66,7 @@
         @click="handleCollectGoods"
       />
       <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
-      <van-goods-action-mini-btn icon="shop" text="店铺"/>
+      <van-goods-action-mini-btn icon="shop" text="店铺" :to="'/shop/' + goods.seller_id"/>
       <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
       <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
     </van-goods-action>
