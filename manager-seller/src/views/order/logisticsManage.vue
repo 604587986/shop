@@ -248,12 +248,16 @@
       },
       formatAreaJson(area) {
         let _area = area
+        let resultArea = []
         if (typeof area === 'string') {
           _area = JSON.parse(area)
         }
-        return _area.map(key => {
-          return key.local_name
-        }).toString()
+        _area.forEach(key => {
+          if (key.level !== 3) {
+            resultArea.push(key.local_name)
+          }
+        })
+        return resultArea.toString()
       }
     },
     mounted() {
@@ -594,6 +598,9 @@
     justify-content: space-between;
     align-items: center;
     background-color: #f6f6f6;
+  }
+  /deep/ .el-button.is-plain:hover {
+    background-color: transparent;
   }
 </style>
 
