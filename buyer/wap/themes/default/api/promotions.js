@@ -120,4 +120,3 @@ export function getAllCoupons(params) {
     params
   })
 }
-
