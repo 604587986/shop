@@ -104,3 +104,15 @@ export function getSeckillTimeGoods(params) {
     params
   })
 }
+
+/**
+ * 获取全部优惠券
+ * @param params
+ */
+export function getAllCoupons(params) {
+  return request({
+    url: 'promotions/coupons/all',
+    method: Method.GET,
+    params
+  })
+}
