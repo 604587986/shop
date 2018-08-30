@@ -84,7 +84,7 @@
       </el-pagination>
     </en-table-layout>
     <!--查看提现记录-->
-    <el-dialog title="查看提现记录" :visible.sync="isShowPutForwardRecoreds" width="50%" align="center">
+    <el-dialog title="查看提现记录" :visible.sync="isShowPutForwardRecoreds" width="55%" align="center">
       <div align="center">
         <div class="d-header"> 提现基本信息 </div>
         <table class="putforawrd-baseinfo">
@@ -110,11 +110,15 @@
         </table>
         <!--提现日志-->
         <div class="d-header"> 提现日志 </div>
-        <en-table-layout :tableData="putforwardLogs" class="pop-table" border>
+        <en-table-layout :tableData="putforwardLogs" class="pop-table" border v-if="putforwardLogs[0]">
           <template slot="table-columns">
-            <el-table-column  prop="transfer_time" :formatter="MixinUnixToDate" label="操作时间"/>
+            <el-table-column v-if="putforwardLogs[0].apply_time"  prop="apply_time" :formatter="MixinUnixToDate" label="申请时间"/>
+            <el-table-column v-if="putforwardLogs[0].apply_time"  prop="apply_remark" label="申请备注"/>
+            <el-table-column v-if="putforwardLogs[0].inspect_time" prop="inspect_time" :formatter="MixinUnixToDate" label="审核时间"/>
+            <el-table-column v-if="putforwardLogs[0].inspect_time"  prop="inspect_remark" label="审核备注"/>
+            <el-table-column v-if="putforwardLogs[0].transfer_time"  prop="transfer_time" :formatter="MixinUnixToDate" label="转账时间"/>
+            <el-table-column v-if="putforwardLogs[0].transfer_time" prop="transfer_remark" label="转账备注"/>
             <el-table-column  prop="status" label="状态" :formatter="withDrawStatus" />
-            <el-table-column  prop="transfer_remark" label="备注"/>
           </template>
         </en-table-layout>
       </div>
@@ -278,6 +282,10 @@
           this.isShowPutForwardRecoreds = true
           this.currentRow = row
           this.putforwardLogs = [{
+            'apply_time': row.apply_time,
+            'apply_remark': row.apply_remark,
+            'inspect_time': row.inspect_time,
+            'inspect_remark': row.inspect_remark,
             'transfer_time': row.transfer_time,
             'transfer_remark': row.transfer_remark,
             'status': row.status
