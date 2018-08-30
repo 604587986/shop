@@ -14,7 +14,7 @@ import md5 from 'js-md5'
  * @returns {string}
  */
 export function getConnectUrl(client_type, login_type) {
-  return `${api.buyer}connect/${client_type}/${login_type}`
+  return `${api.buyer}/passport/connect/${client_type}/${login_type}`
 }
 
 /**
