@@ -1,8 +1,9 @@
 <template>
   <div id="app" class="container">
+    <nav-bar :title="error.statusCode === 404 ? '页面不见啦' : '服务器出错'"/>
     <div v-if="error.statusCode === 404" class="error-404">
       <div class="error-left">
-        <img src="~/assets/images/background-404.jpg">
+        <img src="../assets/images/background-404.jpg">
       </div>
       <div class="error-right">
         <h1>糟糕！您访问的页面不见啦...</h1>
@@ -10,18 +11,10 @@
         <p>网址有错误：<span class="error-message">请检查地址是否完整或存在多余字符</span></p>
         <p>网址已失效：<span class="error-message">可能页面已删除，活动已下线等</span></p>
         <span class="error-title" style="margin-top: 20px">您可以：</span>
-        <div>
-          <el-button type="danger" size="small" @click="$router.back()">返回上页</el-button>
-          <el-button type="danger" size="small" @click="$router.push({ path: '/' })">去首页</el-button>
+        <div style="text-align: center">
+          <van-button type="danger" size="small" @click="$router.back()">返回上页</van-button>
+          <van-button type="danger" size="small" @click="$router.replace({ path: '/' })">去首页</van-button>
         </div>
-      </div>
-    </div>
-    <div v-else-if="error.statusCode === 503" class="error-500">
-      <div class="inner-error">
-        <p>{{ error.message || '服务器出现错误...' }}</p>
-      </div>
-      <div class="inner-btns">
-        <el-button size="small" @click="handleReload">刷新页面</el-button>
       </div>
     </div>
     <div v-else class="error-500">
@@ -29,8 +22,8 @@
         <p>{{ error.message || '服务器出现错误...' }}</p>
       </div>
       <div class="inner-btns">
-        <el-button size="small" @click="$router.back()">返回上页</el-button>
-        <el-button size="small" @click="handleReload">刷新页面</el-button>
+        <van-button size="small" @click="$router.back()">返回上页</van-button>
+        <van-button size="small" @click="handleReload">刷新页面</van-button>
       </div>
     </div>
   </div>
@@ -40,7 +33,6 @@
   export default {
     name: 'error',
     props: ['error'],
-    layout: 'full',
     methods: {
       /** 刷新网页 */
       handleReload() {
@@ -52,19 +44,22 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../assets/styles/color";
+  /deep/ {
+    .van-button + .van-button {
+      margin-left: 20px;
+    }
+  }
   .container {
     background-color: #fff;
   }
   .error-404 {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    width: 980px;
+    width: 100%;
     margin: 0 auto;
-    min-height: 500px;
     .error-left {
-      width: 450px;
-      height: 380px;
       img {
         width: 100%;
         height: 100%;
@@ -85,7 +80,7 @@
         margin-bottom: 5px;
         margin-left: 30px;
       }
-      /deep/ .el-button { width: 90px }
+      /deep/ .van-button { width: 90px }
     }
   }
   .error-500 {
@@ -102,7 +97,7 @@
     }
     .inner-btns {
       margin-bottom: 30px;
-      /deep/ .el-button {
+      /deep/ .van-button {
         &:hover, &:focus, &:active {
           border-color: lighten($color-main, 10%);
           color: lighten($color-main, 10%);
