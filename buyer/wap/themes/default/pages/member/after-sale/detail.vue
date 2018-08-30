@@ -1,20 +1,47 @@
 <template>
   <div id="after-sale-detail">
+    <nav-bar title="售后详情"/>
     <div v-if="detail" class="order-detail">
-      <h1>订单信息</h1>
-      <div class="detail-list">
-        <dl><dt>订单编号：</dt><dd>{{ detail.order_sn }}</dd></dl>
-        <dl class="top-line"><dt>申请时间：</dt><dd>{{ detail.create_time | unixToDate }}</dd></dl>
-        <dl><dt>状态：</dt><dd><span>{{ detail.refund_status_text }}</span></dd></dl>
-        <dl><dt>申请售后原因：</dt><dd>{{ detail.refund_reason }}</dd></dl>
-        <dl><dt>申请售后详细描述：</dt><dd>{{ detail.finance_remark }}</dd></dl>
-        <dl><dt>退款方式：</dt><dd>{{ detail.account_type_text }}</dd></dl>
-        <dl><dt>申请售后金额：</dt><dd>￥{{ detail.refund_price | unitPrice }}</dd></dl>
+      <div class="order-items">
+        <div class="order-item">
+          <span>订单编号：</span><span>{{ detail.sn }}</span>
+        </div>
+        <div class="order-item">
+          <span>申请时间：</span><span>{{ detail.create_time | unixToDate }}</span>
+        </div>
+        <div class="order-item">
+          <span>售后状态：</span><span>{{ detail.refund_status_text }}</span>
+        </div>
+        <div class="order-item">
+          <span>申请原因：</span><span>{{ detail.refund_reason || '无' }}</span>
+        </div>
+        <div class="order-item">
+          <span>详细描述：</span><span>{{ detail.finance_remark || '无' }}</span>
+        </div>
+        <div class="order-item">
+          <span>退款方式：</span><span>{{ detail.account_type_text || '无' }}</span>
+        </div>
+        <div class="order-item">
+          <span>退款金额：</span><span>{{ detail.refund_price | unitPrice }}</span>
+        </div>
+        <span class="hr"></span>
       </div>
     </div>
-    <div v-if="sku" class="goods-list">
-      <sku-list :skuList="sku" num="return_num"></sku-list>
-    </div>
+    <ul v-if="skuList" class="sku-list">
+      <li class="sku-item" v-for="(sku, index) in skuList" :key="index">
+        <nuxt-link :to="'/goods/' + sku.goods_id" class="goods-image">
+          <img :src="sku.goods_image" :alt="sku.goods_name">
+        </nuxt-link>
+        <nuxt-link :to="'/goods/' + sku.goods_id">
+          <span  class="goods-name">{{ sku.goods_name }}</span>
+          <p v-if="sku.spec_list" class="sku-spec">{{ sku | formatterSkuSpec }}</p>
+        </nuxt-link>
+        <div class="goods-info">
+          <p class="price">￥{{ sku.price | unitPrice }}</p>
+          <p class="goods-num">x{{ sku.return_num }}</p>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -31,7 +58,7 @@
       return {
         sn: this.$route.query.sn,
         detail: '',
-        sku: ''
+        skuList: ''
       }
     },
     mounted() {
@@ -41,7 +68,7 @@
       GET_AfterSaleDetail() {
         API_AfterSale.getAfterSaleDetail(this.sn).then(response => {
           this.detail = response.refund
-          this.sku = response.refund_goods
+          this.skuList = response.refund_goods
         })
       }
     }
@@ -49,56 +76,82 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .order-detail {
-    background-color: #fbfbfb;
-    border: 1px solid #d8d8d8;
-    display: inline-block;
-    letter-spacing: normal;
-    vertical-align: top;
+    padding-top: 46px;
+  }
+  .hr {
+    display: block;
     width: 100%;
-    word-spacing: normal;
-    h1 {
-      background-color: #f3f3f3;
-      border-bottom: 1px solid #d8d8d8;
-      font-size: 12px;
-      font-weight: 600;
-      height: 20px;
-      line-height: 20px;
-      padding: 9px;
-    }
-    .detail-list {
-      display: block;
-      padding: 17px 17px 7px;
-      width: auto;
-      dl {
-        margin-bottom: 10px;
-        display: inline-block;
-        font-size: 12px;
-        letter-spacing: normal;
-        line-height: 20px;
-        vertical-align: top;
-        word-spacing: normal;
-        width: 100%;
-        &.top-line {
-          border-top: 1px dotted #d8d8d8;
-          padding-top: 10px;
-        }
-      }
-      dt {
-        color: #888;
-        width: 23%;
-        float: left;
-        display: inline;
-      }
-      dd {
-        color: #666;
-        width: 77%;
-        float: left;
-        display: inline;
+    height: 1px;
+    background-color: #e5e5e5;
+    clear: both;
+  }
+  .order-items {
+    background-color: #fff;
+    padding: 0 10px;
+    .order-item {
+      padding: 5px 0;
+      font-size: 14px;
+      .price {
+        font-size: 16px;
       }
     }
   }
-  .goods-list {
-    margin-top: 20px;
+  .sku-box {
+    clear: both;
+    margin-top: 10px;
+    background-color: #fff;
+    .shop-info {
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 10px;
+      margin: 0 auto;
+    }
+    .shop-name {
+      a {
+        color: $color-href;
+        &:hover { color: $color-main }
+      }
+      .van-icon {
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+      .van-icon-points-mall {
+        font-size: 20px;
+      }
+    }
+    .sku-num {
+      float: right;
+    }
+  }
+  .sku-list {
+    padding: 0 10px;
+  }
+  .sku-item {
+    display: flex;
+    margin: 10px auto;
+    min-height: 75px;
+    .goods-name {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
+    .goods-image {
+      margin-right: 10px;
+      img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+    .goods-info {
+      margin-left: 10px;
+      .price {
+        font-size: 14px;
+      }
+    }
   }
 </style>

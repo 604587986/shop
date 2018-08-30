@@ -35,7 +35,7 @@
         <ul v-if="skuList" class="sku-list">
           <li class="sku-item" v-for="(sku, index) in skuList" :key="index">
             <nuxt-link :to="'/goods/' + sku.goods_id" class="goods-image">
-              <img :src="sku.goods_image" :alt="sku.goods_name">
+              <img :src="sku.goods_image" :alt="sku.name">
             </nuxt-link>
             <nuxt-link :to="'/goods/' + sku.goods_id">
               <span  class="goods-name">{{ sku.name }}</span>

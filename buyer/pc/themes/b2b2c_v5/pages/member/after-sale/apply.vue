@@ -100,7 +100,7 @@
                 <el-input v-model="returnGoodsForm.bank_deposit_name" size="small" :maxlength="180" placeholder="请输入银行开户行"/>
               </el-form-item>
               <el-form-item label="银行开户名：" prop="bank_account_name">
-                <el-input v-model="returnGoodsForm.bank_deposit_name" size="small" :maxlength="180" placeholder="请输入银行开户名"/>
+                <el-input v-model="returnGoodsForm.bank_account_name" size="small" :maxlength="180" placeholder="请输入银行开户名"/>
               </el-form-item>
               <el-form-item label="银行账号：" prop="bank_account_number">
                 <el-input v-model="returnGoodsForm.bank_account_number" size="small" :maxlength="180" placeholder="请输入银行账号"/>
