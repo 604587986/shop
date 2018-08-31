@@ -354,6 +354,16 @@
           callback()
         }
       }
+      const checkTakeEffectTime = (rule, value, callback) => {
+        const now = new Date().getTime()
+        if (!value) {
+          return callback(new Error('请选择生效时间'))
+        } else if (value[0] <= now) {
+          callback(new Error('活动开始时间不得小于当前时间'))
+        } else {
+          callback()
+        }
+      }
       return {
         /** 当前面板的名字*/
         activeName: 'fullList',
@@ -511,7 +521,8 @@
 
           /** 生效时间 */
           take_effect_time: [
-            { type: 'array', required: true, message: '请选择生效时间', trigger: 'blur' }
+            { type: 'array', required: true, message: '请选择生效时间', trigger: 'blur' },
+            { validator: checkTakeEffectTime, trigger: 'blur' }
           ],
 
           /** 优惠门槛 */
@@ -944,17 +955,17 @@
                 return {
                   goods_id: key.goods_id,
                   name: key.goods_name,
+                  goods_name: key.goods_name,
+                  price: key.price,
                   thumbnail: key.thumbnail
                 }
               })
             }
             if (_goodslist.length > 0 && this.activityForm.range_type === 2) {
-              /** 参与商品列表 */
               this.activityForm.goods_list = _goodslist
             } else {
               delete this.activityForm.goods_list
             }
-            delete this.activityForm.take_effect_time
             if (this.activityForm.fd_id) {
               API_activity.saveFullCutActivity(this.activityForm.fd_id, this.activityForm).then(() => {
                 this.$message.success('保存成功！')

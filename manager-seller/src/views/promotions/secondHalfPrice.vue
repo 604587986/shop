@@ -61,7 +61,7 @@
           </el-pagination>
         </en-table-layout>
       </el-tab-pane>
-      <el-tab-pane label="新增第二件半价活动" name="add">
+      <el-tab-pane :label="secondHalfPriceName" name="add">
         <div class="content-goods-publish">
           <el-form
             :model="activityForm"
@@ -213,6 +213,9 @@
         /** 当前面板的名字*/
         activeName: 'seconedHalfList',
 
+        /** 新增活动面板标题 */
+        secondHalfPriceName: '新增第二件半价活动',
+
         /** 列表loading状态 */
         loading: false,
 
@@ -316,6 +319,7 @@
         if (this.activeName === 'seconedHalfList') {
           this.GET_SecondHalfActivityList()
         } else if (this.activeName === 'add') {
+          this.secondHalfPriceName = '新增第二件半价活动'
           this.activityForm = {
             hp_id: '',
             title: '',
@@ -407,6 +411,7 @@
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
+        this.secondHalfPriceName = '编辑第二件半价活动'
         this.GET_SingleCutActivityDetails(row.hp_id)
       },
 
@@ -443,6 +448,7 @@
       /** 新增 */
       handleAddSeconedHalf() {
         this.activeName = 'add'
+        this.secondHalfPriceName = '新增第二件半价活动'
         this.activityForm = {
           title: '',
           take_effect_time: [],

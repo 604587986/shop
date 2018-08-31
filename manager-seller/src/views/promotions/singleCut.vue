@@ -61,7 +61,7 @@
           </el-pagination>
         </en-table-layout>
       </el-tab-pane>
-      <el-tab-pane label="新增单品立减" name="add">
+      <el-tab-pane :label="singleCutName" name="add">
         <div class="content-goods-publish">
           <el-form
             :model="activityForm"
@@ -223,6 +223,9 @@
         /** 当前面板的名字*/
         activeName: 'singleCutList',
 
+        /** 单品立即名称 */
+        singleCutName: '新增单品立减',
+
         /** 列表loading状态 */
         loading: false,
 
@@ -342,6 +345,7 @@
         if (this.activeName === 'express') {
           this.GET_SingleCutActivityList()
         } else if (this.activeName === 'add') {
+          this.singleCutName = '新增单品立减'
           this.activityForm = {
             minus_id: '',
             title: '',
@@ -422,6 +426,7 @@
       /** 编辑活动 */
       handleEditMould(row) {
         this.activeName = 'add'
+        this.singleCutName = '编辑单品立减'
         this.activityForm.minus_id = row.minus_id
         this.GET_SingleCutActivityDetails(row.minus_id)
       },
@@ -462,6 +467,7 @@
       /** 新增 */
       handleAddSingleCut() {
         this.activeName = 'add'
+        this.singleCutName = '新增单品立减'
         this.activityForm = {
           /** 活动ID*/
           minus_id: '',

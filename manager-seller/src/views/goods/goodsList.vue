@@ -398,7 +398,6 @@
 
       /** 切换分组*/
       changeGoodsCateGory(data) {
-        console.log(data)
         delete this.params.shop_cat_path
         if (data && Array.isArray(data) && data.length !== 0) {
           this.params = {
