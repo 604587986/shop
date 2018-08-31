@@ -34,6 +34,9 @@
       <!--店铺优惠券 start-->
       <goods-coupons :shop-id="goods.seller_id"/>
       <!--店铺优惠券 end-->
+      <!--促销活动 start-->
+      <goods-promotions :promotions="promotions"/>
+      <!--促销活动 end-->
       <!--商品规格 start-->
       <goods-specs
         :goods-id="goods.goods_id"

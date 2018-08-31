@@ -144,7 +144,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'shop-list', component: () => import('@/views/shop/shop-manage/shopList'), name: 'shopList', meta: { title: 'shopList' }},
           { path: 'shop-audit', component: () => import('@/views/shop/shop-manage/shopAudit'), name: 'shopAudit', meta: { title: 'shopAudit' }},
-          { path: 'edit/:shop_id', component: () => import('@/views/shop/shop-manage/shopEdit'), name: 'shopEdit', hidden: true, meta: { title: 'shopEdit' }}
+          { path: 'edit/:id', component: () => import('@/views/shop/shop-manage/shopEdit'), name: 'shopEdit', hidden: true, meta: { title: 'shopEdit' }}
         ]
       },
       {
