@@ -11,7 +11,12 @@
     <div class="goods-container">
       <!--商品相册 start-->
       <goods-gallery :data="galleryList"/>
+      <!--团购、限时抢购 start-->
       <goods-groupbuy-seckill :promotions="promotions"/>
+      <!--团购、限时抢购 end-->
+      <!--积分兑换 start-->
+      <goods-exchange :promotions="promotions"/>
+      <!--积分兑换 end-->
       <!--商品相册 end-->
       <div class="goods-buy">
         <div class="goods-name">

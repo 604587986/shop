@@ -72,7 +72,7 @@
     z-index: 10;
     height: 49px;
     color: #fff;
-    background: url(//wq.360buyimg.com/fd/h5/wxsq_dev/detail/images/decoration_bg_pink_a1cbbf07.png) no-repeat,-webkit-linear-gradient(top,#fc5997,#ef4747);
+    background: url(../../assets/images/background-promotion-bar.png) no-repeat,-webkit-linear-gradient(top,#fc5997,#ef4747);
     background-size: 259px,100%;
     .prom-price {
       margin: 0 10px;
