@@ -25,10 +25,10 @@
     .van-tabs {
       top: 46px;
     }
-    .van-cell-swipe__wrapper {
+    .van-swipe-cell__wrapper {
       height: 100%;
     }
-    .van-cell-swipe__left, .van-cell-swipe__right {
+    .van-swipe-cell__left, .van-swipe-cell__right {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -39,7 +39,7 @@
       font-size: 14px;
       font-weight: 700;
     }
-    .van-cell-swipe__left {
+    .van-swipe-cell__left {
       background-color: #409EFF;
     }
     [class$="-container"] {

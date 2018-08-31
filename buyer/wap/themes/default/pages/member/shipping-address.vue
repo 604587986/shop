@@ -16,7 +16,7 @@
           :key="index"
           @click="handleSelectAddress(address)"
         >
-          <van-cell-swipe :right-width="65">
+          <van-swipe-cell :right-width="65">
             <div class="address-content">
               <div class="info-address">
                 <div class="add-name">{{ address.name }}</div>
@@ -30,7 +30,7 @@
             </div>
             <i class="iconfont ea-icon-edit" @click="handleEaitAddress(address)"></i>
             <span slot="right" @click="handleDeleteAddress(address)">删除</span>
-          </van-cell-swipe>
+          </van-swipe-cell>
         </li>
       </ul>
     </div>
@@ -245,10 +245,10 @@
     padding-right: 10px;
   }
   /deep/ {
-    .van-cell-swipe__wrapper {
+    .van-swipe-cell__wrapper {
       height: 100%;
     }
-    .van-cell-swipe__wrapper, .van-cell-swipe {
+    .van-swipe-cell__wrapper, .van-swipe-cell {
       width: 100%;
     }
     .edit-dialog {
