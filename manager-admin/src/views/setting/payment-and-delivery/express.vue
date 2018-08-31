@@ -128,13 +128,17 @@
 
       /** 添加快递公司 */
       handleAddExpress() {
-        this.expressForm = { support_waybill: 0 }
+        this.expressForm = { is_waybill: 0 }
         this.dialogExpressVisible = true
       },
 
       /** 编辑物流公司 */
       handleEditExpress(index, row) {
-        this.expressForm = JSON.parse(JSON.stringify(row))
+        const params = JSON.parse(JSON.stringify(row))
+        if (typeof params.is_waybill !== 'number') {
+          params.is_waybill = 0
+        }
+        this.expressForm = params
         this.dialogExpressVisible = true
       },
 
