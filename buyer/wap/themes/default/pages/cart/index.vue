@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="content-shop-item">
-            <van-cell-swipe :right-width="90" v-for="(sku, index) in shop.sku_list" :key="index">
+            <van-swipe-cell :right-width="90" v-for="(sku, index) in shop.sku_list" :key="index">
               <div class="sku-item">
                 <div class="sku-check" @click="handleCheckSku(sku)">
                   <van-icon :name="sku.checked ? 'checked' : 'check'"/>
@@ -48,7 +48,7 @@
                 </nuxt-link>
               </div>
               <span slot="right" class="del-sku" @click="handleDelete(sku)">删除</span>
-            </van-cell-swipe>
+            </van-swipe-cell>
           </div>
         </div>
       </div>
