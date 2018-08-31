@@ -170,10 +170,13 @@
     }
   }
   .sort-box {
-    position: relative;
+    position: fixed;
+    z-index: 99;
     height: 40px;
     background-color: #fff;
-    padding-top: 46px;
+    top: 46px;
+    left: 0;
+    right: 0;
     .inner-sort {
       font-size: 14px;
       display: flex;
@@ -221,6 +224,9 @@
         }
       }
     }
+  }
+  .goods-list {
+    padding-top: 46px + 40px
   }
   .goods-item {
     display: flex;
