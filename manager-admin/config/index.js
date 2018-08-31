@@ -7,6 +7,11 @@ const { domain_dev } = require('../ui-domain')
 const _domain = domain_dev.admin.match(/.*:\/\/(.*):(\d*)/)
 
 module.exports = {
+  /**
+   * 分销功能开关
+   * 如果您购买了分销相关功能，请设置为true
+   */
+  distribution: true,
   dev: {
 
     // Paths
