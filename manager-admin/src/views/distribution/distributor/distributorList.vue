@@ -30,7 +30,7 @@
         <!--注册时间-->
         <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="注册时间"/>
         <!--修改模式-->
-        <el-table-column label="修改模式" width="150">
+        <el-table-column label="修改模版" width="150">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="handleEditTpl(scope.row)">修改模式</el-button>
           </template>

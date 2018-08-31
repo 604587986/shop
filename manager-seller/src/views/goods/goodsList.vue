@@ -78,7 +78,7 @@
             <div class="under-reason" v-if="scope.row.market_enable === 0" @click="showUnderReason(scope.row)">(下架原因)</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="250" style="text-align: left;">
+        <el-table-column label="操作" width="300" style="text-align: left;">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -96,6 +96,12 @@
               size="mini"
               @click="handleStockGoods(scope.row)">库存
             </el-button>
+            <el-button
+              v-if="distributionSet"
+              type="primary"
+              size="mini"
+              @click="handleRebate(scope.row)">返利
+            </el-button>
           </template>
         </el-table-column>
       </template>
@@ -111,9 +117,10 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-table-layout>
+    <!--库存编辑-->
     <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="35%" class="pop-sku">
       <div align="center">
-        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100" :rules="rules">
+        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100px" :rules="rules">
           <el-form-item label="库存" prop="quantity" >
             <el-input  v-model="goodsStockData.quantity" />
           </el-form-item>
@@ -147,8 +154,27 @@
         <el-button type="primary" @click="reserveStockGoods">确 定</el-button>
       </div>
     </el-dialog>
+    <!--下架原因-->
     <el-dialog title="下架原因" :visible.sync="isShowUnderReason" width="17%" >
       <div align="center">{{ under_reason }}</div>
+    </el-dialog>
+    <!--分销返利-->
+    <el-dialog title="分销返利" :visible.sync="isShowDisRebate" width="24%">
+      <el-form :model="disRebateData" label-width="100px" :rules="disRules" ref="disRebateData">
+        <el-form-item label="1级返利" prop="grade1Rebate">
+          <el-input v-model="disRebateData.grade1Rebate">
+            <template slot="prepend">¥</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="2级返利" prop="grade2Rebate">
+          <el-input v-model="disRebateData.grade2Rebate">
+            <template slot="prepend">¥</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="reserveDisSet('disRebateData')">保存</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -175,6 +201,19 @@
           }
         }, 500)
       }
+      const checkMoney = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('返利金额不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(value)) {
+            callback(new Error('请输入正确的金额'))
+          } else {
+            callback()
+          }
+        }, 500)
+      }
+
       return {
         /** 列表loading状态 */
         loading: false,
@@ -236,7 +275,38 @@
         },
 
         /** 店铺信息 */
-        shopInfo: this.$store.getters.shopInfo
+        shopInfo: this.$store.getters.shopInfo,
+
+        /** 分销设置是否开启 1开启 0关闭 */
+        distributionSet: 0,
+
+        /** 是否显示分销返利弹框 */
+        isShowDisRebate: false,
+
+        /** 分销返利数据 */
+        disRebateData: {
+          /** 商品id */
+          goods_id: 0,
+
+          /** 1级返利 */
+          grade1Rebate: 0,
+
+          /** 2级返利 */
+          grade2Rebate: 0
+
+        },
+
+        /** 分销返利校验规则 */
+        disRules: {
+          grade1Rebate: [
+            { required: true, message: '1级返利金额不能为空', trigger: 'blur' },
+            { validator: checkMoney, trigger: 'blur' }
+          ],
+          grade2Rebate: [
+            { required: true, message: '2级返利金额不能为空', trigger: 'blur' },
+            { validator: checkMoney, trigger: 'blur' }
+          ]
+        }
       }
     },
     filters: {
@@ -258,6 +328,7 @@
         }
       }
       this.GET_GoodsList()
+      this.getDistributionSet()
     },
     activated() {
       delete this.params.market_enable
@@ -266,6 +337,7 @@
         ...this.$route.query
       }
       this.GET_GoodsList()
+      this.getDistributionSet()
     },
     beforeRouteUpdate(to, from, next) {
       delete this.params.market_enable
@@ -274,6 +346,7 @@
         ...this.$route.query
       }
       this.GET_GoodsList()
+      this.getDistributionSet()
       next()
     },
     methods: {
@@ -497,10 +570,46 @@
           this.$message.error('库存必须为大于0的正整数')
           return
         }
-        API_goods.reserveStockGoods(this.goodsId, _params).then((response) => {
+        API_goods.reserveStockGoods(this.goodsId, _params).then(() => {
           this.goodsStockshow = false
           this.$message.success('库存商品保存成功')
           this.GET_GoodsList()
+        })
+      },
+
+      /** 获取分销设置 */
+      getDistributionSet() {
+        API_goods.getDistributionSet().then(response => {
+          this.distributionSet = response.message
+        })
+      },
+
+      /** 返利 获取返利信息*/
+      handleRebate(row) {
+        API_goods.getDistributionInfo(row.goods_id).then(response => {
+          this.isShowDisRebate = true
+          this.disRebateData = {
+            /** 商品id */
+            goods_id: response.goods_id || row.goods_id,
+
+            /** 1级返利 */
+            grade1Rebate: response.grade1_rebate,
+
+            /** 2级返利 */
+            grade2Rebate: response.grade2_rebate
+          }
+        })
+      },
+
+      /** 保存分销返利信息 */
+      reserveDisSet(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            API_goods.setDistributionInfo(this.disRebateData).then(() => {
+              this.isShowDisRebate = false
+              this.$message.success('当前商品分销返利金额修改成功')
+            })
+          }
         })
       }
     }

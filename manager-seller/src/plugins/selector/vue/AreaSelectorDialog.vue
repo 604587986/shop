@@ -25,69 +25,26 @@ export default {
       required: true
     },
 
-    /** 映射属性 */
-    propertys: {
-      type: Object,
-      default: {
-        /** 等级 */
-        level: 'level',
-
-        /** 标签名 */
-        local_name: 'local_name',
-
-        /** 父地区id */
-        p_regions_id: 'p_regions_id',
-
-        /**  地区id */
-        region_id: 'region_id',
-
-        /** 子选项 */
-        children: 'children'
-      }
+    /** 过滤数据 */
+    filterData: {
+      type: Array,
+      default: []
     }
   },
   methods: {
     callAreaDialog() {
       AreaSelector.show({
         api: this.api,
-        props: this.propertys,
+        filterData: this.filterData,
         defaultData: this.defaultData,
         confirm: data => {
-          const _data = this.mapArea(data, this.propertys)
-          this.$emit('confirmFunc', data, _data)
+          this.$emit('confirmFunc', data)
         },
         callHideDialog: () => {
           this.$emit('hideDialogFunc')
         }
       })
-    },
-    /** 数据反向映射 */
-    mapArea(arr, props){
-      if (!arr || !Array.isArray(arr) || !props) return arr
-      const result = []
-      const configurableProps = ['level', 'local_name', 'p_regions_id', 'region_id']
-      const childrenProp = props.children || 'children'
-      arr.forEach(item => {
-        const itemCopy = {}
-        configurableProps.forEach(prop => {
-          let name = props[prop]
-          let value = item[prop]
-          if (value === undefined) {
-            name = prop
-            value = item[prop]
-          }
-          if(value !== undefined) {
-            itemCopy[name] = value
-          }
-        })
-        if (Array.isArray(item[childrenProp])) {
-          itemCopy[childrenProp] = this.mapArea(item[childrenProp], props)
-        }
-        result.push(itemCopy)
-      })
-      return result
-    },
-
+    }
   },
   mounted() {
     if (this.showDialog) {

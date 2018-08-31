@@ -2,104 +2,127 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
       <el-tab-pane label="快递模板" name="express">
-        <en-table-layout
-          toolbar
-          pagination
-          :tableData="tableData"
-          :loading="loading">
-          <div slot="toolbar" class="inner-toolbar">
-            <div class="toolbar-btns">
-              <el-button type="primary" @click="handleAddMould">新增模板</el-button>
-            </div>
-          </div>
-          <template slot="table-columns">
-            <!--模板名称-->
-            <el-table-column prop="name" label="模板名称"/>
-            <!--首重（kg）-->
-            <el-table-column prop="first_company" label="首重（kg）"/>
-            <!--运费（元）-->
-            <el-table-column label="运费（元）">
-              <template slot-scope="scope">
-                <span>{{ scope.row.first_price | unitPrice('￥') }}</span>
+        <div style="margin-bottom: 10px;">
+          <el-button type="primary" @click="handleAddMould">新增模板</el-button>
+        </div>
+        <el-collapse v-for="(item, index) in tableData" :key="index">
+          <el-collapse-item>
+            <template slot="title">
+              <div class="colla-title">
+                <span>{{ item.name }}</span>
+                <div>
+                  <el-button type="text"plain @click="handleEditMould(item)">编辑</el-button>-
+                  <el-button type="text" plain @click="handleDeleteMould(item)">删除</el-button>
+                </div>
+              </div>
+            </template>
+            <en-table-layout
+              pagination
+              :tableData="item.items"
+              :loading="loading">
+              <template slot="table-columns">
+                <!--可配送区域-->
+                <el-table-column label="可配送区域" align="left">
+                  <template slot-scope="scope">
+                    <div class="dispatchingAreas">
+                      <div>
+                        {{ scope.row.area | formatAreaJson }}
+                      </div>
+                    </div>
+                  </template>
+                </el-table-column>
+                <!--首重（kg）-->
+                <el-table-column prop="first_company" label="首重（kg）"/>
+                <!--运费（元）-->
+                <el-table-column label="运费（元）">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.first_price | unitPrice('￥') }}</span>
+                  </template>
+                </el-table-column>
+                <!--续重（kg）-->
+                <el-table-column prop="continued_company" label="续重（kg）"/>
+                <!--续费（元）-->
+                <el-table-column label="续费（元）">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.continued_price | unitPrice('￥') }}</span>
+                  </template>
+                </el-table-column>
               </template>
-            </el-table-column>
-            <!--续重（kg）-->
-            <el-table-column prop="continued_company" label="续重（kg）"/>
-            <!--运费（元）-->
-            <el-table-column prop="receipt_type" label="运费（元）">
-              <template slot-scope="scope">
-                <span>{{ scope.row.continued_price | unitPrice('￥') }}</span>
-              </template>
-            </el-table-column>
-            <!--模板类型-->
-            <el-table-column prop="type" label="模板类型" :formatter="typeStatus"/>
-            <!--操作-->
-            <el-table-column label="操作" width="150">
-              <template slot-scope="scope">
-                <el-button
-                  type="success"
-                  @click="handleEditMould(scope.row)">编辑
-                </el-button>
-                <el-button
-                  type="danger"
-                  @click="handleDeleteMould(scope.row)">删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </template>
-        </en-table-layout>
+            </en-table-layout>
+          </el-collapse-item>
+        </el-collapse>
       </el-tab-pane>
       <el-tab-pane :label="tplOperaName" name="add">
         <el-form
-          :model="mouldForm" status-icon
-          :rules="rules" ref="mouldForm"
-          label-width="160px"
-          class="demo-ruleForm"
-          style="width: 33%;margin-left: 3%;">
-          <el-form-item label="模板名称:" prop="name">
+          :model="mouldForm"
+          status-icon
+          :rules="rules"
+          ref="mouldForm"
+          label-width="120px"
+          class="demo-ruleForm">
+          <el-form-item label="模板名称:" prop="name" id="tplName">
             <el-input v-model="mouldForm.name"></el-input>
           </el-form-item>
-          <el-form-item :label="mouldForm.type === 1 ? '首重:': '首件:'" prop="first_company">
-            <el-input placeholder="请输入首重" v-model.number="mouldForm.first_company">
-              <template slot="prepend">
-                {{ mouldForm.type === 1 ? 'kg': '个' }}
-              </template>
-            </el-input>
+          <el-form-item label="计费方式:" prop="type" v-if="!mouldForm.template_id">
+            <el-radio-group v-model="mouldForm.type" >
+              <el-radio :label="1">按件数计费</el-radio>
+              <el-radio :label="2">按重量计费</el-radio>
+            </el-radio-group>
           </el-form-item>
-          <el-form-item label="运费:" prop="first_price">
-            <el-input placeholder="请输入运费" v-model="mouldForm.first_price">
-              <template slot="prepend">¥</template>
-            </el-input>
+          <el-form-item label="计费方式:" v-if="mouldForm.template_id">
+            <div style="color: #909399;font-size: 13px;">{{ mouldForm.type | typeStatus }}</div>
           </el-form-item>
-          <el-form-item :label="mouldForm.type === 1 ? '续重:':'续件:'" prop="continued_company">
-            <el-input placeholder="请输入续重" v-model.number="mouldForm.continued_company">
-              <template slot="prepend">
-                {{ mouldForm.type === 1 ? 'kg': '个' }}
-              </template>
-            </el-input>
+          <el-form-item label="配送区域:" prop="items">
+            <el-table
+              :data="mouldForm.items"
+              style="width: 80%"
+              border>
+              <el-table-column label="可配送区域" align="left" >
+                <template slot-scope="scope">
+                  <div class="dispatchingAreas">
+                    <!--地区名称显示-->
+                    <div>
+                      {{ scope.row.area | formatAreaJson }}
+                    </div>
+                    <div style="float: right;">
+                      <el-button type="text" plain @click="editArea(scope.row, scope.$index)">编辑</el-button>
+                      <el-button type="text" plain @click="delArea(scope.row, scope.$index)">删除</el-button>
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column :label="mouldForm.type === 1 ? '首件（个）': '首重（kg）'" prop="id" align="center" width="200">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.first_company"
+                    @blur="intFirstCompany(scope.row)"
+                    clearable></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="运费（元）" prop="name" align="center" width="200">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.first_price" @blur="intMoney(scope.row)" clearable></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column :label="mouldForm.type === 1 ? '续件（个）': '续重（kg）'" prop="desc" align="center" width="200">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.continued_company" @blur="intContinuedCompany(scope.row)" clearable></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="续费（元）" prop="desc" align="center" width="200">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.continued_price" @blur="intMoney(scope.row)" clearable></el-input>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-form-item>
-          <el-form-item :label="mouldForm.type === 1? '续重运费:':'续件运费:'" prop="continued_price">
-            <el-input placeholder="请输入续重运费" v-model="mouldForm.continued_price">
-              <template slot="prepend">¥</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="模板类型:" prop="type">
-            <el-select v-model.number="mouldForm.type" placeholder="请选择">
-              <el-option
-                v-for="item in tplTypeList"
-                :label="item.label"
-                :key="item.value"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择配送地区:" prop="area">
-            <el-button type="primary" @click="chooseArea">选择地区</el-button>
+          <el-form-item prop="area">
+            <el-button type="text" plain @click="chooseArea">指定可配送区域和运费</el-button>
             <en-area-selector-dialog
-              :propertys="props"
               :api="areaApi"
               :showDialog="areaDialog"
-              :defaultData="area"
+              :defaultData="defaultArea"
+              :filterData="filterData"
               @confirmFunc="confirmFunc"
               @hideDialogFunc="hideDialogFunc"
             ></en-area-selector-dialog>
@@ -158,30 +181,6 @@
       [AreaSelectorDialog.name]: AreaSelectorDialog
     },
     data() {
-      const checkFirstPrice = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('首重运费不能为空'))
-        }
-        setTimeout(() => {
-          if (!RegExp.money.test(value)) {
-            callback(new Error('请输入正确的金额'))
-          } else {
-            callback()
-          }
-        }, 1000)
-      }
-      const checkContinuedPrice = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('续重运费不能为空'))
-        }
-        setTimeout(() => {
-          if (!RegExp.money.test(value)) {
-            callback(new Error('请输入正确的金额'))
-          } else {
-            callback()
-          }
-        }, 1000)
-      }
       return {
         /** 当前面板的名字*/
         activeName: 'express',
@@ -198,32 +197,6 @@
         /** 快递模板列表数据 */
         tableData: [],
 
-        /** 地区选择器 */
-        areaDialog: false,
-
-        areaApi: `${api.base}/regions/depth/3`,
-
-        /** 地址选择器 映射属性 */
-        props: {
-          /** 等级 */
-          level: 'level',
-
-          /** 标签名 */
-          local_name: 'local_name',
-
-          /** 父地区id */
-          p_regions_id: 'parent_id',
-
-          /**  地区id */
-          region_id: 'id',
-
-          /** 子选项 */
-          children: 'children'
-        },
-
-        /** 地区信息 */
-        area: [],
-
         /** 模板表单信息 */
         mouldForm: {
           /** 模板id */
@@ -232,30 +205,28 @@
           /** 模板名称 */
           name: '',
 
-          /** 首重 */
-          first_company: '',
+          /** 模版类型 */
+          type: 1,
 
-          /** 首重价格 */
-          first_price: '',
-
-          /** 续重*/
-          continued_company: '',
-
-          /** 续重价格 */
-          continued_price: '',
-
-          /** 模板类型 */
-          type: '',
-
-          /** 模板地区*/
-          area: []
+          items: []
         },
 
-        /** 模板类型列表 */
-        tplTypeList: [
-          { label: '重量算运费', value: 1 },
-          { label: '计件算运费', value: 2 }
-        ],
+        /** 地区选择器 */
+        areaDialog: false,
+
+        areaApi: `${api.base}/regions/depth/3`,
+
+        /** 默认地区信息 */
+        defaultArea: [],
+
+        /** 是否是编辑模式 */
+        isEdit: false,
+
+        /** 操作当前行索引 */
+        currentIndex: -1,
+
+        /** 过滤地区数据 */
+        filterData: [],
 
         /** 物流公司列表数据 */
         logisticsTableData: [],
@@ -265,26 +236,28 @@
           name: [
             { required: true, message: '请输入模板名称', trigger: 'blur' }
           ],
-          first_company: [
-            { required: true, message: '请输入首重数量', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
-          ],
-          first_price: [
-            { required: true, message: '请输入首重运费', trigger: 'blur' },
-            { validator: checkFirstPrice, trigger: 'blur' }
-          ],
-          continued_company: [
-            { required: true, message: '请输入续重数量', trigger: 'blur' },
-            { type: 'number', message: '请输入数字值', trigger: 'blur' }
-          ],
-          continued_price: [
-            { required: true, message: '请输入续重运费', trigger: 'blur' },
-            { validator: checkContinuedPrice, trigger: 'blur' }
-          ],
           type: [
-            { required: true, message: '请选择模板类型', trigger: 'blur' }
+            { required: true, message: '请选择模板类型', trigger: 'change' }
           ]
         }
+      }
+    },
+    filters: {
+      typeStatus(type) {
+        return type === 1 ? '重量算运费' : '计件算运费'
+      },
+      formatAreaJson(area) {
+        let _area = area
+        let resultArea = []
+        if (typeof area === 'string') {
+          _area = JSON.parse(area)
+        }
+        _area.forEach(key => {
+          if (key.level !== 3) {
+            resultArea.push(key.local_name)
+          }
+        })
+        return resultArea.toString()
       }
     },
     mounted() {
@@ -299,35 +272,73 @@
           this.GET_ExpressMould()
         } else if (this.activeName === 'add') {
           this.mouldForm = {
+            /** 模板id */
             template_id: '',
+
+            /** 模板名称 */
             name: '',
-            first_company: '',
-            first_price: '',
-            continued_company: '',
-            continued_price: '',
-            type: 2,
-            area: []
+
+            /** 模版类型 */
+            type: 1,
+
+            items: []
           }
-          this.area = []
+          this.defaultArea = []
         } else {
           this.GET_logisticsList()
         }
       },
 
-      /** 模板类型格式化 */
-      typeStatus(row, column, cellValue) {
-        return row.type === 1 ? '重量算运费' : '计件算运费'
-      },
-
       /** 选择配送地区 */
       chooseArea() {
         this.areaDialog = true
+        // 默认数据
+        this.defaultArea = []
       },
 
       /** 地区选择器确认回调 */
-      confirmFunc(original, val) {
-        this.mouldForm.area = JSON.stringify(val)
-        this.area = original
+      confirmFunc(val) {
+        if (this.isEdit) { // 编辑模式
+          const _area = this.mouldForm.items[this.currentIndex].area
+          // 更新表格地区数据
+          this.mouldForm.items[this.currentIndex].area = val
+          this.mouldForm.items[this.currentIndex].area_json = JSON.stringify(val)
+          this.mouldForm.items[this.currentIndex].area_id = JSON.stringify(val.map(key => { return key.id }))
+          // 更新过滤数据 删除
+          this.filterData.forEach((key, index) => {
+            _area.forEach(item => {
+              if (key.region_id === item.region_id) {
+                this.filterData.splice(index, 1)
+              }
+            })
+          })
+          // 更新过滤数据 添加
+          this.filterData = this.filterData.concat(val)
+          // 过滤数据对象数组去重
+          let obj = {}
+          this.filterData = this.filterData.reduce((item, next) => {
+            obj[next.region_id] ? '' : obj[next.region_id] = true && item.push(next)
+            return item
+          }, [])
+          // 更新当前默认数据
+          this.defaultArea = val
+        } else { // 添加
+          if (!val.length) return
+          // 更新表格数据（添加操作）
+          this.mouldForm.items.push({
+            area: val,
+            area_id: JSON.stringify(val.map(key => { return key.id })),
+            area_json: JSON.stringify(val),
+            first_company: 1,
+            first_price: 0,
+            continued_company: 0,
+            continued_price: 0
+          })
+          // 更新过滤地区数据 添加
+          this.filterData = this.filterData.concat(val)
+          // 更新当前默认数据
+          this.defaultArea = []
+        }
         this.areaDialog = false
       },
 
@@ -336,10 +347,83 @@
         this.areaDialog = false
       },
 
-      /** 获取快递模板信息*/
+      /** 过滤已选数据 */
+      retainData(origin, choosed) {
+        let result = []
+        if (!(origin.length && choosed.length)) {
+          return origin
+        }
+        origin.forEach(key => {
+          choosed.forEach(item => {
+            if (key.id !== item.id) {
+              result.push(key)
+            } else {
+              if (key.children && item.children) {
+                key.children = this.retainData(key.children, item.children)
+              }
+            }
+          })
+        })
+        return result
+      },
+
+      /** 过滤first_company */
+      intFirstCompany(row) {
+        if (!RegExp.integer.test(row.first_company)) {
+          row.first_company = 1
+        }
+      },
+
+      /** 过滤continued_company */
+      intContinuedCompany(row) {
+        if (!RegExp.integer.test(row.continued_company) && row.continued_company !== 0) {
+          row.continued_company = 0
+        }
+      },
+
+      /** 过滤first_price continued_price */
+      intMoney(row) {
+        if (!RegExp.money.test(row.first_price)) {
+          row.first_price = 0.00
+        } else {
+          row.first_price = Number.parseFloat(row.first_price).toFixed(2)
+        }
+        if (!RegExp.money.test(row.continued_price)) {
+          row.continued_price = 0.00
+        } else {
+          row.continued_price = Number.parseFloat(row.continued_price).toFixed(2)
+        }
+      },
+
+      /** 编辑子地区 */
+      editArea(row, $index) {
+        this.areaDialog = true
+        this.isEdit = true
+        // 更新当前默认数据
+        this.defaultArea = row.area
+        // 更新当前操作索引
+        this.currentIndex = $index
+      },
+
+      /** 删除子地区 */
+      delArea(row, $index) {
+        this.$confirm('确定删除?', '提示', { type: 'warning' }).then(() => {
+          // 更新表格数据
+          this.mouldForm.items.splice($index, 1)
+          // 更新过滤数据 删除
+          let _filterData = row.area.map(key => { return key.region_id })
+          this.filterData.forEach((key, index) => {
+            if (_filterData.includes(key.region_id)) {
+              this.filterData.splice(index, 1)
+            }
+          })
+        })
+      },
+
+      /** 获取快递模板列表信息*/
       GET_ExpressMould() {
         this.loading = true
-        API_express.getTplList(this.params).then(response => {
+        API_express.getTplList().then(response => {
           this.loading = false
           this.tableData = response
         })
@@ -349,10 +433,12 @@
       handleEditMould(row) {
         this.activeName = 'add'
         this.tplOperaName = '修改模版'
-        API_express.getSimpleTpl(row.template_id, {}).then((response) => {
+        API_express.getSimpleTpl(row.template_id).then((response) => {
           this.mouldForm = { ...response }
-          this.mouldForm.area = response.area_json
-          this.area = JSON.parse(response.area_json)
+          // 初始化过滤地区
+          response.items.forEach(key => {
+            this.filterData = JSON.parse(key.area)
+          })
         })
       },
 
@@ -361,7 +447,7 @@
         const _id = row.template_id
         this.$confirm(`确定要删除模板么?`, '确认信息', { type: 'warning' })
           .then(() => {
-            API_express.deleteExpressMould(_id, {}).then(() => {
+            API_express.deleteExpressMould(_id).then(() => {
               this.GET_ExpressMould()
               this.$message.success('删除成功')
             })
@@ -373,48 +459,41 @@
         this.activeName = 'add'
         this.tplOperaName = '新增模板'
         this.mouldForm = {
+          /** 模板id */
           template_id: '',
 
+          /** 模板名称 */
           name: '',
 
-          first_company: '',
+          /** 模版类型 */
+          type: 1,
 
-          first_price: '',
-
-          continued_company: '',
-
-          continued_price: '',
-
-          type: 2,
-
-          area: []
+          items: []
         }
-        this.area = []
+        // 重置默认数据
+        this.defaultArea = []
+        // 重置过滤地区
+        this.filterData = []
       },
 
       /** 保存模板 */
       saveMould(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            let _params = {
-              name: this.mouldForm.name,
-              first_company: this.mouldForm.first_company,
-              first_price: this.mouldForm.first_price,
-              continued_company: this.mouldForm.continued_company,
-              continued_price: this.mouldForm.continued_price,
-              type: parseInt(this.mouldForm.type),
-              area_json: this.mouldForm.area
-            }
-            if (this.mouldForm.template_id) {
-              API_express.saveExpressMould(this.mouldForm.template_id, _params).then(() => {
+            // area 序列化
+            this.mouldForm.items.forEach(key => {
+              key.area = JSON.stringify(key.area)
+            })
+            if (this.mouldForm.template_id) { // 修改
+              API_express.saveExpressMould(this.mouldForm.template_id, this.mouldForm).then(() => {
                 this.$message.success('修改成功')
                 this.GET_ExpressMould()
                 this.activeName = 'express'
                 this.tplOperaName = '新增模板'
               })
-            } else {
-              delete _params.template_id
-              API_express.addExpressMould(_params).then(() => {
+            } else { // 添加
+              delete this.mouldForm.template_id
+              API_express.addExpressMould(this.mouldForm).then(() => {
                 this.$message.success('添加成功')
                 this.GET_ExpressMould()
                 this.activeName = 'express'
@@ -422,6 +501,26 @@
             }
           }
         })
+      },
+
+      /** 平行结构转树形 */
+      transTreeData(list) {
+        let temp = {}
+        let tree = {}
+        for (let i in list) {
+          temp[list[i].id] = list[i]
+        }
+        for (let i in temp) {
+          if (temp[i].parent_id) {
+            if (!temp[temp[i].parent_id].children) {
+              temp[temp[i].parent_id].children = {}
+            }
+            temp[temp[i].parent_id].children[temp[i].id] = temp[i]
+          } else {
+            tree[temp[i].id] = temp[i]
+          }
+        }
+        return tree
       },
 
       /** 获取物流公司信息*/
@@ -463,6 +562,45 @@
 <style type="text/scss" lang="scss" scoped>
   /deep/ div.toolbar {
     display: none;
+  }
+  /deep/ #tplName {
+    width: 25%;
+  }
+  /deep/ .el-table__body {
+    .el-input {
+      width: 60%;
+      .el-input__inner {
+        text-align: center;
+        padding-right: 15px;
+      }
+    }
+  }
+
+  /deep/ .el-tabs__content {
+    padding: 20px;
+    background-color: #fff;
+  }
+  /deep/ .el-button.is-plain:focus, .el-button.is-plain:hover {
+    border: none;
+  }
+  /deep/ .el-collapse {
+    border-bottom: none;
+    .el-collapse-item{
+      margin-bottom: 10px;
+      background-color: #f6f6f6;
+    }
+  }
+  .colla-title {
+    padding: 0 15px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f6f6f6;
+  }
+  /deep/ .el-button.is-plain:hover {
+    background-color: transparent;
   }
 </style>
 

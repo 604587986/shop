@@ -70,7 +70,7 @@
             </el-form-item>
             <el-form-item prop="captcha" class="img-code">
               <span slot="label">验&ensp;证&ensp;码</span>
-              <el-input v-model="loginForm.captcha" clearable placeholder="验证码" maxlength="4">
+              <el-input v-model="loginForm.captcha" @keyup.enter.native="submitLoginForm" clearable placeholder="验证码" maxlength="4">
                 <template slot="append">
                   <img :src="validcodeImg" @click="changeValidcode" class="verification-code">
                 </template>

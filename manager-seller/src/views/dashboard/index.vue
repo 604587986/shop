@@ -225,6 +225,7 @@ export default {
       this.fileList = []
       API_shop.updateShopLogo({ logo: response.url }).then(() => {
         this.$message.success('店铺LOGO修改成功')
+        this.$store.dispatch('getShopInfoAction')
       })
     },
 

@@ -3,47 +3,39 @@
  */
 
 import request from '@/utils/request'
+import { api } from '~/ui-domain'
 
 /**
  * 运费模版列表
- * @param ids
- * @param params
- * @returns {Promise<any>}
  */
-export function getTplList(ids, params) {
+export function getTplList() {
   return request({
-    url: `seller/shops/ship-templates`,
+    url: 'seller/shops/ship-templates',
     method: 'get',
-    loading: false,
-    params
+    loading: false
   })
 }
 
 /**
  * 查询单个运费模版
  * @param id
- * @param params
- * @returns {Promise<any>}
  */
-export function getSimpleTpl(id, params) {
+export function getSimpleTpl(id) {
   return request({
     url: `seller/shops/ship-templates/${id}`,
     method: 'get',
-    loading: false,
-    params
+    loading: false
   })
 }
 
 /**
  * 删除快递模板
- * @param params
- * @returns {Promise<any>}
+ * @param ids
  */
-export function deleteExpressMould(ids, params) {
+export function deleteExpressMould(ids) {
   return request({
     url: `seller/shops/ship-templates/${ids}`,
-    method: 'delete',
-    params
+    method: 'delete'
   })
 }
 
@@ -56,6 +48,7 @@ export function deleteExpressMould(ids, params) {
 export function saveExpressMould(ids, params) {
   return request({
     url: `seller/shops/ship-templates/${ids}`,
+    headers: { 'Content-Type': 'application/json' },
     method: 'put',
     data: params
   })
@@ -71,6 +64,19 @@ export function addExpressMould(params) {
   return request({
     url: 'seller/shops/ship-templates',
     method: 'post',
+    headers: { 'Content-Type': 'application/json' },
     data: params
   })
 }
+
+/**
+ * 获取树形选择器地区信息 暂时不用 待重构树形选择器时使用
+ * @param params
+ */
+export function getAreaList() {
+  return request({
+    url: `${api.base}/regions/depth/3`,
+    method: 'get'
+  })
+}
+

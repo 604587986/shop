@@ -19,3 +19,7 @@ selenium-debug.log
 *.sln
 
 package-lock.json
+
+ui-utils/
+ui-domain/
+ui-components/

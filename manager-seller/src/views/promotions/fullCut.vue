@@ -63,7 +63,7 @@
         </en-table-layout>
       </el-tab-pane>
       <!--新增满优惠-->
-      <el-tab-pane label="新增满优惠" name="add">
+      <el-tab-pane :label="fullCutName" name="add">
         <div class="content-goods-publish">
           <el-form
             :model="activityForm"
@@ -373,6 +373,8 @@
         /** 列表分页数据 */
         pageData: null,
 
+        fullCutName: '新增满优惠',
+
         /** 新增满减表单信息*/
         activityForm: {
           /** 当前活动ID*/
@@ -621,6 +623,7 @@
               /** 活动商品*/
               goods_list: []
             }
+            this.fullCutName = '新增满优惠'
             /** 处理优惠数据 */
             this.is_discount = false
             this.is_full_minus = false
@@ -717,6 +720,7 @@
       /** 编辑满减优惠 */
       handleEditMould(row) {
         this.activeName = 'add'
+        this.fullCutName = '编辑满优惠'
         this.GET_FullCutActivityDetails(row.fd_id)
       },
 
@@ -764,6 +768,7 @@
       /** 新增满减优惠 */
       handleAddFullCut() {
         this.activeName = 'add'
+        this.fullCutName = '新增满优惠'
         this.activityForm = {
           /** 活动名称/标题*/
           title: '',
