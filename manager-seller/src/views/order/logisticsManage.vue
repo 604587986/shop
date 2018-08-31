@@ -11,13 +11,14 @@
               <div class="colla-title">
                 <span>{{ item.name }}</span>
                 <div>
-                  <el-button type="text"plain @click="handleEditMould(item)">编辑</el-button>-
+                  <el-button type="text"plain @click="handleEditMould(item)">编辑</el-button>
                   <el-button type="text" plain @click="handleDeleteMould(item)">删除</el-button>
                 </div>
               </div>
             </template>
             <en-table-layout
-              pagination
+              :stripe="false"
+              border
               :tableData="item.items"
               :loading="loading">
               <template slot="table-columns">
@@ -25,24 +26,34 @@
                 <el-table-column label="可配送区域" align="left">
                   <template slot-scope="scope">
                     <div class="dispatchingAreas">
-                      <div>
-                        {{ scope.row.area | formatAreaJson }}
-                      </div>
+                      <span v-for="(item, index) in formatAreaJson(scope.row.area)">
+                        <span v-if="item.level === 1" style="color: #333;"> {{ item.local_name }}
+                          <span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>
+                        </span>
+                        <span v-if="item.level === 2" style="color: #777;"> {{ item.local_name }}
+                          <span v-if="item.children && item.children.length" style="color: #aaa;">(</span>
+                          <span v-if="item.children && item.children.length" v-for="(child, _index) in item.children" style="color: #aaa;">
+                            {{ child.local_name }}<span v-if="++_index !== item.children.length">,</span>
+                          </span>
+                          <span v-if="item.children && item.children.length" style="color: #aaa;">)</span>
+                          <span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>
+                        </span>
+                      </span>
                     </div>
                   </template>
                 </el-table-column>
                 <!--首重（kg）-->
-                <el-table-column prop="first_company" label="首重（kg）"/>
+                <el-table-column prop="first_company" label="首重（kg)" width="200"/>
                 <!--运费（元）-->
-                <el-table-column label="运费（元）">
+                <el-table-column label="运费（元）" width="200">
                   <template slot-scope="scope">
                     <span>{{ scope.row.first_price | unitPrice('￥') }}</span>
                   </template>
                 </el-table-column>
                 <!--续重（kg）-->
-                <el-table-column prop="continued_company" label="续重（kg）"/>
+                <el-table-column prop="continued_company" label="续重（kg）" width="200"/>
                 <!--续费（元）-->
-                <el-table-column label="续费（元）">
+                <el-table-column label="续费（元）" width="200">
                   <template slot-scope="scope">
                     <span>{{ scope.row.continued_price | unitPrice('￥') }}</span>
                   </template>
@@ -65,8 +76,8 @@
           </el-form-item>
           <el-form-item label="计费方式:" prop="type" v-if="!mouldForm.template_id">
             <el-radio-group v-model="mouldForm.type" >
-              <el-radio :label="1">按件数计费</el-radio>
-              <el-radio :label="2">按重量计费</el-radio>
+              <el-radio :label="2">按件数计费</el-radio>
+              <el-radio :label="1">按重量计费</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="计费方式:" v-if="mouldForm.template_id">
@@ -80,10 +91,19 @@
               <el-table-column label="可配送区域" align="left" >
                 <template slot-scope="scope">
                   <div class="dispatchingAreas">
-                    <!--地区名称显示-->
-                    <div>
-                      {{ scope.row.area | formatAreaJson }}
-                    </div>
+                    <span v-for="(item, index) in formatAreaJson(scope.row.area)">
+                      <span v-if="item.level === 1" style="color: #333;"> {{ item.local_name }}
+                        <span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>
+                      </span>
+                      <span v-if="item.level === 2" style="color: #777;"> {{ item.local_name }}
+                        <span v-if="item.children && item.children.length" style="color: #aaa;">(</span>
+                        <span v-if="item.children && item.children.length" v-for="(child, _index) in item.children" style="color: #aaa;">
+                          {{ child.local_name }}<span v-if="++_index !== item.children.length">,</span>
+                        </span>
+                        <span v-if="item.children && item.children.length" style="color: #aaa;">)</span>
+                        <span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>
+                      </span>
+                    </span>
                     <div style="float: right;">
                       <el-button type="text" plain @click="editArea(scope.row, scope.$index)">编辑</el-button>
                       <el-button type="text" plain @click="delArea(scope.row, scope.$index)">删除</el-button>
@@ -173,6 +193,7 @@
   import * as API_logistics from '@/api/expressCompany'
   import { RegExp } from '~/ui-utils'
   import { api } from '~/ui-domain'
+  import { cloneObj } from '@/utils/index'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
 
   export default {
@@ -216,6 +237,9 @@
 
         areaApi: `${api.base}/regions/depth/3`,
 
+        /** 全部地区信息 */
+        areaData: [],
+
         /** 默认地区信息 */
         defaultArea: [],
 
@@ -245,25 +269,20 @@
     filters: {
       typeStatus(type) {
         return type === 1 ? '重量算运费' : '计件算运费'
-      },
-      formatAreaJson(area) {
-        let _area = area
-        let resultArea = []
-        if (typeof area === 'string') {
-          _area = JSON.parse(area)
-        }
-        _area.forEach(key => {
-          if (key.level !== 3) {
-            resultArea.push(key.local_name)
-          }
-        })
-        return resultArea.toString()
       }
     },
     mounted() {
       this.GET_ExpressMould()
+      this.getAreaList()
     },
     methods: {
+      /** 获取全部地区数据 方便使用 */
+      getAreaList() {
+        API_express.getAreaList().then(response => {
+          this.areaData = response
+        })
+      },
+
       /** 切换模块 */
       handleToggleClick(tab, event) {
         this.activeName = tab.name
@@ -292,6 +311,7 @@
       /** 选择配送地区 */
       chooseArea() {
         this.areaDialog = true
+        this.isEdit = false
         // 默认数据
         this.defaultArea = []
       },
@@ -299,8 +319,8 @@
       /** 地区选择器确认回调 */
       confirmFunc(val) {
         if (this.isEdit) { // 编辑模式
-          const _area = this.mouldForm.items[this.currentIndex].area
           // 更新表格地区数据
+          const _area = typeof this.mouldForm.items[this.currentIndex].area === 'string' ? JSON.parse(this.mouldForm.items[this.currentIndex].area) : this.mouldForm.items[this.currentIndex].area
           this.mouldForm.items[this.currentIndex].area = val
           this.mouldForm.items[this.currentIndex].area_json = JSON.stringify(val)
           this.mouldForm.items[this.currentIndex].area_id = JSON.stringify(val.map(key => { return key.id }))
@@ -400,7 +420,7 @@
         this.areaDialog = true
         this.isEdit = true
         // 更新当前默认数据
-        this.defaultArea = row.area
+        this.defaultArea = typeof row.area === 'string' ? JSON.parse(row.area) : row.area
         // 更新当前操作索引
         this.currentIndex = $index
       },
@@ -476,13 +496,56 @@
         this.filterData = []
       },
 
+      /** 格式化数据 */
+      formatAreaJson(area) {
+        let _area = area
+        let resultArea = []
+        if (typeof area === 'string') {
+          _area = JSON.parse(area)
+        }
+        const _ids = _area.map(key => { return key.id })
+        let _resultIds = []
+        _area.forEach(key => {
+          if (key.level === 1) {
+            resultArea.push(key)
+          } else if (key.level === 2) {
+            if (!_ids.includes(key.parent_id)) { resultArea.push(key) }
+          } else if (key.level === 3) {
+            if (!_ids.includes(key.parent_id)) { // 如果其父id不存在
+              // 首先检测resultArea中是否存在父id，如果存在（必存在children字段信息,children为数组）：则找出此二级项，并向此children中添加当前三级项信息；
+              if (_resultIds.includes(key.parent_id)) {
+                resultArea.forEach(item => {
+                  if (item.id === key.parent_id) { item.children.push(key) }
+                })
+                // 如果不存在：去全部数据中追寻其父id的项，把其父项添加进来作为resultArea一维数组的一项，并且添加children属性，将当前三级项添加进入children中
+              } else {
+                this.areaData.forEach(ele => {
+                  if (ele.children) {
+                    ele.children.forEach(item => {
+                      if (item.id === key.parent_id) {
+                        let _item = cloneObj(item)
+                        _item.children = []
+                        _item.children.push(key)
+                        resultArea.push(_item)
+                      }
+                    })
+                  }
+                })
+              }
+            }
+            // 三级项更新后 更新当前二级项id信息
+            _resultIds = resultArea.map(key => { return key.id })
+          }
+        })
+        return resultArea
+      },
+
       /** 保存模板 */
       saveMould(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // area 序列化
             this.mouldForm.items.forEach(key => {
-              key.area = JSON.stringify(key.area)
+              key.area = typeof key.area === 'string' ? key.area : JSON.stringify(key.area)
             })
             if (this.mouldForm.template_id) { // 修改
               API_express.saveExpressMould(this.mouldForm.template_id, this.mouldForm).then(() => {
@@ -501,26 +564,6 @@
             }
           }
         })
-      },
-
-      /** 平行结构转树形 */
-      transTreeData(list) {
-        let temp = {}
-        let tree = {}
-        for (let i in list) {
-          temp[list[i].id] = list[i]
-        }
-        for (let i in temp) {
-          if (temp[i].parent_id) {
-            if (!temp[temp[i].parent_id].children) {
-              temp[temp[i].parent_id].children = {}
-            }
-            temp[temp[i].parent_id].children[temp[i].id] = temp[i]
-          } else {
-            tree[temp[i].id] = temp[i]
-          }
-        }
-        return tree
       },
 
       /** 获取物流公司信息*/
@@ -585,9 +628,15 @@
   }
   /deep/ .el-collapse {
     border-bottom: none;
+    .el-collapse-item__header {
+      background-color: transparent;
+    }
     .el-collapse-item{
       margin-bottom: 10px;
       background-color: #f6f6f6;
+    }
+    .el-collapse-item__wrap {
+      border-bottom: 0;
     }
   }
   .colla-title {
