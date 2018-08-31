@@ -202,7 +202,7 @@
     data() {
       return {
         tableName: 'base',
-        shop_id: this.$route.params.shop_id,
+        shop_id: this.$route.params.id,
         isAudit: !!this.$route.query.audit,
         loading: false,
         shopForm: {},
@@ -271,11 +271,11 @@
       this.initMemberInfo()
     },
     beforeRouteUpdate(to, from, next) {
-      this.shop_id = to.params.shop_id
+      this.shop_id = to.params.id
       next()
     },
     activated() {
-      this.shop_id = this.$route.params.shop_id
+      this.shop_id = this.$route.params.id
     },
     watch: {
       shop_id: function() {
@@ -311,6 +311,12 @@
               } else {
                 this.$message.success('修改成功！')
               }
+              const { callback } = this.$route.params
+              typeof callback === 'function' && callback()
+              this.$store.dispatch('delCurrentViews', {
+                view: this.$route,
+                $router: this.$router
+              })
             })
           } else {
             this.$message.error('表单填写有误，请核对！')
@@ -341,6 +347,8 @@
           params.pass = 0
           API_Shop.editAuthShop(this.shop_id, params).then(response => {
             this.$message.success('已拒绝该店铺！')
+            const { callback } = this.$route.params
+            typeof callback === 'function' && callback()
             this.$store.dispatch('delCurrentViews', {
               view: this.$route,
               $router: this.$router

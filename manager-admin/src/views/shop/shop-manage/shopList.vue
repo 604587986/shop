@@ -155,7 +155,7 @@
 
       /** 编辑店铺 */
       handleEditShop(index, row) {
-        this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}` })
+        this.$router.push({ name: 'shopEdit', params: { id: row.shop_id, callback: this.GET_ShopList }})
       },
 
       /** 关闭店铺 */
