@@ -10,6 +10,8 @@ import GoodsGallery from './-goods-gallery'
 import GoodsSpecs from './-goods-specs'
 import GoodsCoupons from './-goods-coupons'
 import GoodsGroupbuySeckill from './-goods-groupbuy-seckill'
+import GoodsExchange from './-goods-exchange'
+import GoodsPromotions from './-goods-promotions'
 
 export {
   GoodsComments,
@@ -18,5 +20,7 @@ export {
   GoodsGallery,
   GoodsSpecs,
   GoodsCoupons,
-  GoodsGroupbuySeckill
+  GoodsGroupbuySeckill,
+  GoodsExchange,
+  GoodsPromotions
 }

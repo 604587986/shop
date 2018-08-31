@@ -10,8 +10,21 @@
       <header-shortcut slot="right"/>
     </van-nav-bar>
     <search :show="showSearch" @close="showSearch = false"/>
-    <!--// Andste_TODO 2018/7/11: 筛选功能未做-->
-    <van-list v-model="loading" :finished="finished" @load="onLoad">
+    <div class="sort-box">
+      <div class="inner-sort">
+        <a
+          v-for="(sort, index) in sorts"
+          :key="index"
+          :class="[sort.active && 'active']"
+          @click="handleClickSort(sort)"
+          href="javascript:"
+          class="item"
+        >
+          <span>{{ sort.title }}<i :class="[sort.type]"></i></span>
+        </a>
+      </div>
+    </div>
+    <van-list v-model="loading" :finished="finished" @load="onLoad" class="goods-list">
       <a :href="'/goods/' + goods.goods_id" v-for="(goods, index) in goodsList" :key="index" class="goods-item">
         <div class="goods-image">
           <img :src="goods.thumbnail" :alt="goods.name">
@@ -42,6 +55,8 @@
   export default {
     name: 'goods-list',
     data() {
+      let { price, sort } = this.$route.query
+      sort = sort ? sort.split('_') : ['def', 'asc']
       return {
         // 显示搜索盒子
         showSearch: false,
@@ -60,8 +75,19 @@
         },
         // 筛选参数
         params: { ...this.$route.query },
-        // 是否为双列模式
-        doubleCol: false
+        // 排序
+        sorts: [
+          { title: '默认', name: 'def', type: 'asc' },
+          { title: '销量', name: 'buynum', type: 'asc' },
+          { title: '价格', name: 'price', type: 'asc' },
+          { title: '评价', name: 'grade', type: 'asc' },
+        ].map(item => {
+          item.active = item.name === sort[0]
+          if (item.name === sort[0]) {
+            item.type = sort[1]
+          }
+          return item
+        })
       }
     },
     beforeRouteUpdate (to, from, next) {
@@ -74,6 +100,19 @@
       /** 加载数据 */
       onLoad() {
         this.page.page_no += 1
+        this.GET_GoodsList()
+      },
+      /** 排序 */
+      handleClickSort(sort) {
+        this.finished = false
+        this.params.page_no = 1
+        this.goodsList = []
+        if (sort.active) sort.type = sort.type === 'asc' ? 'desc' : 'asc'
+        this.$set(this, 'sorts', this.sorts.map(item => {
+          item.active = item.name === sort.name
+          return item
+        }))
+        this.params.sort = `${sort.name}_${sort.type}`
         this.GET_GoodsList()
       },
       /** 获取商品列表 */
@@ -100,7 +139,14 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
   /deep/ {
+    .van-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
     .van-nav-bar__left .van-nav-bar__arrow { color: #666 }
     .van-nav-bar__title { max-width: 75% }
     .search-box {
@@ -122,6 +168,65 @@
         font-size: 16px;
       }
     }
+  }
+  .sort-box {
+    position: fixed;
+    z-index: 99;
+    height: 40px;
+    background-color: #fff;
+    top: 46px;
+    left: 0;
+    right: 0;
+    .inner-sort {
+      font-size: 14px;
+      display: flex;
+      position: relative;
+      padding: 8px 0;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+    }
+    .item {
+      display: block;
+      width: 100%;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 5px;
+      position: relative;
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        position: relative;
+        display: inline-block;
+        max-width: 100%;
+        padding-right: 13px;
+      }
+      i {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -1px;
+        width: 8px;
+        height: 5px;
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAKBAMAAABPkMOvAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAkUExURUdwTMzMzMzMzMzMzMzMzM3NzdLS0svLy6qqqszMzMzMzMzMzGC86tIAAAALdFJOUwDl9UGdJhG9A2jOR0lNjwAAAEdJREFUCNdj8N4NBlsYVkMYuxgCIQxRBmZtEL3JgIFhNoixk4GBgQXEcAAyOKp3797eAGQwJO7eLQaiGVi1NwWAGQyGwkACAKGfIfA79uAMAAAAAElFTkSuQmCC) no-repeat;
+        background-size: 8px auto;
+        transform: rotate(180deg);
+        &.desc { transform: rotate(0) }
+      }
+      &.active {
+        color: $color-main;
+        i {
+          background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAKCAYAAAC9vt6cAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTFBRkQzNUE4RUE5MTFFNjlGOEZBM0ZCRDkxNTQ3ODgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEEzQkVCNkM4RUFGMTFFNjlGOEZBM0ZCRDkxNTQ3ODgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMUFGRDM1ODhFQTkxMUU2OUY4RkEzRkJEOTE1NDc4OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxMUFGRDM1OThFQTkxMUU2OUY4RkEzRkJEOTE1NDc4OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjuQXsYAAACYSURBVHjaYnliabOUgYEhFIhZGUgDv4F4NROQ0CBDMwNUjxbIgHAgfkOGAa9BLgcZcAdqyC8SNIPURoD0MkEF9gFxAQkG5EP1MDAhCU4H4mlEaJ4KxDNgHCY0yTyYyTjAPqjtDLgM+AvEIdBwQQd3oHJ/8RkAAu+B2BeIPyKJfYSKvUdXzITDqTeAOBCIX0BxAFQMAwAEGABzlx8yrIQ8yQAAAABJRU5ErkJggg==)
+        }
+      }
+    }
+  }
+  .goods-list {
+    padding-top: 46px + 40px
   }
   .goods-item {
     display: flex;

@@ -11,7 +11,12 @@
     <div class="goods-container">
       <!--商品相册 start-->
       <goods-gallery :data="galleryList"/>
+      <!--团购、限时抢购 start-->
       <goods-groupbuy-seckill :promotions="promotions"/>
+      <!--团购、限时抢购 end-->
+      <!--积分兑换 start-->
+      <goods-exchange :promotions="promotions"/>
+      <!--积分兑换 end-->
       <!--商品相册 end-->
       <div class="goods-buy">
         <div class="goods-name">
@@ -29,6 +34,9 @@
       <!--店铺优惠券 start-->
       <goods-coupons :shop-id="goods.seller_id"/>
       <!--店铺优惠券 end-->
+      <!--促销活动 start-->
+      <goods-promotions :promotions="promotions"/>
+      <!--促销活动 end-->
       <!--商品规格 start-->
       <goods-specs
         :goods-id="goods.goods_id"

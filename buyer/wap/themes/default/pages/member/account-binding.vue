@@ -1,68 +1,44 @@
 <template>
   <div id="account-binding">
-    <el-alert type="info" title="" :closable="false">
-      <h2>绑定第三方登录有什么好处？</h2>
-      <p>1. 您可以快速地从第三方登录我们的站点。 </p>
-      <p>2. 避免了记不住密码的尴尬局面。</p>
-    </el-alert>
-    <div class="">
-      <div class="bind-item">
-        <div class="fore1">
-          <strong>腾讯QQ</strong>
-        </div>
-        <div class="fore2">
-          <!--<span class="ftx-03"><img src="../../assets/images/icon-bind-qq.png"></span>-->
-          <span class="ftx-01">&nbsp;绑定QQ帐号</span>
-          <span :style="{color: bind['QQ'] ? '#67C23A' : '#ff6c00'}">&nbsp;{{ bind['QQ'] ? '已绑定' : '未绑定' }}</span>
-        </div>
-        <div class="fore3">
-          <a class="ftx-05" v-if="bind['QQ']" href="javascript:;" @click="unbindConnect('QQ')">解绑</a>
-          <a class="ftx-05" v-else href="javascript:;" @click="bindConnect('QQ')">绑定</a>
-        </div>
-      </div>
-      <div class="bind-item">
-        <div class="fore1">
-          <strong>腾讯微信</strong>
-        </div>
-        <div class="fore2">
-          <!--<span class="ftx-03"><img src="../../assets/images/icon-bind-weixin.png"></span>-->
-          <span class="ftx-01">&nbsp;绑定微信帐号</span>
-          <span :style="{color: bind['WECHAT'] ? '#67C23A' : '#ff6c00'}">&nbsp;{{ bind['WECHAT'] ? '已绑定' : '未绑定' }}</span>
-        </div>
-        <div class="fore3">
-          <a class="ftx-05" v-if="bind['WECHAT']" href="javascript:;" @click="unbindConnect('WECHAT')">解绑</a>
-          <a class="ftx-05" v-else href="javascript:;" @click="bindConnect('WECHAT')">绑定</a>
-        </div>
-      </div>
-      <div class="bind-item">
-        <div class="fore1">
-          <strong>新浪微博</strong>
-        </div>
-        <div class="fore2">
-          <!--<span class="ftx-03"><img src="../../assets/images/icon-bind-sina.png"></span>-->
-          <span class="ftx-01">&nbsp;绑定微博帐号</span>
-          <span :style="{color: bind['WEIBO'] ? '#67C23A' : '#ff6c00'}">&nbsp;{{ bind['WEIBO'] ? '已绑定' : '未绑定' }}</span>
-        </div>
-        <div class="fore3">
-          <a class="ftx-05" v-if="bind['WEIBO']" href="javascript:;" @click="unbindConnect('WEIBO')">解绑</a>
-          <a class="ftx-05" v-else href="javascript:;" @click="bindConnect('WEIBO')">绑定</a>
-        </div>
-      </div>
-      <div class="bind-item">
-        <div class="fore1">
-          <strong>支付宝</strong>
-        </div>
-        <div class="fore2">
-          <!--<span class="ftx-03"><img src="../../assets/images/icon-bind-alipay.png"></span>-->
-          <span class="ftx-01">&nbsp;绑定支付宝</span>
-          <span :style="{color: bind['ALIPAY'] ? '#67C23A' : '#ff6c00'}">&nbsp;{{ bind['ALIPAY'] ? '已绑定' : '未绑定' }}</span>
-        </div>
-        <div class="fore3">
-          <a class="ftx-05" v-if="bind['ALIPAY']" href="javascript:;" @click="unbindConnect('ALIPAY')">解绑</a>
-          <a class="ftx-05" v-else href="javascript:;" @click="bindConnect('ALIPAY')">绑定</a>
-        </div>
-      </div>
+    <nav-bar title="账号绑定"/>
+    <div class="account-binding-contaner">
+      <van-cell-group>
+        <van-cell is-link @click="handleClickCell('QQ')">
+          <div slot="title">
+            <img src="../../assets/images/icon-bind-qq.png">
+            <span>QQ帐号</span>
+          </div>
+          <span :style="{color: bind['QQ'] ? '#67C23A' : '#ff6c00'}">{{ bind['QQ'] ? '已绑定' : '未绑定' }}</span>
+        </van-cell>
+        <van-cell is-link @click="handleClickCell('WECHAT')">
+          <div slot="title">
+            <img src="../../assets/images/icon-bind-weixin.png">
+            <span>微信帐号</span>
+          </div>
+          <span :style="{color: bind['WECHAT'] ? '#67C23A' : '#ff6c00'}">{{ bind['WECHAT'] ? '已绑定' : '未绑定' }}</span>
+        </van-cell>
+        <van-cell is-link @click="handleClickCell('WEIBO')">
+          <div slot="title">
+            <img src="../../assets/images/icon-bind-sina.png">
+            <span>微博帐号</span>
+          </div>
+          <span :style="{color: bind['WEIBO'] ? '#67C23A' : '#ff6c00'}">{{ bind['WEIBO'] ? '已绑定' : '未绑定' }}</span>
+        </van-cell>
+        <van-cell is-link @click="handleClickCell('ALIPAY')">
+          <div slot="title">
+            <img src="../../assets/images/icon-bind-alipay.png">
+            <span>支付宝</span>
+          </div>
+          <span :style="{color: bind['ALIPAY'] ? '#67C23A' : '#ff6c00'}">{{ bind['ALIPAY'] ? '已绑定' : '未绑定' }}</span>
+        </van-cell>
+      </van-cell-group>
     </div>
+    <van-actionsheet
+      v-model="showAction"
+      :actions="actions"
+      cancel-text="取消"
+      @select="onSelectAction"
+    />
   </div>
 </template>
 
@@ -77,7 +53,13 @@
     },
     data() {
       return {
-        bind: ''
+        showAction: false,
+        bind: '',
+        actions: [
+          { name: '绑定' },
+          { name: '解绑' }
+        ],
+        cur_name: ''
       }
     },
     mounted() {
@@ -85,6 +67,20 @@
     },
     methods: {
       getConnectUrl: API_Connect.getLogindConnectUrl,
+      /** 点击cell */
+      handleClickCell(name) {
+        this.cur_name = name
+        this.actions[0].disabled = this.bind[name]
+        this.actions[1].disabled = !this.bind[name]
+        this.showAction = true
+      },
+      /** 选择action */
+      onSelectAction(item) {
+        const { name } = item
+        const { cur_name: type } = this
+        this.showAction = false
+        name === '绑定' ? this.bindConnect(type) : this.unbindConnect(type)
+      },
       /** 解绑 */
       unbindConnect(type) {
         this.$confirm('确定要解绑吗？', () => {
@@ -116,39 +112,20 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../assets/styles/color";
-  .el-alert {
-    h2 { margin: 20px 0 }
-    p { margin-bottom: 10px }
+  .account-binding-contaner {
+    padding-top: 46px;
   }
-  .bind-item {
-    border-bottom: 1px solid #e6e6e6;
-    display: flex;
-    align-items: center;
-    padding: 30px 0;
-    .fore1 {
-      font-family: 微软雅黑;
-      font-size: 18px;
-      padding-left: 25px;
-      text-align: left;
-      width: 130px;
-    }
-    .fore2 {
-      border-left: 1px solid #e6e6e6;
-      height: auto;
-      line-height: 32px;
-      padding: 4px 0 4px 15px;
-      width: 200px;
-    }
-    .fore3 {
-      text-align: center;
-      width: 140px;
-    }
-    .ftx-05 {
-      color: $color-href;
-      &:hover { color: $color-main }
-    }
-    &:last-child {
-      border-bottom: none;
+  /deep/ {
+    .van-cell__title {
+      img {
+        display: inline-block;
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+      }
+      span {
+        margin-left: 10px;
+      }
     }
   }
 </style>

@@ -5,6 +5,7 @@
       <van-cell-group>
         <van-cell title="账户密码" value="修改" is-link to="./change-password" />
         <van-cell title="手机号码" value="修改" is-link to="./change-mobile" />
+        <van-cell title="第三方登录" value="查看" is-link to="./account-binding" />
       </van-cell-group>
     </div>
   </div>

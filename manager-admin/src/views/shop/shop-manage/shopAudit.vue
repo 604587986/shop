@@ -93,7 +93,7 @@
 
       /** 审核店铺 */
       handleAuditShop(index, row) {
-        this.$router.push({ path: `/shop/shop-manage/edit/${row.shop_id}?audit=1` })
+        this.$router.push({ name: 'shopEdit', query: { audit: 1 }, params: { id: row.shop_id, callback: this.GET_ShopList }})
       },
 
       /** 获取店铺审核列表 */

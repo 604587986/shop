@@ -1,46 +1,74 @@
 <template>
   <div v-if="promotions && showPromotion" class="promotions-container">
-    <div class="pro-list promotions-box" id="promotions-box">
-      <div class="pro-title">促销信息</div>
-      <div class="pro-content prom">
+    <van-cell-group class="promotions-cells">
+      <van-cell is-link @click="showPopup = true">
+        <div slot="title">
+          <span>促销</span>
+          <div class="promotions-cell">
+            <template v-for="(prom, index) in promotions">
+              <template v-if="prom.full_discount_vo">
+                <em class="hl_red_bg" :key="index + '-full'">满减</em>
+                <em v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'" class="hl_red_bg">赠礼</em>
+                <em v-if="prom.full_discount_vo.coupon_do" :key="index + '-coupon'" class="hl_red_bg">赠券</em>
+              </template>
+              <em :key="index" v-if="prom.minus_vo" class="hl_red_bg">单品立减</em>
+              <em :key="index" v-if="prom.half_price_vo" class="hl_red_bg">第二件半价</em>
+            </template>
+          </div>
+        </div>
+      </van-cell>
+    </van-cell-group>
+    <van-popup v-model="showPopup" position="bottom" style="height:70%">
+      <van-nav-bar title="促销信息" @click-right="showPopup = false">
+        <i class="iconfont ea-icon-close" slot="right"/>
+      </van-nav-bar>
+      <van-cell-group class="proms-list">
         <template v-for="(prom, index) in promotions">
           <!--满减-->
           <template v-if="prom.full_discount_vo">
-            <div :key="index + '-full'" class="prom-item">
-              <em class="hl_red_bg">满减</em>
-              <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立减现金 <span class="price">{{ prom.full_discount_vo.minus_value }}元</span></em>
-              <!--<nuxt-link v-if="index === 0" :to="'/shop/'+ prom.full_discount_vo.seller_id + '/promotions'" target="blank"> 详情>></nuxt-link>&nbsp;-->
-            </div>
-            <div v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'" class="prom-item">
-              <em class="hl_red_bg">赠礼</em>
-              <em class="hl_red">
-                价值<span class="price">{{ prom.full_discount_vo.full_discount_gift_do.gift_price }}元</span>的
-                <a :href="prom.full_discount_vo.full_discount_gift_do.gift_img" target="_blank">
-                  <img :src="prom.full_discount_vo.full_discount_gift_do.gift_img" class="gift-image">
-                </a>
-              </em>
-            </div>
-            <div v-if="prom.full_discount_vo.coupon_do" :key="index + '-coupon'" class="prom-item">
-              <em class="hl_red_bg">赠券</em>
-              <em class="hl_red">
-                <span class="price">{{ prom.full_discount_vo.coupon_do.coupon_price }}元</span>优惠券
-              </em>
-            </div>
+            <van-cell :key="index + '-full'">
+              <div slot="title">
+                <em class="hl_red_bg">满减</em>
+                <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立减现金 <span class="price">{{ prom.full_discount_vo.minus_value }}元</span></em>
+              </div>
+            </van-cell>
+            <van-cell v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'">
+              <div slot="title">
+                <em class="hl_red_bg">赠礼</em>
+                <em class="hl_red">
+                  价值<span class="price">{{ prom.full_discount_vo.full_discount_gift_do.gift_price }}元</span>的
+                  <a :href="prom.full_discount_vo.full_discount_gift_do.gift_img" target="_blank">
+                    <img :src="prom.full_discount_vo.full_discount_gift_do.gift_img" class="gift-image">
+                  </a>
+                </em>
+              </div>
+            </van-cell>
+            <van-cell v-if="prom.full_discount_vo.coupon_do" :key="index + '-coupon'">
+              <div slot="title">
+                <em class="hl_red_bg">赠券</em>
+                <em class="hl_red">
+                  <span class="price">{{ prom.full_discount_vo.coupon_do.coupon_price }}元</span>优惠券
+                </em>
+              </div>
+            </van-cell>
           </template>
           <!--单品立减-->
-          <div :key="index" v-if="prom.minus_vo" class="prom-item">
-            <em class="hl_red_bg">单品立减</em>
-            <em class="hl_red">单件立减现金<span class="price">{{ prom.minus_vo.single_reduction_value }}</span>元</em>
-          </div>
+          <van-cell :key="index" v-if="prom.minus_vo">
+            <div slot="title">
+              <em class="hl_red_bg">单品立减</em>
+              <em class="hl_red">单件立减现金<span class="price">{{ prom.minus_vo.single_reduction_value }}</span>元</em>
+            </div>
+          </van-cell>
           <!--第二件半价-->
-          <div :key="index" v-if="prom.half_price_vo" class="prom-item">
-            <em class="hl_red_bg">第二件半价</em>
-            <em class="hl_red">第二件半价优惠</em>
-          </div>
+          <van-cell :key="index" v-if="prom.half_price_vo">
+            <div slot="title">
+              <em class="hl_red_bg">第二件半价</em>
+              <em class="hl_red">第二件半价优惠</em>
+            </div>
+          </van-cell>
         </template>
-      </div>
-    </div>
-    <div id="promotions-place" class="promotions-place"></div>
+      </van-cell-group>
+    </van-popup>
   </div>
 </template>
 
@@ -55,7 +83,8 @@
     props: ['promotions'],
     data() {
       return {
-        showPromotion: true
+        showPromotion: true,
+        showPopup: false
       }
     },
     watch: {
@@ -68,13 +97,6 @@
           })
         })
         this.showPromotion = flag
-        if (flag) {
-          this.$nextTick(() => {
-            const $proBox = document.getElementById('promotions-box')
-            const $plaBox = document.getElementById('promotions-place')
-            $plaBox.style.height = $proBox.offsetHeight + 'px'
-          })
-        }
       }
     }
   }
@@ -82,43 +104,50 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../assets/styles/color";
+  /deep/ {
+    .van-nav-bar { position: relative }
+    .promotions-cells {
+      border-bottom: 10px solid #e8e8ed;;
+    }
+    .van-cell__title { flex: 5 }
+  }
   .promotions-container {
     position: relative;
   }
-  .promotions-box {
-    background: url("../../assets/images/background-price.png") 0 -12px repeat-x #efefef;
-    padding-bottom: 5px;
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    right: 0;
+  .promotions-cell {
+    display: inline-block;
+    padding-left: 10px;
   }
-  .promotions-place {
+  .proms-list {
+    height: calc(100% - 46px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  .hl_red_bg {
     position: relative;
-    z-index: 1;
-  }
-  .pro-content {
-    em.hl_red_bg {
-      padding: 2px 3px;
-      color: $color-main;
+    padding: 0 3px;
+    margin-right: 5px;
+    height: 15px;
+    line-height: 15px;
+    font-size: 10px;
+    color: $color-main;
+    background: #fff;
+    &::before {
+      content: "";
+      display: block;
       border: 1px solid $color-main;
-      margin-right: 4px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+      border-radius: 2px;
     }
-    .prom-item:not(:first-child) {
-      display: inline-block;
-      .hl_red {
-        display: none;
-      }
-    }
-  }
-  .promotions-box:hover .prom-item {
-    display: block;
-    .hl_red { display: inline-block }
   }
   .gift-image {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
   }
 </style>

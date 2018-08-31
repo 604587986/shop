@@ -38,7 +38,63 @@ export default new Router({
   routes: constantRouterMap
 })
 
-export const asyncRouterMap = [
+// 分销
+const disRouterMap = {
+  path: '/distribution',
+  component: Layout,
+  redirect: '/distribution/extract-tpl',
+  name: 'distribution',
+  meta: { title: 'distribution', icon: 'development-manage' },
+  children: [
+    {
+      path: '/distribution/extract-tpl',
+      component: () => import('@/views/distribution/extractTpl/index'),
+      redirect: '/distribution/extract-tpl/upgrade-logs',
+      name: 'extractTpl',
+      meta: { title: 'extractTpl' },
+      children: [
+        { path: 'per-accomplishment-tpl', component: () => import('@/views/distribution/extractTpl/perAccomplishmentTpl'), name: 'perAccomplishmentTpl', meta: { title: 'perAccomplishmentTpl' }},
+        { path: 'upgrade-logs', component: () => import('@/views/distribution/extractTpl/upgradeLogs'), name: 'upgradeLogs', meta: { title: 'upgradeLogs' }}
+      ]
+    },
+    {
+      path: '/distribution/distributor',
+      component: () => import('@/views/distribution/distributor/index'),
+      redirect: '/distribution/distributor/distributor-list',
+      name: 'distributor',
+      meta: { title: 'distributor' },
+      children: [
+        { path: 'distributor-list', component: () => import('@/views/distribution/distributor/distributorList'), name: 'distributorList', meta: { title: 'distributorList' }},
+        { path: 'distributor-statistics', component: () => import('@/views/distribution/distributor/distributorStatistics'), name: 'distributorStatistics', meta: { title: 'distributorStatistics' }, hidden: true }
+      ]
+    },
+    {
+      path: '/distribution/achievement',
+      component: () => import('@/views/distribution/achievement/index'),
+      redirect: '/distribution/achievement/achievement-list',
+      name: 'achievement',
+      meta: { title: 'achievement' },
+      children: [
+        { path: 'achievement-list', component: () => import('@/views/distribution/achievement/achievementList'), name: 'achievementList', meta: { title: 'achievementList' }},
+        { path: 'bill-list', component: () => import('@/views/distribution/achievement/billList'), name: 'billList', meta: { title: 'billList' }, hidden: true },
+        { path: 'bill-details', component: () => import('@/views/distribution/achievement/billDetails'), name: 'billDetails', meta: { title: 'billDetails' }, hidden: true }
+      ]
+    },
+    {
+      path: '/distribution/put-forward',
+      component: () => import('@/views/distribution/putforward/index'),
+      redirect: '/distribution/put-forward/put-forward-settings',
+      name: 'putforwardManage',
+      meta: { title: 'putforwardManage' },
+      children: [
+        { path: 'put-forward-settings', component: () => import('@/views/distribution/putforward/putforwardSettings'), name: 'putforwardSettings', meta: { title: 'putforwardSettings' }},
+        { path: 'put-forward-apply', component: () => import('@/views/distribution/putforward/putforwardApply'), name: 'putforwardApply', meta: { title: 'putforwardApply' }}
+      ]
+    }
+  ]
+}
+
+const asyncRouters = [
   // 商品管理
   {
     path: '/goods',
@@ -144,7 +200,7 @@ export const asyncRouterMap = [
         children: [
           { path: 'shop-list', component: () => import('@/views/shop/shop-manage/shopList'), name: 'shopList', meta: { title: 'shopList' }},
           { path: 'shop-audit', component: () => import('@/views/shop/shop-manage/shopAudit'), name: 'shopAudit', meta: { title: 'shopAudit' }},
-          { path: 'edit/:shop_id', component: () => import('@/views/shop/shop-manage/shopEdit'), name: 'shopEdit', hidden: true, meta: { title: 'shopEdit' }}
+          { path: 'edit/:id', component: () => import('@/views/shop/shop-manage/shopEdit'), name: 'shopEdit', hidden: true, meta: { title: 'shopEdit' }}
         ]
       },
       {
@@ -441,61 +497,12 @@ export const asyncRouterMap = [
       }
     ]
   },
-  // 分销
-  {
-    path: '/distribution',
-    component: Layout,
-    redirect: '/distribution/extract-tpl',
-    name: 'distribution',
-    meta: { title: 'distribution', icon: 'development-manage' },
-    children: [
-      {
-        path: '/distribution/extract-tpl',
-        component: () => import('@/views/distribution/extractTpl/index'),
-        redirect: '/distribution/extract-tpl/upgrade-logs',
-        name: 'extractTpl',
-        meta: { title: 'extractTpl' },
-        children: [
-          { path: 'per-accomplishment-tpl', component: () => import('@/views/distribution/extractTpl/perAccomplishmentTpl'), name: 'perAccomplishmentTpl', meta: { title: 'perAccomplishmentTpl' }},
-          { path: 'upgrade-logs', component: () => import('@/views/distribution/extractTpl/upgradeLogs'), name: 'upgradeLogs', meta: { title: 'upgradeLogs' }}
-        ]
-      },
-      {
-        path: '/distribution/distributor',
-        component: () => import('@/views/distribution/distributor/index'),
-        redirect: '/distribution/distributor/distributor-list',
-        name: 'distributor',
-        meta: { title: 'distributor' },
-        children: [
-          { path: 'distributor-list', component: () => import('@/views/distribution/distributor/distributorList'), name: 'distributorList', meta: { title: 'distributorList' }},
-          { path: 'distributor-statistics', component: () => import('@/views/distribution/distributor/distributorStatistics'), name: 'distributorStatistics', meta: { title: 'distributorStatistics' }, hidden: true }
-        ]
-      },
-      {
-        path: '/distribution/achievement',
-        component: () => import('@/views/distribution/achievement/index'),
-        redirect: '/distribution/achievement/achievement-list',
-        name: 'achievement',
-        meta: { title: 'achievement' },
-        children: [
-          { path: 'achievement-list', component: () => import('@/views/distribution/achievement/achievementList'), name: 'achievementList', meta: { title: 'achievementList' }},
-          { path: 'bill-list', component: () => import('@/views/distribution/achievement/billList'), name: 'billList', meta: { title: 'billList' }, hidden: true },
-          { path: 'bill-details', component: () => import('@/views/distribution/achievement/billDetails'), name: 'billDetails', meta: { title: 'billDetails' }, hidden: true }
-        ]
-      },
-      {
-        path: '/distribution/put-forward',
-        component: () => import('@/views/distribution/putforward/index'),
-        redirect: '/distribution/put-forward/put-forward-settings',
-        name: 'putforwardManage',
-        meta: { title: 'putforwardManage' },
-        children: [
-          { path: 'put-forward-settings', component: () => import('@/views/distribution/putforward/putforwardSettings'), name: 'putforwardSettings', meta: { title: 'putforwardSettings' }},
-          { path: 'put-forward-apply', component: () => import('@/views/distribution/putforward/putforwardApply'), name: 'putforwardApply', meta: { title: 'putforwardApply' }}
-        ]
-      }
-    ]
-  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
+
+if (process.env.DISTRIBUTION) {
+  asyncRouters.push(disRouterMap)
+}
+
+export const asyncRouterMap = asyncRouters
