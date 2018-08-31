@@ -331,7 +331,6 @@ let bindEventListener = function() {
       .css('display', 'none')
     $('.cover').css('display', 'none')
     // 执行回调,把已选数据传递出去.
-    // console.log(getJSON2())
     confirmCallback(getJSON())
     hideDialogFunc();
   })
@@ -1052,7 +1051,6 @@ let cloneData = function(data) {
 // 遍历获取已选择的区域的数据.
 let getJSON = function() {
   let dataArray = []
-  let areaObj
   // 解决全选省级
   // 遍历省份
   areaDOM.find('.area-right li.depth-one').each(function() {
@@ -1096,16 +1094,8 @@ let getJSON = function() {
     let cityID = Number($(this).attr('region-id'))
     // 如果左边不存在对应市, 说明全选了市
     // 把所有县级数据添加进来
-    if (
-      areaDOM.find('.area-left li.depth-two[region-id=' + cityID + ']')
-        .length === 0
-    ) {
-      let provinceID = Number(
-        $(this)
-          .closest('li.depth-one')
-          .attr('region-id')
-      )
-
+    if (areaDOM.find('.area-left li.depth-two[region-id=' + cityID + ']').length === 0) {
+      let provinceID = Number($(this).closest('li.depth-one').attr('region-id'))
       // 从源数据,把县数据添加进来
       areaData.forEach(function(province) {
         // 找到特定省份
@@ -1181,126 +1171,7 @@ let getJSON = function() {
   return dataArray
 }
 
-// 遍历获取已选择的区域的数据. (新添加)
-let getJSON2 = function() {
-  let dataArray = []
-  let areaObj
-  // 解决全选省级
-  // 遍历省份
-  areaDOM.find('.area-right li.depth-one').each(function() {
-    let provinceID = Number($(this).attr('region-id'))
-    // 无论左边是否存在该省份信息 均添加
-    // 从源数据,把下面市/县数据挨个添加进来
-    areaData.forEach(function(province) {
-      // 找到特定省份
-      if (province.id !== provinceID) {
-        return
-      }
-      // 首先把当前省份添加进来
-      dataArray.push(cloneData(province))
-
-      if (!province.children || province.children.length === 0) {
-        // 跳出当前循环
-        return
-      }
-
-      province.children.forEach(function(city) {
-        dataArray.push(cloneData(city))
-
-        // 遍历县级数据, 挨个添加进来.
-        if (!city.children || city.children.length === 0) {
-          // 跳出当前循环
-          return
-        }
-        city.children.forEach(function(county) {
-          dataArray.push(cloneData(county))
-        })
-      })
-    })
-    // 移除当前省级DOM,省的影响到后面
-    $(this).remove()
-  })
-  // 遍历市级
-  areaDOM.find('.area-right li.depth-two').each(function() {
-    let cityID = Number($(this).attr('region-id'))
-    // 如果左边不存在对应市, 说明全选了市
-    // 把所有县级数据添加进来
-    let provinceID = Number($(this).closest('li.depth-one').attr('region-id'))
-
-    // 从源数据,把县数据添加进来
-    areaData.forEach(function(province) {
-      // 找到特定省份
-      if (province.id !== provinceID) {
-        return
-      }
-      if (!province.children || province.children.length === 0) {
-        // 跳出当前循环
-        return
-      }
-
-      province.children.forEach(function(city) {
-        if (city.id !== cityID) {
-          // 不是对应 市, 跳出当前循环
-          return
-        }
-        dataArray.push(cloneData(city))
-        // 没有县级数据
-        if (!city.children || city.children.length === 0) {
-          // 跳出当前循环
-          return
-        }
-        // 遍历县级数据.
-        city.children.forEach(function(county) {
-          dataArray.push(cloneData(county))
-        })
-      })
-    })
-    // 移除当前市级DOM,省的影响到后面
-    $(this).remove()
-  })
-  // 遍历县级
-  areaDOM.find('.area-right li.depth-three').each(function() {
-    let countyID = Number($(this).attr('region-id'))
-    let cityID = Number(
-      $(this)
-        .closest('li.depth-two')
-        .attr('region-id')
-    )
-    let provinceID = Number(
-      $(this)
-        .closest('li.depth-one')
-        .attr('region-id')
-    )
-
-    areaData.forEach(function(province) {
-      if (province.id !== provinceID) {
-        return
-      }
-      if (!province.children || province.children.length === 0) {
-        return
-      }
-
-      // 遍历市
-      province.children.forEach(function(city) {
-        if (city.id !== cityID) {
-          return
-        }
-        if (!city.children || city.children.length === 0) {
-          return
-        }
-
-        city.children.forEach(function(county) {
-          if (county.id !== countyID) {
-            return
-          }
-          dataArray.push(cloneData(county))
-        })
-      })
-    })
-  })
-  return dataArray
-}
-
+// 处理默认数据
 let startDefault = function(sourceData) {
   if (!sourceData) {
     return

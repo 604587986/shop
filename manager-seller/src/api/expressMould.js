@@ -70,8 +70,7 @@ export function addExpressMould(params) {
 }
 
 /**
- * 获取树形选择器地区信息 暂时不用 待重构树形选择器时使用
- * @param params
+ * 获取树形选择器地区信息
  */
 export function getAreaList() {
   return request({
