@@ -5,10 +5,10 @@ export default {
     goods: 'Goods Manage',
     goodsList: 'Goods List',
     draftList: 'Draft List',
-    goodPublish: 'good Publish',
+    goodPublish: 'Good Publish',
     categoryManage: 'Category Manage',
     tagManage: 'Tag Manage',
-    tagAdd: 'tag Add',
+    tagAdd: 'Tag Add',
     recycleStation: 'Recycle Station',
     understock: 'Understock',
 
@@ -23,23 +23,23 @@ export default {
     orderDetail: 'Order Detail',
 
     shop: 'Manage Shop',
-    shopThemesPc: 'shop Themes Pc',
-    shopThemesWap: 'shop Themes Wap',
-    shopSlide: 'shop Slide',
-    shopNav: 'shop Nav',
+    shopThemesPc: 'Shop Themes Pc',
+    shopThemesWap: 'Shop Themes Wap',
+    shopSlide: 'Shop Slide',
+    shopNav: 'Shop Nav',
 
-    promotions: 'promotions',
-    fullCut: 'full Cut',
-    singleCut: 'single Cut',
-    secondHalfPrice: 'second Half Price',
-    discountManager: 'discount Manager',
-    giftManager: 'gift Manager',
-    groupBuyManager: 'group Buy Manager',
-    timeLimit: 'time Limit',
-    addTimeLimit: 'add Time Limit',
-    activityGoodsData: 'activity Goods Data',
-    addGroupBuyGoods: 'add Group Buy Goods',
-    editGroupBuyGoods: 'edit Group Buy Goods',
+    promotions: 'Promotions',
+    fullCut: 'Full Cut',
+    singleCut: 'Single Cut',
+    secondHalfPrice: 'Second Half Price',
+    discountManager: 'Discount Manager',
+    giftManager: 'Gift Manager',
+    groupBuyManager: 'Group Buy Manager',
+    timeLimit: 'Time Limit',
+    addTimeLimit: 'Add Time Limit',
+    activityGoodsData: 'Activity Goods Data',
+    addGroupBuyGoods: 'Add Group Buy Goods',
+    editGroupBuyGoods: 'Edit Group Buy Goods',
 
     statistics: 'Statistics Manage',
     generalityOverview: 'Generality Overview',
@@ -55,9 +55,9 @@ export default {
     collectStatistics: 'Collect Statistics',
     logManage: 'Log Manage',
 
-    customer: 'customer service',
-    consultation: 'consultation',
-    message: 'message',
+    customer: 'Customer Service',
+    consultation: 'Consultation',
+    message: 'Message',
 
     shopAuth: 'Shop Auth',
     shopAssistant: 'Shop Assistant',
@@ -65,9 +65,9 @@ export default {
     rolePermission: 'Role Permission',
 
     setting: 'Setting Mange',
-    shopSettings: 'shop Settings',
-    goodsWarning: 'goods Warning',
-    gradeApplication: 'grade Application'
+    shopSettings: 'Shop Settings',
+    goodsWarning: 'Goods Warning',
+    gradeApplication: 'Grade Application'
 
   },
   login: {
