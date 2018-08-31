@@ -223,7 +223,7 @@
         isEdit: false,
 
         /** 操作当前行索引 */
-        currentIdex: -1,
+        currentIndex: -1,
 
         /** 过滤地区数据 */
         filterData: [],
@@ -299,11 +299,11 @@
       /** 地区选择器确认回调 */
       confirmFunc(val) {
         if (this.isEdit) { // 编辑模式
-          const _area = this.mouldForm.item[this.currentIdex].area
+          const _area = this.mouldForm.items[this.currentIndex].area
           // 更新表格地区数据
-          this.mouldForm.item[this.currentIdex].area = val
-          this.mouldForm.item[this.currentIdex].area_json = JSON.stringify(val)
-          this.mouldForm.item[this.currentIdex].area_id = JSON.stringify(val.map(key => { return key.id }))
+          this.mouldForm.items[this.currentIndex].area = val
+          this.mouldForm.items[this.currentIndex].area_json = JSON.stringify(val)
+          this.mouldForm.items[this.currentIndex].area_id = JSON.stringify(val.map(key => { return key.id }))
           // 更新过滤数据 删除
           this.filterData.forEach((key, index) => {
             _area.forEach(item => {
