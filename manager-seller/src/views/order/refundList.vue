@@ -253,7 +253,10 @@
         refundGoodsData: [],
 
         /** 弹框是否显示 */
-        goodsRefundshow: false
+        goodsRefundshow: false,
+
+        /** 审核备注 */
+        remark: ''
       }
     },
     methods: {
