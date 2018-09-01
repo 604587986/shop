@@ -341,7 +341,7 @@
             const _params = {
               agree: agree,
               refund_price: this.refundMoney,
-              remark: this.refundInfo.seller_remark
+              remark: this.remark
             }
             API_refund.refundAuth(this.currentSn, _params).then(() => {
               this.goodsRefundshow = false
