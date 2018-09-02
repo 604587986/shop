@@ -32,6 +32,7 @@
       GET_OrderStatisticsPrice() {
         if (this.curTab !== 'price' || this.loading) return
         this.loading = true
+        this.$emit('update')
         const { cycle_type } = this.params
         const type_str = this.params.cycle_type === 'MONTH' ? '日' : '月'
         API_Statistics.getOrderStatisticsPrice(this.params).then(response => {

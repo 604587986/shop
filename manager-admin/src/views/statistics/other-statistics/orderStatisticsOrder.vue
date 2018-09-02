@@ -31,6 +31,7 @@
       GET_OrderStatisticsOrder() {
         if (this.curTab !== 'order' || this.loading) return
         this.loading = true
+        this.$emit('update')
         const { cycle_type } = this.params
         const type_str = cycle_type === 'MONTH' ? '日' : '月'
         API_Statistics.getOrderStatisticsOrder(this.params).then(response => {
