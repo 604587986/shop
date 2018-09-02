@@ -12,15 +12,27 @@
         </div>
         <div class="chart-header-item">
           <span>订单状态：</span>
-          <en-order-status-picker @changed="(order_status) => { params.order_status = order_status }"/>
+          <el-select
+            v-model="params.order_status"
+            placeholder="选择店铺"
+            style="width: 150px"
+            filterable
+            clearable
+          >
+            <el-option
+              v-for="item in orderStatus"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
         </div>
       </div>
       <el-tabs v-model="cur_tab" type="card">
         <el-tab-pane label="下单金额" name="price">
-          <order-statistics-price :params="params" :cur-tab="cur_tab"/>
+          <order-statistics-price :params="params" :cur-tab="cur_tab" @update="GET_OrderStatisticsPage"/>
         </el-tab-pane>
         <el-tab-pane label="下单量" name="order">
-          <order-statistics-order :params="params" :cur-tab="cur_tab"/>
+          <order-statistics-order :params="params" :cur-tab="cur_tab" @update="GET_OrderStatisticsPage"/>
         </el-tab-pane>
       </el-tabs>
       <en-table-layout
@@ -67,7 +79,14 @@
           seller_id: 0
         },
         loading: false,
-        tableData: ''
+        tableData: '',
+        orderStatus: [
+          { label: '已确认', value: 'CONFIRM' },
+          { label: '已付款', value: 'PAID_OFF' },
+          { label: '已发货', value: 'SHIPPED' },
+          { label: '已收货', value: 'ROG' },
+          { label: '已完成', value: 'COMPLETE' }
+        ]
       }
     },
     mounted() {
@@ -78,8 +97,6 @@
       handleYearMonthChanged(object) {
         this.params.year = object.year
         this.params.month = object.month
-        this.params.start_time = object.start_time
-        this.params.end_time = object.end_time
         this.params.cycle_type = object.type
       },
       /** 获取订单统计表格数据 */
