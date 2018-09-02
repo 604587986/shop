@@ -16,7 +16,6 @@
             v-model="params.order_status"
             placeholder="选择店铺"
             style="width: 150px"
-            filterable
             clearable
           >
             <el-option
