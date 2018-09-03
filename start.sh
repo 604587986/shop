@@ -11,4 +11,4 @@ pm2 delete buyer-wap
 pm2 start npm --name "buyer-wap" -- run start
 
 # 启动nginx
-/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+/usr/local/nginx/sbin/nginx -s reload
