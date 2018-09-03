@@ -221,33 +221,30 @@
         remark: ''
       }
     },
-    mounted() {
+    async mounted() {
       // 获取购物清单
       this.loading = true
-      API_Trade.getCarts('checked').then(async response => {
-        const inventories = []
-        const ids = []
-        response.forEach(item => {
-          ids.push(item.seller_id)
-          inventories.push(...item.sku_list)
-        })
-        this.inventories = inventories
-        this.seller_ids = ids
-        if (!inventories.length) {
-          this.loading = false
-          return
-        }
-        // 获取默认结算数据
-        await API_Trade.getCheckoutParams().then(response => this.params = response)
-        const { address_id, remark } = this.params
-        this.remark = remark
-        if (address_id) {
-          this.address = await API_Address.getAddressDetail(address_id)
-        }
-        // 获取订单金额
-        await this.GET_TotalPrice()
-        this.loading = false
+      const params = await API_Trade.getCheckoutParams()
+      this.params = params
+      this.remark = params.remark
+      if (params.address_id) {
+        await API_Trade.setAddressId(params.address_id)
+        this.address = await API_Address.getAddressDetail(params.address_id)
+      }
+      const inventories = []
+      const ids = []
+      const invs = await API_Trade.getCarts('checked')
+      invs.forEach(item => {
+        ids.push(item.seller_id)
+        inventories.push(...item.sku_list)
       })
+      if (!inventories.length) {
+        this.loading = false
+        return
+      }
+      this.inventories = inventories
+      this.seller_ids = ids
+      this.loading = false
     },
     computed: {
       // 计算是否禁用提交订单按钮
@@ -265,7 +262,6 @@
       /** 发票信息发生改变 */
       handleReceiptChanged(receipt) {
         this.$set(this.params, 'receipt', receipt)
-        console.log('receipt-changed: ', receipt)
       },
       /** 支付配送发生改变 */
       handlePaymentChanged(payment) {

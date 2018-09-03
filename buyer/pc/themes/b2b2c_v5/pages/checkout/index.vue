@@ -96,8 +96,15 @@
       }
     },
     mounted() {
-      // 获取购物清单
-      this.GET_Inventories(true)
+      // 获取结算参数
+      API_Trade.getCheckoutParams().then(response => {
+        if (response.address_id) {
+          API_Trade.setAddressId(response.address_id).then(this.GET_Inventories)
+        } else {
+          this.GET_Inventories()
+        }
+        this.params = response
+      })
     },
     methods: {
       /** 使用优惠券 */
@@ -138,19 +145,14 @@
         })
       },
       /** 获取购物清单 */
-      GET_Inventories(get_params = false) {
+      GET_Inventories() {
         API_Trade.getCarts('checked').then(response => {
           this.inventoryList = response
           if (response.length === 0) return
           this.GET_ShopCoupons()
-          get_params && this.GET_CheckoutParams()
           // 获取订单金额
           API_Trade.getOrderTotal().then(response => this.orderTotal = response)
         })
-      },
-      /** 获取结算参数 */
-      GET_CheckoutParams() {
-        API_Trade.getCheckoutParams().then(response => this.params = response)
       }
     }
   }
