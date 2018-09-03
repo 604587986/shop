@@ -9,7 +9,7 @@
         <dl><dt>商家审核备注：</dt><dd><span>{{ detail.seller_remark || '无' }}</span></dd></dl>
         <dl><dt>申请售后原因：</dt><dd>{{ detail.refund_reason }}</dd></dl>
         <dl><dt>申请售后详细描述：</dt><dd>{{ detail.customer_remark || '无' }}</dd></dl>
-        <dl><dt>退款方式：</dt><dd>{{ detail.account_type_text || '无' }}</dd></dl>
+        <dl><dt>退款方式：</dt><dd>{{ detail.refund_way === 'ORIGINAL' ? '原路退回' : (detail.account_type_text || '无') }}</dd></dl>
         <dl><dt>申请售后金额：</dt><dd>￥{{ detail.refund_price | unitPrice }}</dd></dl>
       </div>
     </div>
