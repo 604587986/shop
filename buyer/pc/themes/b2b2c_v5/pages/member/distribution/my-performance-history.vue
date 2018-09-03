@@ -89,7 +89,17 @@
         myHistoryList: [],
 
         /** 我的历史业绩单 */
-        settlementTotal: {}
+        settlementTotal: {
+          start_time: 0,
+
+          end_time: 0,
+
+          push_money: 0,
+
+          final_money: 0,
+
+          return_order_money: 0
+        }
       }
     },
     mounted() {
