@@ -30,27 +30,27 @@
       <div class="status-order">
         <h2>订单状态：{{ order.order_status_text }}</h2>
         <ul class="status-list">
-          <li v-if="order && order.order_operate_allowable_vo.allow_pay">
+          <li v-if="order.order_operate_allowable_vo.allow_pay">
             - 如果您尚未对该订单进行支付，请
             <strong><a :href="'/checkout/cashier?order_sn=' + order.sn">按此为订单付款</a></strong>
             以确保商家及时发货。
           </li>
-          <li v-if="order && order.order_operate_allowable_vo.allow_cancel">
+          <li v-if="order.order_operate_allowable_vo.allow_cancel">
             - 如果您不想购买此订单的商品，您可以
             <strong><a href="javascript:;" @click="handleCancelOrder">取消订单</a></strong>
             操作。
           </li>
-          <li v-if="order.pay_status === 'PAY_YES' && order.ship_status === 'SHIP_NO'">
+          <li v-if="order.order_operate_allowable_vo.allow_service_cancel">
             - 如果您依然不想购买此订单的商品，您可以
             <strong><nuxt-link :to="'../after-sale/apply?order_sn=' + order.sn">申请取消订单</nuxt-link></strong>
             操作
           </li>
-          <li v-if="order && order.order_operate_allowable_vo.allow_rog">
+          <li v-if="order.order_operate_allowable_vo.allow_rog">
             - 如果您已经收到商品，请
             <strong><a href="javascript:;" @click="handleRogOrder">确认收货</a></strong>
             操作。
           </li>
-          <li v-if="order && order.order_operate_allowable_vo.allow_rog">
+          <li v-if="order.order_operate_allowable_vo.allow_rog">
             - 当前订单已发货，您可以
             <strong><a href="javascript:;" @click="handleViewExpress">刷新快递</a></strong>
           </li>
