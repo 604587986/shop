@@ -18,7 +18,7 @@
       </el-row>
       <el-row :gutter="0">
         <el-col :span="4">退款方式</el-col>
-        <el-col :span="8">{{ refund.account_type_text }}</el-col>
+        <el-col :span="8">{{ refund.refund_way === 'ORIGINAL' ? '原路退回' : (refund.account_type_text || '无') }}</el-col>
         <el-col :span="4">售后状态</el-col>
         <el-col :span="8">{{ refund.refund_status_text }}</el-col>
       </el-row>
