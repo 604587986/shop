@@ -145,7 +145,7 @@
             </div>
             <div class="order-info-item order-info-remark">
               <span>审核备注:  </span>
-              <el-input v-if="authOpera.allow_seller_approval" type="textarea" v-model="refundInfo.seller_remark"></el-input>
+              <el-input v-if="authOpera.allow_seller_approval" type="textarea" v-model="remark"></el-input>
               <span v-if="!authOpera.allow_seller_approval">{{ refundInfo.seller_remark || '无' }}</span>
             </div>
             <!--审核-->
@@ -253,7 +253,10 @@
         refundGoodsData: [],
 
         /** 弹框是否显示 */
-        goodsRefundshow: false
+        goodsRefundshow: false,
+
+        /** 审核备注 */
+        remark: ''
       }
     },
     methods: {
@@ -338,7 +341,7 @@
             const _params = {
               agree: agree,
               refund_price: this.refundMoney,
-              remark: this.refundInfo.seller_remark
+              remark: this.remark
             }
             API_refund.refundAuth(this.currentSn, _params).then(() => {
               this.goodsRefundshow = false

@@ -53,24 +53,28 @@
         <!--其他信息（发票、备注）-->
         <el-collapse-item title="其他信息（发票、备注）" name="other">
           <div class="order-item">
-            <span class="item-name">订单附言：</span>
-            <span class="item-value">{{ orderDetail.remark }}</span>
+            <span class="item-name">订单备注：</span>
+            <span class="item-value">{{ orderDetail.remark || '无' }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">送货时间：</span>
             <span class="item-value">{{ orderDetail.receive_time }}</span>
           </div>
           <div class="order-item">
-            <span class="item-name">发票抬头：</span>
-            <span class="item-value">{{ orderDetail.receipt_title }}</span>
+            <span class="item-name">发票类型：</span>
+            <span class="item-value">{{ orderDetail.receipt_history.receipt_type }}</span>
           </div>
           <div class="order-item">
+            <span class="item-name">发票抬头：</span>
+            <span class="item-value">{{ orderDetail.receipt_history.receipt_title }}</span>
+          </div>
+          <div v-if="orderDetail.receipt_history.tax_no" class="order-item">
             <span class="item-name">税号：</span>
-            <span class="item-value">{{ orderDetail.duty_invoice }}</span>
+            <span class="item-value">{{ orderDetail.receipt_history.tax_no }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">发票内容：</span>
-            <span class="item-value">{{ orderDetail.receipt_content }}</span>
+            <span class="item-value">{{ orderDetail.receipt_history.receipt_content }}</span>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -82,23 +86,33 @@
             <i class="el-icon-check"></i>  订单状态：{{ orderDetail.order_status_text }}
           </div>
           <div class="order-item">
-            <span class="item-name"> 1、订单附言：</span>
-            <span class="item-value">{{ orderDetail.remark }}</span>
+            <span class="item-name"> 订单备注：</span>
+            <span class="item-value">{{ orderDetail.remark || '无' }}</span>
           </div>
           <div class="order-item">
-            <span class="item-name">2、送货时间：</span>
+            <span class="item-name">送货时间：</span>
             <span class="item-value">{{ orderDetail.receive_time }}</span>
           </div>
-          <div class="order-item">
-            <span class="item-name">3、发票抬头：</span>
-            <span class="item-value">{{ orderDetail.receipt_title }}</span>
-          </div>
-          <div class="order-item">
-            <span class="item-name">4、发票内容：</span>
-            <span class="item-value">{{ orderDetail.receipt_content }}</span>
-          </div>
+          <template v-if="orderDetail.receipt_history">
+            <div class="order-item">
+              <span class="item-name">发票类型：</span>
+              <span class="item-value">{{ orderDetail.receipt_history.receipt_type }}</span>
+            </div>
+            <div class="order-item">
+              <span class="item-name">发票抬头：</span>
+              <span class="item-value">{{ orderDetail.receipt_history.receipt_title }}</span>
+            </div>
+            <div v-if="orderDetail.receipt_history.tax_no" class="order-item">
+              <span class="item-name">税号：</span>
+              <span class="item-value">{{ orderDetail.receipt_history.tax_no }}</span>
+            </div>
+            <div class="order-item">
+              <span class="item-name">发票内容：</span>
+              <span class="item-value">{{ orderDetail.receipt_history.receipt_content }}</span>
+            </div>
+          </template>
           <div class="order-item" v-if="!isShowEditShipName">
-            <span class="item-name">5、物流信息：</span>
+            <span class="item-name">物流信息：</span>
             <span class="item-value">
             <el-button type="text" @click="looklogistics">点击查看</el-button>
           </span>
@@ -383,10 +397,6 @@
     },
     activated() {
       this.sn = this.$route.params.sn
-    },
-    mounted() {
-      this.sn = this.$route.params.sn
-      this.GET_OrderDetail()
     },
     methods: {
       /** 获取订单详情信息 */

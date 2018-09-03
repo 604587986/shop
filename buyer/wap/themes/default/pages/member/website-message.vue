@@ -17,12 +17,12 @@
           <li class="message-item" v-for="(message, index) in messageList" :key="index">
             <div class="msg-date">{{ message.send_time | unixToDate }}</div>
             <div class="msg-content">
-              <van-cell-swipe :right-width="65" :left-width="message.is_read === 0 ? 65 : 0">
+              <van-swipe-cell :right-width="65" :left-width="message.is_read === 0 ? 65 : 0">
                 <span slot="left" @click="handleReadMessage(message)">已读</span>
                 <p v-if="message.title" class="msg-title">{{ message.title }}</p>
                 <div class="msg-detail">{{ message.content }}</div>
                 <span slot="right" @click="handleDeleteMessage(message)">删除</span>
-              </van-cell-swipe>
+              </van-swipe-cell>
             </div>
           </li>
         </ul>
