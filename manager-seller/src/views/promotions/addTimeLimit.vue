@@ -30,6 +30,7 @@
             <en-table-layout
               v-if="item.tableData && item.tableData.length >= 1"
               :tableData="item.tableData"
+              :key="$index"
               class="buy-info"
               :loading="loading">
               <template slot="table-columns">
@@ -84,6 +85,7 @@
   import * as API_limitTime from '@/api/limitTime'
   import { CategoryPicker } from '@/components'
   import { RegExp } from '~/ui-utils'
+  import { cloneObj } from '@/utils/index'
   export default {
     name: 'addTimeLimit',
     components: {
@@ -221,7 +223,7 @@
           this.$set(key, 'sold_quantity', 0)
           this.$set(key, 'act_price', 0)
         })
-        this.activityData.goodsData[this._order].tableData = val
+        this.activityData.goodsData[this._order].tableData = cloneObj(val)
       }
     }
   }
