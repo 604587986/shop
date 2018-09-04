@@ -17,7 +17,7 @@
             <span class="price">{{ scope.row.apply_money | unitPrice('¥') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="提现状态" align="center"/>
+        <el-table-column prop="status" label="提现状态" :formatter="withdraealsStatus" align="center"/>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="small" @click="lookDetails(scope.row)">查看详情</el-button>
@@ -99,6 +99,19 @@
       handleCurrentPageChange(cur) {
         this.params.page_no = cur
         this.GET_WithdrawalsList()
+      },
+
+      withdraealsStatus(row, column, cellValue) {
+        switch (row.status) {
+          case 'APPLY': return '申请中'
+            break
+          case 'TRANSFER_ACCOUNTS': return '已转账'
+            break
+          case 'VIA_AUDITING': return '审核通过'
+            break
+          case 'FAIL_AUDITING': return '审核失败'
+            break
+        }
       },
 
       /** 获取提现记录 */

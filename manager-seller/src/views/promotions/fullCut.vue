@@ -945,6 +945,11 @@
       handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            /** 是否选择打折或满减 */
+            if (!this.is_discount && !this.is_full_minus) {
+              this.$message.error('请选择打折或满减中的一种')
+              return
+            }
             /** 处理表单数据 */
             this.activityForm.start_time = this.activityForm.take_effect_time[0] / 1000
             this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000

@@ -43,7 +43,7 @@
                   </template>
                 </el-table-column>
                 <!--首重（kg）-->
-                <el-table-column prop="first_company" label="首重（kg)" width="200"/>
+                <el-table-column prop="first_company" :label="item.type === 1 ? '首重（kg）': '首件（个）'"  width="200"/>
                 <!--运费（元）-->
                 <el-table-column label="运费（元）" width="200">
                   <template slot-scope="scope">
@@ -51,7 +51,7 @@
                   </template>
                 </el-table-column>
                 <!--续重（kg）-->
-                <el-table-column prop="continued_company" label="续重（kg）" width="200"/>
+                <el-table-column prop="continued_company" :label="item.type === 1 ? '续重（kg）': '续件（个）'" width="200"/>
                 <!--续费（元）-->
                 <el-table-column label="续费（元）" width="200">
                   <template slot-scope="scope">
@@ -111,7 +111,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column :label="mouldForm.type === 1 ? '首件（个）': '首重（kg）'" prop="id" align="center" width="200">
+              <el-table-column :label="mouldForm.type === 1 ? '首重（kg）': '首件（个）'" prop="id" align="center" width="200">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.first_company"
@@ -124,7 +124,7 @@
                   <el-input v-model="scope.row.first_price" @blur="intMoney(scope.row)" clearable></el-input>
                 </template>
               </el-table-column>
-              <el-table-column :label="mouldForm.type === 1 ? '续件（个）': '续重（kg）'" prop="desc" align="center" width="200">
+              <el-table-column :label="mouldForm.type === 1 ? '续重（kg）': '续件（个）'" prop="desc" align="center" width="200">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.continued_company" @blur="intContinuedCompany(scope.row)" clearable></el-input>
                 </template>
@@ -431,9 +431,10 @@
           // 更新表格数据
           this.mouldForm.items.splice($index, 1)
           // 更新过滤数据 删除
-          let _filterData = row.area.map(key => { return key.region_id })
+          const _area = typeof row.area === 'string' ? JSON.parse(row.area) : row.area
+          let _filterData = _area.map(key => { return key.id })
           this.filterData.forEach((key, index) => {
-            if (_filterData.includes(key.region_id)) {
+            if (_filterData.includes(key.id)) {
               this.filterData.splice(index, 1)
             }
           })
@@ -623,7 +624,7 @@
     padding: 20px;
     background-color: #fff;
   }
-  /deep/ .el-button.is-plain:focus, .el-button.is-plain:hover {
+  /deep/ .el-button.is-plain, .el-button.is-plain:hover {
     border: none;
   }
   /deep/ .el-collapse {

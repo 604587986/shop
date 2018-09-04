@@ -1,17 +1,39 @@
 <template>
   <div id="withdrawals-setting">
-    <div class="member-nav">
-      <ul class="member-nav-list">
-        <li><nuxt-link to="./withdrawals-setting">提现设置</nuxt-link></li>
-      </ul>
-    </div>
-    <div class="recommend-container">
+    <nav-bar title="提现设置"/>
+    <div class="withdrawals-container">
+      <van-cell-group>
+        <van-field
+          label-align="right"
+          v-model="setWithdrawalsForm.member_name"
+          placeholder="请输入户名"
+          label="户名:"/>
+        <van-field
+          label-align="right"
+          v-model="setWithdrawalsForm.bank_name"
+          placeholder="请输入所属银行"
+          label="所属银行:" />
+        <van-field
+          v-model="setWithdrawalsForm.opening_num"
+          label="开户行号:"
+          placeholder="请输入开户行号"
+          label-align="right"/>
+        <van-field
+          v-model="setWithdrawalsForm.bank_card"
+          label="银行卡号:"
+          placeholder="请输入银行卡号"
+          label-align="right"/>
+        <div style="padding:15px 0 15px 114px;">
+          <van-button type="danger" size="small" @click="handleReserveWithdrawalsParams">保存设置</van-button>
+        </div>
+      </van-cell-group>
     </div>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
+  import { mapGetters } from 'vuex'
   import * as API_distribution from '@/api/distribution'
   export default {
     name: 'withdrawals-setting',
@@ -26,7 +48,7 @@
           bank_name: '',
 
           /** 开户行号 */
-          opening_name: '',
+          opening_num: '',
 
           /** 银行卡号 */
           bank_card: ''
@@ -55,15 +77,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  /deep/.el-form {
-    padding: 25px;
-    .el-form-item {
-      .el-form-item__label {
-        font-size: 13px;
-      }
-      .el-form-item__content {
-        width: 250px;
-      }
-    }
+  .withdrawals-container {
+    padding-top: 46px;
+  }
+  /deep/ .van-field__control {
+    padding-left: 16px;
   }
 </style>

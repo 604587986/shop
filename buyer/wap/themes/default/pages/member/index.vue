@@ -58,7 +58,7 @@
         <van-cell title="我的优惠券" is-link value="查看优惠券" to="/member/my-coupons"/>
         <van-cell title="我的积分" is-link value="消费、等级积分" to="/member/my-points"/>
         <van-cell title="站内消息" is-link value="查看站内消息" to="/member/website-message"/>
-        <van-cell v-if="show_dis" title="分销管理" is-link value="查看我的分销" to="/member/distribution/my-performance"/>
+        <van-cell v-if="show_dis" title="分销管理" is-link value="查看我的分销" to="/member/distribution/distribution-manage"/>
       </van-cell-group>
       <van-cell-group style="margin-top: 10px">
         <van-cell title="我的资料" is-link value="修改资料" to="/member/my-profile"/>
