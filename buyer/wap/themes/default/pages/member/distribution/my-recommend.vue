@@ -37,39 +37,7 @@
         myRefereer: '',
 
         /** 推荐的人列表 */
-        referee: [{
-          id: 1,
-          member_name: '嬴政',
-          grade: 1,
-          downline: 400,
-          rebate_total: 2521,
-          item:[{
-            id: 2,
-            member_name: '项羽',
-            grade: 1,
-            downline: 5000,
-            rebate_total: 454
-          },{
-            id: 3,
-            member_name: '凶器',
-            grade: 1,
-            downline: 5000,
-            rebate_total: 464
-          }]
-        },{
-            id: 11,
-            member_name: '刘邦',
-            grade: 1,
-            downline: 505,
-            rebate_total: 2521,
-            item:[{
-              id: 2,
-              member_name: '刘盈',
-              grade: 5,
-              downline: 500,
-              rebate_total: 464
-            }]
-        }]
+        referee: []
       }
     },
     mounted() {

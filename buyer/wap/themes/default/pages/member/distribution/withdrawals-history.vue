@@ -32,8 +32,18 @@
         </template>
       </van-cell>
     </div>
-    <van-popup v-model="isShowDialog">
-       <span>neiro</span>
+    <van-popup v-model="isShowDialog" class="pop-details">
+      <i @click="closeDialog"> &times; </i>
+      <div>
+        <p>提现详情</p>
+        <ul>
+          <li><span>提现金额</span>: <span style="color: #f42424;">{{ currentRow.apply_money | unitPrice('¥') }}</span></li>
+          <li><span>当前状态</span>: <span>{{ currentRow.status | withdraealsStatus }}</span></li>
+          <li><span>备注信息</span>: <span>{{ currentRow.apply_remark }}</span></li>
+          <li><span>提现日志</span>: <span>{{ currentRow.transfer_remark }}</span></li>
+          <li><span>审核备注</span>: <span>{{ currentRow.inspect_remark }}</span></li>
+        </ul>
+      </div>
     </van-popup>
   </div>
 </template>
@@ -103,6 +113,11 @@
       lookDetails(item) {
         this.isShowDialog = true
         this.currentRow = item
+      },
+
+      /** 关闭弹框 */
+      closeDialog() {
+        this.isShowDialog = false
       }
     }
   }
@@ -119,5 +134,35 @@
     flex-wrap: nowrap;
     justify-content: space-around;
     align-items: center;
+  }
+  /** 弹层 */
+  .pop-details {
+    width: 80%;
+    padding: 10px;
+    position: relative;
+    & > i {
+      position: absolute;
+      top: 25px;
+      right: 15px;
+      z-index: 2000;
+      display: inline-block;
+    }
+    p {
+      margin: 10px 15px;
+      text-align: center;
+      line-height: 24px;
+      font-size: 16px;
+      color: #303133
+    }
+    ul {
+      li {
+        list-style:none;
+        margin: 8px 0;
+        padding: 0 8px;
+        span {
+          font-size: 14.5px;
+        }
+      }
+    }
   }
 </style>

@@ -78,6 +78,7 @@
       <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
       <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
     </van-goods-action>
+    <goods-distribution v-if="show_dis"/>
   </div>
 </template>
 
@@ -91,6 +92,7 @@
   import * as API_Common from '@/api/common'
   import * as API_Members from '@/api/members'
   import * as API_Promotions from '@/api/promotions'
+  import * as API_distribution from '@/api/distribution'
   import * as goodsComponents from './index'
   import Storage from '@/utils/storage'
   export default {
@@ -127,6 +129,8 @@
     components: goodsComponents,
     data() {
       return {
+        // 显示分销分享按钮
+        show_dis: process.env.distribution,
         // 商品id
         goods_id: this.$route.params.id,
         // 商品信息
@@ -171,6 +175,10 @@
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
         // 滚动监听
         window.addEventListener('scroll', this.handleCountOffset)
+        // 如果页面是被分享的
+        if (this.$route.query.su) {
+          API_distribution.accessShortLink({su: this.$route.query.su }).then(() => { console.log(9856) })
+        }
       }
     },
     computed: {

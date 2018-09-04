@@ -11,6 +11,7 @@ import GoodsSpecs from './-goods-specs'
 import GoodsCoupons from './-goods-coupons'
 import GoodsGroupbuySeckill from './-goods-groupbuy-seckill'
 import GoodsExchange from './-goods-exchange'
+import GoodsDistribution from './-goods-distribution'
 import GoodsPromotions from './-goods-promotions'
 
 export {
@@ -22,5 +23,6 @@ export {
   GoodsCoupons,
   GoodsGroupbuySeckill,
   GoodsExchange,
+  GoodsDistribution,
   GoodsPromotions
 }

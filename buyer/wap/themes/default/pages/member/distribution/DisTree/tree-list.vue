@@ -60,7 +60,6 @@ export default {
       this.treeDataSource = tempData
     },
     openExpand(m) {
-      console.log(m)
       m.isExpand = !m.isExpand
     }
   }
