@@ -10,9 +10,10 @@ WORKDIR /app
 
 # 安装项目依赖包
 RUN npm install
-RUN npm build
+RUN npm run build
 
 # 配置环境变量
+ENV NODE_ENV=production
 ENV HOST 0.0.0.0
 ENV PORT 8080
 
