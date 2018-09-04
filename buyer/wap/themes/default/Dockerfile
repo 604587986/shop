@@ -15,7 +15,6 @@ RUN npm run build
 # 配置环境变量
 ENV NODE_ENV=production
 ENV HOST 0.0.0.0
-ENV PORT 8080
 
 # 容器对外暴露的端口号
 EXPOSE 3001
