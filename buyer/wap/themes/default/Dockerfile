@@ -17,7 +17,7 @@ ENV NODE_ENV=production
 ENV HOST 0.0.0.0
 
 # 容器对外暴露的端口号
-EXPOSE 3000
+EXPOSE 3001
 
 # 容器启动时执行的命令，类似npm run start
 CMD ["npm", "start"]

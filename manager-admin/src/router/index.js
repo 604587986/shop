@@ -217,11 +217,12 @@ const asyncRouters = [
       {
         path: '/shop/settlement-manage',
         component: () => import('@/views/shop/settlement-manage/index'),
-        redirect: '/shop/settlement-manage/settlement-list',
+        redirect: '/shop/settlement-manage/settlement',
         name: 'settlementManage',
         meta: { title: 'settlementManage' },
         children: [
-          { path: 'settlement-list', component: () => import('@/views/shop/settlement-manage/settlementList'), name: 'settlementList', meta: { title: 'settlementList' }},
+          { path: 'settlement', component: () => import('@/views/shop/settlement-manage/settlement'), name: 'settlement', meta: { title: 'settlement' }},
+          { path: 'settlement/:sn', component: () => import('@/views/shop/settlement-manage/settlementList'), name: 'settlementList', hidden: true, meta: { title: 'settlementList' }},
           { path: 'detail/:id', component: () => import('@/views/shop/settlement-manage/settlementDetail'), name: 'settlementDetail', hidden: true, meta: { title: 'settlementDetail' }}
         ]
       }

@@ -1,5 +1,5 @@
 <template>
-  <div class="distribution-container">
+  <div v-if="show_dis" class="distribution-container">
     <div class="goods-share">
       <div class="inner-share-fenxoao" @click="showQRCode"></div>
     </div>
@@ -38,6 +38,8 @@
     components:{ QrcodeVue },
     data() {
       return {
+        // 是否显示分销按钮
+        show_dis: process.env.distribution,
         /** 是否显示二维码弹框 */
         isShowQRCode: false,
 
