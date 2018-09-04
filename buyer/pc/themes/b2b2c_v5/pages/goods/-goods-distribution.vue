@@ -3,7 +3,7 @@
     <div class="goods-share">
       <div class="inner-share-fenxoao" @click="showQRCode"></div>
     </div>
-    <el-dialog title="分享我的链接" :visible.sync="isShowQRCode"  width="23%">
+    <el-dialog title="分享我的链接" :visible.sync="isShowQRCode"  width="30%">
       <qrcode-vue :value="config.value" :size="config.size" level="H" style="text-align: center"></qrcode-vue>
       <el-form :inline="true" class="demo-form-inline">
         <el-form-item label="我的分享链接">
