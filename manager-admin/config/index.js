@@ -9,7 +9,7 @@ const _domain = domain_dev.admin.match(/.*:\/\/(.*):(\d*)/)
 module.exports = {
   /**
    * 分销功能开关
-   * 如果您购买了分销相关功能，请设置为true
+   * 如果您需要开启分销相关功能，请设置为true
    */
   distribution: true,
   dev: {
