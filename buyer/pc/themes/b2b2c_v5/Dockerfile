@@ -10,13 +10,14 @@ WORKDIR /app
 
 # 安装项目依赖包
 RUN npm install
+RUN npm build
 
 # 配置环境变量
 ENV HOST 0.0.0.0
-ENV PORT 8000
+ENV PORT 8080
 
 # 容器对外暴露的端口号
-EXPOSE 8000
+EXPOSE 3000
 
 # 容器启动时执行的命令，类似npm run start
 CMD ["npm", "start"]
