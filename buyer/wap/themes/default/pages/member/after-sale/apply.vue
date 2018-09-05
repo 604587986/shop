@@ -58,15 +58,15 @@
       <div class="item-sales refund-method">
         <div class="refund-box">
           <span class="item-sales-title">退款方式</span>
-          <!--<span v-if="original_way">原路退回</span>-->
-          <select v-model="returnForm.account_type">
+          <span v-if="original_way">原路退回</span>
+          <select v-else v-model="returnForm.account_type">
             <option value="">请选择退款方式</option>
             <option value="ALIPAY">支付宝</option>
             <option value="WEIXINPAY">微信</option>
             <option value="BANKTRANSFER">银行转账</option>
           </select>
         </div>
-        <div v-if="returnForm.account_type && returnForm.account_type !== 'BANKTRANSFER'" class="normal-account">
+        <div v-if="returnForm.account_type && returnForm.account_type !== 'BANKTRANSFER' && !original_way" class="normal-account">
           <span class="item-sales-title">退款账户</span>
           <input v-model="returnForm.return_account" class="account-input" maxlength="30">
         </div>
@@ -191,7 +191,7 @@
       },
       /** 检查参数 */
       handleCheckParams() {
-        const { type, returnForm: params } = this
+        const { type, returnForm: params, original_way } = this
         // 申请原因
         if (!params.refund_reason) {
           this.$message.error('请选择申请原因！')
@@ -203,12 +203,12 @@
           return false
         }
         // 退款方式
-        if (!params.account_type) {
+        if (!original_way && !params.account_type) {
           this.$message.error('请选择退款方式！')
           return false
         }
         // 退款账户
-        if (params.account_type !== 'BANKTRANSFER' && !params.return_account) {
+        if (!original_way && params.account_type !== 'BANKTRANSFER' && !params.return_account) {
           this.$message.error('请填写退款账户！')
           return false
         }

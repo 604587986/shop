@@ -1,10 +1,10 @@
 <template>
   <div id="checkout" style="background-color: #f7f7f7">
     <nav-bar fixed title="填写订单"/>
-    <en-empty v-if="inventories.length === 0">
+    <en-empty v-if="inventories && inventories.length === 0">
       购物清单为空
     </en-empty>
-    <div v-else class="checkout-container">
+    <div v-if="inventories && inventories.length" class="checkout-container">
       <!--收货地址 start-->
       <van-cell-group>
         <van-cell is-link to="/member/shipping-address?from=checkout">
@@ -231,6 +231,7 @@
         await API_Trade.setAddressId(params.address_id)
         this.address = await API_Address.getAddressDetail(params.address_id)
       }
+      this.GET_TotalPrice()
       const inventories = []
       const ids = []
       const invs = await API_Trade.getCarts('checked')
@@ -294,7 +295,7 @@
         })
       },
       /** 获取结算金额 */
-      async GET_TotalPrice() {
+      GET_TotalPrice() {
         API_Trade.getOrderTotal().then(response => this.orderTotal = response)
       }
     }
@@ -305,6 +306,7 @@
   @import "../../assets/styles/color";
   .checkout-container {
     padding-top: 46px;
+    padding-bottom: 50px + 38px + 10px;
     /deep/ {
       .van-cell-group:not(:first-child) {
         margin-top: 10px;

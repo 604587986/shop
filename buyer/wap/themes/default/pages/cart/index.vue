@@ -32,20 +32,20 @@
                 <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-image">
                   <img :src="sku.goods_image" :alt="sku.name">
                 </nuxt-link>
-                <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-content">
-                  <div class="sku-name">{{ sku.name }}</div>
+                <div class="sku-content">
+                  <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">{{ sku.name }}</nuxt-link>
                   <div class="sku-spec">{{ sku | formatterSkuSpec }}</div>
                   <div class="sku-tools">
                     <div class="sku-price">
                       <strong>￥{{ sku.purchase_price | unitPrice }}</strong>
                     </div>
                     <div class="sku-num">
-                      <a class="sku-symbol symbol-less minus unable" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">-</a>
+                      <a class="sku-symbol symbol-less minus unable" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '-')">-</a>
                       <input type="tel" class="sku-num-input" size="4" :value="sku.num" maxlength="4" readonly>
-                      <a class="sku-symbol symbol-add add" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
+                      <a class="sku-symbol symbol-add add" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '+')">+</a>
                     </div>
                   </div>
-                </nuxt-link>
+                </div>
               </div>
               <span slot="right" class="del-sku" @click="handleDelete(sku)">删除</span>
             </van-swipe-cell>

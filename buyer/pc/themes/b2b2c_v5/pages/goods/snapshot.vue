@@ -60,7 +60,7 @@
     head() {
       const { goods, site } = this
       return {
-        title: `${goods.name || '商品详情'}-${site.site_name}`,
+        title: `${goods.goods_name || '商品详情'}-${site.site_name}`,
       }
     },
     components: GoodsComponents,
@@ -76,6 +76,7 @@
     mounted() {
       const { id } = this.$route.query
       APT_Trade.getSnapshot(id).then(response => {
+        response.goods_name = response.name
         this.goods = response
       })
     },

@@ -21,7 +21,7 @@
             订单号：{{ order.sn }}
           </div>
           <div class="info-order-item">
-            <p><span>状<i></i>态：</span><em style="color: #3985ff;">{{ order.ship_status_text }}</em></p>
+            <p><span>状<i></i>态：</span><em style="color: #3985ff;">{{ order.order_status_text }}</em></p>
             <p><span>总<i></i>价：</span><em class="price">￥{{ order.order_amount | unitPrice }}</em></p>
             <div class="order-btns">
               <a v-if="order.order_operate_allowable_vo.allow_cancel" @click="handleCancelOrder(order.sn)" style="background-color: #f19325">取消订单</a>
@@ -44,7 +44,7 @@
               <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn" style="margin-top: 10px">
                 <div style="margin-top: 3px" class="sku-name">{{ sku.name }}</div>
                 <p><span class="sku-spec" style="margin-right: 5px">{{ sku | formatterSkuSpec }}</span><span>{{ sku.num }}件</span></p>
-                <p v-if="order.order_operate_allowable_vo.allow_apply_service && sku.service_status === 'NOT_APPLY'" style="margin-top: 5px">
+                <p v-if="sku.goods_operate_allowable_vo.allow_apply_service" style="margin-top: 5px">
                   <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
                 </p>
               </nuxt-link>
