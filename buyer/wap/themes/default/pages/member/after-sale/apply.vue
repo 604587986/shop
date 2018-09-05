@@ -58,15 +58,15 @@
       <div class="item-sales refund-method">
         <div class="refund-box">
           <span class="item-sales-title">退款方式</span>
-          <!--<span v-if="original_way">原路退回</span>-->
-          <select v-model="returnForm.account_type">
+          <span v-if="original_way">原路退回</span>
+          <select v-else v-model="returnForm.account_type">
             <option value="">请选择退款方式</option>
             <option value="ALIPAY">支付宝</option>
             <option value="WEIXINPAY">微信</option>
             <option value="BANKTRANSFER">银行转账</option>
           </select>
         </div>
-        <div v-if="returnForm.account_type && returnForm.account_type !== 'BANKTRANSFER'" class="normal-account">
+        <div v-if="returnForm.account_type && returnForm.account_type !== 'BANKTRANSFER' && !original_way" class="normal-account">
           <span class="item-sales-title">退款账户</span>
           <input v-model="returnForm.return_account" class="account-input" maxlength="30">
         </div>
