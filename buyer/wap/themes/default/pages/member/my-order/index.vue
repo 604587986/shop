@@ -21,7 +21,7 @@
             订单号：{{ order.sn }}
           </div>
           <div class="info-order-item">
-            <p><span>状<i></i>态：</span><em style="color: #3985ff;">{{ order.ship_status_text }}</em></p>
+            <p><span>状<i></i>态：</span><em style="color: #3985ff;">{{ order.order_status_text }}</em></p>
             <p><span>总<i></i>价：</span><em class="price">￥{{ order.order_amount | unitPrice }}</em></p>
             <div class="order-btns">
               <a v-if="order.order_operate_allowable_vo.allow_cancel" @click="handleCancelOrder(order.sn)" style="background-color: #f19325">取消订单</a>
