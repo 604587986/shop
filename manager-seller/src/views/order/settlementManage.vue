@@ -15,7 +15,7 @@
         </el-table-column>
         <!--本期应收-->
         <el-table-column label="本期应收" width="120">
-          <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.bill_price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--结算状态-->
         <el-table-column prop="status_text" label="结算状态" width="120"/>
