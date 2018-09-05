@@ -10,7 +10,6 @@ WORKDIR /app
 
 # 安装项目依赖包
 RUN npm install
-RUN npm run build
 
 # 配置环境变量
 ENV NODE_ENV=production
@@ -20,4 +19,4 @@ ENV HOST 0.0.0.0
 EXPOSE 3000
 
 # 容器启动时执行的命令，类似npm run start
-CMD ["npm", "start"]
+CMD ["npm", "deploy"]
