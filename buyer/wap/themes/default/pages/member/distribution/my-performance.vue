@@ -9,46 +9,39 @@
           <span>付款总金额:<span class="color-red">{{ settlementTotal.final_money | unitPrice('¥') }}</span></span>
           <span>订单退款金额:<span class="color-red">{{ settlementTotal.return_order_money | unitPrice('¥') }}</span></span>
         </div>
-        <!--头部-->
-        <van-cell>
-          <template>
-            <div class="cell-content">
-              <span v-for="(row, $index) in cellTitles" :key="$index">{{ row.title }}</span>
-            </div>
-          </template>
-        </van-cell>
-        <!--数据-->
-        <van-list v-if="performanceList && performanceList.length">
-          <van-cell  v-for="(item, _index) in performanceList" :key="_index">
-            <template slot>
-              <div class="cell-content">
-                <!--订单编号-->
-                <span >{{ item.sn }}</span>
-                <!--订单金额-->
-                <span v-if="item.orer_price">{{ item.orer_price | unitPrice('¥') }}</span>
-                <!--会员名称-->
-                <span v-if="item.member_name">{{ item.member_name }}</span>
-                <!--会员级别-->
-                <span v-if="item.level">{{ item.level }}</span>
-                <!--会员返利-->
-                <span v-if="item.point">{{ item.point }}</span>
-                <!--返利金额-->
-                <span v-if="item.price" style="color: #f42424;">{{ item.price | unitPrice('¥') }}</span>
-                <!--下单时间-->
-                <span v-if="item.create_time">{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
-                <!--结算时间-->
-                <span v-if="item.end_time">{{ item.end_time | unixToDate('yyyy-MM-dd') }}</span>
-                <!--结算金额-->
-                <span v-if="item.final_money" style="color: #f42424;">{{ item.final_money | unitPrice('¥') }}</span>
-                <!--操作-->
-                <span v-if="active === 2" @click="handleDetails(item)">详情</span>
-              </div>
-            </template>
-          </van-cell>
-        </van-list>
+
+        <van-collapse v-model="activeNames" v-if="performanceList && performanceList.length">
+          <van-collapse-item
+            class="cell-content"
+            :border="false"
+            :title="`订单编号：${item.sn}`"
+            :name="_index"
+            v-for="(item, _index) in performanceList"
+            :key="_index">
+            <van-button slot="value" v-if="active === 2" size="small" type="default" plain @click="handleDetails(item)">详情</van-button>
+            <!--订单金额-->
+            <span v-if="item.orer_price">订单金额：{{ item.orer_price | unitPrice('¥') }}</span>
+            <!--会员名称-->
+            <span v-if="item.member_name">会员名称：{{ item.member_name }}</span>
+            <!--会员级别-->
+            <span v-if="item.level">会员级别：{{ item.level }}</span>
+            <!--会员返利-->
+            <span v-if="item.point">会员返利：{{ item.point }}</span>
+            <!--返利金额-->
+            <span v-if="item.price" style="color: #f42424;">返利金额：{{ item.price | unitPrice('¥') }}</span>
+            <!--下单时间-->
+            <span v-if="item.create_time">下单时间：{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+            <!--结算时间-->
+            <span v-if="item.end_time">结算时间：{{ item.end_time | unixToDate('yyyy-MM-dd') }}</span>
+            <!--结算金额-->
+            <span v-if="item.final_money" style="color: #f42424;">结算金额：{{ item.final_money | unitPrice('¥') }}</span>
+            <!--操作-->
+            <van-button class="btn-custom" v-if="active === 2" size="small" type="default" plain @click="handleDetails(item)">详情</van-button>
+          </van-collapse-item>
+        </van-collapse>
         <van-cell v-else>
           <template>
-            <div class="cell-content">
+            <div style="text-align: center;">
               <span>暂无数据</span>
             </div>
           </template>
@@ -102,8 +95,8 @@
         /** 结算单id */
         billId: '',
 
-        /** 表头信息 */
-        cellTitles: []
+        /** 当前折叠面板名称 */
+        activeNames: []
       }
     },
     mounted() {
@@ -122,34 +115,10 @@
           }
           switch (this.active) {
             case 0: this.GET_RelevantList()
-              this.cellTitles = [
-                { title: '订单编号'},
-                { title: '订单金额'},
-                { title: '会员名称'},
-                { title: '会员级别'},
-                { title: '会员返利'},
-                { title: '返利金额'},
-                { title: '下单时间'}
-              ]
               break
             case 1: this.GET_RelevantRefundList()
-              this.cellTitles = [
-                { title: '订单编号'},
-                { title: '订单金额'},
-                { title: '会员名称'},
-                { title: '会员级别'},
-                { title: '会员返利'},
-                { title: '返利金额'},
-                { title: '下单时间'}
-              ]
               break
             case 2: this.GET_MyhistoryList()
-              this.cellTitles = [
-                { title: '订单编号'},
-                { title: '结算时间'},
-                { title: '结算金额'},
-                { title: '操作'}
-              ]
               break
           }
         })
@@ -160,34 +129,10 @@
         this.active = index
         switch (index) {
           case 0: this.GET_RelevantList()
-            this.cellTitles = [
-              { title: '订单编号'},
-              { title: '订单金额'},
-              { title: '会员名称'},
-              { title: '会员级别'},
-              { title: '会员返利'},
-              { title: '返利金额'},
-              { title: '下单时间'}
-            ]
             break
           case 1: this.GET_RelevantRefundList()
-            this.cellTitles = [
-              { title: '订单编号'},
-              { title: '订单金额'},
-              { title: '会员名称'},
-              { title: '会员级别'},
-              { title: '会员返利'},
-              { title: '返利金额'},
-              { title: '下单时间'}
-            ]
             break
           case 2: this.GET_MyhistoryList()
-            this.cellTitles = [
-              { title: '订单编号'},
-              { title: '结算时间'},
-              { title: '结算金额'},
-              { title: '操作'}
-            ]
             break
         }
       },
@@ -268,31 +213,27 @@
       color: #f42424;
     }
   }
-  /deep/ .van-cell {
-    padding: 10px 0;
-    div.cell-content {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: space-around;
-      align-items: center;
-      span {
-        font-size: 12px;
-        display: inline-block;
-        text-align: center;
-      }
-      span:first-child {
-        width: 30%;
-      }
-      span:nth-child(2) {
-        width: 20%;
-      }
-      span:nth-child(3) {
-        width: 20%;
-      }
-      span:nth-child(3) {
-        width: 20%;
-      }
+  /deep/ .van-collapse-item__wrapper {
+    width: 100%;
+  }
+  /deep/ .van-collapse-item__content {
+    width: 100%;
+  }
+  .cell-content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    span {
+      font-size: 12px;
+      display: inline-block;
+      margin: 10px 0;
+      text-align: left;
+      width: 50%;
+    }
+    .btn-custom {
+      flex-grow: 1;
     }
   }
 </style>
