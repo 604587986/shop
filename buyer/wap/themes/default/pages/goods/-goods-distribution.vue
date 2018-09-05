@@ -1,5 +1,10 @@
 <template>
-  <div class="distribution-container">
+  <van-popup v-model="show" position="bottom" style="height:100%">
+    <van-nav-bar title="推荐商品" @click-right="$emit('close')">
+      <i class="iconfont ea-icon-close" slot="right"/>
+    </van-nav-bar>
+  </van-popup>
+  <!--<div class="distribution-container">
     <div class="goods-share">
       <div class="inner-share-fenxoao" @click="showQRCode"></div>
     </div>
@@ -34,7 +39,7 @@
         </div>
       </div>
     </van-popup>
-  </div>
+  </div>-->
 </template>
 
 <script>
@@ -50,6 +55,7 @@
   import { domain } from '~/ui-domain'
   export default {
     name: 'goods-distribution',
+    props: ['show'],
     components:{ QrcodeVue },
     data() {
       return {
