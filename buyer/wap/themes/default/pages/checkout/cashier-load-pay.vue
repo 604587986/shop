@@ -13,7 +13,7 @@
     mounted() {
       const { trade_type, sn, payment_plugin_id } = this.$route.query
       API_Trade.initiatePay(trade_type, sn, {
-        client_type: 'PC',
+        client_type: 'WAP',
         pay_mode: 'normal',
         payment_plugin_id
       }).then(response => {
