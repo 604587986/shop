@@ -1,24 +1,39 @@
 <template>
-  <div v-if="show_dis" class="distribution-container">
+  <div class="distribution-container">
     <div class="goods-share">
       <div class="inner-share-fenxoao" @click="showQRCode"></div>
     </div>
-    <el-dialog title="分享我的链接" :visible.sync="isShowQRCode"  width="30%">
-      <qrcode-vue :value="config.value" :size="config.size" level="H" style="text-align: center"></qrcode-vue>
-      <el-form :inline="true" class="demo-form-inline">
-        <el-form-item label="我的分享链接">
-          <el-input v-model="config.value" size="mini"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            size="mini"
-            v-clipboard:copy="config.value"
-            v-clipboard:success="onCopy"
-            v-clipboard:error="onError">复制到剪贴板</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+    <van-popup v-model="isShowQRCode" class="pop-details">
+      <div>
+        <qrcode-vue
+          :value="config.value"
+          :size="config.size"
+          level="H"
+          style="text-align: center; padding: 10px 0;">
+        </qrcode-vue>
+        <div style="margin: 20px 0">
+          <van-cell-group>
+            <van-field
+              v-model="config.value"
+              center
+              :border="false"
+              clearable
+              label="我的分享链接"
+              placeholder="我的分享链接">
+            </van-field>
+          </van-cell-group>
+          <div style="text-align: center">
+            <van-button
+              type="warning"
+              size="mini"
+              plain
+              v-clipboard:copy="config.value"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError">复制到剪贴板</van-button>
+          </div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -29,8 +44,8 @@
   import Vue from 'vue'
   import VueClipboard from 'vue-clipboard2'
   import QrcodeVue from 'qrcode.vue'
-  import { Dialog, Form, FormItem, Input, Button } from 'element-ui'
-  Vue.use(VueClipboard).use(Dialog).use(Form).use(FormItem).use(Input).use(Button)
+
+  Vue.use(VueClipboard)
   import * as API_distribution from '@/api/distribution'
   import { domain } from '~/ui-domain'
   export default {
@@ -38,14 +53,12 @@
     components:{ QrcodeVue },
     data() {
       return {
-        // 是否显示分销按钮
-        show_dis: process.env.distribution,
         /** 是否显示二维码弹框 */
         isShowQRCode: false,
 
         config: {
           value: '',
-          size: 200
+          size: 100
         }
       }
     },
@@ -80,11 +93,23 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /** 弹层 */
+  .pop-details {
+    width: 80%;
+    padding: 10px;
+    /deep/ .van-cell, .van-button {
+      font-size: 12px;
+    }
+    /deep/ .van-button--mini {
+      margin-top: 15px;
+      width: 150px;
+    }
+  }
   .goods-share {
     position: fixed;
     top: 0;
-    right: 100px;
-    z-index: 1000;
+    right: 4%;
+    z-index: 500;
     margin: 0;
     padding: 0;
     & > .inner-share-fenxoao {

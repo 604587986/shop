@@ -33,15 +33,15 @@
         </div>
       </div>
       <el-table :data="myHistoryList" style="width: 100%">
-      <el-table-column prop="status" label="结算单编号" align="center"/>
+      <el-table-column prop="sn" label="结算单编号" align="center"/>
       <el-table-column label="结算时间" align="center">
         <template slot-scope="scope">
-          <span class="price">{{ scope.row.apply_money | unixToDate('yyyy-MM-dd HH') }}</span>
+          <span class="price">{{ scope.row.end_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="结算金额" align="center">
         <template slot-scope="scope">
-          <span class="price">{{ scope.row.apply_money | unitPrice('¥') }}</span>
+          <span class="price">{{ scope.row.final_money | unitPrice('¥') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">

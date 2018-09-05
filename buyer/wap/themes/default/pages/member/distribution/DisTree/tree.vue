@@ -12,16 +12,13 @@
         <div class="title">
           <i v-if="HasChild" class="arrow" :class="isOpenOrClose" @click="openExpand(model)"></i>
           <i class="t-icon m-dep"></i>
-          {{model.member_name}}
+          {{model.name}}
         </div>
         <div class="time" @click="handlelookDetails(model)">详情</div>
       </div>
       <div class="bottom-panel flex">
         <div class="left-wrap flex">
-          <span class="label">[等级]</span>|<span class="txt">{{model.grade}}</span>
-        </div>
-        <div class="right-wrap">
-          <span class="txt color-red">{{model.rebate_total | unitPrice('¥') }}</span>
+          <span class="label">[返利]</span>|<span class="txt color-red">{{model.rebate_total | unitPrice('¥') }}</span>
         </div>
       </div>
     </div>
@@ -45,7 +42,7 @@ export default {
   watch: {
     model: {
       handler() {
-        console.log('监听子组件：', this.model)
+        // console.log('监听子组件：', this.model)
       },
       deep: true
     }
@@ -76,7 +73,6 @@ export default {
 <style type="text/scss" lang="scss">
   .color-red{
     color: #f42424;
-    margin-left: 8px;
   }
   .flex {
   display: flex;
@@ -126,13 +122,13 @@ export default {
     }
     .t-icon {
       display: inline-block;
-      width: 14px;
+      width: 18px;
       height: 18px;
       background-size: 100% 100% !important;
       vertical-align: middle;
       margin: -3px 2px 0 0;
       &.m-dep {
-        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAASCAYAAABrXO8xAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MDZEQUMxRDA0Q0U1MTFFODlGQkJCODYxMDNDRkIzQUEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MDZEQUMxRDE0Q0U1MTFFODlGQkJCODYxMDNDRkIzQUEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowNkRBQzFDRTRDRTUxMUU4OUZCQkI4NjEwM0NGQjNBQSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowNkRBQzFDRjRDRTUxMUU4OUZCQkI4NjEwM0NGQjNBQSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pj8y8UsAAAIjSURBVHjanJPPa9RQEMe/85Jss7v9RVO0UtqDVbR2FbEXEQQP3qTgyX9AEG89KagHRfDi3yAIvfai3qRYUbH0sNJakUV6KOyWLii2btNkNz9enpPEddkfVPALj8mbzGdm3ryElFLwtu4qqjVsre6VKVKboj/3GX2Zj5DqG4jK6NSZp9CTh9FhqCPRQOgFM/hhz1B177puahC5LKD4PQmXE+xDGHNsizEiErAhAddPd1PjXCiC3LMZIF7si2QOMhyDkg+bRVMwScsKI8BvgOKtECnYrq0OsENaDFArYQ/1BJNwats19der41+SDWZ5kRGHMxgd0mqzZHTAsSZgXgaMSfbL9cMrCoaUA2TGGbjBOXji6jRPf3NekfGMuiryxwCdc2W4LVVj6BJDv3ja5dTS0QIiZ7C7VUNLbY2raSJujZf4MxMzOS8Fy9V2ML4CQ0e0tAERBDCs4xz4hv3bUJn4RByvLbMdybWDcVIvYIdEZmQY6BdQuyuo6BdBUQFfdqZRP+B2R323q1UV01kdZPpQZoBbb2/j0QoPZsdDsWTj2MJVfK8MhT2uQ4PulbjF13hRvIIgP42Tzie8Kq1D16qYPzuEO+/ODbaug1Ch0J8gkvAvPF8jZ99YfLlamLA8DCCLpdCErOcxa7nQAmrdIwljklR4X6mfT5z8qaqj9117fHPqQc3era9+Lbn3Tmyct6zq3Nr27PuyO/YhYeIf+X/0W4ABAGLgy0VZgovSAAAAAElFTkSuQmCC);
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEa0lEQVRYR8WXbYhUZRTH//9xRGYyw+xDm4YLCRViQWJB9EYipVIEplaIHwLrQzTSuPd5ZnbZvEkv9z53WmFLaEtKiCIy+lCESUKkfojQrKAPkoJURiaWW+7MtrvznHiGOzFuOy/XXeh8unDP+Z/fPed5OZf4n41J8g8NDc0eHh5+SETWArgFwHUkL4jICZIHAexVSn2dRLNjAGPMZhEJSHa1SCAisjuTyfTkcrk/OwHpCCCKou0i4tcFRWQYgPvSYySvBHATgGUAZjsfETkFYL3W+kg7iLYAYRgWSb4YC4+S7Pc872WS0iheKpWusta+BmBd7HtuYmJiaV9f35lWEC0BSqXSCmvtV7HAaWvtfYVC4ftWgkEQbEmlUq/HPgeUUqsuGcAY4xbWnSJiZ82adWtPT8/RdiV1740xLwDodc8kH/Q87+NmcU0rsHPnzq7x8fFf4nK+r7Xe2Ely5+P7fjqbzZ4AsFhEPtRa19oylTUFMMY8CuBdF2StXVMoFPZ1CuD8wjB06yQvImWl1NzJa6au1QqgB0DkHNPp9IJ8Pv97EgBjzBMAhuL4Rfl8/nTSCrgeul6iXC7P9n1/IglAFEWbROTtOGaJUupkUoB/WyAiN2itjycBCMOwn+QOANXu7u45GzZsqCYCKJVKy621tYNERJTWutaOTs0Y47bvCgDfKaVuTrwIRYRRFP3gznsROVetVm/s7e092wlAEAR3pVKpL2LfnFLqlcQALsAY8xSAV+MqHK5UKqt83x9tBTE4ODivUqkcJbkEwPlyubzQ9/3yJQHEt99nAO6OIY6TfKzZjRcEwTKSe0le73oPYKVSql6JZOdA3Tv+osMk3WXj1oMl+QmAIySPAfjLWjuP5D0i8jTJtEsuIlu01m+1a1nby8gJRFF0mbV2D8mH2wmKyFmS65RSh9r5uvcdAQwMDGSq1epma+0AyWwrYRG5AGBPOp0227Zt+6kdRFuAIAjWknxjikHkPIBTbgIB0E1y/qRk5621jxQKhf2tIFoCGGOeA/BsXUBEvgXgttR+rfXPjcJhGC4SkdUkt5Jc2rBetiil3ky8CxqvVBFxg8hWz/NcJS4aRCYL+76fymazT4pISPLy+H2fUqo21Ey2KSsQRdEDIvJR7PxrtVpdUywW3Yrv2MIwvIak01geB7lK7G4LEATBFSRPklwAoALgdqXUNx1nbnB0M8XY2Jg7lLpExG3XxcVi8Y9Grf9UwBgzAOCZuIePd7KXW8E1VlNEXtJa1yalul0EMDg4OGd0dPQ3APNE5KDWunYCTtfCMDxE8g53p2QymYW5XO7vKQGMMfcDqE0+IrJJa/3OdJO7+EmzwWql1KdTAoRhuMON3S6/tXZ+oVBw8/+0bdeuXXNHRkbcj4qreEkp5TWrwHsANorIGa311dPO3CBgjPkRwLUi8oHWen2zChwgudL99Sil6ttnRjiMMV8CuE1EPtda39sMoDZGkfQ9z3On4IxZGIY+ye0A+pVSz08JMGPZEgj9Ax+gBD/Qa+wWAAAAAElFTkSuQmCC);
       }
     }
   }

@@ -36,7 +36,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-table-layout>
-    <el-dialog :title="isEdit ? '编辑分销提成模板' : '添加分销提成模板'" :visible.sync="isShowTplDialog" width="30%">
+    <el-dialog :title="isEdit ? '编辑分销提成模板' : '添加分销提成模板'" :visible.sync="isShowTplDialog" width="38%">
       <el-form :model="tplForm" ref="tplForm" :rules="rules">
         <el-form-item label="是否默认" :label-width="formLabelWidth">
           <el-radio-group v-model="tplForm.is_default">

@@ -23,11 +23,17 @@
       </p>
       <p>
         <span>本期应收：</span>
-        <span>{{ settlementData.price | unitPrice('￥') }} = {{ settlementData.bill_price | unitPrice('￥') }} (订单金额) -
+        <span>{{ settlementData.bill_price | unitPrice('￥') }} = {{ settlementData.price | unitPrice('￥') }} (在线支付) -
           {{ settlementData.commi_price | unitPrice('￥') }} (佣金金额) - {{ settlementData.refund_price | unitPrice('￥') }} (退单金额)
-          + {{ settlementData.refund_commi_price | unitPrice('￥') }} (退还佣金) -
-          {{ settlementData.cod_price | unitPrice('￥') }} (货到付款金额)
-          + {{ settlementData.cod_refund_price | unitPrice('￥') }} (货到付款退款金额)</span>
+          + {{ settlementData.refund_commi_price | unitPrice('￥') }} (退还佣金)</span>
+      </p>
+      <p>
+        <span>货到付款金额：</span>
+        <span> {{ settlementData.cod_price | unitPrice('￥') }} </span>
+      </p>
+      <p>
+        <span>货到付款退款金额：</span>
+        <span> {{ settlementData.cod_refund_price | unitPrice('￥') }} </span>
       </p>
       <p>
         <span>结算状态：</span>
@@ -136,7 +142,7 @@
         billId: '',
 
         /** 账单类型 */
-        bill_type: 'REFUND',
+        bill_type: 'PAYMENT',
 
         /** 结算单数据 */
         settlementData: {},

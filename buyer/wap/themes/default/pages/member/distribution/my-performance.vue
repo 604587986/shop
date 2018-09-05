@@ -5,30 +5,43 @@
       <van-tab v-for="(item, index) in performance" :key="index" :title="item.title">
         <!--结算单信息-->
         <div class="settlement-total-container">
-          <span>本期佣金：<span class="color-red">{{ settlementTotal.push_money | unitPrice('¥') }}</span></span>
-          <span>付款总金额：<span class="color-red">{{ settlementTotal.final_money | unitPrice('¥') }}</span></span>
-          <span>订单退款金额：<span class="color-red">{{ settlementTotal.return_order_money | unitPrice('¥') }}</span></span>
+          <span>本期佣金:<span class="color-red">{{ settlementTotal.push_money | unitPrice('¥') }}</span></span>
+          <span>付款总金额:<span class="color-red">{{ settlementTotal.final_money | unitPrice('¥') }}</span></span>
+          <span>订单退款金额:<span class="color-red">{{ settlementTotal.return_order_money | unitPrice('¥') }}</span></span>
         </div>
         <!--头部-->
         <van-cell>
           <template>
             <div class="cell-content">
-              <span>订单编号</span>
-              <span>结算时间</span>
-              <span>结算金额</span>
-              <span>操作</span>
+              <span v-for="(row, $index) in cellTitles" :key="$index">{{ row.title }}</span>
             </div>
           </template>
         </van-cell>
         <!--数据-->
         <van-list v-if="performanceList && performanceList.length">
-          <van-cell  v-for="item in performanceList" :key="item">
+          <van-cell  v-for="(item, _index) in performanceList" :key="_index">
             <template slot>
               <div class="cell-content">
-                <span>{{ item.sn }}</span>
-                <span style="color: #f42424;">{{ item.apply_money | unitPrice('¥') }}</span>
-                <span>{{ item.status | withdraealsStatus }}</span>
-                <span @click="handleDetails(item)">查看详情</span>
+                <!--订单编号-->
+                <span >{{ item.sn }}</span>
+                <!--订单金额-->
+                <span v-if="item.orer_price">{{ item.orer_price | unitPrice('¥') }}</span>
+                <!--会员名称-->
+                <span v-if="item.member_name">{{ item.member_name }}</span>
+                <!--会员级别-->
+                <span v-if="item.level">{{ item.level }}</span>
+                <!--会员返利-->
+                <span v-if="item.point">{{ item.point }}</span>
+                <!--返利金额-->
+                <span v-if="item.price" style="color: #f42424;">{{ item.price | unitPrice('¥') }}</span>
+                <!--下单时间-->
+                <span v-if="item.create_time">{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+                <!--结算时间-->
+                <span v-if="item.end_time">{{ item.end_time | unixToDate('yyyy-MM-dd') }}</span>
+                <!--结算金额-->
+                <span v-if="item.final_money" style="color: #f42424;">{{ item.final_money | unitPrice('¥') }}</span>
+                <!--操作-->
+                <span v-if="active === 2" @click="handleDetails(item)">详情</span>
               </div>
             </template>
           </van-cell>
@@ -84,7 +97,13 @@
           { title: '与我相关的订单'},
           { title: '与我相关的退货单'},
           { title: '我的历史业绩'}
-        ]
+        ],
+
+        /** 结算单id */
+        billId: '',
+
+        /** 表头信息 */
+        cellTitles: []
       }
     },
     mounted() {
@@ -95,23 +114,80 @@
       GET_SettlementTotal(){
         API_distribution.getSettlementTotal({member_id: this.$route.query.member_id || 0}).then(response => {
           this.settlementTotal = response
+          this.billId = response.total_id
           this.params = {
             ...this.params,
             member_id: response.member_id,
             bill_id: response.total_id
           }
-          this.GET_RelevantList()
+          switch (this.active) {
+            case 0: this.GET_RelevantList()
+              this.cellTitles = [
+                { title: '订单编号'},
+                { title: '订单金额'},
+                { title: '会员名称'},
+                { title: '会员级别'},
+                { title: '会员返利'},
+                { title: '返利金额'},
+                { title: '下单时间'}
+              ]
+              break
+            case 1: this.GET_RelevantRefundList()
+              this.cellTitles = [
+                { title: '订单编号'},
+                { title: '订单金额'},
+                { title: '会员名称'},
+                { title: '会员级别'},
+                { title: '会员返利'},
+                { title: '返利金额'},
+                { title: '下单时间'}
+              ]
+              break
+            case 2: this.GET_MyhistoryList()
+              this.cellTitles = [
+                { title: '订单编号'},
+                { title: '结算时间'},
+                { title: '结算金额'},
+                { title: '操作'}
+              ]
+              break
+          }
         })
       },
 
       /** 标签改变时触发 */
       tabChange(index) {
+        this.active = index
         switch (index) {
           case 0: this.GET_RelevantList()
+            this.cellTitles = [
+              { title: '订单编号'},
+              { title: '订单金额'},
+              { title: '会员名称'},
+              { title: '会员级别'},
+              { title: '会员返利'},
+              { title: '返利金额'},
+              { title: '下单时间'}
+            ]
             break
           case 1: this.GET_RelevantRefundList()
+            this.cellTitles = [
+              { title: '订单编号'},
+              { title: '订单金额'},
+              { title: '会员名称'},
+              { title: '会员级别'},
+              { title: '会员返利'},
+              { title: '返利金额'},
+              { title: '下单时间'}
+            ]
             break
           case 2: this.GET_MyhistoryList()
+            this.cellTitles = [
+              { title: '订单编号'},
+              { title: '结算时间'},
+              { title: '结算金额'},
+              { title: '操作'}
+            ]
             break
         }
       },
@@ -167,31 +243,56 @@
 
       /** 查看详情 */
       handleDetails(item) {
-
+        this.active = 0
+        this.params = {
+          ...this.params,
+          member_id: item.member_id,
+          bill_id: this.billId
+        }
+        this.GET_RelevantList()
       }
     }
   }
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  .cell-content {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-    align-items: center;
-  }
   .settlement-total-container {
     padding: 15px;
-    display: flex;
     width: 100%;
+    display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-around;
     align-items: center;
     .color-red {
       color: #f42424;
+    }
+  }
+  /deep/ .van-cell {
+    padding: 10px 0;
+    div.cell-content {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-around;
+      align-items: center;
+      span {
+        font-size: 12px;
+        display: inline-block;
+        text-align: center;
+      }
+      span:first-child {
+        width: 30%;
+      }
+      span:nth-child(2) {
+        width: 20%;
+      }
+      span:nth-child(3) {
+        width: 20%;
+      }
+      span:nth-child(3) {
+        width: 20%;
+      }
     }
   }
 </style>

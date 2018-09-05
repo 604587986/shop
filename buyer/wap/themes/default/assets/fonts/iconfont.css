@@ -1,0 +1,29 @@
+
+@font-face {
+  font-family: 'iconfont';
+  src:url('./iconfont.ttf') format('truetype');
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:18px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin-right: 8px;
+}
+
+/** 提现记录 */
+.icon-tixianjilu:before { content: "\e652"; }
+
+/** 提现申请 */
+.icon-29:before { content: "\e61a"; }
+
+/** 业绩 */
+.icon-yeji:before { content: "\e661"; }
+
+/** 推荐人 */
+.icon-tuijianren:before { content: "\e636"; }
+
+/** 提现设置 */
+.icon-tixian:before { content: "\e610"; }

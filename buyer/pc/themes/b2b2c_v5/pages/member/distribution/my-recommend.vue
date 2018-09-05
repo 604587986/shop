@@ -113,16 +113,8 @@
             dataIndex: 'useravatar'
           },
           {
-            text: '分组名称',
-            dataIndex: 'name'
-          },
-          {
             text: '会员',
-            dataIndex: 'member_name'
-          },
-          {
-            text: 'TA的等级',
-            dataIndex: 'grade'
+            dataIndex: 'name'
           },
           {
             text: 'TA的推荐人数',
