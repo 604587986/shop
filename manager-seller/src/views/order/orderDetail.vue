@@ -60,22 +60,24 @@
             <span class="item-name">送货时间：</span>
             <span class="item-value">{{ orderDetail.receive_time }}</span>
           </div>
-          <div class="order-item">
-            <span class="item-name">发票类型：</span>
-            <span class="item-value">{{ orderDetail.receipt_history.receipt_type }}</span>
-          </div>
-          <div class="order-item">
-            <span class="item-name">发票抬头：</span>
-            <span class="item-value">{{ orderDetail.receipt_history.receipt_title }}</span>
-          </div>
-          <div v-if="orderDetail.receipt_history.tax_no" class="order-item">
-            <span class="item-name">税号：</span>
-            <span class="item-value">{{ orderDetail.receipt_history.tax_no }}</span>
-          </div>
-          <div class="order-item">
-            <span class="item-name">发票内容：</span>
-            <span class="item-value">{{ orderDetail.receipt_history.receipt_content }}</span>
-          </div>
+          <template v-if="orderDetail.receipt_history">
+            <div class="order-item">
+              <span class="item-name">发票类型：</span>
+              <span class="item-value">{{ orderDetail.receipt_history.receipt_type }}</span>
+            </div>
+            <div class="order-item">
+              <span class="item-name">发票抬头：</span>
+              <span class="item-value">{{ orderDetail.receipt_history.receipt_title }}</span>
+            </div>
+            <div v-if="orderDetail.receipt_history.tax_no" class="order-item">
+              <span class="item-name">税号：</span>
+              <span class="item-value">{{ orderDetail.receipt_history.tax_no }}</span>
+            </div>
+            <div class="order-item">
+              <span class="item-name">发票内容：</span>
+              <span class="item-value">{{ orderDetail.receipt_history.receipt_content }}</span>
+            </div>
+          </template>
         </el-collapse-item>
       </el-collapse>
       <!--订单状态 / 物流信息-->
