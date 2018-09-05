@@ -74,7 +74,7 @@
         this.payment_plugin_id = payment.plugin_id
         const trade_type = this.trade_sn ? 'trade' : 'order'
         const sn = this.trade_sn || this.order_sn
-        const client_type = 'PC'
+        const client_type = 'WAP'
         const payment_plugin_id = payment.plugin_id
         window.location.href = `./cashier-load-pay?trade_type=${trade_type}&sn=${sn}&payment_plugin_id=${payment_plugin_id}`
       }
