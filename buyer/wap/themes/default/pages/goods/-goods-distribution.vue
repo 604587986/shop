@@ -3,43 +3,36 @@
     <van-nav-bar title="推荐商品" @click-right="$emit('close')">
       <i class="iconfont ea-icon-close" slot="right"/>
     </van-nav-bar>
-  </van-popup>
-  <!--<div class="distribution-container">
-    <div class="goods-share">
-      <div class="inner-share-fenxoao" @click="showQRCode"></div>
-    </div>
-    <van-popup v-model="isShowQRCode" class="pop-details">
-      <div>
-        <qrcode-vue
-          :value="config.value"
-          :size="config.size"
-          level="H"
-          style="text-align: center; padding: 10px 0;">
-        </qrcode-vue>
-        <div style="margin: 20px 0">
-          <van-cell-group>
-            <van-field
-              v-model="config.value"
-              center
-              :border="false"
-              clearable
-              label="我的分享链接"
-              placeholder="我的分享链接">
-            </van-field>
-          </van-cell-group>
-          <div style="text-align: center">
-            <van-button
-              type="warning"
-              size="mini"
-              plain
-              v-clipboard:copy="config.value"
-              v-clipboard:success="onCopy"
-              v-clipboard:error="onError">复制到剪贴板</van-button>
-          </div>
+    <div class="distribution-container">
+      <qrcode-vue
+        :value="config.value"
+        :size="config.size"
+        level="H"
+        style="text-align: center; padding: 10px 0;">
+      </qrcode-vue>
+      <div style="margin: 20px 0">
+        <van-cell-group>
+          <van-field
+            v-model="config.value"
+            center
+            :border="false"
+            clearable
+            label="我的分享链接"
+            placeholder="我的分享链接">
+          </van-field>
+        </van-cell-group>
+        <div style="text-align: center;margin-top: 15px;">
+          <van-button
+            type="warning"
+            size="normal"
+            plain
+            v-clipboard:copy="config.value"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError">复制到剪贴板</van-button>
         </div>
       </div>
-    </van-popup>
-  </div>-->
+    </div>
+  </van-popup>
 </template>
 
 <script>
@@ -64,13 +57,17 @@
 
         config: {
           value: '',
-          size: 100
+          size: 200
         }
       }
+    },
+    watch: {
+      show: 'showQRCode'
     },
     methods: {
       /** 显示并生成二维码 */
       showQRCode() {
+        if (!this.show) return
         /** 登录校验 */
         const { user } = this.$store.getters
         // 如果没有登录，跳转到登录页
@@ -99,6 +96,9 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  div.distribution-container {
+    padding-top: 125px;
+  }
   /** 弹层 */
   .pop-details {
     width: 80%;
@@ -107,7 +107,6 @@
       font-size: 12px;
     }
     /deep/ .van-button--mini {
-      margin-top: 15px;
       width: 150px;
     }
   }
