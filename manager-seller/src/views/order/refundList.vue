@@ -111,9 +111,6 @@
               <span>关联订单: </span><span>{{ refundInfo.order_sn }}</span>
             </div>
             <div class="order-info-item">
-              <span>商品单价: </span><span>{{ refundInfo.price | unitPrice('¥') }}</span>
-            </div>
-            <div class="order-info-item">
               <span>申请退款金额: </span><span>{{ refundInfo.refund_price | unitPrice('¥')}}</span>
             </div>
             <div class="order-info-item">
@@ -329,7 +326,6 @@
           if (Array.isArray(response.refund_goods)) {
             this.refundGoodsData = response.refund_goods
           }
-          this.refundInfo.price = response.refund_goods[0].price
         })
       },
 
