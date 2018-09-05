@@ -231,6 +231,7 @@
         await API_Trade.setAddressId(params.address_id)
         this.address = await API_Address.getAddressDetail(params.address_id)
       }
+      this.GET_TotalPrice()
       const inventories = []
       const ids = []
       const invs = await API_Trade.getCarts('checked')
@@ -294,7 +295,7 @@
         })
       },
       /** 获取结算金额 */
-      async GET_TotalPrice() {
+      GET_TotalPrice() {
         API_Trade.getOrderTotal().then(response => this.orderTotal = response)
       }
     }

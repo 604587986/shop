@@ -407,6 +407,7 @@ export function getShopsCoupons(seller_ids) {
   return request({
     url: `members/coupon/${seller_ids}`,
     method: Method.GET,
+    loading: false,
     needToken: true
   })
 }
