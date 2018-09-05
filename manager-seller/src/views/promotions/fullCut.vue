@@ -403,7 +403,7 @@
           full_money: '',
 
           /** 是否打折 */
-          is_discount: 1,
+          is_discount: 0,
 
           /** 打几折 */
           discount_value: 0,
@@ -642,8 +642,8 @@
             this.is_free_ship = false
             this.is_send_bonus = false
             this.is_send_gift = false
-            this.changeDiscount(this.is_discount)
-            this.changeReduceCash(this.is_full_minus)
+            this.discountTxt = '打折(与减现金活动只能选择一种)'
+            this.reduceCashTxt = '减现金(与打折活动只能选择一种)'
             this.changeIntegral(this.isIntegral)
             this.isChangeCoupon(this.is_send_bonus)
             this.isChangeGift(this.is_send_gift)
@@ -838,8 +838,9 @@
         this.is_free_ship = false
         this.is_send_bonus = false
         this.is_send_gift = false
-        this.changeDiscount(this.is_discount)
-        this.changeReduceCash(this.is_full_minus)
+
+        this.discountTxt = '打折(与减现金活动只能选择一种)'
+        this.reduceCashTxt = '减现金(与打折活动只能选择一种)'
         this.changeIntegral(this.isIntegral)
         this.isChangeCoupon(this.is_send_bonus)
         this.isChangeGift(this.is_send_gift)
@@ -849,7 +850,9 @@
       changeDiscount(val) {
         this.is_discount = val
         this.activityForm.is_discount = val ? 1 : 0
-        this.activityForm.is_full_minus = val ? 0 : 1
+        if (this.is_full_minus) {
+          this.activityForm.is_full_minus = val ? 0 : 1
+        }
         if (val) {
           this.is_full_minus = !this.is_discount
           this.reduceCashTxt = this.is_full_minus ? '减' : '减现金(与打折活动只能选择一种)'
@@ -861,7 +864,9 @@
       changeReduceCash(val) {
         this.is_full_minus = val
         this.activityForm.is_full_minus = val ? 1 : 0
-        this.activityForm.is_discount = val ? 0 : 1
+        if (this.is_discount) {
+          this.activityForm.is_discount = val ? 0 : 1
+        }
         if (val) {
           this.is_discount = !this.is_full_minus
           this.discountTxt = this.is_discount ? '打' : '打折(与减现金活动只能选择一种)'
@@ -945,11 +950,6 @@
       handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            /** 是否选择打折或满减 */
-            if (!this.is_discount && !this.is_full_minus) {
-              this.$message.error('请选择打折或满减中的一种')
-              return
-            }
             /** 处理表单数据 */
             this.activityForm.start_time = this.activityForm.take_effect_time[0] / 1000
             this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000
