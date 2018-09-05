@@ -306,6 +306,7 @@
   @import "../../assets/styles/color";
   .checkout-container {
     padding-top: 46px;
+    padding-bottom: 50px + 38px + 10px;
     /deep/ {
       .van-cell-group:not(:first-child) {
         margin-top: 10px;
