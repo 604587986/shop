@@ -49,6 +49,10 @@
     <div v-if="goods.is_auth === 0" class="no-auth">
       此商品正在审核中，先看看其它商品吧。
     </div>
+    <div v-else-if="is_snapshot" class="snapshot-box">
+      当前页面内容为订单快照，展示的是创建时的商品信息，当发生交易争议时，此页面作为判断依据。
+      <nuxt-link :to="'/goods/' + goods.goods_id">点此查看最新商品详情</nuxt-link>
+    </div>
     <template v-else>
       <div class="pro-list buy-num">
         <div class="pro-title">购买数量</div>
@@ -95,6 +99,7 @@
     props: ['goods', 'promotions'],
     components: { GoodsCoupons, GoodsPromotions, GoodsGroupbuySeckill, GoodsExchange },
     data() {
+      const is_snapshot = this.$route.name === 'goods-snapshot'
       return {
         goodsInfo: JSON.parse(JSON.stringify(this.goods)),
         // 购买数量
@@ -110,7 +115,9 @@
         // 没有选中sku，初始化为false
         unselectedSku: false,
         // 有规格的商品价格区间
-        priceRange: ''
+        priceRange: '',
+        // 是否是快照页
+        is_snapshot
       }
     },
     mounted() {
@@ -496,5 +503,14 @@
     color: #666;
     padding: 10px;
     box-sizing: border-box;
+  }
+  .snapshot-box {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #eaeaea;
+    a {
+      color: $color-href;
+      &:hover { color: $color-main }
+    }
   }
 </style>
