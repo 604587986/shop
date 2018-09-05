@@ -5,6 +5,7 @@
         <van-tab title="商品"/>
         <van-tab title="评价"/>
         <van-tab title="详情"/>
+        <van-tab v-if="show_dis" title="推荐"/>
       </van-tabs>
       <header-shortcut slot="right"/>
     </van-nav-bar>
@@ -78,7 +79,7 @@
       <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
       <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
     </van-goods-action>
-    <goods-distribution v-if="show_dis"/>
+    <goods-distribution v-if="show_dis" :show="showDisPopup" @close="showDisPopup = false"/>
   </div>
 </template>
 
@@ -151,7 +152,9 @@
         // 锁住滚动出发事件
         lockScroll: false,
         // 促销信息
-        promotions: ''
+        promotions: '',
+        // 展示分销弹框
+        showDisPopup: false
       }
     },
     mounted() {
@@ -279,6 +282,7 @@
         if (index === 0) this.MixinScrollToTop(0)
         if (index === 1) this.MixinScrollToTop(cm)
         if (index === 2) this.MixinScrollToTop(pa)
+        if (index === 3) this.showDisPopup = true
       },
       /** 计算滚动offset */
       handleCountOffset() {
