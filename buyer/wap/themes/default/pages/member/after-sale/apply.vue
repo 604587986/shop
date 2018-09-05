@@ -191,7 +191,7 @@
       },
       /** 检查参数 */
       handleCheckParams() {
-        const { type, returnForm: params } = this
+        const { type, returnForm: params, original_way } = this
         // 申请原因
         if (!params.refund_reason) {
           this.$message.error('请选择申请原因！')
@@ -203,12 +203,12 @@
           return false
         }
         // 退款方式
-        if (!params.account_type) {
+        if (!original_way && !params.account_type) {
           this.$message.error('请选择退款方式！')
           return false
         }
         // 退款账户
-        if (params.account_type !== 'BANKTRANSFER' && !params.return_account) {
+        if (!original_way && params.account_type !== 'BANKTRANSFER' && !params.return_account) {
           this.$message.error('请填写退款账户！')
           return false
         }
