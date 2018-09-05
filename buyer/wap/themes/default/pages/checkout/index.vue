@@ -1,10 +1,10 @@
 <template>
   <div id="checkout" style="background-color: #f7f7f7">
     <nav-bar fixed title="填写订单"/>
-    <en-empty v-if="inventories.length === 0">
+    <en-empty v-if="inventories && inventories.length === 0">
       购物清单为空
     </en-empty>
-    <div v-else class="checkout-container">
+    <div v-if="inventories && inventories.length" class="checkout-container">
       <!--收货地址 start-->
       <van-cell-group>
         <van-cell is-link to="/member/shipping-address?from=checkout">
