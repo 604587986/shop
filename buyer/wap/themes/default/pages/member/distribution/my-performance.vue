@@ -18,25 +18,40 @@
             :name="_index"
             v-for="(item, _index) in performanceList"
             :key="_index">
-            <van-button slot="value" v-if="active === 2" size="small" type="default" plain @click="handleDetails(item)">详情</van-button>
             <!--订单金额-->
-            <span v-if="item.orer_price">订单金额：{{ item.orer_price | unitPrice('¥') }}</span>
+            <span v-if="item.order_price">订单金额：
+              <span style="color: #f42424;">{{ item.order_price | unitPrice('¥') }}</span>
+            </span>
             <!--会员名称-->
-            <span v-if="item.member_name">会员名称：{{ item.member_name }}</span>
+            <span v-if="item.member_name">会员名称：<span>{{ item.member_name }}</span></span>
             <!--会员级别-->
-            <span v-if="item.level">会员级别：{{ item.level }}</span>
+            <span v-if="item.level">会员级别：<span>{{ item.level }}</span></span>
             <!--会员返利-->
-            <span v-if="item.point">会员返利：{{ item.point }}</span>
-            <!--返利金额-->
-            <span v-if="item.price" style="color: #f42424;">返利金额：{{ item.price | unitPrice('¥') }}</span>
+            <span v-if="item.point">会员返利：<span> {{ item.point }}</span></span>
             <!--下单时间-->
-            <span v-if="item.create_time">下单时间：{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+            <span v-if="item.create_time">下单时间：
+              <span>{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+            </span>
+            <!--返利金额-->
+            <span v-if="item.price" >返利金额：
+              <span style="color: #f42424;">{{ item.price | unitPrice('¥') }}</span>
+            </span>
             <!--结算时间-->
-            <span v-if="item.end_time">结算时间：{{ item.end_time | unixToDate('yyyy-MM-dd') }}</span>
+            <span v-if="item.end_time">结算时间：
+              <span>{{ item.end_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+            </span>
             <!--结算金额-->
-            <span v-if="item.final_money" style="color: #f42424;">结算金额：{{ item.final_money | unitPrice('¥') }}</span>
+            <span v-if="item.final_money">结算金额：
+              <span style="color: #f42424;">{{ item.final_money | unitPrice('¥') }}</span>
+            </span>
             <!--操作-->
-            <van-button class="btn-custom" v-if="active === 2" size="small" type="default" plain @click="handleDetails(item)">详情</van-button>
+            <van-button
+              class="btn-custom"
+              v-if="active === 2"
+              size="small"
+              type="default"
+              plain
+              @click="handleDetails(item)">详情</van-button>
           </van-collapse-item>
         </van-collapse>
         <van-cell v-else>
@@ -225,12 +240,14 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    span {
-      font-size: 12px;
-      display: inline-block;
-      margin: 10px 0;
-      text-align: left;
-      width: 50%;
+    .van-collapse-item__content {
+      & > span {
+        font-size: 12px;
+        display: inline-block;
+        margin: 10px 0;
+        text-align: left;
+        width: 50%;
+      }
     }
     .btn-custom {
       flex-grow: 1;

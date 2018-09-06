@@ -2,40 +2,36 @@
   <div id="withdrawals-history">
     <nav-bar title="提现记录"/>
     <div class="withdrawals-container">
-      <van-cell>
-        <template>
-          <div class="cell-content">
-            <span>提现时间</span>
-            <span>提现金额</span>
-            <span>提现状态</span>
-            <span>操作</span>
+      <van-collapse v-model="activeNames" v-if="withdrawalsList && withdrawalsList.length">
+        <van-collapse-item
+          :border="false"
+          :name="_index"
+          v-for="(item, _index) in withdrawalsList"
+          :key="_index">
+          <!--提现时间-->
+          <span slot="title">提现时间：{{ item.apply_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+          <div class="colla-content">
+            <!--提现状态-->
+            <span>提现状态:{{ item.status | withdraealsStatus }}</span>
+            <!--提现金额-->
+            <span>提现金额:<i style="color: #f42424;">{{ item.apply_money | unitPrice('¥') }}</i></span>
           </div>
-        </template>
-      </van-cell>
-      <van-list v-if="withdrawalsList && withdrawalsList.length">
-        <van-cell  v-for="item in withdrawalsList" :key="item">
-          <template slot>
-            <div class="cell-content">
-              <span>{{ item.apply_time | unixToDate }}</span>
-              <span style="color: #f42424;">{{ item.apply_money | unitPrice('¥') }}</span>
-              <span>{{ item.status | withdraealsStatus }}</span>
-              <span @click="lookDetails(item)">查看详情</span>
-            </div>
-          </template>
-        </van-cell>
-      </van-list>
+          <div @click="lookDetails(item)" style="color: #ff853f;">查看详情</div>
+        </van-collapse-item>
+      </van-collapse>
       <van-cell v-else>
         <template>
-          <div class="cell-content">
+          <div style="text-align: center;">
             <span>暂无数据</span>
           </div>
         </template>
       </van-cell>
     </div>
-    <van-popup v-model="isShowDialog" class="pop-details">
-      <i @click="closeDialog"> &times; </i>
-      <div>
-        <p>提现详情</p>
+    <van-popup v-model="isShowDialog"  position="bottom" style="height:100%">
+      <van-nav-bar title="提现详情" @click-right="isShowDialog = false">
+        <i class="iconfont ea-icon-close" slot="right"/>
+      </van-nav-bar>
+      <div class="pop-details">
         <ul>
           <li><span>提现金额</span>: <span style="color: #f42424;">{{ currentRow.apply_money | unitPrice('¥') }}</span></li>
           <li><span>当前状态</span>: <span>{{ currentRow.status | withdraealsStatus }}</span></li>
@@ -67,6 +63,9 @@
           page_size: 10,
           data_total: 0
         },
+
+        /** 折叠面板循环索引 */
+        activeNames: [],
 
         /** 提现记录列表 */
         withdrawalsList: null,
@@ -113,11 +112,6 @@
       lookDetails(item) {
         this.isShowDialog = true
         this.currentRow = item
-      },
-
-      /** 关闭弹框 */
-      closeDialog() {
-        this.isShowDialog = false
       }
     }
   }
@@ -127,40 +121,39 @@
   .withdrawals-container {
     padding-top: 46px;
   }
-  .cell-content {
-    display: flex;
+  /deep/ .van-collapse-item__wrapper {
     width: 100%;
-    flex-direction: row;
+  }
+  /deep/ .van-collapse-item__content {
+    display: flex;
     flex-wrap: nowrap;
-    justify-content: space-around;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+  }
+  .colla-content {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    span {
+      font-size: 12px;
+      display: inline-block;
+      margin: 5px 0;
+      text-align: left;
+    }
   }
   /** 弹层 */
   .pop-details {
-    width: 80%;
-    padding: 10px;
-    position: relative;
-    & > i {
-      position: absolute;
-      top: 25px;
-      right: 15px;
-      z-index: 2000;
-      display: inline-block;
-    }
-    p {
-      margin: 10px 15px;
-      text-align: center;
-      line-height: 24px;
-      font-size: 16px;
-      color: #303133
-    }
+    padding-top: 46px;
     ul {
       li {
         list-style:none;
-        margin: 8px 0;
-        padding: 0 8px;
+        margin: 20px 0;
+        padding: 0 20px;
         span {
-          font-size: 14.5px;
+          font-size: 14px;
         }
       }
     }

@@ -26,9 +26,12 @@ async function routerBeforeEach(to, from, next) {
             router.addRoutes(store.getters.addRouters)
             next({ ...to, replace: true })
           }).catch(() => {
-            store.dispatch('fedLogoutAction').then(() => {
-              Message.error('验证失败,请重新登录')
-              next({ path: `/login?forward=${location.pathname}` })
+            store.dispatch('fedLogoutAction')
+            MessageBox.alert('验证失败，请重新登录！', '登录出错', {
+              type: 'error',
+              callback: () => {
+                next({ path: `/login?forward=${location.pathname}` })
+              }
             })
           })
         } else {
@@ -38,6 +41,7 @@ async function routerBeforeEach(to, from, next) {
         MessageBox.alert('您的店铺已被关闭，请联系管理员！', '权限错误', {
           type: 'error',
           callback: () => {
+            store.dispatch('fedLogoutAction')
             next({ path: `/login?forward=${location.pathname}` })
           }
         })
