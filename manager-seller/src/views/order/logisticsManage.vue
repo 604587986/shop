@@ -138,14 +138,14 @@
           </el-form-item>
           <el-form-item prop="area">
             <el-button type="text" plain @click="chooseArea">指定可配送区域和运费</el-button>
-            <en-area-selector-dialog
-              :api="areaApi"
-              :showDialog="areaDialog"
-              :defaultData="defaultArea"
-              :filterData="filterData"
-              @confirmFunc="confirmFunc"
-              @hideDialogFunc="hideDialogFunc"
-            ></en-area-selector-dialog>
+            <!--<en-area-selector-dialog-->
+              <!--:api="areaApi"-->
+              <!--:showDialog="areaDialog"-->
+              <!--:defaultData="defaultArea"-->
+              <!--:filterData="filterData"-->
+              <!--@confirmFunc="confirmFunc"-->
+              <!--@hideDialogFunc="hideDialogFunc"-->
+            <!--&gt;</en-area-selector-dialog>-->
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveMould('mouldForm')">保存模板</el-button>
@@ -185,6 +185,15 @@
         </en-table-layout>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog title="选择配送区域" align="center" :visible.sync="areaDialog" width="30%">
+      <en-transfer-tree
+        :title="title"
+        :from_data="fromData"
+        :to_data="toData"
+        filter
+        height="400px"
+      ></en-transfer-tree>
+    </el-dialog>
   </div>
 </template>
 
@@ -195,11 +204,13 @@
   import { api } from '~/ui-domain'
   import { cloneObj } from '@/utils/index'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
+  import { TransferTree } from '@/components'
 
   export default {
     name: 'logisticsManage',
     components: {
-      [AreaSelectorDialog.name]: AreaSelectorDialog
+      [AreaSelectorDialog.name]: AreaSelectorDialog,
+      [TransferTree.name]: TransferTree
     },
     data() {
       return {
@@ -263,7 +274,14 @@
           type: [
             { required: true, message: '请选择模板类型', trigger: 'change' }
           ]
-        }
+        },
+
+        /** 树形地区选择器 */
+        fromData: [],
+
+        toData: [],
+
+        title: ['可选省、市、县', '已选省、市、县']
       }
     },
     filters: {
@@ -280,6 +298,21 @@
       getAreaList() {
         API_express.getAreaList().then(response => {
           this.areaData = response
+          // 为每一项设置选中属性 isSelected Boolean值
+          let stack = []
+          for (var i = 0, len = this.areaData.length; i < len; i++) {
+            stack.push(this.areaData[i])
+          }
+          let item
+          while (stack.length) {
+            item = stack.shift()
+            // 如果该节点有子节点，继续添加进入栈顶
+            this.$set(item, 'isSelected', false)
+            if (item.children && item.children.length) {
+              stack = item.children.concat(stack)
+            }
+          }
+          this.fromData = this.areaData
         })
       },
 
