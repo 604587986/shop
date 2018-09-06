@@ -41,6 +41,7 @@ export const mutations = {
     const domain = document.domain.split('.').slice(1).join('.')
     Storage.removeItem('user', { domain })
     Storage.removeItem('uid', { domain })
+    Storage.removeItem('uuid_connect', { domain })
   },
   /**
    * 设置访问令牌
