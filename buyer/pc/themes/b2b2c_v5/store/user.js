@@ -111,7 +111,8 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        Storage.setItem('uid', uid)
+        const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+        Storage.setItem('uid', uid, { expires })
         API_Members.getUserInfo().then(response => {
           response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
@@ -170,7 +171,8 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        Storage.setItem('uid', uid)
+        const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+        Storage.setItem('uid', uid, { expires })
         resolve(res)
       })
     })

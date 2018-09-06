@@ -73,7 +73,7 @@
       } else {
         const _uuid = uuidv1()
         this.uuid = _uuid
-        Storage.setItem('admin_uuid', _uuid)
+        Storage.setItem('admin_uuid', _uuid, { expires: 30 })
       }
       this.changeValidcode()
       this.loadParticles()

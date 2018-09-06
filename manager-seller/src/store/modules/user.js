@@ -21,8 +21,9 @@ export const mutations = {
    */
   SET_USER: (state, user) => {
     state.user = user
-    Storage.setItem('seller_user', JSON.stringify(user))
-    Storage.setItem('seller_uid', user.uid)
+    const { expires } = user
+    Storage.setItem('seller_user', JSON.stringify(user), { expires })
+    Storage.setItem('seller_uid', user.uid, { expires })
   },
   /**
    * 设置访问令牌
@@ -78,7 +79,7 @@ export const mutations = {
    */
   SET_SHOP_INFO: (state, shopInfo) => {
     state.shop = shopInfo
-    Storage.setItem('seller_shop', JSON.stringify(shopInfo))
+    Storage.setItem('seller_shop', JSON.stringify(shopInfo), { expires: 30 })
   },
   /**
    * 移除店铺信息
@@ -103,7 +104,8 @@ export const actions = {
     return new Promise((resolve, reject) => {
       API_Login.login(params).then(response => {
         const { access_token, refresh_token, ...user } = response
-        commit('SET_USER', { ...user })
+        const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+        commit('SET_USER', { ...user, expires })
         commit('SET_ACCESS_TOKEN', access_token)
         commit('SET_REFRESH_TOKEN', refresh_token)
         resolve()
