@@ -54,6 +54,7 @@ async function routerBeforeEach(to, from, next) {
           }
         })
       } else {
+        store.dispatch('fedLogoutAction')
         MessageBox.alert('获取店铺状态出错，请稍后再试！', '出现错误', {
           type: 'error',
           callback: () => {
