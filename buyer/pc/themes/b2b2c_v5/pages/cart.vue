@@ -217,7 +217,7 @@
           return false
         }
         const params = {
-          seller_id: 1,
+          seller_id,
           sku_id: sku.sku_id,
           activity_id,
           promotion_type
