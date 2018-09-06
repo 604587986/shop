@@ -16,10 +16,13 @@
           <span>申请原因：</span><span>{{ detail.refund_reason || '无' }}</span>
         </div>
         <div class="order-item">
-          <span>详细描述：</span><span>{{ detail.finance_remark || '无' }}</span>
+          <span>详细描述：</span><span>{{ detail.customer_remark || '无' }}</span>
         </div>
         <div class="order-item">
-          <span>退款方式：</span><span>{{ detail.account_type_text || '无' }}</span>
+          <span>商家回复：</span><span>{{ detail.seller_remark || '无' }}</span>
+        </div>
+        <div class="order-item">
+          <span>退款方式：</span><span>{{ detail.refund_way === 'ORIGINAL' ? '原路退回' : (detail.account_type_text || '无') }}</span>
         </div>
         <div class="order-item">
           <span>退款金额：</span><span>{{ detail.refund_price | unitPrice }}</span>
