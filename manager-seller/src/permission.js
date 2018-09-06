@@ -26,41 +26,19 @@ async function routerBeforeEach(to, from, next) {
             router.addRoutes(store.getters.addRouters)
             next({ ...to, replace: true })
           }).catch(() => {
-            store.dispatch('fedLogoutAction')
-            MessageBox.alert('验证失败，请重新登录！', '登录出错', {
-              type: 'error',
-              callback: () => {
-                location.replace(`/login?forward=${location.pathname}`)
-              }
-            })
+            errorMsg('验证失败，请重新登录！', '登录出错')
           })
         } else {
           next()
         }
       } else if (status === 'CLOSED') {
-        store.dispatch('fedLogoutAction')
-        MessageBox.alert('您的店铺已被关闭，请联系管理员！', '权限错误', {
-          type: 'error',
-          callback: () => {
-            location.replace(`/login?forward=${location.pathname}`)
-          }
-        })
+        errorMsg('您的店铺已被关闭，请联系管理员！')
       } else if (status === 'APPLY' || status === 'APPLYING') {
-        store.dispatch('fedLogoutAction')
-        MessageBox.alert('您的店铺正在申请中，请稍后再试！', '权限错误', {
-          type: 'error',
-          callback: () => {
-            location.replace(`/login?forward=${location.pathname}`)
-          }
-        })
+        errorMsg('您的店铺正在申请中，请稍后再试！')
+      } else if (status === 'REFUSED') {
+        errorMsg('您的开店申请被拒绝，请重新申请或联系管理员！')
       } else {
-        store.dispatch('fedLogoutAction')
-        MessageBox.alert('获取店铺状态出错，请稍后再试！', '出现错误', {
-          type: 'error',
-          callback: () => {
-            location.replace(`/login?forward=${location.pathname}`)
-          }
-        })
+        errorMsg('获取店铺状态出错，请稍后再试！', '出现错误')
       }
     }
   } else {
@@ -72,6 +50,17 @@ async function routerBeforeEach(to, from, next) {
     }
   }
 }
+
+const errorMsg = (msg, title = '权限错误') => {
+  store.dispatch('fedLogoutAction')
+  MessageBox.alert(msg, title, {
+    type: 'error',
+    callback: () => {
+      location.replace(`/login?forward=${location.pathname}`)
+    }
+  })
+}
+
 router.beforeEach(routerBeforeEach)
 
 router.afterEach(NProgress.done)
