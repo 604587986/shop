@@ -113,7 +113,6 @@
 <script>
   import { mapActions } from 'vuex'
   import { RegExp } from '~/ui-utils'
-  import { domain } from '~/ui-domain'
   import Storage from '@/utils/storage'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
@@ -150,6 +149,7 @@
       if (isConnect) {
         this.login_type = 'account'
       }
+      this.domain = document.domain.split('.').slice(1).join('.')
     },
     methods: {
       /** 发送短信验证码异步回调 */
@@ -210,7 +210,7 @@
             this.setRefreshToken(response.refresh_token)
             if (response.result === 'bind_success') {
               this.getUserData()
-              Storage.removeItem('uuid_connect')
+              Storage.removeItem('uuid_connect', { domain: this.domain })
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
               } else {
@@ -220,7 +220,7 @@
               this.$confirm('当前用户已绑定其它账号，确认要覆盖吗？', () => {
                 API_Connect.loginBindConnect(uuid).then(() => {
                   this.getUserData()
-                  Storage.removeItem('uuid_connect')
+                  Storage.removeItem('uuid_connect', { domain: this.domain })
                   if (forward && /^http/.test(forward)) {
                     window.location.href = forward
                   } else {
