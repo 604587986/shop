@@ -106,6 +106,13 @@
       ...mapGetters(['user'])
     },
     mounted() {
+      // 如果是首页，并且有uuid，那么替换掉cookie中的uuid，并且移除url中的uuid
+      const { name, query } = this.$route
+      if (name === 'index' && query.uuid) {
+        Storage.setItem('uuid', query.uuid)
+        location.href = '/'
+        return
+      }
       // 如果有刷新Token，重新获取用户信息【第一次访问和用户刷新页面，会触发】
       if (Storage.getItem('refresh_token')) {
         this.getUserData()
