@@ -42,7 +42,7 @@ async function routerBeforeEach(to, from, next) {
         MessageBox.alert('您的店铺已被关闭，请联系管理员！', '权限错误', {
           type: 'error',
           callback: () => {
-            next({ path: `/login?forward=${location.pathname}` })
+            location.replace(`/login?forward=${location.pathname}`)
           }
         })
       } else if (status === 'APPLY' || status === 'APPLYING') {
@@ -50,14 +50,14 @@ async function routerBeforeEach(to, from, next) {
         MessageBox.alert('您的店铺正在申请中，请稍后再试！', '权限错误', {
           type: 'error',
           callback: () => {
-            next({ path: `/login?forward=${location.pathname}` })
+            location.replace(`/login?forward=${location.pathname}`)
           }
         })
       } else {
         MessageBox.alert('获取店铺状态出错，请稍后再试！', '出现错误', {
           type: 'error',
           callback: () => {
-            next({ path: `/login?forward=${location.pathname}` })
+            location.replace(`/login?forward=${location.pathname}`)
           }
         })
       }
