@@ -187,7 +187,7 @@
           type: 'warning'
         }).then(() => {
           this.$store.dispatch('logoutAction').then(() => {
-            location.reload()// 为了重新实例化vue-router对象 避免bug
+            location.replace('/login')// 为了重新实例化vue-router对象 避免bug
           })
         }).catch(() => {})
       }
