@@ -170,6 +170,13 @@
     },
     mounted() {
       this.handleChangeCaptchalUrl()
+      const uuid_connect = Storage.getItem('uuid_connect')
+      const isConnect = this.$route.query.form === 'connect' && !!uuid_connect
+      this.isConnect = isConnect
+      if (isConnect) {
+        this.login_type = 'account'
+      }
+      this.domain = document.domain.split('.').slice(1).join('.')
     },
     methods: {
       /** 发送短信验证码异步回调 */
@@ -214,18 +221,61 @@
             return false
           }
         }
-        this.login({ login_type, form }).then(() => {
-          if (forward && /^http/.test(forward)) {
-            window.location.href = forward
-          } else {
-            this.$router.replace({ path: forward || '/' })
+        if (this.isConnect) {
+          const uuid = Storage.getItem('uuid_connect')
+          if (!uuid) {
+            this.$message.error('参数异常，请刷新页面！')
+            return false
           }
-        }).catch(this.handleChangeCaptchalUrl)
+          const params = JSON.parse(JSON.stringify(form))
+          params.uuid = this.uuid
+          API_Connect.loginByConnect(uuid, params).then(response => {
+            this.setAccessToken(response.access_token)
+            this.setRefreshToken(response.refresh_token)
+            if (response.result === 'bind_success') {
+              this.getUserData()
+              Storage.removeItem('uuid_connect', { domain: this.domain })
+              if (forward && /^http/.test(forward)) {
+                window.location.href = forward
+              } else {
+                this.$router.push({path: forward || '/'})
+              }
+            } else {
+              this.$confirm('当前用户已绑定其它账号，确认要覆盖吗？', () => {
+                API_Connect.loginBindConnect(uuid).then(() => {
+                  this.getUserData()
+                  Storage.removeItem('uuid_connect', { domain: this.domain })
+                  if (forward && /^http/.test(forward)) {
+                    window.location.href = forward
+                  } else {
+                    this.$router.push({path: forward || '/'})
+                  }
+                }).catch(() => {
+                  this.removeAccessToken()
+                  this.removeRefreshToken()
+                })
+              }, () => {
+                this.removeAccessToken()
+                this.removeRefreshToken()
+              })
+            }
+          }).catch(this.handleChangeCaptchalUrl)
+        } else {
+          this.login({ login_type, form }).then(() => {
+            if (forward && /^http/.test(forward)) {
+              window.location.href = forward
+            } else {
+              this.$router.replace({ path: forward || '/' })
+            }
+          }).catch(this.handleChangeCaptchalUrl)
+        }
       },
       /** 获取第三方登录链接 */
       getConnectUrl: API_Connect.getConnectUrl,
       ...mapActions({
-        login: 'user/loginAction'
+        login: 'user/loginAction',
+        removeAccessToken: 'user/removeAccessTokenAction',
+        removeRefreshToken: 'user/removeRefreshTokenAction',
       })
     }
   }
