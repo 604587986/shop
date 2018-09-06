@@ -110,7 +110,7 @@
       const { name, query } = this.$route
       if (name === 'index' && query.uuid) {
         Storage.setItem('uuid', query.uuid)
-        this.$router.replace('/')
+        location.href = '/'
         return
       }
       // 如果有刷新Token，重新获取用户信息【第一次访问和用户刷新页面，会触发】
