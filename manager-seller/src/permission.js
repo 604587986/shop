@@ -30,7 +30,7 @@ async function routerBeforeEach(to, from, next) {
             MessageBox.alert('验证失败，请重新登录！', '登录出错', {
               type: 'error',
               callback: () => {
-                next({ path: `/login?forward=${location.pathname}` })
+                location.replace(`/login?forward=${location.pathname}`)
               }
             })
           })
@@ -38,10 +38,25 @@ async function routerBeforeEach(to, from, next) {
           next()
         }
       } else if (status === 'CLOSED') {
+        store.dispatch('fedLogoutAction')
         MessageBox.alert('您的店铺已被关闭，请联系管理员！', '权限错误', {
           type: 'error',
           callback: () => {
-            store.dispatch('fedLogoutAction')
+            next({ path: `/login?forward=${location.pathname}` })
+          }
+        })
+      } else if (status === 'APPLY' || status === 'APPLYING') {
+        store.dispatch('fedLogoutAction')
+        MessageBox.alert('您的店铺正在申请中，请稍后再试！', '权限错误', {
+          type: 'error',
+          callback: () => {
+            next({ path: `/login?forward=${location.pathname}` })
+          }
+        })
+      } else {
+        MessageBox.alert('获取店铺状态出错，请稍后再试！', '出现错误', {
+          type: 'error',
+          callback: () => {
             next({ path: `/login?forward=${location.pathname}` })
           }
         })
