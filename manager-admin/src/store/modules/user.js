@@ -18,8 +18,9 @@ export const mutations = {
    */
   SET_USER: (state, user) => {
     state.user = user
-    Storage.setItem('admin_user', JSON.stringify(user))
-    Storage.setItem('admin_uid', user.uid)
+    const { expires } = user
+    Storage.setItem('admin_user', JSON.stringify(user), { expires })
+    Storage.setItem('admin_uid', user.uid, { expires })
   },
   /**
    * 设置访问令牌
@@ -80,7 +81,8 @@ export const actions = {
   loginAction({ commit }, params) {
     return new Promise((resolve, reject) => {
       API_Login.login(params).then(response => {
-        commit('SET_USER', response)
+        const expires = new Date(jwt_decode(response.refresh_token).exp * 1000)
+        commit('SET_USER', { ...response, expires })
         commit('SET_ACCESS_TOKEN', response.access_token)
         commit('SET_REFRESH_TOKEN', response.refresh_token)
         resolve()

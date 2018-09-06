@@ -4,7 +4,6 @@
  * buyer_wap: 买家WAP端
  * seller   : 商家中心
  * admin    : 后台管理
- * cookie   : 设置cookie的domain，用于cookie共享
  */
 
 module.exports = {
