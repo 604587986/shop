@@ -34,7 +34,16 @@
                 </nuxt-link>
                 <div class="sku-content">
                   <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">{{ sku.name }}</nuxt-link>
-                  <div class="sku-spec">{{ sku | formatterSkuSpec }}</div>
+                  <div class="sku-spec">
+                    <span>{{ sku | formatterSkuSpec }}天空蓝-XXL-大飒飒</span>
+                    <select
+                      v-if="sku.single_list && sku.single_list.length"
+                      class="activity_list"
+                      @change="(event) => { handleActChanged(sku, event) }"
+                    >
+                      <option v-for="(act, index) in sku.single_list" :key="index" :value="act.activity_id">{{ act.title }}</option>
+                    </select>
+                  </div>
                   <div class="sku-tools">
                     <div class="sku-price">
                       <strong>￥{{ sku.purchase_price | unitPrice }}</strong>
@@ -127,7 +136,7 @@
           return false
         }
         const params = {
-          seller_id: 1,
+          seller_id,
           sku_id: sku.sku_id,
           activity_id,
           promotion_type
@@ -276,7 +285,7 @@
     position: relative;
     display: flex;
     width: 100%;
-    height: 90px;
+    min-height: 90px;
     padding: 5px 0;
   }
   .del-sku {
@@ -323,7 +332,10 @@
     }
     .sku-spec {
       width: 100%;
-      height: 27px;
+      min-height: 27px;
+      select, option {
+        font-size: 12px;
+      }
     }
     .sku-tools {
       position: relative;
