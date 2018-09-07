@@ -12,9 +12,7 @@
     mounted() {
       // 如果有刷新token，说明是在已登录的情况下绑定或换绑
       if (Storage.getItem('refresh_token')) {
-        API_Connect.loginBindConnect(Storage.getItem('uuid_connect')).then(() => {
-          this.$router.replace({ name: 'member-account-binding' })
-        }).catch(() => {
+        API_Connect.loginBindConnect(Storage.getItem('uuid_connect')).finally(() => {
           this.$router.replace({ name: 'member-account-binding' })
         })
         return false
