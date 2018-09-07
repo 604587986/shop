@@ -22,7 +22,7 @@ export function getValidateCodeUrl(uuid, type) {
  */
 export function getSiteData() {
   return request({
-    url: 'site-show',
+    url: `${api.base}/site-show`,
     method: Method.GET
   })
 }
