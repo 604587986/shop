@@ -3,9 +3,6 @@
  */
 
 import request, { Method } from '@/utils/request'
-import { api_dev } from '@/ui-domain'
-
-const urlPrefix = process.server ? (api_dev.buyer + '/') : ''
 
 /**
  * 获取焦点图
@@ -13,7 +10,7 @@ const urlPrefix = process.server ? (api_dev.buyer + '/') : ''
  */
 export function getFocusPictures(client_type = 'PC') {
   return request({
-    url: `${urlPrefix}focus-pictures`,
+    url: 'focus-pictures',
     method: Method.GET,
     loading: false,
     params: { client_type }
@@ -25,7 +22,7 @@ export function getFocusPictures(client_type = 'PC') {
  */
 export function getSiteMenu(client_type = 'PC') {
   return request({
-    url: `${urlPrefix}pages/site-navigations`,
+    url: 'pages/site-navigations',
     method: Method.GET,
     loading: false,
     params: { client_type }
@@ -38,7 +35,7 @@ export function getSiteMenu(client_type = 'PC') {
  */
 export function getCategory(parent_id = 0) {
   return request({
-    url: `${urlPrefix}goods/categories/${parent_id}/children`,
+    url: `goods/categories/${parent_id}/children`,
     method: Method.GET,
     loading: false
   })
@@ -50,7 +47,7 @@ export function getCategory(parent_id = 0) {
  */
 export function getHotKeywords(num = 7) {
   return request({
-    url: `${urlPrefix}pages/hot-keywords`,
+    url: 'pages/hot-keywords',
     method: Method.GET,
     loading: false,
     params: { num }
@@ -64,7 +61,7 @@ export function getHotKeywords(num = 7) {
  */
 export function getFloorData(client_type = 'PC', page_type = 'INDEX') {
   return request({
-    url: `${urlPrefix}pages/${client_type}/${page_type}`,
+    url: `pages/${client_type}/${page_type}`,
     method: 'get'
   })
 }
