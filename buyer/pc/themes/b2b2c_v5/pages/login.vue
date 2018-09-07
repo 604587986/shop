@@ -208,6 +208,7 @@
           API_Connect.loginByConnect(uuid, params).then(response => {
             this.setAccessToken(response.access_token)
             this.setRefreshToken(response.refresh_token)
+            Storage.setItem('uid', response.uid)
             if (response.result === 'bind_success') {
               this.getUserData()
               Storage.removeItem('uuid_connect', { domain: this.domain })
