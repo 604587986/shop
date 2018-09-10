@@ -138,7 +138,7 @@
       } else {
         const _uuid = uuidv1()
         this.uuid = _uuid
-        Storage.setItem('seller_uuid', _uuid)
+        Storage.setItem('seller_uuid', _uuid, { expires: 30 })
       }
       this.changeValidcode()
     },

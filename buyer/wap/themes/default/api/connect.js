@@ -38,7 +38,7 @@ export function getLogindConnectUrl(login_type) {
 export function loginByConnect(uuid, params) {
   params.password = md5(params.password)
   return request({
-    url: `login-binder/pc/${uuid}`,
+    url: `passport/login-binder/wap/${uuid}`,
     method: Method.PUT,
     data: params
   })

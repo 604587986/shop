@@ -51,7 +51,6 @@ export default {
     /** 获取区块链接 */
     blockHref(block) {
       const { opt_type, opt_value } = block.block_opt
-      // Andste_TODO 2018/7/9: 未适配完
       switch (opt_type) {
         // 链接地址
         case 'URL': return opt_value

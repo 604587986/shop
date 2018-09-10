@@ -29,7 +29,7 @@
             <div class="coupon-info">
               <p class="coupon-text">{{ coupon.title }}</p>
               <span class="coupon-info-btn">领取</span>
-              <p class="coupon-info-date">{{ coupon.start_time | unixToDate('yyy-MM-dd') }} - {{ coupon.end_time | unixToDate('yyy-MM-dd') }}</p>
+              <p class="coupon-info-date">{{ coupon.start_time | unixToDate('yyyy-MM-dd') }} 至 <br/> {{ coupon.end_time | unixToDate('yyyy-MM-dd') }}</p>
             </div>
           </a>
         </div>

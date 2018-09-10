@@ -19,4 +19,4 @@ ENV HOST 0.0.0.0
 EXPOSE 3000
 
 # 容器启动时执行的命令，类似npm run start
-CMD ["npm", "deploy"]
+CMD ["npm", "run", "deploy"]

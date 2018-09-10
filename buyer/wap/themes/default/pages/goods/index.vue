@@ -143,6 +143,7 @@
   /deep/ {
     .van-nav-bar {
       position: fixed;
+      z-index: 100 !important;
       top: 0;
       left: 0;
       right: 0;

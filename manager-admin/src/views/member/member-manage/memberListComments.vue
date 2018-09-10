@@ -47,7 +47,6 @@
           <br>
           <span style="color: #409EFF">{{ reviewComments.content }}</span>
           <div v-if="reviewComments.images && reviewComments.images.length">
-            <!--// Andste_TODO 2018/6/28: 图片地址未适配-->
             <img v-for="image in reviewComments.images" :src="image.url" class="comments-image">
           </div>
         </el-form-item>

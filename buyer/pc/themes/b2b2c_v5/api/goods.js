@@ -3,9 +3,6 @@
  */
 
 import request, { Method } from '@/utils/request'
-import { api_dev } from '~/ui-domain'
-
-const urlPrefix = process.server ? (api_dev.buyer + '/') : ''
 
 /**
  * 获取商品详情
@@ -14,7 +11,7 @@ const urlPrefix = process.server ? (api_dev.buyer + '/') : ''
  */
 export function getGoods(goods_id) {
   return request({
-    url: `${urlPrefix}goods/${goods_id}`,
+    url: `goods/${goods_id}`,
     method: Method.GET
   })
 }
@@ -26,7 +23,7 @@ export function getGoods(goods_id) {
  */
 export function getGoodsList(params) {
   return request({
-    url: `${urlPrefix}goods/search`,
+    url: 'goods/search',
     method: Method.GET,
     params
   })
@@ -38,7 +35,7 @@ export function getGoodsList(params) {
  */
 export function getGoodsSelector(params) {
   return request({
-    url: `${urlPrefix}goods/search/selector`,
+    url: 'goods/search/selector',
     method: Method.GET,
     params
   })
@@ -50,7 +47,7 @@ export function getGoodsSelector(params) {
  */
 export function getKeywordNum(keyword) {
   return request({
-    url: `${urlPrefix}goods/search/words`,
+    url: 'goods/search/words',
     method: Method.GET,
     loading: false,
     params: { keyword }
@@ -105,7 +102,7 @@ export function getTagGoods(seller_id, mark = 'hot', num = 5) {
  */
 export function getCategory(parent_id = 0) {
   return request({
-    url: `${urlPrefix}goods/categories/${parent_id}/children`,
+    url: `goods/categories/${parent_id}/children`,
     method: Method.GET,
     loading: false
   })

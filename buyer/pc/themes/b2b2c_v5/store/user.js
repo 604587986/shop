@@ -37,6 +37,11 @@ export const mutations = {
     state.user = ''
     Storage.removeItem('user')
     Storage.removeItem('uid')
+    // 主要针对第三方登录留下的数据
+    const domain = document.domain.split('.').slice(1).join('.')
+    Storage.removeItem('user', { domain })
+    Storage.removeItem('uid', { domain })
+    Storage.removeItem('uuid_connect', { domain })
   },
   /**
    * 设置访问令牌
@@ -54,7 +59,11 @@ export const mutations = {
    * @param state
    */
   [types.REMOVE_ACCESS_TOKEN](state) {
-    Storage.removeItem('access_token')
+    if (process.client) {
+      Storage.removeItem('access_token')
+      // 主要针对第三方登录留下的数据
+      Storage.removeItem('access_token', { domain: document.domain.split('.').slice(1).join('.') })
+    }
   },
   /**
    * 设置刷新令牌
@@ -73,6 +82,8 @@ export const mutations = {
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
     Storage.removeItem('refresh_token')
+    // 主要针对第三方登录留下的数据
+    Storage.removeItem('refresh_token', { domain: document.domain.split('.').slice(1).join('.') })
   }
 }
 
@@ -111,7 +122,8 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        Storage.setItem('uid', uid)
+        const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+        Storage.setItem('uid', uid, { expires })
         API_Members.getUserInfo().then(response => {
           response.birthday *= 1000
           commit(types.SET_USER_INFO, response)
@@ -170,7 +182,8 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        Storage.setItem('uid', uid)
+        const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+        Storage.setItem('uid', uid, { expires })
         resolve(res)
       })
     })
