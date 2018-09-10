@@ -86,5 +86,13 @@ module.exports = {
   ignorePrefix: '-',
   generate: {
     subFolders: true
+  },
+  // 文件名称
+  filenames: {
+    css: 'common.css',
+    manifest: 'manifest.js',
+    vendor: 'common.js',
+    app: 'app.js',
+    chunk: '[name].js'
   }
 }
