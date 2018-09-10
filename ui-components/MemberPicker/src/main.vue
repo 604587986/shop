@@ -38,7 +38,6 @@
               <div class="member-price">{{ member.mobile }}</div>
             </div>
             <div class="member-mask">
-              <a :href="buyerDomain + '/goods/' + member.member_id" target="_blank" class="mask-view" title="查看详情"><i></i></a>
               <div class="mask-check" :title="isSelected(member) ? '取消选择会员' : '选择会员'" @click="handleClickItem(member, index)"><i></i></div>
             </div>
           </div>
@@ -68,7 +67,6 @@
                 <div class="member-price">{{ member.mobile }}</div>
               </div>
               <div class="member-mask">
-                <a :href="buyerDomain + '/goods/' + member.member_id" target="_blank" class="mask-view" title="查看详情"><i></i></a>
                 <div class="mask-check" title="取消选择会员" @click="handleRemoveItem(member, index)"><i></i></div>
               </div>
             </div>

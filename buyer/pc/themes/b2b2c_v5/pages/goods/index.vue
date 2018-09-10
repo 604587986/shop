@@ -105,18 +105,6 @@
                   <nuxt-link :to="'/goods/' + goods.goods_id" :title="goods.name" target="_blank">
                     <em>{{ goods.name }}</em>
                   </nuxt-link>
-                  <!--// Andste_TODO 2018/6/26: 商品对应关键字，做为体验优化处理-->
-                  <!--<span class="gl-attribute">
-                    <a title="吊带裙/背心裙" href="#" target="_blank" class="attr">
-                      <b>吊带裙/背心裙</b>
-                    </a>
-                    <a title="淑女风" href="#" target="_blank" class="attr">
-                      <b>淑女风</b>
-                    </a>
-                    <a title="纯棉" href="#" target="_blank" class="attr">
-                      <b>纯棉</b>
-                    </a>
-                  </span>-->
                 </div>
                 <div class="gl-commit">
                   <strong>已有<a class="comment">{{ goods.comment_num }}</a>人评价</strong>

@@ -208,6 +208,7 @@
           API_Connect.loginByConnect(uuid, params).then(response => {
             this.setAccessToken(response.access_token)
             this.setRefreshToken(response.refresh_token)
+            Storage.setItem('uid', response.uid)
             if (response.result === 'bind_success') {
               this.getUserData()
               Storage.removeItem('uuid_connect', { domain: this.domain })
@@ -217,22 +218,10 @@
                 this.$router.push({path: forward || '/'})
               }
             } else {
-              this.$confirm('当前用户已绑定其它账号，确认要覆盖吗？', () => {
-                API_Connect.loginBindConnect(uuid).then(() => {
-                  this.getUserData()
-                  Storage.removeItem('uuid_connect', { domain: this.domain })
-                  if (forward && /^http/.test(forward)) {
-                    window.location.href = forward
-                  } else {
-                    this.$router.push({path: forward || '/'})
-                  }
-                }).catch(() => {
-                  this.removeAccessToken()
-                  this.removeRefreshToken()
-                })
-              }, () => {
+              this.$alert('当前用户已绑定其它账号！', () => {
                 this.removeAccessToken()
                 this.removeRefreshToken()
+                Storage.removeItem('uuid_connect', { domain: this.domain })
               })
             }
           }).catch(this.handleChangeValUrl)

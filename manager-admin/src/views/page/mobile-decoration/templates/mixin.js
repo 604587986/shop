@@ -50,9 +50,17 @@ export default {
       }
       if (!block || !block.block_opt) return '#'
       const { opt_type, opt_value } = block.block_opt
-      // Andste_TODO 2018/7/9: 未适配完成
       switch (opt_type) {
+        // 链接地址
+        case 'URL': return opt_value
+        // 商品
+        case 'GOODS': return `/goods/${opt_value}`
+        // 关键字
         case 'KEYWORD': return `/goods?keyword=${opt_value}`
+        // 店铺
+        case 'SHOP': return `/shop/${opt_value}`
+        // 分类
+        case 'CATEGORY': return `/goods?category=${opt_value}`
         default: return '/'
       }
     },

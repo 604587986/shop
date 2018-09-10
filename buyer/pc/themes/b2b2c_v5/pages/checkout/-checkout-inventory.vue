@@ -101,10 +101,6 @@
         </div>
         <div style="clear: both;"></div>
         <div class="bottom-item-inventory">
-          <!--// Andste_TODO 2018/6/13: 促销相关未适配-->
-          <!-- 注释 [store.activity_id??] -->
-          <!-- 注释 [store.storeprice.gift_id != 0] -->
-          <!-- 注释 [store.storeprice.bonus_id != 0]-->
         </div>
         <div style="clear: both;"></div>
       </div>
