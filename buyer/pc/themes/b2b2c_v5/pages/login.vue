@@ -117,6 +117,7 @@
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
+  const psl = require('psl')
   export default {
     name: 'login',
     layout: 'full',
@@ -149,7 +150,7 @@
       if (isConnect) {
         this.login_type = 'account'
       }
-      this.domain = document.domain.split('.').slice(1).join('.')
+      this.domain = psl.parse(document.domain).domain
     },
     methods: {
       /** 发送短信验证码异步回调 */

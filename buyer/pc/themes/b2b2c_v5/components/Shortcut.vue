@@ -87,6 +87,7 @@
   import Storage from '@/utils/storage'
   import * as API_Message from '@/api/message'
   import { mapActions, mapGetters } from 'vuex'
+  const psl = require('psl')
   export default {
     name: 'EnShortcut',
     head() {
@@ -110,7 +111,7 @@
       const { name, query } = this.$route
       if (name === 'index' && query.uuid) {
         Storage.setItem('uuid', query.uuid)
-        Storage.removeItem('uuid_connect', { domain: document.domain.split('.').slice(1).join('.') })
+        Storage.removeItem('uuid_connect', { domain: psl.parse(document.domain).domain })
         location.href = '/'
         return
       }

@@ -5,6 +5,7 @@
 <script>
   import Storage from '@/utils/storage'
   import * as API_Connect from '@/api/connect'
+  const psl = require('psl')
   export default {
     name: 'binder',
     mounted() {
@@ -16,7 +17,7 @@
           Storage.setItem('access_token', access_token)
           Storage.setItem('refresh_token', refresh_token)
           Storage.setItem('uuid', uuid_connect)
-          Storage.removeItem('uuid_connect', { domain: document.domain.split('.').slice(1).join('.') })
+          Storage.removeItem('uuid_connect', { domain: psl.parse(document.domain).domain })
           this.$router.replace({ name: 'member-account-binding' })
         }).catch(() => {
           this.$router.replace({ name: 'member-account-binding' })
