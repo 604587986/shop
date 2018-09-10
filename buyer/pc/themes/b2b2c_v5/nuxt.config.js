@@ -58,7 +58,15 @@ module.exports = {
       ]
     },
     plugins: [],
-    publicPath: '/'
+    publicPath: '/',
+    // 文件名称
+    filenames: {
+      css: '[name].bundle.css',
+      manifest: '[name].bundle.js',
+      vendor: '[name].bundle.js',
+      app: '[name].bundle.js',
+      chunk: '[name].bundle.js'
+    }
   },
   css: [
     '~assets/styles/normalize.css',
@@ -86,13 +94,5 @@ module.exports = {
   ignorePrefix: '-',
   generate: {
     subFolders: true
-  },
-  // 文件名称
-  filenames: {
-    css: 'common.css',
-    manifest: 'manifest.js',
-    vendor: 'common.js',
-    app: 'app.js',
-    chunk: '[name].js'
   }
 }
