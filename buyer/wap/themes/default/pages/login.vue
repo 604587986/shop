@@ -106,7 +106,7 @@
       <h4>其他登录方式</h4>
       <div class="icons-login-other">
         <a :href="getConnectUrl('wap', 'QQ')"><i class="iconfont ea-icon-qq"></i></a>
-        <a :href="getConnectUrl('wap', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>
+        <!--<a :href="getConnectUrl('wap', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>-->
         <a :href="getConnectUrl('wap', 'WEIBO')"><i class="iconfont ea-icon-weibo"></i></a>
         <a :href="getConnectUrl('wap', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
       </div>
