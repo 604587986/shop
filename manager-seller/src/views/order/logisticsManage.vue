@@ -300,7 +300,7 @@
           this.areaData = response
           // 为每一项设置选中属性 isSelected Boolean值
           let stack = []
-          for (var i = 0, len = this.areaData.length; i < len; i++) {
+          for (let i = 0, len = this.areaData.length; i < len; i++) {
             stack.push(this.areaData[i])
           }
           let item

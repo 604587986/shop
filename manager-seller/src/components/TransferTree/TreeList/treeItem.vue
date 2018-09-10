@@ -13,8 +13,9 @@
       <ul style="padding-left: 18px"  v-show="open" v-if="isFolder">
         <en-tree-item
           v-for="item in model.children"
-          @selectCaputure="onselect(item)"
           :model="item"
+          :parentNode="model"
+          @selectCaputure="onselected"
           :key="item.id"></en-tree-item>
       </ul>
     </collapse-transition>
@@ -26,10 +27,16 @@
   export default {
     name: 'EnTreeItem',
     props: {
-      /** 当前地区项 */
+      /** 当前节点 */
       model: {
         type: Object,
         default: {}
+      },
+
+      /** 当前节点的父节点 */
+      parentNode: {
+        type: Object,
+        default: () => { return {} }
       }
     },
     components: {
@@ -47,34 +54,39 @@
     },
     methods: {
       toggle() {
-        if (this.isFolder) { // 如果存在子项 则展开/关闭
+        if (this.isFolder) { // 如果存在子项 则展开/ 关闭
           this.open = !this.open
         }
       },
-      handleChoose(model) { // 选中/不选中
-        this.model.isSelected = !this.model.isSelected
-        this.$emit('selectCaputure', model)
-      },
-      onselect(model) {
+      handleChoose(model) { // 选中/不选中 model为当前项
+        model.isSelected = !model.isSelected
+        // 如果当前项存在后代节点 则后代节点一并选中/不选中
         let stack = []
         stack.push(model)
-        let item; let val = model.isSelected
+        let item
         while (stack.length) {
           item = stack.shift()
-          // 如果该节点有子节点，继续添加进入栈顶
-          item.isSelected = val
-          const result = this.model.children.every(key => {
-            return key.isSelected
-          })
-          if (result) {
-            this.model.isSelected = val
-          } else {
-            this.model.isSelected = false
+          // 如果当前节点全部兄弟节点选中，则当前节点父节点选中，否则不选中
+          item.isSelected = model.isSelected
+          if (this.parentNode.children) {
+            const result = this.parentNode.children.every(key => {
+              return key.isSelected
+            })
+            if (result) {
+              this.parentNode.isSelected = model.isSelected
+            } else {
+              this.parentNode.isSelected = false
+            }
           }
+          // 如果该节点有子节点，继续添加进入栈顶
           if (item.children && item.children.length) {
             stack = item.children.concat(stack)
           }
         }
+        this.$emit('selectCaputure', model, this.parentNode)
+      },
+      onselected(model, parentNode) { // 监听响应 选中之后进行计算现在选中之后的数据
+        this.$emit('selectCaputure', model, parentNode)
       }
     }
   }

@@ -4,12 +4,14 @@
     <div class="transfer-left">
       <h3 class="transfer-title">
         <!--全选按钮-->
+        <el-button plain size="mini" @click="chooseAll(1, from_data)">全选</el-button>
+        <!--源列表标题-->
         <span class="u-right">{{ fromTitle }}</span>
       </h3>
       <!-- 内容区 -->
       <div class="transfer-main">
         <el-input v-if="filter" placeholder="输入关键字进行过滤" v-model="filterFrom" size="small" class="filter-tree"></el-input>
-        <en-tree-list :treeData="from_data" @selectCaputure="onselectfrom"  key="1" class="trees"></en-tree-list>
+        <en-tree-list :treeData="from_data" :key="1" @getChooseData="data => { selected_from_data = data }" class="trees"></en-tree-list>
       </div>
     </div>
      <!--穿梭区 按钮框-->
@@ -38,12 +40,14 @@
     <div class="transfer-right">
       <h3 class="transfer-title">
         <!--全选按钮-->
-        <span class="u-right">{{toTitle}}</span>
+        <el-button plain size="mini" @click="chooseAll(2, to_data)">全选</el-button>
+        <!--源列表标题-->
+        <span class="u-right">{{ toTitle }}</span>
       </h3>
       <!-- 内容区 -->
       <div class="transfer-main">
         <el-input v-if="filter" placeholder="输入关键字进行过滤" v-model="filterTo" size="small" class="filter-tree"></el-input>
-        <en-tree-list :treeData="to_data" @selectCaputure="onselectto" key="2"></en-tree-list>
+        <en-tree-list :treeData="to_data"  @getChooseData="data => { selected_to_data = data }" :key="2"></en-tree-list>
       </div>
     </div>
   </div>
@@ -55,14 +59,14 @@
     name: 'EnTransferTree',
     data() {
       return {
-        self_from: [], // 子组件左侧数据
-        self_to: [], // 子组件右侧数据
-        from_disabled: true, // 添加按钮是否禁用
-        to_disabled: true, // 移除按钮是否禁用
-        from_check_keys: [], // 源数据选中key数组 以此属性关联穿梭按钮，总全选、半选状态
-        to_check_keys: [], // 目标数据选中key数组 以此属性关联穿梭按钮，总全选、半选状态
+        from_disabled: false, // 添加按钮是否禁用
+        to_disabled: false, // 移除按钮是否禁用
         filterFrom: '', // 源数据筛选
-        filterTo: '' // 目标数据筛选
+        filterTo: '', // 目标数据筛选
+        isfromchooseAll: false, // 源数据是否全选
+        istochooseAll: false, // 目标数据是否全选
+        selected_from_data: '', // 源数据选中项
+        selected_to_data: '' // 目标数据选中项
       }
     },
     components: { [TreeList.name]: TreeList },
@@ -131,41 +135,15 @@
       }
     },
     methods: {
-      /** 源数据选中 */
-      onselectfrom(model) {
-        let stack = []
-        stack.push(model)
-        let item; let val = model.isSelected
-        while (stack.length) {
-          item = stack.shift()
-          // 如果该节点有子节点，继续添加进入栈顶
-          item.isSelected = val
-          if (item.children && item.children.length) {
-            stack = item.children.concat(stack)
-          }
-        }
-      },
-
-      /** 目标数据选中事件 */
-      onselectto(model) {
-        let stack = []
-        stack.push(model)
-        let item; let val = model.isSelected
-        while (stack.length) {
-          item = stack.shift()
-          // 如果该节点有子节点，继续添加进入栈顶
-          item.isSelected = val
-          if (item.children && item.children.length) {
-            stack = item.children.concat(stack)
-          }
-        }
-      },
-      // 添加按钮
+      // 添加按钮 执行添加操作 1.源数据更新 把源数据选中项删除 2.目标数据更新 把源数据选中项整合进目标数据 释放当前源数据 目标数据
       addToAims() {
-
+        // this.from_data
+        // this.to_data
+        // this.selected_from_data
       },
-      // 移除按钮
+      // 移除按钮 执行移除操作 1.目标数据更新 把目标数据选中项删除 2.源数据更新 把目标数据选中项整合进源数据 释放当前源数据 目标数据
       removeToSource() {
+
       },
 
       // 源数据 筛选
@@ -173,29 +151,41 @@
         if (!value) return true
         return data.label.indexOf(value) !== -1
       },
+
       // 目标数据筛选
       filterNodeTo(value, data) {
         if (!value) return true
         return data.label.indexOf(value) !== -1
+      },
+
+      /** 全选 */
+      chooseAll(is_from, data) {
+        // 为每一项设置选中属性 isSelected Boolean值
+        let stack = []
+        for (let i = 0, len = data.length; i < len; i++) {
+          stack.push(data[i])
+        }
+        let item
+        while (stack.length) {
+          item = stack.shift()
+          if (is_from === 1) {
+            item.isSelected = !this.isfromchooseAll
+          } else if (is_from === 2) {
+            item.isSelected = !this.istochooseAll
+          }
+          // 如果该节点有子节点，继续添加进入栈顶
+          if (item.children && item.children.length) {
+            stack = item.children.concat(stack)
+          }
+        }
+        if (is_from === 1) {
+          this.isfromchooseAll = !this.isfromchooseAll
+        } else if (is_from === 2) {
+          this.istochooseAll = !this.istochooseAll
+        }
       }
     },
     computed: {
-      // 左侧数据
-      // self_from_data() {
-      //   let from_array = [...this.from_data, ...this.self_from]
-      //   from_array.forEach(item => {
-      //     item[this.pid] = 0
-      //   })
-      //   return from_array
-      // },
-      // // 右侧数据
-      // self_to_data() {
-      //   let to_array = [...this.to_data, ...this.self_to]
-      //   to_array.forEach(item => {
-      //     item[this.pid] = 0
-      //   })
-      //   return to_array
-      // },
       // 左侧菜单名
       fromTitle() {
         let [text] = this.title
@@ -205,74 +195,33 @@
       toTitle() {
         let [, text] = this.title
         return text
+      },
+      // 上部按钮名
+      fromButton() {
+        if (this.button_text === undefined) {
+          return
+        }
+        let [text] = this.button_text
+        return text
+      },
+      // 下部按钮名
+      toButton() {
+        if (this.button_text === undefined) {
+          return
+        }
+        let [, text] = this.button_text
+        return text
       }
-      // // 上部按钮名
-      // fromButton() {
-      //   if (this.button_text === undefined) {
-      //     return
-      //   }
-      //
-      //   let [text] = this.button_text
-      //   return text
-      // },
-      // // 下部按钮名
-      // toButton() {
-      //   if (this.button_text === undefined) {
-      //     return
-      //   }
-      //   let [, text] = this.button_text
-      //   return text
-      // }
     },
     watch: {
-      // // 左侧 状态监测
-      // from_check_keys(val) {
-      //   if (val.length > 0) {
-      //     // 穿梭按钮是否禁用
-      //     this.from_disabled = false
-      //     // 总半选是否开启
-      //     this.from_is_indeterminate = true
-      //
-      //     // 总全选是否开启 - 根据选中节点中为根节点的数量是否和源数据长度相等
-      //     let allCheck = val.filter(item => item[this.pid] === 0)
-      //     if (allCheck.length === this.self_from_data.length) {
-      //       // 关闭半选 开启全选
-      //       this.from_is_indeterminate = false
-      //       this.from_check_all = true
-      //     } else {
-      //       this.from_is_indeterminate = true
-      //       this.from_check_all = false
-      //     }
-      //   } else {
-      //     this.from_disabled = true
-      //     this.from_is_indeterminate = false
-      //     this.from_check_all = false
-      //   }
-      // },
-      // // 右侧 状态监测
-      // to_check_keys(val) {
-      //   if (val.length > 0) {
-      //     // 穿梭按钮是否禁用
-      //     this.to_disabled = false
-      //     // 总半选是否开启
-      //     this.to_is_indeterminate = true
-      //
-      //     // 总全选是否开启 - 根据选中节点中为根节点的数量是否和源数据长度相等
-      //     let allCheck = val.filter(item => item[this.pid] === 0)
-      //     if (allCheck.length === this.self_to_data.length) {
-      //       // 关闭半选 开启全选
-      //       this.to_is_indeterminate = false
-      //       this.to_check_all = true
-      //     } else {
-      //       this.to_is_indeterminate = true
-      //       this.to_check_all = false
-      //     }
-      //   } else {
-      //     this.to_disabled = true
-      //     this.to_is_indeterminate = false
-      //     this.to_check_all = false
-      //   }
-      // },
+      // 左侧 状态监测
+      from_data(val) {
+        this.from_disabled = val.length > 0
+      },
+      // 右侧 状态监测
+      to_data(val) {
+        this.from_disabled = val.length > 0
+      }
       // // 左侧 数据筛选
       // filterFrom(val) {
       //   this.$refs['from-tree'].filter(val)
@@ -285,7 +234,7 @@
   }
 </script>
 
-<style scoped>
+<style type="text/scss" lang="scss" scoped>
   .el-tree {
     min-width: 100%;
     display: inline-block !important;
@@ -315,8 +264,7 @@
     overflow: auto;
   }
 
-  .transfer-left,
-  .transfer-right {
+  .transfer-left,.transfer-right {
     border: 1px solid #ebeef5;
     width: 40%;
     height: 100%;
