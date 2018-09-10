@@ -106,9 +106,9 @@
       <h4>其他登录方式</h4>
       <div class="icons-login-other">
         <a :href="getConnectUrl('wap', 'QQ')"><i class="iconfont ea-icon-qq"></i></a>
-        <!--<a :href="getConnectUrl('wap', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>-->
+        <a v-if="isWXBrowser" :href="getConnectUrl('wap', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>
         <a :href="getConnectUrl('wap', 'WEIBO')"><i class="iconfont ea-icon-weibo"></i></a>
-        <a :href="getConnectUrl('wap', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
+        <a v-if="isAliPayBrowser" :href="getConnectUrl('wap', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
       </div>
       <div class="agreement-tips">
         <p>登录即代表您已同意<a href="javascript:;">Javashop隐私政策</a></p>
@@ -154,7 +154,11 @@
           username: '',
           password: '',
           captcha: ''
-        }
+        },
+        // 是否为微信内置浏览器
+        isWXBrowser: process.client ? /micromessenger/i.test(navigator.userAgent) : false,
+        // 是否为支付宝内置浏览器
+        isAliPayBrowser: process.client ? (navigator.userAgent.match(/Alipay/i) === 'alipay') : false
       }
     },
     computed: {
