@@ -40,8 +40,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="member_name" label="会员名称" align="center"/>
-        <el-table-column prop="level" label="会员级别" align="center"/>
-        <el-table-column prop="point" label="会员返利" align="center"/>
         <el-table-column label="返利金额" align="center">
           <template slot-scope="scope">
             <span class="price">{{ scope.row.price | unitPrice('¥') }}</span>
