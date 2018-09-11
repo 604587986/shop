@@ -44,10 +44,10 @@
         <a href="/">首页</a>
         | <nuxt-link to="/member">会员中心</nuxt-link>
         | <a href="/shop/apply" target="_blank">商家入驻</a>
-        | <a href="/help/45">关于网站</a>
-        | <a href="/help/33">关于我们</a>
-        | <a href="/help/31">联系我们</a>
-        | <a href="http://www.javamall.com.cn" title="JAVA B2B2C网店系统">网店系统</a>
+        | <a href="/help/100" target="_blank">关于网站</a>
+        | <a href="/help/98" target="_blank">关于我们</a>
+        | <a href="/help/99" target="_blank">联系我们</a>
+        | <a href="https://www.javamall.com.cn" title="JAVA B2B2C网店系统">网店系统</a>
       </div>
     </div>
   </div>
