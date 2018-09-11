@@ -25,9 +25,9 @@
             <!--会员名称-->
             <span v-if="item.member_name">会员名称：<span>{{ item.member_name }}</span></span>
             <!--会员级别-->
-            <span v-if="item.level">会员级别：<span>{{ item.level }}</span></span>
+            <!--<span v-if="item.level">会员级别：<span>{{ item.level }}</span></span>-->
             <!--会员返利-->
-            <span v-if="item.point">会员返利：<span> {{ item.point }}</span></span>
+            <!--<span v-if="item.point">会员返利：<span> {{ item.point }}</span></span>-->
             <!--下单时间-->
             <span v-if="item.create_time">下单时间：
               <span>{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
