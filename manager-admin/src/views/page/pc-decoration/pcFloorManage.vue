@@ -76,9 +76,13 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import VueLazyload from 'vue-lazyload'
   import draggable from 'vuedraggable'
   import * as API_Floor from '@/api/floor'
   import templates, { templateArray } from './templates'
+
+  Vue.use(VueLazyload)
 
   export default {
     name: 'pcFloorManage',

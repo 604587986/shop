@@ -29,7 +29,7 @@ export default {
                        </div>
                      </div>
                      <slot :block="block"></slot>
-                     <img v-if="block.block_value" :src="block.block_value">
+                     <img v-if="block.block_value" :data-src="block.block_value">
                      <div v-else-if="$parent.isEdit" class="no-image"></div>
                    </template>
                    <a v-else :href="$parent.blockHref(block)">
