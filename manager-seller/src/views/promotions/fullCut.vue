@@ -318,11 +318,12 @@
           if (!value) {
             return callback(new Error('请输入要优惠的打折力度'))
           }
+          // 正则范围 0.1-9.9
           setTimeout(() => {
-            if (!RegExp.integer.test(value)) {
-              callback(new Error('请输入正整数'))
-            } else if (value <= 0 || value >= 10) {
-              callback(new Error('打折数字只能在1-9之间'))
+            if (!/^((0\.[1-9]{1})|(([1-9]{1})(\.\d{1})?))$/.test(value)) {
+              callback(new Error('请输入正整数或者一位小数'))
+            } else if (value <= 1 || value >= 10) {
+              callback(new Error('打折数字只能在1-9.9之间'))
             } else {
               callback()
             }
