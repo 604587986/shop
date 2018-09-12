@@ -120,7 +120,7 @@
       }
     }
   }
-  .sidebar-container .menu-wrapper>a .el-menu-item {
+  .sidebar-container .menu-wrapper:not(.nest-menu) > a .el-menu-item {
     background-color: $menu_bg !important;
     &:hover {
       background-color: $menu_item_hover_bg !important;
