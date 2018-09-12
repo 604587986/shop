@@ -335,7 +335,7 @@
       color: #999;
     }
     .lf-form {
-      padding: 0 10px;
+      padding: 0 30px;
       overflow: hidden;
       /deep/ .img-code {
         .el-input-group__append {
