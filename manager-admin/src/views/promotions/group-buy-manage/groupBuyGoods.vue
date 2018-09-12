@@ -8,7 +8,7 @@
       <el-table-column prop="gb_title" label="活动标题"/>
       <el-table-column label="商品名称">
         <template slot-scope="scope">
-          <a :href="'/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row.goods_name }}</a>
+          <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row.goods_name }}</a>
         </template>
       </el-table-column>
       <el-table-column label="活动开始时间">

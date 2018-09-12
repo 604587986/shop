@@ -7,7 +7,7 @@
     <template slot="table-columns">
       <el-table-column label="商品名称" min-width="450">
         <template slot-scope="scope">
-          <a :href="'/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row.goods_name }}</a>
+          <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row.goods_name }}</a>
         </template>
       </el-table-column>
       <el-table-column prop="shop_name" label="店铺名称"/>
