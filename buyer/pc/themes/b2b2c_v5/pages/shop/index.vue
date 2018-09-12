@@ -49,7 +49,7 @@
             </template>
             <ul v-else>
               <li v-for="(goods, index) in shop.goods_list" v-if="index < 5" :key="goods.goods_id" class="goods-item">
-                <nuxt-link :to="'/goods/' + goods.goods_id">
+                <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
                   <img :src="goods.thumbnail" class="goods-image">
                   <p class="goods-price price">￥{{ goods.price | unitPrice }}</p>
                   <p class="goods-name">{{ goods.goods_name }}</p>
