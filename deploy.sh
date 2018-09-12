@@ -3,6 +3,7 @@
 WEB_PATH=$PWD
 cd $WEB_PATH
 
+# 更新git代码
 if [[ "$1" == "git-pull" ]];then
   echo "拉取最新的代码..."
   git reset --hard origin/master
@@ -12,6 +13,7 @@ if [[ "$1" == "git-pull" ]];then
   echo -e "\033[32m代码拉取完成...\033[0m"
 fi
 
+# 拷贝公共文件
 if [[ "$1" == "copy" ]];then
   echo "拷贝ui-domain..."
   cp -a $WEB_PATH/ui-domain $WEB_PATH/buyer/pc/themes/b2b2c_v5
@@ -31,6 +33,32 @@ if [[ "$1" == "copy" ]];then
   echo -e "\033[32m拷贝完成\033[0m"
 fi
 
+# 当前台启动环境与后台启动环境不一致时，为了防止出现无权限问题，需要修改api的环境判断方式。
+# 前台-生产环境，后台-开发环境：development
+# 前台-开发环境，后台-生产环境：production
+PATH_BUYER_PC=$WEB_PATH/buyer/pc/themes/b2b2c_v5/utils
+PATH_BUYER_WAP=$WEB_PATH/buyer/wap/themes/default/utils
+PATH_SELLER=$WEB_PATH/manager-seller/src/utils
+PATH_ADMIN=$WEB_PATH/manager-admin/src/utils
+PATH_ARRAY=($PATH_BUYER_PC $PATH_BUYER_WAP $PATH_SELLER $PATH_ADMIN)
+if [[ "$1" == "api_dev" ]];then
+  for path in ${PATH_ARRAY[@]}
+  do
+    sed -i.bak "s/NODE_ENV === 'production'/NODE_ENV === 'development'/" $path/request.js
+    rm -rf $path/request.js.bak
+  done
+  echo -e "\033[32mAPI判断环境更改为[development]！\033[0m"
+fi
+if [[ "$1" == "api_pro" ]];then
+  for path in ${PATH_ARRAY[@]}
+  do
+    sed -i.bak "s/NODE_ENV === 'development'/NODE_ENV === 'production'/" $path/request.js
+    rm -rf $path/request.js.bak
+  done
+  echo -e "\033[32mAPI判断环境更改为[production]！\033[0m"
+fi
+
+# 部署nodejs、nginx、pm2
 if [[ "$1" == "base" ]];then
   # 移除yum lock
   rm -f /var/run/yum.pid
