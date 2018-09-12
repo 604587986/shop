@@ -5,7 +5,6 @@ import Storage from '@/utils/storage'
 import jwt_decode from 'jwt-decode'
 import { Foundation } from '~/ui-utils'
 import * as API_Address from "@/api/address"
-const psl = require('psl')
 
 export const state = () => {
   const user = Storage.getItem('user')
@@ -39,10 +38,9 @@ export const mutations = {
     Storage.removeItem('user')
     Storage.removeItem('uid')
     // 主要针对第三方登录留下的数据
-    const domain = psl.parse(document.domain).domain
-    Storage.removeItem('user', { domain })
-    Storage.removeItem('uid', { domain })
-    Storage.removeItem('uuid_connect', { domain })
+    Storage.removeItem('user')
+    Storage.removeItem('uid')
+    Storage.removeItem('uuid_connect')
   },
   /**
    * 设置访问令牌
@@ -63,7 +61,7 @@ export const mutations = {
     if (process.client) {
       Storage.removeItem('access_token')
       // 主要针对第三方登录留下的数据
-      Storage.removeItem('access_token', { domain: psl.parse(document.domain).domain })
+      Storage.removeItem('access_token')
     }
   },
   /**
@@ -84,7 +82,7 @@ export const mutations = {
   [types.REMOVE_REFRESH_TOKEN](state) {
     Storage.removeItem('refresh_token')
     // 主要针对第三方登录留下的数据
-    Storage.removeItem('refresh_token', { domain: psl.parse(document.domain).domain })
+    Storage.removeItem('refresh_token')
   }
 }
 
