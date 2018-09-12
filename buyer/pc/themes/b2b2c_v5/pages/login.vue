@@ -117,7 +117,6 @@
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
-  const psl = require('psl')
   export default {
     name: 'login',
     layout: 'full',
@@ -150,7 +149,6 @@
       if (isConnect) {
         this.login_type = 'account'
       }
-      this.domain = psl.parse(document.domain).domain
     },
     methods: {
       /** 发送短信验证码异步回调 */
@@ -212,7 +210,7 @@
             Storage.setItem('uid', response.uid)
             if (response.result === 'bind_success') {
               this.getUserData()
-              Storage.removeItem('uuid_connect', { domain: this.domain })
+              Storage.removeItem('uuid_connect')
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
               } else {
@@ -222,7 +220,7 @@
               this.$alert('当前用户已绑定其它账号！', () => {
                 this.removeAccessToken()
                 this.removeRefreshToken()
-                Storage.removeItem('uuid_connect', { domain: this.domain })
+                Storage.removeItem('uuid_connect')
               })
             }
           }).catch(this.handleChangeValUrl)
