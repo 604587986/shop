@@ -105,10 +105,10 @@
     <div class="login-other">
       <h4>其他登录方式</h4>
       <div class="icons-login-other">
-        <a :href="getConnectUrl('pc', 'QQ')"><i class="iconfont ea-icon-qq"></i></a>
-        <a :href="getConnectUrl('pc', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>
-        <a :href="getConnectUrl('pc', 'WEIBO')"><i class="iconfont ea-icon-weibo"></i></a>
-        <a :href="getConnectUrl('pc', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
+        <a :href="getConnectUrl('wap', 'QQ')"><i class="iconfont ea-icon-qq"></i></a>
+        <a v-if="isWXBrowser" :href="getConnectUrl('wap', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>
+        <a :href="getConnectUrl('wap', 'WEIBO')"><i class="iconfont ea-icon-weibo"></i></a>
+        <a v-if="isAliPayBrowser" :href="getConnectUrl('wap', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
       </div>
       <div class="agreement-tips">
         <p>登录即代表您已同意<a href="javascript:;">Javashop隐私政策</a></p>
@@ -125,6 +125,7 @@
   import * as API_Connect from '@/api/connect'
   import EnCountDownBtn from "@/components/CountDownBtn"
   import Storage from '@/utils/storage'
+  const psl = require('psl')
   export default {
     name: 'login',
     components: {EnCountDownBtn},
@@ -153,7 +154,11 @@
           username: '',
           password: '',
           captcha: ''
-        }
+        },
+        // 是否为微信内置浏览器
+        isWXBrowser: process.client ? /micromessenger/i.test(navigator.userAgent) : false,
+        // 是否为支付宝内置浏览器
+        isAliPayBrowser: process.client ? (navigator.userAgent.match(/Alipay/i) === 'alipay') : false
       }
     },
     computed: {
@@ -176,7 +181,7 @@
       if (isConnect) {
         this.login_type = 'account'
       }
-      this.domain = document.domain.split('.').slice(1).join('.')
+      this.domain = psl.parse(document.domain).domain
     },
     methods: {
       /** 发送短信验证码异步回调 */

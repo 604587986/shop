@@ -3,9 +3,18 @@
 </template>
 <script>
   import Storage from '@/utils/storage'
+  const psl = require('psl')
   export default {
     name: 'defalt',
     mounted() {
+      // 如果是首页，并且有uuid，那么替换掉cookie中的uuid，并且移除url中的uuid
+      const { name, query } = this.$route
+      if (name === 'index' && query.uuid) {
+        Storage.setItem('uuid', query.uuid)
+        Storage.removeItem('uuid_connect', { domain: psl.parse(document.domain).domain })
+        location.href = '/'
+        return
+      }
       if (Storage.getItem('refresh_token')) {
         this.$store.dispatch('user/getUserDataAction')
       }

@@ -28,6 +28,7 @@
     "jwt-decode": "^2.2.0",
     "normalize.css": "8.0.0",
     "nuxt": "1.4.0",
+    "psl": "^1.1.29",
     "qrcode.vue": "^1.6.0",
     "uuid": "3.2.1",
     "vant": "1.2.0",

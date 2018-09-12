@@ -23,7 +23,7 @@ module.exports = {
     ],
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },
-      { type: 'text/javascript', src: '/layer/layer.js' }
+      { type: 'text/javascript', src: 'https://cdn.bootcss.com/psl/1.1.27/psl.js' }
     ],
     __dangerouslyDisableSanitizers: ['script']
   },
@@ -47,9 +47,20 @@ module.exports = {
     extractCSS: {
       allChunks: true
     },
+    externals: {
+      psl: 'window.psl'
+    },
     vendor: ['axios'],
     plugins: [],
-    publicPath: '/'
+    publicPath: '/',
+    // 文件名称
+    filenames: {
+      css: '[name].bundle.css',
+      manifest: '[name].bundle.js',
+      vendor: '[name].bundle.js',
+      app: '[name].bundle.js',
+      chunk: '[name].bundle.js'
+    }
   },
   css: [
     '~assets/styles/normalize.css',

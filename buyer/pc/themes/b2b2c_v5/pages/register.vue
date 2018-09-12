@@ -56,6 +56,7 @@
   import { RegExp } from '~/ui-utils'
   import { domain } from '~/ui-domain'
   import Storage from '@/utils/storage'
+  const psl = require('psl')
   export default {
     name: 'register',
     layout: 'full',
@@ -226,7 +227,7 @@
             this.registerByMobile(this.registerForm).then(() => {
               if (this.isConnect) {
                 API_Connect.registerBindConnect(Storage.getItem('uuid_connect')).then(() => {
-                  Storage.removeItem('uuid_connect', { domain: document.domain.split('.').slice(1).join('.')})
+                  Storage.removeItem('uuid_connect', { domain: psl.parse(document.domain).domain })
                   this.getUserData().then(() => {
                     this.$router.push({ path: '/member' })
                   })
