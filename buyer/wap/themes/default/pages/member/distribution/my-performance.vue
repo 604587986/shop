@@ -6,8 +6,8 @@
         <!--结算单信息-->
         <div class="settlement-total-container">
           <span>本期佣金:<span class="color-red">{{ settlementTotal.push_money | unitPrice('¥') }}</span></span>
-          <span>付款总金额:<span class="color-red">{{ settlementTotal.final_money | unitPrice('¥') }}</span></span>
-          <span>订单退款金额:<span class="color-red">{{ settlementTotal.return_order_money | unitPrice('¥') }}</span></span>
+          <span>订单佣金:<span class="color-red">{{ settlementTotal.final_money | unitPrice('¥') }}</span></span>
+          <span>退单佣金返还:<span class="color-red">{{ settlementTotal.return_push_money | unitPrice('¥') }}</span></span>
         </div>
 
         <van-collapse v-model="activeNames" v-if="performanceList && performanceList.length">
@@ -24,10 +24,6 @@
             </span>
             <!--会员名称-->
             <span v-if="item.member_name">会员名称：<span>{{ item.member_name }}</span></span>
-            <!--会员级别-->
-            <span v-if="item.level">会员级别：<span>{{ item.level }}</span></span>
-            <!--会员返利-->
-            <span v-if="item.point">会员返利：<span> {{ item.point }}</span></span>
             <!--下单时间-->
             <span v-if="item.create_time">下单时间：
               <span>{{ item.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>

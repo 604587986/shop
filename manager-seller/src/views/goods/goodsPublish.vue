@@ -122,12 +122,13 @@
                 <template slot="prepend">kg</template>
               </el-input>
             </el-form-item>
+            <!--:file-list="baseInfoForm.goods_gallery_list"-->
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
                 class="avatar-uploader goods-images"
                 :action="`${MixinUploadApi}?scene=goods`"
                 list-type="picture-card"
-                :file-list="baseInfoForm.goods_gallery_list"
+                multiple
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
                 :on-remove="handleRemove"
@@ -875,9 +876,7 @@
           this.baseInfoForm.goods_gallery_list.forEach(key => {
             this.$set(key, 'url', key.original)
           })
-          this.$nextTick(() => {
-            this.setSort()
-          })
+          this.$nextTick(() => { this.setSort() })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list || !Array.isArray(this.baseInfoForm.sku_list)) {
@@ -1004,9 +1003,7 @@
               sort: 0
             }
           })
-          this.$nextTick(() => {
-            this.setSort()
-          })
+          this.$nextTick(() => { this.setSort() })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list) {
@@ -1158,9 +1155,7 @@
         })
         this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
         this.$refs['baseInfoForm'].validateField('goods_gallery')
-        this.$nextTick(() => {
-          this.setSort()
-        })
+        this.$nextTick(() => { this.setSort() })
       },
 
       /** 点击已上传的文件链接时的钩子 放大 */
@@ -1174,9 +1169,7 @@
         const el = document.querySelectorAll('div.avatar-uploader > ul.el-upload-list--picture-card')[0]
         this.sortable = Sortable.create(el, {
           ghostClass: 'sortable-ghost',
-          setData: function(dataTransfer) {
-
-          },
+          setData: function(dataTransfer) { },
           onEnd: evt => {
             let temp = this.baseInfoForm.goods_gallery_list[evt.oldIndex]
             this.baseInfoForm.goods_gallery_list[evt.oldIndex] = this.baseInfoForm.goods_gallery_list[evt.newIndex]
@@ -1201,7 +1194,6 @@
         const isExit = this.baseInfoForm.goods_gallery_list.some(key => {
           return file.name === key.name
         })
-
         if (isExit) {
           this.$message.error('图片已存在')
         }
