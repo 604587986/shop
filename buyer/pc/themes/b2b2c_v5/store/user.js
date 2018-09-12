@@ -38,8 +38,6 @@ export const mutations = {
     Storage.removeItem('user')
     Storage.removeItem('uid')
     // 主要针对第三方登录留下的数据
-    Storage.removeItem('user')
-    Storage.removeItem('uid')
     Storage.removeItem('uuid_connect')
   },
   /**
@@ -60,8 +58,6 @@ export const mutations = {
   [types.REMOVE_ACCESS_TOKEN](state) {
     if (process.client) {
       Storage.removeItem('access_token')
-      // 主要针对第三方登录留下的数据
-      Storage.removeItem('access_token')
     }
   },
   /**
@@ -80,8 +76,6 @@ export const mutations = {
    * @param state
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
-    Storage.removeItem('refresh_token')
-    // 主要针对第三方登录留下的数据
     Storage.removeItem('refresh_token')
   }
 }
