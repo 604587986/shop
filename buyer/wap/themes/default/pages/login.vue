@@ -125,7 +125,6 @@
   import * as API_Connect from '@/api/connect'
   import EnCountDownBtn from "@/components/CountDownBtn"
   import Storage from '@/utils/storage'
-  const psl = require('psl')
   export default {
     name: 'login',
     components: {EnCountDownBtn},
@@ -181,7 +180,6 @@
       if (isConnect) {
         this.login_type = 'account'
       }
-      this.domain = psl.parse(document.domain).domain
     },
     methods: {
       /** 发送短信验证码异步回调 */
@@ -239,7 +237,7 @@
             this.setRefreshToken(response.refresh_token)
             if (response.result === 'bind_success') {
               this.getUserData()
-              Storage.removeItem('uuid_connect', { domain: this.domain })
+              Storage.removeItem('uuid_connect')
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
               } else {
@@ -249,7 +247,7 @@
               this.$confirm('当前用户已绑定其它账号，确认要覆盖吗？', () => {
                 API_Connect.loginBindConnect(uuid).then(() => {
                   this.getUserData()
-                  Storage.removeItem('uuid_connect', { domain: this.domain })
+                  Storage.removeItem('uuid_connect')
                   if (forward && /^http/.test(forward)) {
                     window.location.href = forward
                   } else {

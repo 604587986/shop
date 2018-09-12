@@ -3,7 +3,6 @@
 </template>
 <script>
   import Storage from '@/utils/storage'
-  const psl = require('psl')
   export default {
     name: 'defalt',
     mounted() {
@@ -11,7 +10,7 @@
       const { name, query } = this.$route
       if (name === 'index' && query.uuid) {
         Storage.setItem('uuid', query.uuid)
-        Storage.removeItem('uuid_connect', { domain: psl.parse(document.domain).domain })
+        Storage.removeItem('uuid_connect')
         location.href = '/'
         return
       }
