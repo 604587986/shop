@@ -312,6 +312,10 @@
       background: url("../../../assets/pc-tpl-03.png") no-repeat;
       background-size: 100%;
     }
+    &.item-4 .img-tpl {
+      background: url("../../../assets/pc-tpl-04.png") no-repeat;
+      background-size: 100%;
+    }
   }
   .img-tpl {
     width: 100%;

@@ -12,7 +12,7 @@
       </div>
       <div
         class="tab-item quick"
-        :class="[login_type === 'quick' && 'active']"
+        :class="[login_type === 'quick' && 'active', isConnect && 'disabled']"
         @click="login_type = 'quick'"
       >
         <span>短信验证码登录</span>
@@ -154,6 +154,7 @@
           password: '',
           captcha: ''
         },
+        isConnect: false,
         // 是否为微信内置浏览器
         isWXBrowser: process.client ? /micromessenger/i.test(navigator.userAgent) : false,
         // 是否为支付宝内置浏览器
@@ -175,7 +176,7 @@
     mounted() {
       this.handleChangeCaptchalUrl()
       const uuid_connect = Storage.getItem('uuid_connect')
-      const isConnect = this.$route.query.form === 'connect' && !!uuid_connect
+      const isConnect = (this.$route.query.form === 'connect' && !!uuid_connect) || this.MixinIsWeChatBrowser()
       this.isConnect = isConnect
       if (isConnect) {
         this.login_type = 'account'
@@ -225,7 +226,8 @@
           }
         }
         if (this.isConnect) {
-          const uuid = Storage.getItem('uuid_connect')
+          let uuid = Storage.getItem('uuid_connect')
+          if (this.MixinIsWeChatBrowser()) uuid = Storage.getItem('uuid')
           if (!uuid) {
             this.$message.error('参数异常，请刷新页面！')
             return false
@@ -235,6 +237,7 @@
           API_Connect.loginByConnect(uuid, params).then(response => {
             this.setAccessToken(response.access_token)
             this.setRefreshToken(response.refresh_token)
+            debugger
             if (response.result === 'bind_success') {
               this.getUserData()
               Storage.removeItem('uuid_connect')
@@ -299,6 +302,10 @@
       &.active span {
         border-bottom: 2px solid #f23030;
         padding: 13px 10px;
+      }
+      &.disabled {
+        color: #999;
+        pointer-events: none;
       }
     }
   }
