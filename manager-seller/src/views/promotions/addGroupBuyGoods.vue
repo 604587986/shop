@@ -73,7 +73,7 @@
       </el-form-item>
       <!--商品库存数-->
       <el-form-item label="商品库存数" v-if="gruopBuyForm.goods_name">
-        <span>{{ gruopBuyForm.goods_stock}}</span>
+        <span>{{ gruopBuyForm.goods_stock }}</span>
       </el-form-item>
       <!--商品总数-->
       <el-form-item label="商品总数" prop="goods_num">
@@ -213,6 +213,8 @@
             callback(new Error('请输入正整数'))
           } else if (parseInt(value) < 1) {
             callback(new Error('商品总数不得小于1'))
+          } else if (parseInt(value) > parseInt(this.gruopBuyForm.goods_stock)) {
+            callback(new Error('商品总数不能大于商品库存数'))
           } else {
             callback()
           }
