@@ -439,7 +439,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteSeconedHalfActivity(row.hp_id, {}).then(response => {
+        API_activity.deleteSeconedHalfActivity(row.hp_id, {}).then(() => {
           this.$message.success('删除成功！')
           this.GET_SecondHalfActivityList()
         })
@@ -469,12 +469,26 @@
                 this.$message.success('保存设置成功！')
                 this.activeName = 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
+              }).catch((res) => {
+                if (res.response.data.code === '401' && res.response.data.data) {
+                  const goods_name = JSON.parse(res.response.data.data).map(key => { return key.name }).toString()
+                  this.$message.error(`${goods_name}已经参加其它活动，于当前活动存在冲突`)
+                } else {
+                  this.$message.error(res.response.data.message)
+                }
               })
             } else {
               API_activity.addSeconedHalfActivity(_params).then(() => {
                 this.$message.success('添加成功！')
                 this.activeName = 'seconedHalfList'
                 this.GET_SecondHalfActivityList()
+              }).catch((res) => {
+                if (res.response.data.code === '401' && res.response.data.data) {
+                  const goods_name = JSON.parse(res.response.data.data).map(key => { return key.name }).toString()
+                  this.$message.error(`${goods_name}已经参加其它活动，于当前活动存在冲突`)
+                } else {
+                  this.$message.error(res.response.data.message)
+                }
               })
             }
           }
@@ -489,6 +503,7 @@
             return {
               goods_id: key.goods_id,
               name: key.goods_name,
+              goods_name: key.goods_name,
               thumbnail: key.thumbnail
             }
           })

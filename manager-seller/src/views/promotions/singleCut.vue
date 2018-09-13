@@ -503,12 +503,26 @@
                 this.$message.success('修改成功！')
                 this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
+              }).catch((res) => {
+                if (res.response.data.code === '401' && res.response.data.data) {
+                  const goods_name = JSON.parse(res.response.data.data).map(key => { return key.name }).toString()
+                  this.$message.error(`${goods_name}已经参加其它活动，于当前活动存在冲突`)
+                } else {
+                  this.$message.error(res.response.data.message)
+                }
               })
             } else {
               API_activity.addSingleCutActivity(_params).then(response => {
                 this.$message.success('添加成功！')
                 this.activeName = 'singleCutList'
                 this.GET_SingleCutActivityList()
+              }).catch((res) => {
+                if (res.response.data.code === '401' && res.response.data.data) {
+                  const goods_name = JSON.parse(res.response.data.data).map(key => { return key.name }).toString()
+                  this.$message.error(`${goods_name}已经参加其它活动，于当前活动存在冲突`)
+                } else {
+                  this.$message.error(res.response.data.message)
+                }
               })
             }
           }
@@ -523,6 +537,7 @@
             return {
               goods_id: key.goods_id,
               name: key.goods_name,
+              goods_name: key.goods_name,
               thumbnail: key.thumbnail
             }
           })
