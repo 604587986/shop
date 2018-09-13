@@ -301,13 +301,12 @@
         <el-button
           type="primary"
           @click="aboveGoods"
-          v-if="(currentStatus === 0 && activestep === 2) || (currentStatus === 1 && activestep !== 0)
-          || (currentStatus === 2 && activestep === 1)"
+          v-if="activestep === 1 || activestep === 2"
         >上架</el-button>
         <el-button
           type="primary"
           @click="handleUnderGoods"
-          v-if="(currentStatus === 1 && activestep === 1) || activestep === 2"
+          v-if="currentStatus === 1 && ( activestep === 1 || activestep === 2)"
         >下架</el-button>
         <el-button
           type="primary"
