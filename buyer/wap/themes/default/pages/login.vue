@@ -227,7 +227,6 @@
         }
         if (this.isConnect) {
           let uuid = Storage.getItem('uuid_connect')
-          if (this.MixinIsWeChatBrowser()) uuid = Storage.getItem('uuid')
           if (!uuid) {
             this.$message.error('参数异常，请刷新页面！')
             return false
@@ -235,34 +234,21 @@
           const params = JSON.parse(JSON.stringify(form))
           params.uuid = this.uuid
           API_Connect.loginByConnect(uuid, params).then(response => {
-            this.setAccessToken(response.access_token)
-            this.setRefreshToken(response.refresh_token)
-            debugger
             if (response.result === 'bind_success') {
+              Storage.setItem('access_token', response.access_token)
+              Storage.setItem('refresh_token', response.refresh_token)
+              Storage.setItem('uid', response.uid)
               this.getUserData()
-              Storage.removeItem('uuid_connect')
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
               } else {
-                this.$router.push({path: forward || '/'})
+                window.location.href = forward || '/'
               }
             } else {
-              this.$confirm('当前用户已绑定其它账号，确认要覆盖吗？', () => {
-                API_Connect.loginBindConnect(uuid).then(() => {
-                  this.getUserData()
-                  Storage.removeItem('uuid_connect')
-                  if (forward && /^http/.test(forward)) {
-                    window.location.href = forward
-                  } else {
-                    this.$router.push({path: forward || '/'})
-                  }
-                }).catch(() => {
-                  this.removeAccessToken()
-                  this.removeRefreshToken()
-                })
-              }, () => {
+              this.$confirm('当前用户已绑定其它账号，请先解绑！', () => {
                 this.removeAccessToken()
                 this.removeRefreshToken()
+                this.$router.push('/')
               })
             }
           }).catch(this.handleChangeCaptchalUrl)
@@ -282,6 +268,7 @@
         login: 'user/loginAction',
         removeAccessToken: 'user/removeAccessTokenAction',
         removeRefreshToken: 'user/removeRefreshTokenAction',
+        getUserData: 'user/getUserDataAction'
       })
     }
   }
