@@ -101,11 +101,20 @@
     methods: {
       /** 退出登录 */
       handleLogout() {
-        this.$confirm('确定要退出登录吗？', () => {
-          this.logout().then(() => {
-            location.href = '/'
+        if (this.MixinIsWeChatBrowser()) {
+          this.$confirm('确定要退出登录吗？这将会解绑您的微信！', () => {
+            this.logout('WECHAT').then(() => {
+              Storage.removeItem('is_wechat_auth')
+              location.href = '/'
+            })
           })
-        })
+        } else {
+          this.$confirm('确定要退出登录吗？', () => {
+            this.logout().then(() => {
+              location.href = '/'
+            })
+          })
+        }
       },
       ...mapActions({
         logout: 'user/logoutAction'
