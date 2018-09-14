@@ -702,7 +702,7 @@
           return
         } else if (this.activestep === 0 && this.activeCategoryName1) {
           /** 获取该商城分类下 商品参数信息 */
-          this.GET_GoodsParams()
+          this.GET_GoodsParams(1)
           /** 查询品牌列表 */
           this.getGoodsBrandList()
           /** 运费模板列表 */
@@ -927,8 +927,8 @@
       },
 
       /** 查询商品参数 */
-      GET_GoodsParams() {
-        if (this.activeGoodsId) {
+      GET_GoodsParams(next = null) {
+        if (this.activeGoodsId && !next) {
           API_goods.getEditGoodsParams(this.baseInfoForm.category_id, this.activeGoodsId).then((response) => {
             this.loading = false
             this.goodsParams = response
@@ -994,16 +994,18 @@
             this.isShowExchangeConfig = (this.baseInfoForm.exchange.enable_exchange === 1)
           }
           /** 商品相册校验属性 */
-          this.baseInfoForm.goods_gallery_list = response.gallery_list.map(key => {
-            return {
-              img_id: -1,
-              url: key,
-              original: key,
-              sort: 0
-            }
-          })
-          this.$nextTick(() => { this.setSort() })
-          this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+          if (Array.isArray(response.gallery_list) && response.gallery_list.length) {
+            this.baseInfoForm.goods_gallery_list = response.gallery_list.map(key => {
+              return {
+                img_id: -1,
+                url: key,
+                original: key,
+                sort: 0
+              }
+            })
+            this.$nextTick(() => { this.setSort() })
+            this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+          }
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list) {
             this.baseInfoForm.sku_list = []
