@@ -18,8 +18,7 @@ module.exports = {
       { hid: 'X-UA-Compatible', 'http-equiv': 'X-UA-Compatible', content: 'IE=edge,chrome=1' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_9bsj4tt80ku.css' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },
@@ -65,6 +64,7 @@ module.exports = {
   css: [
     '~assets/styles/normalize.css',
     '~assets/styles/base.scss',
+    '~assets/styles/iconfont/iconfont.css',
     'swiper/dist/css/swiper.css',
     'vant/lib/vant-css/index.css',
     'vant/lib/vant-css/icon-local.css'

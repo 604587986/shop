@@ -34,7 +34,7 @@
           this.$message.error('未登录不能收藏店铺！')
           return false
         }
-        API_Members.collectionShop(this.shop_id).then(() => {
+        API_Members.collectionShop(this.shop.shop_id).then(() => {
           this.$message.success('收藏成功！')
         })
       },
