@@ -3,9 +3,27 @@
 </template>
 <script>
   import Storage from '@/utils/storage'
+  import * as API_Connect from '@/api/connect'
   export default {
     name: 'defalt',
-    mounted() {
+    async mounted() {
+      // 如果是微信浏览器
+      if (this.MixinIsWeChatBrowser()) {
+        // 如果没有授权
+        if (!Storage.getItem('is_wechat_auth')) {
+          Storage.setItem('forward', location.href)
+          location.href = API_Connect.wechatAuthUrl
+        }
+        // 如果已授权，并且登录状态已失效，自动登录
+        if (Storage.getItem('is_wechat_auth') && !Storage.getItem('access_token')) {
+          const res = await API_Connect.weChatAutoLogin(Storage.getItem('uuid'))
+          if (res.uid) {
+            Storage.setItem('uid', res.uid)
+            Storage.setItem('access_token', res.access_token)
+            Storage.setItem('refresh_token', res.refresh_token)
+          }
+        }
+      }
       // 如果是首页，并且有uuid，那么替换掉cookie中的uuid，并且移除url中的uuid
       const { name, query } = this.$route
       if (name === 'index' && query.uuid) {

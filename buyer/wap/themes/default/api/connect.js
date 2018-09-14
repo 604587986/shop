@@ -39,7 +39,7 @@ export function loginByConnect(uuid, params) {
   params.password = md5(params.password)
   return request({
     url: `passport/login-binder/wap/${uuid}`,
-    method: Method.PUT,
+    method: Method.POST,
     data: params
   })
 }
@@ -91,3 +91,19 @@ export function unbindConnect(type) {
   })
 }
 
+/**
+ * 微信自动登录
+ * @param uuid
+ */
+export function weChatAutoLogin(uuid) {
+  return request({
+    url: 'passport/connect/wechat/login',
+    method: Method.GET,
+    params: { uuid }
+  })
+}
+
+/**
+ * 微信授权URL
+ */
+export const wechatAuthUrl = `${api.buyer}/passport/connect/wechat/auth`
