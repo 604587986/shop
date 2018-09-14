@@ -13,8 +13,8 @@
         const uuid_connect = Storage.getItem('uuid_connect')
         API_Connect.loginBindConnect(uuid_connect).then(response => {
           const { access_token, refresh_token } = response
-          this.$store.dispatch('setAccessTokenAction', access_token)
-          this.$store.dispatch('setRefreshTokenAction', refresh_token)
+          this.$store.dispatch('user/setAccessTokenAction', access_token)
+          this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
           Storage.setItem('uuid', uuid_connect)
           Storage.removeItem('uuid_connect')
           this.$router.replace({ name: 'member-account-binding' })

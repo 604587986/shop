@@ -20,8 +20,8 @@
           const { uid, access_token, refresh_token } = res
           if (res.uid && access_token && refresh_token) {
             Storage.setItem('uid', res.uid)
-            this.$store.dispatch('setAccessTokenAction', access_token)
-            this.$store.dispatch('setRefreshTokenAction', refresh_token)
+            this.$store.dispatch('user/setAccessTokenAction', access_token)
+            this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
           }
         }
       }

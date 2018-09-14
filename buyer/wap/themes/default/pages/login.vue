@@ -106,7 +106,7 @@
       <h4>其他登录方式</h4>
       <div class="icons-login-other">
         <a :href="getConnectUrl('wap', 'QQ')"><i class="iconfont ea-icon-qq"></i></a>
-        <a v-if="isWXBrowser" :href="getConnectUrl('wap', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>
+        <!--<a v-if="isWXBrowser" :href="getConnectUrl('wap', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>-->
         <a :href="getConnectUrl('wap', 'WEIBO')"><i class="iconfont ea-icon-weibo"></i></a>
         <a v-if="isAliPayBrowser" :href="getConnectUrl('wap', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
       </div>
@@ -236,10 +236,14 @@
           API_Connect.loginByConnect(uuid, params).then(response => {
             if (response.result === 'bind_success') {
               const { uid, access_token, refresh_token } = response
-              this.$store.dispatch('setAccessTokenAction', access_token)
-              this.$store.dispatch('setRefreshTokenAction', refresh_token)
+              this.$store.dispatch('user/setAccessTokenAction', access_token)
+              this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
               Storage.setItem('uid', uid)
-              this.getUserData()
+              Storage.removeItem('uuid_connect')
+              if (this.MixinIsWeChatBrowser()) {
+                window.location.href = '/'
+                return
+              }
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
               } else {

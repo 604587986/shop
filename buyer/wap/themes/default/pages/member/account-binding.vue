@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  import Storage from '@/utils/storage'
   import * as API_Connect from '@/api/connect'
   export default {
     name: 'account-binding',
@@ -85,6 +86,10 @@
       unbindConnect(type) {
         this.$confirm('确定要解绑吗？', () => {
           API_Connect.unbindConnect(type).then(() => {
+            if (type === 'WECHAT') {
+              Storage.removeItem('is_wechat_auth')
+              Storage.removeItem('uuid_connect')
+            }
             this.$message.success('解绑成功！')
             this.GET_Connects()
           })
