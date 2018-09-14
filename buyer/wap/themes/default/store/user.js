@@ -124,11 +124,12 @@ export const actions = {
    * 登出
    * @param commit
    * @param dispatch
+   * @param type
    * @returns {Promise<any>}
    */
-  logoutAction: ({ commit, dispatch }) => {
+  logoutAction: ({ commit, dispatch }, type) => {
     return new Promise((resolve, reject) => {
-      API_Members.logout().then(() => {
+      API_Members.logout(type).then(() => {
         commit(types.REMOVE_USER_INFO)
         commit(types.REMOVE_ACCESS_TOKEN)
         commit(types.REMOVE_REFRESH_TOKEN)

@@ -258,11 +258,12 @@ export function saveUserInfo(params) {
 
 /**
  * 登出
+ * @param type
  * @returns {AxiosPromise}
  */
-export function logout() {
+export function logout(type) {
   return request({
-    url: `members/logout`,
+    url: type === 'WECHAT' ? 'account-binder/unbind/out' : 'members/logout',
     method: Method.POST,
     needToken: true
   })
