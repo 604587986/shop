@@ -39,10 +39,12 @@
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
                 <el-button
+                  v-if="!scope.row.status"
                   type="success"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
+                  v-if="!scope.row.status"
                   type="danger"
                   @click="handleDeleteFullCut(scope.row)">删除
                 </el-button>
