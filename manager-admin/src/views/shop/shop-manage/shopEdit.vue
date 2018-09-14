@@ -56,10 +56,26 @@
             <el-input v-model="shopForm.license_add" :maxlength="50"></el-input>
           </el-form-item>
           <el-form-item label="成立日期" prop="establish_date">
-            <el-input v-model="shopForm.establish_date" :maxlength="50"></el-input>
+            <el-date-picker
+              class="license-date"
+              v-model="shopForm.establish_date"
+              type="date"
+              align="center"
+              :editable="false"
+              value-format="timestamp"
+              :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() } }">
+            </el-date-picker>
           </el-form-item>
           <el-form-item label="营业执照有效期" prop="licence_start">
-            <el-input v-model="shopForm.licence_start" :maxlength="50"></el-input>
+            <el-date-picker
+              class="license-date"
+              v-model="shopForm.licence_start"
+              type="date"
+              align="center"
+              :editable="false"
+              value-format="timestamp"
+              :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() } }">
+            </el-date-picker>
           </el-form-item>
           <br>
           <el-form-item label="法人身份证" prop="legal_img">
@@ -304,6 +320,8 @@
             if (this.isAudit) {
               params.pass = 1
             }
+            params.licence_start /= 1000
+            params.licence_end /= 1000
             API_Shop.editAuthShop(this.shop_id, params).then(response => {
               if (this.isAudit) {
                 this.$message.success('审核通过！')
@@ -366,6 +384,8 @@
           const categorys = responses[1]
           // 设置店铺信息
           this.shopForm = this.MixinClone(shopInfo)
+          this.shopForm.licence_start *= 1000
+          this.shopForm.licence_end *= 1000
           const {
             license_province_id, license_city_id, license_county_id, license_town_id,
             bank_province_id, bank_city_id, bank_county_id, bank_town_id,
@@ -447,5 +467,8 @@
     font-size: 12px;
     color: #006db7;
     &:hover { color: #F00 }
+  }
+  .license-date {
+    width: 180px;
   }
 </style>

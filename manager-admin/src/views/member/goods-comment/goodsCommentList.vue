@@ -44,7 +44,7 @@
       width="50%"
     >
       <el-form :model="reviewComments">
-        <el-form-item label="咨询内容：">
+        <el-form-item label="评论内容：">
           <br>
           <span style="color: #409EFF">{{ reviewComments.content }}</span>
           <div v-if="reviewComments.images && reviewComments.images.length">
