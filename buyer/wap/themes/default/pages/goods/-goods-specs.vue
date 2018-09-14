@@ -4,14 +4,14 @@
       <van-cell is-link @click="showPopup = true">
         <div slot="title">
           <span>已选</span>
-          <span class="spec-vals">{{ selectedSpecVals.join('-') || '默认' }} {{ buyNum }}件</span>
+          <span class="spec-vals">{{ selectedSku ? (specList.length ? selectedSpecVals.join('-') : '默认') : '未选规格' }} {{ buyNum }}件</span>
         </div>
       </van-cell>
     </van-cell-group>
     <van-popup v-model="showPopup" position="bottom" style="height:70%">
       <div class="spec-headr">
         <div class="pic-header">
-          <img :src="selectedSku.thumbnail">
+          <img :src="selectedSku.thumbnail || goods.thumbnail">
         </div>
         <i class="iconfont ea-icon-close" @click="showPopup = false"/>
         <div class="price-header price">￥{{ selectedSku.price | unitPrice }}</div>
@@ -23,7 +23,7 @@
       <div class="spec-body">
         <div class="spec-sel">
           <span class="tit-spec-body">已选</span>
-          <span class="prod-spec-info">{{ selectedSpecVals.join('-') || '默认' }}</span>
+          <span class="prod-spec-info">{{ selectedSku ? selectedSpecVals.join('-') : '未选规格' }}</span>
           <span class="count-spec-body">{{ buyNum }}件</span>
         </div>
         <div class="spec-list">
@@ -63,10 +63,9 @@
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'goods-specs',
-    props: ['goods-id'],
+    props: ['goods', 'show'],
     data() {
       return {
-        // 显示弹窗
         showPopup: false,
         // 购买数量
         buyNum: 1,
@@ -86,7 +85,7 @@
       }
     },
     mounted() {
-      API_Goods.getGoodsSkus(this.goodsId).then(response => {
+      API_Goods.getGoodsSkus(this.goods.goods_id).then(response => {
         const specList = []
         // const priceList = []
         response.forEach((sku, skuIndex) => {
@@ -132,7 +131,10 @@
         //   }
         // }
         this.specList = specList
-        this.initSpec()
+        // 如果有sku信息，初始化已选规格
+        if (this.$route.query.sku_id) {
+          this.initSpec()
+        }
         // 如果没有规格，把商品第一个sku给已选择sku
         if (!specList.length) {
           this.selectedSku = this.skuMap.get('no_spec')
@@ -186,6 +188,7 @@
         })
         this.$set(this.specList, specIndex, spec)
         this.selectedSpec[specIndex] = spec_val.spec_value_id
+        this.selectedSpecVals[specIndex] = spec_val.spec_value
         this.handleSelectedSku()
       },
       /** 购买数量增加减少 */
@@ -227,6 +230,12 @@
       }
     },
     watch: {
+      show: function(newVal) {
+        if (newVal) this.showPopup = newVal
+      },
+      showPopup: function(newVal) {
+        if (!newVal) this.$emit('close')
+      },
       selectedSku: {
         handler: function (newVal) {
           this.$emit('sku-changed', newVal)

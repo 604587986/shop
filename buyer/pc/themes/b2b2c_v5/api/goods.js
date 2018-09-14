@@ -55,17 +55,6 @@ export function getKeywordNum(keyword) {
 }
 
 /**
- * 记录商品浏览次数
- * @param goods_id
- */
-export function visitGoods(goods_id) {
-  return request({
-    url: `goods/${goods_id}/visit`,
-    method: Method.GET
-  })
-}
-
-/**
  * 获取商品sku列表
  * @param goods_id
  */
