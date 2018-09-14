@@ -454,7 +454,7 @@
       handleEditMould(row) {
         this.activeName = 'add'
         this.tplOperaName = '修改模版'
-        API_express.getSimpleTpl(row.template_id).then((response) => {
+        API_express.getSimpleTpl(row.id).then((response) => {
           this.mouldForm = { ...response }
           // 初始化过滤地区
           response.items.forEach(key => {
@@ -465,7 +465,7 @@
 
       /** 删除模板*/
       handleDeleteMould(row) {
-        const _id = row.template_id
+        const _id = row.id
         this.$confirm(`确定要删除模板么?`, '确认信息', { type: 'warning' })
           .then(() => {
             API_express.deleteExpressMould(_id).then(() => {
@@ -548,15 +548,15 @@
             this.mouldForm.items.forEach(key => {
               key.area = typeof key.area === 'string' ? key.area : JSON.stringify(key.area)
             })
-            if (this.mouldForm.template_id) { // 修改
-              API_express.saveExpressMould(this.mouldForm.template_id, this.mouldForm).then(() => {
+            if (this.mouldForm.id) { // 修改
+              API_express.saveExpressMould(this.mouldForm.id, this.mouldForm).then(() => {
                 this.$message.success('修改成功')
                 this.GET_ExpressMould()
                 this.activeName = 'express'
                 this.tplOperaName = '新增模板'
               })
             } else { // 添加
-              delete this.mouldForm.template_id
+              delete this.mouldForm.id
               API_express.addExpressMould(this.mouldForm).then(() => {
                 this.$message.success('添加成功')
                 this.GET_ExpressMould()

@@ -194,9 +194,9 @@
                 @change="changeTpl">
                 <el-option
                   v-for="item in tplList"
-                  :key="item.template_id"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.template_id">
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
