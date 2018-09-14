@@ -39,10 +39,12 @@
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
                 <el-button
+                  v-if="!scope.row.status"
                   type="success"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
+                  v-if="!scope.row.status"
                   type="danger"
                   @click="handleDeleteFullCut(scope.row)">删除
                 </el-button>
@@ -255,6 +257,25 @@
       :couponModelShow="couponModelShow"
       @saveCoupon="saveCoupon"
     ></Coupon>
+    <el-dialog
+      title="以下商品已经参加其它活动，于当前活动存在冲突"
+      :visible.sync="showConflictGoods"
+      width="30%">
+      <en-table-layout
+        toolbar
+        :tableData="conflictList">
+        <template slot="table-columns">
+          <!--商品名称-->
+          <el-table-column prop="name" label="商品名称"/>
+          <!--商品图片-->
+          <el-table-column label="商品名称">
+            <template slot-scope="scope">
+              <img :src="scope.row.thumbnail" class="goods-image"/>
+            </template>
+          </el-table-column>
+        </template>
+      </en-table-layout>
+    </el-dialog>
   </div>
 </template>
 
@@ -550,7 +571,13 @@
           range_type: [
             { validator: checkRange, trigger: 'change' }
           ]
-        }
+        },
+
+        /** 是否显示冲突列表 */
+        showConflictGoods: false,
+
+        /** 冲突列表 显示商品名称 商品价格 商品图片 */
+        conflictList: []
       }
     },
     mounted() {
@@ -771,7 +798,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteFullCutActivity(row.fd_id).then(response => {
+        API_activity.deleteFullCutActivity(row.fd_id).then(() => {
           this.$message.success('删除成功！')
           this.GET_FullCutActivityList()
         })
@@ -977,12 +1004,29 @@
                 this.$message.success('保存成功！')
                 this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
+              }).catch((res) => {
+                if (res.response.data.code === '401' && res.response.data.data) {
+                  this.showConflictGoods = true
+                  const goods_name = JSON.parse(res.response.data.data).map(key => { return key.name }).toString()
+                  this.$message.error(`${goods_name}已经参加其它活动，于当前活动存在冲突`)
+                } else {
+                  this.$message.error(res.response.data.message)
+                }
               })
             } else {
               API_activity.addFullCutActivity(this.activityForm).then(() => {
                 this.$message.success('添加成功！')
                 this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
+              }).catch((res) => {
+                if (res.response.data.code === '401' && res.response.data.data) {
+                  // this.showConflictGoods = true
+                  // this.conflictList = JSON.parse(res.response.data.data)
+                  const goods_name = JSON.parse(res.response.data.data).map(key => { return key.name }).toString()
+                  this.$message.error(`${goods_name}已经参加其它活动，于当前活动存在冲突`)
+                } else {
+                  this.$message.error(res.response.data.message)
+                }
               })
             }
           }
