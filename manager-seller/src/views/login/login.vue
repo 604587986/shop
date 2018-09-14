@@ -149,6 +149,7 @@
       },
       /** 提交登录表单 */
       submitLoginForm() {
+        Storage.removeItem('seller_shop')
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
             const params = this.MixinClone(this.loginForm)
