@@ -235,9 +235,10 @@
           params.uuid = this.uuid
           API_Connect.loginByConnect(uuid, params).then(response => {
             if (response.result === 'bind_success') {
-              Storage.setItem('access_token', response.access_token)
-              Storage.setItem('refresh_token', response.refresh_token)
-              Storage.setItem('uid', response.uid)
+              const { uid, access_token, refresh_token } = response
+              this.$store.dispatch('setAccessTokenAction', access_token)
+              this.$store.dispatch('setRefreshTokenAction', refresh_token)
+              Storage.setItem('uid', uid)
               this.getUserData()
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward

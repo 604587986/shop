@@ -17,10 +17,11 @@
         // 如果已授权，并且登录状态已失效，自动登录
         if (Storage.getItem('is_wechat_auth') && !Storage.getItem('access_token')) {
           const res = await API_Connect.weChatAutoLogin(Storage.getItem('uuid'))
-          if (res.uid) {
+          const { uid, access_token, refresh_token } = res
+          if (res.uid && access_token && refresh_token) {
             Storage.setItem('uid', res.uid)
-            Storage.setItem('access_token', res.access_token)
-            Storage.setItem('refresh_token', res.refresh_token)
+            this.$store.dispatch('setAccessTokenAction', access_token)
+            this.$store.dispatch('setRefreshTokenAction', refresh_token)
           }
         }
       }
