@@ -170,8 +170,6 @@
           // 获取购物车数据
           this.$store.dispatch('cart/getCartDataAction')
         }
-        // 浏览量+1
-        API_Goods.visitGoods(goods_id)
         // 记录浏览量统计【用于统计】
         API_Common.recordViews(window.location.href)
         // 获取促销信息
