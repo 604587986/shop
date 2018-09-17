@@ -113,7 +113,7 @@
               <a href="javascript:;" :class="['check', 'check-all', all_checked && 'checked']">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
-                <span>全选（共<b>{{ allCount }}</b>）件</span>
+                <span>全选 共（<b>{{ allCount }}</b>）件</span>
             </span>
             <em>|</em>
             <a href="javascript:;" class="check-tool-a" @click="handleBatchDelete">批量删除</a>
