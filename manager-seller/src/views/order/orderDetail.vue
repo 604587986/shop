@@ -390,15 +390,18 @@
         return val === 'ONLINE' ? '在线支付' : '货到付款'
       }
     },
-    watch: {
-      sn: 'GET_OrderDetail'
-    },
     beforeRouteUpdate(to, from, next) {
       this.sn = to.params.sn
+      this.GET_OrderDetail()
       next()
+    },
+    mounted() {
+      this.sn = this.$route.params.sn
+      this.GET_OrderDetail()
     },
     activated() {
       this.sn = this.$route.params.sn
+      this.GET_OrderDetail()
     },
     methods: {
       /** 获取订单详情信息 */
