@@ -312,7 +312,7 @@
     filters: {
       /** 销售状态格式化 */
       marketStatus(row) {
-        switch (row.is_auth || row.is_auth === 0) {
+        switch (row.is_auth) {
           case 0 : return row.market_enable === 1 ? '待审核' : '已下架'
           case 1 : return row.market_enable === 1 ? '售卖中' : '已下架'
           case 2 : return row.market_enable === 1 ? '审核拒绝' : '已下架'
