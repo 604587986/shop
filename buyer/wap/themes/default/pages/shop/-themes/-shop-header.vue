@@ -12,7 +12,7 @@
     <div class="cate-side" :class="[show_cate && 'show']">
       <i class="iconfont ea-icon-close" @click="show_cate = false"></i>
       <ul>
-        <li v-for="(cate, index) in categories" :key="index">
+        <li v-for="(cate, index) in categories" :key="index" :class="[cate.lv === 2 && 'lv-2']">
           <nuxt-link :to="'/shop/goods-list?shop_id='+ shop.shop_id +'&shop_cat_id='+ cate.shop_cat_id">{{ cate.shop_cat_name }}</nuxt-link>
         </li>
       </ul>
@@ -40,7 +40,10 @@
         response.forEach(item => {
           categories.push(item)
           if (item.children && item.children.length) {
-            categories.push(...item.children)
+            item.children.forEach(_item => {
+              _item.lv = 2
+              categories.push(_item)
+            })
           }
         })
         this.categories = categories
@@ -100,6 +103,9 @@
       font-size: 14px;
       font-weigth: 200;
       color: #000;
+      &.lv-2 {
+        padding-left: 20px;
+      }
     }
     a {
       display: block;
