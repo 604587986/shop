@@ -7,7 +7,8 @@
           <div class="promotions-cell">
             <template v-for="(prom, index) in promotions">
               <template v-if="prom.full_discount_vo">
-                <em class="hl_red_bg" :key="index + '-full'">满减</em>
+                <em v-if="prom.full_discount_vo.is_full_minus === 1" class="hl_red_bg" :key="index + '-full'">满减</em>
+                <em v-if="prom.full_discount_vo.is_discount === 1" class="hl_red_bg" :key="index + '-full'">打折</em>
                 <em v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'" class="hl_red_bg">赠礼</em>
                 <em v-if="prom.full_discount_vo.coupon_do" :key="index + '-coupon'" class="hl_red_bg">赠券</em>
               </template>
@@ -27,9 +28,13 @@
           <!--满减-->
           <template v-if="prom.full_discount_vo">
             <van-cell :key="index + '-full'">
-              <div slot="title">
+              <div v-if="prom.full_discount_vo.is_full_minus === 1" slot="title">
                 <em class="hl_red_bg">满减</em>
                 <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立减现金 <span class="price">{{ prom.full_discount_vo.minus_value }}元</span></em>
+              </div>
+              <div v-if="prom.full_discount_vo.is_discount === 1" slot="title">
+                <em class="hl_red_bg">打折</em>
+                <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立享优 <span class="price">{{ prom.full_discount_vo.discount_value }}折</span>优惠</em>
               </div>
             </van-cell>
             <van-cell v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'">
