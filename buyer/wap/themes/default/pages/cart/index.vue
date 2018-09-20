@@ -35,13 +35,13 @@
                 <div class="sku-content">
                   <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">{{ sku.name }}</nuxt-link>
                   <div class="sku-spec">
-                    <span>{{ sku | formatterSkuSpec }}天空蓝-XXL-大飒飒</span>
+                    <span>{{ sku | formatterSkuSpec }}</span>
                     <select
                       v-if="sku.single_list && sku.single_list.length"
                       class="activity_list"
                       @change="(event) => { handleActChanged(sku, event) }"
                     >
-                      <option v-for="(act, index) in sku.single_list" :key="index" :value="act.activity_id">{{ act.title }}</option>
+                      <option v-for="(act, index) in sku.single_list" :key="index" :value="act.promotion_type">{{ act.title }}</option>
                     </select>
                   </div>
                   <div class="sku-tools">
@@ -126,19 +126,12 @@
       /** 促销活动发生改变 */
       handleActChanged(sku, event) {
         const { seller_id, single_list = [] } = sku
-        const activity_id = Number(event.target.value)
-        let promotion_type = ''
-        const pros = single_list.filter(item => item.activity_id === activity_id)
-        if (pros.length) {
-          promotion_type = pros[0].promotion_type
-        } else {
-          this.$message.error('选择活动出错，请稍后再试！')
-          return false
-        }
+        const promotion_type = event.target.value
+        const promotion = single_list.filter(item => item.promotion_type === promotion_type)
         const params = {
           seller_id,
           sku_id: sku.sku_id,
-          activity_id,
+          activity_id: promotion[0].activity_id,
           promotion_type
         }
         this.changeActivity(params)
