@@ -13,7 +13,7 @@
       <i class="iconfont ea-icon-close" @click="show_cate = false"></i>
       <ul>
         <li v-for="(cate, index) in categories" :key="index">
-          <nuxt-link :to="'/shop/goods-list?shop_id='+ shop.shop_id +'&category='+ cate.shop_cat_id">{{ cate.shop_cat_name }}</nuxt-link>
+          <nuxt-link :to="'/shop/goods-list?shop_id='+ shop.shop_id +'&shop_cat_id='+ cate.shop_cat_id">{{ cate.shop_cat_name }}</nuxt-link>
         </li>
       </ul>
     </div>
