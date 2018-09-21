@@ -51,8 +51,14 @@
         <div></div>
       </div>
       <div class="spec-footer">
-        <a class="buy-btn add-cart" @click="$emit('add-cart')">加入购物车</a>
-        <a class="buy-btn direct-order" @click="$emit('buy-now')">立即购买</a>
+        <a
+          v-if="goods.is_auth === 0 || goods.goods_off === 0"
+          class="buy-btn buy-disabled"
+        >{{ goods.is_auth === 0 ? '商品审核中' : '商品已下架' }}</a>
+        <template v-else>
+          <a class="buy-btn add-cart" @click="$emit('add-cart')">加入购物车</a>
+          <a class="buy-btn direct-order" @click="$emit('buy-now')">立即购买</a>
+        </template>
       </div>
     </van-popup>
   </div>
