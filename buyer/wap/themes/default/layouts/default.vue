@@ -8,14 +8,14 @@
     name: 'defalt',
     async mounted() {
       // 如果是微信浏览器
-      if (this.MixinIsWeChatBrowser()) {
+      if (!this.MixinIsWeChatBrowser()) {
         // 如果没有授权
         if (!Storage.getItem('is_wechat_auth')) {
           Storage.setItem('forward', location.href)
           location.href = API_Connect.wechatAuthUrl
         }
-        // 如果已授权，并且登录状态已失效，自动登录
-        if (Storage.getItem('is_wechat_auth') && !Storage.getItem('access_token')) {
+        // 如果已授权，之前已登录过，且登录状态已失效，自动登录
+        if (Storage.getItem('is_wechat_auth') && Storage.getItem('uuid_connect') && !Storage.getItem('refresh_token')) {
           const res = await API_Connect.weChatAutoLogin(Storage.getItem('uuid'))
           const { uid, access_token, refresh_token } = res
           if (res.uid && access_token && refresh_token) {
