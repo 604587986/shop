@@ -78,7 +78,7 @@
       </nuxt-link>
       <a href="/shop/apply" class="service-item">
         <i class="iconfont ea-icon-shop"></i>
-        <span>商家中心</span>
+        <span>商家入驻</span>
       </a>
     </div>
   </div>

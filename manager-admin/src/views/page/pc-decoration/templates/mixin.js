@@ -19,7 +19,7 @@ export default {
   components: {
     'layout-item': {
       props: ['block'],
-      template: `<div class="layout-item" v-lazy-container="{ selector: 'img' }">
+      template: `<div class="layout-item">
                    <template v-if="$parent.isEdit">
                      <div class="mask-floor" @click="$emit('handle-edit')">
                        <div class="mask-bg-floor">
@@ -29,10 +29,10 @@ export default {
                        </div>
                      </div>
                      <slot :block="block"></slot>
-                     <img v-if="block.block_value" :data-src="block.block_value">
+                     <img v-if="block.block_value" :src="block.block_value">
                      <div v-else-if="$parent.isEdit" class="no-image"></div>
                    </template>
-                   <a v-else :href="$parent.blockHref(block)">
+                   <a v-else :href="$parent.blockHref(block)" v-lazy-container="{ selector: 'img' }">
                      <slot :block="block"></slot>
                      <img :data-src="block.block_value">
                    </a>
