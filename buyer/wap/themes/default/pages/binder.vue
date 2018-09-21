@@ -15,7 +15,7 @@
           const { access_token, refresh_token } = response
           this.$store.dispatch('user/setAccessTokenAction', access_token)
           this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
-          Storage.setItem('uuid', uuid_connect)
+          Storage.setItem('uuid', uuid_connect, { expires: 30 })
           Storage.removeItem('uuid_connect')
           this.$router.replace({ name: 'member-account-binding' })
         }).catch(() => {

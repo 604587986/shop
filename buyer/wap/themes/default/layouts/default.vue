@@ -28,7 +28,7 @@
       // 如果是首页，并且有uuid，那么替换掉cookie中的uuid，并且移除url中的uuid
       const { name, query } = this.$route
       if (name === 'index' && query.uuid) {
-        Storage.setItem('uuid', query.uuid)
+        Storage.setItem('uuid', query.uuid, { expires: 30 })
         Storage.removeItem('uuid_connect')
         location.href = '/'
         return

@@ -78,8 +78,15 @@
       />
       <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
       <van-goods-action-mini-btn icon="shop" text="店铺" :to="'/shop/' + goods.seller_id"/>
-      <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
-      <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
+      <van-goods-action-big-btn
+        v-if="goods.is_auth === 0 || goods.goods_off === 0"
+        :text="goods.is_auth === 0 ? '商品审核中' : '商品已下架'"
+        class="buy-disabled"
+      />
+      <template v-else>
+        <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
+        <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
+      </template>
     </van-goods-action>
     <goods-distribution v-if="show_dis" :show="showDisPopup" @close="showDisPopup = false"/>
   </div>
@@ -412,5 +419,9 @@
     .van-icon-like {
       color: $color-main
     }
+  }
+  /deep/ .buy-disabled {
+    background-color: #e5e5e5;
+    pointer-events:none;
   }
 </style>
