@@ -1,6 +1,8 @@
 <template>
   <div id="member-index" style="background-color: #f0f2f5">
-    <van-nav-bar title="我的"></van-nav-bar>
+    <van-nav-bar title="我的" @click-right="$router.push('clear')">
+      <i class="clear-pl" slot="right"/>
+    </van-nav-bar>
     <div class="member-container">
       <div class="head-box" :style="{backgroundImage: 'url('+ user.face +')'}"></div>
       <div class="head-items">
@@ -234,6 +236,11 @@
     .big-btn {
       padding: 10px 15px;
     }
+  }
+  /deep/ .clear-pl {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
   }
 </style>
 
