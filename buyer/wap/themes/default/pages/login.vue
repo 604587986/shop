@@ -1,6 +1,12 @@
 <template>
   <div id="login">
-    <nav-bar title="登录"></nav-bar>
+    <van-nav-bar
+      title="登录"
+      left-arrow
+      @click="MixinRouterBack"
+      @click-right="$router.push('clear')">
+      <i class="clear-pl" slot="right"/>
+    </van-nav-bar>
     <!--登录方式切换-->
     <div class="login-tab">
       <div
@@ -360,5 +366,10 @@
       line-height: 30px;
       color: #333
     }
+  }
+  /deep/ .clear-pl {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
   }
 </style>
