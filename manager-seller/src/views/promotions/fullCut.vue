@@ -343,7 +343,7 @@
           setTimeout(() => {
             if (!/^((0\.[1-9]{1})|(([1-9]{1})(\.\d{1})?))$/.test(value)) {
               callback(new Error('请输入正整数或者一位小数'))
-            } else if (value <= 1 || value >= 10) {
+            } else if (parseInt(value) < 1 || parseInt(value) >= 10) {
               callback(new Error('打折数字只能在1-9.9之间'))
             } else {
               callback()

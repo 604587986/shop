@@ -22,7 +22,7 @@
       <el-form-item label="使用期限：" style="text-align: left" prop="coupon_time_limit">
         <el-date-picker
           v-model="couponForm.coupon_time_limit"
-          type="daterange"
+          type="datetimerange"
           range-separator="-"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
