@@ -8,7 +8,7 @@
     name: 'defalt',
     async mounted() {
       // 如果是微信浏览器
-      if (!this.MixinIsWeChatBrowser()) {
+      if (this.MixinIsWeChatBrowser()) {
         // 如果没有授权
         if (!Storage.getItem('is_wechat_auth')) {
           Storage.setItem('forward', location.href)
