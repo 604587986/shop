@@ -39,7 +39,7 @@ Vue.mixin({
       if (window.history.length <= 1) {
         location.href = '/'
       } else {
-        this.$router.back()
+        window.history.back()
       }
     },
     /** 是否为微信浏览器 */
