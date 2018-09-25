@@ -3,7 +3,7 @@
     <van-nav-bar
       title="登录"
       left-arrow
-      @click="MixinRouterBack"
+      @click-left="MixinRouterBack"
       @click-right="$router.push('clear')">
       <i class="clear-pl" slot="right"/>
     </van-nav-bar>
