@@ -31,7 +31,7 @@
           </div>
           <div class="price-goods">
             <div>原价：￥{{ goods.original_price | unitPrice }}</div>
-            <div>已售出：<span>{{ goods.buy_num }}</span>件</div>
+            <div>已售出：<span>{{ goods.show_buy_num }}</span>件</div>
           </div>
         </dd>
       </li>

@@ -12,14 +12,10 @@
         </div>
       </div>
       <div class="count-down">
-        <p class="count-down-text">已兑换</p>
         <p class="count-down-times">
-          <span>{{ promotion.enable_exchange }}件</span>
-          <!--<span v-if="day > 0" class="day">{{ day }}天</span>-->
-          <!--<span class="time">{{ hours }}</span>:-->
-          <!--<span class="time">{{ minutes }}</span>:-->
-          <!--<span class="time">{{ seconds }}</span>-->
+          <span>{{ promotion.enable_exchange }}人</span>
         </p>
+        <p class="count-down-text">已兑换</p>
       </div>
     </div>
   </div>
@@ -109,11 +105,11 @@
       text-align: center;
       background-color: #f8f8f8;
       .count-down-text {
-        margin: 5px 0 2px;
         font-size: 10px;
         color: #666;
       }
       .count-down-times {
+        margin: 5px 0 2px;
         font-size: 14px;
         color: $color-main;
       }

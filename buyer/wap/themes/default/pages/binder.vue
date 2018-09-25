@@ -8,6 +8,8 @@
   export default {
     name: 'binder',
     mounted() {
+      const { uuid } = this.$route.query
+      if (uuid) Storage.setItem('uuid', uuid, { expires: 30 })
       // 如果有刷新token，说明是在已登录的情况下绑定或换绑
       if (Storage.getItem('refresh_token')) {
         const uuid_connect = Storage.getItem('uuid_connect')
