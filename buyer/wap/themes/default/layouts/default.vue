@@ -9,6 +9,11 @@
     async mounted() {
       // 如果是微信浏览器
       if (this.MixinIsWeChatBrowser()) {
+        const forward = Storage.getItem('forward')
+        if (forward) {
+          Storage.removeItem('forward')
+          location.href = forward
+        }
         // 如果没有授权
         if (!Storage.getItem('is_wechat_auth')) {
           Storage.setItem('forward', location.href)
