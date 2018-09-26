@@ -114,6 +114,7 @@
   import { mapActions } from 'vuex'
   import { RegExp } from '~/ui-utils'
   import Storage from '@/utils/storage'
+  import jwt_decode from 'jwt-decode'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
@@ -207,7 +208,8 @@
           API_Connect.loginByConnect(uuid, params).then(response => {
             this.setAccessToken(response.access_token)
             this.setRefreshToken(response.refresh_token)
-            Storage.setItem('uid', response.uid)
+            const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+            Storage.setItem('uid', response.uid, { expires })
             if (response.result === 'bind_success') {
               this.getUserData()
               Storage.removeItem('uuid_connect')

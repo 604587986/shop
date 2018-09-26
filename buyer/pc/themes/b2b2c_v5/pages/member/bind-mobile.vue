@@ -42,6 +42,7 @@
   import * as API_Safe from '@/api/safe'
   import * as API_Common from '@/api/common'
   import { RegExp } from '~/ui-utils'
+  import Storage from '@/utils/storage'
   export default {
     name: 'bind-mobile',
     head() {
@@ -51,6 +52,7 @@
     },
     data() {
       return {
+        uuid: Storage.getItem('uuid'),
         bindMobileForm: {},
         bindMobileRules: {
           mobile: [
@@ -73,9 +75,6 @@
         // 绑定成功的手机号
         bindMobile: this.$store.getters.user.mobile
       }
-    },
-    computed: {
-      ...mapGetters(['uuid'])
     },
     mounted() {
       this.getValidImgUrl()
