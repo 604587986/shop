@@ -29,7 +29,6 @@
       const { name, query } = this.$route
       if (name === 'index' && query.uuid) {
         Storage.setItem('uuid', query.uuid, { expires: 30 })
-        Storage.removeItem('uuid_connect')
         location.href = '/'
         return
       }
