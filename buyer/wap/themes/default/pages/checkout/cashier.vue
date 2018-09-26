@@ -59,7 +59,7 @@
         this.trade_sn
           ? API_Trade.getCashierData({ trade_sn: this.trade_sn })
           : API_Trade.getCashierData({ order_sn: this.order_sn }),
-        API_Trade.getPaymentList()
+        API_Trade.getPaymentList('WAP')
       ]).then(responses => {
         this.order = responses[0]
         this.paymentList = responses[1].map(item => {
@@ -76,7 +76,26 @@
         const sn = this.trade_sn || this.order_sn
         const client_type = 'WAP'
         const payment_plugin_id = payment.plugin_id
-        window.location.href = `./cashier-load-pay?trade_type=${trade_type}&sn=${sn}&payment_plugin_id=${payment_plugin_id}`
+        API_Trade.initiatePay(trade_type, sn, {
+          client_type,
+          pay_mode: 'normal',
+          payment_plugin_id
+        }).then(response => {
+          if (payment_plugin_id === 'weixinPayPlugin') {
+            if (!this.MixinIsWeChatBrowser()) {
+              this.$message.error('请在微信中支付！')
+              return
+            } else {
+              const params = {}
+              response.form_items.forEach(item => {
+                params[item.item_name] = item.item_value
+              })
+              WeixinJSBridge.invoke('getBrandWCPayRequest', params, res => {
+                alert('WeixinJSBridgeRes:', res)
+              })
+            }
+          }
+        })
       }
     }
   }
