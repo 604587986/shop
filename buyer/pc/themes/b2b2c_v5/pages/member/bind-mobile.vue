@@ -38,7 +38,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
   import * as API_Safe from '@/api/safe'
   import * as API_Common from '@/api/common'
   import { RegExp } from '~/ui-utils'
