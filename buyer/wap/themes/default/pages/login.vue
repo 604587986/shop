@@ -3,7 +3,7 @@
     <van-nav-bar
       title="登录"
       left-arrow
-      @click="MixinRouterBack"
+      @click-left="MixinRouterBack"
       @click-right="$router.push('clear')">
       <i class="clear-pl" slot="right"/>
     </van-nav-bar>
@@ -126,6 +126,7 @@
 <script>
   import { mapActions } from 'vuex'
   import { RegExp } from '~/ui-utils'
+  import jwt_decode from 'jwt-decode'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
@@ -244,8 +245,8 @@
               const { uid, access_token, refresh_token } = response
               this.$store.dispatch('user/setAccessTokenAction', access_token)
               this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
-              Storage.setItem('uid', uid)
-              Storage.removeItem('uuid_connect')
+              const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+              Storage.setItem('uid', uid, { expires })
               if (this.MixinIsWeChatBrowser()) {
                 window.location.href = '/'
                 return

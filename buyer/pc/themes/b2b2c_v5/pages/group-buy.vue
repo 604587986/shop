@@ -28,7 +28,7 @@
                 <span class="group_discount">{{(gb.price / gb.original_price * 10).toFixed(1) }}&nbsp;折</span>
                 <del class="group_price">¥{{ gb.original_price }}</del>
               </div>
-              <span class="group_num"><em>{{ gb.visual_num }}</em>件已购买</span>
+              <span class="group_num"><em>{{ gb.show_buy_num }}</em>件已购买</span>
               <a class="buy-button" target="_blank" :href="'/goods/' + gb.goods_id">
                 我要团
               </a>

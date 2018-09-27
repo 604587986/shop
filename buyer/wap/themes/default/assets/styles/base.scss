@@ -162,6 +162,10 @@ input[type="number"]{
   }
 }
 
+.van-dialog__confirm, .van-dialog__confirm:active {
+  color: $color-main !important;
+}
+
 /** 大按钮样式 */
 .big-btn {
   padding: 10px 10px 0 10px;
