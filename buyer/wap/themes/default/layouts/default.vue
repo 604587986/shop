@@ -4,6 +4,7 @@
 <script>
   import Storage from '@/utils/storage'
   import * as API_Connect from '@/api/connect'
+  import jwt_decode from 'jwt-decode'
   export default {
     name: 'defalt',
     async mounted() {
@@ -19,14 +20,17 @@
           Storage.setItem('forward', location.href)
           location.href = API_Connect.wechatAuthUrl
         }
-        // 如果已授权，之前已登录过，且登录状态已失效，自动登录
-        if (Storage.getItem('is_wechat_auth') && Storage.getItem('uuid_connect') && !Storage.getItem('refresh_token')) {
+        // 如果已授权，去自动登录
+        if (Storage.getItem('is_wechat_auth')) {
           const res = await API_Connect.weChatAutoLogin(Storage.getItem('uuid'))
-          const { uid, access_token, refresh_token } = res
-          if (res.uid && access_token && refresh_token) {
-            Storage.setItem('uid', res.uid)
-            this.$store.dispatch('user/setAccessTokenAction', access_token)
-            this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
+          if (res) {
+            const { uid, access_token, refresh_token } = res
+            if (res.uid && access_token && refresh_token) {
+              const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+              Storage.setItem('uid', uid, { expires })
+              this.$store.dispatch('user/setAccessTokenAction', access_token)
+              this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
+            }
           }
         }
       }

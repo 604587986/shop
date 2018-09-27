@@ -75,14 +75,14 @@ service.interceptors.response.use(
     await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
-    // 109 --> 没有登录、登录状态失效
-    if (error_data.code === '109') {
-      Vue.prototype.$message.error('您已被登出！')
-      const { $store } = Vue.prototype.$nuxt
+    if (error_response.status === 401) {
+      const { $store, $router, $route } = Vue.prototype.$nuxt
+      if (!Storage.getItem('refresh_token')) return
       $store.dispatch('cart/cleanCartStoreAction')
       $store.dispatch('user/removeUserAction')
       $store.dispatch('user/removeAccessTokenAction')
       $store.dispatch('user/removeRefreshTokenAction')
+      $router.push(`/login?forward=${$route.fullPath}`)
       return Promise.reject(error)
     }
     if (error.config.message !== false) {

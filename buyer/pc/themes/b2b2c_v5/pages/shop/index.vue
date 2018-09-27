@@ -108,7 +108,11 @@
       },
       /** 店铺列表排序 */
       handleSortShopList(order) {
-        this.params.order = order
+        if (order === 0) {
+          delete this.params.order
+        } else {
+          this.params.order = order
+        }
         location.href = `/shop?${qs.stringify(this.params)}`
       },
       /** 格式化地址信息 */

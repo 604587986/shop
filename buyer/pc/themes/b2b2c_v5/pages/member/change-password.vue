@@ -117,7 +117,7 @@
       }
     },
     mounted() {
-      this.getValidImgUrl()
+      this.$nextTick(this.getValidImgUrl)
     },
     computed: {
       ...mapGetters(['user'])
