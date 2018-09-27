@@ -106,6 +106,9 @@
             <span>商品总价：</span><span>￥{{ order.goods_price | unitPrice }}</span>
           </div>
           <div class="order-item">
+            <span>优惠折扣：</span><span>-￥{{ order.discount_price | unitPrice }}</span>
+          </div>
+          <div class="order-item">
             <span>运费：</span><span>￥{{ order.shipping_price | unitPrice }}</span>
           </div>
           <span class="hr"></span>
