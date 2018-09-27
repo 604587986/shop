@@ -351,7 +351,7 @@
             area_json: JSON.stringify(val),
             first_company: 1,
             first_price: 0,
-            continued_company: 0,
+            continued_company: 1,
             continued_price: 0
           })
           // 更新过滤地区数据 添加
@@ -396,8 +396,8 @@
 
       /** 过滤continued_company */
       intContinuedCompany(row) {
-        if (!RegExp.integer.test(row.continued_company) && row.continued_company !== 0) {
-          row.continued_company = 0
+        if (!RegExp.integer.test(row.continued_company)) {
+          row.continued_company = 1
         }
       },
 
