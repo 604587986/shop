@@ -4,6 +4,7 @@
 <script>
   import Storage from '@/utils/storage'
   import * as API_Connect from '@/api/connect'
+  import jwt_decode from 'jwt-decode'
   export default {
     name: 'defalt',
     async mounted() {
@@ -25,7 +26,8 @@
           if (res) {
             const { uid, access_token, refresh_token } = res
             if (res.uid && access_token && refresh_token) {
-              Storage.setItem('uid', res.uid)
+              const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+              Storage.setItem('uid', uid, { expires })
               this.$store.dispatch('user/setAccessTokenAction', access_token)
               this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
             }
