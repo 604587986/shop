@@ -130,7 +130,7 @@
       }
     },
     mounted() {
-      this.getValidImgUrl()
+      this.$nextTick(this.getValidImgUrl)
     },
     methods: {
       /** 获取图片验证码URL */
