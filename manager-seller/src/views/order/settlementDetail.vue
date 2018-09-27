@@ -25,7 +25,7 @@
         <span>本期应收：</span>
         <span>{{ settlementData.bill_price | unitPrice('￥') }} = {{ settlementData.price | unitPrice('￥') }} (在线支付) -
           {{ settlementData.commi_price | unitPrice('￥') }} (佣金金额) - {{ settlementData.refund_price | unitPrice('￥') }} (退单金额)
-          + {{ settlementData.refund_commi_price | unitPrice('￥') }} (退还佣金) - ￥{{ settlement.distribution_rebate | unitPrice }}(分销佣金) + ￥{{ settlement.distribution_return_rebate | unitPrice }}(退还分销佣金)</span>
+          + {{ settlementData.refund_commi_price | unitPrice('￥') }} (退还佣金) - ￥{{ settlementData.distribution_rebate | unitPrice }}(分销佣金) + ￥{{ settlementData.distribution_return_rebate | unitPrice }}(退还分销佣金)</span>
       </p>
       <p>
         <span>货到付款金额：</span>
