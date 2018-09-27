@@ -1,17 +1,19 @@
 import Vue from 'vue'
-import { Loading, MessageBox } from 'element-ui'
+import { Loading } from 'element-ui'
 import axios from 'axios'
 import store from '@/store'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
+import router from '@/router'
 import md5 from 'js-md5'
 import checkToken from '@/utils/checkToken'
+import { api } from '~/ui-domain'
 
 const qs = require('qs')
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.ADMIN_API,
+  baseURL: api.admin,
   timeout: 5000,
   paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
 })
@@ -74,8 +76,12 @@ service.interceptors.response.use(
     await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
-    // 403 --> 没有登录、登录状态失效
-    if (error_response.code === '110') fedLogOut()
+    if (error_response.status === 401) {
+      if (!Storage.getItem('admin_refresh_token')) return
+      store.dispatch('fedLogoutAction')
+      router.push({ path: `/login?forward=${location.pathname}` })
+      return
+    }
     if (error.config.message !== false) {
       let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '网络错误，请稍后再试！'
       Vue.prototype.$message.error(error_data.message || _message)
@@ -97,18 +103,6 @@ const closeLoading = (target) => {
       resolve()
     }, 200)
   })
-}
-
-function fedLogOut() {
-  MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-    confirmButtonText: '重新登录',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    store.dispatch('fedLogoutAction').then(() => {
-      location.reload()
-    })
-  }).catch(() => {})
 }
 
 export default function request(options) {
