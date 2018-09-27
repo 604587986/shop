@@ -73,8 +73,12 @@ service.interceptors.response.use(
     await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
-    // 403 --> 没有登录、登录状态失效
-    if (error_response.status === 403) fedLogOut()
+    if (error_response.status === 401) {
+      if (!Storage.getItem('seller_refresh_token')) return
+      store.dispatch('fedLogoutAction')
+      router.push({ path: `/login?forward=${location.pathname}` })
+      return
+    }
     if (error.config.message !== false) {
       let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '网络错误，请稍后再试！'
       Vue.prototype.$message.error(error_data.message || _message)
@@ -96,16 +100,6 @@ const closeLoading = (target) => {
       target.config.loading.close()
       resolve()
     }, loading_num ? 0 : 200)
-  })
-}
-
-function fedLogOut() {
-  MessageBox.alert('您的登录状态已失效，请重新登录！', '权限错误', {
-    type: 'error',
-    callback: () => {
-      store.dispatch('fedLogoutAction')
-      router.push({ path: `/login?forward=${location.pathname}` })
-    }
   })
 }
 
