@@ -94,6 +94,9 @@
     <div v-if="skuList" class="goods-list">
       <sku-list :skuList="skuList" name="name" price="purchase_price" total="subtotal"></sku-list>
     </div>
+    <div v-if="order.gift_list">
+      <gift-list :giftList="order.gift_list"/>
+    </div>
   </div>
 </template>
 
@@ -104,13 +107,15 @@
   import * as API_Order from '@/api/order'
   import * as API_Trade from '@/api/trade'
   import SkuList from '../-skuList'
+  import GiftList from '../-giftList'
   export default {
     name: 'order-detail',
     validate({ query }) {
       return !!query.order_sn
     },
     components: {
-      SkuList
+      SkuList,
+      GiftList
     },
     data() {
       return {

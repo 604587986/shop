@@ -174,7 +174,7 @@
     <!--商品列表-->
     <div>
       <el-table :data="productList" :header-cell-style="{textAlign: 'center'}">
-        <el-table-column label="商品图片" width="180">
+        <el-table-column label="商品列表" width="180">
           <template slot-scope="scope">
             <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank">
               <img :src="scope.row.goods_image" class="goods-image"/>
@@ -193,6 +193,28 @@
         <el-table-column label="小计" width="120">
           <template slot-scope="scope">{{ scope.row.subtotal | unitPrice('￥') }}</template>
         </el-table-column>
+      </el-table>
+    </div>
+    <!--赠品列表-->
+    <div v-if="orderDetail && orderDetail.gift_list && orderDetail.gift_list.length">
+      <el-table :data="orderDetail.gift_list" :header-cell-style="{textAlign: 'center'}">
+        <el-table-column label="赠品列表" width="180">
+          <template slot-scope="scope">
+            <a :href="scope.row.gift_img" target="_blank">
+              <img :src="scope.row.gift_img" class="goods-image"/>
+            </a>
+          </template>
+        </el-table-column>
+        <el-table-column label="赠品名称" >
+          <template slot-scope="scope">
+            <a :href="scope.row.gift_img" target="_blank">{{ scope.row.gift_name }}</a>
+          </template>
+        </el-table-column>
+        <el-table-column label="赠品价格" width="150">
+          <template slot-scope="scope">{{ scope.row.gift_price | unitPrice('￥') }}</template>
+        </el-table-column>
+        <el-table-column label="" width="120"/>
+        <el-table-column label="" width="120"/>
       </el-table>
     </div>
     <!--调整价格 / 修改收货人信息-->
@@ -650,6 +672,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ .el-table__header thead th:first-child .cell {
+    font-size: 16px;
+    font-weight: bold;
+  }
   /*背景颜色*/
   .order-detail-container {
     background-color: #fff;

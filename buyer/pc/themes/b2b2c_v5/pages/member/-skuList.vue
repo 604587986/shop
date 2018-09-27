@@ -1,7 +1,7 @@
 
 <template>
   <el-table :data="skuList" style="width: 100%">
-    <el-table-column label="" width="70">
+    <el-table-column label="商品列表" width="100">
       <template slot-scope="scope">
         <nuxt-link :to="'/goods/' + scope.row.goods_id" target="_blank">
           <img :src="scope.row[image]"  class="goods-image">
@@ -55,6 +55,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /deep/ .el-table__header th:first-child .cell {
+    font-size: 16px;
+    font-weight: bold;
+  }
   .el-table {
     border: 1px solid #ebeef5;
     border-bottom: none;
