@@ -92,7 +92,7 @@
     background-color: #fff;
     padding: 10px;
     .el-input {
-      width: 10%;
+      width: 140px;
     }
   }
 </style>

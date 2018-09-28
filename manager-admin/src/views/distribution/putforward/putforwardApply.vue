@@ -67,7 +67,7 @@
         <el-table-column prop="status" label="提现状态" :formatter="withDrawStatus"/>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleNext(scope.row)">{{ scope.row.status | operaName }}</el-button>
+            <el-button size="mini" type="primary" @click="handleNext(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </template>
@@ -100,11 +100,12 @@
             <td>申请备注</td>
             <td>{{ currentRow.inspect_remark || '无' }}</td>
           </tr>
-          <tr>
+          <tr v-if="currentRow.status === 'VIA_AUDITING' || currentRow.status === 'APPLY'">
             <td>操作</td>
             <td>
-              <el-button v-if="currentRow.status === 'APPLY'" type="success"  size="mini" @click="handleAudit('VIA_AUDITING')">通过审核</el-button>
-              <el-button v-if="currentRow.status === 'APPLY'" type="danger" size="mini" @click="handleAudit('FAIL_AUDITING')">不能通过</el-button>
+              <el-button v-if="currentRow.status === 'VIA_AUDITING'" type="success"  size="mini" @click="handleOpera('TRANSFER_ACCOUNTS')">设为已转账</el-button>
+              <el-button v-if="currentRow.status === 'APPLY'" type="success"  size="mini" @click="handleOpera('VIA_AUDITING')">通过审核</el-button>
+              <el-button v-if="currentRow.status === 'APPLY'" type="danger" size="mini" @click="handleOpera('FAIL_AUDITING')">不能通过</el-button>
             </td>
           </tr>
         </table>
@@ -123,7 +124,8 @@
         </en-table-layout>
       </div>
     </el-dialog>
-    <el-dialog title="审核拒绝备注" :visible.sync="isShowAuthRemarks" width="23%" align="center">
+    <!--审核备注-->
+    <el-dialog title="审核备注" :visible.sync="isShowAuthRemarks" width="23%" align="center">
       <el-form>
         <el-form-item label="审核备注" label-width="80px">
           <el-input type="textarea" v-model="authRemarks" clearable></el-input>
@@ -131,7 +133,19 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="isShowAuthRemarks = false">取 消</el-button>
-        <el-button type="primary" @click="handleRefusedAudit('FAIL_AUDITING')">确 定</el-button>
+        <el-button type="primary" @click="handleRefusedAudit()">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!--转账备注-->
+    <el-dialog title="转账备注" :visible.sync="isShowTransRemarks" width="23%" align="center">
+      <el-form>
+        <el-form-item label="转账备注" label-width="80px">
+          <el-input type="textarea" v-model="transRemarks" clearable></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isShowTransRemarks = false">取 消</el-button>
+        <el-button type="primary" @click="handleTrans()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -188,16 +202,20 @@
         isShowAuthRemarks: false,
 
         /** 审核备注 */
-        authRemarks: ''
+        authRemarks: '',
+
+        /** 是否显示转账备注 */
+        isShowTransRemarks: false,
+
+        /** 转账备注 */
+        transRemarks: '',
+
+        /** 当前操作名称 */
+        operaName: ''
       }
     },
     mounted() {
       this.GET_WithdrawApplyList()
-    },
-    filters: {
-      operaName(status) {
-        return status === 'VIA_AUDITING' ? '设为已转账' : '查看'
-      }
     },
     methods: {
       /** 状态格式化 */
@@ -274,52 +292,50 @@
 
       /** 下一步操作 */
       handleNext(row) {
-        if (row.status === 'VIA_AUDITING') { // 设为已转帐
-          API_distribution.setTransferAccounts({ apply_id: row.id, remark: row.apply_remark }).then(() => {
-            this.GET_WithdrawApplyList()
-          })
-        } else { // 查看
-          this.isShowPutForwardRecoreds = true
-          this.currentRow = row
-          this.putforwardLogs = [{
-            'apply_time': row.apply_time,
-            'apply_remark': row.apply_remark,
-            'inspect_time': row.inspect_time,
-            'inspect_remark': row.inspect_remark,
-            'transfer_time': row.transfer_time,
-            'transfer_remark': row.transfer_remark,
-            'status': row.status
-          }]
+        this.isShowPutForwardRecoreds = true
+        this.currentRow = row
+        this.putforwardLogs = [{
+          'apply_time': row.apply_time,
+          'apply_remark': row.apply_remark,
+          'inspect_time': row.inspect_time,
+          'inspect_remark': row.inspect_remark,
+          'transfer_time': row.transfer_time,
+          'transfer_remark': row.transfer_remark,
+          'status': row.status
+        }]
+      },
+
+      /** 下一步操作 */
+      handleOpera(operaName) {
+        if (operaName === 'TRANSFER_ACCOUNTS') { // 转账
+          this.isShowTransRemarks = true
+        } else { // 审核
+          this.isShowAuthRemarks = true
+          this.operaName = operaName
         }
+      },
+
+      /** 转账 */
+      handleTrans() {
+        API_distribution.setTransferAccounts({
+          apply_id: this.currentRow.id, remark: this.transRemarks }).then(() => {
+          this.$message.success('转账成功')
+          this.isShowTransRemarks = false
+          this.GET_WithdrawApplyList()
+        })
       },
 
       /** 审核 */
-      handleAudit(operaName) {
-        if (operaName !== 'FAIL_AUDITING') {
-          const _params = {
-            apply_id: this.currentRow.id,
-            audit_result: operaName,
-            remark: this.authRemarks
-          }
-          API_distribution.authWithdrawApply(_params).then(() => {
-            this.$message.success('已保存审核结果')
-            this.GET_WithdrawApplyList()
-          })
-        } else {
-          this.isShowAuthRemarks = true
-        }
-      },
-
-      /** 审核拒绝 */
-      handleRefusedAudit(operaName) {
+      handleRefusedAudit() {
         const _params = {
           apply_id: this.currentRow.id,
-          audit_result: operaName,
+          audit_result: this.operaName,
           remark: this.authRemarks
         }
         API_distribution.authWithdrawApply(_params).then(() => {
           this.$message.success('已保存审核结果')
           this.GET_WithdrawApplyList()
+          this.isShowAuthRemarks = false
         })
       }
     }

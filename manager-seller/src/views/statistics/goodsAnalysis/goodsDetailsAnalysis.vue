@@ -13,6 +13,7 @@
               size="mini"
               :api="api"
               :props="props"
+              class="choose-machine"
               @changed="changeGoodsCateGory"
               :clearable='true'/>
           </div>
@@ -192,6 +193,9 @@
       span {
         display: block;
         width: 90px;
+      }
+      .choose-machine {
+        width: 60%;
       }
     }
   }
