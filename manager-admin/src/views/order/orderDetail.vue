@@ -54,7 +54,7 @@
       </el-col>
     </el-row>
     <!--赠品列表-->
-    <el-row v-if="orderDetail.gift_list && orderDetail.gift_list.length" :gutter="0">
+    <el-row v-if="orderDetail && orderDetail.gift_list && orderDetail.gift_list.length" :gutter="0">
       <el-col :span="24">
         <div class="d-header">赠品列表</div>
         <el-table :data="orderDetail.gift_list" :header-cell-style="{textAlign: 'center'}">
