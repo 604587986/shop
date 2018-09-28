@@ -9,16 +9,16 @@
 module.exports = {
   // 开发环境
   dev: {
-    buyer_pc : 'http://192.168.2.105:3000',
-    buyer_wap: 'http://192.168.2.105:3001',
-    seller   : 'http://192.168.2.105:3002',
-    admin    : 'http://192.168.2.105:3003',
+    buyer_pc : 'http://127.0.0.1:3000',
+    buyer_wap: 'http://127.0.0.1:3001',
+    seller   : 'http://127.0.0.1:3002',
+    admin    : 'http://127.0.0.1:3003',
   },
   // 生产环境
   pro: {
-    buyer_pc : 'http://www.javashop7.s1.natapp.cc',
-    buyer_wap: 'http://m.javashop7.s1.natapp.cc',
-    seller   : 'http://seller.javashop7.s1.natapp.cc',
-    admin    : 'http://admin.javashop7.s1.natapp.cc',
+    buyer_pc : 'http://buyer.javamall.com.cn',
+    buyer_wap: 'http://m.buyer.javamall.com.cn',
+    seller   : 'http://seller.javamall.com.cn',
+    admin    : 'http://admin.javamall.com.cn',
   }
 }
