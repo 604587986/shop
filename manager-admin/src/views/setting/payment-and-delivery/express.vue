@@ -106,6 +106,7 @@
     },
     watch: {
       'expressForm.is_waybill': function waybillChange(newVal) {
+        this.expressRules.kdcode[0].required = !!newVal
         this.expressRules.customer_name[0].required = !!newVal
         this.expressRules.customer_pwd[0].required = !!newVal
       }
