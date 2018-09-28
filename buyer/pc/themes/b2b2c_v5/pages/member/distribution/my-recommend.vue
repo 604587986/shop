@@ -229,12 +229,16 @@
       background-color: #dddddd;
       border-bottom: none;
     }
+    thead th:first-child {
+      width: 10%;
+    }
     td {
       line-height: 26px;
     }
   }
   /deep/ div.cell {
     display: flex;
+    display: inline-block;
     flex-direction: row;
     align-items: center;
   }
