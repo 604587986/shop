@@ -1,7 +1,7 @@
 <template>
   <div class="floor-layout tpl-4">
     <div v-for="(column, columnIndex) in data.columnList" :key="columnIndex" class="layout-main">
-      <div class="layout-title" :style="colors(0).title">
+      <div class="layout-title" :style="colors(columnIndex).title">
         <template v-if="isEdit">
           <div class="edit-mask title" @click="handleEditTitle(columnIndex)">
             <button type="button" class="mask-btn-floor">

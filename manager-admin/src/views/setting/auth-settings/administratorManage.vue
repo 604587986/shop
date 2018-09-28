@@ -54,7 +54,8 @@
     >
       <el-form :model="adminForm" :rules="adminRules" ref="adminForm" label-width="120px">
         <el-form-item label="管理员名称" prop="username">
-          <el-input v-model="adminForm.username" :maxlength="20" clearable placeholder="请输入管理员名称"></el-input>
+          <span v-if="adminForm.id">{{ adminForm.username }}</span>
+          <el-input v-else v-model="adminForm.username" :maxlength="20" clearable placeholder="请输入管理员名称"></el-input>
         </el-form-item>
         <el-form-item label="管理员密码" prop="password">
           <el-input type="password" v-model="adminForm.password" :maxlength="20" clearable :placeholder="adminForm.id ? '不修改请留空' : '6-20位数字、英文字母'"></el-input>
@@ -154,6 +155,7 @@
     },
     watch: {
       'adminForm.id': function(newValue) {
+        this.adminRules.username[0].required = !newValue
         this.adminRules.password[0].required = !newValue
       },
       'adminForm.founder': function(newValue) {

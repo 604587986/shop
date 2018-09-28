@@ -38,6 +38,12 @@
         <el-col :span="20">{{ settlement.bank_address || '无' }}</el-col>
       </el-row>
       <el-row :gutter="0">
+        <el-col :span="4">货到付款金额</el-col>
+        <el-col :span="8">￥{{ settlement.cod_price | unitPrice }}</el-col>
+        <el-col :span="4">货到付款退款金额</el-col>
+        <el-col :span="8">￥{{ settlement.cod_refund_price | unitPrice }}</el-col>
+      </el-row>
+      <el-row :gutter="0">
         <el-col :span="4">平台应付金额</el-col>
         <el-col :span="20">
           <em class="plus">￥{{ settlement.bill_price | unitPrice }}</em>

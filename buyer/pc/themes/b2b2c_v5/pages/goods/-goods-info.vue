@@ -337,6 +337,8 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
         padding-left: 10px;
+        word-break: break-all;
+        width: 398px;
       }
     }
     .pro-details {
