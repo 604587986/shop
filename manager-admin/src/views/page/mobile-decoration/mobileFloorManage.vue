@@ -2,13 +2,15 @@
   <div>
     <div class="floor-container">
       <div class="draggable-box floor">
-        <el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>
-        <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
-          <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
-            <div class="img-tpl"></div>
-            <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
-          </div>
-        </draggable>
+        <div style="position: relative">
+          <el-button type="primary" @click="handleSaveFloor" class="save-btn">保存发布</el-button>
+          <draggable v-model="templateArray" :options="tplOptions" class="tpl-list">
+            <div v-for="item in templateArray" :class="'item-' + item.tpl_id" class="tpl-item">
+              <div class="img-tpl"></div>
+              <span class="text-tpl">{{ templates[item.tpl_id].title }}</span>
+            </div>
+          </draggable>
+        </div>
       </div>
       <div class="draggable-box">
         <div class="floor-top"></div>
@@ -193,11 +195,18 @@
     width: 50%;
     .save-btn {
       position: absolute;
-      top: 30px;
+      right: -45px;
+      top: 50%;
+      margin-top: -35px;
+      z-index: 1;
+      /deep/ span {
+        writing-mode: vertical-rl
+      }
     }
     &.floor { align-items: center }
   }
   .tpl-list {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     width: 122px * 3;

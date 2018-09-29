@@ -18,7 +18,7 @@
       </div>
       <div
         class="tab-item quick"
-        :class="[login_type === 'quick' && 'active', isConnect && 'disabled']"
+        :class="[login_type === 'quick' && 'active']"
         @click="login_type = 'quick'"
       >
         <span>短信验证码登录</span>
@@ -204,10 +204,17 @@
             this.$message.error('手机号码格式有误！')
             reject()
           } else {
-            API_Passport.sendLoginSms(mobile, captcha).then(() => {
-              this.$message.success('短信发送成功，请注意查收！')
-              resolve()
-            })
+            if (this.isConnect) {
+              API_Connect.sendMobileLoginSms(mobile, captcha, this.uuid).then(() => {
+                this.$message.success('短信发送成功，请注意查收！')
+                resolve()
+              })
+            } else {
+              API_Passport.sendLoginSms(mobile, captcha).then(() => {
+                this.$message.success('短信发送成功，请注意查收！')
+                resolve()
+              })
+            }
           }
         })
       },
@@ -240,7 +247,13 @@
           }
           const params = JSON.parse(JSON.stringify(form))
           params.uuid = this.uuid
-          API_Connect.loginByConnect(uuid, params).then(response => {
+          if (login_type === 'quick') {
+            API_Connect.loginByMobileConnect(uuid, params).then(loginCallback).catch(this.handleChangeCaptchalUrl)
+          } else {
+            API_Connect.loginByConnect(uuid, params).then(loginCallback).catch(this.handleChangeCaptchalUrl)
+          }
+          // 登录回调
+          function loginCallback(response) {
             if (response.result === 'bind_success') {
               const { uid, access_token, refresh_token } = response
               this.$store.dispatch('user/setAccessTokenAction', access_token)
@@ -263,7 +276,7 @@
                 this.$router.push('/')
               })
             }
-          }).catch(this.handleChangeCaptchalUrl)
+          }
         } else {
           this.login({ login_type, form }).then(() => {
             if (forward && /^http/.test(forward)) {
