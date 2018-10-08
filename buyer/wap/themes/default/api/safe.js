@@ -3,6 +3,7 @@
  */
 
 import request, { Method } from '@/utils/request'
+import md5 from 'js-md5'
 
 /**
  * 发送绑定手机验证码
@@ -108,7 +109,7 @@ export function changePassword(uuid, captcha, password) {
     data: {
       uuid,
       captcha,
-      password
+      password: md5(password)
     }
   })
 }
