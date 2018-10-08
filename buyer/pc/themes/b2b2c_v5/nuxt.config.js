@@ -22,7 +22,7 @@ module.exports = {
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },
       { type: 'text/javascript', src: '/layer/layer.js' },
-      { type: 'text/javascript', src: 'https://cdn.bootcss.com/psl/1.1.27/psl.js' }
+      { type: 'text/javascript', src: '/psl.js' }
     ],
     __dangerouslyDisableSanitizers: ['script']
   },
