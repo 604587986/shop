@@ -31,7 +31,7 @@
               </div>
               <div class="login-interface">
                 <div v-show="login_type === 'quick'" class="login-show quick-login">
-                  <form class="quick-form">
+                  <form class="quick-form" @keyup.enter="handleLogin">
                     <div class="item item-form-o">
                       <label for="mobile">
                         <i class="iconfont ea-icon-mobile"></i>
@@ -52,7 +52,7 @@
                       <label for="sms-code">
                         <i class="iconfont ea-icon-sms"></i>
                       </label>
-                      <input id="sms-code" v-model="quickForm.sms_code" placeholder="短信验证码" maxlength="6"  @keyup.enter="handleLogin">
+                      <input id="sms-code" v-model="quickForm.sms_code" placeholder="短信验证码" maxlength="6">
                     </div>
                     <div class="forget">
                       <span><nuxt-link :to="'/find-password' + MixinForward">忘记密码</nuxt-link></span>
@@ -61,7 +61,7 @@
                   </form>
                 </div>
                 <div v-show=" login_type === 'account'" class="login-show account-login">
-                  <form class="account-form">
+                  <form class="account-form" @keyup.enter="handleLogin">
                     <div class="item">
                       <label for="username">
                         <i class="iconfont ea-icon-persion"></i>
@@ -78,7 +78,7 @@
                       <label for="validcode">
                         <i class="iconfont ea-icon-safe"></i>
                       </label>
-                      <input id="validcode" v-model="accountForm.captcha" placeholder="图片验证码" maxlength="4" @keyup.enter="handleLogin">
+                      <input id="validcode" v-model="accountForm.captcha" placeholder="图片验证码" maxlength="4">
                       <img v-if="val_code_url" class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="forget">
