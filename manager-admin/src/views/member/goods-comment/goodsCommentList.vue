@@ -7,11 +7,16 @@
     >
       <template slot="table-columns">
         <el-table-column prop="member_name" label="会员名称"/>
+        <el-table-column label="商品名称">
+          <template slot-scope="scope">
+            <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" class="goods-name" target="_blank">{{ scope.row.goods_name }}</a>
+          </template>
+        </el-table-column>
         <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="评论日期"/>
         <el-table-column label="评价">
           <template slot-scope="scope">{{ scope.row.grade | gradeFilter }}</template>
         </el-table-column>
-        <el-table-column prop="content" label="评论内容" width="500"/>
+        <el-table-column prop="content" label="评论内容" width="350"/>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
@@ -145,3 +150,10 @@
     }
   }
 </script>
+
+<style type="text/scss" lang="scss" scoped>
+  .goods-name {
+    color: #4183c4;
+    &:hover { color: #f42424 }
+  }
+</style>
