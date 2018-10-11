@@ -22,6 +22,7 @@
                     v-model="advancedForm.coupon_time_limit"
                     type="daterange"
                     range-separator="-"
+                    value-format="timestamp"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
@@ -164,15 +165,21 @@
           goods_status: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        delete this.params.start_time
+        delete this.params.end_time
         this.GET_CouponsList()
       },
 
       /** 高级搜索事件触发 */
       advancedSearchEvent() {
-        this.params = {
-          ...this.params,
-          start_time: this.advancedForm.coupon_time_limit[0],
-          end_time: this.advancedForm.coupon_time_limit[1]
+        this.params = this.MixinClone(this.params)
+        const { coupon_time_limit } = this.advancedForm
+        if (coupon_time_limit && coupon_time_limit[0]) {
+          this.params.start_time = coupon_time_limit[0] / 1000
+          this.params.end_time = coupon_time_limit[1] / 1000
+        } else {
+          delete this.params.start_time
+          delete this.params.end_time
         }
         delete this.params.keyword
         this.GET_CouponsList()
