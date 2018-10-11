@@ -64,6 +64,15 @@
         <no-ssr>
           <van-cell-group :border="false">
             <van-field
+              v-model="quickForm.mobile"
+              type="tel"
+              clearable
+              placeholder="请输入手机号"
+              maxlength="11"
+            >
+              <span slot="label">手&emsp;机&emsp;号</span>
+            </van-field>
+            <van-field
               v-model="quickForm.captcha"
               center
               clearable
@@ -72,15 +81,6 @@
               maxlength="4"
             >
               <img v-if="captcha_url" slot="button" :src="captcha_url" @click="handleChangeCaptchalUrl" class="captcha-img"/>
-            </van-field>
-            <van-field
-              v-model="quickForm.mobile"
-              type="tel"
-              clearable
-              placeholder="请输入手机号"
-              maxlength="11"
-            >
-              <span slot="label">手&emsp;机&emsp;号</span>
             </van-field>
             <van-field
               v-model="quickForm.sms_code"
