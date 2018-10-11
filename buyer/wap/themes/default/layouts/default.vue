@@ -20,8 +20,8 @@
           Storage.setItem('forward', location.href)
           location.href = API_Connect.wechatAuthUrl
         }
-        // 如果已授权，去自动登录
-        if (Storage.getItem('is_wechat_auth')) {
+        // 如果已授权，并且未登录，则去自动登录
+        if (Storage.getItem('is_wechat_auth') && !Storage.getItem('refresh_token')) {
           const res = await API_Connect.weChatAutoLogin(Storage.getItem('uuid'))
           if (res) {
             const { uid, access_token, refresh_token } = res
