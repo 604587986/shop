@@ -40,7 +40,7 @@ export default {
     themeListWap: 'WAP模板列表',
     shopEdit: '编辑店铺',
     settlementManage: '店铺结算单',
-    settlement: '结算周期',
+    settlement: '店铺结算单',
     settlementList: '结算列表',
     settlementDetail: '结算单详情',
 
