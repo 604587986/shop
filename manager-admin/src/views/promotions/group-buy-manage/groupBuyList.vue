@@ -52,7 +52,7 @@
 
     <!--添加团购 dialog-->
     <el-dialog
-      title="添加团购"
+      :title="groupBuyForm.act_id ? '编辑团购' : '添加团购'"
       :visible.sync="dialogGroupBuyVisible"
       width="650px"
       :close-on-click-modal="false"
