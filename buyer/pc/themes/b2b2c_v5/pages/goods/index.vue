@@ -27,7 +27,7 @@
             <div class="small-list brand-list">
               <ul class="show-logo">
                 <li v-for="(brand, index) in selectorData.brand" :key="index">
-                  <a :href="'/goods?brand=' + brand.value + keyword_url" :title="brand.name">
+                  <a :href="'/goods?' + selector_url('brand', brand.value) + keyword_url" :title="brand.name">
                     <img :src="brand.url" alt="新农哥">新农哥
                   </a>
                 </li>
@@ -42,7 +42,7 @@
               <a
                 v-for="(cat, index) in selectorData.cat"
                 :key="index"
-                :href="'/goods?category=' + cat.value + keyword_url"
+                :href="'/goods?' + selector_url('category', cat.value) + keyword_url"
               >{{ cat.name }}</a>
             </div>
           </dd>
@@ -213,6 +213,15 @@
         }))
         this.params.sort = `${sort.name}_${sort.type}`
         this.GET_GoodsList()
+      },
+      /** 计算url，多筛选叠加 */
+      selector_url(type, value) {
+        const { brand, category, prop } = this.$route.query
+        let url = `${type}=${value}`
+        if (type === 'category' && brand) url += `&brand=${brand}`
+        if (type === 'brand' && category) url += `&category=${category}`
+        if (prop) url += `&prop=${prop}`
+        return url
       },
       /** 获取商品列表 */
       GET_GoodsList() {
