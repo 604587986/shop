@@ -88,7 +88,12 @@
         <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
       </template>
     </van-goods-action>
-    <goods-distribution v-if="show_dis" :show="showDisPopup" @close="showDisPopup = false"/>
+    <goods-distribution
+      v-if="show_dis"
+      :show="showDisPopup"
+      :goods_name="goods.goods_name"
+      :thumbnail="goods.thumbnail"
+      @close="showDisPopup = false"/>
   </div>
 </template>
 
