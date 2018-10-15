@@ -156,6 +156,7 @@
         const { index, target, targetIndex } = this.editOptions
         const block = target.blockList[targetIndex]
         block.block_value = data.text
+        block.block_opt = {}
         block.block_opt.opt_type = data.opt_type
         block.block_opt.opt_value = data.opt_value
         this.$set(this.floorList, index, target)
