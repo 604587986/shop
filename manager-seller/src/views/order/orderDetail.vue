@@ -518,8 +518,10 @@
           id: this.orderDetail.logi_id,
           num: this.orderDetail.ship_no
         }
+        this.loading = true
         API_order.getLogisticsInfo(_params).then(response => {
           this.logisticsShow = true
+          this.loading = false
           this.logisticsInfoList = response.data
           this.logisticsNo = response.courier_num
           this.logisticsName = response.name
