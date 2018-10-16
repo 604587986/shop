@@ -68,13 +68,12 @@
         finished: false,
         // 商品列表
         goodsList: [],
-        // 分页参数
-        page: {
-          page_no: 0,
-          page_size: 20
-        },
         // 筛选参数
-        params: { ...this.$route.query },
+        params: {
+          page_no: 0,
+          page_size: 20,
+          ...this.$route.query
+        },
         // 排序
         sorts: [
           { title: '默认', name: 'def', type: 'asc' },
@@ -99,14 +98,14 @@
     methods: {
       /** 加载数据 */
       onLoad() {
-        this.page.page_no += 1
+        this.params.page_no += 1
         this.GET_GoodsList()
       },
       /** 排序 */
       handleClickSort(sort) {
-        this.finished = false
-        this.params.page_no = 1
         this.goodsList = []
+        this.params.page_no = 1
+        this.finished = false
         if (sort.active) sort.type = sort.type === 'asc' ? 'desc' : 'asc'
         this.$set(this, 'sorts', this.sorts.map(item => {
           item.active = item.name === sort.name
@@ -117,7 +116,7 @@
       },
       /** 获取商品列表 */
       GET_GoodsList() {
-        const params = { ...this.page, ...this.params }
+        const { params } = this
         Object.keys(params).forEach(key => {
           if (!params[key]) delete params[key]
         })
