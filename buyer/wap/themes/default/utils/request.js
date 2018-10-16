@@ -86,8 +86,9 @@ service.interceptors.response.use(
       return Promise.reject(error)
     }
     if (error.config.message !== false) {
-      let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : '网络错误，请稍后再试！'
-      Vue.prototype.$message.error(error_data.message || _message)
+      let _message = error.code === 'ECONNABORTED' ? '连接超时，请稍候再试！' : null
+      _message = error_data.message || _message
+      _message && Vue.prototype.$message.error(error_data.message)
     }
     return Promise.reject(error)
   }
