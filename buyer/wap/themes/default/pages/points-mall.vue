@@ -16,7 +16,7 @@
       @load="onLoad"
       class="points-goods-container"
     >
-      <li v-for="(goods, index) in pointsList" :key="index" class="item-goods">
+      <li v-for="(goods, index) in pointsList" v-if="goods.enable_exchange === 1" :key="index" class="item-goods">
         <dt>
           <nuxt-link :to="'/goods/' + goods.goods_id">
             <img :src="goods.goods_img" :alt="goods.goods_name">
@@ -30,7 +30,6 @@
           </div>
           <div class="price-goods">
             <div>原价：￥{{ goods.goods_price | unitPrice }}</div>
-            <div>已兑换：<span>{{ goods.enable_exchange }}</span>人</div>
           </div>
           <nuxt-link :to="'/goods/' + goods.goods_id" class="grab-btn">兑换</nuxt-link>
         </dd>
