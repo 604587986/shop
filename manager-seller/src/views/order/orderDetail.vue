@@ -435,6 +435,9 @@
           this.orderDetail = response
           // 商品信息
           this.productList = this.orderDetail.order_sku_list
+          // 物流信息 快递单号 快递公司
+          this.logisticsNo = this.orderDetail.ship_no
+          this.logisticsName = this.orderDetail.logi_name
           // 修改收货人信息地区选择器信息
           this.areas = [this.orderDetail.ship_province_id, this.orderDetail.ship_city_id,
             this.orderDetail.ship_county_id || -1, this.orderDetail.ship_town_id || -1]
@@ -518,11 +521,11 @@
           id: this.orderDetail.logi_id,
           num: this.orderDetail.ship_no
         }
+        this.loading = true
         API_order.getLogisticsInfo(_params).then(response => {
           this.logisticsShow = true
+          this.loading = false
           this.logisticsInfoList = response.data
-          this.logisticsNo = response.courier_num
-          this.logisticsName = response.name
         })
       },
 

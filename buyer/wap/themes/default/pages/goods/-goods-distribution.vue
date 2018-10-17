@@ -15,7 +15,7 @@
           level="H"
           style="text-align: center; padding: 10px 0;">
         </qrcode-vue>
-        <p>微信扫描二维码，分享好友及朋友圈</p>
+        <p>分享二维码，好友注册立得佣金</p>
       </div>
       <div class="share-box-btn">
         <van-cell-group>

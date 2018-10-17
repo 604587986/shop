@@ -160,6 +160,7 @@ export function getWithdrawalsList(params) {
     url: 'distribution/withdraw/apply-history',
     method: Method.GET,
     needToken: true,
+    loading: false,
     params
   })
 }
