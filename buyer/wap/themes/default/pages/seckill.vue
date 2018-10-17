@@ -5,7 +5,7 @@
       <van-tab v-for="(timeLine, index) in timeLines" :key="index">
         <div slot="title" class="tab-title">
           <p class="time-title-timeline">{{ timeLine.time_text + ':00' }}</p>
-          <p class="text-title-timeline">{{ timeLine.distance_time === 0 ? '在在抢购' : '即将开始' }}</p>
+          <p class="text-title-timeline">{{ timeLine.distance_time === 0 ? '正在抢购' : '即将开始' }}</p>
         </div>
       </van-tab>
     </van-tabs>
