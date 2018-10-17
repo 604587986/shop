@@ -20,7 +20,7 @@
             <div class="goods-info">
               <p class="integral">
                 <span class="price">￥{{ goods.exchange_money | unitPrice }}+{{ goods.exchange_point }}积分</span>
-                <span class="origin-price">原价：￥52</span>
+                <span class="origin-price">￥{{ goods.goods_price | unitPrice }}</span>
               </p>
               <p class="goods-name">{{ goods.goods_name }}</p>
             </div>
@@ -162,7 +162,7 @@
         width: 90%;
       }
       .integral {
-        font-size: 20px;
+        font-size: 18px;
       }
       .origin-price {
         font-size: 12px;
