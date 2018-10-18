@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { api } from '~/ui-domain'
+import { api, api_model } from '~/ui-domain'
 import { Toast } from 'vant'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
@@ -45,8 +45,7 @@ service.interceptors.request.use(config => {
   // 获取访问Token
   let accessToken = Storage.getItem('access_token')
   if (accessToken && config.needToken) {
-    // 'development', 'production'
-    if (process.env.NODE_ENV === 'production') {
+    if (api_model === 'pro') {
       const uid = Storage.getItem('uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)

@@ -8,7 +8,7 @@ import store from '@/store'
 import router from '@/router'
 import md5 from 'js-md5'
 import checkToken from '@/utils/checkToken'
-import { api } from '~/ui-domain'
+import { api, api_model } from '~/ui-domain'
 const qs = require('qs')
 
 // 创建axios实例
@@ -40,8 +40,7 @@ service.interceptors.request.use(config => {
   // 获取访问Token
   let accessToken = Storage.getItem('seller_access_token')
   if (accessToken) {
-    // 'development'， 'production'
-    if (process.env.NODE_ENV === 'production') {
+    if (api_model === 'dev') {
       const uid = Storage.getItem('seller_uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
