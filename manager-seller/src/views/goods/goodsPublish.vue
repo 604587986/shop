@@ -702,6 +702,7 @@
           return
         } else if (this.activestep === 0 && this.activeCategoryName1) {
           /** 获取该商城分类下 商品参数信息 */
+          /** 传参数1 表示查询添加模式（发布商品模式0）下的商品参数信息 */
           this.GET_GoodsParams(1)
           /** 查询品牌列表 */
           this.getGoodsBrandList()
