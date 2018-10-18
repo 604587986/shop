@@ -5,11 +5,14 @@
     :loading="loading"
   >
     <template slot="table-columns">
-      <el-table-column prop="goods_name" label="商品名称" min-width="450"/>
-      <el-table-column prop="shop_name" label="店铺名称"/>
-      <el-table-column label="活动价格">
-        <template slot-scope="scope">￥{{ scope.row.price | unitPrice }}</template>
+      <el-table-column label="商品名称" min-width="450">
+        <template slot-scope="scope">
+          <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" target="_blank" class="goods-name">{{ scope.row.goods_name }}</a>
+        </template>
       </el-table-column>
+      <el-table-column prop="shop_name" label="店铺名称"/>
+      <el-table-column prop="original_price" :formatter="MixinFormatPrice" label="商品原价"/>
+      <el-table-column prop="price" :formatter="MixinFormatPrice" label="活动价格"/>
       <el-table-column prop="sold_quantity" label="售空数量" width="100"/>
       <el-table-column label="抢购时刻" width="100">
         <template slot-scope="scope">{{ scope.row.time_line < 10 ? '0' + scope.row.time_line : scope.row.time_line }} : 00</template>
@@ -114,3 +117,10 @@
     }
   }
 </script>
+
+<style type="text/scss" lang="scss" scoped>
+  .goods-name {
+    color: #4183c4;
+    &:hover { color: #f42424 }
+  }
+</style>

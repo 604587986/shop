@@ -84,6 +84,8 @@
           this.options = []
           if (this.props.value === 'shop_cat_id') {
             this.options = this.filterShowItem(response)
+          } else {
+            this.options = response
           }
           // 如果children为空 则不进行展开
           this.options = this.deleteEmptyChild(this.options)

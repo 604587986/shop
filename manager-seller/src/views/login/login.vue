@@ -60,7 +60,7 @@
       <div class="lf-content">
         <h3 class="lf-title">商户卖家登录</h3>
         <h5 class="lf-title-sb">请使用卖家账户可登录后进入店铺或申请开店</h5>
-        <div class="lf-form">
+        <div class="lf-form" @keyup.enter="submitLoginForm">
           <el-form :model="loginForm" :rules="loginRules" ref="loginForm" size="large" label-width="80px">
             <el-form-item label="商家账号" prop="username">
               <el-input v-model="loginForm.username" clearable placeholder="用户名/邮箱/手机号"></el-input>
@@ -70,7 +70,7 @@
             </el-form-item>
             <el-form-item prop="captcha" class="img-code">
               <span slot="label">验&ensp;证&ensp;码</span>
-              <el-input v-model="loginForm.captcha" @keyup.enter.native="submitLoginForm" clearable placeholder="验证码" maxlength="4">
+              <el-input v-model="loginForm.captcha" clearable placeholder="验证码" maxlength="4">
                 <template slot="append">
                   <img :src="validcodeImg" @click="changeValidcode" class="verification-code">
                 </template>
@@ -149,6 +149,7 @@
       },
       /** 提交登录表单 */
       submitLoginForm() {
+        Storage.removeItem('seller_shop')
         this.$refs['loginForm'].validate((valid) => {
           if (valid) {
             const params = this.MixinClone(this.loginForm)
@@ -335,7 +336,7 @@
       color: #999;
     }
     .lf-form {
-      padding: 0 10px;
+      padding: 0 30px;
       overflow: hidden;
       /deep/ .img-code {
         .el-input-group__append {

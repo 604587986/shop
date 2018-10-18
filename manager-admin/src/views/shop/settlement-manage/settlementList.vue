@@ -8,11 +8,11 @@
       <template slot="table-columns">
         <el-table-column prop="bill_sn" label="结算单号"/>
         <el-table-column prop="shop_name" label="店铺名称"/>
-        <el-table-column prop="bill_price" :formatter="MixinFormatPrice" label="订单金额"/>
+        <el-table-column prop="price" :formatter="MixinFormatPrice" label="订单金额"/>
         <el-table-column prop="commi_price" :formatter="MixinFormatPrice" label="收取佣金"/>
         <el-table-column prop="refund_price" :formatter="MixinFormatPrice" label="退单金额"/>
         <el-table-column prop="refund_commi_price" :formatter="MixinFormatPrice" label="退还佣金"/>
-        <el-table-column prop="price" :formatter="MixinFormatPrice" label="本期应结"/>
+        <el-table-column prop="bill_price" :formatter="MixinFormatPrice" label="本期应结"/>
         <el-table-column prop="status_text" label="订单状态"/>
         <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="出账日期"/>
         <el-table-column prop="start_time" :formatter="MixinUnixToDate" label="开始日期"/>

@@ -110,7 +110,7 @@
       const { name, query } = this.$route
       if (name === 'index' && query.uuid) {
         Storage.setItem('uuid', query.uuid)
-        Storage.removeItem('uuid_connect', { domain: document.domain.split('.').slice(1).join('.') })
+        Storage.removeItem('uuid_connect')
         location.href = '/'
         return
       }

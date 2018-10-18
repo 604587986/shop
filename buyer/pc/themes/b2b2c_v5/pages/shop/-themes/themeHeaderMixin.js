@@ -20,7 +20,12 @@ export default {
   mounted() {
     /** 获取店铺分类【分组】 */
     API_Shop.getShopCategorys(this.shop_id).then(response => {
-      this.categorys = response
+      let categorys = response.filter(item => item.disable === 1)
+      categorys = categorys.map(item => {
+        item.children = item.children.filter(_item => _item.disable === 1)
+        return item
+      })
+      this.categorys = categorys
     })
     /** 获取店铺导航 */
     API_Shop.getShopNav(this.shop_id).then(response => {

@@ -4,14 +4,14 @@
       <van-cell is-link @click="showPopup = true">
         <div slot="title">
           <span>已选</span>
-          <span class="spec-vals">{{ selectedSpecVals.join('-') || '默认' }} {{ buyNum }}件</span>
+          <span class="spec-vals">{{ selectedSku ? (specList.length ? selectedSpecVals.join('-') : '默认') : '未选规格' }} {{ buyNum }}件</span>
         </div>
       </van-cell>
     </van-cell-group>
     <van-popup v-model="showPopup" position="bottom" style="height:70%">
       <div class="spec-headr">
         <div class="pic-header">
-          <img :src="selectedSku.thumbnail">
+          <img :src="selectedSpecImg.thumbnail || selectedSku.thumbnail || goods.thumbnail">
         </div>
         <i class="iconfont ea-icon-close" @click="showPopup = false"/>
         <div class="price-header price">￥{{ selectedSku.price | unitPrice }}</div>
@@ -23,7 +23,7 @@
       <div class="spec-body">
         <div class="spec-sel">
           <span class="tit-spec-body">已选</span>
-          <span class="prod-spec-info">{{ selectedSpecVals.join('-') || '默认' }}</span>
+          <span class="prod-spec-info">{{ selectedSku ? selectedSpecVals.join('-') : '未选规格' }}</span>
           <span class="count-spec-body">{{ buyNum }}件</span>
         </div>
         <div class="spec-list">
@@ -51,8 +51,14 @@
         <div></div>
       </div>
       <div class="spec-footer">
-        <a class="buy-btn add-cart" @click="$emit('add-cart')">加入购物车</a>
-        <a class="buy-btn direct-order" @click="$emit('buy-now')">立即购买</a>
+        <a
+          v-if="goods.is_auth === 0 || goods.goods_off === 0"
+          class="buy-btn buy-disabled"
+        >{{ goods.is_auth === 0 ? '商品审核中' : '商品已下架' }}</a>
+        <template v-else>
+          <a class="buy-btn add-cart" @click="$emit('add-cart')">加入购物车</a>
+          <a class="buy-btn direct-order" @click="$emit('buy-now')">立即购买</a>
+        </template>
       </div>
     </van-popup>
   </div>
@@ -63,10 +69,9 @@
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'goods-specs',
-    props: ['goods-id'],
+    props: ['goods', 'show'],
     data() {
       return {
-        // 显示弹窗
         showPopup: false,
         // 购买数量
         buyNum: 1,
@@ -79,6 +84,8 @@
         selectedSpecVals: [],
         // 被选中sku
         selectedSku: '',
+        // 被选中的规格图片【如果有】
+        selectedSpecImg: '',
         // 没有选中sku，初始化为false
         unselectedSku: false
         // 有规格的商品价格区间
@@ -86,7 +93,7 @@
       }
     },
     mounted() {
-      API_Goods.getGoodsSkus(this.goodsId).then(response => {
+      API_Goods.getGoodsSkus(this.goods.goods_id).then(response => {
         const specList = []
         // const priceList = []
         response.forEach((sku, skuIndex) => {
@@ -132,7 +139,10 @@
         //   }
         // }
         this.specList = specList
-        this.initSpec()
+        // 如果有sku信息，初始化已选规格
+        if (this.$route.query.sku_id) {
+          this.initSpec()
+        }
         // 如果没有规格，把商品第一个sku给已选择sku
         if (!specList.length) {
           this.selectedSku = this.skuMap.get('no_spec')
@@ -177,7 +187,8 @@
       /** 选择规格 */
       handleClickSpec(spec, specIndex, spec_val) {
         if (spec.spec_type === 1 ) {
-          this.$emit('spec-img-change', JSON.parse(JSON.stringify(spec_val.spec_value_img)))
+          this.selectedSpecImg = JSON.parse(JSON.stringify(spec_val.spec_value_img))
+          // this.$emit('spec-img-change', JSON.parse(JSON.stringify(spec_val.spec_value_img)))
         }
         if (spec_val.selected) return
         spec.valueList.map(item => {
@@ -186,15 +197,16 @@
         })
         this.$set(this.specList, specIndex, spec)
         this.selectedSpec[specIndex] = spec_val.spec_value_id
+        this.selectedSpecVals[specIndex] = spec_val.spec_value
         this.handleSelectedSku()
       },
       /** 购买数量增加减少 */
       handleBuyNumChanged(symbol) {
         if (symbol === '+') {
-          const { quantity } = this.selectedSku
-          if (quantity === 0) {
+          const { enable_quantity } = this.selectedSku
+          if (enable_quantity === 0) {
             this.$message.error('该规格暂时缺货！')
-          } else if (this.buyNum >= quantity) {
+          } else if (this.buyNum >= enable_quantity) {
             this.$message.error('超过最大库存！')
           } else {
             this.buyNum += 1
@@ -222,11 +234,17 @@
           this.unselectedSku = false
           // this.priceRange = ''
           this.goodsInfo = { ...this.goodsInfo, ...sku }
-          this.buyNum = sku.quantity === 0 ? 0 : 1
+          this.buyNum = sku.enable_quantity === 0 ? 0 : 1
         }
       }
     },
     watch: {
+      show: function(newVal) {
+        if (newVal) this.showPopup = newVal
+      },
+      showPopup: function(newVal) {
+        if (!newVal) this.$emit('close')
+      },
       selectedSku: {
         handler: function (newVal) {
           this.$emit('sku-changed', newVal)

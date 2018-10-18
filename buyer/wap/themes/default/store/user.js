@@ -4,7 +4,7 @@ import * as types from './mutation-types'
 import Storage from '@/utils/storage'
 import jwt_decode from 'jwt-decode'
 import { Foundation } from '~/ui-utils'
-import * as API_Address from "@/api/address";
+import * as API_Address from "@/api/address"
 
 export const state = () => {
   const user = Storage.getItem('user')
@@ -38,10 +38,7 @@ export const mutations = {
     Storage.removeItem('user')
     Storage.removeItem('uid')
     // 主要针对第三方登录留下的数据
-    const domain = document.domain.split('.').slice(1).join('.')
-    Storage.removeItem('user', { domain })
-    Storage.removeItem('uid', { domain })
-    Storage.removeItem('uuid_connect', { domain })
+    Storage.removeItem('uuid_connect')
   },
   /**
    * 设置访问令牌
@@ -60,8 +57,6 @@ export const mutations = {
    */
   [types.REMOVE_ACCESS_TOKEN](state) {
     Storage.removeItem('access_token')
-    // 主要针对第三方登录留下的数据
-    Storage.removeItem('access_token', { domain: document.domain.split('.').slice(1).join('.') })
   },
   /**
    * 设置刷新令牌
@@ -80,8 +75,6 @@ export const mutations = {
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
     Storage.removeItem('refresh_token')
-    // 主要针对第三方登录留下的数据
-    Storage.removeItem('refresh_token', { domain: document.domain.split('.').slice(1).join('.') })
   }
 }
 
@@ -119,7 +112,8 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        Storage.setItem('uid', uid)
+        const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+        Storage.setItem('uid', uid, { expires })
         API_Members.getUserInfo().then(response => {
           commit(types.SET_USER_INFO, response)
           resolve(response)
@@ -131,11 +125,12 @@ export const actions = {
    * 登出
    * @param commit
    * @param dispatch
+   * @param type
    * @returns {Promise<any>}
    */
-  logoutAction: ({ commit, dispatch }) => {
+  logoutAction: ({ commit, dispatch }, type) => {
     return new Promise((resolve, reject) => {
-      API_Members.logout().then(() => {
+      API_Members.logout(type).then(() => {
         commit(types.REMOVE_USER_INFO)
         commit(types.REMOVE_ACCESS_TOKEN)
         commit(types.REMOVE_REFRESH_TOKEN)
@@ -176,7 +171,8 @@ export const actions = {
         const { access_token, refresh_token, uid } = res
         commit(types.SET_ACCESS_TOKEN, access_token)
         commit(types.SET_REFRESH_TOKEN, refresh_token)
-        Storage.setItem('uid', uid)
+        const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+        Storage.setItem('uid', uid, { expires })
         resolve(res)
       })
     })

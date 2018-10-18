@@ -13,17 +13,16 @@
       </div>
       <div v-else class="w">
         <ul class="goods-list">
-          <li v-for="(goods, index) in tableData.data" :key="index" class="goods-item">
+          <li v-for="(goods, index) in tableData.data" v-if="goods.enable_exchange === 1" :key="index" class="goods-item">
             <a :href="'/goods/' + goods.goods_id">
               <img class="goods-img" :src="goods.goods_img">
             </a>
             <div class="goods-info">
               <p class="integral">
                 <span class="price">￥{{ goods.exchange_money | unitPrice }}+{{ goods.exchange_point }}积分</span>
-                <span class="origin-price">原价：￥52</span>
+                <span class="origin-price">￥{{ goods.goods_price | unitPrice }}</span>
               </p>
               <p class="goods-name">{{ goods.goods_name }}</p>
-              <p>已有<span>{{ goods.enable_exchange }}</span>人兑换</p>
             </div>
           </li>
         </ul>
@@ -163,7 +162,7 @@
         width: 90%;
       }
       .integral {
-        font-size: 20px;
+        font-size: 18px;
       }
       .origin-price {
         font-size: 12px;

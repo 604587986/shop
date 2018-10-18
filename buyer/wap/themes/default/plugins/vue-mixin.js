@@ -39,8 +39,13 @@ Vue.mixin({
       if (window.history.length <= 1) {
         location.href = '/'
       } else {
-        this.$router.back()
+        window.history.back()
       }
+    },
+    /** 是否为微信浏览器 */
+    MixinIsWeChatBrowser() {
+      if (!process.client) return false
+      return /micromessenger/i.test(navigator.userAgent)
     }
   }
 })

@@ -86,7 +86,7 @@
             </p>
           </td>
           <!--买家-->
-          <td> {{ item.ship_name }}</td>
+          <td> {{ item.member_name }}</td>
           <!--下单时间-->
           <td>{{ item.create_time | unixToDate }}</td>
           <!--订单状态-->

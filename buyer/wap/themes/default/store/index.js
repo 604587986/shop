@@ -7,7 +7,7 @@ import Cookie from 'cookie'
 import Storage from '@/utils/storage'
 
 if (!Storage.getItem('uuid') && process.client) {
-  Storage.setItem('uuid', uuidv1())
+  Storage.setItem('uuid', uuidv1(), { expires: 30 })
 }
 
 /** state */

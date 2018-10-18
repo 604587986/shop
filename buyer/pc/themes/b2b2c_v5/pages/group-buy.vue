@@ -19,15 +19,16 @@
               <img :src="gb.img_url" border="0" :alt="gb.goods_name">
             </a>
             <h3 class="gb-title">
-              <a target="_blank" :href="'/goods/' + gb.goods_id" :title="gb.goods_name">{{ gb.goods_name }}</a>
+              <a target="_blank" :href="'/goods/' + gb.goods_id" :title="gb.gb_name">{{ gb.gb_name }}</a>
             </h3>
+            <p class="gn-sub-title">{{ gb.gb_title }}</p>
             <div class="group_price">
-              <span class="price"><i>¥</i>{{ gb.price }}</span>
+              <span class="price" :title="'￥' + gb.price"><i>¥</i>{{ gb.price }}</span>
               <div class="dock">
                 <span class="group_discount">{{(gb.price / gb.original_price * 10).toFixed(1) }}&nbsp;折</span>
                 <del class="group_price">¥{{ gb.original_price }}</del>
               </div>
-              <span class="group_num"><em>{{ gb.buy_num }}</em>件已购买</span>
+              <span class="group_num"><em>{{ gb.show_buy_num }}</em>件已购买</span>
               <a class="buy-button" target="_blank" :href="'/goods/' + gb.goods_id">
                 我要团
               </a>
@@ -153,7 +154,7 @@
     border: solid 1px #E7E7E7;
     margin: -1px;
     &:hover .inner-gb-item {
-      padding: 20px 21px;
+      padding: 10px 11px;
       border: solid 1px #F30;
       box-shadow: 0 0 3px rgba(204,204,204,0.9);
       .group_num {
@@ -166,9 +167,9 @@
     }
   }
   .inner-gb-item {
-    width: 280px;
-    height: 296px;
-    padding: 21px 21px 21px 22px;
+    width: 300px;
+    height: 316px;
+    padding: 11px 11px 11px 12px;
     position: relative;
   }
   .pic_thumb {
@@ -187,8 +188,17 @@
   .gb-title {
     display: block;
     width: 100%;
-    height: 38px;
+    max-height: 38px;
     margin: 10px auto 0 auto;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .gn-sub-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     overflow: hidden;
   }
   .group_price {
@@ -197,7 +207,7 @@
     z-index: 1;
     overflow: hidden;
     .price {
-      font: 700 32px/36px "microsoft yahei", Arial;
+      font: 700 28px/30px "microsoft yahei", Arial;
       color: $color-main;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -245,6 +255,10 @@
       font: normal 14px/36px "microsoft yahei", Arial;
       color: #999;
       float: right;
+      max-width: 105px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       em {
         font-size: 16px;
         font-weight: 700;

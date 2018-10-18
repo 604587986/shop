@@ -27,7 +27,7 @@
             <div class="small-list brand-list">
               <ul class="show-logo">
                 <li v-for="(brand, index) in selectorData.brand" :key="index">
-                  <a :href="'/goods?brand=' + brand.value" :title="brand.name">
+                  <a :href="'/goods?' + selector_url('brand', brand.value) + keyword_url" :title="brand.name">
                     <img :src="brand.url" alt="新农哥">新农哥
                   </a>
                 </li>
@@ -42,7 +42,7 @@
               <a
                 v-for="(cat, index) in selectorData.cat"
                 :key="index"
-                :href="'/goods?category=' + cat.value"
+                :href="'/goods?' + selector_url('category', cat.value) + keyword_url"
               >{{ cat.name }}</a>
             </div>
           </dd>
@@ -55,7 +55,7 @@
                 <a
                   v-for="(prop_val, index) in prop.value"
                   :key="index"
-                  :href="'/goods?prop=' + prop_val.name + '_' +prop_val.value"
+                  :href="'/goods?prop=' + prop.key + '_' +prop_val.value + keyword_url"
                 >{{ prop_val.value }}</a>
               </div>
             </dd>
@@ -192,6 +192,12 @@
         prices: price ? price.split('_') : ['', '']
       }
     },
+    computed: {
+      keyword_url() {
+        const { keyword } = this.$route.query
+        return keyword ? `&keyword=${keyword}` : ''
+      }
+    },
     methods: {
       /** 当前页数发生改变 */
       handleCurrentPageChange(page_no) {
@@ -207,6 +213,15 @@
         }))
         this.params.sort = `${sort.name}_${sort.type}`
         this.GET_GoodsList()
+      },
+      /** 计算url，多筛选叠加 */
+      selector_url(type, value) {
+        const { brand, category, prop } = this.$route.query
+        let url = `${type}=${value}`
+        if (type === 'category' && brand) url += `&brand=${brand}`
+        if (type === 'brand' && category) url += `&category=${category}`
+        if (prop) url += `&prop=${prop}`
+        return url
       },
       /** 获取商品列表 */
       GET_GoodsList() {

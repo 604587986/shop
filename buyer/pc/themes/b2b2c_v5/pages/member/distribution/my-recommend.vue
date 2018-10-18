@@ -38,8 +38,9 @@
               <span v-else-if="index===0" class="ms-tree-space">
                 <i class="el-icon el-icon-tickets"></i>
               </span>
-              <img v-if="column.dataIndex === 'useravatar'" class="user-avatar" src="http://7xlo8o.com1.z0.glb.clouddn.com/1.jpg" alt="">
-              <span v-else>{{scope.row[column.dataIndex]}}</span>
+              <!--<img v-if="column.dataIndex === 'useravatar'"  src="http://7xlo8o.com1.z0.glb.clouddn.com/1.jpg" alt="">-->
+              <span v-if="column.dataIndex === 'useravatar'" class="user-avatar"></span>
+              <span>{{scope.row[column.dataIndex]}}</span>
             </template>
           </el-table-column>
           <el-table-column label="TA的订单" align="center">
@@ -195,8 +196,9 @@
   }
   /*用户头像*/
   .user-avatar {
-    width: 25px;
-    height: 25px;
+    width: 10px;
+    /*width: 25px;*/
+    /*height: 25px;*/
     border-radius: 50%;
     margin-left: 15px;
   }
@@ -227,12 +229,16 @@
       background-color: #dddddd;
       border-bottom: none;
     }
+    thead th:first-child {
+      width: 10%;
+    }
     td {
       line-height: 26px;
     }
   }
   /deep/ div.cell {
     display: flex;
+    display: inline-block;
     flex-direction: row;
     align-items: center;
   }

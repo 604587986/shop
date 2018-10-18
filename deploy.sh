@@ -3,6 +3,7 @@
 WEB_PATH=$PWD
 cd $WEB_PATH
 
+# 更新git代码
 if [[ "$1" == "git-pull" ]];then
   echo "拉取最新的代码..."
   git reset --hard origin/master
@@ -12,6 +13,7 @@ if [[ "$1" == "git-pull" ]];then
   echo -e "\033[32m代码拉取完成...\033[0m"
 fi
 
+# 拷贝公共文件
 if [[ "$1" == "copy" ]];then
   echo "拷贝ui-domain..."
   cp -a $WEB_PATH/ui-domain $WEB_PATH/buyer/pc/themes/b2b2c_v5
@@ -31,6 +33,35 @@ if [[ "$1" == "copy" ]];then
   echo -e "\033[32m拷贝完成\033[0m"
 fi
 
+# 配置后台API模式
+PATH_DOMAIN=$WEB_PATH/ui-domain
+PATH_BUYER_PC=$WEB_PATH/buyer/pc/themes/b2b2c_v5/ui-domain
+PATH_BUYER_WAP=$WEB_PATH/buyer/wap/themes/default/ui-domain
+PATH_SELLER=$WEB_PATH/manager-seller/ui-domain
+PATH_ADMIN=$WEB_PATH/manager-admin/ui-domain
+PATH_ARRAY=($PATH_BUYER_PC $PATH_BUYER_WAP $PATH_SELLER $PATH_ADMIN)
+if [[ "$1" == "api_dev" ]];then
+  for path in ${PATH_ARRAY[@]}
+  do
+    sed -i.bak "s/api_model = 'pro'/api_model = 'dev'/" $path/index.js
+    rm -rf $path/index.js.bak
+  done
+  sed -i.bak "s/api_model = 'pro'/api_model = 'dev'/" $PATH_DOMAIN/index.js
+  rm -rf $PATH_DOMAIN/index.js.bak
+  echo -e "\033[32m适配后端API环境更改为[dev]！\033[0m"
+fi
+if [[ "$1" == "api_pro" ]];then
+  for path in ${PATH_ARRAY[@]}
+  do
+    sed -i.bak "s/api_model = 'dev'/api_model = 'pro'/" $path/index.js
+    rm -rf $path/index.js.bak
+  done
+  sed -i.bak "s/api_model = 'dev'/api_model = 'pro'/" $PATH_DOMAIN/index.js
+  rm -rf $PATH_DOMAIN/index.js.bak
+  echo -e "\033[32m适配后端API环境更改为[pro]！\033[0m"
+fi
+
+# 部署nodejs、nginx、pm2
 if [[ "$1" == "base" ]];then
   # 移除yum lock
   rm -f /var/run/yum.pid

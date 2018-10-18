@@ -147,7 +147,7 @@
             this.countParentChecked(item.children)
             const lenght = item.children.length
             const checked_length = item.children.filter(_item => _item.checked).length
-            item.checked = lenght === checked_length
+            item.checked = !!checked_length
           }
         })
       },

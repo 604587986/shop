@@ -1,6 +1,8 @@
 <template>
   <div id="member-index" style="background-color: #f0f2f5">
-    <van-nav-bar title="我的"></van-nav-bar>
+    <van-nav-bar title="我的" @click-right="$router.push('clear')">
+      <i class="clear-pl" slot="right"/>
+    </van-nav-bar>
     <div class="member-container">
       <div class="head-box" :style="{backgroundImage: 'url('+ user.face +')'}"></div>
       <div class="head-items">
@@ -101,11 +103,20 @@
     methods: {
       /** 退出登录 */
       handleLogout() {
-        this.$confirm('确定要退出登录吗？', () => {
-          this.logout().then(() => {
-            location.href = '/'
+        if (this.MixinIsWeChatBrowser()) {
+          this.$confirm('确定要退出登录吗？这将会解绑您的微信！', () => {
+            this.logout('WECHAT').then(() => {
+              Storage.removeItem('is_wechat_auth')
+              location.href = '/'
+            })
           })
-        })
+        } else {
+          this.$confirm('确定要退出登录吗？', () => {
+            this.logout().then(() => {
+              location.href = '/'
+            })
+          })
+        }
       },
       ...mapActions({
         logout: 'user/logoutAction'
@@ -225,6 +236,11 @@
     .big-btn {
       padding: 10px 15px;
     }
+  }
+  /deep/ .clear-pl {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
   }
 </style>
 

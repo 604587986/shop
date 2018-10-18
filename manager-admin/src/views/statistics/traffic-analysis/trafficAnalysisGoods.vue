@@ -62,7 +62,7 @@
             titleText: '商品访问量TOP' + xAxis.length,
             tooltipFormatter: (params) => {
               params = params[0]
-              return `日期：${localName[params.dataIndex]}${this.params.cycle_type === 'MONTH' ? '日' : '月'}<br/>访问量：${params.value}`
+              return `商品名称：${localName[params.dataIndex] || '暂无数据'}<br/>访问量：${params.value || '暂无数据'}`
             },
             seriesData: data,
             xAxisData: xAxis

@@ -56,6 +56,7 @@
   import * as API_Common from '@/api/common'
   import * as API_Safe from '@/api/safe'
   import { RegExp } from '~/ui-utils'
+  import Storage from '@/utils/storage'
   export default {
     name: 'change-password',
     head() {
@@ -65,6 +66,7 @@
     },
     data() {
       return {
+        uuid: Storage.getItem('uuid'),
         /** 步骤 */
         step: 1,
         /** 验证手机 表单 */
@@ -115,10 +117,10 @@
       }
     },
     mounted() {
-      this.getValidImgUrl()
+      this.$nextTick(this.getValidImgUrl)
     },
     computed: {
-      ...mapGetters(['user', 'uuid'])
+      ...mapGetters(['user'])
     },
     methods: {
       /** 获取图片验证码URL */

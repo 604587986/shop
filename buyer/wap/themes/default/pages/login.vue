@@ -1,6 +1,12 @@
 <template>
   <div id="login">
-    <nav-bar title="登录"></nav-bar>
+    <van-nav-bar
+      title="登录"
+      left-arrow
+      @click-left="MixinRouterBack"
+      @click-right="$router.push('clear')">
+      <i class="clear-pl" slot="right"/>
+    </van-nav-bar>
     <!--登录方式切换-->
     <div class="login-tab">
       <div
@@ -58,6 +64,15 @@
         <no-ssr>
           <van-cell-group :border="false">
             <van-field
+              v-model="quickForm.mobile"
+              type="tel"
+              clearable
+              placeholder="请输入手机号"
+              maxlength="11"
+            >
+              <span slot="label">手&emsp;机&emsp;号</span>
+            </van-field>
+            <van-field
               v-model="quickForm.captcha"
               center
               clearable
@@ -66,15 +81,6 @@
               maxlength="4"
             >
               <img v-if="captcha_url" slot="button" :src="captcha_url" @click="handleChangeCaptchalUrl" class="captcha-img"/>
-            </van-field>
-            <van-field
-              v-model="quickForm.mobile"
-              type="tel"
-              clearable
-              placeholder="请输入手机号"
-              maxlength="11"
-            >
-              <span slot="label">手&emsp;机&emsp;号</span>
             </van-field>
             <van-field
               v-model="quickForm.sms_code"
@@ -105,10 +111,10 @@
     <div class="login-other">
       <h4>其他登录方式</h4>
       <div class="icons-login-other">
-        <a :href="getConnectUrl('pc', 'QQ')"><i class="iconfont ea-icon-qq"></i></a>
-        <a :href="getConnectUrl('pc', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>
-        <a :href="getConnectUrl('pc', 'WEIBO')"><i class="iconfont ea-icon-weibo"></i></a>
-        <a :href="getConnectUrl('pc', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
+        <a :href="getConnectUrl('wap', 'QQ')"><i class="iconfont ea-icon-qq"></i></a>
+        <!--<a v-if="isWXBrowser" :href="getConnectUrl('wap', 'WECHAT')"><i class="iconfont ea-icon-wechat"></i></a>-->
+        <a :href="getConnectUrl('wap', 'WEIBO')"><i class="iconfont ea-icon-weibo"></i></a>
+        <a v-if="isAliPayBrowser" :href="getConnectUrl('wap', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
       </div>
       <div class="agreement-tips">
         <p>登录即代表您已同意<a href="javascript:;">Javashop隐私政策</a></p>
@@ -120,6 +126,7 @@
 <script>
   import { mapActions } from 'vuex'
   import { RegExp } from '~/ui-utils'
+  import jwt_decode from 'jwt-decode'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
@@ -153,7 +160,12 @@
           username: '',
           password: '',
           captcha: ''
-        }
+        },
+        isConnect: false,
+        // 是否为微信内置浏览器
+        isWXBrowser: process.client ? /micromessenger/i.test(navigator.userAgent) : false,
+        // 是否为支付宝内置浏览器
+        isAliPayBrowser: process.client ? (navigator.userAgent.match(/Alipay/i) === 'alipay') : false
       }
     },
     computed: {
@@ -171,12 +183,11 @@
     mounted() {
       this.handleChangeCaptchalUrl()
       const uuid_connect = Storage.getItem('uuid_connect')
-      const isConnect = this.$route.query.form === 'connect' && !!uuid_connect
+      const isConnect = (this.$route.query.form === 'connect' && !!uuid_connect) || this.MixinIsWeChatBrowser()
       this.isConnect = isConnect
       if (isConnect) {
         this.login_type = 'account'
       }
-      this.domain = document.domain.split('.').slice(1).join('.')
     },
     methods: {
       /** 发送短信验证码异步回调 */
@@ -193,10 +204,17 @@
             this.$message.error('手机号码格式有误！')
             reject()
           } else {
-            API_Passport.sendLoginSms(mobile, captcha).then(() => {
-              this.$message.success('短信发送成功，请注意查收！')
-              resolve()
-            })
+            if (this.isConnect) {
+              API_Connect.sendMobileLoginSms(mobile, captcha, this.uuid).then(() => {
+                this.$message.success('短信发送成功，请注意查收！')
+                resolve()
+              })
+            } else {
+              API_Passport.sendLoginSms(mobile, captcha).then(() => {
+                this.$message.success('短信发送成功，请注意查收！')
+                resolve()
+              })
+            }
           }
         })
       },
@@ -222,44 +240,44 @@
           }
         }
         if (this.isConnect) {
-          const uuid = Storage.getItem('uuid_connect')
+          let uuid = Storage.getItem('uuid_connect')
           if (!uuid) {
             this.$message.error('参数异常，请刷新页面！')
             return false
           }
           const params = JSON.parse(JSON.stringify(form))
           params.uuid = this.uuid
-          API_Connect.loginByConnect(uuid, params).then(response => {
-            this.setAccessToken(response.access_token)
-            this.setRefreshToken(response.refresh_token)
+          if (login_type === 'quick') {
+            API_Connect.loginByMobileConnect(uuid, params).then(loginCallback).catch(this.handleChangeCaptchalUrl)
+          } else {
+            API_Connect.loginByConnect(uuid, params).then(loginCallback).catch(this.handleChangeCaptchalUrl)
+          }
+          const _this = this
+          // 登录回调
+          function loginCallback(response) {
             if (response.result === 'bind_success') {
-              this.getUserData()
-              Storage.removeItem('uuid_connect', { domain: this.domain })
+              const { uid, access_token, refresh_token } = response
+              _this.$store.dispatch('user/setAccessTokenAction', access_token)
+              _this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
+              const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+              Storage.setItem('uid', uid, { expires })
+              if (_this.MixinIsWeChatBrowser()) {
+                window.location.href = '/'
+                return
+              }
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
               } else {
-                this.$router.push({path: forward || '/'})
+                window.location.href = forward || '/'
               }
             } else {
-              this.$confirm('当前用户已绑定其它账号，确认要覆盖吗？', () => {
-                API_Connect.loginBindConnect(uuid).then(() => {
-                  this.getUserData()
-                  Storage.removeItem('uuid_connect', { domain: this.domain })
-                  if (forward && /^http/.test(forward)) {
-                    window.location.href = forward
-                  } else {
-                    this.$router.push({path: forward || '/'})
-                  }
-                }).catch(() => {
-                  this.removeAccessToken()
-                  this.removeRefreshToken()
-                })
-              }, () => {
-                this.removeAccessToken()
-                this.removeRefreshToken()
+              this.$confirm('当前用户已绑定其它账号，请先解绑！', () => {
+                _this.removeAccessToken()
+                _this.removeRefreshToken()
+                _this.$router.push('/')
               })
             }
-          }).catch(this.handleChangeCaptchalUrl)
+          }
         } else {
           this.login({ login_type, form }).then(() => {
             if (forward && /^http/.test(forward)) {
@@ -276,6 +294,7 @@
         login: 'user/loginAction',
         removeAccessToken: 'user/removeAccessTokenAction',
         removeRefreshToken: 'user/removeRefreshTokenAction',
+        getUserData: 'user/getUserDataAction'
       })
     }
   }
@@ -296,6 +315,10 @@
       &.active span {
         border-bottom: 2px solid #f23030;
         padding: 13px 10px;
+      }
+      &.disabled {
+        color: #999;
+        pointer-events: none;
       }
     }
   }
@@ -358,5 +381,10 @@
       line-height: 30px;
       color: #333
     }
+  }
+  /deep/ .clear-pl {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
   }
 </style>

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Loading } from 'element-ui'
-import { api } from '~/ui-domain'
+import { api, api_model } from '~/ui-domain'
 import Storage from '@/utils/storage'
 import { Foundation } from '~/ui-utils'
 import md5 from 'js-md5'
@@ -45,8 +45,7 @@ service.interceptors.request.use(config => {
   // 获取访问Token
   let accessToken = Storage.getItem('access_token')
   if (accessToken && config.needToken) {
-    // 'development', 'production'
-    if (process.env.NODE_ENV === 'production') {
+    if (api_model === 'pro') {
       const uid = Storage.getItem('uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
@@ -75,14 +74,14 @@ service.interceptors.response.use(
     await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
-    // 109 --> 没有登录、登录状态失效
-    if (error_data.code === '109') {
-      Vue.prototype.$message.error('您已被登出！')
-      const { $store } = Vue.prototype.$nuxt
+    if (error_response.status === 401) {
+      const { $store, $router, $route } = Vue.prototype.$nuxt
+      if (!Storage.getItem('refresh_token')) return
       $store.dispatch('cart/cleanCartStoreAction')
       $store.dispatch('user/removeUserAction')
       $store.dispatch('user/removeAccessTokenAction')
       $store.dispatch('user/removeRefreshTokenAction')
+      $router.push(`/login?forward=${$route.fullPath}`)
       return Promise.reject(error)
     }
     if (error.config.message !== false) {

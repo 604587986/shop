@@ -66,6 +66,10 @@
           <el-button type="primary">点击上传</el-button>
         </el-upload>
       </el-form-item>
+      <!--商品库存数-->
+      <el-form-item label="商品库存数" v-if="gruopBuyForm.enable_quantity">
+        <span>{{ gruopBuyForm.enable_quantity }}</span>
+      </el-form-item>
       <!--商品总数-->
       <el-form-item label="商品总数" prop="goods_num">
         <el-input :style="{ width:inputLength +'px' }"  v-model="gruopBuyForm.goods_num"></el-input>
@@ -202,6 +206,8 @@
             callback(new Error('请输入正整数'))
           } else if (parseInt(value) < 1) {
             callback(new Error('商品总数不得小于1'))
+          } else if (parseInt(value) > parseInt(this.gruopBuyForm.enable_quantity)) {
+            callback(new Error('商品总数不能大于商品库存数'))
           } else {
             callback()
           }

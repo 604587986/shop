@@ -85,7 +85,7 @@ export function getConnectList() {
  */
 export function unbindConnect(type) {
   return request({
-    url: `account-binder/pc/${type}`,
+    url: `account-binder/unbind/${type}`,
     method: Method.POST,
     needToken: true
   })

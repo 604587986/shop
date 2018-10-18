@@ -136,6 +136,7 @@
       p {
         font-size: 12px;
         color: #fff;
+        line-height: 12px;
       }
     }
     i {

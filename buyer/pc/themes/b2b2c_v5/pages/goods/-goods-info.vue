@@ -64,7 +64,7 @@
           </span>
             <a href="javascript:;" @click="handleBuyNumChanged('+')" class="oper-num up"></a>
           </div>
-          <span style="margin-left: 15px">仅剩 {{ goodsInfo.quantity }} 件，抓紧时间购买哦！</span>
+          <span style="margin-left: 15px">仅剩 {{ goodsInfo.enable_quantity }} 件，抓紧时间购买哦！</span>
         </div>
       </div>
       <div class="buy-btns">
@@ -228,10 +228,10 @@
       /** 购买数量增加减少 */
       handleBuyNumChanged(symbol) {
         if (symbol === '+') {
-          const { quantity } = this.selectedSku
-          if (quantity === 0) {
+          const { enable_quantity } = this.selectedSku
+          if (enable_quantity === 0) {
             this.$message.error('该规格暂时缺货！')
-          } else if (this.buyNum >= quantity) {
+          } else if (this.buyNum >= enable_quantity) {
             this.$message.error('超过最大库存！')
           } else {
             this.buyNum += 1
@@ -259,7 +259,7 @@
           this.unselectedSku = false
           this.priceRange = ''
           this.goodsInfo = { ...this.goodsInfo, ...sku }
-          this.buyNum = sku.quantity === 0 ? 0 : 1
+          this.buyNum = sku.enable_quantity === 0 ? 0 : 1
         }
       },
       /** 立即购买 */
@@ -337,6 +337,8 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
         padding-left: 10px;
+        word-break: break-all;
+        width: 398px;
       }
     }
     .pro-details {

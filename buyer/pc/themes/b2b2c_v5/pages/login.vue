@@ -31,7 +31,7 @@
               </div>
               <div class="login-interface">
                 <div v-show="login_type === 'quick'" class="login-show quick-login">
-                  <form class="quick-form">
+                  <form class="quick-form" @keyup.enter="handleLogin">
                     <div class="item item-form-o">
                       <label for="mobile">
                         <i class="iconfont ea-icon-mobile"></i>
@@ -52,7 +52,7 @@
                       <label for="sms-code">
                         <i class="iconfont ea-icon-sms"></i>
                       </label>
-                      <input id="sms-code" v-model="quickForm.sms_code" placeholder="短信验证码" maxlength="6"  @keyup.enter="handleLogin">
+                      <input id="sms-code" v-model="quickForm.sms_code" placeholder="短信验证码" maxlength="6">
                     </div>
                     <div class="forget">
                       <span><nuxt-link :to="'/find-password' + MixinForward">忘记密码</nuxt-link></span>
@@ -61,7 +61,7 @@
                   </form>
                 </div>
                 <div v-show=" login_type === 'account'" class="login-show account-login">
-                  <form class="account-form">
+                  <form class="account-form" @keyup.enter="handleLogin">
                     <div class="item">
                       <label for="username">
                         <i class="iconfont ea-icon-persion"></i>
@@ -78,7 +78,7 @@
                       <label for="validcode">
                         <i class="iconfont ea-icon-safe"></i>
                       </label>
-                      <input id="validcode" v-model="accountForm.captcha" placeholder="图片验证码" maxlength="4" @keyup.enter="handleLogin">
+                      <input id="validcode" v-model="accountForm.captcha" placeholder="图片验证码" maxlength="4">
                       <img v-if="val_code_url" class="validcode-img" :src="val_code_url" @click="handleChangeValUrl">
                     </div>
                     <div class="forget">
@@ -114,6 +114,7 @@
   import { mapActions } from 'vuex'
   import { RegExp } from '~/ui-utils'
   import Storage from '@/utils/storage'
+  import jwt_decode from 'jwt-decode'
   import * as API_Common from '@/api/common'
   import * as API_Passport from '@/api/passport'
   import * as API_Connect from '@/api/connect'
@@ -149,7 +150,6 @@
       if (isConnect) {
         this.login_type = 'account'
       }
-      this.domain = document.domain.split('.').slice(1).join('.')
     },
     methods: {
       /** 发送短信验证码异步回调 */
@@ -208,10 +208,11 @@
           API_Connect.loginByConnect(uuid, params).then(response => {
             this.setAccessToken(response.access_token)
             this.setRefreshToken(response.refresh_token)
-            Storage.setItem('uid', response.uid)
+            const expires = new Date(jwt_decode(refresh_token).exp * 1000)
+            Storage.setItem('uid', response.uid, { expires })
             if (response.result === 'bind_success') {
               this.getUserData()
-              Storage.removeItem('uuid_connect', { domain: this.domain })
+              Storage.removeItem('uuid_connect')
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
               } else {
@@ -221,7 +222,7 @@
               this.$alert('当前用户已绑定其它账号！', () => {
                 this.removeAccessToken()
                 this.removeRefreshToken()
-                Storage.removeItem('uuid_connect', { domain: this.domain })
+                Storage.removeItem('uuid_connect')
               })
             }
           }).catch(this.handleChangeValUrl)

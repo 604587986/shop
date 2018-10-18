@@ -2,30 +2,31 @@
   <div id="withdrawals-history">
     <nav-bar title="提现记录"/>
     <div class="withdrawals-container">
-      <van-collapse v-model="activeNames" v-if="withdrawalsList && withdrawalsList.length">
-        <van-collapse-item
-          :border="false"
-          :name="_index"
-          v-for="(item, _index) in withdrawalsList"
-          :key="_index">
-          <!--提现时间-->
-          <span slot="title">提现时间：{{ item.apply_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
-          <div class="colla-content">
-            <!--提现状态-->
-            <span>提现状态:{{ item.status | withdraealsStatus }}</span>
-            <!--提现金额-->
-            <span>提现金额:<i style="color: #f42424;">{{ item.apply_money | unitPrice('¥') }}</i></span>
-          </div>
-          <div @click="lookDetails(item)" style="color: #ff853f;">查看详情</div>
-        </van-collapse-item>
-      </van-collapse>
-      <van-cell v-else>
-        <template>
-          <div style="text-align: center;">
-            <span>暂无数据</span>
-          </div>
-        </template>
-      </van-cell>
+      <empty-member v-if="finished && !withdrawalsList.length">暂无提现记录</empty-member>
+      <van-list
+        v-else
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+      >
+        <van-collapse v-model="activeNames" v-if="withdrawalsList && withdrawalsList.length">
+          <van-collapse-item
+            :border="false"
+            :name="_index"
+            v-for="(item, _index) in withdrawalsList"
+            :key="_index">
+            <!--提现时间-->
+            <span slot="title">提现时间：{{ item.apply_time | unixToDate('yyyy-MM-dd hh:mm') }}</span>
+            <div class="colla-content">
+              <!--提现状态-->
+              <span>提现状态:{{ item.status | withdraealsStatus }}</span>
+              <!--提现金额-->
+              <span>提现金额:<i style="color: #f42424;">{{ item.apply_money | unitPrice('¥') }}</i></span>
+            </div>
+            <div @click="lookDetails(item)" style="color: #ff853f;">查看详情</div>
+          </van-collapse-item>
+        </van-collapse>
+      </van-list>
     </div>
     <van-popup v-model="isShowDialog"  position="bottom" style="height:100%">
       <van-nav-bar title="提现详情" @click-right="isShowDialog = false">
@@ -51,6 +52,8 @@
     name: 'withdrawals-history',
     data() {
       return {
+        loading: false,
+
         /** 分页请求参数 */
         params: {
           page_no: 1,
@@ -68,17 +71,17 @@
         activeNames: [],
 
         /** 提现记录列表 */
-        withdrawalsList: null,
+        withdrawalsList: [],
 
         /** 是否显示详情 */
         isShowDialog: false,
 
         /** 当前行的对象 */
-        currentRow: {}
+        currentRow: {},
+
+        /** 是否加载完成 */
+        finished: false
       }
-    },
-    mounted() {
-      this.GET_WithdrawalsList()
     },
     filters: {
       withdraealsStatus(val) {
@@ -95,16 +98,23 @@
       }
     },
     methods: {
-      /** 当前页数发生改变 */
-      handleCurrentPageChange(cur) {
-        this.params.page_no = cur
+      /** 加载数据 */
+      onLoad() {
+        this.params.page_no += 1
         this.GET_WithdrawalsList()
       },
 
       /** 获取提现记录 */
       GET_WithdrawalsList() {
+        this.loading = true
         API_distribution.getWithdrawalsList(this.params).then(response => {
-          this.withdrawalsList = response.data
+          this.loading = false
+          const { data } = response
+          if (!data || !data.length) {
+            this.finished = true
+          } else {
+            this.withdrawalsList.push(...data)
+          }
         })
       },
 

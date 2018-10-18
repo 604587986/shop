@@ -53,6 +53,29 @@
         </el-table>
       </el-col>
     </el-row>
+    <!--赠品列表-->
+    <el-row v-if="orderDetail && orderDetail.gift_list && orderDetail.gift_list.length" :gutter="0">
+      <el-col :span="24">
+        <div class="d-header">赠品列表</div>
+        <el-table :data="orderDetail.gift_list" :header-cell-style="{textAlign: 'center'}">
+          <el-table-column label="赠品图片" width="180">
+            <template slot-scope="scope">
+              <img :src="scope.row.gift_img" class="goods-image"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="赠品名称" align="left">
+            <template slot-scope="scope">
+              <a :href="scope.row.gift_img" class="goods-name" target="_blank">{{ scope.row.gift_name }}</a>
+            </template>
+          </el-table-column>
+          <el-table-column label="赠品价格" width="150">
+            <template slot-scope="scope">￥{{ scope.row.gift_price | unitPrice }}</template>
+          </el-table-column>
+          <el-table-column label="" width="120"/>
+          <el-table-column label="" width="120"/>
+        </el-table>
+      </el-col>
+    </el-row>
     <!--订单日志-->
     <el-row v-loading="loading_log" :gutter="0">
       <el-col :span="24">

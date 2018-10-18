@@ -122,12 +122,13 @@
                 <template slot="prepend">kg</template>
               </el-input>
             </el-form-item>
+            <!--:file-list="baseInfoForm.goods_gallery_list"-->
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
                 class="avatar-uploader goods-images"
                 :action="`${MixinUploadApi}?scene=goods`"
                 list-type="picture-card"
-                :file-list="baseInfoForm.goods_gallery_list"
+                multiple
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
                 :on-remove="handleRemove"
@@ -193,9 +194,9 @@
                 @change="changeTpl">
                 <el-option
                   v-for="item in tplList"
-                  :key="item.template_id"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.template_id">
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -300,13 +301,12 @@
         <el-button
           type="primary"
           @click="aboveGoods"
-          v-if="(currentStatus === 0 && activestep === 2) || (currentStatus === 1 && activestep !== 0)
-          || (currentStatus === 2 && activestep === 1)"
+          v-if="activestep === 1 || activestep === 2"
         >上架</el-button>
         <el-button
           type="primary"
           @click="handleUnderGoods"
-          v-if="(currentStatus === 1 && activestep === 1) || activestep === 2"
+          v-if="currentStatus === 1 && ( activestep === 1 || activestep === 2)"
         >下架</el-button>
         <el-button
           type="primary"
@@ -702,7 +702,7 @@
           return
         } else if (this.activestep === 0 && this.activeCategoryName1) {
           /** 获取该商城分类下 商品参数信息 */
-          this.GET_GoodsParams()
+          this.GET_GoodsParams(1)
           /** 查询品牌列表 */
           this.getGoodsBrandList()
           /** 运费模板列表 */
@@ -875,9 +875,7 @@
           this.baseInfoForm.goods_gallery_list.forEach(key => {
             this.$set(key, 'url', key.original)
           })
-          this.$nextTick(() => {
-            this.setSort()
-          })
+          this.$nextTick(() => { this.setSort() })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list || !Array.isArray(this.baseInfoForm.sku_list)) {
@@ -929,8 +927,8 @@
       },
 
       /** 查询商品参数 */
-      GET_GoodsParams() {
-        if (this.activeGoodsId) {
+      GET_GoodsParams(next = null) {
+        if (this.activeGoodsId && !next) {
           API_goods.getEditGoodsParams(this.baseInfoForm.category_id, this.activeGoodsId).then((response) => {
             this.loading = false
             this.goodsParams = response
@@ -996,18 +994,18 @@
             this.isShowExchangeConfig = (this.baseInfoForm.exchange.enable_exchange === 1)
           }
           /** 商品相册校验属性 */
-          this.baseInfoForm.goods_gallery_list = response.gallery_list.map(key => {
-            return {
-              img_id: -1,
-              url: key,
-              original: key,
-              sort: 0
-            }
-          })
-          this.$nextTick(() => {
-            this.setSort()
-          })
-          this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+          if (Array.isArray(response.gallery_list) && response.gallery_list.length) {
+            this.baseInfoForm.goods_gallery_list = response.gallery_list.map(key => {
+              return {
+                img_id: -1,
+                url: key,
+                original: key,
+                sort: 0
+              }
+            })
+            this.$nextTick(() => { this.setSort() })
+            this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+          }
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list) {
             this.baseInfoForm.sku_list = []
@@ -1158,9 +1156,7 @@
         })
         this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
         this.$refs['baseInfoForm'].validateField('goods_gallery')
-        this.$nextTick(() => {
-          this.setSort()
-        })
+        this.$nextTick(() => { this.setSort() })
       },
 
       /** 点击已上传的文件链接时的钩子 放大 */
@@ -1174,9 +1170,7 @@
         const el = document.querySelectorAll('div.avatar-uploader > ul.el-upload-list--picture-card')[0]
         this.sortable = Sortable.create(el, {
           ghostClass: 'sortable-ghost',
-          setData: function(dataTransfer) {
-
-          },
+          setData: function(dataTransfer) { },
           onEnd: evt => {
             let temp = this.baseInfoForm.goods_gallery_list[evt.oldIndex]
             this.baseInfoForm.goods_gallery_list[evt.oldIndex] = this.baseInfoForm.goods_gallery_list[evt.newIndex]
@@ -1201,7 +1195,6 @@
         const isExit = this.baseInfoForm.goods_gallery_list.some(key => {
           return file.name === key.name
         })
-
         if (isExit) {
           this.$message.error('图片已存在')
         }

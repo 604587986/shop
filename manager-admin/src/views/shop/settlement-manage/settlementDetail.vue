@@ -38,6 +38,12 @@
         <el-col :span="20">{{ settlement.bank_address || '无' }}</el-col>
       </el-row>
       <el-row :gutter="0">
+        <el-col :span="4">货到付款金额</el-col>
+        <el-col :span="8">￥{{ settlement.cod_price | unitPrice }}</el-col>
+        <el-col :span="4">货到付款退款金额</el-col>
+        <el-col :span="8">￥{{ settlement.cod_refund_price | unitPrice }}</el-col>
+      </el-row>
+      <el-row :gutter="0">
         <el-col :span="4">平台应付金额</el-col>
         <el-col :span="20">
           <em class="plus">￥{{ settlement.bill_price | unitPrice }}</em>
@@ -46,6 +52,8 @@
           <em class="minus"> - ￥{{ settlement.refund_price | unitPrice }}</em>(在线退款金额)
           <em class="minus"> - ￥{{ settlement.commi_price | unitPrice }}</em>(佣金金额)
           <em class="plus"> + ￥{{ settlement.refund_commi_price | unitPrice }}</em>(退还佣金)
+          <em class="minus"> - ￥{{ settlement.distribution_rebate | unitPrice }}</em>(分销佣金)
+          <em class="plus"> + ￥{{ settlement.distribution_return_rebate | unitPrice }}</em>(退还分销佣金)
         </el-col>
       </el-row>
     </el-card>

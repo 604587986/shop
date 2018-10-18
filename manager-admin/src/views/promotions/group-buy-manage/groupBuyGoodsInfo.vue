@@ -2,7 +2,7 @@
   <div v-if="form" class="container">
     <el-form :model="form" label-width="100px">
       <el-form-item label="团购活动">
-        <span>{{ form.gb_name }}</span>
+        <span>{{ form.title }}</span>
       </el-form-item>
       <el-form-item label="活动时间">
         <span>{{ form.start_time | unixToDate }} - {{ form.end_time | unixToDate }}</span>

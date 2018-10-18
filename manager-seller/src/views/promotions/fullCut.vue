@@ -39,10 +39,12 @@
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
                 <el-button
+                  v-if="!scope.row.status"
                   type="success"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
+                  v-if="!scope.row.status"
                   type="danger"
                   @click="handleDeleteFullCut(scope.row)">删除
                 </el-button>
@@ -255,6 +257,25 @@
       :couponModelShow="couponModelShow"
       @saveCoupon="saveCoupon"
     ></Coupon>
+    <el-dialog
+      title="以下商品已经参加其它活动，于当前活动存在冲突"
+      :visible.sync="showConflictGoods"
+      width="30%">
+      <en-table-layout
+        toolbar
+        :tableData="conflictList">
+        <template slot="table-columns">
+          <!--商品名称-->
+          <el-table-column prop="name" label="商品名称"/>
+          <!--商品图片-->
+          <el-table-column label="商品名称">
+            <template slot-scope="scope">
+              <img :src="scope.row.thumbnail" class="goods-image"/>
+            </template>
+          </el-table-column>
+        </template>
+      </en-table-layout>
+    </el-dialog>
   </div>
 </template>
 
@@ -318,11 +339,12 @@
           if (!value) {
             return callback(new Error('请输入要优惠的打折力度'))
           }
+          // 正则范围 0.1-9.9
           setTimeout(() => {
-            if (!RegExp.integer.test(value)) {
-              callback(new Error('请输入正整数'))
-            } else if (value <= 0 || value >= 10) {
-              callback(new Error('打折数字只能在1-9之间'))
+            if (!/^((0\.[1-9]{1})|(([1-9]{1})(\.\d{1})?))$/.test(value)) {
+              callback(new Error('请输入正整数或者一位小数'))
+            } else if (parseInt(value) < 1 || parseInt(value) >= 10) {
+              callback(new Error('打折数字只能在1-9.9之间'))
             } else {
               callback()
             }
@@ -403,7 +425,7 @@
           full_money: '',
 
           /** 是否打折 */
-          is_discount: 1,
+          is_discount: 0,
 
           /** 打几折 */
           discount_value: 0,
@@ -549,7 +571,13 @@
           range_type: [
             { validator: checkRange, trigger: 'change' }
           ]
-        }
+        },
+
+        /** 是否显示冲突列表 */
+        showConflictGoods: false,
+
+        /** 冲突列表 显示商品名称 商品价格 商品图片 */
+        conflictList: []
       }
     },
     mounted() {
@@ -642,8 +670,8 @@
             this.is_free_ship = false
             this.is_send_bonus = false
             this.is_send_gift = false
-            this.changeDiscount(this.is_discount)
-            this.changeReduceCash(this.is_full_minus)
+            this.discountTxt = '打折(与减现金活动只能选择一种)'
+            this.reduceCashTxt = '减现金(与打折活动只能选择一种)'
             this.changeIntegral(this.isIntegral)
             this.isChangeCoupon(this.is_send_bonus)
             this.isChangeGift(this.is_send_gift)
@@ -770,7 +798,7 @@
 
       /** 执行删除*/
       toDelActivity(row) {
-        API_activity.deleteFullCutActivity(row.fd_id).then(response => {
+        API_activity.deleteFullCutActivity(row.fd_id).then(() => {
           this.$message.success('删除成功！')
           this.GET_FullCutActivityList()
         })
@@ -838,8 +866,9 @@
         this.is_free_ship = false
         this.is_send_bonus = false
         this.is_send_gift = false
-        this.changeDiscount(this.is_discount)
-        this.changeReduceCash(this.is_full_minus)
+
+        this.discountTxt = '打折(与减现金活动只能选择一种)'
+        this.reduceCashTxt = '减现金(与打折活动只能选择一种)'
         this.changeIntegral(this.isIntegral)
         this.isChangeCoupon(this.is_send_bonus)
         this.isChangeGift(this.is_send_gift)
@@ -849,7 +878,9 @@
       changeDiscount(val) {
         this.is_discount = val
         this.activityForm.is_discount = val ? 1 : 0
-        this.activityForm.is_full_minus = val ? 0 : 1
+        if (this.is_full_minus) {
+          this.activityForm.is_full_minus = val ? 0 : 1
+        }
         if (val) {
           this.is_full_minus = !this.is_discount
           this.reduceCashTxt = this.is_full_minus ? '减' : '减现金(与打折活动只能选择一种)'
@@ -861,7 +892,9 @@
       changeReduceCash(val) {
         this.is_full_minus = val
         this.activityForm.is_full_minus = val ? 1 : 0
-        this.activityForm.is_discount = val ? 0 : 1
+        if (this.is_discount) {
+          this.activityForm.is_discount = val ? 0 : 1
+        }
         if (val) {
           this.is_discount = !this.is_full_minus
           this.discountTxt = this.is_discount ? '打' : '打折(与减现金活动只能选择一种)'
@@ -945,11 +978,6 @@
       handleSaveActivity(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            /** 是否选择打折或满减 */
-            if (!this.is_discount && !this.is_full_minus) {
-              this.$message.error('请选择打折或满减中的一种')
-              return
-            }
             /** 处理表单数据 */
             this.activityForm.start_time = this.activityForm.take_effect_time[0] / 1000
             this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000
@@ -976,12 +1004,29 @@
                 this.$message.success('保存成功！')
                 this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
+              }).catch((res) => {
+                if (res.response.data.code === '401' && res.response.data.data) {
+                  this.showConflictGoods = true
+                  const goods_name = JSON.parse(res.response.data.data).map(key => { return key.name }).toString()
+                  this.$message.error(`${goods_name}已经参加其它活动，于当前活动存在冲突`)
+                } else {
+                  this.$message.error(res.response.data.message)
+                }
               })
             } else {
               API_activity.addFullCutActivity(this.activityForm).then(() => {
                 this.$message.success('添加成功！')
                 this.activeName = 'fullList'
                 this.GET_FullCutActivityList()
+              }).catch((res) => {
+                if (res.response.data.code === '401' && res.response.data.data) {
+                  // this.showConflictGoods = true
+                  // this.conflictList = JSON.parse(res.response.data.data)
+                  const goods_name = JSON.parse(res.response.data.data).map(key => { return key.name }).toString()
+                  this.$message.error(`${goods_name}已经参加其它活动，于当前活动存在冲突`)
+                } else {
+                  this.$message.error(res.response.data.message)
+                }
               })
             }
           }

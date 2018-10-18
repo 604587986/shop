@@ -40,11 +40,13 @@
       <!--促销活动 end-->
       <!--商品规格 start-->
       <goods-specs
-        :goods-id="goods.goods_id"
+        :goods="goods"
+        :show="showSpecsPopup"
         @sku-changed="(sku) => { selectedSku = sku }"
         @num-changed="(num) => { buyNum = num }"
         @add-cart="handleAddToCart"
         @buy-now="handleBuyNow"
+        @close="showSpecsPopup = false"
       />
       <!--商品规格 end-->
       <span class="separated"></span>
@@ -76,10 +78,22 @@
       />
       <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
       <van-goods-action-mini-btn icon="shop" text="店铺" :to="'/shop/' + goods.seller_id"/>
-      <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
-      <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
+      <van-goods-action-big-btn
+        v-if="goods.is_auth === 0 || goods.goods_off === 0"
+        :text="goods.is_auth === 0 ? '商品审核中' : '商品已下架'"
+        class="buy-disabled"
+      />
+      <template v-else>
+        <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
+        <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
+      </template>
     </van-goods-action>
-    <goods-distribution v-if="show_dis" :show="showDisPopup" @close="showDisPopup = false"/>
+    <goods-distribution
+      v-if="show_dis"
+      :show="showDisPopup"
+      :goods_name="goods.goods_name"
+      :thumbnail="goods.thumbnail"
+      @close="showDisPopup = false"/>
   </div>
 </template>
 
@@ -154,7 +168,9 @@
         // 促销信息
         promotions: '',
         // 展示分销弹框
-        showDisPopup: false
+        showDisPopup: false,
+        // 显示规格弹框
+        showSpecsPopup: false
       }
     },
     mounted() {
@@ -170,8 +186,6 @@
           // 获取购物车数据
           this.$store.dispatch('cart/getCartDataAction')
         }
-        // 浏览量+1
-        API_Goods.visitGoods(goods_id)
         // 记录浏览量统计【用于统计】
         API_Common.recordViews(window.location.href)
         // 获取促销信息
@@ -248,6 +262,7 @@
       isLogin() {
         if (!this.selectedSku) {
           this.$message.error('请选择商品规格！')
+          this.showSpecsPopup = true
           this.unselectedSku = true
           return false
         }
@@ -409,5 +424,9 @@
     .van-icon-like {
       color: $color-main
     }
+  }
+  /deep/ .buy-disabled {
+    background-color: #e5e5e5;
+    pointer-events:none;
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-bg" id="login-bg"></div>
-    <div class="login-form">
+    <div class="login-form" @keyup.enter="submitLogin">
       <a :href="MixinBuyerDomain" class="login-logo" target="_blank">
         <img class="login-logo-img" src="../../assets/logo_images/logo-javashop-rectangle-light.png" alt="javashop">
       </a>
@@ -17,7 +17,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="validcode">
-          <el-input v-model="loginForm.validcode" @keyup.native.enter="submitLogin" :placeholder="translateKey('validcode')" :maxlength="4" clearable>
+          <el-input v-model="loginForm.validcode" :placeholder="translateKey('validcode')" :maxlength="4" clearable>
             <template slot="append">
               <img class="login-validcode-img" :src="validcodeImg" @click="changeValidcode">
             </template>

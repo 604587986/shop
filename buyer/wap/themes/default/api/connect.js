@@ -39,7 +39,7 @@ export function loginByConnect(uuid, params) {
   params.password = md5(params.password)
   return request({
     url: `passport/login-binder/wap/${uuid}`,
-    method: Method.PUT,
+    method: Method.POST,
     data: params
   })
 }
@@ -85,9 +85,55 @@ export function getConnectList() {
  */
 export function unbindConnect(type) {
   return request({
-    url: `account-binder/pc/${type}`,
+    url: `account-binder/unbind/${type}`,
     method: Method.POST,
     needToken: true
   })
 }
 
+/**
+ * 微信自动登录
+ * @param uuid
+ */
+export function weChatAutoLogin(uuid) {
+  return request({
+    url: 'passport/connect/wechat/login',
+    method: Method.GET,
+    params: { uuid }
+  })
+}
+
+/**
+ * 微信授权URL
+ */
+export const wechatAuthUrl = `${api.buyer}/passport/connect/wechat/auth`
+
+/**
+ * 发送第三方登录手机验证码
+ * @param mobile
+ * @param captcha
+ * @param uuid
+ */
+export function sendMobileLoginSms(mobile, captcha, uuid) {
+  return request({
+    url: `passport/mobile-binder/sms-code/${mobile}`,
+    method: Method.POST,
+    params: {
+      captcha,
+      uuid
+    }
+  })
+}
+
+/**
+ * 第三方登录绑定【通过手机验证码方式登录】
+ * @param uuid
+ * @param params
+ */
+export function loginByMobileConnect(uuid, params) {
+  return request({
+    url: `passport/mobile-binder/${uuid}`,
+    method: Method.POST,
+    params
+  })
+}

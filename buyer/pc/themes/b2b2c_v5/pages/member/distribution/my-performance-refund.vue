@@ -22,14 +22,14 @@
         </div>
         <div>
           <span class="summary-money performance-money">{{ settlementTotal.final_money | unitPrice('¥') }}</span>
-          <span>付款总金额</span>
+          <span>订单佣金</span>
         </div>
         <div>
           <span class="performance-symbol">-</span>
         </div>
         <div>
-          <span class="refund-money performance-money">{{ settlementTotal.return_order_money | unitPrice('¥') }}</span>
-          <span>订单退款金额</span>
+          <span class="refund-money performance-money">{{ settlementTotal.return_push_money | unitPrice('¥') }}</span>
+          <span>退单佣金返还</span>
         </div>
       </div>
       <el-table :data="relevantRefundList" style="width: 100%">
@@ -40,8 +40,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="member_name" label="会员名称" align="center"/>
-        <el-table-column prop="level" label="会员级别" align="center"/>
-        <el-table-column prop="point" label="会员返利" align="center"/>
         <el-table-column label="返利金额" align="center">
           <template slot-scope="scope">
             <span class="price">{{ scope.row.price | unitPrice('¥') }}</span>

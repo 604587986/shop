@@ -17,12 +17,12 @@ module.exports = {
       { hid: 'X-UA-Compatible', 'http-equiv': 'X-UA-Compatible', content: 'IE=edge,chrome=1' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_461357_ohmdom0k04o.css' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
       { type: 'text/javascript', src: '/jquery.min.js' },
-      { type: 'text/javascript', src: '/layer/layer.js' }
+      { type: 'text/javascript', src: '/layer/layer.js' },
+      { type: 'text/javascript', src: '/psl.js' }
     ],
     __dangerouslyDisableSanitizers: ['script']
   },
@@ -46,6 +46,9 @@ module.exports = {
     extractCSS: {
       allChunks: true
     },
+    externals: {
+      psl: 'window.psl'
+    },
     vendor: ['axios'],
     babel: {
       "plugins": [
@@ -58,11 +61,20 @@ module.exports = {
       ]
     },
     plugins: [],
-    publicPath: '/'
+    publicPath: '/',
+    // 文件名称
+    filenames: {
+      css: '[name].bundle.css',
+      manifest: '[name].bundle.js',
+      vendor: '[name].bundle.js',
+      app: '[name].bundle.js',
+      chunk: '[name].bundle.js'
+    }
   },
   css: [
     '~assets/styles/normalize.css',
     '~assets/styles/base.scss',
+    '~assets/styles/iconfont/iconfont.css',
     '~assets/styles/page-transletion.scss',
     'swiper/dist/css/swiper.css'
   ],

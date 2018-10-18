@@ -155,6 +155,7 @@
       vertical-align: -2px;
       margin-right: 6px;
       font-size: 30px;
+      line-height: 30px;
     }
   }
   .receive-coupon {

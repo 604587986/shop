@@ -15,7 +15,9 @@ const permission = {
   },
   actions: {
     GenerateRoutes({ commit }) {
-      const user = JSON.parse(Storage.getItem('seller_user'))
+      let user = Storage.getItem('seller_user')
+      if (!user) return Promise.reject()
+      user = JSON.parse(user)
       let role_id = user.role_id
       if (user.founder === 1) role_id = 0
       return new Promise((resolve, reject) => {

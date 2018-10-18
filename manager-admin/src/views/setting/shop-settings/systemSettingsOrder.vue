@@ -1,23 +1,23 @@
 <template>
-  <el-form :model="orderForm" :rules="orderRules" ref="orderForm" label-width="130px" style="width: 500px">
-    <el-form-item label="自动取消订单天数" prop="cancel_order_day">
-      <el-input-number size="small" v-model="orderForm.cancel_order_day"></el-input-number>
+  <el-form :model="orderForm" ref="orderForm" label-width="130px" style="width: 500px">
+    <el-form-item label="自动取消订单天数">
+      <el-input-number size="small" v-model="orderForm.cancel_order_day" :min="0"></el-input-number>
     </el-form-item>
-    <el-form-item label="自动确认收货天数" prop="name">
-      <el-input-number size="small" v-model="orderForm.rog_order_day"></el-input-number>
+    <el-form-item label="自动确认收货天数">
+      <el-input-number size="small" v-model="orderForm.rog_order_day" :min="0"></el-input-number>
     </el-form-item>
-    <el-form-item label="自动完成订单天数" prop="complete_order_day">
-      <el-input-number size="small" v-model="orderForm.complete_order_day"></el-input-number>
+    <el-form-item label="自动完成订单天数">
+      <el-input-number size="small" v-model="orderForm.complete_order_day" :min="0"></el-input-number>
     </el-form-item>
-    <el-form-item label="售后失效天数" prop="service_expired_day">
-      <el-input-number size="small" v-model="orderForm.service_expired_day"></el-input-number>
+    <el-form-item label="售后失效天数">
+      <el-input-number size="small" v-model="orderForm.service_expired_day" :min="0"></el-input-number>
     </el-form-item>
-    <el-form-item label="评价超时天数" prop="comment_order_day">
-      <el-input-number size="small" v-model="orderForm.comment_order_day"></el-input-number>
+    <el-form-item label="评价超时天数">
+      <el-input-number size="small" v-model="orderForm.comment_order_day" :min="0"></el-input-number>
     </el-form-item>
-    <el-form-item label="自动支付天数" prop="complete_order_pay">
-      <el-input-number size="small" v-model="orderForm.complete_order_pay"></el-input-number>
-      <p style="color: red;font-size: 12px;margin: 0">仅对货到付款的订单有效</p>
+    <el-form-item label="自动支付天数">
+      <el-input-number size="small" v-model="orderForm.complete_order_pay" :min="0"></el-input-number>
+      <p style="color: red;font-size: 12px;margin: 0">自动支付天数仅对货到付款的订单有效</p>
     </el-form-item>
     <el-form-item label="">
       <el-button type="primary" @click="submitEditOrderSetting">保存设置</el-button>
@@ -40,8 +40,7 @@
           service_expired_day: 30,
           complete_order_day: 7,
           complete_order_pay: 3
-        },
-        orderRules: {}
+        }
       }
     },
     mounted() {

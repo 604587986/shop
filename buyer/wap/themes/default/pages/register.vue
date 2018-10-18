@@ -24,6 +24,15 @@
         <no-ssr>
           <van-cell-group :border="false">
             <van-field
+              v-model="registerForm.mobile"
+              type="tel"
+              clearable
+              placeholder="请输入手机号"
+              maxlength="11"
+            >
+              <span slot="label">手&emsp;机&emsp;号</span>
+            </van-field>
+            <van-field
               v-model="registerForm.captcha"
               center
               clearable
@@ -32,15 +41,6 @@
               maxlength="4"
             >
               <img v-if="valid_code_url" slot="button" :src="valid_code_url" @click="changeValidCodeUrl" class="captcha-img"/>
-            </van-field>
-            <van-field
-              v-model="registerForm.mobile"
-              type="tel"
-              clearable
-              placeholder="请输入手机号"
-              maxlength="11"
-            >
-              <span slot="label">手&emsp;机&emsp;号</span>
             </van-field>
             <van-field
               v-model="registerForm.sms_code"
@@ -209,7 +209,6 @@
         this.registerByMobile({ mobile, password }).then(() => {
           if (this.isConnect) {
             API_Connect.registerBindConnect(Storage.getItem('uuid_connect')).then(() => {
-              Storage.removeItem('uuid_connect', { domain: document.domain.split('.').slice(1).join('.') })
               this.getUserData().then(() => {
                 this.$router.push({ path: '/member' })
               })

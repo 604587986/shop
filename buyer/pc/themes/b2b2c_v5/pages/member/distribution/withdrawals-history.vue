@@ -44,7 +44,7 @@
         <span>提现金额：</span> <span class="price"> {{ currentRow.apply_money | unitPrice('¥') }}</span>
       </div>
       <div>
-        <span>当前状态：</span> <span> {{currentRow.status }}</span>
+        <span>当前状态：</span> <span> {{ withdraealsStatus(currentRow) }}</span>
       </div>
       <div>
         <span>备注信息：</span> <span> {{currentRow.apply_remark }}</span>

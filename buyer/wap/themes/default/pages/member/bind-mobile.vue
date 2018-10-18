@@ -39,10 +39,10 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
   import * as API_Safe from '@/api/safe'
   import * as API_Common from '@/api/common'
   import { RegExp } from '~/ui-utils'
+  import Storage from '@/utils/storage'
   export default {
     name: 'bind-mobile',
     head() {
@@ -52,6 +52,7 @@
     },
     data() {
       return {
+        uuid: Storage.getItem('uuid'),
         bindMobileForm: {
           mobile: '',
           img_code: '',
@@ -64,14 +65,13 @@
       }
     },
     computed: {
-      ...mapGetters(['uuid']),
       val_disabled() {
         const { mobile, img_code, sms_code } = this.bindMobileForm
         return !(mobile && img_code && sms_code)
       }
     },
     mounted() {
-      this.getValidImgUrl()
+      this.$nextTick(this.getValidImgUrl)
     },
     methods: {
       /** 获取图片验证码url */

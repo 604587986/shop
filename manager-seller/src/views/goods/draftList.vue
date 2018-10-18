@@ -137,7 +137,7 @@
           }
           this.tableData = response.data
           this.tableData.forEach(key => {
-            if (!key.thumbnail) {
+            if (!key.thumbnail && key.gallery_list) {
               key.thumbnail = key.gallery_list[0]
             }
           })

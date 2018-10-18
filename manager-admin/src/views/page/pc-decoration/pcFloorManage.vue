@@ -76,9 +76,13 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import VueLazyload from 'vue-lazyload'
   import draggable from 'vuedraggable'
   import * as API_Floor from '@/api/floor'
   import templates, { templateArray } from './templates'
+
+  Vue.use(VueLazyload)
 
   export default {
     name: 'pcFloorManage',
@@ -306,6 +310,10 @@
     }
     &.item-3 .img-tpl {
       background: url("../../../assets/pc-tpl-03.png") no-repeat;
+      background-size: 100%;
+    }
+    &.item-4 .img-tpl {
+      background: url("../../../assets/pc-tpl-04.png") no-repeat;
       background-size: 100%;
     }
   }

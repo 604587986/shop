@@ -26,6 +26,12 @@
                 </div>
               </div>
             </div>
+            <div v-if="comment.reply_status === 1" class="comment-body reply">
+              <strong>掌柜回复：</strong>
+              <div>
+                <p v-html="comment.reply.content.replace(/\n/g, '<br>')"></p>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -106,6 +112,9 @@
     overflow: hidden;
     padding: 10px;
     border-top: none;
+    &.reply {
+      color: $color-main;
+    }
     strong {
       width: 60px;
       flex-shrink: 0;

@@ -17,11 +17,11 @@
         <el-table-column prop="downline"  label="人数"/>
         <!--销售金额-->
         <el-table-column label="销售金额">
-          <template slot-scope="scope">{{ scope.row.rebate_total | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.turnover_price | unitPrice('￥') }}</template>
         </el-table-column>
         <!--利润额-->
         <el-table-column label="利润额">
-          <template slot-scope="scope">{{ scope.row.turnover_price | unitPrice('￥') }}</template>
+          <template slot-scope="scope">{{ scope.row.rebate_total | unitPrice('￥') }}</template>
         </el-table-column>
         <!--订单数	-->
         <el-table-column prop="order_num" label="订单数	"/>

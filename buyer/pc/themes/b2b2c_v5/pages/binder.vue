@@ -10,6 +10,8 @@
     name: 'binder',
     layout: 'full',
     mounted() {
+      const { uuid } = this.$route.query
+      if (uuid) Storage.setItem('uuid', uuid, { expires: 30 })
       // 如果有刷新token，说明是在已登录的情况下绑定或换绑
       if (Storage.getItem('refresh_token')) {
         const uuid_connect = Storage.getItem('uuid_connect')
@@ -18,7 +20,7 @@
           Storage.setItem('access_token', access_token)
           Storage.setItem('refresh_token', refresh_token)
           Storage.setItem('uuid', uuid_connect)
-          Storage.removeItem('uuid_connect', { domain: document.domain.split('.').slice(1).join('.') })
+          Storage.removeItem('uuid_connect')
           this.$router.replace({ name: 'member-account-binding' })
         }).catch(() => {
           this.$router.replace({ name: 'member-account-binding' })

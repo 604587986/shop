@@ -81,6 +81,7 @@
   import * as API_Common from '@/api/common'
   import * as API_Safe from '@/api/safe'
   import { Foundation, RegExp } from '~/ui-utils'
+  import Storage from '@/utils/storage'
   export default {
     name: 'change-mobile',
     head() {
@@ -90,6 +91,7 @@
     },
     data() {
       return {
+        uuid: Storage.getItem('uuid'),
         /** 步骤 */
         step: 1,
         /** 校验手机号 表单 */
@@ -108,10 +110,10 @@
       }
     },
     mounted() {
-      this.getValidImgUrl()
+      this.$nextTick(this.getValidImgUrl)
     },
     computed: {
-      ...mapGetters(['user', 'uuid']),
+      ...mapGetters(['user']),
       bindMobile() {
         return Foundation.secrecyMobile(this.$store.getters.user.mobile)
       },

@@ -4,6 +4,7 @@
 
 import * as API_Promotions from '@/api/promotions'
 import * as API_Members from '@/api/members'
+import Storage from '@/utils/storage'
 
 export default {
   props: ['shop-id'],
@@ -21,6 +22,10 @@ export default {
   methods: {
     /** 领取优惠券 */
     handleReceiveCoupon(coupon) {
+      if (!Storage.getItem('refresh_token')) {
+        this.$message.error('请先登录！')
+        return
+      }
       API_Members.receiveCoupons(coupon.coupon_id).then(() => {
         this.$message.success('领取成功！')
       })

@@ -36,7 +36,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-table-layout>
-    <el-dialog :title="isEdit ? '编辑分销提成模板' : '添加分销提成模板'" :visible.sync="isShowTplDialog" width="38%">
+    <el-dialog :title="isEdit ? '编辑分销提成模板' : '添加分销提成模板'" :visible.sync="isShowTplDialog" width="40%">
       <el-form :model="tplForm" ref="tplForm" :rules="rules">
         <el-form-item label="是否默认" :label-width="formLabelWidth">
           <el-radio-group v-model="tplForm.is_default">
@@ -84,7 +84,7 @@
         <el-button type="primary" :loading="btnloading" @click="handleConfirmTpl">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="等级详情" :visible.sync="isShowTplInfoDialog" width="20%">
+    <el-dialog title="等级详情" :visible.sync="isShowTplInfoDialog" width="30%">
       <el-form :model="tplForm" >
         <el-form-item label="模板名" :label-width="formLabelWidth">
           <el-input disabled v-model="tplForm.tpl_name"></el-input>
