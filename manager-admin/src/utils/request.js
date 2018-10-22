@@ -7,7 +7,7 @@ import { Foundation } from '~/ui-utils'
 import router from '@/router'
 import md5 from 'js-md5'
 import checkToken from '@/utils/checkToken'
-import { api } from '~/ui-domain'
+import { api, api_model } from '~/ui-domain'
 
 const qs = require('qs')
 
@@ -47,8 +47,7 @@ service.interceptors.request.use(config => {
   /** 设置令牌 */
   let accessToken = Storage.getItem('admin_access_token')
   if (accessToken) {
-    // 'development', 'production'
-    if (process.env.NODE_ENV === 'production') {
+    if (api_model === 'pro') {
       const uid = Storage.getItem('admin_uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
