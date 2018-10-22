@@ -15,7 +15,7 @@
           <li v-for="(goods, index) in hotGoods" :key="index" class="item-hot-goods">
             <div class="hot-img">
               <nuxt-link :to="'/goods/' + goods.goods_id">
-                <img :src="goods.thumbnail" :alt="goods.goods_name">
+                <img :src="goods.big" :alt="goods.goods_name">
               </nuxt-link>
             </div>
             <div class="hot-detail">
@@ -38,7 +38,7 @@
             </div>
             <div class="img-new-goods">
               <nuxt-link :to="'/goods/' + goods.goods_id">
-                <img :src="goods.thumbnail" :alt="goods.goods_name">
+                <img :src="goods.big" :alt="goods.goods_name">
               </nuxt-link>
             </div>
           </li>
@@ -51,7 +51,7 @@
             <h5><nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.goods_name }}</nuxt-link></h5>
             <div class="img-rec-goods">
               <nuxt-link :to="'/goods/' + goods.goods_id">
-                <img :src="goods.thumbnail" :alt="goods.goods_name">
+                <img :src="goods.big" :alt="goods.goods_name">
               </nuxt-link>
             </div>
             <p>￥{{ goods.price | unitPrice }}<span> (销量：{{ goods.buy_count }})</span></p>

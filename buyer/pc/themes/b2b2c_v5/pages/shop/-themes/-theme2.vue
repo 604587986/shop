@@ -15,7 +15,7 @@
             <template v-for="(goods, index) in hotGoods">
               <li v-if="index < 7" :key="goods.goods_id" class="goods-item">
                 <nuxt-link :to="'/goods/' + goods.goods_id">
-                  <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                  <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                 </nuxt-link>
                 <div class="goods-info">
                   <div class="goods-name"><nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.goods_name }}</nuxt-link></div>
@@ -40,7 +40,7 @@
               <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
                 <div class="new-img">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
-                    <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                    <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                   </nuxt-link>
                 </div>
                 <div class="new-intro">
@@ -67,7 +67,7 @@
             <template v-for="(goods, index) in recGoods">
               <li v-if="index < 6" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
-                  <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                  <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                 </div>
                 <div class="goods-info">
                   <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>

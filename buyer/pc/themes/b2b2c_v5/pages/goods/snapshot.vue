@@ -28,12 +28,6 @@
             <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.intro"></div>
             <!--商品参数-->
             <goods-params v-show="curTab === '规格参数'" :goods-params="goods.param_list"/>
-            <!--商品评论-->
-            <goods-comments v-show="curTab === '商品评论'" :goods-id="goods.goods_id" :grade="goods.grade"/>
-            <!--商品咨询-->
-            <goods-consulting v-show="curTab === '商品咨询'" :goods-id="goods.goods_id"/>
-            <!--销售记录-->
-            <sales-record v-show="curTab === '销售记录'" :goods-id="goods.goods_id"/>
           </div>
         </div>
       </div>
@@ -69,7 +63,7 @@
         goods: '',
         /** 规格图片 */
         specImage: '',
-        tabs: ['商品详情', '规格参数', '商品评论', '商品咨询', '销售记录'].map((item, index) => ({ title: item, active: index === 0 })),
+        tabs: ['商品详情', '规格参数'].map((item, index) => ({ title: item, active: index === 0 })),
         curTab: '商品详情'
       }
     },
@@ -131,7 +125,7 @@
       width: 100%;
       height: 36px;
       .item-tab {
-        width: ($dc_width - 4px) / 5;
+        width: ($dc_width - 4px) / 2;
         height: 36px;
         background-color: #333;
         border-right: 1px solid #fff;
