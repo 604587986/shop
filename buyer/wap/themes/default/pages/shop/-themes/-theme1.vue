@@ -17,7 +17,7 @@
             </div>
             <div class="img-new-goods">
               <nuxt-link :to="'/goods/' + goods.goods_id">
-                <img :src="goods.thumbnail" :alt="goods.goods_name">
+                <img :src="goods.big" :alt="goods.goods_name">
               </nuxt-link>
             </div>
             <label v-if="index % 2 === 0"></label>
@@ -31,7 +31,7 @@
           <li v-for="(goods, index) in newGoods" :key="index" class="item-rec-goods">
             <div class="img-rec-goods">
               <nuxt-link :to="'/goods/' + goods.goods_id">
-                <img :src="goods.thumbnail" :alt="goods.goods_name">
+                <img :src="goods.big" :alt="goods.goods_name">
               </nuxt-link>
             </div>
             <div class="intro-rec-goods">
@@ -48,7 +48,7 @@
           <li v-for="(goods, index) in recGoods" :key="index" class="item-hot-goods">
             <div class="img-hot-goods">
               <nuxt-link :to="'/goods/' + goods.goods_id">
-                <img :src="goods.thumbnail" :alt="goods.goods_name">
+                <img :src="goods.big" :alt="goods.goods_name">
               </nuxt-link>
             </div>
             <div class="intro-hot-goods">

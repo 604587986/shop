@@ -21,7 +21,7 @@
                   </div>
                   <div class="goods-image">
                     <nuxt-link :to="'/goods/' + goods.goods_id">
-                      <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                      <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                     </nuxt-link>
                   </div>
                 </div>
@@ -35,7 +35,7 @@
               <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
-                    <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                    <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                   </nuxt-link>
                 </div>
                 <div class="goods-info">
@@ -63,7 +63,7 @@
               <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
-                    <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                    <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                   </nuxt-link>
                 </div>
                 <nuxt-link :to="'/goods/' + goods.goods_id" class="goods-name">{{ goods.goods_name }}</nuxt-link>
