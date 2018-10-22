@@ -192,7 +192,7 @@
               items: [
                 { label: '订单编号', value: o.sn },
                 { label: '订单金额', value: '￥' + f.formatPrice(o.need_pay_money) },
-                { label: '支付方式', value: (o.payment_type === 'ONLINE' ? '在线支付' : '货到付款') + '-' + (o.payment_method_name || '未支付') },
+                { label: '支付方式', value: (o.payment_type === 'ONLINE' ? '在线支付' : '货到付款') + (o.payment_method_name ? ('-' + o.payment_method_name) : '') },
                 { label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '') },
                 { label: '下单时间', value: f.unixToDate(o.create_time) }
               ]
