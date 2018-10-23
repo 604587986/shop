@@ -16,7 +16,7 @@
               <li v-if="index < 10" :key="index" class="goods-item">
                 <div class="goods-image">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
-                    <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                    <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                   </nuxt-link>
                 </div>
                 <div class="goods-name">
@@ -40,7 +40,7 @@
             <template v-for="(goods, index) in newGoods">
               <li v-if="index < 10" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
-                  <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                  <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                 </div>
                 <div class="goods-info">
                   <div class="goods-name">
@@ -66,7 +66,7 @@
               <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
                 <div class="goods-image">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
-                    <img :src="goods.thumbnail" :alt="goods.goods_name" :title="goods.goods_name">
+                    <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                   </nuxt-link>
                 </div>
                 <div class="goods-name">
