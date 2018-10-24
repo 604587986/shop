@@ -3,7 +3,7 @@
     <!--图标 & 当前项数据-->
      <div :class="[model.isSelected ? 'is-selected' : '']" >
        <span @click="toggle(model)">
-         <i v-if="isFolder" :class="[open ? 'el-icon-remove': 'el-icon-circle-plus']"></i>
+         <i v-if="isFolder" :class="[model.isSelected ? (open ? 'el-icon-minus': 'el-icon-plus') : (open ? 'el-icon-remove': 'el-icon-circle-plus')]"></i>
          <i v-if="!isFolder"></i>
        </span>
        <span class="name-label" @click="handleChoose(model)"> {{ model.local_name }} </span>
@@ -36,7 +36,7 @@
       /** 当前节点的父节点 */
       parentNode: {
         type: Object,
-        default: () => { return {} }
+        default: () => ({})
       }
     },
     components: {
@@ -49,10 +49,11 @@
     },
     computed: {
       isFolder() { // 是否有子项
-        return this.model.children && this.model.children.length
+        return this.model.children && !Array.isArray(this.model.children)
       }
     },
     methods: {
+      // 展开/关闭
       toggle() {
         if (this.isFolder) { // 如果存在子项 则展开/ 关闭
           this.open = !this.open
@@ -66,21 +67,26 @@
         let item
         while (stack.length) {
           item = stack.shift()
-          // 如果当前节点全部兄弟节点选中，则当前节点父节点选中，否则不选中
+          // 如果当前节点的兄弟节点 全部跟当前节点一样 则父节点保持同步
           item.isSelected = model.isSelected
-          if (this.parentNode.children) {
-            const result = this.parentNode.children.every(key => {
-              return key.isSelected
-            })
-            if (result) {
+          if (this.parentNode && this.parentNode.children) {
+            let result = true // 默认同步
+            for (let i in this.parentNode.children) {
+              if (this.parentNode.children[i].isSelected !== model.isSelected) {
+                result = false
+              }
+            }
+            if (result) { // 同步
               this.parentNode.isSelected = model.isSelected
             } else {
               this.parentNode.isSelected = false
             }
           }
           // 如果该节点有子节点，继续添加进入栈顶
-          if (item.children && item.children.length) {
-            stack = item.children.concat(stack)
+          if (item && item.children && !Array.isArray(item.children)) {
+            for (let i in item.children) {
+              stack.push(item.children[i])
+            }
           }
         }
         this.$emit('selectCaputure', model, this.parentNode)
@@ -110,6 +116,14 @@
     i {
       font-size: 16px;
       color: #d7d7d7;
+      margin-left: 5px;
+    }
+    .el-icon-minus, .el-icon-plus {
+      font-size: 12px;
+      background-color: #fff;
+      border: none;
+      border-radius: 50%;
+      padding: 1px;
     }
     span.name-label {
       display: inline-block;

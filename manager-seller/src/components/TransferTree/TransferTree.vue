@@ -92,14 +92,14 @@
 
       // 源数据
       from_data: {
-        type: Array,
-        default: () => []
+        type: Object,
+        default: () => {}
       },
 
       // 选中数据
       to_data: {
-        type: Array,
-        default: () => []
+        type: Object,
+        default: () => {}
       },
 
       // el-tree 配置项
