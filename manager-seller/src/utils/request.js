@@ -40,7 +40,7 @@ service.interceptors.request.use(config => {
   // 获取访问Token
   let accessToken = Storage.getItem('seller_access_token')
   if (accessToken) {
-    if (api_model === 'dev') {
+    if (api_model === 'pro') {
       const uid = Storage.getItem('seller_uid')
       const nonce = Foundation.randomString(6)
       const timestamp = parseInt(new Date().getTime() / 1000)
