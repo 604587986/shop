@@ -63,7 +63,7 @@ let areaHTML =
 				.area-container .area-right {\
 					width: 200px;\
 					height: 375px;\
-					border: 1px solid #ccc;\
+					border: 1px solid #E5E5E5;\
 					overflow: scroll;\
 				}\
 \
