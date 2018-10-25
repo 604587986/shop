@@ -122,13 +122,14 @@
                 <template slot="prepend">kg</template>
               </el-input>
             </el-form-item>
-            <!--:file-list="baseInfoForm.goods_gallery_list"-->
+            <!--商品相册需批量添加 则去掉目前这句即可 但是编辑时就不显示图片了 此问题押后解决 :file-list="baseInfoForm.goods_gallery_list"-->
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
                 class="avatar-uploader goods-images"
                 :action="`${MixinUploadApi}?scene=goods`"
                 list-type="picture-card"
                 multiple
+                :file-list="baseInfoForm.goods_gallery_list"
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
                 :on-remove="handleRemove"
