@@ -300,6 +300,7 @@
           this.areaData = response
           // 为每一项设置选中属性 isSelected Boolean值
           let stack = []
+          let parallel = []
           for (let i = 0, len = this.areaData.length; i < len; i++) {
             stack.push(this.areaData[i])
           }
@@ -308,12 +309,40 @@
             item = stack.shift()
             // 如果该节点有子节点，继续添加进入栈顶
             this.$set(item, 'isSelected', false)
+            // 把当前项添加进入平行数组
+            parallel.push(item)
             if (item.children && item.children.length) {
               stack = item.children.concat(stack)
             }
           }
-          this.fromData = this.areaData
+          // 平行结构转换对象
+          this.fromData = this.buildTree(parallel)
+          console.log(this.fromData)
         })
+      },
+
+      /**
+       * 将一维的扁平数组转换为多层级对象
+       * @param  {[type]} list 一维数组，数组中每一个元素需包含id和parent_id两个属性
+       * @return {[type]} tree 多层级树状结构
+       */
+      buildTree(list) {
+        let temp = {}
+        let tree = {}
+        for (let i in list) {
+          temp[list[i].id] = list[i]
+        }
+        for (let i in temp) {
+          if (temp[i].parent_id) {
+            if (Array.isArray(temp[temp[i].parent_id].children)) {
+              temp[temp[i].parent_id].children = {}
+            }
+            temp[temp[i].parent_id].children[temp[i].id] = temp[i]
+          } else {
+            tree[temp[i].id] = temp[i]
+          }
+        }
+        return tree
       },
 
       /** 切换模块 */
