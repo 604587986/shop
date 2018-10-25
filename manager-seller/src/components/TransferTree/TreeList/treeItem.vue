@@ -1,25 +1,25 @@
 <template>
-  <li>
-    <!--图标 & 当前项数据-->
-     <div :class="[model.isSelected ? 'is-selected' : '']" >
+    <li>
+      <!--图标 & 当前项数据-->
+      <div :class="[model.isSelected ? 'is-selected' : '']" >
        <span @click="toggle(model)">
          <i v-if="isFolder" :class="[model.isSelected ? (open ? 'el-icon-minus': 'el-icon-plus') : (open ? 'el-icon-remove': 'el-icon-circle-plus')]"></i>
          <i v-if="!isFolder"></i>
        </span>
-       <span class="name-label" @click="handleChoose(model)"> {{ model.local_name }} </span>
-     </div>
-    <!--子项数据-->
-    <collapse-transition>
-      <ul style="padding-left: 18px"  v-show="open" v-if="isFolder">
-        <en-tree-item
-          v-for="item in model.children"
-          :model="item"
-          :parentNode="model"
-          @selectCaputure="onselected"
-          :key="item.id"></en-tree-item>
-      </ul>
-    </collapse-transition>
-  </li>
+        <span class="name-label" @click="handleChoose(model)"> {{ model.local_name }} </span>
+      </div>
+      <!--子项数据-->
+      <collapse-transition>
+        <ul style="padding-left: 18px"  v-show="open" v-if="isFolder">
+          <en-tree-item
+            v-for="item in model.children"
+            :model="item"
+            :parentNode="model"
+            @selectCaputure="onselected"
+            :key="item.id"></en-tree-item>
+        </ul>
+      </collapse-transition>
+    </li>
 </template>
 
 <script>

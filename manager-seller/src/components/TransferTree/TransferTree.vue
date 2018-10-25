@@ -10,8 +10,12 @@
       </h3>
       <!-- 内容区 -->
       <div class="transfer-main">
-        <el-input v-if="filter" placeholder="输入关键字进行过滤" v-model="filterFrom" size="small" class="filter-tree"></el-input>
-        <en-tree-list :treeData="from_data" :key="1" @getChooseData="data => { selected_from_data = data }" class="trees"></en-tree-list>
+        <en-tree-list
+          :treeData="from_data"
+          :key="1"
+          @getChooseData="data => { selected_from_data = data }"
+          @scorll_load_more="scorllLoadFromData"
+          class="trees"></en-tree-list>
       </div>
     </div>
      <!--穿梭区 按钮框-->
@@ -46,8 +50,7 @@
       </h3>
       <!-- 内容区 -->
       <div class="transfer-main">
-        <el-input v-if="filter" placeholder="输入关键字进行过滤" v-model="filterTo" size="small" class="filter-tree"></el-input>
-        <en-tree-list :treeData="to_data"  @getChooseData="data => { selected_to_data = data }" :key="2"></en-tree-list>
+        <en-tree-list :treeData="to_data" :key="2" @getChooseData="data => { selected_to_data = data }" class="trees"></en-tree-list>
       </div>
     </div>
   </div>
@@ -59,10 +62,8 @@
     name: 'EnTransferTree',
     data() {
       return {
-        from_disabled: false, // 添加按钮是否禁用
-        to_disabled: false, // 移除按钮是否禁用
-        filterFrom: '', // 源数据筛选
-        filterTo: '', // 目标数据筛选
+        from_disabled: false,
+        to_disabled: false,
         isfromchooseAll: false, // 源数据是否全选
         istochooseAll: false, // 目标数据是否全选
         selected_from_data: '', // 源数据选中项
@@ -93,72 +94,41 @@
       // 源数据
       from_data: {
         type: Object,
-        default: () => {}
+        default: () => ({})
       },
 
-      // 选中数据
+      // 目标数据
       to_data: {
         type: Object,
-        default: () => {}
-      },
-
-      // el-tree 配置项
-      defaultProps: {
-        type: Object,
-        default: () => {
-          return { label: 'label', children: 'children' }
-        }
-      },
-
-      // el-tree id 必须唯一
-      id: {
-        type: String,
-        default: 'id'
-      },
-
-      // 自定义 pid参数名
-      pid: {
-        type: String,
-        default: 'pid'
-      },
-
-      // 是否只返回叶子节点
-      leafOnly: {
-        type: Boolean,
-        default: false
-      },
-
-      // 是否启用筛选
-      filter: {
-        type: Boolean,
-        default: false
+        default: () => ({})
       }
     },
     methods: {
-      // 添加按钮 执行添加操作 1.源数据更新 把源数据选中项删除 2.目标数据更新 把源数据选中项整合进目标数据 释放当前源数据 目标数据
+      // 添加按钮 执行添加操作 1.源数据更新 把源数据选中项删除/添加 2.目标数据更新 把源数据选中项整合进目标数据 释放当前源数据 目标数据
       addToAims() {
-        // this.from_data
-        // this.to_data
-        // this.selected_from_data
+        // 源数据更新 第二个参数代表数据更新类型（0移除 1添加）
+        this.$emit('from_data_change', this.selected_from_data, 0)
+        // 目标数据更新
+        this.$emit('to_data_change', this.selected_from_data, 1)
+        // 释放当前选中数据
+        this.selected_from_data = {}
       },
       // 移除按钮 执行移除操作 1.目标数据更新 把目标数据选中项删除 2.源数据更新 把目标数据选中项整合进源数据 释放当前源数据 目标数据
       removeToSource() {
-
+        // 源数据更新  第二个参数代表数据更新类型（0移除 1添加）\
+        this.$emit('from_data_change', this.selected_to_data, 1)
+        // 目标数据更新
+        this.$emit('to_data_change', this.selected_to_data, 0)
+        // 释放当前选中数据
+        this.selected_to_data = {}
       },
 
-      // 源数据 筛选
-      filterNodeFrom(value, data) {
-        if (!value) return true
-        return data.label.indexOf(value) !== -1
+      /** 滚动监听触发 加载更多源数据 */
+      scorllLoadFromData() {
+        // this.$emit('')
       },
 
-      // 目标数据筛选
-      filterNodeTo(value, data) {
-        if (!value) return true
-        return data.label.indexOf(value) !== -1
-      },
-
-      /** 全选 */
+      /** 全选 （目标数据全选/源数据全选） */
       chooseAll(is_from, data) {
         // 为每一项设置选中属性 isSelected Boolean值
         let stack = []
@@ -216,20 +186,12 @@
     watch: {
       // 左侧 状态监测
       from_data(val) {
-        this.from_disabled = val.length > 0
+        this.from_disabled = !Object.keys(val).length
       },
       // 右侧 状态监测
       to_data(val) {
-        this.from_disabled = val.length > 0
+        this.to_disabled = !Object.keys(val).length
       }
-      // // 左侧 数据筛选
-      // filterFrom(val) {
-      //   this.$refs['from-tree'].filter(val)
-      // },
-      // // 右侧 数据筛选
-      // filterTo(val) {
-      //   this.$refs['to-tree'].filter(val)
-      // }
     }
   }
 </script>
@@ -299,10 +261,6 @@
 
   .transfer-title .el-checkbox {
     margin-right: 10px;
-  }
-
-  .filter-tree {
-    margin-bottom: 10px;
   }
 </style>
 

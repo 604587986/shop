@@ -138,14 +138,6 @@
           </el-form-item>
           <el-form-item prop="area">
             <el-button type="text" plain @click="chooseArea">指定可配送区域和运费</el-button>
-            <!--<en-area-selector-dialog-->
-              <!--:api="areaApi"-->
-              <!--:showDialog="areaDialog"-->
-              <!--:defaultData="defaultArea"-->
-              <!--:filterData="filterData"-->
-              <!--@confirmFunc="confirmFunc"-->
-              <!--@hideDialogFunc="hideDialogFunc"-->
-            <!--&gt;</en-area-selector-dialog>-->
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveMould('mouldForm')">保存模板</el-button>
@@ -185,13 +177,23 @@
         </en-table-layout>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog title="选择配送区域" align="center" :visible.sync="areaDialog" width="30%">
+    <el-dialog
+      title="选择配送区域"
+      v-loading="loadArea"
+      @open="loadArea = false"
+      align="center"
+      :visible.sync="areaDialog"
+      width="30%">
       <en-transfer-tree
         :title="title"
+        :resolveGrade="2"
         :from_data="fromData"
         :to_data="toData"
-        filter
         height="400px"
+        @from_data_change="fromDataChange"
+        @to_data_change="toDataChange"
+        @from_load_more="fromLoadMore"
+        @to_load_more="toLoadMore"
       ></en-transfer-tree>
     </el-dialog>
   </div>
@@ -276,11 +278,19 @@
           ]
         },
 
-        /** 树形地区选择器 */
-        fromData: [],
+        /** 树形地区选择器加载中 */
+        loadArea: false,
 
-        toData: [],
+        /** 树形地区选择器源数据 */
+        fromData: {},
 
+        /** 树形地区选择器目标数据 */
+        toData: {},
+
+        /** 树形地区选择器静态数据 用于存储用户操作的原始数据 */
+        staticData: {},
+
+        /** 树形地区选择器标题 */
         title: ['可选省、市、县', '已选省、市、县']
       }
     },
@@ -294,9 +304,10 @@
       this.getAreaList()
     },
     methods: {
-      /** 获取全部地区数据 方便使用 */
+      /** 获取全部地区数据 计算出用户操作变化的原始静态数据 方便使用 */
       getAreaList() {
         API_express.getAreaList().then(response => {
+          response.pop()
           this.areaData = response
           // 为每一项设置选中属性 isSelected Boolean值
           let stack = []
@@ -316,8 +327,8 @@
             }
           }
           // 平行结构转换对象
-          this.fromData = this.buildTree(parallel)
-          console.log(this.fromData)
+          this.staticData = this.buildTree(parallel)
+          this.initArea()
         })
       },
 
@@ -345,7 +356,7 @@
         return tree
       },
 
-      /** 切换模块 */
+      /** 切换标签模版 */
       handleToggleClick(tab, event) {
         this.activeName = tab.name
         this.tplOperaName = '新增模版'
@@ -370,63 +381,126 @@
         }
       },
 
+      /** 初始化源数据 & 目标数据  每次只能给15条用来进行渲染*/
+      initArea() {
+        // 初始化源数据
+        const init_from = Object.keys(this.staticData).slice(0, 8)
+        init_from.forEach(key => {
+          this.fromData[key] = this.staticData[key]
+        })
+        // 初始化目标数据
+        this.toData = {}
+      },
+
       /** 选择配送地区 */
       chooseArea() {
         this.areaDialog = true
+        this.loadArea = true
         this.isEdit = false
         // 默认数据
         this.defaultArea = []
       },
 
-      /** 地区选择器确认回调 */
-      confirmFunc(val) {
-        if (this.isEdit) { // 编辑模式
-          // 更新表格地区数据
-          const _area = typeof this.mouldForm.items[this.currentIndex].area === 'string' ? JSON.parse(this.mouldForm.items[this.currentIndex].area) : this.mouldForm.items[this.currentIndex].area
-          this.mouldForm.items[this.currentIndex].area = val
-          this.mouldForm.items[this.currentIndex].area_json = JSON.stringify(val)
-          this.mouldForm.items[this.currentIndex].area_id = JSON.stringify(val.map(key => { return key.id }))
-          // 更新过滤数据 删除
-          this.filterData.forEach((key, index) => {
-            _area.forEach(item => {
-              if (key.region_id === item.region_id) {
-                this.filterData.splice(index, 1)
-              }
-            })
-          })
-          // 更新过滤数据 添加
-          this.filterData = this.filterData.concat(val)
-          // 过滤数据对象数组去重
-          let obj = {}
-          this.filterData = this.filterData.reduce((item, next) => {
-            obj[next.region_id] ? '' : obj[next.region_id] = true && item.push(next)
-            return item
-          }, [])
-          // 更新当前默认数据
-          this.defaultArea = val
-        } else { // 添加
-          if (!val.length) return
-          // 更新表格数据（添加操作）
-          this.mouldForm.items.push({
-            area: val,
-            area_id: JSON.stringify(val.map(key => { return key.id })),
-            area_json: JSON.stringify(val),
-            first_company: 1,
-            first_price: 0,
-            continued_company: 1,
-            continued_price: 0
-          })
-          // 更新过滤地区数据 添加
-          this.filterData = this.filterData.concat(val)
-          // 更新当前默认数据
-          this.defaultArea = []
-        }
-        this.areaDialog = false
+      /** 滚动监听触发 继续加载更多源数据 */
+      fromLoadMore() {
+        // console.log('滚动加载源数据')
       },
 
-      /** 地区选择器取消回调 */
-      hideDialogFunc() {
-        this.areaDialog = false
+      /** 滚动监听触发 继续加载更多目标数据 */
+      toLoadMore() {
+        // console.log('滚动加载目标数据')
+      },
+
+      /** 源数据更新*/
+      fromDataChange(data, type) {
+        if (type) { // 如果type 为1 则进行添加 否则移除
+          // 如果源数据（fromData）是空对象 则直接赋值 如果不是 则进行对象合并
+          if (!Object.keys(this.fromData).length) {
+            this.fromData = JSON.parse(JSON.stringify(data))
+          } else {
+            this.objAssign(this.fromData, data)
+          }
+        } else { // 移除
+          this.objDel(this.fromData, data)
+        }
+        this.resetSelected(this.fromData)
+      },
+
+      /** 目标数据更新 */
+      toDataChange(data, type) {
+        if (type) { // 如果type 为1 则进行添加 否则移除
+          // 如果目标数据（toData）是空对象 则直接赋值 如果不是 则进行对象合并
+          if (!Object.keys(this.toData).length) {
+            this.toData = JSON.parse(JSON.stringify(data))
+          } else {
+            this.objAssign(this.toData, data)
+          }
+        } else { // 移除
+          this.objDel(this.toData, data)
+        }
+        this.resetSelected(this.toData)
+      },
+
+      // 对象合并 同名对象子节点添加
+      objAssign(origins, data) {
+        for (let i in data) {
+          if (!origins[i]) { // 如果level1中被整合的目标数据中不存在当前选中项 直接把当前level1进行赋值
+            this.$set(origins, i, JSON.parse(JSON.stringify(data[i])))
+          } else { // 在level1中存在被整合的目标数据中不存在当前选中项 则进行检测下一级别（level2）
+            for (let j in data[i].children) { // 如果level2中被整合的目标数据中不存在当前选中项 直接把当前level2进行赋值
+              if (!origins[i].children[j]) {
+                this.$set(origins[i].children, j, JSON.parse(JSON.stringify(data[i].children[j])))
+              } else { // 在level2中存在被整合的目标数据中不存在当前选中项 则进行检测下一级别（level3）
+                for (let k in data[i].children[j].children) { // 如果level3中被整合的目标数据中不存在当前选中项 直接把当前level3进行赋值
+                  if (!origins[i].children[j].children[k]) {
+                    this.$set(origins[i].children[j].children, k, JSON.parse(JSON.stringify(data[i].children[j].children[k])))
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      // 对象递归移除 同名对象子节点移除
+      objDel(origins, data) {
+        for (let i in data) {
+          if (data[i].isSelected) { // level1全选
+            this.$delete(origins, i)
+          } else {
+            for (let j in data[i].children) { // level1级别未全选 则循环检查level2
+              if (data[i].children[j].isSelected) { // level2全选
+                this.$delete(origins[i].children, j)
+              } else { // level2级别未全选 则循环检查level3
+                for (let k in data[i].children[j].children) {
+                  if (data[i].children[j].children[k].isSelected) {
+                    this.$delete(origins[i].children[j].children, k)
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      /** 重置选中数据 isSelected 为false*/
+      resetSelected(model) {
+        let stack = []
+        for (let i in model) {
+          stack.push(model[i])
+        }
+        let item
+        while (stack.length) {
+          item = stack.shift()
+          // 如果当前节点的兄弟节点 全部跟当前节点一样 则父节点保持同步
+          item.isSelected = false
+          // 如果该节点有子节点，继续添加进入栈顶
+          if (item && item.children && !Array.isArray(item.children)) {
+            for (let i in item.children) {
+              stack.push(item.children[i])
+            }
+          }
+        }
       },
 
       /** 过滤已选数据 */
@@ -480,6 +554,7 @@
       /** 编辑子地区 */
       editArea(row, $index) {
         this.areaDialog = true
+        this.loadArea = true
         this.isEdit = true
         // 更新当前默认数据
         this.defaultArea = typeof row.area === 'string' ? JSON.parse(row.area) : row.area
