@@ -630,7 +630,7 @@
           this.mouldForm = { ...response }
           // 初始化过滤地区
           response.items.forEach(key => {
-            this.filterData = JSON.parse(key.area)
+            this.filterData.push(JSON.parse(JSON.stringify(key.area)))
           })
         })
       },
