@@ -23,8 +23,8 @@
           <!--文字信息-->
           <div class="shop-info">
             <div class="shop-info-basic">
-              <span>{{shop_info.shop_name}}</span>
-              <span>（用户名：{{shop_info.member_name}}）</span>
+              <span>{{ shop_info.shop_name }}</span>
+              <span>（用户名：{{ user_info.username }}）</span>
               <!--是否是平台自营-->
               <span v-if="parseInt(shop_info.self_operated) === 1">平台自营</span>
             </div>
@@ -178,6 +178,12 @@ export default {
 
       /** 是否显示商城公告 默认不显示 */
       isShowArticle: false
+    }
+  },
+  computed: {
+    /** 用户信息 */
+    user_info() {
+      return this.$store.getters.user
     }
   },
   methods: {
