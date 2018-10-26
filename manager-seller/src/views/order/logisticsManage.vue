@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-tabs v-model="activeName" @tab-click="handleToggleClick">
+      <!--运费模版列表-->
       <el-tab-pane label="快递模板" name="express">
         <div style="margin-bottom: 10px;">
           <el-button type="primary" @click="handleAddMould">新增模板</el-button>
@@ -26,19 +27,19 @@
                 <el-table-column label="可配送区域" align="left">
                   <template slot-scope="scope">
                     <div class="dispatchingAreas">
-                      <span v-for="(item, index) in formatAreaJson(scope.row.area)">
-                        <span v-if="item.level === 1" style="color: #333;"> {{ item.local_name }}
-                          <span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>
-                        </span>
-                        <span v-if="item.level === 2" style="color: #777;"> {{ item.local_name }}
-                          <span v-if="item.children && item.children.length" style="color: #aaa;">(</span>
-                          <span v-if="item.children && item.children.length" v-for="(child, _index) in item.children" style="color: #aaa;">
-                            {{ child.local_name }}<span v-if="++_index !== item.children.length">,</span>
-                          </span>
-                          <span v-if="item.children && item.children.length" style="color: #aaa;">)</span>
-                          <span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>
-                        </span>
-                      </span>
+                      <!--<span v-for="(item, index) in formatAreaJson(scope.row.area)">-->
+                        <!--<span v-if="item.level === 1" style="color: #333;"> {{ item.local_name }}-->
+                          <!--<span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>-->
+                        <!--</span>-->
+                        <!--<span v-if="item.level === 2" style="color: #777;"> {{ item.local_name }}-->
+                          <!--<span v-if="item.children && item.children.length" style="color: #aaa;">(</span>-->
+                          <!--<span v-if="item.children && item.children.length" v-for="(child, _index) in item.children" style="color: #aaa;">-->
+                            <!--{{ child.local_name }}<span v-if="++_index !== item.children.length">,</span>-->
+                          <!--</span>-->
+                          <!--<span v-if="item.children && item.children.length" style="color: #aaa;">)</span>-->
+                          <!--<span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>-->
+                        <!--</span>-->
+                      <!--</span>-->
                     </div>
                   </template>
                 </el-table-column>
@@ -63,6 +64,7 @@
           </el-collapse-item>
         </el-collapse>
       </el-tab-pane>
+      <!--运费模版-->
       <el-tab-pane :label="tplOperaName" name="add">
         <el-form
           :model="mouldForm"
@@ -91,22 +93,31 @@
               <el-table-column label="可配送区域" align="left" >
                 <template slot-scope="scope">
                   <div class="dispatchingAreas">
-                    <span v-for="(item, index) in formatAreaJson(scope.row.area)">
-                      <span v-if="item.level === 1" style="color: #333;"> {{ item.local_name }}
-                        <span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>
+                    <span v-for="levle1 in scope.row.area">
+                      <!--level1-->
+                      <span v-if="checkSelectAll(levle1)" style="color: #333;">
+                        {{ levle1.local_name }}
+                        <span v-if="parseInt(levle1.id) !== parseInt(Object.keys(scope.row.area)[Object.keys(scope.row.area).length - 1])">、</span>
                       </span>
-                      <span v-if="item.level === 2" style="color: #777;"> {{ item.local_name }}
-                        <span v-if="item.children && item.children.length" style="color: #aaa;">(</span>
-                        <span v-if="item.children && item.children.length" v-for="(child, _index) in item.children" style="color: #aaa;">
-                          {{ child.local_name }}<span v-if="++_index !== item.children.length">,</span>
+                      <!--level2-->
+                      <span v-else v-for="levle2 in levle1.children">
+                        <span v-if="checkSelectAll(levle2)" style="color: #777;">
+                          {{ levle2.local_name }}
+                          <span v-if="parseInt(levle2.id) !== parseInt(Object.keys(levle1.children)[Object.keys(levle1.children).length - 1])">、</span>
                         </span>
-                        <span v-if="item.children && item.children.length" style="color: #aaa;">)</span>
-                        <span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>
+                        <span v-else style="color: #777;">
+                          {{ levle2.local_name }}(
+                          <!--level3-->
+                          <span v-for="levle3 in levle2.children" style="color: #aaa;">
+                            {{ levle3.local_name }}
+                            <span v-if="parseInt(levle3.id) !== parseInt(Object.keys(levle2.children)[Object.keys(levle2.children).length - 1])">,</span>
+                          </span>)
+                        </span>
                       </span>
                     </span>
                     <div style="float: right;">
                       <el-button type="text" plain @click="editArea(scope.row, scope.$index)">编辑</el-button>
-                      <el-button type="text" plain @click="delArea(scope.row, scope.$index)">删除</el-button>
+                      <el-button type="text" plain @click="delArea(scope.$index)">删除</el-button>
                     </div>
                   </div>
                 </template>
@@ -144,6 +155,7 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
+      <!--物流公司-->
       <el-tab-pane label="物流公司" name="logistics">
         <en-table-layout
           :tableData="logisticsTableData"
@@ -179,9 +191,7 @@
     </el-tabs>
     <el-dialog
       title="选择配送区域"
-      v-loading="loadArea"
-      @open="loadArea = false"
-      align="center"
+      center
       :close-on-click-modal="false"
       :visible.sync="areaDialog"
       width="30%">
@@ -196,6 +206,10 @@
         @from_load_more="fromLoadMore"
         @to_load_more="toLoadMore"
       ></en-transfer-tree>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="areaDialog = false">取 消</el-button>
+        <el-button type="primary" @click="addTransItem">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -204,7 +218,6 @@
   import * as API_express from '@/api/expressMould'
   import * as API_logistics from '@/api/expressCompany'
   import { RegExp } from '~/ui-utils'
-  import { api } from '~/ui-domain'
   import { cloneObj } from '@/utils/index'
   import { AreaSelectorDialog } from '@/plugins/selector/vue'
   import { TransferTree } from '@/components'
@@ -246,18 +259,13 @@
           items: []
         },
 
-        /** 地区选择器 */
+        /** 地区选择器是否打开 */
         areaDialog: false,
-
-        areaApi: `${api.base}/regions/depth/3`,
 
         /** 全部地区信息 */
         areaData: [],
 
-        /** 默认地区信息 */
-        defaultArea: [],
-
-        /** 是否是编辑模式 */
+        /** 是否是编辑模式 默认是添加模式(false) 编辑模式(true) */
         isEdit: false,
 
         /** 操作当前行索引 */
@@ -265,6 +273,21 @@
 
         /** 过滤地区数据 */
         filterData: [],
+
+        /** 树形地区选择器源数据 */
+        fromData: {},
+
+        /** 上一次更新的源数据 */
+        lastFromData: {},
+
+        /** 树形地区选择器目标数据 */
+        toData: {},
+
+        /** 树形地区选择器静态数据 用于存储用户操作的原始数据 */
+        staticData: {},
+
+        /** 树形地区选择器标题 */
+        title: ['可选省、市、县', '已选省、市、县'],
 
         /** 物流公司列表数据 */
         logisticsTableData: [],
@@ -277,22 +300,7 @@
           type: [
             { required: true, message: '请选择模板类型', trigger: 'change' }
           ]
-        },
-
-        /** 树形地区选择器加载中 */
-        loadArea: false,
-
-        /** 树形地区选择器源数据 */
-        fromData: {},
-
-        /** 树形地区选择器目标数据 */
-        toData: {},
-
-        /** 树形地区选择器静态数据 用于存储用户操作的原始数据 */
-        staticData: {},
-
-        /** 树形地区选择器标题 */
-        title: ['可选省、市、县', '已选省、市、县']
+        }
       }
     },
     filters: {
@@ -328,8 +336,10 @@
             }
           }
           // 平行结构转换对象
-          this.staticData = this.buildTree(parallel)
-          this.initArea()
+          this.fromData = this.buildTree(parallel)
+          // 随后可进行滚动加载进行性能优化， 可减少计算进行性能优化
+          // this.staticData = this.buildTree(parallel)
+          // this.initArea()
         })
       },
 
@@ -382,7 +392,7 @@
         }
       },
 
-      /** 初始化源数据 & 目标数据  每次只能给15条用来进行渲染*/
+      /** 初始化源数据 & 目标数据  每次只能给15条用来进行渲染 暂时没有用到 用于进行后期性能优化*/
       initArea() {
         // 初始化源数据
         const init_from = Object.keys(this.staticData).slice(0, 14)
@@ -504,24 +514,37 @@
         }
       },
 
-      /** 过滤已选数据 */
-      retainData(origin, choosed) {
-        let result = []
-        if (!(origin.length && choosed.length)) {
-          return origin
-        }
-        origin.forEach(key => {
-          choosed.forEach(item => {
-            if (key.id !== item.id) {
-              result.push(key)
-            } else {
-              if (key.children && item.children) {
-                key.children = this.retainData(key.children, item.children)
-              }
-            }
+      /** 树形地区选择器确认回调 */
+      addTransItem() {
+        // 关闭地区选择器
+        this.areaDialog = false
+        // 如果是编辑模式 则进行对应运费模版子项的更新
+        if (this.isEdit) {
+          // 检测目标数据是否为空对象 如果是则执行删除
+          if (!Object.keys(this.toData).length) {
+            this.delArea(this.currentIndex)
+          } else {
+            this.mouldForm.items[this.currentIndex].area = JSON.parse(JSON.stringify(this.toData))
+          }
+        } else { // 如果是添加模式 则添加运费模版子项
+          this.mouldForm.items.push({
+            first_company: 1,
+            first_price: 0,
+            continued_company: 1,
+            continued_price: 0,
+            area: JSON.parse(JSON.stringify(this.toData))
           })
-        })
-        return result
+        }
+        // 更新过滤地区数据  把新添加或者删除的目标数据更新进入过滤地区中
+        if (this.filterData[this.currentIndex]) { // 替换
+          this.filterData[this.currentIndex] = JSON.parse(JSON.stringify(this.toData))
+        } else { // 添加
+          this.filterData.push(JSON.parse(JSON.stringify(this.toData)))
+        }
+        // 置空目标数据
+        this.toData = {}
+        // 上次源数据更新
+        this.lastFromData = JSON.parse(JSON.stringify(this.fromData))
       },
 
       /** 过滤first_company */
@@ -555,27 +578,38 @@
       /** 编辑子地区 */
       editArea(row, $index) {
         this.areaDialog = true
-        this.loadArea = true
         this.isEdit = true
         // 更新当前默认数据
-        this.defaultArea = typeof row.area === 'string' ? JSON.parse(row.area) : row.area
+        this.toData = JSON.parse(JSON.stringify(row.area))
+        // 目标数据进行重置选中
+        this.resetSelected(this.toData)
         // 更新当前操作索引
         this.currentIndex = $index
       },
 
       /** 删除子地区 */
-      delArea(row, $index) {
+      delArea($index) {
         this.$confirm('确定删除?', '提示', { type: 'warning' }).then(() => {
           // 更新表格数据
           this.mouldForm.items.splice($index, 1)
           // 更新过滤数据 删除
-          const _area = typeof row.area === 'string' ? JSON.parse(row.area) : row.area
-          let _filterData = _area.map(key => { return key.id })
-          this.filterData.forEach((key, index) => {
-            if (_filterData.includes(key.id)) {
-              this.filterData.splice(index, 1)
+          const delItem = this.filterData.splice($index, 1)
+          // 更新源数据
+          for (let i in delItem[0]) {
+            if (!this.fromData[i]) { // 不存在level1
+              this.$set(this.fromData, i, delItem[0][i])
+            } else {
+              for (let j in delItem[0][i].children) {
+                if (!this.fromData[i].children[j]) { // 不存在level2
+                  this.$set(this.fromData[i].children, j, delItem[0][i].children[j])
+                } else {
+                  for (let k in delItem[0][i].children[j].children) {
+                    this.$set(this.fromData[i].children[j].children, k, delItem[0][i].children[j].children[k])
+                  }
+                }
+              }
             }
-          })
+          }
         })
       },
 
@@ -619,7 +653,7 @@
         this.tplOperaName = '新增模板'
         this.mouldForm = {
           /** 模板id */
-          template_id: '',
+          id: '',
 
           /** 模板名称 */
           name: '',
@@ -629,54 +663,21 @@
 
           items: []
         }
-        // 重置默认数据
-        this.defaultArea = []
+        // 重置目标数据
+        this.toData = {}
         // 重置过滤地区
         this.filterData = []
       },
 
-      /** 格式化数据 */
-      formatAreaJson(area) {
-        let _area = area
-        let resultArea = []
-        if (typeof area === 'string') {
-          _area = JSON.parse(area)
+      /** 检测是否全选 */
+      checkSelectAll(model) {
+        let isSelectAll = false
+        if (model.level === 1 && !this.lastFromData[model.id]) { // level1
+          isSelectAll = true
+        } else if (model.level === 2 && !this.lastFromData[model.parent_id].children[model.id]) { // level2
+          isSelectAll = true
         }
-        const _ids = _area.map(key => { return key.id })
-        let _resultIds = []
-        _area.forEach(key => {
-          if (key.level === 1) {
-            resultArea.push(key)
-          } else if (key.level === 2) {
-            if (!_ids.includes(key.parent_id)) { resultArea.push(key) }
-          } else if (key.level === 3) {
-            if (!_ids.includes(key.parent_id)) { // 如果其父id不存在
-              // 首先检测resultArea中是否存在父id，如果存在（必存在children字段信息,children为数组）：则找出此二级项，并向此children中添加当前三级项信息；
-              if (_resultIds.includes(key.parent_id)) {
-                resultArea.forEach(item => {
-                  if (item.id === key.parent_id) { item.children.push(key) }
-                })
-                // 如果不存在：去全部数据中追寻其父id的项，把其父项添加进来作为resultArea一维数组的一项，并且添加children属性，将当前三级项添加进入children中
-              } else {
-                this.areaData.forEach(ele => {
-                  if (ele.children) {
-                    ele.children.forEach(item => {
-                      if (item.id === key.parent_id) {
-                        let _item = cloneObj(item)
-                        _item.children = []
-                        _item.children.push(key)
-                        resultArea.push(_item)
-                      }
-                    })
-                  }
-                })
-              }
-            }
-            // 三级项更新后 更新当前二级项id信息
-            _resultIds = resultArea.map(key => { return key.id })
-          }
-        })
-        return resultArea
+        return isSelectAll
       },
 
       /** 保存模板 */
@@ -789,6 +790,9 @@
   }
   /deep/ .el-button.is-plain:hover {
     background-color: transparent;
+  }
+  .dialog-footer {
+    text-align: center;
   }
 </style>
 

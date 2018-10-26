@@ -80,7 +80,6 @@
               break
           }
         }
-        console.log('为什么选中的数据会互相携带呢？', this.chooseData)
         this.$emit('getChooseData', this.chooseData)
       },
 
