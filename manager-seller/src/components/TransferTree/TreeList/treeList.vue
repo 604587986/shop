@@ -14,6 +14,12 @@
       treeData: {
         type: Object,
         default: () => ({})
+      },
+
+      /** 是否完成左右穿梭 */
+      isCompleted: {
+        type: Boolean,
+        default: false
       }
     },
     components: {
@@ -26,6 +32,22 @@
 
         /** 选中数据 */
         chooseData: {}
+      }
+    },
+    watch: {
+      isCompleted() {
+        if (this.isCompleted) {
+          this.chooseData = {}
+        }
+      },
+      chooseData() {
+        if (!Object.keys(this.chooseData).length) { // 如果是空对象
+          this.$emit('listenCompleted', false)
+        }
+      },
+      treeData() {
+        // 对象深拷贝
+        this.areaData = JSON.parse(JSON.stringify(this.treeData))
       }
     },
     mounted() {
@@ -58,6 +80,7 @@
               break
           }
         }
+        console.log('为什么选中的数据会互相携带呢？', this.chooseData)
         this.$emit('getChooseData', this.chooseData)
       },
 

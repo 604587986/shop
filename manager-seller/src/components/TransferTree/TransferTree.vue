@@ -13,8 +13,10 @@
         <en-tree-list
           :treeData="from_data"
           :key="1"
+          :isCompleted="is_from_completed"
           @getChooseData="data => { selected_from_data = data }"
           @scorll_load_more="scorllLoadFromData"
+          @listenCompleted="listenFromCompleted"
           class="trees"></en-tree-list>
       </div>
     </div>
@@ -50,7 +52,13 @@
       </h3>
       <!-- 内容区 -->
       <div class="transfer-main">
-        <en-tree-list :treeData="to_data" :key="2" @getChooseData="data => { selected_to_data = data }" class="trees"></en-tree-list>
+        <en-tree-list
+          :treeData="to_data"
+          :isCompleted="is_to_completed"
+          :key="2"
+          @getChooseData="data => { selected_to_data = data }"
+          @listenCompleted="listenToCompleted"
+          class="trees"></en-tree-list>
       </div>
     </div>
   </div>
@@ -62,12 +70,29 @@
     name: 'EnTransferTree',
     data() {
       return {
+        /** 添加是否禁用 */
         from_disabled: false,
+
+        /** 移除是否禁用 */
         to_disabled: false,
-        isfromchooseAll: false, // 源数据是否全选
-        istochooseAll: false, // 目标数据是否全选
-        selected_from_data: '', // 源数据选中项
-        selected_to_data: '' // 目标数据选中项
+
+        /** 源数据是否全选 */
+        isfromchooseAll: false,
+
+        /** 目标数据是否全选 */
+        istochooseAll: false,
+
+        /** 源数据选中项 */
+        selected_from_data: '',
+
+        /** 目标数据选中项 */
+        selected_to_data: '',
+
+        /** 是否完成左侧移动 */
+        is_from_completed: false,
+
+        /** 是否完成右侧移动 */
+        is_to_completed: false
       }
     },
     components: { [TreeList.name]: TreeList },
@@ -112,6 +137,8 @@
         this.$emit('to_data_change', this.selected_from_data, 1)
         // 释放当前选中数据
         this.selected_from_data = {}
+
+        this.is_from_completed = true
       },
       // 移除按钮 执行移除操作 1.目标数据更新 把目标数据选中项删除 2.源数据更新 把目标数据选中项整合进源数据 释放当前源数据 目标数据
       removeToSource() {
@@ -121,11 +148,23 @@
         this.$emit('to_data_change', this.selected_to_data, 0)
         // 释放当前选中数据
         this.selected_to_data = {}
+
+        this.is_to_completed = true
       },
 
       /** 滚动监听触发 加载更多源数据 */
       scorllLoadFromData() {
         // this.$emit('')
+      },
+
+      /** 监听左侧穿梭完成 */
+      listenFromCompleted(target) {
+        this.is_from_completed = false
+      },
+
+      /** 监听右侧穿梭完成 */
+      listenToCompleted(target) {
+        this.is_to_completed = false
       },
 
       /** 全选 （目标数据全选/源数据全选） */

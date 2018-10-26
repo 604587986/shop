@@ -182,6 +182,7 @@
       v-loading="loadArea"
       @open="loadArea = false"
       align="center"
+      :close-on-click-modal="false"
       :visible.sync="areaDialog"
       width="30%">
       <en-transfer-tree
@@ -384,7 +385,7 @@
       /** 初始化源数据 & 目标数据  每次只能给15条用来进行渲染*/
       initArea() {
         // 初始化源数据
-        const init_from = Object.keys(this.staticData).slice(0, 8)
+        const init_from = Object.keys(this.staticData).slice(0, 14)
         init_from.forEach(key => {
           this.fromData[key] = this.staticData[key]
         })
