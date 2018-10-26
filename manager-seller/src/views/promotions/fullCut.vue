@@ -979,6 +979,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             /** 处理表单数据 */
+            this.activityForm.integral = Number.parseInt(this.activityForm.integral)
             this.activityForm.start_time = this.activityForm.take_effect_time[0] / 1000
             this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000
             this.activityForm.description = this.$refs['UE'].getUEContent()
