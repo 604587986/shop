@@ -129,7 +129,7 @@
                 :action="`${MixinUploadApi}?scene=goods`"
                 list-type="picture-card"
                 multiple
-                :file-list="baseInfoForm.goods_gallery_list"
+                :file-list="goodsGalleryList"
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
                 :on-remove="handleRemove"
@@ -562,6 +562,9 @@
           intro: ''
         },
 
+        /** 临时存储商品相册信息 */
+        goodsGalleryList: [],
+
         /** 用来向组件中传递的数据 */
         skuList: [],
 
@@ -879,6 +882,7 @@
           })
           this.$nextTick(() => { this.setSort() })
           this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
+          this.goodsGalleryList = JSON.parse(JSON.stringify(this.baseInfoForm.goods_gallery_list))
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list || !Array.isArray(this.baseInfoForm.sku_list)) {
             this.baseInfoForm.sku_list = []
@@ -1008,6 +1012,7 @@
             this.$nextTick(() => { this.setSort() })
             this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           }
+          this.goodsGalleryList = JSON.parse(JSON.stringify(this.baseInfoForm.goods_gallery_list))
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list) {
             this.baseInfoForm.sku_list = []
