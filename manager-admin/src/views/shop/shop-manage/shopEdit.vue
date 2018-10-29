@@ -76,6 +76,15 @@
               value-format="timestamp"
               :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() } }">
             </el-date-picker>
+            <el-date-picker
+              class="license-date"
+              v-model="shopForm.licence_end"
+              type="date"
+              align="center"
+              :editable="false"
+              value-format="timestamp"
+              :picker-options="{ disabledDate(time) { return time.getTime() > Date.now() } }">
+            </el-date-picker>
           </el-form-item>
           <br>
           <el-form-item label="法人身份证" prop="legal_img">
@@ -322,6 +331,7 @@
             }
             params.licence_start /= 1000
             params.licence_end /= 1000
+            params.establish_date /= 1000
             API_Shop.editAuthShop(this.shop_id, params).then(response => {
               if (this.isAudit) {
                 this.$message.success('审核通过！')
@@ -386,6 +396,7 @@
           this.shopForm = this.MixinClone(shopInfo)
           this.shopForm.licence_start *= 1000
           this.shopForm.licence_end *= 1000
+          this.shopForm.establish_date *= 1000
           const {
             license_province_id, license_city_id, license_county_id, license_town_id,
             bank_province_id, bank_city_id, bank_county_id, bank_town_id,

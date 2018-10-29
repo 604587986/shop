@@ -161,6 +161,7 @@
   Vue.use(Option)
   import * as API_AfterSale from '@/api/after-sale'
   import SkuList from '../-skuList'
+  import { Foundation } from '@/ui-utils'
   export default {
     name: 'apply',
     components: { SkuList },
@@ -264,6 +265,11 @@
         this.returnGoodsRules.bank_deposit_name[0].required = newVal === 'BANKTRANSFER'
         this.returnGoodsRules.bank_account_name[0].required = newVal === 'BANKTRANSFER'
         this.returnGoodsRules.bank_account_number[0].required = newVal === 'BANKTRANSFER'
+      },
+      'returnGoodsForm.return_num': function (newVal) {
+        if (!this.order || !this.order.order_sku_list || !this.order.order_sku_list[0]) return
+        const { purchase_price } = this.order.order_sku_list[0]
+        this.returnGoodsForm.return_money = Foundation.formatPrice(newVal * purchase_price)
       }
     },
     methods: {
