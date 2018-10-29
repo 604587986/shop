@@ -48,20 +48,40 @@
           </dd>
         </dl>
         <template v-if="selectorData.prop && selectorData.prop.length">
-          <dl v-for="(prop, index) in selectorData.prop" :key="index">
-            <dt>{{ prop.key }}:</dt>
-            <dd>
-              <div class="small-list">
-                <a
-                  v-for="(prop_val, index) in prop.value"
-                  :key="index"
-                  :href="'/goods?prop=' + prop.key + '_' +prop_val.value + keyword_url"
-                >{{ prop_val.value }}</a>
-              </div>
-            </dd>
-          </dl>
+          <transition-group name="fade">
+            <dl
+              v-for="(prop, index) in selectorData.prop"
+              :key="index"
+              v-show="index < 3 || selector_ex_status === 'open'"
+            >
+              <dt>{{ prop.key }}:</dt>
+              <dd>
+                <div class="small-list">
+                  <a
+                    v-for="(prop_val, index) in prop.value"
+                    :key="index"
+                    :href="'/goods?prop=' + prop.key + '_' +prop_val.value + keyword_url"
+                  >{{ prop_val.value }}</a>
+                </div>
+              </dd>
+            </dl>
+          </transition-group>
         </template>
       </div>
+      <a href="javascript:;"
+         class="show-more-btn"
+         v-if="selectorData.prop && selectorData.prop.length > 3"
+         @click="selector_ex_status = selector_ex_status === 'open' ? 'close' : 'open'"
+      >
+        {{ selector_ex_status === 'open' ? '收起' : '更多选项' }}
+        <i
+          :class="['iconfont',
+          selector_ex_status === 'open'
+            ? 'ea-icon-arrow-up'
+            : 'ea-icon-arrow-down'
+          ]"
+        ></i>
+      </a>
       <div class="gl-sku-box">
         <div class="gl-sku-filter">
           <div class="btns">
@@ -189,7 +209,9 @@
           return item
         }),
         // 价格区间
-        prices: price ? price.split('_') : ['', '']
+        prices: price ? price.split('_') : ['', ''],
+        // 更多是否为打开状态
+        selector_ex_status: 'close'
       }
     },
     computed: {
@@ -394,6 +416,25 @@
           margin: 8px;
         }
       }
+    }
+  }
+  .show-more-btn {
+    display: block;
+    position: relative;
+    left: 50%;
+    margin-left: -40px;
+    width: 80px;
+    height: 21px;
+    line-height: 21px;
+    background: #fff;
+    margin-top: 1px;
+    box-shadow: rgb(204, 204, 204) 0 2px 5px;
+    text-indent: 9px;
+    text-align: center;
+    i {
+      font-size: 14px !important;
+      display: initial !important;
+      vertical-align: -1px;
     }
   }
   .gl-sku-box {
@@ -650,5 +691,11 @@
         i { margin-left: 5px }
       }
     }
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+  }
+  .fade-enter, .fade-leave {
+    opacity: 0;
   }
 </style>
