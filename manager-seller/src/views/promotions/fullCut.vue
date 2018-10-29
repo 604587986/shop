@@ -134,9 +134,9 @@
                 </el-form-item>
                 <!--自营店--送积分-->
                 <el-form-item prop="integral" class="discount-model" v-if="parseInt(shopInfo.self_operated) === 1">
-                  <el-checkbox :label="integralTxt" v-model="isIntegral" @change="changeIntegral"></el-checkbox>
-                  <span class="integral-show" v-show="isIntegral">
-                    <el-input  size="mini" v-model="activityForm.integral"></el-input> 分
+                  <el-checkbox :label="integralTxt" v-model="isSendPoint" @change="changeIntegral"></el-checkbox>
+                  <span class="integral-show" v-show="isSendPoint">
+                    <el-input  size="mini" v-model="activityForm.point_value"></el-input> 分
                   </span>
                 </el-form-item>
                 <!--免邮费-->
@@ -437,10 +437,10 @@
           minus_value: 0,
 
           /** 是否送积分 */
-          isIntegral: 1,
+          is_send_point: 1,
 
           /** 积分 */
-          integral: 0,
+          point_value: 0,
 
           /** 是否免邮费*/
           is_free_ship: 1,
@@ -477,7 +477,7 @@
         discountTxt: '打折(与减现金活动只能选择一种)',
 
         /** 是否送积分 */
-        isIntegral: false,
+        isSendPoint: false,
 
         /** 积分文本 */
         integralTxt: '送积分',
@@ -782,13 +782,13 @@
           /** 处理优惠数据 */
           this.is_discount = this.activityForm.is_discount === 1
           this.is_full_minus = this.activityForm.is_full_minus === 1
-          this.isIntegral = this.activityForm.isIntegral === 1
+          this.isSendPoint = this.activityForm.is_send_point === 1
           this.is_free_ship = this.activityForm.is_free_ship === 1
           this.is_send_bonus = this.activityForm.is_send_bonus === 1
           this.is_send_gift = this.activityForm.is_send_gift === 1
           this.changeDiscount(this.is_discount)
           this.changeReduceCash(this.is_full_minus)
-          this.changeIntegral(this.isIntegral)
+          this.changeIntegral(this.isSendPoint)
           this.isChangeCoupon(this.is_send_bonus)
           this.isChangeGift(this.is_send_gift)
         })
@@ -867,7 +867,7 @@
         }
         this.is_discount = false
         this.is_full_minus = false
-        this.isIntegral = false
+        this.isSendPoint = false
         this.is_free_ship = false
         this.is_send_bonus = false
         this.is_send_gift = false
@@ -910,7 +910,7 @@
       /** 是否送积分 */
       changeIntegral(val) {
         this.integralTxt = val ? '送' : '送积分'
-        this.activityForm.isIntegral = val ? 1 : 0
+        this.activityForm.is_send_point = val ? 1 : 0
       },
 
       /** 是否免邮费改变 */
@@ -984,7 +984,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             /** 处理表单数据 */
-            this.activityForm.integral = Number.parseInt(this.activityForm.integral)
+            this.activityForm.point_value = parseInt(this.activityForm.point_value)
             this.activityForm.start_time = this.activityForm.take_effect_time[0] / 1000
             this.activityForm.end_time = this.activityForm.take_effect_time[1] / 1000
             this.activityForm.description = this.$refs['UE'].getUEContent()
