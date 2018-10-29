@@ -590,7 +590,12 @@
     methods: {
       /** 活动类型 */
       activityType(row, column, cellValue) {
-        return row.is_discount === 1 ? '满减' : '满优惠'
+        if (row.is_discount === 1) {
+          return '满折'
+        }
+        if (row.is_full_minus === 1) {
+          return '满减'
+        }
       },
 
       /** 搜索事件触发 */
