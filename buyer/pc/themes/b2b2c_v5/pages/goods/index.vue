@@ -70,7 +70,7 @@
       </div>
       <a href="javascript:;"
          class="show-more-btn"
-         v-if="selectorData.prop.length > 3"
+         v-if="selectorData.prop && selectorData.prop.length > 3"
          @click="selector_ex_status = selector_ex_status === 'open' ? 'close' : 'open'"
       >
         {{ selector_ex_status === 'open' ? '收起' : '更多选项' }}
