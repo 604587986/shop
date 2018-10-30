@@ -268,7 +268,7 @@
     <!--查看物流信息-->
     <el-dialog :visible.sync="logisticsShow" width="400px" align="center">
       <div slot="title">
-        <h3>物流信息</h3>
+        <h3 style="margin: 10px 0;">物流信息</h3>
         <div class="logistics-base">
           <span>物流公司：{{ logisticsName }}</span>
           <span>快递单号：{{ logisticsNo }}</span>
