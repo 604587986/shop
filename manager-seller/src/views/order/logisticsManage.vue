@@ -27,19 +27,18 @@
                 <el-table-column label="可配送区域" align="left">
                   <template slot-scope="scope">
                     <div class="dispatchingAreas">
-                      <!--<span v-for="(item, index) in formatAreaJson(scope.row.area)">-->
-                        <!--<span v-if="item.level === 1" style="color: #333;"> {{ item.local_name }}-->
-                          <!--<span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>-->
-                        <!--</span>-->
-                        <!--<span v-if="item.level === 2" style="color: #777;"> {{ item.local_name }}-->
-                          <!--<span v-if="item.children && item.children.length" style="color: #aaa;">(</span>-->
-                          <!--<span v-if="item.children && item.children.length" v-for="(child, _index) in item.children" style="color: #aaa;">-->
-                            <!--{{ child.local_name }}<span v-if="++_index !== item.children.length">,</span>-->
-                          <!--</span>-->
-                          <!--<span v-if="item.children && item.children.length" style="color: #aaa;">)</span>-->
-                          <!--<span v-if="++index !== formatAreaJson(scope.row.area).length">、</span>-->
-                        <!--</span>-->
-                      <!--</span>-->
+                      <span v-for="(item, index) in scope.row.regions">
+                        <span style="color: #333;"> {{ item.name }}
+                          <span v-if="++index !== scope.row.regions.length">、</span>
+                        </span>
+                        <span v-if="item.children" style="color: #777;">
+                          <span style="color: #aaa;">(</span>
+                          <span v-for="(child, _index) in item.children" style="color: #aaa;">
+                            {{ child.name }}<span v-if="++_index !== item.children.length">,</span>
+                          </span>
+                          <span style="color: #aaa;">)</span>
+                        </span>
+                      </span>
                     </div>
                   </template>
                 </el-table-column>
@@ -405,11 +404,9 @@
 
       /** 选择配送地区 */
       chooseArea() {
+        this.toData = {}
         this.areaDialog = true
-        this.loadArea = true
         this.isEdit = false
-        // 默认数据
-        this.defaultArea = []
       },
 
       /** 滚动监听触发 继续加载更多源数据 */
@@ -579,7 +576,7 @@
       editArea(row, $index) {
         this.areaDialog = true
         this.isEdit = true
-        // 更新当前默认数据
+        // 更新当前目标数据
         this.toData = JSON.parse(JSON.stringify(row.area))
         // 目标数据进行重置选中
         this.resetSelected(this.toData)
@@ -627,6 +624,30 @@
         this.activeName = 'add'
         this.tplOperaName = '修改模版'
         API_express.getSimpleTpl(row.id).then((response) => {
+          // 计算编辑地区
+          response.items.forEach(key => {
+            key.area = typeof key.area === 'string' ? JSON.parse(key.area) : key.area
+            for (let i in key.area) {
+              if (key.area[i].selected_all) { // level 1
+                key.area[i] = JSON.parse(JSON.stringify(this.fromData[i]))
+                this.$delete(this.fromData, i)
+              } else if (key.area[i].children) {
+                for (let j in key.area[i].children) {
+                  if (key.area[i].children[j].selected_all) { // level2
+                    key.area[i].children[j] = JSON.parse(JSON.stringify(this.fromData[i].children[j]))
+                    this.$delete(this.fromData[i].children, j)
+                  } else if (key.area[i].children[j].children) {
+                    for (let k in key.area[i].children[j].children) {
+                      key.area[i].children[j].children[k] = JSON.parse(JSON.stringify(this.fromData[i].children[j].children[k]))
+                      this.$delete(this.fromData[i].children[j].children, k)
+                    }
+                  }
+                }
+              }
+            }
+          })
+          // 此时的上次源数据 为过滤后的地区数据
+          this.lastFromData = JSON.parse(JSON.stringify(this.fromData))
           this.mouldForm = { ...response }
           // 初始化过滤地区
           response.items.forEach(key => {
@@ -667,16 +688,47 @@
         this.toData = {}
         // 重置过滤地区
         this.filterData = []
+        // 此时的上次源数据 为过滤后的地区数据
+        this.lastFromData = JSON.parse(JSON.stringify(this.fromData))
       },
 
       /** 检测是否全选 */
       checkSelectAll(model) {
         let isSelectAll = false
-        if (model.level === 1 && !this.lastFromData[model.id]) { // level1
-          isSelectAll = true
-        } else if (model.level === 2 && !this.lastFromData[model.parent_id].children[model.id]) { // level2
-          isSelectAll = true
+        let _resultlevel1 = 0
+        let _resultlevel2 = 0
+        let _resultlevel3 = 0
+        this.filterData.forEach(key => {
+          for (let i in key) {
+            if (model.level === 1 && parseInt(i) === parseInt(model.id)) {
+              _resultlevel1++
+            } else if (model.level === 2 && key[i].children) {
+              for (let j in key[i].children) {
+                if (parseInt(j) === parseInt(model.id)) {
+                  _resultlevel2++
+                }
+              }
+            }
+          }
+        })
+        if (model.level === 1) {
+          if (!this.lastFromData[model.id] && _resultlevel1 <= 1) {
+            isSelectAll = true
+          }
         }
+
+        if (model.level === 2) {
+          if (_resultlevel2 <= 1 && (!this.lastFromData[model.parent_id] || !this.lastFromData[model.parent_id].children[model.id])) {
+            isSelectAll = true
+          }
+        }
+
+        if (model.level === 3) { // 此处怀疑有问题，但是没有发现 。。。mmp
+          if (_resultlevel3 <= 1 && (!this.lastFromData[model.parent_id] || !this.lastFromData[model.parent_id].children[model.id])) {
+            isSelectAll = true
+          }
+        }
+
         return isSelectAll
       },
 
@@ -684,11 +736,29 @@
       saveMould(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.mouldForm.items.forEach(key => {
+            const _params = JSON.parse(JSON.stringify(this.mouldForm))
+            _params.items.forEach(key => {
+              // 计算提交数据
+              for (let i in key.area) {
+                if (this.checkSelectAll(key.area[i])) { // level1 全选
+                  this.$set(key.area[i], 'selected_all', true)
+                  key.area[i].children = null
+                } else {
+                  this.$set(key.area[i], 'selected_all', false)
+                  for (let j in key.area[i].children) {
+                    if (this.checkSelectAll(key.area[i].children[j])) { // level2 全选
+                      this.$set(key.area[i].children[j], 'selected_all', true)
+                      key.area[i].children[j].children = null
+                    } else {
+                      this.$set(key.area[i].children[j], 'selected_all', false)
+                    }
+                  }
+                }
+              }
               key.area = typeof key.area === 'string' ? key.area : JSON.stringify(key.area)
             })
             if (this.mouldForm.id) { // 修改
-              API_express.saveExpressMould(this.mouldForm.id, this.mouldForm).then(() => {
+              API_express.saveExpressMould(this.mouldForm.id, _params).then(() => {
                 this.$message.success('修改成功')
                 this.GET_ExpressMould()
                 this.activeName = 'express'
@@ -696,7 +766,7 @@
               })
             } else { // 添加
               delete this.mouldForm.id
-              API_express.addExpressMould(this.mouldForm).then(() => {
+              API_express.addExpressMould(_params).then(() => {
                 this.$message.success('添加成功')
                 this.GET_ExpressMould()
                 this.activeName = 'express'
