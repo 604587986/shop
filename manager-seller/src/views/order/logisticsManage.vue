@@ -204,6 +204,8 @@
         @to_data_change="toDataChange"
         @from_load_more="fromLoadMore"
         @to_load_more="toLoadMore"
+        @from_selected_all="fromSelectedAll"
+        @to_selected_all="toSelectedAll"
       ></en-transfer-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="areaDialog = false">取 消</el-button>
@@ -334,11 +336,9 @@
               stack = item.children.concat(stack)
             }
           }
-          // 平行结构转换对象
-          this.fromData = this.buildTree(parallel)
-          // 随后可进行滚动加载进行性能优化， 可减少计算进行性能优化
-          // this.staticData = this.buildTree(parallel)
-          // this.initArea()
+          // 平行结构转换对象 随后可进行滚动加载进行性能优化， 可减少计算进行性能优化
+          this.staticData = this.buildTree(parallel)
+          this.initArea()
         })
       },
 
@@ -394,12 +394,17 @@
       /** 初始化源数据 & 目标数据  每次只能给15条用来进行渲染 暂时没有用到 用于进行后期性能优化*/
       initArea() {
         // 初始化源数据
-        const init_from = Object.keys(this.staticData).slice(0, 14)
+        const init_from = Object.keys(this.staticData).slice(0, 11)
         init_from.forEach(key => {
           this.fromData[key] = this.staticData[key]
         })
         // 初始化目标数据
         this.toData = {}
+
+        // 2s 之后加载完整数据 用来加快弹框加载显示
+        setTimeout(() => {
+          this.fromData = this.staticData
+        }, 2000)
       },
 
       /** 选择配送地区 */
@@ -417,6 +422,46 @@
       /** 滚动监听触发 继续加载更多目标数据 */
       toLoadMore() {
         // console.log('滚动加载目标数据')
+      },
+
+      /** 源数据全选 */
+      fromSelectedAll(val) {
+        let stack = []
+        for (let i in this.fromData) {
+          stack.push(this.fromData[i])
+        }
+        let item
+        while (stack.length) {
+          item = stack.shift()
+          // 如果当前节点的兄弟节点 全部跟当前节点一样 则父节点保持同步
+          item.isSelected = val
+          // 如果该节点有子节点，继续添加进入栈顶
+          if (item && item.children && !Array.isArray(item.children)) {
+            for (let i in item.children) {
+              stack.push(item.children[i])
+            }
+          }
+        }
+      },
+
+      /** 目标数据全选 */
+      toSelectedAll(val) {
+        let stack = []
+        for (let i in this.toData) {
+          stack.push(this.toData[i])
+        }
+        let item
+        while (stack.length) {
+          item = stack.shift()
+          // 如果当前节点的兄弟节点 全部跟当前节点一样 则父节点保持同步
+          item.isSelected = val
+          // 如果该节点有子节点，继续添加进入栈顶
+          if (item && item.children && !Array.isArray(item.children)) {
+            for (let i in item.children) {
+              stack.push(item.children[i])
+            }
+          }
+        }
       },
 
       /** 源数据更新*/

@@ -4,7 +4,7 @@
     <div class="transfer-left">
       <h3 class="transfer-title">
         <!--全选按钮-->
-        <!--<el-checkbox v-model="is_from_selected_all" @change="onChangeFromAll">全选</el-checkbox>-->
+        <el-checkbox v-model="is_from_selected_all" @change="onChangeFromAll">全选</el-checkbox>
         <!--源列表标题-->
         <span class="u-right list-title">{{ fromTitle }}</span>
       </h3>
@@ -46,7 +46,7 @@
     <div class="transfer-right">
       <h3 class="transfer-title">
         <!--全选按钮-->
-        <!--<el-checkbox v-model="is_to_selected_all" @change="onChangeToAll">全选</el-checkbox>-->
+        <el-checkbox v-model="is_to_selected_all" @change="onChangeToAll">全选</el-checkbox>
         <!--目标列表标题-->
         <span class="u-right list-title">{{ toTitle }}</span>
       </h3>
@@ -169,22 +169,22 @@
 
       /** 源数据是否全选 */
       onChangeFromAll(val) {
-        // if (val) {
-        //   this.selected_from_data = JSON.parse(JSON.stringify(this.from_data))
-        // } else {
-        //   this.selected_from_data = {}
-        // }
-        // this.$emit('from_selected_all', val)
+        this.$emit('from_selected_all', val)
+        if (val) {
+          this.selected_from_data = JSON.parse(JSON.stringify(this.from_data))
+        } else {
+          this.selected_from_data = {}
+        }
       },
 
       /** 目标数据是否全选 */
       onChangeToAll(val) {
-        // if (val) {
-        //   this.selected_to_data = JSON.parse(JSON.stringify(this.to_data))
-        // } else {
-        //   this.selected_to_data = {}
-        // }
-        // this.$emit('to_selected_all', val)
+        this.$emit('to_selected_all', val)
+        if (val) {
+          this.selected_to_data = JSON.parse(JSON.stringify(this.to_data))
+        } else {
+          this.selected_to_data = {}
+        }
       }
     },
     computed: {
@@ -219,10 +219,16 @@
       // 左侧 状态监测
       from_data(val) {
         this.from_disabled = !Object.keys(val).length
+        if (this.from_disabled) {
+          this.is_from_selected_all = false
+        }
       },
       // 右侧 状态监测
       to_data(val) {
         this.to_disabled = !Object.keys(val).length
+        if (this.to_disabled) {
+          this.is_to_selected_all = false
+        }
       }
     }
   }
@@ -288,6 +294,7 @@
     line-height: 40px;
     color: #333;
     font-size: 16px;
+    text-align: center;
     background-color: #f5f7fa;
   }
 
