@@ -335,6 +335,8 @@
   }
   .floor-list {
     background-color: #E5E7EA;
+    min-width: 75%;
+    min-height: 500px;
   }
   .floor-item {
     position: relative;
