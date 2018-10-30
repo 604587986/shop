@@ -108,7 +108,7 @@
       </nuxt-link>
     </div>
     <!--第三方登录-->
-    <div class="login-other">
+    <div v-if="!isWXBrowser" class="login-other">
       <h4>其他登录方式</h4>
       <div class="icons-login-other">
         <a :href="getConnectUrl('wap', 'QQ')"><i class="iconfont ea-icon-qq"></i></a>

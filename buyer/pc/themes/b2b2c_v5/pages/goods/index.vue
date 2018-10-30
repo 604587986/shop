@@ -4,7 +4,7 @@
       <div v-if="selectorData.selected_cat && selectorData.selected_cat.length" class="gl-bar-title">
         <span>全部</span>
         <template v-for="(cat, catIndex) in selectorData.selected_cat">
-          <i :key="catIndex" class="iconfont ea-icon-arrow-right"></i>
+          <i :key="'i_' + catIndex" class="iconfont ea-icon-arrow-right"></i>
           <div :key="catIndex" class="gl-bar-item">
             <a :href="'/goods?category=' + cat.value" class="gl-bar-trigger">
               <span>{{ cat.name }}</span>
@@ -24,14 +24,31 @@
         <dl v-if="selectorData.brand && selectorData.brand.length" class="brand logo-brand">
           <dt>品牌:</dt>
           <dd>
-            <div class="small-list brand-list">
-              <ul class="show-logo">
-                <li v-for="(brand, index) in selectorData.brand" :key="index">
+            <div class="brand-list">
+              <transition-group
+                class="show-logo"
+                :class="[selectorData.brand && selectorData.brand.length > 16 && 'more-brand']"
+                tag="ul"
+                name="fade"
+              >
+                <li
+                  v-for="(brand, index) in selectorData.brand"
+                  :key="index"
+                  v-show="index < 16 || brand_ex_status === 'open'"
+                >
                   <a :href="'/goods?' + selector_url('brand', brand.value) + keyword_url" :title="brand.name">
-                    <img :src="brand.url" alt="新农哥">新农哥
-                  </a>
+                    <img :src="brand.url" :alt="brand.name"/>{{ brand.name }}</a>
                 </li>
-              </ul>
+              </transition-group>
+              <a
+                v-if="selectorData.brand && selectorData.brand.length > 16"
+                href="javascript:;"
+                class="more-btn"
+                @click="brand_ex_status = brand_ex_status === 'close' ? 'open' : 'close'"
+              >
+                {{ brand_ex_status === 'open' ? '收起' : '更多品牌' }}
+                <i :class="['iconfont', brand_ex_status === 'open' ? 'ea-icon-arrow-up' : 'ea-icon-arrow-down']"></i>
+              </a>
             </div>
           </dd>
         </dl>
@@ -211,7 +228,9 @@
         // 价格区间
         prices: price ? price.split('_') : ['', ''],
         // 更多是否为打开状态
-        selector_ex_status: 'close'
+        selector_ex_status: 'close',
+        // 更多品牌
+        brand_ex_status: 'close'
       }
     },
     computed: {
@@ -350,7 +369,7 @@
       background: #f5f5f5;
     }
     dt {
-      width: 80px;
+      width: 70px;
       padding-left: 30px;
       line-height: 45px;
       color: #666;
@@ -358,7 +377,7 @@
     }
     dd {
       padding-left: 10px;
-      width: 1090px;
+      width: 1100px;
       min-height: 46px;
       background: #fff;
       float: left;
@@ -381,39 +400,59 @@
     .brand-list {
       margin: 17px 0;
       padding-top: 1px;
-      max-height: 207px;
-      height: auto;
+      overflow: hidden;
+      .more-brand {
+        max-width: 1000px;
+      }
+      .more-btn {
+        position: absolute;
+        top: 17px;
+        right: 20px;
+      }
     }
     .show-logo {
       li {
         float: left;
-        border: 1px solid #ededed;
-        width: 98px;
+        _display: inline;
+        width: 116px;
+        height: 48px;
+        padding: 0;
+        border: 1px solid #DDD;
+        margin: -1px -1px 0 0;
+        background: #FFF;
         text-align: center;
-        height: 68px;
-        line-height: 98px;
-        overflow: hidden;
-        margin-right: -1px;
-        margin-top: -1px;
+        &:hover {
+          position: relative;
+          z-index: 5;
+          border-color: $color-main;
+          box-shadow: 2px 2px 3px rgba(0,0,0,.12);
+        }
         a {
           display: block;
-          padding: 0;
-          position: static;
-          margin: 0;
-          height: 68px;
-          width: 96px !important;
-          line-height: 68px;
-          color: #666;
-          border: 1px solid transparent;
+          border: 1px solid #FFF;
+          height: 46px;
+          width: 114px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
           zoom: 1;
+          color: #005aa0;
+          line-height: 48px;
+          &:hover {
+            text-decoration: none;
+            color: $color-main;
+            border-color: $color-main;
+            img {
+              display: none;
+            }
+          }
         }
         img {
-          width: 80px;
-          height: 53px;
-          margin: 8px;
+          display: block;
+          width: 102px;
+          height: 36px;
+          padding: 5px 6px;
+          vertical-align: top;
         }
       }
     }
