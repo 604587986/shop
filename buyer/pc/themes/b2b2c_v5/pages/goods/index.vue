@@ -4,7 +4,7 @@
       <div v-if="selectorData.selected_cat && selectorData.selected_cat.length" class="gl-bar-title">
         <span>全部</span>
         <template v-for="(cat, catIndex) in selectorData.selected_cat">
-          <i :key="catIndex" class="iconfont ea-icon-arrow-right"></i>
+          <i :key="'i_' + catIndex" class="iconfont ea-icon-arrow-right"></i>
           <div :key="catIndex" class="gl-bar-item">
             <a :href="'/goods?category=' + cat.value" class="gl-bar-trigger">
               <span>{{ cat.name }}</span>
