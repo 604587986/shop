@@ -4,9 +4,9 @@
     <div class="transfer-left">
       <h3 class="transfer-title">
         <!--全选按钮-->
-        <el-button plain size="mini" @click="chooseAll(1, from_data)">全选</el-button>
+        <!--<el-checkbox v-model="is_from_selected_all" @change="onChangeFromAll">全选</el-checkbox>-->
         <!--源列表标题-->
-        <span class="u-right">{{ fromTitle }}</span>
+        <span class="u-right list-title">{{ fromTitle }}</span>
       </h3>
       <!-- 内容区 -->
       <div class="transfer-main">
@@ -46,9 +46,9 @@
     <div class="transfer-right">
       <h3 class="transfer-title">
         <!--全选按钮-->
-        <el-button plain size="mini" @click="chooseAll(2, to_data)">全选</el-button>
-        <!--源列表标题-->
-        <span class="u-right">{{ toTitle }}</span>
+        <!--<el-checkbox v-model="is_to_selected_all" @change="onChangeToAll">全选</el-checkbox>-->
+        <!--目标列表标题-->
+        <span class="u-right list-title">{{ toTitle }}</span>
       </h3>
       <!-- 内容区 -->
       <div class="transfer-main">
@@ -77,10 +77,10 @@
         to_disabled: false,
 
         /** 源数据是否全选 */
-        isfromchooseAll: false,
+        is_from_selected_all: false,
 
         /** 目标数据是否全选 */
-        istochooseAll: false,
+        is_to_selected_all: false,
 
         /** 源数据选中项 */
         selected_from_data: '',
@@ -167,31 +167,24 @@
         this.is_to_completed = false
       },
 
-      /** 全选 （目标数据全选/源数据全选） */
-      chooseAll(is_from, data) {
-        // 为每一项设置选中属性 isSelected Boolean值
-        let stack = []
-        for (let i = 0, len = data.length; i < len; i++) {
-          stack.push(data[i])
-        }
-        let item
-        while (stack.length) {
-          item = stack.shift()
-          if (is_from === 1) {
-            item.isSelected = !this.isfromchooseAll
-          } else if (is_from === 2) {
-            item.isSelected = !this.istochooseAll
-          }
-          // 如果该节点有子节点，继续添加进入栈顶
-          if (item.children && item.children.length) {
-            stack = item.children.concat(stack)
-          }
-        }
-        if (is_from === 1) {
-          this.isfromchooseAll = !this.isfromchooseAll
-        } else if (is_from === 2) {
-          this.istochooseAll = !this.istochooseAll
-        }
+      /** 源数据是否全选 */
+      onChangeFromAll(val) {
+        // if (val) {
+        //   this.selected_from_data = JSON.parse(JSON.stringify(this.from_data))
+        // } else {
+        //   this.selected_from_data = {}
+        // }
+        // this.$emit('from_selected_all', val)
+      },
+
+      /** 目标数据是否全选 */
+      onChangeToAll(val) {
+        // if (val) {
+        //   this.selected_to_data = JSON.parse(JSON.stringify(this.to_data))
+        // } else {
+        //   this.selected_to_data = {}
+        // }
+        // this.$emit('to_selected_all', val)
       }
     },
     computed: {
@@ -296,6 +289,10 @@
     color: #333;
     font-size: 16px;
     background-color: #f5f7fa;
+  }
+
+  .list-title {
+    font-size: 14px;
   }
 
   .transfer-title .el-checkbox {
