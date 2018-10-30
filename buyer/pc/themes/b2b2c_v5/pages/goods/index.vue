@@ -34,7 +34,7 @@
                 <li
                   v-for="(brand, index) in selectorData.brand"
                   :key="index"
-                  v-show="index < 15 || brand_ex_status === 'open'"
+                  v-show="index < 16 || brand_ex_status === 'open'"
                 >
                   <a :href="'/goods?' + selector_url('brand', brand.value) + keyword_url" :title="brand.name">
                     <img :src="brand.url" :alt="brand.name"/>{{ brand.name }}</a>
