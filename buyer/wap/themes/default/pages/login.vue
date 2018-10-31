@@ -271,7 +271,7 @@
                 window.location.href = forward || '/'
               }
             } else {
-              this.$confirm('当前用户已绑定其它账号，请先解绑！', () => {
+              _this.$confirm('当前用户已绑定其它账号，请先解绑！', () => {
                 _this.removeAccessToken()
                 _this.removeRefreshToken()
                 _this.$router.push('/')
