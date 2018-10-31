@@ -12,7 +12,9 @@
         <el-upload
           :action="MixinUploadApi"
           class="avatar-uploader"
+          :auto-upload="false"
           :show-file-list="false"
+          :on-change="handleFaceChange"
           :on-success="(res) => { profileForm.face = res.url }"
         >
           <img v-if="profileForm.face" :src="profileForm.face" class="avatar">
@@ -63,17 +65,41 @@
       </el-form>
       <span class="clr"></span>
     </div>
+    <el-dialog
+      title="修改头像"
+      :visible.sync="dialogFaceVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="432px"
+      class="edit-face-dialog"
+    >
+      <vueCropper
+        ref="cropper"
+        :img="cropperImg"
+        :fixed="true"
+        :autoCrop="true"
+        :autoCropWidth="200"
+        :autoCropHeight="200"
+        :centerBox="true"
+        :info="false"
+        outputType="png"
+      ></vueCropper>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="dialogFaceVisible = false">取 消</el-button>
+        <el-button size="mini" type="primary" @click="handleCropperCrop">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
-  import { DatePicker, Upload } from 'element-ui'
-  Vue.use(DatePicker)
-  Vue.use(Upload)
+  import { DatePicker, Upload, Dialog } from 'element-ui'
+  Vue.use(DatePicker).use(Upload).use(Dialog)
   import { mapGetters, mapActions } from 'vuex'
   import EnRegionPicker from "@/components/RegionPicker"
   import { RegExp } from '~/ui-utils'
+  import request from '@/utils/request'
   export default {
     name: 'my-profile',
     head() {
@@ -113,7 +139,11 @@
               trigger: 'blur'
             }
           ]
-        }
+        },
+        // 修改头像dialog
+        dialogFaceVisible: false,
+        // 裁剪图片地址
+        cropperImg: ''
       }
     },
     watch: {
@@ -138,6 +168,34 @@
       })
     },
     methods: {
+      /** 头像文件发生改变 */
+      handleFaceChange(file) {
+        this.dialogFaceVisible = true
+        this.cropperImg = file.url
+      },
+      /** 裁剪头像 */
+      handleCropperCrop() {
+        this.$refs.cropper.getCropData(async data => {
+          const formData = new FormData()
+          formData.append('file', this.MixinBase64toBlob(data))
+          this.handleUploadFace(formData)
+        })
+      },
+      /** 上传文件 */
+      handleUploadFace(formData) {
+        request({
+          url: this.MixinUploadApi,
+          method: 'POST',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(response => {
+          this.profileForm.face = response.url
+          this.dialogFaceVisible = false
+          this.$message.success('上传成功，保存后生效！')
+        })
+      },
       /** 保存资料提交表单 */
       submitProfile() {
         this.$refs['profileForm'].validate((valid) => {
@@ -215,5 +273,17 @@
     /deep/ .el-form { float: left }
     /deep/ .el-date-editor.el-input { width: 100% }
     /deep/ .app-address { margin-top: 7px }
+  }
+  /deep/ .edit-face-dialog {
+    .el-dialog__header {
+      padding: 10px 10px 0 10px;
+    }
+    .el-dialog__body {
+      padding: 10px;
+      height: 350px;
+    }
+    .el-dialog__footer {
+      padding: 10px;
+    }
   }
 </style>
