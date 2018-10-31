@@ -122,7 +122,10 @@
       },
       // 上传文件
       handleUpload(file, filename) {
-        this.alloyCrop && this.alloyCrop.destroy()
+        if (this.alloyCrop) {
+          this.alloyCrop.destroy()
+          delete this.alloyCrop
+        }
         const formData = new FormData()
         if (typeof file === 'string') {
           file = this.MixinBase64toBlob(file)
