@@ -35,6 +35,10 @@
 </template>
 
 <script>
+  import '@/static/lrz/lrz.all.bundle'
+  import '@/static/alloycrop/asset/alloy-finger'
+  import '@/static/alloycrop/asset/transform'
+  import '@/static/alloycrop/alloy-crop'
   import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
   import { Foundation, RegExp } from '~/ui-utils'
@@ -87,14 +91,50 @@
     methods: {
       /** 头像发生改变 */
       handleUpdateFace(event) {
-        const file = event.target.files[0]
+        const {files} = event.target
+        if (files.length === 0) return
+        const file = files[0]
+        this.$confirm('该图片需要裁剪吗？选择取消将以原图上传。', () => {
+          lrz(file).then(response => {
+            this.toAlloyCrop(response)
+            event.target.value = ''
+          }).catch((e) => {
+            this.$message.error('当前设备不支持上传图片，请到APP或PC端操作！')
+          })
+        }, () => {
+          this.handleUpload(file, file.name)
+          event.target.value = ''
+        })
+      },
+      toAlloyCrop(res) {
+        this.alloyCrop = new AlloyCrop({
+          image_src: res.base64,
+          className: 'crop-box',
+          circle: true,
+          width: 200,
+          height: 200,
+          output: 1,
+          ok: (base64) => {this.handleUpload(base64, res.origin.name)},
+          cancel: () => { this.alloyCrop.destroy() },
+          ok_text: '确认',
+          cancel_text: '取消'
+        })
+      },
+      // 上传文件
+      handleUpload(file, filename) {
+        this.alloyCrop && this.alloyCrop.destroy()
         const formData = new FormData()
-        formData.append('file', file)
+        if (typeof file === 'string') {
+          file = this.MixinBase64toBlob(file)
+        }
+        formData.append('file', file, filename)
         request({
           url: this.MixinUploadApi,
-          method: Method.POST,
-          headers: { 'Content-Type': 'multipart/form-data' },
-          data: formData
+          method: 'POST',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         }).then(response => {
           this.profileForm.face = response.url
         })
