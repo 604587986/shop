@@ -33,6 +33,30 @@ Vue.mixin({
     /** 用得比较多，放到mixin里 */
     MixinRequired(message, trigger) {
       return { required: true, message, trigger: trigger || 'blur' }
+    },
+    /** 返回上一页 */
+    MixinRouterBack() {
+      if (window.history.length <= 1) {
+        location.href = '/'
+      } else {
+        window.history.back()
+      }
+    },
+    /** 是否为微信浏览器 */
+    MixinIsWeChatBrowser() {
+      if (!process.client) return false
+      return /micromessenger/i.test(navigator.userAgent)
+    },
+    /** base64转Blob */
+    MixinBase64toBlob(base64) {
+      const byteString = atob(base64.split(',')[1])
+      const mimeString = base64.split(',')[0].split(':')[1].split(';')[0]
+      const ab = new ArrayBuffer(byteString.length)
+      const ia = new Uint8Array(ab)
+      for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i)
+      }
+      return new Blob([ab], {type: mimeString})
     }
   }
 })
