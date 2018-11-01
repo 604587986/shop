@@ -37,8 +37,6 @@ export const mutations = {
     state.user = ''
     Storage.removeItem('user')
     Storage.removeItem('uid')
-    // 主要针对第三方登录留下的数据
-    Storage.removeItem('uuid_connect')
   },
   /**
    * 设置访问令牌
