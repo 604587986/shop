@@ -7,10 +7,6 @@
             <span>查询周期：</span>
             <en-year-month-picker @changed="handleYearMonthChanged"/>
           </div>
-          <div class="chart-header-item">
-            <span>店铺：</span>
-            <en-shop-picker @changed="(shop) => { params.seller_id = shop.shop_id }"/>
-          </div>
         </div>
       </div>
       <div class="total-box">
@@ -64,8 +60,7 @@
           start_time: '',
           end_time: '',
           cycle_type: 'MONTH',
-          order_status: '',
-          seller_id: 0
+          order_status: ''
         },
         /** 列表数据 */
         tableData: '',

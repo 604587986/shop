@@ -65,6 +65,8 @@ export const mutations = {
     if (process.client) {
       const expires = new Date(jwt_decode(token).exp * 1000)
       Storage.setItem('refresh_token', token, { expires })
+      Storage.setItem('uid', Storage.getItem('uid'), { expires })
+      Storage.setItem('user', Storage.getItem('user'), { expires })
     }
   },
   /**
