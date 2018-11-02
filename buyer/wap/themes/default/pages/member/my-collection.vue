@@ -46,7 +46,7 @@
               <img :src="shop.logo" :alt="shop.shop_name">
             </div>
             <div class="shop-tools">
-              <span class="shop-name">平台自营</span>
+              <span class="shop-name">{{ shop.shop_name }}</span>
               <div class="shop-btns">
                 <a href="javascript:;" @click="handleDeleteShopColl(shop)">取消收藏</a>
                 <a :href="'/shop/' + shop.shop_id">进入店铺</a>
