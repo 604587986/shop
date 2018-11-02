@@ -62,7 +62,12 @@
         API_Trade.getPaymentList('WAP')
       ]).then(responses => {
         this.order = responses[0]
-        this.paymentList = responses[1].map(item => {
+        let paymentList = responses[1]
+        // 如果是在微信里，隐藏支付宝支付方式
+        if (this.MixinIsWeChatBrowser()) {
+          paymentList = paymentList.filter(item => item.plugin_id !== 'alipayDirectPlugin')
+        }
+        this.paymentList = paymentList.map(item => {
           item.selected = false
           return item
         })

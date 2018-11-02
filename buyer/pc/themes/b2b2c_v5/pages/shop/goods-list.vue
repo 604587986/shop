@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="inner-search">
-          <el-input placeholder="店内搜索" size="mini" clearable v-model="params.keyword" @keyup.enter.native="handleSearch('shop')">
+          <el-input placeholder="在当前结果中搜索" size="mini" clearable v-model="params.keyword" @keyup.enter.native="handleSearch('shop')">
             <el-button slot="append" icon="el-icon-search" @click="handleSearch('shop')"></el-button>
           </el-input>
           <el-button size="mini" type="danger" class="search-btn" @click="handleSearch('all')">搜全站</el-button>
