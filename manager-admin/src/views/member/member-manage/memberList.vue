@@ -301,7 +301,7 @@
         const { advancedForm } = this
         const { register_time_range, sex } = advancedForm
         Object.keys(this.advancedForm).forEach(key => {
-          if (!advancedForm[key] && advancedForm[key] !== 0) {
+          if (advancedForm[key] !== undefined) {
             this.params[key] = advancedForm[key]
           }
         })
@@ -337,7 +337,13 @@
       /** 获取会员列表 */
       GET_MemberList() {
         this.loading = true
-        API_Member.getMemberList(this.params).then(response => {
+        const { params } = this
+        Object.keys(params).forEach(key => {
+          if (!params[key] && params[key] !== 0) {
+            delete params[key]
+          }
+        })
+        API_Member.getMemberList(params).then(response => {
           this.loading = false
           this.tableData = response
         }).catch(() => { this.loading = false })
