@@ -301,7 +301,7 @@
         const { advancedForm } = this
         const { register_time_range, sex } = advancedForm
         Object.keys(this.advancedForm).forEach(key => {
-          if (!advancedForm[key] && advancedForm[key] !== 0) {
+          if (advancedForm[key] && advancedForm[key] !== 0) {
             this.params[key] = advancedForm[key]
           }
         })
