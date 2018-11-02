@@ -37,8 +37,6 @@ export const mutations = {
     state.user = ''
     Storage.removeItem('user')
     Storage.removeItem('uid')
-    // 主要针对第三方登录留下的数据
-    Storage.removeItem('uuid_connect')
   },
   /**
    * 设置访问令牌
@@ -67,6 +65,8 @@ export const mutations = {
     if (process.client) {
       const expires = new Date(jwt_decode(token).exp * 1000)
       Storage.setItem('refresh_token', token, { expires })
+      Storage.setItem('uid', Storage.getItem('uid'), { expires })
+      Storage.setItem('user', Storage.getItem('user'), { expires })
     }
   },
   /**

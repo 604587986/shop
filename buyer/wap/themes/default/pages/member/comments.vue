@@ -94,6 +94,7 @@
   import * as API_Order from '@/api/order'
   import * as API_Members from '@/api/members'
   import request, { Method } from '@/utils/request'
+  import '../../static/lrz/lrz.all.bundle'
   export default {
     name: 'comments',
     head() {
@@ -149,15 +150,14 @@
       },
       /** 图片上传 */
       onFileRead(cm, file) {
-        const formData = new FormData()
-        formData.append('file', file.file)
-        request({
-          url: this.MixinUploadApi,
-          method: Method.POST,
-          headers: { 'Content-Type': 'multipart/form-data' },
-          data: formData
-        }).then(response => {
-          cm.images.push(response.url)
+        lrz(file.file).then(async rst => {
+          const res = await request({
+            url: this.MixinUploadApi,
+            method: Method.POST,
+            headers: { 'Content-Type': 'multipart/form-data' },
+            data: rst.formData
+          })
+          res && cm.images.push(res.url)
         })
       },
       submitForm() {

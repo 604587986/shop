@@ -86,7 +86,8 @@ module.exports = {
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/element-ui', ssr: true },
     { src: '~plugins/address-selector', ssr: false },
-    { src: '~plugins/vue-swiper', ssr: false }
+    { src: '~plugins/vue-swiper', ssr: false },
+    { src: '~plugins/vue-cropper', ssr: false }
   ],
   router: {
     middleware: 'auth-site',
