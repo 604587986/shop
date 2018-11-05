@@ -22,14 +22,20 @@
         }
         // 如果已授权，并且未登录，则去自动登录
         if (Storage.getItem('is_wechat_auth') && !Storage.getItem('refresh_token')) {
-          const res = await API_Connect.weChatAutoLogin(Storage.getItem('uuid'))
-          if (res) {
+          try {
+            const res = await API_Connect.weChatAutoLogin(Storage.getItem('uuid'))
             const { uid, access_token, refresh_token } = res
             if (res.uid && access_token && refresh_token) {
               const expires = new Date(jwt_decode(refresh_token).exp * 1000)
               Storage.setItem('uid', uid, { expires })
               this.$store.dispatch('user/setAccessTokenAction', access_token)
               this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
+            }
+          } catch (e) {
+            if (e.response.data.code === 'E133') {
+              Storage.removeItem('is_wechat_auth')
+              Storage.removeItem('uuid_connect')
+              location.href = '/'
             }
           }
         }
