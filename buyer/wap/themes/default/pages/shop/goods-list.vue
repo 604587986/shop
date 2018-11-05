@@ -86,7 +86,9 @@
         this.params.page_no = 1
         this.finished = false
         this.goodsList = []
-        this.params.category = this.$route.query.category
+        this.params = {
+          ...this.$route.query
+        }
         this.GET_GoodsList()
       }
     },
