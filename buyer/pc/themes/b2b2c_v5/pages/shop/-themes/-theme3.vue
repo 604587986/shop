@@ -82,14 +82,14 @@
         </div>
       </div>
     </div>
-    <div class="shop-intro w">
+    <div class="shop-intro w" id="shop-intro">
       <div class="intro-title">
         <h2>关于店铺</h2>
         <h3>Welcome to my shop I wish you a happy shopping</h3>
       </div>
       <div class="intro-body" v-html="shop.shop_desc || '暂无简介'"></div>
     </div>
-    <div class="shop-info">
+    <div class="shop-info" id="shop-info">
       <div class="info-title">关于本店</div>
       <div class="info-information">
         <div class="item">

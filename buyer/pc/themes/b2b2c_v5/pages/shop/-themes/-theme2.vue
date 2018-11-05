@@ -93,14 +93,14 @@
         </div>
       </div>
     </div>
-    <div class="shop-intro">
+    <div class="shop-intro" id="shop-intro">
       <div class="inner">
         <div class="service-box">
           <h2>联系客服</h2>
           <div class="service-bg"></div>
         </div>
         <div class="infomation-box">
-          <div class="item info">
+          <div class="item info" id="shop-info">
             <h3>{{ shop.shop_name }}</h3>
             <p>身份认证：身份已认证</p>
             <p>店铺认证：店铺已认证</p>

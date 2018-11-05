@@ -4,7 +4,10 @@
     <div v-if="detail" class="order-detail">
       <div class="order-items">
         <div class="order-item">
-          <span>订单编号：</span><span>{{ detail.sn }}</span>
+          <span>订单编号：</span><span>{{ detail.order_sn }}</span>
+        </div>
+        <div class="order-item">
+          <span>售后单号：</span><span>{{ detail.sn }}</span>
         </div>
         <div class="order-item">
           <span>申请时间：</span><span>{{ detail.create_time | unixToDate }}</span>

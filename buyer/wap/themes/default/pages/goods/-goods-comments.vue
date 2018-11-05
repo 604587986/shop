@@ -34,7 +34,7 @@
         @load="onLoad"
         class="comments-list"
       >
-        <div v-for="(comment, index) in comments" v-if="index < 3" :key="index" class="com-item" :class="[index === comments.length - 1 && 'last']">
+        <div v-for="(comment, index) in comments" :key="index" class="com-item" :class="[index === comments.length - 1 && 'last']">
           <div class="com-user">
             <span class="user">{{ comment.member_name }}</span>
             <span class="credit">{{ comment.grade | filterGrade }}</span>
