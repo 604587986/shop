@@ -6,10 +6,10 @@
         <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
         <el-button type="primary" class="search-btn" @click="handleSearchSales">开始搜索</el-button>
       </div>
-      <div class="conditions">
-        <span >订单金额：{{order_total}}</span>
-        <span>订单量：{{total_quantity_order}}</span>
-      </div>
+      <!--<div class="conditions">-->
+        <!--<span >订单金额：{{order_total}}</span>-->
+        <!--<span>订单量：{{total_quantity_order}}</span>-->
+      <!--</div>-->
     </div>
     <br>
     <br>
