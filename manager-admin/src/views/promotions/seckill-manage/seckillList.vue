@@ -11,7 +11,11 @@
       </div>
       <template slot="table-columns">
         <el-table-column prop="seckill_name" label="活动名称"/>
-        <el-table-column prop="start_day" :formatter="MixinUnixToDate" label="活动开始时间"/>
+        <el-table-column prop="start_day" :formatter="MixinUnixToDate" label="活动开始时间">
+          <template slot-scope="scope">
+            {{ formatterDate(scope.row.start_day) }}
+          </template>
+        </el-table-column>
         <el-table-column prop="apply_end_time" :formatter="MixinUnixToDate" label="报名截止时间"/>
         <el-table-column prop="seckill_status_text" label="状态"/>
         <el-table-column label="操作">
@@ -127,6 +131,7 @@
 
 <script>
   import * as API_Promotion from '@/api/promotion'
+  import { Foundation } from '~/ui-utils'
 
   export default {
     name: 'seckillList',
@@ -263,6 +268,11 @@
             return false
           }
         })
+      },
+
+      /** 格式化时间 */
+      formatterDate(date) {
+        return Foundation.unixToDate(date, 'yyyy-MM-dd')
       },
 
       /** 获取限时抢购列表 */
