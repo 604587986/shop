@@ -61,15 +61,7 @@ module.exports = {
       ]
     },
     plugins: [],
-    publicPath: '/',
-    // 文件名称
-    filenames: {
-      css: '[name].bundle.css',
-      manifest: '[name].bundle.js',
-      vendor: '[name].bundle.js',
-      app: '[name].bundle.js',
-      chunk: '[name].bundle.js'
-    }
+    publicPath: '/'
   },
   css: [
     '~assets/styles/normalize.css',
