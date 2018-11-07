@@ -66,12 +66,16 @@
       /** 改变日期的回调*/
       changeYearMonth(obj) {
         this.params = {
+          ...this.params,
+
           cycle_type: obj.type,
 
           year: obj.year
         }
         if (obj.type === 'MONTH') {
           this.params = {
+            ...this.params,
+
             cycle_type: obj.type,
 
             year: obj.year,
@@ -91,6 +95,15 @@
 
       /** 执行搜索 */
       handleSearch() {
+        /** 处理区域数据 */
+        let ranges = []
+        if (this.params.ranges && this.params.ranges.length) {
+          this.params.ranges.forEach((key, index) => {
+            if (index === 0) ranges.push(key[0])
+            ranges.push(key[1])
+          })
+          this.params.ranges = ranges
+        }
         this.GET_PriceStatistics()
       },
 
