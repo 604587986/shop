@@ -14,7 +14,7 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column type="selection" width="100"/>
+        <!--<el-table-column type="selection" width="100"/>-->
         <!--品牌图片-->
         <el-table-column label="品牌图片" width="150">
           <template slot-scope="scope">
@@ -37,9 +37,9 @@
           </template>
         </el-table-column>
       </template>
-      <template slot="pagination-toolbar">
+      <!--<template slot="pagination-toolbar">
         <el-button type="danger" size="mini" @click="deleteTheBrand">删除选中</el-button>
-      </template>
+      </template>-->
       <el-pagination
         v-if="tableData"
         slot="pagination"

@@ -5,7 +5,7 @@
       <div class="msg">
         <div class="text">
           <span></span>
-          <del class="old-price">¥{{ 300 | unitPrice }}</del>
+          <del class="old-price">¥{{ promotion.goods_price | unitPrice }}</del>
         </div>
         <div class="text">
           <span class="icon exchange">积分兑换</span>
