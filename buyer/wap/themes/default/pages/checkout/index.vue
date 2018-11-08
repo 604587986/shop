@@ -291,6 +291,7 @@
       handleCreateTrade() {
         /** 先调用创建订单接口，再跳转到收银台 */
         API_Trade.createTrade().then(response => {
+          this.$store.dispatch('cart/getCartDataAction')
           this.$router.replace({ path: '/checkout/cashier?trade_sn=' + response.trade_sn })
         })
       },
