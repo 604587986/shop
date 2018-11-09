@@ -450,6 +450,7 @@
       color: #81838e;
       width: 26px;
       white-space: normal;
+      word-break: break-all;
       height: auto;
     }
   }
