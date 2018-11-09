@@ -78,10 +78,10 @@
         <el-form-item label="活动时间" prop="start_day">
           <el-date-picker
             v-model="seckillForm.start_day"
-            type="datetime"
+            type="date"
             :editable="false"
             :default-time="MixinDefaultTime"
-            placeholder="选择活动时间"
+            placeholder="选择活动日期"
             value-format="timestamp"
             :picker-options="{disabledDate(time) { return time.getTime() < Date.now() - 8.64E7 }}">
           </el-date-picker>

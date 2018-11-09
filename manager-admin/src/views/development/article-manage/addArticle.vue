@@ -60,26 +60,18 @@
         defaultCascaderValue: []
       }
     },
+    beforeRouteUpdate(to, from, next) {
+      this.article_id = to.params.article_id
+      next()
+    },
+    activated() {
+      this.article_id = this.$route.params.article_id
+    },
+    watch: {
+      article_id: 'Get_ArticleData'
+    },
     mounted() {
-      if (this.article_id) {
-        API_Article.getArticleDetail(this.article_id).then(response => {
-          this.articleForm = response
-          let d = []
-          const { category_id } = response
-          this.articleCategoryTree.forEach(item => {
-            if (item.id === category_id) {
-              d = [item.id]
-            } else {
-              item.children && item.children.forEach(_item => {
-                if (_item.id === category_id) {
-                  d = [item.id, _item.id]
-                }
-              })
-            }
-          })
-          this.defaultCascaderValue = d
-        })
-      }
+      if (this.article_id) this.Get_ArticleData()
     },
     methods: {
       /** 当分类改变时 */
@@ -109,6 +101,26 @@
             this.$message.error('表单填写有误，请核对！')
             return false
           }
+        })
+      },
+      /** 获取文章详情 */
+      Get_ArticleData() {
+        API_Article.getArticleDetail(this.article_id).then(response => {
+          this.articleForm = response
+          let d = []
+          const { category_id } = response
+          this.articleCategoryTree.forEach(item => {
+            if (item.id === category_id) {
+              d = [item.id]
+            } else {
+              item.children && item.children.forEach(_item => {
+                if (_item.id === category_id) {
+                  d = [item.id, _item.id]
+                }
+              })
+            }
+          })
+          this.defaultCascaderValue = d
         })
       }
     }
