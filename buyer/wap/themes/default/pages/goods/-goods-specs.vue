@@ -14,7 +14,8 @@
           <img :src="selectedSpecImg.thumbnail || selectedSku.thumbnail || goods.thumbnail">
         </div>
         <i class="iconfont ea-icon-close" @click="showPopup = false"/>
-        <div class="price-header price">￥{{ selectedSku.price | unitPrice }}</div>
+        <div v-if="promotions_price" class="price-header price">{{ promotions_price }}</div>
+        <div v-else class="price-header price">￥{{ selectedSku.price | unitPrice }}</div>
         <div class="sn-header">
           <span>商品编号：</span>
           <span>{{ selectedSku.sn }}</span>
@@ -67,9 +68,10 @@
 <script>
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
+  import { Foundation } from '@/ui-utils'
   export default {
     name: 'goods-specs',
-    props: ['goods', 'show'],
+    props: ['goods', 'show', 'promotions'],
     data() {
       return {
         showPopup: false,
@@ -87,9 +89,11 @@
         // 被选中的规格图片【如果有】
         selectedSpecImg: '',
         // 没有选中sku，初始化为false
-        unselectedSku: false
+        unselectedSku: false,
         // 有规格的商品价格区间
         // priceRange: '',
+        // 活动价格
+        // promotions_price: null
       }
     },
     mounted() {
@@ -148,6 +152,42 @@
           this.selectedSku = this.skuMap.get('no_spec')
         }
       })
+    },
+    computed: {
+      // 如果有活动【限时抢购、团购、积分兑换】
+      // 无论什么规格，都只展示活动价格
+      promotions_price() {
+        const proList = ['exchange', 'groupbuy_goods_vo', 'seckill_goods_vo']
+        const { promotions } = this
+        if (!promotions) return null
+        let promotion = null
+        for (let i = 0; i < proList.length; i++) {
+          const pro = promotions.filter(item => item[proList[i]])
+          if (pro[0]) {
+            promotion = pro[0]
+            break
+          }
+        }
+        if (promotion) {
+          // 如果是积分兑换
+          if (promotion['exchange']) {
+            const pro = promotion['exchange']
+            if (pro['exchange_money'] === 0) return `${pro['exchange_point']}积分`
+            return `￥${Foundation.formatPrice(pro['exchange_money'])}+${pro['exchange_point']}积分`
+          }
+          // 如果是团购
+          if (promotion['groupbuy_goods_vo']) {
+            const pro = promotion['groupbuy_goods_vo']
+            return `￥${Foundation.formatPrice(pro['price'])}`
+          }
+          // 如果是限时抢购
+          if (promotion['seckill_goods_vo']) {
+            const pro = promotion['seckill_goods_vo']
+            return `￥${Foundation.formatPrice(pro['seckill_price'])}`
+          }
+        }
+        return null
+      }
     },
     methods: {
       /** 初始化规格 */
