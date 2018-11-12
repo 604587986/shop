@@ -253,7 +253,8 @@ export function createTrade() {
   return request({
     url: 'trade/create',
     method: Method.POST,
-    needToken: true
+    needToken: true,
+    message: false
   })
 }
 
