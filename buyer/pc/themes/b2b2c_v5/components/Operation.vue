@@ -11,15 +11,15 @@
         const { type, value } = this.opt
         switch (type) {
           // 链接地址
-          case 'URL': return opt_value
+          case 'URL': return value
           // 商品
-          case 'GOODS': return `/goods/${opt_value}`
+          case 'GOODS': return `/goods/${value}`
           // 关键字
-          case 'KEYWORD': return `/goods?keyword=${opt_value}`
+          case 'KEYWORD': return `/goods?keyword=${value}`
           // 店铺
-          case 'SHOP': return `/shop/${opt_value}`
+          case 'SHOP': return `/shop/${value}`
           // 分类
-          case 'CATEGORY': return `/goods?category=${opt_value}`
+          case 'CATEGORY': return `/goods?category=${value}`
           default: return '/'
         }
       }
