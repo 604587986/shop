@@ -69,9 +69,14 @@ export const actions = {
    */
   async nuxtServerInit({ commit, dispatch }, { req, res }) {
     if (req.headers.cookie) {
-      const cookies = Cookie.parse(req.headers.cookie)
-      const { user, site } = cookies
-      await commit('user/SET_USER_INFO', user ? global.JSON.parse(cookies.user) : '')
+      const cookies = Cookie.parse(req.headers.cookie) || {}
+      let { user } = cookies
+      try {
+        user = global.JSON.parse(user)
+      } catch (e) {
+        user = ''
+      }
+      await commit('user/SET_USER_INFO', user)
     }
     // 获取公共数据
     await dispatch('getCommonDataAction')
