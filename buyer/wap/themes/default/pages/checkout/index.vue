@@ -169,6 +169,12 @@
       />
     </van-dialog>
     <!--订单备注dialog end-->
+    <van-actionsheet v-model="showErrorActionsheet" :title="errorActionsheetMessage">
+      <div v-for="(goods, index) in errorActionsheetData" :key="index" class="error-goods-item">
+        <img :src="goods.image" :alt="goods.name" class="error-goods-image">
+        <h5 class="error-goods-name">{{ goods.name }}</h5>
+      </div>
+    </van-actionsheet>
   </div>
 </template>
 
@@ -218,7 +224,13 @@
         // 显示订单备注弹窗
         showRemarkDialog: false,
         // 订单备注暂缓区
-        remark: ''
+        remark: '',
+        // 显示错误actionsheet
+        showErrorActionsheet: false,
+        // 错误actionsheet消息
+        errorActionsheetMessage: '',
+        // 错误actionsheet数据
+        errorActionsheetData: []
       }
     },
     async mounted() {
@@ -257,7 +269,6 @@
       /** 使用优惠券 */
       handleCouponChanged(coupon) {
         this.coupon_price = coupon.coupon_price
-        // console.log(coupon)
         this.GET_TotalPrice()
       },
       /** 发票信息发生改变 */
@@ -293,6 +304,16 @@
         API_Trade.createTrade().then(response => {
           this.$store.dispatch('cart/getCartDataAction')
           this.$router.replace({ path: '/checkout/cashier?trade_sn=' + response.trade_sn })
+        }).catch(error => {
+          const { data } = error.response || {}
+          if (data.code === '452') {
+            const list = data.data || "[]"
+            this.errorActionsheetMessage = data.message
+            this.errorActionsheetData = JSON.parse(list)
+            this.showErrorActionsheet = true
+          } else {
+            this.$message.error(data.message)
+          }
         })
       },
       /** 获取结算金额 */
@@ -532,6 +553,24 @@
       overflow: hidden;
       text-overflow:ellipsis;
       white-space: nowrap;
+    }
+    .error-goods-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .error-goods-image {
+      width: 80px;
+      height: 80px;
+      margin: 0 10px;
+    }
+    .error-goods-name {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      color: red;
     }
   }
 </style>

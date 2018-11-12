@@ -135,6 +135,28 @@
         API_Trade.createTrade().then(response => {
           this.$store.dispatch('cart/getCartDataAction')
           this.$router.push({ path: '/checkout/cashier?trade_sn=' + response.trade_sn })
+        }).catch(error => {
+          const { data } = error.response || {}
+          if (data.code === '452') {
+            const list = data.data || "[]"
+            let content = ''
+            JSON.parse(list).forEach(item => {
+              content += `
+              <div style="display:flex;align-items:center;margin:10px 0;">
+                <img src="${item.image}" alt="${item.name}" style="width:80px;height:80px;margin:0 10px;">
+                <h5 style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 3;overflow: hidden;color: red;">${item.name}</h5>
+              </div>`
+            })
+            this.$layer.open({
+              type: 1,
+              title: data.message || '提示',
+              area: ['420px', '240px'],
+              scrollbar: false,
+              content
+            })
+          } else {
+            this.$message.error(data.message)
+          }
         })
       },
       /** 获取可用店铺优惠券 */

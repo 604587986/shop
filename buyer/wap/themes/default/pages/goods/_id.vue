@@ -42,6 +42,7 @@
       <goods-specs
         :goods="goods"
         :show="showSpecsPopup"
+        :promotions="promotions"
         @sku-changed="(sku) => { selectedSku = sku }"
         @num-changed="(num) => { buyNum = num }"
         @add-cart="handleAddToCart"

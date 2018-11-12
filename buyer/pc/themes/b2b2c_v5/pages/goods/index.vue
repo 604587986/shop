@@ -149,6 +149,7 @@
                 <div class="gl-shop">
                   <span>
                     <a :href="'/shop/' + goods.seller_id" :title="goods.seller_name">{{ goods.seller_name }}<i class="iconfont ea-icon-shop" title="进入店铺"></i></a>
+                    <i v-if="goods.self_operated === 1" class="self-icon">自营</i>
                   </span>
                 </div>
               </div>
@@ -736,5 +737,20 @@
   }
   .fade-enter, .fade-leave {
     opacity: 0;
+  }
+  .self-icon {
+    height: 16px;
+    line-height: 16px;
+    padding: 1px 4px;
+    margin-right: 3px;
+    overflow: hidden;
+    text-align: center;
+    font-style: normal;
+    font-size: 12px;
+    font-family: "Helvetica Neue","Hiragino Sans GB",SimSun,serif;
+    background: $color-main;
+    color: #FFF;
+    cursor: default;
+    border-radius: 2px;
   }
 </style>

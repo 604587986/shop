@@ -10,9 +10,17 @@
       toPage() {
         const { type, value } = this.opt
         switch (type) {
-          case 'goods-sn': return `/goods/${value}`
-          case 'keyword': return `/goods-list?keyword=${value}`
-          default: return ''
+          // 链接地址
+          case 'URL': return value
+          // 商品
+          case 'GOODS': return `/goods/${value}`
+          // 关键字
+          case 'KEYWORD': return `/goods?keyword=${value}`
+          // 店铺
+          case 'SHOP': return `/shop/${value}`
+          // 分类
+          case 'CATEGORY': return `/goods?category=${value}`
+          default: return '/'
         }
       }
     }
