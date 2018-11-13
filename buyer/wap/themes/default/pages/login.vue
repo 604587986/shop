@@ -254,13 +254,14 @@
           }
           const _this = this
           // 登录回调
-          function loginCallback(response) {
+          async function loginCallback(response) {
             if (response.result === 'bind_success') {
               const { uid, access_token, refresh_token } = response
               _this.$store.dispatch('user/setAccessTokenAction', access_token)
               _this.$store.dispatch('user/setRefreshTokenAction', refresh_token)
               const expires = new Date(jwt_decode(refresh_token).exp * 1000)
               Storage.setItem('uid', uid, { expires })
+              await _this.getUserData()
               if (_this.MixinIsWeChatBrowser()) {
                 window.location.href = '/'
                 return
