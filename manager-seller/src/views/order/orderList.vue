@@ -371,6 +371,7 @@
           flex-wrap: nowrap;
           justify-content: flex-start;
           align-items: center;
+          padding: 10px 0;
           img {
             display: block;
             margin-right: 10px;

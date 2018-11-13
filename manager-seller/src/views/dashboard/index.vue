@@ -119,7 +119,7 @@
             <h2>可以致电平台联系电话或将建议、问题提交到平台邮箱中</h2>
           </div>
           <ul class="platform-concate">
-            <li v-for="item in concat" v-if="concat && item">{{ item.name }}: {{ item.context }}</li>
+            <li v-if="concat"><span>{{ concat.article_name }} </span>：<span v-html="concat.content"></span></li>
           </ul>
         </el-card>
       </el-col>
@@ -476,9 +476,20 @@ export default {
     padding: 0;
     li {
       list-style: none;
-      margin: auto 8px;
+      margin: 0;
       color: #aaa;
       font: 12px/16px "microsoft yahei";
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      span {
+        display: inline-block;
+        /deep/ p {
+          margin: 0;
+        }
+      }
     }
   }
 </style>
