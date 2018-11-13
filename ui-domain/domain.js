@@ -16,9 +16,9 @@ module.exports = {
   },
   // 生产环境
   pro: {
-    buyer_pc : 'http://buyer.javamall.com.cn',
-    buyer_wap: 'http://m.buyer.javamall.com.cn',
-    seller   : 'http://seller.javamall.com.cn',
-    admin    : 'http://admin.javamall.com.cn',
+    buyer_pc : 'https://buyer.javamall.com.cn',
+    buyer_wap: 'https://wap.javamall.com.cn',
+    seller   : 'https://seller.javamall.com.cn',
+    admin    : 'https://admin.javamall.com.cn',
   }
 }
