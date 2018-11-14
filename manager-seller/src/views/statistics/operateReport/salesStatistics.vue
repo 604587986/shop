@@ -6,10 +6,10 @@
         <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
         <el-button type="primary" class="search-btn" @click="handleSearchSales">开始搜索</el-button>
       </div>
-      <!--<div class="conditions">-->
-        <!--<span >订单金额：{{order_total}}</span>-->
-        <!--<span>订单量：{{total_quantity_order}}</span>-->
-      <!--</div>-->
+      <div class="conditions">
+        <span >订单金额：{{ order_total | unitPrice('¥')  }}</span>
+        <span>订单量：{{ total_quantity_order }}</span>
+      </div>
     </div>
     <br>
     <br>
@@ -107,6 +107,7 @@
     mounted() {
       this.GET_OrderTotaltChart()
       this.GET_OrderGoodsData()
+      this.getSummary()
       window.onresize = this.countTableHeight
       this.$nextTick(() => {
         this.orderAmountChart = this.$echarts.init(document.getElementById('orderAmount'))
@@ -114,6 +115,14 @@
       })
     },
     methods: {
+      /** 获取数据小结 */
+      getSummary() {
+        API_salesStatistics.getSalesStatisticsSummary(this.params).then(response => {
+          this.order_total = response.order_price
+          this.total_quantity_order = response.order_num
+        })
+      },
+
       /** 改变日期的回调*/
       changeYearMonth(obj) {
         this.params = {
@@ -145,6 +154,7 @@
         } else {
           this.GET_OrderGoodsNumData()
         }
+        this.getSummary()
       },
 
       /** 搜索触发*/
@@ -155,6 +165,7 @@
           this.GET_OrderGoodsNumData()
         }
         this.GET_OrderGoodsData()
+        this.getSummary()
       },
 
       /** 下单量图表数据*/
