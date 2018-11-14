@@ -403,7 +403,7 @@
 
         // 2s 之后加载完整数据 用来加快弹框加载显示
         setTimeout(() => {
-          this.fromData = this.staticData
+          this.fromData = JSON.parse(JSON.stringify(this.staticData))
         }, 2000)
       },
 
@@ -669,6 +669,8 @@
         this.activeName = 'add'
         this.tplOperaName = '修改模版'
         API_express.getSimpleTpl(row.id).then((response) => {
+          // 重置初始数据 防止重复编辑的情况下出错
+          this.fromData = JSON.parse(JSON.stringify(this.staticData))
           // 计算编辑地区
           response.items.forEach(key => {
             key.area = typeof key.area === 'string' ? JSON.parse(key.area) : key.area
@@ -695,6 +697,7 @@
           this.lastFromData = JSON.parse(JSON.stringify(this.fromData))
           this.mouldForm = { ...response }
           // 初始化过滤地区
+          this.filterData = []
           response.items.forEach(key => {
             this.filterData.push(JSON.parse(JSON.stringify(key.area)))
           })
@@ -768,7 +771,7 @@
           }
         }
 
-        if (model.level === 3) { // 此处怀疑有问题，但是没有发现 。。。mmp
+        if (model.level === 3) { // 此处怀疑逻辑有问题，但是没有发现，可能是我神经质了把。。。mmp
           if (_resultlevel3 <= 1 && (!this.lastFromData[model.parent_id] || !this.lastFromData[model.parent_id].children[model.id])) {
             isSelectAll = true
           }
