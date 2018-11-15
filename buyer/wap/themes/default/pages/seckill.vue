@@ -62,74 +62,6 @@
         </div>
       </van-list>
     </div>
-    <!--<div class="inner-timeline w">
-      <ul class="timeline-list">
-        <li
-          v-for="(timeLine, index) in timeLines"
-          :key="index"
-          :class="['timeline-item', , timeLine.active && 'active']"
-          @click="handleClickTimeLine(index, timeLine)"
-        >
-          <a href="javascript:;" class="main-timeline-item">
-            <div class="timeline-wrap">
-              <div class="line-timeline"><i>{{ timeLine.time_text }}:00</i></div>
-              <div class="next-timeline"><i>{{ timeLine.distance_time === 0 ? '在在抢购' : '即将开始' }}</i></div>
-              <div class="time-timeline">
-                <b class="b-text">{{ timeLine.distance_time === 0 ? '正在抢购' : '即将开始' }}</b>
-                <b class="b-time">{{ timeLine.distance_time === 0 ? (onlyOne ? '距结束' : '距下一轮') : '距开始' }}<i>{{ timesText[index].hours }}</i>:<i>{{ timesText[index].minutes }}</i>:<i>{{ timesText[index].seconds }}</i></b>
-              </div>
-            </div>
-          </a>
-        </li>
-        <template v-if="timeLines.length < 5">
-          <li
-            v-for="i in (5 - timeLines.length)"
-            :key="i + '_pla'"
-            class="timeline-item"
-          >
-            <a href="javascript:;" class="main-timeline-item">
-              <div class="timeline-wrap">
-                <div class="line-timeline"></div>
-                <div class="next-timeline"></div>
-                <div class="time-timeline">
-                  <b class="b-text"></b>
-                  <b class="b-time"></b>
-                </div>
-              </div>
-            </a>
-          </li>
-        </template>
-      </ul>
-    </div>-->
-    <!--<div class="seckill-goods w">
-      <ul class="seckill-list">
-        <li v-for="(goods, index) in goodsList.data" :key="index" class="goods-item">
-          <a :href="'/goods/' + goods.goods_id" class="link-goods-item">
-            <img class="goods-img" :src="goods.goods_image" :alt="goods.goods_name">
-            <h4 class="goods-name">{{ goods.goods_name }}</h4>
-          </a>
-          <div :class="['info-goods-item', !seckillIsStart && 'no-start']">
-            <div class="goods-price">
-              <span class="price">
-                <em>￥</em>{{ goods.seckill_price | unitPrice }} <span class="goods-org-price">{{ goods.original_price | unitPrice }}</span>
-              </span>
-              <span v-if="seckillIsStart" class="progress">
-                <i class="progress-txt">已售{{ countProgress(goods) }}%</i>
-                <i class="progress-inner">
-                  <b class="progress-completed" :style="{width: countProgress(goods) + '%'}"></b>
-                </i>
-              </span>
-              <span v-else class="tip">限时抢购 抢先提醒</span>
-            </div>
-            <a
-              :href="'/goods/' + goods.goods_id"
-              class="buy-btn"
-              target="_blank"
-            >{{ seckillIsStart ? '立即抢购' : '即将开始' }}</a>
-          </div>
-        </li>
-      </ul>
-    </div>-->
   </div>
 </template>
 
@@ -223,8 +155,9 @@
             })
             return false
           }
-          this.params.range_time = response[0].time_text
           response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
+          response = response.slice(0, 5)
+          this.params.range_time = response[0].time_text
           const times = []
           const timesText = []
           const onlyOne = response.length === 1
