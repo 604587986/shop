@@ -153,7 +153,7 @@
     mounted() {
       this.changeValidCodeUrl()
       const uuid_connect = Storage.getItem('uuid_connect')
-      const isConnect = this.$route.query.form === 'connect' && !!uuid_connect
+      const isConnect = (this.$route.query.form === 'connect' && !!uuid_connect) || this.MixinIsWeChatBrowser()
       this.isConnect = isConnect
     },
     methods: {
