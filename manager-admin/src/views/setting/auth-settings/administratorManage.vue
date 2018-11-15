@@ -222,7 +222,7 @@
               API_Auth.editAdministrator(id, params).then(response => {
                 this.dialogVisible = false
                 this.$message.success('修改成功！')
-                this.MixinSetTableData(this.tableData, 'id', id, response)
+                this.GET_AdministratorList()
               })
             } else {
               API_Auth.addAdministrator(params).then(() => {
