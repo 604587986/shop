@@ -14,7 +14,7 @@
         @load="onLoad"
       >
         <div class="coupon-item content-unavailable show" v-for="(coupon, index) in couponsList" :key="index" :class="[coupon.used_status === 1 && 'used', coupon.used_status === 2 && 'overdue']">
-          <div class="inner-coupon"  :class="[tabActive === 1 && 'unavailable']">
+          <div class="inner-coupon" :class="[tabActive === 1 && 'unavailable']">
             <div class="par">
               <p>{{ coupon.title }}</p>
               <sub class="sign">￥</sub><span>{{ coupon.coupon_price | unitPrice }}</span>
