@@ -469,17 +469,18 @@
       .ea-icon-right-bottom-checked{ display: block }
     }
     &.spec-image {
-      width: 50px;
-      height: 50px;
-      margin-bottom: 25px;
-      background-color: #fff;
-      img { width: 100%; height: 100% }
+      float: left;
+      padding: 2px 5px;
+      margin-bottom: 5px;
+      background-color: #F7F7F7;
+      img {
+        width: 40px;
+        height: 40px;
+        vertical-align: middle;
+      }
       .spec-text {
-        position: absolute;
-        width: 100%;
-        bottom: -20px;
-        left: 50%;
-        margin-left: -23px;
+        line-height: 50px;
+        color: #666
       }
     }
     .ea-icon-right-bottom-checked {
