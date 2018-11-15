@@ -218,6 +218,7 @@
             const { id } = this.adminForm
             const params = this.MixinClone(this.adminForm)
             if (params.password) params.password = md5(params.password)
+            if (!params.real_name) delete params.real_name
             if (id) {
               API_Auth.editAdministrator(id, params).then(response => {
                 this.dialogVisible = false
