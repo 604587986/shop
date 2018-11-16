@@ -183,9 +183,10 @@
             })
             return false
           }
+          response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
+          response = response.slice(0, 5)
           this.params.range_time = response[0].time_text
           this.GET_TimeLineGoods()
-          response = response.sort((x, y) => (Number(x.time_text) > Number(y.time_text)))
           const times = []
           const timesText = []
           const onlyOne = response.length === 1
