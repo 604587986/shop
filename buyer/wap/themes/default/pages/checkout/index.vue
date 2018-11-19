@@ -307,9 +307,9 @@
         }).catch(error => {
           const { data } = error.response || {}
           if (data.code === '452') {
-            const list = data.data || "[]"
+            const { data: list } = data
             this.errorActionsheetMessage = data.message
-            this.errorActionsheetData = JSON.parse(list)
+            this.errorActionsheetData = typeof (list) === 'string' ? JSON.parse(list) : list
             this.showErrorActionsheet = true
           } else {
             this.$message.error(data.message)
