@@ -4,7 +4,7 @@
       <swiper :options="swiperOption">
         <swiper-slide v-for="(block, index) in data.blockList" :key="index">
           <layout-item
-            :block="data"
+            :block="block"
             :isEdit="isEdit"
             :blockHref="blockHref"
             @handle-edit="handleEditBlock(index)"

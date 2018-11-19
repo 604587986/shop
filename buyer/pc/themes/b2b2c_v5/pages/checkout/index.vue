@@ -138,9 +138,10 @@
         }).catch(error => {
           const { data } = error.response || {}
           if (data.code === '452') {
-            const list = data.data || "[]"
+            let { data: list } = data
+            list = typeof (list) === 'string' ? JSON.parse(data) : list
             let content = ''
-            JSON.parse(list).forEach(item => {
+            list.forEach(item => {
               content += `
               <div style="display:flex;align-items:center;margin:10px 0;">
                 <img src="${item.image}" alt="${item.name}" style="width:80px;height:80px;margin:0 10px;">
