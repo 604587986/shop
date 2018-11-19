@@ -5,8 +5,8 @@
       <van-tab v-for="(item, index) in performance" :key="index" :title="item.title">
         <!--结算单信息-->
         <div class="settlement-total-container">
-          <span>本期佣金:<span class="color-red">{{ settlementTotal.push_money | unitPrice('¥') }}</span></span>
-          <span>订单佣金:<span class="color-red">{{ settlementTotal.final_money | unitPrice('¥') }}</span></span>
+          <span>本期佣金:<span class="color-red">{{ settlementTotal.final_money | unitPrice('¥') }}</span></span>
+          <span>订单佣金:<span class="color-red">{{ settlementTotal.push_money | unitPrice('¥') }}</span></span>
           <span>退单佣金返还:<span class="color-red">{{ settlementTotal.return_push_money | unitPrice('¥') }}</span></span>
         </div>
 
