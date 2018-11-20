@@ -574,6 +574,9 @@
         if (!row.ship_no) {
           this.$message.error('请填写快递单号')
           return
+        } else if (!/^[A-Za-z0-9]+$/.test(row.ship_no)) {
+          this.$message.error('快递单号不符合规则，请输入字母或者数字')
+          return
         }
         const _params = {
           /** 发货单号 */
