@@ -135,7 +135,7 @@
             { required: true, message: '请输入管理员密码！', trigger: 'bulr' },
             {
               validator: (rule, value, callback) => {
-                if (this.adminForm.id && !RegExp.password.test(value)) {
+                if (value && !RegExp.password.test(value)) {
                   callback(new Error('密码格式错误！'))
                 } else {
                   callback()
