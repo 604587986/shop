@@ -63,7 +63,7 @@
             :limit="1"
           >
             <el-button size="small" type="primary">点击上传</el-button>
-            <span slot="tip" class="el-upload__tip">&nbsp;只能上传jpg/png文件，且不超过500kb</span>
+            <span slot="tip" class="el-upload__tip">&nbsp;建议上传jpg/png文件，且不超过1MB</span>
           </el-upload>
         </el-form-item>
         <el-form-item label="原密码" prop="old_passwprd">

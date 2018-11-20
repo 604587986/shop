@@ -47,7 +47,7 @@
             :file-list="paymentForm.image ? [{name: 'payment_image', url: paymentForm.image}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">建议上传jpg/png文件，且不超过1MB</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="原路退回" prop="is_retrace">
