@@ -4,6 +4,8 @@
       <div slot="header" class="clearfix">
         <span>结算单详细信息</span>
         <el-button type="primary" size="mini" @click="handleExportBill" style="margin-left: 10px">导出结算单</el-button>
+        <el-button v-if="settlement.operate_allowable.allow_auth" type="primary" size="mini" @click="handleNextOperate">通过审核</el-button>
+        <el-button v-if="settlement.operate_allowable.allow_pay" type="primary" size="mini" @click="handleNextOperate">确认付款</el-button>
       </div>
       <el-row :gutter="0">
         <el-col :span="4">结算单号</el-col>
@@ -255,6 +257,15 @@
       handlePageCurrentChangeRefund(page_no) {
         this.params_refund.page_no = page_no
         this.GET_SettlementRefundList()
+      },
+      /** 对结算单进行下一步操作 【通过审核、确认付款】 */
+      handleNextOperate() {
+        this.$confirm('确定进行此操作吗？', '提示', { type: 'warning' }).then(() => {
+          API_Order.operateSettlement(this.settlement.bill_id).then(() => {
+            this.$message.success('操作成功！')
+            this.GET_SettlementDetail()
+          })
+        }).catch(() => {})
       },
       /** 获取售后订单详情 */
       GET_SettlementDetail() {
