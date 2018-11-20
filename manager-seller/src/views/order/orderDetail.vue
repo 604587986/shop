@@ -7,7 +7,12 @@
         <el-collapse-item title="订单信息" name="order">
           <div class="order-item">
             <span class="item-name">收货地址：</span>
-            <span class="item-value">{{ orderDetail.ship_addr }}</span>
+            <span class="item-value">
+              {{ orderDetail.ship_province }}
+              {{ orderDetail.ship_city }}
+              {{ orderDetail.ship_county }}
+              {{ orderDetail.ship_addr }}
+            </span>
           </div>
           <div class="order-item">
             <span class="item-name">收货人：</span>
@@ -26,6 +31,10 @@
           <div class="order-item">
             <span class="item-name">付款方式：</span>
             <span class="item-value">{{ orderDetail.payment_type | paymentTypeFilter }}</span>
+          </div>
+          <div class="order-item">
+            <span class="item-name">付款渠道：</span>
+            <span class="item-value">{{ orderDetail.payment_method_name || '无' }}</span>
           </div>
           <div class="order-item">
             <span class="item-name">下单时间：</span>
