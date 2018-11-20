@@ -136,7 +136,7 @@
                 :on-success="handleSuccess">
                 <span style="display: none;"  v-model="baseInfoForm.goods_gallery"></span>
                 <i  class="el-icon-plus avatar-uploader-icon"></i>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png/jqeg文件，且不超过1mb</div>
+                <div slot="tip" class="el-upload__tip">建议上传jpg/png文件，且不超过1MB</div>
               </el-upload>
               <el-dialog :visible.sync="dialogImage">
                 <img width="100%" :src="dialogImageUrl" alt="">

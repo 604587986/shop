@@ -82,7 +82,7 @@ export default {
     },
     /** 用于判断表单是否为空 */
     MixinRequired(message, trigger) {
-      return { required: true, message, trigger: trigger || 'blur' }
+      return { required: true, pattern: /^\S.*$/gi, message: message + '【不能以空格开始】', trigger: trigger || 'blur' }
     },
     /** 格式化金钱 */
     MixinFormatPrice(row, column, cellValue, index) {

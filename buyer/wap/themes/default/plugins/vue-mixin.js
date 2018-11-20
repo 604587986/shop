@@ -32,7 +32,7 @@ Vue.mixin({
     },
     /** 用得比较多，放到mixin里 */
     MixinRequired(message, trigger) {
-      return { required: true, message, trigger: trigger || 'blur' }
+      return { required: true, pattern: /^\S.*$/gi, message: message + '【不能以空格开始】', trigger: trigger || 'blur' }
     },
     /** 返回上一页 */
     MixinRouterBack() {
