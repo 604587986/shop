@@ -92,7 +92,7 @@
             :file-list="adminForm.face ? [{name: 'face', url: adminForm.face}] : []"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">建议上传jpg/png文件，且不超过1MB</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="超级管理员">
@@ -135,7 +135,7 @@
             { required: true, message: '请输入管理员密码！', trigger: 'bulr' },
             {
               validator: (rule, value, callback) => {
-                if (this.adminForm.id && !RegExp.password.test(value)) {
+                if (value && !RegExp.password.test(value)) {
                   callback(new Error('密码格式错误！'))
                 } else {
                   callback()
