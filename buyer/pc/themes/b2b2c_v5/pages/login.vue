@@ -205,13 +205,13 @@
           }
           const params = JSON.parse(JSON.stringify(form))
           params.uuid = this.uuid
-          API_Connect.loginByConnect(uuid, params).then(response => {
-            this.setAccessToken(response.access_token)
-            this.setRefreshToken(response.refresh_token)
-            const expires = new Date(jwt_decode(refresh_token).exp * 1000)
-            Storage.setItem('uid', response.uid, { expires })
+          API_Connect.loginByConnect(uuid, params).then(async response => {
             if (response.result === 'bind_success') {
-              this.getUserData()
+              this.setAccessToken(response.access_token)
+              this.setRefreshToken(response.refresh_token)
+              const expires = new Date(jwt_decode(response.refresh_token).exp * 1000)
+              Storage.setItem('uid', response.uid, { expires })
+              await this.getUserData()
               Storage.removeItem('uuid_connect')
               if (forward && /^http/.test(forward)) {
                 window.location.href = forward
