@@ -35,44 +35,6 @@
         </swiper>
       </no-ssr>
     </div>
-    <!--<div class="seckill-hd">
-      <a href="/seckill" class="seckill-hd-a" target="_blank">
-        <div class="sk-title">限时抢购</div>
-        <div class="sk-sub-title">FLASH DEALS</div>
-        <i class="iconfont ea-icon-lightning sk-icon"></i>
-        <div class="sk-desc">{{ onlyOne ? '本轮距离结束还剩' : '距离下一轮开始还有' }}</div>
-        <div class="sk-time">
-          <div class="time-item"><span class="time-text">{{ times.hours }}</span></div>
-          <div class="time-item"><span class="time-text">{{ times.minutes }}</span></div>
-          <div class="time-item"><span class="time-text">{{ times.seconds }}</span></div>
-        </div>
-      </a>
-    </div>
-    <div class="seckill-bd">
-      <no-ssr>
-        <swiper :options="swiperOptions">
-          <swiper-slide v-for="(goods, index) in goodsList" :key="index" class="goods-item">
-            <a :href="'/goods/' + goods.goods_id" class="goods-item-a" target="_blank">
-              <div class="goods-item-img">
-                <img :src="goods.goods_image" :alt="goods.goods_name">
-              </div>
-              <p class="goods-item-name">{{ goods.goods_name }}</p>
-              <div class="goods-item-price">
-                <span class="goods-item-price-new">
-                  <i>¥</i>
-                  <span>{{ goods.seckill_price | unitPrice }}</span>
-                </span>
-                <span class="goods-item-price-origin">
-                  <i>¥</i><span>{{ goods.original_price | unitPrice }}</span>
-                </span>
-              </div>
-            </a>
-          </swiper-slide>
-          <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
-          <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
-        </swiper>
-      </no-ssr>
-    </div>-->
   </div>
 </template>
 
