@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const { file_version } = require('../ui-domain')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -19,17 +20,42 @@ const env = require('../config/'+process.env.env_config+'.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
-      extract: true,
+    rules: [...utils.styleLoaders({
+      sourceMap : config.build.productionSourceMap,
+      extract   : true,
       usePostCSS: true
-    })
+    }), {
+      test   : /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+      loader : 'url-loader',
+      exclude: [resolve('src/icons')],
+      options: {
+        limit: 10000,
+        name : utils.assetsPath(`img/[name].${file_version}.[ext]`)
+      }
+    },
+      {
+        test   : /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        loader : 'url-loader',
+        options: {
+          limit: 10000,
+          name : utils.assetsPath(`media/[name].${file_version}.[ext]`)
+        }
+      },
+      {
+        test   : /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader : 'url-loader',
+        options: {
+          limit: 10000,
+          name : utils.assetsPath(`fonts/[name].${file_version}.[ext]`)
+        }
+      }
+    ]
   },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    filename: utils.assetsPath(`js/[name].${file_version}.js`),
+    chunkFilename: utils.assetsPath(`js/[id].${file_version}.js`)
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -47,7 +73,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      filename: utils.assetsPath(`css/[name].${file_version}.css`),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
