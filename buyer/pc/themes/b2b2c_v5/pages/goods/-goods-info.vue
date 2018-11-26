@@ -85,6 +85,7 @@
    * 包括团购活动
    */
   import Vue from 'vue'
+  import { RegExp } from '@/ui-utils'
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
   import Storage from '@/utils/storage'
@@ -266,6 +267,7 @@
       handleBuyNow() {
         if (!this.isLogin()) return
         const { buyNum } = this
+        if (!this.handleCheckNum()) return
         const { sku_id } = this.selectedSku
         API_Trade.buyNow(sku_id, buyNum, this.getActivityId()).then(response => {
           this.$store.dispatch('cart/getCartDataAction')
@@ -276,6 +278,7 @@
       handleAddToCart() {
         if (!this.isLogin()) return
         const { buyNum } = this
+        if (!this.handleCheckNum()) return
         const { sku_id } = this.selectedSku
         API_Trade.addToCart(sku_id, buyNum, this.getActivityId()).then(response => {
           this.$store.dispatch('cart/getCartDataAction')
@@ -314,6 +317,15 @@
         }
         if (!pro) return ''
         return pro.activity_id
+      },
+      /** 检查购买数量有效性 */
+      handleCheckNum() {
+        let { buyNum } = this
+        if (!RegExp.integer.test(buyNum) || buyNum < 1) {
+          this.$message.error('购买数量格式有误，请填写正整数！')
+          return false
+        }
+        return true
       }
     }
   }
