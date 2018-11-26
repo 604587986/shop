@@ -20,36 +20,11 @@ const env = require('../config/'+process.env.env_config+'.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: [...utils.styleLoaders({
-      sourceMap : config.build.productionSourceMap,
-      extract   : true,
+    rules: utils.styleLoaders({
+      sourceMap: config.build.productionSourceMap,
+      extract: true,
       usePostCSS: true
-    }), {
-      test   : /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-      loader : 'url-loader',
-      exclude: [resolve('src/icons')],
-      options: {
-        limit: 10000,
-        name : utils.assetsPath(`img/[name].${file_version}.[ext]`)
-      }
-    },
-      {
-        test   : /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-        loader : 'url-loader',
-        options: {
-          limit: 10000,
-          name : utils.assetsPath(`media/[name].${file_version}.[ext]`)
-        }
-      },
-      {
-        test   : /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader : 'url-loader',
-        options: {
-          limit: 10000,
-          name : utils.assetsPath(`fonts/[name].${file_version}.[ext]`)
-        }
-      }
-    ]
+    })
   },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
