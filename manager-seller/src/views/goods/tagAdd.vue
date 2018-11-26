@@ -11,6 +11,9 @@
           <el-button type="primary" @click="selectgoodslist" >选择商品</el-button>
           <el-button type="danger" @click="cancelall">批量取消</el-button>
         </div>
+        <div class="toolbar-search">
+          <el-tag size="medium" v-if="tag_name">{{ tag_name }}</el-tag>
+        </div>
       </div>
       <template slot="table-columns">
         <el-table-column type="selection"/>
@@ -29,8 +32,7 @@
         </el-table-column>
         <el-table-column label="库存">
           <template slot-scope="scope">
-             <span v-if="scope.row.buy_count || scope.row.buy_count === 0">{{ scope.row.buy_count }}</span>
-             <span v-if="scope.row.quantity || scope.row.quantity === 0 ">{{ scope.row.quantity }}</span>
+             <span v-if="scope.row.enable_quantity || scope.row.enable_quantity === 0">{{ scope.row.enable_quantity }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -78,6 +80,9 @@
         /** 标签id */
         tag_id: '',
 
+        /** 标签名称 */
+        tag_name: '',
+
         /** 标签商品列表数据 */
         tableData: [],
 
@@ -107,10 +112,12 @@
     },
     beforeRouteUpdate(to, from, next) {
       this.params.tag_id = this.tag_id = to.params.tag_id
+      this.tag_name = to.query.tag_name
       next()
     },
     activated() {
       this.params.tag_id = this.tag_id = this.$route.params.tag_id
+      this.tag_name = this.$route.query.tag_name
     },
     methods: {
       /**  显示商品选择器*/
