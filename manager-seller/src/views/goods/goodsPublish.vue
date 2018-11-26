@@ -90,6 +90,18 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="是否为服务">
+                <el-radio-group v-model="baseInfoForm.is_services">
+                  <el-radio :label="0">不是</el-radio>
+                  <el-radio :label="1">是</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="是否有补贴">
+                <el-radio-group v-model="baseInfoForm.is_bu_tie">
+                  <el-radio :label="0">不是</el-radio>
+                  <el-radio :label="1">是</el-radio>
+                </el-radio-group>
+            </el-form-item>
           </div>
         </div>
         <!--商品信息-->
@@ -114,6 +126,16 @@
             </el-form-item>
             <el-form-item label="成本价格：" prop="cost" >
               <el-input placeholder="请输入成本价格" v-model="baseInfoForm.cost">
+                <template slot="prepend">¥</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="定金：" prop="first_money" v-if="baseInfoForm.is_services">
+              <el-input placeholder="请输入定金价格" v-model="baseInfoForm.first_money">
+                <template slot="prepend">¥</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="尾款：" prop="end_money" v-if="baseInfoForm.is_services">
+              <el-input placeholder="请输入尾款价格" v-model="baseInfoForm.end_money">
                 <template slot="prepend">¥</template>
               </el-input>
             </el-form-item>
@@ -376,6 +398,32 @@
         }, 1000)
       }
 
+      const checkFirstMoney = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('定金价格不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(value)) {
+            callback(new Error('请输入正整数或者两位小数'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+
+      const checkEndMoney = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('尾款价格不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(value)) {
+            callback(new Error('请输入正整数或者两位小数'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+
       const checkCost = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('成本价格不能为空'))
@@ -476,9 +524,19 @@
 
         /** 商品详情信息提交表单 */
         baseInfoForm: {
+          /** 是否为服务 */
+          is_services:0,
+          /** 是否有补贴 */
+          is_bu_tie:0,
 
           /** 品牌id */
           brand_id: '',
+
+          /** 定金 */
+          first_money:'',
+
+          /** 尾款 */
+          end_money:'',
 
           /** 商城分类id */
           category_id: 0,
@@ -649,7 +707,15 @@
           ],
           exchange_point: [
             { validator: checkExchangePoint, trigger: 'blur' }
-          ]
+          ],
+          first_money: [
+            { required: true, message: '请填写定金', trigger: 'blur' },
+            { validator: checkFirstMoney, trigger: 'blur' }
+          ],
+          end_money: [
+            { required: true, message: '请填写尾款', trigger: 'blur' },
+            { validator: checkEndMoney, trigger: 'blur' }
+          ],
         }
       }
     },

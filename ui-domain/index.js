@@ -4,7 +4,7 @@ const domain = require('./domain')
 // 文件版本号
 const file_version = 'v1.0'
 // 后台提供的API模式【dev|pro】
-const api_model = 'pro'
+const api_model = 'dev'
 // 当前前台是否为开发模式
 const is_dev = process.env.NODE_ENV === 'development'
 
