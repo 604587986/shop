@@ -10,7 +10,7 @@
       >
         <h5 class="item-title">营业执照信息</h5>
         <el-form-item label="法定代表人姓名：" prop="legal_name">
-          <el-input v-model.trim="authInfoForm.legal_name" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.legal_name" :maxlength="20" clearable></el-input>
         </el-form-item>
         <el-form-item label="法定代表人身份证：" prop="legal_id">
           <el-input v-model.trim="authInfoForm.legal_id" :maxlength="18" clearable></el-input>
@@ -28,13 +28,13 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="营业执照编号：" prop="license_num">
-          <el-input v-model.trim="authInfoForm.license_num" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.license_num" :maxlength="30" clearable></el-input>
         </el-form-item>
         <el-form-item label="营业执照所在地：" prop="license_region">
           <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { authInfoForm.license_region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="营业执照详细地址：" prop="license_add">
-          <el-input v-model.trim="authInfoForm.license_add" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.license_add" :maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item label="成立日期：" prop="establish_date">
           <el-date-picker
@@ -67,7 +67,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="法定经营范围：" prop="scope">
-          <el-input v-model.trim="authInfoForm.scope" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.scope" :maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item label="营业执照电子版：" prop="licence_img">
           <el-upload
@@ -83,7 +83,7 @@
         </el-form-item>
         <h5 class="item-title">组织机构代码证</h5>
         <el-form-item label="组织机构代码：" prop="organization_code">
-          <el-input v-model.trim="authInfoForm.organization_code" clearable></el-input>
+          <el-input v-model.trim="authInfoForm.organization_code" :maxlength="50" clearable></el-input>
         </el-form-item>
         <el-form-item label="组织机构代码证电子版：" prop="code_img">
           <el-upload

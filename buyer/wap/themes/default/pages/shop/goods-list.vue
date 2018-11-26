@@ -69,7 +69,7 @@
           { title: '默认', name: 'def', type: 'asc', active: true },
           { title: '销量', name: 'buynum', type: 'asc', active: false },
           { title: '价格', name: 'price', type: 'asc', active: false },
-          { title: '评价', name: 'grade', type: 'asc', active: false },
+          { title: '好评率', name: 'grade', type: 'asc', active: false },
         ],
         shop: '',
         goodsList: [],

@@ -50,7 +50,7 @@
                     </div>
                     <div class="sku-num">
                       <a class="sku-symbol symbol-less minus unable" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '-')">-</a>
-                      <input type="tel" class="sku-num-input" size="4" :value="sku.num" maxlength="4" readonly>
+                      <input type="tel" class="sku-num-input" size="4" :value="sku.num" maxlength="4" @change="handleUpdateSkuNum(sku, $event)">
                       <a class="sku-symbol symbol-add add" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '+')">+</a>
                     </div>
                   </div>
@@ -138,13 +138,26 @@
       },
       /** 更新商品数量 */
       handleUpdateSkuNum(sku, symbol) {
-        if (symbol === '-' && sku.num < 2) return
-        if (symbol === '+' && sku.num >= sku.enable_quantity) {
-          this.$message.error('超过最大库存！')
-          return
+        if (typeof symbol !== 'string') {
+          let _num = parseInt(symbol.target.value)
+          if (isNaN(_num) || _num < 1) {
+            this.$message.error('输入格式有误，请输入正整数！')
+            return
+          }
+          if (_num >= sku.enable_quantity) {
+            this.$message.error('超过最大库存！')
+            return
+          }
+          this.updateSkuNum({sku_id: sku.sku_id, num: _num})
+        } else {
+          if (symbol === '-' && sku.num < 2) return
+          if (symbol === '+' && sku.num >= sku.enable_quantity) {
+            this.$message.error('超过最大库存！')
+            return
+          }
+          let _num = symbol === '+' ? sku.num + 1 : sku.num - 1
+          this.updateSkuNum({sku_id: sku.sku_id, num: _num})
         }
-        let _num = symbol === '+' ? sku.num + 1 : sku.num - 1
-        this.updateSkuNum({sku_id: sku.sku_id, num: _num})
       },
       /** 输入框被焦点【记录当前值】 */
       handleSkuNumFocus(sku) {

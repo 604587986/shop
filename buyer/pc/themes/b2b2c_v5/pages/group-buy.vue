@@ -21,17 +21,17 @@
             <h3 class="gb-title">
               <a target="_blank" :href="'/goods/' + gb.goods_id" :title="gb.gb_name">{{ gb.gb_name }}</a>
             </h3>
-            <p class="gn-sub-title">{{ gb.gb_title }}</p>
+            <p class="gb-sub-title">{{ gb.gb_title }}</p>
             <div class="group_price">
               <span class="price" :title="'￥' + gb.price"><i>¥</i>{{ gb.price }}</span>
-              <div class="dock">
-                <span class="group_discount">{{(gb.price / gb.original_price * 10).toFixed(1) }}&nbsp;折</span>
-                <del class="group_price">¥{{ gb.original_price }}</del>
-              </div>
               <span class="group_num"><em>{{ gb.show_buy_num }}</em>件已购买</span>
               <a class="buy-button" target="_blank" :href="'/goods/' + gb.goods_id">
                 我要团
               </a>
+            </div>
+            <div class="group_dock">
+              <span class="group_discount">{{(gb.price / gb.original_price * 10).toFixed(1) }}&nbsp;折</span>
+              <del class="group_price">¥{{ gb.original_price }}</del>
             </div>
           </div>
         </li>
@@ -188,18 +188,20 @@
   .gb-title {
     display: block;
     width: 100%;
-    max-height: 38px;
+    max-height: 20px;
+    min-height: 20px;
     margin: 10px auto 0 auto;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     overflow: hidden;
   }
-  .gn-sub-title {
+  .gb-sub-title {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     overflow: hidden;
+    min-height: 18px;
   }
   .group_price {
     margin-top: 15px;
@@ -209,9 +211,9 @@
     .price {
       font: 700 28px/30px "microsoft yahei", Arial;
       color: $color-main;
+      max-width: 200px;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 125px;
       height: 36px;
       float: left;
       overflow: hidden;
@@ -223,32 +225,6 @@
         display: inline-block;
         margin-right: 2px;
         zoom: 1;
-      }
-    }
-    .dock {
-      width: 70px;
-      height: 40px;
-      float: left;
-      margin-left: 8px;
-      position: relative;
-      .group_discount {
-        font: 600 12px/20px "microsoft yahei";
-        color: #C30;
-        width: 50px;
-        height: 20px;
-        padding: 2px 0 1px 12px;
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-      .group_price {
-        line-height: 16px;
-        display: block;
-        position: absolute;
-        bottom: 0;
-        left: 8px;
-        z-index: 1;
-        overflow: hidden;
       }
     }
     .group_num {
@@ -281,6 +257,19 @@
       opacity: 0;
       filter: alpha(opacity=0)/*IE*/;
       transition: opacity 0.4s ease-in-out 0s;
+    }
+  }
+  .group_dock {
+    margin-left: 8px;
+    position: relative;
+    .group_discount {
+      font: 600 12px/20px "microsoft yahei";
+      color: #C30;
+    }
+    .group_price {
+      margin-left: 10px;
+      line-height: 16px;
+      overflow: hidden;
     }
   }
   /deep/ .el-pagination {

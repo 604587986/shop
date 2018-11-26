@@ -205,9 +205,17 @@
       }
     },
     destroyed() {
-      // 当组件销毁时，移除百度分享创建的script标签
-      const bdss = document.getElementById('BdShareScript')
-      if (bdss) bdss.remove()
+      // 当组件销毁时，移除百度分享创建的标签
+      const removeIds = ['BdShareScript', 'bdshare_weixin_qrcode_dialog_bg', 'bdshare_weixin_qrcode_dialog']
+      const removeClass = ['bdshare_dialog_box', 'bdshare_dialog_bg', 'bdshare_popup_box']
+      removeIds.forEach(id => {
+        const ele = $('#' + id)
+        ele.length && ele.remove()
+      })
+      removeClass.forEach(cl => {
+        const ele = $('.' + cl)
+        ele.length && ele.remove()
+      })
     }
   }
 </script>

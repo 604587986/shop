@@ -139,6 +139,10 @@
           const { data } = error.response || {}
           if (data.code === '452') {
             let { data: list } = data
+            if (!list || list[0]) {
+              this.$message.error(data.message)
+              return
+            }
             list = typeof (list) === 'string' ? JSON.parse(data) : list
             let content = ''
             list.forEach(item => {

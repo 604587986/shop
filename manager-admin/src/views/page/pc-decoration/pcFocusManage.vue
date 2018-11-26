@@ -62,8 +62,8 @@
         this.dialogImageShow = true
       },
       /** 编辑焦点图 */
-      handleEditFocus(focus) {
-        this.curEdit = focus
+      handleEditFocus(focus, index) {
+        this.curEditIndex = index
         this.defaultImageData = [{
           id: focus.id,
           url: focus.pic_url,
@@ -96,7 +96,7 @@
         }
         if (curEditIndex) {
           API_Floor.editFocus(this.focusList[curEditIndex].id, params).then(response => {
-            this.focusList[curEditIndex] = params
+            this.GET_FocusList()
             this.$message.success('修改成功！')
           })
         } else {

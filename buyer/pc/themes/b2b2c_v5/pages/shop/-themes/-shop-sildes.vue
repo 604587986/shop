@@ -4,7 +4,7 @@
       v-for="silde in sildes"
       :key="silde.silde_id"
     >
-      <a :href="silde.silde_url">
+      <a :href="silde.silde_url" target="_blank">
         <img :src="silde.img" class="banner-img">
       </a>
     </el-carousel-item>

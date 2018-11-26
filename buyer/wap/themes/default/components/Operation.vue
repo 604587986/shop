@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :to="toPage"><slot/></nuxt-link>
+  <a :href="toPage" target="_blank"><slot/></a>
 </template>
 
 <script>

@@ -331,7 +331,6 @@
     }
   }
   .login-interface form .item-form-t {
-    width: 225px !important;
     height: 30px;
     border: 0 !important;
     button {

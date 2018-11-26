@@ -11,7 +11,8 @@
       </ul>
     </div>
     <div class="message-container">
-      <ul v-if="tableData && tableData.data_total">
+      <empty-member v-if="tableData && !tableData.data.length">暂无站内消息</empty-member>
+      <ul v-else>
         <li v-for="message in tableData.data" :key="message.id" class="message-item">
           <div class="msg-time">{{ message.send_time | unixToDate }}</div>
           <div class="msg-box">
@@ -33,7 +34,6 @@
           </div>
         </li>
       </ul>
-      <empty-member v-else>暂无站内消息</empty-member>
     </div>
     <div class="member-pagination" v-if="tableData && tableData.data.length">
       <a v-if="params.type !== 'all'" href="javascript:;" class="read-all" @click="handleReadPageMessages">标记当前页为已读</a>

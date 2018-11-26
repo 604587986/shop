@@ -44,7 +44,7 @@
               <nuxt-link :to="'./my-order/detail?order_sn=' + order.sn" style="margin-top: 10px">
                 <div style="margin-top: 3px" class="sku-name">{{ sku.name }}</div>
                 <p><span class="sku-spec" style="margin-right: 5px">{{ sku | formatterSkuSpec }}</span><span>{{ sku.num }}件</span></p>
-                <p v-if="sku.goods_operate_allowable_vo.allow_apply_service" style="margin-top: 5px">
+                <p v-if="sku.goods_operate_allowable_vo.allow_apply_service" class="after-btn">
                   <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
                 </p>
               </nuxt-link>
@@ -302,6 +302,12 @@
       -webkit-line-clamp: 2;
       overflow: hidden;
       min-height: 36px;
+    }
+  }
+  .after-btn {
+    margin-top: 5px;
+    a {
+      color: $color-main;
     }
   }
 </style>

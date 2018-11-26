@@ -12,7 +12,8 @@
     </div>
     <div class="collection-container">
       <div v-show="type !== 'shop'" class="goods">
-        <template v-if="goodsData && goodsData.data.length">
+        <empty-member v-if="goodsData && !goodsData.data.length">暂无商品收藏</empty-member>
+        <template v-else>
           <ul>
             <li
               v-for="goods in goodsData.data"
@@ -65,7 +66,6 @@
             @current-change="handleGoodsCurrentChange"
             :total="goodsData.data_total"/>
         </template>
-        <empty-member v-else>暂无商品收藏</empty-member>
       </div>
       <div v-show="type === 'shop'" class="shop">
         <template v-if="shopData && shopData.data.length > 0">

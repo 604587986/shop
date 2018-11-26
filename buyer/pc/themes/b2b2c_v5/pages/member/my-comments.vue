@@ -7,7 +7,8 @@
         </li>
       </ul>
     </div>
-    <template v-if="comments && comments.data.length > 0">
+    <empty-member v-if="comments && !comments.data.length">暂无评论</empty-member>
+    <template v-else>
       <div class="comments-container">
         <ul>
           <li v-for="comment in comments.data" :key="comment.comment_id" class="comment-item">
@@ -45,7 +46,6 @@
         </el-pagination>
       </div>
     </template>
-    <empty-member v-else>暂无评论</empty-member>
   </div>
 </template>
 

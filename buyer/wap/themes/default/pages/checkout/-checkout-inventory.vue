@@ -118,6 +118,7 @@
       color: #232326;
       text-overflow: ellipsis;
       overflow: hidden;
+      word-break: break-all;
     }
     .detail-container-item {
       white-space: nowrap;

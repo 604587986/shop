@@ -2,7 +2,7 @@
   <div id="goods-comments" class="goods-comments">
     <van-cell-group class="comment-cells">
       <van-cell value="全部评价" is-link @click="showPopup = true">
-        <div slot="title">好评<span class="rate">好评{{ grade }}%</span></div>
+        <div slot="title">好评率：<span class="rate">{{ grade }}%</span></div>
       </van-cell>
       <div v-if="finished && !comments.length" class="no-comments">暂无评价</div>
       <div v-else class="some-comments">

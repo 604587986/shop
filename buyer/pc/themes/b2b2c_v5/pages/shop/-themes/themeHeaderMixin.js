@@ -3,6 +3,7 @@
  * 店铺头部Mixin
  */
 
+import storage from '@/utils/storage'
 import * as API_Shop from '@/api/shop'
 import * as API_Members from "@/api/members"
 
@@ -14,7 +15,9 @@ export default {
       // 店铺分类【分组】
       categorys: [],
       // 店铺导航
-      navs: []
+      navs: [],
+      // 是否已收藏
+      is_collection: false
     }
   },
   mounted() {
@@ -31,17 +34,31 @@ export default {
     API_Shop.getShopNav(this.shop_id).then(response => {
       this.navs = response
     })
+    // 如果已登录，获取是否已收藏店铺
+    if (storage.getItem('refresh_token')) {
+      API_Members.getShopIsCollect(this.shop_id).then(response => {
+        this.is_collection = response.message
+      })
+    }
   },
   methods: {
     /** 收藏店铺 */
     collectionShop() {
-      if (!this.$store.getters.user) {
+      if (!storage.getItem('refresh_token')) {
         this.$message.error('未登录不能收藏店铺！')
         return false
       }
-      API_Members.collectionShop(this.shop_id).then(() => {
-        this.$message.success('收藏成功！')
-      })
+      if (this.is_collection) {
+        API_Members.deleteShopCollection(this.shop_id).then(() => {
+          this.is_collection = false
+          this.$message.success('取消收藏成功！')
+        })
+      } else {
+        API_Members.collectionShop(this.shop_id).then(() => {
+          this.is_collection = true
+          this.$message.success('收藏成功！')
+        })
+      }
     }
   }
 }
