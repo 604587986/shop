@@ -16,7 +16,7 @@
           <div class="shop-info">
             <div class="shop-name">{{ shop.shop_name }}</div>
             <div class="shop-desc">
-              <span>关注数数<em>{{ shop.shop_collect }}</em></span>
+              <span>关注数：<em>{{ shop.shop_collect }}</em></span>
             </div>
           </div>
           <nuxt-link class="shop-btn" :to="'/shop/' + shop.shop_id">进店</nuxt-link>
