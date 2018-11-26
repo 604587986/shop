@@ -178,17 +178,6 @@
       const { goods_id, seller_id } = this.goods
       // 如果商品可以查看
       if (this.canView) {
-        // 如果用户已登录，加载收藏状态，加载购物车
-        if (Storage.getItem('refresh_token')) {
-          // 获取收藏状态
-          API_Members.getGoodsIsCollect(goods_id).then(response => {
-            this.collected = response.message
-          })
-          // 获取购物车数据
-          this.$store.dispatch('cart/getCartDataAction')
-        }
-        // 记录浏览量统计【用于统计】
-        API_Common.recordViews(window.location.href)
         // 获取促销信息
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
         // 滚动监听
@@ -197,6 +186,17 @@
         if (this.$route.query.su) {
           API_distribution.accessShortLink({su: this.$route.query.su }).then(() => { console.log(9856) })
         }
+      }
+      // 记录浏览量统计【用于统计】
+      API_Common.recordViews(window.location.href)
+      // 如果用户已登录，加载收藏状态，加载购物车
+      if (Storage.getItem('refresh_token')) {
+        // 获取收藏状态
+        API_Members.getGoodsIsCollect(goods_id).then(response => {
+          this.collected = response.message
+        })
+        // 获取购物车数据
+        this.$store.dispatch('cart/getCartDataAction')
       }
     },
     computed: {
