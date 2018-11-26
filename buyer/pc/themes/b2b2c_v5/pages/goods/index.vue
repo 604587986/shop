@@ -240,7 +240,7 @@
     computed: {
       keyword_url() {
         const { keyword } = this.$route.query
-        return keyword ? `&keyword=${keyword}` : ''
+        return keyword ? `&keyword=${encodeURIComponent(keyword)}` : ''
       }
     },
     methods: {
