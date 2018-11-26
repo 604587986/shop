@@ -189,7 +189,8 @@
       width: 100%;
       img {
         display: block;
-        max-width: 100%;
+        width: 100%;
+        height: 100%;
       }
     }
     .item-price {
