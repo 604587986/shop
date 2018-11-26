@@ -331,6 +331,10 @@
 
       /** 卖家审核退款/货 */
       handleRefundAuth(agree) {
+        if (!RegExp.money.test(this.refundMoney)) {
+          this.$message.error('请输入正确的退款金额')
+          return
+        }
         const _tip = agree === 1 ? '通过' : '不通过'
         this.$confirm(`确认${_tip}审核么?`, '确认信息', { type: 'warning' })
           .then(() => {
