@@ -60,7 +60,7 @@
                 <span class="el-upload-img-actions" v-show="val.spec_image">
                   <i class="el-icon-delete" @click.stop="handleDeleteImg(index)"></i>
                 </span>
-                <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon" @click="handleClickImg(index)"></i>
+                <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon" @click="handleClickImg(index, $index)"></i>
               </el-upload>
             </div>
           </div>
@@ -465,6 +465,7 @@
       handleClickImg(index) {
         this.currentPercent = 0
         this.activeSkuValIndex = index
+        this.activeSkuItemIndex = 0
       },
 
       /** 删除当前图片 */
