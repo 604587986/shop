@@ -142,7 +142,7 @@
               :label="item.label"
               :key="index">
               <template slot-scope="scope">
-                <el-input v-if="item.prop === 'quantity'" v-model="scope.row.quantity"/>
+                <el-input v-if="item.prop === 'quantity'" @blur="checkQuantity(scope.row.quantity)" v-model="scope.row.quantity"/>
                 <span v-if="item.prop !== 'quantity'" >{{ scope.row[item.prop] }}</span>
               </template>
             </el-table-column>
@@ -196,6 +196,8 @@
         setTimeout(() => {
           if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
             callback(new Error('请输入整数'))
+          } else if (!(parseInt(value) >= 0 && parseInt(value) <= 99999999)) {
+            callback(new Error('请输入0 - 99999999之间的正整数'))
           } else {
             callback()
           }
@@ -350,6 +352,16 @@
       next()
     },
     methods: {
+      /** 库存边界限制 */
+      checkQuantity(value) {
+        if (!value && value !== 0) {
+          this.$message.error('库存不能为空')
+        } else if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
+          this.$message.error('请输入整数')
+        } else if (!(parseInt(value) >= 0 && parseInt(value) <= 99999999)) {
+          this.$message.error('请输入0 - 99999999之间的正整数')
+        }
+      },
 
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
@@ -563,10 +575,10 @@
           })
         }
         const _res = _params.some(key => {
-          return !RegExp.integer.test(key.quantity_count) && parseInt(key.quantity_count) !== 0
+          return !(parseInt(key.quantity_count) >= 0 && parseInt(key.quantity_count) < 99999999)
         })
         if (_res) {
-          this.$message.error('库存必须为大于0的正整数')
+          this.$message.error('库存须为0 - 99999999之间的整数')
           return
         }
         API_goods.reserveStockGoods(this.goodsId, _params).then(() => {
