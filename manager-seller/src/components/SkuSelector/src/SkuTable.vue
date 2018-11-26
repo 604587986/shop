@@ -20,12 +20,14 @@
           <div v-else class="input-error-model">
             <el-input
               :disabled="isEditModel === 1 && item==='quantity'"
+              :maxlength="10"
               v-model="scope.row[item]"
               @input="updateSkuTable(index, scope, item)"
               @blur="updateSkuTable(index, scope, item)">
             </el-input>
             <span
               class="input-error"
+              v-if="item !== 'sn'"
               v-show="isValidate(index, scope)">{{ validatatxt }}
             </span>
           </div>
@@ -135,7 +137,7 @@
         concactArray: [],
 
         /** 固定列校验提示内容 */
-        validatatxt: '请输入数字值',
+        validatatxt: '请输入0-99999999之间的数字值',
 
         /** 存储未通过校验的单元格位置  */
         validateError: []
@@ -204,7 +206,7 @@
         this.concactArray.push(_currnetRow)
       },
 
-      /** 检测是否未通过数字校验 */
+      /** 检测是否未通过0-99999999之间的数字校验 */
       isValidate(index, scope) {
         return this.validateError.some(key => {
           return key[0] === index && key[1] === scope.$index
@@ -221,7 +223,7 @@
       /** 保存批量设置值 */
       saveBatch() {
         const _desc = this.activeVal === 1 ? '价格' : '库存'
-        const checkResult = this.activeVal === 1 ? RegExp.money.test(this.batch) : RegExp.integer.test(this.batch)
+        const checkResult = this.activeVal === 1 ? RegExp.money.test(this.batch) : parseInt(this.batch) >= 0 && parseInt(this.batch) < 99999999
         if (!checkResult) {
           this.batch = ''
           this.$message.error(`请输入一个有效的${_desc}数据`)
@@ -242,7 +244,7 @@
       /** 数据改变之后 抛出数据 */
       updateSkuTable(index, scope, item) {
         /** 进行自定义校验 判断是否是数字（小数也能通过） */
-        if (!/^[0-9]+.?[0-9]*$/.test(scope.row[item]) && item !== 'sn') { // 校验通过
+        if (!/^[0-9]+.?[0-9]*$/.test(scope.row[item]) && item !== 'sn' || (parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999)) { // 校验未通过 加入错误存储列表中
           this.validateError.push([index, scope.$index])
         } else {
           this.validateError.forEach((key, _index) => {
