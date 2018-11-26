@@ -10,7 +10,7 @@
       >
         <h5 class="item-title">开户行银行许可证</h5>
         <el-form-item label="银行开户名：" prop="bank_account_name">
-          <el-input v-model.trim="finlQuafForm.bank_account_name" clearable></el-input>
+          <el-input v-model.trim="finlQuafForm.bank_account_name" :maxlength="30" clearable></el-input>
         </el-form-item>
         <el-form-item label="公司银行账号：" prop="bank_number">
           <el-input v-model.trim="finlQuafForm.bank_number" :maxlength="18" clearable></el-input>
@@ -35,10 +35,10 @@
         </el-form-item>
         <h5 class="item-title">税务登记证</h5>
         <el-form-item label="税务登记证号：" prop="taxes_certificate_num">
-          <el-input v-model.trim="finlQuafForm.taxes_certificate_num" clearable></el-input>
+          <el-input v-model.trim="finlQuafForm.taxes_certificate_num" :maxlength="30" clearable></el-input>
         </el-form-item>
         <el-form-item label="纳税人识别号：" prop="taxes_distinguish_num">
-          <el-input v-model.trim="finlQuafForm.taxes_distinguish_num" clearable></el-input>
+          <el-input v-model.trim="finlQuafForm.taxes_distinguish_num" :maxlength="20" clearable></el-input>
         </el-form-item>
         <el-form-item label="税务登记证电子版：" prop="taxes_certificate_img">
           <el-upload

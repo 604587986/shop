@@ -10,7 +10,7 @@
       >
         <h5 class="item-title">店铺信息</h5>
         <el-form-item label="店铺名称：" prop="shop_name">
-          <el-input v-model.trim="shopInfoForm.shop_name" clearable></el-input>
+          <el-input v-model.trim="shopInfoForm.shop_name" :maxlength="15" clearable></el-input>
         </el-form-item>
         <el-form-item label="店铺地址：" prop="shop_region">
           <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { shopInfoForm.shop_region = object.last_id }"/>
