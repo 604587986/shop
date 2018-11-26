@@ -214,4 +214,9 @@
     line-height: 18px;
     text-align: right;
   }
+  /deep/ {
+    .van-nav-bar--fixed {
+      z-index: 99 !important;
+    }
+  }
 </style>
