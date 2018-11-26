@@ -15,9 +15,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="赠品库存：" prop="actual_store">
-        <el-input placeholder="请输入赠品库存" v-model="giftModelForm.actual_store">
-          <template slot="prepend">¥</template>
-        </el-input>
+        <el-input placeholder="请输入赠品库存" v-model="giftModelForm.actual_store"/>
       </el-form-item>
       <el-form-item label="赠品图片：" prop="enable_img">
         <el-upload
