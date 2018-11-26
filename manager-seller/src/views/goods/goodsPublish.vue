@@ -73,7 +73,7 @@
                 :defaultVal="baseInfoForm.shop_cat_id" />
             </el-form-item>
             <p class="goods-group-manager">
-              商品可以从属于店铺的多个分类之下，店铺分类可以由 "商家中心 -> 商品 -> 分组管理" 中自定义
+              商品可以从属于店铺的某个分组之下，店铺分组可以由 "商家中心 -> 商品管理 -> 分组管理" 中自定义
             </p>
             <el-form-item label="商品品牌：" >
               <el-select
@@ -97,7 +97,7 @@
           <h4>商品信息</h4>
           <div>
             <el-form-item label="商品名称：" prop="goods_name" class="goods-name-width">
-              <el-input v-model="baseInfoForm.goods_name" maxlength="60" minlength="3" placeholder="3-60个字符"></el-input>
+              <el-input v-model="baseInfoForm.goods_name" :maxlength="60" :minlength="3" placeholder="3-60个字符"></el-input>
             </el-form-item>
             <el-form-item label="商品编号：" prop="sn">
               <el-input v-model="baseInfoForm.sn"></el-input>
@@ -168,7 +168,7 @@
         <div class="base-info-item">
           <h4>seo</h4>
           <div>
-            <el-form-item label="seo标题：">
+            <el-form-item label="seo标题：" prop="seotitle">
               <el-input placeholder="3-60个字符" class="seo-text"  v-model="baseInfoForm.page_title"></el-input>
             </el-form-item>
             <el-form-item label="seo关键字：" >
@@ -616,7 +616,9 @@
         /** 商品详情的校验规则 */
         baseInfoFormRule: {
           goods_name: [
-            { required: true, message: '请输入商品名称', trigger: 'blur' }
+            { required: true, message: '请输入商品名称', trigger: 'blur' },
+            { whitespace: true, message: '商品名称不可为纯空格', trigger: 'blur' },
+            { min: 3, max: 60, message: '长度在 3 到 60 个字符', trigger: 'blur' }
           ],
           sn: [
             { required: true, message: '请输入商品编号', trigger: 'blur' },
@@ -642,7 +644,12 @@
             { required: true, message: '请选择商品相册', trigger: 'change' }
           ],
           quantity: [
-            { required: true, message: '请填写总库存', trigger: 'blur' }
+            { required: true, message: '请填写总库存', trigger: 'blur' },
+            { whitespace: true, message: '总库存不可为纯空格', trigger: 'blur' }
+          ],
+          seotitle: [
+            { min: 3, max: 60, message: '长度在 3 到 60 个字符', trigger: 'blur' },
+            { whitespace: true, message: '标题不可为纯空格', trigger: 'blur' }
           ],
           template_id: [
             { validator: checkTplId, trigger: 'blur' }
