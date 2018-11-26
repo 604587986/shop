@@ -40,11 +40,11 @@
           </el-form-item>
           <el-form-item label="退款原因：" prop="refund_reason">
             <el-select v-model="returnMoneyForm.refund_reason" size="small" placeholder="请选择退款原因">
-              <el-option label="商品质量有问题" value="商品质量有问题"></el-option>
-              <el-option label="收到商品与描述不符" value="收到商品与描述不符"></el-option>
-              <el-option label="不喜欢/不想要" value="不喜欢/不想要"></el-option>
+              <el-option v-if="ship_rog" label="商品质量有问题" value="商品质量有问题"></el-option>
+              <el-option v-if="ship_rog" label="收到商品与描述不符" value="收到商品与描述不符"></el-option>
+              <el-option v-if="ship_rog" label="不喜欢/不想要" value="不喜欢/不想要"></el-option>
               <el-option label="发票问题" value="发票问题"></el-option>
-              <el-option label="空包裹" value="空包裹"></el-option>
+              <el-option v-if="ship_rog" label="空包裹" value="空包裹"></el-option>
               <el-option label="快递无记录" value="快递无记录"></el-option>
               <el-option label="快递一直没有收到" value="快递一直没有收到"></el-option>
               <el-option label="买错/不想要" value="买错/不想要"></el-option>
@@ -226,6 +226,8 @@
         isCancel: !(!!this.$route.query.sku_id),
         // 是否为原路返回方式
         original_way: false,
+        // 是否已收货
+        ship_rog: false,
         ...this.$route.query
       }
     },
@@ -233,6 +235,7 @@
       // 获取售后数据
       API_AfterSale.getAfterSaleData(this.order_sn, this.sku_id).then(response => {
         this.order = response.order
+        this.ship_rog = ship_status === 'SHIP_ROG'
         this.skuList = response.sku_list
         this.returnMoneyForm.return_money = response.return_money
         this.returnGoodsForm.return_money = response.return_money
