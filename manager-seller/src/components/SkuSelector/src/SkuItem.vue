@@ -62,7 +62,7 @@
                 <span class="el-upload-img-actions" v-show="val.spec_image">
                   <i class="el-icon-delete" @click.stop="handleDeleteImg(index)"></i>
                 </span>
-                <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon" @click="handleClickImg(index, $index)"></i>
+                <i v-show="!val.spec_image" class="el-icon-plus avatar-uploader-icon" @click="handleClickImg(index)"></i>
               </el-upload>
             </div>
           </div>
@@ -133,7 +133,10 @@
         currentPercent: 0,
 
         /** 定时器 */
-        timer: null
+        timer: null,
+
+        /** 上传状态 true 可上传 false 不可上传 默认可上传*/
+        uploadStatus: true
       }
     },
     mounted() {
@@ -465,6 +468,10 @@
 
       /** 点击已上传的图片 或者 i标签 */
       handleClickImg(index) {
+        if (!this.uploadStatus) {
+          this.$message.warning('正在上传，请稍侯。。。')
+          return
+        }
         this.currentPercent = 0
         this.activeSkuValIndex = index
         this.activeSkuItemIndex = 0
@@ -484,6 +491,7 @@
 
       /** 文件正在上传时的钩子 */
       upLoading(event, file, fileList) {
+        this.uploadStatus = false // 正在上传 不可继续操作上传
         this.upLoadStatus = true
         this.timer = setInterval(() => {
           if (this.currentPercent < 100) {
@@ -514,6 +522,7 @@
           this.$set(this.skuInfo, this.activeSkuItemIndex, _arr)
           this.$emit('updateSkuInfo', this.skuInfo)
         }
+        this.uploadStatus = true // 上传完成 可继续操作上传
       }
     }
   }
