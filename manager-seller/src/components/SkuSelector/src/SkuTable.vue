@@ -49,6 +49,7 @@
 </template>
 
 <script>
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'skuTable',
     props: {
@@ -220,7 +221,8 @@
       /** 保存批量设置值 */
       saveBatch() {
         const _desc = this.activeVal === 1 ? '价格' : '库存'
-        if (!this.batch || !Number.isInteger(this.batch) || !parseInt(this.batch)) {
+        const checkResult = this.activeVal === 1 ? RegExp.money.test(this.batch) : RegExp.integer.test(this.batch)
+        if (!checkResult) {
           this.batch = ''
           this.$message.error(`请输入一个有效的${_desc}数据`)
           return
