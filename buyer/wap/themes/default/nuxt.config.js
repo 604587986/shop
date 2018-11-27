@@ -38,23 +38,6 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-      if (!isDev) {
-        config.module.rules.push(...[{
-          test: /\.(png|jpe?g|gif|svg)$/,
-          loader: 'url-loader',
-          options: {
-            limit: 1000,
-            name: `img/[name].${file_version}.[ext]`
-          }
-        }, {
-          test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-          loader: 'url-loader',
-          options: {
-            limit: 1000,
-            name: `fonts/[name].${file_version}.[ext]`
-          }
-        }])
-      }
       if (isClient) {
         config.entry['polyfill'] = ['babel-polyfill']
       }
