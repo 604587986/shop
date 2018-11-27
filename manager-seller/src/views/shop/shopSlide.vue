@@ -9,7 +9,7 @@
       <p>4. 跳转链接必须是 <b class="color-weight">http:// 或 https://</b></p>
     </div>
     <!--轮播-->
-    <el-carousel indicator-position="outside">
+    <el-carousel indicator-position="outside" height="500px">
       <el-carousel-item v-for="(item,index) in tableData" :key="index">
         <img :src="item.img" alt="">
       </el-carousel-item>
@@ -200,8 +200,9 @@
   .el-carousel__item img {
     opacity: 0.75;
     width: 100%;
-    /*height: 300px;*/
+    height: 100%;
     margin: 0;
+    object-fit: cover;
   }
 
   /*操作幻灯片*/
