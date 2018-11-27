@@ -16,7 +16,7 @@
           <div class="shop-info">
             <div class="shop-name">{{ shop.shop_name }}</div>
             <div class="shop-desc">
-              <span>关注数数<em>{{ shop.shop_collect }}</em></span>
+              <span>关注数：<em>{{ shop.shop_collect }}</em></span>
             </div>
           </div>
           <nuxt-link class="shop-btn" :to="'/shop/' + shop.shop_id">进店</nuxt-link>
@@ -189,7 +189,8 @@
       width: 100%;
       img {
         display: block;
-        max-width: 100%;
+        width: 100%;
+        height: 100%;
       }
     }
     .item-price {
@@ -213,5 +214,10 @@
     font-size: 12px;
     line-height: 18px;
     text-align: right;
+  }
+  /deep/ {
+    .van-nav-bar--fixed {
+      z-index: 99 !important;
+    }
   }
 </style>

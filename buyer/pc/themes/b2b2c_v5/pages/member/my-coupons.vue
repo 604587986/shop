@@ -8,7 +8,8 @@
       </ul>
     </div>
     <div class="coupons-container">
-      <ul v-if="coupons && coupons.data_total" class="coupon-list">
+      <empty-member v-if="coupons && !coupons.data.length">暂无优惠券</empty-member>
+      <ul v-else class="coupon-list">
         <li v-for="(coupon, index) in coupons.data" :key="index" class="coupon-item" :class="[coupon.used_status === 1 && 'used', coupon.used_status === 2 && 'overdue']">
           <div class="c-type">
             <div class="c-money">
@@ -31,7 +32,6 @@
           <i class="is-overdue"></i>
         </li>
       </ul>
-      <empty-member v-else>暂无优惠券</empty-member>
       <span class="clr"></span>
       <div class="member-pagination" v-if="coupons">
         <el-pagination

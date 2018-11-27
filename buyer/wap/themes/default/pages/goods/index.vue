@@ -79,7 +79,7 @@
           { title: '默认', name: 'def', type: 'asc' },
           { title: '销量', name: 'buynum', type: 'asc' },
           { title: '价格', name: 'price', type: 'asc' },
-          { title: '评价', name: 'grade', type: 'asc' },
+          { title: '好评率', name: 'grade', type: 'asc' },
         ].map(item => {
           item.active = item.name === sort[0]
           if (item.name === sort[0]) {

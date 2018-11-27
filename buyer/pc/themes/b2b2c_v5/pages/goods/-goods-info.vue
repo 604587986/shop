@@ -29,16 +29,27 @@
         <div class="pro-title">{{ spec.spec_name }}</div>
         <div class="pro-content">
           <button
-            v-for="spec_val in spec.valueList"
-            :key="spec_val.spec_value_id"
-            :class="['spec-val-btn', spec_val.selected && 'selected', spec.spec_type === 1 && 'spec-image']"
-            @click="handleClickSpec(spec, specIndex, spec_val)"
+            v-if="is_snapshot"
+            :class="['spec-val-btn', 'selected', spec.spec_image && 'spec-image']"
             type="button"
           >
-            <img v-if="spec.spec_type === 1" :src="spec_val['spec_value_img'].thumbnail">
-            <span class="spec-text">{{ spec_val.spec_value }}</span>
+            <img v-if="spec.spec_image" :src="spec.spec_image">
+            <span class="spec-text">{{ spec.spec_value }}</span>
             <i class="iconfont ea-icon-right-bottom-checked"></i>
           </button>
+          <template v-else>
+            <button
+              v-for="spec_val in spec.valueList"
+              :key="spec_val.spec_value_id"
+              :class="['spec-val-btn', spec_val.selected && 'selected', spec.spec_type === 1 && 'spec-image']"
+              @click="handleClickSpec(spec, specIndex, spec_val)"
+              type="button"
+            >
+              <img v-if="spec.spec_type === 1" :src="spec_val['spec_value_img'].thumbnail">
+              <span class="spec-text">{{ spec_val.spec_value }}</span>
+              <i class="iconfont ea-icon-right-bottom-checked"></i>
+            </button>
+          </template>
         </div>
       </div>
       <div v-if="unselectedSku" class="pro-list error-msg">
@@ -85,6 +96,7 @@
    * 包括团购活动
    */
   import Vue from 'vue'
+  import { RegExp } from '@/ui-utils'
   import * as API_Goods from '@/api/goods'
   import * as API_Trade from '@/api/trade'
   import Storage from '@/utils/storage'
@@ -121,61 +133,65 @@
       }
     },
     mounted() {
-      API_Goods.getGoodsSkus(this.goods.goods_id).then(response => {
-        const specList = []
-        const priceList = []
-        response.forEach((sku, skuIndex) => {
-          const { spec_list, price } = sku
-          priceList.push(price)
-          const spec_value_ids = []
-          if (spec_list) {
-            spec_list.forEach((spec, specIndex) => {
-              const _specIndex = specList.findIndex(_spec => _spec['spec_id'] === spec.spec_id)
-              const _spec = {
-                spec_id: spec.spec_id,
-                spec_name: spec.spec_name,
-                spec_type: spec.spec_type
-              }
-              const _value = {
-                spec_value: spec.spec_value,
-                spec_value_id: spec.spec_value_id,
-                spec_value_img: {
-                  original: spec.spec_image,
-                  thumbnail: spec.thumbnail
+      if (this.is_snapshot) {
+        this.specList = this.goods['spec_list']
+      } else {
+        API_Goods.getGoodsSkus(this.goods.goods_id).then(response => {
+          const specList = []
+          const priceList = []
+          response.forEach((sku, skuIndex) => {
+            const { spec_list, price } = sku
+            priceList.push(price)
+            const spec_value_ids = []
+            if (spec_list) {
+              spec_list.forEach((spec, specIndex) => {
+                const _specIndex = specList.findIndex(_spec => _spec['spec_id'] === spec.spec_id)
+                const _spec = {
+                  spec_id: spec.spec_id,
+                  spec_name: spec.spec_name,
+                  spec_type: spec.spec_type
                 }
-              }
-              spec_value_ids.push(spec.spec_value_id)
-              if(_specIndex === -1){
-                specList.push({..._spec, valueList: [{..._value}]})
-              }else if(specList[_specIndex]['valueList'].findIndex(_value => _value['spec_value_id'] === spec['spec_value_id']) === -1) {
-                specList[_specIndex]['valueList'].push({ ..._value })
-              }
-            })
-            this.skuMap.set(spec_value_ids.join('-'), sku)
-          } else {
-            this.skuMap.set('no_spec', sku)
+                const _value = {
+                  spec_value: spec.spec_value,
+                  spec_value_id: spec.spec_value_id,
+                  spec_value_img: {
+                    original: spec.spec_image,
+                    thumbnail: spec.thumbnail
+                  }
+                }
+                spec_value_ids.push(spec.spec_value_id)
+                if(_specIndex === -1){
+                  specList.push({..._spec, valueList: [{..._value}]})
+                }else if(specList[_specIndex]['valueList'].findIndex(_value => _value['spec_value_id'] === spec['spec_value_id']) === -1) {
+                  specList[_specIndex]['valueList'].push({ ..._value })
+                }
+              })
+              this.skuMap.set(spec_value_ids.join('-'), sku)
+            } else {
+              this.skuMap.set('no_spec', sku)
+            }
+          })
+          // 如果价格区间大于1个
+          if (priceList.length > 1) {
+            const min = Math.min(...priceList)
+            const max = Math.max(...priceList)
+            if (min === max) {
+              this.priceRange = [max]
+            } else {
+              this.priceRange = [min, max]
+            }
+          }
+          this.specList = specList
+          // 如果有sku信息，初始化已选规格
+          if (this.$route.query.sku_id) {
+            this.initSpec()
+          }
+          // 如果没有规格，把商品第一个sku给已选择sku
+          if (!specList.length) {
+            this.selectedSku = this.skuMap.get('no_spec')
           }
         })
-        // 如果价格区间大于1个
-        if (priceList.length > 1) {
-          const min = Math.min(...priceList)
-          const max = Math.max(...priceList)
-          if (min === max) {
-            this.priceRange = [max]
-          } else {
-            this.priceRange = [min, max]
-          }
-        }
-        this.specList = specList
-        // 如果有sku信息，初始化已选规格
-        if (this.$route.query.sku_id) {
-          this.initSpec()
-        }
-        // 如果没有规格，把商品第一个sku给已选择sku
-        if (!specList.length) {
-          this.selectedSku = this.skuMap.get('no_spec')
-        }
-      })
+      }
     },
     methods: {
       /** 初始化规格 */
@@ -266,6 +282,7 @@
       handleBuyNow() {
         if (!this.isLogin()) return
         const { buyNum } = this
+        if (!this.handleCheckNum()) return
         const { sku_id } = this.selectedSku
         API_Trade.buyNow(sku_id, buyNum, this.getActivityId()).then(response => {
           this.$store.dispatch('cart/getCartDataAction')
@@ -276,6 +293,7 @@
       handleAddToCart() {
         if (!this.isLogin()) return
         const { buyNum } = this
+        if (!this.handleCheckNum()) return
         const { sku_id } = this.selectedSku
         API_Trade.addToCart(sku_id, buyNum, this.getActivityId()).then(response => {
           this.$store.dispatch('cart/getCartDataAction')
@@ -314,6 +332,15 @@
         }
         if (!pro) return ''
         return pro.activity_id
+      },
+      /** 检查购买数量有效性 */
+      handleCheckNum() {
+        let { buyNum } = this
+        if (!RegExp.integer.test(buyNum) || buyNum < 1) {
+          this.$message.error('购买数量格式有误，请填写正整数！')
+          return false
+        }
+        return true
       }
     }
   }

@@ -7,7 +7,8 @@
         </li>
       </ul>
     </div>
-    <template v-if="consultation && consultation.data.length > 0">
+    <empty-member v-if="consultation && !consultation.data.length">暂无咨询</empty-member>
+    <template v-else>
       <div class="consultation-container">
         <ul>
           <li v-for="consultation in consultation.data" :key="consultation.ask_id" class="comment-item">
@@ -42,7 +43,6 @@
         </el-pagination>
       </div>
     </template>
-    <empty-member v-else>暂无咨询</empty-member>
   </div>
 </template>
 

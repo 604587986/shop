@@ -14,7 +14,7 @@
       <span v-if="orderData">搜到：<em>{{ orderData.data_total }}</em> 笔订单</span>
       <span v-else>搜索中...</span>
     </div>
-    <empty-member v-if="!orderData || !orderData.data.length">暂无订单</empty-member>
+    <empty-member v-if="orderData && !orderData.data.length">暂无订单</empty-member>
     <template v-else>
       <div class="order-table">
         <div class="order-table-thead">

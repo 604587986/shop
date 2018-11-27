@@ -15,7 +15,7 @@
     </div>
     <ul v-if="!hideKeywords" class="search-hot-keywords">
       <li v-for="item in $store.getters.hotKeywords" :key="item.id">
-        <a :href="'/goods?keyword=' + item.hot_name">{{ item.hot_name }}</a>
+        <a :href="'/goods?keyword=' + encodeURIComponent(item.hot_name)">{{ item.hot_name }}</a>
       </li>
     </ul>
     <div v-show="show_autocomplete && autoCompleteData.length > 0" class="search-autocomplete">
@@ -73,11 +73,11 @@
         this.keyword = keyword
         this.show_autocomplete = false
         this.$refs['searchInput'].blur()
-        window.location.href = `/goods${keyword ? `?keyword=${keyword}` : ''}`
+        window.location.href = `/goods${keyword ? `?keyword=${encodeURIComponent(keyword)}` : ''}`
       },
       /** 搜索店铺 */
       handleSearchShop() {
-        window.location.href = `/shop${this.keyword ? '?keyword=' + this.keyword : ''}`
+        window.location.href = `/shop${this.keyword ? '?keyword=' + encodeURIComponent(this.keyword) : ''}`
       },
       /** URL中keyword发生改变 */
       handleQueryKeywordChange() {

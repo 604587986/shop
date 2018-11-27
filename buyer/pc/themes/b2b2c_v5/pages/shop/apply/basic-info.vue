@@ -24,17 +24,17 @@
           <el-input v-model="basicInfoForm.company_email" clearable :maxlength="80"></el-input>
         </el-form-item>
         <el-form-item label="员工总数：" prop="employee_num">
-          <el-input v-model="basicInfoForm.employee_num" clearable>
+          <el-input v-model="basicInfoForm.employee_num" :maxlength="10" clearable>
             <el-button slot="append">人</el-button>
           </el-input>
         </el-form-item>
         <el-form-item label="注册资金：" prop="reg_money">
-          <el-input v-model="basicInfoForm.reg_money" clearable>
+          <el-input v-model="basicInfoForm.reg_money" :maxlength="10" clearable>
             <el-button slot="append">万</el-button>
           </el-input>
         </el-form-item>
         <el-form-item label="联系人姓名：" prop="link_name">
-          <el-input v-model="basicInfoForm.link_name" clearable :maxlength="20"></el-input>
+          <el-input v-model="basicInfoForm.link_name" :maxlength="20" clearable></el-input>
         </el-form-item>
         <el-form-item label="联系人电话：" prop="link_phone">
           <el-input v-model="basicInfoForm.link_phone" :maxlength="11" clearable></el-input>

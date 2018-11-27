@@ -4,9 +4,9 @@
       <div class="w">
         <div class="shop-name">{{ shop.shop_name }}</div>
         <div class="shop-more">
-          <div class="item" @click="collectionShop">
+          <div class="item" :class="[is_collection && 'active']" @click="collectionShop">
             <i class="iconfont ea-icon-star"></i>
-            <p>收藏</p>
+            <p>{{ is_collection ? '已收藏' : '收藏' }}</p>
           </div>
           <a :href="'http://wpa.qq.com/msgrd?v=3&uin='+ shop.shop_qq +'&site=qq&menu=yes'" target="_blank" class="item">
             <i class="iconfont ea-icon-service"></i>
@@ -67,6 +67,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   img {
     width: 100%;
     height: 100%;
@@ -96,6 +97,10 @@
         cursor: pointer;
         margin-left: 30px;
         color: #333;
+        &.active {
+          color: $color-main;
+          i { color: $color-main }
+        }
         i {
           background-color: #fff;
           font-size: 26px;

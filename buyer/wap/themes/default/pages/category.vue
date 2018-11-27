@@ -17,7 +17,11 @@
       <div class="con-wrapper" ref="conWrapper">
         <div class="content">
           <div class="inner-content show">
-            <div class="cont item-${cat_index}">
+            <div v-if="!currentCat.children || !currentCat.children.length" class="no-data">
+              <img src="../assets/images/icon-empty-member.png">
+              <p>暂无数据...</p>
+            </div>
+            <div v-else class="cont">
               <div v-for="cat in currentCat.children" :key="cat.category_id" class="item">
                 <div class="title-item">{{ cat.name }}</div>
                 <div class="content-item">
@@ -236,5 +240,14 @@
     white-space: nowrap;
     font-size: 10px;
     overflow: hidden;
+  }
+  .no-data {
+    width: 100%;
+    margin-top: 100px;
+    text-align: center;
+    img {
+      display: block;
+      margin: 0 auto;
+    }
   }
 </style>

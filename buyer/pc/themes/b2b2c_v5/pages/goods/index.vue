@@ -148,7 +148,10 @@
                 </div>
                 <div class="gl-shop">
                   <span>
-                    <a :href="'/shop/' + goods.seller_id" :title="goods.seller_name">{{ goods.seller_name }}<i class="iconfont ea-icon-shop" title="进入店铺"></i></a>
+                    <a :href="'/shop/' + goods.seller_id" :title="goods.seller_name">
+                      <span class="gl-shop-name">{{ goods.seller_name }}</span>
+                      <i class="iconfont ea-icon-shop" title="进入店铺"></i>
+                    </a>
                     <i v-if="goods.self_operated === 1" class="self-icon">自营</i>
                   </span>
                 </div>
@@ -218,7 +221,7 @@
           { title: '默认', name: 'def', type: 'asc' },
           { title: '销量', name: 'buynum', type: 'asc' },
           { title: '价格', name: 'price', type: 'asc' },
-          { title: '评价', name: 'grade', type: 'asc' },
+          { title: '好评率', name: 'grade', type: 'asc' },
         ].map(item => {
           item.active = item.name === sort[0]
           if (item.name === sort[0]) {
@@ -237,7 +240,7 @@
     computed: {
       keyword_url() {
         const { keyword } = this.$route.query
-        return keyword ? `&keyword=${keyword}` : ''
+        return keyword ? `&keyword=${encodeURIComponent(keyword)}` : ''
       }
     },
     methods: {
@@ -722,13 +725,11 @@
       overflow: hidden;
       margin-top: -3px;
       margin-bottom: 9px;
-      span {
-        display: inline-block;
-        position: relative;
-        height: 18px;
-        a { color: #999 }
-        a:hover { color: $color-main }
-        i { margin-left: 5px }
+      a { color: #999 }
+      a:hover { color: $color-main }
+      i {
+        margin-left: 5px;
+        vertical-align: 5px;
       }
     }
   }
@@ -752,5 +753,12 @@
     color: #FFF;
     cursor: default;
     border-radius: 2px;
+  }
+  .gl-shop-name {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
   }
 </style>

@@ -14,8 +14,8 @@
         </nuxt-link>
       </li>
       <li class="last" @click="collectionShop">
-        <span>{{ shop.shop_collect }}</span>
-        <p>收藏</p>
+        <span>{{ collection_num }}</span>
+        <p>{{ is_collection ? '已收藏' : '收藏' }}</p>
       </li>
     </ul>
   </div>
@@ -27,6 +27,22 @@
   export default {
     name: 'shop-nav',
     props: ['shop'],
+    data() {
+      return {
+        // 店铺是否已收藏
+        is_collection: false,
+        // 收藏数
+        collection_num: this.shop.shop_collect
+      }
+    },
+    mounted() {
+      // 如果已登录，获取是否已收藏店铺
+      if (Storage.getItem('refresh_token')) {
+        API_Members.getShopIsCollect(this.shop.shop_id).then(response => {
+          this.is_collection = response.message
+        })
+      }
+    },
     methods: {
       /** 收藏店铺 */
       collectionShop() {
@@ -34,9 +50,19 @@
           this.$message.error('未登录不能收藏店铺！')
           return false
         }
-        API_Members.collectionShop(this.shop.shop_id).then(() => {
-          this.$message.success('收藏成功！')
-        })
+        if (this.is_collection) {
+          API_Members.deleteShopCollection(this.shop.shop_id).then(() => {
+            this.is_collection = false
+            this.collection_num -= 1
+            this.$message.success('取消收藏成功！')
+          })
+        } else {
+          API_Members.collectionShop(this.shop.shop_id).then(() => {
+            this.is_collection = true
+            this.collection_num += 1
+            this.$message.success('收藏成功！')
+          })
+        }
       },
     }
   }

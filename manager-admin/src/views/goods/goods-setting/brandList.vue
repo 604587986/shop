@@ -10,7 +10,7 @@
           <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" @click="handleAddBrand">添加</el-button>
         </div>
         <div class="toolbar-search">
-          <!--<en-table-search @search="searchEvent"/>-->
+          <en-table-search @search="searchEvent" placeholder="请输入品牌名称"/>
         </div>
       </div>
       <template slot="table-columns">
@@ -144,10 +144,9 @@
 
       /** 搜索事件触发 */
       searchEvent(data) {
-        this.params = {
-          ...this.params,
-          keyword: data
-        }
+        this.params.page_no = 1
+        this.params.name = data
+        if (!data) delete this.params.name
         this.GET_BrandList()
       },
 

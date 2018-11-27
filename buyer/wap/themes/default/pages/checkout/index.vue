@@ -308,6 +308,10 @@
           const { data } = error.response || {}
           if (data.code === '452') {
             const { data: list } = data
+            if (!list || list[0]) {
+              this.$message.error(data.message)
+              return
+            }
             this.errorActionsheetMessage = data.message
             this.errorActionsheetData = typeof (list) === 'string' ? JSON.parse(list) : list
             this.showErrorActionsheet = true

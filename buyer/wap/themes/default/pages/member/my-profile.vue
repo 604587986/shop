@@ -166,6 +166,11 @@
       },
       /** 保存资料提交表单 */
       submitProfile() {
+        const { birthday } = this.profileForm
+        if (!birthday || isNaN(birthday) || birthday.length < 8 ) {
+          this.$message.error('生日格式不正确！')
+          return
+        }
         this.saveUserInfo(this.profileForm).then(() => {
           this.$store.dispatch('user/getUserDataAction')
           this.$message.success('修改成功！')

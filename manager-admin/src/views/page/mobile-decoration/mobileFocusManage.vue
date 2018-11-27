@@ -96,7 +96,7 @@
         }
         if (curEditIndex) {
           API_Floor.editFocus(this.focusList[curEditIndex].id, params).then(response => {
-            this.focusList[curEditIndex] = response
+            this.GET_FocusList()
             this.$message.success('修改成功！')
           })
         } else {
