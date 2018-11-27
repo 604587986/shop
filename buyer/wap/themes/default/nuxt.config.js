@@ -1,5 +1,4 @@
 const webpack = require('webpack')
-const { file_version } = require('./ui-domain')
 
 module.exports = {
   env: {
@@ -69,15 +68,7 @@ module.exports = {
     },
     vendor: ['axios'],
     plugins: [],
-    publicPath: '/',
-    // 文件名称
-    filenames: {
-      css: `[name].bundle.${file_version}.css`,
-      manifest: `[name].bundle.${file_version}.js`,
-      vendor: `[name].bundle.${file_version}.js`,
-      app: `[name].bundle.${file_version}.js`,
-      chunk: `[name].bundle.${file_version}.js`
-    }
+    publicPath: '/'
   },
   css: [
     '~assets/styles/normalize.css',
