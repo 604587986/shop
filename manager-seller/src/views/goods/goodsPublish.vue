@@ -733,7 +733,7 @@
               if (this.activestep++ > 2) return
             } else {
               this.loading = false
-              this.$message.error('表单中存在未填写的值')
+              this.$message.error('表单中存在未填写或者填写有误的地方,已有错误标示，请检查并正确填写')
             }
           })
           return
