@@ -127,7 +127,6 @@
 
       /** 保存设置 */
       handleReserveWithdrawalsParams(FormName) {
-        console.log(FormName)
         this.$refs[FormName].validate((valid) => {
           if (valid) {
             API_distribution.reserveWithdrawalsParams(this.setWithdrawalsForm).then(response => {
