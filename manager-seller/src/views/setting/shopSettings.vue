@@ -7,6 +7,10 @@
       label-width="200px"
       class="demo-ruleForm"
       status-icon>
+      <!--店铺名称-->
+      <el-form-item label="店铺名称：" prop="shop_name">
+        <el-input v-model="shopDataForm.shop_name" style="width: 200px;" auto-complete="off"></el-input>
+      </el-form-item>
       <!--身份证号-->
       <el-form-item label="身份证号：" prop="legal_id">
         <span>{{ shopDataForm.legal_id }}</span>
@@ -88,6 +92,13 @@
           callback()
         }
       }
+      const validQQ = (rule, value, callback) => {
+        if (!/^[0-9]\d*$/g.test(value)) {
+          callback(new Error('请输入0-9之间的整数'))
+        } else {
+          callback()
+        }
+      }
       return {
         /** 店铺信息*/
         shopDataForm: {
@@ -130,14 +141,28 @@
 
         /** 校验规则 校验必填 */
         rules: {
+          /** 店铺名称 */
+          shop_name: [
+            { required: true, message: '请填写店铺名称', trigger: 'blur' },
+            { whitespace: true, message: '店铺名称不可为纯空格', trigger: 'blur' },
+            { max: 15, message: '店铺名称长度最多15个字符', trigger: 'blur' }
+          ],
           /** 详细地址 */
           shop_add: [
-            { required: true, message: '请填写详细地址', trigger: 'changer,blur' }
+            { required: true, message: '请填写详细地址', trigger: 'changer,blur' },
+            { whitespace: true, message: '详细地址不可为纯空格', trigger: 'blur' },
+            { max: 50, message: '详细地址长度最多50个字符', trigger: 'blur' }
           ],
           /** 联系人电话 */
           link_phone: [
             { required: true, message: '请填写联系人电话', trigger: 'blur' },
             { validator: validPhone, trigger: 'blur' }
+          ],
+          /** 店铺qq */
+          shop_qq: [
+            { whitespace: true, message: '店铺QQ不可为纯空格', trigger: 'blur' },
+            { max: 20, message: '店铺QQ长度最多20个字符', trigger: 'blur' },
+            { validator: validQQ, trigger: 'blur' }
           ]
         }
       }
