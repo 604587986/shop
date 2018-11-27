@@ -38,7 +38,7 @@ async function routerBeforeEach(to, from, next) {
       } else if (status === 'REFUSED') {
         errorMsg('您的开店申请被拒绝，请重新申请或联系管理员！')
       } else {
-        errorMsg('获取店铺状态出错，请稍后再试！', '出现错误')
+        errorMsg('账号未申请开店或店铺申请审核未通过！', '出现错误')
       }
     }
   } else {

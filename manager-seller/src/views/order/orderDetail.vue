@@ -460,8 +460,8 @@
             this.logisticsStatus = true
           }
 
-          // 是否可以修改收货人信息 未发货时皆可修改收货人信息（订单状态 新订单 已确认 未付款） 在线支付时已付款
-          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' || this.orderDetail.order_status === 'CANCELLED' ||
+          // 是否可以修改收货人信息 货到付款未发货时皆可修改收货人信息（订单状态 新订单 已确认 未付款） 在线支付时已付款可修改收货人信息
+          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
             this.orderDetail.order_status === 'PAY_NO' || (this.orderDetail.order_status === 'PAID_OFF' && this.orderDetail.payment_type === 'ONLINE')) {
             this.isShowEditShipName = true
           } else {

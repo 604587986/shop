@@ -73,7 +73,7 @@
                 :defaultVal="baseInfoForm.shop_cat_id" />
             </el-form-item>
             <p class="goods-group-manager">
-              商品可以从属于店铺的多个分类之下，店铺分类可以由 "商家中心 -> 商品 -> 分组管理" 中自定义
+              商品可以从属于店铺的某个分组之下，店铺分组可以由 "商家中心 -> 商品管理 -> 分组管理" 中自定义
             </p>
             <el-form-item label="商品品牌：" >
               <el-select
@@ -97,32 +97,31 @@
           <h4>商品信息</h4>
           <div>
             <el-form-item label="商品名称：" prop="goods_name" class="goods-name-width">
-              <el-input v-model="baseInfoForm.goods_name" maxlength="60" minlength="3" placeholder="3-60个字符"></el-input>
+              <el-input v-model="baseInfoForm.goods_name" :maxlength="60" :minlength="3" placeholder="3-60个字符"></el-input>
             </el-form-item>
             <el-form-item label="商品编号：" prop="sn">
-              <el-input v-model="baseInfoForm.sn"></el-input>
+              <el-input v-model="baseInfoForm.sn" :maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item label="市场价格：" prop="mktprice">
+            <el-form-item label="市场价格：" prop="mktprice" :maxlength="10">
               <el-input placeholder="请输入市场价格" v-model="baseInfoForm.mktprice">
                 <template slot="prepend">¥</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="商品价格：" prop="price">
+            <el-form-item label="商品价格：" prop="price" :maxlength="10">
               <el-input placeholder="请输入商品价格" v-model="baseInfoForm.price">
                 <template slot="prepend">¥</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="成本价格：" prop="cost" >
+            <el-form-item label="成本价格：" prop="cost" :maxlength="10">
               <el-input placeholder="请输入成本价格" v-model="baseInfoForm.cost">
                 <template slot="prepend">¥</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="商品重量：" prop="weight">
+            <el-form-item label="商品重量：" prop="weight" :maxlength="10">
               <el-input placeholder="请输入商品重量" v-model="baseInfoForm.weight">
                 <template slot="prepend">kg</template>
               </el-input>
             </el-form-item>
-            <!--商品相册需批量添加 则去掉目前这句即可 但是编辑时就不显示图片了 此问题押后解决 :file-list="baseInfoForm.goods_gallery_list"-->
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
                 class="avatar-uploader goods-images"
@@ -169,13 +168,13 @@
           <h4>seo</h4>
           <div>
             <el-form-item label="seo标题：">
-              <el-input placeholder="3-60个字符" class="seo-text"  v-model="baseInfoForm.page_title"></el-input>
+              <el-input placeholder="最多60个字符" class="seo-text" :maxlength="60"  v-model="baseInfoForm.page_title"></el-input>
             </el-form-item>
             <el-form-item label="seo关键字：" >
-              <el-input type="textarea" class="seo-text" rows="5" v-model="baseInfoForm.meta_keywords"></el-input>
+              <el-input type="textarea" placeholder="最多200个字符" class="seo-text" rows="5" :maxlength="200" v-model="baseInfoForm.meta_keywords"></el-input>
             </el-form-item>
-            <el-form-item label="seo描述：" >
-              <el-input type="textarea" class="seo-text" rows="5" v-model="baseInfoForm.meta_description"></el-input>
+            <el-form-item label="seo描述：">
+              <el-input type="textarea" placeholder="最多500个字符" class="seo-text" rows="5" :maxlength="500" v-model="baseInfoForm.meta_description"></el-input>
             </el-form-item>
           </div>
         </div>
@@ -225,8 +224,8 @@
           <h4>积分配置</h4>
           <div v-if="baseInfoForm.exchange">
             <el-form-item label="兑换积分：" style="width: 50%;" prop="exchange_point">
-              <el-input v-model="baseInfoForm.exchange.exchange_money" style="width: 100px;"></el-input> 元 +
-              <el-input v-model.number="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分 可兑换此商品
+              <el-input placeholder="最多10个字符" :maxlength="10" v-model="baseInfoForm.exchange.exchange_money" style="width: 100px;"></el-input> 元 +
+              <el-input placeholder="最多10个字符" :maxlength="10" v-model.number="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分 可兑换此商品
             </el-form-item>
             <el-form-item label="积分商品分类：" >
               <el-select
@@ -259,6 +258,8 @@
               :prop="'goods_params_list.' + index + '.param_value'"
               :rules="goods_params_list.required === 1 ? {required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' } : {}">
               <el-input
+                placeholder="最多20个字符"
+                :maxlength="20"
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
               </el-input>
@@ -616,7 +617,9 @@
         /** 商品详情的校验规则 */
         baseInfoFormRule: {
           goods_name: [
-            { required: true, message: '请输入商品名称', trigger: 'blur' }
+            { required: true, message: '请输入商品名称', trigger: 'blur' },
+            { whitespace: true, message: '商品名称不可为纯空格', trigger: 'blur' },
+            { min: 3, max: 60, message: '长度在 3 到 60 个字符', trigger: 'blur' }
           ],
           sn: [
             { required: true, message: '请输入商品编号', trigger: 'blur' },
@@ -642,7 +645,8 @@
             { required: true, message: '请选择商品相册', trigger: 'change' }
           ],
           quantity: [
-            { required: true, message: '请填写总库存', trigger: 'blur' }
+            { required: true, message: '请填写总库存', trigger: 'blur' },
+            { whitespace: true, message: '总库存不可为纯空格', trigger: 'blur' }
           ],
           template_id: [
             { validator: checkTplId, trigger: 'blur' }
