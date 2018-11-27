@@ -81,7 +81,10 @@
                 <a :href="`${MixinBuyerDomain}/goods/${shop.goods_id}`" target="_blank" style="color: #00a2d4;">{{ shop.name }}</a>
               </span>
               <span>
-                <span>{{shop.original_price | unitPrice('￥')}}</span> × <span>{{ shop.num }}</span>
+                <span>{{shop.original_price | unitPrice('￥')}}</span> × <span class="goods—price">{{ shop.num }}</span>
+                <a :href="`${MixinBuyerDomain}/goods/snapshot?id=${shop.snapshot_id}&sku_id=${shop.sku_id}`" target="_blank">
+                  <el-button type="text">交易快照</el-button>
+                </a>
               </span>
             </p>
           </td>
@@ -397,10 +400,14 @@
         }
       }
     }
-    /*图片*/
+    /* 商品图片 */
     .goods-image {
       width: 50px;
       height: 50px;
+    }
+    /** 商品价格 */
+    .goods—price {
+      margin-right: 50px;
     }
   }
 
