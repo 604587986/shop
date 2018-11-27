@@ -105,6 +105,9 @@
           /** 店铺ID */
           shop_id: 0,
 
+          /** 店铺名称 */
+          shop_name: '',
+
           /** 身份证号*/
           legal_id: '',
 
@@ -189,6 +192,8 @@
           if (valid) {
             const _params = {
               shop_add: this.shopDataForm.shop_add,
+
+              shop_name: this.shopDataForm.shop_name,
 
               link_phone: this.shopDataForm.link_phone,
 
