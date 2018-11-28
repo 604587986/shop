@@ -73,11 +73,11 @@
           </el-form-item>
         </template>
         <template v-if="type === 'EMAILL'">
-          <el-form-item label="短信开启状态">
+          <el-form-item label="邮件开启状态">
             <el-radio v-model="messageForm.email_state" label="OPEN">开启</el-radio>
             <el-radio v-model="messageForm.email_state" label="CLOSED">关闭</el-radio>
           </el-form-item>
-          <el-form-item label="短信模板内容">
+          <el-form-item label="邮件模板内容">
             <el-input
               type="textarea"
               :autosize="{ minRows: 3, maxRows: 5 }"
