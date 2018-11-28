@@ -13,6 +13,7 @@
       :header-cell-style="{textAlign: 'center'}"
       :style="{width: '100%'}"
       @selection-change="selectionChange"
+      highlight-current-row
     >
       <slot name="table-columns"></slot>
     </el-table>
