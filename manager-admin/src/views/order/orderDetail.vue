@@ -130,12 +130,10 @@
     },
     activated() {
       this.sn = this.$route.params.sn
+      this.GET_OrderDetail()
     },
     mounted() {
       this.GET_OrderDetail()
-    },
-    watch: {
-      sn: 'GET_OrderDetail'
     },
     methods: {
       GET_OrderDetail() {
