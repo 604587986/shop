@@ -94,7 +94,7 @@
 
       /** 复制失败 */
       onError(e) {
-        this.$message.error('无法复制文本')
+        this.$message.error('抱歉，您的由于您的浏览器不支持，请手动复制。')
       }
     }
   }
