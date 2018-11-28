@@ -645,8 +645,7 @@
             { required: true, message: '请选择商品相册', trigger: 'change' }
           ],
           quantity: [
-            { required: true, message: '请填写总库存', trigger: 'blur' },
-            { whitespace: true, message: '总库存不可为纯空格', trigger: 'blur' }
+            { required: true, message: '请填写总库存', trigger: 'blur' }
           ],
           template_id: [
             { validator: checkTplId, trigger: 'blur' }
