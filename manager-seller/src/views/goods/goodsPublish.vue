@@ -307,7 +307,7 @@
         <el-button
           type="primary"
           @click="handleUnderGoods"
-          v-if="currentStatus === 1 && ( activestep === 1 || activestep === 2)"
+          v-if="currentStatus === 1 && ( activestep === 1 || activestep === 2) && baseInfoForm.market_enable === 1"
         >下架</el-button>
         <el-button
           type="primary"

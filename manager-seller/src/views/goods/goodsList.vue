@@ -88,8 +88,14 @@
             <el-button
               size="mini"
               type="danger"
-              :disabled="scope.row.market_enable === 1 "
+              v-if="scope.row.market_enable === 0"
               @click="handleDeleteGoods(scope.row)">删除
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              v-if="scope.row.market_enable === 1"
+              @click="handleUnderGoods(scope.row)">下架
             </el-button>
             <el-button
               type="primary"
@@ -394,6 +400,16 @@
           }
         }
         this.GET_GoodsList()
+      },
+
+      /** 下架*/
+      handleUnderGoods(row) {
+        this.$confirm('确认下架此商品, 是否继续?', '提示', { type: 'warning' }).then(() => {
+          API_goods.underGoods(row.goods_id, {}).then(() => {
+            this.$message.success('下架成功')
+            this.GET_GoodsList()
+          })
+        })
       },
 
       /** 切换商品类型 */
