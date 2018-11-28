@@ -216,7 +216,6 @@
                 @change="handleSwitchexchange">
               </el-switch>
             </el-form-item>
-            <p class="exchange-tip">添加为积分换购商品后,自今日起一年后自动过期</p>
           </div>
         </div>
         <!--积分配置-->
@@ -1431,19 +1430,6 @@
       font-size: 13px;
     }
 
-    /*!*积分提示*!*/
-    p.exchange-tip {
-      width: 40%;
-      margin:0 0 10px 38px;
-      padding: 5px;
-      padding-left: 5%;
-      text-align: left;
-      font-size: 13px;
-      color: #8a6d3b;
-      background: #fcf8e3;
-      border: 1px solid #faebcc;
-    }
-
     /*teatarea*/
     /deep/ .el-textarea {
       width: 150%;
@@ -1475,16 +1461,6 @@
       padding-left: 12%;
       text-align: left;
       color: #999;
-    }
-    /*积分提示*/
-    p.exchange-tip {
-      margin:0;
-      padding: 10px;
-      padding-left: 12%;
-      text-align: left;
-      color: #8a6d3b;
-      background: #fcf8e3;
-      border: 1px solid #faebcc;
     }
     /deep/ .el-collapse-item__content {
       padding: 10px 0;
