@@ -68,6 +68,44 @@
 
       /** 保存设置 */
       handleReserveWithdrawalsParams() {
+        // 户名校验
+        if (!this.setWithdrawalsForm.member_name) {
+          this.$message.error('户名不能为空或0')
+          return
+        } else if (this.setWithdrawalsForm.member_name.length >= 20) {
+          this.$message.error('户名长度最多为20个字符')
+          return
+        }
+        // 所属银行
+        if (!this.setWithdrawalsForm.bank_name) {
+          this.$message.error('所属银行不能为空或0')
+          return
+        } else if (this.setWithdrawalsForm.bank_name.length >= 20) {
+          this.$message.error('所属银行长度最多为20个字符')
+          return
+        }
+        // 开户行号
+        if (!this.setWithdrawalsForm.opening_num) {
+          this.$message.error('开户行号不能为空或0')
+          return
+        } else if (this.setWithdrawalsForm.opening_num.length >= 20) {
+          this.$message.error('开户行号长度最多为20个字符')
+          return
+        } else if(!/^[0-9]\d*$/g.test(this.setWithdrawalsForm.opening_num)) {
+          this.$message.error('开户行号必须为数字')
+          return
+        }
+        // 银行卡号
+        if (!this.setWithdrawalsForm.bank_card) {
+          this.$message.error('银行卡号不能为空或0')
+          return
+        } else if (this.setWithdrawalsForm.bank_card.length >= 20) {
+          this.$message.error('银行卡号长度最多为20个字符')
+          return
+        } else if (!/^[0-9]\d*$/g.test(this.setWithdrawalsForm.bank_card)) {
+          this.$message.error('银行卡号必须为数字')
+          return
+        }
         API_distribution.reserveWithdrawalsParams(this.setWithdrawalsForm).then(response => {
           this.$message.success('保存成功')
         })
