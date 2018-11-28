@@ -141,6 +141,9 @@
     mounted() {
       this.GET_OrderList()
     },
+    activated() {
+      this.GET_OrderList()
+    },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
