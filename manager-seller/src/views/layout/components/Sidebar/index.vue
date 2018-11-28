@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     linkIndex() {
-      location.href = this.MixinBuyerDomain
+      this.$router.push({ path: '/dashboard' })
     }
   }
 }
