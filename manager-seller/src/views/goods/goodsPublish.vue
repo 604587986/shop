@@ -257,8 +257,8 @@
               :prop="'goods_params_list.' + index + '.param_value'"
               :rules="goods_params_list.required === 1 ? {required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' } : {}">
               <el-input
-                placeholder="最多20个字符"
-                :maxlength="20"
+                placeholder="长度为最多100个字符"
+                :maxlength="100"
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
               </el-input>
