@@ -159,7 +159,7 @@
                  @finalSku="finalSku"/>
             </el-form-item>
             <el-form-item label="总库存：" prop="quantity" style="width: 20%;text-align: left;">
-              <el-input v-model="baseInfoForm.quantity" disabled></el-input>
+              <el-input v-model="baseInfoForm.quantity" :disabled="currentStatus === 1 || isEditQuantity"></el-input>
             </el-form-item>
           </div>
         </div>
@@ -257,8 +257,8 @@
               :prop="'goods_params_list.' + index + '.param_value'"
               :rules="goods_params_list.required === 1 ? {required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' } : {}">
               <el-input
-                placeholder="最多20个字符"
-                :maxlength="20"
+                placeholder="长度为最多100个字符"
+                :maxlength="100"
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
               </el-input>
@@ -307,7 +307,7 @@
         <el-button
           type="primary"
           @click="handleUnderGoods"
-          v-if="currentStatus === 1 && ( activestep === 1 || activestep === 2)"
+          v-if="currentStatus === 1 && ( activestep === 1 || activestep === 2) && baseInfoForm.market_enable === 1"
         >下架</el-button>
         <el-button
           type="primary"
@@ -570,6 +570,9 @@
 
         /** 是否自动生成货号 */
         productSn: false,
+
+        /** 总库存是否可编辑 默认可以 false可编辑 true不可编辑 */
+        isEditQuantity: false,
 
         /** 请求的商品参数组列表 */
         goodsParams: [
@@ -1213,6 +1216,7 @@
 
       /** 规格选择器规格数据改变时触发 */
       finalSku(val) {
+        this.isEditQuantity = !!val.length
         /** 动态修改总库存 每次设置为0  此处每次进行循环计算 存在性能浪费 */
         this.baseInfoForm.quantity = 0
         val.forEach(key => {

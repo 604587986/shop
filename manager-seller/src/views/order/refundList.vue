@@ -193,6 +193,7 @@
 <script>
   import * as API_refund from '@/api/refund'
   import { CategoryPicker } from '@/components'
+  import { RegExp } from '~/ui-utils'
 
   export default {
     name: 'refundList',

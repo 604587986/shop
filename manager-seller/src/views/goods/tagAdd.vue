@@ -93,7 +93,7 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goodsApi: 'seller/goods',
+        goodsApi: 'seller/goods?market_enable=1&is_auth=1',
 
         multipleApi: 'seller/goods/@ids/details',
 
@@ -184,13 +184,10 @@
       },
       /** 保存设置 */
       savesetup() {
-        const _goods_ids = this.tableData.map(key => {
+        let _goods_ids = this.tableData.map(key => {
           return key.goods_id
         })
-        if (_goods_ids.length === 0) {
-          this.$message.error('请至少选择一种商品')
-          return
-        }
+        if (!_goods_ids.length) _goods_ids = -1
         API_goodsTag.saveTagGoodsList(this.params.tag_id, _goods_ids, this.params).then(() => {
           this.loading = false
           this.$message.success('保存设置成功！')

@@ -122,7 +122,7 @@
               <span class="item-value">{{ orderDetail.receipt_history.receipt_content }}</span>
             </div>
           </template>
-          <div class="order-item" v-if="!isShowEditShipName">
+          <div class="order-item" v-if="isLooklogistics">
             <span class="item-name">物流信息：</span>
             <span class="item-value">
             <el-button type="text" @click="looklogistics">点击查看</el-button>
@@ -340,6 +340,9 @@
         /** 产品列表 */
         productList: [],
 
+        /** 是否可以查看物流信息 默认不可以*/
+        isLooklogistics: false,
+
         /** 是否显示修改收货人信息按钮 默认不显示*/
         isShowEditShipName: false,
 
@@ -485,6 +488,15 @@
             this.isShowConfirmReceive = true
           } else {
             this.isShowConfirmReceive = false
+          }
+
+          // 是否可以查看物流信息 物流信息为 正常订单发货之后可查看即 订单状态
+          // 已发货 已收货 已完成 (货到付款)已付款 isLooklogistics
+          if (this.orderDetail.order_status === 'SHIPPED' || this.orderDetail.order_status === 'ROG' || this.orderDetail.order_status === 'COMPLETE' ||
+            (this.orderDetail.payment_type === 'COD' && this.orderDetail.order_status === 'PAID_OFF')) {
+            this.isLooklogistics = true
+          } else {
+            this.isLooklogistics = false
           }
         })
       },

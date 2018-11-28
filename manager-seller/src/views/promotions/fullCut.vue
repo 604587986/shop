@@ -522,7 +522,7 @@
         goodsIds: [],
 
         /** 商品选择器列表api*/
-        goodsApi: 'seller/goods',
+        goodsApi: 'seller/goods?market_enable=1&is_auth=1',
 
         /** 商城分类api */
         categoryApi: 'seller/goods/category/0/children',

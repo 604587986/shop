@@ -152,7 +152,7 @@
           ],
           /** 详细地址 */
           shop_add: [
-            { required: true, message: '请填写详细地址', trigger: 'changer,blur' },
+            { required: true, message: '请填写详细地址', trigger: 'blur' },
             { whitespace: true, message: '详细地址不可为纯空格', trigger: 'blur' },
             { max: 50, message: '详细地址长度最多50个字符', trigger: 'blur' }
           ],
