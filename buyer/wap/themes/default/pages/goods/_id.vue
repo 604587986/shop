@@ -2,99 +2,107 @@
   <div>
     <van-nav-bar left-arrow @click-left="MixinRouterBack">
       <van-tabs v-model="tabActive" slot="title" @click="handleClickNavTab">
-        <van-tab title="商品"/>
-        <van-tab title="评价"/>
-        <van-tab title="详情"/>
-        <van-tab v-if="show_dis" title="推荐"/>
+        <van-tab :disabled="goods_off" title="商品"/>
+        <van-tab :disabled="goods_off" title="评价"/>
+        <van-tab :disabled="goods_off" title="详情"/>
+        <van-tab v-if="show_dis" :disabled="goods_off" title="推荐"/>
       </van-tabs>
       <header-shortcut slot="right"/>
     </van-nav-bar>
-    <div class="goods-container">
-      <!--商品相册 start-->
-      <goods-gallery :data="galleryList"/>
-      <!--团购、限时抢购 start-->
-      <goods-groupbuy-seckill :promotions="promotions"/>
-      <!--团购、限时抢购 end-->
-      <!--积分兑换 start-->
-      <goods-exchange :promotions="promotions"/>
-      <!--积分兑换 end-->
-      <!--商品相册 end-->
-      <div class="goods-buy">
-        <div class="goods-name">
-          <h1>{{ goods.goods_name }}</h1>
-        </div>
-        <van-cell-group v-if="!hiddenPrice" :border="false">
-          <van-cell class="goods-price">
-            <div slot="title" class="price">
-              ￥<em>{{ goods.price | unitPrice('', 'before') }}</em>.{{ goods.price | unitPrice('', 'after') }}
-            </div>
-          </van-cell>
-        </van-cell-group>
-      </div>
-      <span class="separated"></span>
-      <!--店铺优惠券 start-->
-      <goods-coupons :shop-id="goods.seller_id"/>
-      <!--店铺优惠券 end-->
-      <!--促销活动 start-->
-      <goods-promotions :promotions="promotions"/>
-      <!--促销活动 end-->
-      <!--商品规格 start-->
-      <goods-specs
-        :goods="goods"
-        :show="showSpecsPopup"
-        :promotions="promotions"
-        @sku-changed="(sku) => { selectedSku = sku }"
-        @num-changed="(num) => { buyNum = num }"
-        @add-cart="handleAddToCart"
-        @buy-now="handleBuyNow"
-        @close="showSpecsPopup = false"
-      />
-      <!--商品规格 end-->
-      <span class="separated"></span>
-      <!--店铺卡片 start-->
-      <shop-card :shop-id="goods.seller_id"/>
-      <!--店铺卡片 end-->
-      <span class="separated"></span>
-      <!--评价 start-->
-      <goods-comments :goods-id="goods.goods_id" :grade="goods.grade"/>
-      <!--评价 end-->
-      <span class="separated"></span>
-      <!--商品简介、参数 start-->
-      <van-tabs class="params-container" :line-width="100">
-        <van-tab title="商品介绍">
-          <div v-html="goods.intro" class="goods-intro"></div>
-        </van-tab>
-        <van-tab title="商品参数">
-          <goods-params :goods-params="goods.param_list"/>
-        </van-tab>
-      </van-tabs>
-      <!--商品简介、参数 end-->
+    <div v-if="goods.goods_off === 0" class="goods-auth">
+      <div style="height: 50px"></div>
+      <img src="../../assets/images/background-goods-off.jpg" alt="">
+      <van-button type="default" size="small" @click="$router.push('/')">去首页</van-button>
+      <van-button type="default" size="small" @click="MixinRouterBack">返回上页</van-button>
     </div>
-    <div style="height: 50px"></div>
-    <van-goods-action style="z-index: 99">
-      <van-goods-action-mini-btn
-        :icon="collected ? 'like' : 'like-o'"
-        :text="collected ? '已收藏' : '收藏'"
-        @click="handleCollectGoods"
-      />
-      <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
-      <van-goods-action-mini-btn icon="shop" text="店铺" :to="'/shop/' + goods.seller_id"/>
-      <van-goods-action-big-btn
-        v-if="goods.is_auth === 0 || goods.goods_off === 0"
-        :text="goods.is_auth === 0 ? '商品审核中' : '商品已下架'"
-        class="buy-disabled"
-      />
-      <template v-else>
-        <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
-        <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
-      </template>
-    </van-goods-action>
-    <goods-distribution
-      v-if="show_dis"
-      :show="showDisPopup"
-      :goods_name="goods.goods_name"
-      :thumbnail="goods.thumbnail"
-      @close="showDisPopup = false"/>
+    <template v-else>
+      <div class="goods-container">
+        <!--商品相册 start-->
+        <goods-gallery :data="galleryList"/>
+        <!--团购、限时抢购 start-->
+        <goods-groupbuy-seckill :promotions="promotions"/>
+        <!--团购、限时抢购 end-->
+        <!--积分兑换 start-->
+        <goods-exchange :promotions="promotions"/>
+        <!--积分兑换 end-->
+        <!--商品相册 end-->
+        <div class="goods-buy">
+          <div class="goods-name">
+            <h1>{{ goods.goods_name }}</h1>
+          </div>
+          <van-cell-group v-if="!hiddenPrice" :border="false">
+            <van-cell class="goods-price">
+              <div slot="title" class="price">
+                ￥<em>{{ goods.price | unitPrice('', 'before') }}</em>.{{ goods.price | unitPrice('', 'after') }}
+              </div>
+            </van-cell>
+          </van-cell-group>
+        </div>
+        <span class="separated"></span>
+        <!--店铺优惠券 start-->
+        <goods-coupons :shop-id="goods.seller_id"/>
+        <!--店铺优惠券 end-->
+        <!--促销活动 start-->
+        <goods-promotions :promotions="promotions"/>
+        <!--促销活动 end-->
+        <!--商品规格 start-->
+        <goods-specs
+          :goods="goods"
+          :show="showSpecsPopup"
+          :promotions="promotions"
+          @sku-changed="(sku) => { selectedSku = sku }"
+          @num-changed="(num) => { buyNum = num }"
+          @add-cart="handleAddToCart"
+          @buy-now="handleBuyNow"
+          @close="showSpecsPopup = false"
+        />
+        <!--商品规格 end-->
+        <span class="separated"></span>
+        <!--店铺卡片 start-->
+        <shop-card :shop-id="goods.seller_id"/>
+        <!--店铺卡片 end-->
+        <span class="separated"></span>
+        <!--评价 start-->
+        <goods-comments :goods-id="goods.goods_id" :grade="goods.grade"/>
+        <!--评价 end-->
+        <span class="separated"></span>
+        <!--商品简介、参数 start-->
+        <van-tabs class="params-container" :line-width="100">
+          <van-tab title="商品介绍">
+            <div v-html="goods.intro" class="goods-intro"></div>
+          </van-tab>
+          <van-tab title="商品参数">
+            <goods-params :goods-params="goods.param_list"/>
+          </van-tab>
+        </van-tabs>
+        <!--商品简介、参数 end-->
+      </div>
+      <div style="height: 50px"></div>
+      <van-goods-action style="z-index: 99">
+        <van-goods-action-mini-btn
+          :icon="collected ? 'like' : 'like-o'"
+          :text="collected ? '已收藏' : '收藏'"
+          @click="handleCollectGoods"
+        />
+        <van-goods-action-mini-btn icon="cart" :info="cartBadge ? (cartBadge > 99 ? '99+' : cartBadge) : ''" to="/cart" text="购物车"/>
+        <van-goods-action-mini-btn icon="shop" text="店铺" :to="'/shop/' + goods.seller_id"/>
+        <van-goods-action-big-btn
+          v-if="goods.is_auth === 0 || goods.goods_off === 0"
+          :text="goods.is_auth === 0 ? '商品审核中' : '商品已下架'"
+          class="buy-disabled"
+        />
+        <template v-else>
+          <van-goods-action-big-btn text="加入购物车" @click="handleAddToCart"/>
+          <van-goods-action-big-btn text="立即购买" primary @click="handleBuyNow"/>
+        </template>
+      </van-goods-action>
+      <goods-distribution
+        v-if="show_dis"
+        :show="showDisPopup"
+        :goods_name="goods.goods_name"
+        :thumbnail="goods.thumbnail"
+        @close="showDisPopup = false"/>
+    </template>
   </div>
 </template>
 
@@ -129,7 +137,9 @@
         // 商品相册
         galleryList: goods.gallery_list || [],
         // 当前商品是否可以浏览
-        canView: goods.is_auth !== 0 && goods.goods_off === 1
+        canView: goods.is_auth !== 0 && goods.goods_off === 1,
+        // 当前商品是否下架
+        goods_off: goods.goods_off === 0
       }
     },
     head() {
@@ -180,6 +190,8 @@
       if (this.canView) {
         // 获取促销信息
         API_Promotions.getGoodsPromotions(goods_id).then(response => { this.promotions = response })
+        // 记录浏览量统计【用于统计】
+        API_Common.recordViews(window.location.href)
         // 滚动监听
         window.addEventListener('scroll', this.handleCountOffset)
         // 如果页面是被分享的
@@ -187,8 +199,6 @@
           API_distribution.accessShortLink({su: this.$route.query.su }).then(() => { console.log(9856) })
         }
       }
-      // 记录浏览量统计【用于统计】
-      API_Common.recordViews(window.location.href)
       // 如果用户已登录，加载收藏状态，加载购物车
       if (Storage.getItem('refresh_token')) {
         // 获取收藏状态
@@ -429,5 +439,15 @@
   /deep/ .buy-disabled {
     background-color: #e5e5e5;
     pointer-events:none;
+  }
+  .goods-auth {
+    text-align: center;
+    /deep/ .van-button {
+      margin-right: 20px;
+    }
+    img {
+      margin-top: 50px;
+      width: 100%;
+    }
   }
 </style>
