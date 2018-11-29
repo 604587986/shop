@@ -229,8 +229,10 @@
       margin: 0 auto;
       max-width: 200px;
       img {
-        width: 100%;
-        height: 100%;
+        display: block;
+        margin: 0 auto;
+        width: 156px;
+        height: 156px;
       }
     }
     .goods-list-right {
