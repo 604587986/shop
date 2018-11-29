@@ -20,7 +20,6 @@
               <viewer :images="comment.images">
                 <a
                   :key="index"
-                  @click="handleShowViewer(comment.images, index)"
                   class="comment-img-item"
                   v-for="(image, index) in comment.images"
                 >
