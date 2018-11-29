@@ -31,14 +31,26 @@
     <div class="big-btn">
       <van-button size="large" @click="submitProfile">保存修改</van-button>
     </div>
+    <div v-show="show_cropper" class="cropper-box">
+      <no-ssr>
+        <vueCropper
+          ref="cropper"
+          outputType="png"
+          :img="cropper_img"
+          :autoCropWidth="200"
+          :autoCropHeight="200"
+          :info="false"
+          centerBox
+          autoCrop
+        ></vueCropper>
+      </no-ssr>
+      <van-button type="default" class="confirm-btn" @click="handleCropper">确认裁剪</van-button>
+    </div>
   </div>
 </template>
 
 <script>
   import '@/static/lrz/lrz.all.bundle'
-  import '@/static/alloycrop/asset/alloy-finger'
-  import '@/static/alloycrop/asset/transform'
-  import '@/static/alloycrop/alloy-crop'
   import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
   import { Foundation, RegExp } from '~/ui-utils'
@@ -73,7 +85,11 @@
           }}
         ],
         // 生日
-        birthday: user.birthday ? Foundation.unixToDate(user.birthday, 'yyyy-MM-dd') : ''
+        birthday: user.birthday ? Foundation.unixToDate(user.birthday, 'yyyy-MM-dd') : '',
+        // 图片裁剪源
+        cropper_img: '',
+        // 显示图片裁剪
+        show_cropper: false
       }
     },
     watch: {
@@ -96,7 +112,8 @@
         const file = files[0]
         this.$confirm('该图片需要裁剪吗？选择取消将以原图上传。', () => {
           lrz(file).then(response => {
-            this.toAlloyCrop(response)
+            this.cropper_img = response.base64
+            this.show_cropper = true
             event.target.value = ''
           }).catch((e) => {
             this.$message.error('当前设备不支持上传图片，请到APP或PC端操作！')
@@ -106,26 +123,15 @@
           event.target.value = ''
         })
       },
-      toAlloyCrop(res) {
-        this.alloyCrop = new AlloyCrop({
-          image_src: res.base64,
-          className: 'crop-box',
-          circle: true,
-          width: 200,
-          height: 200,
-          output: 1,
-          ok: (base64) => {this.handleUpload(base64, res.origin.name)},
-          cancel: () => { this.alloyCrop.destroy() },
-          ok_text: '确认',
-          cancel_text: '取消'
+      // 图片裁剪
+      handleCropper() {
+        this.$refs.cropper.getCropData(async data => {
+          this.handleUpload(data)
         })
+        this.show_cropper = false
       },
       // 上传文件
-      handleUpload(file, filename) {
-        if (this.alloyCrop) {
-          this.alloyCrop.destroy()
-          delete this.alloyCrop
-        }
+      handleUpload(file, filename = 'file') {
         const formData = new FormData()
         if (typeof file === 'string') {
           file = this.MixinBase64toBlob(file)
@@ -212,5 +218,19 @@
     background-color: #fff;
     width: 100%;
     text-align: right;
+  }
+  .cropper-box {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #836FFF;
+  }
+  /deep/ .confirm-btn {
+    position: absolute;
+    left: 50%;
+    margin-left: -44px;
+    bottom: 20px;
   }
 </style>
