@@ -150,9 +150,12 @@
             { whitespace: true, message: '店铺名称不可为纯空格', trigger: 'blur' },
             { max: 15, message: '店铺名称长度最多15个字符', trigger: 'blur' }
           ],
+          /** 店铺地址地址 */
+          shop_address: [
+            { required: true, message: '请填写店铺地址', trigger: 'blur' }
+          ],
           /** 详细地址 */
           shop_add: [
-            { required: true, message: '请填写详细地址', trigger: 'blur' },
             { whitespace: true, message: '详细地址不可为纯空格', trigger: 'blur' },
             { max: 50, message: '详细地址长度最多50个字符', trigger: 'blur' }
           ],
