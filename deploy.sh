@@ -77,7 +77,7 @@ if [[ "$1" == "base" ]];then
   rm -rf node-v8.11.0-linux-x64.tar.gz
   mv node-v8.11.0-linux-x64 node
   echo 'export NODE_HOME=/usr/local/node  
-export PATH=$NODE_HOME/bin:$PATH'>/etc/profile
+export PATH=$NODE_HOME/bin:$PATH'>>/etc/profile
   source /etc/profile
 
   # 安装pm2
