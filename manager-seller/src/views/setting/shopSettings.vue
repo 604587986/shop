@@ -9,7 +9,7 @@
       status-icon>
       <!--店铺名称-->
       <el-form-item label="店铺名称：" prop="shop_name">
-        <el-input v-model="shopDataForm.shop_name" style="width: 200px;" auto-complete="off"></el-input>
+        <el-input v-model="shopDataForm.shop_name" @change="() => { shopDataForm.shop_name = shopDataForm.shop_name.trim() }" style="width: 200px;" auto-complete="off"></el-input>
       </el-form-item>
       <!--身份证号-->
       <el-form-item label="身份证号：" prop="legal_id">
@@ -21,7 +21,7 @@
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
-        <el-input v-model="shopDataForm.shop_add" style="width: 200px;" auto-complete="off"></el-input>
+        <el-input v-model="shopDataForm.shop_add" @change="() => { shopDataForm.shop_add = shopDataForm.shop_add.trim() }"  style="width: 200px;" auto-complete="off"></el-input>
       </el-form-item>
       <!--联系电话-->
       <el-form-item label="联系电话：" prop="link_phone">
