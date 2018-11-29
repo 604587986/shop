@@ -42,4 +42,13 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../assets/styles/color";
+  /deep/ {
+    .more-goods {
+      display: block;
+      text-align: center;
+      color: $color-href;
+      margin: 5px 0;
+    }
+  }
 </style>
