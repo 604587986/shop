@@ -97,7 +97,7 @@
           <h4>商品信息</h4>
           <div>
             <el-form-item label="商品名称：" prop="goods_name" class="goods-name-width">
-              <el-input v-model="baseInfoForm.goods_name" :maxlength="60" :minlength="3" placeholder="3-60个字符"></el-input>
+              <el-input v-model="baseInfoForm.goods_name" @change="() => { baseInfoForm.goods_name = baseInfoForm.goods_name.trim() }" :maxlength="60" :minlength="3" placeholder="3-60个字符"></el-input>
             </el-form-item>
             <el-form-item label="商品编号：" prop="sn">
               <el-input v-model="baseInfoForm.sn" :maxlength="20"></el-input>
@@ -168,7 +168,7 @@
           <h4>seo</h4>
           <div>
             <el-form-item label="seo标题：">
-              <el-input placeholder="最多60个字符" class="seo-text" :maxlength="60"  v-model="baseInfoForm.page_title"></el-input>
+              <el-input placeholder="最多60个字符" class="seo-text" @change="() => { baseInfoForm.page_title = baseInfoForm.page_title.trim() }" :maxlength="60"  v-model="baseInfoForm.page_title"></el-input>
             </el-form-item>
             <el-form-item label="seo关键字：" >
               <el-input type="textarea" placeholder="最多200个字符" class="seo-text" rows="5" :maxlength="200" v-model="baseInfoForm.meta_keywords"></el-input>
@@ -222,9 +222,11 @@
         <div class="base-info-item" v-if="isShowExchangeConfig">
           <h4>积分配置</h4>
           <div v-if="baseInfoForm.exchange">
-            <el-form-item label="兑换积分：" style="width: 50%;" prop="exchange_point">
-              <el-input placeholder="最多10个字符" :maxlength="10" v-model="baseInfoForm.exchange.exchange_money" style="width: 100px;"></el-input> 元 +
-              <el-input placeholder="最多10个字符" :maxlength="10" v-model.number="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分 可兑换此商品
+            <el-form-item label="兑换条件：" style="width: 25%;" prop="exchange_money">
+              <el-input placeholder="最多10个字符" :maxlength="10" v-model="baseInfoForm.exchange.exchange_money" style="width: 100px;"></el-input> 元
+            </el-form-item>
+            <el-form-item  style="width: 25%;" prop="exchange_point">
+              <el-input placeholder="最多10个字符" :maxlength="10" v-model.number="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分
             </el-form-item>
             <el-form-item label="积分商品分类：" >
               <el-select
@@ -258,7 +260,7 @@
               :rules="goods_params_list.required === 1 ? {required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' } : {}">
               <el-input
                 placeholder="长度为最多100个字符"
-                :maxlength="100"
+                maxlength="100"
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
               </el-input>
@@ -416,17 +418,30 @@
 
       const checkExchangePoint = (rule, value, callback) => {
         if (this.baseInfoForm.exchange.enable_exchange && !this.baseInfoForm.exchange.exchange_point) {
-          return callback(new Error('积分值不能为空'))
+          return callback(new Error('积分值不能为空且不能为0'))
         }
         setTimeout(() => {
-          if (!Number.isInteger(this.baseInfoForm.exchange.exchange_point)) {
-            callback(new Error('请输入数字值'))
+          if (!RegExp.integer.test(this.baseInfoForm.exchange.exchange_point)) {
+            callback(new Error('请输入正整数'))
           } else {
-            if (this.baseInfoForm.exchange.exchange_point <= 0) {
+            if (parseInt(this.baseInfoForm.exchange.exchange_point) <= 0) {
               callback(new Error('请输入大于0的积分值'))
             } else {
               callback()
             }
+          }
+        }, 1000)
+      }
+
+      const checkExchangeMoney = (rule, value, callback) => {
+        if (this.baseInfoForm.exchange.exchange_money !== 0 && !this.baseInfoForm.exchange.exchange_money) {
+          return callback(new Error('积分所需金额不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(this.baseInfoForm.exchange.exchange_money)) {
+            callback(new Error('请输入正确的金额'))
+          } else {
+            callback()
           }
         }, 1000)
       }
@@ -651,6 +666,9 @@
           ],
           template_id: [
             { validator: checkTplId, trigger: 'blur' }
+          ],
+          exchange_money: [
+            { validator: checkExchangeMoney, trigger: 'blur' }
           ],
           exchange_point: [
             { validator: checkExchangePoint, trigger: 'blur' }
