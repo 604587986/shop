@@ -223,7 +223,7 @@
       height: 5 * 16px;
       left: 10%;
       bottom: 2 * 16px;
-      z-index: 99;
+      z-index: 10;
       background-color: rgba(229, 229, 229, .8);
       i {
         float: left;
@@ -282,9 +282,10 @@
     }
     .img-new-goods {
       img {
-        width: 90%;
+        display: block;
         margin: 0 auto;
-        max-width: 200px;
+        width: 157px;
+        height: 157px;
       }
     }
     .intro-new-goods {
