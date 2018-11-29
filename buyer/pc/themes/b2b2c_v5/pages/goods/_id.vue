@@ -66,7 +66,9 @@
   import * as GoodsComponents from './'
   import Storage from '@/utils/storage'
   import { Pagination } from 'element-ui'
-  Vue.use(Pagination)
+  import 'viewerjs/dist/viewer.css'
+  import Viewer from 'v-viewer'
+  Vue.use(Pagination).use(Viewer)
   export default {
     name: 'goods-detail',
     validate({ params }) {
