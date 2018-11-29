@@ -18,6 +18,7 @@
         <el-input
           v-model="gruopBuyForm.gb_name"
           :style="{ width:inputLength +'px' }"
+          @change="() => { gruopBuyForm.gb_name = gruopBuyForm.gb_name.trim() }"
           placeholder="团购标题名称长度最多可输入30个字符">
         </el-input>
         <span class="activity-tip">团购标题名称长度最多可输入30个字符</span>
@@ -27,7 +28,8 @@
          <el-input
            v-model="gruopBuyForm.gb_title"
            :style="{ width:inputLength +'px' }"
-           placeholder="团购副标题针对团购特殊说明">
+           maxlength="200"
+           placeholder="团购副标题针对团购特殊说明,限200字">
          </el-input>
         <span class="activity-tip">团购副标题针对团购特殊说明</span>
       </el-form-item>
@@ -44,7 +46,7 @@
         </span>
       </el-form-item>
       <!--店铺价格-->
-      <el-form-item label="店铺价格">
+      <el-form-item label="店铺价格" v-if="gruopBuyForm.original_price">
         <span>{{ gruopBuyForm.original_price | unitPrice('￥')}}</span>
       </el-form-item>
       <!--团购价格-->
@@ -95,7 +97,7 @@
       <!--虚拟数量-->
       <el-form-item label="虚拟数量" prop="visual_num">
         <el-input
-          v-model.number="gruopBuyForm.visual_num"
+          v-model="gruopBuyForm.visual_num"
           :style="{ width:inputLength +'px' }"
           placeholder="虚拟购买数量，只用于前台显示，不影响成交记录"></el-input>
         <span class="activity-tip">虚拟购买数量，只用于前台显示，不影响成交记录</span>
@@ -103,7 +105,7 @@
       <!--限购数量-->
       <el-form-item label="限购数量" prop="limit_num">
         <el-input
-          v-model.number="gruopBuyForm.limit_num"
+          v-model="gruopBuyForm.limit_num"
           :style="{ width:inputLength +'px' }"
           placeholder="每个买家ID可团购的最大数量，不限数量请填 '0'"></el-input>
         <span class="activity-tip">每个买家ID可团购的最大数量，不限数量请填 '0'</span>
@@ -227,6 +229,24 @@
           callback()
         }
       }
+      const checkVisualNum = (rule, value, callback) => {
+        setTimeout(() => {
+          if (!RegExp.integer.test(value) && value !== 0) {
+            callback(new Error('请输入整数'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+      const checkLimitNum = (rule, value, callback) => {
+        setTimeout(() => {
+          if (!RegExp.integer.test(value) && value !== 0) {
+            callback(new Error('请输入整数'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
       const checkAgreement = (rule, value, callback) => {
         setTimeout(() => {
           if (!this.gruopBuyForm.is_allow_agreement) {
@@ -344,6 +364,17 @@
             { validator: checkGoodsSummary, trigger: 'blur' }
           ],
 
+          /** 虚拟数量 */
+          visual_num: [
+            { validator: checkVisualNum, trigger: 'change' }
+          ],
+
+          /** 限制数量 */
+          limit_num: [
+            { validator: checkLimitNum, trigger: 'change' }
+          ],
+
+          /** 是否统一协议 */
           is_allow_agreement: [
             { validator: checkAgreement, trigger: 'change' }
           ]

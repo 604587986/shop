@@ -46,7 +46,7 @@
           <el-button @click="gotoRecycle"  type="primary">回收站</el-button>
         </div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent" />
+          <en-table-search @search="searchEvent" placeholder="请输入商品名称"/>
         </div>
       </div>
       <template slot="table-columns">
@@ -200,7 +200,7 @@
           return callback(new Error('库存不能为空'))
         }
         setTimeout(() => {
-          if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
+          if (!/^[0-9]\d*$/.test(value) && parseInt(value) !== 0) {
             callback(new Error('请输入整数'))
           } else if (!(parseInt(value) >= 0 && parseInt(value) <= 99999999)) {
             callback(new Error('请输入0 - 99999999之间的正整数'))

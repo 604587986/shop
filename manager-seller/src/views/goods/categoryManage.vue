@@ -91,9 +91,9 @@
       </template>
     </en-table-layout>
     <el-dialog :title="categorytitle" :visible.sync="goodsCategoryShow" width="25%">
-      <el-form :model="goodsCatData" label-position="right" label-width="80px" :rules="rules" status-icon>
-        <el-form-item label="分组名称">
-          <el-input v-model="goodsCatData.category_name" style="width: 100%;"></el-input>
+      <el-form :model="goodsCatData" label-position="right" ref="goodsCatData" label-width="80px" :rules="rules" status-icon>
+        <el-form-item label="分组名称" prop="category_name">
+          <el-input v-model="goodsCatData.category_name" @change="() => { goodsCatData.category_name = goodsCatData.category_name.trim() }" maxlength="20" placeholder="限20字" style="width: 100%;"></el-input>
         </el-form-item>
         <el-form-item label="上级分组" >
           <el-select v-model="goodsCatData.category_parent" placeholder="请选择" style="width: 100%;">
@@ -117,7 +117,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="goodsCategoryShow = false">取 消</el-button>
-        <el-button type="primary" @click="reserveCategoryGoods">确 定</el-button>
+        <el-button type="primary" @click="reserveCategoryGoods('goodsCatData')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -172,6 +172,9 @@
         rules: {
           sort: [
             { validator: checkSort, trigger: 'blur' }
+          ],
+          category_name: [
+            { required: true, message: '请填写分类名称', trigger: 'blur' }
           ]
         }
       }
@@ -256,35 +259,39 @@
       },
 
       /** 保存商品分组 */
-      reserveCategoryGoods() {
-        let params = {}
-        if (this.goodsCatData.category_parent) {
-          params = {
-            shop_cat_pid: this.goodsCatData.category_parent,
-            shop_cat_name: this.goodsCatData.category_name,
-            disable: this.goodsCatData.disable,
-            sort: this.goodsCatData.sort
+      reserveCategoryGoods(FormName) {
+        this.$refs['baseInfoForm'].validate((valid) => {
+          if (valid) {
+            let params = {}
+            if (this.goodsCatData.category_parent) {
+              params = {
+                shop_cat_pid: this.goodsCatData.category_parent,
+                shop_cat_name: this.goodsCatData.category_name,
+                disable: this.goodsCatData.disable,
+                sort: this.goodsCatData.sort
+              }
+            } else {
+              params = {
+                shop_cat_name: this.goodsCatData.category_name,
+                disable: this.goodsCatData.disable,
+                sort: this.goodsCatData.sort
+              }
+            }
+            if (this.is_edit === 1) { // 添加
+              API_goodsCategory.addGoodsCategory(params).then(response => {
+                this.goodsCategoryShow = false
+                this.$message.success('添加成功')
+                this.GET_GoodsCategoryList()
+              })
+            } else { // 编辑
+              API_goodsCategory.updateGoodsCategory(this.categoryID, params).then(response => {
+                this.goodsCategoryShow = false
+                this.$message.success('编辑成功')
+                this.GET_GoodsCategoryList()
+              })
+            }
           }
-        } else {
-          params = {
-            shop_cat_name: this.goodsCatData.category_name,
-            disable: this.goodsCatData.disable,
-            sort: this.goodsCatData.sort
-          }
-        }
-        if (this.is_edit === 1) { // 添加
-          API_goodsCategory.addGoodsCategory(params).then(response => {
-            this.goodsCategoryShow = false
-            this.$message.success('添加成功')
-            this.GET_GoodsCategoryList()
-          })
-        } else { // 编辑
-          API_goodsCategory.updateGoodsCategory(this.categoryID, params).then(response => {
-            this.goodsCategoryShow = false
-            this.$message.success('编辑成功')
-            this.GET_GoodsCategoryList()
-          })
-        }
+        })
       },
 
       /** 展开/关闭 */

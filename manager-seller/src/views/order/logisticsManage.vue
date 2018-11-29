@@ -73,7 +73,7 @@
           label-width="120px"
           class="demo-ruleForm">
           <el-form-item label="模板名称:" prop="name" id="tplName">
-            <el-input v-model="mouldForm.name"></el-input>
+            <el-input v-model="mouldForm.name" :maxlength="15" @change="()=> { mouldForm.name = mouldForm.name.trim() }"></el-input>
           </el-form-item>
           <el-form-item label="计费方式:" prop="type" v-if="!mouldForm.template_id">
             <el-radio-group v-model="mouldForm.type" >
@@ -296,7 +296,8 @@
         /** 表单校验规则*/
         rules: {
           name: [
-            { required: true, message: '请输入模板名称', trigger: 'blur' }
+            { required: true, message: '请输入模板名称', trigger: 'blur' },
+            { max: 15, message: '模版名称最多15个字符', trigger: 'blur' }
           ],
           type: [
             { required: true, message: '请选择模板类型', trigger: 'change' }

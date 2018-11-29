@@ -8,7 +8,7 @@
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns"></div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent" />
+          <en-table-search @search="searchEvent" placeholder="请输入商品名称" />
         </div>
       </div>
       <template slot="table-columns">

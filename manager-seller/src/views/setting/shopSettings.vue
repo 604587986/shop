@@ -9,7 +9,7 @@
       status-icon>
       <!--店铺名称-->
       <el-form-item label="店铺名称：" prop="shop_name">
-        <el-input v-model="shopDataForm.shop_name" style="width: 200px;" auto-complete="off"></el-input>
+        <el-input v-model="shopDataForm.shop_name" @change="() => { shopDataForm.shop_name = shopDataForm.shop_name.trim() }" style="width: 200px;" auto-complete="off"></el-input>
       </el-form-item>
       <!--身份证号-->
       <el-form-item label="身份证号：" prop="legal_id">
@@ -21,7 +21,7 @@
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
-        <el-input v-model="shopDataForm.shop_add" style="width: 200px;" auto-complete="off"></el-input>
+        <el-input v-model="shopDataForm.shop_add" @change="() => { shopDataForm.shop_add = shopDataForm.shop_add.trim() }"  style="width: 200px;" auto-complete="off"></el-input>
       </el-form-item>
       <!--联系电话-->
       <el-form-item label="联系电话：" prop="link_phone">
@@ -150,9 +150,12 @@
             { whitespace: true, message: '店铺名称不可为纯空格', trigger: 'blur' },
             { max: 15, message: '店铺名称长度最多15个字符', trigger: 'blur' }
           ],
+          /** 店铺地址地址 */
+          shop_address: [
+            { required: true, message: '请填写店铺地址', trigger: 'blur' }
+          ],
           /** 详细地址 */
           shop_add: [
-            { required: true, message: '请填写详细地址', trigger: 'blur' },
             { whitespace: true, message: '详细地址不可为纯空格', trigger: 'blur' },
             { max: 50, message: '详细地址长度最多50个字符', trigger: 'blur' }
           ],

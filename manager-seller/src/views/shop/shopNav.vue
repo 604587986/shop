@@ -45,9 +45,9 @@
       </el-pagination>
     </en-table-layout>
     <el-dialog title="新增导航" :visible.sync="addShopNavshow"  width="35%">
-      <el-form :model="navform" :rules="rules" ref="navform" label-position="right" label-width="120px">
+      <el-form :model="navform" :rules="rules" ref="navform" label-position="right" status-icon label-width="120px">
         <el-form-item label="导航名称:" prop="name">
-          <el-input v-model="navform.name"/>
+          <el-input v-model="navform.name" @change="()=> { navform.name = navform.name.trim() }" />
         </el-form-item>
         <el-form-item label="是否显示:" prop="disable">
           <el-radio-group v-model="navform.disable">
@@ -59,7 +59,7 @@
           <el-input-number v-model="navform.sort" controls-position="right"  :min="0" :max="99999"/>
         </el-form-item>
         <el-form-item label="URL:" prop="nav_url">
-          <el-input placeholder="请输入URL" v-model="navform.nav_url"></el-input>
+          <el-input placeholder="请输入URL" @change="() => { navform.nav_url = navform.nav_url.trim() }" v-model="navform.nav_url"></el-input>
           <span class="URLtip">请填写包含http://的完整URL地址，否则会跳转到外链，长度最多255个字符</span>
           <span class="URLtip">例: http://www.baidu.com填写http://www.baidu.com</span>
         </el-form-item>

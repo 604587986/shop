@@ -142,7 +142,7 @@
             </div>
             <div class="order-info-item order-info-remark">
               <span>审核备注:  </span>
-              <el-input v-if="authOpera.allow_seller_approval" type="textarea" v-model="remark"></el-input>
+              <el-input v-if="authOpera.allow_seller_approval" placeholder="最多200字" :maxlength="200" type="textarea" v-model="remark"></el-input>
               <span v-if="!authOpera.allow_seller_approval">{{ refundInfo.seller_remark || '无' }}</span>
             </div>
             <!--审核-->
