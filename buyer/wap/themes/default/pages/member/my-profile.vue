@@ -154,7 +154,7 @@
       /** 生日发生改变 */
       handleBirthdayChange(event) {
         const date = event.target.value
-        this.profileForm.birthday = Foundation.dateToUnix(date)
+        this.profileForm.birthday = date ? Foundation.dateToUnix(date) : ''
       },
       /** 昵称dialog关闭前 */
       beforeNicknameClose(action, done) {
@@ -176,7 +176,7 @@
       /** 保存资料提交表单 */
       submitProfile() {
         const { birthday } = this.profileForm
-        if (!birthday || isNaN(birthday) || birthday.length < 8 ) {
+        if (isNaN(birthday) ) {
           this.$message.error('生日格式不正确！')
           return
         }
