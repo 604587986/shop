@@ -10,6 +10,7 @@
           </div>
           <div class="toolbar-search">
             <en-table-search
+              placeholder="请输入商品名称或评论内容"
               @search="searchEvent"
               @advancedSearch="advancedSearchEvent"
               advanced>
@@ -110,7 +111,7 @@
         </el-pagination>
       </div>
       <el-dialog title="回复评论" :visible.sync="replyCommentShow" width="30%">
-        <el-form :model="commentForm">
+        <el-form :model="commentForm" :rules="replyRules">
           <el-form-item label="评论内容" :label-width="formLabelWidth">
             <span>{{commentForm.comment_content}}</span>
           </el-form-item>
@@ -118,8 +119,8 @@
             <img v-for="imgsrc in commentForm.comment_imgs" :src="imgsrc"
                  style="margin-right:3px;width:50px;height:50px;">
           </el-form-item>
-          <el-form-item label="回复内容" :label-width="formLabelWidth">
-            <el-input type="textarea" v-model="commentForm.reply_content" auto-complete="off"></el-input>
+          <el-form-item label="回复内容" :label-width="formLabelWidth" prop="reply_content">
+            <el-input type="textarea" rows="5" :maxlength="500" v-model="commentForm.reply_content" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -250,6 +251,14 @@
 
           /** 回复内容 */
           reply_content: ''
+        },
+
+        /** 检验工具 */
+        replyRules: {
+          reply_content: [
+            { required: true, message: '回复内容不可为空', trigger: 'blur' },
+            { max: 500, message: '回复内容最多500个字', trigger: 'blur' }
+          ]
         },
 
         /** 表格最大高度 */
