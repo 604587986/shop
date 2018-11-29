@@ -111,7 +111,7 @@
         </el-pagination>
       </div>
       <el-dialog title="回复评论" :visible.sync="replyCommentShow" width="30%">
-        <el-form :model="commentForm" :rules="replyRules">
+        <el-form :model="commentForm" :rules="replyRules" ref="commentForm">
           <el-form-item label="评论内容" :label-width="formLabelWidth">
             <span>{{commentForm.comment_content}}</span>
           </el-form-item>
@@ -125,7 +125,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="replyCommentShow = false">取 消</el-button>
-          <el-button type="primary" @click="saveCommentReply">确 定</el-button>
+          <el-button type="primary" @click="saveCommentReply('commentForm')">确 定</el-button>
         </div>
       </el-dialog>
     </el-tab-pane>
@@ -379,11 +379,15 @@
       },
 
       /** 保存评论回复*/
-      saveCommentReply() {
-        API_comment.replyComment(this.commentForm.comment_id, { reply: this.commentForm.reply_content }).then(() => {
-          this.replyCommentShow = false
-          this.GET_CommmentsList()
-          this.$message.success('保存成功')
+      saveCommentReply(FormName) {
+        this.$refs[FormName].validate((valid) => {
+          if (valid) {
+            API_comment.replyComment(this.commentForm.comment_id, { reply: this.commentForm.reply_content }).then(() => {
+              this.replyCommentShow = false
+              this.GET_CommmentsList()
+              this.$message.success('保存成功')
+            })
+          }
         })
       }
     }
