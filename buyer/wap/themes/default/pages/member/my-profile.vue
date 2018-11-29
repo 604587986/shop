@@ -44,7 +44,10 @@
           autoCrop
         ></vueCropper>
       </no-ssr>
-      <van-button type="default" class="confirm-btn" @click="handleCropper">确认裁剪</van-button>
+      <div class="confirm-btns">
+        <van-button type="default" @click="show_cropper = false">取消裁剪</van-button>
+        <van-button type="primary" @click="handleCropper">确认裁剪</van-button>
+      </div>
     </div>
   </div>
 </template>
@@ -227,10 +230,13 @@
     bottom: 0;
     background-color: #836FFF;
   }
-  /deep/ .confirm-btn {
+  /deep/ .confirm-btns {
     position: absolute;
     left: 50%;
-    margin-left: -44px;
+    margin-left: -(186px / 2);
     bottom: 20px;
+    .van-button:first-child {
+      margin-right: 10px;
+    }
   }
 </style>
