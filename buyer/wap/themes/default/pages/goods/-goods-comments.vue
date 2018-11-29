@@ -15,7 +15,7 @@
           <div class="com-content">{{ comment.content }}</div>
           <div v-if="comment.images && comment.images.length" class="com-gallery">
             <span v-for="(img, index) in comment.images" :key="index" class="img">
-              <img :src="img">
+              <img :src="img" @click="handleImagePreview(comment.images, index)">
             </span>
           </div>
         </div>
@@ -43,7 +43,7 @@
           <div class="com-content">{{ comment.content }}</div>
           <div v-if="comment.images && comment.images.length" class="com-gallery">
             <span v-for="(img, index) in comment.images" :key="index" class="img">
-              <img :src="img">
+              <img :src="img" @click="handleImagePreview(comment.images, index)">
             </span>
           </div>
         </div>
@@ -58,6 +58,7 @@
    * 这里只负责展示商品的评论
    */
   import * as API_Members from '@/api/members'
+  import { ImagePreview } from 'vant'
   export default {
     name: "goods-comments",
     props: ['goods-id', 'grade'],
@@ -92,6 +93,10 @@
       }
     },
     methods: {
+      /** 显示图片预览 */
+      handleImagePreview(images, index) {
+        ImagePreview({images, startPosition: index})
+      },
       /** 当页数发生改变时 */
       onLoad() {
         this.params.page_no += 1

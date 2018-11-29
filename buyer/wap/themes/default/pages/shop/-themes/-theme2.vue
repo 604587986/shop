@@ -58,6 +58,7 @@
           </li>
         </ul>
       </div>
+      <nuxt-link :to="'./goods-list?shop_id=' + shop_id" class="more-goods">更多本店商品 >></nuxt-link>
     </div>
     <div class="shop-detail">
       <h3>关于店铺</h3>

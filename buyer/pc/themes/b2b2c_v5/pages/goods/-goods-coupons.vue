@@ -69,7 +69,7 @@
   import Storage from '@/utils/storage'
   export default {
     name: 'goods-coupons',
-    props: ['shop-id'],
+    props: ['goods', 'isSnapshot'],
     data() {
       return {
         sidebarOpen: false,
@@ -77,20 +77,33 @@
       }
     },
     mounted() {
-      API_Promotions.getShopCoupons(this.shopId).then(response => {
-        this.coupons = response
-      })
+      if (this.isSnapshot) {
+        this.coupons = this.goods.coupon_list
+      } else {
+        this.GET_CouponsList()
+      }
       this.$nextTick(() => {
         window.addEventListener('click', this.handleClsoeSide)
       })
     },
     methods: {
+      /** 获取优惠券列表 */
+      GET_CouponsList() {
+        const { seller_id } = this.goods
+        API_Promotions.getShopCoupons(seller_id).then(response => {
+          this.coupons = response
+        })
+      },
       /** 关闭优惠券侧边栏 */
       handleClsoeSide() {
         this.sidebarOpen = false
       },
       /** 领取优惠券 */
       handleReceiveCoupon(coupon) {
+        if (this.isSnapshot) {
+          this.$message.error('此优惠券为此商品的快照信息，不能领取！')
+          return false
+        }
         if (!Storage.getItem('refresh_token')) {
           this.$confirm('您还未登录，要现在去登录吗？', () => {
             this.$router.push({ path: '/login', query: { forward: this.$route.path } })

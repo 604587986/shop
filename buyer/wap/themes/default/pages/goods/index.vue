@@ -251,7 +251,7 @@
     .goods-name {
       font-size: 14px;
       color: #333;
-      line-height: 1.3;
+      line-height: 19px;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;

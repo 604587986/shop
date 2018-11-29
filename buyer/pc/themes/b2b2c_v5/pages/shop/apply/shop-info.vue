@@ -25,7 +25,7 @@
     </div>
     <div class="next-btns">
       <el-button size="small" @click="$router.back()">上一步</el-button>
-      <el-button size="small" @click="handleNextStep">下一步</el-button>
+      <el-button @click="handleNextStep" size="small">提交申请</el-button>
     </div>
   </div>
 </template>

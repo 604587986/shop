@@ -22,7 +22,7 @@
         </div>
         <goods-promotions :promotions="promotions"/>
       </div>
-      <goods-coupons :shop-id="goods.seller_id"/>
+      <goods-coupons :goods="goodsInfo" :is-snapshot="is_snapshot"/>
     </div>
     <div v-if="specList && specList.length" :class="['pro-spec', unselectedSku && 'error']">
       <div v-for="(spec, specIndex) in specList" :key="spec.spec_id" class="pro-list">

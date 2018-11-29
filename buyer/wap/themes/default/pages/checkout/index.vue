@@ -306,9 +306,9 @@
           this.$router.replace({ path: '/checkout/cashier?trade_sn=' + response.trade_sn })
         }).catch(error => {
           const { data } = error.response || {}
-          if (data.code === '452') {
+          if (data.data) {
             const { data: list } = data
-            if (!list || list[0]) {
+            if (!list || !list[0]) {
               this.$message.error(data.message)
               return
             }

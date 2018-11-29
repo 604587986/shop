@@ -10,7 +10,7 @@
           <dl><dt>收货人：</dt><dd>{{ order.ship_name }}</dd></dl>
           <dl><dt>送货时间:</dt><dd>{{ order.receive_time }}</dd></dl>
           <dl><dt>客户留言：</dt><dd>{{ order.remark || '无' }}</dd></dl>
-          <template v-if="order.receipt_history">
+          <template v-if="order.receipt_history && order.receipt_history.receipt_title">
             <dl class="top_line"><dt>发票抬头:</dt><dd>{{ order.receipt_history.receipt_title }}</dd></dl>
             <dl><dt>发票内容:</dt><dd>{{ order.receipt_history.receipt_content }}</dd></dl>
             <dl><dt>发票类型:</dt><dd>{{ order.receipt_history.receipt_type }}</dd></dl>

@@ -1,13 +1,5 @@
 <template>
   <div v-if="goods && goods.goods_id" id="goods">
-    <!--<div v-if="goods.is_auth === 0 || goods.goods_off === 0" class="goods-auth w">-->
-      <!--<img v-if="goods.goods_off === 0" src="../../assets/images/background-goods-off.jpg" alt="商品已下架">-->
-      <!--<img v-else src="../../assets/images/background-goods-auth.jpg" alt="商品待审核">-->
-      <!--<div class="goods-auth-btns">-->
-        <!--<nuxt-link to="/">去首页</nuxt-link>-->
-        <!--<a href="javascript:;" @click="handleCloseWindow">关闭窗口</a>-->
-      <!--</div>-->
-    <!--</div>-->
     <div v-if="goods.goods_off === 0" class="goods-auth w">
       <img src="../../assets/images/background-goods-off.jpg" alt="商品已下架">
       <div class="goods-auth-btns">
@@ -74,7 +66,9 @@
   import * as GoodsComponents from './'
   import Storage from '@/utils/storage'
   import { Pagination } from 'element-ui'
-  Vue.use(Pagination)
+  import 'viewerjs/dist/viewer.css'
+  import Viewer from 'v-viewer'
+  Vue.use(Pagination).use(Viewer)
   export default {
     name: 'goods-detail',
     validate({ params }) {

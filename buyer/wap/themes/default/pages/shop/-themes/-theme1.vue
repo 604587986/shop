@@ -58,6 +58,7 @@
           </li>
         </ul>
       </div>
+      <nuxt-link :to="'./goods-list?shop_id=' + shop_id" class="more-goods">更多本店商品 >></nuxt-link>
     </div>
     <div class="shop-detail">
       <h3>关于店铺</h3>
@@ -208,7 +209,6 @@
     width: 90%;
     padding: 16px 5%;
     background: #fff;
-    box-shadow: 1px 1px 10px #ccc;
     .title-hot-goods {
       width: 100%;
       height: 3 * 16px;
