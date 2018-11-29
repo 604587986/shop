@@ -98,8 +98,8 @@
           <el-form-item
             label="回复内容:"
             prop="reply"
-            :rules="{ required: true, message: '请填写回复内容' ,trigger: 'blur' }">
-            <el-input type="textarea" v-model="replyForm.reply"></el-input>
+            :rules="{ required: true, messagmessagee: '请填写回复内容' ,trigger: 'blur' }">
+            <el-input type="textarea" :maxlength="500" rows="5" placeholder="回复内容最多500个字" v-model="replyForm.reply"></el-input>
           </el-form-item>
         </el-form>
       </div>
