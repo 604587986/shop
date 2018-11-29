@@ -10,7 +10,7 @@
           <h4>店铺正在审核中，您可以去其它地方看看。</h4>
         </div>
       </template>
-      <template v-if="shop_status === 'APPLYING'">
+      <template v-else-if="shop_status === 'APPLYING'">
         <h3>您的店铺申请流程尚未完成，无法对商家中心功能进行操作，您可以：</h3>
         <div class="apply-btn">
           <nuxt-link to="/shop/apply/user-agreement">继续申请</nuxt-link>

@@ -11,7 +11,7 @@
         <li v-for="shop in shopList.data" :key="shop.shop_id" class="shop-item">
           <div class="shop-info">
             <div class="shop-member-face">
-              <img :src="shop.member_face" class="member-face">
+              <en-face :url="shop.member_face" class="member-face"/>
             </div>
             <div class="shop-member-name">
               <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
