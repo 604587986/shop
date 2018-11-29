@@ -6,7 +6,7 @@
         <template v-for="(goods, index) in tag.data">
           <li
             v-if="index < 5"
-            :key="goods.goods_id"
+            :key="index"
             class="goods-item">
             <a :href="'/goods/' + goods.goods_id">
               <img :src="goods.thumbnail" :alt="goods.goods_name" class="goods-image">
