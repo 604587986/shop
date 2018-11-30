@@ -372,6 +372,8 @@
         setTimeout(() => {
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入正整数或者两位小数'))
+          } else if (parseFloat(value) > 99999999) {
+            callback(new Error('价格设置超过上限值'))
           } else {
             callback()
           }
