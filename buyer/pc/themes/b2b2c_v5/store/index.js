@@ -2,6 +2,7 @@ import * as types from './mutation-types'
 import * as API_Common from '@/api/common'
 import * as API_Home from '@/api/home'
 import * as API_Goods from '@/api/goods'
+import * as API_Message from '@/api/message'
 import uuidv1 from 'uuid/v1'
 import Cookie from 'cookie'
 import Storage from '@/utils/storage'
@@ -19,7 +20,9 @@ export const state = () => ({
   // 热搜关键词
   hotKeywords: [],
   // 站点信息
-  site: ''
+  site: '',
+  // 未读消息数量
+  unreadMessageNum: 0
 })
 
 /** mutations */
@@ -56,6 +59,14 @@ export const mutations = {
    */
   [types.SET_HOT_KEYWORDS](state, data) {
     state.hotKeywords = data
+  },
+  /**
+   * 未读消息数量
+   * @param state
+   * @param num
+   */
+  [types.GET_UNREAD_MESSAGE](state, num) {
+    state.unreadMessageNum = num
   }
 }
 
@@ -105,6 +116,15 @@ export const actions = {
     commit(types.SET_CATEGORY_DATA, commons[2])
     // 热门关键字
     commit(types.SET_HOT_KEYWORDS, commons[3])
+  },
+  /**
+   * 获取未读消息数
+   * @param commit
+   * @returns {Promise<void>}
+   */
+  async getUnreadMessageNumAction({ commit }) {
+    const res = await API_Message.getMesssagesAsUnread()
+    commit(types.GET_UNREAD_MESSAGE, res.data_total)
   }
 }
 
@@ -139,5 +159,11 @@ export const getters = {
    * @param state
    * @returns {getters.site|(function(*))|string}
    */
-  site: state => state.site
+  site: state => state.site,
+  /**
+   * 获取未读消息数量
+   * @param state
+   * @returns {getters.unreadMessageNum|(function(*))|*|number}
+   */
+  unreadMessageNum: state => state.unreadMessageNum
 }

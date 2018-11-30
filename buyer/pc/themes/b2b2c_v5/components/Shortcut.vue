@@ -75,7 +75,9 @@
         <li class="spacer"></li>
         <li>
           <div class="dt">
-            <nuxt-link to="/member/website-message">站内消息[{{ message_total }}]</nuxt-link>
+            <nuxt-link to="/member/website-message">
+              站内消息[{{ unreadMessageNum > 99 ? '99+' : unreadMessageNum }}]
+            </nuxt-link>
           </div>
         </li>
       </ul>
@@ -103,7 +105,7 @@
       }
     },
     computed: {
-      ...mapGetters(['user'])
+      ...mapGetters(['user', 'unreadMessageNum'])
     },
     mounted() {
       // 如果是首页，并且有uuid，那么替换掉cookie中的uuid，并且移除url中的uuid
@@ -124,7 +126,8 @@
       ...mapActions({
         logout: 'user/logoutAction',
         getUserData: 'user/getUserDataAction',
-        cleanCartStore: 'cart/cleanCartStoreAction'
+        cleanCartStore: 'cart/cleanCartStoreAction',
+        getUnreadMessageNum: 'getUnreadMessageNumAction'
       }),
       /** 账户登出 */
       handleLogout() {
@@ -134,16 +137,13 @@
         })
       },
       /** 获取未读消息 */
-      GET_UnreadMessage() {
+      async GET_UnreadMessage() {
         if (!Storage.getItem('refresh_token')) return
-        API_Message.getMesssagesAsUnread().then(response => {
-          const { data_total } = response
-          this.message_total = data_total > 99 ? '99+' : data_total
-          // 消息轮询，5分钟查一次
-          setTimeout(() => {
-            this.GET_UnreadMessage()
-          }, 1000 * 60 * 5)
-        })
+        await this.getUnreadMessageNum()
+        // 消息轮询，5分钟查一次
+        setTimeout(() => {
+          this.GET_UnreadMessage()
+        }, 1000 * 60 * 5)
       }
     }
   }
