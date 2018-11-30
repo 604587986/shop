@@ -1333,6 +1333,31 @@
           this.$message.error('存在未填写的规格值')
           return false
         }
+        // 规格值校验
+        let spec_fun = false
+        let spec_tip
+        this.baseInfoForm.sku_list.forEach(key => {
+          if (!RegExp.money.test(key.cost)) {
+            spec_fun = true
+            spec_tip = '请输入正确的成本价金额'
+          }
+          if (!RegExp.money.test(key.price)) {
+            spec_fun = true
+            spec_tip = '请输入正确的价格'
+          }
+          if (!(parseInt(key.weight) >= 0 && parseInt(key.weight) < 99999999)) {
+            spec_fun = true
+            spec_tip = '重量须为0 - 99999999之间的整数'
+          }
+          if (!(parseInt(key.quantity) >= 0 && parseInt(key.quantity) < 99999999) || !/^[0-9]\d*$/.test(key.quantity)) {
+            spec_fun = true
+            spec_tip = '库存须为0 - 99999999之间的整数'
+          }
+        })
+        if (spec_fun) {
+          this.$message.error(spec_tip)
+          return false
+        }
         return true
       }
     }

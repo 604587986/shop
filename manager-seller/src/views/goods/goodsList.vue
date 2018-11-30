@@ -202,7 +202,7 @@
           return callback(new Error('库存不能为空'))
         }
         setTimeout(() => {
-          if (!/^[0-9]\d*$/.test(value) && parseInt(value) !== 0) {
+          if (!/^[0-9]\d*$/.test(value)) {
             callback(new Error('请输入整数'))
           } else if (!(parseInt(value) >= 0 && parseInt(value) <= 99999999)) {
             callback(new Error('请输入0 - 99999999之间的正整数'))
@@ -280,7 +280,7 @@
         /** 校验规则 */
         rules: {
           quantity: [
-            { validator: checkQuantity, trigger: 'change' }
+            { validator: checkQuantity, trigger: 'blur' }
           ]
         },
 
@@ -593,7 +593,7 @@
           })
         }
         const _res = _params.some(key => {
-          return !(parseInt(key.quantity_count) >= 0 && parseInt(key.quantity_count) < 99999999)
+          return !(parseInt(key.quantity_count) >= 0 && parseInt(key.quantity_count) < 99999999) || !/^[0-9]\d*$/.test(key.quantity_count)
         })
         if (_res) {
           this.$message.error('库存须为0 - 99999999之间的整数')
