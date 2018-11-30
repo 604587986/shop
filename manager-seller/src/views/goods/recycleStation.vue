@@ -28,7 +28,9 @@
       <el-table-column type="selection"/>
       <el-table-column label="图片" width="120">
         <template slot-scope="scope">
-          <img :src="scope.row.thumbnail" class="goods-image"/>
+          <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank">
+            <img :src="scope.row.thumbnail" class="goods-image"/>
+          </a>
         </template>
       </el-table-column>
       <el-table-column prop="goods_name" label="名称" min-width="400">

@@ -20,11 +20,11 @@
         <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
             <div class="goods-info">
-              <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
+              <a class="goods-name" :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`">
+                <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
+              </a>
               <div class="goodsinfo-txt">
-                <a class="goods-name"
-                  :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`">
-                  {{ scope.row.goods_name }}</a>
+                <a class="goods-name" :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`">{{ scope.row.goods_name }}</a>
                 <span class="goods-price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
             </div>
