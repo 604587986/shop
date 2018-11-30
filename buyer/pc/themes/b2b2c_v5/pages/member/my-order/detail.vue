@@ -30,6 +30,10 @@
       <div class="status-order">
         <h2>订单状态：{{ order.order_status_text }}</h2>
         <ul class="status-list">
+          <li v-if="order.order_status === 'CANCELLED'">
+            - 订单取消原因：
+            <strong>{{ order.cancel_reason }}</strong>
+          </li>
           <li v-if="order.order_operate_allowable_vo.allow_pay">
             - 如果您尚未对该订单进行支付，请
             <strong><a :href="'/checkout/cashier?order_sn=' + order.sn">按此为订单付款</a></strong>
