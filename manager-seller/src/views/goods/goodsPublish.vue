@@ -1035,6 +1035,7 @@
             this.$nextTick(() => { this.setSort() })
             this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           }
+          if (!this.baseInfoForm.goods_gallery_list) this.baseInfoForm.goods_gallery_list = []
           this.goodsGalleryList = JSON.parse(JSON.stringify(this.baseInfoForm.goods_gallery_list))
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list) {
