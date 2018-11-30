@@ -281,6 +281,6 @@
     display: block;
     text-align: center;
     margin-top: 86px;
-    padding-top: 100px;
+    padding-top: 50px;
   }
 </style>
