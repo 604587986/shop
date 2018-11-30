@@ -93,7 +93,7 @@
         }
       }
       const validQQ = (rule, value, callback) => {
-        if (!/^[0-9]\d*$/g.test(value)) {
+        if (value && !/^[0-9]\d*$/g.test(value)) {
           callback(new Error('请输入0-9之间的整数'))
         } else {
           callback()
@@ -162,9 +162,8 @@
           ],
           /** 店铺qq */
           shop_qq: [
-            { whitespace: true, message: '店铺QQ不可为纯空格', trigger: 'blur' },
-            { max: 20, message: '店铺QQ长度最多20个字符', trigger: 'blur' },
-            { validator: validQQ, trigger: 'blur' }
+            { required: false, trigger: 'change', validator: validQQ },
+            { max: 20, message: '店铺QQ长度最多20个字符', trigger: 'change' }
           ]
         }
       }
