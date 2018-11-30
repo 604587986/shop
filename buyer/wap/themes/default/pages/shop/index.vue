@@ -215,6 +215,9 @@
     line-height: 18px;
     text-align: right;
   }
+  .shop-aside {
+    border-bottom: 1px solid #f1f1f1;
+  }
   /deep/ {
     .van-nav-bar--fixed {
       z-index: 99 !important;
