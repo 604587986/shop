@@ -10,9 +10,7 @@
         <van-cell title="用户名" :value="profileForm.uname"/>
         <van-cell title="昵称" :value="profileForm.nickname" is-link @click="showEditNickname = true"/>
         <van-cell title="性别" :value="profileForm.sex === 1 ? '男' : '女'" is-link @click="showSexActionsheet = true"/>
-        <van-cell title="生日" :value="birthday" is-link>
-          <input type="date" :value="birthday" class="birthday-input" @change="handleBirthdayChange">
-        </van-cell>
+        <van-cell title="生日" :value="formatterBirthdayDate()" is-link @click="showBirthdayActionsheet = true"/>
       </van-cell-group>
     </div>
     <!--修改昵称弹框-->
@@ -27,6 +25,16 @@
     </van-dialog>
     <!--修改性别弹出菜单-->
     <van-actionsheet v-model="showSexActionsheet" :actions="sexActions" cancel-text="取消"/>
+    <van-actionsheet v-model="showBirthdayActionsheet">
+      <van-datetime-picker
+        v-model="birthday"
+        type="date"
+        :min-date="new Date(1900,1,1)"
+        :max-date="new Date()"
+        @cancel="showBirthdayActionsheet = false"
+        @confirm="handleConfirmBirthday"
+      />
+    </van-actionsheet>
     <!--登录-->
     <div class="big-btn">
       <van-button size="large" @click="submitProfile">保存修改</van-button>
@@ -87,8 +95,10 @@
             this.showSexActionsheet = false
           }}
         ],
+        // 显示日期选择器
+        showBirthdayActionsheet: false,
         // 生日
-        birthday: user.birthday ? Foundation.unixToDate(user.birthday, 'yyyy-MM-dd') : '',
+        birthday: user.birthday ? new Date(user.birthday * 1000) : new Date(),
         // 图片裁剪源
         cropper_img: '',
         // 显示图片裁剪
@@ -98,7 +108,7 @@
     watch: {
       user(newVal, oldVal) {
         this.profileForm = newVal ? JSON.parse(JSON.stringify(newVal)) : {}
-        this.birthday = newVal.birthday ? Foundation.unixToDate(newVal.birthday, 'yyyy-MM-dd') : ''
+        this.birthday = newVal.birthday ? new Date(newVal.birthday * 1000) : new Date()
         this.nickname = newVal.nickname
       }
     },
@@ -151,10 +161,10 @@
           this.profileForm.face = response.url
         })
       },
-      /** 生日发生改变 */
-      handleBirthdayChange(event) {
-        const date = event.target.value
-        this.profileForm.birthday = date ? Foundation.dateToUnix(date) : ''
+      /** 确认生日选择 */
+      handleConfirmBirthday() {
+        this.profileForm.birthday = new Date(this.birthday).getTime() / 1000
+        this.showBirthdayActionsheet = false
       },
       /** 昵称dialog关闭前 */
       beforeNicknameClose(action, done) {
@@ -184,6 +194,11 @@
           this.$store.dispatch('user/getUserDataAction')
           this.$message.success('修改成功！')
         })
+      },
+      /** 格式化生日日期 */
+      formatterBirthdayDate() {
+        const { birthday } = this.profileForm
+        return Foundation.unixToDate(birthday, 'yyyy-MM-dd')
       },
       ...mapActions({
         saveUserInfo: 'user/saveUserInfoAction'
@@ -221,6 +236,12 @@
     background-color: #fff;
     width: 100%;
     text-align: right;
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+    &::-webkit-clear-button {
+      display: none;
+    }
   }
   .cropper-box {
     position: fixed;
