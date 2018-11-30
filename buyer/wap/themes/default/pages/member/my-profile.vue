@@ -4,7 +4,7 @@
     <div class="profile-container">
       <van-cell-group :border="false">
         <van-cell title="头像" is-link class="face-cell">
-          <img :src="profileForm.face" class="img-face">
+          <en-face :url="profileForm.face" class="img-face"/>
           <input id="update-face" class="update-face" type="file" accept="image/jpg,image/jpeg,image/png" @change="handleUpdateFace">
         </van-cell>
         <van-cell title="用户名" :value="profileForm.uname"/>
