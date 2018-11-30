@@ -76,12 +76,12 @@
                   <nuxt-link :to="'/shop/' + shop.shop_id">
                     <img :src="shop.logo" :alt="shop.shop_name">
                   </nuxt-link>
-                </div>
-                <div class="shop-card-main">
-                  <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
                   <div class="shop-tools">
                     <a href="javascript:;" @click="shop.show_del_pop = 1"><i class="iconfont ea-icon-delete"></i></a>
                   </div>
+                </div>
+                <div class="shop-card-main">
+                  <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
                   <div class="shop-other">
                     <p style="margin-bottom: 5px">店铺评分：</p>
                     <p>描述相符: {{ shop.shop_description_credit }}</p>
@@ -350,26 +350,24 @@
     border-bottom: #e5e5e5 1px solid;
     &:last-child { border-bottom: none };
     .shop-card {
-      width: 270px;
+      width: 200px;
       margin-right: 30px;
       padding-top: 20px;
       position: relative;
     }
     .shop-card-side {
-      float: left;
       padding-left: 6px;
       padding-right: 17px;
-      height: 190px;
-      width: 50px;
       img {
-        width: 50px;
+        width: 130px;
         height: 50px;
-        border-radius: 100%;
+        object-fit: contain;
       }
     }
     .shop-card-main {
-      position: relative;
-      float: left;
+      padding-left: 6px;
+      padding-right: 17px;
+      margin-top: 10px;
     }
     .shop-other {
       margin-top: 10px;
@@ -388,9 +386,9 @@
       &:hover { color: $color-main }
     }
     .shop-tools {
-      position: absolute;
-      top: 0;
-      right: 0;
+      display: inline-block;
+      margin-left: 20px;
+      float: right;
       .ea-icon-delete {
         font-size: 20px;
         line-height: normal;
