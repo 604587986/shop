@@ -72,6 +72,7 @@
       <div class="all-check" @click="handleCheckAll">
         <van-icon :name="all_checked ? 'checked' : 'check'"/>全选
       </div>
+      <a v-show="checkedCount" href="javascript:void(0)" class="del-btn" @click="handleBatchDelete">删除已选</a>
     </van-submit-bar>
   </div>
 </template>
@@ -417,6 +418,11 @@
     }
     .van-icon-checked {
       color: $color-main;
+    }
+    .del-btn {
+      font-size: 12px;
+      margin-left: 10px;
+      color: #F44F44;
     }
   }
 </style>
