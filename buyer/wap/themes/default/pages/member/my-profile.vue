@@ -48,6 +48,7 @@
           :autoCropWidth="200"
           :autoCropHeight="200"
           :info="false"
+          fixed
           centerBox
           autoCrop
         ></vueCropper>
