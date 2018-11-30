@@ -40,8 +40,9 @@
     name: 'EnSearch',
     props: ['hide-keywords'],
     data() {
+      const { keyword } = this.$route.query
       return {
-        keyword: this.$route.query.keyword || '',
+        keyword: keyword ? decodeURIComponent(keyword) : '',
         autoCompleteStr: '',
         autoCompleteData: [],
         show_autocomplete: false
