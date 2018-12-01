@@ -77,3 +77,15 @@ export function getOrderListByTradeSn(trade_sn) {
     needToken: true
   })
 }
+
+/**
+ * 获取订单日志
+ * @param order_sn
+ */
+export function getOrderLog(order_sn) {
+  return request({
+    url: `trade/orders/${order_sn}/log`,
+    method: Method.GET,
+    needToken: true
+  })
+}
