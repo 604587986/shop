@@ -88,7 +88,7 @@
                     <span class="sku-spec">{{ goods | formatterSkuSpec }}</span>
                   </td>
                   <td class="price-gooods-inventory">
-                    ￥{{ goods.purchase_price | unitPrice }}
+                    ￥{{ goods.purchase_price | unitPrice }}{{ goods.point ? ('+'+goods.point+'积分')  : '' }}
                     <p v-if="goods.purchase_price < goods.original_price" class="price-goods-org">原价￥{{ goods.original_price | unitPrice }}</p>
                   </td>
                   <td class="num-gooods-inventory">x{{ goods.num }}</td>
@@ -96,6 +96,27 @@
                 </tr>
                 </tbody>
               </table>
+            </div>
+            <div class="gift-item-inventory">
+              <div class="gift-item" v-if="shop.gift_coupon_list && shop.gift_coupon_list.length">
+                <div class="gf-tit">赠送优惠券：</div>
+                <div class="gf-con">
+                  <span :key="index" v-for="(coupon, index) in shop.gift_coupon_list">
+                    {{ coupon.amount }}的优惠券
+                  </span>
+                </div>
+              </div>
+              <div class="gift-item" v-if="shop.gift_list && shop.gift_list.length">
+                <div class="gf-tit">赠送礼品：</div>
+                <div class="gf-con gift">
+                  <span :key="index" v-for="(gift, index) in shop.gift_list">
+                    价值{{ gift.gift_price }}的{{ gift.gift_name }}
+                    <a :href="gift.gift_img" target="_blank">
+                      <img :src="gift.gift_img" alt="" class="gift-img">
+                    </a>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -61,7 +61,23 @@
                 <p>运费（{{ order.shipping_amount | unitPrice('￥') }}）</p>
                 <p>{{ order.payment_text }}</p>
               </div>
-              <div class="order-item-status">{{ order.order_status_text }}</div>
+              <div class="order-item-status">
+                <span
+                  :class="[
+                  order.pay_status === 'PAY_NO' &&
+                  order.payment_type === 'ONLINE' &&
+                  order.order_status === 'CONFIRM' &&
+                  'wait-pay'
+                  ]"
+                >{{ order.order_status_text }}</span>
+                <div
+                  class="time-down"
+                  v-if="
+                  order.pay_status === 'PAY_NO' &&
+                  order.payment_type === 'ONLINE' && 'wait-pay' &&
+                  order.order_status === 'CONFIRM'"
+                ><i class="iconfont ea-icon-time"></i>剩余{{ getPayTimeDown(order) }}</div>
+              </div>
               <div class="order-item-operate">
                 <a v-if="order.order_operate_allowable_vo.allow_cancel" href="javascript:;" @click="handleCancelOrder(order.sn)">取消订单</a>
                 <nuxt-link v-if="order.order_operate_allowable_vo.allow_service_cancel" :to="'./after-sale/apply?order_sn=' + order.sn">取消订单</nuxt-link>
@@ -153,6 +169,18 @@
             this.GET_OrderList()
           })
         })
+      },
+      /** 获取支付倒计时 */
+      getPayTimeDown(order) {
+        const { create_time } = order
+        const rema = 86400 - (new Date().getTime() / 1000 - create_time)
+        if (rema <= 3600) {
+          return `0时${parseInt(rema / 60)}分`
+        } else {
+          const h = parseInt(rema / 3600)
+          const m = parseInt((rema - h * 3600) / 60)
+          return `${h}时${m}分`
+        }
       },
       /** 获取订单数据 */
       GET_OrderList() {
@@ -327,11 +355,12 @@
         strong { color: $color-main }
       }
       .order-item-status {
+        width: 120px;
         &::after {
           content: ' ';
           position: absolute;
           top: 0;
-          right: 110px;
+          right: 100px;
           width: 1px;
           height: 100%;
           background-color: #f9dbcc;
@@ -362,6 +391,14 @@
           }
         }
       }
+    }
+  }
+  .wait-pay {
+    color: $color-main !important;
+  }
+  .time-down {
+    .ea-icon-time {
+      vertical-align: -1px;
     }
   }
 </style>

@@ -83,12 +83,12 @@
     },
     watch: {
       $route() {
-        this.params.page_no = 1
         this.finished = false
         this.goodsList = []
         this.params = {
           ...this.$route.query
         }
+        this.params.page_no = 1
         this.GET_GoodsList()
       }
     },

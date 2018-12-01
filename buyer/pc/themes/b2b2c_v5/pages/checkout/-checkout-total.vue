@@ -12,6 +12,11 @@
           <em class="price-details-ckt-total">-￥{{ orderTotal.discount_price | unitPrice }}</em>
           <div class="clear-details-ckt-total"></div>
         </li>
+        <li class="li_discount_price" v-if="orderTotal.exchange_point">
+          <span class="title-details-ckt-total">抵扣积分：</span>
+          <em class="price-details-ckt-total">-{{ orderTotal.exchange_point }}积分</em>
+          <div class="clear-details-ckt-total"></div>
+        </li>
         <li>
           <span class="title-details-ckt-total">运费总计：</span>
           <em class="price-details-ckt-total">￥{{ orderTotal.freight_price | unitPrice }}</em>

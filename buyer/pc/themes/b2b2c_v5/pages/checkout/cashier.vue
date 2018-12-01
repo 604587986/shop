@@ -3,6 +3,10 @@
     <en-header-other title="收银台"/>
     <div class="cashier-box">
       <div class="cashier-change">
+        <h2 class="time-tip" v-if="order.pay_type_text === 'ONLINE' && order.need_pay_price !== 0">
+          订单提交成功，请您在<span>24小时</span>内完成支付，否则订单会被自动取消。
+        </h2>
+        <h2 class="time-tip" v-else>订单金额为<span>￥0.00</span>，您无需支付。</h2>
         <h2 v-if="this.trade_sn">
           交易号：<b>{{ trade_sn }}</b>
           <a class="see-order-btn" href="/member/my-order">查看订单</a>
@@ -30,7 +34,7 @@
             </h3>
           </div>
         </div>
-        <div v-if="order.pay_type_text === 'ONLINE'" class="cashier-tools">
+        <div class="cashier-tools" v-if="order.pay_type_text === 'ONLINE' && order.need_pay_price !== 0">
           <div class="cashier-tools-inside">
             <div class="cashier-tools-title">
               <h3>支付平台</h3>
@@ -63,8 +67,8 @@
           </div>
         </div>
         <div class="same-pay-way bank-pay paybtn">
-          <a v-if="!showPayBox && order.pay_type_text === 'ONLINE'" href="javascript:;" @click="$message.error('请先选择支付方式！')">立即支付</a>
-          <nuxt-link v-if="order.pay_type_text !== 'ONLINE'" to="/member/my-order">查看订单</nuxt-link>
+          <a @click="$message.error('请先选择支付方式！')" href="javascript:;" v-if="!showPayBox && order.pay_type_text === 'ONLINE' && order.need_pay_price !== 0">立即支付</a>
+          <nuxt-link to="/member/my-order" v-if="order.pay_type_text !== 'ONLINE' || order.need_pay_price === 0">查看订单</nuxt-link>
         </div>
       </div>
     </div>
@@ -357,5 +361,12 @@
     margin-left: 20px;
     color: $color-href;
     &:hover { color: $color-main }
+  }
+  .cashier-change .time-tip {
+    font-size: 16px;
+    font-weight: 400;
+    span {
+      color: $color-main;
+    }
   }
 </style>
