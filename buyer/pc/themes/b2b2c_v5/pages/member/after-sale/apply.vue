@@ -235,7 +235,7 @@
       // 获取售后数据
       API_AfterSale.getAfterSaleData(this.order_sn, this.sku_id).then(response => {
         this.order = response.order
-        this.ship_rog = ship_status === 'SHIP_ROG'
+        this.ship_rog = response.order.ship_status === 'SHIP_ROG'
         this.skuList = response.sku_list
         this.returnMoneyForm.return_money = response.return_money
         this.returnGoodsForm.return_money = response.return_money

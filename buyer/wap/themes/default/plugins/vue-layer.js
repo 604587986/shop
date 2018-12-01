@@ -20,6 +20,7 @@ const alert = function (message, fn) {
  * @returns {*|boolean}
  */
 const confirm = function (message, fn, caFn) {
+  caFn = caFn || function() {}
   Dialog.confirm({
     title: '提示',
     message

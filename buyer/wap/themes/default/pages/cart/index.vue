@@ -36,13 +36,11 @@
                   <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">{{ sku.name }}</nuxt-link>
                   <div class="sku-spec">
                     <span>{{ sku | formatterSkuSpec }}</span>
-                    <select
+                    <div
                       v-if="sku.single_list && sku.single_list.length"
-                      class="activity_list"
-                      @change="(event) => { handleActChanged(sku, event) }"
-                    >
-                      <option v-for="(act, index) in sku.single_list" :key="index" :value="act.promotion_type">{{ act.title }}</option>
-                    </select>
+                      @click="handleChangeActivity(sku)"
+                      class="activity-select"
+                    >{{ selectedActivity(sku.single_list) }}</div>
                   </div>
                   <div class="sku-tools">
                     <div class="sku-price">
@@ -72,7 +70,14 @@
       <div class="all-check" @click="handleCheckAll">
         <van-icon :name="all_checked ? 'checked' : 'check'"/>全选
       </div>
+      <a v-show="checkedCount" href="javascript:void(0)" class="del-btn" @click="handleBatchDelete">删除已选</a>
     </van-submit-bar>
+    <van-actionsheet
+      v-model="showActivityActionsheet"
+      :actions="activity_options"
+      @select="handleActivitySelect"
+      cancel-text="取消"
+    />
   </div>
 </template>
 
@@ -91,7 +96,9 @@
     data() {
       return {
         /** 当前操作的输入框的值【变化之前】 */
-        current_input_value: 1
+        current_input_value: 1,
+        activity_options: [],
+        showActivityActionsheet: false
       }
     },
     mounted() {
@@ -123,18 +130,38 @@
       handleCheckAll() {
         this.checkAll(this.all_checked ? 0 : 1)
       },
-      /** 促销活动发生改变 */
-      handleActChanged(sku, event) {
-        const { seller_id, single_list = [] } = sku
-        const promotion_type = event.target.value
-        const promotion = single_list.filter(item => item.promotion_type === promotion_type)
+      /** 打开促销选择 */
+      handleChangeActivity(sku) {
+        const options = sku.single_list.map(item => ({
+          name: item.title,
+          activity_id: item.activity_id,
+          is_check: item.is_check,
+          promotion_type: item.promotion_type,
+          sku
+        }))
+        this.activity_options = options
+        this.showActivityActionsheet = true
+      },
+      /** 展示已选择促销*/
+      selectedActivity(list) {
+        const _list = list.filter(item => item.is_check === 1)
+        if (_list[0]) {
+          return _list[0].title
+        }
+        return '选择促销活动'
+      },
+      /** 确认促销选择 */
+      handleActivitySelect(item) {
+        const { seller_id, single_list = [], sku_id } = item.sku
+        const { promotion_type, activity_id } = item
         const params = {
           seller_id,
-          sku_id: sku.sku_id,
-          activity_id: promotion[0].activity_id,
+          sku_id,
+          activity_id,
           promotion_type
         }
         this.changeActivity(params)
+        this.showActivityActionsheet = false
       },
       /** 更新商品数量 */
       handleUpdateSkuNum(sku, symbol) {
@@ -418,5 +445,13 @@
     .van-icon-checked {
       color: $color-main;
     }
+    .del-btn {
+      font-size: 12px;
+      margin-left: 10px;
+      color: #F44F44;
+    }
+  }
+  .activity-select {
+    color: $color-main;
   }
 </style>
