@@ -88,7 +88,7 @@
                     <span class="sku-spec">{{ goods | formatterSkuSpec }}</span>
                   </td>
                   <td class="price-gooods-inventory">
-                    ￥{{ goods.purchase_price | unitPrice }}
+                    ￥{{ goods.purchase_price | unitPrice }}{{ goods.point ? ('+'+goods.point+'积分')  : '' }}
                     <p v-if="goods.purchase_price < goods.original_price" class="price-goods-org">原价￥{{ goods.original_price | unitPrice }}</p>
                   </td>
                   <td class="num-gooods-inventory">x{{ goods.num }}</td>

@@ -824,4 +824,21 @@
     height: 12px;
     line-height: 12px;
   }
+
+  .gift-item-inventory {
+    padding-left: 10px;
+    color: $color-main;
+    .gift-item {
+      display: flex;
+      align-items: center;
+    }
+    .gift-img {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+    }
+    .gf-con.gift {
+      line-height: 30px;
+    }
+  }
 }
