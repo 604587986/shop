@@ -372,6 +372,8 @@
         setTimeout(() => {
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入正整数或者两位小数'))
+          } else if (parseFloat(value) > 99999999) {
+            callback(new Error('价格设置超过上限值'))
           } else {
             callback()
           }
@@ -1035,6 +1037,7 @@
             this.$nextTick(() => { this.setSort() })
             this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           }
+          if (!this.baseInfoForm.goods_gallery_list) this.baseInfoForm.goods_gallery_list = []
           this.goodsGalleryList = JSON.parse(JSON.stringify(this.baseInfoForm.goods_gallery_list))
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list) {
@@ -1330,6 +1333,31 @@
         })
         if (_result) {
           this.$message.error('存在未填写的规格值')
+          return false
+        }
+        // 规格值校验
+        let spec_fun = false
+        let spec_tip
+        this.baseInfoForm.sku_list.forEach(key => {
+          if (!RegExp.money.test(key.cost)) {
+            spec_fun = true
+            spec_tip = '请输入正确的成本价金额'
+          }
+          if (!RegExp.money.test(key.price)) {
+            spec_fun = true
+            spec_tip = '请输入正确的价格'
+          }
+          if (!(parseInt(key.weight) >= 0 && parseInt(key.weight) < 99999999)) {
+            spec_fun = true
+            spec_tip = '重量须为0 - 99999999之间的整数'
+          }
+          if (!(parseInt(key.quantity) >= 0 && parseInt(key.quantity) < 99999999) || !/^[0-9]\d*$/.test(key.quantity)) {
+            spec_fun = true
+            spec_tip = '库存须为0 - 99999999之间的整数'
+          }
+        })
+        if (spec_fun) {
+          this.$message.error(spec_tip)
           return false
         }
         return true

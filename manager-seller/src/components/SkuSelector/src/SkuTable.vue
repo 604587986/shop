@@ -22,6 +22,7 @@
               :disabled="isEditModel === 1 && item==='quantity'"
               :maxlength="30"
               v-model="scope.row[item]"
+              @change="scope.row[item] = scope.row[item].trim()"
               @input="updateSkuTable(index, scope, item)"
               @blur="updateSkuTable(index, scope, item)">
             </el-input>
