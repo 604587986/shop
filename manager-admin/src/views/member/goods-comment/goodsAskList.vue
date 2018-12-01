@@ -1,10 +1,36 @@
 <template>
   <div>
     <en-table-layout
-      :toolbar="false"
       :tableData="tableData.data"
       :loading="loading"
     >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns"></div>
+        <div class="toolbar-search">
+          <en-table-search
+            @search="searchEvent"
+            @advancedSearch="advancedSearchEvent"
+            advanced
+          >
+            <template slot="advanced-content">
+              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+                <el-form-item label="商品名称">
+                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="会员名称">
+                  <el-input size="medium" v-model="advancedForm.member_name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="回复状态">
+                  <el-select v-model="advancedForm.reply_status" placeholder="请选择" clearable>
+                    <el-option label="已回复" value="1"/>
+                    <el-option label="未回复" value="0"/>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+            </template>
+          </en-table-search>
+        </div>
+      </div>
       <template slot="table-columns">
         <el-table-column prop="member_name" label="会员名称"/>
         <el-table-column label="商品名称">
@@ -91,7 +117,11 @@
         // 查看的详情
         reviewAsk: {},
         // 查看详情 dialog
-        dialogReviewVisible: false
+        dialogReviewVisible: false,
+        // 关键字
+        keyword: '',
+        // 高级搜索
+        advancedForm: {}
       }
     },
     mounted() {
@@ -139,6 +169,27 @@
       replyLabel() {
         const ask = this.reviewAsk
         return `商家于[${Foundation.unixToDate(ask.reply_time)}]${ask.reply_status === 1 ? '审核通过' : '审核未通过'}并回复：`
+      },
+
+      /** 搜索事件触发 */
+      searchEvent(keyword) {
+        this.params.keyword = keyword
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.params.page_no = 1
+        this.GET_AskList()
+      },
+
+      /** 高级搜索事件触发 */
+      advancedSearchEvent() {
+        const { advancedForm } = this
+        Object.keys(advancedForm).forEach(key => {
+          if (advancedForm[key] !== undefined) {
+            this.params[key] = advancedForm[key]
+          }
+        })
+        delete this.params.keyword
+        this.params.page_no = 1
+        this.GET_AskList()
       },
 
       /** 获取咨询列表 */
