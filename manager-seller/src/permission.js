@@ -46,8 +46,6 @@ async function routerBeforeEach(to, from, next) {
           type: 'error'
         }).then(() => {
           location.replace(`${domain.buyer_pc}/shop/apply`)
-        }).catch(() => {
-          location.replace(`/login?forward=${location.pathname}`)
         })
       }
     }
