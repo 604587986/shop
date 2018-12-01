@@ -144,18 +144,17 @@
     .goods-item {
       float: left;
       width: 230px;
-      height: 320px;
-      margin: 0 5px 10px 0;
+      margin: 0 10px 10px 0;
       border: 1px solid #ddd;
       a {
-        display: inline-block;
-        margin: 5%;
-        width: 200px;
-        height: 200px;
+        display: block;
+        margin: 5% auto;
       }
       .goods-img {
-        width: 100%;
-        height: 100%;
+        display: block;
+        margin: 0 auto;
+        width: 200px;
+        height: 200px;
       }
       .goods-info {
         margin: 5%;
