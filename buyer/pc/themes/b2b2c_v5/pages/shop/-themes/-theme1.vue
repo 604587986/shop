@@ -8,7 +8,7 @@
         <div class="item hot">
           <ul>
             <template v-for="(goods, index) in hotGoods">
-              <li v-if="index < 5" :key="goods.goods_id" class="goods-item">
+              <li :key="index" class="goods-item" v-if="index < 5">
                 <div class="w">
                   <div class="goods-info">
                     <h3>店家热卖<span>Hot-Recommend</span></h3>
@@ -32,7 +32,7 @@
         <div class="item new">
           <ul>
             <template v-for="(goods, index) in newGoods">
-              <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
+              <li :key="index" class="goods-item" v-if="index < 8">
                 <div class="goods-image">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
                     <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
@@ -60,7 +60,7 @@
           <h3>掌柜推荐</h3>
           <ul>
             <template v-for="(goods, index) in recGoods">
-              <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
+              <li :key="index" class="goods-item" v-if="index < 8">
                 <div class="goods-image">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
                     <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
