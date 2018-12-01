@@ -373,7 +373,7 @@
       background: #f5f5f5;
     }
     dt {
-      width: 70px;
+      width: 100px;
       padding-left: 30px;
       line-height: 45px;
       color: #666;
@@ -381,7 +381,7 @@
     }
     dd {
       padding-left: 10px;
-      width: 1100px;
+      width: 1070px;
       min-height: 46px;
       background: #fff;
       float: left;

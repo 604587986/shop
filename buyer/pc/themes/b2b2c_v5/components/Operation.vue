@@ -15,7 +15,7 @@
           // 商品
           case 'GOODS': return `/goods/${value}`
           // 关键字
-          case 'KEYWORD': return `/goods?keyword=${value}`
+          case 'KEYWORD': return `/goods?keyword=${encodeURIComponent(value)}`
           // 店铺
           case 'SHOP': return `/shop/${value}`
           // 分类

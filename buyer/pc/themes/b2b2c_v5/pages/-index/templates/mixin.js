@@ -57,7 +57,7 @@ export default {
         // 商品
         case 'GOODS': return `/goods/${opt_value}`
         // 关键字
-        case 'KEYWORD': return `/goods?keyword=${opt_value}`
+        case 'KEYWORD': return `/goods?keyword=${encodeURIComponent(opt_value)}`
         // 店铺
         case 'SHOP': return `/shop/${opt_value}`
         // 分类

@@ -149,40 +149,43 @@
     letter-spacing: normal;
     word-spacing: normal;
     display: inline-block;
-    width: 324px;
     margin-bottom: 20px;
     border: solid 1px #E7E7E7;
     margin: -1px;
-    &:hover .inner-gb-item {
-      padding: 10px 11px;
-      border: solid 1px #F30;
-      box-shadow: 0 0 3px rgba(204,204,204,0.9);
-      .group_num {
-        display: none;
-      }
-      .buy-button {
-        opacity: 1;
-        filter: alpha(opacity=100)/*IE*/;
+    &:hover {
+      border-width: 0;
+      .inner-gb-item {
+        padding: 11px;
+        border: solid 1px $color-main;
+        box-shadow: 0 0 3px rgba(204,204,204,0.9);
+        .group_num {
+          display: none;
+        }
+        .buy-button {
+          opacity: 1;
+          filter: alpha(opacity=100)/*IE*/;
+        }
       }
     }
   }
   .inner-gb-item {
-    width: 300px;
-    height: 316px;
-    padding: 11px 11px 11px 12px;
+    width: 275px;
+    padding: 11px;
     position: relative;
   }
   .pic_thumb {
     line-height: 0;
     text-align: center;
     vertical-align: middle;
-    display: table-cell;
-    width: 290px;
+    display: block;
+    width: 100%;
     height: 193px;
     overflow: hidden;
     img {
-      max-width: 280px;
-      max-height: 193px;
+      display: block;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
     }
   }
   .gb-title {

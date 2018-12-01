@@ -49,3 +49,7 @@ export const SET_CATEGORY_DATA = 'SET_CATEGORY_DATA'
 export const SET_NAV_DATA = 'SET_NAV_DATA'
 // 设置热搜关键词
 export const SET_HOT_KEYWORDS = 'SET_HOT_KEYWORDS'
+
+/** 站内消息相关 */
+// 获取未读消息
+export const GET_UNREAD_MESSAGE = 'GET_UNREAD_MESSAGE'

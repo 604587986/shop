@@ -13,7 +13,7 @@
               <nuxt-link :to="'./goods-list?shop_id=' + shop_id" title="查看更多"></nuxt-link>
             </li>
             <template v-for="(goods, index) in hotGoods">
-              <li v-if="index < 7" :key="goods.goods_id" class="goods-item">
+              <li :key="index" class="goods-item" v-if="index < 7">
                 <nuxt-link :to="'/goods/' + goods.goods_id">
                   <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                 </nuxt-link>
@@ -37,7 +37,7 @@
           </div>
           <ul>
             <template v-for="(goods, index) in newGoods">
-              <li v-if="index < 8" :key="goods.goods_id" class="goods-item">
+              <li :key="index" class="goods-item" v-if="index < 8">
                 <div class="new-img">
                   <nuxt-link :to="'/goods/' + goods.goods_id">
                     <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
@@ -65,7 +65,7 @@
           </div>
           <ul>
             <template v-for="(goods, index) in recGoods">
-              <li v-if="index < 6" :key="goods.goods_id" class="goods-item">
+              <li :key="index" class="goods-item" v-if="index < 6">
                 <div class="goods-image">
                   <img :src="goods.big" :alt="goods.goods_name" :title="goods.goods_name">
                 </div>

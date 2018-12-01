@@ -28,7 +28,7 @@
                 <a href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
-                <nuxt-link :to="'/shop?shop_id=' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>
+                <nuxt-link :to="'/shop/' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>
               </div>
               <div class="shop-body">
                 <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item">
