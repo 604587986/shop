@@ -6,8 +6,11 @@
         <div class="order-item">
           <span>订单编号：</span><span>{{ order.sn }}</span>
         </div>
-        <div class="order-item">
+        <div v-if="!orderLog.length" class="order-item">
           <span>下单时间：</span><span>{{ order.create_time | unixToDate }}</span>
+        </div>
+        <div v-for="(log, index) in orderLog" :key="index" class="order-item">
+          <span>{{ log.message }}：</span><span>{{ log.op_time | unixToDate }}</span>
         </div>
         <div class="order-item">
           <span>配送时间：</span><span>{{ order.receive_time || '无' }}</span>
@@ -147,7 +150,9 @@
         order: '',
         skuList: '',
         // 显示发票信息
-        showReceiptDialog: false
+        showReceiptDialog: false,
+        // 订单日志
+        orderLog: ''
       }
     },
     mounted() {
@@ -190,14 +195,15 @@
         })
       },
       /** 获取订单详情 */
-      GET_OrderDetail() {
-        API_Order.getOrderDetail(this.order_sn).then(response => {
-          this.order = response
-          if (response.order_operate_allowable_vo.allow_rog && response.logi_id && response.ship_no) {
-            // this.handleViewExpress()
-          }
-          this.skuList = JSON.parse(response.items_json)
-        })
+      async GET_OrderDetail() {
+        const { order_sn } = this
+        const values = await Promise.all([
+          API_Order.getOrderDetail(order_sn),
+          API_Order.getOrderLog(order_sn)
+        ])
+        this.order = values[0]
+        this.skuList = JSON.parse(values[0].items_json)
+        this.orderLog = values[1]
       }
     }
   }
