@@ -4,7 +4,6 @@
       <div class="conditions">
         <span>日期设置: </span>
         <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
-        <el-button type="primary" class="search-btn" @click="handleSearchSales">开始搜索</el-button>
       </div>
       <div class="conditions">
         <span >订单金额：{{ order_total | unitPrice('¥')  }}</span>
@@ -133,6 +132,9 @@
 
           month: obj.month
         }
+        this.hotType === 0 ? this.GET_OrderTotaltChart() : this.GET_OrderGoodsNumData()
+        this.GET_OrderGoodsData()
+        this.getSummary()
       },
 
       /** 窗口缩放时计算table高度 */
@@ -154,17 +156,6 @@
         } else {
           this.GET_OrderGoodsNumData()
         }
-        this.getSummary()
-      },
-
-      /** 搜索触发*/
-      handleSearchSales() {
-        if (this.hotType === 0) {
-          this.GET_OrderTotaltChart()
-        } else {
-          this.GET_OrderGoodsNumData()
-        }
-        this.GET_OrderGoodsData()
         this.getSummary()
       },
 

@@ -68,15 +68,14 @@
             }
           },
           xAxis: {
+            name: '日期',
             type: 'category',
             boundaryGap: false,
             data: response.xAxis.reverse()
           },
           yAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: '{value} 元'
-            }
+            name: '下单金额（元）',
+            type: 'value'
           },
           series: [
             {
