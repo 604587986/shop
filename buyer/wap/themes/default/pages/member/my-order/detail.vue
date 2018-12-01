@@ -44,13 +44,19 @@
               <span  class="goods-name">{{ sku.name }}</span>
               <p v-if="sku.spec_list" class="sku-spec">{{ sku | formatterSkuSpec }}</p>
             </nuxt-link>
-            <div class="goods-info">
+            <div class="goods-infos">
               <p class="price">￥{{ sku.purchase_price | unitPrice }}</p>
               <p class="goods-num">x{{ sku.num }}</p>
+              <p v-if="sku.goods_operate_allowable_vo.allow_apply_service" class="after-btn">
+                <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
+              </p>
             </div>
           </li>
         </ul>
         <div class="order-btns">
+          <nuxt-link v-if="order.order_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn">
+            <van-button size="small" type="default">申请售后</van-button>
+          </nuxt-link>
           <nuxt-link v-if="order.logi_id && order.ship_no" :to="'./express?logi_id=' + order.logi_id + '&ship_no=' + order.ship_no">
             <van-button size="small" type="default">查看物流</van-button>
           </nuxt-link>
@@ -202,7 +208,7 @@
           API_Order.getOrderLog(order_sn)
         ])
         this.order = values[0]
-        this.skuList = JSON.parse(values[0].items_json)
+        this.skuList = values[0]['order_sku_list']
         this.orderLog = values[1]
       }
     }
@@ -338,6 +344,15 @@
     .receipt-dialog {
       height: 70%;
       .van-nav-bar { position: relative }
+    }
+  }
+  .goods-infos {
+    min-width: 60px;
+    margin-left: 10px;
+  }
+  .after-btn {
+    a {
+      color: $color-main
     }
   }
 </style>
