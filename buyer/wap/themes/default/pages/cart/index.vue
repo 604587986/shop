@@ -265,6 +265,7 @@
   .inner-shop-item {
     background-color: #fff;
     overflow: hidden;
+    padding: 0 5px;
   }
   .title-shop-item {
     display: flex;
