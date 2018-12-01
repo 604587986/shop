@@ -3,6 +3,9 @@
     <en-header-other title="收银台"/>
     <div class="cashier-box">
       <div class="cashier-change">
+        <h2 class="time-tip" v-if="order.pay_type_text === 'ONLINE'">
+          订单提交成功，请您在<span>24小时</span>内完成支付，否则订单会被自动取消
+        </h2>
         <h2 v-if="this.trade_sn">
           交易号：<b>{{ trade_sn }}</b>
           <a class="see-order-btn" href="/member/my-order">查看订单</a>
@@ -357,5 +360,12 @@
     margin-left: 20px;
     color: $color-href;
     &:hover { color: $color-main }
+  }
+  .cashier-change .time-tip {
+    font-size: 16px;
+    font-weight: 400;
+    span {
+      color: $color-main;
+    }
   }
 </style>
