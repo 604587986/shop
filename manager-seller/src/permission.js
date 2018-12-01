@@ -5,6 +5,7 @@ import 'nprogress/nprogress.css'
 import { MessageBox, Message } from 'element-ui'
 import Storage from '@/utils/storage'
 import * as API_Shop from '@/api/shop'
+import { domain } from '~/ui-domain'
 
 const whiteList = ['/login']
 
@@ -38,7 +39,16 @@ async function routerBeforeEach(to, from, next) {
       } else if (status === 'REFUSED') {
         errorMsg('您的开店申请被拒绝，请重新申请或联系管理员！')
       } else {
-        errorMsg('账号未申请开店或店铺申请审核未通过！', '出现错误')
+        store.dispatch('fedLogoutAction')
+        MessageBox.confirm('账号尚未申请开店！', '出现错误', {
+          confirmButtonText: '去开店',
+          cancelButtonText: '取消',
+          type: 'error'
+        }).then(() => {
+          location.replace(`${domain.buyer_pc}/shop/apply`)
+        }).catch(() => {
+          location.replace(`/login?forward=${location.pathname}`)
+        })
       }
     }
   } else {
