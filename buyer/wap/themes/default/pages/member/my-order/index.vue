@@ -1,6 +1,12 @@
 <template>
   <div id="my-order" style="background-color: #f7f7f7">
-    <nav-bar title="我的订单"/>
+    <van-nav-bar
+      left-arrow
+      title="我的订单"
+      @click-left="MixinRouterBack"
+    >
+      <van-icon slot="right" name="search" @click="showSearchPopup = true"/>
+    </van-nav-bar>
     <van-tabs v-model="tabActive" :swipe-threshold="5" @change="handleTabChange">
       <van-tab title="全部"/>
       <van-tab title="待付款"/>
@@ -67,6 +73,18 @@
         placeholder="请输入取消原因"
       />
     </van-dialog>
+    <van-popup
+      v-model="showSearchPopup"
+      position="top"
+    >
+      <form action="/">
+        <van-search
+          placeholder="请输入商品关键字"
+          v-model="searchKeyword"
+          @search="handleSearchOrder"
+        />
+      </form>
+    </van-popup>
   </div>
 </template>
 
@@ -92,7 +110,11 @@
         // 显示取消订单dialog
         showCancelDialog: false,
         // 取消订单原因
-        reason: ''
+        reason: '',
+        // 显示搜索框
+        showSearchPopup: false,
+        // 搜索关键字
+        searchKeyword: ''
       }
     },
     methods: {
@@ -162,6 +184,15 @@
             this.GET_OrderList()
           })
         })
+      },
+      /** 订单搜索 */
+      handleSearchOrder() {
+        this.showSearchPopup = false
+        this.params.goods_name = this.searchKeyword
+        this.params.page_no = 0
+        this.finished = false
+        this.orderList = []
+        this.onLoad()
       },
       /** 获取订单数据 */
       GET_OrderList() {
