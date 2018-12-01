@@ -1,6 +1,7 @@
 <template>
   <div class="bg-out">
     <el-button type="primary" @click="lookshop">查看店铺</el-button>
+    <span class="themes-tip">选择或者切换默认模版时，可在【商品管理】-【标签管理】对应标签里添加标签商品。</span>
     <hr/>
     <!--当前模板-->
     <p style="padding: 0 50px;">当前模板:</p>
@@ -108,7 +109,7 @@
           this.$message.warning('请先选择一种模板！')
           return
         }
-        this.$confirm(`确定要切换模板么?`, '确认信息')
+        this.$confirm(`若切换模板，可在【商品管理】-【标签管理】对应标签里添加标签商品，是否确认切换？`, '确认信息')
           .then(() => {
             const _params = {}
             API_ShopTheme.saveShopTheme(this.tpl_choosed_id, _params).then(() => {
@@ -122,6 +123,15 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  /** 模版主题 */
+  .themes-tip {
+    display: inline-block;
+    padding: 10px;
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    font-size: 14px;
+    color: #c09853;
+  }
   /*被选中的模板图片*/
   .choosed-image {
     border: 1px solid #5cb85c;

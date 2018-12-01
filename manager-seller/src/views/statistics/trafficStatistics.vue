@@ -6,7 +6,6 @@
         <el-button :type="currentStatistics == 2 ? 'primary' : ''" @click="handleGoodsStatistics">商品流量排行</el-button>
       </el-button-group>
       <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
-      <el-button @click="handleSearchStatistics" type="primary" >开始搜索</el-button>
     </div>
     <div id="trafficStatistics" :style="{height: tableHeight + 'px'}"></div>
   </div>
@@ -69,15 +68,7 @@
           year: obj.year,
           month: obj.month
         }
-      },
-
-      /** 搜索 */
-      handleSearchStatistics() {
-        if (this.currentStatistics === 1) {
-          this.handleShopSumaryStatistics()
-        } else {
-          this.handleGoodsStatistics()
-        }
+        this.currentStatistics === 1 ? this.handleShopSumaryStatistics() : this.handleGoodsStatistics()
       },
 
       /** 店铺总流量*/

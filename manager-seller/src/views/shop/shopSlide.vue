@@ -30,7 +30,13 @@
                 @click="Del_Slide(item, index)">删除</el-button>
             </div>
             <div class="img-show">
-              <img :src="item.img" alt="">
+              <img :src="item.img" alt="" v-show="!(activeIndex === index && isShowProgress)">
+              <el-progress
+                type="circle"
+                class="progress-circle"
+                v-show="activeIndex === index && isShowProgress"
+                :percentage="currentPercent"
+                :width="100"/>
             </div>
             <label>跳转URL...</label>
             <el-input
@@ -42,12 +48,13 @@
               class="upload-demo"
               :action="`${MixinUploadApi}?scene=shop`"
               :key="index"
+              list-type="picture"
               :limit="1"
               :show-file-list="false"
+              :on-progress="upLoading"
               :on-success="uploadSuccess"
-              :file-list="fileList"
-              list-type="picture">
-              <el-button type="primary" @click="uploadSlide(item)">
+              :file-list="fileList">
+              <el-button type="primary" @click="uploadSlide(item, index)">
                 上传
                 <i class="el-icon-upload el-icon--right"></i>
               </el-button>
@@ -92,7 +99,16 @@
         currentShopBannerId: '',
 
         /** 存储上传的图片列表 数量限制为1*/
-        fileList: []
+        fileList: [],
+
+        /** 当前百分比 */
+        currentPercent: 0,
+
+        /** 是否显示进度条 */
+        isShowProgress: false,
+
+        /** 当前正在操作的幻灯片 */
+        activeIndex: 0
       }
     },
     mounted() {
@@ -119,8 +135,25 @@
       },
 
       /** 上传幻灯片*/
-      uploadSlide(item) {
+      uploadSlide(item, index) {
         this.uploadShopBanner = item
+        this.activeIndex = index
+      },
+
+      /** 文件正在上传时的钩子 */
+      upLoading(event, file, fileList) {
+        this.timer = setInterval(() => {
+          if (this.currentPercent < 100) {
+            this.currentPercent += 5
+          } else {
+            clearInterval(this.timer)
+            this.timer = null
+            setTimeout(() => {
+              this.isShowProgress = false
+            }, 500)
+          }
+        }, 30)
+        this.isShowProgress = true
       },
 
       /** 上传成功钩子*/
@@ -128,6 +161,8 @@
         this.uploadShopBanner.img = response.url
         this.uploadShopBanner.silde_url = ''
         this.fileList = []
+        this.isShowProgress = false
+        this.$message.success('上传成功')
       },
 
       /** 新增幻灯片*/
@@ -177,6 +212,22 @@
     padding: 20px;
     background: #ffffff;
     border: 1px solid #dddddd;
+  }
+
+  /deep/ div.img-show {
+    position: relative;
+    /*圆形进度条*/
+    .progress-circle {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      left: 30px;
+      top: 0px;
+      z-index: 5000;
+      & > div.el-progress__text {
+        color: #fff;
+      }
+    }
   }
 
   /*提示*/

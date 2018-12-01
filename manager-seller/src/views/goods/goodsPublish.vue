@@ -1318,10 +1318,6 @@
           })
           return false
         }
-        if (isDraft) {
-          this.productSn = true
-          return true
-        }
         /** 规格值空校验 */
         let _result = false
         this.baseInfoForm.sku_list.forEach(key => {
@@ -1359,6 +1355,10 @@
         if (spec_fun) {
           this.$message.error(spec_tip)
           return false
+        }
+        if (isDraft) {
+          this.productSn = true
+          return true
         }
         return true
       }

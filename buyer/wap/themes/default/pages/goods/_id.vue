@@ -420,6 +420,8 @@
         border-bottom: 1px solid #f5f5f5;
       }
       .goods-intro {
+        width: 100%;
+        overflow-x: hidden;
         padding: 10px;
         box-sizing: border-box;
         /deep/ img {

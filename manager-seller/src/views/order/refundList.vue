@@ -119,17 +119,23 @@
             <div class="order-info-item">
               <span>{{currentType}}状态: </span><span>{{ refundInfo.refund_status_text }}</span>
             </div>
-          </div>
-          <!--退款/货信息-->
-          <div class="refund-info-relations">
             <div class="order-info-item">
               <span>申请时间:  </span><span>{{ refundInfo.create_time | unixToDate }}</span>
             </div>
+          </div>
+          <!--退款/货信息-->
+          <div class="refund-info-relations">
             <div class="order-info-item">
               <span>{{currentType}}原因: </span><span>{{ refundInfo.refund_reason }}</span>
             </div>
             <div class="order-info-item">
               <span>详细描述:  </span><span>{{ refundInfo.customer_remark || '无'}}</span>
+            </div>
+            <div class="order-info-item">
+              <span>退款渠道:  </span><span>{{ refundInfo.account_type_text || '无'}}</span>
+            </div>
+            <div class="order-info-item">
+              <span>退款账号:  </span><span>{{ refundInfo.return_account || '无'}}</span>
             </div>
             <div class="order-info-item">
               <span>退款金额:  </span>
