@@ -19,7 +19,7 @@
   margin-top: 20px;
   background: #f5f5f5;
   font-size: 12px;
-  overflow: hidden;
+  //overflow: hidden;
   padding-bottom: 20px;
   .list-header {
     margin: 10px auto;
@@ -356,9 +356,97 @@
   font-weight: bold;
 }
 
-.activity_list {
-  width: 80px;
+.activity-box {
+  position: relative;
+  .activity-btn {
+    position: absolute;
+    right: 0;
+    display: inline-block;
+    width: 28px;
+    border: 1px solid lighten($color-main, 20);
+    color: $color-main;
+    height: 18px;
+    text-align: left;
+    line-height: 20px;
+    padding: 0 15px 0 5px;
+    cursor: pointer;
+    background: #fff;
+    text-decoration: none;
+    float: right;
+    overflow: hidden;
+    .ea-icon-arrow-down {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+  .activity-list {
+    position: absolute;
+    top: 19px;
+    left: 115px;
+    z-index: 30;
+    margin: -1px 0 0;
+    padding: 10px 14px 10px 10px;
+    width: 276px;
+    box-shadow: 0 0 2px 2px #eee;
+    border: 1px solid $color-main;
+    background-color: #FFFFFF;
+    text-align: left;
+    min-height: 50px;
+    .act-list {
+      input {
+        color: #666666;
+        margin: 3px;
+      }
+    }
+  }
+  .activity-list-btns {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+    .act-l-btn {
+      display: inline-block;
+      padding: 0 10px;
+      height: 25px;
+      line-height: 25px;
+      border-radius: 3px;
+      background-color: #f7f7f7;
+      border: 1px solid #e1e1e1;
+      &.confirm {
+        margin-right: 10px;
+        background-color: $color-main;
+        color: #FFFFFF;
+        border-color: $color-main
+      }
+    }
+  }
+  &.show-act {
+    .activity-btn {
+      z-index: 33;
+      border-color: $color-main;
+      border-bottom: none;
+    }
+    .ea-icon-arrow-down {
+      transform: rotate(180deg);
+    }
+  }
 }
-.activity_list + .num-action {
+.shop-act-info {
+  color: $color-main;
+  margin-left: 5px;
+}
+.sku-act-tag {
+  display: inline-block;
+  padding: 0 5px;
+  line-height: 15px;
+  margin-right: 5px;
+  border: 1px solid $color-main;
+  color: $color-main
+}
+
+.shop-cash-back {
+  color: $color-main;
   margin-left: 10px;
 }

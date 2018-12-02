@@ -12,11 +12,10 @@ import { api } from '@/ui-domain'
  */
 export function getCarts(show_type = 'all') {
   return request({
-    url: 'trade/carts',
+    url: `trade/carts/${show_type}`,
     method: Method.GET,
     needToken: true,
-    loading: false,
-    params: { show_type }
+    loading: false
   })
 }
 
@@ -398,7 +397,7 @@ export function getGoodsSales(goods_id, params) {
  */
 export function changeActivity(params) {
   return request({
-    url: 'trade/carts/cart/promotion',
+    url: 'trade/promotion',
     method: Method.POST,
     needToken: true,
     data: params

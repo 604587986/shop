@@ -72,6 +72,11 @@
               </div>
               <input type="hidden" name="storeid" value="18">
             </div>
+            <div
+              :title="shop.promotion_notice"
+              class="shop-act-info"
+              v-if="shop.promotion_notice"
+            >{{ shop.promotion_notice }}</div>
             <div class="content-item-inventory goods">
               <table class="table-gooods-inventory">
                 <tbody>
