@@ -16,8 +16,8 @@
         <span>{{ shopDataForm.legal_id }}</span>
       </el-form-item>
       <!--店铺地址-->
-      <el-form-item label="店铺地址：" prop="shop_address">
-        <en-region-picker :api="MixinRegionApi" :default="areas" @changed="handleChange"></en-region-picker>
+      <el-form-item label="店铺地址：" prop="shop_region">
+        <en-region-picker :api="MixinRegionApi" :default="areas" @changed="(object) => { shopDataForm.shop_region = object.last_id }"></en-region-picker>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
@@ -150,6 +150,12 @@
             { whitespace: true, message: '店铺名称不可为纯空格', trigger: 'blur' },
             { max: 15, message: '店铺名称长度最多15个字符', trigger: 'blur' }
           ],
+
+          /** 店铺地址 */
+          shop_region: [
+            { required: true, message: '请填写店铺名称', trigger: 'blur' }
+          ],
+
           /** 详细地址 */
           shop_add: [
             { whitespace: true, message: '详细地址不可为纯空格', trigger: 'blur' },
@@ -211,11 +217,6 @@
             })
           }
         })
-      },
-
-      /** 操作地区选择器改变时 触发*/
-      handleChange(val) {
-        this.shopDataForm.shop_region = val.last_id
       },
 
       /** 上传logo成功以后*/
