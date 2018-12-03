@@ -507,6 +507,8 @@
       }
       .spec-text {
         line-height: 50px;
+        display: inline-block;
+        margin-left: 5px;
         color: #666
       }
     }

@@ -351,7 +351,7 @@
     border-bottom: #e5e5e5 1px solid;
     &:last-child { border-bottom: none };
     .shop-card {
-      width: 270px;
+      width: 200px;
       margin-right: 30px;
       padding-top: 20px;
       position: relative;
@@ -394,9 +394,9 @@
       &:hover { color: $color-main }
     }
     .shop-tools {
-      position: absolute;
-      top: 0;
-      right: 0;
+      display: inline-block;
+      margin-left: 20px;
+      float: right;
       .ea-icon-delete {
         font-size: 20px;
         line-height: normal;

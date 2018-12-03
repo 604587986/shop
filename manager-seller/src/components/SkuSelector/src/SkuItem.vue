@@ -2,14 +2,15 @@
   <div class="sku-item-content">
     <el-form  :model="skuForm" @submit.native.prevent>
       <div v-for="(item, $index) in skuInfo" :key="$index">
-        <el-form-item label="规格名：" prop="spec_name">
+        <el-form-item label="规格名：">
           <el-autocomplete
             style="width: 170px;"
             class="inline-input"
             v-model="item.spec_name"
+            :maxlength="30"
             value-key="spec_name"
             :fetch-suggestions="querySearchSkuItem"
-            placeholder="请输入规格项名称"
+            placeholder="请输入规格项名称，最多30个字符"
             :select-when-unmatched='true'
             @focus="getActiveSkuItem($index, item)"
             @keyup.enter.native="editSkuItem(item, $index)"
@@ -20,7 +21,7 @@
           <div class="empty"></div>
           <el-button type="danger" size="mini" @click="handleCloseSkuItem($index)" icon="el-icon-delete"></el-button>
         </el-form-item>
-        <el-form-item label="规格值：" prop="spec_value">
+        <el-form-item label="规格值：">
           <!--规格值文本列表-->
           <div  v-for="(val, index) in item.value_list" :key="index" style="padding: 10px 10px 10px 0;">
             <el-autocomplete
@@ -30,7 +31,8 @@
               :key="index"
               value-key="spec_value"
               :fetch-suggestions="querySearchSkuValue"
-              placeholder="请输入规格值名称"
+              :maxlength="30"
+              placeholder="请输入规格值名称，最多30个字符"
               @focus="getActiveSkuValue(index, $index ,item, val)"
               @keyup.enter.native="editSkuIValue(item, val, $index, index)"
               @blur.naitve="editSkuIValue(item, val, $index, index)"
@@ -131,7 +133,10 @@
         currentPercent: 0,
 
         /** 定时器 */
-        timer: null
+        timer: null,
+
+        /** 上传状态 true 可上传 false 不可上传 默认可上传*/
+        uploadStatus: true
       }
     },
     mounted() {
@@ -463,8 +468,13 @@
 
       /** 点击已上传的图片 或者 i标签 */
       handleClickImg(index) {
+        if (!this.uploadStatus) {
+          this.$message.warning('正在上传，请稍侯。。。')
+          return
+        }
         this.currentPercent = 0
         this.activeSkuValIndex = index
+        this.activeSkuItemIndex = 0
       },
 
       /** 删除当前图片 */
@@ -481,6 +491,7 @@
 
       /** 文件正在上传时的钩子 */
       upLoading(event, file, fileList) {
+        this.uploadStatus = false // 正在上传 不可继续操作上传
         this.upLoadStatus = true
         this.timer = setInterval(() => {
           if (this.currentPercent < 100) {
@@ -511,6 +522,7 @@
           this.$set(this.skuInfo, this.activeSkuItemIndex, _arr)
           this.$emit('updateSkuInfo', this.skuInfo)
         }
+        this.uploadStatus = true // 上传完成 可继续操作上传
       }
     }
   }

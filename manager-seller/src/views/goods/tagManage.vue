@@ -81,7 +81,7 @@
 
       /** 标签商品设置 */
       addtag(row) {
-        this.$router.push({ path: `/goods/tag-add/${row.tag_id}` })
+        this.$router.push({ path: `/goods/tag-add/${row.tag_id}`, query: { tag_name: row.tag_name }})
       }
     }
   }

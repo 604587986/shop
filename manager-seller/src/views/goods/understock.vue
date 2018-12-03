@@ -8,13 +8,15 @@
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns"></div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent" />
+          <en-table-search @search="searchEvent" placeholder="请输入商品名称" />
         </div>
       </div>
       <template slot="table-columns">
         <el-table-column label="图片" width="120">
           <template slot-scope="scope">
-            <img :src="scope.row.thumbnail" class="goods-image"/>
+            <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank">
+              <img :src="scope.row.thumbnail" class="goods-image"/>
+            </a>
           </template>
         </el-table-column>
         <el-table-column label="名称" min-width="400">

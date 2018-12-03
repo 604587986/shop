@@ -117,6 +117,7 @@
           this.loading = false
           /** x轴信息  此处应当为中国34个行政区划的名称*/
           const xData = response.map((item) => { return item.name })
+          const xName = this.orderOptions.filter(key => { return this.params.type === key.value })[0].label
 
           /** tooltip提示信息 */
           let seriesName = ''
@@ -150,7 +151,6 @@
               left: 'right',
               top: 'center',
               feature: {
-                dataView: { readOnly: false },
                 restore: {},
                 saveAsImage: {}
               }
@@ -195,7 +195,7 @@
               }
             },
             xAxis: {
-              name: '下单会员数',
+              name: xName,
               type: 'value'
             },
             yAxis: {

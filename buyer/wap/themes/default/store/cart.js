@@ -262,6 +262,20 @@ export const actions = {
         resolve()
       }).catch(reject)
     })
+  },
+  /**
+   * 不参与促销活动
+   * @param dispatch
+   * @param params
+   * @returns {Promise<any>}
+   */
+  cleanActivityAction: ({ dispatch }, params) => {
+    return new Promise((resolve, reject) => {
+      API_Trade.cleanPromotion(params).then(() => {
+        dispatch('getCartDataAction')
+        resolve()
+      }).catch(reject)
+    })
   }
 }
 

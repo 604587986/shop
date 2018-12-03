@@ -7,20 +7,22 @@
       :loading="loading">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-            <el-button type="primary" @click="handleAddCoupon">新增</el-button>
+          <el-button type="primary" @click="handleAddCoupon">新增</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search
             @search="searchEvent"
             @advancedSearch="advancedSearchEvent"
-            advanced>
+            advancedWidth="465"
+            advanced
+            placeholder="请输入关键字">
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="有效期">
                   <el-date-picker
-                    key="0"
                     v-model="advancedForm.coupon_time_limit"
                     type="daterange"
+                    align="center"
                     range-separator="-"
                     value-format="timestamp"
                     start-placeholder="开始日期"
@@ -57,7 +59,6 @@
           </template>
         </el-table-column>
       </template>
-
       <el-pagination
         slot="pagination"
         v-if="pageData"
@@ -83,7 +84,6 @@
   import * as API_coupon from '@/api/coupon'
   import { CategoryPicker } from '@/components'
   import { Coupon } from './components'
-
   export default {
     name: 'discountManager',
     components: {
@@ -120,7 +120,6 @@
 
         /** 优惠券表单*/
         couponModelForm: {
-
           /** 优惠券名称*/
           title: '',
 
@@ -162,7 +161,7 @@
       searchEvent(data) {
         this.params = {
           ...this.params,
-          goods_status: data
+          keyword: data
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         delete this.params.start_time

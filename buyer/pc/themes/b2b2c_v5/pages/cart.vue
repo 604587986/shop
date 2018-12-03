@@ -32,9 +32,10 @@
                 <span class="shop-act-info" v-if="shop.promotion_notice">[{{ shop.promotion_notice }}]</span>
               </div>
               <div class="shop-body">
-                <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item">
+                <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item" :class="[sku.invalid === 1 && 'invalid']">
                   <div class="item clearfix">
-                    <a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
+                    <span v-if="sku.invalid === 1" class="invalid-pla">已失效</span>
+                    <a v-else href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
                       <i class="iconfont ea-icon-check"></i>
                     </a>
                     <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-pic">
@@ -57,7 +58,7 @@
                       <div
                         :class="[show_act_sku_id === sku.sku_id && 'show-act']"
                         class="activity-box"
-                        v-if="sku.single_list && sku.single_list.length"
+                        v-if="sku.invalid !== 1 && sku.single_list && sku.single_list.length"
                       >
                         <a @click.stop="handleShowAct(sku)" class="activity-btn" href="javascript:void(0)" slot="reference">
                           促销<i class="iconfont ea-icon-arrow-down"></i>
@@ -76,6 +77,7 @@
                               <input
                                 :checked="handleActsChecked(sku.single_list) && 'checked'"
                                 :name="'act_'+sku.sku_id"
+                                value="clean"
                                 type="radio"
                               >不参与促销活动
                             </li>
@@ -88,7 +90,7 @@
                       </div>
                     </div>
                     <div class="sku-num">
-                      <div class="num-action clearfix">
+                      <div v-if="sku.invalid !== 1" class="num-action clearfix">
                         <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
                         <input
                           class="input"
@@ -100,6 +102,7 @@
                         >
                         <a :class="['oper', sku.num >= sku.enable_quantity && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
                       </div>
+                      <div v-if="sku.invalid === 1">此商品已失效</div>
                     </div>
                     <div class="sku-weight">
                       {{ (sku.num * sku.goods_weight).toFixed(2) }}
@@ -119,9 +122,9 @@
                 </div>
                 <div class="shop-footer-item price">
                   <em>￥</em>
-                  <span>{{ shop.price.total_price | unitPrice }}</span>
+                  <span>{{ shop.price.goods_price | unitPrice }}</span>
                 </div>
-                <div class="shop-cash-back" v-if="shop.cash_back">[返现：￥{{ shop.cash_back | unitPrice }}]</div>
+                <div class="shop-cash-back" v-if="shop.price.cash_back">[返现：￥{{ shop.price.cash_back | unitPrice }}]</div>
               </div>
             </div>
           </div>
@@ -308,11 +311,17 @@
       /** 确认修改促销活动 */
       handleConfirmChangeAct(sku) {
         const eleStr = `input[name=act_${sku.sku_id}]:checked`
-        const val = JSON.parse($(eleStr).val())
-        const { activity_id, promotion_type } = val
-        const { seller_id, sku_id } = sku
-        const params = { seller_id, sku_id, activity_id, promotion_type }
-        this.changeActivity(params)
+        const val = $(eleStr).val()
+        if (val === 'clean') {
+          const { seller_id, sku_id } = sku
+          this.cleanActivity({seller_id, sku_id})
+        } else {
+          const val = JSON.parse($(eleStr).val())
+          const { activity_id, promotion_type } = val
+          const { seller_id, sku_id } = sku
+          const params = { seller_id, sku_id, activity_id, promotion_type }
+          this.changeActivity(params)
+        }
         this.show_act_sku_id = null
       },
       /** 展示sku促销弹框 */
@@ -352,7 +361,9 @@
         // 清空购物车
         cleanCart: 'cart/cleanCartAction',
         // 更换促销活动
-        changeActivity: 'cart/changeActivityAction'
+        changeActivity: 'cart/changeActivityAction',
+        // 不参加活动
+        cleanActivity: 'cart/cleanActivityAction'
       })
     },
     destroyed() {

@@ -221,6 +221,16 @@
         position: relative;
         padding: 20px 0 20px 35px;
       }
+      &.invalid {
+        filter: grayscale(1);
+        .invalid-pla {
+          position: absolute;
+          left: -10px;
+          top: 50%;
+          margin-top: -7px;
+          z-index: 1;
+        }
+      }
     }
   }
   .shop-footer {

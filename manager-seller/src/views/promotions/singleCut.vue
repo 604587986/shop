@@ -81,8 +81,9 @@
                   <el-input
                     v-model="activityForm.title"
                     style="width: 300px"
+                    @change="activityForm.title  = activityForm.title.trim()"
                     placeholder="不超过60个字符"
-                    maxLength="60"></el-input>
+                    maxLength="60"/>
                 </el-form-item>
                 <el-form-item label="生效时间：" prop="take_effect_time">
                   <el-date-picker
@@ -299,7 +300,7 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goodsApi: 'seller/goods',
+        goodsApi: 'seller/goods?market_enable=1&is_auth=1',
 
         /** 商城分类api */
         categoryApi: 'seller/goods/category/0/children',

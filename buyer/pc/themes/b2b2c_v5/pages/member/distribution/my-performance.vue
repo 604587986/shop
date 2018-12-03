@@ -14,14 +14,14 @@
           <span> {{ settlementTotal.start_time | unixToDate('yyyy-MM-dd') }} ～ {{ settlementTotal.end_time | unixToDate('yyyy-MM-dd') }} </span>
         </div>
         <div>
-          <span class="finally-money performance-money">{{ settlementTotal.push_money | unitPrice('¥') }}</span>
+          <span class="finally-money performance-money">{{ settlementTotal.final_money | unitPrice('¥') }}</span>
           <span>最终佣金</span>
         </div>
         <div>
           <span class="performance-symbol">=</span>
         </div>
         <div>
-          <span class="summary-money performance-money">{{ settlementTotal.final_money | unitPrice('¥') }}</span>
+          <span class="summary-money performance-money">{{ settlementTotal.push_money | unitPrice('¥') }}</span>
           <span>订单佣金</span>
         </div>
         <div>

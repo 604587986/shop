@@ -16,10 +16,10 @@ let areaHTML =
 					z-index: 1000;\
 					top: 15%;\
 					left: 45%;\
-                    left: calc(50% - 346px);\
-                    display: none;\
-                    z-index: 999;\
-                    background: white;\
+          left: calc(50% - 346px);\
+          display: none;\
+          z-index: 2000;\
+          background: white;\
 				}\
 \
 				.area-selector-container .head {\
@@ -63,7 +63,7 @@ let areaHTML =
 				.area-container .area-right {\
 					width: 200px;\
 					height: 375px;\
-					border: 1px solid #ccc;\
+					border: 1px solid #E5E5E5;\
 					overflow: scroll;\
 				}\
 \
@@ -169,7 +169,7 @@ let areaHTML =
                     position: fixed;\
                     top: 0;\
                     left: 0;\
-                    z-index: 1;\
+                    z-index: 1500;\
                     display: none;\
                 }\
 			</style>\
