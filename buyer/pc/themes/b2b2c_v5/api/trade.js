@@ -403,3 +403,15 @@ export function changeActivity(params) {
     data: params
   })
 }
+
+/**
+ * 不参加促销活动
+ */
+export function cleanPromotion(params) {
+  return request({
+    url: 'trade/promotion',
+    method: Method.DELETE,
+    needToken: true,
+    params
+  })
+}

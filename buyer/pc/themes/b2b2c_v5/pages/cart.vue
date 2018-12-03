@@ -76,6 +76,7 @@
                               <input
                                 :checked="handleActsChecked(sku.single_list) && 'checked'"
                                 :name="'act_'+sku.sku_id"
+                                value="clean"
                                 type="radio"
                               >不参与促销活动
                             </li>
@@ -308,11 +309,17 @@
       /** 确认修改促销活动 */
       handleConfirmChangeAct(sku) {
         const eleStr = `input[name=act_${sku.sku_id}]:checked`
-        const val = JSON.parse($(eleStr).val())
-        const { activity_id, promotion_type } = val
-        const { seller_id, sku_id } = sku
-        const params = { seller_id, sku_id, activity_id, promotion_type }
-        this.changeActivity(params)
+        const val = $(eleStr).val()
+        if (val === 'clean') {
+          const { seller_id, sku_id } = sku
+          this.cleanActivity({seller_id, sku_id})
+        } else {
+          const val = JSON.parse($(eleStr).val())
+          const { activity_id, promotion_type } = val
+          const { seller_id, sku_id } = sku
+          const params = { seller_id, sku_id, activity_id, promotion_type }
+          this.changeActivity(params)
+        }
         this.show_act_sku_id = null
       },
       /** 展示sku促销弹框 */
@@ -352,7 +359,9 @@
         // 清空购物车
         cleanCart: 'cart/cleanCartAction',
         // 更换促销活动
-        changeActivity: 'cart/changeActivityAction'
+        changeActivity: 'cart/changeActivityAction',
+        // 不参加活动
+        cleanActivity: 'cart/cleanActivityAction'
       })
     },
     destroyed() {
