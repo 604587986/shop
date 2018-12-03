@@ -119,9 +119,9 @@
                 </div>
                 <div class="shop-footer-item price">
                   <em>￥</em>
-                  <span>{{ shop.price.total_price | unitPrice }}</span>
+                  <span>{{ shop.price.goods_price | unitPrice }}</span>
                 </div>
-                <div class="shop-cash-back" v-if="shop.cash_back">[返现：￥{{ shop.cash_back | unitPrice }}]</div>
+                <div class="shop-cash-back" v-if="shop.price.cash_back">[返现：￥{{ shop.price.cash_back | unitPrice }}]</div>
               </div>
             </div>
           </div>
