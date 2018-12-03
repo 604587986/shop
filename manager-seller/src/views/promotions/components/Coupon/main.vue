@@ -5,17 +5,18 @@
         <el-input
           auto-complete="off"
           v-model="couponForm.title"
+          @change="couponForm.title = couponForm.title.trim()"
           placeholder="请输入10个以内的汉字"
           maxLength="10"
           label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="优惠券面额：" prop="coupon_price">
-        <el-input placeholder="请输入优惠券面额" v-model="couponForm.coupon_price">
+        <el-input placeholder="请输入优惠券面额,长度最多10个字符" maxLength="10" v-model="couponForm.coupon_price">
           <template slot="prepend">¥</template>
         </el-input>
       </el-form-item>
       <el-form-item label="买家需消费：" prop="coupon_threshold_price">
-        <el-input placeholder="请输入内容" v-model="couponForm.coupon_threshold_price">
+        <el-input placeholder="请输入内容,长度最多10个字符" maxlength="10" v-model="couponForm.coupon_threshold_price">
           <template slot="prepend">¥</template>
         </el-input>
       </el-form-item>
@@ -32,10 +33,10 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="发行量：" prop="create_num">
-        <el-input v-model="couponForm.create_num" label-width="100"></el-input>
+        <el-input v-model="couponForm.create_num" maxlength="10" label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="每人限领：" prop="limit_num">
-        <el-input v-model="couponForm.limit_num"  label-width="100"></el-input>
+        <el-input v-model="couponForm.limit_num" maxlength="10"  label-width="100"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

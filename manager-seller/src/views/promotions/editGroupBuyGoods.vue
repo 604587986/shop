@@ -18,6 +18,8 @@
         <el-input
           v-model="gruopBuyForm.gb_name"
           :style="{ width:inputLength +'px' }"
+          @change="gruopBuyForm.gb_name = gruopBuyForm.gb_name.trim()"
+          maxlength="30"
           placeholder="团购标题名称长度最多可输入30个字符"></el-input>
         <span class="activity-tip">团购标题名称长度最多可输入30个字符</span>
       </el-form-item>
@@ -26,8 +28,9 @@
         <el-input
           v-model="gruopBuyForm.gb_title"
           :style="{ width:inputLength +'px' }"
-          placeholder="团购副标题针对团购特殊说明"></el-input>
-        <span class="activity-tip">团购副标题针对团购特殊说明</span>
+          maxlength="200"
+          placeholder="团购副标题针对团购特殊说明，限200字"></el-input>
+        <span class="activity-tip">团购副标题针对团购特殊说明,限200字</span>
       </el-form-item>
       <!--团购商品-->
       <el-form-item label="团购商品">
@@ -41,7 +44,7 @@
           如没有找到您想要参加团购的商品，请重新发布该商品后再选择。</span>
       </el-form-item>
       <!--店铺价格-->
-      <el-form-item label="店铺价格">
+      <el-form-item label="店铺价格" v-if="gruopBuyForm.original_price">
         <span>{{ gruopBuyForm.original_price | unitPrice('￥')}}</span>
       </el-form-item>
       <!--团购价格-->
@@ -135,36 +138,7 @@
       width="50%"
       center
       :before-close="handleAgreementClose">
-      <div>
-        <h4>甲乙双方确认并同意本条款中对于各名词的解释及定义，并同意按照该定义履行相关义务</h4>
-        <p>1、团购：通过互联网渠道，一定数量的消费者组团，以较低价格购买同一种商品/服务的商业活动。</p>
-
-        <p> 2、javashop商城：系提供团购交易服务的网络服务平台。</p>
-
-        <p> 3、团购信息：甲方通过javashop商城发布的，在javashop商城网页面上展示的甲方商品/服务信息(如团购价、商品/服务描述、电子券有效期、团购规则等)。该信息为甲方就前述商品/服务向团购用户发出的要约， 一旦团购用户通过javashop商城确认同意购买甲方该商品/服务，即视为甲方与团购用户达成了团购合同。</p>
-
-        <p> 4、团购订单：即团购合同，系团购用户通过美团网与甲方间达成的购买商品/服务的合同。</p>
-
-        <p> 5、优惠券：指甲方提供给团购用户的商品/服务的消费凭证，团购用户可以凭其获取相应的商品/服务; 优惠券的形式包括但不限于javashop商城页面、短信、电子邮件等。</p>
-
-        <p> 6、优惠券消费数：团购用户已实际消费的优惠券数量。因甲方提供的商品/服务需要在javashop商城验证平台上进行验证， 优惠券消费数以javashop商城验证平台上已标记消费的数量为准。</p>
-
-        <p> 7、门店价：签订本合同时，甲方提供的商品/服务不参加团购活动时(即在实体经营场所销售/提供时)的单份销售价格。</p>
-
-        <p> 8、团购价：甲方提供的商品/服务参加团购活动时的单份销售价格。</p>
-
-        <p> 9、代收团购款项：javashop商城实际经营者代甲方收取的团购用户通过javashop商城向甲方支付的已实际消费的优惠券对应的款项。该款项由javashop商城实际经营者代收后转付至乙方，乙方扣除本合同约定的服务费后支付给甲方。计算标准为：团购价乘以优惠券消费数。</p>
-
-        <p> 10、服务费：为了实现甲方进入javashop商城开展经营活动、进行团购交易之目的，乙方为甲方提供本合同第二条约定之服务收取的相关费用。</p>
-
-        <p> 11、服务费价格：团购用户每实际消费一张优惠券，甲方应向乙方支付的服务费数额。</p>
-
-        <p> 12、结算价：针对每一张已实际消费的优惠券，乙方于代收团购款项中扣除应收取的服务费后，应支付给甲方的数额。计算标准为：团购价减服务费价格。</p>
-
-        <p> 13、代收净额：对应团购用户实际消费的优惠券数量，乙方应支付给甲方的实际结算款项。计算标准为：结算价乘以优惠券消费数。</p>
-
-        <p>  14、本协议仅为javashop商城团购协议示例，不作为正式协议使用。</p>
-      </div>
+      <div v-html="agreement_content"></div>
       <span slot="footer" class="dialog-footer">
     <el-button type="danger" @click="allowContinue">同意并继续</el-button>
   </span>
@@ -174,6 +148,7 @@
 
 <script>
   import * as API_groupBuy from '@/api/groupBuy'
+  import * as API_Dashboard from '@/api/dashboard'
   import { unixToDate } from '@/utils/index'
   import { RegExp } from '~/ui-utils'
   import { UE } from '@/components'
@@ -339,7 +314,10 @@
           is_allow_agreement: [
             { validator: checkAgreement, trigger: 'change' }
           ]
-        }
+        },
+
+        /** 团购服务协议 */
+        agreement_content: ''
       }
     },
     beforeRouteUpdate(to, from, next) {
@@ -347,6 +325,12 @@
       this.GET_AllGroupBuyActivitys()
       this.GET_GroupCateGories()
       next()
+    },
+    created() {
+      /** 获取团购服务协议 */
+      API_Dashboard.getConcate({ position: 'GROUP_BUY_AGREEMENT' }).then((response) => {
+        this.agreement_content = response.content
+      })
     },
     mounted() {
       this.$route.params.goods_id && this.GET_GroupBuyGoodsDetails(this.$route.params.goods_id)

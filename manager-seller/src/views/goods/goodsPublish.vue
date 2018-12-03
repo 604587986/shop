@@ -65,7 +65,7 @@
               <span v-show="activeCategoryName3"> > {{ activeCategoryName3 }}</span>
               <span v-if="!activeCategoryName1" v-html="baseInfoForm.category_name"></span>
             </el-form-item>
-            <el-form-item label="商品分组：" >
+            <el-form-item label="店铺商品分组：" >
               <!--商品分组 获取分类列表 传入默认值-->
               <en-category-picker
                 @changed="changeGoodsCateGory"

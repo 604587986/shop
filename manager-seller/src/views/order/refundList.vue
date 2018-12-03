@@ -60,7 +60,12 @@
         <!--类型-->
         <el-table-column prop="refuse_type_text" label="类型"/>
         <!--状态-->
-        <el-table-column prop="refund_status_text" label="状态"/>
+        <el-table-column prop="refund_status_text" label="状态">
+          <template slot-scope="scope">
+            <span>{{ scope.row.refund_status_text }}</span>
+            <div class="refund-fail-reason" v-if="scope.row.refund_status === 'REFUNDFAIL'" @click="showRefundFailReason(scope.row)">(退款失败原因)</div>
+          </template>
+        </el-table-column>
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -98,6 +103,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-table-layout>
+    <!--退款、退货审核-->
     <el-dialog title="退款、退货审核" :visible.sync="goodsRefundshow" width="50%" align="center">
       <div align="center">
         <div class="refund-info">
@@ -193,6 +199,10 @@
         </en-table-layout>
       </div>
     </el-dialog>
+    <!--退款失败原因-->
+    <el-dialog title="退款失败原因" :visible.sync="isShowRefundFailReason" width="17%" >
+      <div align="center">{{ refund_fail_reason }}</div>
+    </el-dialog>
   </div>
 </template>
 
@@ -246,6 +256,12 @@
 
         /** 当前操作权限 */
         authOpera: {},
+
+        /** 是否显示退款失败原因 */
+        isShowRefundFailReason: false,
+
+        /** 退款失败原因 */
+        refund_fail_reason: '',
 
         /** 当前退款/货 信息 */
         refundInfo: {},
@@ -319,6 +335,13 @@
             data_total: response.data_total
           }
         })
+      },
+
+      /** 显示退款失败原因 */
+      showRefundFailReason(row) {
+        this.isShowRefundFailReason = false
+        this.isShowRefundFailReason = true
+        this.refund_fail_reason = row.refund_fail_reason
       },
 
       /** 查看退款/货单详细 */
@@ -401,6 +424,12 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
+  }
+
+  /* 退款失败原因*/
+  .refund-fail-reason {
+    color: red;
+    cursor: pointer;
   }
 
   /** 退款/货信息 */

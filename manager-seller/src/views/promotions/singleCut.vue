@@ -81,8 +81,9 @@
                   <el-input
                     v-model="activityForm.title"
                     style="width: 300px"
+                    @change="activityForm.title  = activityForm.title.trim()"
                     placeholder="不超过60个字符"
-                    maxLength="60"></el-input>
+                    maxLength="60"/>
                 </el-form-item>
                 <el-form-item label="生效时间：" prop="take_effect_time">
                   <el-date-picker
