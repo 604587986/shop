@@ -25,10 +25,16 @@
           </div>
           <div class="promotion-notice">{{ shop.promotion_notice }}</div>
           <div class="content-shop-item">
-            <div v-for="(sku, index) in shop.sku_list" :key="index" class="sku-item-li">
+            <div
+              v-for="(sku, index) in shop.sku_list"
+              :key="index"
+              class="sku-item-li"
+              :class="[sku.invalid === 1 && 'invalid']"
+            >
               <van-swipe-cell :right-width="90">
                 <div class="sku-item">
-                  <div class="sku-check" @click="handleCheckSku(sku)">
+                  <div v-if="sku.invalid === 1" class="sku-check">已失效</div>
+                  <div v-else class="sku-check" @click="handleCheckSku(sku)">
                     <van-icon :name="sku.checked ? 'checked' : 'check'"/>
                   </div>
                   <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-image">
@@ -106,19 +112,6 @@
         >去结算</van-button>
       </div>
     </div>
-    <!--这里的价格以分为单位-->
-    <!--<van-submit-bar
-      :price="cartTotal.total_price * 100"
-      button-text="去结算"
-      :disabled="!checkedCount"
-      @submit="handleCheckout"
-    >
-      <div class="all-check" @click="handleCheckAll">
-        <van-icon :name="all_checked ? 'checked' : 'check'"/>全选
-      </div>
-      <a v-show="checkedCount" href="javascript:void(0)" class="del-btn" @click="handleBatchDelete">删除已选</a>
-      &lt;!&ndash;<div>返现：￥233,233,22.00</div>&ndash;&gt;
-    </van-submit-bar>-->
     <van-actionsheet
       v-model="showActivityActionsheet"
       :actions="activity_options"
@@ -570,9 +563,14 @@
       vertical-align: -2px;
     }
   }
-  .sku-item-li:last-child {
-    .act-item {
-      margin-bottom: 10px;
+  .sku-item-li {
+    &.invalid .sku-item {
+      filter: grayscale(1);
+    }
+    &:last-child {
+      .act-item {
+        margin-bottom: 10px;
+      }
     }
   }
   .cat-bottom-bar {
