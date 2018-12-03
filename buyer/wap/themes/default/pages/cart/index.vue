@@ -49,7 +49,7 @@
                       <div class="sku-price">
                         <strong>￥{{ sku.purchase_price | unitPrice }}</strong>
                       </div>
-                      <div class="sku-num">
+                      <div v-if="sku.invalid !== 1" class="sku-num">
                         <a class="sku-symbol symbol-less minus unable" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '-')">-</a>
                         <input type="tel" class="sku-num-input" size="4" :value="sku.num" maxlength="4" @change="handleUpdateSkuNum(sku, $event)">
                         <a class="sku-symbol symbol-add add" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '+')">+</a>
