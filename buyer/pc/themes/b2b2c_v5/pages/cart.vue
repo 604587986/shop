@@ -32,9 +32,10 @@
                 <span class="shop-act-info" v-if="shop.promotion_notice">[{{ shop.promotion_notice }}]</span>
               </div>
               <div class="shop-body">
-                <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item">
+                <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item" :class="[sku.invalid === 1 && 'invalid']">
                   <div class="item clearfix">
-                    <a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
+                    <span v-if="sku.invalid === 1" class="invalid-pla">已失效</span>
+                    <a v-else href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
                       <i class="iconfont ea-icon-check"></i>
                     </a>
                     <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-pic">
@@ -57,7 +58,7 @@
                       <div
                         :class="[show_act_sku_id === sku.sku_id && 'show-act']"
                         class="activity-box"
-                        v-if="sku.single_list && sku.single_list.length"
+                        v-if="sku.invalid !== 1 && sku.single_list && sku.single_list.length"
                       >
                         <a @click.stop="handleShowAct(sku)" class="activity-btn" href="javascript:void(0)" slot="reference">
                           促销<i class="iconfont ea-icon-arrow-down"></i>
@@ -89,7 +90,7 @@
                       </div>
                     </div>
                     <div class="sku-num">
-                      <div class="num-action clearfix">
+                      <div v-if="sku.invalid !== 1" class="num-action clearfix">
                         <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
                         <input
                           class="input"
@@ -101,6 +102,7 @@
                         >
                         <a :class="['oper', sku.num >= sku.enable_quantity && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
                       </div>
+                      <div v-if="sku.invalid === 1">此商品已失效</div>
                     </div>
                     <div class="sku-weight">
                       {{ (sku.num * sku.goods_weight).toFixed(2) }}
