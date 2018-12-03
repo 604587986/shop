@@ -3,15 +3,27 @@
     <en-category/>
     <ul class="nav-list">
       <li v-for="nav in $store.getters.navList" :key="nav.navigation_id">
-        <a :href="nav.url">{{ nav.navigation_name }}</a>
+        <a :href="getUrl(nav.url)">{{ nav.navigation_name }}</a>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+  import { parse, stringify } from 'querystring'
   export default {
-    name: 'EnNav'
+    name: 'EnNav',
+    methods: {
+      getUrl(url) {
+        if (/keyword=(.*)/.test(url)) {
+          let querys = url.match(/\?(.*)/)
+          const query = parse(querys[1])
+          const qs = stringify(query)
+          url = url.replace(/\?(.*)/, `?${qs}`)
+        }
+        return url
+      }
+    }
   }
 </script>
 
