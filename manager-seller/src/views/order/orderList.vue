@@ -7,7 +7,7 @@
       :tableData="tableData">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
-          <span style="font-size: 14px;">待操作订单：</span>
+          <span style="font-size: 14px;">订单状态：</span>
           <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus">
             <el-option
               v-for="item in orderStatusList"
@@ -164,7 +164,9 @@
           { value: 'ALL', label: '全部' },
           { value: 'WAIT_PAY', label: '待付款' },
           { value: 'WAIT_SHIP', label: '待发货' },
-          { value: 'WAIT_ROG', label: '待收货' }
+          { value: 'WAIT_ROG', label: '待收货' },
+          { value: 'COMPLETE', label: '已完成' },
+          { value: 'CANCELLED', label: '已取消' }
         ],
 
         /** 表格最大高度 */
