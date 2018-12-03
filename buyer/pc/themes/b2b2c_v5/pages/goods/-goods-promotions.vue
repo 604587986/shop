@@ -60,28 +60,35 @@
   export default {
     name: 'goods-promotions',
     props: ['promotions'],
-    data() {
-      return {
-        showPromotion: true
-      }
+    mounted() {
+      this.handleCountPlaBoxHeight()
     },
     watch: {
-      promotions: function (newVal) {
+      showPromotion: 'handleCountPlaBoxHeight'
+    },
+    computed: {
+      showPromotion: function () {
+        const { promotions } = this
+        if (!promotions || !Array.isArray(promotions)) return false
         let flag = false
         const proms = ['full_discount_vo', 'half_price_vo', 'minus_vo']
-        newVal.forEach(item => {
+        this.promotions.forEach(item => {
           proms.forEach(porm => {
             if (item[porm]) flag = true
           })
         })
-        this.showPromotion = flag
-        if (flag) {
-          this.$nextTick(() => {
-            const $proBox = document.getElementById('promotions-box')
-            const $plaBox = document.getElementById('promotions-place')
-            $plaBox.style.height = $proBox.offsetHeight + 'px'
-          })
-        }
+        return flag
+      }
+    },
+    methods: {
+      /** 重新计算赋值占位box高度 */
+      handleCountPlaBoxHeight() {
+        this.$nextTick(() => {
+          const $proBox = document.getElementById('promotions-box')
+          const $plaBox = document.getElementById('promotions-place')
+          if (!$proBox || !$plaBox) return
+          $plaBox.style.height = $proBox.offsetHeight + 'px'
+        })
       }
     }
   }
