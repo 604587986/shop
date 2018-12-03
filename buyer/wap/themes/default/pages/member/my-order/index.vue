@@ -188,7 +188,7 @@
       /** 订单搜索 */
       handleSearchOrder() {
         this.showSearchPopup = false
-        this.params.goods_name = this.searchKeyword
+        this.params.key_words = this.searchKeyword
         this.params.page_no = 0
         this.finished = false
         this.orderList = []
