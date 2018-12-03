@@ -80,6 +80,7 @@
                 <el-form-item  label="活动名称：" prop="title">
                   <el-input
                     v-model="activityForm.title"
+                    @change="activityForm.title  = activityForm.title.trim()"
                     style="width: 300px"
                     placeholder="不超过60个字符"
                     maxLength="60"
