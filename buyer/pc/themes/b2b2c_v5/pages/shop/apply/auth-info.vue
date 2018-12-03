@@ -123,9 +123,11 @@
   import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
   import EnRegionPicker from "@/components/RegionPicker"
+  import mixin from './checkStatusMixin'
   export default {
     name: "auth-info",
     middleware: 'auth-seller',
+    mixins: [mixin],
     components: { EnRegionPicker },
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })

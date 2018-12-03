@@ -145,6 +145,7 @@
                 </div>
                 <div class="gl-commit">
                   <strong>已有<a class="comment">{{ goods.comment_num }}</a>人评价</strong>
+                  <span class="gl-grade">好评率：<i>{{ goods.grade }}%</i></span>
                 </div>
                 <div class="gl-shop">
                   <span>
@@ -704,6 +705,8 @@
       }
     }
     .gl-commit {
+      display: flex;
+      justify-content: space-between;
       width: 100%;
       height: 18px;
       margin-top: -3px;
@@ -718,6 +721,7 @@
           font-weight: 700;
         }
       }
+      .gl-grade i { color: $color-main }
     }
     .gl-shop {
       line-height: 18px;

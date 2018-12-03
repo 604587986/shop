@@ -6,7 +6,7 @@
         <!--商品相册-->
         <goods-zoom :images="goods.gallery_list" :spec-img="specImage"/>
         <!--商品信息【包括规格】-->
-        <goods-info :goods="goods" @spec-img-change="(img) => { this.specImage = img }"/>
+        <goods-info :goods="goods" :promotions="promotions" @spec-img-change="(img) => { this.specImage = img }"/>
         <!--店铺卡片-->
         <shop-card :shop-id="goods.seller_id"/>
       </div>
@@ -72,6 +72,7 @@
       APT_Trade.getSnapshot(id).then(response => {
         response.goods_name = response.name
         this.goods = response
+        this.promotions = response.promotion_list// || JSON.parse(response.promotion_json)
       })
     },
     methods: {

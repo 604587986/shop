@@ -41,8 +41,10 @@
 
 <script>
   import * as API_Shop from '@/api/shop'
+  import mixin from './checkStatusMixin'
   export default {
     name: "user-agreement",
+    mixins: [mixin],
     middleware: 'auth-seller',
     data() {
       return { agreed: false }

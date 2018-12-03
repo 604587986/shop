@@ -1,5 +1,8 @@
 <template>
-  <nuxt id="wrapper"/>
+  <div>
+    <nuxt id="wrapper"/>
+    <en-back-to-top/>
+  </div>
 </template>
 <script>
   import Storage from '@/utils/storage'
