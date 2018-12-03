@@ -48,6 +48,10 @@ export default {
     },
     /** 添加地址 */
     handleAddAddress() {
+      if (!this.regions) {
+        const $regionPicker = this.$refs['regionPicker']
+        $regionPicker && $regionPicker['initAddressSelect']()
+      }
       this.addressForm = {
         def_addr: 0,
         ship_address_name: ''

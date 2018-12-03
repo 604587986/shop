@@ -65,13 +65,14 @@
   import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
   import EnRegionPicker from "@/components/RegionPicker"
+  import mixin from './checkStatusMixin'
   export default {
     name: "financial-qualification",
     middleware: 'auth-seller',
+    mixins: [mixin],
     components: { EnRegionPicker },
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })
-      const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'change' })
       return {
         defaultRegions: null,
         /** 基础信息 表单 */

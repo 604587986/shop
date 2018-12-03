@@ -20,7 +20,6 @@
                 <img :src="goods.big" :alt="goods.goods_name">
               </nuxt-link>
             </div>
-            <label v-if="index % 2 === 0"></label>
           </li>
         </ul>
       </div>
@@ -92,7 +91,9 @@
       font-weight: 300;
     }
     .list-new-goods {
-      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
       overflow: hidden;
     }
     .item-new-goods {
@@ -100,25 +101,12 @@
       display: flex;
       flex-direction: column;
       width: 46%;
-      margin: 0 2% 8px 0;
       position: relative;
       padding: 0.6 * 16px 0;
       text-align: center;
       border-bottom: 1px solid #fff;
       &:nth-child(2n) {
         flex-direction: column-reverse;
-      }
-      &:nth-child(4n + 2), &:nth-child(4n + 3) {
-        border-color: #dedede;
-      }
-      label {
-        width: 16px;
-        height: 250px;
-        background-size: 100%;
-        position: absolute;
-        top: 16px;
-        right: -1.5 * 16px;
-        border-left: 1px solid #dedede;
       }
     }
     .intro-new-goods {

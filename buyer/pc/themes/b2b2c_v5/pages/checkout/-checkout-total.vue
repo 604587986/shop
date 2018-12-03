@@ -7,9 +7,14 @@
           <em class="price-details-ckt-total">￥{{ orderTotal.goods_price | unitPrice }}</em>
           <div class="clear-details-ckt-total"></div>
         </li>
-        <li class="li_discount_price">
-          <span class="title-details-ckt-total">优惠金额：</span>
-          <em class="price-details-ckt-total">-￥{{ orderTotal.discount_price | unitPrice }}</em>
+        <li class="li_discount_price" v-if="orderTotal.coupon_price">
+          <span class="title-details-ckt-total">优惠券抵扣：</span>
+          <em class="price-details-ckt-total">-￥{{ orderTotal.coupon_price | unitPrice }}</em>
+          <div class="clear-details-ckt-total"></div>
+        </li>
+        <li class="li_discount_price" v-if="orderTotal.cash_back">
+          <span class="title-details-ckt-total">返现金额：</span>
+          <em class="price-details-ckt-total">-￥{{ orderTotal.cash_back | unitPrice }}</em>
           <div class="clear-details-ckt-total"></div>
         </li>
         <li class="li_discount_price" v-if="orderTotal.exchange_point">

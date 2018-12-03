@@ -48,6 +48,7 @@
               <span>RMB：<span class="price">￥<strong>{{ goods.price | unitPrice }}</strong></span></span>
               <span>已销售：{{ goods.buy_count }}件</span>
             </div>
+            <div class="goods-grade">好评率：<span>{{ goods.grade }}%</span></div>
           </li>
           <span class="clr"></span>
         </ul>
@@ -250,5 +251,10 @@
     display: flex;
     justify-content: space-between;
     strong { font-size: 16px }
+  }
+  .goods-grade {
+    span {
+      color: $color-main
+    }
   }
 </style>

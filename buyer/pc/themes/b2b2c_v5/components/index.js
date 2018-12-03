@@ -14,6 +14,7 @@ import PicZoom from './PicZoom'
 import Search from './Search'
 import Settleup from './Settleup'
 import Shortcut from './Shortcut'
+import ShopLogo from './ShopLogo'
 
 export {
   RegionPicker,
@@ -30,5 +31,6 @@ export {
   PicZoom,
   Search,
   Settleup,
-  Shortcut
+  Shortcut,
+  ShopLogo
 }

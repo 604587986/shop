@@ -9,6 +9,7 @@ import TabBar from './TabBar'
 import NavBar from './NavBar'
 import HeaderShortcut from './HeaderShortcut'
 import Empty from './Empty'
+import BackToTop from './BackToTop'
 
 export {
   RegionPicker,
@@ -20,5 +21,6 @@ export {
   TabBar,
   NavBar,
   HeaderShortcut,
-  Empty
+  Empty,
+  BackToTop
 }

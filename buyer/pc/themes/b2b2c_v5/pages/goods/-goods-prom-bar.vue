@@ -4,7 +4,7 @@
       <slot name="icon" class="icon-prom-type"></slot>
       <strong>{{ title }}</strong>
     </div>
-    <div class="prom-time">
+    <div class="prom-time" v-if="!is_snapshot">
       距离结束
       <template v-if="day > 0">
         <span>{{ day }}</span>天
@@ -25,11 +25,12 @@
         day: 0,
         hours: '00',
         minutes: '00',
-        seconds: '00'
+        seconds: '00',
+        is_snapshot: this.$route.name === 'goods-snapshot'
       }
     },
     mounted() {
-      this.contDown(this.endTime)
+      !this.is_snapshot && this.contDown(this.endTime)
     },
     methods: {
       contDown(times) {
@@ -50,7 +51,7 @@
       }
     },
     destroyed() {
-      clearInterval(this.timer)
+      this.timer && clearInterval(this.timer)
     }
   }
 </script>
