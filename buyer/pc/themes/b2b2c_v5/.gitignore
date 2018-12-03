@@ -8,6 +8,7 @@ npm-debug.log
 .nuxt
 
 # Editor directories and files
+.idea
 .idea/*
 .vscode
 *.suo
