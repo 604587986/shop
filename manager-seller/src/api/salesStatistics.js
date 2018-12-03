@@ -46,3 +46,16 @@ export function getSalesStatisticsGoodsList(params) {
   })
 }
 
+/**
+ * 获取销售统计小结
+ * @param params
+ */
+export function getSalesStatisticsSummary(params) {
+  return request({
+    url: 'seller/statistics/reports/sales_summary',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+

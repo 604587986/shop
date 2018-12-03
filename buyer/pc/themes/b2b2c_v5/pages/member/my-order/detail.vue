@@ -173,7 +173,7 @@
       GET_OrderDetail() {
         API_Order.getOrderDetail(this.order_sn).then(response => {
           this.order = response
-          if (response.order_operate_allowable_vo.allow_rog && response.logi_id && response.ship_no) {
+          if (response.logi_id && response.ship_no) {
             this.handleViewExpress()
           }
           this.skuList = JSON.parse(response.items_json)

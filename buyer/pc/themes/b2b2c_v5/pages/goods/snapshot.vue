@@ -51,6 +51,7 @@
     validate({ query }) {
       return /^\d+$/.test(query.id)
     },
+    middleware: 'auth-user',
     head() {
       const { goods, site } = this
       return {

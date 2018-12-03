@@ -190,6 +190,12 @@
         this.rolesOptions = response.data
       })
     },
+    activated() {
+      // 获取角色
+      API_Auth.getRoleList({ page_size: 10000 }).then(response => {
+        this.rolesOptions = response.data
+      })
+    },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {

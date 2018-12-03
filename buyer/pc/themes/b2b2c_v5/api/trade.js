@@ -347,7 +347,7 @@ export function getExpress(id, num) {
  */
 export function useCoupon(shop_id, coupon_id) {
   return request({
-    url: `trade/${shop_id}/seller/${coupon_id}/coupon`,
+    url: `trade/promotion/${shop_id}/seller/${coupon_id}/coupon`,
     method: Method.POST,
     needToken: true
   })
@@ -401,5 +401,17 @@ export function changeActivity(params) {
     method: Method.POST,
     needToken: true,
     data: params
+  })
+}
+
+/**
+ * 不参加促销活动
+ */
+export function cleanPromotion(params) {
+  return request({
+    url: 'trade/promotion',
+    method: Method.DELETE,
+    needToken: true,
+    params
   })
 }

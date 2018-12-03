@@ -9,6 +9,7 @@ npm-debug.log
 
 # Editor directories and files
 .idea
+.idea/*
 .vscode
 *.suo
 *.ntvs*

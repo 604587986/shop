@@ -60,7 +60,12 @@
         <!--类型-->
         <el-table-column prop="refuse_type_text" label="类型"/>
         <!--状态-->
-        <el-table-column prop="refund_status_text" label="状态"/>
+        <el-table-column prop="refund_status_text" label="状态">
+          <template slot-scope="scope">
+            <span>{{ scope.row.refund_status_text }}</span>
+            <div class="refund-fail-reason" v-if="scope.row.refund_status === 'REFUNDFAIL'" @click="showRefundFailReason(scope.row)">(退款失败原因)</div>
+          </template>
+        </el-table-column>
         <!--操作-->
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -98,6 +103,7 @@
         :total="pageData.data_total">
       </el-pagination>
     </en-table-layout>
+    <!--退款、退货审核-->
     <el-dialog title="退款、退货审核" :visible.sync="goodsRefundshow" width="50%" align="center">
       <div align="center">
         <div class="refund-info">
@@ -119,17 +125,23 @@
             <div class="order-info-item">
               <span>{{currentType}}状态: </span><span>{{ refundInfo.refund_status_text }}</span>
             </div>
-          </div>
-          <!--退款/货信息-->
-          <div class="refund-info-relations">
             <div class="order-info-item">
               <span>申请时间:  </span><span>{{ refundInfo.create_time | unixToDate }}</span>
             </div>
+          </div>
+          <!--退款/货信息-->
+          <div class="refund-info-relations">
             <div class="order-info-item">
               <span>{{currentType}}原因: </span><span>{{ refundInfo.refund_reason }}</span>
             </div>
             <div class="order-info-item">
               <span>详细描述:  </span><span>{{ refundInfo.customer_remark || '无'}}</span>
+            </div>
+            <div class="order-info-item">
+              <span>退款渠道:  </span><span>{{ refundInfo.account_type_text || '无'}}</span>
+            </div>
+            <div class="order-info-item">
+              <span>退款账号:  </span><span>{{ refundInfo.return_account || '无'}}</span>
             </div>
             <div class="order-info-item">
               <span>退款金额:  </span>
@@ -142,7 +154,7 @@
             </div>
             <div class="order-info-item order-info-remark">
               <span>审核备注:  </span>
-              <el-input v-if="authOpera.allow_seller_approval" type="textarea" v-model="remark"></el-input>
+              <el-input v-if="authOpera.allow_seller_approval" placeholder="最多200字" :maxlength="200" type="textarea" v-model="remark"></el-input>
               <span v-if="!authOpera.allow_seller_approval">{{ refundInfo.seller_remark || '无' }}</span>
             </div>
             <!--审核-->
@@ -187,12 +199,17 @@
         </en-table-layout>
       </div>
     </el-dialog>
+    <!--退款失败原因-->
+    <el-dialog title="退款失败原因" :visible.sync="isShowRefundFailReason" width="17%" >
+      <div align="center">{{ refund_fail_reason }}</div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import * as API_refund from '@/api/refund'
   import { CategoryPicker } from '@/components'
+  import { RegExp } from '~/ui-utils'
 
   export default {
     name: 'refundList',
@@ -239,6 +256,12 @@
 
         /** 当前操作权限 */
         authOpera: {},
+
+        /** 是否显示退款失败原因 */
+        isShowRefundFailReason: false,
+
+        /** 退款失败原因 */
+        refund_fail_reason: '',
 
         /** 当前退款/货 信息 */
         refundInfo: {},
@@ -314,6 +337,13 @@
         })
       },
 
+      /** 显示退款失败原因 */
+      showRefundFailReason(row) {
+        this.isShowRefundFailReason = false
+        this.isShowRefundFailReason = true
+        this.refund_fail_reason = row.refund_fail_reason
+      },
+
       /** 查看退款/货单详细 */
       getRefundDetails(row) {
         this.currentType = row.refuse_type_text
@@ -331,6 +361,10 @@
 
       /** 卖家审核退款/货 */
       handleRefundAuth(agree) {
+        if (!RegExp.money.test(this.refundMoney)) {
+          this.$message.error('请输入正确的退款金额')
+          return
+        }
         const _tip = agree === 1 ? '通过' : '不通过'
         this.$confirm(`确认${_tip}审核么?`, '确认信息', { type: 'warning' })
           .then(() => {
@@ -390,6 +424,12 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 20px;
+  }
+
+  /* 退款失败原因*/
+  .refund-fail-reason {
+    color: red;
+    cursor: pointer;
   }
 
   /** 退款/货信息 */

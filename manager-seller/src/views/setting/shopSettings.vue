@@ -7,17 +7,21 @@
       label-width="200px"
       class="demo-ruleForm"
       status-icon>
+      <!--店铺名称-->
+      <el-form-item label="店铺名称：" prop="shop_name">
+        <el-input v-model="shopDataForm.shop_name" @change="() => { shopDataForm.shop_name = shopDataForm.shop_name.trim() }" style="width: 200px;" auto-complete="off"></el-input>
+      </el-form-item>
       <!--身份证号-->
       <el-form-item label="身份证号：" prop="legal_id">
         <span>{{ shopDataForm.legal_id }}</span>
       </el-form-item>
       <!--店铺地址-->
-      <el-form-item label="店铺地址：" prop="shop_address">
-        <en-region-picker :api="MixinRegionApi" :default="areas" @changed="handleChange"></en-region-picker>
+      <el-form-item label="店铺地址：" prop="shop_region">
+        <en-region-picker :api="MixinRegionApi" :default="areas" @changed="(object) => { shopDataForm.shop_region = object.last_id }"></en-region-picker>
       </el-form-item>
       <!--详细地址-->
       <el-form-item label="详细地址：" prop="shop_add">
-        <el-input v-model="shopDataForm.shop_add" style="width: 200px;" auto-complete="off"></el-input>
+        <el-input v-model="shopDataForm.shop_add" @change="() => { shopDataForm.shop_add = shopDataForm.shop_add.trim() }"  style="width: 200px;" auto-complete="off"></el-input>
       </el-form-item>
       <!--联系电话-->
       <el-form-item label="联系电话：" prop="link_phone">
@@ -88,11 +92,21 @@
           callback()
         }
       }
+      const validQQ = (rule, value, callback) => {
+        if (value && !/^[0-9]\d*$/g.test(value)) {
+          callback(new Error('请输入0-9之间的整数'))
+        } else {
+          callback()
+        }
+      }
       return {
         /** 店铺信息*/
         shopDataForm: {
           /** 店铺ID */
           shop_id: 0,
+
+          /** 店铺名称 */
+          shop_name: '',
 
           /** 身份证号*/
           legal_id: '',
@@ -130,14 +144,32 @@
 
         /** 校验规则 校验必填 */
         rules: {
+          /** 店铺名称 */
+          shop_name: [
+            { required: true, message: '请填写店铺名称', trigger: 'blur' },
+            { whitespace: true, message: '店铺名称不可为纯空格', trigger: 'blur' },
+            { max: 15, message: '店铺名称长度最多15个字符', trigger: 'blur' }
+          ],
+
+          /** 店铺地址 */
+          shop_region: [
+            { required: true, message: '请填写店铺名称', trigger: 'blur' }
+          ],
+
           /** 详细地址 */
           shop_add: [
-            { required: true, message: '请填写详细地址', trigger: 'changer,blur' }
+            { whitespace: true, message: '详细地址不可为纯空格', trigger: 'blur' },
+            { max: 50, message: '详细地址长度最多50个字符', trigger: 'blur' }
           ],
           /** 联系人电话 */
           link_phone: [
             { required: true, message: '请填写联系人电话', trigger: 'blur' },
             { validator: validPhone, trigger: 'blur' }
+          ],
+          /** 店铺qq */
+          shop_qq: [
+            { required: false, trigger: 'change', validator: validQQ },
+            { max: 20, message: '店铺QQ长度最多20个字符', trigger: 'change' }
           ]
         }
       }
@@ -165,6 +197,8 @@
             const _params = {
               shop_add: this.shopDataForm.shop_add,
 
+              shop_name: this.shopDataForm.shop_name,
+
               link_phone: this.shopDataForm.link_phone,
 
               shop_logo: this.shopDataForm.shop_logo,
@@ -183,11 +217,6 @@
             })
           }
         })
-      },
-
-      /** 操作地区选择器改变时 触发*/
-      handleChange(val) {
-        this.shopDataForm.shop_region = val.last_id
       },
 
       /** 上传logo成功以后*/

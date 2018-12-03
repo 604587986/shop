@@ -160,6 +160,9 @@
     mounted() {
       this.GET_GoodsAuditList()
     },
+    activated() {
+      this.GET_GoodsAuditList()
+    },
     watch: {
       'goodsAuditForm.pass': function(newVal) {
         this.goodsAuditRules.message[0].required = newVal === 0

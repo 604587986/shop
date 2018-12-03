@@ -20,6 +20,8 @@ import './permission' // permission control
 
 // register global utility filters.
 import * as filters from './filters' // global filter
+// register global utility directives.
+import directives from './directives/loadmore'
 // register global utility mixins.
 import mixin from './utils/mixin'
 
@@ -27,6 +29,7 @@ Vue.use(Element, {
   size: 'small',
   i18n: (key, value) => i18n.t(key, value)
 })
+Vue.use(directives)
 Vue.use(UIComponents)
 Vue.use(VueAwesomeSwiper)
 

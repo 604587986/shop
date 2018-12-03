@@ -11,7 +11,7 @@
         <li v-for="shop in shopList.data" :key="shop.shop_id" class="shop-item">
           <div class="shop-info">
             <div class="shop-member-face">
-              <en-face :url="shop.member_face" class="member-face"/>
+              <en-face :url="shop.shop_logo" class="member-face"/>
             </div>
             <div class="shop-member-name">
               <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
@@ -162,8 +162,8 @@
       float: left;
       .member-face {
         display: block;
-        width: 70px;
-        height: 70px;
+        width: 130px;
+        height: 50px;
         background-color: #fff;
       }
     }

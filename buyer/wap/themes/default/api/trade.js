@@ -12,11 +12,10 @@ import { api } from '@/ui-domain'
  */
 export function getCarts(show_type = 'all') {
   return request({
-    url: 'trade/carts',
+    url: `trade/carts/${show_type}`,
     method: Method.GET,
     needToken: true,
-    loading: false,
-    params: { show_type }
+    loading: false
   })
 }
 
@@ -241,7 +240,6 @@ export function getOrderTotal() {
   return request({
     url: 'trade/price',
     method: Method.GET,
-    loading: false,
     needToken: true
   })
 }
@@ -345,11 +343,11 @@ export function getExpress(id, num) {
 /**
  * 使用优惠券
  * @param shop_id
- * @param mc_id
+ * @param coupon_id
  */
-export function useCoupon(shop_id, mc_id) {
+export function useCoupon(shop_id, coupon_id) {
   return request({
-    url: `trade/${shop_id}/seller/${mc_id}/coupon`,
+    url: `trade/promotion/${shop_id}/seller/${coupon_id}/coupon`,
     method: Method.POST,
     needToken: true
   })
@@ -399,9 +397,21 @@ export function getGoodsSales(goods_id, params) {
  */
 export function changeActivity(params) {
   return request({
-    url: 'trade/carts/cart/promotion',
+    url: 'trade/promotion',
     method: Method.POST,
     needToken: true,
     data: params
+  })
+}
+
+/**
+ * 不参加促销活动
+ */
+export function cleanPromotion(params) {
+  return request({
+    url: 'trade/promotion',
+    method: Method.DELETE,
+    needToken: true,
+    params
   })
 }

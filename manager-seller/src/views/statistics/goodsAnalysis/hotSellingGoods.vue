@@ -1,7 +1,6 @@
 <template>
   <div class="bg-shop-summary">
     <en-year-month-picker @changed="changeYearMonth"></en-year-month-picker>
-    <el-button type="primary" @click="handleSearchHot">开始搜索</el-button>
     <br>
     <br>
     <el-tabs type="border-card" @tab-click="changeHotType">
@@ -17,18 +16,18 @@
               <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
             </el-table-column>
           </template>
-          <el-pagination
-            slot="pagination"
-            v-if="pageData"
-            key="orderAmount"
-            @size-change="handlePageSizeChange"
-            @current-change="handlePageCurrentChange"
-            :current-page="pageData.page_no"
-            :page-sizes="[10, 20, 50, 100]"
-            :page-size="pageData.page_size"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageData.data_total">
-          </el-pagination>
+          <!--<el-pagination-->
+            <!--slot="pagination"-->
+            <!--v-if="pageData"-->
+            <!--key="orderAmount"-->
+            <!--@size-change="handlePageSizeChange"-->
+            <!--@current-change="handlePageCurrentChange"-->
+            <!--:current-page="pageData.page_no"-->
+            <!--:page-sizes="[10, 20, 50, 100]"-->
+            <!--:page-size="pageData.page_size"-->
+            <!--layout="total, sizes, prev, pager, next, jumper"-->
+            <!--:total="pageData.data_total">-->
+          <!--</el-pagination>-->
         </en-table-layout>
       </el-tab-pane>
       <el-tab-pane label="下单商品数">
@@ -41,18 +40,18 @@
             <el-table-column prop="goods_name" label="商品名称" />
             <el-table-column prop="all_num" label="下单商品数量" />
           </template>
-          <el-pagination
-            slot="pagination"
-            v-if="pageData"
-            key="orderGoodsNum"
-            @size-change="handlePageSizeChange"
-            @current-change="handlePageCurrentChange"
-            :current-page="pageData.page_no"
-            :page-sizes="[10, 20, 50, 100]"
-            :page-size="pageData.page_size"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageData.data_total">
-          </el-pagination>
+          <!--<el-pagination-->
+            <!--slot="pagination"-->
+            <!--v-if="pageData"-->
+            <!--key="orderGoodsNum"-->
+            <!--@size-change="handlePageSizeChange"-->
+            <!--@current-change="handlePageCurrentChange"-->
+            <!--:current-page="pageData.page_no"-->
+            <!--:page-sizes="[10, 20, 50, 100]"-->
+            <!--:page-size="pageData.page_size"-->
+            <!--layout="total, sizes, prev, pager, next, jumper"-->
+            <!--:total="pageData.data_total">-->
+          <!--</el-pagination>-->
         </en-table-layout>
       </el-tab-pane>
     </el-tabs>
@@ -127,25 +126,13 @@
 
           month: obj.month
         }
+        this.hotType === 0 ? this.GET_OrderAmountData() : this.GET_OrderGoodsNumData()
       },
 
       /** 改变热卖焦点时触发 */
       changeHotType(target) {
         this.hotType = parseInt(target.paneName)
-        if (parseInt(target.paneName) === 0) {
-          this.GET_OrderAmountData()
-        } else {
-          this.GET_OrderGoodsNumData()
-        }
-      },
-
-      /** 搜索触发*/
-      handleSearchHot() {
-        if (this.hotType === 0) {
-          this.GET_OrderAmountData()
-        } else {
-          this.GET_OrderGoodsNumData()
-        }
+        parseInt(target.paneName) === 0 ? this.GET_OrderAmountData() : this.GET_OrderGoodsNumData()
       },
 
       /** 下单金额数量 */
