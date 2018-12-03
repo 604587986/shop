@@ -6,16 +6,17 @@
           auto-complete="off"
           v-model="giftModelForm.gift_name"
           placeholder="不超过20个字"
+          @change="giftModelForm.gift_name = giftModelForm.gift_name.trim()"
           maxlength="20"
           label-width="100"></el-input>
       </el-form-item>
       <el-form-item label="赠品价格：" prop="gift_price">
-        <el-input placeholder="请输入赠品价格" v-model="giftModelForm.gift_price">
+        <el-input placeholder="请输入赠品价格,长度最多为10个字符" maxlength="10" v-model="giftModelForm.gift_price">
           <template slot="prepend">¥</template>
         </el-input>
       </el-form-item>
       <el-form-item label="赠品库存：" prop="actual_store">
-        <el-input placeholder="请输入赠品库存" v-model="giftModelForm.actual_store"/>
+        <el-input placeholder="请输入赠品库存,长度最多为10个字符" maxlength="10" v-model="giftModelForm.actual_store"/>
       </el-form-item>
       <el-form-item label="赠品图片：" prop="enable_img">
         <el-upload
