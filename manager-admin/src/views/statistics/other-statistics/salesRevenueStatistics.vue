@@ -7,6 +7,13 @@
             <span>查询周期：</span>
             <en-year-month-picker @changed="handleYearMonthChanged"/>
           </div>
+          <div class="chart-header-item">
+            <span>表格类型：</span>
+            <el-select v-model="tableType" style="width: 150px">
+              <el-option label="销售单" value="sales"></el-option>
+              <el-option label="退款单" value="after"></el-option>
+            </el-select>
+          </div>
         </div>
       </div>
       <div class="total-box">
@@ -57,22 +64,22 @@
           page_size: 10,
           year: '',
           month: '',
-          start_time: '',
-          end_time: '',
-          cycle_type: 'MONTH',
-          order_status: ''
+          cycle_type: 'MONTH'
         },
         /** 列表数据 */
         tableData: '',
         /** 总览 */
-        totalData: ''
+        totalData: '',
+        // 是否为退款单类型
+        tableType: 'sales'
       }
     },
     watch: {
       params: {
         handler: 'GET_SalesRevenueStatistics',
         deep: true
-      }
+      },
+      tableType: 'GET_SalesRevenueStatistics'
     },
     methods: {
       /** 年月发生改变 */
@@ -85,8 +92,12 @@
       /** 获取销售收入统计 */
       GET_SalesRevenueStatistics() {
         this.loading = true
+        const { tableType } = this
+        const tableApi = tableType === 'sales'
+          ? API_Statistics.getSalesRevenueStatisticsPage
+          : API_Statistics.getSalesAftersaleStatistics
         Promise.all([
-          API_Statistics.getSalesRevenueStatisticsPage(this.params),
+          tableApi(this.params),
           API_Statistics.getSalesRevenueStatisticsTotal(this.params)
         ]).then(responses => {
           this.loading = false
