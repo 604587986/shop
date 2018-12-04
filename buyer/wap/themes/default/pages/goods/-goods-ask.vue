@@ -1,32 +1,22 @@
 <template>
-  <div id="goods-comments" class="goods-comments">
-    <van-cell-group class="comment-cells">
-      <van-cell value="全部评价" is-link @click="showPopup = true">
-        <div slot="title">好评率：<span class="rate">{{ grade }}%</span></div>
-      </van-cell>
-      <div v-if="finished && !comments.length" class="no-comments">暂无评价</div>
+  <div id="goods-ask">
+    <van-cell-group class="ask-cells">
+      <van-cell title="商品咨询" value="查看全部咨询" is-link @click="showPopup = true"/>
+      <div v-if="finished && !asks.length" class="no-ask">暂无咨询</div>
       <div v-else class="some-comments">
-        <div v-for="(comment, index) in comments" v-if="index < 3" :key="index" class="com-item">
-          <div class="com-user">
-            <span class="user">{{ comment.member_name }}</span>
-            <span class="credit">{{ comment.grade | filterGrade }}</span>
-            <span class="date">{{ comment.create_time | unixToDate('yyyy-MM-dd') }}</span>
-          </div>
-          <div class="com-content">{{ comment.content }}</div>
-          <div v-if="comment.images && comment.images.length" class="com-gallery">
-            <span v-for="(img, index) in comment.images" :key="index" class="img">
-              <img :src="img" @click="handleImagePreview(comment.images, index)">
-            </span>
-          </div>
+        <div v-for="(ask, index) in asks" v-if="index < 3" :key="index" class="com-item">
+          <div class="com-content">{{ ask.content }}</div>
         </div>
-        <div class="com-more">
-          <a href="javascript:;" class="com-more-link" @click="showPopup = true">查看全部评价</a>
-        </div>
+      </div>
+      <div class="com-more">
+        <a href="javascript:;" class="com-more-link" @click="handleAsk">我也要咨询</a>
       </div>
     </van-cell-group>
     <van-popup v-model="showPopup" position="bottom" style="height:100%">
-      <van-nav-bar title="商品评价" left-arrow @click-left="showPopup = false"/>
-      <div v-if="finished && !comments.length" class="no-comments" style="padding-top: 50px">暂无评价</div>
+      <van-nav-bar title="商品咨询" left-arrow @click-left="showPopup = false">
+        <span slot="right" @click="handleAsk">我要咨询</span>
+      </van-nav-bar>
+      <div v-if="finished && !asks.length" class="no-ask" style="padding-top: 50px">暂无咨询</div>
       <van-list
         v-else
         v-model="loading"
@@ -34,84 +24,96 @@
         @load="onLoad"
         class="comments-list"
       >
-        <div v-for="(comment, index) in comments" :key="index" class="com-item" :class="[index === comments.length - 1 && 'last']">
+        <div v-for="(ask, index) in asks" :key="index" class="com-item" :class="[index === asks.length - 1 && 'last']">
           <div class="com-user">
-            <span class="user">{{ comment.member_name }}</span>
-            <span class="credit">{{ comment.grade | filterGrade }}</span>
-            <span class="date">{{ comment.create_time | unixToDate('yyyy-MM-dd') }}</span>
+            <span class="user">{{ ask.member_name }}</span>
+            <span class="date">{{ ask.create_time | unixToDate('yyyy-MM-dd') }}</span>
           </div>
-          <div class="com-content">{{ comment.content }}</div>
-          <div v-if="comment.images && comment.images.length" class="com-gallery">
-            <span v-for="(img, index) in comment.images" :key="index" class="img">
-              <img :src="img" @click="handleImagePreview(comment.images, index)">
-            </span>
+          <div class="com-content">{{ ask.content }}</div>
+          <div v-if="ask.reply_status === 1 && ask.reply" class="com-reply">
+            <span>商家回复：</span>
+            <span>{{ ask.reply }}</span>
           </div>
         </div>
       </van-list>
     </van-popup>
+    <van-dialog
+      v-model="showAskDialog"
+      show-cancel-button
+      :before-close="beforeClose"
+    >
+      <van-field
+        v-model="ask"
+        type="textarea"
+        clearable
+        placeholder="请输入咨询内容，长度在200个字以内。"
+      />
+    </van-dialog>
   </div>
 </template>
 
 <script>
-  /**
-   * 商品评论模块
-   * 这里只负责展示商品的评论
-   */
   import * as API_Members from '@/api/members'
-  import { ImagePreview } from 'vant'
+  import Storage from '@/utils/storage'
   export default {
-    name: "goods-comments",
-    props: ['goods-id', 'grade'],
+    name: 'goods-ask',
+    props: ['goodsId'],
     data() {
       return {
         loading: false,
         finished: false,
         params: {
           page_no: 1,
-          page_size: 10,
-          grade: ''
+          page_size: 10
         },
-        comments: [],
-        // 显示全部评论
-        showPopup: false
+        asks: [],
+        // 咨询列表弹出框
+        showPopup: false,
+        // 咨询内容
+        ask: '',
+        // 显示咨询dialog
+        showAskDialog: false
       }
     },
     mounted() {
-      this.GET_GoodsComments()
-    },
-    filters: {
-      /** 评分 */
-      filterGrade(val) {
-        switch (val) {
-          case 'bad':
-            return '差评'
-          case 'neutral':
-            return '中评'
-          default:
-            return '好评'
-        }
-      }
+      this.GET_Asks()
     },
     methods: {
-      /** 显示图片预览 */
-      handleImagePreview(images, index) {
-        ImagePreview({images, startPosition: index})
+      /** 我也要咨询 */
+      handleAsk() {
+        if (Storage.getItem('refresh_token')) {
+          this.ask = ''
+          this.showAskDialog = true
+        } else {
+          this.$message.error('您未登录！')
+        }
+      },
+      beforeClose(action, done) {
+        if (action === 'confirm') {
+          API_Members.consultating(this.goodsId, this.ask).then(() => {
+            done()
+            this.ask = ''
+            this.$message.success('已提交咨询！')
+          })
+        } else {
+          done()
+        }
       },
       /** 当页数发生改变时 */
       onLoad() {
         this.params.page_no += 1
-        this.GET_GoodsComments()
+        this.GET_Asks()
       },
-      /** 获取商品评论 */
-      GET_GoodsComments(){
+      /** 获取商品咨询 */
+      GET_Asks() {
         this.loading = true
-        API_Members.getGoodsComments(this.goodsId, this.params).then(response => {
+        API_Members.getGoodsConsultations(this.goodsId, this.params).then(response => {
           this.loading = false
           const { data } = response
           if (!data || !data.length) {
             this.finished = true
           } else {
-            this.comments.push(...data)
+            this.asks.push(...data)
           }
         }).catch(() => { this.loading = false })
       }
@@ -121,13 +123,6 @@
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../assets/styles/color";
-  .comment-cells {
-    .rate {
-      color: $color-main;
-      margin-left: 3px;
-      font-size: 12px;
-    }
-  }
   .some-comments {
     padding: 0 15px;
   }
@@ -166,7 +161,7 @@
     .com-content {
       position: relative;
       line-height: 1.3;
-      margin: 5px 0;
+      /*margin: 5px 0;*/
       word-break: break-all;
       overflow: hidden;
     }
@@ -229,7 +224,11 @@
     padding: 46px 15px 15px 15px;
     .com-item.last::after { content: none }
   }
-  .no-comments {
+  .com-reply {
+    margin-top: 2px;
+    color: $color-main;
+  }
+  .no-ask {
     line-height: 50px;
     text-align: center;
   }
