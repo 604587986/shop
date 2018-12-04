@@ -7,9 +7,17 @@ npm-debug.log
 # Nuxt build
 .nuxt
 
+# Editor directories and files
+.idea
+.idea/*
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
 # Nuxt generate
 dist
 
-# idea
-.idea
-.idea/*
+ui-domain
+ui-utils
