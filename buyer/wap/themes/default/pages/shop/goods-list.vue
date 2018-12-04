@@ -39,6 +39,16 @@
             <h3><nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.name }}</nuxt-link></h3>
             <p>￥{{ goods.price | unitPrice }}</p>
           </div>
+          <div class="goods-list-other">
+            <div>
+              <span>销量：</span>
+              <span class="price">{{ goods.buy_count }}件</span>
+            </div>
+            <div>
+              <span>好评率：</span>
+              <span class="price">{{ goods.grade }}%</span>
+            </div>
+          </div>
         </li>
       </ul>
     </van-list>
@@ -217,7 +227,6 @@
       float: left;
       background: #fff;
       width: 48%;
-      height: 250px;
       margin: 0 2% 8px 0;
       overflow: hidden;
       position: relative;
@@ -261,6 +270,9 @@
         text-align: right;
         font-size: 16px;
       }
+    }
+    .goods-list-other {
+      padding: 0 10px;
     }
   }
 </style>
