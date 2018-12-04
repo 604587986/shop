@@ -7,7 +7,8 @@
           <!--logo-->
           <div class="logo">
             <div class="shop-img-icon">
-              <img  :src="shop_info.shop_logo">
+              <img v-if="shop_info.shop_logo" :src="shop_info.shop_logo">
+              <img v-if="!shop_info.shop_logo" src="../../assets/logo_images/icon-no-shop-logo.png">
               <span class="to-change-shop-icon" @click="toChangeShopIcon">更改图标</span>
             </div>
             <el-upload
