@@ -99,7 +99,9 @@
 
           final_money: 0,
 
-          return_order_money: 0
+          return_order_money: 0,
+
+          return_push_money: 0
         }
       }
     },
@@ -117,10 +119,19 @@
       GET_SettlementTotal(){
         API_distribution.getSettlementTotal({member_id: this.$route.query.member_id || 0}).then(response => {
           this.settlementTotal = response
-          this.params = {
-            ...this.params,
-            member_id: response.member_id,
-            bill_id: response.total_id
+          const { member_id, bill_id } = this.$route.query
+          if(member_id && bill_id) {
+            this.params = {
+              ...this.params,
+              member_id,
+              bill_id
+            }
+          } else {
+            this.params = {
+              ...this.params,
+              member_id: response.member_id,
+              bill_id: response.total_id
+            }
           }
           this.GET_RelevantList()
         })

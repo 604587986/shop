@@ -140,7 +140,7 @@
       /** 查看详情 */
       lookDetails(row) {
         this.$router.push({ path: '/member/distribution/my-performance',
-          query: { member_id: row.member_id } })
+          query: { member_id: row.member_id, bill_id: row.total_id } })
       }
     }
   }
