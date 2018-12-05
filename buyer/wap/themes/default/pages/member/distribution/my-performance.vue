@@ -14,7 +14,7 @@
           <van-collapse-item
             class="cell-content"
             :border="false"
-            :title="`业绩编号：${item.sn}`"
+            :title="`${sn_text}：${item.sn}`"
             :name="_index"
             v-for="(item, _index) in performanceList"
             :key="_index">
@@ -50,13 +50,7 @@
               @click="handleDetails(item)">详情</van-button>
           </van-collapse-item>
         </van-collapse>
-        <van-cell v-else>
-          <template>
-            <div style="text-align: center;">
-              <span>暂无数据</span>
-            </div>
-          </template>
-        </van-cell>
+        <empty-member v-else>暂无数据</empty-member>
       </van-tab>
     </van-tabs>
   </div>
@@ -107,7 +101,10 @@
         billId: '',
 
         /** 当前折叠面板名称 */
-        activeNames: []
+        activeNames: [],
+
+        /** 当前面板对应的文本名称 */
+        sn_text: '订单编号'
       }
     },
     mounted() {
@@ -176,6 +173,7 @@
       /** 获取我的历史业绩记录 */
       GET_MyhistoryList() {
         API_distribution.getMyHistoryList(this.params).then(response => {
+          this.sn_text = '结算单编号'
           this.pageData = {
             page_no: response.page_no,
             page_size: response.page_size,
@@ -203,7 +201,7 @@
         this.params = {
           ...this.params,
           member_id: item.member_id,
-          bill_id: this.billId
+          bill_id: item.total_id
         }
         this.GET_RelevantList()
       }
