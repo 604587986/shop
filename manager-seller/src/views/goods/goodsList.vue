@@ -128,7 +128,7 @@
     <!--库存编辑-->
     <el-dialog title="库存编辑" :visible.sync="goodsStockshow" width="35%" class="pop-sku">
       <div align="center">
-        <el-form :model="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100px" :rules="rules">
+        <el-form :model="goodsStockData" ref="goodsStockData" v-if="goodsStocknums === 1" style="width: 50%;" label-width="100px" :rules="rules">
           <el-form-item label="库存" prop="quantity" >
             <el-input  v-model="goodsStockData.quantity" />
           </el-form-item>
@@ -168,7 +168,7 @@
     </el-dialog>
     <!--分销返利-->
     <el-dialog title="分销返利" :visible.sync="isShowDisRebate" width="24%">
-      <el-form :model="disRebateData" label-width="100px" :rules="disRules" ref="disRebateData">
+      <el-form :model="disRebateData" label-width="100px" :rules="disRules" ref="disRebateData" status-icon>
         <el-form-item label="1级返利" prop="grade1Rebate">
           <el-input v-model="disRebateData.grade1Rebate">
             <template slot="prepend">¥</template>
@@ -218,6 +218,8 @@
         setTimeout(() => {
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入正确的金额'))
+          } else if (parseFloat(value) < 0 || parseFloat(value) > 99999999) {
+            callback(new Error('请输入0~99999999之间的金额'))
           } else {
             callback()
           }
@@ -573,6 +575,7 @@
             })
             this.goodsStockData = response[0]
           }
+          this.$refs['goodsStockData'].resetFields()
         })
       },
 
@@ -627,6 +630,7 @@
             /** 2级返利 */
             grade2Rebate: response.grade2_rebate
           }
+          this.$refs['disRebateData'].resetFields()
         })
       },
 
