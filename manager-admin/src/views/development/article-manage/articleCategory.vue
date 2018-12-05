@@ -217,7 +217,7 @@
       },
       /** 删除文章分类 */
       handleDeleteCategory(index, row) {
-        this.$confirm('确定要删除这个文章分类吗，此分类下的子分类以及关联的所有文章将被删除！', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确定要删除这个文章分类吗？', '提示', { type: 'warning' }).then(() => {
           API_Article.deleteAritcleCategory(row.id).then(() => {
             this.$message.success('删除成功！')
             this.handleCountExpand(row)

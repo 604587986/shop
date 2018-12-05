@@ -5,7 +5,7 @@
         <el-input v-model="permissionForm.role_name"></el-input>
       </el-form-item>
       <el-form-item label="角色描述" prop="role_describe">
-        <el-input v-model="permissionForm.role_describe"></el-input>
+        <el-input v-model="permissionForm.role_describe" placeholder="最多200字" :maxlength="200"></el-input>
       </el-form-item>
       <el-form-item label="角色权限" prop="permission">
         <el-checkbox :indeterminate="allIndeterminate" v-model="allCheck" @change="handleCheckAll">全部选择</el-checkbox>

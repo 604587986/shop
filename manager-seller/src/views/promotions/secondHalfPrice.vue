@@ -80,6 +80,7 @@
                 <el-form-item  label="活动名称：" prop="title">
                   <el-input
                     v-model="activityForm.title"
+                    @change="activityForm.title  = activityForm.title.trim()"
                     style="width: 300px"
                     placeholder="不超过60个字符"
                     maxLength="60"
@@ -285,7 +286,7 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goodsApi: 'seller/goods',
+        goodsApi: 'seller/goods?market_enable=1&is_auth=1',
 
         /** 商城分类api */
         categoryApi: 'seller/goods/category/0/children',

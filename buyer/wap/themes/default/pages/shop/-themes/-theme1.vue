@@ -20,7 +20,6 @@
                 <img :src="goods.big" :alt="goods.goods_name">
               </nuxt-link>
             </div>
-            <label v-if="index % 2 === 0"></label>
           </li>
         </ul>
       </div>
@@ -58,6 +57,7 @@
           </li>
         </ul>
       </div>
+      <nuxt-link :to="'./goods-list?shop_id=' + shop_id" class="more-goods">更多本店商品 >></nuxt-link>
     </div>
     <div class="shop-detail">
       <h3>关于店铺</h3>
@@ -91,7 +91,9 @@
       font-weight: 300;
     }
     .list-new-goods {
-      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
       overflow: hidden;
     }
     .item-new-goods {
@@ -99,25 +101,12 @@
       display: flex;
       flex-direction: column;
       width: 46%;
-      margin: 0 2% 8px 0;
       position: relative;
       padding: 0.6 * 16px 0;
       text-align: center;
       border-bottom: 1px solid #fff;
       &:nth-child(2n) {
         flex-direction: column-reverse;
-      }
-      &:nth-child(4n + 2), &:nth-child(4n + 3) {
-        border-color: #dedede;
-      }
-      label {
-        width: 16px;
-        height: 250px;
-        background-size: 100%;
-        position: absolute;
-        top: 16px;
-        right: -1.5 * 16px;
-        border-left: 1px solid #dedede;
       }
     }
     .intro-new-goods {
@@ -208,7 +197,6 @@
     width: 90%;
     padding: 16px 5%;
     background: #fff;
-    box-shadow: 1px 1px 10px #ccc;
     .title-hot-goods {
       width: 100%;
       height: 3 * 16px;

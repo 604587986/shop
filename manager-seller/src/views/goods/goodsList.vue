@@ -46,13 +46,15 @@
           <el-button @click="gotoRecycle"  type="primary">回收站</el-button>
         </div>
         <div class="toolbar-search">
-          <en-table-search @search="searchEvent" />
+          <en-table-search @search="searchEvent" placeholder="请输入商品名称"/>
         </div>
       </div>
       <template slot="table-columns">
         <el-table-column label="图片" width="120">
           <template slot-scope="scope">
-            <img :src="scope.row.thumbnail" class="goods-image"/>
+            <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank">
+              <img :src="scope.row.thumbnail" class="goods-image"/>
+            </a>
           </template>
         </el-table-column>
         <el-table-column label="名称" min-width="400">
@@ -88,8 +90,14 @@
             <el-button
               size="mini"
               type="danger"
-              :disabled="scope.row.market_enable === 1 "
+              v-if="scope.row.market_enable === 0"
               @click="handleDeleteGoods(scope.row)">删除
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              v-if="scope.row.market_enable === 1"
+              @click="handleUnderGoods(scope.row)">下架
             </el-button>
             <el-button
               type="primary"
@@ -142,7 +150,7 @@
               :label="item.label"
               :key="index">
               <template slot-scope="scope">
-                <el-input v-if="item.prop === 'quantity'" v-model="scope.row.quantity"/>
+                <el-input v-if="item.prop === 'quantity'" @blur="checkQuantity(scope.row.quantity)" v-model="scope.row.quantity"/>
                 <span v-if="item.prop !== 'quantity'" >{{ scope.row[item.prop] }}</span>
               </template>
             </el-table-column>
@@ -194,8 +202,10 @@
           return callback(new Error('库存不能为空'))
         }
         setTimeout(() => {
-          if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
+          if (!/^[0-9]\d*$/.test(value)) {
             callback(new Error('请输入整数'))
+          } else if (!(parseInt(value) >= 0 && parseInt(value) <= 99999999)) {
+            callback(new Error('请输入0 - 99999999之间的正整数'))
           } else {
             callback()
           }
@@ -270,7 +280,7 @@
         /** 校验规则 */
         rules: {
           quantity: [
-            { validator: checkQuantity, trigger: 'change' }
+            { validator: checkQuantity, trigger: 'blur' }
           ]
         },
 
@@ -350,6 +360,16 @@
       next()
     },
     methods: {
+      /** 库存边界限制 */
+      checkQuantity(value) {
+        if (!value && value !== 0) {
+          this.$message.error('库存不能为空')
+        } else if (!RegExp.integer.test(value) && parseInt(value) !== 0) {
+          this.$message.error('请输入整数')
+        } else if (!(parseInt(value) >= 0 && parseInt(value) <= 99999999)) {
+          this.$message.error('请输入0 - 99999999之间的正整数')
+        }
+      },
 
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
@@ -382,6 +402,16 @@
           }
         }
         this.GET_GoodsList()
+      },
+
+      /** 下架*/
+      handleUnderGoods(row) {
+        this.$confirm('确认下架此商品, 是否继续?', '提示', { type: 'warning' }).then(() => {
+          API_goods.underGoods(row.goods_id, {}).then(() => {
+            this.$message.success('下架成功')
+            this.GET_GoodsList()
+          })
+        })
       },
 
       /** 切换商品类型 */
@@ -563,10 +593,10 @@
           })
         }
         const _res = _params.some(key => {
-          return !RegExp.integer.test(key.quantity_count) && parseInt(key.quantity_count) !== 0
+          return !(parseInt(key.quantity_count) >= 0 && parseInt(key.quantity_count) < 99999999) || !/^[0-9]\d*$/.test(key.quantity_count)
         })
         if (_res) {
-          this.$message.error('库存必须为大于0的正整数')
+          this.$message.error('库存须为0 - 99999999之间的整数')
           return
         }
         API_goods.reserveStockGoods(this.goodsId, _params).then(() => {

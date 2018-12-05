@@ -7,30 +7,44 @@
           <!--满减-->
           <template v-if="prom.full_discount_vo">
             <!--满减-->
-            <div v-if="prom.full_discount_vo.is_full_minus === 1" :key="index + '-full'" class="prom-item">
+            <div v-if="prom.full_discount_vo.is_full_minus" :key="index + '-full'" class="prom-item">
               <em class="hl_red_bg">满减</em>
               <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立减现金 <span class="price">{{ prom.full_discount_vo.minus_value }}元</span></em>
             </div>
             <!--打折-->
-            <div v-if="prom.full_discount_vo.is_discount === 1" :key="index + '-full'" class="prom-item">
+            <div v-if="prom.full_discount_vo.is_discount" :key="index + '-full'" class="prom-item">
               <em class="hl_red_bg">打折</em>
               <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立享<span class="price">{{ prom.full_discount_vo.discount_value }}折</span>优惠</em>
             </div>
             <!--满赠 赠品-->
-            <div v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'" class="prom-item">
+            <div v-if="prom.full_discount_vo.is_send_gift" :key="index + '-gift'" class="prom-item">
               <em class="hl_red_bg">赠礼</em>
               <em class="hl_red">
-                价值<span class="price">{{ prom.full_discount_vo.full_discount_gift_do.gift_price }}元</span>的
+                赠送价值<span class="price">{{ prom.full_discount_vo.full_discount_gift_do.gift_price }}元</span>的
                 <a :href="prom.full_discount_vo.full_discount_gift_do.gift_img" target="_blank">
                   <img :src="prom.full_discount_vo.full_discount_gift_do.gift_img" class="gift-image">
                 </a>
               </em>
             </div>
             <!--满赠 赠券-->
-            <div v-if="prom.full_discount_vo.coupon_do" :key="index + '-coupon'" class="prom-item">
+            <div v-if="prom.full_discount_vo.is_send_bonus" :key="index + '-coupon'" class="prom-item">
               <em class="hl_red_bg">赠券</em>
               <em class="hl_red">
-                <span class="price">{{ prom.full_discount_vo.coupon_do.coupon_price }}元</span>优惠券
+                赠送<span class="price">{{ prom.full_discount_vo.coupon_do.coupon_price }}元</span>优惠券
+              </em>
+            </div>
+            <!--满赠 免邮-->
+            <div v-if="prom.full_discount_vo.is_free_ship" :key="index + '-free_ship'" class="prom-item">
+              <em class="hl_red_bg">赠券</em>
+              <em class="hl_red">
+                满<span class="price">{{ prom.full_discount_vo.full_money }}元</span>免邮
+              </em>
+            </div>
+            <!--满赠 积分-->
+            <div v-if="prom.full_discount_vo.is_send_point" :key="index + '-send_point'" class="prom-item">
+              <em class="hl_red_bg">积分</em>
+              <em class="hl_red">
+                赠送<span class="price">{{ prom.full_discount_vo.point_value }}元</span>积分
               </em>
             </div>
           </template>
@@ -60,28 +74,35 @@
   export default {
     name: 'goods-promotions',
     props: ['promotions'],
-    data() {
-      return {
-        showPromotion: true
-      }
+    mounted() {
+      this.handleCountPlaBoxHeight()
     },
     watch: {
-      promotions: function (newVal) {
+      showPromotion: 'handleCountPlaBoxHeight'
+    },
+    computed: {
+      showPromotion: function () {
+        const { promotions } = this
+        if (!promotions || !Array.isArray(promotions)) return false
         let flag = false
         const proms = ['full_discount_vo', 'half_price_vo', 'minus_vo']
-        newVal.forEach(item => {
+        this.promotions.forEach(item => {
           proms.forEach(porm => {
             if (item[porm]) flag = true
           })
         })
-        this.showPromotion = flag
-        if (flag) {
-          this.$nextTick(() => {
-            const $proBox = document.getElementById('promotions-box')
-            const $plaBox = document.getElementById('promotions-place')
-            $plaBox.style.height = $proBox.offsetHeight + 'px'
-          })
-        }
+        return flag
+      }
+    },
+    methods: {
+      /** 重新计算赋值占位box高度 */
+      handleCountPlaBoxHeight() {
+        this.$nextTick(() => {
+          const $proBox = document.getElementById('promotions-box')
+          const $plaBox = document.getElementById('promotions-place')
+          if (!$proBox || !$plaBox) return
+          $plaBox.style.height = $proBox.offsetHeight + 'px'
+        })
       }
     }
   }

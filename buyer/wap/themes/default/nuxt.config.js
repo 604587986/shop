@@ -1,5 +1,4 @@
 const webpack = require('webpack')
-const { file_version } = require('./ui-domain')
 
 module.exports = {
   env: {
@@ -39,23 +38,6 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-      if (!isDev) {
-        config.module.rules.push(...[{
-          test: /\.(png|jpe?g|gif|svg)$/,
-          loader: 'url-loader',
-          options: {
-            limit: 1000,
-            name: `img/[name].${file_version}.[ext]`
-          }
-        }, {
-          test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-          loader: 'url-loader',
-          options: {
-            limit: 1000,
-            name: `fonts/[name].${file_version}.[ext]`
-          }
-        }])
-      }
       if (isClient) {
         config.entry['polyfill'] = ['babel-polyfill']
       }
@@ -69,15 +51,7 @@ module.exports = {
     },
     vendor: ['axios'],
     plugins: [],
-    publicPath: '/',
-    // 文件名称
-    filenames: {
-      css: `[name].bundle.${file_version}.css`,
-      manifest: `[name].bundle.${file_version}.js`,
-      vendor: `[name].bundle.${file_version}.js`,
-      app: `[name].bundle.${file_version}.js`,
-      chunk: `[name].bundle.${file_version}.js`
-    }
+    publicPath: '/'
   },
   css: [
     '~assets/styles/normalize.css',
@@ -94,7 +68,8 @@ module.exports = {
     { src: '~plugins/vue-mixin', ssr: true },
     { src: '~plugins/vue-vant', ssr: true },
     { src: '~plugins/address-selector', ssr: false },
-    { src: '~plugins/vue-swiper', ssr: false }
+    { src: '~plugins/vue-swiper', ssr: false },
+    { src: '~plugins/vue-cropper', ssr: false }
   ],
   router: {
     middleware: 'auth-site',

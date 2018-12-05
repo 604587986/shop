@@ -10,7 +10,7 @@
           <dl><dt>收货人：</dt><dd>{{ order.ship_name }}</dd></dl>
           <dl><dt>送货时间:</dt><dd>{{ order.receive_time }}</dd></dl>
           <dl><dt>客户留言：</dt><dd>{{ order.remark || '无' }}</dd></dl>
-          <template v-if="order.receipt_history">
+          <template v-if="order.receipt_history && order.receipt_history.receipt_title">
             <dl class="top_line"><dt>发票抬头:</dt><dd>{{ order.receipt_history.receipt_title }}</dd></dl>
             <dl><dt>发票内容:</dt><dd>{{ order.receipt_history.receipt_content }}</dd></dl>
             <dl><dt>发票类型:</dt><dd>{{ order.receipt_history.receipt_type }}</dd></dl>
@@ -30,6 +30,10 @@
       <div class="status-order">
         <h2>订单状态：{{ order.order_status_text }}</h2>
         <ul class="status-list">
+          <li v-if="order.order_status === 'CANCELLED'">
+            - 订单取消原因：
+            <strong>{{ order.cancel_reason }}</strong>
+          </li>
           <li v-if="order.order_operate_allowable_vo.allow_pay">
             - 如果您尚未对该订单进行支付，请
             <strong><a :href="'/checkout/cashier?order_sn=' + order.sn">按此为订单付款</a></strong>

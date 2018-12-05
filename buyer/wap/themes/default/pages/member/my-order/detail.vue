@@ -6,8 +6,11 @@
         <div class="order-item">
           <span>订单编号：</span><span>{{ order.sn }}</span>
         </div>
-        <div class="order-item">
+        <div v-if="!orderLog.length" class="order-item">
           <span>下单时间：</span><span>{{ order.create_time | unixToDate }}</span>
+        </div>
+        <div v-for="(log, index) in orderLog" :key="index" class="order-item">
+          <span>{{ log.message }}：</span><span>{{ log.op_time | unixToDate }}</span>
         </div>
         <div class="order-item">
           <span>配送时间：</span><span>{{ order.receive_time || '无' }}</span>
@@ -41,13 +44,19 @@
               <span  class="goods-name">{{ sku.name }}</span>
               <p v-if="sku.spec_list" class="sku-spec">{{ sku | formatterSkuSpec }}</p>
             </nuxt-link>
-            <div class="goods-info">
+            <div class="goods-infos">
               <p class="price">￥{{ sku.purchase_price | unitPrice }}</p>
               <p class="goods-num">x{{ sku.num }}</p>
+              <p v-if="sku.goods_operate_allowable_vo.allow_apply_service" class="after-btn">
+                <nuxt-link :to="'/member/after-sale/apply?order_sn=' + order.sn + '&sku_id=' + sku.sku_id">申请售后</nuxt-link>
+              </p>
             </div>
           </li>
         </ul>
         <div class="order-btns">
+          <nuxt-link v-if="order.order_operate_allowable_vo.allow_apply_service" :to="'/member/after-sale/apply?order_sn=' + order.sn">
+            <van-button size="small" type="default">申请售后</van-button>
+          </nuxt-link>
           <nuxt-link v-if="order.logi_id && order.ship_no" :to="'./express?logi_id=' + order.logi_id + '&ship_no=' + order.ship_no">
             <van-button size="small" type="default">查看物流</van-button>
           </nuxt-link>
@@ -147,7 +156,9 @@
         order: '',
         skuList: '',
         // 显示发票信息
-        showReceiptDialog: false
+        showReceiptDialog: false,
+        // 订单日志
+        orderLog: ''
       }
     },
     mounted() {
@@ -190,14 +201,15 @@
         })
       },
       /** 获取订单详情 */
-      GET_OrderDetail() {
-        API_Order.getOrderDetail(this.order_sn).then(response => {
-          this.order = response
-          if (response.order_operate_allowable_vo.allow_rog && response.logi_id && response.ship_no) {
-            // this.handleViewExpress()
-          }
-          this.skuList = JSON.parse(response.items_json)
-        })
+      async GET_OrderDetail() {
+        const { order_sn } = this
+        const values = await Promise.all([
+          API_Order.getOrderDetail(order_sn),
+          API_Order.getOrderLog(order_sn)
+        ])
+        this.order = values[0]
+        this.skuList = values[0]['order_sku_list']
+        this.orderLog = values[1]
       }
     }
   }
@@ -332,6 +344,15 @@
     .receipt-dialog {
       height: 70%;
       .van-nav-bar { position: relative }
+    }
+  }
+  .goods-infos {
+    min-width: 60px;
+    margin-left: 10px;
+  }
+  .after-btn {
+    a {
+      color: $color-main
     }
   }
 </style>

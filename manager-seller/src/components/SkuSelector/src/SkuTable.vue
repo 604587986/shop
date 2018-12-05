@@ -20,12 +20,15 @@
           <div v-else class="input-error-model">
             <el-input
               :disabled="isEditModel === 1 && item==='quantity'"
+              :maxlength="30"
               v-model="scope.row[item]"
+              @change="scope.row[item] = scope.row[item].trim()"
               @input="updateSkuTable(index, scope, item)"
               @blur="updateSkuTable(index, scope, item)">
             </el-input>
             <span
               class="input-error"
+              v-if="item !== 'sn'"
               v-show="isValidate(index, scope)">{{ validatatxt }}
             </span>
           </div>
@@ -49,6 +52,7 @@
 </template>
 
 <script>
+  import { RegExp } from '~/ui-utils'
   export default {
     name: 'skuTable',
     props: {
@@ -134,7 +138,7 @@
         concactArray: [],
 
         /** 固定列校验提示内容 */
-        validatatxt: '请输入数字值',
+        validatatxt: '请输入0~99999999之间的数字值',
 
         /** 存储未通过校验的单元格位置  */
         validateError: []
@@ -203,7 +207,7 @@
         this.concactArray.push(_currnetRow)
       },
 
-      /** 检测是否未通过数字校验 */
+      /** 检测是否未通过0-99999999之间的数字校验 */
       isValidate(index, scope) {
         return this.validateError.some(key => {
           return key[0] === index && key[1] === scope.$index
@@ -220,9 +224,10 @@
       /** 保存批量设置值 */
       saveBatch() {
         const _desc = this.activeVal === 1 ? '价格' : '库存'
-        if (!this.batch || !Number.isInteger(this.batch) || !parseInt(this.batch)) {
+        const checkResult = this.activeVal === 1 ? RegExp.money.test(this.batch) : parseInt(this.batch) >= 0 && parseInt(this.batch) < 99999999 && /^[0-9]\d*$/.test(this.batch)
+        if (!checkResult) {
           this.batch = ''
-          this.$message.error(`请输入一个有效的${_desc}数据`)
+          this.activeVal === 1 ? this.$message.error(`请输入一个有效的${_desc}数据`) : this.$message.error(`请输入一个有效的${_desc}数据,${_desc}为整数`)
           return
         }
         /** 批量设置 */
@@ -239,9 +244,16 @@
 
       /** 数据改变之后 抛出数据 */
       updateSkuTable(index, scope, item) {
-        /** 进行自定义校验 判断是否是数字（小数也能通过） */
-        if (!/^[0-9]+.?[0-9]*$/.test(scope.row[item]) && item !== 'sn') { // 校验通过
+        /** 进行自定义校验 判断是否是数字（小数也能通过）重量 */
+        if ((!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(scope.row[item]) && item === 'weight') || parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999) { // 校验未通过 加入错误存储列表中
           this.validateError.push([index, scope.$index])
+          this.validatatxt = '请输入0~99999999之间的数字值'
+        } else if ((item === 'quantity' && !/^[0-9]\d*$/.test(scope.row[item])) || parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999) { // 库存
+          this.validateError.push([index, scope.$index])
+          this.validatatxt = '请输入0~99999999之间的整数'
+        } else if (((item === 'cost' || item === 'price') && !RegExp.money.test(scope.row[item])) || parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999) { // 成本价 价格
+          this.validateError.push([index, scope.$index])
+          this.validatatxt = '请输入0~99999999之间的价格'
         } else {
           this.validateError.forEach((key, _index) => {
             if (key[0] === index && key[1] === scope.$index) {

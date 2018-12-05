@@ -4,15 +4,13 @@
     <div class="profile-container">
       <van-cell-group :border="false">
         <van-cell title="头像" is-link class="face-cell">
-          <img :src="profileForm.face" class="img-face">
+          <en-face :url="profileForm.face" class="img-face"/>
           <input id="update-face" class="update-face" type="file" accept="image/jpg,image/jpeg,image/png" @change="handleUpdateFace">
         </van-cell>
         <van-cell title="用户名" :value="profileForm.uname"/>
         <van-cell title="昵称" :value="profileForm.nickname" is-link @click="showEditNickname = true"/>
         <van-cell title="性别" :value="profileForm.sex === 1 ? '男' : '女'" is-link @click="showSexActionsheet = true"/>
-        <van-cell title="生日" :value="birthday" is-link>
-          <input type="date" :value="birthday" class="birthday-input" @change="handleBirthdayChange">
-        </van-cell>
+        <van-cell title="生日" :value="formatterBirthdayDate()" is-link @click="showBirthdayActionsheet = true"/>
       </van-cell-group>
     </div>
     <!--修改昵称弹框-->
@@ -27,18 +25,44 @@
     </van-dialog>
     <!--修改性别弹出菜单-->
     <van-actionsheet v-model="showSexActionsheet" :actions="sexActions" cancel-text="取消"/>
+    <van-actionsheet v-model="showBirthdayActionsheet">
+      <van-datetime-picker
+        v-model="birthday"
+        type="date"
+        :min-date="new Date(1900,1,1)"
+        :max-date="new Date()"
+        @cancel="showBirthdayActionsheet = false"
+        @confirm="handleConfirmBirthday"
+      />
+    </van-actionsheet>
     <!--登录-->
     <div class="big-btn">
       <van-button size="large" @click="submitProfile">保存修改</van-button>
+    </div>
+    <div v-show="show_cropper" class="cropper-box">
+      <no-ssr>
+        <vueCropper
+          ref="cropper"
+          outputType="png"
+          :img="cropper_img"
+          :autoCropWidth="200"
+          :autoCropHeight="200"
+          :info="false"
+          fixed
+          centerBox
+          autoCrop
+        ></vueCropper>
+      </no-ssr>
+      <div class="confirm-btns">
+        <van-button type="default" @click="show_cropper = false">取消裁剪</van-button>
+        <van-button type="primary" @click="handleCropper">确认裁剪</van-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import '@/static/lrz/lrz.all.bundle'
-  import '@/static/alloycrop/asset/alloy-finger'
-  import '@/static/alloycrop/asset/transform'
-  import '@/static/alloycrop/alloy-crop'
   import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
   import { Foundation, RegExp } from '~/ui-utils'
@@ -72,14 +96,20 @@
             this.showSexActionsheet = false
           }}
         ],
+        // 显示日期选择器
+        showBirthdayActionsheet: false,
         // 生日
-        birthday: user.birthday ? Foundation.unixToDate(user.birthday, 'yyyy-MM-dd') : ''
+        birthday: user.birthday ? new Date(user.birthday * 1000) : new Date(),
+        // 图片裁剪源
+        cropper_img: '',
+        // 显示图片裁剪
+        show_cropper: false
       }
     },
     watch: {
       user(newVal, oldVal) {
         this.profileForm = newVal ? JSON.parse(JSON.stringify(newVal)) : {}
-        this.birthday = newVal.birthday ? Foundation.unixToDate(newVal.birthday, 'yyyy-MM-dd') : ''
+        this.birthday = newVal.birthday ? new Date(newVal.birthday * 1000) : new Date()
         this.nickname = newVal.nickname
       }
     },
@@ -96,7 +126,8 @@
         const file = files[0]
         this.$confirm('该图片需要裁剪吗？选择取消将以原图上传。', () => {
           lrz(file).then(response => {
-            this.toAlloyCrop(response)
+            this.cropper_img = response.base64
+            this.show_cropper = true
             event.target.value = ''
           }).catch((e) => {
             this.$message.error('当前设备不支持上传图片，请到APP或PC端操作！')
@@ -106,26 +137,15 @@
           event.target.value = ''
         })
       },
-      toAlloyCrop(res) {
-        this.alloyCrop = new AlloyCrop({
-          image_src: res.base64,
-          className: 'crop-box',
-          circle: true,
-          width: 200,
-          height: 200,
-          output: 1,
-          ok: (base64) => {this.handleUpload(base64, res.origin.name)},
-          cancel: () => { this.alloyCrop.destroy() },
-          ok_text: '确认',
-          cancel_text: '取消'
+      // 图片裁剪
+      handleCropper() {
+        this.$refs.cropper.getCropData(async data => {
+          this.handleUpload(data)
         })
+        this.show_cropper = false
       },
       // 上传文件
-      handleUpload(file, filename) {
-        if (this.alloyCrop) {
-          this.alloyCrop.destroy()
-          delete this.alloyCrop
-        }
+      handleUpload(file, filename = 'file') {
         const formData = new FormData()
         if (typeof file === 'string') {
           file = this.MixinBase64toBlob(file)
@@ -142,10 +162,10 @@
           this.profileForm.face = response.url
         })
       },
-      /** 生日发生改变 */
-      handleBirthdayChange(event) {
-        const date = event.target.value
-        this.profileForm.birthday = Foundation.dateToUnix(date)
+      /** 确认生日选择 */
+      handleConfirmBirthday() {
+        this.profileForm.birthday = new Date(this.birthday).getTime() / 1000
+        this.showBirthdayActionsheet = false
       },
       /** 昵称dialog关闭前 */
       beforeNicknameClose(action, done) {
@@ -167,7 +187,7 @@
       /** 保存资料提交表单 */
       submitProfile() {
         const { birthday } = this.profileForm
-        if (!birthday || isNaN(birthday) || birthday.length < 8 ) {
+        if (isNaN(birthday) ) {
           this.$message.error('生日格式不正确！')
           return
         }
@@ -175,6 +195,11 @@
           this.$store.dispatch('user/getUserDataAction')
           this.$message.success('修改成功！')
         })
+      },
+      /** 格式化生日日期 */
+      formatterBirthdayDate() {
+        const { birthday } = this.profileForm
+        return Foundation.unixToDate(birthday, 'yyyy-MM-dd')
       },
       ...mapActions({
         saveUserInfo: 'user/saveUserInfoAction'
@@ -212,5 +237,28 @@
     background-color: #fff;
     width: 100%;
     text-align: right;
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+    &::-webkit-clear-button {
+      display: none;
+    }
+  }
+  .cropper-box {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #836FFF;
+  }
+  /deep/ .confirm-btns {
+    position: absolute;
+    left: 50%;
+    margin-left: -(186px / 2);
+    bottom: 20px;
+    .van-button:first-child {
+      margin-right: 10px;
+    }
   }
 </style>

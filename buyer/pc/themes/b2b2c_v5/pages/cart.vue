@@ -28,12 +28,14 @@
                 <a href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
-                <nuxt-link :to="'/shop?shop_id=' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>
+                <nuxt-link :to="'/shop/' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>
+                <span class="shop-act-info" v-if="shop.promotion_notice">[{{ shop.promotion_notice }}]</span>
               </div>
               <div class="shop-body">
-                <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item">
+                <div v-for="sku in shop.sku_list" :key="sku.sku_id" class="sku-item" :class="[sku.invalid === 1 && 'invalid']">
                   <div class="item clearfix">
-                    <a href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
+                    <span v-if="sku.invalid === 1" class="invalid-pla">已失效</span>
+                    <a v-else href="javascript:;" :class="['check', sku.checked && 'checked']" @click="handleCheckSku(sku)">
                       <i class="iconfont ea-icon-check"></i>
                     </a>
                     <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-pic">
@@ -46,20 +48,49 @@
                       <span v-if="sku.spec_list && sku.spec_list.length > 0" class="sku-spec">
                         {{ sku | formatterSkuSpec }}
                       </span>
+                      <p>
+                        <span :key="index" class="sku-act-tag" v-for="(tag, index) in sku.promotion_tags">{{ tag }}</span>
+                      </p>
                     </div>
                     <div class="sku-price">
                       <span v-if="sku.purchase_price < sku.original_price" class="original-price">{{ sku.original_price | unitPrice }}</span>
-                      {{ sku.purchase_price | unitPrice }}
+                      <span> {{ sku.purchase_price | unitPrice }}</span>
+                      <div
+                        :class="[show_act_sku_id === sku.sku_id && 'show-act']"
+                        class="activity-box"
+                        v-if="sku.invalid !== 1 && sku.single_list && sku.single_list.length"
+                      >
+                        <a @click.stop="handleShowAct(sku)" class="activity-btn" href="javascript:void(0)" slot="reference">
+                          促销<i class="iconfont ea-icon-arrow-down"></i>
+                        </a>
+                        <div @click.stop="() => {}" class="activity-list" v-show="sku.sku_id === show_act_sku_id">
+                          <ul class="act-list">
+                            <li :key="index" v-for="(act, index) in sku.single_list">
+                              <input
+                                :checked="act.is_check && 'checked'"
+                                :name="'act_'+sku.sku_id"
+                                :value="JSON.stringify(act)"
+                                type="radio"
+                              >{{ act.title }}
+                            </li>
+                            <li>
+                              <input
+                                :checked="handleActsChecked(sku.single_list) && 'checked'"
+                                :name="'act_'+sku.sku_id"
+                                value="clean"
+                                type="radio"
+                              >不参与促销活动
+                            </li>
+                          </ul>
+                          <div class="activity-list-btns">
+                            <a @click="handleConfirmChangeAct(sku)" class="act-l-btn confirm" href="javascript:void(0)">确定</a>
+                            <a @click="show_act_sku_id = null" class="act-l-btn" href="javascript:void(0)">取消</a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="sku-num">
-                      <select
-                        v-if="sku.single_list && sku.single_list.length"
-                        class="activity_list"
-                        @change="(event) => { handleActChanged(sku, event) }"
-                      >
-                        <option v-for="(act, index) in sku.single_list" :key="index" :value="act.promotion_type">{{ act.title }}</option>
-                      </select>
-                      <div class="num-action clearfix">
+                      <div v-if="sku.invalid !== 1" class="num-action clearfix">
                         <a :class="['oper', sku.num < 2 && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '-')">−</a>
                         <input
                           class="input"
@@ -71,6 +102,7 @@
                         >
                         <a :class="['oper', sku.num >= sku.enable_quantity && 'unable']" href="javascript:;" @click="handleUpdateSkuNum(sku, '+')">+</a>
                       </div>
+                      <div v-if="sku.invalid === 1">此商品已失效</div>
                     </div>
                     <div class="sku-weight">
                       {{ (sku.num * sku.goods_weight).toFixed(2) }}
@@ -90,8 +122,9 @@
                 </div>
                 <div class="shop-footer-item price">
                   <em>￥</em>
-                  <span>{{ shop.price.total_price | unitPrice }}</span>
+                  <span>{{ shop.price.goods_price | unitPrice }}</span>
                 </div>
+                <div class="shop-cash-back" v-if="shop.price.cash_back">[返现：￥{{ shop.price.cash_back | unitPrice }}]</div>
               </div>
             </div>
           </div>
@@ -133,6 +166,9 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { Popover } from 'element-ui'
+  Vue.use(Popover)
   import { mapActions, mapGetters } from 'vuex'
   import * as API_Trade from '@/api/trade'
   import { RegExp } from '~/ui-utils'
@@ -154,7 +190,9 @@
         /** 是否固定到底部 */
         check_bar_fiexd_bottom: false,
         /** 当前操作的输入框的值【变化之前】 */
-        current_input_value: 1
+        current_input_value: 1,
+        /** 显示促销选择框 */
+        show_act_sku_id: null
       }
     },
     mounted() {
@@ -163,6 +201,8 @@
         this.$cartContent = $('#cart-content')
         /** 添加滚动事件监听 */
         window.addEventListener('scroll', this.countCheckBarFiexd)
+        /** 添加点击事件 */
+        window.addEventListener('click', this.handleCloseAct)
         /** 获取购物车数据 */
         this.getCartData()
       })
@@ -203,19 +243,6 @@
       /** 全选、取消全选 */
       handleCheckAll() {
         this.checkAll(this.all_checked ? 0 : 1)
-      },
-      /** 促销活动发生改变 */
-      handleActChanged(sku, event) {
-        const { seller_id, single_list = [] } = sku
-        const promotion_type = event.target.value
-        const promotion = single_list.filter(item => item.promotion_type === promotion_type)
-        const params = {
-          seller_id,
-          sku_id: sku.sku_id,
-          activity_id: promotion[0].activity_id,
-          promotion_type
-        }
-        this.changeActivity(params)
       },
       /** 更新商品数量 */
       handleUpdateSkuNum(sku, symbol) {
@@ -281,6 +308,42 @@
         // 是否固定到底部
         this.check_bar_fiexd_bottom = bodyScrollTop < (this.check_bar_top - window.innerHeight  + 60)
       },
+      /** 确认修改促销活动 */
+      handleConfirmChangeAct(sku) {
+        const eleStr = `input[name=act_${sku.sku_id}]:checked`
+        const val = $(eleStr).val()
+        if (val === 'clean') {
+          const { seller_id, sku_id } = sku
+          this.cleanActivity({seller_id, sku_id})
+        } else {
+          const val = JSON.parse($(eleStr).val())
+          const { activity_id, promotion_type } = val
+          const { seller_id, sku_id } = sku
+          const params = { seller_id, sku_id, activity_id, promotion_type }
+          this.changeActivity(params)
+        }
+        this.show_act_sku_id = null
+      },
+      /** 展示sku促销弹框 */
+      handleShowAct(sku) {
+        const { sku_id } = sku
+        const { show_act_sku_id } = this
+        if (sku_id === show_act_sku_id) {
+          this.show_act_sku_id = null
+          return
+        } else {
+          this.show_act_sku_id = sku_id
+        }
+      },
+      /** 关闭sku促销弹框 */
+      handleCloseAct() {
+        this.show_act_sku_id = null
+      },
+      /** 检查是否没有活动被参与 */
+      handleActsChecked(acts) {
+        const act = acts.filter(item => item.is_check === 1)
+        return act.length === 0
+      },
       /** vuex/cart */
       ...mapActions({
         // 获取购物车数据
@@ -298,12 +361,15 @@
         // 清空购物车
         cleanCart: 'cart/cleanCartAction',
         // 更换促销活动
-        changeActivity: 'cart/changeActivityAction'
+        changeActivity: 'cart/changeActivityAction',
+        // 不参加活动
+        cleanActivity: 'cart/cleanActivityAction'
       })
     },
     destroyed() {
       /** 当组件销毁时，移除事件监听 */
       window.removeEventListener('scroll', this.countCheckBarFiexd)
+      window.removeEventListener('click', this.handleCloseAct)
     }
   }
 </script>

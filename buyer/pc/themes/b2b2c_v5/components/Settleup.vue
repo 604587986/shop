@@ -110,7 +110,7 @@
       }
     }
     .dorpdown-layer {
-      z-index: 10;
+      z-index: 11;
     }
     .header-cart-cm {
       position: relative;

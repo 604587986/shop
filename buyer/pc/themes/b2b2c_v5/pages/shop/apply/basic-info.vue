@@ -51,12 +51,13 @@
 <script>
   import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
+  import mixin from './checkStatusMixin'
   export default {
     name: "basic-info",
     middleware: 'auth-seller',
+    mixins: [mixin],
     data() {
       const req_rule = (message) => ({ required: true, message, trigger: 'blur' })
-      const len_rule = (min, max) => ({ min, max, message: `'长度在 ${min} 到 ${max} 个字符`, trigger: 'blur' })
       return {
         /** 基础信息 表单 */
         basicInfoForm: {

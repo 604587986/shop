@@ -1,60 +1,115 @@
 <template>
   <div>
-    <en-table-layout
-      toolbar
-      pagination
-      :tableData="tableData"
-      :loading="loading"
-      :selectionChange="handleSelectionChange">
-      <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <div class="conditions">
-            <span>消息类型:</span>
-            <el-select v-model="params.type" placeholder="请选择"  @change="handleChangeMsgCategory">
-              <el-option
-                v-for="item in msg_categorys"
-                :key="item.msg_category_id"
-                :label="item.msg_category_label"
-                :value="item.msg_category_id">
-              </el-option>
-            </el-select>
+    <el-tabs type="border-card" @tab-click="changeTabs">
+      <el-tab-pane label="未读消息" name="0">
+        <en-table-layout
+          toolbar
+          pagination
+          :tableData="tableData"
+          :loading="loading"
+          :selectionChange="handleSelectionChange">
+          <div slot="toolbar" class="inner-toolbar">
+            <div class="toolbar-btns">
+              <div class="conditions">
+                <span>消息类型:</span>
+                <el-select v-model="params.type" placeholder="请选择"  @change="handleChangeMsgCategory">
+                  <el-option
+                    v-for="item in msg_categorys"
+                    :key="item.msg_category_id"
+                    :label="item.msg_category_label"
+                    :value="item.msg_category_id">
+                  </el-option>
+                </el-select>
+              </div>
+              <el-button @click="handleDeleteAllMsgs" type="danger">全部删除</el-button>
+              <el-button @click="handleSignReadAllMsgs" v-if="isAllRead" type="primary">标记为已读</el-button>
+            </div>
           </div>
-          <el-button @click="handleDeleteAllMsgs" type="danger">全部删除</el-button>
-          <el-button @click="handleSignReadAllMsgs" v-if="isAllRead" type="primary">标记为已读</el-button>
-        </div>
-      </div>
-      <template slot="table-columns">
-        <el-table-column type="selection" width="55"/>
-        <el-table-column prop="notice_content" label="内容"/>
-        <el-table-column label="发送时间" width="200" >
-          <template slot-scope="scope">{{ scope.row.send_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
-        </el-table-column>
-        <el-table-column label="操作" width="200" class="opera-btn">
-          <template slot-scope="scope">
-            <el-button
-              type="danger"
-              @click="handleDeleteMsg(scope.row)">删除
-            </el-button>
-            <el-button
-              type="primary"
-              v-if="scope.row.is_read === 0"
-              @click="handleSignRead(scope.row)">标记为已读
-            </el-button>
+          <template slot="table-columns">
+            <el-table-column type="selection" width="55"/>
+            <el-table-column prop="notice_content" label="内容"/>
+            <el-table-column label="发送时间" width="200" >
+              <template slot-scope="scope">{{ scope.row.send_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
+            </el-table-column>
+            <el-table-column label="操作" width="200" class="opera-btn">
+              <template slot-scope="scope">
+                <el-button
+                  type="danger"
+                  @click="handleDeleteMsg(scope.row)">删除
+                </el-button>
+                <el-button
+                  type="primary"
+                  v-if="scope.row.is_read === 0"
+                  @click="handleSignRead(scope.row)">标记为已读
+                </el-button>
+              </template>
+            </el-table-column>
           </template>
-        </el-table-column>
-      </template>
-      <el-pagination
-        slot="pagination"
-        v-if="pageData"
-        @size-change="handlePageSizeChange"
-        @current-change="handlePageCurrentChange"
-        :current-page="pageData.page_no"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pageData.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.data_total">
-      </el-pagination>
-    </en-table-layout>
+          <el-pagination
+            slot="pagination"
+            v-if="pageData"
+            @size-change="handlePageSizeChange"
+            @current-change="handlePageCurrentChange"
+            :current-page="pageData.page_no"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageData.page_size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageData.data_total">
+          </el-pagination>
+        </en-table-layout>
+      </el-tab-pane>
+      <el-tab-pane label="已读消息" name="1">
+        <en-table-layout
+          toolbar
+          pagination
+          :tableData="tableData"
+          :loading="loading"
+          :selectionChange="handleSelectionChange">
+          <div slot="toolbar" class="inner-toolbar">
+            <div class="toolbar-btns">
+              <div class="conditions">
+                <span>消息类型:</span>
+                <el-select v-model="params.type" placeholder="请选择"  @change="handleChangeMsgCategory">
+                  <el-option
+                    v-for="item in msg_categorys"
+                    :key="item.msg_category_id"
+                    :label="item.msg_category_label"
+                    :value="item.msg_category_id">
+                  </el-option>
+                </el-select>
+              </div>
+              <el-button @click="handleDeleteAllMsgs" type="danger">全部删除</el-button>
+            </div>
+          </div>
+          <template slot="table-columns">
+            <el-table-column type="selection" width="55"/>
+            <el-table-column prop="notice_content" label="内容"/>
+            <el-table-column label="发送时间" width="200" >
+              <template slot-scope="scope">{{ scope.row.send_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
+            </el-table-column>
+            <el-table-column label="操作" width="200" class="opera-btn">
+              <template slot-scope="scope">
+                <el-button
+                  type="danger"
+                  @click="handleDeleteMsg(scope.row)">删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </template>
+          <el-pagination
+            slot="pagination"
+            v-if="pageData"
+            @size-change="handlePageSizeChange"
+            @current-change="handlePageCurrentChange"
+            :current-page="pageData.page_no"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageData.page_size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageData.data_total">
+          </el-pagination>
+        </en-table-layout>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -127,6 +182,16 @@
         this.GET_MsgsList()
       },
 
+      /** 切换tab */
+      changeTabs(tab) {
+        this.params = {
+          page_no: 1,
+          page_size: 10,
+          is_read: parseInt(tab.name)
+        }
+        this.GET_MsgsList()
+      },
+
       /** 获取消息列表*/
       GET_MsgsList() {
         this.loading = true
@@ -181,7 +246,7 @@
 
       /** 执行删除*/
       Delete_messages(ids) {
-        API_Messages.deleteMsgs(ids, {}).then(response => {
+        API_Messages.deleteMsgs(ids, {}).then(() => {
           this.$message.success('删除成功！')
           this.GET_MsgsList()
         })

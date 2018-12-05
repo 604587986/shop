@@ -17,15 +17,15 @@
           <div class="box-cons">
             <p class="content-cons" v-html="comment.content.replace(/\n/g, '<br>')"></p>
             <div v-if="comment.images && comment.images.length" class="comment-images">
-              <a
-                v-for="(image, index) in comment.images"
-                :key="index"
-                :href="image"
-                target="_blank"
-                class="comment-img-item"
-              >
-                <img :src="image">
-              </a>
+              <viewer :images="comment.images">
+                <a
+                  :key="index"
+                  class="comment-img-item"
+                  v-for="(image, index) in comment.images"
+                >
+                  <img :src="image" alt="">
+                </a>
+              </viewer>
               <span class="clear"></span>
             </div>
             <template v-if="comment.reply_status === 1 && comment.reply">

@@ -13,12 +13,24 @@
     </div>
     <div v-if="advanced">
       <el-popover
+        ref="popover"
         placement="bottom-start"
         :width="advancedWidth"
         v-model="popoverVisible"
       >
         <slot name="advanced-content"></slot>
         <div style="text-align: right; margin: 0">
+          <el-popover
+            placement="top"
+            width="160"
+            v-model="visible_del_popover">
+            <p>确定要清空表单吗？</p>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="text" @click="visible_del_popover = false">取消</el-button>
+              <el-button type="primary" size="mini" @click="handleCleanForm">确定</el-button>
+            </div>
+            <el-button size="mini" type="text" slot="reference" @click="visible_del_popover = true" class="clean-form">清空</el-button>
+          </el-popover>
           <el-button size="mini" type="text" @click="popoverVisible = false">取消</el-button>
           <el-button type="primary" size="mini" @click="advancedSearch">确定</el-button>
         </div>
@@ -54,7 +66,10 @@
     data() {
       return {
         keyword: '',
-        popoverVisible: false
+        popoverVisible: false,
+        visible_del_popover: false,
+        clearFuncs: [],
+        clearFuncNames: ['clearValue', 'deleteSelected']
       }
     },
     methods: {
@@ -67,6 +82,32 @@
       advancedSearch() {
         this.popoverVisible = false
         this.$emit('advancedSearch', this.$data.keyword)
+      },
+      /** 清空表单 */
+      handleCleanForm(event) {
+        const $parent = this.$parent.$parent
+        const $form = $parent.$refs['advancedForm']
+        const objs = this.MixinClone($parent.advancedForm)
+        Object.keys(objs).forEach(key => {
+          $parent.advancedForm[key] = ''
+        })
+        this.findClearValue($form)
+        this.clearFuncs.forEach(func => func(event))
+        this.clearFuncs = []
+        this.visible_del_popover = false
+      },
+      /** 递归查找组件清空的方法 */
+      findClearValue(component) {
+        const { clearFuncs, clearFuncNames } = this
+        const { $children: $ch } = component
+        $ch && $ch.length && $ch.forEach(item => {
+          const funs = clearFuncNames.filter(name => typeof item[name] === 'function')
+          if (funs.length) {
+            clearFuncs.push(item[funs[0]])
+          } else {
+            this.findClearValue(item)
+          }
+        })
       }
     }
   }
@@ -77,5 +118,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .clean-form {
+    color: #F56C6C;
+    margin-right: 10px;
   }
 </style>

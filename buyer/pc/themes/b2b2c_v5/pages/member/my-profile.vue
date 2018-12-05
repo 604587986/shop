@@ -43,7 +43,7 @@
             type="date"
             placeholder="请选择生日"
             :editable="false"
-            :picker-options="{disabledDate(time) { return time.getTime() > Date.now() }}"
+            :picker-options="{disabledDate(time) { return (time.getTime() > Date.now() || time.getTime() < -2208988800000) }}"
             size="small"
             clearable
             value-format="timestamp"

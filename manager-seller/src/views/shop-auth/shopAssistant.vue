@@ -190,6 +190,12 @@
         this.rolesOptions = response.data
       })
     },
+    activated() {
+      // 获取角色
+      API_Auth.getRoleList({ page_size: 10000 }).then(response => {
+        this.rolesOptions = response.data
+      })
+    },
     methods: {
       /** 分页大小发生改变 */
       handlePageSizeChange(size) {
@@ -246,10 +252,10 @@
             const params = this.MixinClone(this.shopAssistantForm)
             if (params.password) params.password = md5(params.password)
             if (clerk_id) {
-              API_Auth.editShopAssistant(clerk_id, params).then(response => {
+              API_Auth.editShopAssistant(clerk_id, params).then(() => {
                 this.dialogVisible = false
                 this.$message.success('修改成功！')
-                this.MixinSetTableData(this.tableData, 'clerk_id', clerk_id, response)
+                this.GET_ShopAssistantList()
               })
             } else {
               API_Auth.addShopAssistant(params).then(() => {

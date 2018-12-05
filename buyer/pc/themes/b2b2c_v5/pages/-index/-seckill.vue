@@ -178,7 +178,7 @@
     .sk-time {
       position: absolute;
       top: 212px;
-      left: 30px;
+      left: 25px;
       height: 40px;
     }
     .time-item {
@@ -188,12 +188,26 @@
       height: 40px;
       text-align: center;
       background-color: #2f3430;
-      margin-right: 5px;
+      margin-right: 11px;
       span {
         position: relative;
         line-height: 40px;
         font-weight: bold;
         font-size: 20px;
+      }
+      &:after {
+        content: ':';
+        position: absolute;
+        top: 11px;
+        right: -9px;
+        color: #ffffff;
+        font-size: 16px;
+      }
+      &:last-child {
+        margin-right: 0;
+        &:after {
+          content: none;
+        }
       }
     }
   }

@@ -95,11 +95,14 @@
         <van-cell title="商品金额">
           <span class="price">￥{{ orderTotal.goods_price | unitPrice }}</span>
         </van-cell>
-        <van-cell v-if="orderTotal.exchange_point" title="积分">
-          <span>{{ orderTotal.exchange_point }}分</span>
+        <van-cell title="优惠券抵扣" v-if="orderTotal.coupon_price">
+          <span class="price">-￥{{ orderTotal.coupon_price | unitPrice }}</span>
         </van-cell>
-        <van-cell title="优惠金额">
-          <span class="price">-￥{{ orderTotal.discount_price | unitPrice }}</span>
+        <van-cell title="返现金额" v-if="orderTotal.cash_back">
+          <span class="price">-￥{{ orderTotal.cash_back | unitPrice }}</span>
+        </van-cell>
+        <van-cell title="积分抵扣" v-if="orderTotal.exchange_point">
+          <span>-{{ orderTotal.exchange_point }}分</span>
         </van-cell>
         <van-cell title="运费">
           <span class="price">￥{{ orderTotal.freight_price | unitPrice }}</span>
@@ -306,9 +309,9 @@
           this.$router.replace({ path: '/checkout/cashier?trade_sn=' + response.trade_sn })
         }).catch(error => {
           const { data } = error.response || {}
-          if (data.code === '452') {
+          if (data.data) {
             const { data: list } = data
-            if (!list || list[0]) {
+            if (!list || !list[0]) {
               this.$message.error(data.message)
               return
             }

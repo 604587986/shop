@@ -44,6 +44,10 @@
         </div>
       </a>
     </van-list>
+    <div v-if="finished && !goodsList.length" class="empty-list">
+      <img src="../../assets/images/icon-empty-member.png" alt="">
+      <p>暂无商品</p>
+    </div>
   </div>
 </template>
 
@@ -251,7 +255,7 @@
     .goods-name {
       font-size: 14px;
       color: #333;
-      line-height: 1.3;
+      line-height: 19px;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -272,5 +276,11 @@
     .goods-shop {
 
     }
+  }
+  .empty-list {
+    display: block;
+    text-align: center;
+    margin-top: 86px;
+    padding-top: 50px;
   }
 </style>

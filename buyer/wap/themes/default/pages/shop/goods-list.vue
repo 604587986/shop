@@ -39,6 +39,16 @@
             <h3><nuxt-link :to="'/goods/' + goods.goods_id">{{ goods.name }}</nuxt-link></h3>
             <p>￥{{ goods.price | unitPrice }}</p>
           </div>
+          <div class="goods-list-other">
+            <div>
+              <span>销量：</span>
+              <span class="price">{{ goods.buy_count }}件</span>
+            </div>
+            <div>
+              <span>好评率：</span>
+              <span class="price">{{ goods.grade }}%</span>
+            </div>
+          </div>
         </li>
       </ul>
     </van-list>
@@ -83,12 +93,12 @@
     },
     watch: {
       $route() {
-        this.params.page_no = 1
         this.finished = false
         this.goodsList = []
         this.params = {
           ...this.$route.query
         }
+        this.params.page_no = 1
         this.GET_GoodsList()
       }
     },
@@ -217,7 +227,6 @@
       float: left;
       background: #fff;
       width: 48%;
-      height: 250px;
       margin: 0 2% 8px 0;
       overflow: hidden;
       position: relative;
@@ -229,8 +238,10 @@
       margin: 0 auto;
       max-width: 200px;
       img {
-        width: 100%;
-        height: 100%;
+        display: block;
+        margin: 0 auto;
+        width: 156px;
+        height: 156px;
       }
     }
     .goods-list-right {
@@ -259,6 +270,9 @@
         text-align: right;
         font-size: 16px;
       }
+    }
+    .goods-list-other {
+      padding: 0 10px;
     }
   }
 </style>

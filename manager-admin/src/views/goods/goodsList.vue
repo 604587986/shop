@@ -108,6 +108,9 @@
     mounted() {
       this.GET_GoodsList()
     },
+    activated() {
+      this.GET_GoodsList()
+    },
     methods: {
 
       /** 分页大小发生改变 */

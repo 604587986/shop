@@ -21,9 +21,9 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column prop="article_id" label="文章ID"/>
+        <el-table-column prop="article_id" label="文章ID" width="120"/>
         <el-table-column prop="article_name" label="文章名称"/>
-        <el-table-column prop="category_name" label="分类名称"/>
+        <el-table-column prop="category_name" label="分类名称" width="175"/>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
@@ -168,7 +168,7 @@
   }
   .article-tree {
     padding: 10px;
-    width: 300px;
+    min-width: 200px;
     margin-right: 45px;
     margin-top: 44px;
     border: 1px solid #ccc;

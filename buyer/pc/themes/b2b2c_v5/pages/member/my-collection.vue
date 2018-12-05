@@ -12,7 +12,7 @@
     </div>
     <div class="collection-container">
       <div v-show="type !== 'shop'" class="goods">
-        <empty-member v-if="goodsData && !goodsData.data.length">暂无商品收藏</empty-member>
+        <empty-member v-if="goodsData.data && !goodsData.data.length">暂无商品收藏</empty-member>
         <template v-else>
           <ul>
             <li
@@ -64,24 +64,26 @@
             v-if="goodsData"
             layout="prev, pager, next"
             @current-change="handleGoodsCurrentChange"
+            :current-page="goodsData.page_no"
+            :page-size="goodsData.page_size"
             :total="goodsData.data_total"/>
         </template>
       </div>
       <div v-show="type === 'shop'" class="shop">
-        <template v-if="shopData && shopData.data.length > 0">
+        <empty-member v-if="shopData.data && !shopData.data.length">暂无店铺收藏</empty-member>
+        <template v-else>
           <ul>
             <li v-for="shop in shopData.data" :key="shop.shop_id" :class="['coll-s-item', shop.show_del_pop && 'del-pop-show']">
               <div class="shop-card">
                 <div class="shop-card-side">
                   <nuxt-link :to="'/shop/' + shop.shop_id">
-                    <img :src="shop.logo" :alt="shop.shop_name">
+                    <en-shop-logo :url="shop.logo"/>
+                    <!--<img :src="shop.logo" :alt="shop.shop_name">-->
                   </nuxt-link>
+                  <a @click="shop.show_del_pop = 1" class="del-btn" href="javascript:void(0)">删除</a>
                 </div>
                 <div class="shop-card-main">
                   <nuxt-link :to="'/shop/' + shop.shop_id" class="shop-name">{{ shop.shop_name }}</nuxt-link>
-                  <div class="shop-tools">
-                    <a href="javascript:;" @click="shop.show_del_pop = 1"><i class="iconfont ea-icon-delete"></i></a>
-                  </div>
                   <div class="shop-other">
                     <p style="margin-bottom: 5px">店铺评分：</p>
                     <p>描述相符: {{ shop.shop_description_credit }}</p>
@@ -138,7 +140,6 @@
             @current-change="handleShopCurrentChange"
             :total="shopData.data_total"/>
         </template>
-        <empty-member v-else>暂无店铺收藏</empty-member>
       </div>
     </div>
   </div>
@@ -350,26 +351,29 @@
     border-bottom: #e5e5e5 1px solid;
     &:last-child { border-bottom: none };
     .shop-card {
-      width: 270px;
+      width: 200px;
       margin-right: 30px;
       padding-top: 20px;
       position: relative;
     }
     .shop-card-side {
-      float: left;
-      padding-left: 6px;
-      padding-right: 17px;
-      height: 190px;
-      width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      a {
+        display: inline-block;
+      }
       img {
-        width: 50px;
+        display: block;
+        width: 160px;
         height: 50px;
-        border-radius: 100%;
+      }
+      .del-btn {
+        color: $color-main;
       }
     }
     .shop-card-main {
       position: relative;
-      float: left;
     }
     .shop-other {
       margin-top: 10px;
@@ -379,18 +383,19 @@
       line-height: 25px;
       margin-bottom: 2px;
       height: 26px;
-      width: 130px;
+      width: 190px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      font-size: 14px;
+      font-size: 16px;
+      font-weight: 600;
       color: #3c3c3c;
       &:hover { color: $color-main }
     }
     .shop-tools {
-      position: absolute;
-      top: 0;
-      right: 0;
+      display: inline-block;
+      margin-left: 20px;
+      float: right;
       .ea-icon-delete {
         font-size: 20px;
         line-height: normal;

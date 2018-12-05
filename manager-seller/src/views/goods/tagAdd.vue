@@ -11,17 +11,20 @@
           <el-button type="primary" @click="selectgoodslist" >选择商品</el-button>
           <el-button type="danger" @click="cancelall">批量取消</el-button>
         </div>
+        <div class="toolbar-search">
+          <el-tag size="medium" v-if="tag_name">{{ tag_name }}</el-tag>
+        </div>
       </div>
       <template slot="table-columns">
         <el-table-column type="selection"/>
         <el-table-column label="商品信息" width="1000px">
           <template slot-scope="scope">
             <div class="goods-info">
-              <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
+              <a class="goods-name" :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`">
+                <img v-if="scope.row.thumbnail" :src="scope.row.thumbnail" class="goods-image"/>
+              </a>
               <div class="goodsinfo-txt">
-                <a class="goods-name"
-                  :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`">
-                  {{ scope.row.goods_name }}</a>
+                <a class="goods-name" :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`">{{ scope.row.goods_name }}</a>
                 <span class="goods-price">{{ scope.row.price | unitPrice('￥') }}</span>
               </div>
             </div>
@@ -29,8 +32,7 @@
         </el-table-column>
         <el-table-column label="库存">
           <template slot-scope="scope">
-             <span v-if="scope.row.buy_count || scope.row.buy_count === 0">{{ scope.row.buy_count }}</span>
-             <span v-if="scope.row.quantity || scope.row.quantity === 0 ">{{ scope.row.quantity }}</span>
+             <span v-if="scope.row.enable_quantity || scope.row.enable_quantity === 0">{{ scope.row.enable_quantity }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -78,6 +80,9 @@
         /** 标签id */
         tag_id: '',
 
+        /** 标签名称 */
+        tag_name: '',
+
         /** 标签商品列表数据 */
         tableData: [],
 
@@ -88,7 +93,7 @@
         maxsize: 0,
 
         /** 商品选择器列表api*/
-        goodsApi: 'seller/goods',
+        goodsApi: 'seller/goods?market_enable=1&is_auth=1',
 
         multipleApi: 'seller/goods/@ids/details',
 
@@ -107,10 +112,12 @@
     },
     beforeRouteUpdate(to, from, next) {
       this.params.tag_id = this.tag_id = to.params.tag_id
+      this.tag_name = to.query.tag_name
       next()
     },
     activated() {
       this.params.tag_id = this.tag_id = this.$route.params.tag_id
+      this.tag_name = this.$route.query.tag_name
     },
     methods: {
       /**  显示商品选择器*/
@@ -177,13 +184,10 @@
       },
       /** 保存设置 */
       savesetup() {
-        const _goods_ids = this.tableData.map(key => {
+        let _goods_ids = this.tableData.map(key => {
           return key.goods_id
         })
-        if (_goods_ids.length === 0) {
-          this.$message.error('请至少选择一种商品')
-          return
-        }
+        if (!_goods_ids.length) _goods_ids = -1
         API_goodsTag.saveTagGoodsList(this.params.tag_id, _goods_ids, this.params).then(() => {
           this.loading = false
           this.$message.success('保存设置成功！')

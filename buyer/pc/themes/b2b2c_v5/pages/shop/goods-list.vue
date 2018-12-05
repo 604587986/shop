@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="inner-search">
-          <el-input placeholder="在当前结果中搜索" size="mini" clearable v-model="params.keyword" @keyup.enter.native="handleSearch('shop')">
+          <el-input style="width: 75%;" placeholder="在当前结果中搜索" size="mini" clearable v-model="params.keyword" @keyup.enter.native="handleSearch('shop')">
             <el-button slot="append" icon="el-icon-search" @click="handleSearch('shop')"></el-button>
           </el-input>
           <el-button size="mini" type="danger" class="search-btn" @click="handleSearch('all')">搜全站</el-button>
@@ -48,6 +48,7 @@
               <span>RMB：<span class="price">￥<strong>{{ goods.price | unitPrice }}</strong></span></span>
               <span>已销售：{{ goods.buy_count }}件</span>
             </div>
+            <div class="goods-grade">好评率：<span>{{ goods.grade }}%</span></div>
           </li>
           <span class="clr"></span>
         </ul>
@@ -250,5 +251,10 @@
     display: flex;
     justify-content: space-between;
     strong { font-size: 16px }
+  }
+  .goods-grade {
+    span {
+      color: $color-main
+    }
   }
 </style>

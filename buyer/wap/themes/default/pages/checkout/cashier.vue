@@ -99,7 +99,8 @@
               WeixinJSBridge.invoke('getBrandWCPayRequest', params, this.payCallbackDialog)
             }
           } else {
-            window.location.href = `./cashier-load-pay?trade_type=${trade_type}&sn=${sn}&payment_plugin_id=${payment_plugin_id}`
+            const url = `./cashier-load-pay?trade_type=${trade_type}&sn=${sn}&payment_plugin_id=${payment_plugin_id}`
+            window.open(url)
           }
         })
       },

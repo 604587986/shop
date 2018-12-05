@@ -23,56 +23,101 @@
               </div>
             </div>
           </div>
+          <div class="promotion-notice">{{ shop.promotion_notice }}</div>
           <div class="content-shop-item">
-            <van-swipe-cell :right-width="90" v-for="(sku, index) in shop.sku_list" :key="index">
-              <div class="sku-item">
-                <div class="sku-check" @click="handleCheckSku(sku)">
-                  <van-icon :name="sku.checked ? 'checked' : 'check'"/>
-                </div>
-                <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-image">
-                  <img :src="sku.goods_image" :alt="sku.name">
-                </nuxt-link>
-                <div class="sku-content">
-                  <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">{{ sku.name }}</nuxt-link>
-                  <div class="sku-spec">
-                    <span>{{ sku | formatterSkuSpec }}</span>
-                    <select
-                      v-if="sku.single_list && sku.single_list.length"
-                      class="activity_list"
-                      @change="(event) => { handleActChanged(sku, event) }"
-                    >
-                      <option v-for="(act, index) in sku.single_list" :key="index" :value="act.promotion_type">{{ act.title }}</option>
-                    </select>
+            <div
+              v-for="(sku, index) in shop.sku_list"
+              :key="index"
+              class="sku-item-li"
+              :class="[sku.invalid === 1 && 'invalid']"
+            >
+              <van-swipe-cell :right-width="90">
+                <div class="sku-item">
+                  <div v-if="sku.invalid === 1" class="sku-check">已失效</div>
+                  <div v-else class="sku-check" @click="handleCheckSku(sku)">
+                    <van-icon :name="sku.checked ? 'checked' : 'check'"/>
                   </div>
-                  <div class="sku-tools">
-                    <div class="sku-price">
-                      <strong>￥{{ sku.purchase_price | unitPrice }}</strong>
+                  <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-image">
+                    <img :src="sku.goods_image" :alt="sku.name">
+                  </nuxt-link>
+                  <div class="sku-content">
+                    <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">{{ sku.name }}</nuxt-link>
+                    <div class="sku-spec">
+                      <span>{{ sku | formatterSkuSpec }}</span>
                     </div>
-                    <div class="sku-num">
-                      <a class="sku-symbol symbol-less minus unable" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '-')">-</a>
-                      <input type="tel" class="sku-num-input" size="4" :value="sku.num" maxlength="4" @change="handleUpdateSkuNum(sku, $event)">
-                      <a class="sku-symbol symbol-add add" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '+')">+</a>
+                    <div class="sku-tools">
+                      <div class="sku-price">
+                        <strong>￥{{ sku.purchase_price | unitPrice }}</strong>
+                      </div>
+                      <div v-if="sku.invalid !== 1" class="sku-num">
+                        <a class="sku-symbol symbol-less minus unable" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '-')">-</a>
+                        <input type="tel" class="sku-num-input" size="4" :value="sku.num" maxlength="4" @change="handleUpdateSkuNum(sku, $event)">
+                        <a class="sku-symbol symbol-add add" href="javascript:;" @click.stop="handleUpdateSkuNum(sku, '+')">+</a>
+                      </div>
                     </div>
+                  </div>
+                </div>
+                <span slot="right" class="del-sku" @click="handleDelete(sku)">删除</span>
+              </van-swipe-cell>
+              <div class="act-box">
+                <div
+                  v-if="sku.single_list && sku.single_list.length"
+                  @click="handleChangeActivity(sku)"
+                  class="act-item"
+                >
+                  <div>
+                    <span class="act-item-title">促销</span>
+                    <span class="act-item-cont">{{ selectedActivity(sku.single_list) }}</span>
+                  </div>
+                  <div v-if="sku.single_list.length > 1" class="act-item-select">
+                    <span>{{ sku.single_list.length }}个可选</span>
+                    <i
+                      class="iconfont"
+                      :class="[
+                      cur_sku_id === sku.sku_id
+                      ? 'ea-icon-arrow-up'
+                      : 'ea-icon-arrow-down'
+                      ]"
+                    ></i>
                   </div>
                 </div>
               </div>
-              <span slot="right" class="del-sku" @click="handleDelete(sku)">删除</span>
-            </van-swipe-cell>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!--这里的价格以分为单位-->
-    <van-submit-bar
-      :price="cartTotal.total_price * 100"
-      button-text="去结算"
-      :disabled="!checkedCount"
-      @submit="handleCheckout"
-    >
-      <div class="all-check" @click="handleCheckAll">
-        <van-icon :name="all_checked ? 'checked' : 'check'"/>全选
+    <div class="cat-bottom-bar">
+      <div class="inner-bar">
+        <div class="all-check" @click="handleCheckAll">
+          <van-icon :name="all_checked ? 'checked' : 'check'"/>全选
+        </div>
+        <a
+          v-show="checkedCount"
+          href="javascript:void(0)"
+          class="del-btn"
+          @click="handleBatchDelete"
+        >删除已选</a>
+        <div class="cat-bar-price">
+          <span>合计：</span>
+          <span class="price">¥{{ cartTotal.total_price | unitPrice }}</span>
+          <div v-if="cartTotal.cash_back" class="back-price">
+            返现：<span class="price">￥{{ cartTotal.cash_back | unitPrice }}</span>
+          </div>
+        </div>
+        <van-button
+          type="default"
+          :disabled="!checkedCount"
+          @click="handleCheckout"
+        >去结算</van-button>
       </div>
-    </van-submit-bar>
+    </div>
+    <van-actionsheet
+      v-model="showActivityActionsheet"
+      :actions="activity_options"
+      @select="handleActivitySelect"
+      cancel-text="取消"
+    />
   </div>
 </template>
 
@@ -91,7 +136,15 @@
     data() {
       return {
         /** 当前操作的输入框的值【变化之前】 */
-        current_input_value: 1
+        current_input_value: 1,
+        activity_options: [],
+        showActivityActionsheet: false,
+        cur_sku_id: null
+      }
+    },
+    watch: {
+      showActivityActionsheet(newVal) {
+        newVal === false && (this.cur_sku_id = null)
       }
     },
     mounted() {
@@ -123,18 +176,50 @@
       handleCheckAll() {
         this.checkAll(this.all_checked ? 0 : 1)
       },
-      /** 促销活动发生改变 */
-      handleActChanged(sku, event) {
-        const { seller_id, single_list = [] } = sku
-        const promotion_type = event.target.value
-        const promotion = single_list.filter(item => item.promotion_type === promotion_type)
-        const params = {
-          seller_id,
-          sku_id: sku.sku_id,
-          activity_id: promotion[0].activity_id,
-          promotion_type
+      /** 打开促销选择 */
+      handleChangeActivity(sku) {
+        const options = sku.single_list.map(item => ({
+          name: item.title,
+          activity_id: item.activity_id,
+          is_check: item.is_check,
+          promotion_type: item.promotion_type,
+          className: item.is_check === 1 ? 'checked' : '',
+          sku
+        }))
+        const no_act = sku.single_list.filter(item => item.is_check === 1)
+        options.push({
+          name: '不参加活动',
+          className: no_act[0] ? '' : 'checked',
+          sku
+        })
+        this.activity_options = options
+        this.showActivityActionsheet = true
+        this.cur_sku_id = sku.sku_id
+      },
+      /** 展示已选择促销*/
+      selectedActivity(list) {
+        const _list = list.filter(item => item.is_check === 1)
+        if (_list[0]) {
+          return _list[0].title
         }
-        this.changeActivity(params)
+        return '不参加活动'
+      },
+      /** 确认促销选择 */
+      handleActivitySelect(item) {
+        const { seller_id, single_list = [], sku_id } = item.sku
+        if (item.name === '不参加活动') {
+          this.cleanActivity({seller_id, sku_id})
+        } else {
+          const { promotion_type, activity_id } = item
+          const params = {
+            seller_id,
+            sku_id,
+            activity_id,
+            promotion_type
+          }
+          this.changeActivity(params)
+        }
+        this.showActivityActionsheet = false
       },
       /** 更新商品数量 */
       handleUpdateSkuNum(sku, symbol) {
@@ -221,11 +306,15 @@
         // 清空购物车
         cleanCart: 'cart/cleanCartAction',
         // 更换促销活动
-        changeActivity: 'cart/changeActivityAction'
+        changeActivity: 'cart/changeActivityAction',
+        // 不参加活动
+        cleanActivity: 'cart/cleanActivityAction',
       })
     }
   }
 </script>
+
+
 
 <style type="text/scss" lang="scss" scoped>
   @import "../../assets/styles/color";
@@ -238,6 +327,7 @@
   .inner-shop-item {
     background-color: #fff;
     overflow: hidden;
+    padding: 0 5px;
   }
   .title-shop-item {
     display: flex;
@@ -417,6 +507,133 @@
     }
     .van-icon-checked {
       color: $color-main;
+    }
+    .del-btn {
+      font-size: 12px;
+      margin-left: 10px;
+      color: #F44F44;
+    }
+  }
+  /deep/ {
+    .van-actionsheet {
+      .checked {
+        color: $color-main
+      }
+    }
+  }
+  .act-box {
+    padding-left: 15%;
+  }
+  .promotion-notice {
+    padding-left: 15%;
+    color: $color-main;
+  }
+  .act-item {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 10px;
+    margin-top: 5px;
+    margin-right: 10px;
+    background-color: #FDF3F3;
+    border-radius: 2px;
+    &::before {
+      content: ' ';
+      position: absolute;
+      top: -5px;
+      left: 15px;
+      width: 10px;
+      height: 10px;
+      background-color: #FDF3F3;
+      transform: rotate(45deg);
+    }
+  }
+  .act-item-title {
+    color: #333;
+    font-size: 14px;
+  }
+  .act-item-cont {
+    margin-left: 10px;
+  }
+  .act-item-cont, .act-item-select {
+    color: #7f828b;
+    font-size: 12px;
+  }
+  .act-item-select {
+    .iconfont {
+      vertical-align: -2px;
+    }
+  }
+  .sku-item-li {
+    &.invalid .sku-item {
+      filter: grayscale(1);
+    }
+    &:last-child {
+      .act-item {
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .cat-bottom-bar {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+    position: fixed;
+    user-select: none;
+    .inner-bar {
+      height: 50px;
+      display: flex;
+      font-size: 14px;
+      align-items: center;
+      background-color: #fff;
+    }
+    /deep/ {
+      .all-check {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+      }
+      .van-icon-check, .van-icon-checked {
+        font-size: 18px;
+        margin-right: 3px;
+      }
+      .van-icon-checked {
+        color: $color-main;
+      }
+      .del-btn {
+        font-size: 12px;
+        margin-left: 10px;
+        color: #F44F44;
+      }
+      .van-button {
+        width: 110px;
+        height: 100%;
+        background-color: $color-main;
+        color: #ffffff;
+        border-color: $color-main;
+        border-radius: 0;
+        font-size: 16px;
+        &.van-button--disabled {
+          color: #999;
+          background-color: #e8e8e8;
+          border: none;
+        }
+      }
+    }
+    .cat-bar-price {
+      flex: 1;
+      font-weight: 500;
+      text-align: right;
+      color: #333;
+      padding-right: 12px;
+      span {
+        display: inline-block;
+      }
+      .back-price {
+        color: #777;
+        font-size: 12px;
+      }
     }
   }
 </style>

@@ -25,19 +25,20 @@
     </div>
     <div class="next-btns">
       <el-button size="small" @click="$router.back()">上一步</el-button>
-      <el-button size="small" @click="handleNextStep">下一步</el-button>
+      <el-button @click="handleNextStep" size="small">提交申请</el-button>
     </div>
   </div>
 </template>
 
 <script>
-  import { RegExp } from '~/ui-utils'
   import * as API_Shop from '@/api/shop'
   import * as API_Goods from '@/api/goods'
   import EnRegionPicker from "@/components/RegionPicker"
+  import mixin from './checkStatusMixin'
   export default {
     name: "shop-info",
     middleware: 'auth-seller',
+    mixins: [mixin],
     components: { EnRegionPicker },
     data() {
       const req_rule = (message, trigger) => ({ required: true, message, trigger: trigger || 'blur' })

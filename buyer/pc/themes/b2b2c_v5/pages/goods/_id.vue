@@ -1,13 +1,5 @@
 <template>
   <div v-if="goods && goods.goods_id" id="goods">
-    <!--<div v-if="goods.is_auth === 0 || goods.goods_off === 0" class="goods-auth w">-->
-      <!--<img v-if="goods.goods_off === 0" src="../../assets/images/background-goods-off.jpg" alt="商品已下架">-->
-      <!--<img v-else src="../../assets/images/background-goods-auth.jpg" alt="商品待审核">-->
-      <!--<div class="goods-auth-btns">-->
-        <!--<nuxt-link to="/">去首页</nuxt-link>-->
-        <!--<a href="javascript:;" @click="handleCloseWindow">关闭窗口</a>-->
-      <!--</div>-->
-    <!--</div>-->
     <div v-if="goods.goods_off === 0" class="goods-auth w">
       <img src="../../assets/images/background-goods-off.jpg" alt="商品已下架">
       <div class="goods-auth-btns">
@@ -27,7 +19,7 @@
           <shop-card :shop-id="goods.seller_id"/>
         </div>
         <div v-show="showShare" class="bdsharebuttonbox bdshare-button-style1-16" style="margin-top: 10px">
-          <a href="javascript:;" class="bds_more" data-cmd="more">分享到：</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a><a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧">百度贴吧</a>
+          <a class="bds_more" data-cmd="more" href="javascript:;">分享到：</a><a class="bds_qzone" data-cmd="qzone" href="#" title="分享到QQ空间">QQ空间</a><a class="bds_tsina" data-cmd="tsina" href="#" title="分享到新浪微博">新浪微博</a><a class="bds_weixin" data-cmd="weixin" href="#" title="分享到微信">微信</a><a class="bds_tieba" data-cmd="tieba" href="#" title="分享到百度贴吧">百度贴吧</a>
           <a href="javascript:;" :class="['collect-goods-btn', collected && 'collected']" @click="handleCollectionGoods">{{ collected ? '已收藏' : '收藏商品' }}</a>
         </div>
       </div>
@@ -74,7 +66,9 @@
   import * as GoodsComponents from './'
   import Storage from '@/utils/storage'
   import { Pagination } from 'element-ui'
-  Vue.use(Pagination)
+  import 'viewerjs/dist/viewer.css'
+  import Viewer from 'v-viewer'
+  Vue.use(Pagination).use(Viewer)
   export default {
     name: 'goods-detail',
     validate({ params }) {
@@ -184,15 +178,17 @@
           window._bd_share_config = {
             common: {
               bdSnsKey:{},
+              bdUrl: location.href,
               bdText: goods.goods_name,
               bdMini: "2",
               bdPic: goods.thumbnail,
               bdStyle: "1",
-              bdSize: "16"
+              bdSize: "16",
+              bdMiniList: ["mshare","qzone","tsina","bdysc","weixin","kaixin001","tqf","tieba","douban","sqq","copy"]
             },
             share: {
               bdSize: 16,
-              bdMiniList: ["mshare","qzone","tsina","bdysc","weixin","renren","kaixin001","tqf","tieba","douban","sqq","copy"],
+              bdMiniList: ["mshare","qzone","tsina","bdysc","weixin","kaixin001","tqf","tieba","douban","sqq","copy"],
             }
           }
           const s = document.createElement('script')
@@ -216,6 +212,7 @@
         const ele = $('.' + cl)
         ele.length && ele.remove()
       })
+      window._bd_share_main = undefined
     }
   }
 </script>

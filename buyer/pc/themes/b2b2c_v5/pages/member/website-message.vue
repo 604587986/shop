@@ -86,7 +86,8 @@
       /** 删除消息 */
       handleDeleteMessage(message) {
         this.$confirm('确定要删除这条消息吗？', () => {
-          API_Message.deleteMessage(message.id).then(() => {
+          API_Message.deleteMessage(message.id).then(async () => {
+            await this.getUnreadMessageNumAction()
             this.$message.success('删除成功！')
             this.GET_MessageList()
           })
@@ -94,14 +95,16 @@
       },
       /** 标记消息为已读 */
       handleReadMessage(message) {
-        API_Message.messageMarkAsRead(message.id).then(() => {
+        API_Message.messageMarkAsRead(message.id).then(async () => {
+          await this.getUnreadMessageNumAction()
           this.GET_MessageList()
         })
       },
-      /** 标记当前页消息问已读 */
+      /** 标记当前页消息为已读 */
       handleReadPageMessages() {
         const ids = this.tableData.data.map(item => item.id).join(',')
-        API_Message.messageMarkAsRead(ids).then(() => {
+        API_Message.messageMarkAsRead(ids).then(async () => {
+          await this.getUnreadMessageNumAction()
           this.GET_MessageList()
         })
       },
@@ -117,7 +120,8 @@
           this.tableData = response
           this.MixinScrollToTop()
         })
-      }
+      },
+      ...mapActions(['getUnreadMessageNumAction'])
     }
   }
 </script>

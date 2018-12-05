@@ -145,6 +145,7 @@
                 </div>
                 <div class="gl-commit">
                   <strong>已有<a class="comment">{{ goods.comment_num }}</a>人评价</strong>
+                  <span class="gl-grade">好评率：<i>{{ goods.grade }}%</i></span>
                 </div>
                 <div class="gl-shop">
                   <span>
@@ -373,7 +374,7 @@
       background: #f5f5f5;
     }
     dt {
-      width: 70px;
+      width: 100px;
       padding-left: 30px;
       line-height: 45px;
       color: #666;
@@ -381,7 +382,7 @@
     }
     dd {
       padding-left: 10px;
-      width: 1100px;
+      width: 1070px;
       min-height: 46px;
       background: #fff;
       float: left;
@@ -704,6 +705,8 @@
       }
     }
     .gl-commit {
+      display: flex;
+      justify-content: space-between;
       width: 100%;
       height: 18px;
       margin-top: -3px;
@@ -718,6 +721,7 @@
           font-weight: 700;
         }
       }
+      .gl-grade i { color: $color-main }
     }
     .gl-shop {
       line-height: 18px;

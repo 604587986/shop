@@ -170,7 +170,7 @@
     .shop-rec-item {
       float: left;
       margin: 0 10px 10px 0;
-      background-color: #ccc;
+      background-color: #ffffff;
       width: 33.33%;
       box-sizing: border-box;
       &:last-child {
@@ -189,8 +189,9 @@
       width: 100%;
       img {
         display: block;
-        width: 100%;
-        height: 100%;
+        width: 111px;
+        height: 111px;
+        margin: 0 auto;
       }
     }
     .item-price {
@@ -214,6 +215,9 @@
     font-size: 12px;
     line-height: 18px;
     text-align: right;
+  }
+  .shop-aside {
+    border-bottom: 1px solid #f1f1f1;
   }
   /deep/ {
     .van-nav-bar--fixed {

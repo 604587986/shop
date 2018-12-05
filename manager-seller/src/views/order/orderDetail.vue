@@ -122,7 +122,7 @@
               <span class="item-value">{{ orderDetail.receipt_history.receipt_content }}</span>
             </div>
           </template>
-          <div class="order-item" v-if="!isShowEditShipName">
+          <div class="order-item" v-if="isLooklogistics">
             <span class="item-name">物流信息：</span>
             <span class="item-value">
             <el-button type="text" @click="looklogistics">点击查看</el-button>
@@ -144,7 +144,7 @@
               <!--物流单号-->
               <el-table-column label="物流单号">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.ship_no"></el-input>
+                  <el-input v-model="scope.row.ship_no" @change="() => { scope.row.ship_no = scope.row.ship_no.trim() }" :maxlength="15"></el-input>
                 </template>
               </el-table-column>
               <!--是否支持电子面单-->
@@ -232,9 +232,12 @@
         <!--调整订单总价-->
         <el-form
           v-show="triggerStatus === 1"
+          status-icon
+          ref="adjustPriceForm"
+          :rules="orderRules"
           label-position="right">
-          <el-form-item>
-            <el-input placeholder="请输入订单总价" v-model="adjustedPrice">
+          <el-form-item prop="adjustedPrice">
+            <el-input placeholder="请输入订单总价" v-model="adjustedPrice" @change="() => { adjustedPrice = adjustedPrice.trim() }">
               <template slot="prepend">¥</template>
             </el-input>
           </el-form-item>
@@ -242,20 +245,23 @@
         <!--修改收货人信息-->
         <el-form
           :model="ConsigneeForm"
+          ref="ConsigneeForm"
+          :rules="orderRules"
+          status-icon
           v-show="triggerStatus === 2"
           label-position="right"
-          label-width="90px">
-          <el-form-item label="收货人：" prop="ship_name">
-            <el-input  v-model="ConsigneeForm.ship_name" ></el-input>
+          label-width="120px">
+          <el-form-item label="收货人：" prop="ship_name" >
+            <el-input  v-model="ConsigneeForm.ship_name" @change="() => { ConsigneeForm.ship_name = ConsigneeForm.ship_name.trim() }" maxlength="20" placeholder="限20字"></el-input>
           </el-form-item>
           <el-form-item label="手机：" prop="ship_mobile" >
-            <el-input  v-model.number="ConsigneeForm.ship_mobile" ></el-input>
+            <el-input  v-model.number="ConsigneeForm.ship_mobile" maxlength="11" ></el-input>
           </el-form-item>
           <el-form-item label="配送地区：" prop="region" class="area-select">
             <en-region-picker :api="MixinRegionApi" :default="areas" @changed="handleChangeArea"></en-region-picker>
           </el-form-item>
           <el-form-item label="详细地址：" prop="ship_addr" >
-            <el-input  v-model="ConsigneeForm.ship_addr" ></el-input>
+            <el-input  v-model="ConsigneeForm.ship_addr" @change="() => { ConsigneeForm.ship_addr = ConsigneeForm.ship_addr.trim() }" placeholder="限20字" maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="送货时间：" prop="receive_time" style="text-align: left;">
             <el-select v-model="ConsigneeForm.receive_time" placeholder="请选择">
@@ -265,7 +271,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="订单备注：" prop="remark">
-            <el-input  type="textarea" v-model="ConsigneeForm.remark" placeholder="限500字" maxlength="500"></el-input>
+            <el-input  type="textarea" rows="4" v-model="ConsigneeForm.remark" placeholder="限500字" maxlength="500"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -319,6 +325,7 @@
   import * as API_logistics from '@/api/expressCompany'
   import { CategoryPicker } from '@/components'
   import { LogisticsCompany } from './components'
+  import { RegExp } from '~/ui-utils'
   import Print from 'print-js'
   export default {
     name: 'orderDetail',
@@ -327,6 +334,32 @@
       [CategoryPicker.name]: CategoryPicker
     },
     data() {
+      /** 金额 */
+      const checkMoney = (rule, value, callback) => {
+        if (!this.adjustedPrice && this.adjustedPrice !== 0) {
+          return callback(new Error('订单总价不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(this.adjustedPrice)) {
+            callback(new Error('请填写正确的金额'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+      /** 手机号 */
+      const checkPhone = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('手机号不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.mobile.test(value)) {
+            callback(new Error('请填写正确的手机号'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
       return {
         /** 列表loading状态 */
         loading: false,
@@ -339,6 +372,9 @@
 
         /** 产品列表 */
         productList: [],
+
+        /** 是否可以查看物流信息 默认不可以*/
+        isLooklogistics: false,
 
         /** 是否显示修改收货人信息按钮 默认不显示*/
         isShowEditShipName: false,
@@ -413,7 +449,32 @@
         stepList: [],
 
         /** 是否显示电子面单 */
-        electronicSurfaceShow: false
+        electronicSurfaceShow: false,
+
+        /** 校验规则 */
+        orderRules: {
+          /** 调整价格 */
+          adjustedPrice: [
+            { validator: checkMoney, trigger: 'blur' }
+          ],
+
+          /** 收货人 */
+          ship_name: [
+            { required: true, message: '请填写收货人姓名', trigger: 'blur' }
+          ],
+
+          /** 手机号 */
+          ship_mobile: [
+            { required: true, message: '请填写手机号', trigger: 'blur' },
+            { validator: checkPhone, trigger: 'blur' }
+          ],
+
+          /** 详细地址 */
+          ship_addr: [
+            { required: true, message: '请填写详细地址', trigger: 'blur' },
+            { mix: 5, max: 100, message: '详细地址为5～100个字符', trigger: 'blur' }
+          ]
+        }
       }
     },
     filters: {
@@ -460,8 +521,8 @@
             this.logisticsStatus = true
           }
 
-          // 是否可以修改收货人信息 未发货时皆可修改收货人信息（订单状态 新订单 已确认 未付款） 在线支付时已付款
-          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' || this.orderDetail.order_status === 'CANCELLED' ||
+          // 是否可以修改收货人信息 货到付款未发货时皆可修改收货人信息（订单状态 新订单 已确认 未付款） 在线支付时已付款可修改收货人信息
+          if (this.orderDetail.order_status === 'NEW' || this.orderDetail.order_status === 'CONFIRM' ||
             this.orderDetail.order_status === 'PAY_NO' || (this.orderDetail.order_status === 'PAID_OFF' && this.orderDetail.payment_type === 'ONLINE')) {
             this.isShowEditShipName = true
           } else {
@@ -485,6 +546,15 @@
             this.isShowConfirmReceive = true
           } else {
             this.isShowConfirmReceive = false
+          }
+
+          // 是否可以查看物流信息 物流信息为 正常订单发货之后可查看即 订单状态
+          // 已发货 已收货 已完成 (货到付款)已付款 isLooklogistics
+          if (this.orderDetail.order_status === 'SHIPPED' || this.orderDetail.order_status === 'ROG' || this.orderDetail.order_status === 'COMPLETE' ||
+            (this.orderDetail.payment_type === 'COD' && this.orderDetail.order_status === 'PAID_OFF')) {
+            this.isLooklogistics = true
+          } else {
+            this.isLooklogistics = false
           }
         })
       },

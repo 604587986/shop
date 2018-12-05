@@ -31,7 +31,17 @@
           </div>
         </div>
       </div>
-      <div class="hot-keyword-control-search">
+    </div>
+    <div v-if="searchType === '商品' && autoCompleteStr &&  autoCompleteData.length" class="auto-complete">
+      <ul>
+        <li v-for="(word, index) in autoCompleteData" :key="index" @click="handleOnSubmit(word.words)">
+          <span>{{ word.words }}</span>
+          <span>约{{ word.goods_num }}个商品</span>
+        </li>
+      </ul>
+    </div>
+    <template v-else>
+      <div class="hot-keyword-search">
         <div class="title-hot-keyword">
           <span>大家都在搜</span>
         </div>
@@ -46,24 +56,25 @@
           </ul>
         </div>
       </div>
-    </div>
-    <div class="history-search">
-      <template v-if="searchHistory && searchHistory.length">
-        <ul>
-          <li v-for="(his, index) in searchHistory" :key="his" class="his-item">
-            <span @click="handleOnSubmit(his)">{{ his }}</span>
-            <i @click="handleDeleteHistory(index)" class="icon-close"></i>
-          </li>
-        </ul>
-        <van-button size="small" class="clear-his-btn" @click="handleClearHistory">清空搜索历史</van-button>
-      </template>
-      <div v-else style="width: 100%;text-align: center;line-height: 100px">暂无搜索记录...</div>
-    </div>
+      <div class="history-search">
+        <template v-if="searchHistory && searchHistory.length">
+          <ul>
+            <li v-for="(his, index) in searchHistory" :key="his" class="his-item">
+              <span @click="handleOnSubmit(his)">{{ his }}</span>
+              <i @click="handleDeleteHistory(index)" class="icon-close"></i>
+            </li>
+          </ul>
+          <van-button size="small" class="clear-his-btn" @click="handleClearHistory">清空搜索历史</van-button>
+        </template>
+        <div v-else style="width: 100%;text-align: center;line-height: 100px">暂无搜索记录...</div>
+      </div>
+    </template>
   </van-popup>
 </template>
 
 <script>
   import * as API_Home from '@/api/home'
+  import * as API_Goods from '@/api/goods'
   import Storage from '@/utils/storage'
 
   export default {
@@ -78,11 +89,18 @@
         // 搜索类型
         searchType: '商品',
         // 搜索历史
-        searchHistory: []
+        searchHistory: [],
+        // 自动补全数据
+        autoCompleteData: '',
+        // 自动补全字符串
+        autoCompleteStr: ''
       }
     },
+    watch: {
+      keyword: 'handleSearchChange'
+    },
     mounted() {
-       /** 获取热门关键词 */
+      /** 获取热门关键词 */
       API_Home.getHotKeywords().then(response => this.hot_keywords = response)
       this.$nextTick(() => {
         document.querySelector('body').addEventListener('click', this.handleCloseSearcyType);
@@ -92,12 +110,6 @@
       if(searchHistory) this.searchHistory = JSON.parse(searchHistory)
     },
     methods: {
-      /** 关键字发生改变 */
-      handleKeywordChnaged(event) {
-        let _str = event.target.value || ''
-        _str = _str.replace('\'', '')
-        this.GET_AutoCompleteWords(_str)
-      },
       /** 隐藏搜索类型盒子 */
       handleCloseSearcyType() {
         this.showSearchType = false
@@ -132,6 +144,21 @@
         this.$confirm('确定要清空搜索历史吗？', () => {
           this.$set(this, 'searchHistory', [])
           Storage.removeItem('search_history')
+        })
+      },
+      /** 搜索关键字发生改变 */
+      handleSearchChange() {
+        let _str = this.keyword
+        if (this.searchType !== '商品') return
+        if (!_str) {
+          this.autoCompleteData = []
+          return
+        }
+        if (_str === this.autoCompleteStr) return
+        this.autoCompleteStr = _str
+        _str = _str.trim()
+        API_Goods.getKeywordNum(_str).then(response => {
+          this.autoCompleteData = response
         })
       }
     },
@@ -353,6 +380,17 @@
     .clear-his-btn {
       display: block;
       margin: 10px auto;
+    }
+  }
+  .auto-complete {
+    height: calc(100% - 50px);
+    background-color: #FFFFFF;
+    padding: 0 10px;
+    li {
+      display: flex;
+      justify-content: space-between;
+      line-height: 30px;
+      color: #333;
     }
   }
 </style>

@@ -1,10 +1,49 @@
 <template>
   <div>
     <en-table-layout
-      :toolbar="false"
       :tableData="tableData.data"
       :loading="loading"
     >
+      <div slot="toolbar" class="inner-toolbar">
+        <div class="toolbar-btns"></div>
+        <div class="toolbar-search">
+          <en-table-search
+            @search="searchEvent"
+            @advancedSearch="advancedSearchEvent"
+            advanced
+          >
+            <template slot="advanced-content">
+              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+                <el-form-item label="商品名称">
+                  <el-input size="medium" v-model="advancedForm.goods_name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="会员名称">
+                  <el-input size="medium" v-model="advancedForm.member_name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="评价">
+                  <el-select v-model="advancedForm.grade" placeholder="请选择" clearable>
+                    <el-option label="好评" value="good"/>
+                    <el-option label="中评" value="neutral"/>
+                    <el-option label="差评" value="bad"/>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="回复状态">
+                  <el-select v-model="advancedForm.reply_status" placeholder="请选择" clearable>
+                    <el-option label="已回复" value="1"/>
+                    <el-option label="未回复" value="0"/>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="是否有图">
+                  <el-select v-model="advancedForm.have_image" placeholder="请选择" clearable>
+                    <el-option label="有图" :value="true"/>
+                    <el-option label="无图" :value="false"/>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+            </template>
+          </en-table-search>
+        </div>
+      </div>
       <template slot="table-columns">
         <el-table-column prop="member_name" label="会员名称"/>
         <el-table-column label="商品名称">
@@ -56,7 +95,6 @@
             <a v-for="(image, index) in reviewComments.images" :href="image" :key="index" target="_blank">
               <img :src="image" style="max-width: 150px;height: 80px;display: inline-block;margin-right: 10px">
             </a>
-
           </div>
         </el-form-item>
         <template v-if="reviewComments.reply_status === 1">
@@ -92,7 +130,11 @@
         // 查看评论 dialog
         dialogReviewVisible: false,
         // 查看评论
-        reviewComments: {}
+        reviewComments: {},
+        // 关键字
+        keyword: '',
+        // 高级搜索
+        advancedForm: {}
       }
     },
     mounted() {
@@ -120,6 +162,27 @@
       /** 分页页数发生改变 */
       handlePageCurrentChange(page) {
         this.params.page_no = page
+        this.GET_CommentList()
+      },
+
+      /** 搜索事件触发 */
+      searchEvent(keyword) {
+        this.params.keyword = keyword
+        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
+        this.params.page_no = 1
+        this.GET_CommentList()
+      },
+
+      /** 高级搜索事件触发 */
+      advancedSearchEvent() {
+        const { advancedForm } = this
+        Object.keys(advancedForm).forEach(key => {
+          if (advancedForm[key] !== undefined) {
+            this.params[key] = advancedForm[key]
+          }
+        })
+        delete this.params.keyword
+        this.params.page_no = 1
         this.GET_CommentList()
       },
 

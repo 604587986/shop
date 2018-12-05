@@ -65,7 +65,7 @@
               <span v-show="activeCategoryName3"> > {{ activeCategoryName3 }}</span>
               <span v-if="!activeCategoryName1" v-html="baseInfoForm.category_name"></span>
             </el-form-item>
-            <el-form-item label="商品分组：" >
+            <el-form-item label="店铺商品分组：" >
               <!--商品分组 获取分类列表 传入默认值-->
               <en-category-picker
                 @changed="changeGoodsCateGory"
@@ -73,7 +73,7 @@
                 :defaultVal="baseInfoForm.shop_cat_id" />
             </el-form-item>
             <p class="goods-group-manager">
-              商品可以从属于店铺的多个分类之下，店铺分类可以由 "商家中心 -> 商品 -> 分组管理" 中自定义
+              商品可以从属于店铺的某个分组之下，店铺分组可以由 "商家中心 -> 商品管理 -> 分组管理" 中自定义
             </p>
             <el-form-item label="商品品牌：" >
               <el-select
@@ -109,22 +109,22 @@
           <h4>商品信息</h4>
           <div>
             <el-form-item label="商品名称：" prop="goods_name" class="goods-name-width">
-              <el-input v-model="baseInfoForm.goods_name" maxlength="60" minlength="3" placeholder="3-60个字符"></el-input>
+              <el-input v-model="baseInfoForm.goods_name" @change="() => { baseInfoForm.goods_name = baseInfoForm.goods_name.trim() }" :maxlength="60" :minlength="3" placeholder="3-60个字符"></el-input>
             </el-form-item>
             <el-form-item label="商品编号：" prop="sn">
-              <el-input v-model="baseInfoForm.sn"></el-input>
+              <el-input v-model="baseInfoForm.sn" :maxlength="20"></el-input>
             </el-form-item>
-            <el-form-item label="市场价格：" prop="mktprice">
+            <el-form-item label="市场价格：" prop="mktprice" :maxlength="10">
               <el-input placeholder="请输入市场价格" v-model="baseInfoForm.mktprice">
                 <template slot="prepend">¥</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="商品价格：" prop="price">
+            <el-form-item label="商品价格：" prop="price" :maxlength="10">
               <el-input placeholder="请输入商品价格" v-model="baseInfoForm.price">
                 <template slot="prepend">¥</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="成本价格：" prop="cost" >
+            <el-form-item label="成本价格：" prop="cost" :maxlength="10">
               <el-input placeholder="请输入成本价格" v-model="baseInfoForm.cost">
                 <template slot="prepend">¥</template>
               </el-input>
@@ -144,7 +144,6 @@
                 <template slot="prepend">kg</template>
               </el-input>
             </el-form-item>
-            <!--商品相册需批量添加 则去掉目前这句即可 但是编辑时就不显示图片了 此问题押后解决 :file-list="baseInfoForm.goods_gallery_list"-->
             <el-form-item label="商品图片：" prop="goods_gallery" style="width: 90%;text-align: left;">
               <el-upload
                 class="avatar-uploader goods-images"
@@ -182,7 +181,7 @@
                  @finalSku="finalSku"/>
             </el-form-item>
             <el-form-item label="总库存：" prop="quantity" style="width: 20%;text-align: left;">
-              <el-input v-model="baseInfoForm.quantity" disabled></el-input>
+              <el-input v-model="baseInfoForm.quantity" :disabled="currentStatus === 1 || isEditQuantity"></el-input>
             </el-form-item>
           </div>
         </div>
@@ -191,13 +190,13 @@
           <h4>seo</h4>
           <div>
             <el-form-item label="seo标题：">
-              <el-input placeholder="3-60个字符" class="seo-text"  v-model="baseInfoForm.page_title"></el-input>
+              <el-input placeholder="最多60个字符" class="seo-text" @change="() => { baseInfoForm.page_title = baseInfoForm.page_title.trim() }" :maxlength="60"  v-model="baseInfoForm.page_title"></el-input>
             </el-form-item>
             <el-form-item label="seo关键字：" >
-              <el-input type="textarea" class="seo-text" rows="5" v-model="baseInfoForm.meta_keywords"></el-input>
+              <el-input type="textarea" placeholder="最多200个字符" class="seo-text" rows="5" :maxlength="200" v-model="baseInfoForm.meta_keywords"></el-input>
             </el-form-item>
-            <el-form-item label="seo描述：" >
-              <el-input type="textarea" class="seo-text" rows="5" v-model="baseInfoForm.meta_description"></el-input>
+            <el-form-item label="seo描述：">
+              <el-input type="textarea" placeholder="最多500个字符" class="seo-text" rows="5" :maxlength="500" v-model="baseInfoForm.meta_description"></el-input>
             </el-form-item>
           </div>
         </div>
@@ -239,16 +238,17 @@
                 @change="handleSwitchexchange">
               </el-switch>
             </el-form-item>
-            <p class="exchange-tip">添加为积分换购商品后,自今日起一年后自动过期</p>
           </div>
         </div>
         <!--积分配置-->
         <div class="base-info-item" v-if="isShowExchangeConfig">
           <h4>积分配置</h4>
           <div v-if="baseInfoForm.exchange">
-            <el-form-item label="兑换积分：" style="width: 50%;" prop="exchange_point">
-              <el-input v-model="baseInfoForm.exchange.exchange_money" style="width: 100px;"></el-input> 元 +
-              <el-input v-model.number="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分 可兑换此商品
+            <el-form-item label="兑换条件：" style="width: 25%;" prop="exchange_money">
+              <el-input placeholder="最多10个字符" :maxlength="10" v-model="baseInfoForm.exchange.exchange_money" style="width: 100px;"></el-input> 元
+            </el-form-item>
+            <el-form-item  style="width: 25%;" prop="exchange_point">
+              <el-input placeholder="最多10个字符" :maxlength="10" v-model.number="baseInfoForm.exchange.exchange_point" style="width: 100px;"></el-input> 积分
             </el-form-item>
             <el-form-item label="积分商品分类：" >
               <el-select
@@ -281,6 +281,8 @@
               :prop="'goods_params_list.' + index + '.param_value'"
               :rules="goods_params_list.required === 1 ? {required: true, message: `${goods_params_list.param_name}不能为空`, trigger: 'change' } : {}">
               <el-input
+                placeholder="长度为最多100个字符"
+                maxlength="100"
                 v-if="goods_params_list.param_type === 1"
                 v-model="goods_params_list.param_value" >
               </el-input>
@@ -329,7 +331,7 @@
         <el-button
           type="primary"
           @click="handleUnderGoods"
-          v-if="currentStatus === 1 && ( activestep === 1 || activestep === 2)"
+          v-if="currentStatus === 1 && ( activestep === 1 || activestep === 2) && baseInfoForm.market_enable === 1"
         >下架</el-button>
         <el-button
           type="primary"
@@ -392,6 +394,8 @@
         setTimeout(() => {
           if (!RegExp.money.test(value)) {
             callback(new Error('请输入正整数或者两位小数'))
+          } else if (parseFloat(value) > 99999999) {
+            callback(new Error('价格设置超过上限值'))
           } else {
             callback()
           }
@@ -464,17 +468,30 @@
 
       const checkExchangePoint = (rule, value, callback) => {
         if (this.baseInfoForm.exchange.enable_exchange && !this.baseInfoForm.exchange.exchange_point) {
-          return callback(new Error('积分值不能为空'))
+          return callback(new Error('积分值不能为空且不能为0'))
         }
         setTimeout(() => {
-          if (!Number.isInteger(this.baseInfoForm.exchange.exchange_point)) {
-            callback(new Error('请输入数字值'))
+          if (!RegExp.integer.test(this.baseInfoForm.exchange.exchange_point)) {
+            callback(new Error('请输入正整数'))
           } else {
-            if (this.baseInfoForm.exchange.exchange_point <= 0) {
+            if (parseInt(this.baseInfoForm.exchange.exchange_point) <= 0) {
               callback(new Error('请输入大于0的积分值'))
             } else {
               callback()
             }
+          }
+        }, 1000)
+      }
+
+      const checkExchangeMoney = (rule, value, callback) => {
+        if (this.baseInfoForm.exchange.exchange_money !== 0 && !this.baseInfoForm.exchange.exchange_money) {
+          return callback(new Error('积分所需金额不能为空'))
+        }
+        setTimeout(() => {
+          if (!RegExp.money.test(this.baseInfoForm.exchange.exchange_money)) {
+            callback(new Error('请输入正确的金额'))
+          } else {
+            callback()
           }
         }, 1000)
       }
@@ -629,6 +646,9 @@
         /** 是否自动生成货号 */
         productSn: false,
 
+        /** 总库存是否可编辑 默认可以 false可编辑 true不可编辑 */
+        isEditQuantity: false,
+
         /** 请求的商品参数组列表 */
         goodsParams: [
           {
@@ -674,7 +694,9 @@
         /** 商品详情的校验规则 */
         baseInfoFormRule: {
           goods_name: [
-            { required: true, message: '请输入商品名称', trigger: 'blur' }
+            { required: true, message: '请输入商品名称', trigger: 'blur' },
+            { whitespace: true, message: '商品名称不可为纯空格', trigger: 'blur' },
+            { min: 3, max: 60, message: '长度在 3 到 60 个字符', trigger: 'blur' }
           ],
           sn: [
             { required: true, message: '请输入商品编号', trigger: 'blur' },
@@ -704,6 +726,9 @@
           ],
           template_id: [
             { validator: checkTplId, trigger: 'blur' }
+          ],
+          exchange_money: [
+            { validator: checkExchangeMoney, trigger: 'blur' }
           ],
           exchange_point: [
             { validator: checkExchangePoint, trigger: 'blur' }
@@ -795,7 +820,7 @@
               if (this.activestep++ > 2) return
             } else {
               this.loading = false
-              this.$message.error('表单中存在未填写的值')
+              this.$message.error('表单中存在未填写或者填写有误的地方,已有错误标示，请检查并正确填写')
             }
           })
           return
@@ -1078,6 +1103,7 @@
             this.$nextTick(() => { this.setSort() })
             this.baseInfoForm.goods_gallery = this.baseInfoForm.goods_gallery_list.toString()
           }
+          if (!this.baseInfoForm.goods_gallery_list) this.baseInfoForm.goods_gallery_list = []
           this.goodsGalleryList = JSON.parse(JSON.stringify(this.baseInfoForm.goods_gallery_list))
           /** 商品规格校验属性  */
           if (!this.baseInfoForm.sku_list) {
@@ -1277,6 +1303,7 @@
 
       /** 规格选择器规格数据改变时触发 */
       finalSku(val) {
+        this.isEditQuantity = !!val.length
         /** 动态修改总库存 每次设置为0  此处每次进行循环计算 存在性能浪费 */
         this.baseInfoForm.quantity = 0
         val.forEach(key => {
@@ -1357,10 +1384,6 @@
           })
           return false
         }
-        if (isDraft) {
-          this.productSn = true
-          return true
-        }
         /** 规格值空校验 */
         let _result = false
         this.baseInfoForm.sku_list.forEach(key => {
@@ -1373,6 +1396,35 @@
         if (_result) {
           this.$message.error('存在未填写的规格值')
           return false
+        }
+        // 规格值校验
+        let spec_fun = false
+        let spec_tip
+        this.baseInfoForm.sku_list.forEach(key => {
+          if (!RegExp.money.test(key.cost)) {
+            spec_fun = true
+            spec_tip = '请输入正确的成本价金额'
+          }
+          if (!RegExp.money.test(key.price)) {
+            spec_fun = true
+            spec_tip = '请输入正确的价格'
+          }
+          if (!(parseInt(key.weight) >= 0 && parseInt(key.weight) < 99999999)) {
+            spec_fun = true
+            spec_tip = '重量须为0 - 99999999之间的整数'
+          }
+          if (!(parseInt(key.quantity) >= 0 && parseInt(key.quantity) < 99999999) || !/^[0-9]\d*$/.test(key.quantity)) {
+            spec_fun = true
+            spec_tip = '库存须为0 - 99999999之间的整数'
+          }
+        })
+        if (spec_fun) {
+          this.$message.error(spec_tip)
+          return false
+        }
+        if (isDraft) {
+          this.productSn = true
+          return true
         }
         return true
       }
@@ -1494,19 +1546,6 @@
       font-size: 13px;
     }
 
-    /*!*积分提示*!*/
-    p.exchange-tip {
-      width: 40%;
-      margin:0 0 10px 38px;
-      padding: 5px;
-      padding-left: 5%;
-      text-align: left;
-      font-size: 13px;
-      color: #8a6d3b;
-      background: #fcf8e3;
-      border: 1px solid #faebcc;
-    }
-
     /*teatarea*/
     /deep/ .el-textarea {
       width: 150%;
@@ -1538,16 +1577,6 @@
       padding-left: 12%;
       text-align: left;
       color: #999;
-    }
-    /*积分提示*/
-    p.exchange-tip {
-      margin:0;
-      padding: 10px;
-      padding-left: 12%;
-      text-align: left;
-      color: #8a6d3b;
-      background: #fcf8e3;
-      border: 1px solid #faebcc;
     }
     /deep/ .el-collapse-item__content {
       padding: 10px 0;

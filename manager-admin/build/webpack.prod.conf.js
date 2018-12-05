@@ -10,7 +10,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const { file_version } = require('../ui-domain')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -29,8 +28,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath(`js/[name].${file_version}.js`),
-    chunkFilename: utils.assetsPath(`js/[id].${file_version}.js`)
+    filename: utils.assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -48,7 +47,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath(`css/[name].${file_version}.css`),
+      filename: utils.assetsPath('css/[name].[contenthash].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
@@ -130,8 +129,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         return context && (context.indexOf('xlsx') >= 0);
       }
     }),
-     // split codemirror into its own file
-     new webpack.optimize.CommonsChunkPlugin({
+    // split codemirror into its own file
+    new webpack.optimize.CommonsChunkPlugin({
       async: 'codemirror',
       minChunks(module) {
         var context = module.context;

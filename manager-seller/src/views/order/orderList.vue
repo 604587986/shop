@@ -7,6 +7,7 @@
       :tableData="tableData">
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
+          <span style="font-size: 14px;">订单状态：</span>
           <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus">
             <el-option
               v-for="item in orderStatusList"
@@ -22,7 +23,7 @@
             @advancedSearch="advancedSearchEvent"
             advanced
             advancedWidth="465"
-            placeholder="请输入关键字">
+            placeholder="请输入订单编号或者商品名称">
             <template slot="advanced-content">
               <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
                 <el-form-item label="订单编号">
@@ -81,7 +82,10 @@
                 <a :href="`${MixinBuyerDomain}/goods/${shop.goods_id}`" target="_blank" style="color: #00a2d4;">{{ shop.name }}</a>
               </span>
               <span>
-                <span>{{shop.original_price | unitPrice('￥')}}</span> × <span>{{ shop.num }}</span>
+                <span>{{shop.original_price | unitPrice('￥')}}</span> × <span class="goods—price">{{ shop.num }}</span>
+                <a :href="`${MixinBuyerDomain}/goods/snapshot?id=${shop.snapshot_id}&sku_id=${shop.sku_id}`" target="_blank">
+                  <el-button type="text">交易快照</el-button>
+                </a>
               </span>
             </p>
           </td>
@@ -160,7 +164,9 @@
           { value: 'ALL', label: '全部' },
           { value: 'WAIT_PAY', label: '待付款' },
           { value: 'WAIT_SHIP', label: '待发货' },
-          { value: 'WAIT_ROG', label: '待收货' }
+          { value: 'WAIT_ROG', label: '待收货' },
+          { value: 'COMPLETE', label: '已完成' },
+          { value: 'CANCELLED', label: '已取消' }
         ],
 
         /** 表格最大高度 */
@@ -397,10 +403,14 @@
         }
       }
     }
-    /*图片*/
+    /* 商品图片 */
     .goods-image {
       width: 50px;
       height: 50px;
+    }
+    /** 商品价格 */
+    .goods—price {
+      margin-right: 50px;
     }
   }
 
