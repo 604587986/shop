@@ -14,7 +14,7 @@
           <van-collapse-item
             class="cell-content"
             :border="false"
-            :title="`订单编号：${item.sn}`"
+            :title="`业绩编号：${item.sn}`"
             :name="_index"
             v-for="(item, _index) in performanceList"
             :key="_index">
