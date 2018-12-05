@@ -7,10 +7,12 @@
           <div class="promotions-cell">
             <template v-for="(prom, index) in promotions">
               <template v-if="prom.full_discount_vo">
-                <em v-if="prom.full_discount_vo.is_full_minus === 1" class="hl_red_bg" :key="index + '-full'">满减</em>
-                <em v-if="prom.full_discount_vo.is_discount === 1" class="hl_red_bg" :key="index + '-full'">打折</em>
-                <em v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'" class="hl_red_bg">赠礼</em>
-                <em v-if="prom.full_discount_vo.coupon_do" :key="index + '-coupon'" class="hl_red_bg">赠券</em>
+                <em v-if="prom.full_discount_vo.is_full_minus" :key="index + '-full'" class="hl_red_bg">满减</em>
+                <em v-if="prom.full_discount_vo.is_discount" :key="index + '-discount'" class="hl_red_bg">打折</em>
+                <em v-if="prom.full_discount_vo.is_send_gift" :key="index + '-gift'" class="hl_red_bg">赠礼</em>
+                <em v-if="prom.full_discount_vo.is_send_bonus" :key="index + '-coupon'" class="hl_red_bg">赠券</em>
+                <em v-if="prom.full_discount_vo.is_free_ship" :key="index + '-free_ship'" class="hl_red_bg">免邮</em>
+                <em v-if="prom.full_discount_vo.is_send_point" :key="index + '-send_point'" class="hl_red_bg">积分</em>
               </template>
               <em :key="index" v-if="prom.minus_vo" class="hl_red_bg">单品立减</em>
               <em :key="index" v-if="prom.half_price_vo" class="hl_red_bg">第二件半价</em>
@@ -27,7 +29,7 @@
         <template v-for="(prom, index) in promotions">
           <!--满减-->
           <template v-if="prom.full_discount_vo">
-            <van-cell :key="index + '-full'">
+            <van-cell v-if="prom.full_discount_vo.is_full_minus" :key="index + '-full'">
               <div v-if="prom.full_discount_vo.is_full_minus === 1" slot="title">
                 <em class="hl_red_bg">满减</em>
                 <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立减现金 <span class="price">{{ prom.full_discount_vo.minus_value }}元</span></em>
@@ -37,22 +39,38 @@
                 <em class="hl_red">满{{ prom.full_discount_vo.full_money }}元，立享优 <span class="price">{{ prom.full_discount_vo.discount_value }}折</span>优惠</em>
               </div>
             </van-cell>
-            <van-cell v-if="prom.full_discount_vo.full_discount_gift_do" :key="index + '-gift'">
+            <van-cell v-if="prom.full_discount_vo.is_send_gift" :key="index + '-gift'">
               <div slot="title">
                 <em class="hl_red_bg">赠礼</em>
                 <em class="hl_red">
-                  价值<span class="price">{{ prom.full_discount_vo.full_discount_gift_do.gift_price }}元</span>的
+                  赠送价值<span class="price">{{ prom.full_discount_vo.full_discount_gift_do.gift_price }}元</span>的
                   <a :href="prom.full_discount_vo.full_discount_gift_do.gift_img" target="_blank">
                     <img :src="prom.full_discount_vo.full_discount_gift_do.gift_img" class="gift-image">
                   </a>
                 </em>
               </div>
             </van-cell>
-            <van-cell v-if="prom.full_discount_vo.coupon_do" :key="index + '-coupon'">
+            <van-cell v-if="prom.full_discount_vo.is_send_bonus" :key="index + '-coupon'">
               <div slot="title">
                 <em class="hl_red_bg">赠券</em>
                 <em class="hl_red">
-                  <span class="price">{{ prom.full_discount_vo.coupon_do.coupon_price }}元</span>优惠券
+                  赠送<span class="price">{{ prom.full_discount_vo.coupon_do.coupon_price }}元</span>优惠券
+                </em>
+              </div>
+            </van-cell>
+            <van-cell v-if="prom.full_discount_vo.is_free_ship" :key="index + '-free_ship'">
+              <div slot="title">
+                <em class="hl_red_bg">免邮</em>
+                <em class="hl_red">
+                  满<span class="price">{{ prom.full_discount_vo.full_money }}元</span>免邮费
+                </em>
+              </div>
+            </van-cell>
+            <van-cell v-if="prom.full_discount_vo.is_send_point" :key="index + '-send_point'">
+              <div slot="title">
+                <em class="hl_red_bg">积分</em>
+                <em class="hl_red">
+                  赠送<span class="price">{{ prom.full_discount_vo.point_value }}</span>积分
                 </em>
               </div>
             </van-cell>

@@ -4,7 +4,6 @@
 
 <script>
   export default {
-    name: 'shop',
-    layout: 'full'
+    name: 'shop'
   }
 </script>

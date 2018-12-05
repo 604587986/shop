@@ -360,13 +360,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-right: 17px;
       a {
         display: inline-block;
       }
       img {
         display: block;
-        width: 190px;
+        width: 160px;
         height: 50px;
       }
       .del-btn {

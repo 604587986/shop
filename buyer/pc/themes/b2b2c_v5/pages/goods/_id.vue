@@ -212,6 +212,7 @@
         const ele = $('.' + cl)
         ele.length && ele.remove()
       })
+      window._bd_share_main = undefined
     }
   }
 </script>
