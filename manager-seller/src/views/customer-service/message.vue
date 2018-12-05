@@ -182,17 +182,18 @@
         this.GET_MsgsList()
       },
 
+      /** 切换tab */
       changeTabs(tab) {
         this.params = {
           page_no: 1,
-          page_size: 10
+          page_size: 10,
+          is_read: parseInt(tab.name)
         }
-        if (tab.name) this.GET_MsgsList(tab.name)
+        this.GET_MsgsList()
       },
 
       /** 获取消息列表*/
-      GET_MsgsList(is_read = 0) { // 传入参数 默认0未读 1已读
-        this.params = { ...this.params, is_read }
+      GET_MsgsList() {
         this.loading = true
         API_Messages.getMsgsList(this.params).then(response => {
           this.loading = false
@@ -245,7 +246,7 @@
 
       /** 执行删除*/
       Delete_messages(ids) {
-        API_Messages.deleteMsgs(ids, {}).then(response => {
+        API_Messages.deleteMsgs(ids, {}).then(() => {
           this.$message.success('删除成功！')
           this.GET_MsgsList()
         })
