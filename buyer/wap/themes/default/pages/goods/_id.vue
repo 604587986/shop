@@ -66,6 +66,10 @@
         <goods-comments :goods-id="goods.goods_id" :grade="goods.grade"/>
         <!--评价 end-->
         <span class="separated"></span>
+        <!--商品咨询 start-->
+        <goods-ask :goods-id="goods.goods_id"/>
+        <!--商品咨询 end-->
+        <span class="separated"></span>
         <!--商品简介、参数 start-->
         <van-tabs class="params-container" :line-width="100">
           <van-tab title="商品介绍">

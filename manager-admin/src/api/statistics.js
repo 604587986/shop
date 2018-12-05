@@ -353,6 +353,19 @@ export function getSalesRevenueStatisticsTotal(params) {
 }
 
 /**
+ * 获取退单记录
+ * @param params
+ */
+export function getSalesAftersaleStatistics(params) {
+  return request({
+    url: 'admin/statistics/order/aftersales/money',
+    method: 'get',
+    loading: false,
+    params
+  })
+}
+
+/**
  * 获取区域分析表格
  * @param params
  */
