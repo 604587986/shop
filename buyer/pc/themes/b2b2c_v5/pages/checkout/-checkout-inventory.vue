@@ -25,17 +25,17 @@
           <div class="discount-inventory">
             <div class="title-item-inventory">优惠折扣</div>
             <div class="content-item-inventory">
-              <template v-if="!shopCoupons[shopIndex] || !shopCoupons[shopIndex].member_coupon_list">
+              <template v-if="!shop.coupon_list || !shop.coupon_list.length">
                 <p class="no-item-discount-inventory">您在该店铺还没有领到优惠劵，去&nbsp;
                   <nuxt-link :to="'/shop/' + shop.seller_id" target="_blank" style="color: #005ea7;">店铺</nuxt-link>&nbsp;看看吧！
                 </p>
               </template>
               <template v-else>
                 <div
-                  v-for="(coupon, couponIndex) in shopCoupons[shopIndex].member_coupon_list"
+                  v-for="(coupon, couponIndex) in shop.coupon_list"
                   :key="couponIndex"
                   class="item-discount-inventory"
-                  :class="[coupon.used_status === 1 && 'selected']"
+                  :class="[coupon.selected === 1 && 'selected']"
                   @click="useCoupon(shop.seller_id, shopIndex, coupon, couponIndex)"
                 >
                   <div class="lace-item-discount">
@@ -47,9 +47,9 @@
                     <span class="bg-select-discount"></span>
                     <i class="iconfont ea-icon-check"></i>
                   </div>
-                  <div class="money-item-discount">￥{{ coupon.coupon_price || unitPrice }}</div>
+                  <div class="money-item-discount">￥{{ coupon.amount || unitPrice }}</div>
                   <div class="detail-item-discount">
-                    <p class="first">满&nbsp;<span style="color: red;">￥{{ coupon.coupon_threshold_price || unitPrice }}</span>&nbsp;可使用</p>
+                    <p class="first">{{ coupon.use_term }}</p>
                     <p>有效期至{{ coupon.end_time | unixToDate('yyyy-MM-dd') }}</p>
                   </div>
                 </div>
@@ -150,7 +150,7 @@
   import * as API_Trade from '@/api/trade'
   export default {
     name: 'checkout-inventory',
-    props: ['inventoryList', 'shop-coupons', 'remark'],
+    props: ['inventoryList', 'remark'],
     data() {
       return {
         iRemark: this.remark
@@ -163,13 +163,13 @@
       /** 使用优惠券 */
       useCoupon(shop_id, shopIndex, coupon, couponIndex) {
         // 取消使用
-        if (coupon.used_status === 1) {
+        if (coupon.selected === 1) {
           API_Trade.useCoupon(shop_id, 0).then(() => {
-            this.$emit('coupon-change', shopIndex, couponIndex, false)
+            this.$emit('coupon-change')
           })
         } else {
-          API_Trade.useCoupon(shop_id, coupon.mc_id).then(() => {
-            this.$emit('coupon-change', shopIndex, couponIndex, true)
+          API_Trade.useCoupon(shop_id, coupon.member_coupon_id).then(() => {
+            this.$emit('coupon-change')
           })
         }
       },
