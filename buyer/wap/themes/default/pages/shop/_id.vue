@@ -55,7 +55,7 @@
       margin-top: 5px !important;
       padding: 0 10px !important;
       img {
-        width: 100%;
+        max-width: 100%;
       }
     }
   }
