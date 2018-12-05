@@ -52,20 +52,6 @@
           <div slot="tip" class="el-upload__tip">此处为您的店铺logo，将显示在店铺Logo栏里。 （请上传200x60规格的图片！）</div>
         </el-upload>
       </el-form-item>
-      <!--店铺banner-->
-      <el-form-item label="店铺横幅：" prop="shop_banner">
-        <el-upload
-          class="upload-demo"
-          key="shop_banner"
-          :on-success="uploadSuccessBanner"
-          :action="`${MixinUploadApi}?scene=shop`"
-          :file-list="fileList_banner"
-          ref="fileList_banner"
-          list-type="picture">
-          <el-button size="small" type="primary">上传<i class="el-icon-upload el-icon--right"></i></el-button>
-          <div slot="tip" class="el-upload__tip">此处为您的店铺条幅，将显示在移动端。（请上传638x158规格的图片！） </div>
-        </el-upload>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSaveShopData('shopDataForm')">保存修改</el-button>
       </el-form-item>
@@ -127,10 +113,7 @@
           shop_desc: '',
 
           /** 店铺logo*/
-          shop_logo: '',
-
-          /** 店铺横幅*/
-          shop_banner: ''
+          shop_logo: ''
         },
 
         /** 地区信息*/
@@ -183,7 +166,6 @@
         API_Shop.getShopData().then(response => {
           this.shopDataForm = { ...response }
           this.fileList_logo = [{ url: this.shopDataForm.shop_logo }]
-          this.fileList_banner = [{ url: this.shopDataForm.shop_banner }]
           this.areas = [this.shopDataForm.shop_province_id, this.shopDataForm.shop_city_id,
             this.shopDataForm.shop_county_id || -1, this.shopDataForm.shop_town_id || -1]
         })
@@ -202,8 +184,6 @@
               link_phone: this.shopDataForm.link_phone,
 
               shop_logo: this.shopDataForm.shop_logo,
-
-              shop_banner: this.shopDataForm.shop_banner,
 
               shop_desc: this.shopDataForm.shop_desc || '',
 
@@ -224,13 +204,6 @@
         this.fileList_logo.shift()
         this.fileList_logo.push(response)
         this.shopDataForm.shop_logo = response.url
-      },
-
-      /** 上传banner成功之后*/
-      uploadSuccessBanner(response) {
-        this.fileList_banner.shift()
-        this.fileList_banner.push(response)
-        this.shopDataForm.shop_banner = response.url
       }
     }
   }

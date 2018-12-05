@@ -130,11 +130,11 @@
     name: 'categoryManage',
     data() {
       const checkSort = (rule, value, callback) => {
-        if (!value) {
+        if (!value && value !== 0) {
           return callback(new Error('排序不能为空'))
         }
         setTimeout(() => {
-          if (!RegExp.integer.test(value)) {
+          if (!RegExp.integer.test(value) && value !== 0) {
             callback(new Error('请输入正整数'))
           } else {
             callback()
@@ -260,7 +260,7 @@
 
       /** 保存商品分组 */
       reserveCategoryGoods(FormName) {
-        this.$refs['baseInfoForm'].validate((valid) => {
+        this.$refs[FormName].validate((valid) => {
           if (valid) {
             let params = {}
             if (this.goodsCatData.category_parent) {
@@ -278,13 +278,13 @@
               }
             }
             if (this.is_edit === 1) { // 添加
-              API_goodsCategory.addGoodsCategory(params).then(response => {
+              API_goodsCategory.addGoodsCategory(params).then(() => {
                 this.goodsCategoryShow = false
                 this.$message.success('添加成功')
                 this.GET_GoodsCategoryList()
               })
             } else { // 编辑
-              API_goodsCategory.updateGoodsCategory(this.categoryID, params).then(response => {
+              API_goodsCategory.updateGoodsCategory(this.categoryID, params).then(() => {
                 this.goodsCategoryShow = false
                 this.$message.success('编辑成功')
                 this.GET_GoodsCategoryList()
