@@ -48,3 +48,25 @@ export function editPointSetting(params) {
     data: params
   })
 }
+
+/**
+ * 获取排队设置
+ */
+export function getLineupSetting() {
+  return request({
+    url: 'admin/lineup/parame',
+    method: 'get'
+  })
+}
+
+/**
+ * 修改排队设置
+ * @param params
+ */
+export function editLineupSetting(id,params) {
+  return request({
+    url: `admin/lineup/parame/edit/${id}`,
+    method: 'put',
+    data: params
+  })
+}

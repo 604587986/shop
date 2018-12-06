@@ -20,6 +20,9 @@ export default {
     orderDetail: '订单详情',
     refundDetail: '售后详情',
 
+    lineup: '排队管理',
+    lineupList: '排队列表',
+
     member: '会员管理',
     memberManage: '管理会员',
     memberList: '会员列表',

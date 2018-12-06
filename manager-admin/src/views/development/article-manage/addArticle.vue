@@ -20,6 +20,23 @@
       <el-form-item label="文章外链" prop="outside_url" style="width: 500px">
         <el-input v-model="articleForm.outside_url"></el-input>
       </el-form-item>
+      <el-form-item label="封面图" prop="cover" style="width: 500px">
+        <el-upload
+            :action="MixinUploadApi"
+            list-type="picture"
+            :on-success="(res) => { articleForm.cover = res.url }"
+            :on-remove="() => { articleForm.cover = '' }"
+            :file-list="articleForm.cover ? [{name: 'cover', url: articleForm.category_image}] : []"
+            :multiple="false"
+            :limit="1"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <span slot="tip" class="el-upload__tip">&nbsp;建议上传jpg/png文件，且不超过1MB</span>
+          </el-upload>
+      </el-form-item>
+      <el-form-item label="描述" prop="describe" style="width: 500px">
+        <el-input v-model="articleForm.describe" type="textarea"></el-input>
+      </el-form-item>
       <el-form-item label="文章内容" prop="content">
         <UE ref="ue" :defaultMsg="articleForm.content"></UE>
       </el-form-item>

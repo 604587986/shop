@@ -140,6 +140,18 @@ const asyncRouters = [
       { path: 'refund/:sn', component: () => import('@/views/order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }}
     ]
   },
+  // 排队管理
+  {
+    path: '/lineup',
+    component: Layout,
+    name: 'lineup',
+    redirect: '/lineup/lineup-list',
+    alwaysShow:true,
+    meta: { title: 'lineup', icon: 'order-manage' },
+    children: [
+      { path: 'lineup-list', component: () => import('@/views/lineup/lineupList'), name: 'lineupList', meta: { title: 'lineupList' }},
+    ]
+  },
   // 会员管理
   {
     path: '/member',

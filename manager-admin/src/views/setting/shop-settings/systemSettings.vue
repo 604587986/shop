@@ -13,6 +13,9 @@
       <el-tab-pane label="积分设置" class="point-pane">
         <system-settings-point/>
       </el-tab-pane>
+      <el-tab-pane label="排队设置">
+        <system-settings-lineup/>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -22,6 +25,7 @@
   import systemSettingsGoods from './systemSettingsGoods'
   import SystemSettingsOrder from './systemSettingsOrder'
   import SystemSettingsPoint from './systemSettingsPoint'
+  import systemSettingsLineup from './systemSettingsLineup'
 
   export default {
     name: 'systemSettings',
@@ -29,7 +33,8 @@
       SystemSettingsSite,
       systemSettingsGoods,
       SystemSettingsOrder,
-      SystemSettingsPoint
+      SystemSettingsPoint,
+      systemSettingsLineup,
     }
   }
 </script>

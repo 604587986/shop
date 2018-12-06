@@ -20,6 +20,9 @@ export default {
     orderDetail: 'Order Detail',
     refundDetail: 'Refund Detail',
 
+    lineup: 'Manage Lineup',
+    lineupList: 'Lineup List',
+
     member: 'Member Manage',
     memberManage: 'Member Manage',
     memberList: 'Member List',

@@ -29,6 +29,36 @@
                 <el-form-item label="订单编号">
                   <el-input v-model="advancedForm.order_sn" clearable></el-input>
                 </el-form-item>
+                <el-form-item label="订单类型">
+                  <el-select v-model="advancedForm.order_type" placeholder="请选择订单类型">
+                    <el-option
+                      v-for="item in orderTypeList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="预付款是否完成">
+                  <el-select v-model="advancedForm.first_money_state" clearable placeholder="预付款是否完成">
+                    <el-option
+                      v-for="item in firstMoneyStatusList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="尾款是否完成">
+                  <el-select v-model="advancedForm.end_money_state" clearable placeholder="尾款是否完成">
+                    <el-option
+                      v-for="item in endMoneyStatusList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="商品名称">
                   <el-input v-model="advancedForm.goods_name" clearable></el-input>
                 </el-form-item>
@@ -167,6 +197,24 @@
           { value: 'WAIT_ROG', label: '待收货' },
           { value: 'COMPLETE', label: '已完成' },
           { value: 'CANCELLED', label: '已取消' }
+        ],
+
+        /** 订单类型 列表*/
+        orderTypeList: [
+          { value: 0, label: '普通订单' },
+          { value: 1, label: '服务订单' },
+        ],
+
+        /** 预付款状态 列表*/
+        firstMoneyStatusList: [
+          { value: 'no', label: '未完成' },
+          { value: 'yes', label: '已完成' },
+        ],
+
+        /** 尾款状态 列表*/
+        endMoneyStatusList: [
+          { value: 'no', label: '未完成' },
+          { value: 'yes', label: '已完成' },
         ],
 
         /** 表格最大高度 */
