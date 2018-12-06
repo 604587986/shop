@@ -35,7 +35,7 @@
                   v-for="(coupon, couponIndex) in shop.coupon_list"
                   :key="couponIndex"
                   class="item-discount-inventory"
-                  :class="[coupon.selected === 1 && 'selected']"
+                  :class="[coupon.selected === 1 && 'selected', coupon.enable === 0 && 'full']"
                   @click="useCoupon(shop.seller_id, shopIndex, coupon, couponIndex)"
                 >
                   <div class="lace-item-discount">
@@ -163,6 +163,10 @@
       /** 使用优惠券 */
       useCoupon(shop_id, shopIndex, coupon, couponIndex) {
         // 取消使用
+        if (coupon.enable === 0) {
+          this.$message.error('订单金额不满足此优惠券使用条件！')
+          return
+        }
         if (coupon.selected === 1) {
           API_Trade.useCoupon(shop_id, 0).then(() => {
             this.$emit('coupon-change')
