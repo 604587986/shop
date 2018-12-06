@@ -14,6 +14,7 @@
           <div class="coupon-name">
             <h2>优惠券</h2>
             <p>{{ coupon.title }}</p>
+            <p class="use-res">满{{ coupon.coupon_threshold_price }}元可使用</p>
           </div>
           <div class="coupon-receive">领</div>
         </div>
@@ -80,6 +81,9 @@
     }
   }
   .shop-coupons-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     width: 100%;
     margin-top: 10px;
     background: #fff;
@@ -88,46 +92,42 @@
   }
   .coupon-item {
     position: relative;
-    float: left;
     margin: 0 0 20px 30px;
-    position: relative;
     background: #b6bfa1;
     padding: 10px;
     .coupon-box {
+      display: flex;
       width: 180px;
       height: 80px;
       border: 1px solid #897459;
     }
     .coupon-price {
+      align-self: center;
       color: #424242;
       cursor: pointer;
-      float: left;
-      font-family: georgia;
+      font-family: georgia,serif;
       font-size: 40px;
-      height: 80px;
+      line-height: 35px;
       letter-spacing: -6px;
-      line-height: 80px;
       text-align: center;
       width: 90px;
     }
     .coupon-name {
-      float: left;
+      display: flex;
+      flex-direction: column;
       h2 {
         border-bottom: 1px dashed #faf6f0;
         cursor: pointer;
         display: block;
         font: 20px/37px "微软雅黑";
-        margin: 5px 0 0 0;
         text-align: center;
-        width: 80px;
       }
       p {
         color: #faf6f0;
         cursor: pointer;
         float: left;
         font: 12px/15px "微软雅黑";
-        text-align: left;
-        margin: 5px 0 0 0;
+        text-align: center;
       }
     }
     .coupon-receive {
