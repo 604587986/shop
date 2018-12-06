@@ -1,5 +1,5 @@
 <template>
-  <div v-if="time !== false && goodsList.length" class="seckill-container w">
+  <div v-if="time !== false && goodsList && goodsList.length" class="seckill-container w">
     <div class="seckill-hd">
       <a href="/seckill" class="seckill-hd-a" target="_blank">
         <div class="sk-title">限时抢购</div>
