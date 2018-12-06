@@ -28,11 +28,6 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <a target='_blank' :href="MixinBuyerDomain">
-            <el-dropdown-item>
-              浏览网站
-            </el-dropdown-item>
-          </a>
           <a target="_blank" :href="MixinBuyerDomain + '/member/account-safe'">
             <el-dropdown-item>
               修改密码

@@ -221,6 +221,8 @@
             ...this.params,
             order_status: data
           }
+          this.params.page_no = 1
+          this.params.page_size = 10
         }
         Object.keys(this.advancedForm).forEach(key => delete this.params[key])
         this.GET_OrderList()
