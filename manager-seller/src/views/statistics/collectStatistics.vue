@@ -101,6 +101,7 @@
               }
             },
             xAxis: {
+              name: '排名',
               type: 'category',
               data: response.xAxis
             },
