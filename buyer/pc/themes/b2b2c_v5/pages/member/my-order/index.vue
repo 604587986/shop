@@ -147,7 +147,6 @@
       handleCancelOrder(order_sn) {
         this.$layer.prompt({
           formType: 2,
-          value: ' ',
           title: '请输入取消原因'
         }, (value, index) => {
           const val = value.trim()

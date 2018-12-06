@@ -100,7 +100,4 @@
       }
     }
   }
-  .demo-form-inline {
-    text-align: center;
-  }
 </style>

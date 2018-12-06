@@ -17,8 +17,7 @@
           <li class="message-item" v-for="(message, index) in messageList" :key="index">
             <div class="msg-date">{{ message.send_time | unixToDate }}</div>
             <div class="msg-content">
-              <van-swipe-cell :right-width="65" :left-width="message.is_read === 0 ? 65 : 0">
-                <span slot="left" @click="handleReadMessage(message)">已读</span>
+              <van-swipe-cell :right-width="65">
                 <p v-if="message.title" class="msg-title">{{ message.title }}</p>
                 <div class="msg-detail">{{ message.content }}</div>
                 <span slot="right" @click="handleDeleteMessage(message)">删除</span>
@@ -99,12 +98,16 @@
         } else {
           delete params.read
         }
-        API_Message.getMessages(params).then(response => {
+        API_Message.getMessages(params).then(async response => {
           this.loading = false
           const { data } = response
           if (!data || !data.length) {
             this.finished = true
           } else {
+            if (params.read === 0) {
+              const ids = data.map(item => item.id).join(',')
+              await API_Message.messageMarkAsRead(ids)
+            }
             this.messageList.push(...data)
           }
         })

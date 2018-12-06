@@ -44,6 +44,7 @@ export function messageMarkAsRead(ids) {
   return request({
     url: `members/member-nocice-logs/${ids}/read`,
     method: Method.PUT,
+    loading: false,
     needToken: true
   })
 }

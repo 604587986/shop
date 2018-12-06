@@ -12,6 +12,7 @@
         <h2>{{ coupon.coupon_price }}</h2>
         <p>{{ coupon.title }}</p>
         <span>{{ coupon.start_time | unixToDate('yyyy-MM-dd') }} - {{ coupon.end_time | unixToDate('yyyy-MM-dd') }}</span>
+        <span>满{{ coupon.coupon_threshold_price }}元可使用</span>
       </li>
     </ul>
   </div>
@@ -82,7 +83,7 @@
     overflow: hidden;
   }
   .coupon-item {
-    background: url("../../../assets/images/background-shop-coupons.jpg") no-repeat left top;
+    background: url("../../../assets/images/background-shop-coupons.jpg") no-repeat center top;
     margin: 0 30px;
     display: inline-block;
     border: 1px solid #dcdcdc;
@@ -90,7 +91,7 @@
     overflow: hidden;
     text-align: center;
     text-decoration: none;
-    width: 213px;
+    width: 225px;
     cursor: pointer;
     &:hover {
       border-color: #000
@@ -102,20 +103,20 @@
       line-height: 60px;
       overflow: hidden;
       padding-top: 32px;
-      width: 213px;
+      width: 225px;
     }
     p {
       font-family: georgia;
       font-weight: 500;
       overflow: hidden;
       padding-top: 15px;
-      width: 213px;
+      width: 225px;
     }
     span {
       font-weight: 500;
       overflow: hidden;
       padding-top: 10px;
-      width: 213px;
+      width: 225px;
       display: block;
     }
   }
