@@ -1,5 +1,5 @@
 <template>
-  <div v-if="time !== false" class="seckill-container">
+  <div v-if="time !== false && goodsList && goodsList.length" class="seckill-container">
     <div class="title-seckill">
       <nuxt-link class="seckill-left-link" to="/seckill">
         <strong class="seckill-tit-txt">限时抢购</strong>
