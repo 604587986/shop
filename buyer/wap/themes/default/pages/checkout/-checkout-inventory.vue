@@ -26,7 +26,7 @@
           </div>
         </div>
       </van-cell>
-      <van-cell class="act-cell">
+      <van-cell v-if="showActBox(shop)" class="act-cell">
         <div class="act-box" @click="handleShowActs(shop)">
           <div class="inner-act">
             <span class="inner-act-tit">赠品</span>
@@ -100,6 +100,11 @@
       handleShowActs(shop) {
         this.surActsShop = shop
         this.showActs = true
+      },
+      showActBox(shop) {
+        const { gift_coupon_list, gift_list } = shop
+        if (!gift_list && !gift_coupon_list) return false
+        return !!(gift_list.length || gift_list.length)
       }
     }
   }
