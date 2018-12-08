@@ -23,41 +23,10 @@
         <div class="address-list-hr"></div>
       </van-cell-group>
       <!--收货地址 end-->
+      <!--购物清单 start-->
+      <checkout-inventory :inventories="inventories"/>
+      <!--购物清单 end-->
       <van-cell-group>
-        <!--购物清单 start-->
-        <!--<van-cell v-if="inventories.length > 1" is-link @click="showInventoryPopup = true">-->
-          <!--<div class="sku-list">-->
-            <!--<div v-for="(sku, index) in inventories" v-if="index < 4" :key="index" class="sku-item">-->
-              <!--<img :src="sku.goods_image">-->
-              <!--<p>x{{ sku.num }}</p>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="sku-count">共{{ inventories.length }}件</div>-->
-        <!--</van-cell>-->
-        <!--<van-cell v-else>
-          <div class="sku-single">
-            <div class="img-single-item">
-              <div class="inner-img-sinle-item">
-                <img :src="inventories[0].goods_image">
-              </div>
-            </div>
-            <div class="content-single-item">
-              <div class="name-single-item">{{ inventories[0].name }}</div>
-              <span v-if="inventories[0].spec_list" class="sku-spec">{{ inventories[0] | formatterSkuSpec }}</span>
-              <div class="price-single-item">
-                <div class="sitem-sam-l cf">
-                    <span class="price-box">
-                      <em>￥</em>
-                      <span class="price">{{ inventories[0].purchase_price | unitPrice('', 'before') }}</span>
-                      <em>.{{ inventories[0].purchase_price | unitPrice('', 'after') }}</em>
-                    </span>
-                </div>
-                <span class="sam-num">×{{ inventories[0].num }}</span>
-              </div>
-            </div>
-          </div>
-        </van-cell>-->
-        <!--购物清单 end-->
         <!--支付配送 start-->
         <van-cell title="支付配送" is-link @click="showPaymentPopup = true">
           <div>
@@ -115,17 +84,8 @@
       :price="orderTotal.total_price * 100"
       :disabled="submitDisabled"
       button-text="提交订单"
-      tip="修改地址或支付方式后，需要重新选择使用优惠券"
       @submit="handleCreateTrade"
     />
-    <!--购物清单popup start-->
-    <checkout-inventory
-      v-if="inventories.length"
-      :show="showInventoryPopup"
-      :inventories="inventories"
-      @close="showInventoryPopup = false"
-    />
-    <!--购物清单popup end-->
     <!--优惠券popup start-->
     <checkout-coupons
       :show="showCouponsPopup"
@@ -326,7 +286,7 @@
   @import "../../assets/styles/color";
   .checkout-container {
     padding-top: 46px;
-    padding-bottom: 50px + 38px + 10px;
+    padding-bottom: 50px + 10px;
     /deep/ {
       .van-cell-group:not(:first-child) {
         margin-top: 10px;
