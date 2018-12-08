@@ -4,15 +4,24 @@
       <i class="iconfont ea-icon-close" slot="right"/>
     </van-nav-bar>
     <div class="coupons-container">
-      <div class="shop-item" v-for="(shop, shopIndex) in shopList" :key="shopIndex">
+      <div
+        class="shop-item"
+        v-for="(shop, shopIndex) in inventories"
+        :key="shopIndex"
+      >
         <div class="title-shop-item">{{ shop.seller_name || `店铺${shopIndex + 1}` }}</div>
         <div class="content-shop-item">
           <div
-            class="bonus-item"
-            v-for="(coupon, couponIndex) in shop.member_coupon_list"
+            v-if="!shop.coupon_list || !shop.coupon_list.length"
+            class="no-coupon"
+          >您在此店铺还没有领到优惠券，<nuxt-link :to="'/shop/' + shop.seller_id">[去店铺]</nuxt-link>看看？</div>
+          <div
+            v-else
+            v-for="(coupon, couponIndex) in shop.coupon_list"
             :key="couponIndex"
-            :class="[coupon.used_status && 'checked', coupon.disabled && 'unavailable']"
-            @click="useCoupon(shop.seller_id, shopIndex, coupon)"
+            class="bonus-item"
+            :class="[coupon.selected && 'checked', coupon.enable === 0 && 'unavailable']"
+            @click="useCoupon(shop, coupon)"
           >
             <div class="top-bg-bonus-item"></div>
             <div class="content-bonus-item">
@@ -22,13 +31,13 @@
               <div class="money-bonus-item">
                 <div class="use-money">
                   <span class="symbol-yuan">￥</span>
-                  <span class="bonus-money">{{ coupon.coupon_price | unitPrice }}</span>
+                  <span class="bonus-money">{{ coupon.amount | unitPrice }}</span>
                 </div>
                 <div class="limit-money">
-                  满{{ coupon.coupon_threshold_price | unitPrice }}可用
+                  {{ coupon.use_term }}
                 </div>
                 <div class="limit-money">
-                  使用期限：{{ coupon.start_time | unixToDate('yyyy-MM-dd') }} - {{ coupon.end_time | unixToDate('yyyy-MM-dd') }}
+                 使用有效期截止：{{ coupon.end_time | unixToDate('yyyy-MM-dd') }}
                 </div>
               </div>
             </div>
@@ -44,47 +53,29 @@
   import * as API_Members from '@/api/members'
   export default {
     name: 'checkout-coupons',
-    props: ['show', 'ids'],
+    props: ['show', 'inventories'],
     data() {
       return {
         shopList: ''
       }
     },
     mounted() {
-      const { ids } = this
-      if (!ids.length) return
-      API_Members.getShopsCoupons(ids.join(',')).then(response => {
-        this.shopList = response
-        let coupons_num = 0
-        response.forEach(item => {
-          coupons_num += item.member_coupon_list.length
-        })
-        this.$emit('loaded', coupons_num)
-      })
     },
     methods: {
       /** 使用优惠券 */
-      async useCoupon(seller_id, shopIndex, coupon) {
-        if (coupon.disabled) return
-        const use = coupon.used_status !== true
-        if (use) {
-          await API_Trade.useCoupon(seller_id, coupon.mc_id)
-        } else {
-          await API_Trade.useCoupon(seller_id, 0)
+      async useCoupon(shop, coupon) {
+        if (coupon.enable === 0) {
+          this.$message.error('订单金额不满足此优惠券使用条件')
+          return
         }
-        const shop = JSON.parse(JSON.stringify(this.shopList[shopIndex]))
-        shop.member_coupon_list = shop.member_coupon_list.map(item => {
-          if (use) {
-            item.used_status = item.mc_id === coupon.mc_id
-            item.disabled = item.mc_id !== coupon.mc_id
-          } else {
-            item.used_status = false
-            item.disabled = false
-          }
-          return item
-        })
-        this.$set(this.shopList, shopIndex, shop)
-        this.$emit('changed', use ? coupon : '')
+        const { seller_id } = shop
+        const used = coupon.selected === 1
+        if (used) {
+          await API_Trade.useCoupon(seller_id, 0)
+        } else {
+          await API_Trade.useCoupon(seller_id, coupon.member_coupon_id)
+        }
+        this.$emit('changed', used ? '' : coupon)
         this.$emit('close')
       }
     }
@@ -113,7 +104,7 @@
       border-bottom: 1px solid #e2e2e2;
     }
     .content-shop-item {
-      min-height: 100px;
+      min-height: 50px;
       background-color: #fff;
       padding: 0 10px;
     }
@@ -186,6 +177,13 @@
       width: 100%;
       font-size: 12px;
       color: #686868;
+    }
+  }
+  .no-coupon {
+    text-align: center;
+    margin: 15px 0;
+    a {
+      color: $color-href;
     }
   }
 </style>

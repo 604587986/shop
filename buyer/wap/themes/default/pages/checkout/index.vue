@@ -4,7 +4,7 @@
     <en-empty v-if="inventories && inventories.length === 0">
       购物清单为空
     </en-empty>
-    <div v-if="inventories && inventories.length" class="checkout-container">
+    <div v-else class="checkout-container">
       <!--收货地址 start-->
       <van-cell-group>
         <van-cell is-link to="/member/shipping-address?from=checkout">
@@ -23,41 +23,10 @@
         <div class="address-list-hr"></div>
       </van-cell-group>
       <!--收货地址 end-->
+      <!--购物清单 start-->
+      <checkout-inventory :inventories="inventories"/>
+      <!--购物清单 end-->
       <van-cell-group>
-        <!--购物清单 start-->
-        <van-cell v-if="inventories.length > 1" is-link @click="showInventoryPopup = true">
-          <div class="sku-list">
-            <div v-for="(sku, index) in inventories" v-if="index < 4" :key="index" class="sku-item">
-              <img :src="sku.goods_image">
-              <p>x{{ sku.num }}</p>
-            </div>
-          </div>
-          <div class="sku-count">共{{ inventories.length }}件</div>
-        </van-cell>
-        <van-cell v-else>
-          <div class="sku-single">
-            <div class="img-single-item">
-              <div class="inner-img-sinle-item">
-                <img :src="inventories[0].goods_image">
-              </div>
-            </div>
-            <div class="content-single-item">
-              <div class="name-single-item">{{ inventories[0].name }}</div>
-              <span v-if="inventories[0].spec_list" class="sku-spec">{{ inventories[0] | formatterSkuSpec }}</span>
-              <div class="price-single-item">
-                <div class="sitem-sam-l cf">
-                    <span class="price-box">
-                      <em>￥</em>
-                      <span class="price">{{ inventories[0].purchase_price | unitPrice('', 'before') }}</span>
-                      <em>.{{ inventories[0].purchase_price | unitPrice('', 'after') }}</em>
-                    </span>
-                </div>
-                <span class="sam-num">×{{ inventories[0].num }}</span>
-              </div>
-            </div>
-          </div>
-        </van-cell>
-        <!--购物清单 end-->
         <!--支付配送 start-->
         <van-cell title="支付配送" is-link @click="showPaymentPopup = true">
           <div>
@@ -75,13 +44,13 @@
       </van-cell-group>
       <van-cell-group>
         <!--优惠券 start-->
-        <van-cell v-if="seller_ids.length" is-link @click="showCouponsPopup = true">
+        <van-cell is-link @click="showCouponsPopup = true">
           <div slot="title">
             <span>优惠券</span>
             <em class="can-use-coupon-num">{{ coupon_num }}张可用</em>
           </div>
-          <span v-if="!coupon_price">未使用</span>
-          <span v-else class="price">-￥{{ coupon_price | unitPrice }}</span>
+          <span v-if="!orderTotal.coupon_price">未使用</span>
+          <span v-else class="price">-￥{{ orderTotal.coupon_price | unitPrice }}</span>
         </van-cell>
         <!--优惠券 end-->
         <!--备注信息 start-->
@@ -115,24 +84,14 @@
       :price="orderTotal.total_price * 100"
       :disabled="submitDisabled"
       button-text="提交订单"
-      tip="修改地址或支付方式后，需要重新选择使用优惠券"
       @submit="handleCreateTrade"
     />
-    <!--购物清单popup start-->
-    <checkout-inventory
-      v-if="inventories.length"
-      :show="showInventoryPopup"
-      :inventories="inventories"
-      @close="showInventoryPopup = false"
-    />
-    <!--购物清单popup end-->
     <!--优惠券popup start-->
     <checkout-coupons
-      v-if="seller_ids.length"
       :show="showCouponsPopup"
-      :ids="seller_ids"
+      :inventories="inventories"
       @close="showCouponsPopup = false"
-      @changed="handleCouponChanged"
+      @changed="GET_Inventories"
       @loaded="(coupons_num) => { coupon_num = coupons_num  }"
     />
     <!--优惠券popup end-->
@@ -210,12 +169,8 @@
         inventories: '',
         // 已选地址
         address: '',
-        // 购物清单的店铺id集合
-        seller_ids: [],
         // 显示优惠券弹窗
         showCouponsPopup: false,
-        // 使用优惠券金额
-        coupon_price: 0,
         // 优惠券张数
         coupon_num: 0,
         // 显示购物清单弹窗
@@ -246,20 +201,7 @@
         await API_Trade.setAddressId(params.address_id)
         this.address = await API_Address.getAddressDetail(params.address_id)
       }
-      this.GET_TotalPrice()
-      const inventories = []
-      const ids = []
-      const invs = await API_Trade.getCarts('checked')
-      invs.forEach(item => {
-        ids.push(item.seller_id)
-        inventories.push(...item.sku_list)
-      })
-      if (!inventories.length) {
-        this.loading = false
-        return
-      }
-      this.inventories = inventories
-      this.seller_ids = ids
+      await this.GET_Inventories()
       this.loading = false
     },
     computed: {
@@ -269,11 +211,6 @@
       }
     },
     methods: {
-      /** 使用优惠券 */
-      handleCouponChanged(coupon) {
-        this.coupon_price = coupon.coupon_price
-        this.GET_TotalPrice()
-      },
       /** 发票信息发生改变 */
       handleReceiptChanged(receipt) {
         this.$set(this.params, 'receipt', receipt)
@@ -323,9 +260,23 @@
           }
         })
       },
-      /** 获取结算金额 */
-      GET_TotalPrice() {
-        API_Trade.getOrderTotal().then(response => this.orderTotal = response)
+      /**
+       * 获取购物清单，和结算金额
+       * @returns {Promise<void>}
+       * @constructor
+       */
+      async GET_Inventories() {
+        const values = await Promise.all([
+          API_Trade.getOrderTotal(),
+          API_Trade.getCarts('checked')
+        ])
+        const total = values[0]
+        const inventories = values[1]
+        this.orderTotal = total
+        let coupon_num = 0
+        inventories.forEach(shop => { coupon_num += shop.coupon_list.length })
+        this.coupon_num = coupon_num
+        this.inventories = inventories
       }
     }
   }
@@ -335,7 +286,7 @@
   @import "../../assets/styles/color";
   .checkout-container {
     padding-top: 46px;
-    padding-bottom: 50px + 38px + 10px;
+    padding-bottom: 50px + 10px;
     /deep/ {
       .van-cell-group:not(:first-child) {
         margin-top: 10px;
