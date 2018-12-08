@@ -122,7 +122,7 @@
               }
             },
             xAxis: {
-              name: '时',
+              name: '小时',
               type: 'category',
               boundaryGap: false,
               data: response.xAxis
@@ -138,6 +138,7 @@
               {
                 type: 'line',
                 data: response.series.data,
+                barWidth: 50,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
@@ -167,7 +168,7 @@
               }
             },
             xAxis: {
-              name: '价格',
+              name: '价格(元)',
               type: 'category',
               boundaryGap: false,
               data: response.xAxis
@@ -183,6 +184,7 @@
               {
                 type: 'line',
                 data: response.series.data,
+                barWidth: 50,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },

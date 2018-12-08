@@ -142,20 +142,28 @@
           this.loading = false
           this.orderAmountChart.setOption({
             title: { text: '热卖商品Top30', x: 'center' },
-            tooltip: { trigger: 'axis' },
+            tooltip: {
+              trigger: 'axis',
+              show: true,
+              formatter: function(params, ticket, callback) {
+                if (params[0].name && params[0].value) {
+                  return `排名:${params[0].name}<br>${params[0].seriesId.replace(/0/, '')}：${params[0].value}`
+                }
+              }
+            },
             legend: { orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
             color: ['#7CB5EC'],
             toolbox: {
               show: true,
               feature: {
-                magicType: { type: ['line', 'bar'] },
+                magicType: { type: ['bar', 'line'] },
                 restore: {},
                 saveAsImage: {}
               }
             },
             xAxis: {
+              name: '排名',
               type: 'category',
-              boundaryGap: false,
               data: response.xAxis
             },
             yAxis: {
@@ -168,7 +176,8 @@
             series: [
               {
                 name: '总金额',
-                type: 'line',
+                type: 'bar',
+                barWidth: 50,
                 data: response.series.data,
                 markPoint: {
                   data: [
@@ -206,20 +215,28 @@
           this.loading = false
           this.orderGoodsNumChart.setOption({
             title: { text: '热卖商品Top30', x: 'center' },
-            tooltip: { trigger: 'axis' },
-            legend: { orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
+            tooltip: {
+              trigger: 'axis',
+              show: true,
+              formatter: function(params, ticket, callback) {
+                if (params[0].name && params[0].value) {
+                  return `排名:${params[0].name}<br>${params[0].seriesId.replace(/0/, '')}：${params[0].value}`
+                }
+              }
+            },
+            legend: { orient: 'vertical', data: [{ name: '下单商品数', textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
             color: ['#7CB5EC'],
             toolbox: {
               show: true,
               feature: {
-                magicType: { type: ['line', 'bar'] },
+                magicType: { type: ['bar', 'line'] },
                 restore: {},
                 saveAsImage: {}
               }
             },
             xAxis: {
+              name: '排名',
               type: 'category',
-              boundaryGap: false,
               data: response.xAxis
             },
             yAxis: {
@@ -231,9 +248,10 @@
             },
             series: [
               {
-                name: '总金额',
-                type: 'line',
+                name: '下单商品数',
+                type: 'bar',
                 data: response.series.data,
+                barWidth: 50,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },
