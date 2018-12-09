@@ -78,7 +78,15 @@
           this.loading = false
           this.sesalChart.setOption({
             title: { text: '访问量统计', x: 'center' },
-            tooltip: { trigger: 'axis' },
+            tooltip: {
+              trigger: 'axis',
+              show: true,
+              formatter: function(params, ticket, callback) {
+                if (response.series.localName[params[0].dataIndex] && params[0].value) {
+                  return `第${response.series.localName[params[0].dataIndex]}日<br>${params[0].seriesId.replace(/0/, '')}：${params[0].value}`
+                }
+              }
+            },
             legend: { show: true, orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
             color: ['#7CB5EC'],
             toolbox: {
@@ -136,8 +144,9 @@
               trigger: 'axis',
               show: true,
               formatter: function(params, ticket, callback) {
-                const res = response.series.localName[params[0].dataIndex] + '<br>' + params[0].seriesId.replace(/0/, '') + '：' + params[0].value
-                return res
+                if (response.series.localName[params[0].dataIndex] && params[0].value) {
+                  return `商品名称:${response.series.localName[params[0].dataIndex]}<br>${params[0].seriesId.replace(/0/, '')}：${params[0].value}`
+                }
               }
             },
             color: ['#7CB5EC'],

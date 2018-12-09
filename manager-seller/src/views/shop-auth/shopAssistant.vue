@@ -78,6 +78,14 @@
         <el-form-item label="店员密码" prop="password">
           <el-input type="password" v-model="shopAssistantForm.password" :maxlength="20" clearable :placeholder="shopAssistantForm.clerk_id ? '不修改请留空' : '6-20位数字、英文字母'"></el-input>
         </el-form-item>
+        <el-form-item prop="captcha" class="img-code">
+          <span slot="label">验&ensp;证&ensp;码</span>
+          <el-input v-model="shopAssistantForm.captcha" clearable placeholder="验证码" maxlength="4">
+            <template slot="append">
+              <img :src="validcodeImg" @click="changeValidcode" class="verification-code">
+            </template>
+          </el-input>
+        </el-form-item>
         <el-form-item label="所属角色" prop="role_id">
           <el-select
             v-model="shopAssistantForm.role_id"
@@ -112,6 +120,7 @@
 
 <script>
   import * as API_Auth from '@/api/auth'
+  import * as API_Common from '@/api/common'
   import md5 from 'js-md5'
   import { RegExp } from '~/ui-utils'
 
@@ -146,6 +155,7 @@
               }
             }
           ],
+          captcha: [this.MixinRequired('请输入图片验证码！')],
           role_id: [{ required: true, message: '请选择所属角色！', trigger: 'change' }],
           mobile: [
             this.MixinRequired('请输入手机号码！'),
@@ -175,7 +185,9 @@
         // 店员表单 dialog
         dialogVisible: false,
         // 角色列表
-        rolesOptions: []
+        rolesOptions: [],
+        // 验证码图片
+        validcodeImg: ''
       }
     },
     watch: {
@@ -189,6 +201,7 @@
       API_Auth.getRoleList({ page_size: 10000 }).then(response => {
         this.rolesOptions = response.data
       })
+      this.changeValidcode()
     },
     activated() {
       // 获取角色
@@ -213,6 +226,11 @@
       handleAddShopAssistant() {
         this.shopAssistantForm = {}
         this.dialogVisible = true
+      },
+
+      /** 更换图片验证码 */
+      changeValidcode() {
+        this.validcodeImg = API_Common.getValidateCodeUrl('REGISTER', this.uuid)
       },
 
       /** 编辑店员 */
@@ -292,5 +310,17 @@
   }
   /deep/ .el-dialog__body {
     padding: 10px 20px;
+  }
+  /deep/ .img-code {
+    width: 80%;
+    .el-input-group__append {
+      padding: 0;
+      margin: 0;
+      img {
+        display: block;
+        height: 30px;
+        cursor: pointer;
+      }
+    }
   }
 </style>

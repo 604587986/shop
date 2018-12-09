@@ -336,5 +336,8 @@
       font-weight: 200;
       color: #ccc;
     }
+    img {
+      object-fit: cover;
+    }
   }
 </style>

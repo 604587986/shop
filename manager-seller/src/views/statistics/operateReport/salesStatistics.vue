@@ -181,6 +181,7 @@
               }
             },
             xAxis: {
+              name: '日期',
               type: 'category',
               data: response.xAxis
             },
