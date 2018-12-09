@@ -43,13 +43,16 @@
           key="shop_logo"
           :action="`${MixinUploadApi}?scene=shop`"
           :on-success="uploadSuccessLogo"
+          :before-upload="handleImagesUrlBefore"
           :file-list="fileList_logo"
           ref="fileList_logo"
           list-type="picture">
           <el-button size="small" type="primary">
             上传<i class="el-icon-upload el-icon--right"></i>
           </el-button>
-          <div slot="tip" class="el-upload__tip">此处为您的店铺logo，将显示在店铺Logo栏里。 （请上传200x60规格的图片！）</div>
+          <div slot="tip" class="el-upload__tip">
+            此处为您的店铺logo，将显示在店铺Logo栏里。 （限制上传宽（200～300）x高（50～100）规格的图片！）
+          </div>
         </el-upload>
       </el-form-item>
       <el-form-item>
@@ -196,6 +199,31 @@
               this.GET_ShopGradeData()
             })
           }
+        })
+      },
+
+      /** 图片上传之前的校验 */
+      handleImagesUrlBefore(file) {
+        return new Promise((resolve, reject) => {
+          let reader = new FileReader()
+          reader.onload = (event) => {
+            let image = new Image()
+            image.onload = () => {
+              let width = image.width
+              let height = image.height
+              if (width > 300 || width < 200) {
+                this.$message.error('图片宽度必须在200~300之间！')
+                reject()
+              }
+              if (height > 100 || height < 50) {
+                this.$message.error('图片高度必须在50~100之间！')
+                reject()
+              }
+              resolve()
+            }
+            image.src = event.target.result
+          }
+          reader.readAsDataURL(file)
         })
       },
 
