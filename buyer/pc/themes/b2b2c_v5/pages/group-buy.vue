@@ -13,26 +13,25 @@
     </div>
     <div class="group-buy w">
       <ul v-if="groupBuy && groupBuy.data.length" class="group-buy-list">
-        <li v-for="(gb, index) in groupBuy.data" :key="index" class="gb-item">
-          <div class="inner-gb-item">
-            <a target="_blank" class="pic_thumb" :href="'/goods/' + gb.goods_id" :title="gb.goods_name">
-              <img :src="gb.img_url" border="0" :alt="gb.goods_name">
-            </a>
-            <h3 class="gb-title">
-              <a target="_blank" :href="'/goods/' + gb.goods_id" :title="gb.gb_name">{{ gb.gb_name }}</a>
-            </h3>
-            <p class="gb-sub-title">{{ gb.gb_title }}</p>
-            <div class="group_price">
-              <span class="price" :title="'￥' + gb.price"><i>¥</i>{{ gb.price }}</span>
-              <span class="group_num"><em>{{ gb.show_buy_num }}</em>件已购买</span>
-              <a class="buy-button" target="_blank" :href="'/goods/' + gb.goods_id">
-                我要团
-              </a>
+        <li v-for="(gb, index) in groupBuy.data" :key="index">
+          <div class="gl-item">
+            <div class="gl-img">
+              <nuxt-link :to="'/goods/' + gb.goods_id" target="_blank">
+                <img :src="gb.img_url" :alt="gb.goods_name">
+              </nuxt-link>
             </div>
-            <div class="group_dock">
-              <span class="group_discount">{{(gb.price / gb.original_price * 10).toFixed(1) }}&nbsp;折</span>
-              <del class="group_price">¥{{ gb.original_price }}</del>
+            <div class="gl-price">
+              <strong><em>¥</em><i>{{ gb.price | unitPrice }}</i></strong>
+              <span class="gl-original-price">￥{{ gb.original_price | unitPrice }}</span>
             </div>
+            <div class="gl-name">
+              <nuxt-link :to="'/goods/' + gb.goods_id" :title="gb.goods_name" target="_blank">
+                <em>{{ gb.goods_name }}</em>
+              </nuxt-link>
+            </div>
+            <p class="gl-sub-title">{{ gb.gb_title }}</p>
+            <div class="gl-buy-count">已销售：{{ gb.show_buy_num }}件</div>
+            <nuxt-link :to="'/goods/' + gb.goods_id" target="_blank" class="gl-join-btn">我要参团</nuxt-link>
           </div>
         </li>
       </ul>
@@ -135,12 +134,34 @@
       color: $color-main
     }
     &:hover {
-      border-color: #FFCFBF
+      border-color: #FFCFBF;
     }
   }
   .group-buy {
     margin-top: 20px;
     margin-bottom: 50px;
+  }
+  .group-buy-list {
+    overflow: hidden;
+    padding: 20px 10px;
+    li {
+      width: 234px;
+      height: 400px;
+      float: left;
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      box-shadow: 0 0 0 0 #e4e7ed;
+      transition: box-shadow .2s ease;
+    }
+    li:hover {
+      border-color: #e9e9e9;
+      box-shadow: 0 0 5px 2px #e4e7ed;
+      z-index: 2;
+      .gl-join-btn {
+        opacity: 1 !important;
+      }
+    }
   }
   .gb-item {
     font-size: 12px;
@@ -168,114 +189,8 @@
       }
     }
   }
-  .inner-gb-item {
-    width: 275px;
-    padding: 11px;
-    position: relative;
-  }
-  .pic_thumb {
-    line-height: 0;
-    text-align: center;
-    vertical-align: middle;
-    display: block;
-    width: 100%;
-    height: 193px;
-    overflow: hidden;
-    img {
-      display: block;
-      width: 200px;
-      height: 200px;
-      margin: 0 auto;
-    }
-  }
-  .gb-title {
-    display: block;
-    width: 100%;
-    max-height: 20px;
-    min-height: 20px;
-    margin: 10px auto 0 auto;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-  }
-  .gb-sub-title {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-    min-height: 18px;
-  }
-  .group_price {
-    margin-top: 15px;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    .price {
-      font: 700 28px/30px "microsoft yahei", Arial;
-      color: $color-main;
-      max-width: 200px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      height: 36px;
-      float: left;
-      overflow: hidden;
-      i {
-        font-weight: lighter;
-        font-size: 20px;
-        line-height: 24px;
-        vertical-align: bottom;
-        display: inline-block;
-        margin-right: 2px;
-        zoom: 1;
-      }
-    }
-    .group_num {
-      font: normal 14px/36px "microsoft yahei", Arial;
-      color: #999;
-      float: right;
-      max-width: 105px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      em {
-        font-size: 16px;
-        font-weight: 700;
-        color: #396;
-        margin: 0 2px;
-      }
-    }
-    .buy-button {
-      font: normal 16px/20px "microsoft yahei";
-      color: #FFF;
-      background-color: #FF0000;
-      text-align: center;
-      display: block;
-      width: 80px;
-      height: 20px;
-      padding: 5px 0;
-      position: absolute;
-      right: 0;
-      bottom: 5px;
-      opacity: 0;
-      filter: alpha(opacity=0)/*IE*/;
-      transition: opacity 0.4s ease-in-out 0s;
-    }
-  }
-  .group_dock {
-    margin-left: 8px;
-    position: relative;
-    .group_discount {
-      font: 600 12px/20px "microsoft yahei";
-      color: #C30;
-    }
-    .group_price {
-      margin-left: 10px;
-      line-height: 16px;
-      overflow: hidden;
-    }
-  }
   /deep/ .el-pagination {
+    padding: 10px 0 30px 0;
     text-align: right;
     margin-top: 30px;
   }
@@ -283,5 +198,124 @@
     text-align: center;
     height: 100px;
     line-height: 100px;
+  }
+  .gl-item {
+    padding: 12px 6px;
+    width: 220px;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    background: #fff;
+    border: 1px solid #fff;
+    transition: border-color .1s ease;
+    .gl-img {
+      margin-bottom: 5px;
+      img {
+        display: block;
+        width: 220px;
+        height: 220px;
+        background-color: #fafafa;
+      }
+    }
+  }
+  .gl-price {
+    position: relative;
+    line-height: 22px;
+    height: 22px;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 0 8px;
+    strong {
+      float: left;
+      margin-right: 10px;
+      color: $color-main;
+      font-size: 20px;
+      font-weight: 400;
+      font-family: Verdana,serif;
+      em { font-size: 16px }
+    }
+  }
+  .gl-name {
+    height: 40px;
+    overflow: hidden;
+    a {
+      color: #666;
+      &:hover { color: $color-main }
+    }
+    em {
+      display: block;
+      height: 40px;
+      line-height: 20px;
+      overflow: hidden;
+      transition: height .08s ease;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .gl-attribute {
+      display: block;
+      width: 228px;
+      height: 19px;
+      margin-top: 1px;
+      margin-right: -8px;
+      overflow: hidden;
+      .attr {
+        float: left;
+        height: 19px;
+        line-height: 19px;
+        padding: 0 4px;
+        margin-right: 7px;
+        background: #f4f4f4;
+        b {
+          font-weight: 400;
+          color: #999;
+        }
+      }
+    }
+  }
+  .gl-commit {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 18px;
+    margin-top: -3px;
+    overflow: hidden;
+    strong {
+      color: #a7a7a7;
+      font-weight: 400;
+      a {
+        color: #646fb0;
+        font-family: verdana,serif;
+        font-weight: 700;
+      }
+    }
+    .gl-grade i { color: $color-main }
+  }
+  .gl-buy-count {
+    color: #a7a7a7;
+    margin: 5px 0;
+  }
+  .gl-sub-title {
+    color: #909399;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    margin: 5px 0;
+  }
+  .gl-original-price {
+    color: #909399;
+    text-decoration: line-through;
+    vertical-align: -2px;
+  }
+  .gl-join-btn {
+    display: block;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    text-align: center;
+    background-color: $color-main;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity ease .2s;
   }
 </style>
