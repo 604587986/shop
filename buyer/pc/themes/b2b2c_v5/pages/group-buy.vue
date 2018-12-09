@@ -12,7 +12,8 @@
       </div>
     </div>
     <div class="group-buy w">
-      <ul v-if="groupBuy && groupBuy.data.length" class="group-buy-list">
+      <div v-if="groupBuy && !groupBuy.data.length" class="no-data">暂无数据...</div>
+      <ul v-else class="group-buy-list">
         <li v-for="(gb, index) in groupBuy.data" :key="index">
           <div class="gl-item">
             <div class="gl-img">
@@ -35,7 +36,6 @@
           </div>
         </li>
       </ul>
-      <div v-else class="no-data">暂无数据...</div>
       <el-pagination
         v-if="groupBuy"
         @current-change="handleCurrentPageChange"
@@ -102,6 +102,7 @@
         if (params.cat_id === 0) delete params.cat_id
         API_Promotions.getGroupBuyGoods(params).then(response => {
           this.groupBuy = response
+          this.MixinScrollToTop()
         })
       }
     }

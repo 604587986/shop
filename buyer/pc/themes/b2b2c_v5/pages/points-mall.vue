@@ -8,21 +8,29 @@
       </ul>
     </div>
     <div class="points-goods">
-      <div v-if="!tableData || !tableData.data.length" class="no-goods w">
+      <div v-if="tableData && !tableData.data.length" class="no-goods w">
         暂无商品...
       </div>
       <div v-else class="w">
         <ul class="goods-list">
           <li v-for="(goods, index) in tableData.data" v-if="goods.enable_exchange === 1" :key="index" class="goods-item">
-            <a :href="'/goods/' + goods.goods_id">
-              <img class="goods-img" :src="goods.goods_img">
-            </a>
-            <div class="goods-info">
-              <p class="integral">
-                <span class="price">￥{{ goods.exchange_money | unitPrice }}+{{ goods.exchange_point }}积分</span>
-                <span class="origin-price">￥{{ goods.goods_price | unitPrice }}</span>
+            <div class="gl-item">
+              <div class="gl-img">
+                <nuxt-link :to="'/goods/' + goods.goods_id" target="_blank">
+                  <img :src="goods.goods_img" :alt="goods.goods_name">
+                </nuxt-link>
+              </div>
+              <div class="gl-price">
+                <strong><em>¥</em><i>{{ goods.exchange_money | unitPrice }}</i> + {{ goods.exchange_point }}积分</strong>
+              </div>
+              <p>
+                原价：<span class="gl-original-price">￥{{ goods.goods_price | unitPrice }}</span>
               </p>
-              <p class="goods-name">{{ goods.goods_name }}</p>
+              <div class="gl-name">
+                <nuxt-link :to="'/goods/' + goods.goods_id" :title="goods.goods_name" target="_blank">
+                  <em>{{ goods.goods_name }}</em>
+                </nuxt-link>
+              </div>
             </div>
           </li>
         </ul>
@@ -55,7 +63,7 @@
         categorys: '',
         params: {
           page_no: 1,
-          page_size: 20,
+          page_size: 10,
           cat_id: 0
         },
         tableData: ''
@@ -99,6 +107,7 @@
         if (params.cat_id === 0) delete params.cat_id
         API_Promotions.getPointsGoods(params).then(response => {
           this.tableData = response
+          this.MixinScrollToTop()
         })
       }
     }
@@ -136,51 +145,12 @@
     }
   }
   .points-goods {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 50px;
-    .goods-list {
-      overflow: hidden;
-    }
-    .goods-item {
-      float: left;
-      width: 230px;
-      margin: 0 10px 10px 0;
-      border: 1px solid #ddd;
-      a {
-        display: block;
-        margin: 5% auto;
-      }
-      .goods-img {
-        display: block;
-        margin: 0 auto;
-        width: 200px;
-        height: 200px;
-      }
-      .goods-info {
-        margin: 5%;
-        width: 90%;
-      }
-      .integral {
-        font-size: 18px;
-      }
-      .origin-price {
-        font-size: 12px;
-        text-decoration: line-through;
-        color: grey;
-        float: right;
-        margin-right: 10px;
-      }
-      .goods-name {
-        font-size: 18px;
-        margin: 10px 0;
-        width: 200px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
     /deep/ .el-pagination {
+      padding: 10px 0 30px 0;
       text-align: right;
+      margin-right: 10px;
     }
   }
   .no-goods {
@@ -188,5 +158,125 @@
     line-height: 100px;
     font-size: 18px;
     font-weight: 700;
+  }
+  .goods-list {
+    padding: 20px 10px;
+    overflow: hidden;
+    li {
+      width: 234px;
+      height: 340px;
+      float: left;
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      box-shadow: 0 0 0 0 #e4e7ed;
+      transition: box-shadow .2s ease;
+    }
+    li:hover {
+      border-color: #e9e9e9;
+      box-shadow: 0 0 5px 2px #e4e7ed;
+      z-index: 2;
+    }
+    .gl-item {
+      padding: 12px 6px;
+      width: 220px;
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      background: #fff;
+      border: 1px solid #fff;
+      transition: border-color .1s ease;
+      .gl-img {
+        margin-bottom: 5px;
+        img {
+          display: block;
+          width: 220px;
+          height: 220px;
+          background-color: #fafafa;
+        }
+      }
+    }
+    .gl-price {
+      position: relative;
+      line-height: 22px;
+      height: 22px;
+      overflow: hidden;
+      width: 100%;
+      strong {
+        float: left;
+        margin-right: 10px;
+        color: $color-main;
+        font-size: 20px;
+        font-weight: 400;
+        font-family: Verdana,serif;
+        em { font-size: 16px }
+      }
+    }
+    .gl-name {
+      height: 40px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      a {
+        color: #666;
+        &:hover { color: $color-main }
+      }
+      em {
+        display: block;
+        height: 40px;
+        line-height: 20px;
+        overflow: hidden;
+        transition: height .08s ease;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+      .gl-attribute {
+        display: block;
+        width: 228px;
+        height: 19px;
+        margin-top: 1px;
+        margin-right: -8px;
+        overflow: hidden;
+        .attr {
+          float: left;
+          height: 19px;
+          line-height: 19px;
+          padding: 0 4px;
+          margin-right: 7px;
+          background: #f4f4f4;
+          b {
+            font-weight: 400;
+            color: #999;
+          }
+        }
+      }
+    }
+    .gl-commit {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      height: 18px;
+      margin-top: -3px;
+      overflow: hidden;
+      strong {
+        color: #a7a7a7;
+        font-weight: 400;
+        a {
+          color: #646fb0;
+          font-family: verdana,serif;
+          font-weight: 700;
+        }
+      }
+      .gl-grade i { color: $color-main }
+    }
+    .gl-buy-count {
+      color: #a7a7a7;
+      margin: 5px 0;
+    }
+    .gl-original-price {
+      color: #909399;
+      text-decoration: line-through;
+    }
   }
 </style>
