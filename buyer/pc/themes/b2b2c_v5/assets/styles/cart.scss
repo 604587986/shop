@@ -214,12 +214,16 @@
       padding: 0 30px;
       background-color: #fff;
       transition: background-color 0.2s ease-in-out;
+      border-bottom: 1px dashed #dcdcdc;
       &:hover {
         background-color: #fff7f7;
       }
       .item {
         position: relative;
         padding: 20px 0 20px 35px;
+      }
+      &:last-child {
+        border-bottom: none;
       }
       &.invalid {
         filter: grayscale(1);
