@@ -31,6 +31,7 @@
               class="sku-item-li"
               :class="[sku.invalid === 1 && 'invalid']"
             >
+              <div v-if="sku.error_message" class="error-message">{{ sku.error_message }}</div>
               <van-swipe-cell :right-width="90">
                 <div class="sku-item">
                   <div v-if="sku.invalid === 1" class="sku-check">已失效</div>
@@ -327,7 +328,6 @@
   .inner-shop-item {
     background-color: #fff;
     overflow: hidden;
-    padding: 0 5px;
   }
   .title-shop-item {
     display: flex;
@@ -565,10 +565,12 @@
     }
   }
   .sku-item-li {
+    border-bottom: 1px dashed #dcdcdc;
     &.invalid .sku-item {
       filter: grayscale(1);
     }
     &:last-child {
+      border-bottom: none;
       .act-item {
         margin-bottom: 10px;
       }
@@ -635,5 +637,9 @@
         font-size: 12px;
       }
     }
+  }
+  .error-message {
+    color: red;
+    padding-left: 15%;
   }
 </style>
