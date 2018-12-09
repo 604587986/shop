@@ -270,19 +270,21 @@
           end_time: this.couponForm.coupon_time_limit[1] / 1000
         }
         delete _params.coupon_time_limit
-        if (this.currentcouponId) {
-          API_coupon.modifyCoupons(this.currentcouponId, _params).then(() => {
-            this.couponShow = false
-            this.$message.success('保存成功！')
-            this.$emit('saveCoupon', true)
-          })
-        } else {
-          API_coupon.addCoupons(_params).then(() => {
-            this.couponShow = false
-            this.$message.success('保存成功！')
-            this.$emit('saveCoupon', true)
-          })
-        }
+        this.$confirm('优惠券参加的活动开始后优惠券不可编辑，是否确认？', '提示', { type: 'warning' }).then(() => {
+          if (this.currentcouponId) {
+            API_coupon.modifyCoupons(this.currentcouponId, _params).then(() => {
+              this.couponShow = false
+              this.$message.success('保存成功！')
+              this.$emit('saveCoupon', true)
+            })
+          } else {
+            API_coupon.addCoupons(_params).then(() => {
+              this.couponShow = false
+              this.$message.success('保存成功！')
+              this.$emit('saveCoupon', true)
+            })
+          }
+        }).catch(() => {})
       }
     }
   }
