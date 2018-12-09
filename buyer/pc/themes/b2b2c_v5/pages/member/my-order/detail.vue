@@ -22,7 +22,8 @@
           <dl><dt>支付状态：</dt><dd>{{ order.pay_status_text }}</dd></dl>
           <dl><dt>商品总价：</dt><dd>￥{{ (order.goods_price || 0) | unitPrice }}</dd></dl>
           <dl class="bottom_line"><dt>运费：</dt><dd>￥{{ (order.shipping_price || 0) | unitPrice }}</dd></dl>
-          <dl><dt>优惠金额:</dt><dd>￥{{ (order.discount_price || 0) | unitPrice }}</dd></dl>
+          <dl v-if="order.coupon_price"><dt>优惠券抵扣:</dt><dd>-￥{{ order.coupon_price | unitPrice }}</dd></dl>
+          <dl v-if="order.cash_back"><dt>返现金额:</dt><dd>￥{{ order.cash_back | unitPrice }}</dd></dl>
           <dl><dt>订单总价：</dt><dd style="font-size: 16px; color: #49afcd">￥{{ (order.need_pay_money || 0) | unitPrice }}</dd></dl>
           <dl><dt>实付金额：</dt><dd style="font-size: 22px;" class="price">￥{{ (order.pay_money || 0) | unitPrice }}</dd></dl>
         </div>
