@@ -44,6 +44,11 @@ export const mutations = {
   SET_REFRESH_TOKEN: (state, token) => {
     const expires = new Date(jwt_decode(token).exp * 1000)
     Storage.setItem('seller_refresh_token', token, { expires })
+    // 同时延长用户信息失效时间
+    const user = Storage.getItem('seller_user')
+    const uid = Storage.getItem('seller_uid')
+    Storage.setItem('seller_user', user, { expires })
+    Storage.setItem('seller_uid', uid, { expires })
   },
   /**
    * 移除用户信息

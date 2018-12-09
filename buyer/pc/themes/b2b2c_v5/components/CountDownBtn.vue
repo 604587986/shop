@@ -70,6 +70,7 @@
 
 <style type="text/scss" lang="scss" scoped>
   .count-down-btn {
+    line-height: 40px;
     &.is-disabled {
       color: #c0c4cc;
       cursor: not-allowed;

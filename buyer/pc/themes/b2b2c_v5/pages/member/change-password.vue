@@ -171,8 +171,8 @@
             const { img_code, password } = this.changePasswordForm
             API_Safe.changePassword(uuid, img_code, password).then(() => {
               this.$message.success('密码修改成功，请重新登录！')
-              setTimeout(() => {
-                this.$store.dispatch('user/logoutAction')
+              setTimeout(async () => {
+                await this.$store.dispatch('user/logoutAction', 'change-pwd')
                 this.$router.push('/login')
               }, 200)
             }).catch(this.getValidImgUrl)
