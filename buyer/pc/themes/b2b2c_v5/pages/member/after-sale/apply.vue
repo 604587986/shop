@@ -149,6 +149,16 @@
     </div>
     <div v-if="order" class="goods-list">
       <sku-list :skuList="skuList" name="name" price="purchase_price" total="subtotal"/>
+      <div class="act-box">
+        <div class="act-item">
+          <span>优惠券抵扣：</span>
+          <span>-￥{{ order.coupon_price | unitPrice }}</span>
+        </div>
+        <div class="act-item">
+          <span>返现金额：</span>
+          <span>￥{{ order.cash_back | unitPrice }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -320,6 +330,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .goods-list {
     margin-top: 20px;
   }
@@ -382,5 +393,12 @@
   }
   /deep/ .el-input:not(.el-input--mini) {
     width: 212px;
+  }
+  .act-box {
+    padding: 10px 0;
+    .act-item {
+      margin: 5px 0;
+      color: $color-main;
+    }
   }
 </style>
