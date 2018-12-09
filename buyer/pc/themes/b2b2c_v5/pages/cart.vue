@@ -24,8 +24,9 @@
         <div class="list-content">
           <div v-if="shopList && shopList.length > 0" class="">
             <div v-for="shop in shopList" :key="shop.shop_id" class="shop-item">
-              <div class="shop-header">
-                <a href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
+              <div class="shop-header" :class="[shop.invalid === 1 && 'invalid']">
+                <div v-if="shop.invalid === 1" style="width: 35px"></div>
+                <a v-else href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
                 <nuxt-link :to="'/shop/' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>

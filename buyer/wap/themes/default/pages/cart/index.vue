@@ -13,7 +13,8 @@
       <div class="shop-item" v-for="(shop, index) in shopList" :key="index">
         <div class="inner-shop-item">
           <div class="title-shop-item">
-            <div class="shop-check" @click="handleCheckShop(shop)">
+            <div v-if="shop.invalid === 1" style="width: 10%"></div>
+            <div v-else class="shop-check" @click="handleCheckShop(shop)">
               <van-icon :name="shop.checked ? 'checked' : 'check'"/>
             </div>
             <div class="shop-name">{{ shop.seller_name }}</div>
