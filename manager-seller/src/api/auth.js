@@ -18,18 +18,6 @@ export function getShopAssistantList(params) {
 }
 
 /**
- * 添加店员
- * @param params
- */
-export function addShopAssistant(params) {
-  return request({
-    url: 'seller/shops/clerks',
-    method: 'post',
-    data: params
-  })
-}
-
-/**
  * 修改店员
  * @param id
  * @param params
@@ -123,6 +111,56 @@ export function deleteRole(id) {
   return request({
     url: `seller/shops/roles/${id}`,
     method: 'delete'
+  })
+}
+
+/**
+ * 获取短信验证码
+ * @param mobile
+ * @param params
+ */
+export function getSmsCode(mobile, params) {
+  return request({
+    url: `/seller/shops/clerks/sms-code/${mobile}`,
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 验证手机号
+ * @param params
+ * @param mobile
+ */
+export function valiPhone(mobile, params) {
+  return request({
+    url: `/seller/shops/clerks/check/${mobile}`,
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 添加老会员
+ * @param params
+ */
+export function addOldMember(params) {
+  return request({
+    url: `/seller/shops/clerks/old`,
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 添加新会员
+ * @param params
+ */
+export function addNewMember(params) {
+  return request({
+    url: `/seller/shops/clerks/new`,
+    method: 'post',
+    data: params
   })
 }
 
