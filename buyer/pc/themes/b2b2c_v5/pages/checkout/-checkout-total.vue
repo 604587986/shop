@@ -21,6 +21,7 @@
           <span class="title-details-ckt-total">抵扣积分：</span>
           <em class="price-details-ckt-total">-{{ orderTotal.exchange_point }}积分</em>
           <div class="clear-details-ckt-total"></div>
+          <p class="tip-details-ckt-total">温馨提示：订单取消、申请售后积分不退还</p>
         </li>
         <li>
           <span class="title-details-ckt-total">运费总计：</span>
@@ -47,5 +48,10 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-
+  @import "../../assets/styles/color";
+  .tip-details-ckt-total {
+    text-align: right;
+    color: $color-main;
+    line-height: 22px;
+  }
 </style>
