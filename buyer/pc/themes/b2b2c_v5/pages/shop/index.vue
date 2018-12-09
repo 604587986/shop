@@ -86,7 +86,7 @@
       const shopList = await API_Shop.getShopList(query)
       if (shopList.data) {
         shopList.data = shopList.data.map(item => {
-          item.goods_on = true
+          item.goods_on = !!(item.goods_list && item.goods_list.length)
           return item
         })
       }
