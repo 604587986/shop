@@ -113,6 +113,7 @@
                     <div class="sku-action">
                       <i class="iconfont ea-icon-delete" @click="handleDelete(sku)"></i>
                     </div>
+                    <div v-if="sku.error_message" class="sku-error-msg">{{ sku.error_message }}</div>
                   </div>
                 </div>
               </div>
@@ -167,8 +168,8 @@
 
 <script>
   import Vue from 'vue'
-  import { Popover } from 'element-ui'
-  Vue.use(Popover)
+  import { Popover, Tooltip } from 'element-ui'
+  Vue.use(Popover).use(Tooltip)
   import { mapActions, mapGetters } from 'vuex'
   import * as API_Trade from '@/api/trade'
   import { RegExp } from '~/ui-utils'

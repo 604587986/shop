@@ -460,3 +460,10 @@
   color: $color-main;
   margin-left: 10px;
 }
+
+.sku-error-msg {
+  position: absolute;
+  top: 5px;
+  left: 130px;
+  color: red;
+}
