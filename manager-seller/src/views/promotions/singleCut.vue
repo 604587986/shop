@@ -35,15 +35,17 @@
             <!--活动状态-->
             <el-table-column label="活动状态" prop="status_text"/>
             <!--操作-->
-            <el-table-column label="操作" width="150">
+            <el-table-column label="操作" width="200">
               <template slot-scope="scope">
                 <el-button
-                  v-if="!scope.row.status"
+                  v-if="scope.row.status !== 'END'"
                   type="success"
+                  :disabled="scope.row.status === 'UNDERWAY'"
                   @click="handleEditMould(scope.row)">编辑
                 </el-button>
                 <el-button
-                  v-if="!scope.row.status"
+                  v-if="scope.row.status !== 'END'"
+                  :disabled="scope.row.status === 'UNDERWAY'"
                   type="danger"
                   @click="handleDeleteFullCut(scope.row)">删除
                 </el-button>
