@@ -262,6 +262,9 @@
     background: #fff;
     padding: 8px 5%;
     border-top: 10px solid #e5e5e5;
+    img {
+      object-fit: cover;
+    }
     h3 {
       font-size: 16px;
       line-height: 32px;

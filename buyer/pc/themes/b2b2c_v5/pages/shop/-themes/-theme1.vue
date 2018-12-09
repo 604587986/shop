@@ -370,6 +370,9 @@
     }
     .intro-body {
       margin-top: 20px;
+      img {
+        object-fit: cover;
+      }
     }
   }
   .shop-info {
