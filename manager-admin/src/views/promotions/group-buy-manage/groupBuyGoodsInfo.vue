@@ -17,13 +17,13 @@
         <span>{{ form.goods_name }}</span>
       </el-form-item>
       <el-form-item label="商品价格">
-        <span>{{ form.price | unitPrice("￥") }}</span>
+        <span>{{ form.original_price | unitPrice("￥") }}</span>
       </el-form-item>
       <el-form-item label="商品库存">
         <span>{{ form.goods_num }}</span>
       </el-form-item>
       <el-form-item label="团购价格">
-        <span>{{ form.price | unitPrice }}</span>
+        <span>{{ form.price | unitPrice('¥') }}</span>
       </el-form-item>
       <el-form-item label="团购数量">
         <span>{{ form.goods_num }}</span>
