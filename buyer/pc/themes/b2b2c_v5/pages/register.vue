@@ -370,6 +370,11 @@
       &:hover { background-color: darken($color-main, 10%) }
     }
   }
+  /deep/ {
+    .count-down-btn {
+      line-height: 40px !important;
+    }
+  }
 </style>
 <style type="text/scss" lang="scss">
   @import "../assets/styles/color";
