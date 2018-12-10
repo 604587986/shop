@@ -13,6 +13,16 @@
             </div>
           </div>
         </div>
+        <div class="act-box">
+          <div v-if="order.coupon_price" class="act-item">
+            <span>优惠券抵扣：</span>
+            <span>-￥{{ order.coupon_price | unitPrice }}</span>
+          </div>
+          <div v-if="order.cash_back" class="act-item">
+            <span>返现金额：</span>
+            <span>￥{{ order.cash_back | unitPrice }}</span>
+          </div>
+        </div>
       </div>
       <!--服务类型 start-->
       <div class="service-type">
@@ -504,5 +514,12 @@
     border-radius: 0;
     -webkit-appearance: none;
     box-sizing: border-box;
+  }
+  .act-box {
+    padding-left: 10px;
+    .act-item {
+      color: $color-main;
+      margin: 5px 0;
+    }
   }
 </style>
