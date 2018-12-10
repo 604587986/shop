@@ -92,7 +92,8 @@
       cursor: not-allowed;
       background-image: none;
       background-color: #fff;
-      border-color: transparent;
+      border-color: #ddd;
+      border-top: 1px solid;
     }
   }
 </style>
