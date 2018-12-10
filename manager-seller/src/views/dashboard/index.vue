@@ -17,6 +17,7 @@
               :action="`${MixinUploadApi}?scene=shop`"
               :limit="1"
               :file-list="fileList"
+              :before-upload="handleShopLogoBefore"
               :on-success="uploaded">
               <button style="visibility: hidden;" ref="uploadBtn"></button>
             </el-upload>
@@ -224,6 +225,31 @@ export default {
     /** 店铺LOGO上传 */
     toChangeShopIcon() {
       this.$refs.uploadBtn.click()
+    },
+
+    /** 图片上传之前的校验 */
+    handleShopLogoBefore(file) {
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader()
+        reader.onload = (event) => {
+          let image = new Image()
+          image.onload = () => {
+            let width = image.width
+            let height = image.height
+            if (width > 300 || width < 200) {
+              this.$message.error('图片宽度必须在200~300之间！')
+              reject()
+            }
+            if (height > 100 || height < 50) {
+              this.$message.error('图片高度必须在50~100之间！')
+              reject()
+            }
+            resolve()
+          }
+          image.src = event.target.result
+        }
+        reader.readAsDataURL(file)
+      })
     },
 
     /** 上传成功后的钩子 更换图片 置空存储数组*/
