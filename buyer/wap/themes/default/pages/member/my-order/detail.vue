@@ -114,8 +114,11 @@
           <div class="order-item">
             <span>商品总价：</span><span>￥{{ order.goods_price | unitPrice }}</span>
           </div>
-          <div class="order-item">
-            <span>优惠折扣：</span><span>-￥{{ order.discount_price | unitPrice }}</span>
+          <div v-if="order.coupon_price" class="order-item">
+            <span>优惠券抵扣：</span><span>-￥{{ order.coupon_price | unitPrice }}</span>
+          </div>
+          <div v-if="order.cash_back" class="order-item">
+            <span>返现金额：</span><span>-￥{{ order.cash_back | unitPrice }}</span>
           </div>
           <div class="order-item">
             <span>运费：</span><span>￥{{ order.shipping_price | unitPrice }}</span>
