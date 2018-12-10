@@ -80,8 +80,9 @@ export default {
   watch: {
     show(newVal) {
       this.dialogVisible = newVal
-      if (this.goodsList.length === 0 && newVal === true) {
-        this.GET_GoodsList()
+      // if (this.goodsList.length === 0 && newVal === true) {
+      if (newVal === true) {
+        this.GET_GoodsList(true)
         this.$nextTick(() => {
           this.$selectedList = document.getElementById('goods-picker-selected-' + this._uid)
         })

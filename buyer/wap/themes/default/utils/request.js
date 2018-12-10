@@ -74,7 +74,7 @@ service.interceptors.response.use(
     await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
-    if (error_response.status === 401) {
+    if (error_response.status === 403) {
       const { $store, $router, $route } = Vue.prototype.$nuxt
       if (!Storage.getItem('refresh_token')) return
       $store.dispatch('cart/cleanCartStoreAction')

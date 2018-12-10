@@ -197,6 +197,7 @@
     }
   }
   .shop-header {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 15px 30px;
@@ -214,12 +215,16 @@
       padding: 0 30px;
       background-color: #fff;
       transition: background-color 0.2s ease-in-out;
+      border-bottom: 1px dashed #dcdcdc;
       &:hover {
         background-color: #fff7f7;
       }
       .item {
         position: relative;
         padding: 20px 0 20px 35px;
+      }
+      &:last-child {
+        border-bottom: none;
       }
       &.invalid {
         filter: grayscale(1);
@@ -459,4 +464,11 @@
 .shop-cash-back {
   color: $color-main;
   margin-left: 10px;
+}
+
+.sku-error-msg {
+  position: absolute;
+  top: 5px;
+  left: 130px;
+  color: red;
 }

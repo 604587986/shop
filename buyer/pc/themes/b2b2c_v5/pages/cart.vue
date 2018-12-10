@@ -24,8 +24,9 @@
         <div class="list-content">
           <div v-if="shopList && shopList.length > 0" class="">
             <div v-for="shop in shopList" :key="shop.shop_id" class="shop-item">
-              <div class="shop-header">
-                <a href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
+              <div class="shop-header" :class="[shop.invalid === 1 && 'invalid']">
+                <div v-if="shop.invalid === 1" style="width: 35px"></div>
+                <a v-else href="javascript:;" :class="['check', shop.checked && 'checked']" @click="handleCheckShop(shop)">
                   <i class="iconfont ea-icon-check"></i>
                 </a>
                 <nuxt-link :to="'/shop/' + shop.seller_id" class="shop-name">{{ shop.seller_name }}</nuxt-link>
@@ -113,6 +114,7 @@
                     <div class="sku-action">
                       <i class="iconfont ea-icon-delete" @click="handleDelete(sku)"></i>
                     </div>
+                    <div v-if="sku.error_message" class="sku-error-msg">{{ sku.error_message }}</div>
                   </div>
                 </div>
               </div>
@@ -167,8 +169,8 @@
 
 <script>
   import Vue from 'vue'
-  import { Popover } from 'element-ui'
-  Vue.use(Popover)
+  import { Popover, Tooltip } from 'element-ui'
+  Vue.use(Popover).use(Tooltip)
   import { mapActions, mapGetters } from 'vuex'
   import * as API_Trade from '@/api/trade'
   import { RegExp } from '~/ui-utils'

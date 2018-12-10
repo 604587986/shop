@@ -67,3 +67,15 @@ export function deleteSiteMenu(id) {
     method: 'delete'
   })
 }
+
+/**
+ * 导航排序
+ * @param id
+ * @param sort_type [up|down]
+ */
+export function sortSiteMenu(id, sort_type) {
+  return request({
+    url: `admin/pages/site-navigations/${id}/${sort_type}`,
+    method: 'put'
+  })
+}

@@ -304,7 +304,11 @@ export const getters = {
   allCount: state => {
     let _allCount = 0
     state.shopList.forEach(shop => {
-      shop.sku_list.forEach(item => _allCount += item.num)
+      shop.sku_list.forEach(item => {
+        if (item.invalid !== 1) {
+          _allCount += item.num
+        }
+      })
     })
     return _allCount
   },
@@ -317,7 +321,7 @@ export const getters = {
     let _checkedCount = 0
     state.shopList.forEach(shop => {
       shop.sku_list.forEach(item => {
-        if (item.checked) _checkedCount += item.num
+        if (item.checked && item.invalid !== 1) _checkedCount += item.num
       })
     })
     return _checkedCount

@@ -29,6 +29,12 @@
               size="mini"
               type="danger"
               @click="handleDeleteSiteMenu(scope.$index, scope.row)">删除</el-button>
+            <el-button
+              size="mini"
+              @click="handleSortSiteMenu(scope.$index, scope.row, 'up')">上移</el-button>
+            <el-button
+              size="mini"
+              @click="handleSortSiteMenu(scope.$index, scope.row, 'down')">下移</el-button>
           </template>
         </el-table-column>
       </template>
@@ -177,6 +183,14 @@
             this.$message.error('表单填写有误，请检查！')
             return false
           }
+        })
+      },
+
+      /** 导航排序 */
+      handleSortSiteMenu(index, row, sort_type) {
+        API_SiteMenu.sortSiteMenu(row.navigation_id, sort_type).then(response => {
+          this.GET_SiteMenuList()
+          this.$message.success('操作成功！')
         })
       },
 

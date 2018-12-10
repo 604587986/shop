@@ -79,6 +79,17 @@ export const mutations = {
    */
   [types.REMOVE_REFRESH_TOKEN](state) {
     Storage.removeItem('refresh_token')
+  },
+  /**
+   * 移除商家中心登录状态
+   * @param state
+   */
+  [types.REMOVE_SELLER_AUTH](state) {
+    Storage.removeItem('seller_access_token')
+    Storage.removeItem('seller_refresh_token')
+    Storage.removeItem('seller_shop')
+    Storage.removeItem('seller_uid')
+    Storage.removeItem('seller_user')
   }
 }
 
@@ -133,9 +144,21 @@ export const actions = {
    * @param dispatch
    * @returns {Promise<any>}
    */
-  logoutAction: ({ commit, dispatch }) => {
+  logoutAction: ({ commit, dispatch }, type) => {
     return new Promise((resolve, reject) => {
       API_Members.logout().then(() => {
+        /**
+         * 如果是修改密码
+         * 那么判断当前用户id是否与商家中心已登录用户id一致
+         * 如果一致，那么连同商家中心登录状态一同移除
+         */
+        if (type === 'change-pwd') {
+          const uid = Storage.getItem('uid')
+          const seller_uid = Storage.getItem('seller_uid')
+          if (uid === seller_uid) {
+            commit(types.REMOVE_SELLER_AUTH)
+          }
+        }
         commit(types.REMOVE_USER_INFO)
         commit(types.REMOVE_ACCESS_TOKEN)
         commit(types.REMOVE_REFRESH_TOKEN)

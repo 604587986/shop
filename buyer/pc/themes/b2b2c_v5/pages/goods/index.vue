@@ -147,6 +147,7 @@
                   <strong>已有<a class="comment">{{ goods.comment_num }}</a>人评价</strong>
                   <span class="gl-grade">好评率：<i>{{ goods.grade }}%</i></span>
                 </div>
+                <div class="gl-buy-count">已销售：{{ goods.buy_count }}件</div>
                 <div class="gl-shop">
                   <span>
                     <a :href="'/shop/' + goods.seller_id" :title="goods.seller_name">
@@ -257,6 +258,7 @@
           item.active = item.name === sort.name
           return item
         }))
+        this.params.page_no = 1
         this.params.sort = `${sort.name}_${sort.type}`
         this.GET_GoodsList()
       },
@@ -710,18 +712,21 @@
       width: 100%;
       height: 18px;
       margin-top: -3px;
-      margin-bottom: 9px;
       overflow: hidden;
       strong {
         color: #a7a7a7;
         font-weight: 400;
         a {
           color: #646fb0;
-          font-family: verdana;
+          font-family: verdana,serif;
           font-weight: 700;
         }
       }
       .gl-grade i { color: $color-main }
+    }
+    .gl-buy-count {
+      color: #a7a7a7;
+      margin: 5px 0;
     }
     .gl-shop {
       line-height: 18px;

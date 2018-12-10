@@ -5,6 +5,8 @@
 export const SET_USER_INFO = 'SET_USER_INFO'
 // 移除用户信息
 export const REMOVE_USER_INFO = 'REMOVE_USER_INFO'
+// 移除商家中心登录状态
+export const REMOVE_SELLER_AUTH = 'REMOVE_SELLER_AUTH'
 
 /** TOKEN相关 */
 // 保存访问令牌
