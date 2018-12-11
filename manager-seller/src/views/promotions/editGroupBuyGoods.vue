@@ -101,7 +101,7 @@
         <span class="activity-tip">虚拟购买数量，只用于前台显示，不影响成交记录</span>
       </el-form-item>
       <!--限购数量-->
-      <el-form-item label="限购数量">
+      <el-form-item label="限购数量" prop="limit_num">
         <el-input
           v-model="gruopBuyForm.limit_num"
           :style="{ width:inputLength +'px' }"
@@ -197,6 +197,18 @@
           callback()
         }
       }
+      const checkLimitNum = (rule, value, callback) => {
+        setTimeout(() => {
+          if (!RegExp.integer.test(value) && value !== 0) {
+            callback(new Error('请输入整数'))
+          } else if (parseInt(value) > parseInt(this.gruopBuyForm.goods_num)) {
+            callback(new Error('限购数量不能大于商品总数数'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
+
       const checkAgreement = (rule, value, callback) => {
         setTimeout(() => {
           if (!this.gruopBuyForm.is_allow_agreement) {
@@ -313,6 +325,12 @@
             { validator: checkGoodsSummary, trigger: 'blur' }
           ],
 
+          /** 限购 */
+          limit_num: [
+            { validator: checkLimitNum, trigger: 'change' }
+          ],
+
+          /** 是否允许团购协议 */
           is_allow_agreement: [
             { validator: checkAgreement, trigger: 'change' }
           ]

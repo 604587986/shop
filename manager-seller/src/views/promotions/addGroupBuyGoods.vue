@@ -217,6 +217,8 @@
         setTimeout(() => {
           if (!RegExp.integer.test(value) && value !== 0) {
             callback(new Error('请输入整数'))
+          } else if (parseInt(value) > parseInt(this.gruopBuyForm.goods_num)) {
+            callback(new Error('限购数量不能大于商品总数数'))
           } else {
             callback()
           }
