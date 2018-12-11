@@ -44,9 +44,12 @@
                   </nuxt-link>
                   <div class="sku-content">
                     <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">{{ sku.name }}</nuxt-link>
-                    <div class="sku-spec">
+                    <div v-if="sku.spec_list" class="sku-spec">
                       <span>{{ sku | formatterSkuSpec }}</span>
                     </div>
+                    <p v-if="sku.promotion_tags && sku.promotion_tags.length">
+                      <span class="sku-act-tag" v-for="(tag, _index) in sku.promotion_tags" :key="'tag_' + _index">{{ tag }}</span>
+                    </p>
                     <div class="sku-tools">
                       <div class="sku-price">
                         <strong>￥{{ sku.purchase_price | unitPrice }}</strong>
@@ -642,5 +645,13 @@
   .error-message {
     color: red;
     padding-left: 15%;
+  }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid $color-main;
+    color: $color-main
   }
 </style>

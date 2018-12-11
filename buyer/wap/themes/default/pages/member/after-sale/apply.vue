@@ -6,7 +6,13 @@
         <div v-for="(sku, index) in skuList" :key="index" class="item-sku">
           <img :src="sku.goods_image">
           <div class="sku-detail">
-            <div class="goods-name">{{ sku.name }}</div>
+            <div>
+              <span class="goods-name">{{ sku.name }}</span>
+              <p v-if="sku.spec_list" class="sku-spec">{{ sku | formatterSkuSpec }}</p>
+              <p v-if="sku.promotion_tags && sku.promotion_tags.length">
+                <span class="sku-act-tag" v-for="(tag, _index) in sku.promotion_tags" :key="'tag_' + _index">{{ tag }}</span>
+              </p>
+            </div>
             <div class="goods-other">
               <span>价格：<a class="unit-price">￥{{ sku.purchase_price | unitPrice }}</a></span>
               <span>数量：<a>{{ sku.num }}</a></span>
@@ -245,7 +251,6 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    height: 90px;
     background: white;
     align-items: center;
     &::after {
@@ -264,7 +269,6 @@
       margin-right: 10px;
     }
     .sku-detail {
-      height: 100%;
     }
     .goods-name {
       height: 37px;
@@ -277,7 +281,7 @@
       color: #4B4C4C
     }
     .goods-other {
-      margin-top: 10px;
+      margin-top: 5px;
       span {
         font-size: 13px;
         margin-right: 20px;
@@ -504,5 +508,13 @@
     border-radius: 0;
     -webkit-appearance: none;
     box-sizing: border-box;
+  }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid $color-main;
+    color: $color-main
   }
 </style>

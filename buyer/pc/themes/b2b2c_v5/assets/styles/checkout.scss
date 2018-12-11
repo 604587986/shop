@@ -845,4 +845,12 @@
     padding-left: 10px;
     color: $color-main
   }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid $color-main;
+    color: $color-main
+  }
 }

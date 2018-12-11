@@ -28,7 +28,8 @@ module.exports = {
   externals: {
     jquery: 'window.$',
     xlsx: 'window.XLSX',
-    echarts: 'window.echarts'
+    echarts: 'window.echarts',
+    psl: 'window.psl'
   },
   output: {
     path: config.build.assetsRoot,
