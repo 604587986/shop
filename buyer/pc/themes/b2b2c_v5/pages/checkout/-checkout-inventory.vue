@@ -91,6 +91,9 @@
                       {{ goods.name }}
                     </nuxt-link>
                     <span class="sku-spec">{{ goods | formatterSkuSpec }}</span>
+                    <p v-if="goods.promotion_tags && goods.promotion_tags.length">
+                      <span class="sku-act-tag" v-for="(tag, index) in goods.promotion_tags" :key="index">{{ tag }}</span>
+                    </p>
                   </td>
                   <td class="price-gooods-inventory">
                     ￥{{ goods.purchase_price | unitPrice }}{{ goods.point ? ('+'+goods.point+'积分')  : '' }}

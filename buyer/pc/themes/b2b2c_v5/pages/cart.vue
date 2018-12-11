@@ -49,8 +49,8 @@
                       <span v-if="sku.spec_list && sku.spec_list.length > 0" class="sku-spec">
                         {{ sku | formatterSkuSpec }}
                       </span>
-                      <p>
-                        <span :key="index" class="sku-act-tag" v-for="(tag, index) in sku.promotion_tags">{{ tag }}</span>
+                      <p v-if="goods.promotion_tags && goods.promotion_tags.length">
+                        <span class="sku-act-tag" v-for="(tag, index) in sku.promotion_tags" :key="index">{{ tag }}</span>
                       </p>
                     </div>
                     <div class="sku-price">
