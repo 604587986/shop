@@ -16,6 +16,9 @@
           <div class="sku-info">
             <strong class="sku-name">{{ sku.name }}</strong>
             <p v-if="sku.spec_list" class="sku-spec">{{ sku | formatterSkuSpec }}</p>
+            <p v-if="sku.promotion_tags && sku.promotion_tags.length">
+              <span class="sku-act-tag" v-for="(tag, _index) in sku.promotion_tags" :key="'tag_' + _index">{{ tag }}</span>
+            </p>
             <p class="sku-price">
               <span class="price">
                 <i>￥</i>{{ sku.purchase_price | unitPrice }}
@@ -251,5 +254,13 @@
   .popup-act-name {
     flex: 1;
     margin-left: 10px;
+  }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid $color-main;
+    color: $color-main
   }
 </style>

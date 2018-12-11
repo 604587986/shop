@@ -201,9 +201,13 @@
             </a>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" >
+        <el-table-column label="商品名称" align="left">
           <template slot-scope="scope">
             <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.name }}</a>
+            <p class="sku-spec">{{ scope.row | formatterSkuSpec }}</p>
+            <p class="sku-act-tags" v-if="scope.row.promotion_tags && scope.row.promotion_tags.length">
+              <span class="sku-act-tag" v-for="(tag, index) in scope.row.promotion_tags" :key="index">{{ tag }}</span>
+            </p>
           </template>
         </el-table-column>
         <el-table-column label="单价（元）" width="150">
@@ -935,6 +939,24 @@
   /deep/ .electronic-surface {
     border: 1px solid #ddd;
     padding: 5px;
+  }
+
+  .sku-spec {
+    color: #ff9800;
+    margin: 0;
+  }
+
+  .sku-act-tags {
+    padding: 0;
+    margin: 0;
+  }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid #f42424;
+    color: #f42424;
   }
 </style>
 
