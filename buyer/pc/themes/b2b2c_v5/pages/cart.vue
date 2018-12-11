@@ -49,7 +49,7 @@
                       <span v-if="sku.spec_list && sku.spec_list.length > 0" class="sku-spec">
                         {{ sku | formatterSkuSpec }}
                       </span>
-                      <p v-if="goods.promotion_tags && goods.promotion_tags.length">
+                      <p v-if="sku.promotion_tags && sku.promotion_tags.length">
                         <span class="sku-act-tag" v-for="(tag, index) in sku.promotion_tags" :key="index">{{ tag }}</span>
                       </p>
                     </div>
