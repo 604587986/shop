@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="新增优惠券" :visible.sync="couponShow" width="30%">
-    <el-form :model="couponForm" label-position="right" :rules="rules"  label-width="120px">
+    <el-form :model="couponForm" ref="couponForm" label-position="right" :rules="rules"  label-width="120px">
       <el-form-item label="优惠券名称：" prop="title">
         <el-input
           auto-complete="off"
@@ -69,6 +69,7 @@
     watch: {
       couponModelShow() {
         this.couponShow = this.couponModelShow
+        this.$refs['couponForm'].resetFields()
       },
       couponShow() {
         !this.couponShow && this.$emit('saveCoupon', false)
