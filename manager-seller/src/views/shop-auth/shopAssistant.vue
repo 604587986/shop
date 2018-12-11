@@ -191,6 +191,15 @@
       [CountDownBtn.name]: CountDownBtn
     },
     data() {
+      const checkName = (rule, value, callback) => {
+        if (!value.trim()) {
+          callback(new Error('请输入店员名称,且不能为空格！'))
+        } else if (!/^(?![0-9]+$)[\u4e00-\u9fa5_0-9A-Za-z]{2,20}$/.test(value)) {
+          callback(new Error('店员名称不可为纯数字，长度2-20个字符，不允许特殊符号！'))
+        } else {
+          callback()
+        }
+      }
       return {
         uuid: Storage.getItem('seller_uuid'),
         // 列表loading状态
@@ -228,7 +237,10 @@
         shopAssistantForm: {},
         // 店员表单 规则
         shopAssistantRules: {
-          uname: [this.MixinRequired('请输入店员名称！')],
+          uname: [
+            { required: true, message: '请输入店员名称！', trigger: 'bulr' },
+            { validator: checkName, trigger: 'blur' }
+          ],
           password: [
             { required: true, message: '请输入店员密码！', trigger: 'bulr' },
             {
