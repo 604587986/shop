@@ -150,11 +150,11 @@
     <div v-if="order" class="goods-list">
       <sku-list :skuList="skuList" name="name" price="purchase_price" total="subtotal"/>
       <div class="act-box">
-        <div class="act-item">
+        <div v-if="order.coupon_price" class="act-item">
           <span>优惠券抵扣：</span>
           <span>-￥{{ order.coupon_price | unitPrice }}</span>
         </div>
-        <div class="act-item">
+        <div v-if="order.cash_back" class="act-item">
           <span>返现金额：</span>
           <span>￥{{ order.cash_back | unitPrice }}</span>
         </div>
