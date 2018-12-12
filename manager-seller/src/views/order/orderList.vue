@@ -160,6 +160,7 @@
 </template>
 
 <script>
+/* eslint-disable */
   import * as API_order from '@/api/order'
   import { CategoryPicker } from '@/components'
 
