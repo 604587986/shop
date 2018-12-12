@@ -70,8 +70,9 @@
         <van-cell title="返现金额" v-if="orderTotal.cash_back">
           <span class="price">-￥{{ orderTotal.cash_back | unitPrice }}</span>
         </van-cell>
-        <van-cell title="积分抵扣" v-if="orderTotal.exchange_point">
+        <van-cell title="积分抵扣" v-if="orderTotal.exchange_point" class="exchange-cell">
           <span>-{{ orderTotal.exchange_point }}分</span>
+          <p class="exchange-tip">温馨提示：订单取消、申请售后积分不退还</p>
         </van-cell>
         <van-cell title="运费">
           <span class="price">￥{{ orderTotal.freight_price | unitPrice }}</span>
@@ -529,6 +530,13 @@
       -webkit-line-clamp: 3;
       overflow: hidden;
       color: red;
+    }
+    .exchange-cell .van-cell__value {
+      flex: 2;
+    }
+    .exchange-tip {
+      color: red;
+      font-size: 12px;
     }
   }
 </style>
