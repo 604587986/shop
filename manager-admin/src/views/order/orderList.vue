@@ -6,6 +6,8 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
+          <el-button size="mini" type="primary" icon="el-icon-download" @click="handleExportOrders" style="margin-left: 5px">导出Excel</el-button>
+          <span class="exprot-tip">导出时，会按右侧高级搜索中的筛选条件导出全部数据。如果不需要，请先清空筛选条件！</span>
         </div>
         <div class="toolbar-search">
           <en-table-search
@@ -115,6 +117,7 @@
 
 <script>
   import * as API_order from '@/api/order'
+  import { Foundation } from '~/ui-utils'
 
   export default {
     name: 'orderList',
@@ -197,6 +200,29 @@
         })
       },
 
+      /** 导出订单 */
+      handleExportOrders() {
+        const { advancedForm: params } = this
+        API_order.exportOrders(params).then(response => {
+          const json = {
+            sheet_name: '订单列表',
+            sheet_values: response.map(item => ({
+              '订单遍号': item.sn,
+              '下单时间': Foundation.unixToDate(item.create_time),
+              '订单总额': Foundation.formatPrice(item.order_amount),
+              '收货人': item.ship_name,
+              '订单状态': item.order_status_text,
+              '付款人': item.pay_member_name,
+              '付款状态': item.pay_status_text,
+              '发货状态': item.ship_status_text,
+              '支付方式': item.payment_type === 'ONLINE' ? '在线支付' : '货到付款',
+              '订单来源': item.client_type
+            }))
+          }
+          this.MixinExportJosnToExcel(json, '订单列表')
+        })
+      },
+
       /** 获取订单列表 */
       GET_OrderList() {
         this.loading = true
@@ -230,6 +256,11 @@
   .goods-image {
     width: 50px;
     height: 50px;
+  }
+  .exprot-tip {
+    margin-left: 5px;
+    color: red;
+    font-size: 12px;
   }
 </style>
 
