@@ -87,7 +87,6 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const { id } = this.regionForm
-            debugger
             if (!id) {
               API_Region.addRegion(this.regionForm).then(response => {
                 this.dialogRegionVisible = false
