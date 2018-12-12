@@ -20,23 +20,23 @@
             <!--活动名称-->
             <el-table-column prop="title" label="活动名称"/>
             <!--开始时间-->
-            <el-table-column label="开始时间" min-width="200">
+            <el-table-column label="开始时间" width="150">
               <template slot-scope="scope">
                 <span>{{ scope.row.start_time | unixToDate }}</span>
               </template>
             </el-table-column>
             <!--结束时间-->
-            <el-table-column label="结束时间" min-width="200">
+            <el-table-column label="结束时间" width="150">
               <template slot-scope="scope">
                 <span>{{ scope.row.end_time | unixToDate }}</span>
               </template>
             </el-table-column>
             <!--活动类型-->
-            <el-table-column prop="activity_type" label="活动类型" :formatter="activityType" />
+            <el-table-column prop="activity_type" label="活动类型" :formatter="activityType" width="120"  />
             <!--活动状态-->
-            <el-table-column label="活动状态" prop="status_text"/>
+            <el-table-column label="活动状态" prop="status_text" width="120" />
             <!--操作-->
-            <el-table-column label="操作" width="200">
+            <el-table-column label="操作" width="150">
               <template slot-scope="scope">
                 <el-button
                   v-if="scope.row.status !== 'END'"

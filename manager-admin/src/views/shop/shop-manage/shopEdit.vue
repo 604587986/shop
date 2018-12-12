@@ -193,7 +193,7 @@
           <el-form-item label="店铺所在地" prop="shop_region">
             <en-region-picker :api="MixinRegionApi" :default="defaultRegionShop" @changed="(object) => { shopForm.shop_region = object.last_id }" />
           </el-form-item>
-          <el-form-item label="用金比例" prop="shop_commission">
+          <el-form-item label="佣金比例" prop="shop_commission">
             <el-input v-model="shopForm.shop_commission" :maxlength="50">
               <template slot="append">%</template>
             </el-input>

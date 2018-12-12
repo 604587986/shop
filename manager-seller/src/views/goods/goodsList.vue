@@ -57,21 +57,21 @@
             </a>
           </template>
         </el-table-column>
-        <el-table-column label="名称" min-width="400">
+        <el-table-column label="商品名称">
           <template slot-scope="scope">
             <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
           </template>
         </el-table-column>
-        <el-table-column label="价格" width="100">
+        <el-table-column label="价格" width="120">
           <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
         </el-table-column>
         <el-table-column label="库存" width="80">
           <template slot-scope="scope">{{ scope.row.quantity }}件</template>
         </el-table-column>
-        <el-table-column label="可用库存" width="100">
+        <el-table-column label="可用库存" width="80">
           <template slot-scope="scope">{{ scope.row.enable_quantity }}件</template>
         </el-table-column>
-        <el-table-column label="创建时间" width="150">
+        <el-table-column label="创建时间" width="120">
           <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
         </el-table-column>
         <el-table-column  label="状态" width="80">

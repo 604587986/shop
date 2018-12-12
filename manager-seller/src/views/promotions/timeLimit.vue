@@ -14,19 +14,19 @@
       </div>
       <template slot="table-columns">
         <el-table-column prop="seckill_name" label="活动名称"/>
-        <el-table-column label="活动时间">
+        <el-table-column label="活动时间" width="150">
           <template slot-scope="scope">
-            <span>{{ scope.row.start_day | unixToDate}}</span>
+            <span>{{ scope.row.start_day | unixToDate }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="报名截止时间">
+        <el-table-column label="报名截止时间" width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.apply_end_time | unixToDate }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="seckill_rule" label="报名条件"/>
-        <el-table-column label="报名状态" :formatter="marketStatus"/>
-        <el-table-column label="操作">
+        <el-table-column label="报名状态" :formatter="marketStatus" width="80"/>
+        <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
               type="primary"

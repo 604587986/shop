@@ -254,7 +254,18 @@
             }
           ],
           captcha: [this.MixinRequired('请输入图片验证码！')],
-          role_id: [{ required: true, message: '请选择所属角色！', trigger: 'change' }],
+          role_id: [
+            { required: true, message: '请选择所属角色！', trigger: 'change' },
+            {
+              validator: (rule, value, callback) => {
+                const _result = this.tableData.data.findIndex(val => { return val.role_id === 0 })
+                if (_result !== -1 && value === 0) {
+                  callback(new Error('超级店员只能添加一个！'))
+                } else {
+                  callback()
+                }
+              }
+            }],
           mobile: [
             this.MixinRequired('请输入手机号码！'),
             {
