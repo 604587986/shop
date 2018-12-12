@@ -19,7 +19,7 @@
           <img :src="scope.row.thumbnail" class="goods-image"/>
         </template>
       </el-table-column>
-      <el-table-column prop="goods_name" label="名称" min-width="400"/>
+      <el-table-column prop="goods_name" label="商品名称" min-width="400"/>
       <el-table-column label="价格" width="130">
         <template slot-scope="scope">{{ scope.row.price | unitPrice('￥') }}</template>
       </el-table-column>

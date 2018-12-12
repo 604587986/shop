@@ -33,7 +33,7 @@
           </a>
         </template>
       </el-table-column>
-      <el-table-column prop="goods_name" label="名称" min-width="400">
+      <el-table-column prop="goods_name" label="商品名称" min-width="400">
         <template slot-scope="scope">
           <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.goods_name }}</a>
         </template>
