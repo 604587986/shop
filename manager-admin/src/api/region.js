@@ -23,7 +23,7 @@ export function addRegion(params) {
  */
 export function editRegion(id, params) {
   return request({
-    url: `systems/regions/${id}`,
+    url: `admin/systems/regions/${id}`,
     method: 'put',
     data: params
   })
@@ -35,7 +35,7 @@ export function editRegion(id, params) {
  */
 export function deleteRegion(id) {
   return request({
-    url: `systems/regions/${id}`,
+    url: `admin/systems/regions/${id}`,
     method: 'delete'
   })
 }
