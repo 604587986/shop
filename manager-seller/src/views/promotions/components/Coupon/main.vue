@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="新增优惠券" :visible.sync="couponShow" width="30%">
-    <el-form :model="couponForm" label-position="right" :rules="rules"  label-width="120px">
+    <el-form :model="couponForm" ref="couponForm" label-position="right" :rules="rules"  label-width="120px">
       <el-form-item label="优惠券名称：" prop="title">
         <el-input
           auto-complete="off"
@@ -69,6 +69,7 @@
     watch: {
       couponModelShow() {
         this.couponShow = this.couponModelShow
+        this.$refs['couponForm'].resetFields()
       },
       couponShow() {
         !this.couponShow && this.$emit('saveCoupon', false)
@@ -270,19 +271,21 @@
           end_time: this.couponForm.coupon_time_limit[1] / 1000
         }
         delete _params.coupon_time_limit
-        if (this.currentcouponId) {
-          API_coupon.modifyCoupons(this.currentcouponId, _params).then(() => {
-            this.couponShow = false
-            this.$message.success('保存成功！')
-            this.$emit('saveCoupon', true)
-          })
-        } else {
-          API_coupon.addCoupons(_params).then(() => {
-            this.couponShow = false
-            this.$message.success('保存成功！')
-            this.$emit('saveCoupon', true)
-          })
-        }
+        this.$confirm('优惠券参加的活动开始后优惠券不可编辑，是否确认？', '提示', { type: 'warning' }).then(() => {
+          if (this.currentcouponId) {
+            API_coupon.modifyCoupons(this.currentcouponId, _params).then(() => {
+              this.couponShow = false
+              this.$message.success('保存成功！')
+              this.$emit('saveCoupon', true)
+            })
+          } else {
+            API_coupon.addCoupons(_params).then(() => {
+              this.couponShow = false
+              this.$message.success('保存成功！')
+              this.$emit('saveCoupon', true)
+            })
+          }
+        }).catch(() => {})
       }
     }
   }

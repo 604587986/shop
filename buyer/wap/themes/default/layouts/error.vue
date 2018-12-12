@@ -86,17 +86,16 @@
   .error-500 {
     text-align: center;
     .inner-error {
-      width: 500px;
+      width: 100%;
       height: 350px;
-      margin: 50px auto 20px;
       text-align: center;
-      line-height: 200px;
+      line-height: 275px;
       font-size: 18px;
       font-weight: 600;
       background: url("../assets/images/backbround-500.png") no-repeat center;
+      background-size: 100%;
     }
     .inner-btns {
-      margin-bottom: 30px;
       /deep/ .van-button {
         &:hover, &:focus, &:active {
           border-color: lighten($color-main, 10%);

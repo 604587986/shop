@@ -345,6 +345,9 @@
       padding: 10px 0;
       min-height: 100px;
       border-bottom: 1px dashed #ccc;
+      img {
+        object-fit: cover;
+      }
     }
   }
   .shop-info {

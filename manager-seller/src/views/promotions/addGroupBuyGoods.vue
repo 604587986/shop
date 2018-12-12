@@ -69,9 +69,11 @@
           :file-list="fileList"
           :on-remove="handleRemove"
           :on-success="handleSuccess"
+          :before-upload="handleImagesGbBefore"
           list-type="picture">
           <span v-model="gruopBuyForm.img_url"></span>
           <el-button type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">限制上传图片尺寸为正方形，且尺寸应在200～250之间</div>
         </el-upload>
       </el-form-item>
       <!--商品库存数-->
@@ -215,6 +217,8 @@
         setTimeout(() => {
           if (!RegExp.integer.test(value) && value !== 0) {
             callback(new Error('请输入整数'))
+          } else if (parseInt(value) > parseInt(this.gruopBuyForm.goods_num)) {
+            callback(new Error('限购数量不能大于商品总数数'))
           } else {
             callback()
           }
@@ -306,11 +310,11 @@
           remark: '',
 
           /** 是否同意协议 */
-          is_allow_agreement: false,
-
-          /** 团购服务协议 */
-          agreement_content: ''
+          is_allow_agreement: false
         },
+
+        /** 团购服务协议 */
+        agreement_content: '',
 
         /** 表单校验规则 */
         rules: {
@@ -404,6 +408,27 @@
           this.gruopBuyForm.original_price = _val.price
           this.gruopBuyForm.goods_stock = _val.quantity
         }
+      },
+
+      /** 图片上传之前的校验 */
+      handleImagesGbBefore(file) {
+        return new Promise((resolve, reject) => {
+          let reader = new FileReader()
+          reader.onload = (event) => {
+            let image = new Image()
+            image.onload = () => {
+              let width = image.width
+              let height = image.height
+              if (width !== height || width < 200 || width > 250) {
+                this.$message.error('图片尺寸必须在200~250之间，且宽高一致为正方形！')
+                reject()
+              }
+              resolve()
+            }
+            image.src = event.target.result
+          }
+          reader.readAsDataURL(file)
+        })
       },
 
       /** 图片上传成功时的钩子 上传成功校验*/

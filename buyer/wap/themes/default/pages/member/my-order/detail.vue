@@ -43,6 +43,9 @@
             <nuxt-link :to="'/goods/' + sku.goods_id">
               <span  class="goods-name">{{ sku.name }}</span>
               <p v-if="sku.spec_list" class="sku-spec">{{ sku | formatterSkuSpec }}</p>
+              <p v-if="sku.promotion_tags && sku.promotion_tags.length">
+                <span class="sku-act-tag" v-for="(tag, _index) in sku.promotion_tags" :key="'tag_' + _index">{{ tag }}</span>
+              </p>
             </nuxt-link>
             <div class="goods-infos">
               <p class="price">￥{{ sku.purchase_price | unitPrice }}</p>
@@ -72,7 +75,7 @@
             <van-icon name="point-gift"/>赠品列表
           </div>
         </div>
-        <ul class="sku-list">
+        <ul class="sku-list" style="overflow:hidden;">
           <li class="sku-item gift" v-for="(gift, index) in order.gift_list" :key="index">
             <a :href="gift.gift_img" class="goods-image">
               <img :src="gift.gift_img" :alt="gift.gift_name">
@@ -84,15 +87,15 @@
               <p class="price">￥{{ gift.gift_price | unitPrice }}</p>
             </div>
           </li>
+          <li class="sku-item gift" v-if="order.gift_coupon" key="gift_coupon">
+            <a class="goods-image">
+              <img src="../../../assets/images/icon-color-coupon.png">
+            </a>
+            <span class="goods-name">
+              价值<em class="price">￥{{ order.gift_coupon.amount | unitPrice }}</em>的优惠券
+            </span>
+          </li>
         </ul>
-        <div class="order-btns">
-          <nuxt-link v-if="order.logi_id && order.ship_no" :to="'./express?logi_id=' + order.logi_id + '&ship_no=' + order.ship_no">
-            <van-button size="small" type="default">查看物流</van-button>
-          </nuxt-link>
-          <nuxt-link v-if="order.order_operate_allowable_vo.allow_comment" :to="'../comments?order_sn=' + order.sn">
-            <van-button size="small" type="default">去评论</van-button>
-          </nuxt-link>
-        </div>
       </div>
       <van-cell-group class="receipt-cell">
         <van-cell v-if="!order.receipt_history || !order.receipt_history.receipt_title" title="发票信息" value="无" />
@@ -114,8 +117,11 @@
           <div class="order-item">
             <span>商品总价：</span><span>￥{{ order.goods_price | unitPrice }}</span>
           </div>
-          <div class="order-item">
-            <span>优惠折扣：</span><span>-￥{{ order.discount_price | unitPrice }}</span>
+          <div v-if="order.coupon_price" class="order-item">
+            <span>优惠券抵扣：</span><span>-￥{{ order.coupon_price | unitPrice }}</span>
+          </div>
+          <div v-if="order.cash_back" class="order-item">
+            <span>返现金额：</span><span>-￥{{ order.cash_back | unitPrice }}</span>
           </div>
           <div class="order-item">
             <span>运费：</span><span>￥{{ order.shipping_price | unitPrice }}</span>
@@ -271,6 +277,7 @@
     }
     .sku-item {
       display: flex;
+      align-items: center;
       margin: 10px auto;
       min-height: 75px;
       &.gift {
@@ -354,5 +361,13 @@
     a {
       color: $color-main
     }
+  }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid $color-main;
+    color: $color-main
   }
 </style>

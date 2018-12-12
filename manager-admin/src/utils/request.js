@@ -75,7 +75,7 @@ service.interceptors.response.use(
     await closeLoading(error)
     const error_response = error.response || {}
     const error_data = error_response.data || {}
-    if (error_response.status === 401) {
+    if (error_response.status === 403) {
       if (!Storage.getItem('admin_refresh_token')) return
       store.dispatch('fedLogoutAction')
       router.push({ path: `/login?forward=${location.pathname}` })

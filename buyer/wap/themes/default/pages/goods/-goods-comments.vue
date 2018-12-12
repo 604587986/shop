@@ -46,6 +46,10 @@
               <img :src="img" @click="handleImagePreview(comment.images, index)">
             </span>
           </div>
+          <div v-if="comment.reply_status === 1 && comment.reply" class="com-reply">
+            <span>商家回复：</span>
+            <span>{{ comment.reply.content }}</span>
+          </div>
         </div>
       </van-list>
     </van-popup>
@@ -232,5 +236,9 @@
   .no-comments {
     line-height: 50px;
     text-align: center;
+  }
+  .com-reply {
+    margin-top: 5px;
+    color: $color-main;
   }
 </style>

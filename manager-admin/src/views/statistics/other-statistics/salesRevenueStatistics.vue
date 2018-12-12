@@ -27,11 +27,17 @@
         :tableData="tableData.data"
         border
       >
-        <template slot="table-columns">
+        <template v-if="tableType === 'sales'" slot="table-columns">
           <el-table-column prop="goods_name" label="商品名称"/>
           <el-table-column prop="price" :formatter="MixinFormatPrice" label="商品单价"/>
           <el-table-column prop="goods_num" label="商品数量" width="100"/>
           <el-table-column prop="total" :formatter="MixinFormatPrice" label="订单金额"/>
+        </template>
+        <template v-else slot="table-columns">
+          <el-table-column prop="refund_sn" label="退款单号"/>
+          <el-table-column prop="order_sn" label="订单号"/>
+          <el-table-column prop="create_time" :formatter="MixinUnixToDate" label="创建时间"/>
+          <el-table-column prop="refund_price" :formatter="MixinFormatPrice" label="退款金额"/>
         </template>
         <el-pagination
           v-if="tableData"

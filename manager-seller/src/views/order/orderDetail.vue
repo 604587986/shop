@@ -2,7 +2,7 @@
   <div v-loading="loading" class="order-detail-container">
     <div class="order-info" v-if="orderDetail">
       <!--accordion-->
-      <el-collapse  class="order-collapse" :value="['order','other']">
+      <el-collapse  class="order-collapse" :value="['order', 'promotions', 'other']">
         <!--订单信息-->
         <el-collapse-item title="订单信息" name="order">
           <div class="order-item">
@@ -51,12 +51,23 @@
             <span class="item-value">{{ orderDetail.shipping_price | unitPrice('¥') }}</span>
           </div>
           <div class="order-item">
-            <span class="item-name">优惠金额：</span>
-            <span class="item-value">{{ orderDetail.discount_price | unitPrice('¥') }}</span>
-          </div>
-          <div class="order-item">
             <span class="item-name">订单总价：</span>
             <span class="item-value">{{ orderDetail.order_price | unitPrice('¥') }}</span>
+          </div>
+        </el-collapse-item>
+        <!--促销信息-->
+        <el-collapse-item title="促销信息" name="promotions" v-if="orderDetail.cash_back || orderDetail.gift_point || orderDetail.coupon_price">
+          <div class="order-item" v-if="orderDetail.cash_back">
+            <span class="item-name">返现金额：</span>
+            <span class="item-value">{{ orderDetail.cash_back | unitPrice('¥') }}</span>
+          </div>
+          <div class="order-item" v-if="orderDetail.gift_point">
+            <span class="item-name">赠送积分：</span>
+            <span class="item-value">{{ orderDetail.gift_point }}</span>
+          </div>
+          <div class="order-item" v-if="orderDetail.coupon_price">
+            <span class="item-name">优惠券抵扣：</span>
+            <span class="item-value">{{ orderDetail.coupon_price | unitPrice('¥') }}</span>
           </div>
         </el-collapse-item>
         <!--其他信息（发票、备注）-->
@@ -114,7 +125,7 @@
               <span class="item-value">{{ orderDetail.receipt_history.receipt_title }}</span>
             </div>
             <div v-if="orderDetail.receipt_history.tax_no" class="order-item">
-              <span class="item-name">税号：</span>
+              <span class="item-name"> 税 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 号：</span>
               <span class="item-value">{{ orderDetail.receipt_history.tax_no }}</span>
             </div>
             <div class="order-item">
@@ -190,9 +201,13 @@
             </a>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" >
+        <el-table-column label="商品名称" align="left">
           <template slot-scope="scope">
             <a :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`" target="_blank" style="color: #00a2d4;">{{ scope.row.name }}</a>
+            <p class="sku-spec">{{ scope.row | formatterSkuSpec }}</p>
+            <p class="sku-act-tags" v-if="scope.row.promotion_tags && scope.row.promotion_tags.length">
+              <span class="sku-act-tag" v-for="(tag, index) in scope.row.promotion_tags" :key="index">{{ tag }}</span>
+            </p>
           </template>
         </el-table-column>
         <el-table-column label="单价（元）" width="150">
@@ -924,6 +939,24 @@
   /deep/ .electronic-surface {
     border: 1px solid #ddd;
     padding: 5px;
+  }
+
+  .sku-spec {
+    color: #ff9800;
+    margin: 0;
+  }
+
+  .sku-act-tags {
+    padding: 0;
+    margin: 0;
+  }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid #f42424;
+    color: #f42424;
   }
 </style>
 

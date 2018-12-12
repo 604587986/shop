@@ -452,7 +452,9 @@
     }
     .font-other { height: 60px }
     .shop-intro-body {
-
+      img {
+        object-fit: cover;
+      }
     }
   }
   .shop-intro {

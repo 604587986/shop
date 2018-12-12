@@ -13,7 +13,8 @@
       <div class="shop-item" v-for="(shop, index) in shopList" :key="index">
         <div class="inner-shop-item">
           <div class="title-shop-item">
-            <div class="shop-check" @click="handleCheckShop(shop)">
+            <div v-if="shop.invalid === 1" style="width: 10%"></div>
+            <div v-else class="shop-check" @click="handleCheckShop(shop)">
               <van-icon :name="shop.checked ? 'checked' : 'check'"/>
             </div>
             <div class="shop-name">{{ shop.seller_name }}</div>
@@ -31,6 +32,7 @@
               class="sku-item-li"
               :class="[sku.invalid === 1 && 'invalid']"
             >
+              <div v-if="sku.error_message" class="error-message">{{ sku.error_message }}</div>
               <van-swipe-cell :right-width="90">
                 <div class="sku-item">
                   <div v-if="sku.invalid === 1" class="sku-check">已失效</div>
@@ -42,9 +44,12 @@
                   </nuxt-link>
                   <div class="sku-content">
                     <nuxt-link :to="'/goods/' + sku.goods_id" class="sku-name">{{ sku.name }}</nuxt-link>
-                    <div class="sku-spec">
+                    <div v-if="sku.spec_list" class="sku-spec">
                       <span>{{ sku | formatterSkuSpec }}</span>
                     </div>
+                    <p v-if="sku.promotion_tags && sku.promotion_tags.length">
+                      <span class="sku-act-tag" v-for="(tag, _index) in sku.promotion_tags" :key="'tag_' + _index">{{ tag }}</span>
+                    </p>
                     <div class="sku-tools">
                       <div class="sku-price">
                         <strong>￥{{ sku.purchase_price | unitPrice }}</strong>
@@ -327,7 +332,6 @@
   .inner-shop-item {
     background-color: #fff;
     overflow: hidden;
-    padding: 0 5px;
   }
   .title-shop-item {
     display: flex;
@@ -565,10 +569,12 @@
     }
   }
   .sku-item-li {
+    border-bottom: 1px dashed #dcdcdc;
     &.invalid .sku-item {
       filter: grayscale(1);
     }
     &:last-child {
+      border-bottom: none;
       .act-item {
         margin-bottom: 10px;
       }
@@ -635,5 +641,17 @@
         font-size: 12px;
       }
     }
+  }
+  .error-message {
+    color: red;
+    padding-left: 15%;
+  }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid $color-main;
+    color: $color-main
   }
 </style>

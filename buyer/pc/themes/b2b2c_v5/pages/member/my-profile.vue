@@ -31,7 +31,7 @@
           <span>{{ profileForm.uname }}</span>
         </el-form-item>
         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="profileForm.nickname" size="small" clearable></el-input>
+          <el-input v-model="profileForm.nickname" placeholder="昵称最多20个字符" maxlength="20" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="性别" required>
           <el-radio v-model="profileForm.sex" :label="1">男</el-radio>
@@ -54,7 +54,7 @@
           <en-region-picker :api="MixinRegionApi" :default="defaultRegions" @changed="(object) => { profileForm.region = object.last_id }"/>
         </el-form-item>
         <el-form-item label="详细地址" prop="address">
-          <el-input v-model="profileForm.address" size="small" clearable></el-input>
+          <el-input v-model="profileForm.address" placeholder="最多50个字符" maxlength="50" size="small" clearable></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="profileForm.email" size="small" clearable></el-input>

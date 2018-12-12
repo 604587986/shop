@@ -16,7 +16,12 @@
       <div class="header-cart-content">
         <div class="mc">
           <ul v-if="skuList.length > 0" class="header-cart-list">
-            <li v-for="sku in skuList" :key="sku.sku_id" class="item-header-cart">
+            <li
+              v-for="sku in skuList"
+              :key="sku.sku_id"
+              class="item-header-cart"
+              :class="[sku.invalid === 1 && 'invalid']"
+            >
               <div class="p-img">
                 <nuxt-link :to="'/goods/' + sku.goods_id" target="_blank" :title="sku.name">
                   <img :src="sku.goods_image" :alt="sku.name">
@@ -28,11 +33,14 @@
                 </nuxt-link>
               </div>
               <div class="p-number">
-                <span class="num">{{ sku.num }}</span>
-                <div class="count">
-                  <a @click="handleUpdateCartSkuNum(sku, '+')" href="javascript:void(0);" class="count-oper count-add"><i class="cart-icon icon-up"></i></a>
-                  <a @click="handleUpdateCartSkuNum(sku, '-')" href="javascript:void(0);" class="count-oper count-remove"><i class="cart-icon icon-down"></i></a>
-                </div>
+                <div v-if="sku.invalid === 1" style="line-height: 36px">已失效</div>
+                <template v-else>
+                  <span class="num">{{ sku.num }}</span>
+                  <div class="count">
+                    <a @click="handleUpdateCartSkuNum(sku, '+')" href="javascript:void(0);" class="count-oper count-add"><i class="cart-icon icon-up"></i></a>
+                    <a @click="handleUpdateCartSkuNum(sku, '-')" href="javascript:void(0);" class="count-oper count-remove"><i class="cart-icon icon-down"></i></a>
+                  </div>
+                </template>
               </div>
               <div class="p-oper">
                 <div class="price"><em>¥</em><span class="item-total">{{ sku.subtotal | unitPrice }}</span></div>
@@ -182,6 +190,9 @@
         vertical-align: bottom;
         &:hover {
           background-color: #f5f5f5;
+        }
+        &.invalid {
+          filter: grayscale(1);
         }
       }
       .p-img {

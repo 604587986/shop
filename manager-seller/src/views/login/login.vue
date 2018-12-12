@@ -108,7 +108,7 @@
         },
         // 登陆表单 规则
         loginRules: {
-          username: [this.MixinRequired('请输入用户名/邮箱/手机号！')],
+          username: [this.MixinRequired('请输入用户名/邮箱/手机号')],
           password: [this.MixinRequired('请输入密码！')],
           captcha: [this.MixinRequired('请输入图片验证码！')]
         },

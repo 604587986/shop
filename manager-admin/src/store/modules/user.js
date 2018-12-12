@@ -41,6 +41,11 @@ export const mutations = {
   SET_REFRESH_TOKEN: (state, token) => {
     const expires = new Date(jwt_decode(token).exp * 1000)
     Storage.setItem('admin_refresh_token', token, { expires })
+    // 同时延长用户信息失效时间
+    const user = Storage.getItem('admin_user')
+    const uid = Storage.getItem('admin_uid')
+    Storage.setItem('admin_user', user, { expires })
+    Storage.setItem('admin_uid', uid, { expires })
   },
   /**
    * 移除用户信息

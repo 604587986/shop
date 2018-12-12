@@ -127,7 +127,15 @@
           this.loading = false
           this.sesalChart.setOption({
             title: { text: '价格销量分析', x: 'center' },
-            tooltip: { trigger: 'axis' },
+            tooltip: {
+              trigger: 'axis',
+              show: true,
+              formatter: function(params, ticket, callback) {
+                if (params[0].name && params[0].value) {
+                  return `价格:${params[0].name}<br>${params[0].seriesId.replace(/0/, '')}：${params[0].value}`
+                }
+              }
+            },
             legend: { show: true, orient: 'vertical', data: [{ name: response.series.name, textStyle: { borderColor: '#7CB5EC' }}], bottom: '10px' },
             color: ['#7CB5EC'],
             toolbox: {
@@ -139,7 +147,7 @@
               }
             },
             xAxis: {
-              name: '价格',
+              name: '价格（元）',
               type: 'category',
               boundaryGap: false,
               data: response.xAxis
@@ -156,6 +164,7 @@
                 name: '下单量',
                 type: 'line',
                 data: response.series.data,
+                barWidth: 50,
                 markPoint: {
                   data: [
                     { type: 'max', name: '最大值' },

@@ -8,7 +8,11 @@
 
     <!--地址列表-->
     <div class="center-ckt-info" :style="{height: (expanded ? addressList.length * 42 : 114) + 'px'}">
-      <ul id="address_list">
+      <div v-if="addressList && !addressList.length" class="empyt-addr">
+        <img src="../../assets/images/icon-empty-member.png" alt="">
+        <p>您还没有收货地址，请先[<a href="javascript:void(0)" @click="handleAddAddress">添加收货地址</a>]</p>
+      </div>
+      <ul v-else id="address_list">
         <li
           v-for="item in ckAddressList"
           :key="item.addr_id"
@@ -140,5 +144,12 @@
   #addressForm{
     padding: 10px 20px;
     /deep/ .app-address { margin-top: 7px }
+  }
+  .empyt-addr {
+    width: 100%;
+    text-align: center;
+    a {
+      color: $color-href;
+    }
   }
 </style>

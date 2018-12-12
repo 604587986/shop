@@ -320,6 +320,7 @@
 </script>
 
 <style type="text/scss" lang="scss" scoped>
+  @import "../../../assets/styles/color";
   .goods-list {
     margin-top: 20px;
   }

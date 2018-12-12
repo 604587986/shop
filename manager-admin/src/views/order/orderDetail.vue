@@ -41,6 +41,9 @@
             <template slot-scope="scope">
               <a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" class="goods-name" target="_blank">{{ scope.row.name }}</a>
               <p class="sku-spec">{{ scope.row | formatterSkuSpec }}</p>
+              <p class="sku-act-tags" v-if="scope.row.promotion_tags && scope.row.promotion_tags.length">
+                <span class="sku-act-tag" v-for="(tag, index) in scope.row.promotion_tags" :key="index">{{ tag }}</span>
+              </p>
             </template>
           </el-table-column>
           <el-table-column label="商品价格" width="150">
@@ -182,6 +185,17 @@
       countShowData() {
         const o = this.orderDetail
         const f = Foundation
+        const promotions = []
+        if (o.coupon_price) {
+          promotions.push({ label: '优惠券抵扣', value: '-￥' + f.formatPrice(o.coupon_price) })
+        }
+        if (o.cash_back) {
+          promotions.push({ label: '返现金额', value: '￥' + f.formatPrice(o.cash_back) })
+        }
+        promotions.push({ label: '运&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;费', value: '￥' + f.formatPrice(o.shipping_price) })
+        if (o.gift_point) {
+          promotions.push({ label: '赠送积分', value: o.gift_point })
+        }
         this.orderInfo = [
           [
             {
@@ -190,6 +204,8 @@
               items: [
                 { label: '订单编号', value: o.sn },
                 { label: '订单金额', value: '￥' + f.formatPrice(o.need_pay_money) },
+                { label: '商品金额', value: '￥' + f.formatPrice(o.goods_price) },
+                ...promotions,
                 { label: '支付方式', value: (o.payment_type === 'ONLINE' ? '在线支付' : '货到付款') + (o.payment_method_name ? ('-' + o.payment_method_name) : '') },
                 { label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '') },
                 { label: '下单时间', value: f.unixToDate(o.create_time) }
@@ -293,6 +309,18 @@
   .sku-spec {
     color: #ff9800;
     margin: 0;
+  }
+  .sku-act-tags {
+    padding: 0;
+    margin: 0;
+  }
+  .sku-act-tag {
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    margin-right: 5px;
+    border: 1px solid #f42424;
+    color: #f42424;
   }
 </style>
 

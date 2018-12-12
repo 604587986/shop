@@ -165,3 +165,13 @@ export function unixOrderStatus(status_code) {
       return '售后中'
   }
 }
+
+/**
+ * 格式化货品的规格
+ * @param sku
+ * @returns {*}
+ */
+export function formatterSkuSpec(sku) {
+  if (!sku.spec_list || !sku.spec_list.length) return ''
+  return sku.spec_list.map(spec => spec.spec_value).join(' - ')
+}

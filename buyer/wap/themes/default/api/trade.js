@@ -240,6 +240,7 @@ export function getOrderTotal() {
   return request({
     url: 'trade/price',
     method: Method.GET,
+    loading: false,
     needToken: true
   })
 }
