@@ -331,35 +331,16 @@
         }
       }
     },
-    mounted() {
-      delete this.params.market_enable
-      if (this.$route.query.market_enable) {
-        this.params = {
-          ...this.params,
-          market_enable: parseInt(this.$route.query.market_enable)
-        }
-      }
-      this.GET_GoodsList()
-      this.getDistributionSet()
-    },
     activated() {
-      delete this.params.market_enable
+      if (this.$route.query.market_enable === 0 || this.$route.query.market_enable === 1) {
+        delete this.params.market_enable
+      }
       this.params = {
         ...this.params,
         ...this.$route.query
       }
       this.GET_GoodsList()
       this.getDistributionSet()
-    },
-    beforeRouteUpdate(to, from, next) {
-      delete this.params.market_enable
-      this.params = {
-        ...this.params,
-        ...this.$route.query
-      }
-      this.GET_GoodsList()
-      this.getDistributionSet()
-      next()
     },
     methods: {
       /** 库存边界限制 */
