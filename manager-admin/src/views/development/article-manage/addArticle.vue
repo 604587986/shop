@@ -26,7 +26,7 @@
             list-type="picture"
             :on-success="(res) => { articleForm.cover = res.url }"
             :on-remove="() => { articleForm.cover = '' }"
-            :file-list="articleForm.cover ? [{name: 'cover', url: articleForm.category_image}] : []"
+            :file-list="articleForm.cover ? [{name: 'cover', url: articleForm.cover}] : []"
             :multiple="false"
             :limit="1"
           >
@@ -34,8 +34,8 @@
             <span slot="tip" class="el-upload__tip">&nbsp;建议上传jpg/png文件，且不超过1MB</span>
           </el-upload>
       </el-form-item>
-      <el-form-item label="描述" prop="describe" style="width: 500px">
-        <el-input v-model="articleForm.describe" type="textarea"></el-input>
+      <el-form-item label="描述" prop="describes" style="width: 500px">
+        <el-input v-model="articleForm.describes" type="textarea"></el-input>
       </el-form-item>
       <el-form-item label="文章内容" prop="content">
         <UE ref="ue" :defaultMsg="articleForm.content"></UE>
