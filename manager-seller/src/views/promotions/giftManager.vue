@@ -15,24 +15,24 @@
       </div>
       <template slot="table-columns">
         <el-table-column prop="gift_name" label="赠品名称" />
-        <el-table-column label="赠品图片" >
+        <el-table-column label="赠品图片" width="120">
           <template slot-scope="scope">
             <img :src="scope.row.gift_img" class="goods-image" alt="">
           </template>
         </el-table-column>
-        <el-table-column  label="赠品价格">
+        <el-table-column  label="赠品价格" width="120">
           <template slot-scope="scope">
             {{ scope.row.gift_price | unitPrice('￥') }}
           </template>
         </el-table-column>
-        <el-table-column prop="actual_store" label="实际库存" />
-        <el-table-column prop="enable_store" label="可用库存" />
-        <el-table-column label="创建时间">
+        <el-table-column prop="actual_store" label="实际库存" width="120"/>
+        <el-table-column prop="enable_store" label="可用库存" width="120"/>
+        <el-table-column label="创建时间" width="150">
           <template slot-scope="scope">
             {{ scope.row.create_time | unixToDate }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="280">
+        <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
               type="success"
