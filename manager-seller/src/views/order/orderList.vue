@@ -1,484 +1,500 @@
 <template>
-  <div>
-    <en-table-layout
-      toolbar
-      pagination
-      :loading="loading"
-      :tableData="tableData">
-      <div slot="toolbar" class="inner-toolbar">
-        <div class="toolbar-btns">
-          <span style="font-size: 14px;">订单状态：</span>
-          <el-select v-model="params.order_status" placeholder="请选择订单状态" @change="changeOrderStatus">
-            <el-option
-              v-for="item in orderStatusList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </div>
-        <div class="toolbar-search">
-          <en-table-search
-            @search="searchEvent"
-            @advancedSearch="advancedSearchEvent"
-            advanced
-            advancedWidth="465"
-            placeholder="请输入订单编号或者商品名称">
-            <template slot="advanced-content">
-              <el-form ref="advancedForm" :model="advancedForm" label-width="80px">
-                <el-form-item label="订单编号">
-                  <el-input v-model="advancedForm.order_sn" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="订单类型">
-                  <el-select v-model="advancedForm.order_type" placeholder="请选择订单类型">
-                    <el-option
-                      v-for="item in orderTypeList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="预付款是否完成">
-                  <el-select v-model="advancedForm.first_money_state" clearable placeholder="预付款是否完成">
-                    <el-option
-                      v-for="item in firstMoneyStatusList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="尾款是否完成">
-                  <el-select v-model="advancedForm.end_money_state" clearable placeholder="尾款是否完成">
-                    <el-option
-                      v-for="item in endMoneyStatusList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="商品名称">
-                  <el-input v-model="advancedForm.goods_name" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="买家姓名">
-                  <el-input v-model="advancedForm.buyer_name" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="下单日期">
-                  <el-date-picker
-                    v-model="advancedForm.order_time_range"
-                    type="daterange"
-                    align="center"
-                    :editable="false"
-                    unlink-panels
-                    range-separator="-"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
-                  </el-date-picker>
-                </el-form-item>
-              </el-form>
-            </template>
-          </en-table-search>
-        </div>
-      </div>
-    </en-table-layout>
-    <div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
-      <table class="my-table">
-        <thead>
-        <tr class="bg-order">
-          <th class="shoplist-header"><span>商品</span> <span>单价/数量</span></th>
-          <th>买家</th>
-          <th>下单时间</th>
-          <th>订单状态</th>
-          <th>订单来源</th>
-          <th>实付金额</th>
-        </tr>
-        </thead>
-        <tbody v-for="item in tableData">
-        <tr style="width: 100%;height: 10px;"></tr>
-        <tr class="bg-order">
-          <td class="shoplist-content-out" colspan="5">订单编号：{{item.sn}}</td>
-          <td>
-            <el-button type="text" @click="handleOperateOrder(item)">查看详情</el-button>
-          </td>
-        </tr>
-        <tr>
-          <!--商品-->
-          <td>
-            <p v-for="shop in item.sku_list" class="shoplist-content">
-              <span class="goods-info">
-                <img :src="shop.goods_image" alt="" class="goods-image"/>
-                <a :href="`${MixinBuyerDomain}/goods/${shop.goods_id}`" target="_blank" style="color: #00a2d4;">{{ shop.name }}</a>
-              </span>
-              <span>
-                <span>{{shop.original_price | unitPrice('￥')}}</span> × <span class="goods—price">{{ shop.num }}</span>
-                <a :href="`${MixinBuyerDomain}/goods/snapshot?id=${shop.snapshot_id}&sku_id=${shop.sku_id}`" target="_blank">
-                  <el-button type="text">交易快照</el-button>
-                </a>
-              </span>
-            </p>
-          </td>
-          <!--买家-->
-          <td> {{ item.member_name }}</td>
-          <!--下单时间-->
-          <td>{{ item.create_time | unixToDate }}</td>
-          <!--订单状态-->
-          <td>{{ item.order_status_text }}</td>
-          <!--订单来源-->
-          <td>{{ item.client_type }}</td>
-          <!--实付金额-->
-          <td>
-            <div class="order-money">
-              <!--订单总金额-->
-              <span class="order-amount">{{ item.order_amount | unitPrice('￥')}}</span>
-              <!--运费/邮费-->
-              <span>运费({{ item.shipping_amount | unitPrice('￥') }})</span>
-              <!--支付方式-->
-              <span>{{ item.payment_name }}</span>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-        <div v-if="tableData.length === 0 " class="empty-block">
-          暂无数据
-        </div>
-      </table>
-    </div>
-    <el-pagination
-      slot="pagination"
-      v-if="pageData"
-      @size-change="handlePageSizeChange"
-      @current-change="handlePageCurrentChange"
-      :current-page="pageData.page_no"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageData.page_size"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pageData.data_total">
-    </el-pagination>
-  </div>
+	<div>
+		<en-table-layout toolbar pagination :loading="loading" :tableData="tableData">
+			<div slot="toolbar" class="inner-toolbar">
+				<div class="toolbar-btns">
+					<el-select v-model="params.order_type" placeholder="请选择订单类型" @change="orderSearch">
+						<el-option label="普通订单" :value="0"></el-option>
+						<el-option label="服务订单" :value="1"></el-option>
+					</el-select>
+
+					<el-select v-if="params.order_type===1" v-model="params.first_money_state" clearable placeholder="预付款是否完成" @change="orderSearch">
+						<el-option label="未完成" value="no"></el-option>
+						<el-option label="已完成" value="yes"></el-option>
+					</el-select>
+
+					<el-select v-if="params.order_type===1" v-model="params.end_money_state" clearable placeholder="尾款是否完成" @change="orderSearch">
+						<el-option label="未完成" value="no"></el-option>
+						<el-option label="已完成" value="yes"></el-option>
+					</el-select>
+				</div>
+				<div class="toolbar-search">
+					<en-table-search @search="searchEvent" @advancedSearch="advancedSearchEvent" advanced advancedWidth="465" placeholder="请输入订单编号或者商品名称">
+						<template slot="advanced-content">
+							<el-form ref="advancedForm" :model="advancedForm" label-width="80px">
+								<el-form-item label="订单编号">
+									<el-input v-model="advancedForm.order_sn" clearable></el-input>
+								</el-form-item>
+								<el-form-item label="商品名称">
+									<el-input v-model="advancedForm.goods_name" clearable></el-input>
+								</el-form-item>
+								<el-form-item label="买家姓名">
+									<el-input v-model="advancedForm.buyer_name" clearable></el-input>
+								</el-form-item>
+								<el-form-item label="下单日期">
+									<el-date-picker
+										v-model="advancedForm.order_time_range"
+										type="daterange"
+										align="center"
+										:editable="false"
+										unlink-panels
+										range-separator="-"
+										start-placeholder="开始日期"
+										end-placeholder="结束日期"
+									></el-date-picker>
+								</el-form-item>
+								<el-form-item label="订单状态" v-if="params.order_type!==1">
+									<el-select v-model="advancedForm.order_status" placeholder="请选择" clearable>
+										<el-option label="新订单" value="NEW"/>
+										<el-option label="已确认" value="CONFIRM"/>
+										<el-option label="已付款" value="PAID_OFF"/>
+										<el-option label="已发货" value="SHIPPED"/>
+										<el-option label="已收货" value="ROG"/>
+										<el-option label="已完成" value="COMPLETE"/>
+										<el-option label="已取消" value="CANCELLED"/>
+										<el-option label="售后中" value="AFTE_SERVICE"/>
+									</el-select>
+								</el-form-item>
+							</el-form>
+						</template>
+					</en-table-search>
+				</div>
+			</div>
+		</en-table-layout>
+		<div class="my-table-out" :style="{maxHeight: tableMaxHeight + 'px'}">
+			<table class="my-table">
+				<thead>
+					<tr class="bg-order">
+						<th class="shoplist-header">
+							<span>商品</span>
+							<span>单价/数量</span>
+						</th>
+						<th>买家</th>
+						<th v-if="params.order_type!==1">下单时间</th>
+						<th v-else>预约时间</th>
+						<th v-if="params.order_type!==1">订单状态</th>
+						<th v-if="params.order_type===1">预付款</th>
+						<th v-if="params.order_type===1">尾款</th>
+						<th>订单来源</th>
+						<th v-if="params.order_type!==1">实付金额</th>
+					</tr>
+				</thead>
+				<tbody v-for="item in tableData">
+					<tr style="width: 100%;height: 10px;"></tr>
+					<tr class="bg-order">
+						<td class="shoplist-content-out" :colspan="params.order_type!==1?5:5">订单编号：{{item.sn}}</td>
+						<td>
+							<el-button type="text" @click="handleOperateOrder(item)">查看详情</el-button>
+						</td>
+					</tr>
+					<tr>
+						<!--商品-->
+						<td>
+							<p v-for="shop in item.sku_list" class="shoplist-content">
+								<span class="goods-info">
+									<img :src="shop.goods_image" alt class="goods-image">
+									<a :href="`${MixinBuyerDomain}/goods/${shop.goods_id}`" target="_blank" style="color: #00a2d4;">{{ shop.name }}</a>
+								</span>
+								<span>
+									<span>{{shop.original_price | unitPrice('￥')}}</span> ×
+									<span class="goods—price">{{ shop.num }}</span>
+									<a :href="`${MixinBuyerDomain}/goods/snapshot?id=${shop.snapshot_id}&sku_id=${shop.sku_id}`" target="_blank">
+										<el-button type="text">交易快照</el-button>
+									</a>
+								</span>
+							</p>
+						</td>
+						<!--买家-->
+						<td>{{ item.member_name }}</td>
+						<!--下单时间-->
+						<td>{{ item.create_time | unixToDate }}</td>
+						<!--订单状态-->
+						<td v-if="params.order_type!==1">{{ item.order_status_text }}</td>
+						<!--预付款-->
+						<td v-if="params.order_type===1">{{ item.first_money | unitPrice('￥') }} <span :class="item.first_money_state==='yes'?'green':'red'">{{item.first_money_state==="yes"?"已付款":"未付款"}}</span> </td>
+						<!--尾款-->
+						<td v-if="params.order_type===1">{{ item.end_money | unitPrice('￥') }} <span :class="item.first_money_state==='yes'?'green':'red'">{{item.end_money_state==="yes"?"已付款":"未付款"}}</span> </td>
+						<!--订单来源-->
+						<td>{{ item.client_type }}</td>
+						<!--实付金额-->
+						<td v-if="params.order_type!==1">
+							<div class="order-money">
+								<!--订单总金额-->
+								<span class="order-amount">{{ item.order_amount | unitPrice('￥')}}</span>
+								<!--运费/邮费-->
+								<span>运费({{ item.shipping_amount | unitPrice('￥') }})</span>
+								<!--支付方式-->
+								<span>{{ item.payment_name }}</span>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+				<div v-if="tableData.length === 0 " class="empty-block">暂无数据</div>
+			</table>
+		</div>
+		<el-pagination
+			slot="pagination"
+			v-if="pageData"
+			@size-change="handlePageSizeChange"
+			@current-change="handlePageCurrentChange"
+			:current-page="pageData.page_no"
+			:page-sizes="[10, 20, 50, 100]"
+			:page-size="pageData.page_size"
+			layout="total, sizes, prev, pager, next, jumper"
+			:total="pageData.data_total"
+		></el-pagination>
+	</div>
 </template>
 
 <script>
 /* eslint-disable */
-  import * as API_order from '@/api/order'
-  import { CategoryPicker } from '@/components'
+import * as API_order from "@/api/order";
+import { CategoryPicker } from "@/components";
 
-  export default {
-    name: 'orderList',
-    components: {
-      [CategoryPicker.name]: CategoryPicker
-    },
-    data() {
-      return {
-        /** 列表loading状态 */
-        loading: false,
+export default {
+	name: "orderList",
+	components: {
+		[CategoryPicker.name]: CategoryPicker
+	},
+	data() {
+		return {
+			/** 列表loading状态 */
+			loading: false,
 
-        /** 列表参数 */
-        params: {
-          page_no: 1,
-          page_size: 10,
-          ...this.$route.query
-        },
+			/** 列表参数 */
+			params: {
+				page_no: 1,
+				page_size: 10,
+				...this.$route.query,
+				order_type: 0,
+				first_money_state: null,
+				end_money_state: null
+			},
 
-        /** 列表数据 */
-        tableData: [],
+			/** 列表数据 */
+			tableData: [],
 
-        /** 列表分页数据 */
-        pageData: [],
+			/** 列表分页数据 */
+			pageData: [],
 
-        /** 高级搜索数据 */
-        advancedForm: {},
+			/** 高级搜索数据 */
+			advancedForm: {},
 
-        /** 订单状态 列表*/
-        orderStatusList: [
-          { value: 'ALL', label: '全部' },
-          { value: 'WAIT_PAY', label: '待付款' },
-          { value: 'WAIT_SHIP', label: '待发货' },
-          { value: 'WAIT_ROG', label: '待收货' },
-          { value: 'COMPLETE', label: '已完成' },
-          { value: 'CANCELLED', label: '已取消' }
-        ],
+			/** 订单状态 列表*/
+			orderStatusList: [
+				{ value: "ALL", label: "全部" },
+				{ value: "WAIT_PAY", label: "待付款" },
+				{ value: "WAIT_SHIP", label: "待发货" },
+				{ value: "WAIT_ROG", label: "待收货" },
+				{ value: "COMPLETE", label: "已完成" },
+				{ value: "CANCELLED", label: "已取消" }
+			],
 
-        /** 订单类型 列表*/
-        orderTypeList: [
-          { value: 0, label: '普通订单' },
-          { value: 1, label: '服务订单' },
-        ],
+			/** 订单类型 列表*/
+			orderTypeList: [
+				{ value: 0, label: "普通订单" },
+				{ value: 1, label: "服务订单" }
+			],
 
-        /** 预付款状态 列表*/
-        firstMoneyStatusList: [
-          { value: 'no', label: '未完成' },
-          { value: 'yes', label: '已完成' },
-        ],
+			/** 预付款状态 列表*/
+			firstMoneyStatusList: [
+				{ value: "no", label: "未完成" },
+				{ value: "yes", label: "已完成" }
+			],
 
-        /** 尾款状态 列表*/
-        endMoneyStatusList: [
-          { value: 'no', label: '未完成' },
-          { value: 'yes', label: '已完成' },
-        ],
+			/** 尾款状态 列表*/
+			endMoneyStatusList: [
+				{ value: "no", label: "未完成" },
+				{ value: "yes", label: "已完成" }
+			],
 
-        /** 表格最大高度 */
-        tableMaxHeight: (document.body.clientHeight - 54 - 34 - 50 - 15)
-      }
-    },
-    mounted() {
-      this.GET_OrderList()
-    },
-    activated() {
-      delete this.params.market_enable
-      this.params = {
-        ...this.params,
-        ...this.$route.query
-      }
-      this.GET_OrderList()
-      window.onresize = this.countTableHeight
-    },
-    beforeRouteUpdate(to, from, next) {
-      delete this.params.market_enable
-      this.params = {
-        ...this.params,
-        ...this.$route.query
-      }
-      this.GET_OrderList()
-      next()
-    },
-    methods: {
-      /** 计算高度 */
-      countTableHeight() {
-        this.tableHeight = (document.body.clientHeight - 54 - 35 - 50)
-      },
+			/** 表格最大高度 */
+			tableMaxHeight: document.body.clientHeight - 54 - 34 - 50 - 15
+		};
+	},
+	mounted() {
+		this.GET_OrderList();
+	},
+	activated() {
+		delete this.params.market_enable;
+		this.params = {
+			...this.params,
+			...this.$route.query
+		};
+		this.GET_OrderList();
+		window.onresize = this.countTableHeight;
+	},
+	beforeRouteUpdate(to, from, next) {
+		delete this.params.market_enable;
+		this.params = {
+			...this.params,
+			...this.$route.query
+		};
+		this.GET_OrderList();
+		next();
+	},
+	methods: {
+		/** 计算高度 */
+		countTableHeight() {
+			this.tableHeight = document.body.clientHeight - 54 - 35 - 50;
+		},
 
-      /** 分页大小发生改变 */
-      handlePageSizeChange(size) {
-        this.params.page_size = size
-        this.GET_OrderList()
-      },
+		/** 分页大小发生改变 */
+		handlePageSizeChange(size) {
+			this.params.page_size = size;
+			this.GET_OrderList();
+		},
 
-      /** 分页页数发生改变 */
-      handlePageCurrentChange(page) {
-        this.params.page_no = page
-        this.GET_OrderList()
-      },
+		/** 分页页数发生改变 */
+		handlePageCurrentChange(page) {
+			this.params.page_no = page;
+			this.GET_OrderList();
+		},
 
-      /** 订单状态改变 */
-      changeOrderStatus(data) {
-        delete this.params.keywords
-        delete this.params.order_status
-        if (data) {
-          this.params = {
-            ...this.params,
-            order_status: data
-          }
-          this.params.page_no = 1
-          this.params.page_size = 10
-        }
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
-        this.GET_OrderList()
-      },
+		/** 订单状态改变 */
+		changeOrderStatus(data) {
+			delete this.params.keywords;
+			delete this.params.order_status;
+			if (data) {
+				this.params = {
+					...this.params,
+					order_status: data
+				};
+				this.params.page_no = 1;
+				this.params.page_size = 10;
+			}
+			Object.keys(this.advancedForm).forEach(
+				key => delete this.params[key]
+			);
+			this.GET_OrderList();
+		},
 
-      /** 搜索事件触发 */
-      searchEvent(data) {
-        this.params = {
-          ...this.params,
-          keywords: data
-        }
-        delete this.params.order_status
-        Object.keys(this.advancedForm).forEach(key => delete this.params[key])
-        this.GET_OrderList()
-      },
+		/** 搜索事件触发 */
+		searchEvent(data) {
+			this.params = {
+				...this.params,
+				keywords: data
+			};
+			delete this.params.order_status;
+			Object.keys(this.advancedForm).forEach(
+				key => delete this.params[key]
+			);
+			this.GET_OrderList();
+		},
 
-      /** 高级搜索事件触发 */
-      advancedSearchEvent() {
-        this.params = {
-          ...this.params,
-          ...this.advancedForm
-        }
-        delete this.params.start_time
-        delete this.params.end_time
-        if (this.advancedForm.order_time_range) {
-          this.params.start_time = this.advancedForm.order_time_range[0].getTime() / 1000
-          this.params.end_time = this.advancedForm.order_time_range[1].getTime() / 1000
-        }
-        delete this.params.keywords
-        delete this.params.order_time_range
-        this.GET_OrderList()
-      },
+		/** 高级搜索事件触发 */
+		advancedSearchEvent() {
+			this.params = {
+				...this.params,
+				...this.advancedForm
+			};
+			delete this.params.start_time;
+			delete this.params.end_time;
+			if (this.advancedForm.order_time_range) {
+				this.params.start_time =
+					this.advancedForm.order_time_range[0].getTime() / 1000;
+				this.params.end_time =
+					this.advancedForm.order_time_range[1].getTime() / 1000;
+			}
+			delete this.params.keywords;
+			delete this.params.order_time_range;
+			this.GET_OrderList();
+		},
 
-      /** 查看、操作订单 */
-      handleOperateOrder(item) {
-        this.$router.push({ path: `/order/detail/${item.sn}` })
-      },
+		/** 查看、操作订单 */
+		handleOperateOrder(item) {
+			this.$router.push({ path: `/order/detail/${item.sn}` });
+		},
 
-      GET_OrderList() {
-        this.loading = true
-        API_order.getOrderList(this.params).then(response => {
-          this.loading = false
-          this.tableData = response.data
-          this.pageData = {
-            page_no: response.page_no,
-            page_size: response.page_size,
-            data_total: response.data_total
-          }
-        })
-      }
-    }
-  }
+		GET_OrderList() {
+			this.loading = true;
+			API_order.getOrderList(this.params).then(response => {
+				this.loading = false;
+				this.tableData = response.data;
+				this.pageData = {
+					page_no: response.page_no,
+					page_size: response.page_size,
+					data_total: response.data_total
+				};
+			});
+		},
+
+		/** 订单筛选 */
+		orderSearch(val) {
+			if (val === 0) {
+				this.params.first_money_state = null;
+				this.params.end_money_state = null;
+			} else if (val === 1) {
+				this.advancedForm.order_status = null;
+			}
+
+			this.params.page_no = 1;
+			this.GET_OrderList();
+		}
+	}
+};
 </script>
 
 <style type="text/scss" lang="scss" scoped>
-  /deep/ div.toolbar {
-    height: 70px;
-    padding: 20px 0;
-  }
-  /* 工具条*/
-  .inner-toolbar {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding: 0 20px;
-  }
+/deep/ div.toolbar {
+	height: 70px;
+	padding: 20px 0;
+}
+/* 工具条*/
+.inner-toolbar {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	padding: 0 20px;
+}
 
-  /*暂无数据时的样式*/
-  /deep/ .el-table__empty-block {
-    display: none;
-  }
+/*暂无数据时的样式*/
+/deep/ .el-table__empty-block {
+	display: none;
+}
 
-  .empty-block {
-    position: relative;
-    min-height: 60px;
-    line-height: 60px;
-    text-align: center;
-    width: 295%;
-    height: 100%;
-    font-size: 14px;
-    color: #606266;
-  }
+.empty-block {
+	position: relative;
+	min-height: 60px;
+	line-height: 60px;
+	text-align: center;
+	width: 295%;
+	height: 100%;
+	font-size: 14px;
+	color: #606266;
+}
 
-  /*表格信息*/
-  .my-table-out{
-    white-space: nowrap;
-    overflow-y: scroll;
-    text-overflow: ellipsis;
-    width: 100%;
-    max-height: 800px;
-  }
-  .my-table {
-    width: 100%;
-    margin-bottom: 40px;
-    background: #fff;
-    border-collapse: collapse;
-    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
-    font-size: 14px;
-    font-bold: 700;
-    .bg-order {
-      background: #FAFAFA;
-    }
-    thead {
-      th {
-        padding: 10px 0;
-        border: 1px solid #ebeef5;
-        border-collapse: collapse;
-        color: #909399;
-      }
-      th.shoplist-header {
-        padding: 10px 20px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        align-items: center;
-      }
-    }
-    tbody {
-      margin-top: 10px;
-      td {
-        border: 1px solid #ebeef5;
-        border-collapse: collapse;
-        text-align: center;
-        padding: 0;
-      }
-      td:first-child {
-        text-align: left;
-      }
-      td:not(:first-child) {
-        padding: 3px;
-      }
-      td.shoplist-content-out {
-        padding-left: 20px;
-      }
+/*表格信息*/
+.my-table-out {
+	white-space: nowrap;
+	overflow-y: scroll;
+	text-overflow: ellipsis;
+	width: 100%;
+	max-height: 800px;
+}
+.my-table {
+	width: 100%;
+	margin-bottom: 40px;
+	background: #fff;
+	border-collapse: collapse;
+	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+		Microsoft YaHei, Arial, sans-serif;
+	font-size: 14px;
+	font-bold: 700;
+	.bg-order {
+		background: #fafafa;
+	}
+	thead {
+		th {
+			padding: 10px 0;
+			border: 1px solid #ebeef5;
+			border-collapse: collapse;
+			color: #909399;
+		}
+		th.shoplist-header {
+			padding: 10px 20px;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			align-items: center;
+		}
+	}
+	tbody {
+		margin-top: 10px;
+		td {
+			border: 1px solid #ebeef5;
+			border-collapse: collapse;
+			text-align: center;
+			padding: 0;
+		}
+		td:first-child {
+			text-align: left;
+		}
+		td:not(:first-child) {
+			padding: 3px;
+		}
+		td.shoplist-content-out {
+			padding-left: 20px;
+		}
 
-      /*商品信息*/
-      p.shoplist-content:not(:last-child) {
-        border-bottom: 1px solid #ebeef5;
-        border-collapse: collapse;
-      }
-      p.shoplist-content {
-        margin: 0;
-        padding: 0 20px;
-        box-sizing: padding-box;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        align-items: center;
-        .goods-info {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          justify-content: flex-start;
-          align-items: center;
-          padding: 10px 0;
-          img {
-            display: block;
-            margin-right: 10px;
-          }
-          a {
-            display: block;
-            color: #409EFF;
-          }
-        }
-      }
-      div.order-money {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: center;
-        span {
-          display: inline-block;
-          padding: 5px;
-        }
-        span.order-amount {
-          color: red;
-        }
-      }
-    }
-    /* 商品图片 */
-    .goods-image {
-      width: 50px;
-      height: 50px;
-    }
-    /** 商品价格 */
-    .goods—price {
-      margin-right: 50px;
-    }
-  }
+		/*商品信息*/
+		p.shoplist-content:not(:last-child) {
+			border-bottom: 1px solid #ebeef5;
+			border-collapse: collapse;
+		}
+		p.shoplist-content {
+			margin: 0;
+			padding: 0 20px;
+			box-sizing: padding-box;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			align-items: center;
+			.goods-info {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				justify-content: flex-start;
+				align-items: center;
+				padding: 10px 0;
+				img {
+					display: block;
+					margin-right: 10px;
+				}
+				a {
+					display: block;
+					color: #409eff;
+				}
+			}
+		}
+		div.order-money {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: nowrap;
+			justify-content: center;
+			align-items: center;
+			span {
+				display: inline-block;
+				padding: 5px;
+			}
+			span.order-amount {
+				color: red;
+			}
+		}
+	}
+	/* 商品图片 */
+	.goods-image {
+		width: 50px;
+		height: 50px;
+	}
+	/** 商品价格 */
+	.goods—price {
+		margin-right: 50px;
+	}
+}
 
-  /*分页信息*/
-  section>div {
-    position: relative;
-  }
-  .el-pagination {
-    text-align: right;
-    width: 100%;
-    background: #ffffff;
-    height: 40px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    border-top: 1px solid #e5e5e5;
-    padding: 5px 20px;
-  }
+/*分页信息*/
+section > div {
+	position: relative;
+}
+.el-pagination {
+	text-align: right;
+	width: 100%;
+	background: #ffffff;
+	height: 40px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	border-top: 1px solid #e5e5e5;
+	padding: 5px 20px;
+}
+.green{
+  color: green;
+}
+.red{
+  color: red;
+}
 </style>
 

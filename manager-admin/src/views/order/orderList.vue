@@ -69,19 +69,25 @@
 				<!--订单编号-->
 				<el-table-column prop="sn" label="订单编号"/>
 				<!--下单时间-->
-				<el-table-column prop="create_time" :formatter="MixinUnixToDate" label="下单时间"/>
+				<el-table-column prop="create_time" :formatter="MixinUnixToDate" label="下单时间" v-if="params.order_type === 0"/>
+				<el-table-column prop="create_time" :formatter="MixinUnixToDate" label="预约时间" v-else/>
 				<!--订单总额-->
 				<el-table-column label="订单总额">
 					<template slot-scope="scope">{{ scope.row.order_amount | unitPrice('￥') }}</template>
 				</el-table-column>
 				<!--收货人-->
-				<el-table-column prop="ship_name" label="收货人"/>
+				<el-table-column prop="ship_name" label="收货人" v-if="params.order_type === 0"/>
+				<el-table-column prop="member_name" label="预约人" v-if="params.order_type === 1"/>
 				<!--订单状态-->
-				<el-table-column prop="order_status_text" label="订单状态"/>
-				<!--付款状态-->
-				<el-table-column prop="pay_status_text" label="付款状态"/>
+				<el-table-column prop="order_status_text" label="订单状态" v-if="params.order_type === 0"/>
+				<!--付款状态--> 
+				<el-table-column prop="pay_status_text" label="付款状态" v-if="params.order_type === 0"/>
+				<!-- 预付款 -->
+				<el-table-column prop="first_money" label="预付款(元)" v-if="params.order_type === 1"/>>
+				<!-- 尾款 -->
+				<el-table-column prop="end_money" label="尾款(元)" v-if="params.order_type === 1"/>
 				<!--发货状态-->
-				<el-table-column prop="ship_status_text" label="发货状态"/>
+				<el-table-column prop="ship_status_text" label="发货状态" v-if="params.order_type === 0"/>
 				<!--支付方式-->
 				<el-table-column label="支付方式">
 					<template slot-scope="scope">{{ scope.row.payment_type | paymentTypeFilter }}</template>
