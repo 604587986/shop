@@ -6,6 +6,7 @@
     >
       <div slot="toolbar" class="inner-toolbar">
         <div class="toolbar-btns">
+          <el-button type="primary" @click="dialogAddShopVisible = true">新建店铺</el-button>
         </div>
         <div class="toolbar-search">
           <en-table-search
@@ -102,11 +103,42 @@
         :total="tableData.data_total">
       </el-pagination>
     </en-table-layout>
+    <!--新建店铺 dialog-->
+		<el-dialog title="新建店铺" :visible.sync="dialogAddShopVisible" :close-on-click-modal="false" :close-on-press-escape="false">
+        <el-alert
+          title="创建基本信息后，再去完善详细信息，并开启"
+          type="info"
+          :closable="false"
+          style="margin-bottom:20px"
+          >
+        </el-alert>
+			<el-form :model="addShopForm" ref="addShopForm" :rules="addShopRules" label-width="100px">
+				<el-form-item label="所属会员" prop="member_id">
+            <el-button type="success" @click="dialogMemberVisible = true">选择会员</el-button>
+            <span v-if="addShopForm.member_id">当前：{{addShopForm.member_name}}</span>
+				</el-form-item>
+				<el-form-item label="店铺名称" prop="shop_name">
+          <el-input v-model="addShopForm.shop_name"></el-input>
+				</el-form-item>
+			</el-form>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogAddShopVisible = false">取 消</el-button>
+				<el-button type="primary" @click="submitAddShopForm('addShopForm')">确 定</el-button>
+			</span>
+		</el-dialog>
+
+    <!--会员列表 dialog-->
+		<el-dialog title="会员列表" :visible.sync="dialogMemberVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="80%">
+      <member-component @selectMember="handleSelect"></member-component>
+		</el-dialog>
+
   </div>
 </template>
 
 <script>
+/* eslint-disable */
   import * as API_Shop from '@/api/shop'
+  import memberComponent from './memberComponent'
 
   export default {
     name: 'shopList',
@@ -118,16 +150,37 @@
         params: {
           page_no: 1,
           page_size: 10,
-          shop_disable: 'OPEN'
+          shop_disable: 'ALL'
         },
         /** 列表数据 */
         tableData: '',
         /** 高级搜索数据 */
-        advancedForm: {}
+        advancedForm: {},
+        /** 新建店铺dialog */
+        dialogAddShopVisible:false,
+        /** 新建店铺表单 */
+        addShopForm:{
+          member_id:null,
+          member_name:null,
+          shop_name:null
+        },
+        /** 会员列表dialog */
+        dialogMemberVisible:false,
+
+       /** 添加店铺 表单规则 */
+        addShopRules: {
+          shop_name: [
+            this.MixinRequired('请输入店铺名称！')
+          ],
+          member_id: [{ required: true, pattern: /^\S.*$/gi, message: '请选择会员', trigger: 'change' },]
+        },
       }
     },
     mounted() {
       this.GET_ShopList()
+    },
+    components:{
+      memberComponent
     },
     filters: {
       statusFilter(val) {
@@ -215,6 +268,31 @@
           this.loading = false
           this.tableData = response
         }).catch(() => { this.loading = false })
+      },
+
+      /** 新建店铺 表单提交 */
+      submitAddShopForm(formName){
+        
+          this.$refs[formName].validate((valid) => {
+          if (valid) {
+            API_Shop.addShop(this.addShopForm).then(response=>{
+              this.dialogAddShopVisible = false
+              this.$message.success('添加成功,请去完善店铺信息！')
+              this.GET_ShopList()
+            })
+          } else {
+            this.$message.error('表单填写有误，请检查！')
+            return false
+          }
+        })
+
+      },
+
+      /** 选择会员 */
+      handleSelect(row){
+        this.addShopForm.member_id = row.member_id;
+        this.addShopForm.member_name = row.uname;
+        this.dialogMemberVisible = false;
       }
     }
   }

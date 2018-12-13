@@ -10,7 +10,7 @@
 
 					<el-checkbox v-if="params.is_services===1" :true-label="1" :false-label="0" v-model="params.tui_jian" @change="changeTuiJian">推荐服务</el-checkbox>
 					<el-checkbox v-if="params.is_services===1" :true-label="1" :false-label="0" v-model="params.index_tui_jian" @change="changeTuiJian">首页推荐服务</el-checkbox>
-					<!-- <el-checkbox :true-label="1" :false-label="0" v-model="params.is_new ">首页新品</el-checkbox> -->
+					<el-checkbox v-if="params.is_services===1" :true-label="1" :false-label="0" v-model="params.is_new ">首页新品</el-checkbox>
 				</div>
 				<div class="toolbar-search">
 					<en-table-search @search="searchEvent" @advancedSearch="advancedSearchEvent" advanced>
@@ -267,6 +267,9 @@ export default {
 			}
 			if(!this.params.index_tui_jian){
 				delete this.params.index_tui_jian
+			}
+			if(!this.params.is_new){
+				delete this.params.is_new
 			}
 			this.params = {
 				...this.params,

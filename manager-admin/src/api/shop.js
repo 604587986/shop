@@ -128,3 +128,17 @@ export function deleteShopTheme(id) {
     method: 'delete'
   })
 }
+
+/**
+ * 添加店铺（简洁版）
+ * @param params
+ * @returns {*}
+ */
+export function addShop(params) {
+  return request({
+    url: 'admin/shops/addShop',
+    method: 'post',
+    data: params
+  })
+}
+
