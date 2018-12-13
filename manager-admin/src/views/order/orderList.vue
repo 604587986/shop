@@ -229,11 +229,53 @@ export default {
 				this.advancedForm.order_status = null;
 			}
 
+<<<<<<< HEAD
 			this.params.page_no = 1;
 			this.GET_OrderList();
 		}
 	}
 };
+=======
+      /** 导出订单 */
+      handleExportOrders() {
+        const { advancedForm: params } = this
+        API_order.exportOrders(params).then(response => {
+          const json = {
+            sheet_name: '订单列表',
+            sheet_values: response.map(item => ({
+              '订单遍号': item.sn,
+              '下单时间': Foundation.unixToDate(item.create_time),
+              '订单总额': Foundation.formatPrice(item.order_amount),
+              '收货人': item.ship_name,
+              '订单状态': item.order_status_text,
+              '付款人': item.pay_member_name,
+              '付款状态': item.pay_status_text,
+              '发货状态': item.ship_status_text,
+              '支付方式': item.payment_type === 'ONLINE' ? '在线支付' : '货到付款',
+              '订单来源': item.client_type
+            }))
+          }
+          this.MixinExportJosnToExcel(json, '订单列表')
+        })
+      },
+
+      /** 获取订单列表 */
+      GET_OrderList() {
+        this.loading = true
+        const params = this.MixinClone(this.params)
+        if (params.start_time && params.end_time) {
+          params.start_time = parseInt(params.start_time / 1000)
+          params.end_time = parseInt(params.end_time / 1000)
+        }
+        if (params.seller_id === 0) delete params.seller_id
+        API_order.getOrderList(params).then(response => {
+          this.loading = false
+          this.tableData = response
+        }).catch(() => { this.loading = false })
+      }
+    }
+  }
+>>>>>>> df149d685ae11793ac771bb99896b9351dc6ba81
 </script>
 
 <style type="text/scss" lang="scss" scoped>
@@ -248,9 +290,21 @@ export default {
 	padding: 0 20px;
 }
 
+<<<<<<< HEAD
 .goods-image {
 	width: 50px;
 	height: 50px;
 }
+=======
+  .goods-image {
+    width: 50px;
+    height: 50px;
+  }
+  .exprot-tip {
+    margin-left: 5px;
+    color: red;
+    font-size: 12px;
+  }
+>>>>>>> df149d685ae11793ac771bb99896b9351dc6ba81
 </style>
 

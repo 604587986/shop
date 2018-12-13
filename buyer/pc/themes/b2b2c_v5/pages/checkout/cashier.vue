@@ -6,7 +6,7 @@
         <h2 class="time-tip" v-if="order.pay_type_text === 'ONLINE' && order.need_pay_price !== 0">
           订单提交成功，请您在<span>24小时</span>内完成支付，否则订单会被自动取消。
         </h2>
-        <h2 class="time-tip" v-else>订单金额为<span>￥0.00</span>，您无需支付。</h2>
+        <h2 class="time-tip" v-else-if="order.pay_type_text !== 'COD'">订单金额为 <span>￥0.00</span>，您无需支付。</h2>
         <h2 v-if="this.trade_sn">
           交易号：<b>{{ trade_sn }}</b>
           <a class="see-order-btn" href="/member/my-order">查看订单</a>

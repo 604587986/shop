@@ -170,3 +170,15 @@ export function editOrderSettings(params) {
     data: params
   })
 }
+
+/**
+ * 导出订单
+ * @param params
+ */
+export function exportOrders(params) {
+  return request({
+    url: 'admin/trade/orders/export',
+    method: 'get',
+    params
+  })
+}

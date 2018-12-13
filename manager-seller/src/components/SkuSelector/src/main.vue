@@ -198,7 +198,7 @@
         let _empty = []
         _empty.push(_result)
         /** 得到数据之后 去goodsSkuInfo中进行匹配对应的数据项进行填充，匹配到则进行填充，
-         * 没有匹配到则填充默认值（this.origin） 当前模式为发布商品0时直接填充默认值（this.origin）  */
+         * 没有匹配到则填充默认值（this.origin） 当前模式为发布商品0(即goodsSkuInfo规格本来就不存在时)或编辑时时直接填充默认值（this.origin）  */
         for (let i = 0, len = result.length; i < len; i++) {
           /** 如果 result[i]不是数组 则构造数组赋给它*/
           if (!Array.isArray(result[i])) {
@@ -212,7 +212,7 @@
           const _result_sim = cloneObj(result[i])
           _result_sim[_result_sim.length - 1].spec_value_id = _arr.join('|')
 
-          if (this.isEditModel === 0) { // 发布商品
+          if (this.isEditModel === 0 || !this.goodsSkuInfo || (Array.isArray(this.goodsSkuInfo) && this.goodsSkuInfo.length === 0)) { // 发布商品 || goodsSkuInfo规格本来就不存在
             result[i] = Object.assign({ }, ..._result_sim, this.origin)
           } else {
             const value_ids = result[i].map(key => {
@@ -228,6 +228,7 @@
           this.tablehead = Object.keys(result[0]).filter(key => {
             return key !== 'spec_value_id'
           })
+          console.log(this.tablehead)
         } else {
           this.tablehead = []
         }

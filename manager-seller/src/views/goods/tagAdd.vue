@@ -17,7 +17,7 @@
       </div>
       <template slot="table-columns">
         <el-table-column type="selection"/>
-        <el-table-column label="商品信息" width="1000px">
+        <el-table-column label="商品信息" width="1000">
           <template slot-scope="scope">
             <div class="goods-info">
               <a class="goods-name" :href="`${MixinBuyerDomain}/goods/${scope.row.goods_id}`">

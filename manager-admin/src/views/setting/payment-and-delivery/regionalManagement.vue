@@ -86,20 +86,20 @@
       submitRegionForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            const { region_id } = this.regionForm
-            if (!region_id) {
+            const { id } = this.regionForm
+            if (!id) {
               API_Region.addRegion(this.regionForm).then(response => {
                 this.dialogRegionVisible = false
                 this.$message.success('添加成功！')
                 this.$refs['regionEditor'].refresh('add')
               })
             } else {
-              API_Region.editRegion(region_id, this.regionForm).then(response => {
+              API_Region.editRegion(id, this.regionForm).then(response => {
                 this.dialogRegionVisible = false
                 this.$message.success('保存成功！')
                 this.$refs['regionEditor'].refresh('edit', {
                   ...this.regionForm,
-                  id: this.regionForm.region_id,
+                  id: this.regionForm.id,
                   text: this.regionForm.local_name
                 })
               })
@@ -113,7 +113,3 @@
     }
   }
 </script>
-
-<style type="text/scss" lang="scss" scoped>
-
-</style>

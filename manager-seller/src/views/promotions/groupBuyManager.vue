@@ -25,7 +25,7 @@
         </div>
       </div>
       <template slot="table-columns">
-        <el-table-column label="商品图片" >
+        <el-table-column label="商品图片" width="120">
           <template slot-scope="scope">
             <img :src="scope.row.img_url" class="goods-image"/>
           </template>
@@ -49,9 +49,9 @@
           </template>
         </el-table-column>
         <!--已团购数量-->
-        <el-table-column prop="buy_num" label="已团购" />
-        <el-table-column prop="gb_status_text" label="活动状态" />
-        <el-table-column label="操作">
+        <el-table-column prop="buy_num" label="已团购" width="120"/>
+        <el-table-column prop="gb_status_text" label="活动状态" width="80"/>
+        <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
               type="success"

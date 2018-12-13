@@ -36,7 +36,7 @@
       </el-table-column>
     </el-table>
     <p v-if="isEditModel === 1" class="stock-tip"> 提示: 编辑商品规格时不允许进行库存编辑，请到商品列表单独维护库存 </p>
-    <div class="batch-all">
+    <div class="batch-all" v-show="tablehead && tablehead.length">
       <span>批量设置：</span>
       <div v-show="isShowBatch">
         <el-button type="text" size="mini" @click="setBatch(1)">价格</el-button>

@@ -98,8 +98,12 @@
     name: 'register',
     layout: 'full',
     async asyncData() {
-      const protocol = await API_Article.getArticleByPosition('REGISTRATION_AGREEMENT')
-      return { protocol }
+      try {
+        const protocol = await API_Article.getArticleByPosition('REGISTRATION_AGREEMENT')
+        return { protocol }
+      } catch (e) {
+        return { protocol: '协议获取失败...' }
+      }
     },
     head() {
       return {

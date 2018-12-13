@@ -37,6 +37,18 @@
                   <el-option label="微信支付" value="wechat"/>
                 </el-select>
               </el-form-item>
+              <el-form-item label="付款方式">
+                <el-select v-model="advancedForm.payment_type" placeholder="请选择" clearable>
+                  <el-option label="在线支付" value="ONLINE"/>
+                  <el-option label="货到付款" value="COD"/>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="支付状态">
+                <el-select v-model="advancedForm.pay_status" placeholder="请选择" clearable>
+                  <el-option label="已支付" value="PAY_YES"/>
+                  <el-option label="未支付" value="PAY_NO"/>
+                </el-select>
+              </el-form-item>
               <el-form-item label="账单日期">
                 <el-date-picker
                   v-model="advancedForm.refund_time_range"
@@ -90,7 +102,7 @@
   export default {
     name: 'collectionList',
     mounted() {
-      this.GET_CollectionOrder()
+      this.advancedSearchEvent()
     },
     data() {
       return {
@@ -107,7 +119,10 @@
         tableData: '',
 
         /** 高级搜索数据 */
-        advancedForm: {},
+        advancedForm: {
+          payment_type: 'ONLINE',
+          pay_status: 'PAY_YES'
+        },
 
         /** 导出Excel日期 */
         exportDateRange: []

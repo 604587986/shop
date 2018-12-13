@@ -36,17 +36,17 @@
       </div>
       <template slot="table-columns">
         <el-table-column prop="title" label="优惠券名称" />
-        <el-table-column prop="coupon_price" label="优惠券面额（元）" />
-        <el-table-column prop="coupon_threshold_price" label="使用限制" />
-        <el-table-column label="使用期限" >
+        <el-table-column prop="coupon_price" label="优惠券面额（元）" width="120" />
+        <el-table-column prop="coupon_threshold_price" label="使用限制(元)" width="120" />
+        <el-table-column label="使用期限" width="240">
           <template slot-scope="scope">
             {{ scope.row.start_time | unixToDate('yyyy-MM-dd') }}~
             {{ scope.row.end_time | unixToDate('yyyy-MM-dd') }}
           </template>
         </el-table-column>
         <el-table-column prop="create_num" label="发行量（个）" width="120" />
-        <el-table-column prop="used_num" label="已使用量（个）" />
-        <el-table-column label="操作" width="280">
+        <el-table-column prop="used_num" label="已使用量（个）" width="120"/>
+        <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
               type="success"
