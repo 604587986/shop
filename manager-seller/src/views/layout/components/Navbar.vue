@@ -71,7 +71,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('logoutAction').then(() => {
-          this.$router.push('/login')
+          window.location.reload()
         })
       }).catch(() => {})
     }
