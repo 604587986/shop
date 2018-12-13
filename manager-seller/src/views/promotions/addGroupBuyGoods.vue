@@ -235,6 +235,9 @@
       }
 
       return {
+        /** 团购图片尺寸宽高误差 */
+        IMG_SIZE_ERROR: 50,
+
         /** input框长度*/
         inputLength: 300,
 
@@ -419,9 +422,8 @@
             image.onload = () => {
               let width = image.width
               let height = image.height
-              if (width !== height || width < 200 || width > 250) {
-                this.$message.error('图片尺寸必须在200~250之间，且宽高一致为正方形！')
-                reject()
+              if (Math.abs(width - height) > this.IMG_SIZE_ERROR) {
+                this.$message.warning(`图片尺寸宽高相差误差须小于${this.IMG_SIZE_ERROR}！`)
               }
               resolve()
             }
