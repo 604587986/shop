@@ -7,10 +7,11 @@
     <el-scrollbar wrapClass="scrollbar-wrapper">
       <el-menu
         mode="vertical"
+        :show-timeout="200"
         :default-active="$route.path"
         :collapse="isCollapse"
       >
-        <sidebar-item v-for="route in routers" :key="route.name" :item="route" :base-path="route.path"></sidebar-item>
+        <sidebar-item v-for="route in permission_routers" :key="route.name" :item="route" :base-path="route.path"></sidebar-item>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -19,21 +20,16 @@
 <script>
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
-import { constantRouterMap, asyncRouterMap } from '@/router'
 
 export default {
   components: { SidebarItem },
   computed: {
     ...mapGetters([
+      'permission_routers',
       'sidebar'
     ]),
     isCollapse() {
       return !this.sidebar.opened
-    }
-  },
-  data() {
-    return {
-      routers: [...constantRouterMap, ...asyncRouterMap]
     }
   },
   methods: {
