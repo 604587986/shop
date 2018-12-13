@@ -73,7 +73,7 @@
           list-type="picture">
           <span v-model="gruopBuyForm.img_url"></span>
           <el-button type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">限制上传图片尺寸为正方形，且尺寸应在200～250之间</div>
+          <div slot="tip" class="el-upload__tip">建议上传图片尺寸为正方形，且宽高误差应在0～50之间</div>
         </el-upload>
       </el-form-item>
       <!--商品库存数-->
