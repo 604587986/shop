@@ -25,6 +25,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import * as API_SystemSetting from '@/api/systemSetting'
 
   export default {

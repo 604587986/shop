@@ -34,7 +34,7 @@
       systemSettingsGoods,
       SystemSettingsOrder,
       SystemSettingsPoint,
-      systemSettingsLineup,
+      systemSettingsLineup
     }
   }
 </script>

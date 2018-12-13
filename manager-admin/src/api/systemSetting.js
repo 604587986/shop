@@ -63,7 +63,7 @@ export function getLineupSetting() {
  * 修改排队设置
  * @param params
  */
-export function editLineupSetting(id,params) {
+export function editLineupSetting(id, params) {
   return request({
     url: `admin/lineup/parame/edit/${id}`,
     method: 'put',

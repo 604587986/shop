@@ -62,6 +62,7 @@
 </template>
 
 <script>
+/* eslint-disable */
   import * as API_lineup from '@/api/lineup'
 
   export default {

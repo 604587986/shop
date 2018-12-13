@@ -102,3 +102,15 @@ export function editGoodsSettings(params) {
     data: params
   })
 }
+
+/**
+ * 商品推荐等设置
+ * @param params
+ */
+export function tuiJian(goods_id, params) {
+  return request({
+    url: `admin/goods/${goods_id}/tuiJian`,
+    method: 'put',
+    data: params
+  })
+}
