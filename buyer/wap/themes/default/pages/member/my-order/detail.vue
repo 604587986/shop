@@ -123,6 +123,9 @@
           <div v-if="order.cash_back" class="order-item">
             <span>返现金额：</span><span>-￥{{ order.cash_back | unitPrice }}</span>
           </div>
+          <div v-if="order.use_point" class="order-item">
+            <span>积分抵扣：</span><span>-{{ order.use_point }}积分</span>
+          </div>
           <div class="order-item">
             <span>运费：</span><span>￥{{ order.shipping_price | unitPrice }}</span>
           </div>

@@ -59,15 +59,19 @@
         <el-collapse-item title="促销信息" name="promotions" v-if="orderDetail.cash_back || orderDetail.gift_point || orderDetail.coupon_price">
           <div class="order-item" v-if="orderDetail.cash_back">
             <span class="item-name">返现金额：</span>
-            <span class="item-value">{{ orderDetail.cash_back | unitPrice('¥') }}</span>
-          </div>
-          <div class="order-item" v-if="orderDetail.gift_point">
-            <span class="item-name">赠送积分：</span>
-            <span class="item-value">{{ orderDetail.gift_point }}</span>
+            <span class="item-value">-{{ orderDetail.cash_back | unitPrice('¥') }}</span>
           </div>
           <div class="order-item" v-if="orderDetail.coupon_price">
             <span class="item-name">优惠券抵扣：</span>
             <span class="item-value">{{ orderDetail.coupon_price | unitPrice('¥') }}</span>
+          </div>
+          <div class="order-item" v-if="orderDetail.use_point">
+            <span class="item-name">积分抵扣：</span>
+            <span class="item-value">-{{ orderDetail.use_point }}积分</span>
+          </div>
+          <div class="order-item" v-if="orderDetail.gift_point">
+            <span class="item-name">赠送积分：</span>
+            <span class="item-value">{{ orderDetail.gift_point }}</span>
           </div>
         </el-collapse-item>
         <!--其他信息（发票、备注）-->
