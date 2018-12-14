@@ -69,8 +69,7 @@
 				<!--订单编号-->
 				<el-table-column prop="sn" label="订单编号"/>
 				<!--下单时间-->
-				<el-table-column prop="create_time" :formatter="MixinUnixToDate" label="下单时间" v-if="params.order_type === 0"/>
-				<el-table-column prop="create_time" :formatter="MixinUnixToDate" label="预约时间" v-else/>
+				<el-table-column prop="create_time" :formatter="MixinUnixToDate" label="下单时间"/>
 				<!--订单总额-->
 				<el-table-column label="订单总额">
 					<template slot-scope="scope">{{ scope.row.order_amount | unitPrice('￥') }}</template>

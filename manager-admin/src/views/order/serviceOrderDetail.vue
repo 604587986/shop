@@ -192,7 +192,7 @@
         if (o.cash_back) {
           promotions.push({ label: '返现金额', value: '￥' + f.formatPrice(o.cash_back) })
         }
-        promotions.push({ label: '运&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;费', value: '￥' + f.formatPrice(o.shipping_price) })
+        // promotions.push({ label: '运&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;费', value: '￥' + f.formatPrice(o.shipping_price) })
         if (o.gift_point) {
           promotions.push({ label: '赠送积分', value: o.gift_point })
         }
@@ -228,8 +228,8 @@
               title: '买家信息',
               key: 'buyer',
               items: [
-                { label: '收&ensp;货&ensp;人', value: o.ship_name },
-                { label: '收货地址', value: o.ship_province + o.ship_city + o.ship_county + o.ship_town + ' ' + o.ship_addr },
+                { label: '预&ensp;约&ensp;人', value: o.ship_name },
+                { label: '联系地址', value: o.ship_province + o.ship_city + o.ship_county + o.ship_town + ' ' + o.ship_addr },
                 { label: '联系方式', value: o.ship_mobile },
                 { label: '买家留言', value: o.remark || '无' }
               ]
@@ -239,9 +239,9 @@
               key: 'seller',
               items: [
                 { label: '卖家账号', value: o.seller_name },
-                { label: '发货时间', value: o.ship_time ? f.unixToDate(o.ship_time) : '未发货' },
-                { label: '物流公司', value: o.logi_name || '未发货' },
-                { label: '快递单号', value: o.ship_no || '未发货' }
+                { label: '预约时间', value: o.ship_time ? f.unixToDate(o.ship_time) : '未排期' },
+                // { label: '物流公司', value: o.logi_name || '未发货' },
+                // { label: '快递单号', value: o.ship_no || '未发货' }
               ]
             }
           ]
