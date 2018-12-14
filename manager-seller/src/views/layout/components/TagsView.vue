@@ -3,7 +3,7 @@
     <scroll-pane class='tags-view-wrapper' ref='scrollPane'>
       <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)"
                    :to="tag" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
-        {{generateTitle(tag.title)}}
+        {{ generateFormatTitle(tag) }}
         <span v-if="tag.name !== 'dashboard'" class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
       </router-link>
     </scroll-pane>
@@ -52,6 +52,12 @@
     },
     methods: {
       generateTitle, // generateTitle by vue-i18n
+      generateFormatTitle(tag) {
+        if (tag.name === 'tagAdd') {
+          return `${this.generateTitle(tag.title)} - ${tag.query.tag_name}`
+        }
+        return this.generateTitle(tag.title)
+      },
       generateRoute() {
         if (this.$route.name) {
           return this.$route
