@@ -47,6 +47,11 @@ Vue.mixin({
       if (!process.client) return false
       return /micromessenger/i.test(navigator.userAgent)
     },
+    /** 是否为支付宝浏览器 */
+    MixinIsAliPayBrowser() {
+      if (!process.client) return false
+      return /alipay/i.test(navigator.userAgent)
+    },
     /** base64转Blob */
     MixinBase64toBlob(base64) {
       const byteString = atob(base64.split(',')[1])

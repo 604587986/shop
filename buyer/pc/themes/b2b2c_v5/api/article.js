@@ -58,6 +58,7 @@ export function getArticleByPosition(position) {
 export function getArticlesByCategory(category_type) {
   return request({
     url: `${api.base}/pages/article-categories/${category_type}/articles`,
-    method: Method.GET
+    method: Method.GET,
+    loading: false
   })
 }

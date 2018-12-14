@@ -192,6 +192,9 @@
         if (o.cash_back) {
           promotions.push({ label: '返现金额', value: '￥' + f.formatPrice(o.cash_back) })
         }
+        if (o.use_point) {
+          promotions.push({ label: '积分抵扣', value: '-' + o.use_point + '积分' })
+        }
         promotions.push({ label: '运&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;费', value: '￥' + f.formatPrice(o.shipping_price) })
         if (o.gift_point) {
           promotions.push({ label: '赠送积分', value: o.gift_point })

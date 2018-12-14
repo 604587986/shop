@@ -24,6 +24,7 @@ export function accessShortLink(params) {
     url: 'distribution/su/visit',
     method: Method.GET,
     needToken: false,
+    loading: false,
     params
   })
 }

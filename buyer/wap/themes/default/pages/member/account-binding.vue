@@ -70,6 +70,10 @@
       getConnectUrl: API_Connect.getLogindConnectUrl,
       /** 点击cell */
       handleClickCell(name) {
+        if (name === 'ALIPAY' && !this.MixinIsAliPayBrowser()) {
+          this.$message.error('请在支付宝浏览器中进行操作！')
+          return false
+        }
         this.cur_name = name
         this.actions[0].disabled = this.bind[name]
         this.actions[1].disabled = !this.bind[name]
