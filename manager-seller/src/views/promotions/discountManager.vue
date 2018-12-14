@@ -46,7 +46,7 @@
         </el-table-column>
         <el-table-column prop="create_num" label="发行量（个）" width="120" />
         <el-table-column prop="used_num" label="已使用量（个）" width="120"/>
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button
               type="success"

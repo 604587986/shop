@@ -76,7 +76,7 @@
             </p>
             <div>
               <el-tag type="success" @click.native="toGoodsManager(0)">仓库待上架货品  {{dashBoardData.pending_goods}}</el-tag>
-              <el-tag type="success" @click.native="toConsumerMsg">买家留言  {{dashBoardData.pending_member_ask}}</el-tag>
+              <el-tag type="success" @click.native="toConsumerMsg">待回复的咨询 {{dashBoardData.pending_member_ask}}</el-tag>
             </div>
           </div>
         </el-card>
@@ -267,9 +267,9 @@ export default {
       this.$router.push({ path: '/goods/goods-list', query: { market_enable: goodsStatus }})
     },
 
-    /** 跳转买家留言*/
+    /** 跳转买家留言 待回复的咨询 */
     toConsumerMsg() {
-      this.$router.push({ path: '/customer/consultation' })
+      this.$router.push({ path: '/customer/consultation', query: { reply_status: 0 }})
     },
 
     /** 跳转订单列表*/

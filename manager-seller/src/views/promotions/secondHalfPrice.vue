@@ -35,7 +35,7 @@
             <!--活动状态-->
             <el-table-column label="活动状态" prop="status_text" width="120"/>
             <!--操作-->
-            <el-table-column label="操作" width="150">
+            <el-table-column label="操作" width="180">
               <template slot-scope="scope">
                 <el-button
                   v-if="scope.row.status !== 'END'"

@@ -50,7 +50,7 @@
       <el-table-column label="创建时间" width="120">
         <template slot-scope="scope">{{ scope.row.create_time | unixToDate('yyyy-MM-dd hh:mm') }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="180">
         <template slot-scope="scope">
           <el-button
             type="primary"
