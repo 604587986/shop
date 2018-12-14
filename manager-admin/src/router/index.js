@@ -264,6 +264,7 @@ const asyncRouters = [
         ]
       },
       {
+        hidden: true,//暂时隐藏积分商城
         path: '/promotions/points-mall-manage',
         component: () => import('@/views/promotions/points-mall-manage/index'),
         redirect: '/promotions/points-mall-manage/points-classify',
@@ -297,6 +298,7 @@ const asyncRouters = [
     meta: { title: 'page', icon: 'page-manage' },
     children: [
       {
+        hidden: true,//暂时隐藏pc装修
         path: '/page/pc-decoration',
         component: () => import('@/views/page/pc-decoration/index'),
         redirect: '/page/pc-decoration/floor',
@@ -310,6 +312,7 @@ const asyncRouters = [
         ]
       },
       {
+        hidden: true,//暂时隐藏移动端装修
         path: '/page/mobile-decoration',
         component: () => import('@/views/page/mobile-decoration/index'),
         redirect: '/page/mobile-decoration/floor',
@@ -329,8 +332,8 @@ const asyncRouters = [
         name: 'pageSetting',
         meta: { title: 'pageSetting' },
         children: [
-          { path: 'pc-site-menu', component: () => import('@/views/page/page-setting/pcSiteMenu'), name: 'pcSiteMenu', meta: { title: 'pcSiteMenu' }},
-          { path: 'mobile-site-menu', component: () => import('@/views/page/page-setting/mobileSiteMenu'), name: 'mobileSiteMenu', meta: { title: 'mobileSiteMenu' }},
+          { path: 'pc-site-menu', component: () => import('@/views/page/page-setting/pcSiteMenu'), name: 'pcSiteMenu', meta: { title: 'pcSiteMenu' },hidden: true},//暂时隐藏pc导航
+          { path: 'mobile-site-menu', component: () => import('@/views/page/page-setting/mobileSiteMenu'), name: 'mobileSiteMenu', meta: { title: 'mobileSiteMenu' },hidden: true},//暂时隐藏移动端导航
           { path: 'hot-keyword', component: () => import('@/views/page/page-setting/hotKeyword'), name: 'hotKeyword', meta: { title: 'hotKeyword' }}
         ]
       }
