@@ -70,8 +70,7 @@
 							<span>单价/数量</span>
 						</th>
 						<th>买家</th>
-						<th v-if="params.order_type!==1">下单时间</th>
-						<th v-else>预约时间</th>
+						<th>下单时间</th>
 						<th v-if="params.order_type!==1">订单状态</th>
 						<th v-if="params.order_type===1">预付款</th>
 						<th v-if="params.order_type===1">尾款</th>

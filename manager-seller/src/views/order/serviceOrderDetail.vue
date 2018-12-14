@@ -6,7 +6,7 @@
         <!--订单信息-->
         <el-collapse-item title="订单信息" name="order">
           <div class="order-item">
-            <span class="item-name">预约人地址：</span>
+            <span class="item-name">联系地址：</span>
             <span class="item-value">
               {{ orderDetail.ship_province }}
               {{ orderDetail.ship_city }}
@@ -37,7 +37,7 @@
             <span class="item-value">{{ orderDetail.payment_method_name || '无' }}</span>
           </div>
           <div class="order-item">
-            <span class="item-name">预约时间：</span>
+            <span class="item-name">下单时间：</span>
             <span class="item-value">{{ orderDetail.create_time | unixToDate }}</span>
           </div>
           <hr>
@@ -115,17 +115,17 @@
           <div class="order-status">
             <i class="el-icon-check"></i> 订单状态： 
             <div>预付款:{{ orderDetail.first_money_state ==="yes"?"已完成":"未完成" }}</div>
-            <div>尾款:{{ orderDetail.end_money_state ==="yes"?"已完成":"未完成" }}</div>
+            <div>尾&ensp;&ensp;款:{{ orderDetail.end_money_state ==="yes"?"已完成":"未完成" }}</div>
             
           </div>
           <div class="order-item">
             <span class="item-name"> 订单备注：</span>
             <span class="item-value">{{ orderDetail.remark || '无' }}</span>
           </div>
-          <!-- <div class="order-item">
-            <span class="item-name">送货时间：</span>
+          <div class="order-item">
+            <span class="item-name">预约时间：</span>
             <span class="item-value">{{ orderDetail.receive_time }}</span>
-          </div> -->
+          </div>
           <template v-if="orderDetail.receipt_history">
             <div class="order-item">
               <span class="item-name">发票类型：</span>
@@ -250,13 +250,15 @@
           <el-form-item label="详细地址：" prop="ship_addr" >
             <el-input  v-model="ConsigneeForm.ship_addr" @change="() => { ConsigneeForm.ship_addr = ConsigneeForm.ship_addr.trim() }" placeholder="限20字" maxlength="20"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="送货时间：" prop="receive_time" style="text-align: left;">
-            <el-select v-model="ConsigneeForm.receive_time" placeholder="请选择">
-              <el-option label="任意时间" value="任意时间"></el-option>
-              <el-option label="仅工作日" value="仅工作日"></el-option>
-              <el-option label="仅休息日" value="仅休息日"></el-option>
-            </el-select>
-          </el-form-item> -->
+          <el-form-item label="预约时间：" prop="receive_time" style="text-align: left;">
+            <!-- <el-date-picker
+              v-model="ConsigneeForm.receive_time"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期">
+            </el-date-picker> -->
+            <el-input v-model="ConsigneeForm.receive_time" placeholder="预约时间"></el-input>
+          </el-form-item>
           <el-form-item label="订单备注：" prop="remark">
             <el-input  type="textarea" rows="4" v-model="ConsigneeForm.remark" placeholder="限500字" maxlength="500"></el-input>
           </el-form-item>
