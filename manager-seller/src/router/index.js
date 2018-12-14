@@ -65,6 +65,7 @@ export const asyncRouterMap = [
   },
   // 店铺管理
   {
+    hidden: true,//暂时隐藏店铺管理
     path: '/shop',
     component: Layout,
     redirect: '/shop/shop-themes-pc',
@@ -138,6 +139,7 @@ export const asyncRouterMap = [
   },
   // 客服管理
   {
+    hidden: true,//暂时隐藏客服管理
     path: '/customer',
     component: Layout,
     redirect: '/customer/consultation',
