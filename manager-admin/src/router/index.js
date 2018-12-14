@@ -151,7 +151,7 @@ const asyncRouters = [
     alwaysShow:true,
     meta: { title: 'lineup', icon: 'order-manage' },
     children: [
-      { path: 'lineup-list', component: () => import('@/views/lineup/lineupList'), name: 'lineupList', meta: { title: 'lineupList' }},
+      { path: 'lineup-list', component: () => import('@/views/lineup/lineuplist'), name: 'lineupList', meta: { title: 'lineupList' }},
     ]
   },
   // 会员管理
