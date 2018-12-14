@@ -132,6 +132,34 @@
         is_snapshot
       }
     },
+    watch: {
+      promotions(newVal) {
+        if (!newVal.length) {
+          return
+        }
+        const strs = ['groupbuy_goods_vo', 'seckill_goods_vo']
+        let num = null
+        newVal.forEach(item => {
+          strs.forEach(str => {
+            if (item[str]) {
+              if (str === 'groupbuy_goods_vo') {
+                num = item[str].goods_num
+              } else {
+                num = item[str].num
+              }
+            }
+          })
+        })
+        if (num === null) {
+          return
+        }
+        this.$set(this.goodsInfo, 'enable_quantity', num)
+        this.skuMap.forEach(val => {
+          val.enable_quantity = num
+        })
+        this.$set(this, 'skuMap', this.skuMap)
+      }
+    },
     mounted() {
       if (this.is_snapshot) {
         this.specList = this.goods['spec_list']
