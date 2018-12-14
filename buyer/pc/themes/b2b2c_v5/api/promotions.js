@@ -91,7 +91,8 @@ export function getPointsGoods(params) {
 export function getSeckillTimeLine() {
   return request({
     url: 'promotions/seckill/time-line',
-    method: Method.GET
+    method: Method.GET,
+    loading: false
   })
 }
 
@@ -103,6 +104,7 @@ export function getSeckillTimeGoods(params) {
   return request({
     url: 'promotions/seckill/goods-list',
     method: Method.GET,
+    loading: false,
     params
   })
 }
