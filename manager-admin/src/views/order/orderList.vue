@@ -76,7 +76,7 @@
 				</el-table-column>
 				<!--收货人-->
 				<el-table-column prop="ship_name" label="收货人" v-if="params.order_type === 0"/>
-				<el-table-column prop="member_name" label="预约人" v-if="params.order_type === 1"/>
+				<el-table-column prop="ship_name" label="预约人" v-if="params.order_type === 1"/>
 				<!--订单状态-->
 				<el-table-column prop="order_status_text" label="订单状态" v-if="params.order_type === 0"/>
 				<!--付款状态-->
