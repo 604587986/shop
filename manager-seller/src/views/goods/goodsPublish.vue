@@ -105,13 +105,13 @@
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
-						<el-form-item label="定金：" prop="first_money" v-if="baseInfoForm.is_services">
-							<el-input placeholder="请输入定金价格" v-model="baseInfoForm.first_money">
+						<el-form-item label="预约款：" prop="first_money" v-if="baseInfoForm.is_services">
+							<el-input placeholder="请输入预约款价格" v-model="baseInfoForm.first_money">
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
 						<el-form-item label="尾款：" prop="end_money" v-if="baseInfoForm.is_services">
-							<el-input placeholder="请输入尾款价格" v-model="baseInfoForm.end_money">
+							<el-input placeholder="请输入尾款价格" v-model="baseInfoForm.end_money" disabled>
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
@@ -347,7 +347,7 @@ export default {
 
 		const checkFirstMoney = (rule, value, callback) => {
 			if (!value) {
-				return callback(new Error("定金价格不能为空"));
+				return callback(new Error("预约款价格不能为空"));
 			}
 			setTimeout(() => {
 				if (!RegExp.money.test(value)) {
@@ -511,7 +511,7 @@ export default {
 				/** 品牌id */
 				brand_id: "",
 
-				/** 定金 */
+				/** 预约款 */
 				first_money: "",
 
 				/** 尾款 */
@@ -731,7 +731,11 @@ export default {
 					{ validator: checkExchangePoint, trigger: "blur" }
 				],
 				first_money: [
-					{ required: true, message: "请填写定金", trigger: "blur" },
+					{
+						required: true,
+						message: "请填写预约款",
+						trigger: "blur"
+					},
 					{ validator: checkFirstMoney, trigger: "blur" }
 				],
 				end_money: [
@@ -740,6 +744,17 @@ export default {
 				]
 			}
 		};
+	},
+	watch: {
+		baseInfoForm: {
+			handler: function(val) {
+				if(val.price && val.first_money){
+					this.$set(this.baseInfoForm,'end_money',val.price-val.first_money)
+				}
+				
+			},
+			deep:true
+		}
 	},
 	beforeRouteUpdate(to, from, next) {
 		if (to.params && to.params.goodsid) {
