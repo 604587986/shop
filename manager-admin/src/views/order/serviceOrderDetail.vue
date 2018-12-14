@@ -96,6 +96,8 @@
 </template>
 
 <script>
+/* eslint-disable */
+
   import * as API_order from '@/api/order'
   import { Foundation } from '~/ui-utils'
 
@@ -208,7 +210,11 @@
                 ...promotions,
                 { label: '支付方式', value: (o.payment_type === 'ONLINE' ? '在线支付' : '货到付款') + (o.payment_method_name ? ('-' + o.payment_method_name) : '') },
                 // { label: '订单状态', value: o.order_status_text + (o.cancel_reason ? '（' + o.cancel_reason + '）' : '') },
-                { label: '下单时间', value: f.unixToDate(o.create_time) }
+                { label: '下单时间', value: f.unixToDate(o.create_time) },
+                { label: '预付款', value: '￥' + f.formatPrice( o.first_money) },
+                { label: '尾款',value: '￥' + f.formatPrice( o.end_money)  },
+                { label: '预付款支付状态', value:  o.first_money_status==="yes"?"已支付":"未支付"},
+                { label: '尾款支付状态', value:  o.end_money_status==="yes"?"已支付":"未支付"},
               ]
             },
             {
