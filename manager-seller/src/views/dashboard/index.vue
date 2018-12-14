@@ -53,10 +53,10 @@
                 <span>服务</span>
                 <span>{{shop_info.shop_service_credit_text}}分</span>
               </div>
-              <div>
+              <!-- <div>
                 <span>发货</span>
                 <span>{{shop_info.shop_delivery_credit_text}}分</span>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -106,8 +106,8 @@
             <p class="store-rompt" @click="toOrderList('ALL')">所有的订单：<span style="color: red;">{{dashBoardData.all_orders_num}}</span></p>
             <div>
               <el-tag type="success" @click.native="toOrderList('WAIT_PAY')"> 待付款  {{dashBoardData.wait_pay_order_num}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList('WAIT_SHIP')">待发货  {{dashBoardData.wait_ship_order_num}}</el-tag>
-              <el-tag type="success" @click.native="toOrderList('WAIT_ROG')"> 待收货  {{dashBoardData.wait_delivery_order_num}}</el-tag>
+              <!-- <el-tag type="success" @click.native="toOrderList('WAIT_SHIP')">待发货  {{dashBoardData.wait_ship_order_num}}</el-tag> -->
+              <!-- <el-tag type="success" @click.native="toOrderList('WAIT_ROG')"> 待收货  {{dashBoardData.wait_delivery_order_num}}</el-tag> -->
               <el-tag type="success" @click.native="toRefundOrderList()">     申请售后 {{dashBoardData.after_sale_order_num}}</el-tag>
             </div>
           </div>

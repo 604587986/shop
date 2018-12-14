@@ -111,9 +111,15 @@
 						<!--订单状态-->
 						<td v-if="params.order_type!==1">{{ item.order_status_text }}</td>
 						<!--预付款-->
-						<td v-if="params.order_type===1">{{ item.first_money | unitPrice('￥') }} <span :class="item.first_money_state==='yes'?'green':'red'">{{item.first_money_state==="yes"?"已付款":"未付款"}}</span> </td>
+						<td v-if="params.order_type===1">
+							{{ item.first_money | unitPrice('￥') }}
+							<span :class="item.first_money_state==='yes'?'green':'red'">{{item.first_money_state==="yes"?"已付款":"未付款"}}</span>
+						</td>
 						<!--尾款-->
-						<td v-if="params.order_type===1">{{ item.end_money | unitPrice('￥') }} <span :class="item.first_money_state==='yes'?'green':'red'">{{item.end_money_state==="yes"?"已付款":"未付款"}}</span> </td>
+						<td v-if="params.order_type===1">
+							{{ item.end_money | unitPrice('￥') }}
+							<span :class="item.first_money_state==='yes'?'green':'red'">{{item.end_money_state==="yes"?"已付款":"未付款"}}</span>
+						</td>
 						<!--订单来源-->
 						<td>{{ item.client_type }}</td>
 						<!--实付金额-->
@@ -303,7 +309,12 @@ export default {
 
 		/** 查看、操作订单 */
 		handleOperateOrder(item) {
-			this.$router.push({ path: `/order/detail/${item.sn}` });
+			if (item.order_type !== 1) {
+				this.$router.push({ path: `/order/detail/${item.sn}` });
+			}
+			else{
+				this.$router.push({ path: `/order/service-detail/${item.sn}` });
+			}
 		},
 
 		GET_OrderList() {
@@ -485,16 +496,16 @@ section > div {
 	background: #ffffff;
 	height: 40px;
 	position: absolute;
-	bottom: 0;
+	bottom: -40px;
 	right: 0;
 	border-top: 1px solid #e5e5e5;
 	padding: 5px 20px;
 }
-.green{
-  color: green;
+.green {
+	color: green;
 }
-.red{
-  color: red;
+.red {
+	color: red;
 }
 </style>
 

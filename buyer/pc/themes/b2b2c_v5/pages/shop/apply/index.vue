@@ -1,7 +1,7 @@
 <template>
   <div id="apply-index">
     <div class="entry-container">
-      <h1>欢迎来到Javashop多店铺示例商城，商家中心</h1>
+      <h1>欢迎来到topfree多店铺示例商城，商家中心</h1>
       <!--店铺申请流程未完成-->
       <template v-if="shop_status === 'APPLY'">
         <h3>您的店铺申请流程尚未完成，无法对商家中心功能进行操作，您可以：</h3>

@@ -138,6 +138,7 @@ const asyncRouters = [
       { path: 'receipt-history', component: () => import('@/views/order/receiptHistory'), name: 'receiptHistory', meta: { title: 'receiptHistory' }},
       { path: 'receipt-detail/:id', component: () => import('@/views/order/receiptDetail'), name: 'receiptDetail', hidden: true, meta: { title: 'receiptDetail' }},
       { path: 'detail/:sn', component: () => import('@/views/order/orderDetail'), name: 'orderDetail', hidden: true, meta: { title: 'orderDetail' }},
+      { path: 'service-detail/:sn', component: () => import('@/views/order/serviceOrderDetail'), name: 'serviceOrderDetail', hidden: true, meta: { title: 'orderDetail' }},
       { path: 'refund/:sn', component: () => import('@/views/order/refundDetail'), name: 'refundDetail', hidden: true, meta: { title: 'refundDetail' }}
     ]
   },

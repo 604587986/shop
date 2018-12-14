@@ -80,7 +80,7 @@
 				<el-table-column prop="member_name" label="预约人" v-if="params.order_type === 1"/>
 				<!--订单状态-->
 				<el-table-column prop="order_status_text" label="订单状态" v-if="params.order_type === 0"/>
-				<!--付款状态--> 
+				<!--付款状态-->
 				<el-table-column prop="pay_status_text" label="付款状态" v-if="params.order_type === 0"/>
 				<!-- 预付款 -->
 				<el-table-column prop="first_money" label="预付款(元)" v-if="params.order_type === 1"/>>
@@ -198,13 +198,23 @@ export default {
 
 		/** 查看、操作订单 */
 		handleOperateOrder(index, row) {
-			this.$router.push({
-				name: "orderDetail",
-				params: {
-					sn: row.sn,
-					callback: this.GET_OrderList
-				}
-			});
+			if (row.order_type !== 1) {
+				this.$router.push({
+					name: "orderDetail",
+					params: {
+						sn: row.sn,
+						callback: this.GET_OrderList
+					}
+				});
+			}else{
+				this.$router.push({
+					name: "serviceOrderDetail",
+					params: {
+						sn: row.sn,
+						callback: this.GET_OrderList
+					}
+				});
+			}
 		},
 
 		/** 获取订单列表 */
