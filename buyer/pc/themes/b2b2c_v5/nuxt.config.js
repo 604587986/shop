@@ -61,7 +61,7 @@ module.exports = {
       ]
     },
     plugins: [],
-    publicPath: '/'
+    publicPath: '//static.javamall.com.cn/resouce/pc/'
   },
   css: [
     '~assets/styles/normalize.css',

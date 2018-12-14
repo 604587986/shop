@@ -12,7 +12,8 @@ import request, { Method } from '@/utils/request'
 export function getGoodsPromotions(goods_id) {
   return request({
     url: `promotions/${goods_id}`,
-    method: Method.GET
+    method: Method.GET,
+    loading: false
   })
 }
 
@@ -57,6 +58,7 @@ export function getShopCoupons(seller_id) {
   return request({
     url: 'promotions/coupons',
     method: Method.GET,
+    loading: false,
     params: { seller_id }
   })
 }
