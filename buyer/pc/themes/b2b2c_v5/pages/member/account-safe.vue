@@ -15,7 +15,7 @@
         show-icon
       >
         <p>建议您启动全部安全设置，以保障账户及资金安全。</p>
-        <p>确认您登录的是Javashop网址<a href="http://www.javamall.com.cn" target="_blank">http://www.javamall.com.cn</a>，注意防范进入钓鱼网站，不要轻信各种即时通讯工具发送的商品或支付链接，谨防网购诈骗。</p>
+        <p>确认您登录的是topfree网址<a href="http://wap.topfree.com" target="_blank">http://wap.topfree.com</a>，注意防范进入钓鱼网站，不要轻信各种即时通讯工具发送的商品或支付链接，谨防网购诈骗。</p>
         <p>建议您安装杀毒软件，并定期更新操作系统等软件补丁，确保账户及交易安全。</p>
       </el-alert>
     </div>

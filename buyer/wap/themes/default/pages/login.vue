@@ -117,7 +117,7 @@
         <a v-if="isAliPayBrowser" :href="getConnectUrl('wap', 'ALIPAY')"><i class="iconfont ea-icon-alipay"></i></a>
       </div>
       <div class="agreement-tips">
-        <p>登录即代表您已同意<a href="javascript:;">Javashop隐私政策</a></p>
+        <p>登录即代表您已同意<a href="javascript:;">topfree隐私政策</a></p>
       </div>
     </div>
   </div>

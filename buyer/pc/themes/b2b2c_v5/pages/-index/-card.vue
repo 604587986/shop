@@ -14,7 +14,7 @@
           </p>
         </div>
         <div v-else class="card-user-show">
-          <p>Hi,<a href="#">&ensp;欢迎来到Javashop！</a></p>
+          <p>Hi,<a href="#">&ensp;欢迎来到topfree！</a></p>
           <p class="btns">
             <nuxt-link :to="'/login' + MixinForward" class="please-login">请登录</nuxt-link>
             <nuxt-link :to="'/register' + MixinForward" class="to-register">去注册</nuxt-link>

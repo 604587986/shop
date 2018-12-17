@@ -3,7 +3,7 @@
     <div class="search-container">
       <div class="search-bg" :style="{ opacity }"></div>
       <div class="search-main">
-        <div class="search-logo">Javashop</div>
+        <div class="search-logo">topfree</div>
         <div class="search-input" @click="showSearch = true">
           <div class="inner-search-input">
             <van-icon name="search" color="#999"/>
