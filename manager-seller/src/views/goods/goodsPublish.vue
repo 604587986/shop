@@ -504,7 +504,7 @@ export default {
 			/** 商品详情信息提交表单 */
 			baseInfoForm: {
 				/** 是否为服务 */
-				is_services: 0,
+				is_services: 1,
 				/** 是否有补贴 */
 				is_bu_tie: 0,
 
