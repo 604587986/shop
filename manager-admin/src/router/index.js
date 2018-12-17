@@ -312,7 +312,6 @@ const asyncRouters = [
         ]
       },
       {
-        hidden: true,//暂时隐藏移动端装修
         path: '/page/mobile-decoration',
         component: () => import('@/views/page/mobile-decoration/index'),
         redirect: '/page/mobile-decoration/floor',
@@ -320,8 +319,9 @@ const asyncRouters = [
         meta: {
           title: 'mobileDecoration'
         },
+        alwaysShow:true,
         children: [
-          { path: 'floor', component: () => import('@/views/page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' }},
+          { path: 'floor', component: () => import('@/views/page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' },hidden: true},//暂时隐藏移动端楼层装修
           { path: 'focus', component: () => import('@/views/page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }}
         ]
       },
