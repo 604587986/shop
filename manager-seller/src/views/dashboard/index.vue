@@ -236,14 +236,14 @@ export default {
           image.onload = () => {
             let width = image.width
             let height = image.height
-            if (width > 300 || width < 200) {
-              this.$message.error('图片宽度必须在200~300之间！')
-              reject()
-            }
-            if (height > 100 || height < 50) {
-              this.$message.error('图片高度必须在50~100之间！')
-              reject()
-            }
+            // if (width > 300 || width < 200) {
+            //   this.$message.error('图片宽度必须在200~300之间！')
+            //   reject()
+            // }
+            // if (height > 100 || height < 50) {
+            //   this.$message.error('图片高度必须在50~100之间！')
+            //   reject()
+            // }
             resolve()
           }
           image.src = event.target.result
