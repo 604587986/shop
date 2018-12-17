@@ -2,7 +2,7 @@
   <div id="app">
     <en-shortcut/>
     <nuxt id="wrapper"/>
-    <en-footer/>
+    <!-- <en-footer/> -->
   </div>
 </template>
 <script>

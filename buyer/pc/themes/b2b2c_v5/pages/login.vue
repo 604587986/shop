@@ -6,7 +6,7 @@
       <div class="prompt">
         <div>
           <i></i>
-          <p>依据《网络安全法》，为保障您的账户安全和正常使用，请尽快完成手机号验证！ 新版<a href="#">《javashop隐私政策》</a>已上线，将更有利于保护您的个人隐私。</p>
+          <p>依据《网络安全法》，为保障您的账户安全和正常使用，请尽快完成手机号验证！ 新版<a href="#">《topfree隐私政策》</a>已上线，将更有利于保护您的个人隐私。</p>
         </div>
       </div>
       <div class="login-banner">
@@ -17,7 +17,7 @@
             <div class="login-form">
               <div class="tips-wapper">
                 <i></i>
-                <p>Javashop不会以任何理由要求您转账汇款，谨防诈骗。</p>
+                <p>topfree不会以任何理由要求您转账汇款，谨防诈骗。</p>
               </div>
               <div class="login-tab">
                 <ul>

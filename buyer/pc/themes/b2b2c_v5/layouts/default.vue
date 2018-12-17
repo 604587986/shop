@@ -8,7 +8,9 @@
 </template>
 <script>
   export default {
-    name: 'defalt'
+    name: 'defalt',
+    middleware: 'auth-redirect',
+
   }
 </script>
 <style type="text/scss" lang="scss">

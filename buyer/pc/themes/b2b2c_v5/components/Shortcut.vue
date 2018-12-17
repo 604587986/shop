@@ -3,15 +3,15 @@
     <div class="w">
       <div v-if="user" class="login-status logined">
         <span>您好<nuxt-link to="/member">{{ user.nickname || user.uname }}</nuxt-link>，欢迎来到</span>
-        <nuxt-link to="/">topfree示例商城</nuxt-link>
+        <nuxt-link to="/">topfree</nuxt-link>
         <span>[<a href="javascript:;" @click="handleLogout">退出</a>]</span>
       </div>
       <div v-else class="login-status">
         <span>您好，欢迎来到</span>
-        <nuxt-link to="/" style="color: #333">topfree示例商城</nuxt-link>
+        <nuxt-link to="/" style="color: #333">topfree</nuxt-link>
         <span>[<nuxt-link :to="'/login' + MixinForward">登录</nuxt-link>] [<nuxt-link :to="'/register' + MixinForward">注册</nuxt-link>]</span>
       </div>
-      <ul class="links">
+      <!-- <ul class="links">
         <li>
           <div class="dt">
             <a href="/shop/apply">商家入驻</a>
@@ -62,15 +62,15 @@
         <li class="dorpdown">
           <div class="dt">
             <a href="/help">帮助中心</a>
-            <!--<i class="iconfont ea-icon-arrow-down"></i>-->
+            <i class="iconfont ea-icon-arrow-down"></i>
           </div>
-          <!--<div class="dd dorpdown-layer">
+          <div class="dd dorpdown-layer">
             <dl>
               <dd><nuxt-link to="/help">帮助中心</nuxt-link></dd>
               <dd><nuxt-link to="/">售后中心</nuxt-link></dd>
               <dd><nuxt-link to="/">客服中心</nuxt-link></dd>
             </dl>
-          </div>-->
+          </div>
         </li>
         <li class="spacer"></li>
         <li>
@@ -80,7 +80,7 @@
             </nuxt-link>
           </div>
         </li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 </template>
