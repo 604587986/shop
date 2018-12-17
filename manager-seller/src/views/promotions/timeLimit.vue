@@ -26,7 +26,7 @@
         </el-table-column>
         <el-table-column prop="seckill_rule" label="报名条件"/>
         <el-table-column label="报名状态" :formatter="marketStatus" width="80"/>
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button
               type="primary"

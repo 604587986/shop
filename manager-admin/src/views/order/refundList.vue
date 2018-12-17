@@ -46,6 +46,12 @@
                   <el-option label="退货" value="RETURN_GOODS"/>
                 </el-select>
               </el-form-item>
+              <el-form-item label="退款方式">
+                <el-select v-model="advancedForm.refund_way" placeholder="请选择" clearable>
+                  <el-option label="线下支付" value="OFFLINE"/>
+                  <el-option label="原路退回" value="ORIGINAL"/>
+                </el-select>
+              </el-form-item>
               <el-form-item label="申请时间">
                 <el-date-picker
                   v-model="advancedForm.refund_time_range"

@@ -37,7 +37,12 @@
               >{{ tab.title }}</div>
             </div>
             <div class="detail-content">
-              <div v-show="curTab === '商品详情'" class="intro-detail" v-html="goods.intro"></div>
+              <div
+                v-show="curTab === '商品详情'"
+                class="intro-detail"
+                v-html="goods.intro"
+                v-lazy-container="{ selector: 'img' }"
+              ></div>
               <!--商品参数-->
               <goods-params v-show="curTab === '规格参数'" :goods-params="goods.param_list"/>
               <!--商品评论-->
@@ -80,6 +85,9 @@
         goods = await API_Goods.getGoods(params.id)
       } catch (e) {
         error({ statusCode: 500, message: '服务器出错' })
+      }
+      if (goods.intro) {
+        goods.intro = goods.intro.replace(/src=/g, 'data-src=')
       }
       return {
         goods,
@@ -272,7 +280,14 @@
       padding-top: 10px;
       overflow: hidden;
     }
-    .intro-detail { text-align: center }
+    .intro-detail {
+      text-align: center;
+      /deep/ img[lazy=loading] {
+        display: block;
+        width: 100%;
+        height: 450px;
+      }
+    }
   }
   /deep/ .el-pagination {
     margin-top: 20px;

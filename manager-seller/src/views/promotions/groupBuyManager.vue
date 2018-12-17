@@ -51,7 +51,7 @@
         <!--已团购数量-->
         <el-table-column prop="buy_num" label="已团购" width="120"/>
         <el-table-column prop="gb_status_text" label="活动状态" width="80"/>
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button
               type="success"

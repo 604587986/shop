@@ -174,7 +174,7 @@
             { validator: checkSort, trigger: 'blur' }
           ],
           category_name: [
-            { required: true, message: '请填写分类名称', trigger: 'blur' }
+            { required: true, message: '请填写分组名称', trigger: 'blur' }
           ]
         }
       }
@@ -208,7 +208,7 @@
 
       /** 删除分组 */
       handleDeleteGoodsCategory(row) {
-        this.$confirm('确认删除此分类, 是否继续?', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确认删除此分组, 是否继续?', '提示', { type: 'warning' }).then(() => {
           const _id = row.shop_cat_id
           API_goodsCategory.deleteGoodsCategory(_id).then(() => {
             this.GET_GoodsCategoryList()

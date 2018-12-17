@@ -6,10 +6,6 @@
 
 <script>
   import { api } from '~/ui-domain'
-  import '../../../../static/UE/ueditor.config'
-  import '../../../../static/UE/ueditor.all'
-  import '../../../../static/UE/lang/zh-cn/zh-cn'
-  import '../../../../static/UE/ueditor.parse'
 
   export default {
     name: 'UE',

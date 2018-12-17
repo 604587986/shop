@@ -11,9 +11,6 @@
           <el-button type="primary" @click="selectgoodslist" >选择商品</el-button>
           <el-button type="danger" @click="cancelall">批量取消</el-button>
         </div>
-        <div class="toolbar-search">
-          <el-tag size="medium" v-if="tag_name">{{ tag_name }}</el-tag>
-        </div>
       </div>
       <template slot="table-columns">
         <el-table-column type="selection"/>

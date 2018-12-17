@@ -171,6 +171,7 @@
       }
     },
     mounted() {
+      this.params = { ...this.params, ...this.$route.query }
       this.GET_ConsultationList()
       window.onresize = this.countTableHeight
     },

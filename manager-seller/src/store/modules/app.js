@@ -7,7 +7,7 @@ const app = {
       withoutAnimation: false
     },
     device: 'desktop',
-    language: Cookies.get('language') || 'zh'
+    language: Cookies.get('adminLanguage') || 'zh'
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {

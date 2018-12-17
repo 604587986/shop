@@ -410,8 +410,8 @@
 
       /** 选择配送地区 */
       chooseArea() {
-        this.toData = {}
         this.areaDialog = true
+        if (this.isEdit) this.toData = {}
         this.isEdit = false
       },
 
@@ -565,11 +565,16 @@
         if (this.isEdit) {
           // 检测目标数据是否为空对象 如果是则执行删除
           if (!Object.keys(this.toData).length) {
-            this.delArea(this.currentIndex)
+            this.implementDel(this.currentIndex)
           } else {
             this.mouldForm.items[this.currentIndex].area = JSON.parse(JSON.stringify(this.toData))
           }
         } else { // 如果是添加模式 则添加运费模版子项
+          // 校验目标数据是否为空
+          if (!Object.keys(this.toData).length) {
+            this.$message.warning('目标地区数据为空，可点击取消或右上角关闭地区选择器')
+            return
+          }
           this.mouldForm.items.push({
             first_company: 1,
             first_price: 0,
@@ -633,30 +638,35 @@
       /** 删除子地区 */
       delArea($index) {
         this.$confirm('确定删除?', '提示', { type: 'warning' }).then(() => {
-          // 更新表格数据
-          this.mouldForm.items.splice($index, 1)
-          // 更新过滤数据 删除
-          const delItem = this.filterData.splice($index, 1)
-          // 更新源数据
-          for (let i in delItem[0]) {
-            if (!this.fromData[i]) { // 不存在level1
-              this.$set(this.fromData, i, delItem[0][i])
-            } else {
-              for (let j in delItem[0][i].children) {
-                if (!this.fromData[i].children[j]) { // 不存在level2
-                  this.$set(this.fromData[i].children, j, delItem[0][i].children[j])
-                } else {
-                  for (let k in delItem[0][i].children[j].children) {
-                    this.$set(this.fromData[i].children[j].children, k, delItem[0][i].children[j].children[k])
-                  }
+          this.implementDel($index)
+        }).catch(() => {})
+      },
+
+      /** 执行删除子地区 */
+      implementDel($index) {
+        // 更新表格数据
+        this.mouldForm.items.splice($index, 1)
+        // 更新过滤数据 删除
+        const delItem = this.filterData.splice($index, 1)
+        // 更新源数据
+        for (let i in delItem[0]) {
+          if (!this.fromData[i]) { // 不存在level1
+            this.$set(this.fromData, i, delItem[0][i])
+          } else {
+            for (let j in delItem[0][i].children) {
+              if (!this.fromData[i].children[j]) { // 不存在level2
+                this.$set(this.fromData[i].children, j, delItem[0][i].children[j])
+              } else {
+                for (let k in delItem[0][i].children[j].children) {
+                  this.$set(this.fromData[i].children[j].children, k, delItem[0][i].children[j].children[k])
                 }
               }
             }
           }
-        })
+        }
       },
 
-      /** 获取快递模板列表信息*/
+      /** 获取快递模板列表信息 */
       GET_ExpressMould() {
         this.loading = true
         API_express.getTplList().then(response => {

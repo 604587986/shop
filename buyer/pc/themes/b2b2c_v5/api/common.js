@@ -34,6 +34,7 @@ export function recordViews(url) {
   return request({
     url: 'view',
     method: Method.GET,
+    loading: false,
     params: {
       url,
       uuid: Storage.getItem('uuid')

@@ -193,8 +193,12 @@
         ...query
       }
       try {
-        goodsListData = await API_Goods.getGoodsList(_parmas)
-        selectorData = await API_Goods.getGoodsSelector(query)
+        const values = await Promise.all([
+          API_Goods.getGoodsList(_parmas),
+          API_Goods.getGoodsSelector(query)
+        ])
+        goodsListData = values[0]
+        selectorData = values[1]
       } catch (e) {
         error({ statusCode: 500, message: '服务器出错' })
       }
