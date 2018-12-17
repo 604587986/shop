@@ -15,7 +15,7 @@ export default {
       // 地区API
       MixinRegionApi: api.base + '/regions/@id/children',
       // 买家端域名
-      MixinBuyerDomain: domain.buyer_pc,
+      MixinBuyerDomain: domain.buyer_wap,//将买家端域名设为wap端
       // 日期选择器快捷选项
       MixinPickerShortcuts: [{
         text: '最近一周',
