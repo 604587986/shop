@@ -67,17 +67,16 @@ export const asyncRouterMap = [
   },
   // 店铺管理
   {
-    hidden: true,//暂时隐藏店铺管理
     path: '/shop',
     component: Layout,
     redirect: '/shop/shop-themes-pc',
     name: 'shop',
     meta: { title: 'shop', icon: 'shop-manage' },
     children: [
-      { path: 'shop-themes-pc', component: () => import('@/views/shop/shopThemesPc'), name: 'shopThemesPc', meta: { title: 'shopThemesPc' }},
-      { path: 'shop-themes-wap', component: () => import('@/views/shop/shopThemesWap'), name: 'shopThemesWap', meta: { title: 'shopThemesWap' }},
+      { path: 'shop-themes-pc', component: () => import('@/views/shop/shopThemesPc'), name: 'shopThemesPc', meta: { title: 'shopThemesPc' ,hidden: true }},
+      { path: 'shop-themes-wap', component: () => import('@/views/shop/shopThemesWap'), name: 'shopThemesWap', meta: { title: 'shopThemesWap' ,hidden: true  }},
       { path: 'shop-slide', component: () => import('@/views/shop/shopSlide'), name: 'shopSlide', meta: { title: 'shopSlide' }},
-      { path: 'shop-nav', component: () => import('@/views/shop/shopNav'), name: 'shopNav', meta: { title: 'shopNav' }}
+      { path: 'shop-nav', component: () => import('@/views/shop/shopNav'), name: 'shopNav', meta: { title: 'shopNav' ,hidden: true  }}
     ]
   },
   // 促销管理
