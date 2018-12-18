@@ -19,6 +19,10 @@
             <span class="item-value">{{ orderDetail.ship_name }}</span>
           </div>
           <div class="order-item">
+            <span class="item-name">预约时间：</span>
+            <span class="item-value">{{ orderDetail.receive_time }}</span>
+          </div>
+          <div class="order-item">
             <span class="item-name">联系电话：</span>
             <span class="item-value">{{ orderDetail.ship_mobile }}</span>
           </div>
@@ -111,12 +115,9 @@
       <!--订单状态 / 物流信息-->
       <div class="order-status-info">
         <!--订单状态-->
-        <div>
+        <div v-if="logisticsStatus">
           <div class="order-status">
-            <i class="el-icon-check"></i> 订单状态： 
-            <div>预付款:{{ orderDetail.first_money_state ==="yes"?"已完成":"未完成" }}</div>
-            <div>尾&ensp;&ensp;款:{{ orderDetail.end_money_state ==="yes"?"已完成":"未完成" }}</div>
-            
+            <i class="el-icon-check"></i>  订单状态：{{ orderDetail.order_status_text }}
           </div>
           <div class="order-item">
             <span class="item-name"> 订单备注：</span>
@@ -147,11 +148,37 @@
           <div class="order-item" v-if="isLooklogistics">
             <span class="item-name">物流信息：</span>
             <span class="item-value">
-            <el-button type="text" @click="looklogistics">点击查看</el-button>
-          </span>
+            该商品为服务订单，无需物流信息
+            </span>
           </div>
         </div>
-
+        <!--物流信息-->
+        <div v-if="!logisticsStatus">
+          <en-table-layout
+            :tableData="logisticsData"
+            :loading="loading">
+            <div slot="toolbar" class="inner-toolbar">
+              <span style="line-height: 35px;">物流信息</span>
+            </div>
+            <template slot="table-columns">
+              <!--物流单号-->
+              <el-table-column label="提示">
+                <template slot-scope="scope">
+                  该订单为服务订单，无需物流信息，可直接点击发货
+                </template>
+              </el-table-column>
+              <!--操作-->
+              <el-table-column label="操作" width="150">
+                <template slot-scope="scope">
+                  <el-button
+                    plain type="primary"
+                    @click="deliverGoods()">发货
+                  </el-button>
+                </template>
+              </el-table-column>
+            </template>
+          </en-table-layout>
+        </div>
         <div class="opera-btn">
           <el-button v-if="isShowEditShipName" plain type="info" @click="adjustConsignee" >修改预约人信息</el-button>
           <!-- <el-button v-if="isShowEditOrderPrice" plain type="info" @click="adjustPrice" >调整价格</el-button> -->
@@ -160,9 +187,9 @@
       </div>
     </div>
     <!--订单状态 步骤条-->
-    <!-- <el-steps  align-center style="margin-top: 20px;" simple>
+    <el-steps  align-center style="margin-top: 20px;" simple>
       <el-step v-for="item in stepList" :title="item.text" :key="item.text" :status="item.show_status"></el-step>
-    </el-steps> -->
+    </el-steps>
     <!--商品列表-->
     <div>
       <el-table :data="productList" :header-cell-style="{textAlign: 'center'}">
@@ -269,29 +296,6 @@
         <el-button type="primary" @click="reserveOrderDetail">确 定</el-button>
       </div>
     </el-dialog>
-    <!--查看物流信息-->
-    <el-dialog :visible.sync="logisticsShow" width="400px" align="center">
-      <div slot="title">
-        <h3 style="margin: 10px 0;">物流信息</h3>
-        <div class="logistics-base">
-          <span>物流公司：{{ logisticsName }}</span>
-          <span>快递单号：{{ logisticsNo }}</span>
-        </div>
-      </div>
-      <div class="logistics-info">
-        <div v-if="logisticsInfoList">
-          <el-steps direction="vertical" :active="1" align-center space="100px">
-            <el-step
-              v-for="(row, index) in logisticsInfoList"
-              :title="row.time"
-              :key="index"
-              :status="index === 0 ? 'success' : 'wait'"
-              :description="row.context"/>
-          </el-steps>
-        </div>
-        <div v-else>暂无物流信息，请您耐心等待！</div>
-      </div>
-    </el-dialog>
     <!--电子面单-->
     <el-dialog title="电子面单" :visible.sync="electronicSurfaceShow" width="30%" align="center">
       <!--主体-->
@@ -310,6 +314,8 @@
 </template>
 
 <script>
+/* eslint-disable */
+
   import * as API_order from '@/api/order'
   import * as API_logistics from '@/api/expressCompany'
   import { CategoryPicker } from '@/components'
@@ -378,7 +384,9 @@
         logisticsStatus: true,
 
         /** 物流信息 */
-        logisticsData: [],
+        logisticsData: [{
+          title:"该订单为服务订单，无需物流信息，可直接点击发货"
+        }],
 
         /** 物流信息弹框是否显示 */
         logisticsShow: false,
@@ -505,7 +513,7 @@
           // 是否可发货 如果可发货则获取物流公司信息列表 是否可发货 在线支付（已付款状态可发货） 货到付款（已确认状态可发货）
           if ((this.orderDetail.payment_type === 'ONLINE' && this.orderDetail.order_status === 'PAID_OFF') ||
             (this.orderDetail.payment_type === 'COD' && this.orderDetail.order_status === 'CONFIRM')) {
-            this.getLogisticsCompanies()
+            this.logisticsStatus = false
           } else {
             this.logisticsStatus = true
           }
@@ -568,19 +576,6 @@
         })
       },
 
-      /** 获取物流公司信息列表 */
-      getLogisticsCompanies() {
-        API_logistics.getExpressCompanyList({}).then(response => {
-          this.logisticsData = response
-          this.logisticsData = this.logisticsData.filter(key => {
-            return key.shop_id
-          })
-          this.logisticsData.forEach(key => {
-            this.$set(key, 'ship_no', '')
-          })
-          this.logisticsStatus = false
-        })
-      },
 
       /** 查看物流信息*/
       looklogistics() {
@@ -637,25 +632,10 @@
         })
       },
 
-      /** 发货 */
-      deliverGoods(row) {
-        if (!row.ship_no) {
-          this.$message.error('请填写快递单号')
-          return
-        } else if (!/^[A-Za-z0-9]+$/.test(row.ship_no)) {
-          this.$message.error('快递单号不符合规则，请输入字母或者数字')
-          return
-        }
-        const _params = {
-          /** 发货单号 */
-          ship_no: row.ship_no,
-          /** 物流公司id */
-          logi_id: row.logi_id,
-          /** 物流公司名称 */
-          logi_name: row.name
-        }
+      /** 发货（订单无需物流信息） */
+      deliverGoods() {
         this.$confirm('确认发货?', '提示', { type: 'warning' }).then(() => {
-          API_order.deliveryGoods(this.sn, _params).then(() => {
+          API_order.deliveryGoodsNull(this.sn).then(() => {
             this.$message.success('发货成功')
             this.GET_OrderDetail()
           })

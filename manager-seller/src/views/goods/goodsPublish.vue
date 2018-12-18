@@ -110,8 +110,8 @@
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
-						<el-form-item label="尾款：" prop="end_money" v-if="baseInfoForm.is_services">
-							<el-input placeholder="请输入尾款价格" v-model="baseInfoForm.end_money" disabled>
+						<el-form-item label="尾款：" prop="" v-if="baseInfoForm.is_services" disabled>
+							<el-input placeholder="请输入尾款价格" v-model="baseInfoForm.end_money">
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>

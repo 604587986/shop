@@ -90,6 +90,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import uuidv1 from "uuid/v1";
 import Storage from "@/utils/storage";
 import * as API_Common from "@/api/common";

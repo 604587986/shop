@@ -45,14 +45,12 @@
 								</el-form-item>
 								<el-form-item label="订单状态" v-if="params.order_type!==1">
 									<el-select v-model="advancedForm.order_status" placeholder="请选择" clearable>
-										<el-option label="新订单" value="NEW"/>
-										<el-option label="已确认" value="CONFIRM"/>
-										<el-option label="已付款" value="PAID_OFF"/>
-										<el-option label="已发货" value="SHIPPED"/>
-										<el-option label="已收货" value="ROG"/>
+										<el-option label="全部" value="ALL"/>
+										<el-option label="待付款" value="WAIT_PAY"/>
+										<el-option label="待发货" value="WAIT_SHIP"/>
+										<el-option label="待收货" value="WAIT_ROG"/>
 										<el-option label="已完成" value="COMPLETE"/>
 										<el-option label="已取消" value="CANCELLED"/>
-										<el-option label="售后中" value="AFTE_SERVICE"/>
 									</el-select>
 								</el-form-item>
 							</el-form>
@@ -71,9 +69,9 @@
 						</th>
 						<th>买家</th>
 						<th>下单时间</th>
-						<th v-if="params.order_type!==1">订单状态</th>
 						<th v-if="params.order_type===1">预付款</th>
 						<th v-if="params.order_type===1">尾款</th>
+						<th>订单状态</th>
 						<th>订单来源</th>
 						<th v-if="params.order_type!==1">实付金额</th>
 					</tr>
@@ -107,8 +105,6 @@
 						<td>{{ item.member_name }}</td>
 						<!--下单时间-->
 						<td>{{ item.create_time | unixToDate }}</td>
-						<!--订单状态-->
-						<td v-if="params.order_type!==1">{{ item.order_status_text }}</td>
 						<!--预付款-->
 						<td v-if="params.order_type===1">
 							{{ item.first_money | unitPrice('￥') }}
@@ -119,6 +115,8 @@
 							{{ item.end_money | unitPrice('￥') }}
 							<span :class="item.first_money_state==='yes'?'green':'red'">{{item.end_money_state==="yes"?"已付款":"未付款"}}</span>
 						</td>
+						<!--订单状态-->
+						<td>{{ item.order_status_text }}</td>
 						<!--订单来源-->
 						<td>{{ item.client_type }}</td>
 						<!--实付金额-->
@@ -310,8 +308,7 @@ export default {
 		handleOperateOrder(item) {
 			if (item.order_type !== 1) {
 				this.$router.push({ path: `/order/detail/${item.sn}` });
-			}
-			else{
+			} else {
 				this.$router.push({ path: `/order/service-detail/${item.sn}` });
 			}
 		},

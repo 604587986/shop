@@ -89,6 +89,20 @@ export function deliveryGoods(sn, params) {
     data: params
   })
 }
+/**
+ * 无需物流信息的发货
+ * @param ids
+ * @param params
+ * @returns {Promise<any>}
+ */
+export function deliveryGoodsNull(sn, params) {
+  return request({
+    url: `seller/trade/orders/${sn}/deliveryNo`,
+    method: 'post',
+    loading: false,
+    data: params
+  })
+}
 
 /**
  * 查询快递物流信息
