@@ -264,7 +264,6 @@ const asyncRouters = [
         ]
       },
       {
-        hidden: true,//暂时隐藏积分商城
         path: '/promotions/points-mall-manage',
         component: () => import('@/views/promotions/points-mall-manage/index'),
         redirect: '/promotions/points-mall-manage/points-classify',
@@ -298,7 +297,6 @@ const asyncRouters = [
     meta: { title: 'page', icon: 'page-manage' },
     children: [
       {
-        hidden: true,//暂时隐藏pc装修
         path: '/page/pc-decoration',
         component: () => import('@/views/page/pc-decoration/index'),
         redirect: '/page/pc-decoration/floor',
@@ -321,7 +319,7 @@ const asyncRouters = [
         },
         alwaysShow:true,
         children: [
-          { path: 'floor', component: () => import('@/views/page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' },hidden: true},//暂时隐藏移动端楼层装修
+          { path: 'floor', component: () => import('@/views/page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' }},
           { path: 'focus', component: () => import('@/views/page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }},
           { path: 'service', component: () => import('@/views/page/mobile-decoration/mobileServiceSwiper'), name: 'mobileServiceSwiper', meta: { title: 'mobileServiceSwiper' }}
         ]
@@ -333,8 +331,8 @@ const asyncRouters = [
         name: 'pageSetting',
         meta: { title: 'pageSetting' },
         children: [
-          { path: 'pc-site-menu', component: () => import('@/views/page/page-setting/pcSiteMenu'), name: 'pcSiteMenu', meta: { title: 'pcSiteMenu' },hidden: true},//暂时隐藏pc导航
-          { path: 'mobile-site-menu', component: () => import('@/views/page/page-setting/mobileSiteMenu'), name: 'mobileSiteMenu', meta: { title: 'mobileSiteMenu' },hidden: true},//暂时隐藏移动端导航
+          { path: 'pc-site-menu', component: () => import('@/views/page/page-setting/pcSiteMenu'), name: 'pcSiteMenu', meta: { title: 'pcSiteMenu' }},
+          { path: 'mobile-site-menu', component: () => import('@/views/page/page-setting/mobileSiteMenu'), name: 'mobileSiteMenu', meta: { title: 'mobileSiteMenu' }},
           { path: 'hot-keyword', component: () => import('@/views/page/page-setting/hotKeyword'), name: 'hotKeyword', meta: { title: 'hotKeyword' }}
         ]
       }
