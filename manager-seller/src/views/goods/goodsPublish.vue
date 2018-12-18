@@ -100,7 +100,7 @@
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
-						<el-form-item label="成本价格：" prop="cost" :maxlength="10">
+						<el-form-item label="成本价格：" prop="" :maxlength="10">
 							<el-input placeholder="请输入成本价格" v-model="baseInfoForm.cost">
 								<template slot="prepend">¥</template>
 							</el-input>
@@ -115,7 +115,7 @@
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
-						<el-form-item label="商品重量：" prop="weight">
+						<el-form-item label="商品重量：" prop="" style="display:none">
 							<el-input placeholder="请输入商品重量" v-model="baseInfoForm.weight">
 								<template slot="prepend">kg</template>
 							</el-input>
@@ -548,7 +548,7 @@ export default {
 				goods_gallery: "",
 
 				/** 商品总库存 */
-				quantity: 0,
+				quantity: 10000,
 
 				/** 卖家承担运费1 买家承担运费0 */
 				goods_transfee_charge: 1,
