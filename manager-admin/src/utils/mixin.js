@@ -1,7 +1,7 @@
 /**
  * Created by Andste on 2018/5/9.
  */
-
+/* eslint-disable */
 import Vue from 'vue'
 import { Foundation } from '~/ui-utils'
 import { api, domain } from '~/ui-domain'

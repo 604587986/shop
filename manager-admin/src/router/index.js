@@ -322,7 +322,8 @@ const asyncRouters = [
         alwaysShow:true,
         children: [
           { path: 'floor', component: () => import('@/views/page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' },hidden: true},//暂时隐藏移动端楼层装修
-          { path: 'focus', component: () => import('@/views/page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }}
+          { path: 'focus', component: () => import('@/views/page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }},
+          { path: 'service', component: () => import('@/views/page/mobile-decoration/mobileServiceSwiper'), name: 'mobileServiceSwiper', meta: { title: 'mobileServiceSwiper' }}
         ]
       },
       {

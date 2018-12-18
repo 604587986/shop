@@ -71,6 +71,7 @@ export default {
     mobileThemeManage: 'Theme Manage',
     mobileFloorManage: 'Floor Manage',
     mobileFocusManage: 'Focus Manage',
+    mobileServiceSwiper: 'Service Swiper',
     pageSetting: 'Page Setting',
     pcSiteMenu: 'PC Site Menu',
     mobileSiteMenu: 'Mobile Site Menu',
