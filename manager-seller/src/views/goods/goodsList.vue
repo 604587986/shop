@@ -20,7 +20,7 @@
 					</div>
 					<!--商品类型-->
 					<div v-if="parseInt(shopInfo.self_operated) === 1">
-					<el-select class="choose-machine" v-model="params.is_services" placeholder="是否为服务" @change="changeServiceType" clearable>
+					<el-select class="choose-machine" v-model="params.is_services" placeholder="是否为服务" @change="changeServiceType" clearable disabled>
 						<el-option label="普通商品" :value="0"></el-option>
 						<el-option label="服务商品" :value="1"></el-option>
 					</el-select>
@@ -196,6 +196,7 @@ export default {
 			params: {
 				page_no: 1,
 				page_size: 10,
+				is_services:1,
 				...this.$route.query
 			},
 

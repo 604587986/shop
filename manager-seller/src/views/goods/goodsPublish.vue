@@ -60,7 +60,7 @@
 								<el-option v-for="item in brandList" :key="item.brand_id" :label="item.name" :value="item.brand_id"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="是否为服务">
+						<el-form-item label="是否为服务" style="display:none">
 							<el-radio-group v-model="baseInfoForm.is_services">
 								<el-radio :label="0">不是</el-radio>
 								<el-radio :label="1">是</el-radio>
