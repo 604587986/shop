@@ -241,7 +241,8 @@ export default {
 				this.params.first_money_state = null;
 				this.params.end_money_state = null;
 			} else if (val === 1) {
-				this.advancedForm.order_status = null;
+				delete this.advancedForm.order_status
+				delete this.params.order_status
 			}
 
 			this.params.page_no = 1;

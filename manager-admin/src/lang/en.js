@@ -23,6 +23,9 @@ export default {
     lineup: 'Manage Lineup',
     lineupList: 'Lineup List',
 
+    cash: 'Manage Cash',
+    cashList: 'Cash List',
+
     member: 'Member Manage',
     memberManage: 'Member Manage',
     memberList: 'Member List',

@@ -154,6 +154,18 @@ const asyncRouters = [
       { path: 'lineup-list', component: () => import('@/views/lineup/lineuplist'), name: 'lineupList', meta: { title: 'lineupList' }},
     ]
   },
+  // 提现管理
+  {
+    path: '/cash',
+    component: Layout,
+    name: 'cash',
+    redirect: '/cash/cash-list',
+    alwaysShow:true,
+    meta: { title: 'cash', icon: 'order-manage' },
+    children: [
+      { path: 'cash-list', component: () => import('@/views/cash/cashlist'), name: 'cashList', meta: { title: 'cashList' }},
+    ]
+  },
   // 会员管理
   {
     path: '/member',

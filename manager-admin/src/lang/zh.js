@@ -23,6 +23,9 @@ export default {
     lineup: '排队管理',
     lineupList: '排队列表',
 
+    cash: '提现管理',
+    cashList: '提现列表',
+
     member: '会员管理',
     memberManage: '管理会员',
     memberList: '会员列表',
