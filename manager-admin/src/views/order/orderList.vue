@@ -3,7 +3,7 @@
 		<en-table-layout :tableData="tableData.data" :loading="loading">
 			<div slot="toolbar" class="inner-toolbar">
 				<div class="toolbar-btns">
-					<el-select v-model="params.order_type" placeholder="请选择订单类型" @change="orderSearch">
+					<el-select v-model="params.order_type" placeholder="请选择订单类型" @change="orderSearch" disabled>
 						<el-option label="普通订单" :value="0"></el-option>
 						<el-option label="服务订单" :value="1"></el-option>
 					</el-select>
@@ -130,7 +130,7 @@ export default {
 			params: {
 				page_no: 1,
 				page_size: 10,
-				order_type: 0,
+				order_type: 1,
 				first_money_state: null,
 				end_money_state: null
 			},
