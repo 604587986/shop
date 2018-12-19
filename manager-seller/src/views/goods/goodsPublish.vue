@@ -100,7 +100,7 @@
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
-						<el-form-item label="成本价格：" prop="" :maxlength="10">
+						<el-form-item label="成本价格：" prop :maxlength="10">
 							<el-input placeholder="请输入成本价格" v-model="baseInfoForm.cost">
 								<template slot="prepend">¥</template>
 							</el-input>
@@ -110,12 +110,12 @@
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
-						<el-form-item label="尾款：" prop="" v-if="baseInfoForm.is_services" disabled>
-							<el-input placeholder="请输入尾款价格" v-model="baseInfoForm.end_money">
+						<el-form-item label="尾款：" prop v-if="baseInfoForm.is_services">
+							<el-input placeholder="请输入尾款价格" v-model="baseInfoForm.end_money" disabled>
 								<template slot="prepend">¥</template>
 							</el-input>
 						</el-form-item>
-						<el-form-item label="商品重量：" prop="" style="display:none">
+						<el-form-item label="商品重量：" prop style="display:none">
 							<el-input placeholder="请输入商品重量" v-model="baseInfoForm.weight">
 								<template slot="prepend">kg</template>
 							</el-input>
@@ -748,12 +748,15 @@ export default {
 	watch: {
 		baseInfoForm: {
 			handler: function(val) {
-				if(val.price && val.first_money){
-					this.$set(this.baseInfoForm,'end_money',val.price-val.first_money)
+				if (val.price && val.first_money) {
+					this.$set(
+						this.baseInfoForm,
+						"end_money",
+						val.price - val.first_money
+					);
 				}
-				
 			},
-			deep:true
+			deep: true
 		}
 	},
 	beforeRouteUpdate(to, from, next) {
@@ -1521,6 +1524,7 @@ export default {
 			/** 规格值空校验 */
 			let _result = false;
 			this.baseInfoForm.sku_list.forEach(key => {
+				delete key.weight;
 				Object.values(key).forEach(item => {
 					if (!item && item !== 0) {
 						_result = true;
@@ -1543,15 +1547,15 @@ export default {
 					spec_fun = true;
 					spec_tip = "请输入正确的价格";
 				}
-				if (
-					!(
-						parseInt(key.weight) >= 0 &&
-						parseInt(key.weight) < 99999999
-					)
-				) {
-					spec_fun = true;
-					spec_tip = "重量须为0 - 99999999之间的整数";
-				}
+				// if (
+				// 	!(
+				// 		parseInt(key.weight) >= 0 &&
+				// 		parseInt(key.weight) < 99999999
+				// 	)
+				// ) {
+				// 	spec_fun = true;
+				// 	spec_tip = "重量须为0 - 99999999之间的整数";
+				// }
 				if (
 					!(
 						parseInt(key.quantity) >= 0 &&

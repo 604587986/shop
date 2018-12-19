@@ -52,6 +52,7 @@
 </template>
 
 <script>
+ /* eslint-disable */
   import { RegExp } from '~/ui-utils'
   export default {
     name: 'skuTable',
@@ -245,10 +246,11 @@
       /** 数据改变之后 抛出数据 */
       updateSkuTable(index, scope, item) {
         /** 进行自定义校验 判断是否是数字（小数也能通过）重量 */
-        if ((!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(scope.row[item]) && item === 'weight') || parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999) { // 校验未通过 加入错误存储列表中
-          this.validateError.push([index, scope.$index])
-          this.validatatxt = '请输入0~99999999之间的数字值'
-        } else if ((item === 'quantity' && !/^[0-9]\d*$/.test(scope.row[item])) || parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999) { // 库存
+        // if ((!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(scope.row[item]) && item === 'weight') || parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999) { // 校验未通过 加入错误存储列表中
+        //   this.validateError.push([index, scope.$index])
+        //   this.validatatxt = '请输入0~99999999之间的数字值'
+        // } else 
+        if ((item === 'quantity' && !/^[0-9]\d*$/.test(scope.row[item])) || parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999) { // 库存
           this.validateError.push([index, scope.$index])
           this.validatatxt = '请输入0~99999999之间的整数'
         } else if (((item === 'cost' || item === 'price') && !RegExp.money.test(scope.row[item])) || parseInt(scope.row[item]) < 0 || parseInt(scope.row[item]) > 99999999) { // 成本价 价格
