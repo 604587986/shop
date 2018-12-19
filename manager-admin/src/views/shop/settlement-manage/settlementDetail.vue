@@ -54,8 +54,8 @@
           <em class="minus"> - ￥{{ settlement.refund_price | unitPrice }}</em>(在线退款金额)
           <em class="minus"> - ￥{{ settlement.commi_price | unitPrice }}</em>(佣金金额)
           <em class="plus"> + ￥{{ settlement.refund_commi_price | unitPrice }}</em>(退还佣金)
-          <em class="minus"> - ￥{{ settlement.distribution_rebate | unitPrice }}</em>(分销佣金)
-          <em class="plus"> + ￥{{ settlement.distribution_return_rebate | unitPrice }}</em>(退还分销佣金)
+          <!-- <em class="minus"> - ￥{{ settlement.distribution_rebate | unitPrice }}</em>(分销佣金)
+          <em class="plus"> + ￥{{ settlement.distribution_return_rebate | unitPrice }}</em>(退还分销佣金) -->
         </el-col>
       </el-row>
     </el-card>
