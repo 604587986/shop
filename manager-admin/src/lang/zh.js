@@ -74,6 +74,7 @@ export default {
     mobileFloorManage: '楼层装修',
     mobileFocusManage: '焦点图管理',
     mobileServiceSwiper: '服务轮播',
+    mobileGuideSwiper: 'APP引导页',
     pageSetting: '页面设置',
     pcSiteMenu: 'PC导航菜单',
     mobileSiteMenu: '移动端导航菜单',

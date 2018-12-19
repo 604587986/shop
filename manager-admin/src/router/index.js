@@ -333,7 +333,8 @@ const asyncRouters = [
         children: [
           { path: 'floor', component: () => import('@/views/page/mobile-decoration/mobileFloorManage'), name: 'mobileFloorManage', meta: { title: 'mobileFloorManage' }},
           { path: 'focus', component: () => import('@/views/page/mobile-decoration/mobileFocusManage'), name: 'mobileFocusManage', meta: { title: 'mobileFocusManage' }},
-          { path: 'service', component: () => import('@/views/page/mobile-decoration/mobileServiceSwiper'), name: 'mobileServiceSwiper', meta: { title: 'mobileServiceSwiper' }}
+          { path: 'service', component: () => import('@/views/page/mobile-decoration/mobileServiceSwiper'), name: 'mobileServiceSwiper', meta: { title: 'mobileServiceSwiper' }},
+          { path: 'guide', component: () => import('@/views/page/mobile-decoration/mobileGuideSwiper'), name: 'mobileGuideSwiper', meta: { title: 'mobileGuideSwiper' }}
         ]
       },
       {
