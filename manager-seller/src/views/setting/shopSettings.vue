@@ -32,6 +32,16 @@
         <el-input v-model="shopDataForm.shop_qq" style="width: 200px;" placeholder="请设置店铺的客服QQ"></el-input>
         <span class="QQ-tip">（设置店铺的客服QQ）</span>
       </el-form-item>
+      <!--店铺类型-->
+      <el-form-item label="店铺类型：" prop="">
+        <el-input v-model="shopDataForm.shop_type" style="width: 200px;" placeholder="请设置店铺类型"></el-input>
+        <span class="QQ-tip">（设置店铺类型）</span>
+      </el-form-item>
+      <!--店铺经纬坐标-->
+      <el-form-item label="店铺经纬坐标：" prop="">
+        <el-input v-model="shopDataForm.coordinate" style="width: 200px;" placeholder="请设置店铺坐标"></el-input>
+        <span class="QQ-tip">经纬坐标：如120.117768,30.2274 <a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank" style="color:blue">快速查找坐标</a></span>
+      </el-form-item>
       <!--店铺简介-->
       <el-form-item label="店铺简介：" prop="shop_desc">
         <UE ref="UE" :defaultMsg="shopDataForm.shop_desc" style="width: 80%;"></UE>
@@ -192,7 +202,11 @@
 
               shop_qq: this.shopDataForm.shop_qq,
 
-              shop_region: this.shopDataForm.shop_region
+              shop_region: this.shopDataForm.shop_region,
+
+              shop_type: this.shopDataForm.shop_type,
+
+              coordinate: this.shopDataForm.coordinate
             }
             API_Shop.saveShopSettings(_params).then(() => {
               this.$message.success('保存店铺设置成功')
