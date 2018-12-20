@@ -164,7 +164,7 @@
               <!--物流单号-->
               <el-table-column label="提示">
                 <template slot-scope="scope">
-                  该订单为服务订单，无需物流信息，可直接点击发货
+                  该订单为服务订单，无需物流信息，可直接点击确认
                 </template>
               </el-table-column>
               <!--操作-->
@@ -172,7 +172,7 @@
                 <template slot-scope="scope">
                   <el-button
                     plain type="primary"
-                    @click="deliverGoods()">发货
+                    @click="deliverGoods()">确认服务
                   </el-button>
                 </template>
               </el-table-column>
@@ -634,9 +634,9 @@
 
       /** 发货（订单无需物流信息） */
       deliverGoods() {
-        this.$confirm('确认发货?', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确认服务?', '提示', { type: 'warning' }).then(() => {
           API_order.deliveryGoodsNull(this.sn).then(() => {
-            this.$message.success('发货成功')
+            this.$message.success('确认成功')
             this.GET_OrderDetail()
           })
         })
