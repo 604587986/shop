@@ -70,6 +70,24 @@
 					<div slot="tip" class="el-upload__tip">此处为您的店铺logo，将显示在店铺Logo栏里。 （限制上传宽（200～300）x高（50～100）规格的图片！）</div>
 				</el-upload>
 			</el-form-item>
+			<!--店铺图片-->
+			<el-form-item label="店铺图片：" prop="shop_banner">
+				<el-upload
+					class="upload-demo"
+					key="shop_logo"
+					:action="`${MixinUploadApi}?scene=shop`"
+					:on-success="uploadSuccessBanner"
+					:before-upload="handleImagesUrlBefore"
+					:file-list="fileList_banner"
+					ref="fileList_banner"
+					list-type="picture"
+				>
+					<el-button size="small" type="primary">上传
+						<i class="el-icon-upload el-icon--right"></i>
+					</el-button>
+					<div slot="tip" class="el-upload__tip">此处为您的店铺图片</div>
+				</el-upload>
+			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click="handleSaveShopData('shopDataForm')">保存修改</el-button>
 			</el-form-item>
@@ -216,6 +234,7 @@ export default {
 			API_Shop.getShopData().then(response => {
 				this.shopDataForm = { ...response };
 				this.fileList_logo = [{ url: this.shopDataForm.shop_logo }];
+				this.fileList_banner = [{ url: this.shopDataForm.shop_banner }];
 				this.areas = [
 					this.shopDataForm.shop_province_id,
 					this.shopDataForm.shop_city_id,
@@ -247,7 +266,10 @@ export default {
 
 						shop_type: this.shopDataForm.shop_type,
 
-						coordinate: this.shopDataForm.coordinate
+						coordinate: this.shopDataForm.coordinate,
+						
+						shop_banner: this.shopDataForm.shop_banner,
+
 					};
 					API_Shop.saveShopSettings(_params).then(() => {
 						this.$message.success("保存店铺设置成功");
@@ -266,14 +288,14 @@ export default {
 					image.onload = () => {
 						let width = image.width;
 						let height = image.height;
-						if (width > 300 || width < 200) {
-							this.$message.error("图片宽度必须在200~300之间！");
-							reject();
-						}
-						if (height > 100 || height < 50) {
-							this.$message.error("图片高度必须在50~100之间！");
-							reject();
-						}
+						// if (width > 300 || width < 200) {
+						// 	this.$message.error("图片宽度必须在200~300之间！");
+						// 	reject();
+						// }
+						// if (height > 100 || height < 50) {
+						// 	this.$message.error("图片高度必须在50~100之间！");
+						// 	reject();
+						// }
 						resolve();
 					};
 					image.src = event.target.result;
@@ -287,6 +309,12 @@ export default {
 			this.fileList_logo.shift();
 			this.fileList_logo.push(response);
 			this.shopDataForm.shop_logo = response.url;
+		},
+		/** 上传店铺图片成功以后*/
+		uploadSuccessBanner(response) {
+			this.fileList_banner.shift();
+			this.fileList_banner.push(response);
+			this.shopDataForm.shop_banner = response.url;
 		}
 	}
 };
