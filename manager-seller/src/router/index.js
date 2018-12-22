@@ -73,10 +73,10 @@ export const asyncRouterMap = [
     name: 'shop',
     meta: { title: 'shop', icon: 'shop-manage' },
     children: [
-      { path: 'shop-themes-pc', component: () => import('@/views/shop/shopThemesPc'), name: 'shopThemesPc', meta: { title: 'shopThemesPc' ,hidden: true }},
-      { path: 'shop-themes-wap', component: () => import('@/views/shop/shopThemesWap'), name: 'shopThemesWap', meta: { title: 'shopThemesWap' ,hidden: true  }},
+      { path: 'shop-themes-pc', component: () => import('@/views/shop/shopThemesPc'), name: 'shopThemesPc', meta: { title: 'shopThemesPc'  },hidden: true},
+      { path: 'shop-themes-wap', component: () => import('@/views/shop/shopThemesWap'), name: 'shopThemesWap', meta: { title: 'shopThemesWap'} ,hidden: true  },
       { path: 'shop-slide', component: () => import('@/views/shop/shopSlide'), name: 'shopSlide', meta: { title: 'shopSlide' }},
-      { path: 'shop-nav', component: () => import('@/views/shop/shopNav'), name: 'shopNav', meta: { title: 'shopNav' ,hidden: true  }}
+      { path: 'shop-nav', component: () => import('@/views/shop/shopNav'), name: 'shopNav', meta: { title: 'shopNav'} ,hidden: true  }
     ]
   },
   // 促销管理
