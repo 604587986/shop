@@ -71,7 +71,7 @@
 				</el-upload>
 			</el-form-item>
 			<!--店铺图片-->
-			<el-form-item label="店铺图片：" prop="shop_banner">
+			<!-- <el-form-item label="店铺图片：" prop="shop_banner">
 				<el-upload
 					class="upload-demo"
 					key="shop_logo"
@@ -87,7 +87,7 @@
 					</el-button>
 					<div slot="tip" class="el-upload__tip">此处为您的店铺图片</div>
 				</el-upload>
-			</el-form-item>
+			</el-form-item> -->
 			<el-form-item>
 				<el-button type="primary" @click="handleSaveShopData('shopDataForm')">保存修改</el-button>
 			</el-form-item>
@@ -268,7 +268,7 @@ export default {
 
 						coordinate: this.shopDataForm.coordinate,
 						
-						shop_banner: this.shopDataForm.shop_banner,
+						// shop_banner: this.shopDataForm.shop_banner,
 
 					};
 					API_Shop.saveShopSettings(_params).then(() => {
