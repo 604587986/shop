@@ -23,13 +23,28 @@
           <el-input v-model="catForm.category_name"></el-input>
         </el-form-item>
         <!--分类图片-->
-        <el-form-item label="分类图片" prop="cat_img">
+        <el-form-item label="分类图标" prop="cat_img">
           <el-upload
             :action="MixinUploadApi"
             list-type="picture"
             :on-success="(res) => { catForm.category_image = res.url }"
             :on-remove="() => { catForm.category_image = '' }"
             :file-list="catForm.category_image ? [{name: 'category_image', url: catForm.category_image}] : []"
+            :multiple="false"
+            :limit="1"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <span slot="tip" class="el-upload__tip">&nbsp;建议上传jpg/png文件，且不超过1MB</span>
+          </el-upload>
+        </el-form-item>
+        <!--分类banner-->
+        <el-form-item label="分类图片" prop="">
+          <el-upload
+            :action="MixinUploadApi"
+            list-type="picture"
+            :on-success="(res) => { catForm.banner = res.url }"
+            :on-remove="() => { catForm.banner = '' }"
+            :file-list="catForm.banner ? [{name: 'banner', url: catForm.banner}] : []"
             :multiple="false"
             :limit="1"
           >
@@ -107,6 +122,7 @@
 </template>
 
 <script>
+/* eslint-disable */ 
   import * as API_Category from '@/api/category'
 
   export default {
@@ -174,7 +190,8 @@
           parent_datas: parentArray,
           ...cat,
           category_name: cat.name,
-          category_image: cat.image
+          category_image: cat.image,
+          banner:cat.banner
         }
         this.dialogCatVisible = true
       },
@@ -191,7 +208,7 @@
                 this.$refs[formName].resetFields()
                 this.$refs['gradeEditor'].refresh('add')
               })
-            } else {
+            } else {            
               API_Category.editCategory(category_id, this.catForm).then(response => {
                 this.$message.success('保存成功！')
                 this.dialogCatVisible = false
@@ -199,7 +216,8 @@
                 this.$refs['gradeEditor'].refresh('edit', {
                   category_order: response.category_order,
                   image: response.image,
-                  name: response.name
+                  name: response.name,
+                  banner: response.banner,
                 })
               })
             }

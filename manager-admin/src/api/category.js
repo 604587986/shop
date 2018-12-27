@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 /**
  * 分类管理API
  */
@@ -12,7 +13,8 @@ export function addCategory(params) {
     name: params.category_name,
     parent_id: params.parent_id,
     category_order: params.category_order,
-    image: params.category_image
+    image: params.category_image,
+    banner:params.banner
   }
   return request({
     url: 'admin/goods/categories',
@@ -31,7 +33,8 @@ export function editCategory(id, params) {
     name: params.category_name,
     parent_id: params.parent_id,
     category_order: params.category_order,
-    image: params.category_image
+    image: params.category_image,
+    banner:params.banner
   }
   return request({
     url: `admin/goods/categories/${id}`,
