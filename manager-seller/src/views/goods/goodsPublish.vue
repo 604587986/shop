@@ -536,7 +536,7 @@ export default {
 				mktprice: "",
 
 				/** 成本价格 */
-				cost: "",
+				cost: "0",
 
 				/** 商品重量 */
 				weight: "",

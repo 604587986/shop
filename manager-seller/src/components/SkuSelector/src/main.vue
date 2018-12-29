@@ -75,9 +75,9 @@
         /** 固定表头字段信息 */
         origin: {
           sn: '',
-          weight: '',
-          quantity: 0,
-          cost: '',
+          weight: 0,
+          quantity: 9999,
+          cost: 0,
           price: ''
         },
 

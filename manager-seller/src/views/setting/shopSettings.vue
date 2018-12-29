@@ -96,6 +96,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import * as API_Shop from "@/api/shop";
 import { UE } from "@/components";
 import { RegExp } from "~/ui-utils";
