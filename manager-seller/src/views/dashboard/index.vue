@@ -11,6 +11,7 @@
               <img v-if="!shop_info.shop_logo" src="../../assets/logo_images/icon-no-shop-logo.png">
               <span class="to-change-shop-icon" @click="toChangeShopIcon">更改图标</span>
             </div>
+            <div style="color:#666;font-size:12px;">建议上传144px * 144px图片 </div>
             <el-upload
               class="upload-demo"
               style="display: none;"
@@ -336,7 +337,7 @@ export default {
           left: 16px;
           bottom: 20px;
           z-index: 10;
-          width: 200px;
+          width: 144px;
           height: 20px;
           line-height: 20px;
           text-align: center;
@@ -347,8 +348,7 @@ export default {
           cursor: pointer;
         }
         img {
-          width: 200px;
-          height: 80px;
+          width: 144px;
           cursor: pointer;
           border: 1px solid #999;
         }
