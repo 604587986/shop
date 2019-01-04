@@ -76,6 +76,7 @@ export default {
     mobileFocusManage: 'Focus Manage',
     mobileServiceSwiper: 'Service Swiper',
     mobileGuideSwiper: 'APP Guide',
+    mobileAdSwiper: 'Advertisement Swiper',
     pageSetting: 'Page Setting',
     pcSiteMenu: 'PC Site Menu',
     mobileSiteMenu: 'Mobile Site Menu',
