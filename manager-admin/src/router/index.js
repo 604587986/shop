@@ -514,21 +514,32 @@ const asyncRouters = [
           { path: 'menu-manage', component: () => import('@/views/development/tool-manage/menuManage'), name: 'menuManage', meta: { title: 'menuManage' }}
         ]
       },
-      {
-        path: '/development/article-manage',
-        component: () => import('@/views/development/article-manage/index'),
-        redirect: '/development/article-manage/article-list',
-        name: 'articleManage',
-        meta: { title: 'articleManage' },
-        children: [
-          { path: 'article-category', component: () => import('@/views/development/article-manage/articleCategory'), name: 'articleCategory', meta: { title: 'articleCategory' }},
-          { path: 'article-list', component: () => import('@/views/development/article-manage/articleList'), name: 'articleList', meta: { title: 'articleList' }},
-          { path: 'add', component: () => import('@/views/development/article-manage/addArticle'), name: 'addArticle', hidden: true, meta: { title: 'addArticle' }}
-        ]
-      }
+      // {
+      //   path: '/development/article-manage',
+      //   component: () => import('@/views/development/article-manage/index'),
+      //   redirect: '/development/article-manage/article-list',
+      //   name: 'articleManage',
+      //   meta: { title: 'articleManage' },
+      //   children: [
+      //     { path: 'article-category', component: () => import('@/views/development/article-manage/articleCategory'), name: 'articleCategory', meta: { title: 'articleCategory' }},
+      //     { path: 'article-list', component: () => import('@/views/development/article-manage/articleList'), name: 'articleList', meta: { title: 'articleList' }},
+      //     { path: 'add', component: () => import('@/views/development/article-manage/addArticle'), name: 'addArticle', hidden: true, meta: { title: 'addArticle' }}
+      //   ]
+      // }
     ]
   },
-
+  {
+    path: '/development/article-manage',
+    component: Layout,
+    redirect: '/development/article-manage/article-list',
+    name: 'articleManage',
+    meta: { title: 'articleManage',icon: 'page-manage' },
+    children: [
+      { path: 'article-category', component: () => import('@/views/development/article-manage/articleCategory'), name: 'articleCategory', meta: { title: 'articleCategory' }},
+      { path: 'article-list', component: () => import('@/views/development/article-manage/articleList'), name: 'articleList', meta: { title: 'articleList' }},
+      { path: 'add', component: () => import('@/views/development/article-manage/addArticle'), name: 'addArticle', hidden: true, meta: { title: 'addArticle' }}
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

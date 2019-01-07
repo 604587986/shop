@@ -137,9 +137,9 @@ export default {
     toolManage: '工具',
     URLMapping: 'URL映射',
     menuManage: '菜单管理',
-    articleManage: '文章管理',
-    articleCategory: '文章分类',
-    articleList: '文章列表',
+    articleManage: '资讯管理',
+    articleCategory: '资讯分类',
+    articleList: '资讯列表',
     addArticle: '添加文章',
 
     distribution: '分销管理',
