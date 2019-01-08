@@ -64,10 +64,12 @@
       /** 编辑焦点图 */
       handleEditFocus(focus, index) {
         this.curEditIndex = index
+        
         this.defaultImageData = [{
           id: focus.id,
           url: focus.pic_url,
           name:focus.pic_url,
+
           opt: {
             opt_type: focus.operation_type,
             opt_value: focus.operation_param
@@ -89,11 +91,14 @@
         this.dialogImageShow = false
         const { curEditIndex } = this
         const file = fileList[0]
+        
         const params = {
           client_type: this.client_type,
           pic_url: file.response.url,
           operation_type: file.operation.opt_type,
-          operation_param: file.operation.opt_value
+          operation_param: file.operation.opt_value,
+          type_name:file.response.ext
+
         }
         if (curEditIndex) {
           API_Floor.editFocus(this.focusList[curEditIndex].id, params).then(response => {
