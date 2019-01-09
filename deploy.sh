@@ -9,7 +9,6 @@ if [[ "$1" == "git-pull" ]];then
   git reset --hard origin/master
   git clean -f
   git pull origin master
-  git pull
   echo -e "\033[32m代码拉取完成...\033[0m"
 fi
 
