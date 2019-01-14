@@ -151,7 +151,9 @@ const asyncRouters = [
     alwaysShow:true,
     meta: { title: 'lineup', icon: 'order-manage' },
     children: [
-      { path: 'lineup-list', component: () => import('@/views/lineup/lineuplist'), name: 'lineupList', meta: { title: 'lineupList' }},
+      { path: 'lineup-goods', component: () => import('@/views/lineup/goodslist'), name: 'lineup_goods', meta: { title: 'lineup_goods' }},
+      { path: 'lineup-list', component: () => import('@/views/lineup/lineuplist'), name: 'lineupList', meta: { title: 'lineupList' },hidden: true},
+      { path: 'lineup-detail', component: () => import('@/views/lineup/lineupdetail'), name: 'lineupDetail', meta: { title: 'lineupDetail' },hidden: true},
     ]
   },
   // 提现管理

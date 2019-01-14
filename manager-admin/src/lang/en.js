@@ -21,7 +21,9 @@ export default {
     refundDetail: 'Refund Detail',
 
     lineup: 'Manage Lineup',
+    lineup_goods: 'Lineup Goods',
     lineupList: 'Lineup List',
+    lineupDetail: 'Lineup Detail',
 
     cash: 'Manage Cash',
     cashList: 'Cash List',

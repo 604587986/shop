@@ -21,7 +21,9 @@ export default {
     refundDetail: '售后详情',
 
     lineup: '排队管理',
+    lineup_goods: '补贴商品列表',
     lineupList: '排队列表',
+    lineupDetail: '排队详情',
 
     cash: '提现管理',
     cashList: '提现列表',
