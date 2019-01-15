@@ -40,3 +40,15 @@ export function getMemberList(params) {
     params
   })
 }
+/**
+ * 获取助力列表
+ * @param params
+ */
+export function getHelpList(params) {
+  return request({
+    url: 'admin/lineup/assistance',
+    method: 'get',
+    loading: false,
+    params
+  })
+}

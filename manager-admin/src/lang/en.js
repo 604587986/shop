@@ -23,7 +23,8 @@ export default {
     lineup: 'Manage Lineup',
     lineup_goods: 'Lineup Goods',
     lineupList: 'Lineup List',
-    lineupDetail: 'Lineup Detail',
+    lineupDetail: 'My π',
+    helpList: 'Help List',
 
     cash: 'Manage Cash',
     cashList: 'Cash List',

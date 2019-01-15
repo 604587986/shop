@@ -46,10 +46,13 @@
 			<el-table-column label="进度" width>
 				<template slot-scope="scope">{{scope.row.bili}}%</template>
 			</el-table-column>
-			<el-table-column label="操作" width="150">
+			<el-table-column label="操作" width="200">
 				<template slot-scope="scope">
-					<router-link :to="{name:'lineupDetail',query:{member_id:scope.row.member_id}}">
-						<el-button type="primary">详情</el-button>
+					<router-link :to="{name:'lineupDetail',query:{member_id:scope.row.member_id,name:scope.row.member_name}}">
+						<el-button type="primary">帮π成员</el-button>
+					</router-link>
+					<router-link :to="{name:'helpList',query:{member_id:scope.row.member_id,goods_id:scope.row.goods_id,name:scope.row.member_name}}">
+						<el-button type="primary">助力列表</el-button>
 					</router-link>
 				</template>
 			</el-table-column>

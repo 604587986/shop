@@ -23,7 +23,8 @@ export default {
     lineup: '排队管理',
     lineup_goods: '补贴商品列表',
     lineupList: '排队列表',
-    lineupDetail: '排队详情',
+    lineupDetail: '帮π成员',
+    helpList: '助力列表',
 
     cash: '提现管理',
     cashList: '提现列表',
