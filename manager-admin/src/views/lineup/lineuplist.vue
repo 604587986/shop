@@ -30,7 +30,6 @@
 		<template slot="table-columns">
 			<el-table-column prop="sort_num" label="排名" width/>
 			<el-table-column prop="member_code" label="用户账号" width/>
-			<el-table-column prop="member_name" label="会员名称" width/>
 			<el-table-column label="商品名称" width>
 				<template slot-scope="scope">
 					<a :href="MixinBuyerDomain + '/goods/' + scope.row.goods_id" class="goods_name" target="_blank">{{ scope.row.goods_name }}</a>
