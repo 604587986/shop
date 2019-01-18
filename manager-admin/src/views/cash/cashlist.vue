@@ -22,7 +22,7 @@
 				<el-table-column label="操作" width="150">
 					<template slot-scope="scope">
 						<el-button size="mini" type="primary" v-if="scope.row.state === 0" @click="current_id = scope.row.id; dialogVisible = true">确认提现</el-button>
-						<el-button size="mini" type="primary" v-else @click="currentDetail = scope.row.img_arry; detailVisible = true">查看</el-button>
+						<el-button size="mini" type="primary" v-else @click="currentTime = scope.row.complete_time;currentDetail = scope.row.img_arry; detailVisible = true">查看</el-button>
 					</template>
 				</el-table-column>
 			</template>
@@ -65,7 +65,8 @@
 				</el-form-item>
 			</el-form>
 		</el-dialog>
-		<el-dialog title="详情" :visible.sync="detailVisible" @close="currentDetail=[]">
+		<el-dialog title="详情" :visible.sync="detailVisible" @close="currentDetail=[];currentTime=''">
+			<el-alert type="info" :title="currentTime | unixToDate" :closable="false"></el-alert>
 			<el-card :body-style="{ padding: '0px',textAlign:'center' }" v-for="(item,index) in currentDetail" :key="index">
 				<img :src="item" class="image">
 			</el-card>
@@ -104,7 +105,8 @@ export default {
 			goodsGalleryList: [],
 			dialogImage: false,
 			dialogImageUrl: "",
-			currentDetail:[]
+			currentDetail:[],
+			currentTime:''
 		};
 	},
 	mounted() {
