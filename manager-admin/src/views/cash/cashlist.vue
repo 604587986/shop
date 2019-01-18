@@ -22,6 +22,7 @@
 				<el-table-column label="操作" width="150">
 					<template slot-scope="scope">
 						<el-button size="mini" type="primary" v-if="scope.row.state === 0" @click="current_id = scope.row.id; dialogVisible = true">确认提现</el-button>
+						<el-button size="mini" type="primary" v-else @click="currentDetail = scope.row.img_arry; detailVisible = true">查看</el-button>
 					</template>
 				</el-table-column>
 			</template>
@@ -38,7 +39,7 @@
 				:total="tableData.data_total"
 			></el-pagination>
 		</en-table-layout>
-		<el-dialog title="提现" :visible.sync="dialogVisible" @close="current_id = '';baseInfoForm={}">
+		<el-dialog title="提现" :visible.sync="dialogVisible" @close="current_id = '';baseInfoForm.imgList=[]">
 			<el-form :model="baseInfoForm">
 				<el-form-item label="图片：" prop style="width: 90%;text-align: left;">
 					<el-upload
@@ -64,6 +65,11 @@
 				</el-form-item>
 			</el-form>
 		</el-dialog>
+		<el-dialog title="详情" :visible.sync="detailVisible" @close="currentDetail=[]">
+			<el-card :body-style="{ padding: '0px',textAlign:'center' }" v-for="(item,index) in currentDetail" :key="index">
+				<img :src="item" class="image">
+			</el-card>
+		</el-dialog>
 	</div>
 </template>
 
@@ -88,6 +94,7 @@ export default {
 			tableData: "",
 
 			dialogVisible: false,
+			detailVisible: false,
 
 			current_id: "",
 			baseInfoForm: {
@@ -96,7 +103,8 @@ export default {
 
 			goodsGalleryList: [],
 			dialogImage: false,
-			dialogImageUrl: ""
+			dialogImageUrl: "",
+			currentDetail:[]
 		};
 	},
 	mounted() {
@@ -190,18 +198,20 @@ export default {
 				.catch(() => (this.loading = false));
 		},
 		submit() {
-      let data = {}
+			let data = {};
 			if (this.baseInfoForm.imgList.length) {
-				 data = {
-					img_str: this.baseInfoForm.imgList.map(i => {
-						return i.url;
-					}).join()
+				data = {
+					img_str: this.baseInfoForm.imgList
+						.map(i => {
+							return i.url;
+						})
+						.join()
 				};
-			}else{
-         data = {
-          img_str:''
-        }
-      }
+			} else {
+				data = {
+					img_str: ""
+				};
+			}
 
 			API_cash.confirm(this.current_id, data);
 		}
@@ -233,5 +243,8 @@ export default {
 	&:hover {
 		color: #f42424;
 	}
+}
+.image{
+	max-width: 100%;
 }
 </style>
