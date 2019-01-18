@@ -59,6 +59,7 @@ export default {
 				type_name:null,
 				superior_id: this.$route.query.member_id,
 				goods_id: this.$route.query.goods_id,
+				line_id:this.$route.query.id,
 			}
 		};
 	},
@@ -69,6 +70,8 @@ export default {
 		getData() {
 			this.loading = true;
 			API_lineup.getHelpList(this.params).then(response => {
+				console.log(this.params);
+				
 				this.loading = false;
 				this.pageData = {
 					page_no: response.page_no,

@@ -50,7 +50,7 @@
 					<router-link :to="{name:'lineupDetail',query:{member_id:scope.row.member_id,name:scope.row.member_name}}">
 						<el-button type="primary">帮π成员</el-button>
 					</router-link>
-					<router-link :to="{name:'helpList',query:{member_id:scope.row.member_id,goods_id:scope.row.goods_id,name:scope.row.member_name}}">
+					<router-link :to="{name:'helpList',query:{member_id:scope.row.member_id,goods_id:scope.row.goods_id,name:scope.row.member_name,id:scope.row.id}}">
 						<el-button type="primary">助力列表</el-button>
 					</router-link>
 				</template>
