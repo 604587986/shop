@@ -19,6 +19,7 @@
 						<el-tag type="info" v-else>已提现</el-tag>
 					</template>
 				</el-table-column>
+				<el-table-column prop="operator" label="操作人" width/>
 				<el-table-column label="操作" width="150">
 					<template slot-scope="scope">
 						<el-button size="mini" type="primary" v-if="scope.row.state === 0" @click="current_id = scope.row.id; dialogVisible = true">确认提现</el-button>
