@@ -33,7 +33,7 @@
     "prettier": "^1.12.1",
     "print-js": "^1.0.47",
     "screenfull": "3.3.2",
-    "showdown": "1.8.5",
+    "showdown": "1.9.1",
     "simplemde": "1.11.2",
     "sortablejs": "^1.7.0",
     "uuid": "^3.3.2",
